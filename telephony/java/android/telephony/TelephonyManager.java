@@ -3570,12 +3570,15 @@ public class TelephonyManager {
     /** @hide */
     @SystemApi
     public boolean getDataEnabled() {
+        boolean retVal = false;
         try {
-            return getITelephony().getDataEnabled();
+            retVal = getITelephony().getDataEnabled();
         } catch (RemoteException e) {
             Log.e(TAG, "Error calling ITelephony#getDataEnabled", e);
+        } catch (NullPointerException e) {
         }
-        return false;
+        Log.d(TAG, "getDataEnabled: retVal=" + retVal);
+        return retVal;
     }
 
     /**
