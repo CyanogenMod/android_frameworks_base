@@ -341,4 +341,7 @@
     <string name="live_display_outdoor">Outdoor (bright sun)</string>
     <string name="live_display_outdoor_summary">Use outdoor settings only</string>
     <string name="live_display_hint">LiveDisplay can help reduce eyestrain and help you sleep at night. Click here to try it out!</string>
+
+    <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+    <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>
 </resources>
