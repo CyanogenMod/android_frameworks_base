@@ -204,4 +204,6 @@
     <string name="app_ops_wifi_change">change WiFI state</string>
     <string name="app_ops_su">get Superuser access</string>
 
+    <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+    <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>
 </resources>

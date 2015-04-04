@@ -77,4 +77,7 @@
     <string name="quick_settings_edit_label">Edit Tiles</string>
     <string name="quick_settings_cannot_delete_edit_tile">Cannot delete the Edit tile</string>
     <string name="qs_tiles_reset_confirmation">Reset quick settings tiles to default configuration?</string>
+
+    <!-- Screen pinning dialog description (for devices without navbar) -->
+    <string name="screen_pinning_description_no_navbar">This keeps it in view until you unpin. Touch and hold the Back button to unpin.</string>
 </resources>
