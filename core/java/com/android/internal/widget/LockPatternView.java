@@ -1149,20 +1149,21 @@ public class LockPatternView extends View {
         currentPath.rewind();
 
         // draw the circles
-        for (int i = 0; i < mPatternSize; i++) {
-            float centerY = getCenterYForRow(i);
-            for (int j = 0; j < mPatternSize; j++) {
-                CellState cellState = mCellStates[i][j];
-                float centerX = getCenterXForColumn(j);
-                float translationY = cellState.translationY;
-                if (isHardwareAccelerated() && cellState.hwAnimating) {
-                    DisplayListCanvas displayListCanvas = (DisplayListCanvas) canvas;
-                    displayListCanvas.drawCircle(cellState.hwCenterX, cellState.hwCenterY,
-                            cellState.hwRadius, cellState.hwPaint);
-                } else {
-                    drawCircle(canvas, (int) centerX, (int) centerY + translationY,
-                            cellState.radius, drawLookup[i][j], cellState.alpha);
-
+        if (mVisibleDots) {
+            for (int i = 0; i < mPatternSize; i++) {
+                float centerY = getCenterYForRow(i);
+                for (int j = 0; j < mPatternSize; j++) {
+                    CellState cellState = mCellStates[i][j];
+                    float centerX = getCenterXForColumn(j);
+                    float translationY = cellState.translationY;
+                    if (isHardwareAccelerated() && cellState.hwAnimating) {
+                        DisplayListCanvas displayListCanvas = (DisplayListCanvas) canvas;
+                        displayListCanvas.drawCircle(cellState.hwCenterX, cellState.hwCenterY,
+                                cellState.hwRadius, cellState.hwPaint);
+                    } else {
+                        drawCircle(canvas, (int) centerX, (int) centerY + translationY,
+                                cellState.radius, drawLookup[i][j], cellState.alpha);
+                    }
                 }
             }
         }
@@ -1170,8 +1171,6 @@ public class LockPatternView extends View {
         // TODO: the path should be created and cached every time we hit-detect a cell
         // only the last segment of the path should be computed here
         // draw the path of the pattern (unless we are in stealth mode)
-        // draw the path of the pattern (unless the user is in progress, and
-        // we are in stealth mode)
         final boolean drawPath = ((!mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)
                 || (mPatternDisplayMode == DisplayMode.Wrong && mShowErrorPath));
         if (drawPath) {
@@ -1231,7 +1230,9 @@ public class LockPatternView extends View {
     }
 
     private int getCurrentColor(boolean partOfPattern) {
-        if (!partOfPattern || mInStealthMode || mPatternInProgress) {
+        if (!partOfPattern || (mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)
+                || (mPatternDisplayMode == DisplayMode.Wrong && !mShowErrorPath)
+                || mPatternInProgress) {
             // unselected circle
             return mRegularColor;
         } else if (mPatternDisplayMode == DisplayMode.Wrong) {
