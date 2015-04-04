@@ -157,4 +157,7 @@
     <!-- Protected Apps Notification -->
     <string name="notify_package_component_protected_title">Activity launch blocked</string>
     <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> is protected from being launched. Tap to authenticate and launch the application.</string>
+
+    <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+    <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>
 </resources>

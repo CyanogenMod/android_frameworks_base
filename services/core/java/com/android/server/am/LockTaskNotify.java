@@ -20,10 +20,13 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
+import android.os.UserHandle;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.internal.R;
+import cyanogenmod.providers.CMSettings;
 
 /**
  *  Helper to manage showing/hiding a image to notify them that they are entering
@@ -41,24 +44,31 @@ public class LockTaskNotify {
         mHandler = new H();
     }
 
+    private boolean hasNavigationBar() {
+        return mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar)
+                || CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                        CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
+    }
+
     public void showToast(int lockTaskModeState) {
         mHandler.obtainMessage(H.SHOW_TOAST, lockTaskModeState, 0 /* Not used */).sendToTarget();
     }
 
     public void handleShowToast(int lockTaskModeState) {
-        String text = null;
+        final int textResId;
         if (lockTaskModeState == ActivityManager.LOCK_TASK_MODE_LOCKED) {
-            text = mContext.getString(R.string.lock_to_app_toast_locked);
+            textResId = R.string.lock_to_app_toast_locked;
         } else if (lockTaskModeState == ActivityManager.LOCK_TASK_MODE_PINNED) {
-            text = mContext.getString(R.string.lock_to_app_toast);
-        }
-        if (text == null) {
-            return;
+            textResId = R.string.lock_to_app_toast;
+        } else {
+            textResId = hasNavigationBar() ? 
+                    R.string.lock_to_app_toast : R.string.lock_to_app_toast_no_navbar;
         }
         if (mLastToast != null) {
             mLastToast.cancel();
         }
-        mLastToast = makeAllUserToastAndShow(text);
+        mLastToast = makeAllUserToastAndShow(mContext.getString(textResId));
     }
 
     public void show(boolean starting) {
