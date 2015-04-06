@@ -97,10 +97,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
     private static final Intent PHONE_INTENT = new Intent(Intent.ACTION_DIAL);
 
-    // the length to animate the visualizer in and out
-    private static final int VISUALIZER_ANIMATION_DURATION_IN = 300;
-    private static final int VISUALIZER_ANIMATION_DURATION_OUT = 0;
-
     private KeyguardAffordanceView mCameraImageView;
     private KeyguardAffordanceView mPhoneImageView;
     private KeyguardAffordanceView mLockIcon;
@@ -124,13 +120,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     private int mLastUnlockIconRes = 0;
 
-    private VisualizerView mVisualizer;
-    private boolean mScreenOn;
-    private boolean mLinked;
-    private boolean mVisualizerEnabled;
-    private boolean mPowerSaveModeEnabled;
-    private SettingsObserver mSettingsObserver;
-
     public KeyguardBottomAreaView(Context context) {
         this(context, null);
     }
@@ -147,7 +136,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mTrustDrawable = new TrustDrawable(mContext);
-        mSettingsObserver = new SettingsObserver(new Handler());
     }
 
     private AccessibilityDelegate mAccessibilityDelegate = new AccessibilityDelegate() {
@@ -211,26 +199,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mLockIcon.setOnLongClickListener(this);
         mCameraImageView.setOnClickListener(this);
         mPhoneImageView.setOnClickListener(this);
-        if (ActivityManager.isHighEndGfx()) {
-            mVisualizer = (VisualizerView) findViewById(R.id.visualizerView);
-            if (mVisualizer != null) {
-                Paint paint = new Paint();
-                Resources res = mContext.getResources();
-                paint.setStrokeWidth(res.getDimensionPixelSize(
-                        R.dimen.kg_visualizer_path_stroke_width));
-                paint.setAntiAlias(true);
-                paint.setColor(res.getColor(R.color.equalizer_fill_color));
-                paint.setPathEffect(new DashPathEffect(new float[] {
-                        res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_1),
-                        res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_2)
-                }, 0));
-
-                int bars = res.getInteger(R.integer.kg_visualizer_divisions);
-                mVisualizer.addRenderer(new LockscreenBarEqRenderer(bars, paint,
-                        res.getInteger(R.integer.kg_visualizer_db_fuzz),
-                        res.getInteger(R.integer.kg_visualizer_db_fuzz_factor)));
-            }
-        }
 
         initAccessibility();
         updateCustomShortcuts();
@@ -502,7 +470,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             mTrustDrawable.start();
         } else {
             mTrustDrawable.stop();
-            requestVisualizer(false, 0);
         }
         if (changedView == this && visibility == VISIBLE) {
             updateLockIcon();
@@ -513,18 +480,12 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mContext.registerReceiver(mReceiver, new IntentFilter(
-                PowerManager.ACTION_POWER_SAVE_MODE_CHANGING));
-        mSettingsObserver.observe();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mSettingsObserver.unobserve();
-        mContext.unregisterReceiver(mReceiver);
         mTrustDrawable.stop();
-        requestVisualizer(false, 0);
     }
 
     private void updateLockIcon() {
@@ -659,17 +620,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
     };
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGING.equals(intent.getAction())) {
-                mPowerSaveModeEnabled = intent.getBooleanExtra(PowerManager.EXTRA_POWER_SAVE_MODE,
-                        false);
-                requestVisualizer(true, 0);
-            }
-        }
-    };
-
     private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
             new KeyguardUpdateMonitorCallback() {
         @Override
@@ -679,16 +629,12 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
         @Override
         public void onScreenTurnedOn() {
-            mScreenOn = true;
             updateLockIcon();
-            requestVisualizer(true, 300);
         }
 
         @Override
         public void onScreenTurnedOff(int why) {
-            mScreenOn = false;
             updateLockIcon();
-            requestVisualizer(false, 0);
         }
     };
 
@@ -728,145 +674,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         @Override
         public int getIntrinsicHeight() {
             return mIntrinsicHeight;
-        }
-    }
-
-    public void requestVisualizer(boolean show, int delay) {
-        if (mVisualizer == null || !mVisualizerEnabled || mPowerSaveModeEnabled) {
-            return;
-        }
-        removeCallbacks(mStartVisualizer);
-        removeCallbacks(mStopVisualizer);
-        if (DEBUG) Log.d(TAG, "requestVisualizer(show: " + show + ", delay: " + delay + ")");
-        if (show && mScreenOn
-                && mPhoneStatusBar.getBarState() == StatusBarState.KEYGUARD
-                && !mPhoneStatusBar.isKeyguardFadingAway()
-                && !mPhoneStatusBar.isGoingToNotificationShade()
-                && mPhoneStatusBar.getCurrentMediaNotificationKey() != null) {
-            if (DEBUG) Log.d(TAG, "--> starting visualizer");
-            postDelayed(mStartVisualizer, delay);
-        } else {
-            if (DEBUG) Log.d(TAG, "--> stopping visualizer");
-            postDelayed(mStopVisualizer, delay);
-        }
-    }
-
-    private static class LockscreenBarEqRenderer extends Renderer {
-        private int mDivisions;
-        private Paint mPaint;
-        private int mDbFuzz;
-        private int mDbFuzzFactor;
-
-        /**
-         * Renders the FFT data as a series of lines, in histogram form
-         *
-         * @param divisions - must be a power of 2. Controls how many lines to draw
-         * @param paint - Paint to draw lines with
-         * @param dbfuzz - final dB display adjustment
-         * @param dbFactor - dbfuzz is multiplied by dbFactor.
-         */
-        public LockscreenBarEqRenderer(int divisions, Paint paint, int dbfuzz, int dbFactor) {
-            super();
-            if (DEBUG) {
-                Log.d(TAG, "Lockscreen EQ Renderer; divisions:" + divisions + ", dbfuzz: "
-                        + dbfuzz + "dbFactor: " + dbFactor);
-            }
-            mDivisions = divisions;
-            mPaint = paint;
-            mDbFuzz = dbfuzz;
-            mDbFuzzFactor = dbFactor;
-        }
-
-        @Override
-        public void onRender(Canvas canvas, AudioData data, Rect rect) {
-            // Do nothing, we only display FFT data
-        }
-
-        @Override
-        public void onRender(Canvas canvas, FFTData data, Rect rect) {
-            for (int i = 0; i < data.bytes.length / mDivisions; i++) {
-                mFFTPoints[i * 4] = i * 4 * mDivisions;
-                mFFTPoints[i * 4 + 2] = i * 4 * mDivisions;
-                byte rfk = data.bytes[mDivisions * i];
-                byte ifk = data.bytes[mDivisions * i + 1];
-                float magnitude = (rfk * rfk + ifk * ifk);
-                int dbValue = magnitude > 0 ? (int) (10 * Math.log10(magnitude)) : 0;
-
-                mFFTPoints[i * 4 + 1] = rect.height();
-                mFFTPoints[i * 4 + 3] = rect.height() - ((dbValue * mDbFuzzFactor) + mDbFuzz);
-            }
-
-            canvas.drawLines(mFFTPoints, mPaint);
-        }
-    }
-
-    private final Runnable mStartVisualizer = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG) Log.w(TAG, "mStartVisualizer");
-
-            mVisualizer.animate()
-                    .alpha(1f)
-                    .setDuration(VISUALIZER_ANIMATION_DURATION_IN);
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVisualizer != null && !mLinked) {
-                        mVisualizer.link(0);
-                        mLinked = true;
-                    }
-                }
-            });
-        }
-    };
-
-    private final Runnable mStopVisualizer = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG) Log.w(TAG, "mStopVisualizer");
-
-            mVisualizer.animate()
-                    .alpha(0f)
-                    .setDuration(VISUALIZER_ANIMATION_DURATION_OUT);
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVisualizer != null && mLinked) {
-                        mVisualizer.unlink();
-                        mLinked = false;
-                    }
-                }
-            });
-        }
-    };
-
-    private class SettingsObserver extends UserContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void observe() {
-            super.observe();
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED),
-                    false, this, UserHandle.USER_ALL);
-            update();
-        }
-
-        @Override
-        protected void unobserve() {
-            super.unobserve();
-            mContext.getContentResolver().unregisterContentObserver(this);
-        }
-
-        @Override
-        public void update() {
-            ContentResolver resolver = mContext.getContentResolver();
-            mVisualizerEnabled = Settings.Secure.getIntForUser(resolver,
-                    Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED, 1, UserHandle.USER_CURRENT) != 0;
-
         }
     }
 }
