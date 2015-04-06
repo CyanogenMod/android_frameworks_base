@@ -266,8 +266,8 @@ public class BluetoothControllerImpl implements BluetoothController {
                     Log.e(TAG, "Unable to get Profile for " + profileToString(profile));
                 } else {
                     final boolean ok = connect ? p.connect(device) : p.disconnect(device);
-                if (DEBUG) Log.d(TAG, action + " " + profileToString(profile) + " "
-                        + (ok ? "succeeded" : "failed"));
+                    if (DEBUG) Log.d(TAG, action + " " + profileToString(profile) + " "
+                            + (ok ? "succeeded" : "failed"));
                 }
             } else {
                 Log.e(TAG, "Unable to get Profile for " + profileToString(profile));
