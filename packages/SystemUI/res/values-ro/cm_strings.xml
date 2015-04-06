@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Închide notificările recente</string>
   <string name="screenshot_delete_action">Șterge</string>
   <string name="screenshot_delete_confirmation">Captură ecran ștearsă.</string>
   <string name="advanced_dev_option_wipe_app">Șterge datele aplicației</string>
@@ -42,6 +43,7 @@
   <string name="quick_settings_network_adb_label">ADB prin reţea</string>
   <string name="quick_settings_lte_label">4G</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Glisați dreapta pentru %1$s</string>
   <string name="navbar_dialog_title">Alege o acțiune pentru a o asocia</string>
   <string name="navbar_home_button">Butonul Acasă</string>
   <string name="navbar_recent_button">Butonul Recent</string>
@@ -55,6 +57,7 @@
   <string name="navring_action_ring_vibrate">Sunet/Vibrație</string>
   <string name="navring_action_ring_silent">Sunet/Silențios</string>
   <string name="navring_action_ring_vibrate_silent">Sunet/Vibrație/Silențios</string>
+  <string name="navring_action_screen_off">Închidere ecran</string>
   <string name="navring_action_torch">Comutare lanternă</string>
   <string name="navring_action_google_now">Google Now</string>
   <string name="select_application">Selectaţi aplicaţia</string>
