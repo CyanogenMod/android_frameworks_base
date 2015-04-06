@@ -16,20 +16,66 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">داخستنی هەموو کراوەکان</string>
   <string name="screenshot_delete_action">سڕینەوە</string>
   <string name="screenshot_delete_confirmation">وێنەی ڕوونمای گیراو سڕدرایەوە.</string>
   <string name="advanced_dev_option_wipe_app">سڕینەوەی داواکاریەکانی بەرنامە</string>
   <string name="advanced_dev_option_force_stop">وەستاندی بێهۆکار</string>
   <string name="advanced_dev_option_uninstall">سڕینەوە</string>
+  <string name="accessibility_quick_settings_data_off">داتای مۆبایل ناچالاکە.</string>
+  <string name="accessibility_quick_settings_data_on">داتای مۆبایل چالاکە.</string>
+  <string name="accessibility_quick_settings_roaming_off">Roaming ناچالاکە.</string>
+  <string name="accessibility_quick_settings_roaming_on">Roaming چالاکە.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">دۆزینەوەی شوێن: شێوازی پاراستنی ووزە.</string>
+  <string name="accessibility_quick_settings_location_gps_only">دۆزینەوەی شوێن: تەنیا هەستەوەرەکان.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">دۆزینەوەی شوێن: شێوازی بەکارهێنانی تەواو.</string>
   <string name="accessibility_dpad_left">جێنیشانده‌ر بۆ لای چه‌پ</string>
   <string name="accessibility_dpad_right">جێنیشانده‌ر بۆ لای ڕاست</string>
+  <string name="quick_settings_mobile_data_label">داتای مۆبایل</string>
+  <string name="quick_settings_roaming_label">Roaming</string>
+  <string name="quick_settings_apn_switch_label">APN گۆڕەری</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> داتای مۆبایل</string>
+  <string name="quick_settings_data_off">داتای مۆبایل ناچالاکە</string>
+  <string name="quick_settings_location_detail_title">شێوازی شوێن</string>
+  <string name="quick_settings_location_battery_saving_label">پاراستنی ووزە</string>
+  <string name="quick_settings_location_gps_only_label">تەنها ئامێر</string>
+  <string name="quick_settings_location_high_accuracy_label">بەکارهێنانی زۆر</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">پرۆفایلەکانی سیستەم</string>
+  <string name="quick_settings_profiles_disabled">پرۆفایل ناچالاکە</string>
+  <string name="quick_settings_compass_label">قیبلە نما</string>
   <string name="quick_settings_compass_init">سه‌ره‌تایکردن\u2026</string>
+  <string name="quick_settings_lockscreen_label">قفڵی شاشە</string>
+  <string name="quick_settings_lockscreen_label_enforced">قفڵکردنی شاشە بەزۆر</string>
+  <string name="quick_settings_network_adb_label">ADB لەڕێی تۆڕەوە</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">کاتی شاشە</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">رایکێشە بۆلای ڕاست بۆ %1$s</string>
+  <string name="right_shortcut_hint">ڕایکێشە بۆلای چەپ بۆ %1$s</string>
   <string name="navbar_dialog_title">کارێك هەڵبژێرە بۆ ئەنجام دان </string>
   <string name="navbar_home_button">دوگمەی سەرەتا</string>
   <string name="navbar_recent_button">دوگمەی پێشینە</string>
   <string name="navbar_search_button">دوگمەی گەڕان</string>
   <string name="navbar_back_button">دوگمەی گەڕانەوە</string>
+  <string name="navbar_empty_button">دوگمەی بەتاڵ</string>
   <string name="navbar_menu_conditional_button">دوگمەی مینو (شاردنەوەی خۆکار) </string>
   <string name="navbar_menu_always_button">دوگمەی مینو (نیشاندانی خۆکار) </string>
   <string name="navbar_menu_big_button">دوگمەی مینو</string>
+  <string name="navigation_ring_title">کورتە ئایکۆنی خێراکردنەوە</string>
+  <string name="navring_target_reset_message">سڕینه‌وه‌ی هه‌موو ڕێدۆزه‌ره‌کان که‌ دروستکراون و گێڕانەوەی کورتە ئایکۆنەکان سەرەکی؟</string>
+  <string name="navring_target_reset">ڕێکخستنەوەی شریتی ڕێدۆزه‌ر بۆ باری سه‌ره‌کی</string>
+  <string name="navring_action_open_ime_switcher">کردنه‌وه‌ی گۆڕەری IMEI </string>
+  <string name="navring_action_kill_app">داخستنی بەرنامە</string>
+  <string name="navring_action_none">هیچیان</string>
+  <string name="navring_action_take_screenshot">گرتنی وێنەی شاشە</string>
+  <string name="navring_action_ring_vibrate">زه‌نگ/له‌رینه‌وه‌</string>
+  <string name="navring_action_ring_silent">زه‌نگ/بێده‌نگ</string>
+  <string name="navring_action_ring_vibrate_silent">زه‌نگ/له‌رینه‌وه‌/بێده‌نگ</string>
+  <string name="navring_action_screen_off">کوژاندنەوەی شاشە</string>
+  <string name="navring_action_torch">لایت</string>
+  <string name="navring_action_google_now">Google Now</string>
+  <string name="navring_choose_action_title">چالاکیه‌ک هه‌ڵبژێره‌</string>
+  <string name="select_application">دیاریکردنی بەرنامە</string>
+  <string name="lockscreen_target_empty">بەتاڵ</string>
 </resources>

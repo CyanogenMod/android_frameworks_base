@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">SIM/RUIM נעול ב-Perso</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM נעול להתאמות</string>
   <string name="keyguard_accessibility_status">"מצב"</string>
   <string name="kg_dismiss">בטל</string>
   <string name="kg_slot_name">חריץ <xliff:g id="number">%d </xliff:g>: כרטיס SIM חדש\u0020</string>

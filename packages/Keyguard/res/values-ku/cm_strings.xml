@@ -18,4 +18,16 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM is Perso قوفڵکراوە</string>
+  <string name="keyguard_accessibility_status">"دۆخ"</string>
+  <string name="kg_dismiss">ڕەتکردنەوە</string>
+  <string name="kg_slot_name">شوێنی سیمکارتی <xliff:g id="number">%d</xliff:g>: نوێ\u0020</string>
+  <string name="lockscreen_sim_error_message_short">کارته‌که‌ نادرووستە.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">PIN کۆدی سیم هه‌ڵه‌یه‌، <xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ به‌رله‌وه‌ی که‌ پێویست بکات په‌یوه‌ندیی به‌ کۆمپانیای دابینکه‌ره‌وه‌ بکه‌یت.</item>
+    <item quantity="other">PIN کۆدی سیم هه‌ڵه‌یه‌، <xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ به‌رله‌وه‌ی که‌ پێویست بکات په‌یوه‌ندیی به‌ کۆمپانیای دابینکه‌ره‌وه‌ بکه‌یت.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">سیمکارت ئێستا لەکارکەوت، کۆدی PUK بنوسە بۆ بەردەوامبون. <xliff:g id="number">%d</xliff:g> جار ماوە بۆ لێدانی کۆد پێش ئەوەی سیمکارت بەتەواوی لەکار بکەوێت، پەیوەندی بکە بە کۆمپانیای سیمکارتەکەتەوە بۆ زانیاری زیاتر.</item>
+    <item quantity="other">سیمکارت ئێستا لەکارکەوت، کۆدی PUK بنوسە بۆ بەردەوامبون. <xliff:g id="number">%d</xliff:g> جار ماوە بۆ لێدانی کۆد پێش ئەوەی سیمکارت بەتەواوی لەکار بکەوێت، پەیوەندی بکە بە کۆمپانیای سیمکارتەکەتەوە بۆ زانیاری زیاتر.</item>
+  </plurals>
 </resources>

@@ -18,7 +18,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_recents">סגור את כל היישומים האחרונים</string>
   <string name="screenshot_delete_action">מחק</string>
-  <string name="screenshot_delete_confirmation">תמונת מסך נמחקה.</string>
+  <string name="screenshot_delete_confirmation">צילום מסך נמחק.</string>
   <string name="advanced_dev_option_wipe_app">מחק נתוני יישום</string>
   <string name="advanced_dev_option_force_stop">אלץ עצירה</string>
   <string name="advanced_dev_option_uninstall">הסרה</string>
@@ -49,23 +49,23 @@
   <string name="quick_settings_lockscreen_label_enforced">מסך הנעילה נאכף</string>
   <string name="quick_settings_network_adb_label">ADB דרך הרשת</string>
   <string name="quick_settings_lte_label">LTE</string>
-  <string name="quick_settings_screen_timeout_detail_title">מסך נשאר דולק</string>
+  <string name="quick_settings_screen_timeout_detail_title">משך זמן מסך</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">החלק ימינה בשביל %1$s</string>
   <string name="right_shortcut_hint">החלק שמאלה בשביל %1$s</string>
-  <string name="navbar_dialog_title">בחר את הפעולה להקצה</string>
-  <string name="navbar_home_button">כפתור הבית</string>
+  <string name="navbar_dialog_title">בחר את הפעולה להקצאה</string>
+  <string name="navbar_home_button">לחצן הבית</string>
   <string name="navbar_recent_button">לחצן יישומים אחרונים</string>
   <string name="navbar_search_button">לחצן חיפוש</string>
-  <string name="navbar_back_button">לחצן הקודם</string>
+  <string name="navbar_back_button">לחצן \"הקודם\"</string>
   <string name="navbar_empty_button">לחצן ריק</string>
   <string name="navbar_menu_conditional_button">לחצן התפריט (הסתר אוטומטית)</string>
-  <string name="navbar_menu_always_button">לחצן התפריט (נראה תמיד)</string>
+  <string name="navbar_menu_always_button">לחצן התפריט (הצג תמיד)</string>
   <string name="navbar_menu_big_button">לחצן התפריט</string>
   <string name="navigation_ring_title">קיצורי דרך של הפעלה מהירה</string>
   <string name="navring_target_reset_message">האם למחוק את כל קיצורי הדרך מסרגל הניווט ולשחזר לברירת המחדל?</string>
   <string name="navring_target_reset">קיצורי הדרך בסרגל הניווט שוחזרו לברירת המחדל</string>
-  <string name="navring_action_open_ime_switcher">פתח מחליף IME</string>
+  <string name="navring_action_open_ime_switcher">פתח תפריט צורות קלט</string>
   <string name="navring_action_kill_app">הרוג יישום</string>
   <string name="navring_action_none">ללא</string>
   <string name="navring_action_take_screenshot">צלם מסך</string>
@@ -73,7 +73,7 @@
   <string name="navring_action_ring_silent">צלצול/שקט</string>
   <string name="navring_action_ring_vibrate_silent">צלצול/רטט/שקט</string>
   <string name="navring_action_screen_off">כיבוי מסך</string>
-  <string name="navring_action_torch">הדלק/כבה פנס</string>
+  <string name="navring_action_torch">הדלקת/כיבוי הפנס</string>
   <string name="navring_action_google_now">Google Now</string>
   <string name="navring_choose_action_title">בחר פעולה</string>
   <string name="select_application">בחר יישום</string>
