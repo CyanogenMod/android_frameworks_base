@@ -39,6 +39,15 @@
                    android:layout_height="match_parent"
                    android:scaleType="centerCrop"
                    android:visibility="invisible" />
+        <com.pheelicks.visualizer.VisualizerView
+                   android:id="@+id/visualizerView"
+                   android:gravity="bottom"
+                   android:layout_gravity="bottom"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:clipChildren="false"
+                   android:clipToPadding="false"
+                   android:visibility="visible"/>
     </com.android.systemui.statusbar.BackDropView>
 
     <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_behind"
