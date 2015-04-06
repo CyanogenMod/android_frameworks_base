@@ -208,4 +208,5 @@
   <string name="live_display_outdoor">Na zewnątrz (jasne światło)</string>
   <string name="live_display_outdoor_summary">Używaj ustawienia tylko na zewnątrz</string>
   <string name="live_display_hint">LiveDisplay może pomóc w zredukowaniu efektu zmęczenia oczu oraz pomaga zasnąć w nocy. Kliknij tutaj, aby wypróbować!</string>
+  <string name="lock_to_app_description_no_navbar">Przypinanie blokuje ekran w jednym widoku\n\nAby odpiąć, dotknij i przytrzymaj przycisk Menu.</string>
 </resources>

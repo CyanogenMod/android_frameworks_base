@@ -173,6 +173,30 @@
   <string name="usb_media_checking">Controllo dell\'archivio USB in corso.</string>
   <string name="usb_media_removed">L\'archivio USB è stato rimosso.</string>
   <string name="usb_media_shared">L\'archivio USB è attualmente utilizzato da un computer.</string>
+  <string name="sd_ext_media_checking_notification_title">Preparazione scheda SD</string>
+  <string name="sd_ext_media_checking_notification_message">Controllo errori su scheda SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Scheda SD vuota</string>
+  <string name="sd_ext_media_nofs_notification_message">La scheda SD è vuota o ha un filesystem non supportato.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Scheda SD danneggiata</string>
+  <string name="sd_ext_media_unmountable_notification_message">La scheda SD è danneggiata. Prova a riformattarla.</string>
+  <string name="sd_ext_media_badremoval_notification_title">La scheda SD è stata inaspettatamente rimossa</string>
+  <string name="sd_ext_media_badremoval_notification_message">Smonta la scheda SD prima di rimuoverla per prevenire perdite di dati.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">È possibile rimuovere la scheda SD in sicurezza</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Puoi rimuovere la scheda SD in sicurezza.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Scheda SD rimossa</string>
+  <string name="sd_ext_media_nomedia_notification_message">Scheda SD rimossa. Inserisci una nuova scheda.</string>
+  <string name="usb_ext_media_checking_notification_title">Preparazione memoria USB</string>
+  <string name="usb_ext_media_checking_notification_message">Controllo errori sulla memoria USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Memoria USB vuota</string>
+  <string name="usb_ext_media_nofs_notification_message">La memoria USB è vuota o ha un filesystem non supportato.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Memoria USB danneggiata</string>
+  <string name="usb_ext_media_unmountable_notification_message">La memoria USB è danneggiata. Prova a riformattarla.</string>
+  <string name="usb_ext_media_badremoval_notification_title">La memoria USB è stata inaspettatamente rimossa</string>
+  <string name="usb_ext_media_badremoval_notification_message">Smonta la memoria USB prima di rimuoverla per prevenire perdite di dati.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">È possibile rimuovere la memoria USB in sicurezza</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Puoi rimuovere la memoria USB in sicurezza.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Memoria USB rimossa</string>
+  <string name="usb_ext_media_nomedia_notification_message">Memoria USB rimossa. Inserisci un nuovo archivio.</string>
   <string name="live_display_auto">Automatico</string>
   <string name="live_display_auto_summary">Regola automaticamente la temperatura del colore dello schermo dopo il tramonto e l\'alba</string>
   <string name="live_display_off">Disattivato</string>
@@ -184,4 +208,6 @@
   <string name="live_display_outdoor">All\'aperto (sole)</string>
   <string name="live_display_outdoor_summary">Utilizza solo impostazioni all\'aperto</string>
   <string name="live_display_hint">LiveDisplay aiuta a ridurre l\'affaticamento degli occhi e aiuta a dormire di notte. Clicca per provarlo!</string>
+  <string name="lock_to_app_toast_no_navbar">Per sbloccare questo schermo, toccare e tenere premuto il tasto Menu.</string>
+  <string name="lock_to_app_description_no_navbar">Screen pinning blocca il dispositivo in una singola visuale.\n\nPer sbloccare, tocca e tieni premuto il pulsante Menu.</string>
 </resources>

@@ -209,4 +209,5 @@
   <string name="live_display_outdoor_summary">Только уличный режим</string>
   <string name="live_display_hint">LiveDisplay поможет снизить зрительное напряжение и улучшить сон. Нажмите здесь, чтобы попробовать!</string>
   <string name="lock_to_app_toast_no_navbar">Чтобы открепить экран, нажмите и удерживайте кнопку «Меню».</string>
+  <string name="lock_to_app_description_no_navbar">Функция закрепления позволяет зафиксировать текущий экран.\n\nЧтобы открепить его, нажмите и удерживайте кнопку «Меню».</string>
 </resources>

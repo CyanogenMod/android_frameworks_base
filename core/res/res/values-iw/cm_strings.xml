@@ -24,7 +24,7 @@
   <string name="profileNameNight">לילה</string>
   <string name="profileNameAutomobile">רכב</string>
   <string name="profileGroupPhone">טלפון</string>
-  <string name="profileGroupCalendar">יומן</string>
+  <string name="profileGroupCalendar">לוח שנה</string>
   <string name="profileGroupGmail">Gmail</string>
   <string name="profileGroupEmail">דוא\"ל</string>
   <string name="profileGroupSMS">SMS</string>
@@ -32,31 +32,31 @@
   <string name="profile_none">ללא</string>
   <string name="profile_picker_title">פרופילים</string>
   <string name="global_action_choose_profile">פרופיל</string>
-  <string name="global_action_screenshot">צלם מסך</string>
-  <string name="permlab_receiveProtectedSms">קבלת הודעות טקסט מוגנות</string>
-  <string name="permdesc_receiveProtectedSms">מאפשר לאפליקציה לקבל הודעות טקסט מוגנות.</string>
+  <string name="global_action_screenshot">צילום מסך</string>
+  <string name="permlab_receiveProtectedSms">קבלת הודעות SMS מוגנות</string>
+  <string name="permdesc_receiveProtectedSms">מאפשר ליישום לקבל הודעות SMS מוגנות.</string>
   <string name="permlab_modifyProtectedSmsList">שנה את רשימת הודעות הטקסט המוגנות</string>
-  <string name="permdesc_modifyProtectedSmsList">מאפשר לאפליקציה לשנות את רשימת הכתובות של הודעות SMS מוגנות.</string>
+  <string name="permdesc_modifyProtectedSmsList">מאפשר ליישום לשנות את רשימת הכתובות של הודעות SMS מוגנות.</string>
   <string name="permgrouplab_security">אבטחה</string>
   <string name="permgroupdesc_security">הרשאות הקשורות לאבטחת המידע במכשיר.</string>
-  <string name="permlab_accessThemeService">גישה לשירות ערכת הצבעים</string>
-  <string name="permdesc_accessThemeService">אפשר ליישום לגשת לשירות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
+  <string name="permlab_accessThemeService">גישה לשירות ערכות העיצוב</string>
+  <string name="permdesc_accessThemeService">אפשר ליישום לגשת לשירות ערכות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
   <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב</string>
   <string name="permdesc_readThemesDesc">אפשר ליישום לקרוא את ערכות העיצוב ולקבוע איזו ערכה קבעת.</string>
-  <string name="permlab_writeThemes">שינוי ערכות העיצוב</string>
-  <string name="permdesc_writeThemesDesc">אפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות אילו הוחלו.</string>
+  <string name="permlab_writeThemes">שינוי ערכות עיצוב</string>
+  <string name="permdesc_writeThemesDesc">אפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות את הערכה המוחלת.</string>
   <string name="permlab_readPhoneBlacklist">לקרוא את הרשימה השחורה</string>
   <string name="permdesc_readPhoneBlacklist">אפשר ליישום לגשת למידע אודות מספרי הטלפון שנחסמו עבור הודעות נכנסות או להודעות.</string>
   <string name="permlab_changePhoneBlacklist">שנה את הרשימה השחורה</string>
   <string name="permdesc_changePhoneBlacklist">אפשר ליישום לשנות את המספרים המופיעים ברשימה השחורה, שעבורם נחסמות הודעות ושיחות נכנסות.</string>
-  <string name="permlab_changePrivacyGuardState">אפשר או נטרל את שומר הפרטיות</string>
-  <string name="permdesc_changePrivacyGuardState">אפשר ליישום לשנות אם יישום אחר פועל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא יהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
-  <string name="privacy_guard_notification">שומר הפרטיות פועל</string>
+  <string name="permlab_changePrivacyGuardState">הפעל או נטרל את שומר הפרטיות</string>
+  <string name="permdesc_changePrivacyGuardState">אפשר ליישום לשנות האם יישום אחר פועל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
+  <string name="privacy_guard_notification">שומר הפרטיות פעיל</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> לא יוכל לגשת למידע אישי</string>
   <string name="permlab_useHardwareFramework">השתמש במסגרת חומרתית</string>
   <string name="permdesc_useHardwareFramework">אפשר ליישום לגשת למסגרת החומרתית של CM.</string>
-  <string name="permlab_setKeyguardWallpaper">הגדר רקע ל-keyguard</string>
-  <string name="permdesc_setKeyguardWallpaper">אפשר ליישום לשנות את הרקע של מסך הנעילה.</string>
+  <string name="permlab_setKeyguardWallpaper">הגדר טפט למסך הנעילה</string>
+  <string name="permdesc_setKeyguardWallpaper">אפשר ליישום לשנות את הטפט של מסך הנעילה.</string>
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">הפעלה מחדש</string>
@@ -65,15 +65,15 @@
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">מצב הורדה</string>
-  <string name="reboot_soft">אתחול תוכנתי</string>
+  <string name="reboot_soft">הפעלה מחדש מהירה</string>
   <string name="reboot_title">הפעלה מחדש</string>
   <string name="reboot_confirm" product="tablet">הטאבלט יופעל מחדש.</string>
-  <string name="reboot_confirm" product="default">הטלפון יופעל מחדש.</string>
+  <string name="reboot_confirm" product="default">המכשיר יופעל מחדש.</string>
   <string name="reboot_progress">מפעיל מחדש...</string>
   <string name="app_killed_message">היישום נסגר</string>
   <string name="adb_net_active_notification_title">ADB דרך הרשת מופעל</string>
-  <string name="adb_both_active_notification_title">ADB דרך USB &amp; רשת מופעל</string>
-  <string name="adb_active_generic_notification_message">הקש לביטול ADB.</string>
+  <string name="adb_both_active_notification_title">ADB דרך ה-USB והרשת מופעל</string>
+  <string name="adb_active_generic_notification_message">הקש לביטול איתור באגים.</string>
   <string name="usb_choose_notification_title">לחץ כדי לבחור אפשרויות USB.</string>
   <string name="permlab_interceptPackageLaunch">יירט הפעלת יישום</string>
   <string name="permdesc_interceptPackageLaunch">מאפשר ליישום ליירט הפעלה של יישומים אחרים</string>

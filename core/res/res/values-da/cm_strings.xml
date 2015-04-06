@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Privatlivsvagt</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ønsker at <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Genstart</string>
+  <string name="global_action_current_user">Aktuel</string>
   <string name="reboot_reboot">Genstart</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -174,6 +175,30 @@
   <string name="usb_media_checking">USB-lageret bliver i øjeblikket kontrolleret.</string>
   <string name="usb_media_removed">USB-lageret er blevet fjernet.</string>
   <string name="usb_media_shared">USB-lageret er i øjeblikket i brug af en computer.</string>
+  <string name="sd_ext_media_checking_notification_title">Forbereder SD-kort</string>
+  <string name="sd_ext_media_checking_notification_message">Kontrollerer SD-kort for fejl.</string>
+  <string name="sd_ext_media_nofs_notification_title">SD-kort er tom</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-kort er tom, eller filsystem er ikke understøttet.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Beskadiget SD-kort</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-kort er beskadiget. Prøv at formattér det.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-kort er fjernet uventet</string>
+  <string name="sd_ext_media_badremoval_notification_message">Frakoble SD-kort før det fjernes, for at undgå tab af data.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-kort er sikkert at fjerne</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Du kan sikkert fjerne SD-kort.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD-kort fjernet</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-kort fjernet. Indsæt et nyt.</string>
+  <string name="usb_ext_media_checking_notification_title">Forbereder USB-hukommelse</string>
+  <string name="usb_ext_media_checking_notification_message">Kontrollerer USB-hukommelse for fejl.</string>
+  <string name="usb_ext_media_nofs_notification_title">USB-hukommelse er tom</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-hukommelse er tom, eller filsystem er ikke understøttet.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Beskadiget USB-hukommelse</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-hukommelse er beskadiget. Prøv at formattér den.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-hukommelse er fjernet uventet</string>
+  <string name="usb_ext_media_badremoval_notification_message">Frakoble USB-hukommelse før den fjernes, for at undgå tab af data.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-hukommelse er sikker at fjerne</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Du kan sikkert fjerne USB-hukommelse.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB-hukommelse fjernet</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-hukommelse fjernet. Indsæt nyt medie.</string>
   <string name="live_display_auto">Automatisk</string>
   <string name="live_display_auto_summary">Justerer automatisk farvetemperaturen på skærmen efter solnedgang og solopgang</string>
   <string name="live_display_off">Fra</string>
@@ -185,4 +210,6 @@
   <string name="live_display_outdoor">Udendørs (stærk sol)</string>
   <string name="live_display_outdoor_summary">Brug kun udendørsindstillinger</string>
   <string name="live_display_hint">LiveDisplay kan hjælpe med at reducere overanstrengelse af øjnene og hjælpe dig med at sove om natten. Klik her for at prøve det!</string>
+  <string name="lock_to_app_toast_no_navbar">Hvis du vil frigøre denne skærm, tryk og hold Menu-knappen.</string>
+  <string name="lock_to_app_description_no_navbar">Fastgørelse af skærmen låser displayet i enkelt visning.\n\nFor at frigøre, tryk og hold Menu-knappen.</string>
 </resources>

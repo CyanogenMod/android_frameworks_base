@@ -208,4 +208,6 @@
   <string name="live_display_outdoor">Kültéri (erős napfény)</string>
   <string name="live_display_outdoor_summary">Csak a kültéri beállítások használata</string>
   <string name="live_display_hint">A LiveDisplay segíthet a szemek terhelésének csökkentésében és a jobb éjszakai alvásban. Kattintson ide, hogy kipróbálja!</string>
+  <string name="lock_to_app_toast_no_navbar">Képernyő feloldásához érintse meg és tartsa nyomva a Menü gombot.</string>
+  <string name="lock_to_app_description_no_navbar">Egyszerű nézetben PIN zárolja a kijelzőt.\n\nFeloldáshoz érintse meg és tartsa nyomva a Menü gombot.</string>
 </resources>
