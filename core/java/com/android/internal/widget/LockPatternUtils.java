@@ -993,6 +993,16 @@ public class LockPatternUtils {
      * @return The pattern in string form.
      */
     public String patternToString(List<LockPatternView.Cell> pattern) {
+        return patternToString(pattern, getLockPatternSize());
+    }
+
+    /**
+     * Serialize a pattern.
+     * @param pattern The pattern.
+     * @param patternGridSize the pattern size
+     * @return The pattern in string form.
+     */
+    public static String patternToString(List<LockPatternView.Cell> pattern, int patternGridSize) {
         if (pattern == null) {
             return "";
         }
@@ -1001,7 +1011,7 @@ public class LockPatternUtils {
         byte[] res = new byte[patternSize];
         for (int i = 0; i < patternSize; i++) {
             LockPatternView.Cell cell = pattern.get(i);
-            res[i] = (byte) (cell.getRow() * getLockPatternSize() + cell.getColumn());
+            res[i] = (byte) (cell.getRow() * patternGridSize + cell.getColumn());
         }
         return new String(res);
     }
