@@ -27,4 +27,5 @@
   <string name="pick_wallpaper">Fondos de pantalla</string>
   <string name="activity_not_found">L\'aplicación nun ta instalada.</string>
   <string name="lockscreen_wallpaper_instructions">Afitar fondu de pantalla de bloquéu</string>
+  <string name="image_decode_error">Nun pudo descodificase la imaxe</string>
 </resources>

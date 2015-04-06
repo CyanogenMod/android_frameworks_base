@@ -27,4 +27,5 @@
   <string name="pick_wallpaper">Baggrunde</string>
   <string name="activity_not_found">App er ikke installeret.</string>
   <string name="lockscreen_wallpaper_instructions">Vælg baggrund for skærmlås</string>
+  <string name="image_decode_error">Kan ikke afkode billedet</string>
 </resources>
