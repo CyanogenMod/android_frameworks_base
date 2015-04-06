@@ -17,13 +17,13 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string-array name="cardinal_directions">
-    <item>צפון</item>
-    <item>צפון מזרח</item>
-    <item>מזרח</item>
-    <item>דרום מזרח</item>
-    <item>דרום</item>
-    <item>דרום מערב</item>
-    <item>מערב</item>
-    <item>צפון מערב</item>
+    <item>צפ\'</item>
+    <item>צפ\'-מז\'</item>
+    <item>מז\'</item>
+    <item>דר\'-מז\'</item>
+    <item>דר\'</item>
+    <item>דר\'-מע\'</item>
+    <item>מע\'</item>
+    <item>צפ\'-מע\'</item>
   </string-array>
 </resources>
