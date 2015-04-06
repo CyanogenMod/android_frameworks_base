@@ -39,7 +39,7 @@
     <dimen name="kg_visualizer_path_stroke_width">20dp</dimen>
 
     <!-- Color for the Equalizer tile -->
-    <color name="equalizer_fill_color">#32ffffff</color>
+    <color name="equalizer_fill_color">#92ffffff</color>
 
     <!-- The amount of divisions to make for eq bars -->
     <integer name="kg_visualizer_divisions">16</integer>
