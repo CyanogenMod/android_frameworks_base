@@ -732,8 +732,13 @@ public class MediaSessionService extends SystemService implements Monitor {
                 synchronized (mLock) {
                     // If we don't have a media button receiver to fall back on
                     // include non-playing sessions for dispatching
-                    boolean useNotPlayingSessions = mUserRecords.get(
-                            ActivityManager.getCurrentUser()).mLastMediaButtonReceiver == null;
+                    UserRecord user = mUserRecords.get(mCurrentUserId);
+                    if (user == null) {
+                        Log.e(TAG, "Invalid UserRecord for current user : " + mCurrentUserId);
+                        return;
+                    }
+
+                    boolean useNotPlayingSessions = user.mLastMediaButtonReceiver == null;
                     MediaSessionRecord session = mPriorityStack
                             .getDefaultMediaButtonSession(mCurrentUserId, useNotPlayingSessions);
                     if (isVoiceKey(keyEvent.getKeyCode())) {
@@ -808,7 +813,7 @@ public class MediaSessionService extends SystemService implements Monitor {
                 count = mUserRecords.size();
                 for (int i = 0; i < count; i++) {
                     UserRecord user = mUserRecords.get(i);
-                    user.dumpLocked(pw, "");
+                    if (user != null) user.dumpLocked(pw, "");
                 }
             }
         }
@@ -938,7 +943,7 @@ public class MediaSessionService extends SystemService implements Monitor {
                 // Launch the last PendingIntent we had with priority
                 int userId = ActivityManager.getCurrentUser();
                 UserRecord user = mUserRecords.get(userId);
-                if (user.mLastMediaButtonReceiver != null) {
+                if ((user != null) && (user.mLastMediaButtonReceiver != null)) {
                     if (DEBUG) {
                         Log.d(TAG, "Sending media key to last known PendingIntent");
                     }
