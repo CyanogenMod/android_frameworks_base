@@ -21,4 +21,7 @@
     <color name="dialog_title_divider">@android:color/holo_blue_light</color>
     <!-- Notification action text color -->
     <color name="notification_action_text_color">#ccc</color>
+    
+    <!-- Lock pattern line color -->
+    <color name="lock_pattern_path_color">#FFFFFF</color>
 </resources>

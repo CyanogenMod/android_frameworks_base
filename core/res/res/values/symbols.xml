@@ -334,6 +334,7 @@
   <java-symbol type="integer" name="config_overrideHasPermanentMenuKey" />
 
   <java-symbol type="color" name="tab_indicator_text_v4" />
+  <java-symbol type="color" name="lock_pattern_path_color" />
 
   <java-symbol type="dimen" name="accessibility_touch_slop" />
   <java-symbol type="dimen" name="config_prefDialogWidth" />
