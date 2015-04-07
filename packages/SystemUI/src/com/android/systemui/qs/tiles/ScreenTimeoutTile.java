@@ -184,44 +184,35 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
         Bucket nextBucket = Bucket.getBucket(newTimeout);
         Bucket previousBucket = Bucket.getBucket(state.previousTimeout);
 
-        switch (state.previousTimeout) {
-            case 0:
-            case 15000:
-            case 30000:
-                // Default
-                drawableId = R.drawable.ic_qs_screen_timeout_med_reverse_avd;
-                if (nextBucket == Bucket.MEDIUM) {
-                    // Medium
-                    drawableId = R.drawable.ic_qs_screen_timeout_short_avd;
-                } else if (nextBucket == Bucket.LARGE) {
-                    // Large
-                    drawableId = R.drawable.ic_qs_screen_timeout_short_reverse_avd;
-                }
-                break;
-            case 60000:
-            case 120000:
-            case 300000:
-                // Default
+        if (state.previousTimeout < 60000) {
+            // Default
+            drawableId = R.drawable.ic_qs_screen_timeout_med_reverse_avd;
+            if (nextBucket == Bucket.MEDIUM) {
+                // Medium
                 drawableId = R.drawable.ic_qs_screen_timeout_short_avd;
-                if (nextBucket == Bucket.SMALL) {
-                    // Small
-                    drawableId = R.drawable.ic_qs_screen_timeout_med_reverse_avd;
-                } else if (nextBucket == Bucket.LARGE) {
-                    // Large
-                    drawableId = R.drawable.ic_qs_screen_timeout_med_avd;
-                }
-                break;
-            case 600000:
-            case 1800000:
+            } else if (nextBucket == Bucket.LARGE) {
+                // Large
+                drawableId = R.drawable.ic_qs_screen_timeout_short_reverse_avd;
+            }
+        } else if (state.previousTimeout < 600000) {
+            // Default
+            drawableId = R.drawable.ic_qs_screen_timeout_short_avd;
+            if (nextBucket == Bucket.SMALL) {
+                // Small
+                drawableId = R.drawable.ic_qs_screen_timeout_med_reverse_avd;
+            } else if (nextBucket == Bucket.LARGE) {
+                // Large
                 drawableId = R.drawable.ic_qs_screen_timeout_med_avd;
-                if (nextBucket == Bucket.MEDIUM) {
-                    // Small
-                    drawableId = R.drawable.ic_qs_screen_timeout_long_reverse_avd;
-                } else if (nextBucket == Bucket.SMALL) {
-                    // Large
-                    drawableId = R.drawable.ic_qs_screen_timeout_long_avd;
-                }
-                break;
+            }
+        } else {
+            drawableId = R.drawable.ic_qs_screen_timeout_med_avd;
+            if (nextBucket == Bucket.MEDIUM) {
+                // Small
+                drawableId = R.drawable.ic_qs_screen_timeout_long_reverse_avd;
+            } else if (nextBucket == Bucket.SMALL) {
+                // Large
+                drawableId = R.drawable.ic_qs_screen_timeout_long_avd;
+            }
         }
 
         if (state.icon == null || previousBucket != nextBucket) {
