@@ -22,7 +22,6 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -272,7 +271,7 @@ public class LockPatternView extends View {
 
         mPathPaint.setAntiAlias(true);
         mPathPaint.setDither(true);
-        mPathPaint.setColor(Color.WHITE);   // TODO this should be from the style
+        mPathPaint.setColor(context.getResources().getColor(R.color.lock_pattern_path_color));
         mPathPaint.setAlpha(mStrokeAlpha);
         mPathPaint.setStyle(Paint.Style.STROKE);
         mPathPaint.setStrokeJoin(Paint.Join.ROUND);
