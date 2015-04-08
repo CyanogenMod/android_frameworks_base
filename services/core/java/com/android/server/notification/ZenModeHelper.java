@@ -380,7 +380,9 @@ public class ZenModeHelper implements AudioManagerInternal.RingerModeDelegate {
         switch (ringerModeNew) {
             case AudioManager.RINGER_MODE_SILENT:
                 if (isChange) {
-                    if (mZenMode == Global.ZEN_MODE_OFF) {
+                    if (mZenMode == Global.ZEN_MODE_OFF &&
+                        mContext.getResources().getBoolean(com.android.internal.R.bool.config_setZenModeWhenSilentModeOn))
+                    {
                         newZen = Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
                     }
                     ringerModeInternalOut = isVibrate ? AudioManager.RINGER_MODE_VIBRATE
