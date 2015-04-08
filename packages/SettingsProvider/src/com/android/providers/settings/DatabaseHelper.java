@@ -2638,6 +2638,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.Secure.ADVANCED_MODE,
                     R.bool.def_advanced_mode);
 
+            loadBooleanSetting(stmt, Settings.Secure.SPELL_CHECKER_ENABLED,
+                    R.integer.def_spell_checker);
+
             loadDefaultThemeSettings(stmt);
             loadProtectedSmsSetting(stmt);
         } finally {
