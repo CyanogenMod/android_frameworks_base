@@ -234,6 +234,8 @@ public class DisconnectCause {
     /** EMERGENCY call failed with permanent fail cause */
     public static final int EMERGENCY_PERM_FAILURE         = 93;
 
+    public static final int NON_SELECTED_USER_CLEARING = 94;
+
     //*********************************************************************************************
     // When adding a disconnect type:
     // 1) Please assign the new type the next id value below.
@@ -249,7 +251,7 @@ public class DisconnectCause {
     public static final int MINIMUM_VALID_VALUE = NOT_DISCONNECTED;
 
     /** Largest valid value for call disconnect codes. */
-    public static final int MAXIMUM_VALID_VALUE = IMS_MERGED_SUCCESSFULLY;
+    public static final int MAXIMUM_VALID_VALUE = NON_SELECTED_USER_CLEARING;
 
     /** Private constructor to avoid class instantiation. */
     private DisconnectCause() {
@@ -357,6 +359,8 @@ public class DisconnectCause {
             return "IMS_MERGED_SUCCESSFULLY";
         case CALL_BLACKLISTED:
             return "CALL_BLACKLISTED";
+        case NON_SELECTED_USER_CLEARING:
+            return "NON_SELECTED_USER_CLEARING";
         default:
             return "INVALID: " + cause;
         }
