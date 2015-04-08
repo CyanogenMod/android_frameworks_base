@@ -258,4 +258,7 @@
          1. Right
          2. Left -->
     <integer name="def_qs_quick_pulldown">0</integer>
+
+    <!-- Defaults for Settings.Secure.SPELL_CHECKER_ENABLED. -->
+    <bool name="def_spell_checker">true</bool>
 </resources>
