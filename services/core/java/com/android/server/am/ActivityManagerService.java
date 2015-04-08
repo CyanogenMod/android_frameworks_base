@@ -177,6 +177,7 @@ import android.os.FileUtils;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IPermissionController;
+import android.os.IProcessInfoService;
 import android.os.IRemoteCallback;
 import android.os.IUserManager;
 import android.os.Looper;
@@ -1978,6 +1979,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 ServiceManager.addService("cpuinfo", new CpuBinder(this));
             }
             ServiceManager.addService("permission", new PermissionController(this));
+            ServiceManager.addService("processinfo", new ProcessInfoService(this));
 
             ApplicationInfo info = mContext.getPackageManager().getApplicationInfo(
                     "android", STOCK_PM_FLAGS);
@@ -2860,10 +2862,38 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!isolated) {
             app = getProcessRecordLocked(processName, info.uid, keepIfLarge);
             checkTime(startTime, "startProcess: after getProcessRecord");
+
+            if ((intentFlags & Intent.FLAG_FROM_BACKGROUND) != 0) {
+                // If we are in the background, then check to see if this process
+                // is bad.  If so, we will just silently fail.
+                if (mBadProcesses.get(info.processName, info.uid) != null) {
+                    if (DEBUG_PROCESSES) Slog.v(TAG, "Bad process: " + info.uid
+                            + "/" + info.processName);
+                    return null;
+                }
+            } else {
+                // When the user is explicitly starting a process, then clear its
+                // crash count so that we won't make it bad until they see at
+                // least one crash dialog again, and make the process good again
+                // if it had been bad.
+                if (DEBUG_PROCESSES) Slog.v(TAG, "Clearing bad process: " + info.uid
+                        + "/" + info.processName);
+                mProcessCrashTimes.remove(info.processName, info.uid);
+                if (mBadProcesses.get(info.processName, info.uid) != null) {
+                    EventLog.writeEvent(EventLogTags.AM_PROC_GOOD,
+                            UserHandle.getUserId(info.uid), info.uid,
+                            info.processName);
+                    mBadProcesses.remove(info.processName, info.uid);
+                    if (app != null) {
+                        app.bad = false;
+                    }
+                }
+            }
         } else {
             // If this is an isolated process, it can't re-use an existing process.
             app = null;
         }
+
         // We don't have to do anything more if:
         // (1) There is an existing application record; and
         // (2) The caller doesn't think it is dead, OR there is no thread
@@ -2896,35 +2926,6 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         String hostingNameStr = hostingName != null
                 ? hostingName.flattenToShortString() : null;
-
-        if (!isolated) {
-            if ((intentFlags&Intent.FLAG_FROM_BACKGROUND) != 0) {
-                // If we are in the background, then check to see if this process
-                // is bad.  If so, we will just silently fail.
-                if (mBadProcesses.get(info.processName, info.uid) != null) {
-                    if (DEBUG_PROCESSES) Slog.v(TAG, "Bad process: " + info.uid
-                            + "/" + info.processName);
-                    return null;
-                }
-            } else {
-                // When the user is explicitly starting a process, then clear its
-                // crash count so that we won't make it bad until they see at
-                // least one crash dialog again, and make the process good again
-                // if it had been bad.
-                if (DEBUG_PROCESSES) Slog.v(TAG, "Clearing bad process: " + info.uid
-                        + "/" + info.processName);
-                mProcessCrashTimes.remove(info.processName, info.uid);
-                if (mBadProcesses.get(info.processName, info.uid) != null) {
-                    EventLog.writeEvent(EventLogTags.AM_PROC_GOOD,
-                            UserHandle.getUserId(info.uid), info.uid,
-                            info.processName);
-                    mBadProcesses.remove(info.processName, info.uid);
-                    if (app != null) {
-                        app.bad = false;
-                    }
-                }
-            }
-        }
 
         if (app == null) {
             checkTime(startTime, "startProcess: creating new process record");
@@ -4676,17 +4677,13 @@ public final class ActivityManagerService extends ActivityManagerNative
             finishInstrumentationLocked(app, Activity.RESULT_CANCELED, info);
         }
 
-        if (!restarting) {
-            if (!mStackSupervisor.resumeTopActivitiesLocked()) {
-                // If there was nothing to resume, and we are not already
-                // restarting this process, but there is a visible activity that
-                // is hosted by the process...  then make sure all visible
-                // activities are running, taking care of restarting this
-                // process.
-                if (hasVisibleActivities) {
-                    mStackSupervisor.ensureActivitiesVisibleLocked(null, 0);
-                }
-            }
+        if (!restarting && hasVisibleActivities && !mStackSupervisor.resumeTopActivitiesLocked()) {
+            // If there was nothing to resume, and we are not already
+            // restarting this process, but there is a visible activity that
+            // is hosted by the process...  then make sure all visible
+            // activities are running, taking care of restarting this
+            // process.
+            mStackSupervisor.ensureActivitiesVisibleLocked(null, 0);
         }
     }
 
@@ -6925,7 +6922,46 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }
     }
-    
+
+    // =========================================================
+    // PROCESS INFO
+    // =========================================================
+
+    static class ProcessInfoService extends IProcessInfoService.Stub {
+        final ActivityManagerService mActivityManagerService;
+        ProcessInfoService(ActivityManagerService activityManagerService) {
+            mActivityManagerService = activityManagerService;
+        }
+
+        @Override
+        public void getProcessStatesFromPids(/*in*/ int[] pids, /*out*/ int[] states) {
+            mActivityManagerService.getProcessStatesForPIDs(/*in*/ pids, /*out*/ states);
+        }
+    }
+
+    /**
+     * For each PID in the given input array, write the current process state
+     * for that process into the output array, or -1 to indicate that no
+     * process with the given PID exists.
+     */
+    public void getProcessStatesForPIDs(/*in*/ int[] pids, /*out*/ int[] states) {
+        if (pids == null) {
+            throw new NullPointerException("pids");
+        } else if (states == null) {
+            throw new NullPointerException("states");
+        } else if (pids.length != states.length) {
+            throw new IllegalArgumentException("input and output arrays have different lengths!");
+        }
+
+        synchronized (mPidsSelfLocked) {
+            for (int i = 0; i < pids.length; i++) {
+                ProcessRecord pr = mPidsSelfLocked.get(pids[i]);
+                states[i] = (pr == null) ? ActivityManager.PROCESS_STATE_NONEXISTENT :
+                        pr.curProcState;
+            }
+        }
+    }
+
     // =========================================================
     // PERMISSIONS
     // =========================================================
@@ -17833,9 +17869,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         mFullPssPending = true;
         mPendingPssProcesses.ensureCapacity(mLruProcesses.size());
         mPendingPssProcesses.clear();
-        for (int i=mLruProcesses.size()-1; i>=0; i--) {
+        for (int i = mLruProcesses.size() - 1; i >= 0; i--) {
             ProcessRecord app = mLruProcesses.get(i);
-            if (app.thread == null || app.curProcState < 0) {
+            if (app.thread == null
+                    || app.curProcState == ActivityManager.PROCESS_STATE_NONEXISTENT) {
                 continue;
             }
             if (memLowered || now > (app.lastStateTime+ProcessList.PSS_ALL_INTERVAL)) {
@@ -18171,8 +18208,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
         }
-        if (app.setProcState < 0 || ProcessList.procStatesDifferForMem(app.curProcState,
-                app.setProcState)) {
+        if (app.setProcState == ActivityManager.PROCESS_STATE_NONEXISTENT
+                || ProcessList.procStatesDifferForMem(app.curProcState, app.setProcState)) {
             if (false && mTestPssMode && app.setProcState >= 0 && app.lastStateTime <= (now-200)) {
                 // Experimental code to more aggressively collect pss while
                 // running test...  the problem is that this tends to collect

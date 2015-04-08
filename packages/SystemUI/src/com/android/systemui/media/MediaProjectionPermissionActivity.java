@@ -114,7 +114,9 @@ public class MediaProjectionPermissionActivity extends Activity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mDialog.dismiss();
+        if(mDialog != null) {
+            mDialog.dismiss();
+        }
     }
 
     @Override

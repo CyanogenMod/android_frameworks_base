@@ -2488,9 +2488,11 @@ final class ActivityStack {
         }
 
         int taskNdx = mTaskHistory.indexOf(task);
-        do {
-            taskTop = mTaskHistory.get(taskNdx--).getTopActivity();
-        } while (taskTop == null && taskNdx >= 0);
+        if (taskNdx >= 0) {
+            do {
+                taskTop = mTaskHistory.get(taskNdx--).getTopActivity();
+            } while (taskTop == null && taskNdx >= 0);
+        }
 
         if (topOptions != null) {
             // If we got some ActivityOptions from an activity on top that
@@ -3446,6 +3448,9 @@ final class ActivityStack {
                 if (DEBUG_CLEANUP) Slog.v(
                     TAG, "Record #" + i + " " + r + ": app=" + r.app);
                 if (r.app == app) {
+                    if (r.visible) {
+                        hasVisibleActivities = true;
+                    }
                     boolean remove;
                     if ((!r.haveState && !r.stateNotNeeded) || r.finishing) {
                         // Don't currently have state for the activity, or
@@ -3487,9 +3492,6 @@ final class ActivityStack {
                         // it can be restarted later when needed.
                         if (localLOGV) Slog.v(
                             TAG, "Keeping entry, setting app to null");
-                        if (r.visible) {
-                            hasVisibleActivities = true;
-                        }
                         if (DEBUG_APP) Slog.v(TAG, "Clearing app during removeHistory for activity "
                                 + r);
                         r.app = null;
@@ -3956,16 +3958,18 @@ final class ActivityStack {
     }
 
     void getTasksLocked(List<RunningTaskInfo> list, int callingUid, boolean allowed) {
+        boolean focusedStack = mStackSupervisor.getFocusedStack() == this;
+        boolean topTask = true;
         for (int taskNdx = mTaskHistory.size() - 1; taskNdx >= 0; --taskNdx) {
             final TaskRecord task = mTaskHistory.get(taskNdx);
+            if (task.getTopActivity() == null) {
+                continue;
+            }
             ActivityRecord r = null;
             ActivityRecord top = null;
             int numActivities = 0;
             int numRunning = 0;
             final ArrayList<ActivityRecord> activities = task.mActivities;
-            if (activities.isEmpty()) {
-                continue;
-            }
             if (!allowed && !task.isHomeTask() && task.effectiveUid != callingUid) {
                 continue;
             }
@@ -3994,14 +3998,18 @@ final class ActivityStack {
             ci.baseActivity = r.intent.getComponent();
             ci.topActivity = top.intent.getComponent();
             ci.lastActiveTime = task.lastActiveTime;
+            if (focusedStack && topTask) {
+                // Give the latest time to ensure foreground task can be sorted
+                // at the first, because lastActiveTime of creating task is 0.
+                ci.lastActiveTime = System.currentTimeMillis();
+                topTask = false;
+            }
 
             if (top.task != null) {
                 ci.description = top.task.lastDescription;
             }
             ci.numActivities = numActivities;
             ci.numRunning = numRunning;
-            //System.out.println(
-            //    "#" + maxNum + ": " + " descr=" + ci.description);
             list.add(ci);
         }
     }
