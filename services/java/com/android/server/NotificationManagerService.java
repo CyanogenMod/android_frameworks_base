@@ -1394,6 +1394,44 @@ public class NotificationManagerService extends INotificationManager.Stub
 
     private LEDSettingsObserver mSettingsObserver;
 
+    class SpamFilterObserver extends ContentObserver {
+        SpamFilterObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(SpamFilter.NOTIFICATION_URI, true, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.getPath() != null) {
+                List<String> pathSegments = uri.getPathSegments();
+                if (pathSegments.size() >= 2) {
+                    if (pathSegments.get(0).equals("delete")) {
+                        String pkg = pathSegments.get(1);
+                        StatusBarNotification[] activeNotifications = getActiveNotifications(pkg);
+                        for (StatusBarNotification notification : activeNotifications) {
+                            int idx = indexOfNotificationLocked(pkg, notification.getTag(),
+                                    notification.getId(), notification.getUserId());
+                            if (idx < 0) {
+                                // great!
+                            } else {
+                                // remove this manually
+                                synchronized (mNotificationList) {
+                                    mNotificationList.remove(idx);
+                                }
+                            }
+                        }
+                        // we need to rebuild our spam cache
+                        mSpamCache.evictAll();
+                    }
+                }
+            }
+        }
+    }
+
     static long[] getLongArray(Resources r, int resid, int maxlen, long[] def) {
         int[] ar = r.getIntArray(resid);
         if (ar == null) {
@@ -1495,6 +1533,8 @@ public class NotificationManagerService extends INotificationManager.Stub
         qhObserver.observe();
         mSettingsObserver = new LEDSettingsObserver(mHandler);
         mSettingsObserver.observe();
+        SpamFilterObserver spamObserver = new SpamFilterObserver(mHandler);
+        spamObserver.observe();
 
         // spin up NotificationScorers
         String[] notificationScorerNames = resources.getStringArray(
