@@ -2665,7 +2665,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     com.android.internal.R.bool.config_advancedSettingsMode);
 
             loadBooleanSetting(stmt, Settings.Secure.SPELL_CHECKER_ENABLED,
-                    R.integer.def_spell_checker);
+                    R.bool.def_spell_checker);
 
             loadDefaultThemeSettings(stmt);
             loadProtectedSmsSetting(stmt);
