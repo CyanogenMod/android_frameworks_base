@@ -33,7 +33,7 @@ public class TorchManager {
 
     public static final String TAG = TorchManager.class.getSimpleName();
 
-    private static final int DISPATCH_TORCH_OFF = 1;
+    private static final int DISPATCH_TORCH_STATE_CHANGE = 1;
     private static final int DISPATCH_TORCH_ERROR = 2;
     private static final int DISPATCH_TORCH_AVAILABILITY_CHANGE = 3;
 
@@ -57,14 +57,14 @@ public class TorchManager {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case DISPATCH_TORCH_OFF:
+                case DISPATCH_TORCH_STATE_CHANGE:
                     synchronized (mCallbacks) {
                         List<TorchCallback> listenersToRemove = new ArrayList<>();
                         for (TorchCallback listener : mCallbacks) {
                             try {
-                                listener.onTorchOff();
+                                listener.onTorchStateChanged(msg.arg1 != 0);
                             } catch (Throwable e) {
-                                Log.w(TAG, "Unable to update torch off", e);
+                                Log.w(TAG, "Unable to update torch state", e);
                                 listenersToRemove.add(listener);
                             }
                         }
@@ -148,8 +148,9 @@ public class TorchManager {
 
     private final ITorchCallback mTorchChangeListener = new ITorchCallback.Stub() {
         @Override
-        public void onTorchOff() throws RemoteException {
-            mHandler.sendEmptyMessage(DISPATCH_TORCH_OFF);
+        public void onTorchStateChanged(boolean on) throws RemoteException {
+            mHandler.sendMessage(Message.obtain(mHandler, DISPATCH_TORCH_STATE_CHANGE,
+                    on ? 1 : 0, 0));
         }
 
         @Override
@@ -212,9 +213,9 @@ public class TorchManager {
 
     public interface TorchCallback {
         /**
-         * Called when the torch turns off unexpectedly.
+         * Called when the torch state changes
          */
-        public void onTorchOff();
+        public void onTorchStateChanged(boolean on);
         /**
          * Called when there is an error that turns the torch off.
          */
