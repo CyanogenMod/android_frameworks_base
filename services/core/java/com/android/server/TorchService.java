@@ -17,6 +17,7 @@ package com.android.server;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.ITorchCallback;
 import android.hardware.ITorchService;
@@ -38,6 +39,8 @@ import android.util.Size;
 import android.util.SparseArray;
 import android.view.Surface;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -208,6 +211,31 @@ public class TorchService extends ITorchService.Stub {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.ACCESS_TORCH_SERVICE, null);
         mListeners.unregister(l);
+    }
+
+    @Override
+    protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
+                != PackageManager.PERMISSION_GRANTED) {
+            pw.println("Permission Denial: can't dump torch service from from pid="
+                    + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid());
+            return;
+        }
+        pw.println("Current torch service state:");
+        pw.println(" Active cameras:");
+        for (int i = 0; i < mCamerasInUse.size(); i++) {
+            int cameraId = mCamerasInUse.keyAt(i);
+            CameraUserRecord record = mCamerasInUse.valueAt(i);
+            boolean isTorch = cameraId == mTorchCameraId;
+            pw.print(" Camera " + cameraId + " (" + (isTorch ? "torch" : "camera"));
+            pw.println("): pid=" + record.pid + "; uid=" + record.uid);
+        }
+        pw.println(" mTorchEnabled=" + mTorchEnabled);
+        pw.println(" mTorchAvailable=" + mTorchAvailable);
+        pw.println(" mTorchAppUid=" + mTorchAppUid);
+        pw.println(" mTorchCameraId=" + mTorchCameraId);
+        pw.println(" mCameraDevice=" + mCameraDevice);
+        pw.println(" mOpeningCamera=" + mOpeningCamera);
     }
 
     private synchronized void ensureHandler() {
