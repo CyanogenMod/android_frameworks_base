@@ -656,8 +656,7 @@ public class Tethering extends BaseNetworkObserver {
             if (bluetoothTethered) {
                 showTetheredNotification(com.android.internal.R.drawable.stat_sys_tether_general);
             } else {
-                /* We now have a status bar icon for WifiTethering, so drop the notification */
-                clearTetheredNotification();
+                showTetheredNotification(com.android.internal.R.drawable.stat_sys_tether_wifi);
             }
         } else if (bluetoothTethered) {
             showTetheredNotification(com.android.internal.R.drawable.stat_sys_tether_bluetooth);
