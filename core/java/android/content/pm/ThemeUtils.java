@@ -679,6 +679,46 @@ public class ThemeUtils {
     }
 
     /**
+     * Creates a map of components found in the current ThemeConfig that come from {@themePkgName}
+     * and sets them to the proper defaults.
+     * @param context
+     * @param themePkgName
+     * @return
+     */
+    public static Map<String, String> returnToDefaults(Context context, String themePkgName) {
+        final Configuration config = context.getResources().getConfiguration();
+        final ThemeConfig themeConfig = config != null ? config.themeConfig : null;
+        Map<String, String> returnToDefaultComponents = new HashMap<String, String>();
+        if (themePkgName != null && themeConfig != null) {
+            Map<String, String> defaultComponents = getDefaultComponents(context);
+            if (themePkgName.equals(themeConfig.getOverlayPkgName())) {
+                returnToDefaultComponents.put(ThemesColumns.MODIFIES_OVERLAYS,
+                        defaultComponents.get(ThemesColumns.MODIFIES_OVERLAYS));
+            }
+            if (themePkgName.equals(
+                    themeConfig.getOverlayPkgNameForApp(ThemeConfig.SYSTEMUI_PKG))) {
+                returnToDefaultComponents.put(ThemesColumns.MODIFIES_STATUS_BAR,
+                        defaultComponents.get(ThemesColumns.MODIFIES_STATUS_BAR));
+            }
+            if (themePkgName.equals(
+                    themeConfig.getOverlayPkgNameForApp(ThemeConfig.SYSTEMUI_NAVBAR_PKG))) {
+                returnToDefaultComponents.put(ThemesColumns.MODIFIES_NAVIGATION_BAR,
+                        defaultComponents.get(ThemesColumns.MODIFIES_NAVIGATION_BAR));
+            }
+            if (themePkgName.equals(themeConfig.getIconPackPkgName())) {
+                returnToDefaultComponents.put(ThemesColumns.MODIFIES_ICONS,
+                        defaultComponents.get(ThemesColumns.MODIFIES_ICONS));
+            }
+            if (themePkgName.equals(themeConfig.getFontPkgName())) {
+                returnToDefaultComponents.put(ThemesColumns.MODIFIES_FONTS,
+                        defaultComponents.get(ThemesColumns.MODIFIES_FONTS));
+            }
+        }
+
+        return returnToDefaultComponents;
+    }
+
+    /**
      * Get the boot theme by accessing the settings.db directly instead of using a content resolver.
      * Only use this when the system is starting up and the settings content provider is not ready.
      *
@@ -722,4 +762,6 @@ public class ThemeUtils {
 
         return config;
     }
+
+
 }

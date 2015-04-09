@@ -46,6 +46,8 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public static final String TAG = ThemeConfig.class.getCanonicalName();
     public static final String HOLO_DEFAULT = "holo";
 
+    public static final String SYSTEMUI_PKG = "com.android.systemui";
+
     /**
      * Special package name for theming the navbar separate from the rest of SystemUI
      */
