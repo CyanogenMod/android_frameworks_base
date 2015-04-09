@@ -50,7 +50,7 @@ public class TorchService extends ITorchService.Stub {
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
     private static final int DISPATCH_ERROR = 0;
-    private static final int DISPATCH_OFF = 1;
+    private static final int DISPATCH_STATE_CHANGE = 1;
     private static final int DISPATCH_AVAILABILITY_CHANGED = 2;
 
     private final Context mContext;
@@ -74,6 +74,7 @@ public class TorchService extends ITorchService.Stub {
 
     private CameraManager mCameraManager;
     private CameraDevice mCameraDevice;
+    private boolean mOpeningCamera;
     private CaptureRequest mFlashlightRequest;
     private CameraCaptureSession mSession;
     private SurfaceTexture mSurfaceTexture;
@@ -222,6 +223,7 @@ public class TorchService extends ITorchService.Stub {
         final String cameraId = getCameraId();
         if (DEBUG) Log.d(TAG, "startDevice(), cameraID: " + cameraId);
         mTorchCameraId = Integer.valueOf(cameraId);
+        mOpeningCamera = true;
         mCameraManager.openCamera(cameraId, mTorchCameraListener, mHandler);
     }
 
@@ -279,7 +281,9 @@ public class TorchService extends ITorchService.Stub {
             }
             if (enabled) {
                 if (mCameraDevice == null) {
-                    startDevice();
+                    if (!mOpeningCamera) {
+                        startDevice();
+                    }
                     return;
                 }
                 if (mSession == null) {
@@ -294,12 +298,10 @@ public class TorchService extends ITorchService.Stub {
                     CaptureRequest request = builder.build();
                     mSession.capture(request, null, mHandler);
                     mFlashlightRequest = request;
+                    dispatchStateChange(true);
                 }
             } else {
-                if (mCameraDevice != null) {
-                    mCameraDevice.close();
-                    teardownTorch();
-                }
+                teardownTorch();
             }
 
         } catch (CameraAccessException|IllegalStateException|UnsupportedOperationException e) {
@@ -317,7 +319,11 @@ public class TorchService extends ITorchService.Stub {
     }
 
     private void teardownTorch() {
-        mCameraDevice = null;
+        if (mCameraDevice != null) {
+            mCameraDevice.close();
+            mCameraDevice = null;
+        }
+        mOpeningCamera = false;
         mSession = null;
         mFlashlightRequest = null;
         if (mSurface != null) {
@@ -333,7 +339,7 @@ public class TorchService extends ITorchService.Stub {
             mTorchEnabled = false;
         }
         dispatchError();
-        dispatchOff();
+        dispatchStateChange(false);
         updateFlashlight(true /* forceDisable */);
     }
 
@@ -352,12 +358,12 @@ public class TorchService extends ITorchService.Stub {
                 mTorchEnabled = false;
             }
             updateFlashlight(true /* forceDisable */);
-            dispatchOff();
+            dispatchStateChange(false);
         }
     };
 
-    private void dispatchOff() {
-        dispatchListeners(DISPATCH_OFF, false /* argument (ignored) */);
+    private void dispatchStateChange(boolean on) {
+        dispatchListeners(DISPATCH_STATE_CHANGE, on);
     }
 
     private void dispatchError() {
@@ -376,8 +382,8 @@ public class TorchService extends ITorchService.Stub {
                 try {
                     if (message == DISPATCH_ERROR) {
                         l.onTorchError();
-                    } else if (message == DISPATCH_OFF) {
-                        l.onTorchOff();
+                    } else if (message == DISPATCH_STATE_CHANGE) {
+                        l.onTorchStateChanged(argument);
                     } else if (message == DISPATCH_AVAILABILITY_CHANGED) {
                         l.onTorchAvailabilityChanged(argument);
                     }
@@ -393,14 +399,19 @@ public class TorchService extends ITorchService.Stub {
             new CameraDevice.StateListener() {
         @Override
         public void onOpened(CameraDevice camera) {
-            mCameraDevice = camera;
-            postUpdateFlashlight();
+            if (mOpeningCamera) {
+                mCameraDevice = camera;
+                mOpeningCamera = false;
+                postUpdateFlashlight();
+            } else {
+                teardownTorch();
+            }
         }
 
         @Override
         public void onDisconnected(CameraDevice camera) {
             if (mCameraDevice == camera) {
-                dispatchOff();
+                dispatchStateChange(false);
                 teardownTorch();
             }
         }
@@ -446,18 +457,19 @@ public class TorchService extends ITorchService.Stub {
                 @Override
                 public void onCameraUnavailable(String cameraId) {
                     if (DEBUG) Log.d(TAG, "onCameraUnavailable(" + cameraId + ")");
-                    if (cameraId.equals(String.valueOf(mTorchCameraId))) {
+                    boolean openedOurselves = mOpeningCamera || mCameraDevice != null;
+                    if (!openedOurselves && cameraId.equals(String.valueOf(mTorchCameraId))) {
                         setTorchAvailable(false);
                     }
                 }
 
                 private void setTorchAvailable(boolean available) {
-                    boolean changed;
+                    boolean oldAvailable;
                     synchronized (TorchService.this) {
-                        changed = mTorchAvailable != available;
+                        oldAvailable = mTorchAvailable;
                         mTorchAvailable = available;
                     }
-                    if (changed) {
+                    if (oldAvailable != available) {
                         if (DEBUG) Log.d(TAG, "dispatchAvailabilityChanged(" + available + ")");
                         dispatchAvailabilityChanged(available);
                     }
