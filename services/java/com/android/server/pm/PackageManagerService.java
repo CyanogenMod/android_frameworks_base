@@ -5809,6 +5809,18 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     private void uninstallThemeForAllApps(PackageParser.Package opkg) {
+        // Since we are uninstalling a theme, we need to check if it has any components applied
+        // and switch back to defaults.  Since this method will remove the resource cache for this
+        // theme, apps could still be trying to reference themed resources that no longer exist in
+        // the given path.  Any other components that are applied from this theme, and not part of
+        // the theme config, will be handled after package manager broadcasts its removal.
+        Map<String, String> returnToDefaultComponents = ThemeUtils.returnToDefaults(mContext,
+                opkg.packageName);
+        if (returnToDefaultComponents != null && returnToDefaultComponents.size() > 0) {
+            ThemeManager tm = (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
+            tm.requestThemeChange(returnToDefaultComponents);
+        }
+
         for(String target : opkg.mOverlayTargets) {
             HashMap<String, PackageParser.Package> map = mOverlays.get(target);
             if (map != null) {
