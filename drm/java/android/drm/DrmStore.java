@@ -249,6 +249,7 @@ public class DrmStore {
     /**
      * Defines the drm delivery methods.
      * This should be in sync with svc_drm.h
+     * @hide
      */
     public static class DrmDeliveryType {
         /**
