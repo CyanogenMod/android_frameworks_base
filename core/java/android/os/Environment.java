@@ -61,6 +61,7 @@ public class Environment {
     private static final File DIR_ANDROID_ROOT = getDirectory(ENV_ANDROID_ROOT, "/system");
     private static final File DIR_OEM_ROOT = getDirectory(ENV_OEM_ROOT, "/oem");
     private static final File DIR_VENDOR_ROOT = getDirectory(ENV_VENDOR_ROOT, "/vendor");
+    private static final File DIR_PREBUNDLED_ROOT = getDirectory(ENV_VENDOR_ROOT, "/vendor/bundled-app");
     private static final File DIR_MEDIA_STORAGE = getDirectory(ENV_MEDIA_STORAGE, "/data/media");
 
     private static final String CANONCIAL_EMULATED_STORAGE_TARGET = getCanonicalPathOrNull(
@@ -272,6 +273,15 @@ public class Environment {
      */
     public static File getVendorDirectory() {
         return DIR_VENDOR_ROOT;
+    }
+
+    /**
+     * Return the root directory for "prebundled" apps.  These apps will be installed directly
+     * from this partition but will not be marked as system apps and will hence be uninstallable.
+     * @hide
+     */
+    public static File getPrebundledDirectory() {
+        return DIR_PREBUNDLED_ROOT;
     }
 
     /**
