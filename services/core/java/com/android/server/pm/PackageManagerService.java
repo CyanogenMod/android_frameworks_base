@@ -60,6 +60,7 @@ import static com.android.internal.content.NativeLibraryHelper.LIB_DIR_NAME;
 import static com.android.internal.util.ArrayUtils.appendInt;
 import static com.android.internal.util.ArrayUtils.removeInt;
 
+import android.app.PackageInstallObserver;
 import android.util.ArrayMap;
 
 import com.android.internal.R;
@@ -1691,6 +1692,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             final File oemAppDir = new File(Environment.getOemDirectory(), "app");
             scanDirLI(oemAppDir, PackageParser.PARSE_IS_SYSTEM
                     | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0);
+
+            // Collect all prebundled packages.
+            final File prebundledAppDir = new File(Environment.getPrebundledDirectory(), "app");
+            scanDirLI(prebundledAppDir, PackageParser.PARSE_IS_PREBUNDLED_DIR, scanFlags, 0);
 
             if (DEBUG_UPGRADE) Log.v(TAG, "Running installd update commands");
             mInstaller.moveFiles();
@@ -4358,8 +4363,13 @@ public class PackageManagerService extends IPackageManager.Stub {
                 continue;
             }
             try {
-                scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
-                        scanFlags, currentTime, null);
+                if ((parseFlags&PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
+                    tryInstallPrebundledPackage(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
+                            scanFlags, currentTime, null);
+                } else {
+                    scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
+                            scanFlags, currentTime, null);
+                }
             } catch (PackageManagerException e) {
                 Slog.w(TAG, "Failed to parse " + file + ": " + e.getMessage());
 
@@ -4440,6 +4450,16 @@ public class PackageManagerService extends IPackageManager.Stub {
         } catch (PackageParserException e) {
             throw PackageManagerException.from(e);
         }
+    }
+
+
+    private boolean tryInstallPrebundledPackage(File scanFile, int parseFlags, int scanFlags,
+            long currentTime, UserHandle user) throws PackageManagerException {
+        if (DEBUG_INSTALL) Slog.d(TAG, "Parsing prebundled: " + scanFile);
+        PackageParser.Package scannedPackage =
+                scanPackageLI(scanFile, parseFlags, scanFlags, currenTime, user);
+        return installPackage(scannedPackage.codePath, new PackageInstallObserver(),
+                PackageManager.INSTALL_REPLACE_EXISTING, scannedPackage.packageName);
     }
 
     /*
