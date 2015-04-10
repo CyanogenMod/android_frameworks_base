@@ -66,6 +66,7 @@ import static android.content.pm.PackageManager.MOVE_FAILED_OPERATION_PENDING;
 import static android.content.pm.PackageManager.MOVE_FAILED_SYSTEM_PACKAGE;
 import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.content.pm.PackageManager.INSTALL_FAILED_UNINSTALLED_PREBUNDLE;
 import static android.content.pm.PackageParser.isApkFile;
 import static android.os.Process.PACKAGE_INFO_GID;
 import static android.os.Process.SYSTEM_UID;
@@ -94,6 +95,7 @@ import android.app.AppGlobals;
 import android.app.ComposedIconInfo;
 import android.app.IActivityManager;
 import android.app.IconPackHelper;
+import android.app.PackageInstallObserver;
 import android.app.admin.IDevicePolicyManager;
 import android.app.backup.IBackupManager;
 import android.app.usage.UsageStats;
@@ -2171,6 +2173,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             final File oemAppDir = new File(Environment.getOemDirectory(), "app");
             scanDirLI(oemAppDir, PackageParser.PARSE_IS_SYSTEM
                     | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0);
+
+            // Collect all prebundled packages.
+            scanDirLI(Environment.getPrebundledDirectory(),
+                    PackageParser.PARSE_IS_PREBUNDLED_DIR, scanFlags, 0);
 
             if (DEBUG_UPGRADE) Log.v(TAG, "Running installd update commands");
             mInstaller.moveFiles();
@@ -5731,6 +5737,13 @@ public class PackageManagerService extends IPackageManager.Stub {
                     + " flags=0x" + Integer.toHexString(parseFlags));
         }
 
+        boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
+        if (isPrebundled) {
+            synchronized (mPackages) {
+                mSettings.readPrebundledPackagesLPr();
+            }
+        }
+
         for (File file : files) {
             final boolean isPackage = (isApkFile(file) || file.isDirectory())
                     && !PackageInstallerService.isStageName(file.getName());
@@ -5741,6 +5754,17 @@ public class PackageManagerService extends IPackageManager.Stub {
             try {
                 scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
                         scanFlags, currentTime, null);
+                if (isPrebundled) {
+                    final PackageParser.Package pkg;
+                    try {
+                        pkg = new PackageParser().parsePackage(file, parseFlags);
+                    } catch (PackageParserException e) {
+                        throw PackageManagerException.from(e);
+                    }
+                    synchronized (mPackages) {
+                        mSettings.markPrebundledPackageInstalledLPr(pkg.packageName);
+                    }
+                }
             } catch (PackageManagerException e) {
                 Slog.w(TAG, "Failed to parse " + file + ": " + e.getMessage());
 
@@ -5754,6 +5778,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                         file.delete();
                     }
                 }
+            }
+        }
+
+        if (isPrebundled) {
+            synchronized (mPackages) {
+                mSettings.writePrebundledPackagesLPr();
             }
         }
     }
@@ -5848,6 +5878,29 @@ public class PackageManagerService extends IPackageManager.Stub {
             pkg = pp.parsePackage(scanFile, parseFlags);
         } catch (PackageParserException e) {
             throw PackageManagerException.from(e);
+        }
+
+        if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
+            synchronized (mPackages) {
+                PackageSetting existingSettings = mSettings.peekPackageLPr(pkg.packageName);
+                if (mSettings.wasPrebundledPackageInstalledLPr(pkg.packageName) &&
+                        existingSettings == null) {
+                    // The prebundled app was installed at some point in time, but now it is
+                    // gone.  Assume that the user uninstalled it intentionally: do not reinstall.
+                    throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
+                            "skip reinstall for " + pkg.packageName);
+                } else if (existingSettings != null
+                        && existingSettings.versionCode >= pkg.mVersionCode
+                        && !existingSettings.codePathString.contains(
+                                Environment.getPrebundledDirectory().getPath())) {
+                    // This app is installed in a location that is not the prebundled location
+                    // and has a higher (or same) version as the prebundled one.  Skip
+                    // installing the prebundled version.
+                    Slog.d(TAG, pkg.packageName + " already installed at " +
+                            existingSettings.codePathString);
+                    return null; // return null so we still mark package as installed
+                }
+            }
         }
 
         PackageSetting ps = null;
