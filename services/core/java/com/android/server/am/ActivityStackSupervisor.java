@@ -2744,6 +2744,19 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
                 final ActivityRecord ar = stack.findTaskLocked(r);
                 if (ar != null) {
+                    /* Acquire perf lock during app launch for existing activity record. */
+                    /* Acquire lock only in case app is killed/died. */
+                    if(ar.state == ActivityState.DESTROYED ) {
+                       if (mIsPerfBoostEnabled == true && mPerf == null) {
+                           mPerf = new Performance();
+                       }
+                       if (mPerf != null) {
+                           mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
+                                                 lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost,
+                                                 lBoostSmTaskBoost, lBoostIdleLoadBoost,
+                                                 lBoostIdleNrRunBoost, lBoostPreferIdle);
+                       }
+                    }
                     return ar;
                 }
             }
@@ -2754,8 +2767,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
         }
         if (mPerf != null) {
             mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                  lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost, 
-                                  lBoostSmTaskBoost, lBoostIdleLoadBoost, 
+                                  lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost,
+                                  lBoostSmTaskBoost, lBoostIdleLoadBoost,
                                   lBoostIdleNrRunBoost, lBoostPreferIdle);
         }
 
