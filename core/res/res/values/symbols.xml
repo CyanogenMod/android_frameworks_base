@@ -2114,4 +2114,7 @@
   <!-- Strings for MultiSim -->
   <java-symbol type="string" name="multi_sim_entry_format" />
   <java-symbol type="string" name="multi_sim_entry_format_no_carrier" />
+
+  <!-- Account Preference -->
+  <java-symbol type="style" name="AccountPreference" />
 </resources>
