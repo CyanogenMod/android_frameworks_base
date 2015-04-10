@@ -251,11 +251,12 @@ void OpenGLRenderer::discardFramebuffer(float left, float top, float right, floa
 }
 
 status_t OpenGLRenderer::clear(float left, float top, float right, float bottom, bool opaque) {
-    if (!opaque) {
-        mCaches.enableScissor();
-        mCaches.setScissor(left, getViewportHeight() - bottom, right - left, bottom - top);
-        glClear(GL_COLOR_BUFFER_BIT);
-        return DrawGlInfo::kStatusDrew;
+    mCaches.enableScissor();
+    mCaches.setScissor(left, getViewportHeight() - bottom, right - left, bottom - top);
+    glClear(GL_COLOR_BUFFER_BIT);
+    if (opaque) {
+        mCaches.resetScissor();
+        return DrawGlInfo::kStatusDone;
     }
 
     return DrawGlInfo::kStatusDrew;
