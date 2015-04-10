@@ -68,6 +68,7 @@ public class QSUtils {
                     case QSConstants.TILE_DATA:
                     case QSConstants.TILE_ROAMING:
                     case QSConstants.TILE_APN:
+                    case QSConstants.TILE_USB_TETHER:
                         removeTile = !deviceSupportsMobile;
                         break;
                     case QSConstants.TILE_DDS:
