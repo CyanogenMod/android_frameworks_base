@@ -818,6 +818,14 @@ public abstract class PackageManager {
     public static final int INSTALL_FAILED_THEME_UNKNOWN_ERROR = -402;
 
     /**
+     * Used for prebundles
+     * Installation failed for a prebundled app because the user previously uninstalled it
+     * and we don't want to bring it back
+     * @hide
+     */
+    public static final int INSTALL_FAILED_UNINSTALLED_PREBUNDLE = -403;
+
+    /**
      * Flag parameter for {@link #deletePackage} to indicate that you don't want to delete the
      * package's data directory.
      *
