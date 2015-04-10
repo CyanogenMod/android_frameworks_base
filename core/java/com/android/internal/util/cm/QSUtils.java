@@ -70,6 +70,9 @@ public class QSUtils {
                     case QSConstants.TILE_APN:
                         removeTile = !deviceSupportsMobile;
                         break;
+                    case QSConstants.TILE_USB_TETHER:
+                        removeTile = !deviceSupportsUsbTether(context);;
+                        break;
                     case QSConstants.TILE_DDS:
                         removeTile = !deviceSupportsDdsSupported(context);
                         break;
@@ -114,6 +117,12 @@ public class QSUtils {
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         return cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
+    }
+
+    public static boolean deviceSupportsMobileData(Context ctx) {
+        ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        return cm.getTetherableUsbRegexs() != 0;
     }
 
     public static boolean deviceSupportsBluetooth() {
