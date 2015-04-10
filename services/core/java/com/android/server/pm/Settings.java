@@ -45,6 +45,7 @@ import com.android.internal.util.XmlUtils;
 import com.android.server.pm.PackageManagerService.DumpState;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -169,12 +170,15 @@ final class Settings {
     private final File mPackageListFilename;
     private final File mStoppedPackagesFilename;
     private final File mBackupStoppedPackagesFilename;
+    private final File mPrebundledPackagesFilename;
 
     final ArrayMap<String, PackageSetting> mPackages =
             new ArrayMap<String, PackageSetting>();
     // List of replaced system applications
     private final ArrayMap<String, PackageSetting> mDisabledSysPackages =
         new ArrayMap<String, PackageSetting>();
+    private final HashSet<String> mPrebundledPackages =
+            new HashSet<String>();
 
     private static int mFirstAvailableUid = 0;
 
@@ -274,6 +278,7 @@ final class Settings {
         mSettingsFilename = new File(mSystemDir, "packages.xml");
         mBackupSettingsFilename = new File(mSystemDir, "packages-backup.xml");
         mPackageListFilename = new File(mSystemDir, "packages.list");
+        mPrebundledPackagesFilename = new File(mSystemDir, "prebundled-packages.list");
         FileUtils.setPermissions(mPackageListFilename, 0640, SYSTEM_UID, PACKAGE_INFO_GID);
 
         // Deprecated: Needed for migration
@@ -1773,6 +1778,59 @@ final class Settings {
             }
         }
         //Debug.stopMethodTracing();
+    }
+
+    void writePrebundledPackagesLPr() {
+        BufferedOutputStream out = null;
+        try {
+            out = new BufferedOutputStream(new FileOutputStream(mPrebundledPackagesFilename, false));
+            for (String packageName : mPrebundledPackages) {
+                out.write(packageName.getBytes());
+                out.write("\n".getBytes());
+            }
+        } catch (java.io.IOException e) {
+            Slog.e(PackageManagerService.TAG, "Unable to write prebundled package list", e);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {}
+            }
+        }
+    }
+
+    void readPrebundledPackagesLPr() {
+        if (!mPrebundledPackagesFilename.exists()) {
+            return;
+        }
+
+        java.io.BufferedReader reader = null;
+        try {
+            reader = new java.io.BufferedReader(new java.io.FileReader(mPrebundledPackagesFilename));
+            String packageName = reader.readLine();
+            while (packageName != null) {
+                if (!android.text.TextUtils.isEmpty(packageName)) {
+                    mPrebundledPackages.add(packageName);
+                }
+                packageName = reader.readLine();
+            }
+        } catch (java.io.IOException e) {
+            Slog.e(PackageManagerService.TAG, "Unable to read prebundled package list", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {}
+            }
+        }
+    }
+
+    void addPrebundledPackageLPr(String packageName) {
+        mPrebundledPackages.add(packageName);
+    }
+
+    boolean hasPrebundledPackageLPr(String packageName) {
+        return mPrebundledPackages.contains(packageName);
     }
 
     void writeDisabledSysPackageLPr(XmlSerializer serializer, final PackageSetting pkg)

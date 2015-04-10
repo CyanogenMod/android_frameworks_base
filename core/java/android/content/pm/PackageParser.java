@@ -645,6 +645,7 @@ public class PackageParser {
     public final static int PARSE_IS_PRIVILEGED = 1<<7;
     public final static int PARSE_COLLECT_CERTIFICATES = 1<<8;
     public final static int PARSE_TRUSTED_OVERLAY = 1<<9;
+    public final static int PARSE_IS_PREBUNDLED_DIR = 1<<10;
 
     private static final Comparator<String> sSplitNameComparator = new SplitNameComparator();
 
