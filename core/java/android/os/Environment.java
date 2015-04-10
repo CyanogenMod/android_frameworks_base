@@ -45,6 +45,7 @@ public class Environment {
     private static final String ENV_ANDROID_ROOT = "ANDROID_ROOT";
     private static final String ENV_OEM_ROOT = "OEM_ROOT";
     private static final String ENV_VENDOR_ROOT = "VENDOR_ROOT";
+    private static final String ENV_PREBUNDLED_ROOT = "PREBUNDLED_ROOT";
 
     /** {@hide} */
     public static final String DIR_ANDROID = "Android";
@@ -61,6 +62,8 @@ public class Environment {
     private static final File DIR_ANDROID_ROOT = getDirectory(ENV_ANDROID_ROOT, "/system");
     private static final File DIR_OEM_ROOT = getDirectory(ENV_OEM_ROOT, "/oem");
     private static final File DIR_VENDOR_ROOT = getDirectory(ENV_VENDOR_ROOT, "/vendor");
+    /* TODO: Make this overlayable */
+    private static final File DIR_PREBUNDLED_ROOT = getDirectory(ENV_PREBUNDLED_ROOT, "/prebundled");
     private static final File DIR_MEDIA_STORAGE = getDirectory(ENV_MEDIA_STORAGE, "/data/media");
 
     private static final String CANONCIAL_EMULATED_STORAGE_TARGET = getCanonicalPathOrNull(
@@ -272,6 +275,17 @@ public class Environment {
      */
     public static File getVendorDirectory() {
         return DIR_VENDOR_ROOT;
+    }
+
+    /**
+     * Return magical root directory of the "prebundled" partition that holds extension, plugins,
+     * and various other software that should persist across simple reflashing of the "system"
+     * partitions. Software contained within this root directory will be installed during Android
+     * upgrade
+     * @hide
+     */
+    public static File getPrebundledDirectory() {
+        return DIR_PREBUNDLED_ROOT;
     }
 
     /**
