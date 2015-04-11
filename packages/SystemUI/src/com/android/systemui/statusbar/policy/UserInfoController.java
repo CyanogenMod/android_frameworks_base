@@ -153,8 +153,8 @@ public final class UserInfoController {
                     avatar = new BitmapDrawable(mContext.getResources(),
                             BitmapHelper.createCircularClip(rawAvatar, avatarSize, avatarSize));
                 } else {
-                    avatar = UserIcons.getDefaultUserIcon(isGuest? UserHandle.USER_NULL : userId,
-                            /* light= */ true);
+                    avatar = UserIcons.getDefaultUserIcon(res,
+                            isGuest? UserHandle.USER_NULL : userId, /* light= */ true);
                     mUseDefaultAvatar = true;
                 }
 

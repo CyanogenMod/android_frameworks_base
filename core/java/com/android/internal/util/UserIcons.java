@@ -16,6 +16,7 @@
 
 package com.android.internal.util;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -62,13 +63,17 @@ public class UserIcons {
      * @param light whether we want a light icon (suitable for a dark background)
      */
     public static Drawable getDefaultUserIcon(int userId, boolean light) {
+        return getDefaultUserIcon(Resources.getSystem(), userId, light);
+    }
+
+    public static Drawable getDefaultUserIcon(Resources res, int userId, boolean light) {
         int colorResId = light ? R.color.user_icon_default_white : R.color.user_icon_default_gray;
         if (userId != UserHandle.USER_NULL) {
             // Return colored icon instead
             colorResId = USER_ICON_COLORS[userId % USER_ICON_COLORS.length];
         }
-        Drawable icon = Resources.getSystem().getDrawable(R.drawable.ic_account_circle).mutate();
-        icon.setColorFilter(Resources.getSystem().getColor(colorResId), Mode.SRC_IN);
+        Drawable icon = res.getDrawable(R.drawable.ic_account_circle).mutate();
+        icon.setColorFilter(res.getColor(colorResId), Mode.SRC_IN);
         icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
         return icon;
     }

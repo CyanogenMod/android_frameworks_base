@@ -693,6 +693,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     Bitmap rawAvatar = um.getUserIcon(user.id);
                     if (rawAvatar == null) {
                         rawAvatar = UserIcons.convertToBitmap(UserIcons.getDefaultUserIcon(
+                                mUiContext.getResources(),
                                 user.isGuest() ? UserHandle.USER_NULL : user.id, /*light=*/ false));
                     }
                     avatar = new BitmapDrawable(mContext.getResources(),

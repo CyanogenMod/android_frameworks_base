@@ -421,8 +421,8 @@ public class UserSwitcherController {
             if (item.isAddUser) {
                 return context.getDrawable(R.drawable.ic_add_circle_qs);
             }
-            return UserIcons.getDefaultUserIcon(item.isGuest ? UserHandle.USER_NULL : item.info.id,
-                    /* light= */ true);
+            return UserIcons.getDefaultUserIcon(context.getResources(),
+                    item.isGuest ? UserHandle.USER_NULL : item.info.id, /* light= */ true);
         }
 
         public void refresh() {
@@ -577,7 +577,7 @@ public class UserSwitcherController {
                 }
                 int id = user.id;
                 Bitmap icon = UserIcons.convertToBitmap(UserIcons.getDefaultUserIcon(
-                        id, /* light= */ false));
+                        getContext().getResources(), id, /* light= */ false));
                 mUserManager.setUserIcon(id, icon);
                 switchToUserId(id);
             }
