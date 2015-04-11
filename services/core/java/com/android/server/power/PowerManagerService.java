@@ -3249,12 +3249,16 @@ public final class PowerManagerService extends SystemService
                 return;
             }
 
-            TelephonyManager tm = (TelephonyManager)mContext.getSystemService(
-                    Context.TELEPHONY_SERVICE);
-            boolean hasIncomingCall = tm.getCallState() == TelephonyManager.CALL_STATE_RINGING;
+            boolean withProximity = mProximityWakeSupported && mProximityWakeEnabled
+                    && mProximitySensor != null;
 
-            if (mProximityWakeSupported && mProximityWakeEnabled && mProximitySensor != null
-                    && !hasIncomingCall) {
+            if (withProximity) {
+                TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+                        Context.TELEPHONY_SERVICE);
+                withProximity = tm.getCallState() != TelephonyManager.CALL_STATE_RINGING;
+            }
+
+            if (withProximity) {
                 Message msg = mHandler.obtainMessage(MSG_WAKE_UP);
                 msg.obj = r;
                 mHandler.sendMessageDelayed(msg, mProximityTimeOut);
