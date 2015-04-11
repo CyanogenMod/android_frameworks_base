@@ -130,7 +130,7 @@ public class EmergencyButton extends Button {
             final boolean bypassHandler = true;
             KeyguardUpdateMonitor.getInstance(mContext).reportEmergencyCallAction(bypassHandler);
             Intent intent = new Intent(ACTION_EMERGENCY_DIAL);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
                     | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             getContext().startActivityAsUser(intent,
                     new UserHandle(mLockPatternUtils.getCurrentUser()));
