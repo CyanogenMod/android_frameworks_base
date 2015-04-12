@@ -28,6 +28,13 @@
     <bool name="def_auto_time">true</bool>
     <bool name="def_auto_time_zone">true</bool>
     <bool name="def_accelerometer_rotation">true</bool>
+    <!-- Bitmask of allowed display rotation angles:
+           ROTATION_0_MODE: 1
+           ROTATION_90_MODE: 2
+           ROTATION_180_MODE: 4
+           ROTATION_270_MODE: 8
+         Default to 0, 90, 270. -->
+    <integer name="def_accelerometer_rotation_angles">11</integer>
     <!-- Default screen brightness, from 0 to 255.  102 is 40%. -->
     <integer name="def_screen_brightness">102</integer>
     <bool name="def_screen_brightness_automatic_mode">false</bool>
