@@ -27,6 +27,7 @@
     <bool name="def_auto_time">true</bool>
     <bool name="def_auto_time_zone">true</bool>
     <bool name="def_accelerometer_rotation">true</bool>
+    <integer name="def_accelerometer_rotation_angles">11</integer>
     <!-- Default screen brightness, from 0 to 255.  102 is 40%. -->
     <integer name="def_screen_brightness">102</integer>
     <bool name="def_screen_brightness_automatic_mode">false</bool>
