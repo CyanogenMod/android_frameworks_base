@@ -34,6 +34,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -43,6 +44,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 import android.util.TypedValue;
+import com.android.internal.util.cm.palette.Palette;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -63,11 +65,27 @@ import android.util.DisplayMetrics;
 /** @hide */
 public class IconPackHelper {
     private static final String TAG = IconPackHelper.class.getSimpleName();
+
+    private static final boolean DEBUG = false;
+
     private static final String ICON_MASK_TAG = "iconmask";
     private static final String ICON_BACK_TAG = "iconback";
     private static final String ICON_UPON_TAG = "iconupon";
     private static final String ICON_SCALE_TAG = "scale";
     private static final String ICON_BACK_FORMAT = "iconback%d";
+
+    // Palettized icon background constants
+    private static final String ICON_PALETTIZED_BACK_TAG = "paletteback";
+    private static final String IMG_ATTR = "img";
+    private static final String SWATCH_TYPE_ATTR = "swatchType";
+    private static final String DEFAULT_SWATCH_COLOR_ATTR = "defaultSwatchColor";
+    private static final String VIBRANT_VALUE = "vibrant";
+    private static final String VIBRANT_LIGHT_VALUE = "vibrantLight";
+    private static final String VIBRANT_DARK_VALUE = "vibrantDark";
+    private static final String MUTED_VALUE = "muted";
+    private static final String MUTED_LIGHT_VALUE = "mutedLight";
+    private static final String MUTED_DARK_VALUE = "mutedDark";
+    private static final int NUM_PALETTE_COLORS = 32;
 
     private static final ComponentName ICON_BACK_COMPONENT;
     private static final ComponentName ICON_MASK_COMPONENT;
@@ -168,9 +186,10 @@ public class IconPackHelper {
     }
 
     private boolean isComposedIconComponent(String tag) {
-        return tag.equalsIgnoreCase(ICON_MASK_TAG) ||
-                tag.equalsIgnoreCase(ICON_BACK_TAG) ||
-                tag.equalsIgnoreCase(ICON_UPON_TAG);
+        return ICON_MASK_TAG.equalsIgnoreCase(tag) ||
+                ICON_BACK_TAG.equalsIgnoreCase(tag) ||
+                ICON_UPON_TAG.equalsIgnoreCase(tag) ||
+                ICON_PALETTIZED_BACK_TAG.equalsIgnoreCase(tag);
     }
 
     private boolean parseComposedIconComponent(XmlPullParser parser,
@@ -182,13 +201,15 @@ public class IconPackHelper {
         }
 
         if (parser.getAttributeCount() >= 1) {
-            if (tag.equalsIgnoreCase(ICON_BACK_TAG)) {
+            if (ICON_BACK_TAG.equalsIgnoreCase(tag)) {
                 mIconBackCount = parser.getAttributeCount();
                 for (int i = 0; i < mIconBackCount; i++) {
                     tag = String.format(ICON_BACK_FORMAT, i);
                     icon = parser.getAttributeValue(i);
                     iconPackResources.put(new ComponentName(tag, ""), icon);
                 }
+            } else if (ICON_PALETTIZED_BACK_TAG.equalsIgnoreCase(tag)) {
+                parsePalettizedBackground(parser, mComposedIconInfo);
             } else {
                 icon = parser.getAttributeValue(0);
                 iconPackResources.put(new ComponentName(tag, ""),
@@ -200,6 +221,62 @@ public class IconPackHelper {
         return false;
     }
 
+    private void parsePalettizedBackground(XmlPullParser parser, ComposedIconInfo iconInfo) {
+        int attrCount = parser.getAttributeCount();
+        ArrayList<Integer> convertedColors = new ArrayList<Integer>();
+        for (int i = 0; i < attrCount; i++) {
+            String name = parser.getAttributeName(i);
+            String value = parser.getAttributeValue(i);
+            if (TextUtils.isEmpty(name)) {
+                Log.w(TAG, "Attribute name cannot be empty or null");
+                continue;
+            }
+            if (TextUtils.isEmpty(value)) {
+                Log.w(TAG, "Attribute value cannot be empty or null");
+                continue;
+            }
+            if (IMG_ATTR.equalsIgnoreCase(name)) {
+                iconInfo.iconPaletteBack = getResourceIdForDrawable(value);
+                if (DEBUG) {
+                    Log.d(TAG, String.format("img=%s, resId=%d", value,
+                            iconInfo.iconPaletteBack));
+                }
+            } else if (SWATCH_TYPE_ATTR.equalsIgnoreCase(name)) {
+                ComposedIconInfo.SwatchType type = ComposedIconInfo.SwatchType.None;
+                if (VIBRANT_VALUE.equalsIgnoreCase(value)) {
+                    type = ComposedIconInfo.SwatchType.Vibrant;
+                } else if (VIBRANT_LIGHT_VALUE.equalsIgnoreCase(value)) {
+                    type = ComposedIconInfo.SwatchType.VibrantLight;
+                } else if (VIBRANT_DARK_VALUE.equalsIgnoreCase(value)) {
+                    type = ComposedIconInfo.SwatchType.VibrantDark;
+                } else if (MUTED_VALUE.equalsIgnoreCase(value)) {
+                    type = ComposedIconInfo.SwatchType.Muted;
+                } else if (MUTED_LIGHT_VALUE.equalsIgnoreCase(value)) {
+                    type = ComposedIconInfo.SwatchType.MutedLight;
+                } else if (MUTED_DARK_VALUE.equalsIgnoreCase(value)) {
+                    type = ComposedIconInfo.SwatchType.MutedDark;
+                }
+                if (type != ComposedIconInfo.SwatchType.None) {
+                    iconInfo.swatchType = type;
+                    if (DEBUG) Log.d(TAG, "PaletteType=" + type);
+                }
+            } else if (name.startsWith(DEFAULT_SWATCH_COLOR_ATTR)) {
+                try {
+                    // ensure alpha is always 0xff
+                    convertedColors.add(Color.parseColor(value) | 0xff000000);
+                } catch (IllegalArgumentException e) {
+                    Log.w(TAG, "Invalid color format", e);
+                }
+            }
+            if (convertedColors.size() > 0) {
+                iconInfo.defaultSwatchColors = new int[convertedColors.size()];
+                for (int j = 0; j < convertedColors.size(); j++) {
+                    iconInfo.defaultSwatchColors[j] = convertedColors.get(j);
+                }
+            }
+        }
+    }
+
     public void loadIconPack(String packageName) throws NameNotFoundException {
         if (packageName == null) {
             mLoadedIconPackResource = null;
@@ -208,12 +285,14 @@ public class IconPackHelper {
             mComposedIconInfo.iconMask = mComposedIconInfo.iconUpon = 0;
             mComposedIconInfo.iconScale = 0;
             mComposedIconInfo.colorFilter = null;
+            mComposedIconInfo.iconPaletteBack = 0;
+            mComposedIconInfo.swatchType = ComposedIconInfo.SwatchType.None;
         } else {
             mIconBackCount = 0;
             Resources res = createIconResource(mContext, packageName);
-            mIconPackResourceMap = getIconResMapFromXml(res, packageName);
             mLoadedIconPackResource = res;
             mLoadedIconPackName = packageName;
+            mIconPackResourceMap = getIconResMapFromXml(res, packageName);
             loadComposedIconComponents();
             ColorMatrix cm = mFilterBuilder.build();
             if (cm != null) {
@@ -454,11 +533,19 @@ public class IconPackHelper {
                 ComposedIconInfo iconInfo) {
             if (iconInfo == null) return icon;
             int back = 0;
-            if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
+            int defaultSwatchColor = 0;
+            if (iconInfo.swatchType != ComposedIconInfo.SwatchType.None) {
+                back = iconInfo.iconPaletteBack;
+                if (iconInfo.defaultSwatchColors.length > 0) {
+                    defaultSwatchColor = iconInfo.defaultSwatchColors[
+                            sRandom.nextInt(iconInfo.defaultSwatchColors.length)];
+                }
+            } else if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
                 back = iconInfo.iconBacks[sRandom.nextInt(iconInfo.iconBacks.length)];
             }
             Bitmap bmp = createIconBitmap(icon, res, back, iconInfo.iconMask, iconInfo.iconUpon,
-                    iconInfo.iconScale, iconInfo.iconSize, iconInfo.colorFilter);
+                    iconInfo.iconScale, iconInfo.iconSize, iconInfo.colorFilter,
+                    iconInfo.swatchType, defaultSwatchColor);
             return bmp != null ? new BitmapDrawable(res, bmp): null;
         }
 
@@ -470,18 +557,28 @@ public class IconPackHelper {
             outValue.assetCookie = COMPOSED_ICON_COOKIE;
             outValue.data = resId & (COMPOSED_ICON_COOKIE << 24 | 0x00ffffff);
             outValue.string = getCachedIconPath(pkgName, resId, outValue.density);
+            int hashCode = outValue.string.hashCode() & 0x7fffffff;
+            int defaultSwatchColor = 0;
 
             if (!(new File(outValue.string.toString()).exists())) {
                 // compose the icon and cache it
                 final ComposedIconInfo iconInfo = res.getComposedIconInfo();
                 int back = 0;
-                if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
-                    back = iconInfo.iconBacks[(outValue.string.hashCode() & 0x7fffffff)
-                            % iconInfo.iconBacks.length];
+                if (iconInfo.swatchType != ComposedIconInfo.SwatchType.None) {
+                    back = iconInfo.iconPaletteBack;
+                    if (iconInfo.defaultSwatchColors.length > 0) {
+                        defaultSwatchColor =iconInfo.defaultSwatchColors[
+                                hashCode % iconInfo.defaultSwatchColors.length];
+                    }
+                } else if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
+                    back = iconInfo.iconBacks[hashCode % iconInfo.iconBacks.length];
+                }
+                if (DEBUG) {
+                    Log.d(TAG, "Composing icon for " + pkgName);
                 }
                 Bitmap bmp = createIconBitmap(baseIcon, res, back, iconInfo.iconMask,
                         iconInfo.iconUpon, iconInfo.iconScale, iconInfo.iconSize,
-                        iconInfo.colorFilter);
+                        iconInfo.colorFilter, iconInfo.swatchType, defaultSwatchColor);
                 if (!cacheComposedIcon(bmp, getCachedIconName(pkgName, resId, outValue.density))) {
                     Log.w(TAG, "Unable to cache icon " + outValue.string);
                     // restore the original TypedValue
@@ -491,7 +588,8 @@ public class IconPackHelper {
         }
 
         private static Bitmap createIconBitmap(Drawable icon, Resources res, int iconBack,
-                int iconMask, int iconUpon, float scale, int iconSize, float[] colorFilter) {
+                int iconMask, int iconUpon, float scale, int iconSize, float[] colorFilter,
+                ComposedIconInfo.SwatchType swatchType, int defaultSwatchColor) {
             if (iconSize <= 0) return null;
 
             final Canvas canvas = new Canvas();
@@ -499,6 +597,7 @@ public class IconPackHelper {
                     Paint.FILTER_BITMAP_FLAG));
 
             int width = 0, height = 0;
+            int backTintColor = 0;
             if (icon instanceof PaintDrawable) {
                 PaintDrawable painter = (PaintDrawable) icon;
                 painter.setIntrinsicWidth(iconSize);
@@ -528,6 +627,32 @@ public class IconPackHelper {
                 } else {
                     width = iconSize;
                     height = iconSize;
+                }
+                if (swatchType != ComposedIconInfo.SwatchType.None) {
+                    Palette palette = Palette.generate(bitmap, NUM_PALETTE_COLORS);
+                    switch (swatchType) {
+                        case Vibrant:
+                            backTintColor = palette.getVibrantColor(defaultSwatchColor);
+                            break;
+                        case VibrantLight:
+                            backTintColor = palette.getLightVibrantColor(defaultSwatchColor);
+                            break;
+                        case VibrantDark:
+                            backTintColor = palette.getDarkVibrantColor(defaultSwatchColor);
+                            break;
+                        case Muted:
+                            backTintColor = palette.getMutedColor(defaultSwatchColor);
+                            break;
+                        case MutedLight:
+                            backTintColor = palette.getLightMutedColor(defaultSwatchColor);
+                            break;
+                        case MutedDark:
+                            backTintColor = palette.getDarkMutedColor(defaultSwatchColor);
+                            break;
+                    }
+                    if (DEBUG) {
+                        Log.d(TAG, String.format("palette tint color=0x%08x", backTintColor));
+                    }
                 }
             } else if (icon instanceof VectorDrawable) {
                 width = height = iconSize;
@@ -572,8 +697,13 @@ public class IconPackHelper {
                 Drawable back = res.getDrawable(iconBack);
                 if (back != null) {
                     back.setBounds(icon.getBounds());
-                    ((BitmapDrawable) back).getPaint().setXfermode(
+                    Paint paint = ((BitmapDrawable) back).getPaint();
+                    paint.setXfermode(
                             new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+                    if (backTintColor != 0) {
+                        paint.setColorFilter(new PorterDuffColorFilter(backTintColor,
+                                PorterDuff.Mode.MULTIPLY));
+                    }
                     back.draw(canvas);
                 }
             }
