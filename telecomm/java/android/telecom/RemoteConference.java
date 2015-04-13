@@ -43,6 +43,7 @@ public final class RemoteConference {
         public void onConnectionCapabilitiesChanged(
                 RemoteConference conference,
                 int connectionCapabilities) {}
+        /** @hide */
         public void onPropertiesChanged(RemoteConference conference, int properties) {}
         public void onConferenceableConnectionsChanged(
                 RemoteConference conference,
@@ -185,6 +186,7 @@ public final class RemoteConference {
         return mConnectionCapabilities;
     }
 
+    /** @hide */
     public final int getCallProperties() {
         return mCallProperties;
     }
