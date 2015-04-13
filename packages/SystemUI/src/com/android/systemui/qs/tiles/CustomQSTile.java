@@ -89,21 +89,12 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         if (iconId != 0) {
             final String iconPackage = tile.getPackage();
             if (!TextUtils.isEmpty(iconPackage)) {
-                state.icon = getPackageDrawable(iconPackage, iconId);
+                state.icon = new ExternalIcon(iconPackage, iconId);
             } else {
                 state.iconId = iconId;
             }
         }
         mOnClick = customTile.onClick;
         mOnClickUri = customTile.onClickUri;
-    }
-
-    private Drawable getPackageDrawable(String pkg, int id) {
-        try {
-            return mContext.createPackageContext(pkg, 0).getResources().getDrawable(id);
-        } catch (Throwable t) {
-            Log.w(TAG, "Error loading package drawable pkg=" + pkg + " id=" + id, t);
-            return null;
-        }
     }
 }
