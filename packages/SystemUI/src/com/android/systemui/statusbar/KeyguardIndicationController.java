@@ -164,7 +164,7 @@ public class KeyguardIndicationController {
         public void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
             boolean isChargingOrFull = status.status == BatteryManager.BATTERY_STATUS_CHARGING
                     || status.status == BatteryManager.BATTERY_STATUS_FULL;
-            //mPowerPluggedIn = status.isPluggedIn() && isChargingOrFull;
+            mPowerPluggedIn = status.isPluggedIn() && isChargingOrFull;
             mPowerCharged = status.isCharged();
             updateIndication();
         }
