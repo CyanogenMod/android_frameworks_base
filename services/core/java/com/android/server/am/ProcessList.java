@@ -207,8 +207,8 @@ final class ProcessList {
     };
     // These are the high-end OOM level limits for 32bit 1 GB RAM
     private final int[] mOomMinFreeHigh32Bit = new int[] {
-            73728, 92160, 110592,
-            129024, 177012, 227012
+            61440, 76800, 92160,
+            107520, 137660, 174948
     };
     // These are the low-end OOM level limits.  This is appropriate for an
     // HVGA or smaller phone with less than 512MB.  Values are in KB.
