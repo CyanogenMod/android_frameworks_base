@@ -356,6 +356,42 @@ public abstract class QSTile<TState extends State> implements Listenable {
         }
     }
 
+    protected class ExternalIcon extends AnimationIcon {
+        private Context mPackageContext;
+        private String mPkg;
+        private int mResId;
+
+        public ExternalIcon(String pkg, int resId) {
+            super(resId);
+            mPkg = pkg;
+            mResId = resId;
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            // Get the drawable from the package context
+            Drawable d = null;
+            try {
+                d = super.getDrawable(getPackageContext());
+            } catch (Throwable t) {
+                Log.w(TAG, "Error creating package context" + mPkg + " id=" + mResId, t);
+            }
+            return d;
+        }
+
+        private Context getPackageContext() {
+            if (mPackageContext == null) {
+                try {
+                    mPackageContext = mContext.createPackageContext(mPkg, 0);
+                } catch (Throwable t) {
+                    Log.w(TAG, "Error creating package context" + mPkg, t);
+                    return null;
+                }
+            }
+            return mPackageContext;
+        }
+    }
+
     protected class AnimationIcon extends ResourceIcon {
         private boolean mAllowAnimation;
 
