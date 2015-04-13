@@ -1147,8 +1147,6 @@ public final class ContactsContract {
          * }
          * </pre>
          * </p>
-         *
-         * @hide
          */
         public static final String EXTRA_ADDRESS_BOOK_INDEX =
                 "android.provider.extra.ADDRESS_BOOK_INDEX";
@@ -1157,8 +1155,6 @@ public final class ContactsContract {
          * The array of address book index titles, which are returned in the
          * same order as the data in the cursor.
          * <p>TYPE: String[]</p>
-         *
-         * @hide
          */
         public static final String EXTRA_ADDRESS_BOOK_INDEX_TITLES =
                 "android.provider.extra.ADDRESS_BOOK_INDEX_TITLES";
@@ -1167,8 +1163,6 @@ public final class ContactsContract {
          * The array of group counts for the corresponding group.  Contains the same number
          * of elements as the EXTRA_ADDRESS_BOOK_INDEX_TITLES array.
          * <p>TYPE: int[]</p>
-         *
-         * @hide
          */
         public static final String EXTRA_ADDRESS_BOOK_INDEX_COUNTS =
                 "android.provider.extra.ADDRESS_BOOK_INDEX_COUNTS";
