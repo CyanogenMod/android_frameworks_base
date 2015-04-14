@@ -4616,7 +4616,7 @@ public class AudioService extends IAudioService.Stub {
                 }
                 readDockAudioSettings(mContentResolver);
 
-                mLinkNotificationWithVolume = Settings.System.getInt(mContentResolver,
+                mLinkNotificationWithVolume = Settings.Secure.getInt(mContentResolver,
                         Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
                 if (mLinkNotificationWithVolume) {
                     mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
