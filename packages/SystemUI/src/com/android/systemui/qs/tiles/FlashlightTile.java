@@ -17,7 +17,13 @@
 package com.android.systemui.qs.tiles;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.TorchManager;
 import android.os.SystemClock;
 
@@ -27,6 +33,9 @@ import com.android.systemui.qs.QSTile;
 /** Quick settings tile: Control flashlight **/
 public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
         TorchManager.TorchCallback {
+
+    public static final String ACTION_TURN_FLASHLIGHT_OFF =
+            "com.android.systemui.qs.ACTION_TURN_FLASHLIGHT_OFF";
 
     /** Grace period for which we consider the flashlight
      * still available because it was recently on. */
@@ -40,6 +49,18 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
     private long mWasLastOn;
     private boolean mTorchAvailable;
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ACTION_TURN_FLASHLIGHT_OFF.equals(intent.getAction())) {
+                mTorchManager.setTorchEnabled(false);
+                refreshState(UserBoolean.BACKGROUND_FALSE);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                setNotificationShown(true);
+            }
+        }
+    };
+
     public FlashlightTile(Host host) {
         super(host);
         mTorchManager = (TorchManager) mContext.getSystemService(Context.TORCH_SERVICE);
@@ -49,8 +70,9 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
 
     @Override
     protected void handleDestroy() {
-        super.handleDestroy();
         mTorchManager.removeListener(this);
+        setListenForScreenOff(false);
+        super.handleDestroy();
     }
 
     @Override
@@ -65,6 +87,43 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
 
     @Override
     protected void handleUserSwitch(int newUserId) {
+    }
+
+    private void setNotificationShown(boolean show) {
+        NotificationManager nm = (NotificationManager)
+                mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (show) {
+            Intent fireMe = new Intent(ACTION_TURN_FLASHLIGHT_OFF);
+            fireMe.setPackage(mContext.getPackageName());
+
+            Notification not = new Notification.Builder(mContext)
+                    .setContentTitle(mContext.getString(
+                            R.string.quick_settings_tile_flashlight_not_title))
+                    .setContentText(mContext.getString(
+                            R.string.quick_settings_tile_flashlight_not_summary))
+                    .setAutoCancel(false)
+                    .setOngoing(true)
+                    .setSmallIcon(R.drawable.ic_signal_flashlight_disable)
+                    .setContentIntent(
+                            PendingIntent.getBroadcast(mContext, 0, fireMe, 0))
+                    .build();
+
+            nm.notify(R.string.quick_settings_tile_flashlight_not_title, not);
+        } else {
+            nm.cancel(R.string.quick_settings_tile_flashlight_not_title);
+        }
+    }
+
+    private void setListenForScreenOff(boolean listen) {
+        if (listen) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_TURN_FLASHLIGHT_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            mContext.registerReceiver(mReceiver, filter);
+        } else {
+            mContext.unregisterReceiver(mReceiver);
+            setNotificationShown(false);
+        }
     }
 
     @Override
@@ -85,6 +144,7 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
 
         if (arg instanceof UserBoolean) {
             state.value = ((UserBoolean) arg).value;
+            setListenForScreenOff(state.value);
         }
 
         if (!state.value && mWasLastOn != 0) {
