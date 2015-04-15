@@ -167,7 +167,11 @@ public class ZenModeHelper implements AudioManagerInternal.RingerModeDelegate {
         }
         switch (mZenMode) {
             case Global.ZEN_MODE_NO_INTERRUPTIONS:
-                // #notevenalarms
+                if (isAlarm(record)) {
+                    ZenLog.traceNotIntercepted(record, "alarm");
+                    // Alarms are always priority
+                    return false;
+                }
                 ZenLog.traceIntercepted(record, "none");
                 return true;
             case Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS:
@@ -253,10 +257,6 @@ public class ZenModeHelper implements AudioManagerInternal.RingerModeDelegate {
         // call restrictions
         final boolean muteCalls = zen && !mConfig.allowCalls || mEffectsSuppressed;
         applyRestrictions(muteCalls, USAGE_NOTIFICATION_RINGTONE);
-
-        // alarm restrictions
-        final boolean muteAlarms = mZenMode == Global.ZEN_MODE_NO_INTERRUPTIONS;
-        applyRestrictions(muteAlarms, USAGE_ALARM);
     }
 
     private void applyRestrictions(boolean mute, int usage) {
@@ -421,7 +421,7 @@ public class ZenModeHelper implements AudioManagerInternal.RingerModeDelegate {
         return record.isCategory(Notification.CATEGORY_SYSTEM);
     }
 
-    private static boolean isAlarm(NotificationRecord record) {
+    public static boolean isAlarm(NotificationRecord record) {
         return record.isCategory(Notification.CATEGORY_ALARM)
                 || record.isAudioStream(AudioManager.STREAM_ALARM)
                 || record.isAudioAttributesUsage(AudioAttributes.USAGE_ALARM);
