@@ -134,12 +134,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> preseos coneutaos</string>
   <string name="progress_nomediapresent" product="default">Nun hai medios estrayibles\u2026</string>
   <string name="storage_uicc">Almacenamientu UICC</string>
-  <string name="stk_cc_ussd_to_dial">Solicitú USSD modifícase a solicitú DIAL.</string>
-  <string name="stk_cc_ussd_to_ss">Solicitú USSD modifícase a solicitú SS.</string>
-  <string name="stk_cc_ussd_to_ussd">Solicitú USSD modifícase a solicitú nueva USSD.</string>
-  <string name="stk_cc_ss_to_dial">Solicitú SS modifícase a solicitú DIAL.</string>
-  <string name="stk_cc_ss_to_ussd">Solicitú SS modifícase a solicitú USSD.</string>
-  <string name="stk_cc_ss_to_ss">Solicitú SS modifícase a solicitú nueva SS.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

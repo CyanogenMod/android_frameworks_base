@@ -115,12 +115,6 @@ modifiera det tema som du har tillämpat.</string>
   <string name="lockscreen_airplane_mode_on">Flygplansläge</string>
   <string name="progress_nomediapresent" product="default">Inget flyttbart media är tillgängligt\u2026</string>
   <string name="storage_uicc">UICC-lagring</string>
-  <string name="stk_cc_ussd_to_dial">USSD-begäran ändras till DIAL-begäran.</string>
-  <string name="stk_cc_ussd_to_ss">USSD-begäran ändras till SS-begäran.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD-begäran ändras till ny USSD-begäran.</string>
-  <string name="stk_cc_ss_to_dial">SS-begäran ändras till DIAL-begäran.</string>
-  <string name="stk_cc_ss_to_ussd">SS-begäran ändras till USSD-begäran.</string>
-  <string name="stk_cc_ss_to_ss">SS-begäran ändras till ny SS-begäran.</string>
   <string name="perf_profile_pwrsv">Energisparläge</string>
   <string name="perf_profile_bal">Balanserad</string>
   <string name="perf_profile_perf">Hög prestanda</string>

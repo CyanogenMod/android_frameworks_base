@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivos conectados</string>
   <string name="progress_nomediapresent" product="default">No hay medios extraíbles\u2026</string>
   <string name="storage_uicc">Almacenamiento UICC</string>
-  <string name="stk_cc_ussd_to_dial">Solicitud USSD es modificada a solicitud DIAL.</string>
-  <string name="stk_cc_ussd_to_ss">Solicitud USSD es modificada a solicitud SS.</string>
-  <string name="stk_cc_ussd_to_ussd">Solicitud USSD es modificada a nueva solicitud USSD.</string>
-  <string name="stk_cc_ss_to_dial">Solicitud SS es modificada a solicitud DIAL.</string>
-  <string name="stk_cc_ss_to_ussd">Solicitud SS es modificada a solicitud USSD.</string>
-  <string name="stk_cc_ss_to_ss">Solicitud SS es modificada a nueva solicitud SS.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

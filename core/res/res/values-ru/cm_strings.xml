@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message">Подключено устройств: <xliff:g id="count">%1$s</xliff:g></string>
   <string name="progress_nomediapresent" product="default">Отсутствует внешний накопитель</string>
   <string name="storage_uicc">Хранилище UICC</string>
-  <string name="stk_cc_ussd_to_dial">USSD-запрос преобразован в DIAL-запрос.</string>
-  <string name="stk_cc_ussd_to_ss">USSD-запрос преобразован в SS-запрос.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD-запрос преобразован в новый USSD-запрос.</string>
-  <string name="stk_cc_ss_to_dial">SS-запрос преобразован в DIAL-запрос.</string>
-  <string name="stk_cc_ss_to_ussd">SS-запрос преобразован в USSD-запрос.</string>
-  <string name="stk_cc_ss_to_ss">SS-запрос преобразован в новый SS-запрос.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

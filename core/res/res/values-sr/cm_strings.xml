@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> конектовани уређаји</string>
   <string name="progress_nomediapresent" product="default">Нема присутних преносивих медија\u2026</string>
   <string name="storage_uicc">UICC складиште</string>
-  <string name="stk_cc_ussd_to_dial">USSD захтев је модификован на DIAL захтев.</string>
-  <string name="stk_cc_ussd_to_ss">USSD захтев је модификован на SS захтев.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD захтев је модификован на нови USSD захтев.</string>
-  <string name="stk_cc_ss_to_dial">SS захтев је модификован на DIAL захтев.</string>
-  <string name="stk_cc_ss_to_ussd">SS захтев је модификован на USSD захтев.</string>
-  <string name="stk_cc_ss_to_ss">SS захтев је модификован на нови SS захтев.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

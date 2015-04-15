@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
   <string name="progress_nomediapresent" product="default">ไม่พบอุปกรณ์สื่อที่ถอดได้\u2026</string>
   <string name="storage_uicc">ที่เก็บ UICC</string>
-  <string name="stk_cc_ussd_to_dial">คำขอ USSD ถูกแก้ไขเป็นคำขอ DIAL</string>
-  <string name="stk_cc_ussd_to_ss">คำขอ USSD ถูกแก้ไขเป็นคำขอ SS</string>
-  <string name="stk_cc_ussd_to_ussd">คำขอ USSD ถูกแก้ไขเป็นคำขอ USSD ใหม่</string>
-  <string name="stk_cc_ss_to_dial">คำขอ SS ถูกแก้ไขเป็นคำขอ DIAL</string>
-  <string name="stk_cc_ss_to_ussd">คำขอ SS ถูกแก้ไขเป็นคำขอ USSD</string>
-  <string name="stk_cc_ss_to_ss">คำขอ SS ถูกแก้ไขเป็นคำขอ SS ใหม่</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

@@ -1868,4 +1868,10 @@
     <string name="muted_by" msgid="6147073845094180001">"ปิดเสียงโดย <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"อุปกรณ์ของคุณเกิดปัญหาภายในเครื่อง อุปกรณ์อาจทำงานไม่เสถียรจนกว่าคุณจะรีเซ็ตข้อมูลเป็นค่าเริ่มต้น"</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"อุปกรณ์ของคุณเกิดปัญหาภายในเครื่อง โปรดติดต่อผู้ผลิตเพื่อขอรายละเอียดเพิ่มเติม"</string>
+    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"คำขอ USSD ได้รับการแก้ไขให้เป็นคำขอ DIAL"</string>
+    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"คำขอ USSD ได้รับการแก้ไขให้เป็นคำขอ SS"</string>
+    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"คำขอ USSD ได้รับการแก้ไขให้เป็นคำขอ USSD ใหม่"</string>
+    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"คำขอ SS ได้รับการแก้ไขให้เป็นคำขอ DIAL"</string>
+    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"คำขอ SS ได้รับการแก้ไขให้เป็นคำขอ USSD"</string>
+    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"คำขอ SS ได้รับการแก้ไขให้เป็นคำขอ SS ใหม่"</string>
 </resources>
