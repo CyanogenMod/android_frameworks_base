@@ -119,4 +119,10 @@
     <string name="quick_settings_tile_flashlight_not_title">Flashlight is on</string>
     <string name="quick_settings_tile_flashlight_not_summary">Tap to turn off</string>
 
+    <!-- Interruption level: None. [CHAR LIMIT=20] -->
+    <string name="interruption_level_silent">Silent</string>
+
+    <!-- Zen mode: No interruptions title, with a warning about alarms. [CHAR LIMIT=60] -->
+    <string name="zen_silent_with_warning">No interruptions, except alarms.</string>
+
 </resources>

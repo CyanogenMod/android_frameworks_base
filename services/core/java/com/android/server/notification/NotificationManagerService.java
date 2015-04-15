@@ -1725,7 +1725,8 @@ public class NotificationManagerService extends SystemService {
         if (mDisableNotificationEffects) {
             return "booleanState";
         }
-        if ((mListenerHints & HINT_HOST_DISABLE_EFFECTS) != 0) {
+        if ((mListenerHints & HINT_HOST_DISABLE_EFFECTS) != 0
+                && !ZenModeHelper.isAlarm(record)) {
             return "listenerHints";
         }
         if (mCallState != TelephonyManager.CALL_STATE_IDLE && !mZenModeHelper.isCall(record)) {
@@ -2216,7 +2217,7 @@ public class NotificationManagerService extends SystemService {
                 && (record.getUserId() == UserHandle.USER_ALL ||
                     record.getUserId() == currentUser ||
                     mUserProfiles.isCurrentProfile(record.getUserId()))
-                && canInterrupt
+                && (canInterrupt || ZenModeHelper.isAlarm(record))
                 && mSystemReady
                 && mAudioManager != null) {
             if (DBG) Slog.v(TAG, "Interrupting!");
