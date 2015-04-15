@@ -2603,11 +2603,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
-            loadStringSetting(stmt, Settings.System.TIME_12_24,
-                    R.string.def_time_format);
+            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_time_format))) {
+                loadStringSetting(stmt, Settings.System.TIME_12_24,
+                        R.string.def_time_format);
+            }
 
-            loadStringSetting(stmt, Settings.System.DATE_FORMAT,
-                    R.string.def_date_format);
+            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_date_format))) {
+                loadStringSetting(stmt, Settings.System.DATE_FORMAT,
+                        R.string.def_date_format);
+            }
 
             loadIntegerSetting(stmt, Settings.System.STATUS_BAR_NOTIF_COUNT,
                     R.integer.def_notif_count);
