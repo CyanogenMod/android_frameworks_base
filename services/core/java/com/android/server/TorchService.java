@@ -16,7 +16,13 @@
 package com.android.server;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.ITorchCallback;
@@ -43,6 +49,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import com.android.internal.R;
+
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
 /**
@@ -55,6 +63,9 @@ public class TorchService extends ITorchService.Stub {
     private static final int DISPATCH_ERROR = 0;
     private static final int DISPATCH_STATE_CHANGE = 1;
     private static final int DISPATCH_AVAILABILITY_CHANGED = 2;
+
+    public static final String ACTION_TURN_FLASHLIGHT_OFF =
+            "com.android.server.TorchService.ACTION_TURN_FLASHLIGHT_OFF";
 
     private final Context mContext;
 
@@ -116,6 +127,59 @@ public class TorchService extends ITorchService.Stub {
         }
     }
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ACTION_TURN_FLASHLIGHT_OFF.equals(intent.getAction())) {
+                mHandler.post(mKillFlashlightRunnable);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+                setNotificationShown(true);
+            }
+        }
+    };
+
+    private void setNotificationShown(boolean show) {
+        final long callingIdentity = Binder.clearCallingIdentity();
+        try {
+            NotificationManager nm = (NotificationManager)
+                    mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (show) {
+                Intent fireMe = new Intent(ACTION_TURN_FLASHLIGHT_OFF);
+                fireMe.setPackage(mContext.getPackageName());
+
+                Notification not = new Notification.Builder(mContext)
+                        .setContentTitle(mContext.getString(
+                                R.string.quick_settings_tile_flashlight_not_title))
+                        .setContentText(mContext.getString(
+                                R.string.quick_settings_tile_flashlight_not_summary))
+                        .setAutoCancel(false)
+                        .setOngoing(true)
+                        .setSmallIcon(R.drawable.ic_signal_flashlight_disable)
+                        .setContentIntent(
+                                PendingIntent.getBroadcast(mContext, 0, fireMe, 0))
+                        .build();
+
+                nm.notify(R.string.quick_settings_tile_flashlight_not_title, not);
+            } else {
+                nm.cancel(R.string.quick_settings_tile_flashlight_not_title);
+            }
+        } finally {
+            Binder.restoreCallingIdentity(callingIdentity);
+        }
+    }
+
+    private void setListenForScreenOff(boolean listen) {
+        if (listen) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_TURN_FLASHLIGHT_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            mContext.registerReceiver(mReceiver, filter);
+        } else {
+            mContext.unregisterReceiver(mReceiver);
+            setNotificationShown(false);
+        }
+    }
+
     @Override
     public void onCameraOpened(final IBinder token, final int cameraId) {
         if (DEBUG) Log.d(TAG, "onCameraOpened(token= " + token + ", cameraId=" + cameraId + ")");
@@ -172,8 +236,10 @@ public class TorchService extends ITorchService.Stub {
     public synchronized void setTorchEnabled(boolean enabled) {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.ACCESS_TORCH_SERVICE, null);
+
         if (mTorchEnabled != enabled) {
             mTorchEnabled = enabled;
+            setListenForScreenOff(enabled);
             postUpdateFlashlight();
         }
     }
@@ -347,6 +413,7 @@ public class TorchService extends ITorchService.Stub {
     }
 
     private void teardownTorch() {
+        setListenForScreenOff(false);
         dispatchStateChange(false);
         if (mCameraDevice != null) {
             mCameraDevice.close();
