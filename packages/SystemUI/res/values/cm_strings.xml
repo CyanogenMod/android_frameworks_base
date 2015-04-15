@@ -116,4 +116,7 @@
     <string name="select_application">Select application</string>
     <string name="lockscreen_target_empty">Empty</string>
 
+    <string name="quick_settings_tile_flashlight_not_title">Flashlight is on</string>
+    <string name="quick_settings_tile_flashlight_not_summary">Tap to turn off</string>
+
 </resources>
