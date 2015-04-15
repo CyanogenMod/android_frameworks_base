@@ -84,10 +84,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <integer name="def_voice_call_earpiece_volume" translatable="false">4</integer>
 
     <!-- Time format,default vlaue is 24 : 24 format,other value is 12 format -->
-    <string name="def_time_format" translatable="false">24</string>
+    <string name="def_time_format" translatable="false"></string>
 
     <!-- Date format,yyyy-MM-dd: 2013/07/30; MM-dd-yyyy:07/30/2013; dd-MM-yyyy:30/07/2013 -->
-    <string name="def_date_format" translatable="false">MM-dd-yyyy</string>
+    <string name="def_date_format" translatable="false"></string>
 
     <!--
          Default Input Method, its value is from inputmethod's package name and main class name
