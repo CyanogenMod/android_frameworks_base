@@ -2363,6 +2363,18 @@ public class PhoneNumberUtils
     }
 
     /**
+     * Return true if attempting to call a number with an indonesian prefix (+62) while already in
+     * indonesia with an indonesian sim
+     */
+    private static boolean isLocalIndonesia(String dialStr) {
+        String currIso = SystemProperties.get(PROPERTY_OPERATOR_ISO_COUNTRY, "");
+        String defaultIso = SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, "");
+        return !TextUtils.isEmpty(currIso) && !TextUtils.isEmpty(defaultIso)
+                && currIso.equalsIgnoreCase(defaultIso) && currIso.equalsIgnoreCase("IN")
+                        && dialStr.startsWith("+62");
+    }
+
+    /**
      * Determines if the specified number is actually a URI
      * (i.e. a SIP address) rather than a regular PSTN phone number,
      * based on whether or not the number contains an "@" character.
@@ -2424,6 +2436,8 @@ public class PhoneNumberUtils
             if (useNanp && isOneNanp(newStr)) {
                 // Remove the leading plus sign
                 retStr = newStr;
+            } else if (isLocalIndonesia(networkDialStr)) {
+                retStr = networkDialStr.replaceFirst("[+]62", "0");
             } else {
                 // Replaces the plus sign with the default IDP
                 retStr = networkDialStr.replaceFirst("[+]", getCurrentIdp(useNanp));
