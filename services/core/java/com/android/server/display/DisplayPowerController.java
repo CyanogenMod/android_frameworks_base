@@ -155,6 +155,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     // True if auto-brightness should be used.
     private boolean mUseSoftwareAutoBrightnessConfig;
 
+    // True if slow brightness animation ramp rate should be used
+    private final boolean mBrightnessRampRateSlowConfig;
+
+    private final int mBrighteningLightDebounceConfig;
+    private final int mDarkeningLightDebounceConfig;
+
     // True if we should fade the screen while turning it off, false if we should play
     // a stylish color fade animation instead.
     private boolean mColorFadeFadesConfig;
@@ -300,6 +306,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
 
         mUseSoftwareAutoBrightnessConfig = resources.getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
+        mBrightnessRampRateSlowConfig = resources.getBoolean(
+                com.android.internal.R.bool.config_brightnessRampRateSlow);
+        mBrighteningLightDebounceConfig = resources.getInteger(
+                com.android.internal.R.integer.config_brighteningLightDebounce);
+        mDarkeningLightDebounceConfig = resources.getInteger(
+                com.android.internal.R.integer.config_darkeningLightDebounce);
         if (mUseSoftwareAutoBrightnessConfig) {
             int[] lux = resources.getIntArray(
                     com.android.internal.R.array.config_autoBrightnessLevels);
@@ -331,7 +343,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 mAutomaticBrightnessController = new AutomaticBrightnessController(mContext, this,
                         handler.getLooper(), sensorManager, screenAutoBrightnessSpline,
                         lightSensorWarmUpTimeConfig, screenBrightnessRangeMinimum,
-                        mScreenBrightnessRangeMaximum, mLiveDisplayController);
+                        mScreenBrightnessRangeMaximum, mLiveDisplayController,
+                        mBrighteningLightDebounceConfig, mDarkeningLightDebounceConfig
+                        );
             }
         }
 
@@ -608,7 +622,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             if (brightness >= 0) {
                 // Use current auto-brightness value and slowly adjust to changes.
                 brightness = clampScreenBrightness(brightness);
-                if (mAppliedAutoBrightness && !autoBrightnessAdjustmentChanged) {
+                if (mAppliedAutoBrightness && !autoBrightnessAdjustmentChanged &&
+                        mBrightnessRampRateSlowConfig) {
                     slowChange = true; // slowly adapt to auto-brightness
                 }
                 mAppliedAutoBrightness = true;
