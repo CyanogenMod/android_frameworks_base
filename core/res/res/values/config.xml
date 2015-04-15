@@ -2214,6 +2214,7 @@
 
     <!-- Whether cpu boost is enabled for AppLaunch -->
     <bool name="config_enableCpuBoostForAppLaunch">false</bool>
+    <integer name="disablepacking_timeout_param">0</integer>
     <integer name="launchboost_timeout_param">0</integer>
     <integer name="launchboost_schedboost_param">0</integer>
     <integer name="launchboost_cpuboost_param">0</integer>
