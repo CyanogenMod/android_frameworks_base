@@ -871,6 +871,10 @@
     <integer-array name="config_autoBrightnessLevels">
     </integer-array>
 
+    <!-- The debounce time value for automatic display brightness adjustment -->
+    <integer name="config_brighteningLightDebounce">4000</integer>
+    <integer name="config_darkeningLightDebounce">8000</integer>
+
     <!-- Array of output values for LCD backlight corresponding to the LUX values
          in the config_autoBrightnessLevels array.  This array should have size one greater
          than the size of the config_autoBrightnessLevels array.
