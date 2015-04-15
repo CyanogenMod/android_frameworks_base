@@ -83,6 +83,8 @@ public final class Profile implements Parcelable, Comparable {
 
     private int mExpandedDesktopMode = ExpandedDesktopMode.DEFAULT;
 
+    private int mDozeMode = DozeMode.DEFAULT;
+
     /** @hide */
     public static class LockMode {
         public static final int DEFAULT = 0;
@@ -92,6 +94,13 @@ public final class Profile implements Parcelable, Comparable {
 
     /** @hide */
     public static class ExpandedDesktopMode {
+        public static final int DEFAULT = 0;
+        public static final int ENABLE = 1;
+        public static final int DISABLE = 2;
+    }
+
+    /** @hide */
+    public static class DozeMode {
         public static final int DEFAULT = 0;
         public static final int ENABLE = 1;
         public static final int DISABLE = 2;
@@ -363,6 +372,7 @@ public final class Profile implements Parcelable, Comparable {
         dest.writeInt(mScreenLockMode);
         dest.writeMap(mTriggers);
         dest.writeInt(mExpandedDesktopMode);
+        dest.writeInt(mDozeMode);
     }
 
     /** @hide */
@@ -398,6 +408,7 @@ public final class Profile implements Parcelable, Comparable {
         mScreenLockMode = in.readInt();
         in.readMap(mTriggers, null);
         mExpandedDesktopMode = in.readInt();
+        mDozeMode = in.readInt();
     }
 
     public String getName() {
@@ -499,6 +510,20 @@ public final class Profile implements Parcelable, Comparable {
         mDirty = true;
     }
 
+    public int getDozeMode() {
+        return mDozeMode;
+    }
+
+    public void setDozeMode(int dozeMode) {
+        if (dozeMode < DozeMode.DEFAULT
+                || dozeMode > DozeMode.DISABLE) {
+            mDozeMode = DozeMode.DEFAULT;
+        } else {
+            mDozeMode = dozeMode;
+        }
+        mDirty = true;
+    }
+
     public AirplaneModeSettings getAirplaneMode() {
         return mAirplaneMode;
     }
@@ -586,6 +611,10 @@ public final class Profile implements Parcelable, Comparable {
         builder.append("<expanded-desktop-mode>");
         builder.append(mExpandedDesktopMode);
         builder.append("</expanded-desktop-mode>\n");
+
+        builder.append("<doze-mode>");
+        builder.append(mDozeMode);
+        builder.append("</doze-mode>\n");
 
         mAirplaneMode.getXmlString(builder, context);
 
@@ -727,6 +756,9 @@ public final class Profile implements Parcelable, Comparable {
                 if (name.equals("expanded-desktop-mode")) {
                     profile.setExpandedDesktopMode(Integer.valueOf(xpp.nextText()));
                 }
+                if (name.equals("doze-mode")) {
+                    profile.setDozeMode(Integer.valueOf(xpp.nextText()));
+                }
                 if (name.equals("profileGroup")) {
                     ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
                     profile.addProfileGroup(pg);
@@ -782,6 +814,14 @@ public final class Profile implements Parcelable, Comparable {
         //             mExpandedDesktopMode == ExpandedDesktopMode.ENABLE ? 1 : 0,
         //             UserHandle.USER_CURRENT);
         // }
+
+        // Set doze mode
+        if (mDozeMode != DozeMode.DEFAULT) {
+            Settings.Secure.putIntForUser(context.getContentResolver(),
+                Settings.Secure.DOZE_ENABLED,
+                    mDozeMode == DozeMode.ENABLE ? 1 : 0,
+                    UserHandle.USER_CURRENT);
+        }
     }
 
     /** @hide */
