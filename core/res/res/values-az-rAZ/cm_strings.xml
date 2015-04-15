@@ -109,12 +109,6 @@
   <string name="app_ops_write_sms">SMS mesajı yazın</string>
   <string name="progress_nomediapresent" product="default">Çıxarılacaq media yoxdur\u2026</string>
   <string name="storage_uicc">UICC saxlama</string>
-  <string name="stk_cc_ussd_to_dial">USSD sorğusu DIAL sorğusu ilə əvəzləndi.</string>
-  <string name="stk_cc_ussd_to_ss">USSD sorğusu SS sorğusu ilə əvəzləndi.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD sorğusu yeni bir USSD sorğusu ilə əvəzləndi.</string>
-  <string name="stk_cc_ss_to_dial">SS sorğusu DIAL sorğusu ilə əvəzləndi.</string>
-  <string name="stk_cc_ss_to_ussd">SS sorğusu USSD sorğusu ilə əvəzlədi.</string>
-  <string name="stk_cc_ss_to_ss">SS sorğusu yeni bir SS sorğusu ilə əvəzləndi.</string>
   <string name="perf_profile_pwrsv">Güc təsərrüfatı</string>
   <string name="perf_profile_bal">Tarazlı</string>
   <string name="perf_profile_perf">Performans</string>

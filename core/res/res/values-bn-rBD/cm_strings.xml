@@ -112,12 +112,6 @@
   <string name="app_ops_write_sms">এসএমএস বার্তা লিখুন</string>
   <string name="progress_nomediapresent" product="default">অপসারণযোগ্য মিডিয়া উপস্থিত নেই\u2026</string>
   <string name="storage_uicc">UICC ভান্ডার</string>
-  <string name="stk_cc_ussd_to_dial">USSD অনুরোধটি DIAL অনুরোধের দ্বারা পরিবর্তিত হয়েছে।</string>
-  <string name="stk_cc_ussd_to_ss">USSD অনুরোধটি SS অনুরোধের দ্বারা পরিবর্তিত হয়েছে।</string>
-  <string name="stk_cc_ussd_to_ussd">USSD অনুরোধটি নতুন USSD অনুরোধের দ্বারা পরিবর্তিত হয়েছে।</string>
-  <string name="stk_cc_ss_to_dial">SS অনুরোধটি DIAL অনুরোধের দ্বারা পরিবর্তিত হয়েছে।</string>
-  <string name="stk_cc_ss_to_ussd">SS অনুরোধটি USSD অনুরোধের দ্বারা পরিবর্তিত হয়েছে।</string>
-  <string name="stk_cc_ss_to_ss">SS অনুরোধটি নতুন SS অনুরোধের দ্বারা পরিবর্তিত হয়েছে।</string>
   <string name="perf_profile_pwrsv">শক্তি সাশ্রয়ী</string>
   <string name="perf_profile_bal">সুষম</string>
   <string name="perf_profile_perf">কৃতিত্ব</string>

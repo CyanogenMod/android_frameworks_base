@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> 個已連接裝置</string>
   <string name="progress_nomediapresent" product="default">沒有可移除的媒體\u2026</string>
   <string name="storage_uicc">UICC 儲存</string>
-  <string name="stk_cc_ussd_to_dial">USSD 請求被修改為 DIAL 請求。</string>
-  <string name="stk_cc_ussd_to_ss">USSD 請求被修改為 SS 請求。</string>
-  <string name="stk_cc_ussd_to_ussd">USSD 請求被修改為新的 USSD 請求。</string>
-  <string name="stk_cc_ss_to_dial">SS 要求被修改為 DIAL 要求。</string>
-  <string name="stk_cc_ss_to_ussd">SS 請求被修改為 USSD 請求。</string>
-  <string name="stk_cc_ss_to_ss">SS 請求被修改為新的 SS 請求。</string>
   <string name="China_Mobile">中國移動</string>
   <string name="China_Unicom">中國聯通</string>
   <string name="China_Telecom">中國電信</string>

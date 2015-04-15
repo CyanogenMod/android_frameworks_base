@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ئۈسكۈنە باغلاندى</string>
   <string name="progress_nomediapresent" product="default">ھازىر كۆچمە ۋاستە يوق\u2026</string>
   <string name="storage_uicc">UICC ساقلاش</string>
-  <string name="stk_cc_ussd_to_dial">USSD ئىلتىماسى DIAL ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ussd_to_ss">USSD ئىلتىماسى SS ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD ئىلتىماسى يېڭى USSD ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ss_to_dial">SS ئىلتىماسى DIAL ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ss_to_ussd">SS ئىلتىماسى USSD ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ss_to_ss">SS ئىلتىماسى يېڭى SS ئىلتىماسىغا ئۆزگەرتىلدى.</string>
   <string name="China_Mobile">جۇڭگو كۆچمە خەۋەرلىشىش</string>
   <string name="China_Unicom">جۇڭگو بىرلەشمە خەۋەرلىشىش</string>
   <string name="China_Telecom">جۇڭگو تېلېگرافى</string>

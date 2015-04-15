@@ -1862,14 +1862,16 @@
   </plurals>
     <string name="zen_mode_until" msgid="7336308492289875088">"到<xliff:g id="FORMATTEDTIME">%1$s</xliff:g>"</string>
     <string name="zen_mode_forever" msgid="4316804956488785559">"无限期"</string>
-    <!-- App Ops -->
-    <string name="permission">权限</string>
-
-    <!-- Carrier Name -->
     <string name="toolbar_collapse_description" msgid="2821479483960330739">"收起"</string>
     <string name="zen_mode_next_alarm_summary" msgid="5915140424683747372">"到下次闹钟时间（<xliff:g id="FORMATTEDTIME">%1$s</xliff:g>）"</string>
     <string name="zen_mode_next_alarm_line_one" msgid="5537042951553420916">"到下次闹钟时间"</string>
     <string name="muted_by" msgid="6147073845094180001">"已被<xliff:g id="THIRD_PARTY">%1$s</xliff:g>设为静音"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"您的设备内部出现了问题。如果不将设备恢复出厂设置，设备运行可能会不稳定。"</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"您的设备内部出现了问题。请联系您的设备制造商了解详情。"</string>
+    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"USSD 请求已修改为 DIAL 请求。"</string>
+    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"USSD 请求已修改为 SS 请求。"</string>
+    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"USSD 请求已修改为新的 USSD 请求。"</string>
+    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"SS 请求已修改为 DIAL 请求。"</string>
+    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"SS 请求已修改为 USSD 请求。"</string>
+    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"SS 请求已修改为新的 SS 请求。"</string>
 </resources>

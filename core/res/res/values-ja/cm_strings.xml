@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g>台のデバイスが接続しています</string>
   <string name="progress_nomediapresent" product="default">取り外し可能なメディアが挿入されていません\u2026</string>
   <string name="storage_uicc">UICCストレージ</string>
-  <string name="stk_cc_ussd_to_dial">USSDリクエストはDIALリクエストに変更されます。</string>
-  <string name="stk_cc_ussd_to_ss">USSDリクエストはSSリクエストに変更されます。</string>
-  <string name="stk_cc_ussd_to_ussd">USSDリクエストは新しいUSSDに変更されます。</string>
-  <string name="stk_cc_ss_to_dial">SSリクエストはDIALリクエストに変更されます。</string>
-  <string name="stk_cc_ss_to_ussd">SSリクエストはUSSDリクエストに変更されます。</string>
-  <string name="stk_cc_ss_to_ss">SSリクエストは新しいSSリクエストに変更されます。</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

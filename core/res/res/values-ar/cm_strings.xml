@@ -112,12 +112,6 @@
   <string name="app_ops_write_sms">كتابة رسالة قصيرة</string>
   <string name="progress_nomediapresent" product="default">لاتوجد وسائط قابلة للإزالة في الوقت الحالى \u2026</string>
   <string name="storage_uicc">تخزين UICC</string>
-  <string name="stk_cc_ussd_to_dial">تم تعديل طلب USSD إلى طلب اتصال هاتفي.</string>
-  <string name="stk_cc_ussd_to_ss">تم تعديل طلب USSD إلى طلب SS.</string>
-  <string name="stk_cc_ussd_to_ussd">تم تعديل طلب USSD إلى طلب USSD جديد.</string>
-  <string name="stk_cc_ss_to_dial">تم تعديل طلب SS إلى طلب اتصال هاتفي.</string>
-  <string name="stk_cc_ss_to_ussd">تم تعديل طلب SS إلى طلب USSD.</string>
-  <string name="stk_cc_ss_to_ss">تم تعديل طلب SS إلى طلب SS جديد.</string>
   <string name="perf_profile_pwrsv">حفظ الطاقة</string>
   <string name="perf_profile_bal">متوازنة</string>
   <string name="perf_profile_perf">الأداء</string>

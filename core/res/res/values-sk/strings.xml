@@ -1868,4 +1868,10 @@
     <string name="muted_by" msgid="6147073845094180001">"Stlmené aplikáciou <xliff:g id="THIRD_PARTY">%1$s</xliff:g>"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"Vo vašom zariadení došlo k internému problému. Môže byť nestabilné, kým neobnovíte jeho továrenské nastavenia."</string>
     <string name="system_error_manufacturer" msgid="8086872414744210668">"Vo vašom zariadení došlo k internému problému. Ak chcete získať podrobné informácie, obráťte sa na jeho výrobcu."</string>
+    <string name="stk_cc_ussd_to_dial" msgid="5202342984749947872">"Žiadosť USSD bola upravená na žiadosť DIAL."</string>
+    <string name="stk_cc_ussd_to_ss" msgid="2345360594181405482">"Žiadosť USSD bola upravená na žiadosť SS."</string>
+    <string name="stk_cc_ussd_to_ussd" msgid="7466087659967191653">"Žiadosť USSD bola upravená na novú žiadosť USSD."</string>
+    <string name="stk_cc_ss_to_dial" msgid="2151304435775557162">"Žiadosť SS bola upravená na žiadosť DIAL."</string>
+    <string name="stk_cc_ss_to_ussd" msgid="3951862188105305589">"Žiadosť SS bola upravená na žiadosť USSD."</string>
+    <string name="stk_cc_ss_to_ss" msgid="5470768854991452695">"Žiadosť SS bola upravená na novú žiadosť SS."</string>
 </resources>
