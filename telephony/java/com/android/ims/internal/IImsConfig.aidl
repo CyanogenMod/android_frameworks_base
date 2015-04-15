@@ -140,4 +140,25 @@ interface IImsConfig {
      * @return void
      */
     boolean getVolteProvisioned();
+
+    /**
+     * Gets the value for IMS fature item wifi calling preference.
+     *
+     * @param listener. Wifi preference will be returned asynchronously through listener.
+     * @return void
+     */
+    oneway void getWifiCallingPreference(ImsConfigListener listener);
+
+    /**
+     * Sets the value for IMS feature item wifi calling preference.
+     *
+     * @param wifiCallingStatus, as defined in com.android.ims.ImsConfig#WifiCallingValueConstants.
+     * @param wifiCallingPreference, as defined in com.android.ims.ImsConfig#WifiCallingPreference.
+     * @param listener, provided if caller needs to be notified for set result.
+     * @return void
+     *
+     * @throws ImsException if calling the IMS service results in an error.
+     */
+    oneway void setWifiCallingPreference(int wifiCallingStatus, int wifiCallingPreference,
+            ImsConfigListener listener);
 }
