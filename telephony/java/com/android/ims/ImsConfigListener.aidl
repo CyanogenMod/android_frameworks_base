@@ -70,4 +70,27 @@ oneway interface ImsConfigListener {
      * @throws ImsException if calling the IMS service results in an error.
      */
      void onSetVideoQuality(int status);
+
+    /**
+     * Notifies client the value of the get operation result on the wifi calling preference.
+     *
+     * @param status. as defined in com.android.ims.ImsConfig#OperationStatusConstants.
+     * @param wifiCallingStatus. as defined in com.android.ims.ImsConfig#WifiCallingValueConstants.
+     * @param wifiCallingPreference. as defined in com.android.ims.ImsConfig#WifiCallingPreference.
+     * @return void
+     *
+     * @throws ImsException if calling the IMS service results in an error.
+     */
+     void onGetWifiCallingPreference(int status, int wifiCallingStatus, int wifiCallingPreference);
+
+    /**
+     * Notifies client the set value operation result for wifi calling preference item.
+     * Used by clients that need to be notified the set operation result.
+     *
+     * @param status. as defined in com.android.ims.ImsConfig#OperationStatusConstants.
+     * @return void
+     *
+     * @throws ImsException if calling the IMS service results in an error.
+     */
+     void onSetWifiCallingPreference(int status);
 }
