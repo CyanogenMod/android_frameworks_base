@@ -1725,7 +1725,8 @@ public class NotificationManagerService extends SystemService {
         if (mDisableNotificationEffects) {
             return "booleanState";
         }
-        if ((mListenerHints & HINT_HOST_DISABLE_EFFECTS) != 0) {
+        if ((mListenerHints & HINT_HOST_DISABLE_EFFECTS) != 0
+                && !ZenModeHelper.isAlarm(record)) {
             return "listenerHints";
         }
         if (mCallState != TelephonyManager.CALL_STATE_IDLE && !mZenModeHelper.isCall(record)) {
@@ -2216,7 +2217,7 @@ public class NotificationManagerService extends SystemService {
                 && (record.getUserId() == UserHandle.USER_ALL ||
                     record.getUserId() == currentUser ||
                     mUserProfiles.isCurrentProfile(record.getUserId()))
-                && canInterrupt
+                && (canInterrupt || ZenModeHelper.isAlarm(record))
                 && mSystemReady
                 && mAudioManager != null) {
             if (DBG) Slog.v(TAG, "Interrupting!");
@@ -2247,7 +2248,6 @@ public class NotificationManagerService extends SystemService {
                 soundUri = notification.sound;
                 hasValidSound = (soundUri != null);
             }
-
             if (hasValidSound && (!mDisableDuckingWhileMedia || !mActiveMedia)) {
                 boolean looping =
                         (notification.flags & Notification.FLAG_INSISTENT) != 0;
@@ -2326,7 +2326,8 @@ public class NotificationManagerService extends SystemService {
         // light
         // release the light
         boolean wasShowLights = mLights.remove(record.getKey());
-        final boolean aboveThresholdWithLight = aboveThreshold || isLedNotificationForcedOn(record);
+        final boolean aboveThresholdWithLight = aboveThreshold
+                || isLedNotificationForcedOn(record);
         if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0 && aboveThresholdWithLight) {
             mLights.add(record.getKey());
             updateLightsLocked();
