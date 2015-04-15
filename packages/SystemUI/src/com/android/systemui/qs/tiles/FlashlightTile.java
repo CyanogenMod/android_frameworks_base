@@ -20,7 +20,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.hardware.TorchManager;
 import android.os.SystemClock;
-
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 
