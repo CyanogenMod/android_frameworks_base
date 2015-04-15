@@ -21,6 +21,7 @@ import com.android.server.twilight.TwilightListener;
 import com.android.server.twilight.TwilightManager;
 import com.android.server.twilight.TwilightState;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -64,8 +65,8 @@ class AutomaticBrightnessController {
     // when adapting to brighter or darker environments.  This parameter controls how quickly
     // brightness changes occur in response to an observed change in light level that exceeds the
     // hysteresis threshold.
-    private static final long BRIGHTENING_LIGHT_DEBOUNCE = 4000;
-    private static final long DARKENING_LIGHT_DEBOUNCE = 8000;
+    private final long mBrighteningLightDebounceConfig;
+    private final long mDarkeningLightDebounceConfig;
 
     // Hysteresis constraints for brightening or darkening.
     // The recent lux must have changed by at least this fraction relative to the
@@ -171,9 +172,13 @@ class AutomaticBrightnessController {
     // The last screen auto-brightness gamma.  (For printing in dump() only.)
     private float mLastScreenAutoBrightnessGamma = 1.0f;
 
-    public AutomaticBrightnessController(Callbacks callbacks, Looper looper,
+    private final Context mContext;
+
+    public AutomaticBrightnessController(Context context, Callbacks callbacks, Looper looper,
             SensorManager sensorManager, Spline autoBrightnessSpline,
             int lightSensorWarmUpTime, int brightnessMin, int brightnessMax) {
+        final Resources resources = context.getResources();
+        mContext = context;
         mCallbacks = callbacks;
         mTwilight = LocalServices.getService(TwilightManager.class);
         mSensorManager = sensorManager;
@@ -181,6 +186,11 @@ class AutomaticBrightnessController {
         mScreenBrightnessRangeMinimum = brightnessMin;
         mScreenBrightnessRangeMaximum = brightnessMax;
         mLightSensorWarmUpTimeConfig = lightSensorWarmUpTime;
+
+        mBrighteningLightDebounceConfig = resources.getInteger(
+                com.android.internal.R.integer.config_brighteningLightDebounce);
+        mDarkeningLightDebounceConfig = resources.getInteger(
+                com.android.internal.R.integer.config_darkeningLightDebounce);
 
         mHandler = new AutomaticBrightnessHandler(looper);
         mAmbientLightRingBuffer = new AmbientLightRingBuffer();
@@ -333,7 +343,7 @@ class AutomaticBrightnessController {
             }
             earliestValidTime = mAmbientLightRingBuffer.getTime(i);
         }
-        return earliestValidTime + BRIGHTENING_LIGHT_DEBOUNCE;
+        return earliestValidTime + mBrighteningLightDebounceConfig;
     }
 
     private long nextAmbientLightDarkeningTransition(long time) {
@@ -345,7 +355,7 @@ class AutomaticBrightnessController {
             }
             earliestValidTime = mAmbientLightRingBuffer.getTime(i);
         }
-        return earliestValidTime + DARKENING_LIGHT_DEBOUNCE;
+        return earliestValidTime + mDarkeningLightDebounceConfig;
     }
 
     private void updateAmbientLux() {
