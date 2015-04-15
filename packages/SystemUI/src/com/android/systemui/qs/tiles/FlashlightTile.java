@@ -17,7 +17,13 @@
 package com.android.systemui.qs.tiles;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.TorchManager;
 import android.os.SystemClock;
 
@@ -49,8 +55,8 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
 
     @Override
     protected void handleDestroy() {
-        super.handleDestroy();
         mTorchManager.removeListener(this);
+        super.handleDestroy();
     }
 
     @Override
