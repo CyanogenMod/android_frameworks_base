@@ -134,12 +134,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitive conectate</string>
   <string name="progress_nomediapresent" product="default">Nu este prezentă nicio unitate detașabilă\u2026</string>
   <string name="storage_uicc">Stocare UICC</string>
-  <string name="stk_cc_ussd_to_dial">Cererea USSD este modificată în cerere DIAL.</string>
-  <string name="stk_cc_ussd_to_ss">Cererea USSD este modificată în cerere SS.</string>
-  <string name="stk_cc_ussd_to_ussd">Cererea USSD este modificată într-o cerere nouă USSD.</string>
-  <string name="stk_cc_ss_to_dial">Cererea SS este modificată în cerere DIAL.</string>
-  <string name="stk_cc_ss_to_ussd">Cererea SS este modificată în cerere USSD.</string>
-  <string name="stk_cc_ss_to_ss">Cererea SS este modificată într-o cerere nouă SS.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

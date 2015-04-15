@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> tilsluttede enheder</string>
   <string name="progress_nomediapresent" product="default">Ingen flytbare medier til stede\u2026</string>
   <string name="storage_uicc">UICC lager</string>
-  <string name="stk_cc_ussd_to_dial">USSD-anmodning er ændret til en DIAL-anmodning.</string>
-  <string name="stk_cc_ussd_to_ss">USSD-anmodning er ændret til en SS-anmodning.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD-anmodning er ændret til en ny USSD-anmodning.</string>
-  <string name="stk_cc_ss_to_dial">SS-anmodning er ændret til en DIAL-anmodning.</string>
-  <string name="stk_cc_ss_to_ussd">SS-anmodning er ændret til en USSD-anmodning.</string>
-  <string name="stk_cc_ss_to_ss">SS-anmodning er ændret til en ny SS-anmodning.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

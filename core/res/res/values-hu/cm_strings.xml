@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> csatlakoztatott eszköz</string>
   <string name="progress_nomediapresent" product="default">Nincs eltávolítható média\u2026</string>
   <string name="storage_uicc">UICC tároló</string>
-  <string name="stk_cc_ussd_to_dial">USSD kérés módosítva DIAL kérésre.</string>
-  <string name="stk_cc_ussd_to_ss">USSD kérés módosítva SS kérésre.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD kérés módosítva új USSD kérésre.</string>
-  <string name="stk_cc_ss_to_dial">SS kérés módosítva DIAL kérésre.</string>
-  <string name="stk_cc_ss_to_ussd">SS kérés módosítva USSD kérésre.</string>
-  <string name="stk_cc_ss_to_ss">SS kérés módosítva új SS kérésre.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

@@ -134,12 +134,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> connectéiert Apparater</string>
   <string name="progress_nomediapresent" product="default">Keen eraushuelbaart Medium präsent\u2026</string>
   <string name="storage_uicc">UICC-Späicher</string>
-  <string name="stk_cc_ussd_to_dial">D\'USSD-Ufro gouf an eng DIAL-Ufro ëmgewandelt.</string>
-  <string name="stk_cc_ussd_to_ss">D\'USSD-Ufro gouf an eng SS-Ufro ëmgewandelt.</string>
-  <string name="stk_cc_ussd_to_ussd">D\'USSD-Ufro gouf an eng nei USSD-Ufro ëmgewandelt.</string>
-  <string name="stk_cc_ss_to_dial">D\'SS-Ufro gouf an eng DIAL-Ufro ëmgewandelt.</string>
-  <string name="stk_cc_ss_to_ussd">D\'SS-Ufro gouf an eng USSD-Ufro ëmgewandelt.</string>
-  <string name="stk_cc_ss_to_ss">D\'SS-Ufro gouf an eng nei SS-Ufro ëmgewandelt.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

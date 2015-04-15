@@ -136,12 +136,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> připojená zařízení</string>
   <string name="progress_nomediapresent" product="default">Není dostupné žádné vyměnitelné médium\u2026</string>
   <string name="storage_uicc">Úložiště UICC</string>
-  <string name="stk_cc_ussd_to_dial">Požadavek USSD byl změněn na požadavek DIAL.</string>
-  <string name="stk_cc_ussd_to_ss">Požadavek USSD byl změněn na požadavek SS.</string>
-  <string name="stk_cc_ussd_to_ussd">Požadavek USSD byl změněn na nový požadavek USSD.</string>
-  <string name="stk_cc_ss_to_dial">Požadavek SS byl změněn na požadavek DIAL.</string>
-  <string name="stk_cc_ss_to_ussd">Požadavek SS byl změněn na požadavek USSD.</string>
-  <string name="stk_cc_ss_to_ss">Požadavek SS byl změněn na nový požadavek SS.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

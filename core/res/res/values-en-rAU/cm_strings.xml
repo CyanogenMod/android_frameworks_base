@@ -138,12 +138,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> connected devices</string>
   <string name="progress_nomediapresent" product="default">No removable media present\u2026</string>
   <string name="storage_uicc">UICC storage</string>
-  <string name="stk_cc_ussd_to_dial">USSD request is modified to DIAL request.</string>
-  <string name="stk_cc_ussd_to_ss">USSD request is modified to SS request.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD request is modified to new USSD request.</string>
-  <string name="stk_cc_ss_to_dial">SS request is modified to DIAL request.</string>
-  <string name="stk_cc_ss_to_ussd">SS request is modified to USSD request.</string>
-  <string name="stk_cc_ss_to_ss">SS request is modified to new SS request.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
