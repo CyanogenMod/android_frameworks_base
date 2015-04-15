@@ -157,7 +157,7 @@ public class ZenModePanel extends LinearLayout {
         super.onFinishInflate();
 
         mZenButtons = (SegmentedButtons) findViewById(R.id.zen_buttons);
-        mZenButtons.addButton(R.string.interruption_level_none, R.drawable.ic_zen_none,
+        mZenButtons.addButton(R.string.interruption_level_silent, R.drawable.ic_zen_none,
                 Global.ZEN_MODE_NO_INTERRUPTIONS);
         mZenButtons.addButton(R.string.interruption_level_priority, R.drawable.ic_zen_important,
                 Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
@@ -412,7 +412,7 @@ public class ZenModePanel extends LinearLayout {
         mZenConditions.setVisibility(!zenOff && expanded ? VISIBLE : GONE);
 
         if (zenNone) {
-            mZenSubheadExpanded.setText(R.string.zen_no_interruptions_with_warning);
+            mZenSubheadExpanded.setText(R.string.zen_silent_with_warning);
             mZenSubheadCollapsed.setText(mExitConditionText);
         } else if (zenImportant) {
             mZenSubheadExpanded.setText(R.string.zen_important_interruptions);
