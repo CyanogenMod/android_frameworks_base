@@ -16,6 +16,7 @@
 
 package android.telephony;
 
+import android.util.SparseArray;
 import com.android.i18n.phonenumbers.NumberParseException;
 import com.android.i18n.phonenumbers.PhoneNumberUtil;
 import com.android.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
@@ -139,6 +140,32 @@ public class PhoneNumberUtils
     /** Returns true if ch is not dialable or alpha char */
     private static boolean isSeparator(char ch) {
         return !isDialable(ch) && !(('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z'));
+    }
+
+    /**
+     * On some CDMA networks +COUNTRYCODE must be rewritten to 0 when making a local
+     * call from within the user's home network.  We maintain a white list of
+     * (country code prefix) -> (iso country code) to perform this substitution.
+     *
+     * Since country codes are variable length it is easiest to compile a regex
+     */
+    private static SparseArray<String> sCdmaLocalRewriteWhitelist;
+    private static Pattern sCdmaLocalRewritePattern;
+    static {
+        sCdmaLocalRewriteWhitelist = new SparseArray<String>();
+        sCdmaLocalRewriteWhitelist.put(62, "IN"); // indonesia
+
+        StringBuffer regex = new StringBuffer();
+        regex.append("[+](");
+        for (int i=0; i < sCdmaLocalRewriteWhitelist.size(); ++i) {
+            int countryCode = sCdmaLocalRewriteWhitelist.keyAt(i);
+            if (i > 0) {
+                regex.append("|");
+            }
+            regex.append(countryCode);
+        }
+        regex.append(")");
+        sCdmaLocalRewritePattern = Pattern.compile(regex.toString());
     }
 
     /** Extracts the phone number from an Intent.
@@ -2363,6 +2390,28 @@ public class PhoneNumberUtils
     }
 
     /**
+     * Returns the country code prefix to rewrite if the dial string matches the whitelist
+     * and the user is in their home network
+     *
+     * @param dialStr number being dialed
+     * @param currIso ISO code of currently attached network
+     * @param defaultIso ISO code of user's sim
+     * @return country code to rewrite, or null if checks fail
+     */
+    private static String getCdmaLocalRewritePrefix(String dialStr,
+                                                    String currIso, String defaultIso) {
+        Matcher m = sCdmaLocalRewritePattern.matcher(dialStr);
+        if (m.find()) {
+            String dialPrefix = m.group(1);
+            String dialIso = sCdmaLocalRewriteWhitelist.get(Integer.valueOf(dialPrefix));
+            if (currIso.equalsIgnoreCase(defaultIso) && currIso.equalsIgnoreCase(dialIso)) {
+                return dialPrefix;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Determines if the specified number is actually a URI
      * (i.e. a SIP address) rather than a regular PSTN phone number,
      * based on whether or not the number contains an "@" character.
@@ -2425,8 +2474,16 @@ public class PhoneNumberUtils
                 // Remove the leading plus sign
                 retStr = newStr;
             } else {
-                // Replaces the plus sign with the default IDP
-                retStr = networkDialStr.replaceFirst("[+]", getCurrentIdp(useNanp));
+                String rewritePrefix =
+                        getCdmaLocalRewritePrefix(networkDialStr,
+                                SystemProperties.get(PROPERTY_OPERATOR_ISO_COUNTRY, ""),
+                                SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, ""));
+                if (rewritePrefix != null) {
+                    retStr = networkDialStr.replaceFirst("[+]"+rewritePrefix, "0");
+                } else {
+                    // Replaces the plus sign with the default IDP
+                    retStr = networkDialStr.replaceFirst("[+]", getCurrentIdp(useNanp));
+                }
             }
         }
         if (DBG) log("processPlusCode, retStr=" + retStr);
