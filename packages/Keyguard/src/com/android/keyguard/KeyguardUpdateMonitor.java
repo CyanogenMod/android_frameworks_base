@@ -745,6 +745,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                     mPlmn.put(subInfo.getSubscriptionId(), mPlmn.get(subId));
                     mSpn.put(subInfo.getSubscriptionId(), mSpn.get(subId));
 
+                    // If there is race condition it is possible that mSpn and mPlmn updated
+                    // by SPN_STRINGS_UPDATED_ACTION intent gets overwritten here with invalid
+                    // values, hence copy the original plmn and spn values got from intent.
+                    copyOriginalPlmnSpn(subInfo.getSubscriptionId());
                     final int count = mCallbacks.size();
                     for (int i = 0; i < count; i++) {
                         KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
@@ -760,6 +764,19 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             }
         } else {
             if (DEBUG) Log.d(TAG, "updateStandbySubscriptions activeSubInfos is null");
+        }
+    }
+
+    private void copyOriginalPlmnSpn(int subId) {
+        // If mOriginalPlmn and mOriginalSpn are null here, then once
+        // SPN_STRINGS_UPDATED_ACTION intent arrives mPlmn and mSpn will
+        // get updated with right values.
+        if (mOriginalPlmn.get(subId) != null) {
+            mPlmn.put(subId, getLocaleString(mOriginalPlmn.get(subId).toString()));
+        }
+
+        if (mOriginalSpn.get(subId) != null) {
+            mSpn.put(subId, getLocaleString(mOriginalSpn.get(subId).toString()));
         }
     }
 
