@@ -93,6 +93,24 @@ public class RingtoneManager {
     public static final String ACTION_RINGTONE_PICKER = "android.intent.action.RINGTONE_PICKER";
 
     /**
+     * Broadcast Action: The current default alarm has changed.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_ALARMS_CHANGE = "android.intent.action.ALARMS_CHANGED";
+
+    /**
+     * Broadcast Action: The current default notification has changed.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_NOTIFICATIONS_CHANGE = "android.intent.action.NOTIFICATIONS_CHANGED";
+
+    /**
+     * Broadcast Action: The current default ringtone has changed.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_RINGTONES_CHANGE = "android.intent.action.RINGTONES_CHANGED";
+
+    /**
      * Given to the ringtone picker as a boolean. Whether to show an item for
      * "Default".
      * 
@@ -678,6 +696,8 @@ public class RingtoneManager {
         if (setting == null) return;
         Settings.System.putString(context.getContentResolver(), setting,
                 ringtoneUri != null ? ringtoneUri.toString() : null);
+
+        sendBroadcastForType(type);
     }
     
     private static String getSettingForType(int type) {
@@ -882,5 +902,34 @@ public class RingtoneManager {
         }
         Settings.System.putString(context.getContentResolver(), setting,
                 ringtoneUri != null ? ringtoneUri.toString() : null);
+
+        if (subId == 0) {
+            sendBroadcastForType(TYPE_RINGTONE);
+        }
+    }
+
+    private static void sendBroadcastForType(int type) {
+        if ((type & TYPE_RINGTONE) != 0) {
+            sendRingtonesUpdatedBroadcast();
+        } else if ((type & TYPE_NOTIFICATION) != 0) {
+            sendNotificationsUpdatedBroadcast();
+        } else if ((type & TYPE_ALARM) != 0) {
+            sendAlarmsUpdatedBroadcast();
+        }
+    }
+
+    private static void sendAlarmsUpdatedBroadcast() {
+        Intent intent = new Intent(ACTION_ALARMS_CHANGE);
+        context.sendBroadcast(intent, /*new UserHandle(mCurrentUserId)*/);
+    }
+
+    private static void sendNotificationsUpdatedBroadcast() {
+        Intent intent = new Intent(ACTION_NOTIFICATIONS_CHANGE);
+        context.sendBroadcast(intent, /*new UserHandle(mCurrentUserId)*/);
+    }
+
+    private static void sendRingtonesUpdatedBroadcast() {
+        Intent intent = new Intent(ACTION_RINGTONES_CHANGE);
+        context.sendBroadcast(intent, /*new UserHandle(mCurrentUserId)*/);
     }
 }
