@@ -16,6 +16,7 @@
 
 package android.media;
 
+import android.content.Intent;
 import com.android.internal.database.SortCursor;
 
 import android.annotation.SdkConstant;
@@ -91,6 +92,25 @@ public class RingtoneManager {
      */
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_RINGTONE_PICKER = "android.intent.action.RINGTONE_PICKER";
+
+    /**
+     * Broadcast Action: The current default alarm has changed.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_ALARMS_CHANGED = "android.intent.action.ALARMS_CHANGED";
+
+    /**
+     * Broadcast Action: The current default notification has changed.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_NOTIFICATIONS_CHANGED =
+            "android.intent.action.NOTIFICATIONS_CHANGED";
+
+    /**
+     * Broadcast Action: The current default ringtone has changed.
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_RINGTONES_CHANGED = "android.intent.action.RINGTONES_CHANGED";
 
     /**
      * Given to the ringtone picker as a boolean. Whether to show an item for
@@ -678,6 +698,8 @@ public class RingtoneManager {
         if (setting == null) return;
         Settings.System.putString(context.getContentResolver(), setting,
                 ringtoneUri != null ? ringtoneUri.toString() : null);
+
+        sendBroadcastForType(context, type);
     }
     
     private static String getSettingForType(int type) {
@@ -882,5 +904,34 @@ public class RingtoneManager {
         }
         Settings.System.putString(context.getContentResolver(), setting,
                 ringtoneUri != null ? ringtoneUri.toString() : null);
+
+        if (subId == 0) {
+            sendBroadcastForType(context, TYPE_RINGTONE);
+        }
+    }
+
+    private static void sendBroadcastForType(Context context, int type) {
+        if ((type & TYPE_RINGTONE) != 0) {
+            sendRingtonesUpdatedBroadcast(context);
+        } else if ((type & TYPE_NOTIFICATION) != 0) {
+            sendNotificationsUpdatedBroadcast(context);
+        } else if ((type & TYPE_ALARM) != 0) {
+            sendAlarmsUpdatedBroadcast(context);
+        }
+    }
+
+    private static void sendAlarmsUpdatedBroadcast(Context context) {
+        Intent intent = new Intent(ACTION_ALARMS_CHANGED);
+        context.sendBroadcast(intent);
+    }
+
+    private static void sendNotificationsUpdatedBroadcast(Context context) {
+        Intent intent = new Intent(ACTION_NOTIFICATIONS_CHANGED);
+        context.sendBroadcast(intent);
+    }
+
+    private static void sendRingtonesUpdatedBroadcast(Context context) {
+        Intent intent = new Intent(ACTION_RINGTONES_CHANGED);
+        context.sendBroadcast(intent);
     }
 }
