@@ -111,6 +111,9 @@ public class ThemeService extends IThemeService.Stub {
     private PackageManager mPM;
     private int mProgress;
     private boolean mWallpaperChangedByUs = false;
+    private boolean mAlarmsChangedByUs = false;
+    private boolean mNotificationsChangedByUs = false;
+    private boolean mRingtonesChangedByUs = false;
     private long mIconCacheSize = 0L;
 
     private boolean mIsThemeApplying = false;
@@ -239,6 +242,14 @@ public class ThemeService extends IThemeService.Stub {
         // listen for wallpaper changes
         IntentFilter filter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
         mContext.registerReceiver(mWallpaperChangeReceiver, filter);
+
+        // listen for alarm/notifications/ringtone changes
+        filter = new IntentFilter(RingtoneManager.ACTION_ALARMS_CHANGED);
+        mContext.registerReceiver(mAlarmsChangeReceiver, filter);
+        filter = new IntentFilter(RingtoneManager.ACTION_NOTIFICATIONS_CHANGED);
+        mContext.registerReceiver(mNotificationsChangeReceiver, filter);
+        filter = new IntentFilter(RingtoneManager.ACTION_RINGTONES_CHANGED);
+        mContext.registerReceiver(mRingtonesChangeReceiver, filter);
 
         filter = new IntentFilter(Intent.ACTION_USER_SWITCHED);
         mContext.registerReceiver(mUserChangeReceiver, filter);
@@ -401,17 +412,27 @@ public class ThemeService extends IThemeService.Stub {
 
         Environment.setUserRequired(false);
         if (request.getNotificationThemePackageName() != null) {
-            updateNotifications(request.getNotificationThemePackageName());
+            //updateNotifications(request.getNotificationThemePackageName());
+            if (updateNotifications(request.getNotificationThemePackageName())) {
+                mNotificationsChangedByUs = true;
+            }
             incrementProgress(progressIncrement);
         }
 
         if (request.getAlarmThemePackageName() != null) {
-            updateAlarms(request.getAlarmThemePackageName());
+            //updateAlarms(request.getAlarmThemePackageName());
+            if (updateAlarms(request.getAlarmThemePackageName())) {
+                mAlarmsChangedByUs = true;
+            }
             incrementProgress(progressIncrement);
+
         }
 
         if (request.getRingtoneThemePackageName() != null) {
-            updateRingtones(request.getRingtoneThemePackageName());
+            //updateRingtones(request.getRingtoneThemePackageName());
+            if (updateRingtones(request.getRingtoneThemePackageName())) {
+                mRingtonesChangedByUs = true;
+            }
             incrementProgress(progressIncrement);
         }
         Environment.setUserRequired(true);
@@ -1133,6 +1154,48 @@ public class ThemeService extends IThemeService.Stub {
                 updateProvider(builder.build(), System.currentTimeMillis());
             } else {
                 mWallpaperChangedByUs = false;
+            }
+        }
+    };
+
+    private BroadcastReceiver mAlarmsChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!mAlarmsChangedByUs) {
+                // In case the mixnmatch table has a mods_alarms entry, we'll clear it
+                ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
+                builder.setAlarm("");
+                updateProvider(builder.build(), System.currentTimeMillis());
+            } else {
+                mAlarmsChangedByUs = false;
+            }
+        }
+    };
+
+    private BroadcastReceiver mNotificationsChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!mNotificationsChangedByUs) {
+                // In case the mixnmatch table has a mods_notifications entry, we'll clear it
+                ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
+                builder.setNotification("");
+                updateProvider(builder.build(), System.currentTimeMillis());
+            } else {
+                mNotificationsChangedByUs = false;
+            }
+        }
+    };
+
+    private BroadcastReceiver mRingtonesChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!mRingtonesChangedByUs) {
+                // In case the mixnmatch table has a mods_ringtones entry, we'll clear it
+                ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
+                builder.setRingtone("");
+                updateProvider(builder.build(), System.currentTimeMillis());
+            } else {
+                mRingtonesChangedByUs = false;
             }
         }
     };
