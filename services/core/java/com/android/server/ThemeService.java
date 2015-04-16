@@ -41,9 +41,11 @@ import android.content.res.ThemeChangeRequest;
 import android.content.res.ThemeConfig;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.FileUtils;
@@ -111,6 +113,9 @@ public class ThemeService extends IThemeService.Stub {
     private PackageManager mPM;
     private int mProgress;
     private boolean mWallpaperChangedByUs = false;
+    private boolean mAlarmsChangedByUs = false;
+    private boolean mNotificationsChangedByUs = false;
+    private boolean mRingtonesChangedByUs = false;
     private long mIconCacheSize = 0L;
 
     private boolean mIsThemeApplying = false;
@@ -122,6 +127,8 @@ public class ThemeService extends IThemeService.Stub {
             new RemoteCallbackList<IThemeProcessingListener>();
 
     final private ArrayList<String> mThemesToProcessQueue = new ArrayList<String>(0);
+
+    private final SettingsObserver mSettingsObserver = new SettingsObserver();
 
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
@@ -242,6 +249,9 @@ public class ThemeService extends IThemeService.Stub {
 
         filter = new IntentFilter(Intent.ACTION_USER_SWITCHED);
         mContext.registerReceiver(mUserChangeReceiver, filter);
+
+        // listen for alarm/notifications/ringtone changes
+        mSettingsObserver.register(true);
 
         mPM = mContext.getPackageManager();
 
@@ -408,6 +418,7 @@ public class ThemeService extends IThemeService.Stub {
         if (request.getAlarmThemePackageName() != null) {
             updateAlarms(request.getAlarmThemePackageName());
             incrementProgress(progressIncrement);
+
         }
 
         if (request.getRingtoneThemePackageName() != null) {
@@ -1224,5 +1235,55 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         return null;
+    }
+
+    private final class SettingsObserver extends ContentObserver {
+        private final Uri ALARM_ALERT_URI =
+                Settings.System.DEFAULT_ALARM_ALERT_URI;
+        private final Uri NOTIFICATION_URI =
+                Settings.System.DEFAULT_NOTIFICATION_URI;
+        private final Uri RINGTONE_URI =
+                Settings.System.DEFAULT_RINGTONE_URI;
+
+        public SettingsObserver() {
+            super(null);
+        }
+
+        public void register(boolean register) {
+            final ContentResolver cr = mContext.getContentResolver();
+            if (register) {
+                cr.registerContentObserver(ALARM_ALERT_URI, false, this);
+                cr.registerContentObserver(NOTIFICATION_URI, false, this);
+                cr.registerContentObserver(RINGTONE_URI, false, this);
+            } else {
+                cr.unregisterContentObserver(this);
+            }
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+            boolean changed = false;
+            ThemeChangeRequest.Builder builder = new ThemeChangeRequest.Builder();
+            if (ALARM_ALERT_URI.equals(uri)) {
+                // In case the mixnmatch table has a mods_alarms entry, we'll clear it
+                builder.setAlarm("");
+                changed = true;
+            }
+            if (NOTIFICATION_URI.equals(uri)) {
+                // In case the mixnmatch table has a mods_notifications entry, we'll clear it
+                builder.setNotification("");
+                changed = true;
+            }
+            if (RINGTONE_URI.equals(uri)) {
+                // In case the mixnmatch table has a mods_ringtones entry, we'll clear it
+                builder.setRingtone("");
+                changed = true;
+            }
+
+            if (changed) {
+                updateProvider(builder.build(), System.currentTimeMillis());
+            }
+        }
     }
 }
