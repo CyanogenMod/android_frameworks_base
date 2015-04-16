@@ -1349,13 +1349,15 @@ public class MSimNetworkControllerImpl extends NetworkControllerImpl {
 
         // mobile label
         N = mMobileLabelViews.size();
-        for (int i=0; i<N; i++) {
-            TextView v = mMobileLabelViews.get(i);
-            v.setText(mobileLabel);
-            if ("".equals(mobileLabel)) {
-                v.setVisibility(View.GONE);
-            } else {
-                v.setVisibility(View.VISIBLE);
+        if (phoneId == dataSub) {
+            for (int i=0; i<N; i++) {
+                TextView v = mMobileLabelViews.get(i);
+                v.setText(mobileLabel);
+                if ("".equals(mobileLabel)) {
+                    v.setVisibility(View.GONE);
+                } else {
+                    v.setVisibility(View.VISIBLE);
+                }
             }
         }
         setCarrierText();
