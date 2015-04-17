@@ -26,4 +26,5 @@
   <string name="pick_wallpaper">배경화면</string>
   <string name="activity_not_found">앱이 설치되지 않았습니다.</string>
   <string name="lockscreen_wallpaper_instructions">잠금화면 배경 설정</string>
+  <string name="image_decode_error">이미지를 디코드할 수 없음</string>
 </resources>
