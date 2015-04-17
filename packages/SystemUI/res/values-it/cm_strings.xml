@@ -36,7 +36,7 @@
   <string name="quick_settings_apn_switch_label">Cambio APN</string>
   <string name="quick_settings_dds_sub">Dati mobili SIM <xliff:g id="number">%d</xliff:g></string>
   <string name="quick_settings_data_off">Dati mobili OFF</string>
-  <string name="quick_settings_location_detail_title">Modalità geolocalizzazione</string>
+  <string name="quick_settings_location_detail_title">Geolocalizzazione</string>
   <string name="quick_settings_location_battery_saving_label">Risparmio batteria</string>
   <string name="quick_settings_location_gps_only_label">Solo dispositivo</string>
   <string name="quick_settings_location_high_accuracy_label">Alta precisione</string>

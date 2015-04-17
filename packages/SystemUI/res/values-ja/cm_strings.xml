@@ -50,6 +50,7 @@
   <string name="quick_settings_network_adb_label">ネットワーク経由のADB</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">画面のタイムアウト</string>
+  <string name="quick_settings_usb_tether_label">USBテザリング</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">右にスワイプして%1$s</string>
   <string name="right_shortcut_hint">左にスワイプして%1$s</string>

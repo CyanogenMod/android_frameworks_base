@@ -31,4 +31,5 @@
   <string name="navbar_menu_conditional_button">Menu botoia (automatikoki izkutatu)</string>
   <string name="navbar_menu_always_button">Menu botoia (beti erakutsi)</string>
   <string name="navbar_menu_big_button">Menu botoia</string>
+  <string name="navring_action_google_now">Google Now</string>
 </resources>
