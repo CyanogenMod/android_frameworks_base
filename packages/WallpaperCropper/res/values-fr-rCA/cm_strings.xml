@@ -16,6 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="clear_keyguard_wallpaper">Effacer</string>
+  <plurals name="number_of_items_selected">
+    <item quantity="one">%1$d sélectionné</item>
+    <item quantity="other">%1$d sélectionnés</item>
+  </plurals>
   <string name="wallpaper_accessibility_name">Fond d\'écran %1$d de %2$d</string>
   <string name="announce_selection"><xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g> sélectionné</string>
   <string name="wallpaper_delete">Supprimer</string>
@@ -23,4 +27,5 @@
   <string name="pick_wallpaper">Fonds d\'écran</string>
   <string name="activity_not_found">L\'application n\'est pas installée.</string>
   <string name="lockscreen_wallpaper_instructions">Définir le fond d\'écran de verrouillage</string>
+  <string name="image_decode_error">Incapable de décoder l\'image</string>
 </resources>

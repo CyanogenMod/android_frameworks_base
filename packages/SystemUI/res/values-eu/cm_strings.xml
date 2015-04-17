@@ -18,12 +18,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_dpad_left">Kurtsorea ezkerrean</string>
   <string name="accessibility_dpad_right">Kurtsorea eskuman</string>
-  <string name="dessert_case_settings_cm_title">CM maskotak erakutsi</string>
-  <string name="dessert_case_settings_cm_summary">CM maskotak Andoroid-en postreekin batera erakutsi</string>
-  <string name="quick_settings_screen_sleep">Lokatu</string>
   <string name="quick_settings_label_enabled">Gaituta</string>
   <string name="quick_settings_ringer_normal">Soinua</string>
-  <string name="quick_settings_lockscreen">Lokatze pantaila</string>
   <string name="quick_settings_network_type">Sare mugikorra</string>
   <string name="quick_settings_report_bug">Akatsa jakinarazi</string>
   <string name="quick_settings_sync">Sinkronizatu</string>

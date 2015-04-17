@@ -15,17 +15,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_keyguard_wallpaper">Eidel maachen</string>
+  <string name="clear_keyguard_wallpaper">Borrar</string>
   <plurals name="number_of_items_selected">
-    <item quantity="one">%1$d ausgewielt</item>
-    <item quantity="other">%1$d ausgewielt</item>
+    <item quantity="one">%1$d seleccionado(s)</item>
+    <item quantity="other">%1$d seleccionado(s)</item>
   </plurals>
-  <string name="wallpaper_accessibility_name">Hannergrondbild %1$d / %2$d</string>
-  <string name="announce_selection"><xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g> ausgewielt</string>
-  <string name="wallpaper_delete">Läschen</string>
-  <string name="pick_image">Bild auswielen</string>
-  <string name="pick_wallpaper">Hannergrondbiller</string>
-  <string name="activity_not_found">D\'App ass net installéiert.</string>
-  <string name="lockscreen_wallpaper_instructions">Hannergrondbild fir de Spärschierm setzen</string>
-  <string name="image_decode_error">Bild kann net decodéiert ginn</string>
+  <string name="wallpaper_accessibility_name">Fondo de pantalla %1$d de %2$d</string>
+  <string name="announce_selection">Seleccionado <xliff:g id="label" example="Wallpaper 3 of 10">%1$s </xliff:g></string>
+  <string name="wallpaper_delete">Eliminar</string>
+  <string name="pick_image">Elegir imagen</string>
+  <string name="pick_wallpaper">Fondos de pantalla</string>
+  <string name="activity_not_found">La aplicación no está instalada.</string>
+  <string name="lockscreen_wallpaper_instructions">Establecer fondo de pantalla de bloqueo</string>
+  <string name="image_decode_error">No se pudo descodificar la imagen</string>
 </resources>

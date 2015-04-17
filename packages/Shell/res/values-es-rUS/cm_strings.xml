@@ -14,13 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_keyguard_wallpaper">Garbitu</string>
-  <plurals name="number_of_items_selected">
-    <item quantity="one">%1$d aukeratua</item>
-    <item quantity="other">%1$d aukeratuak</item>
-  </plurals>
-  <string name="wallpaper_delete">Ezabatu</string>
-  <string name="pick_image">Irudia aukeratu</string>
-  <string name="activity_not_found">Aplikazioa ez dago instalatuta.</string>
+<resources>
+  <string name="notification_bug_report_active_title">Obteniendo el informe de error\u2026</string>
+  <string name="notification_bug_report_active_text">Por favor, espere unos minutos</string>
 </resources>
