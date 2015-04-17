@@ -2551,6 +2551,14 @@ public final class ActivityStackSupervisor implements DisplayListener {
     }
 
     void findTaskToMoveToFrontLocked(TaskRecord task, int flags, Bundle options, String reason) {
+
+        ActivityRecord top_activity;
+        top_activity = task.stack.topRunningActivityLocked(null);
+        /* App is launching from recent apps and it's a new process */
+        if(top_activity != null && top_activity.state == ActivityState.DESTROYED) {
+            acquireAppLaunchPerfLock();
+        }
+
         if ((flags & ActivityManager.MOVE_TASK_NO_USER_ACTION) == 0) {
             mUserLeaving = true;
         }
@@ -2727,6 +2735,20 @@ public final class ActivityStackSupervisor implements DisplayListener {
         resumeTopActivitiesLocked();
     }
 
+    void acquireAppLaunchPerfLock() {
+       /* Acquire perf lock during new app launch */
+       if (mIsPerfBoostEnabled == true && mPerf == null) {
+           mPerf = new Performance();
+       }
+       if (mPerf != null) {
+           if (DEBUG) Slog.d(TAG, "Acquiring perf lock Enter : ");
+           mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
+                                  lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost,
+                                  lBoostSmTaskBoost, lBoostIdleLoadBoost,
+                                  lBoostIdleNrRunBoost, lBoostPreferIdle);
+       }
+    }
+
     ActivityRecord findTaskLocked(ActivityRecord r) {
         if (DEBUG_TASKS) Slog.d(TAG, "Looking for task of " + r);
         for (int displayNdx = mActivityDisplays.size() - 1; displayNdx >= 0; --displayNdx) {
@@ -2744,33 +2766,16 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
                 final ActivityRecord ar = stack.findTaskLocked(r);
                 if (ar != null) {
-                    /* Acquire perf lock during app launch for existing activity record. */
-                    /* Acquire lock only in case app is killed/died. */
-                    if(ar.state == ActivityState.DESTROYED ) {
-                       if (mIsPerfBoostEnabled == true && mPerf == null) {
-                           mPerf = new Performance();
-                       }
-                       if (mPerf != null) {
-                           mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                                 lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost,
-                                                 lBoostSmTaskBoost, lBoostIdleLoadBoost,
-                                                 lBoostIdleNrRunBoost, lBoostPreferIdle);
-                       }
+                    if(ar.state == ActivityState.DESTROYED ){
+                        /*It's a new app launch */
+                        acquireAppLaunchPerfLock();
                     }
                     return ar;
                 }
             }
         }
         /* Acquire perf lock during new app launch */
-        if (mIsPerfBoostEnabled == true && mPerf == null) {
-            mPerf = new Performance();
-        }
-        if (mPerf != null) {
-            mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                  lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost,
-                                  lBoostSmTaskBoost, lBoostIdleLoadBoost,
-                                  lBoostIdleNrRunBoost, lBoostPreferIdle);
-        }
+        acquireAppLaunchPerfLock();
 
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;
