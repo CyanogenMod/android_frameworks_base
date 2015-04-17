@@ -1953,7 +1953,8 @@ public class NotificationManagerService extends SystemService {
                     applyZenModeLocked(r);
                     mRankingHelper.sort(mNotificationList);
 
-                    if (notification.icon != 0) {
+                    System.out.println("Check " + notification.iconBitmap);
+                    if (notification.icon != 0 || notification.iconBitmap != null) {
                         StatusBarNotification oldSbn = (old != null) ? old.sbn : null;
                         mListeners.notifyPostedLocked(n, oldSbn);
                     } else {

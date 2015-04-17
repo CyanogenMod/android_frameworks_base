@@ -166,6 +166,8 @@ public class Notification implements Parcelable
      */
     public int icon;
 
+    public Bitmap iconBitmap;
+
     /**
      * If the icon in the status bar is to have more than one level, you can set this.  Otherwise,
      * leave it at its default value of 0.
@@ -747,6 +749,7 @@ public class Notification implements Parcelable
      * supplied to {@link Builder#setSmallIcon(int)}.
      */
     public static final String EXTRA_SMALL_ICON = "android.icon";
+    public static final String EXTRA_SMALL_ICON_BITMAP = "android.icon.bitmap";
 
     /**
      * {@link #extras} key: this is a bitmap to be used instead of the small icon when showing the
@@ -1285,6 +1288,9 @@ public class Notification implements Parcelable
 
         when = parcel.readLong();
         icon = parcel.readInt();
+        if (parcel.readInt() != 0) {
+            iconBitmap = Bitmap.CREATOR.createFromParcel(parcel);
+        }
         number = parcel.readInt();
         if (parcel.readInt() != 0) {
             contentIntent = PendingIntent.CREATOR.createFromParcel(parcel);
@@ -1368,6 +1374,9 @@ public class Notification implements Parcelable
     public void cloneInto(Notification that, boolean heavy) {
         that.when = this.when;
         that.icon = this.icon;
+        if (iconBitmap != null) {
+            that.iconBitmap = Bitmap.createBitmap(this.iconBitmap);
+        }
         that.number = this.number;
 
         // PendingIntents are global, so there's no reason (or way) to clone them.
@@ -1509,6 +1518,12 @@ public class Notification implements Parcelable
 
         parcel.writeLong(when);
         parcel.writeInt(icon);
+        if (iconBitmap != null) {
+            parcel.writeInt(1);
+            iconBitmap.writeToParcel(parcel, 0);
+        } else {
+            parcel.writeInt(0);
+        }
         parcel.writeInt(number);
         if (contentIntent != null) {
             parcel.writeInt(1);
@@ -1868,6 +1883,7 @@ public class Notification implements Parcelable
 
         private long mWhen;
         private int mSmallIcon;
+        private Bitmap mSmallIconBitmap;
         private int mSmallIconLevel;
         private int mNumber;
         private CharSequence mContentTitle;
@@ -2061,6 +2077,11 @@ public class Notification implements Parcelable
          */
         public Builder setSmallIcon(int icon) {
             mSmallIcon = icon;
+            return this;
+        }
+
+        public Builder setSmallIcon(Bitmap icon) {
+            mSmallIconBitmap = icon;
             return this;
         }
 
@@ -2742,11 +2763,19 @@ public class Notification implements Parcelable
             if (mLargeIcon != null) {
                 contentView.setImageViewBitmap(R.id.icon, mLargeIcon);
                 processLargeLegacyIcon(mLargeIcon, contentView);
-                contentView.setImageViewResource(R.id.right_icon, mSmallIcon);
+                if (mSmallIconBitmap != null) {
+                    contentView.setImageViewBitmap(R.id.right_icon, mSmallIconBitmap);
+                } else {
+                    contentView.setImageViewResource(R.id.right_icon, mSmallIcon);
+                }
                 contentView.setViewVisibility(R.id.right_icon, View.VISIBLE);
                 processSmallRightIcon(mSmallIcon, contentView);
             } else { // small icon at left
-                contentView.setImageViewResource(R.id.icon, mSmallIcon);
+                if (mSmallIconBitmap != null) {
+                    contentView.setImageViewBitmap(R.id.icon, mSmallIconBitmap);
+                } else {
+                    contentView.setImageViewResource(R.id.icon, mSmallIcon);
+                }
                 contentView.setViewVisibility(R.id.icon, View.VISIBLE);
                 processSmallIconAsLarge(mSmallIcon, contentView);
             }
@@ -2979,7 +3008,7 @@ public class Notification implements Parcelable
          * Apply any necessary background to smallIcons being used in the largeIcon spot.
          */
         private void processSmallIconAsLarge(int largeIconId, RemoteViews contentView) {
-            if (!isLegacy() || mColorUtil.isGrayscaleIcon(mContext, largeIconId)) {
+            if (!isLegacy() || isSmallIconGrayscale(largeIconId)) {
                 applyLargeIconBackground(contentView);
             }
         }
@@ -3026,10 +3055,12 @@ public class Notification implements Parcelable
          */
         private void processSmallRightIcon(int smallIconDrawableId,
                 RemoteViews contentView) {
-            if (!isLegacy() || mColorUtil.isGrayscaleIcon(mContext, smallIconDrawableId)) {
-                contentView.setDrawableParameters(R.id.right_icon, false, -1,
+            if (!isLegacy() || isSmallIconGrayscale(smallIconDrawableId)) {
+                if (mSmallIconBitmap == null ) {
+                    contentView.setDrawableParameters(R.id.right_icon, false, -1,
                         0xFFFFFFFF,
                         PorterDuff.Mode.SRC_ATOP, -1);
+                }
 
                 contentView.setInt(R.id.right_icon,
                         "setBackgroundResource",
@@ -3042,6 +3073,14 @@ public class Notification implements Parcelable
                         resolveColor(),
                         PorterDuff.Mode.SRC_ATOP,
                         -1);
+            }
+        }
+
+        private boolean isSmallIconGrayscale(int smallIconDrawableId) {
+            if (mSmallIconBitmap != null) {
+                return mColorUtil.isGrayscaleIcon(mSmallIconBitmap);
+            } else {
+                return mColorUtil.isGrayscaleIcon(mContext, smallIconDrawableId); 
             }
         }
 
@@ -3067,6 +3106,7 @@ public class Notification implements Parcelable
             Notification n = new Notification();
             n.when = mWhen;
             n.icon = mSmallIcon;
+            n.iconBitmap = mSmallIconBitmap;
             n.iconLevel = mSmallIconLevel;
             n.number = mNumber;
 
@@ -3129,6 +3169,8 @@ public class Notification implements Parcelable
             extras.putCharSequence(EXTRA_SUB_TEXT, mSubText);
             extras.putCharSequence(EXTRA_INFO_TEXT, mContentInfo);
             extras.putInt(EXTRA_SMALL_ICON, mSmallIcon);
+            extras.putParcelable(EXTRA_SMALL_ICON_BITMAP, mSmallIconBitmap);
+            System.out.println("Putting " + mSmallIconBitmap);
             extras.putInt(EXTRA_PROGRESS, mProgress);
             extras.putInt(EXTRA_PROGRESS_MAX, mProgressMax);
             extras.putBoolean(EXTRA_PROGRESS_INDETERMINATE, mProgressIndeterminate);
@@ -3317,6 +3359,7 @@ public class Notification implements Parcelable
             // Notification fields.
             mWhen = n.when;
             mSmallIcon = n.icon;
+            mSmallIconBitmap = n.iconBitmap;
             mSmallIconLevel = n.iconLevel;
             mNumber = n.number;
 
@@ -3359,6 +3402,8 @@ public class Notification implements Parcelable
             mSubText = extras.getCharSequence(EXTRA_SUB_TEXT);
             mContentInfo = extras.getCharSequence(EXTRA_INFO_TEXT);
             mSmallIcon = extras.getInt(EXTRA_SMALL_ICON);
+            mSmallIconBitmap = extras.getParcelable(EXTRA_SMALL_ICON_BITMAP);
+            System.out.println("Getting " + mSmallIconBitmap);
             mProgress = extras.getInt(EXTRA_PROGRESS);
             mProgressMax = extras.getInt(EXTRA_PROGRESS_MAX);
             mProgressIndeterminate = extras.getBoolean(EXTRA_PROGRESS_INDETERMINATE);
