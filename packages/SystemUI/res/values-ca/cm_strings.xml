@@ -50,6 +50,7 @@
   <string name="quick_settings_network_adb_label">ADB sobre xarxa</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Temps d\'espera de la pantalla</string>
+  <string name="quick_settings_usb_tether_label">Ancoratge USB</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Llisca a la dreta per %1$s</string>
   <string name="right_shortcut_hint">Llisca a l\'esquerra per %1$s</string>

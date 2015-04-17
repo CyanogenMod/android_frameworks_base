@@ -17,7 +17,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Lehenetsita</string>
   <string name="profileNameWork">Lanean</string>
   <string name="profileNameHome">Etxean</string>
   <string name="profileNameSilent">Isilik</string>
@@ -42,26 +41,18 @@
   <string name="permlab_writeThemes">Gaiak aldatu</string>
   <string name="permdesc_writeThemesDesc">Aplikazioa gai berriak sartzera baimentzen du, baita momentuan aplikaturiko gaia aldatzera ere.</string>
   <string name="permlab_readPhoneBlacklist">Telefonoaren zerrenda beltza irakurri</string>
-  <string name="permdesc_readPhoneBlacklist">Aplikazioa datozen dei edota SMS-entzako lokaturiko telefono zenbakiei buruzko infomazioa irakurtzera baimentzen du.</string>
   <string name="permlab_changePhoneBlacklist">Telefonoaren zerrenda beltza aldatu</string>
-  <string name="permdesc_changePhoneBlacklist">Aplikazioa datozen dei edota SMS-entzako lokaturiko telefono zenbakiak aldatzera baimentzen du.</string>
   <string name="permlab_changePrivacyGuardState">Pribatutasuna gaitu edo ezgaitu</string>
   <string name="permdesc_changePrivacyGuardState">Aplikazioa beste aplikazioen pribatutasun egoera aldatzera baimentzen du. Aplikazio bat pribatutasuna gaituta izanik abiatzen denean ezingo du datu pertsonalik ikusi, ez kontakturik, ez mezurik ezta dei erregistrorik ere.</string>
   <string name="privacy_guard_notification">Pribatutasuna gaituta</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> -k ezingo du datu pertsonalik irakurri</string>
   <string name="permlab_useHardwareFramework">Hardware markoa erabili</string>
   <string name="permdesc_useHardwareFramework">Aplikazioari hardware markorako sarbidea gaitzen dio.</string>
-  <string name="permlab_setKeyguardWallpaper">Lokatze pantailarako hormairudia ezarri</string>
-  <string name="permdesc_setKeyguardWallpaper">Aplikazioa lokatze pantailarako hormairudia ezartzera baimentzen du.</string>
   <string name="privacy_guard_dialog_title">Pribatutasuna</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> nahi du.</string>
   <string name="global_action_reboot">Berrabiarazi</string>
   <string name="reboot_reboot">Berrabiarazi</string>
-  <string name="reboot_recovery">Recovery-a</string>
-  <string name="reboot_bootloader">Bootloader-a</string>
-  <string name="reboot_download">Download-a</string>
   <string name="reboot_soft">Berrabiarazte leuna</string>
-  <string name="reboot_confirm" product="tablet">Tablet-a berrabiarazi egingo da.</string>
   <string name="reboot_confirm" product="default">Telefonoa berrabiarazi egingo da.</string>
   <string name="reboot_progress">Berrabiarazten\u2026</string>
   <string name="adb_net_active_notification_title">Sare gaineko ADB-a gaitua</string>
@@ -109,5 +100,4 @@
   <string name="perf_profile_pwrsv">Energia aurreztea</string>
   <string name="perf_profile_bal">Orekatua</string>
   <string name="perf_profile_perf">Etekin handia</string>
-  <string name="permlab_interceptSmsSent">Irtetzen dires SMS-ak oztopatu</string>
 </resources>
