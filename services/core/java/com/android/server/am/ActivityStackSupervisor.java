@@ -147,6 +147,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
     public Performance mPerf = null;
     public boolean mIsPerfBoostEnabled = false;
     public int lBoostTimeOut = 0;
+    public int lDisPackTimeOut = 0;
     public int lBoostCpuBoost = 0;
     public int lBoostSchedBoost = 0;
     public int lBoostPcDisblBoost = 0;
@@ -324,6 +325,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
                    com.android.internal.R.integer.launchboost_schedboost_param);
            lBoostTimeOut = mService.mContext.getResources().getInteger(
                    com.android.internal.R.integer.launchboost_timeout_param);
+           lDisPackTimeOut = mService.mContext.getResources().getInteger(
+                   com.android.internal.R.integer.disablepacking_timeout_param);
            lBoostCpuBoost = mService.mContext.getResources().getInteger(
                    com.android.internal.R.integer.launchboost_cpuboost_param);
            lBoostPcDisblBoost = mService.mContext.getResources().getInteger(
@@ -2742,10 +2745,10 @@ public final class ActivityStackSupervisor implements DisplayListener {
        }
        if (mPerf != null) {
            if (DEBUG) Slog.d(TAG, "Acquiring perf lock Enter : ");
-           mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                  lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost,
-                                  lBoostSmTaskBoost, lBoostIdleLoadBoost,
+           mPerf.perfLockAcquire(lDisPackTimeOut,lBoostSmTaskBoost, lBoostIdleLoadBoost,
                                   lBoostIdleNrRunBoost, lBoostPreferIdle);
+           mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
+                                  lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost);
        }
     }
 
