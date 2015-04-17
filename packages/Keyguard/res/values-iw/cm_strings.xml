@@ -21,13 +21,13 @@
   <string name="keyguard_accessibility_status">"מצב"</string>
   <string name="kg_dismiss">בטל</string>
   <string name="kg_slot_name">חריץ <xliff:g id="number">%d </xliff:g>: כרטיס SIM חדש\u0020</string>
-  <string name="lockscreen_sim_error_message_short">כרטיס לא חוקי.</string>
+  <string name="lockscreen_sim_error_message_short">כרטיס SIM לא חוקי.</string>
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">הזן קוד PIN, נותר לך ניסיון <xliff:g id="number">%d </xliff:g> לפני שתיאלץ לפנות לספק הסלולרי שלך על מנת לבטל את נעילת המכשיר.</item>
-    <item quantity="other">הזן קוד PIN, נותרו לך <xliff:g id="number">%d </xliff:g> ניסיונות.</item>
+    <item quantity="one">הזן את קוד ה-PIN של כרטיס ה-SIM, נותר לך ניסיון <xliff:g id="number">%d</xliff:g> לפני שתיאלץ לפנות לספק הסלולרי שלך על מנת לבטל את נעילת המכשיר.</item>
+    <item quantity="other">הזן את קוד ה-PIN של כרטיס ה-SIM, נותרו לך <xliff:g id="number">%d</xliff:g> ניסיונות.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">כרטיס ה-SIM נחסם זמנית. הזן קוד PUK כדי להמשיך. לרשותך נסיון <xliff:g id="number">%d </xliff:g> לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק הסלולרי שלך.</item>
-    <item quantity="other">כרטיס ה-SIM נחסם זמנית. הזן קוד PUK כדי להמשיך. לרשותך <xliff:g id="number">%d </xliff:g> נסיונות לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק הסלולרי שלך.</item>
+    <item quantity="one">כרטיס ה-SIM חסום כרגע. הזן קוד PUK כדי להמשיך. לרשותך ניסיון <xliff:g id="number">%d</xliff:g> לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק הסלולרי שלך.</item>
+    <item quantity="other">כרטיס ה-SIM נחסם זמנית. הזן קוד PUK כדי להמשיך. לרשותך <xliff:g id="number">%d</xliff:g> ניסיונות לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק הסלולרי שלך.</item>
   </plurals>
 </resources>

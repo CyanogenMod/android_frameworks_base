@@ -40,10 +40,13 @@
   <string name="quick_settings_compass_label">Busolă</string>
   <string name="quick_settings_compass_init">Inițializare\u2026</string>
   <string name="quick_settings_lockscreen_label">Ecran de blocare</string>
+  <string name="quick_settings_lockscreen_label_enforced">Blocare ecran impusă</string>
   <string name="quick_settings_network_adb_label">ADB prin reţea</string>
   <string name="quick_settings_lte_label">4G</string>
+  <string name="quick_settings_usb_tether_label">Tethering USB</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Glisați dreapta pentru %1$s</string>
+  <string name="right_shortcut_hint">Glisați stânga pentru %1$s</string>
   <string name="navbar_dialog_title">Alege o acțiune pentru a o asocia</string>
   <string name="navbar_home_button">Butonul Acasă</string>
   <string name="navbar_recent_button">Butonul Recent</string>
