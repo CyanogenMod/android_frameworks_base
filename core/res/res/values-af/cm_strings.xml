@@ -175,6 +175,30 @@
   <string name="usb_media_checking">USB stoor spasie word tans gekontroleer.</string>
   <string name="usb_media_removed">USB stoor spasie is verwyder.</string>
   <string name="usb_media_shared">USB stoor spasie word tans gebruik deur \'n rekenaar.</string>
+  <string name="sd_ext_media_checking_notification_title">SD kaart word voorberei</string>
+  <string name="sd_ext_media_checking_notification_message">Nagaan SD kaart vir foute.</string>
+  <string name="sd_ext_media_nofs_notification_title">Leë SD kaart</string>
+  <string name="sd_ext_media_nofs_notification_message">SD kaart is leeg of het \'n nie ondersteunde lêerstelsel.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Beskadigde SD kaart</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD kaart is beskadig. Probeer om dit te formateer.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD kaart onverwags verwyder</string>
+  <string name="sd_ext_media_badremoval_notification_message">Ontheg SD kaart om die verlies van data te voorkom.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD kaart is veilig om te verwyder</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Jy kan veilig die SD kaart verwyder.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Verwyder SD kaart</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD kaart verwyder. Sit \'n nuwe een in.</string>
+  <string name="usb_ext_media_checking_notification_title">USB-berging voorberei</string>
+  <string name="usb_ext_media_checking_notification_message">Kyk USB spasie vir foute.</string>
+  <string name="usb_ext_media_nofs_notification_title">Leë USB-berging</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-berging is leeg of het \'n onbekende lêerstelsel.</string>
+  <string name="usb_ext_media_unmountable_notification_title">USB-berging is beskadig</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-berging is beskadig. Probeer om dit te oor te formateer.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-berging onverwags verwyder</string>
+  <string name="usb_ext_media_badremoval_notification_message">Ontheg USB-berging om die verlies van data te voorkom.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB-berging kan verwyder word</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USB-berging is veilig om te verwyder.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Het USB-berging verwyder</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB-berging is verwyder. Voeg nuwe media by.</string>
   <string name="live_display_auto">Outomaties</string>
   <string name="live_display_auto_summary">Kleurtemperatuur van die skerm sal outomaties aanpas na sononder en sonop</string>
   <string name="live_display_off">Af</string>
@@ -186,4 +210,6 @@
   <string name="live_display_outdoor">Buitekant (helder son)</string>
   <string name="live_display_outdoor_summary">Alleenlik gebruik buite instellings</string>
   <string name="live_display_hint">LewendigeVertoning kan jou oogspanning verminder en help jou slaap in die nag. Klik hier om dit uit te probeer!</string>
+  <string name="lock_to_app_toast_no_navbar">Om hierdie skerm te ontspeld, raak en hou Kieslys knoppie.</string>
+  <string name="lock_to_app_description_no_navbar">Skerm vassteek sluit die skerm in \'n enkele beeld.\n\nOm te ontspeld, raak en hou Kieslys knoppie.</string>
 </resources>

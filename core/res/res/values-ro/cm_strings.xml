@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> dorește să <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Repornire</string>
+  <string name="global_action_current_user">Actual</string>
   <string name="reboot_reboot">Repornire</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -164,7 +165,10 @@
   <string name="sd_media_bad_removal">Cardul SD a fost înlăturat înainte de a fi demontat.</string>
   <string name="sd_media_checking">Cardul SD este în curs de verificare.</string>
   <string name="sd_media_removed">Cardul SD a fost înlăturat.</string>
+  <string name="sd_media_shared">Cardul SD este în prezent utilizat de un computer.</string>
   <string name="usb_format_error">Nu s-a putut şterge mediul de stocare USB.</string>
+  <string name="sd_ext_media_checking_notification_title">Se pregătește cardul SD</string>
+  <string name="sd_ext_media_checking_notification_message">Se verifică cardul SD pentru erori.</string>
   <string name="sd_ext_media_nofs_notification_title">Card SD gol</string>
   <string name="sd_ext_media_nofs_notification_message">Cardul SD este gol sau are un sistem de fișiere neacceptat.</string>
   <string name="sd_ext_media_unmountable_notification_title">Card SD deteriorat</string>

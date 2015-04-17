@@ -28,7 +28,7 @@
   <string name="profileGroupGmail">Gmail</string>
   <string name="profileGroupEmail">El. paštas</string>
   <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Kitas</string>
+  <string name="wildcardProfile">Kita</string>
   <string name="profile_none">Nėra</string>
   <string name="profile_picker_title">Profiliai</string>
   <string name="global_action_choose_profile">Profilis</string>
@@ -50,7 +50,7 @@
   <string name="permlab_changePhoneBlacklist">pakeisti telefono juodąjį sąrašą</string>
   <string name="permdesc_changePhoneBlacklist">Leidžia programai keisti telefono numerius kurie yra užblokuoti dėl įeinančių skambučių ar pranešimų.</string>
   <string name="permlab_changePrivacyGuardState">įgalinti arba neleisti privatumo saugos</string>
-  <string name="permdesc_changePrivacyGuardState">Leisti programai keisti, kai kita programa veikia su privatumo sauga. Kai programa veikia su privatumo sauga ji neturės prieigos prie asmeninių duomenų, pavyzdžiui, kontaktų, skambučių žurnalų ar pranešimų.</string>
+  <string name="permdesc_changePrivacyGuardState">Leisti programai keisti, kai kita programa veikia su privatumo sauga. Kai programa veikia su privatumo sauga ji neturės prieigos prie asmeninių duomenų pvz., kontaktų, skambučių žurnalų ar pranešimų.</string>
   <string name="privacy_guard_notification">Privatumo sauga aktyvi</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> negalės prieiti prie asmeninių duomenų</string>
   <string name="permlab_useHardwareFramework">naudoti aparatinės įrangos sistemą</string>
@@ -135,7 +135,7 @@
   <string name="tethered_notification_no_device_message">Nėra prijungto įrenginio</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> prijungtas įrenginys</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> prijungti įrenginiai</string>
-  <string name="progress_nomediapresent" product="default">Nėra laikmenos\u2026</string>
+  <string name="progress_nomediapresent" product="default">Nėra pašalinamos medijos\u2026</string>
   <string name="storage_uicc">UICC saugykla</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
@@ -149,7 +149,7 @@
   <string name="android_installing_apk">Įdiegiama programa
 <xliff:g id="number" example="123">%1$d</xliff:g> iš
 <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Įdiegiamas „Android“\u2026</string>
+  <string name="android_installing_title">Įdiegiama „Android“\u2026</string>
   <string name="theme_reset_notification_title">Nustatyti iš naujo temą</string>
   <string name="theme_reset_notification_body">Sistemos tema atkurta dėl pasikartojančių programos klaidų.</string>
   <string name="stylus_app_not_installed">%s neįdiegta</string>
@@ -198,7 +198,7 @@
   <string name="usb_ext_media_safe_unmount_notification_title">Saugu pašalinti USB saugyklą</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti USB saugyklą.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB saugykla pašalinta</string>
-  <string name="usb_ext_media_nomedia_notification_message">USB saugykla pašalinta. Įdėkite naują.</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB saugykla pašalinta. Įdėkite naują mediją.</string>
   <string name="live_display_auto">Automatinis</string>
   <string name="live_display_auto_summary">Automatiškai sureguliuoti ekrano spalvos temperatūrą po saulėlydžio ir saulėtekio</string>
   <string name="live_display_off">Išjungti</string>
