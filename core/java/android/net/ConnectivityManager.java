@@ -1252,7 +1252,13 @@ public class ConnectivityManager {
             LegacyRequest l = sLegacyRequests.get(netCap);
             if (l == null) return;
             ourSeqNum = l.expireSequenceNumber;
-            if (l.expireSequenceNumber == sequenceNum) removeRequestForFeature(netCap);
+            if (l.expireSequenceNumber == sequenceNum) {
+                NetworkCallback ntcb = removeRequestForFeature(netCap);
+                if (ntcb != null) {
+                    Log.d(TAG,"release request when timer expires");
+                    unregisterNetworkCallback(ntcb);
+                }
+            }
         }
         Log.d(TAG, "expireRequest with " + ourSeqNum + ", " + sequenceNum);
     }
