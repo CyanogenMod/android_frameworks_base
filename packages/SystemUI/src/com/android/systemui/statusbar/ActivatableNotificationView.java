@@ -41,6 +41,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.PathInterpolator;
 
 import com.android.systemui.R;
+import com.android.systemui.ViewInvertHelper;
 
 /**
  * Base class for both {@link ExpandableNotificationRow} and {@link NotificationOverflowContainer}
@@ -138,6 +139,8 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     private final int mNormalColor;
     private final int mLowPriorityColor;
     private boolean mIsBelowSpeedBump;
+    private ViewInvertHelper mBackgroundNormalInvertHelper;
+    private ViewInvertHelper mBackgroundDimmedInvertHelper;
 
     public ActivatableNotificationView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -174,6 +177,10 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         mBackgroundDimmed = (NotificationBackgroundView) findViewById(R.id.backgroundDimmed);
         mBackgroundNormal.setCustomBackground(R.drawable.notification_material_bg);
         mBackgroundDimmed.setCustomBackground(R.drawable.notification_material_bg_dim);
+        mBackgroundNormalInvertHelper =
+                new ViewInvertHelper(mBackgroundNormal, DARK_ANIMATION_LENGTH);
+        mBackgroundDimmedInvertHelper =
+                new ViewInvertHelper(mBackgroundDimmed, DARK_ANIMATION_LENGTH);
         updateBackground();
         updateBackgroundTint();
     }
@@ -406,15 +413,15 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
      */
     private void fadeInFromDark(long delay) {
         final View background = mDimmed ? mBackgroundDimmed : mBackgroundNormal;
-        background.setAlpha(0f);
-        background.setPivotX(mBackgroundDimmed.getWidth() / 2f);
-        background.setPivotY(getActualHeight() / 2f);
-        background.setScaleX(DARK_EXIT_SCALE_START);
-        background.setScaleY(DARK_EXIT_SCALE_START);
+        if (mDimmed) {
+            mBackgroundDimmedInvertHelper.fade(false, delay);
+            mBackgroundNormalInvertHelper.update(false);
+        } else {
+            mBackgroundDimmedInvertHelper.update(false);
+            mBackgroundNormalInvertHelper.fade(false, delay);
+        }
         background.animate()
                 .alpha(1f)
-                .scaleX(1f)
-                .scaleY(1f)
                 .setDuration(DARK_ANIMATION_LENGTH)
                 .setStartDelay(delay)
                 .setInterpolator(mLinearOutSlowInInterpolator)
@@ -422,8 +429,6 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
                     @Override
                     public void onAnimationCancel(Animator animation) {
                         // Jump state if we are cancelled
-                        background.setScaleX(1f);
-                        background.setScaleY(1f);
                         background.setAlpha(1f);
                     }
                 })
@@ -476,9 +481,11 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
 
     private void updateBackground() {
         cancelFadeAnimations();
+        mBackgroundNormalInvertHelper.update(mDark);
+        mBackgroundDimmedInvertHelper.update(mDark);
         if (mDark) {
             mBackgroundDimmed.setVisibility(View.INVISIBLE);
-            mBackgroundNormal.setVisibility(View.INVISIBLE);
+            mBackgroundNormal.setVisibility(View.VISIBLE);
         } else if (mDimmed) {
             mBackgroundDimmed.setVisibility(View.VISIBLE);
             mBackgroundNormal.setVisibility(View.INVISIBLE);
