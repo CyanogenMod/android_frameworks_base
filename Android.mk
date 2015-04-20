@@ -279,6 +279,8 @@ LOCAL_SRC_FILES += \
 	core/java/android/speech/tts/ITextToSpeechCallback.aidl \
 	core/java/android/speech/tts/ITextToSpeechService.aidl \
 	core/java/codeaurora/ultrasound/IDigitalPenDimensionsCallback.aidl \
+    cm/java/org/cyanogenmod/internal/statusbar/IStatusBarCustomTileHolder.aidl \
+	cm/java/cyanogenmod/app/ICustomTileListener.aidl \
 	core/java/com/android/internal/app/IAppOpsCallback.aidl \
 	core/java/com/android/internal/app/IAppOpsService.aidl \
 	core/java/com/android/internal/app/IBatteryStats.aidl \
@@ -495,6 +497,8 @@ aidl_files := \
 	frameworks/base/graphics/java/android/graphics/PointF.aidl \
 	frameworks/base/graphics/java/android/graphics/RectF.aidl \
 	frameworks/base/graphics/java/android/graphics/Rect.aidl \
+	frameworks/base/cm/java/cyanogenmod/app/CustomTile.aidl \
+	frameworks/base/cm/java/org/cyanogenmod/internal/statusbar/StatusBarPanelCustomTile.aidl \
 	frameworks/base/core/java/android/accounts/AuthenticatorDescription.aidl \
 	frameworks/base/core/java/android/accounts/Account.aidl \
 	frameworks/base/core/java/android/print/PrintDocumentInfo.aidl \
