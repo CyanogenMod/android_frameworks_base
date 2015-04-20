@@ -28,19 +28,33 @@ public class IconMerger extends LinearLayout {
     private static final String TAG = "IconMerger";
     private static final boolean DEBUG = false;
 
-    private int mIconSize;
+    private int mIconWidth;
     private int mClockLocation;
     private View mMoreView;
 
     public IconMerger(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mIconSize = context.getResources().getDimensionPixelSize(
-                R.dimen.status_bar_icon_size);
+        mIconWidth = calculateIconWidth(context);
 
         if (DEBUG) {
             setBackgroundColor(0x800099FF);
         }
+    }
+
+    /**
+     * Considering the padding, this method calculates the effective icon width
+     * of the notification icons.
+     *
+     * @param context
+     * @return The effective icon width which is expected by the {@link IconMerger}.
+     */
+    public static int calculateIconWidth(final Context context) {
+        int iconSize = context.getResources().getDimensionPixelSize(
+                R.dimen.status_bar_icon_size);
+        int iconHPadding = context.getResources().getDimensionPixelSize(
+                R.dimen.status_bar_icon_padding);
+        return iconSize + 2 * iconHPadding;
     }
 
     public void setOverflowIndicator(View v) {
@@ -56,7 +70,7 @@ public class IconMerger extends LinearLayout {
             int totalWidth = mContext.getResources().getDisplayMetrics().widthPixels;
             width = totalWidth / 2 - mIconSize * 2;
         }
-        setMeasuredDimension(width - (width % mIconSize), getMeasuredHeight());
+        setMeasuredDimension(width - (width % mIconWidth), getMeasuredHeight());
     }
 
     @Override
@@ -79,11 +93,11 @@ public class IconMerger extends LinearLayout {
             int totalWidth = mContext.getResources().getDisplayMetrics().widthPixels;
             if ((mClockLocation != Clock.STYLE_CLOCK_CENTER &&
                     mClockLocation != Clock.STYLE_CLOCK_LEFT) ||
-                    (visibleChildren > (totalWidth / mIconSize / 2 + 1))) {
+                    (visibleChildren > (totalWidth / mIconWidth / 2 + 1))) {
                 visibleChildren--;
             }
         }
-        final boolean moreRequired = visibleChildren * mIconSize > width;
+        final boolean moreRequired = visibleChildren * mIconWidth > width;
         if (moreRequired != overflowShown) {
             post(new Runnable() {
                 @Override
