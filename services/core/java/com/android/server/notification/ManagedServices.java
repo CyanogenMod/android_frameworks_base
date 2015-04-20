@@ -642,12 +642,12 @@ abstract public class ManagedServices {
         }
     }
 
-    protected static class Config {
-        String caption;
-        String serviceInterface;
-        String secureSettingName;
-        String bindPermission;
-        String settingsAction;
-        int clientLabel;
+    public static class Config {
+        public String caption;
+        public String serviceInterface;
+        public String secureSettingName;
+        public String bindPermission;
+        public String settingsAction;
+        public int clientLabel;
     }
 }

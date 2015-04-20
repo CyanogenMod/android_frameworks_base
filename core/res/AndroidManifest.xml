@@ -2914,6 +2914,15 @@
         android:description="@string/permdesc_bindNotificationListenerService"
         android:protectionLevel="signature" />
 
+    <!-- Must be required by an {@link cyanogenmod.app.CustomTileListenerService},
+         to ensure that only the system can bind to it.
+         TODO: This can be made public
+         @hide -->
+    <permission android:name="android.permission.BIND_CUSTOM_TILE_LISTENER_SERVICE"
+         android:label="@string/permlab_bindCustomTileListenerService"
+         android:description="@string/permdesc_bindCustomTileListenerService"
+         android:protectionLevel="signature" />
+
     <!-- @SystemApi Must be required by a {@link
          android.service.notification.ConditionProviderService},
          to ensure that only the system can bind to it.
@@ -3051,6 +3060,14 @@
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
+
+    <!-- Allows a 3rd party application to publish or unpublish a quick settings tile
+         TODO: Move this to an external CyanogenMod framework jar, so it doesn't have to be hidden
+         @hide-->
+    <permission android:name="android.permission.PUBLISH_QUICK_SETTINGS_TILE"
+        android:label="@string/permlab_publishQuickSettingsTile"
+        android:description="@string/permdesc_publishQuickSettingsTile"
+        android:protectionLevel="normal" />
 
     <application android:process="system"
                  android:persistent="true"

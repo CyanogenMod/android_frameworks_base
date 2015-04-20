@@ -22,8 +22,12 @@ import android.os.Binder;
 import android.os.RemoteException;
 import android.os.IBinder;
 import android.os.ServiceManager;
+import android.os.UserHandle;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
+
+import cyanogenmod.app.CustomTile;
 
 import com.android.internal.statusbar.IStatusBarService;
 
@@ -33,6 +37,9 @@ import com.android.internal.statusbar.IStatusBarService;
  * @hide
  */
 public class StatusBarManager {
+
+    private static String TAG = "StatusBarManager";
+    private static boolean localLOGV = false;
 
     public static final int DISABLE_EXPAND = View.STATUS_BAR_DISABLE_EXPAND;
     public static final int DISABLE_NOTIFICATION_ICONS = View.STATUS_BAR_DISABLE_NOTIFICATION_ICONS;
@@ -192,5 +199,67 @@ public class StatusBarManager {
         if (state == WINDOW_STATE_HIDDEN) return "WINDOW_STATE_HIDDEN";
         if (state == WINDOW_STATE_SHOWING) return "WINDOW_STATE_SHOWING";
         return "WINDOW_STATE_UNKNOWN";
+    }
+
+    /**
+     * @hide
+     */
+    public void publishTile(String tag, int id, CustomTile customTile) {
+        int[] idOut = new int[1];
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": create(" + id + ", " + customTile + ")");
+        try {
+            service.createCustomTileWithTag(pkg, mContext.getOpPackageName(), tag, id,
+                    customTile, idOut, UserHandle.myUserId());
+            if (id != idOut[0]) {
+                Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
+            }
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void publishTileAsUser(String tag, int id, CustomTile customTile, UserHandle user) {
+        int[] idOut = new int[1];
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": create(" + id + ", " + customTile + ")");
+        try {
+            service.createCustomTileWithTag(pkg, mContext.getOpPackageName(), tag, id,
+                    customTile, idOut, user.getIdentifier());
+            if (id != idOut[0]) {
+                Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
+            }
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void removeTile(String tag, int id) {
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": remove(" + id + ")");
+        try {
+            service.removeCustomTileWithTag(pkg, tag, id, UserHandle.myUserId());
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void removeTileAsUser(String tag, int id, UserHandle user) {
+        IStatusBarService service = getService();
+        String pkg = mContext.getPackageName();
+        if (localLOGV) Log.v(TAG, pkg + ": remove(" + id + ")");
+        try {
+            service.removeCustomTileWithTag(pkg, tag, id, user.getIdentifier());
+        } catch (RemoteException e) {
+        }
     }
 }

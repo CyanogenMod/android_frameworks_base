@@ -103,6 +103,12 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_setKeyguardWallpaper">Allows an app to change the lock screen wallpaper.</string>
 
+    <string name="permlab_publishQuickSettingsTile">create a custom tile within qs tiles</string>
+    <string name="permdesc_publishQuickSettingsTile">Allows an app to publish a quick settings tile</string>
+
+    <string name="permlab_bindCustomTileListenerService">bind to a custom tile listener service</string>
+    <string name="permdesc_bindCustomTileListenerService">Allows the holder to bind to the top-level interface of a custom tile listener service. Should never be needed for normal apps.</string>
+
     <string name="privacy_guard_dialog_title">Privacy Guard</string>
     <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> would like to <xliff:g id="op">%2$s</xliff:g>.</string>
 
@@ -333,6 +339,9 @@
     <string name="live_display_outdoor_summary">Use outdoor settings only</string>
     <string name="live_display_hint">LiveDisplay can help reduce eyestrain and help you sleep at night. Click here to try it out!</string>
 
-    <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-    <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>
+    <!-- Notify use that they are in Lock-to-app (for devices without navbar) -->
+    <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold Menu button.</string>
+
+    <!-- Label to show for a service that is running because it is observing the user's custom tiles. -->
+    <string name="custom_tile_listener_binding_label">Custom tile listener</string>
 </resources>

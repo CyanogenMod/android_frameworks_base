@@ -333,4 +333,7 @@
     <java-symbol type="array" name="config_packagesAllowedAccessToKillSwitch" />
     <java-symbol type="string" name="config_killSwitchLib" />
     <java-symbol type="string" name="config_killSwitchClass" />
+
+    <!-- Strings for StatusBarManagerService. -->
+    <java-symbol type="string" name="custom_tile_listener_binding_label" />
 </resources>
