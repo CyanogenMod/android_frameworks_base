@@ -2914,6 +2914,15 @@
         android:description="@string/permdesc_bindNotificationListenerService"
         android:protectionLevel="signature" />
 
+    <!-- Must be required by an {@link
+         android.service.statusbar.CustomTileListenerService},
+         to ensure that only the system can bind to it.
+         @hide -->
+    <permission android:name="android.permission.BIND_CUSTOM_TILE_LISTENER_SERVICE"
+         android:label="@string/permlab_bindCustomTileListenerService"
+         android:description="@string/permdesc_bindCustomTileListenerService"
+         android:protectionLevel="signature" />
+
     <!-- @SystemApi Must be required by a {@link
          android.service.notification.ConditionProviderService},
          to ensure that only the system can bind to it.
