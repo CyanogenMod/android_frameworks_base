@@ -133,12 +133,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> pievienotas ierīces</string>
   <string name="progress_nomediapresent" product="default">Nav izņemama datu nesēja\u2026</string>
   <string name="storage_uicc">UICC krātuve</string>
-  <string name="stk_cc_ussd_to_dial">USSD pieprasījums ir izmainīts uz DIAL pieprasījumu.</string>
-  <string name="stk_cc_ussd_to_ss">USSD pieprasījums ir izmainīts uz SS pieprasījumu.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD pieprasījums ir izmainīts uz jauno USSD pieprasījumu.</string>
-  <string name="stk_cc_ss_to_dial">SS pieprasījums ir izmainīts uz DIAL pieprasījumu.</string>
-  <string name="stk_cc_ss_to_ussd">SS pieprasījums ir izmainīts uz USSD pieprasījumu.</string>
-  <string name="stk_cc_ss_to_ss">SS pieprasījums ir izmainīts uz jauno SS pieprasījumu.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

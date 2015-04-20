@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Privacidad</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> quiere <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Reiniciar</string>
+  <string name="global_action_current_user">Actual</string>
   <string name="reboot_reboot">Reiniciar</string>
   <string name="reboot_recovery">Modo Recovery</string>
   <string name="reboot_bootloader">Modo Bootloader</string>
@@ -136,12 +137,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivos conectados</string>
   <string name="progress_nomediapresent" product="default">No hay medios extraíbles\u2026</string>
   <string name="storage_uicc">Almacenamiento UICC</string>
-  <string name="stk_cc_ussd_to_dial">Solicitud USSD es modificada a solicitud DIAL.</string>
-  <string name="stk_cc_ussd_to_ss">Solicitud USSD es modificada a solicitud SS.</string>
-  <string name="stk_cc_ussd_to_ussd">Solicitud USSD es modificada a nueva solicitud USSD.</string>
-  <string name="stk_cc_ss_to_dial">Solicitud SS es modificada a solicitud DIAL.</string>
-  <string name="stk_cc_ss_to_ussd">Solicitud SS es modificada a solicitud USSD.</string>
-  <string name="stk_cc_ss_to_ss">Solicitud SS es modificada a nueva solicitud SS.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
@@ -178,6 +173,30 @@
   <string name="usb_media_checking">El almacenamiento USB está siendo comprobado.</string>
   <string name="usb_media_removed">El almacenamiento USB ha sido extraído.</string>
   <string name="usb_media_shared">El almacenamiento USB está siendo usado por un ordenador.</string>
+  <string name="sd_ext_media_checking_notification_title">Preparando tarjeta SD</string>
+  <string name="sd_ext_media_checking_notification_message">Comprobando errores en la tarjeta SD.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tarjeta SD vacía</string>
+  <string name="sd_ext_media_nofs_notification_message">La tarjeta SD está vacía o tiene un sistema de archivos no soportado.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Tarjeta SD dañada</string>
+  <string name="sd_ext_media_unmountable_notification_message">La tarjeta SD está dañada. Intenta formatearla de nuevo.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Tarjeta SD extraída inesperadamente</string>
+  <string name="sd_ext_media_badremoval_notification_message">Desmonta la tarjeta SD antes de extraerla para evitar pérdida de datos.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Extraer tarjeta SD</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Puedes extraer la tarjeta SD de forma segura.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Tarjeta SD extraída</string>
+  <string name="sd_ext_media_nomedia_notification_message">Tarjeta SD extraída. Inserta una nueva.</string>
+  <string name="usb_ext_media_checking_notification_title">Preparando almacenamiento USB</string>
+  <string name="usb_ext_media_checking_notification_message">Comprobando errores en el almacenamiento USB.</string>
+  <string name="usb_ext_media_nofs_notification_title">Almacenamiento USB vacío</string>
+  <string name="usb_ext_media_nofs_notification_message">El almacenamiento USB está vacío o tiene un sistema de archivos no soportado.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Almacenamiento USB dañado</string>
+  <string name="usb_ext_media_unmountable_notification_message">El almacenamiento USB está dañado. Intenta formatearlo de nuevo.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Almacenamiento USB extraído inesperadamente</string>
+  <string name="usb_ext_media_badremoval_notification_message">Desmonta el almacenamiento USB antes de extraerlo para evitar pérdida de datos.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Extraer almacenamiento USB</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Puedes extraer el almacenamiento USB de forma segura.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Almacenamiento USB extraído</string>
+  <string name="usb_ext_media_nomedia_notification_message">Almacenamiento USB extraído. Inserta uno nuevo.</string>
   <string name="live_display_auto">Automático</string>
   <string name="live_display_auto_summary">Ajustar automáticamente la temperatura del color de pantalla con el amanecer y el anochecer</string>
   <string name="live_display_off">Desactivado</string>
@@ -189,4 +208,6 @@
   <string name="live_display_outdoor">Al aire libre (luz del sol)</string>
   <string name="live_display_outdoor_summary">Utilizar solo los ajustes al aire libre</string>
   <string name="live_display_hint">LiveDisplay puede reducir la fatiga visual y ayudar a dormir por la noche. ¡Toca aquí para probarlo!</string>
+  <string name="lock_to_app_toast_no_navbar">Para liberar esta pantalla, deja pulsado el botón Menú.</string>
+  <string name="lock_to_app_description_no_navbar">La fijación de pantalla mantiene visible una única pantalla.\n\nPara liberar esta pantalla, deja pulsado el botón Menú.</string>
 </resources>

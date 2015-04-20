@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Penjaga Privasi</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ingin <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Reboot</string>
+  <string name="global_action_current_user">Saat ini</string>
   <string name="reboot_reboot">Reboot</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -134,12 +135,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> perangkat yang terhubung</string>
   <string name="progress_nomediapresent" product="default">Tidak ada piranti media yang dapat dilepas\u2026</string>
   <string name="storage_uicc">Penyimpanan UICC</string>
-  <string name="stk_cc_ussd_to_dial">Permintaan USSD dimodifikasi ke permintaan DIAL.</string>
-  <string name="stk_cc_ussd_to_ss">Permintaan USSD dimodifikasi ke permintaan SS.</string>
-  <string name="stk_cc_ussd_to_ussd">Permintaan USSD dimodifikasi ke permintaan USSD yang baru.</string>
-  <string name="stk_cc_ss_to_dial">Permintaan SS dimodifikasi ke permintaan DIAL.</string>
-  <string name="stk_cc_ss_to_ussd">Permintaan SS dimodifikasi ke permintaan USSD.</string>
-  <string name="stk_cc_ss_to_ss">Permintaan SS dimodifikasi ke permintaan SS yang baru.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>

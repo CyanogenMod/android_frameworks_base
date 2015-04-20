@@ -112,12 +112,6 @@
   <string name="app_ops_write_sms">編寫短訊</string>
   <string name="progress_nomediapresent" product="default">現在沒有卸除式媒體\u2026</string>
   <string name="storage_uicc">UICC 儲存</string>
-  <string name="stk_cc_ussd_to_dial">USSD 請求被修改為撥號請求。</string>
-  <string name="stk_cc_ussd_to_ss">USSD 請求被修改為 SS 請求。</string>
-  <string name="stk_cc_ussd_to_ussd">USSD 請求被修改為新的 USSD 請求。</string>
-  <string name="stk_cc_ss_to_dial">SS 請求被修改為撥號請求。</string>
-  <string name="stk_cc_ss_to_ussd">SS 請求被修改為 USSD 請求。</string>
-  <string name="stk_cc_ss_to_ss">SS 請求被修改為新的 SS 請求。</string>
   <string name="perf_profile_pwrsv">省電</string>
   <string name="perf_profile_bal">平衡</string>
   <string name="perf_profile_perf">效能</string>

@@ -50,6 +50,7 @@
   <string name="quick_settings_network_adb_label">ADB sobre rede</string>
   <string name="quick_settings_lte_label">4G  LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Tempo limite de tela</string>
+  <string name="quick_settings_usb_tether_label">Tethering USB</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="tempo">%1$s</xliff:g> - <xliff:g id="condição">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>
   <string name="right_shortcut_hint">Deslizar para a esquerda para %1$s</string>

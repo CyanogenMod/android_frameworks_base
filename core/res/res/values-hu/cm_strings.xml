@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Adatvédelmi beállítások</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> a következő műveletet szeretné végrehajtani: <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Újraindítás</string>
+  <string name="global_action_current_user">Jelenlegi</string>
   <string name="reboot_reboot">Újraindítás</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -136,12 +137,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> csatlakoztatott eszköz</string>
   <string name="progress_nomediapresent" product="default">Nincs eltávolítható média\u2026</string>
   <string name="storage_uicc">UICC tároló</string>
-  <string name="stk_cc_ussd_to_dial">USSD kérés módosítva DIAL kérésre.</string>
-  <string name="stk_cc_ussd_to_ss">USSD kérés módosítva SS kérésre.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD kérés módosítva új USSD kérésre.</string>
-  <string name="stk_cc_ss_to_dial">SS kérés módosítva DIAL kérésre.</string>
-  <string name="stk_cc_ss_to_ussd">SS kérés módosítva USSD kérésre.</string>
-  <string name="stk_cc_ss_to_ss">SS kérés módosítva új SS kérésre.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
@@ -178,7 +173,34 @@
   <string name="usb_media_checking">USB tároló ellenőrzése folyamatban van.</string>
   <string name="usb_media_removed">USB tároló eltávolítva.</string>
   <string name="usb_media_shared">USB tárolót jelenleg egy számítógép használja.</string>
+  <string name="sd_ext_media_checking_notification_title">SD kártya előkészítése</string>
+  <string name="sd_ext_media_checking_notification_message">SD kártya hibák ellenőrzése.</string>
+  <string name="sd_ext_media_nofs_notification_title">Üres SD kártya</string>
+  <string name="sd_ext_media_nofs_notification_message">Az SD kártya üres, vagy a fájlrendszere nem támogatott.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Sérült SD kártya</string>
+  <string name="sd_ext_media_unmountable_notification_message">Az SD kártya sérült. Próbálja meg újraformázni.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Az SD kártya váratlanul el lett távolítva</string>
+  <string name="sd_ext_media_badremoval_notification_message">Válassza le az SD kártyát az eltávolítás előtt, az adatvesztés elkerülése érdekében.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD kártya biztonságosan eltávolítható</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Biztonságosan eltávolíthatja az SD kártyát.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Eltávolított SD kártya</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD kártya eltávolítva. Helyezzen be egy újat.</string>
+  <string name="usb_ext_media_checking_notification_title">USB tároló előkészítése</string>
+  <string name="usb_ext_media_checking_notification_message">USB tároló hibák ellenőrzése.</string>
+  <string name="usb_ext_media_nofs_notification_title">Üres az USB tároló</string>
+  <string name="usb_ext_media_nofs_notification_message">Az USB tároló üres, vagy a fájlrendszere nem támogatott.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Sérült USB tároló</string>
+  <string name="usb_ext_media_unmountable_notification_message">Az USB tároló sérült. Próbálja meg újraformázni.</string>
+  <string name="usb_ext_media_badremoval_notification_title">Az USB tároló váratlanul el lett távolítva</string>
+  <string name="usb_ext_media_badremoval_notification_message">Válassza le az USB tárolót az eltávolítás előtt, az adatvesztés elkerülése érdekében.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB tároló biztonságosan eltávolítható</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Biztonságosan eltávolíthatja az USB tárolót.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Eltávolított USB tároló</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB tároló eltávolítva. Helyezzen be egy új adathordozót.</string>
   <string name="live_display_auto">Automatikus</string>
+  <string name="live_display_auto_summary">Automatikusan beállítja a képernyő színhőmérsékletét napnyugta és napkelte után</string>
+  <string name="live_display_off">Ki</string>
+  <string name="live_display_off_summary">Az összes beállítás kikapcsolása</string>
   <string name="live_display_day">Nappal</string>
   <string name="live_display_day_summary">Csak a nappali beállítások használata</string>
   <string name="live_display_night">Éjszaka</string>
@@ -186,4 +208,6 @@
   <string name="live_display_outdoor">Kültéri (erős napfény)</string>
   <string name="live_display_outdoor_summary">Csak a kültéri beállítások használata</string>
   <string name="live_display_hint">A LiveDisplay segíthet a szemek terhelésének csökkentésében és a jobb éjszakai alvásban. Kattintson ide, hogy kipróbálja!</string>
+  <string name="lock_to_app_toast_no_navbar">Képernyő feloldásához érintse meg és tartsa nyomva a Menü gombot.</string>
+  <string name="lock_to_app_description_no_navbar">Egyszerű nézetben PIN zárolja a kijelzőt.\n\nFeloldáshoz érintse meg és tartsa nyomva a Menü gombot.</string>
 </resources>

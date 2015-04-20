@@ -52,12 +52,6 @@
     <java-symbol type="string" name="reboot_confirm" />
     <java-symbol type="string" name="reboot_title" />
     <java-symbol type="string" name="reboot_progress" />
-    <java-symbol type="string" name="stk_cc_ss_to_dial" />
-    <java-symbol type="string" name="stk_cc_ss_to_ss" />
-    <java-symbol type="string" name="stk_cc_ss_to_ussd" />
-    <java-symbol type="string" name="stk_cc_ussd_to_dial" />
-    <java-symbol type="string" name="stk_cc_ussd_to_ss" />
-    <java-symbol type="string" name="stk_cc_ussd_to_ussd" />
 
     <java-symbol type="drawable" name="cm_platlogo" />
 

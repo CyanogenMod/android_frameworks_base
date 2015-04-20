@@ -268,7 +268,7 @@ class LockSettingsStorage {
 
     @VisibleForTesting
     String getLockPatternFilename(int userId, boolean defaultSize) {
-        String baseFileName = defaultSize ? "" : "cm_" + LOCK_PATTERN_FILE;
+        String baseFileName = defaultSize ? LOCK_PATTERN_FILE : "cm_" + LOCK_PATTERN_FILE;
         return getLockCredentialFilePathForUser(userId, baseFileName);
     }
 

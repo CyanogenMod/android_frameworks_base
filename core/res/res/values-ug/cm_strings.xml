@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">شەخسىيەت قوغداش</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> نىڭ قىلماقچى بولغىنى <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">قايتا قوزغات</string>
+  <string name="global_action_current_user">نۆۋەتتىكى</string>
   <string name="reboot_reboot">قايتا قوزغات</string>
   <string name="reboot_recovery">ئەسلىگە كەلتۈر</string>
   <string name="reboot_bootloader">قوزغىتىش يۈكلىگۈچ</string>
@@ -136,12 +137,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ئۈسكۈنە باغلاندى</string>
   <string name="progress_nomediapresent" product="default">ھازىر كۆچمە ۋاستە يوق\u2026</string>
   <string name="storage_uicc">UICC ساقلاش</string>
-  <string name="stk_cc_ussd_to_dial">USSD ئىلتىماسى DIAL ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ussd_to_ss">USSD ئىلتىماسى SS ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD ئىلتىماسى يېڭى USSD ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ss_to_dial">SS ئىلتىماسى DIAL ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ss_to_ussd">SS ئىلتىماسى USSD ئىلتىماسىغا ئۆزگەرتىلدى.</string>
-  <string name="stk_cc_ss_to_ss">SS ئىلتىماسى يېڭى SS ئىلتىماسىغا ئۆزگەرتىلدى.</string>
   <string name="China_Mobile">جۇڭگو كۆچمە خەۋەرلىشىش</string>
   <string name="China_Unicom">جۇڭگو بىرلەشمە خەۋەرلىشىش</string>
   <string name="China_Telecom">جۇڭگو تېلېگرافى</string>
@@ -180,6 +175,30 @@
   <string name="usb_media_checking">نۆۋەتتە USB ساقلىغۇچ تەكشۈرۈلدى.</string>
   <string name="usb_media_removed">بۇ USB ساقلىغۇچ چىقىرىۋېتىلدى.</string>
   <string name="usb_media_shared">نۆۋەتتە USB ساقلىغۇچنى كومپيۇتېر ئىشلىتىۋاتىدۇ.</string>
+  <string name="sd_ext_media_checking_notification_title">SD كارتا تەييارلاۋاتىدۇ</string>
+  <string name="sd_ext_media_checking_notification_message">بۇ SD كارتىنىڭ خاتالىقىنى تەكشۈرۈۋاتىدۇ.</string>
+  <string name="sd_ext_media_nofs_notification_title">بوش SD كارتا</string>
+  <string name="sd_ext_media_nofs_notification_message">SD كارتا بوش ياكى قوللىمايدىغان ھۆججەت سىستېمىسى بار.</string>
+  <string name="sd_ext_media_unmountable_notification_title">بۇزۇلغان SD كارتا</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD كارتا بۇزۇلغان. ئۇنى قايتا فورماتلاپ سىناپ بېقىڭ.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD كارتا تاسادىپىي چىقىرىۋېتىلدى</string>
+  <string name="sd_ext_media_badremoval_notification_message">سانلىق مەلۇماتلارنىڭ يوقاپ كېتىشىدىن ساقلىنىش ئۈچۈن، ئاۋۋال SD كارتىنى ئېگەرسىزلەپ ئاندىن ئاجرىتېۋېلىڭ.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD كارتا چىقىرىۋېتىش بىخەتەر</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SD كارتىنى بىخەتەر ھالدا چىقىرىۋالسىڭىز بولىدۇ.</string>
+  <string name="sd_ext_media_nomedia_notification_title">چىقىرىۋېتىلگەن SD كارتا</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD كارتا چىقىرىۋېتىلدى، يېڭى SD كارتىنى قىستۇرۇڭ.</string>
+  <string name="usb_ext_media_checking_notification_title">USB ساقلىغۇچنى تەييارلاۋاتىدۇ</string>
+  <string name="usb_ext_media_checking_notification_message">بۇ USB ساقلىغۇچنىڭ خاتالىقىنى تەكشۈرۈۋاتىدۇ.</string>
+  <string name="usb_ext_media_nofs_notification_title">بوش USB ساقلىغۇچ</string>
+  <string name="usb_ext_media_nofs_notification_message">USB ساقلىغۇچ بوش ياكى قوللىمايدىغان ھۆججەت سىستېمىسى بار.</string>
+  <string name="usb_ext_media_unmountable_notification_title">بۇزۇلغان USB ساقلىغۇچ</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB ساقلىغۇچ بۇزۇلغان. ئۇنى قايتا فورماتلاپ سىناپ بېقىڭ.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB ساقلىغۇچ تاسادىپىي چىقىرىۋېتىلدى</string>
+  <string name="usb_ext_media_badremoval_notification_message">سانلىق مەلۇماتلارنىڭ يوقاپ كېتىشىدىن ساقلىنىش ئۈچۈن، ئاۋۋال USB ساقلىغۇچنى ئېگەرسىزلەپ ئاندىن ئاجرىتېۋېلىڭ.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB ساقلىغۇچنى چىقىرىۋېتىش بىخەتەر</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USB ساقلىغۇچنى بىخەتەر ھالدا چىقىرىۋالسىڭىز بولىدۇ.</string>
+  <string name="usb_ext_media_nomedia_notification_title">چىقىرىۋېتىلگەن USB ساقلىغۇچ</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB ساقلىغۇچ چىقىرىۋېتىلدى. يېڭى ۋاستە قىستۇرۇڭ.</string>
   <string name="live_display_auto">ئاپتوماتىك</string>
   <string name="live_display_auto_summary">كۈن چىققان ۋە كۈن پاتقاندىن كېيىن ئېكران رەڭ تېمپېراتورىسىنى ئۆزلۈكىدىن تەڭشەيدۇ</string>
   <string name="live_display_off">تاقاق</string>
@@ -191,4 +210,6 @@
   <string name="live_display_outdoor">تالا (قۇياش نۇرى)</string>
   <string name="live_display_outdoor_summary">تالا تەڭشەكلىرىنىلا ئىشلىتىدۇ</string>
   <string name="live_display_hint">LiveDisplay كۆزنىڭ چارچىشىنى يېنىكلىتىشكە ياردەم بېرىدۇ، كېچىدە ئۇخلىشىڭىزغا ياردەم بېرىدۇ. سىناش ئۈچۈن بۇ جاينى چېكىڭ!</string>
+  <string name="lock_to_app_toast_no_navbar">بۇ ئېكراننى چىقىرىۋېتىشتە، تىزىملىك توپچىنى چېكىپ بېسىپ تۇرۇڭ.</string>
+  <string name="lock_to_app_description_no_navbar">ئېكراننى مىخلاش ئۈسكۈنە مەلۇم بىر كۆرۈنۈشنى ئىزچىل كۆرسىتىدۇ.\n\nمىخلاشنى بىكار قىلىشتا، چېكىپ تىزىملىك توپچىنى بېسىپ تۇرسا بولىدۇ.</string>
 </resources>

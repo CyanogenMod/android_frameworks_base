@@ -522,6 +522,7 @@ public class SoundPool {
         private final Object mLock;
         private final AudioAttributes mAttributes;
         private final IAppOpsService mAppOps;
+        private final boolean mIsRestricted;
 
         // SoundPool messages
         //
@@ -539,6 +540,7 @@ public class SoundPool {
             mAttributes = attr;
             IBinder b = ServiceManager.getService(Context.APP_OPS_SERVICE);
             mAppOps = IAppOpsService.Stub.asInterface(b);
+            mIsRestricted = isRestricted();
         }
 
         public int load(String path, int priority)
@@ -600,7 +602,7 @@ public class SoundPool {
 
         public final int play(int soundID, float leftVolume, float rightVolume,
                 int priority, int loop, float rate) {
-            if (isRestricted()) {
+            if (mIsRestricted) {
                 leftVolume = rightVolume = 0;
             }
             return _play(soundID, leftVolume, rightVolume, priority, loop, rate);
@@ -631,7 +633,7 @@ public class SoundPool {
         public native final void stop(int streamID);
 
         public final void setVolume(int streamID, float leftVolume, float rightVolume) {
-            if (isRestricted()) {
+            if (mIsRestricted) {
                 return;
             }
             _setVolume(streamID, leftVolume, rightVolume);

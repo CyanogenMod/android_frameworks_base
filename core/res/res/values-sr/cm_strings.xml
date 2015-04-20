@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Заштита приватности</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> жели да <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Рестартуј</string>
+  <string name="global_action_current_user">Тренутно</string>
   <string name="reboot_reboot">Рестартуј</string>
   <string name="reboot_recovery">Опоравак</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -136,12 +137,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> конектовани уређаји</string>
   <string name="progress_nomediapresent" product="default">Нема присутних преносивих медија\u2026</string>
   <string name="storage_uicc">UICC складиште</string>
-  <string name="stk_cc_ussd_to_dial">USSD захтев је модификован на DIAL захтев.</string>
-  <string name="stk_cc_ussd_to_ss">USSD захтев је модификован на SS захтев.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD захтев је модификован на нови USSD захтев.</string>
-  <string name="stk_cc_ss_to_dial">SS захтев је модификован на DIAL захтев.</string>
-  <string name="stk_cc_ss_to_ussd">SS захтев је модификован на USSD захтев.</string>
-  <string name="stk_cc_ss_to_ss">SS захтев је модификован на нови SS захтев.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
@@ -180,6 +175,30 @@
   <string name="usb_media_checking">USB складиште се тренутно проверава.</string>
   <string name="usb_media_removed">USB складиште је уклоњено.</string>
   <string name="usb_media_shared">USB складиште је тренутно у употреби од стране рачунара.</string>
+  <string name="sd_ext_media_checking_notification_title">Припрема SD картице</string>
+  <string name="sd_ext_media_checking_notification_message">Провера SD картице за грешке.</string>
+  <string name="sd_ext_media_nofs_notification_title">Празна SD картица</string>
+  <string name="sd_ext_media_nofs_notification_message">SD картица је празна или има неподржан систем фајлова.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Оштећена SD картица</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD картица је оштећена. Пробај да је форматираш.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD картица је неочекивано уклоњена</string>
+  <string name="sd_ext_media_badremoval_notification_message">Искључи SD картицу пре уклањања да би избегао губитак података.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD картица је безбедна за уклањање</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Можеш безбедно да уклониш SD картицу.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Уклоњена SD картица</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD картица је уклоњена. Убаци нову.</string>
+  <string name="usb_ext_media_checking_notification_title">Припрема USB складишта</string>
+  <string name="usb_ext_media_checking_notification_message">Провера USB складишта за грешке.</string>
+  <string name="usb_ext_media_nofs_notification_title">Празно USB складиште</string>
+  <string name="usb_ext_media_nofs_notification_message">USB складиште је празно или има неподржан систем фајлова.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Оштећено USB складиште</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB складиште је оштећено. Пробај да га форматираш.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB складиште је неочекивано уклоњено</string>
+  <string name="usb_ext_media_badremoval_notification_message">Искључи USB складиште пре уклањања да избегнеш губитак података.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB складиште је безбедно за уклањање</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Можеш безбедно да уклониш USB складиште.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Уклоњено USB складиште</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB складиште је уклоњено. Убаци нове медије.</string>
   <string name="live_display_auto">Аутоматски</string>
   <string name="live_display_auto_summary">Аутоматски прилагоди температуру боје екрана после сумрака и свитања</string>
   <string name="live_display_off">Искључено</string>
@@ -191,4 +210,6 @@
   <string name="live_display_outdoor">Напољу (јако сунце)</string>
   <string name="live_display_outdoor_summary">Користи само подешавања за напоље</string>
   <string name="live_display_hint">LiveDisplay може смањити напрезање очију и помоћи да спавате ноћу. Додирните да пробате!</string>
+  <string name="lock_to_app_toast_no_navbar">Да преместиш овај екран додирни и држи мени дугме.</string>
+  <string name="lock_to_app_description_no_navbar">Постављање екрана закључава екран у једноструки преглед.\n\nДа га преместиш додирни и држи мени дугме.</string>
 </resources>

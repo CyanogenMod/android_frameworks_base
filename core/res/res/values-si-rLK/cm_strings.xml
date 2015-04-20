@@ -112,12 +112,6 @@
   <string name="app_ops_write_sms">කෙටි පණිවිඩයක් ලිවීම</string>
   <string name="progress_nomediapresent" product="default">ඉවත් කළ හැකි මාධ්‍ය කිසිවක් නැත\u2026</string>
   <string name="storage_uicc">UICC ආචයනය</string>
-  <string name="stk_cc_ussd_to_dial">USSD ආයාචනය DIAL ආයාචනයක් බවට වෙනස් කර ඇත.</string>
-  <string name="stk_cc_ussd_to_ss">USSD ආයාචනය SS ආයාචනයක් බවට වෙනස් කර ඇත.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD ආයාචනය නව USSD ආයාචනයක් බවට වෙනස් කර ඇත.</string>
-  <string name="stk_cc_ss_to_dial">SS ආයාචනය DIAL ආයාචනයක් බවට වෙනස් කර ඇත.</string>
-  <string name="stk_cc_ss_to_ussd">SS ආයාචනය USSD ආයාචනයක් බවට වෙනස් කර ඇත.</string>
-  <string name="stk_cc_ss_to_ss">SS ආයාචනය නව SS ආයාචනයක් බවට වෙනස් කර ඇත.</string>
   <string name="perf_profile_pwrsv">බලය සුරැකීම</string>
   <string name="perf_profile_bal">සමබර</string>
   <string name="perf_profile_perf">ක්‍රියාකාරීත්වය</string>

@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">프라이버시 가드</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>이(가) <xliff:g id="op">%2$s</xliff:g>을(를) 원합니다.</string>
   <string name="global_action_reboot">다시 시작</string>
+  <string name="global_action_current_user">현재</string>
   <string name="reboot_reboot">다시 시작</string>
   <string name="reboot_recovery">복구 모드</string>
   <string name="reboot_bootloader">부트로더</string>
@@ -136,12 +137,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g>대의 기기가 연결되어 있습니다</string>
   <string name="progress_nomediapresent" product="default">이동식 미디어가 없습니다\u2026</string>
   <string name="storage_uicc">UICC 저장소</string>
-  <string name="stk_cc_ussd_to_dial">USSD 요청이 DIAL 요청으로 변경되었습니다.</string>
-  <string name="stk_cc_ussd_to_ss">USSD 요청이 SS 요청으로 변경되었습니다.</string>
-  <string name="stk_cc_ussd_to_ussd">USSD 요청이 새로운 USSD 요청으로 변경되었습니다.</string>
-  <string name="stk_cc_ss_to_dial">SS 요청이 DIAL 요청으로 변경되었습니다.</string>
-  <string name="stk_cc_ss_to_ussd">SS 요청이 USSD 요청으로 변경되었습니다.</string>
-  <string name="stk_cc_ss_to_ss">SS 요청이 새로운 SS 요청으로 변경되었습니다.</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
@@ -178,6 +173,30 @@
   <string name="usb_media_checking">USB 저장소를 검사 중입니다.</string>
   <string name="usb_media_removed">USB 저장소가 제거되었습니다.</string>
   <string name="usb_media_shared">USB 저장소가 사용 중입니다.</string>
+  <string name="sd_ext_media_checking_notification_title">SD 카드 준비 중</string>
+  <string name="sd_ext_media_checking_notification_message">SD 카드 오류를 확인 중</string>
+  <string name="sd_ext_media_nofs_notification_title">빈 SD 카드</string>
+  <string name="sd_ext_media_nofs_notification_message">SD 카드가 비어있거나 지원되지 않는 파일 시스템으로 구성되어 있습니다.</string>
+  <string name="sd_ext_media_unmountable_notification_title">손상된 SD 카드</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD 카드가 손상되었습니다. 다시 포맷해보십시오.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD 카드가 예상치 않게 제거됨</string>
+  <string name="sd_ext_media_badremoval_notification_message">데이터 손실을 피하려면 SD 카드를 제거하기 전에 마운트 해제하십시오.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD 카드 제거 가능</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SD 카드를 안전하게 제거할 수 있습니다.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD 카드 제거됨</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD 카드가 제거되었습니다. 새 SD 카드를 삽입하십시오.</string>
+  <string name="usb_ext_media_checking_notification_title">USB 저장소 준비 중</string>
+  <string name="usb_ext_media_checking_notification_message">USB 저장소의 오류를 검사 중입니다.</string>
+  <string name="usb_ext_media_nofs_notification_title">빈 USB 저장소</string>
+  <string name="usb_ext_media_nofs_notification_message">USB 저장소가 비어있거나 지원되지 않는 파일 시스템으로 구성되어 있습니다.</string>
+  <string name="usb_ext_media_unmountable_notification_title">손상된 USB 저장소</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB 저장소가 손상되었습니다. 다시 포맷해보십시오.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB 저장소가 예상치 않게 제거됨</string>
+  <string name="usb_ext_media_badremoval_notification_message">데이터 손실을 피하려면 USB 저장소를 제거하기 전에 마운트 해제하십시오.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB 저장소 제거 가능</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USB 저장소를 안전하게 제거할 수 있습니다.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB 저장소 제거됨</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB 저장소가 제거되었습니다. 새 저장소를 삽입하십시오.</string>
   <string name="live_display_auto">자동</string>
   <string name="live_display_auto_summary">일출 및 일몰 후 화면의 색 온도를 자동으로 조정</string>
   <string name="live_display_off">끄기</string>
@@ -188,4 +207,7 @@
   <string name="live_display_night_summary">야간 설정만으로 사용</string>
   <string name="live_display_outdoor">야외 (밝은 햇빛)</string>
   <string name="live_display_outdoor_summary">야외 설정만으로 사용</string>
+  <string name="live_display_hint">LiveDisplay는 눈의 피로를 줄이고 밤에 수면을 돕습니다. 적용하려면 클릭하십시오!</string>
+  <string name="lock_to_app_toast_no_navbar">이 화면 고정을 해제하려면 메뉴 버튼을 누른 상태로 유지하십시오.</string>
+  <string name="lock_to_app_description_no_navbar">화면 고정은 화면을 한 방향으로 잠급니다.\n\n고정을 해제하려면 메뉴 버튼을 누른 상태로 유지하십시오.</string>
 </resources>
