@@ -1905,26 +1905,6 @@ public class NotificationManagerService extends SystemService {
                 callingUid, incomingUserId, true, false, "enqueueNotification", pkg);
         final UserHandle user = new UserHandle(userId);
 
-        // Limit the number of notifications that any given package except the android
-        // package or a registered listener can enqueue.  Prevents DOS attacks and deals with leaks.
-        if (!isSystemNotification && !isNotificationFromListener) {
-            synchronized (mNotificationList) {
-                int count = 0;
-                final int N = mNotificationList.size();
-                for (int i=0; i<N; i++) {
-                    final NotificationRecord r = mNotificationList.get(i);
-                    if (r.sbn.getPackageName().equals(pkg) && r.sbn.getUserId() == userId) {
-                        count++;
-                        if (count >= MAX_PACKAGE_NOTIFICATIONS) {
-                            Slog.e(TAG, "Package has already posted " + count
-                                    + " notifications.  Not showing more.  package=" + pkg);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
         if (pkg == null || notification == null) {
             throw new IllegalArgumentException("null not allowed: pkg=" + pkg
                     + " id=" + id + " notification=" + notification);
@@ -2023,6 +2003,12 @@ public class NotificationManagerService extends SystemService {
 
                     int index = indexOfNotificationLocked(n.getKey());
                     if (index < 0) {
+                        // Check DOS protection if this this id is unknown to us
+                        if (!isSystemNotification && !isNotificationFromListener) {
+                            if (checkDosProtection(pkg, userId)) {
+                                return;
+                            }
+                        }
                         mNotificationList.add(r);
                         mUsageStats.registerPostedByApp(r);
                     } else {
@@ -2068,6 +2054,32 @@ public class NotificationManagerService extends SystemService {
         });
 
         idOut[0] = id;
+    }
+
+    /**
+     * Limit the number of notifications that any given package except the android
+     * package or a registered listener can enqueue. Prevents DOS attacks and deals with leaks.
+     * @param pkg The package to check for dos protection
+     * @param userId user id associated with the pending notification
+     * @return whether or not dos protection was triggered
+     */
+    private boolean checkDosProtection(String pkg, int userId) {
+        synchronized (mNotificationList) {
+            int count = 0;
+            final int N = mNotificationList.size();
+            for (int i=0; i<N; i++) {
+                final NotificationRecord r = mNotificationList.get(i);
+                if (r.sbn.getPackageName().equals(pkg) && r.sbn.getUserId() == userId) {
+                    count++;
+                    if (count >= MAX_PACKAGE_NOTIFICATIONS) {
+                        Slog.e(TAG, "Package has already posted " + count
+                                + " notifications.  Not showing more.  package=" + pkg);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
     /**
