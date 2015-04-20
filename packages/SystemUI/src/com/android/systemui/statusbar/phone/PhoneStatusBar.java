@@ -933,7 +933,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateDisplaySize(); // populates mDisplayMetrics
         updateResources(null);
 
-        mIconSize = res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_icon_size);
+        mIconSize = res.getDimensionPixelSize(R.dimen.status_bar_icon_size);
 
         mStatusBarWindowContent = (FrameLayout) View.inflate(context,
                 R.layout.super_status_bar, null);
@@ -2066,8 +2066,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void updateNotificationIcons() {
+        final int effectiveIconWidth = IconMerger.calculateIconWidth(mContext);
         final LinearLayout.LayoutParams params
-            = new LinearLayout.LayoutParams(mIconSize + 2*mIconHPadding, mNaturalBarHeight);
+            = new LinearLayout.LayoutParams(effectiveIconWidth, mNaturalBarHeight);
 
         ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
         final int N = activeNotifications.size();
@@ -4154,7 +4155,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 com.android.internal.R.dimen.status_bar_height);
 
         int newIconSize = res.getDimensionPixelSize(
-            com.android.internal.R.dimen.status_bar_icon_size);
+            R.dimen.status_bar_icon_size);
         int newIconHPadding = res.getDimensionPixelSize(
             R.dimen.status_bar_icon_padding);
 
