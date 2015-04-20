@@ -134,6 +134,26 @@ interface IImsConfig {
      oneway void setVideoQuality(int quality, ImsConfigListener listener);
 
     /**
+     * Total number of packets sent or received
+     *
+     * @param listener, provided if caller needs to be notified for get result.
+     * @return void
+     *
+     * @throws ImsException if calling the IMS service results in an error.
+     */
+     oneway void getPacketCount(ImsConfigListener listener);
+
+    /**
+     * Total number of packet errors encountered
+     *
+     * @param listener, provided if caller needs to be notified for get result.
+     * @return void
+     *
+     * @throws ImsException if calling the IMS service results in an error.
+     */
+     oneway void getPacketErrorCount(ImsConfigListener listener);
+
+    /**
      * Gets the value for IMS volte provisioned.
      * This should be the same as the operator provisioned value if applies.
      *
