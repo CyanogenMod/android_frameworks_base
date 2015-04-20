@@ -53,6 +53,7 @@ public class DozeService extends DreamService {
 
     private static final String ACTION_BASE = "com.android.systemui.doze";
     private static final String PULSE_ACTION = ACTION_BASE + ".pulse";
+    private static final String EXTRA_SKIP_PROX_CHECK = "skip_prox_check";
     private static final String NOTIFICATION_PULSE_ACTION = ACTION_BASE + ".notification_pulse";
     private static final String EXTRA_INSTANCE = "instance";
 
@@ -211,13 +212,17 @@ public class DozeService extends DreamService {
     }
 
     private void requestPulse(final int reason) {
+        requestPulse(reason, false);
+    }
+
+    private void requestPulse(final int reason, final boolean skipProxCheck) {
         if (mHost != null && mDreaming && !mPulsing) {
             // Let the host know we want to pulse.  Wait for it to be ready, then
             // turn the screen on.  When finished, turn the screen off again.
             // Here we need a wakelock to stay awake until the pulse is finished.
             mWakeLock.acquire();
             mPulsing = true;
-            if (!mDozeParameters.getProxCheckBeforePulse()) {
+            if (!mDozeParameters.getProxCheckBeforePulse() || skipProxCheck) {
                 // skip proximity check
                 continuePulsing(reason);
                 return;
@@ -417,8 +422,9 @@ public class DozeService extends DreamService {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (PULSE_ACTION.equals(intent.getAction())) {
-                if (DEBUG) Log.d(mTag, "Received pulse intent");
-                requestPulse(DozeLog.PULSE_REASON_INTENT);
+                boolean skipProxCheck = intent.getBooleanExtra(EXTRA_SKIP_PROX_CHECK, false);
+                if (DEBUG) Log.d(mTag, "Received pulse intent skipProxCheck=" + skipProxCheck);
+                requestPulse(DozeLog.PULSE_REASON_INTENT, skipProxCheck);
             }
             if (NOTIFICATION_PULSE_ACTION.equals(intent.getAction())) {
                 final long instance = intent.getLongExtra(EXTRA_INSTANCE, -1);
