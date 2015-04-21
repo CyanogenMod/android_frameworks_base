@@ -46,8 +46,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <TextView
+        <Button
             android:id="@+id/usage_carrier_text"
+            style="@style/QSBorderlessButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -971,6 +971,10 @@
     <integer-array name="config_autoBrightnessLevels">
     </integer-array>
 
+    <!-- The debounce time value for automatic display brightness adjustment -->
+    <integer name="config_brighteningLightDebounce">4000</integer>
+    <integer name="config_darkeningLightDebounce">8000</integer>
+
     <!-- Array of output values for LCD backlight corresponding to the LUX values
          in the config_autoBrightnessLevels array.  This array should have size one greater
          than the size of the config_autoBrightnessLevels array.
@@ -2291,6 +2295,16 @@
          setting is used to determine, whether lidOpenRotation has to be
          applied. -->
     <bool name="config_hasRemovableLid">false</bool>
+
+    <!-- Packages that are allowed to write killswitch values -->
+    <string-array name="config_packagesAllowedAccessToKillSwitch" translatable="false">
+    </string-array>
+
+    <!-- Path to the library that contains the kill switch library -->
+    <string name="config_killSwitchLib" translatable="false"></string>
+
+    <!-- Name of the class which implements the IKillSwitch interface -->
+    <string name="config_killSwitchClass" translatable="false"></string>
 
     <!-- Boolean to enable Stylus gestures -->
     <bool name="config_stylusGestures">false</bool>
