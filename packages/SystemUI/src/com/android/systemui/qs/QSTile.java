@@ -497,6 +497,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
 
     public static class State {
         public boolean visible;
+        public boolean enabled = true;
         public Icon icon;
         public String label;
         public String contentDescription;
@@ -507,6 +508,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
             if (other == null) throw new IllegalArgumentException();
             if (!other.getClass().equals(getClass())) throw new IllegalArgumentException();
             final boolean changed = other.visible != visible
+                    || !Objects.equals(other.enabled, enabled)
                     || !Objects.equals(other.icon, icon)
                     || !Objects.equals(other.label, label)
                     || !Objects.equals(other.contentDescription, contentDescription)
@@ -514,6 +516,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
                     || !Objects.equals(other.dualLabelContentDescription,
                     dualLabelContentDescription);
             other.visible = visible;
+            other.enabled = enabled;
             other.icon = icon;
             other.label = label;
             other.contentDescription = contentDescription;
@@ -530,6 +533,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         protected StringBuilder toStringBuilder() {
             final StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append('[');
             sb.append("visible=").append(visible);
+            sb.append(",enabled=").append(enabled);
             sb.append(",icon=").append(icon);
             sb.append(",label=").append(label);
             sb.append(",contentDescription=").append(contentDescription);
