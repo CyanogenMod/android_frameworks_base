@@ -371,6 +371,12 @@ public class PrintActivity extends Activity implements RemotePrintDocument.Updat
     }
 
     @Override
+    protected void onDestroy() {
+        doFinish();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             event.startTracking();
