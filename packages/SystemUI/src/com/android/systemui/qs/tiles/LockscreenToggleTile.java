@@ -75,6 +75,7 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
         if (listening) {
             mSettingsObserver.observe();
             mKeyguard.addCallback(this);
+            refreshState();
         } else {
             mSettingsObserver.unobserve();
             mKeyguard.removeCallback(this);
@@ -89,6 +90,7 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
     @Override
     protected void handleClick() {
         setPersistedState(!mPersistedState);
+        refreshState();
     }
 
     @Override
@@ -104,7 +106,8 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
                 || mKeyguardViewMediator.getKeyguardEnabledInternal();
 
         state.value = lockscreenEnabled;
-        state.visible = !mKeyguard.isShowing() || !mKeyguard.isSecure();
+        state.visible = mKeyguardViewMediator.isKeyguardBound();
+        state.enabled = !mKeyguard.isShowing() || !mKeyguard.isSecure();
         state.label = mContext.getString(lockscreenEnforced
                 ? R.string.quick_settings_lockscreen_label_enforced
                 : R.string.quick_settings_lockscreen_label);
