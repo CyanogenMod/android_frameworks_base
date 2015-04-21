@@ -3008,11 +3008,13 @@ public class NotificationManagerService extends SystemService {
             int ledOnMS;
             int ledOffMS;
 
-            if (ledValues != null) {
+            boolean appHasLedValues = (ledno.defaults & Notification.DEFAULT_LIGHTS) == 0
+                    && (ledno.flags & Notification.FLAG_SHOW_LIGHTS) != 0;
+            if (ledValues != null && !appHasLedValues) {
                 ledARGB = ledValues.color != 0 ? ledValues.color : mDefaultNotificationColor;
                 ledOnMS = ledValues.onMS >= 0 ? ledValues.onMS : mDefaultNotificationLedOn;
                 ledOffMS = ledValues.offMS >= 0 ? ledValues.offMS : mDefaultNotificationLedOff;
-            } else if ((ledno.defaults & Notification.DEFAULT_LIGHTS) != 0) {
+            } else if (!appHasLedValues) {
                 ledARGB = mDefaultNotificationColor;
                 ledOnMS = mDefaultNotificationLedOn;
                 ledOffMS = mDefaultNotificationLedOff;
