@@ -103,4 +103,7 @@
     <color name="qs_detailed_expansion_indicator_color">@color/qs_title_text_color</color>
     <color name="qs_detailed_title_text_color">@color/qs_title_text_color</color>
     <color name="qs_detailed_icon_tint_color">@color/qs_title_text_color</color>
+
+    <!-- Quick tile text color when the tile is disabled -->
+    <color name="qs_tile_text_disabled">#ff747474</color>
 </resources>
