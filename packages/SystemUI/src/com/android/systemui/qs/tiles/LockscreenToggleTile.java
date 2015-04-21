@@ -103,8 +103,8 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
                 || mPersistedState
                 || mKeyguardViewMediator.getKeyguardEnabledInternal();
 
-        state.visible = mKeyguardBound
-                && !(mKeyguard.isShowing() && mKeyguard.isSecure());
+        state.visible = mKeyguardBound;
+        state.enabled = !mKeyguard.isShowing() || !mKeyguard.isSecure();
         state.label = mContext.getString(lockscreenEnforced
                 ? R.string.quick_settings_lockscreen_label_enforced
                 : R.string.quick_settings_lockscreen_label);
