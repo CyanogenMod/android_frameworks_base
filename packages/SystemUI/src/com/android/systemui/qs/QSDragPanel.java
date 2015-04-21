@@ -353,6 +353,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
         final int visibility = state.visible ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
+        setTileEnabled(r.tileView, state.enabled);
         r.tileView.onStateChanged(state);
     }
 

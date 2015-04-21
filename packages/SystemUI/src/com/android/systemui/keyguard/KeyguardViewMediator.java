@@ -16,6 +16,7 @@
 
 package com.android.systemui.keyguard;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
