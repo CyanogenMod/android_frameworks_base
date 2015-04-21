@@ -2964,8 +2964,16 @@ public class NotificationManagerService extends SystemService {
     private boolean isLedNotificationForcedOn(NotificationRecord r) {
         if (r != null) {
             final Notification n = r.sbn.getNotification();
-            if (n.extras != null) {
-                return n.extras.getBoolean(Notification.EXTRA_FORCE_SHOW_LIGHTS, false);
+
+            PackageManager pm = mContext.getPackageManager();
+            try {
+                // EXTRA_FORCE_SHOW_LIGHTS must only be used by system apps
+                ApplicationInfo ai = pm.getApplicationInfo(r.sbn.getPackageName(), 0);
+                if ((ai.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && n.extras != null) {
+                    return n.extras.getBoolean(Notification.EXTRA_FORCE_SHOW_LIGHTS, false);
+                }
+            } catch (NameNotFoundException e) {
+                // Ignore
             }
         }
         return false;
@@ -2986,7 +2994,7 @@ public class NotificationManagerService extends SystemService {
         }
 
         // Don't flash while we are in a call or screen is on
-        // (unless Notification has EXTRA_FORCE_SHOW_LGHTS)
+        // (unless Notification has EXTRA_FORCE_SHOW_LIGHTS)
         final boolean enableLed;
         if (ledNotification == null) {
             enableLed = false;
@@ -3008,13 +3016,11 @@ public class NotificationManagerService extends SystemService {
             int ledOnMS;
             int ledOffMS;
 
-            boolean appHasLedValues = (ledno.defaults & Notification.DEFAULT_LIGHTS) == 0
-                    && (ledno.flags & Notification.FLAG_SHOW_LIGHTS) != 0;
-            if (ledValues != null && !appHasLedValues) {
+            if (ledValues != null) {
                 ledARGB = ledValues.color != 0 ? ledValues.color : mDefaultNotificationColor;
                 ledOnMS = ledValues.onMS >= 0 ? ledValues.onMS : mDefaultNotificationLedOn;
                 ledOffMS = ledValues.offMS >= 0 ? ledValues.offMS : mDefaultNotificationLedOff;
-            } else if (!appHasLedValues) {
+            } else if ((ledno.defaults & Notification.DEFAULT_LIGHTS) != 0) {
                 ledARGB = mDefaultNotificationColor;
                 ledOnMS = mDefaultNotificationLedOn;
                 ledOffMS = mDefaultNotificationLedOff;
