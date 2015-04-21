@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -304,9 +306,20 @@ public class QSTileView extends ViewGroup {
             mDualLabel.setText(state.label);
             mDualLabel.setContentDescription(state.dualLabelContentDescription);
             mTopBackgroundView.setContentDescription(state.contentDescription);
+            if (!Objects.equals(state.enabled, mDualLabel.isEnabled())) {
+                mTopBackgroundView.setEnabled(state.enabled);
+                mDualLabel.setEnabled(state.enabled);
+                mDualLabel.setTextColor(mContext.getResources().getColor(state.enabled ?
+                        R.color.qs_tile_text : R.color.qs_tile_text_disabled));
+            }
         } else {
             mLabel.setText(state.label);
             setContentDescription(state.contentDescription);
+            if (!Objects.equals(state.enabled, mLabel.isEnabled())) {
+                mLabel.setEnabled(state.enabled);
+                mLabel.setTextColor(mContext.getResources().getColor(state.enabled ?
+                        R.color.qs_tile_text : R.color.qs_tile_text_disabled));
+            }
         }
     }
 
@@ -322,6 +335,14 @@ public class QSTileView extends ViewGroup {
                 if (!iv.isShown()) {
                     ((Animatable) d).stop(); // skip directly to end state
                 }
+            }
+        }
+        if (!Objects.equals(state.enabled, iv.isEnabled())) {
+            iv.setEnabled(state.enabled);
+            if (state.enabled) {
+                iv.setColorFilter(null);
+            } else {
+                iv.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
             }
         }
     }

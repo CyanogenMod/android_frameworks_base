@@ -16,6 +16,7 @@
 
 package com.android.systemui.keyguard;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -68,6 +69,7 @@ import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.keyguard.MultiUserAvatarCache;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.SystemUI;
+import com.android.systemui.qs.tiles.LockscreenToggleTile;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.ScrimController;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
@@ -135,6 +137,10 @@ public class KeyguardViewMediator extends SystemUI {
 
     private static final String DISMISS_KEYGUARD_SECURELY_ACTION =
         "com.android.keyguard.action.DISMISS_KEYGUARD_SECURELY";
+
+    private static final String KEYGUARD_SERVICE_ACTION_STATE_CHANGE =
+            "com.android.internal.action.KEYGUARD_SERVICE_STATE_CHANGED";
+    private static final String KEYGUARD_SERVICE_EXTRA_ACTIVE = "active";
 
     // used for handler messages
     private static final int SHOW = 2;
@@ -273,6 +279,11 @@ public class KeyguardViewMediator extends SystemUI {
      * Whether we are disabling the lock screen internally
      */
     private boolean mInternallyDisabled = false;
+
+    /**
+     * Whether we are bound to the service delegate
+     */
+    private boolean mKeyguardBound;
 
     /**
      * we send this intent when the keyguard is dismissed.
@@ -537,6 +548,8 @@ public class KeyguardViewMediator extends SystemUI {
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(DELAYED_KEYGUARD_ACTION));
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(DISMISS_KEYGUARD_SECURELY_ACTION),
                 android.Manifest.permission.CONTROL_KEYGUARD, null);
+        mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(KEYGUARD_SERVICE_ACTION_STATE_CHANGE),
+                android.Manifest.permission.CONTROL_KEYGUARD, null);
 
         mKeyguardDisplayManager = new KeyguardDisplayManager(mContext);
 
@@ -771,6 +784,10 @@ public class KeyguardViewMediator extends SystemUI {
             }
         }
         return false;
+    }
+
+    public boolean isKeyguardBound() {
+        return mKeyguardBound;
     }
 
     /**
@@ -1213,6 +1230,10 @@ public class KeyguardViewMediator extends SystemUI {
                         mDismissSecurelyOnScreenOn = true;
                     }
                 }
+            } else if (KEYGUARD_SERVICE_ACTION_STATE_CHANGE.equals(intent.getAction())) {
+                mKeyguardBound = intent.getBooleanExtra(KEYGUARD_SERVICE_EXTRA_ACTIVE, false);
+                context.sendBroadcast(new Intent(LockscreenToggleTile.ACTION_APPLY_LOCKSCREEN_STATE)
+                        .setPackage(context.getPackageName()));
             }
         }
     };
