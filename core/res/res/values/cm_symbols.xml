@@ -296,10 +296,6 @@
     <java-symbol type="string" name="usb_ext_media_unmountable_notification_message" />
     <java-symbol type="string" name="usb_ext_media_unmountable_notification_title" />
 
-    <!-- Automatic display brightness settings -->
-    <java-symbol type="integer" name="config_brighteningLightDebounce" />
-    <java-symbol type="integer" name="config_darkeningLightDebounce" />
-
     <!-- LiveDisplay -->
     <java-symbol type="string" name="live_display_title" />
     <java-symbol type="string" name="live_display_hint" />
