@@ -214,4 +214,6 @@
     <!-- Default for Settings.Global.GUEST_USER_ENABLED -->
     <bool name="def_guest_user_enabled">true</bool>
 
+    <!-- Default for Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED -->
+    <integer name="def_captive_portal_detection_enabled" translatable="false">1</integer>
 </resources>
