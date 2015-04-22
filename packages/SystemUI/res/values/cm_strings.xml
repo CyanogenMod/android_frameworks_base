@@ -119,4 +119,10 @@
 
     <!-- Screen pinning dialog description (for devices without navbar) -->
     <string name="screen_pinning_description_no_navbar">This keeps it in view until you unpin. Touch and hold the Back button to unpin.</string>
+
+    <!-- Interruption level: None. [CHAR LIMIT=20] -->
+    <string name="interruption_level_silent">Silent</string>
+
+    <!-- Zen mode: No interruptions title, with a warning about alarms. [CHAR LIMIT=60] -->
+    <string name="zen_silent_with_warning">No interruptions, except alarms.</string>
 </resources>

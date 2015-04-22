@@ -30,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.service.notification.Condition;
@@ -115,6 +116,7 @@ public class ZenModePanel extends LinearLayout {
     private Condition mSessionExitCondition;
     private Condition[] mConditions;
     private Condition mTimeCondition;
+    private boolean mNoneIsSilent;
 
     public ZenModePanel(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -149,6 +151,7 @@ public class ZenModePanel extends LinearLayout {
         pw.print("  mExpanded="); pw.println(mExpanded);
         pw.print("  mSessionZen="); pw.println(mSessionZen);
         pw.print("  mAttachedZen="); pw.println(mAttachedZen);
+        pw.print("  mNoneIsSilent="); pw.println(mNoneIsSilent);
         mTransitionHelper.dump(fd, pw, args);
     }
 
@@ -157,8 +160,7 @@ public class ZenModePanel extends LinearLayout {
         super.onFinishInflate();
 
         mZenButtons = (SegmentedButtons) findViewById(R.id.zen_buttons);
-        mZenButtons.addButton(R.string.interruption_level_none, R.drawable.ic_zen_none,
-                Global.ZEN_MODE_NO_INTERRUPTIONS);
+        addNoneOrSilentButton();
         mZenButtons.addButton(R.string.interruption_level_priority, R.drawable.ic_zen_important,
                 Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS);
         mZenButtons.addButton(R.string.interruption_level_all, R.drawable.ic_zen_all,
@@ -209,6 +211,15 @@ public class ZenModePanel extends LinearLayout {
             transition.addTransitionListener(listener);
         }
         return transition;
+    }
+
+    private void addNoneOrSilentButton() {
+        if (mZenButtons != null) {
+            mZenButtons.addButton(mNoneIsSilent ? R.string.interruption_level_silent
+                            : R.string.interruption_level_none,
+                    R.drawable.ic_zen_none,
+                    Global.ZEN_MODE_NO_INTERRUPTIONS, 0);
+        }
     }
 
     @Override
@@ -403,6 +414,12 @@ public class ZenModePanel extends LinearLayout {
         final boolean zenImportant = zen == Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
         final boolean zenNone = zen == Global.ZEN_MODE_NO_INTERRUPTIONS;
         final boolean expanded = !mHidden && mExpanded;
+        final boolean noneIsSilent =  Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.NONE_IS_SILENT, 0, UserHandle.USER_CURRENT) == 1;
+        if (noneIsSilent != mNoneIsSilent) {
+            mNoneIsSilent = noneIsSilent;
+            addNoneOrSilentButton();
+        }
 
         mZenButtons.setVisibility(mHidden ? GONE : VISIBLE);
         mZenSubhead.setVisibility(!mHidden && !zenOff ? VISIBLE : GONE);
@@ -412,7 +429,8 @@ public class ZenModePanel extends LinearLayout {
         mZenConditions.setVisibility(!zenOff && expanded ? VISIBLE : GONE);
 
         if (zenNone) {
-            mZenSubheadExpanded.setText(R.string.zen_no_interruptions_with_warning);
+            mZenSubheadExpanded.setText(mNoneIsSilent ? R.string.zen_silent_with_warning
+                    : R.string.zen_no_interruptions_with_warning);
             mZenSubheadCollapsed.setText(mExitConditionText);
         } else if (zenImportant) {
             mZenSubheadExpanded.setText(R.string.zen_important_interruptions);
@@ -848,7 +866,7 @@ public class ZenModePanel extends LinearLayout {
         }
 
         public boolean isNoneDangerous() {
-            return mNoneSelected < mNoneDangerousThreshold;
+            return mNoneSelected < mNoneDangerousThreshold && !mNoneIsSilent;
         }
 
         public void trackNoneSelected() {

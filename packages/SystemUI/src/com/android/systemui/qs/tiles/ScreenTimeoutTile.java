@@ -197,44 +197,35 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
         Bucket nextBucket = Bucket.getBucket(newTimeout);
         Bucket previousBucket = Bucket.getBucket(state.previousTimeout);
 
-        switch (state.previousTimeout) {
-            case 0:
-            case 15000:
-            case 30000:
-                // Default
-                d = mMediumReverse;
-                if (nextBucket == Bucket.MEDIUM) {
-                    // Medium
-                    d = mShort;
-                } else if (nextBucket == Bucket.LARGE) {
-                    // Large
-                    d = mShortReverse;
-                }
-                break;
-            case 60000:
-            case 120000:
-            case 300000:
-                // Default
+        if (state.previousTimeout < 60000) {
+            // Default
+            d = mMediumReverse;
+            if (nextBucket == Bucket.MEDIUM) {
+                // Medium
                 d = mShort;
-                if (nextBucket == Bucket.SMALL) {
-                    // Small
-                    d = mMediumReverse;
-                } else if (nextBucket == Bucket.LARGE) {
-                    // Large
-                    d = mMedium;
-                }
-                break;
-            case 600000:
-            case 1800000:
+            } else if (nextBucket == Bucket.LARGE) {
+                // Large
+                d = mShortReverse;
+            }
+        } else if (state.previousTimeout < 600000) {
+            // Default
+            d = mShort;
+            if (nextBucket == Bucket.SMALL) {
+                // Small
+                d = mMediumReverse;
+            } else if (nextBucket == Bucket.LARGE) {
+                // Large
                 d = mMedium;
-                if (nextBucket == Bucket.MEDIUM) {
-                    // Small
-                    d = mLongReverse;
-                } else if (nextBucket == Bucket.SMALL) {
-                    // Large
-                    d = mLong;
-                }
-                break;
+            }
+        } else {
+            d = mMedium;
+            if (nextBucket == Bucket.MEDIUM) {
+                // Small
+                d = mLongReverse;
+            } else if (nextBucket == Bucket.SMALL) {
+                // Large
+                d = mLong;
+            }
         }
 
         if (state.icon == null || previousBucket != nextBucket) {

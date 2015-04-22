@@ -308,6 +308,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     static final int SCAN_TRUSTED_OVERLAY = 1<<9;
     static final int SCAN_DELETE_DATA_ON_FAILURES = 1<<10;
     static final int SCAN_REPLACING = 1<<11;
+    static final int SCAN_REQUIRE_KNOWN = 1<<12;
 
     static final int REMOVE_CHATTY = 1<<16;
 
@@ -1769,10 +1770,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (!mOnlyCore) {
                 EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_DATA_SCAN_START,
                         SystemClock.uptimeMillis());
-                scanDirLI(mAppInstallDir, 0, scanFlags, 0);
+                scanDirLI(mAppInstallDir, 0, scanFlags | SCAN_REQUIRE_KNOWN, 0);
 
                 scanDirLI(mDrmAppPrivateInstallDir, PackageParser.PARSE_FORWARD_LOCK,
-                        scanFlags, 0);
+                        scanFlags | SCAN_REQUIRE_KNOWN, 0);
 
                 /**
                  * Remove disable package settings for any updated system
@@ -5583,6 +5584,28 @@ public class PackageManagerService extends IPackageManager.Stub {
             if ((compareSignatures(pkg.mSignatures, s1) == PackageManager.SIGNATURE_MATCH)) {
                 throw new PackageManagerException(INSTALL_FAILED_INVALID_INSTALL_LOCATION,
                         "Cannot install platform packages to user storage!");
+            }
+        }
+
+        // If we're only installing presumed-existing packages, require that the
+        // scanned APK is both already known and at the path previously established
+        // for it.  Previously unknown packages we pick up normally, but if we have an
+        // a priori expectation about this package's install presence, enforce it.
+        if ((scanFlags & SCAN_REQUIRE_KNOWN) != 0) {
+            PackageSetting known = mSettings.peekPackageLPr(pkg.packageName);
+            if (known != null) {
+                if (DEBUG_PACKAGE_SCANNING) {
+                    Log.d(TAG, "Examining " + pkg.codePath
+                            + " and requiring known paths " + known.codePathString
+                            + " & " + known.resourcePathString);
+                }
+                if (!pkg.applicationInfo.getCodePath().equals(known.codePathString)
+                        || !pkg.applicationInfo.getResourcePath().equals(known.resourcePathString)) {
+                    throw new PackageManagerException(INSTALL_FAILED_PACKAGE_CHANGED,
+                            "Application package " + pkg.packageName
+                            + " found at " + pkg.applicationInfo.getCodePath()
+                            + " but expected at " + known.codePathString + "; ignoring.");
+                }
             }
         }
 
