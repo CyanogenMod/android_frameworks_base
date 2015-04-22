@@ -41,3 +41,45 @@ LOCAL_AIDL_INCLUDES := $(call find-other-aidl-files, $(cyanogenmod_app_src))
 $(info $(LOCAL_AIDL_INCLUDES))
 
 include $(BUILD_STATIC_JAVA_LIBRARY)
+
+# ===========================================================
+# Common Droiddoc vars
+cmplat.docs.src_files := \
+    $(call all-java-files-under, src) \
+    $(call find-other-java-files, $(cyanogenmod_app_src)) \
+    $(call all-html-files-under, src)
+cmplat.docs.java_libraries := \
+    org.cyanogenmod.platform
+
+# Documentation
+# ===========================================================
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := org.cyanogenmod.platform
+LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+LOCAL_MODULE_TAGS := optional
+
+intermediates.COMMON := $(call intermediates-dir-for,$(LOCAL_MODULE_CLASS), org.cyanogenmod.platform,,COMMON)
+
+LOCAL_SRC_FILES := $(cmplat.docs.src_files)
+LOCAL_ADDITONAL_JAVA_DIR := $(intermediates.COMMON)/src
+
+LOCAL_SDK_VERSION := 21
+LOCAL_IS_HOST_MODULE := false
+LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR := build/tools/droiddoc/templates-sdk
+
+LOCAL_JAVA_LIBRARIES := $(cmplat.docs.java_libraries)
+
+LOCAL_DROIDDOC_OPTIONS := \
+    -offlinemode \
+    -hdf android.whichdoc offline \
+    -federate Android http://developer.android.com \
+    -federationapi Android prebuilts/sdk/api/21.txt
+
+include $(BUILD_DROIDDOC)
+
+# Cleanup temp vars
+# ===========================================================
+cmplat.docs.src_files :=
+cmplat.docs.java_libraries :=
+intermediates.COMMON :=
