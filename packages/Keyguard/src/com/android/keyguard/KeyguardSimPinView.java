@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionInfo;
+import android.telephony.TelephonyManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -368,9 +369,11 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
                 ", displayName=" + displayName);
         mSubNameView.setText(displayName);
 
-        final int color = info != null && info.getIconTint() != 0
-                ? info.getIconTint() : Color.WHITE;
-        mSimImageView.setImageTintList(ColorStateList.valueOf(color));
+        if (TelephonyManager.getDefault().isMultiSimEnabled()) {
+            final int color = info != null && info.getIconTint() != 0
+                    ? info.getIconTint() : Color.WHITE;
+            mSimImageView.setImageTintList(ColorStateList.valueOf(color));
+        }
     }
 
     private void showDefaultMessage() {
