@@ -7984,11 +7984,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                     (flags & PackageManager.MATCH_DEFAULT_ONLY) != 0, userId);
             // Remove protected Application components
             int callingUid = Binder.getCallingUid();
+            List<String> packages = Arrays.asList(getPackagesForUid(callingUid));
             if (callingUid != Process.SYSTEM_UID &&
                     (getFlagsForUid(callingUid) & ApplicationInfo.FLAG_SYSTEM) == 0) {
                Iterator<ResolveInfo> itr = list.iterator();
                 while (itr.hasNext()) {
-                    if (itr.next().activityInfo.applicationInfo.protect) {
+                    ActivityInfo activityInfo = itr.next().activityInfo;
+                    if (activityInfo.applicationInfo.protect && (packages == null
+                            || !packages.contains(activityInfo.packageName))) {
                         itr.remove();
                     }
                 }
