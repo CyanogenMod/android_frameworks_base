@@ -42,11 +42,7 @@ public class BrightnessMirrorController {
     public BrightnessMirrorController(View statusBarWindow) {
         mScrimBehind = (ScrimView) statusBarWindow.findViewById(R.id.scrim_behind);
         mBrightnessMirror = statusBarWindow.findViewById(R.id.brightness_mirror);
-        if (isMSim()) {
-            mPanelHolder = statusBarWindow.findViewById(R.id.msim_panel_holder);
-        } else {
-            mPanelHolder = statusBarWindow.findViewById(R.id.panel_holder);
-        }
+        mPanelHolder = statusBarWindow.findViewById(R.id.panel_holder);
     }
 
     public void showMirror() {

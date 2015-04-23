@@ -33,19 +33,16 @@ import android.net.NetworkStatsHistory;
 import android.net.NetworkTemplate;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.provider.Settings;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.Log;
 
-import com.android.systemui.statusbar.policy.NetworkController.DataUsageInfo;
-
 import java.util.Date;
 import java.util.Locale;
 
-public class MobileDataController {
+public class MobileDataControllerImpl implements NetworkController.MobileDataController {
     private static final String TAG = "MobileDataController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -63,14 +60,19 @@ public class MobileDataController {
 
     private INetworkStatsSession mSession;
     private Callback mCallback;
+    private NetworkControllerImpl mNetworkController;
 
-    public MobileDataController(Context context) {
+    public MobileDataControllerImpl(Context context) {
         mContext = context;
         mTelephonyManager = TelephonyManager.from(context);
         mConnectivityManager = ConnectivityManager.from(context);
         mStatsService = INetworkStatsService.Stub.asInterface(
                 ServiceManager.getService(Context.NETWORK_STATS_SERVICE));
         mPolicyManager = NetworkPolicyManager.from(mContext);
+    }
+
+    public void setNetworkController(NetworkControllerImpl networkController) {
+        mNetworkController = networkController;
     }
 
     private INetworkStatsSession getSession() {
@@ -111,7 +113,9 @@ public class MobileDataController {
         if (session == null) {
             return warn("no stats session");
         }
-        final NetworkTemplate template = NetworkTemplate.buildTemplateMobileAll(subscriberId);
+        NetworkTemplate template = NetworkTemplate.buildTemplateMobileAll(subscriberId);
+        template = NetworkTemplate.normalize(template, null); // XXX mTelephonyManager.getMergedSubscriberIds());
+
         final NetworkPolicy policy = findNetworkPolicy(template);
         try {
             final NetworkStatsHistory history = mSession.getHistoryForNetwork(template, FIELDS);
@@ -157,6 +161,9 @@ public class MobileDataController {
             } else {
                 usage.warningLevel = DEFAULT_WARNING_LEVEL;
             }
+            if (usage != null) {
+                usage.carrier = mNetworkController.getMobileNetworkName();
+            }
             return usage;
         } catch (RemoteException e) {
             return warn("remote call failed");
@@ -192,8 +199,7 @@ public class MobileDataController {
 
     public void setMobileDataEnabled(boolean enabled) {
         Log.d(TAG, "setMobileDataEnabled: enabled=" + enabled);
-        mTelephonyManager.setDataEnabled(
-                SubscriptionManager.getDefaultDataSubId(), enabled);
+        mTelephonyManager.setDataEnabled(enabled);
         if (mCallback != null) {
             mCallback.onMobileDataEnabled(enabled);
         }
@@ -202,19 +208,17 @@ public class MobileDataController {
     public boolean isMobileDataSupported() {
         // require both supported network and ready SIM
         return mConnectivityManager.isNetworkSupported(TYPE_MOBILE)
-                && mTelephonyManager.getSimState(
-                        SubscriptionManager.from(mContext).getDefaultDataPhoneId()) == SIM_STATE_READY;
+                && mTelephonyManager.getSimState() == SIM_STATE_READY;
     }
 
     public boolean isMobileDataEnabled() {
-        return Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.MOBILE_DATA + SubscriptionManager.from(mContext).getDefaultDataPhoneId(), 0) != 0;
+        return mTelephonyManager.getDataEnabled();
     }
 
     private static String getActiveSubscriberId(Context context) {
         final TelephonyManager tele = TelephonyManager.from(context);
-        final String actualSubscriberId =
-                tele.getSubscriberId(SubscriptionManager.getDefaultDataSubId());
+        final String actualSubscriberId = tele.getSubscriberId(
+                SubscriptionManager.getDefaultDataSubId());
         return actualSubscriberId;
     }
 
