@@ -17,19 +17,17 @@
 package com.android.keyguard;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
-import android.text.method.SingleLineTransformationMethod;
+import android.net.ConnectivityManager;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
-import android.telephony.TelephonyManager;
+import android.text.method.SingleLineTransformationMethod;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.telephony.IccCardConstants;
@@ -37,72 +35,48 @@ import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.widget.LockPatternUtils;
 
+import java.util.List;
 import java.util.Locale;
-import java.util.HashMap;
-import android.util.Log;
 
-public class CarrierText extends LinearLayout {
+public class CarrierText extends TextView {
     private static final String TAG = "CarrierText";
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
-    private static final int mNumPhones = TelephonyManager.getDefault().getPhoneCount();
+
     private static CharSequence mSeparator;
 
     private LockPatternUtils mLockPatternUtils;
+    private KeyguardUpdateMonitor mKeyguardUpdateMonitor;
 
-    private boolean mShowAPM;
-
-    private KeyguardUpdateMonitor mUpdateMonitor;
-    private TextView mOperatorName[];
-    private TextView mOperatorSeparator[];
-    private TextView mAirplaneModeText;
+    private boolean mDisplayAirplaneMode;
+    private boolean mAirplaneModeActive;
 
     private KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onRefreshCarrierInfo(int subId, CharSequence plmn, CharSequence spn) {
-            updateCarrierText(mUpdateMonitor.getSimState(subId), plmn, spn, subId);
+            updateCarrierText();
         }
 
         @Override
         public void onSimStateChanged(int subId, IccCardConstants.State simState) {
-            updateCarrierText(simState, mUpdateMonitor.getTelephonyPlmn(subId),
-                mUpdateMonitor.getTelephonySpn(subId), subId);
+            updateCarrierText();
         }
 
         @Override
         void onAirplaneModeChanged(boolean on) {
-            if (on && mShowAPM) {
-                for (int i = 0; i < mNumPhones; i++) {
-                    mOperatorName[i].setVisibility(View.GONE);
-                    if (i < mNumPhones-1) {
-                        mOperatorSeparator[i].setVisibility(View.GONE);
-                    }
-                }
-                if (mAirplaneModeText != null) {
-                    mAirplaneModeText.setVisibility(View.VISIBLE);
-                }
-            } else {
-                for (int i = 0; i < mNumPhones; i++) {
-                    mOperatorName[i].setVisibility(View.VISIBLE);
-                    if (i < mNumPhones-1) {
-                        mOperatorSeparator[i].setVisibility(View.VISIBLE);
-                    }
-                }
-                if (mAirplaneModeText != null) {
-                    mAirplaneModeText.setVisibility(View.GONE);
-                }
+            mAirplaneModeActive = on;
+            if (mDisplayAirplaneMode) {
+                updateCarrierText();
             }
         }
 
+        @Override
         public void onScreenTurnedOff(int why) {
-            for (int i = 0; i < mNumPhones; i++) {
-                mOperatorName[i].setSelected(false);
-            }
+            setSelected(false);
         };
 
+        @Override
         public void onScreenTurnedOn() {
-            for (int i = 0; i < mNumPhones; i++) {
-                mOperatorName[i].setSelected(true);
-            }
+            setSelected(true);
         };
     };
     /**
@@ -126,91 +100,111 @@ public class CarrierText extends LinearLayout {
 
     public CarrierText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-            inflater.inflate(R.layout.keyguard_carrier_text_view, this, true);
-
         mLockPatternUtils = new LockPatternUtils(mContext);
-        mUpdateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
 
-        mOperatorName = new TextView[mNumPhones];
-        mOperatorSeparator = new TextView[mNumPhones-1];
-
-        mShowAPM = context.getResources().getBoolean(R.bool.config_display_APM);
+	        boolean useAllCaps;
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs, R.styleable.CarrierText, 0, 0);
+        try {
+            useAllCaps = a.getBoolean(R.styleable.CarrierText_allCaps, false);
+        } finally {
+            a.recycle();
+        }
+        setTransformationMethod(new CarrierTextTransformationMethod(mContext, useAllCaps));
     }
 
-    protected void updateCarrierText(State simState, CharSequence plmn, CharSequence spn,
-            int subId) {
-        if(DEBUG) Log.d(TAG, "updateCarrierText, simState=" + simState + " plmn=" + plmn
-            + " spn=" + spn +" subId=" + subId);
-        int phoneId = mUpdateMonitor.getPhoneIdBySubId(subId);
-        if (!mUpdateMonitor.isValidPhoneId(phoneId)) {
-            if(DEBUG) Log.d(TAG, "updateCarrierText, invalidate phoneId=" + phoneId);
+    protected void updateCarrierText() {
+        if (mDisplayAirplaneMode && mAirplaneModeActive) {
+            setText(com.android.internal.R.string.lockscreen_airplane_mode_on);
             return;
         }
 
-        String airplaneMode = getResources().getString(
-                com.android.internal.R.string.lockscreen_airplane_mode_on);
-        CharSequence text = getCarrierTextForSimState(simState, plmn, spn);
-        TextView updateCarrierView = mOperatorName[phoneId];
-        if (mAirplaneModeText != null && mShowAPM) {
-            mAirplaneModeText.setText(airplaneMode);
-        }
-        updateCarrierView.setText(text != null ? text.toString() : null);
-
-        for (int i = 0; i < mNumPhones-1; i++) {
-            if (mOperatorSeparator[i] != null) {
-                mOperatorSeparator[i].setText("|");
+        boolean allSimsMissing = true;
+        CharSequence displayText = null;
+        List<SubscriptionInfo> subs = mKeyguardUpdateMonitor.getSubscriptionInfo(false);
+        final int N = subs.size();
+        if (DEBUG) Log.d(TAG, "updateCarrierText(): " + N);
+        for (int i = 0; i < N; i++) {
+            int subId = subs.get(i).getSubscriptionId();
+            State simState = mKeyguardUpdateMonitor.getSimState(subId);
+            CharSequence plmn = mKeyguardUpdateMonitor.getTelephonyPlmn(subId);
+            CharSequence spn = mKeyguardUpdateMonitor.getTelephonySpn(subId);
+            CharSequence carrierTextForSimState = getCarrierTextForSimState(simState, plmn, spn);
+            if (carrierTextForSimState != null) {
+                allSimsMissing = false;
+                displayText = concatenate(displayText, carrierTextForSimState, " | ");
             }
         }
+        if (allSimsMissing) {
+            if (N != 0) {
+                // Shows "No SIM card | Emergency calls only" on devices that are voice-capable.
+                // This depends on mPlmn containing the text "Emergency calls only" when the radio
+                // has some connectivity. Otherwise, it should be null or empty and just show
+                // "No SIM card"
+                // Grab the first subscripton, because they all should contain the emergency text,
+                // described above.
+                displayText =  makeCarrierStringOnEmergencyCapable(
+                        getContext().getText(R.string.keyguard_missing_sim_message_short),
+                        mKeyguardUpdateMonitor.getTelephonyPlmn(subs.get(0).getSubscriptionId()));
+            } else {
+                // We don't have a SubscriptionInfo to get the emergency calls only from.
+                // Grab it from the old sticky broadcast if possible instead. We can use it
+                // here because no subscriptions are active, so we don't have
+                // to worry about MSIM clashing.
+                CharSequence text =
+                        getContext().getText(com.android.internal.R.string.emergency_calls_only);
+                Intent i = getContext().registerReceiver(null,
+                        new IntentFilter(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION));
+                if (i != null) {
+                    String spn = "";
+                    String plmn = "";
+                    if (i.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false)) {
+                        spn = i.getStringExtra(TelephonyIntents.EXTRA_SPN);
+                    }
+                    if (i.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false)) {
+                        plmn = i.getStringExtra(TelephonyIntents.EXTRA_PLMN);
+                    }
+                    if (DEBUG) Log.d(TAG, "Getting plmn/spn sticky brdcst " + plmn + "/" + spn);
+                    text = concatenate(plmn, spn);
+                }
+                displayText =  makeCarrierStringOnEmergencyCapable(
+                        getContext().getText(R.string.keyguard_missing_sim_message_short), text);
+            }
+        }
+        setText(displayText);
     }
-
-    @Override
-    protected void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        final int[] carrierTextViewId = { R.id.airplane_mode, R.id.carrier1, R.id.carrier2,
-                R.id.carrier3, R.id.carrier_divider1, R.id.carrier_divider2 };
-        for (int i = 0; i < carrierTextViewId.length; i++) {
-            TextView carrierTextView = (TextView)findViewById(carrierTextViewId[i]);
-            if (carrierTextView != null) {
-                carrierTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                        getResources().getDimensionPixelSize(
-                                com.android.internal.R.dimen.text_size_small_material));
-           }
-       }
-   }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mSeparator = getResources().getString(com.android.internal.R.string.kg_text_message_separator);
-        int[] operatorNameId = {R.id.carrier1, R.id.carrier2, R.id.carrier3};
-        int[] operatorSepId = {R.id.carrier_divider1, R.id.carrier_divider2};
+        mSeparator = getResources().getString(
+                com.android.internal.R.string.kg_text_message_separator);
+        mDisplayAirplaneMode = getResources().getBoolean(R.bool.config_display_APM);
+
         final boolean screenOn = KeyguardUpdateMonitor.getInstance(mContext).isScreenOn();
         setSelected(screenOn); // Allow marquee to work.
-
-        for (int i = 0; i < mNumPhones; i++) {
-            mOperatorName[i] = (TextView) findViewById(operatorNameId[i]);
-            mOperatorName[i].setVisibility(View.VISIBLE);
-            mOperatorName[i].setSelected(true);
-            if (i < mNumPhones-1) {
-                mOperatorSeparator[i] = (TextView) findViewById(operatorSepId[i]);
-                mOperatorSeparator[i].setVisibility(View.VISIBLE);
-            }
-        }
-        mAirplaneModeText = (TextView) findViewById(R.id.airplane_mode);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mCallback);
+        if (ConnectivityManager.from(mContext).isNetworkSupported(
+                ConnectivityManager.TYPE_MOBILE)) {
+            mKeyguardUpdateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
+            mKeyguardUpdateMonitor.registerCallback(mCallback);
+        } else {
+            // Don't listen and clear out the text when the device isn't a phone.
+            mKeyguardUpdateMonitor = null;
+            setText("");
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mCallback);
+        if (mKeyguardUpdateMonitor != null) {
+            mKeyguardUpdateMonitor.removeCallback(mCallback);
+        }
     }
 
     /**
@@ -234,6 +228,7 @@ public class CarrierText extends LinearLayout {
                 break;
 
             case SimNotReady:
+                // Null is reserved for denoting missing, in this case we have nothing to display.
                 carrierText = null; // nothing to display yet.
                 break;
 
@@ -243,13 +238,7 @@ public class CarrierText extends LinearLayout {
                 break;
 
             case SimMissing:
-                // Shows "No SIM card | Emergency calls only" on devices that are voice-capable.
-                // This depends on mPlmn containing the text "Emergency calls only" when the radio
-                // has some connectivity. Otherwise, it should be null or empty and just show
-                // "No SIM card"
-                carrierText =  makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.keyguard_missing_sim_message_short),
-                        plmn);
+                carrierText = null;
                 break;
 
             case SimPermDisabled:
@@ -258,9 +247,7 @@ public class CarrierText extends LinearLayout {
                 break;
 
             case SimMissingLocked:
-                carrierText =  makeCarrierStringOnEmergencyCapable(
-                        getContext().getText(R.string.keyguard_missing_sim_message_short),
-                        plmn);
+                carrierText = null;
                 break;
 
             case SimLocked:
@@ -336,13 +323,18 @@ public class CarrierText extends LinearLayout {
     }
 
     private static CharSequence concatenate(CharSequence plmn, CharSequence spn) {
+        return concatenate(plmn, spn, mSeparator);
+    }
+
+    private static CharSequence concatenate(CharSequence plmn, CharSequence spn,
+            CharSequence separator) {
         final boolean plmnValid = !TextUtils.isEmpty(plmn);
         final boolean spnValid = !TextUtils.isEmpty(spn);
         if (plmnValid && spnValid) {
             if (plmn.equals(spn)) {
                 return plmn;
             } else {
-                return new StringBuilder().append(plmn).append(mSeparator).append(spn).toString();
+                return new StringBuilder().append(plmn).append(separator).append(spn).toString();
             }
         } else if (plmnValid) {
             return plmn;
