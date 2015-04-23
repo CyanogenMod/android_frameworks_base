@@ -58,94 +58,18 @@
         android:layout_height="4dp"
         android:visibility="gone"
         />
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/data_combo"
-        android:visibility="visible"
-        >
-        <ImageView
-            android:id="@+id/data_inout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            />
-    </FrameLayout>
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/mobile_signal_group"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         >
-        <FrameLayout
-            android:id="@+id/mobile_combo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-            <LinearLayout
-                android:id="@+id/mobile_signal_cdma"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                >
-                <ImageView
-                    android:id="@+id/mobile_signal_3g"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-                <ImageView
-                    android:id="@+id/mobile_signal_1x"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-            </LinearLayout>
-            <ImageView
-                android:id="@+id/mobile_signal_1x_only"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-            />
-            <LinearLayout
-                android:id="@+id/mobile_data_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                >
-                <ImageView
-                    android:id="@+id/mobile_signal_data"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-                <ImageView
-                    android:id="@+id/mobile_signal_voice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-            </LinearLayout>
-            <ImageView
-                android:id="@+id/mobile_signal"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center|bottom"
-                />
-            <ImageView
-                android:id="@+id/mobile_type"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                />
-            <ImageView
-                android:id="@+id/no_sim"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                />
-             <ImageView
-                android:id="@+id/mobile_inout"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_gravity="end|bottom"
-                />
-        </FrameLayout>
-    </FrameLayout>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/no_sims"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/stat_sys_no_sims"
+        />
     <View
         android:id="@+id/wifi_airplane_spacer"
         android:layout_width="4dp"

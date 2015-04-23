@@ -65,7 +65,7 @@ public class DataUsageDetailView extends LinearLayout {
                 R.dimen.qs_data_usage_text_size);
     }
 
-    public void bind(QSTile.Host host, NetworkController.DataUsageInfo info) {
+    public void bind(QSTile.Host host, NetworkController.MobileDataController.DataUsageInfo info) {
         final QSTile.Host mHost = host;
         final Resources res = mContext.getResources();
         final int titleId;
