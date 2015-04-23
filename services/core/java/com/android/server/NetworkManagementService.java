@@ -838,7 +838,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                         timestampNanos = SystemClock.elapsedRealtimeNanos();
                     }
                     boolean isActive = cooked[2].equals("active");
-                    notifyInterfaceClassActivity(Integer.parseInt(cooked[3]),
+                    notifyInterfaceClassActivity(cooked[3] == null ? 0 : Integer.parseInt(cooked[3]),
                             isActive ? DataConnectionRealTimeInfo.DC_POWER_STATE_HIGH
                             : DataConnectionRealTimeInfo.DC_POWER_STATE_LOW, timestampNanos, false);
                     return true;
