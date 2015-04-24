@@ -38,7 +38,6 @@
   <string name="permdesc_preventpower">Aplikazioak pizteko teklaren jokabidea aldatzea ahalbidetzen du</string>
   <string name="permlab_sendMockSms">Itxurazko SMSak bidali</string>
   <string name="storage_sd_dock_card">Oinarriaren SD txartela</string>
-  <string name="app_killed_message">Aplikazioa eten da</string>
   <string name="global_action_reboot">Berrabiarazi</string>
   <string name="global_action_choose_profile">Profila</string>
   <string name="stylus_app_not_installed">%s ez dago instalatuta</string>

@@ -44,6 +44,7 @@
   <string name="permlab_preventpower">chặn nút nguồn</string>
   <string name="permdesc_preventpower">Cho phép ứng dụng thay thế phím nguồn</string>
   <string name="permlab_sendMockSms">gửi tin nhắn SMS giả</string>
+  <string name="storage_sd_dock_card">Ổ cắm thẻ nhớ</string>
   <string name="global_action_reboot">Khởi động lại</string>
   <string name="global_action_choose_profile">Cấu hình</string>
   <string name="toast_rotation_unlocked">Đã mở khoá xoay màn hình</string>

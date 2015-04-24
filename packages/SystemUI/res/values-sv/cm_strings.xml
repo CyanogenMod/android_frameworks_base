@@ -56,6 +56,10 @@
   <string name="location_mode_sensors_only_title">Endast enhet</string>
   <string name="quick_settings_expanded_desktop">Utökat</string>
   <string name="quick_settings_expanded_desktop_off">Normalt</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d ansluten</item>
+    <item quantity="other">%1$d ansluten</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Kan inte ansluta till kamera</string>
   <string name="navbar_dialog_title">Välj åtgärd att tilldela</string>
   <string name="navbar_home_button">Hemknapp</string>
