@@ -41,7 +41,7 @@
   <string name="permgroupdesc_security">הרשאות הקשורות לאבטחת המידע במכשיר.</string>
   <string name="permlab_accessThemeService">גישה לשירות ערכות העיצוב</string>
   <string name="permdesc_accessThemeService">מאפשר ליישום לגשת לשירות ערכות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
-  <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב</string>
+  <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב שלך</string>
   <string name="permdesc_readThemesDesc">מאפשר ליישום לקרוא את ערכות העיצוב ולקבוע איזו ערכה החלת.</string>
   <string name="permlab_writeThemes">שינוי ערכות העיצוב שלך</string>
   <string name="permdesc_writeThemesDesc">מאפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות את הערכה המוחלת.</string>
