@@ -1343,7 +1343,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="perms_new_perm_prefix"><font size="12" fgcolor="#ff33b5e5">NEI: </font></string>
   <string name="perms_description_app">Zur Verfügung gestallt vu(n) <xliff:g id="app_name">%1$s</xliff:g>.</string>
   <string name="no_permissions">Keng Berechtegungen néideg</string>
-  <string name="perm_costs_money">dëst kéint dir Sue kaschten</string>
+  <string name="perm_costs_money">dëst kéint dech Sue kaschten</string>
   <string name="usb_storage_activity_title">USB-Massespäicher</string>
   <string name="usb_storage_title">USB connectéiert</string>
   <string name="usb_storage_message" product="nosdcard">Du hues den Apparat iwwer USB un däi Computer ugeschloss. Dréck de Knäppchen hei drënner wann s du Fichieren tëscht dengem Computer an dem USB-Späicher vun dengem Android-Apparat wëlls kopéieren.</string>
