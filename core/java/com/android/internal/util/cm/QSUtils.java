@@ -26,6 +26,7 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.net.ConnectivityManager;
 import android.nfc.NfcAdapter;
+import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import com.android.internal.telephony.PhoneConstants;
@@ -84,6 +85,9 @@ public class QSUtils {
                         break;
                     case QSConstants.TILE_COMPASS:
                         removeTile = !deviceSupportsCompass(context);
+                        break;
+                    case QSConstants.TILE_PERFORMANCE:
+                        removeTile = !deviceSupportsPerformance(context);
                         break;
                 }
                 if (removeTile) {
@@ -151,5 +155,10 @@ public class QSUtils {
         SensorManager sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         return sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
                 && sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
+    }
+
+    public static boolean deviceSupportsPerformance(Context context) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        return pm.hasPowerProfiles();
     }
 }
