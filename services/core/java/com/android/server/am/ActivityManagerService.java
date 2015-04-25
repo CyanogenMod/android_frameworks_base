@@ -2122,7 +2122,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                             context.getApplicationInfo().loadLabel(context.getPackageManager()));
                     String title = mContext.getString(R.string.privacy_guard_notification);
 
-                    Intent infoIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Intent infoIntent = new Intent(Settings.ACTION_APP_OPS_DETAILS_SETTINGS,
                             Uri.fromParts("package", root.packageName, null));
 
                     Notification notification = new Notification();
