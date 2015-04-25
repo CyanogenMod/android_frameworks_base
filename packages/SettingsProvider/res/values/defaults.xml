@@ -235,7 +235,7 @@
     <bool name="def_cm_stats_collection">false</bool>
 
     <!-- Default for Settings.System.STATUS_BAR_BATTERY_STYLE -->
-    <integer name="def_battery_style">0</integer>
+    <integer name="def_battery_style">2</integer>
 
     <!-- Default theme -->
     <string name="def_theme_package"></string>
