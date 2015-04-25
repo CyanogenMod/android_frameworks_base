@@ -347,6 +347,7 @@ public class TorchService extends ITorchService.Stub {
     }
 
     private void teardownTorch() {
+        dispatchStateChange(false);
         if (mCameraDevice != null) {
             mCameraDevice.close();
             mCameraDevice = null;
@@ -367,7 +368,6 @@ public class TorchService extends ITorchService.Stub {
             mTorchEnabled = false;
         }
         dispatchError();
-        dispatchStateChange(false);
         updateFlashlight(true /* forceDisable */);
     }
 
@@ -386,7 +386,6 @@ public class TorchService extends ITorchService.Stub {
                 mTorchEnabled = false;
             }
             updateFlashlight(true /* forceDisable */);
-            dispatchStateChange(false);
         }
     };
 
@@ -439,7 +438,6 @@ public class TorchService extends ITorchService.Stub {
         @Override
         public void onDisconnected(CameraDevice camera) {
             if (mCameraDevice == camera) {
-                dispatchStateChange(false);
                 teardownTorch();
             }
         }

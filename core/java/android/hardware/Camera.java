@@ -588,9 +588,9 @@ public class Camera {
      * <p>You must call this as soon as you're done with the Camera object.</p>
      */
     public final void release() {
+        notifyTorch(false);
         native_release();
         mFaceDetectionRunning = false;
-        notifyTorch(false);
     }
 
     /**
