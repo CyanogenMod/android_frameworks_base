@@ -2317,4 +2317,7 @@
     <!-- Configuration that determines if PROTOCOL_ERRORS is to be treated as a
          permanent error -->
     <bool translatable="false" name="config_protocol_errors_perm_failure">true</bool>
+
+    <!-- External CM Services list -->
+    <string-array name="config_externalCMServices"></string-array>
 </resources>
