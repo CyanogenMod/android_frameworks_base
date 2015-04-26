@@ -2326,4 +2326,6 @@
 
     <!-- Default, comma-delimited, quick settings tiles. See QSConstants.java for a list of all available tiles -->
     <string name="config_defaultQuickSettingsTiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast</string>
+
+    <string-array name="config_externalCMServices"></string-array>
 </resources>
