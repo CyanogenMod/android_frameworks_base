@@ -721,6 +721,9 @@ public final class SystemServer {
                 mSystemServiceManager.startService(
                             "com.android.server.wifi.WifiScanningService");
 
+                mSystemServiceManager.startService(
+                        "org.cyanogenmod.platform.internal.CMStatusBarManagerService");
+
                 mSystemServiceManager.startService("com.android.server.wifi.RttService");
 
                 if (mPackageManager.hasSystemFeature(PackageManager.FEATURE_ETHERNET)) {
