@@ -454,6 +454,8 @@ public final class SystemServer {
         boolean digitalPenCapable =
             Resources.getSystem().getBoolean(com.android.internal.R.bool.config_digitalPenCapable);
         boolean disableAtlas = SystemProperties.getBoolean("config.disable_atlas", false);
+        String[] externalServices = Resources.getSystem()
+                .getStringArray(com.android.internal.R.array.config_externalCMServices);
 
         try {
             Slog.i(TAG, "Reading configuration...");
@@ -1195,6 +1197,15 @@ public final class SystemServer {
                 edgeGestureService.systemReady();
             } catch (Throwable e) {
                 reportWtf("making EdgeGesture service ready", e);
+            }
+        }
+
+        for (String service : externalServices) {
+            try {
+                Slog.i(TAG, service);
+                mSystemServiceManager.startService(service);
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting " + service , e);
             }
         }
 
