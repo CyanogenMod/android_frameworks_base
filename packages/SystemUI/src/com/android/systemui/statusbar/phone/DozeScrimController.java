@@ -145,6 +145,7 @@ public class DozeScrimController {
     private void startScrimAnimation(final boolean inFront, float target, long duration,
             Interpolator interpolator, long delay, final Runnable endRunnable) {
         Animator current = getCurrentAnimator(inFront);
+
         if (current != null) {
             float currentTarget = getCurrentTarget(inFront);
             if (currentTarget == target) {
@@ -221,12 +222,12 @@ public class DozeScrimController {
             if (DEBUG) Log.d(TAG, "Pulse in, mDozing=" + mDozing + " mPulseReason="
                     + DozeLog.pulseReasonToString(mPulseReason));
             if (!mDozing) return;
-            DozeLog.tracePulseStart(mPulseReason);
             final boolean pickup = mPulseReason == DozeLog.PULSE_REASON_SENSOR_PICKUP;
+            DozeLog.tracePulseStart(mPulseReason);
             startScrimAnimation(true /* inFront */, 0f,
-                    mDozeParameters.getPulseInDuration(pickup),
+                    mDozeParameters.getPulseInDuration(mPulseReason),
                     pickup ? mPulseInInterpolatorPickup : mPulseInInterpolator,
-                    mDozeParameters.getPulseInDelay(pickup),
+                    mDozeParameters.getPulseInDelay(mPulseReason),
                     mPulseInFinished);
 
             // Signal that the pulse is ready to turn the screen on and draw.
