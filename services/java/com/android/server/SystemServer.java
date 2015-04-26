@@ -454,6 +454,8 @@ public final class SystemServer {
         boolean digitalPenCapable =
             Resources.getSystem().getBoolean(com.android.internal.R.bool.config_digitalPenCapable);
         boolean disableAtlas = SystemProperties.getBoolean("config.disable_atlas", false);
+        String[] externalServices = Resources.getSystem()
+                .getStringArray(com.android.internal.R.array.config_externalCMServices);
 
         try {
             Slog.i(TAG, "Reading configuration...");
@@ -1049,6 +1051,15 @@ public final class SystemServer {
                     ServiceManager.addService(Context.CMHW_SERVICE, new CmHardwareService(context));
                 } catch (Throwable e) {
                     reportWtf("starting CMHW Service", e);
+                }
+            }
+
+            for (String service : externalServices) {
+                try {
+                    Slog.i(TAG, service);
+                    mSystemServiceManager.startService(service);
+                } catch (Throwable e) {
+                    reportWtf("starting " + service, e);
                 }
             }
 
