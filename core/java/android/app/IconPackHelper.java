@@ -91,6 +91,7 @@ public class IconPackHelper {
 
     // Rotation and translation constants
     private static final String ANGLE_ATTR = "angle";
+    private static final String ANGLE_VARIANCE = "plusMinus";
     private static final String TRANSLATE_X_ATTR = "xOffset";
     private static final String TRANSLATE_Y_ATTR = "yOffset";
 
@@ -295,11 +296,19 @@ public class IconPackHelper {
     private boolean parseRotationComponent(XmlPullParser parser, ComposedIconInfo iconInfo) {
         if (!parser.getName().equalsIgnoreCase(ICON_ROTATE_TAG)) return false;
         String angle = parser.getAttributeValue(null, ANGLE_ATTR);
+        String variance = parser.getAttributeValue(null, ANGLE_VARIANCE);
         if (angle != null) {
             try {
                 iconInfo.iconRotation = Float.valueOf(angle);
             } catch (NumberFormatException e) {
-                Log.w(TAG, "Error parsing angle", e);
+                Log.w(TAG, "Error parsing " + ANGLE_ATTR, e);
+            }
+        }
+        if (variance != null) {
+            try {
+                iconInfo.iconRotationVariance = Float.valueOf(variance);
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "Error parsing " + ANGLE_VARIANCE, e);
             }
         }
         return true;
@@ -720,7 +729,12 @@ public class IconPackHelper {
             canvas.save();
             final float halfWidth = width / 2f;
             final float halfHeight = height / 2f;
-            canvas.rotate(iconInfo.iconRotation, halfWidth, halfHeight);
+            float angle = iconInfo.iconRotation;
+            if (iconInfo.iconRotationVariance != 0) {
+                angle += (sRandom.nextFloat() * (iconInfo.iconRotationVariance * 2))
+                        - iconInfo.iconRotationVariance;
+            }
+            canvas.rotate(angle, halfWidth, halfHeight);
             canvas.scale(iconInfo.iconScale, iconInfo.iconScale, halfWidth, halfHeight);
             canvas.translate(iconInfo.iconTranslationX, iconInfo.iconTranslationY);
             if (iconInfo.colorFilter != null) {
