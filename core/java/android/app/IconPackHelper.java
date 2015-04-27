@@ -734,9 +734,9 @@ public class IconPackHelper {
                 angle += (sRandom.nextFloat() * (iconInfo.iconRotationVariance * 2))
                         - iconInfo.iconRotationVariance;
             }
-            canvas.rotate(angle, halfWidth, halfHeight);
             canvas.scale(iconInfo.iconScale, iconInfo.iconScale, halfWidth, halfHeight);
             canvas.translate(iconInfo.iconTranslationX, iconInfo.iconTranslationY);
+            canvas.rotate(angle, halfWidth, halfHeight);
             if (iconInfo.colorFilter != null) {
                 Paint p = null;
                 if (icon instanceof BitmapDrawable) {
