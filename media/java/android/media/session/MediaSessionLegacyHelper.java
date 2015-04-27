@@ -63,14 +63,16 @@ public class MediaSessionLegacyHelper {
             = new ArrayMap<PendingIntent, SessionHolder>();
 
     private MediaSessionLegacyHelper(Context context) {
-        mContext = context;
-        mSessionManager = (MediaSessionManager) context
+        if (context != null) {
+            mContext = context;
+            mSessionManager = (MediaSessionManager) context
                 .getSystemService(Context.MEDIA_SESSION_SERVICE);
+        }
     }
 
     public static MediaSessionLegacyHelper getHelper(Context context) {
         synchronized (sLock) {
-            if (sInstance == null) {
+            if (sInstance == null && context != null) {
                 sInstance = new MediaSessionLegacyHelper(context.getApplicationContext());
             }
         }
@@ -173,9 +175,11 @@ public class MediaSessionLegacyHelper {
             Log.w(TAG, "Tried to send a null key event. Ignoring.");
             return;
         }
-        mSessionManager.dispatchMediaKeyEvent(keyEvent, needWakeLock);
-        if (DEBUG) {
-            Log.d(TAG, "dispatched media key " + keyEvent);
+        if (mSessionManager != null) {
+            mSessionManager.dispatchMediaKeyEvent(keyEvent, needWakeLock);
+            if (DEBUG) {
+                Log.d(TAG, "dispatched media key " + keyEvent);
+            }
         }
     }
 
@@ -234,14 +238,19 @@ public class MediaSessionLegacyHelper {
     }
 
     public void sendAdjustVolumeBy(int suggestedStream, int delta, int flags) {
-        mSessionManager.dispatchAdjustVolume(suggestedStream, delta, flags);
-        if (DEBUG) {
-            Log.d(TAG, "dispatched volume adjustment");
+        if (mSessionManager != null) {
+            mSessionManager.dispatchAdjustVolume(suggestedStream, delta, flags);
+            if (DEBUG) {
+                Log.d(TAG, "dispatched volume adjustment");
+            }
         }
     }
 
     public boolean isGlobalPriorityActive() {
-        return mSessionManager.isGlobalPriorityActive();
+        if (mSessionManager != null) {
+            return mSessionManager.isGlobalPriorityActive();
+        }
+        return false;
     }
 
     public void addRccListener(PendingIntent pi, MediaSession.Callback listener) {
