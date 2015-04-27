@@ -86,7 +86,7 @@ public class SystemBars extends SystemUI implements ServiceMonitor.Callbacks {
 
     private void createStatusBarFromConfig() {
         if (DEBUG) Log.d(TAG, "createStatusBarFromConfig");
-        final String clsName = mContext.getString(R.string.config_statusBarComponent);
+        final String clsName = getStatusBarComponent();
         if (clsName == null || clsName.length() == 0) {
             throw andLog("No status bar component configured", null);
         }
@@ -110,5 +110,30 @@ public class SystemBars extends SystemUI implements ServiceMonitor.Callbacks {
     private RuntimeException andLog(String msg, Throwable t) {
         Log.w(TAG, msg, t);
         throw new RuntimeException(msg, t);
+    }
+
+    /**
+     * Retrieves the statusBarComponent from possible external definitions
+     *
+     * The property 'ro.cm.statusBarComponent' is preferred over other values, if exists
+     * The System.STATUSBAR_COMPONENT value is preferred over the config, if exists
+     * If the dB value and property value are both null, the fallback config_statusBarComponent is used.
+     */
+    private String getStatusBarComponent() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        String componentPropValue = SystemProperties.get("ro.cm.statusBarComponent");
+        String componentDbValue = Settings.System.getString(resolver, System.STATUSBAR_COMPONENT, null);
+
+        String statusBarComponentPrefix = "com.android.systemui.statusbar.";
+
+        if (componentPropValue != null) {
+            return statusBarComponentPrefix + componentPropValue;
+        } else if (componentDbValue != null) {
+            return statusBarComponentPrefix + componentDbValue;
+        } else {
+            // fallback to config value
+            return mContext.getString(R.string.config_statusBarComponent);;
+        }
     }
 }
