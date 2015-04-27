@@ -1817,9 +1817,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 if (mMediaController != null) {
                     mMediaController.adjustVolume(direction, AudioManager.FLAG_SHOW_UI);
                 } else {
-                    MediaSessionLegacyHelper.getHelper(getContext()).sendAdjustVolumeBy(
+                    MediaSessionLegacyHelper mMediaHelper;
+                    mMediaHelper = MediaSessionLegacyHelper.getHelper(getContext());
+                    if (mMediaHelper != null) {
+                        mMediaHelper.sendAdjustVolumeBy(
                             mVolumeControlStreamType, direction,
                             AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    }
                 }
                 return true;
             }
@@ -1907,9 +1911,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     mMediaController.adjustVolume(0, AudioManager.FLAG_PLAY_SOUND
                             | AudioManager.FLAG_VIBRATE);
                 } else {
-                    MediaSessionLegacyHelper.getHelper(getContext()).sendAdjustVolumeBy(
+                    MediaSessionLegacyHelper mMediaHelper;
+                    mMediaHelper = MediaSessionLegacyHelper.getHelper(getContext());
+                    if (mMediaHelper != null) {
+                        mMediaHelper.sendAdjustVolumeBy(
                             mVolumeControlStreamType, 0,
                             AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_VIBRATE);
+                    }
                 }
                 return true;
             }
