@@ -78,7 +78,7 @@ public class PhoneNumberUtils
     public static final int TOA_Unknown = 0x81;
 
     static final String LOG_TAG = "PhoneNumberUtils";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     /*
      * global-phone-number = ["+"] 1*( DIGIT / written-sep )
@@ -2203,11 +2203,14 @@ public class PhoneNumberUtils
      * @hide TODO: pending API Council approval
      */
     public static String cdmaCheckAndProcessPlusCode(String dialStr) {
+        log("enter cdmaCheckAndProcessPlusCode");
         if (!TextUtils.isEmpty(dialStr)) {
             if (isReallyDialable(dialStr.charAt(0)) &&
                 isNonSeparator(dialStr)) {
                 String currIso = SystemProperties.get(PROPERTY_OPERATOR_ISO_COUNTRY, "");
                 String defaultIso = SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, "");
+                log("currIso = " + currIso + ", defaultIso=" + defaultIso);
+
                 if (!TextUtils.isEmpty(currIso) && !TextUtils.isEmpty(defaultIso)) {
                     return cdmaCheckAndProcessPlusCodeByNumberFormat(dialStr,
                             getFormatTypeFromCountryCode(currIso),
@@ -2269,6 +2272,7 @@ public class PhoneNumberUtils
     public static String
     cdmaCheckAndProcessPlusCodeByNumberFormat(String dialStr,int currFormat,int defaultFormat) {
         String retStr = dialStr;
+        log("enter cdmaCheckAndProcessPlusCodeByNumberFormat");
 
         boolean useNanp = (currFormat == defaultFormat) && (currFormat == FORMAT_NANP);
 
@@ -2298,6 +2302,7 @@ public class PhoneNumberUtils
                 }
 
                 networkDialStr = processPlusCode(networkDialStr, useNanp);
+                log("proccessPlusCode returned " + networkDialStr);
 
                 // Concatenates the string that is converted from network portion
                 if (!TextUtils.isEmpty(networkDialStr)) {
@@ -2422,10 +2427,14 @@ public class PhoneNumberUtils
      */
     private static RewriteRule getCdmaLocalRewriteRule(String dialStr,
                                                        String currIso, String defaultIso) {
+        log("enter getCdmaLocalRewriteRule dialStr = " + dialStr
+                + ", " + currIso + ", " + defaultIso);
         Matcher m = sCdmaLocalRewritePattern.matcher(dialStr);
         if (m.find()) {
             String dialPrefix = m.group(1);
+            log("found match dialPrefix = " + dialPrefix);
             RewriteRule rule = sCdmaLocalRewriteWhitelist.get(Integer.valueOf(dialPrefix));
+            log("got rule " + rule.countryCodePrefix + ", " + rule.replacement + ", " + rule.isoCountryCode);
             if (currIso.equalsIgnoreCase(defaultIso) &&
                     currIso.equalsIgnoreCase(rule.isoCountryCode)) {
                 return rule;
@@ -2484,7 +2493,7 @@ public class PhoneNumberUtils
     private static String processPlusCode(String networkDialStr, boolean useNanp) {
         String retStr = networkDialStr;
 
-        if (DBG) log("processPlusCode, networkDialStr = " + networkDialStr
+        log("processPlusCode, networkDialStr = " + networkDialStr
                 + "for NANP = " + useNanp);
         // If there is a plus sign at the beginning of the dial string,
         // Convert the plus sign to the default IDP since it's an international number
@@ -2502,6 +2511,7 @@ public class PhoneNumberUtils
                                 SystemProperties.get(PROPERTY_OPERATOR_ISO_COUNTRY, ""),
                                 SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, ""));
                 if (rewriteRule != null) {
+                    log("applying rewrite rule");
                     retStr = rewriteRule.apply(networkDialStr);
                 } else {
                     // Replaces the plus sign with the default IDP
@@ -2509,7 +2519,7 @@ public class PhoneNumberUtils
                 }
             }
         }
-        if (DBG) log("processPlusCode, retStr=" + retStr);
+        log("processPlusCode, retStr=" + retStr);
         return retStr;
     }
 
