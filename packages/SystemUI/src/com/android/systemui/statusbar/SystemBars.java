@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar;
 
 import android.content.res.Configuration;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -84,9 +85,16 @@ public class SystemBars extends SystemUI implements ServiceMonitor.Callbacks {
         }
     }
 
+    public static String getStatusBarComponent() {
+        return SystemProperties.get("ro.cm.statusBarComponent");
+    }
+
     private void createStatusBarFromConfig() {
         if (DEBUG) Log.d(TAG, "createStatusBarFromConfig");
-        final String clsName = mContext.getString(R.string.config_statusBarComponent);
+        String clsName = mContext.getString(R.string.config_statusBarComponent);
+        if (getStatusBarComponent() != null) {
+            clsName = "com.android.systemui.statusbar." + getStatusBarComponent();
+        }
         if (clsName == null || clsName.length() == 0) {
             throw andLog("No status bar component configured", null);
         }
