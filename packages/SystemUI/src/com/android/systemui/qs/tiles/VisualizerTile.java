@@ -88,24 +88,23 @@ public class VisualizerTile extends QSTile<QSTile.State>
                 new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGING));
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mPowerSaveModeEnabled = pm.isPowerSaveMode();
-
-        // initialize state
         if (!mPowerSaveModeEnabled) {
-            List<MediaController> activeSessions = mMediaSessionManager.getActiveSessions(null);
-            for (MediaController activeSession : activeSessions) {
-                PlaybackState playbackState = activeSession.getPlaybackState();
-                if (playbackState != null && playbackState.getState()
-                        == PlaybackState.STATE_PLAYING) {
-                    mIsAnythingPlaying = true;
-                    break;
-                }
+            mIsAnythingPlaying = isAnythingPlayingColdCheck();
+        }
+
+        mMediaSessionManager.addOnActiveSessionsChangedListener(this, null);
+    }
+
+    private boolean isAnythingPlayingColdCheck() {
+        List<MediaController> activeSessions = mMediaSessionManager.getActiveSessions(null);
+        for (MediaController activeSession : activeSessions) {
+            PlaybackState playbackState = activeSession.getPlaybackState();
+            if (playbackState != null && playbackState.getState()
+                    == PlaybackState.STATE_PLAYING) {
+                return true;
             }
         }
-        if (mIsAnythingPlaying && !mLinked) {
-            AsyncTask.execute(mLinkVisualizer);
-        } else if (!mIsAnythingPlaying && mLinked) {
-            AsyncTask.execute(mUnlinkVisualizer);
-        }
+        return false;
     }
 
     @Override
@@ -186,11 +185,8 @@ public class VisualizerTile extends QSTile<QSTile.State>
     public void setListening(boolean listening) {
         if (mListening == listening) return;
         mListening = listening;
-        if (listening) {
-            mMediaSessionManager.addOnActiveSessionsChangedListener(this, null);
-        } else {
-            mMediaSessionManager.removeOnActiveSessionsChangedListener(this);
-        }
+        doLinkage();
+        // refresh state is called by QSPanel right after calling into this.
     }
 
     @Override
@@ -207,6 +203,9 @@ public class VisualizerTile extends QSTile<QSTile.State>
     @Override
     protected void handleDestroy() {
         super.handleDestroy();
+        mIsAnythingPlaying = false;
+        doLinkage();
+        mMediaSessionManager.removeOnActiveSessionsChangedListener(this);
         for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
             entry.getValue().unregister();
         }
@@ -227,11 +226,7 @@ public class VisualizerTile extends QSTile<QSTile.State>
         }
         if (anythingPlaying != mIsAnythingPlaying) {
             mIsAnythingPlaying = anythingPlaying;
-            if (mIsAnythingPlaying && !mLinked) {
-                AsyncTask.execute(mLinkVisualizer);
-            } else if (!mIsAnythingPlaying && mLinked) {
-                AsyncTask.execute(mUnlinkVisualizer);
-            }
+            doLinkage();
 
             mHandler.removeCallbacks(mRefreshStateRunnable);
             mHandler.postDelayed(mRefreshStateRunnable, 50);
@@ -240,6 +235,11 @@ public class VisualizerTile extends QSTile<QSTile.State>
 
     @Override
     public void onKeyguardChanged() {
+        doLinkage();
+        refreshState();
+    }
+
+    private void doLinkage() {
         if (mKeyguardMonitor.isShowing()) {
             if (mLinked) {
                 // explicitly unlink
@@ -247,19 +247,20 @@ public class VisualizerTile extends QSTile<QSTile.State>
             }
         } else {
             // no keyguard, relink if there's something playing
-            if (mIsAnythingPlaying && !mLinked) {
+            if (mIsAnythingPlaying && !mLinked && mListening) {
                 AsyncTask.execute(mLinkVisualizer);
-            } else if (!mIsAnythingPlaying && mLinked) {
+            } else if (mLinked) {
                 AsyncTask.execute(mUnlinkVisualizer);
             }
         }
-        refreshState();
     }
 
     private final Runnable mRefreshStateRunnable = new Runnable() {
         @Override
         public void run() {
-            refreshState();
+            if (mListening) {
+                refreshState();
+            }
         }
     };
 

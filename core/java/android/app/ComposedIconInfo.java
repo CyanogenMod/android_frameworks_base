@@ -23,16 +23,32 @@ public class ComposedIconInfo implements Parcelable {
     public int iconUpon, iconMask;
     public int[] iconBacks;
     public float iconScale;
+    public float iconRotation;
+    public float iconTranslationX;
+    public float iconTranslationY;
     public int iconDensity;
     public int iconSize;
     public float[] colorFilter;
 
+    // Palettized background items
+    public int iconPaletteBack;
+    public SwatchType swatchType;
+    public int[] defaultSwatchColors;
+
     public ComposedIconInfo() {
         super();
+        iconPaletteBack = 0;
+        swatchType = SwatchType.None;
+        iconRotation = 0;
+        iconTranslationX = 0;
+        iconTranslationY = 0;
     }
 
     private ComposedIconInfo(Parcel source) {
         iconScale = source.readFloat();
+        iconRotation = source.readFloat();
+        iconTranslationX = source.readFloat();
+        iconTranslationY = source.readFloat();
         iconDensity = source.readInt();
         iconSize = source.readInt();
         int backCount = source.readInt();
@@ -51,6 +67,15 @@ public class ComposedIconInfo implements Parcelable {
                 colorFilter[i] = source.readFloat();
             }
         }
+        iconPaletteBack = source.readInt();
+        swatchType = SwatchType.values()[source.readInt()];
+        int numDefaultColors = source.readInt();
+        if (numDefaultColors > 0) {
+            defaultSwatchColors = new int[numDefaultColors];
+            for (int i = 0; i < numDefaultColors; i++) {
+                defaultSwatchColors[i] = source.readInt();
+            }
+        }
     }
 
     @Override
@@ -61,6 +86,9 @@ public class ComposedIconInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeFloat(iconScale);
+        dest.writeFloat(iconRotation);
+        dest.writeFloat(iconTranslationX);
+        dest.writeFloat(iconTranslationY);
         dest.writeInt(iconDensity);
         dest.writeInt(iconSize);
         dest.writeInt(iconBacks != null ? iconBacks.length : 0);
@@ -79,6 +107,16 @@ public class ComposedIconInfo implements Parcelable {
         } else {
             dest.writeInt(0);
         }
+        dest.writeInt(iconPaletteBack);
+        dest.writeInt(swatchType.ordinal());
+        if (defaultSwatchColors != null) {
+            dest.writeInt(defaultSwatchColors.length);
+            for (int color : defaultSwatchColors) {
+                dest.writeInt(color);
+            }
+        } else {
+            dest.writeInt(0);
+        }
     }
 
     public static final Creator<ComposedIconInfo> CREATOR
@@ -93,4 +131,14 @@ public class ComposedIconInfo implements Parcelable {
             return new ComposedIconInfo[0];
         }
     };
+
+    public enum SwatchType {
+        None,
+        Vibrant,
+        VibrantLight,
+        VibrantDark,
+        Muted,
+        MutedLight,
+        MutedDark
+    }
 }
