@@ -2206,8 +2206,10 @@ public class PhoneNumberUtils
         if (!TextUtils.isEmpty(dialStr)) {
             if (isReallyDialable(dialStr.charAt(0)) &&
                 isNonSeparator(dialStr)) {
-                String currIso = SystemProperties.get(PROPERTY_OPERATOR_ISO_COUNTRY, "");
-                String defaultIso = SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, "");
+                String currIso =  TelephonyManager.getTelephonyProperty(
+                        PROPERTY_OPERATOR_ISO_COUNTRY, 0, "");
+                String defaultIso = TelephonyManager.getTelephonyProperty(
+                        PROPERTY_ICC_OPERATOR_ISO_COUNTRY, 0, "");
                 if (!TextUtils.isEmpty(currIso) && !TextUtils.isEmpty(defaultIso)) {
                     return cdmaCheckAndProcessPlusCodeByNumberFormat(dialStr,
                             getFormatTypeFromCountryCode(currIso),
@@ -2229,7 +2231,8 @@ public class PhoneNumberUtils
     public static String cdmaCheckAndProcessPlusCodeForSms(String dialStr) {
         if (!TextUtils.isEmpty(dialStr)) {
             if (isReallyDialable(dialStr.charAt(0)) && isNonSeparator(dialStr)) {
-                String defaultIso = SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, "");
+                String defaultIso = TelephonyManager.getTelephonyProperty(
+                        PROPERTY_ICC_OPERATOR_ISO_COUNTRY, 0, "");
                 if (!TextUtils.isEmpty(defaultIso)) {
                     int format = getFormatTypeFromCountryCode(defaultIso);
                     return cdmaCheckAndProcessPlusCodeByNumberFormat(dialStr, format, format);
@@ -2499,8 +2502,10 @@ public class PhoneNumberUtils
             } else {
                 RewriteRule rewriteRule =
                         getCdmaLocalRewriteRule(networkDialStr,
-                                SystemProperties.get(PROPERTY_OPERATOR_ISO_COUNTRY, ""),
-                                SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, ""));
+                                TelephonyManager.getTelephonyProperty(PROPERTY_OPERATOR_ISO_COUNTRY,
+                                        0, ""),
+                                TelephonyManager.getTelephonyProperty(
+                                        PROPERTY_ICC_OPERATOR_ISO_COUNTRY, 0, ""));
                 if (rewriteRule != null) {
                     retStr = rewriteRule.apply(networkDialStr);
                 } else {
