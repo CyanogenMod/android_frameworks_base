@@ -2497,10 +2497,13 @@ public class PhoneNumberUtils
                 // Remove the leading plus sign
                 retStr = newStr;
             } else {
+                int defaultSlot = 0;
                 RewriteRule rewriteRule =
                         getCdmaLocalRewriteRule(networkDialStr,
-                                SystemProperties.get(PROPERTY_OPERATOR_ISO_COUNTRY, ""),
-                                SystemProperties.get(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, ""));
+                                TelephonyManager.getTelephonyProperty(PROPERTY_OPERATOR_ISO_COUNTRY,
+                                        defaultSlot, ""),
+                                TelephonyManager.getTelephonyProperty(
+                                        PROPERTY_ICC_OPERATOR_ISO_COUNTRY, defaultSlot, ""));
                 if (rewriteRule != null) {
                     retStr = rewriteRule.apply(networkDialStr);
                 } else {
