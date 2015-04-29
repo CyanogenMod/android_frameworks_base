@@ -130,9 +130,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
         @Override
         public Intent getSettingsIntent() {
-            //TODO: Provide settings intent from API
-            //return SETTINGS_INTENT;
-            return null;
+            return mTile.getCustomTile().onSettingsClick;
         }
 
         @Override
