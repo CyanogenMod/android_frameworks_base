@@ -24,21 +24,35 @@ import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import cyanogenmod.app.CustomTile;
 import cyanogenmod.app.StatusBarPanelCustomTile;
 
+import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 
 public class CustomQSTile extends QSTile<QSTile.State> {
 
-    private Context mPackageContext;
     private PendingIntent mOnClick;
     private Uri mOnClickUri;
     private int mCurrentUserId;
+    private StatusBarPanelCustomTile mTile;
+    private CustomQSDetailAdapter mDetailAdapter;
 
     public CustomQSTile(Host host, StatusBarPanelCustomTile tile) {
         super(host);
         refreshState(tile);
+        mDetailAdapter = new CustomQSDetailAdapter();
+    }
+
+    @Override
+    public DetailAdapter getDetailAdapter() {
+        return mDetailAdapter;
     }
 
     @Override
@@ -61,6 +75,11 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     }
 
     @Override
+    protected void handleLongClick() {
+        showDetail(true);
+    }
+
+    @Override
     protected void handleClick() {
         try {
             if (mOnClick != null) {
@@ -77,15 +96,15 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     @Override
     protected void handleUpdateState(State state, Object arg) {
         if (!(arg instanceof StatusBarPanelCustomTile)) return;
-        final StatusBarPanelCustomTile tile = (StatusBarPanelCustomTile) arg;
-        final CustomTile customTile = tile.getCustomTile();
+        mTile = (StatusBarPanelCustomTile) arg;
+        final CustomTile customTile = mTile.getCustomTile();
         state.visible = true;
         state.contentDescription = customTile.contentDescription;
         state.label = customTile.label;
         state.iconId = 0;
         final int iconId = customTile.icon;
         if (iconId != 0) {
-            final String iconPackage = tile.getPackage();
+            final String iconPackage = mTile.getPackage();
             if (!TextUtils.isEmpty(iconPackage)) {
                 state.icon = new ExternalIcon(iconPackage, iconId);
             } else {
@@ -94,5 +113,52 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         }
         mOnClick = customTile.onClick;
         mOnClickUri = customTile.onClickUri;
+    }
+
+    private class CustomQSDetailAdapter implements DetailAdapter {
+
+        @Override
+        public int getTitle() {
+            return R.string.quick_settings_custom_tile_detail_title;
+        }
+
+        @Override
+        public Boolean getToggleState() {
+            return null;
+        }
+
+
+        @Override
+        public Intent getSettingsIntent() {
+            //TODO: Provide settings intent from API
+            //return SETTINGS_INTENT;
+            return null;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return mTile;
+        }
+
+        @Override
+        public void setToggleState(boolean state) {
+            // noop
+        }
+
+        @Override
+        public View createDetailView(Context context, View convertView, ViewGroup parent) {
+            LinearLayout rootView = (LinearLayout) LayoutInflater.from(context)
+                    .inflate(R.layout.qs_custom_detail, parent, false);
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.custom_qs_tile_icon);
+            TextView customTileTitle = (TextView) rootView.findViewById(R.id.custom_qs_tile_title);
+            TextView customTilePkg = (TextView) rootView
+                    .findViewById(R.id.custom_qs_tile_package);
+
+            // icon is cached in state, fetch it
+            imageView.setImageDrawable(getState().icon.getDrawable(mContext));
+            customTileTitle.setText(mTile.getCustomTile().label);
+            customTilePkg.setText(mTile.getPackage());
+            return rootView;
+        }
     }
 }
