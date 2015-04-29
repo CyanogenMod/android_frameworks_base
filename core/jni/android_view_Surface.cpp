@@ -392,6 +392,7 @@ static jint nativeGetHeight(JNIEnv* env, jclass clazz, jlong nativeObject) {
     return value;
 }
 
+#ifdef USE_OPENGL_RENDERER
 namespace uirenderer {
 
 using namespace android::uirenderer::renderthread;
@@ -435,6 +436,7 @@ static void destroy(JNIEnv* env, jclass clazz, jlong rendererPtr) {
 }
 
 } // uirenderer
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -466,11 +468,13 @@ static JNINativeMethod gSurfaceMethods[] = {
     {"nativeGetWidth", "(J)I", (void*)nativeGetWidth },
     {"nativeGetHeight", "(J)I", (void*)nativeGetHeight },
 
+    #ifdef USE_OPENGL_RENDERER
     // HWUI context
     {"nHwuiCreate", "(JJ)J", (void*) hwui::create },
     {"nHwuiSetSurface", "(JJ)V", (void*) hwui::setSurface },
     {"nHwuiDraw", "(J)V", (void*) hwui::draw },
     {"nHwuiDestroy", "(J)V", (void*) hwui::destroy },
+    #endif
 };
 
 int register_android_view_Surface(JNIEnv* env)

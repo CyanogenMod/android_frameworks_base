@@ -71,20 +71,26 @@ public abstract class Connection implements IConferenceable {
      */
 
     /* Default case */
+    /** @hide */
     public static final int CALL_SUBSTATE_NONE = 0;
 
+    /** @hide */
     /* Indicates that the call is connected but audio attribute is suspended */
     public static final int CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED = 0x1;
 
+    /** @hide */
     /* Indicates that the call is connected but video attribute is suspended */
     public static final int CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED = 0x2;
 
+    /** @hide */
     /* Indicates that the call is established but media retry is needed */
     public static final int CALL_SUBSTATE_AVP_RETRY = 0x4;
 
+    /** @hide */
     /* Indicates that the call is multitasking */
     public static final int CALL_SUBSTATE_MEDIA_PAUSED = 0x8;
 
+    /** @hide */
     /* Mask containing all the call substate bits set */
     public static final int CALL_SUBSTATE_ALL = CALL_SUBSTATE_AUDIO_CONNECTED_SUSPENDED |
         CALL_SUBSTATE_VIDEO_CONNECTED_SUSPENDED | CALL_SUBSTATE_AVP_RETRY |
@@ -293,6 +299,7 @@ public abstract class Connection implements IConferenceable {
         public void onVideoStateChanged(Connection c, int videoState) {}
         public void onDisconnected(Connection c, DisconnectCause disconnectCause) {}
         public void onPostDialWait(Connection c, String remaining) {}
+        public void onPostDialChar(Connection c, char nextChar) {}
         public void onRingbackRequested(Connection c, boolean ringback) {}
         public void onDestroyed(Connection c) {}
         public void onCallPropertiesChanged(Connection c, int callProperties) {}
@@ -310,6 +317,7 @@ public abstract class Connection implements IConferenceable {
         public void onConferenceParticipantsChanged(Connection c,
                 List<ConferenceParticipant> participants) {}
         public void onCdmaConnectionTimeReset(Connection c) {}
+        public void onConferenceStarted() {}
     }
 
     /** @hide */
@@ -369,6 +377,11 @@ public abstract class Connection implements IConferenceable {
          * Session modify request ignored due to invalid parameters.
          */
         public static final int SESSION_MODIFY_REQUEST_TIMED_OUT = 4;
+
+        /**
+         * Session modify request ignored due to invalid parameters.
+         */
+        public static final int SESSION_MODIFY_REQUEST_REJECTED_BY_REMOTE = 5;
 
         private static final int MSG_SET_VIDEO_CALLBACK = 1;
         private static final int MSG_SET_CAMERA = 2;
@@ -650,7 +663,7 @@ public abstract class Connection implements IConferenceable {
          *
          * @param dataUsage The updated data usage.
          */
-        public void changeCallDataUsage(long dataUsage) {
+        public void changeCallDataUsage(int dataUsage) {
             if (mVideoCallback != null) {
                 try {
                     mVideoCallback.changeCallDataUsage(dataUsage);
@@ -934,6 +947,8 @@ public abstract class Connection implements IConferenceable {
 
     /**
      * Returns the connection's {@link CallProperties}
+     *
+     * @hide
      */
     public final int getCallProperties() {
         return mCallProperties;
@@ -1024,6 +1039,7 @@ public abstract class Connection implements IConferenceable {
     /**
      * Updates the call extras for the connection.
      */
+    /** @hide */
     public final void setExtras(Bundle extras) {
         if (DBG) {
             Log.d(this, "setExtras extras size= " + extras.size());
@@ -1126,6 +1142,23 @@ public abstract class Connection implements IConferenceable {
     }
 
     /**
+     * Informs listeners that this {@code Connection} has processed a character in the post-dial
+     * started state. This is done when (a) the {@code Connection} is issuing a DTMF sequence;
+     * (b) it has encountered a "wait" character; and (c) it wishes to signal Telecom to play
+     * the corresponding DTMF tone locally.
+     *
+     * @param nextChar The DTMF character that was just processed by the {@code Connection}.
+     *
+     * @hide
+     */
+    public final void setNextPostDialWaitChar(char nextChar) {
+        checkImmutable();
+        for (Listener l : mListeners) {
+            l.onPostDialChar(this, nextChar);
+        }
+    }
+
+    /**
      * Requests that the framework play a ringback tone. This is to be invoked by implementations
      * that do not play a ringback tone themselves in the connection's audio stream.
      *
@@ -1165,6 +1198,8 @@ public abstract class Connection implements IConferenceable {
      * Sets the connection's {@link CallProperties}.
      *
      * @param callProperties The new call properties.
+     *
+     * @hide
      */
     public final void setCallProperties(int callProperties) {
         if (mCallProperties != callProperties) {
@@ -1256,6 +1291,8 @@ public abstract class Connection implements IConferenceable {
 
     /**
      * Resets the cdma connection time.
+     *
+     * @hide.
      */
     public final void resetCdmaConnectionTime() {
         for (Listener l : mListeners) {
@@ -1469,11 +1506,13 @@ public abstract class Connection implements IConferenceable {
      *
      * @param otherConnection The connection with which this connection should be conferenced.
      */
+    /** @hide */
     public void onConferenceWith(Connection otherConnection) {}
 
     /**
      * Notifies this Connection that the conference which is set on it has changed.
      */
+    /** @hide */
     public void onConferenceChanged() {}
 
     static String toLogSafePhoneNumber(String number) {
@@ -1605,6 +1644,15 @@ public abstract class Connection implements IConferenceable {
             List<ConferenceParticipant> conferenceParticipants) {
         for (Listener l : mListeners) {
             l.onConferenceParticipantsChanged(this, conferenceParticipants);
+        }
+    }
+
+    /**
+     * Notifies listeners that a conference call has been started.
+     */
+    protected void notifyConferenceStarted() {
+        for (Listener l : mListeners) {
+            l.onConferenceStarted();
         }
     }
 }

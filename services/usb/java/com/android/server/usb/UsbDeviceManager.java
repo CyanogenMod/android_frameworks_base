@@ -752,7 +752,7 @@ public class UsbDeviceManager {
                     //}
                 }
             }
-            if (id != mUsbNotificationId && mBootCompleted) {
+            if (id != mUsbNotificationId) {
                 // clear notification if title needs changing
                 if (mUsbNotificationId != 0) {
                     mNotificationManager.cancelAsUser(null, mUsbNotificationId,
@@ -786,10 +786,14 @@ public class UsbDeviceManager {
                     mNotificationManager.notifyAsUser(null, id, notification,
                             UserHandle.ALL);
                     mUsbNotificationId = id;
-                    if (r.getBoolean(com.android.internal.R.bool.
-                            always_popup_usb_computer_connection_option))
-                        mContext.startActivity(intent);
                 }
+            }
+            if (r.getBoolean(com.android.internal.R.bool.
+                    always_popup_usb_computer_connection_option) && mBootCompleted) {
+                Intent intent = Intent.makeRestartActivityTask(
+                        new ComponentName("com.android.settings",
+                                "com.android.settings.UsbSettings"));
+                mContext.startActivity(intent);
             }
         }
 

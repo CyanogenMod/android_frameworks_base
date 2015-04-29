@@ -95,6 +95,8 @@ public final class RemoteConnection {
          *
          * @param connection The {@code RemoteConnection} invoking this method.
          * @param callProperties The new call properties of the {@code RemoteConnection}.
+         *
+         * @hide
          */
         public void onCallPropertiesChanged(RemoteConnection connection, int callProperties) {}
 
@@ -109,7 +111,6 @@ public final class RemoteConnection {
          */
         public void onPostDialWait(RemoteConnection connection, String remainingPostDialSequence) {}
 
-        //FIXME L-MR1-INTERNAL
         /**
          * Invoked when the post-dial sequence in the outgoing {@code Connection} has processed
          * a character.
@@ -118,7 +119,6 @@ public final class RemoteConnection {
          * @param nextChar The character being processed.
          */
         public void onPostDialChar(RemoteConnection connection, char nextChar) {}
-
 
         /**
          * Indicates that the VOIP audio status of this {@code RemoteConnection} has changed.
@@ -249,7 +249,7 @@ public final class RemoteConnection {
 
             public void onPeerDimensionsChanged(VideoProvider videoProvider, int width, int height) {}
 
-            public void onCallDataUsageChanged(VideoProvider videoProvider, long dataUsage) {}
+            public void onCallDataUsageChanged(VideoProvider videoProvider, int dataUsage) {}
 
             public void onCameraCapabilitiesChanged(
                     VideoProvider videoProvider,
@@ -293,7 +293,7 @@ public final class RemoteConnection {
             }
 
             @Override
-            public void changeCallDataUsage(long dataUsage) {
+            public void changeCallDataUsage(int dataUsage) {
                 for (Listener l : mListeners) {
                     l.onCallDataUsageChanged(VideoProvider.this, dataUsage);
                 }
@@ -553,6 +553,8 @@ public final class RemoteConnection {
     /**
      * @return A bitmask of the properties of the {@code RemoteConnection}, as defined in
      *         {@link CallProperties}.
+     *
+     * @hide
      */
     public int getCallProperties() {
         return mCallProperties;
@@ -788,7 +790,7 @@ public final class RemoteConnection {
      * of time.
      *
      * If the DTMF string contains a {@link TelecomManager#DTMF_CHARACTER_WAIT} symbol, this
-     * {@code RemoteConnection} will pause playing the tones and notify callbackss via
+     * {@code RemoteConnection} will pause playing the tones and notify callbacks via
      * {@link Callback#onPostDialWait(RemoteConnection, String)}. At this point, the in-call app
      * should display to the user an indication of this state and an affordance to continue
      * the postdial sequence. When the user decides to continue the postdial sequence, the in-call
@@ -935,6 +937,15 @@ public final class RemoteConnection {
     void setPostDialWait(String remainingDigits) {
         for (Callback c : mCallbacks) {
             c.onPostDialWait(this, remainingDigits);
+        }
+    }
+
+    /**
+     * @hide
+     */
+    void onPostDialChar(char nextChar) {
+        for (Callback c : mCallbacks) {
+            c.onPostDialChar(this, nextChar);
         }
     }
 

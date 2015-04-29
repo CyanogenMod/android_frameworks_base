@@ -1016,10 +1016,6 @@ public class TelephonyManager {
     private static final String sLteOnCdmaProductType =
         SystemProperties.get(TelephonyProperties.PROPERTY_LTE_ON_CDMA_PRODUCT_TYPE, "");
 
-    /** @hide */
-     public static int getLteOnCdmaModeStatic() {
-        return getLteOnCdmaModeStatic(getDefaultSim());
-    }
 
     /**
      * Return if the current radio is LTE on CDMA. This
@@ -1031,13 +1027,13 @@ public class TelephonyManager {
      *
      * @hide
      */
-    public static int getLteOnCdmaModeStatic(int slotId) {
+    public static int getLteOnCdmaModeStatic() {
         int retVal;
         int curVal;
         String productType = "";
 
-        curVal = getTelephonyProperty(TelephonyProperties.PROPERTY_LTE_ON_CDMA_DEVICE, slotId,
-                    PhoneConstants.LTE_ON_CDMA_UNKNOWN);
+        curVal = SystemProperties.getInt(TelephonyProperties.PROPERTY_LTE_ON_CDMA_DEVICE,
+                PhoneConstants.LTE_ON_CDMA_UNKNOWN);
         retVal = curVal;
         if (retVal == PhoneConstants.LTE_ON_CDMA_UNKNOWN) {
             Matcher matcher = sProductTypePattern.matcher(sKernelCmdLine);
@@ -3729,7 +3725,6 @@ public class TelephonyManager {
     }
 
     /** @hide */
-    @SystemApi
     public boolean isDataPossibleForSubscription(int subId, String apnType) {
         try {
             return getITelephony().isDataPossibleForSubscription(subId, apnType);

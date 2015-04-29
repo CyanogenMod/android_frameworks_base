@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
- * Copyright (c) 2014 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2014, 2015 The Linux Foundation. All rights reserved.
  * Not a Contribution.
 /* //device/apps/common/assets/res/any/colors.xml
 **
@@ -200,9 +200,9 @@
 
     <string-array name="telephony_data_activity_g_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -215,9 +215,9 @@
 
     <string-array name="telephony_data_activity_e_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -230,9 +230,9 @@
 
     <string-array name="telephony_data_activity_2g_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -245,9 +245,9 @@
 
     <string-array name="telephony_data_activity_3g_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -260,9 +260,9 @@
 
     <string-array name="telephony_data_activity_4g_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -275,9 +275,9 @@
 
     <string-array name="telephony_data_activity_h_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -290,9 +290,9 @@
 
     <string-array name="telephony_data_activity_hp_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -305,9 +305,9 @@
 
     <string-array name="telephony_data_activity_1x_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 
@@ -320,9 +320,9 @@
 
     <string-array name="telephony_data_activity_lte_sim1">
         <item>0</item>
-        <item>drawable/stat_sys_signal_in</item>
-        <item>drawable/stat_sys_signal_out</item>
-        <item>drawable/stat_sys_signal_inout</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
         <item>0</item>
     </string-array>
 

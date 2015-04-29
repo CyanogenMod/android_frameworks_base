@@ -131,6 +131,7 @@ public class PhoneAccount implements Parcelable {
     /**
      * Indicating no color is set.
      */
+    /** @hide */
     public static final int NO_COLOR = -1;
 
     /**
@@ -305,6 +306,7 @@ public class PhoneAccount implements Parcelable {
             return this;
         }
 
+        /** @hide */
         public Builder setColor(int value) {
             this.mColor = value;
             return this;
@@ -316,6 +318,7 @@ public class PhoneAccount implements Parcelable {
          * @param value The name of the package from which to load the icon.
          * @return The builder.
          */
+        /** @hide */
         public Builder setIconPackageName(String value) {
             this.mIconPackageName = value;
             return this;
@@ -327,6 +330,7 @@ public class PhoneAccount implements Parcelable {
          * @param value The icon bitmap.
          * @return The builder.
          */
+        /** @hide */
         public Builder setIconBitmap(Bitmap value) {
             this.mIconBitmap = value;
             return this;
@@ -606,6 +610,7 @@ public class PhoneAccount implements Parcelable {
      *
      * @return A hexadecimal color value.
      */
+    /** @hide */
     public int getColor() {
         return mColor;
     }

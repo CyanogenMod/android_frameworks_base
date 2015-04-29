@@ -30,8 +30,12 @@ import static com.android.server.wm.WindowManagerService.LayoutFields.SET_ORIENT
 import static com.android.server.wm.WindowManagerService.LayoutFields.SET_WALLPAPER_ACTION_PENDING;
 
 import android.content.Context;
+import android.database.ContentObserver;
 import android.os.Debug;
+import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -55,7 +59,7 @@ public class WindowAnimator {
     private static final String TAG = "WindowAnimator";
 
     /** How long to give statusbar to clear the private keyguard flag when animating out */
-    private static final long KEYGUARD_ANIM_TIMEOUT_MS = 0; //1000;
+    private static long KEYGUARD_ANIM_TIMEOUT_MS = 1000;
 
     final WindowManagerService mService;
     final Context mContext;
@@ -96,6 +100,8 @@ public class WindowAnimator {
     /** Use one animation for all entering activities after keyguard is dismissed. */
     Animation mPostKeyguardExitAnimation;
 
+    private boolean mKeyguardBlurEnabled;
+
     // forceHiding states.
     static final int KEYGUARD_NOT_SHOWN     = 0;
     static final int KEYGUARD_ANIMATING_IN  = 1;
@@ -127,7 +133,24 @@ public class WindowAnimator {
                 }
             }
         };
+        mKeyguardBlurSettingObserver.onChange(true);
+        mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.BLUR_EFFECT_LOCKSCREEN), false,
+                    mKeyguardBlurSettingObserver);
     }
+
+    private ContentObserver mKeyguardBlurSettingObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            mKeyguardBlurEnabled = 1 == Settings.System.getInt(
+                    mContext.getContentResolver(), Settings.System.BLUR_EFFECT_LOCKSCREEN, 0);
+            if (mKeyguardBlurEnabled) {
+                KEYGUARD_ANIM_TIMEOUT_MS = 0;
+            } else {
+                KEYGUARD_ANIM_TIMEOUT_MS = 1000;
+            }
+        }
+    };
 
     void addDisplayLocked(final int displayId) {
         // Create the DisplayContentsAnimator object by retrieving it.
@@ -324,20 +347,22 @@ public class WindowAnimator {
                         mKeyguardGoingAway = false;
                     }
                     if (win.isReadyForDisplay()) {
-/*
- * Top window keep the showing state.(don't hide.)
- *
-                        if (nowAnimating) {
-                            if (winAnimator.mAnimationIsEntrance) {
-                                mForceHiding = KEYGUARD_ANIMATING_IN;
-                            } else {
-                                mForceHiding = KEYGUARD_ANIMATING_OUT;
-                            }
+                        if (mKeyguardBlurEnabled) {
+                            /*
+                             * Top window keep the showing state.(don't hide.)
+                            */
+                            mForceHiding = KEYGUARD_NOT_SHOWN;
                         } else {
-                            mForceHiding = win.isDrawnLw() ? KEYGUARD_SHOWN : KEYGUARD_NOT_SHOWN;
+                            if (nowAnimating) {
+                                if (winAnimator.mAnimationIsEntrance) {
+                                    mForceHiding = KEYGUARD_ANIMATING_IN;
+                                } else {
+                                    mForceHiding = KEYGUARD_ANIMATING_OUT;
+                                }
+                            } else {
+                                mForceHiding = win.isDrawnLw() ? KEYGUARD_SHOWN : KEYGUARD_NOT_SHOWN;
+                            }
                         }
-*/
-                        mForceHiding = KEYGUARD_NOT_SHOWN;
                     }
                     if (DEBUG_KEYGUARD || WindowManagerService.DEBUG_VISIBILITY) Slog.v(TAG,
                             "Force hide " + forceHidingToString()

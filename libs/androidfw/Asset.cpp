@@ -49,6 +49,7 @@ static Mutex gAssetLock;
 static int32_t gCount = 0;
 static Asset* gHead = NULL;
 static Asset* gTail = NULL;
+static Mutex sLock;
 
 int32_t Asset::getGlobalCount()
 {
@@ -820,6 +821,7 @@ off64_t _CompressedAsset::seek(off64_t offset, int whence)
  */
 void _CompressedAsset::close(void)
 {
+    AutoMutex _l(mCompressedAssetLock);
     if (mMap != NULL) {
         mMap->release();
         mMap = NULL;
@@ -845,6 +847,9 @@ void _CompressedAsset::close(void)
  */
 const void* _CompressedAsset::getBuffer(bool)
 {
+    if (mBuf != NULL)
+        return mBuf;
+    AutoMutex _l(sLock);
     unsigned char* buf = NULL;
 
     if (mBuf != NULL)

@@ -147,6 +147,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
     public Performance mPerf = null;
     public boolean mIsPerfBoostEnabled = false;
     public int lBoostTimeOut = 0;
+    public int lDisPackTimeOut = 0;
     public int lBoostCpuBoost = 0;
     public int lBoostSchedBoost = 0;
     public int lBoostPcDisblBoost = 0;
@@ -155,6 +156,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
     public int lBoostIdleLoadBoost = 0;
     public int lBoostIdleNrRunBoost = 0;
     public int lBoostPreferIdle = 0;
+    public int lBoostCpuNumBoost = 0;
     static final int HANDLE_DISPLAY_ADDED = FIRST_SUPERVISOR_STACK_MSG + 5;
     static final int HANDLE_DISPLAY_CHANGED = FIRST_SUPERVISOR_STACK_MSG + 6;
     static final int HANDLE_DISPLAY_REMOVED = FIRST_SUPERVISOR_STACK_MSG + 7;
@@ -323,6 +325,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
                    com.android.internal.R.integer.launchboost_schedboost_param);
            lBoostTimeOut = mService.mContext.getResources().getInteger(
                    com.android.internal.R.integer.launchboost_timeout_param);
+           lDisPackTimeOut = mService.mContext.getResources().getInteger(
+                   com.android.internal.R.integer.disablepacking_timeout_param);
            lBoostCpuBoost = mService.mContext.getResources().getInteger(
                    com.android.internal.R.integer.launchboost_cpuboost_param);
            lBoostPcDisblBoost = mService.mContext.getResources().getInteger(
@@ -337,6 +341,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
                    com.android.internal.R.integer.launchboost_idlenrrunboost_param);
            lBoostPreferIdle = mService.mContext.getResources().getInteger(
                    com.android.internal.R.integer.launchboost_preferidle_param);
+           lBoostCpuNumBoost = mService.mContext.getResources().getInteger(
+                   com.android.internal.R.integer.launchboost_cpunumboost_param);
        }
     }
 
@@ -2548,6 +2554,14 @@ public final class ActivityStackSupervisor implements DisplayListener {
     }
 
     void findTaskToMoveToFrontLocked(TaskRecord task, int flags, Bundle options, String reason) {
+
+        ActivityRecord top_activity;
+        top_activity = task.stack.topRunningActivityLocked(null);
+        /* App is launching from recent apps and it's a new process */
+        if(top_activity != null && top_activity.state == ActivityState.DESTROYED) {
+            acquireAppLaunchPerfLock();
+        }
+
         if ((flags & ActivityManager.MOVE_TASK_NO_USER_ACTION) == 0) {
             mUserLeaving = true;
         }
@@ -2724,6 +2738,20 @@ public final class ActivityStackSupervisor implements DisplayListener {
         resumeTopActivitiesLocked();
     }
 
+    void acquireAppLaunchPerfLock() {
+       /* Acquire perf lock during new app launch */
+       if (mIsPerfBoostEnabled == true && mPerf == null) {
+           mPerf = new Performance();
+       }
+       if (mPerf != null) {
+           if (DEBUG) Slog.d(TAG, "Acquiring perf lock Enter : ");
+           mPerf.perfLockAcquire(lDisPackTimeOut,lBoostSmTaskBoost, lBoostIdleLoadBoost,
+                                  lBoostIdleNrRunBoost, lBoostPreferIdle);
+           mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
+                                  lBoostCpuBoost, lBoostCpuNumBoost, lBoostKsmBoost);
+       }
+    }
+
     ActivityRecord findTaskLocked(ActivityRecord r) {
         if (DEBUG_TASKS) Slog.d(TAG, "Looking for task of " + r);
         for (int displayNdx = mActivityDisplays.size() - 1; displayNdx >= 0; --displayNdx) {
@@ -2741,19 +2769,16 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
                 final ActivityRecord ar = stack.findTaskLocked(r);
                 if (ar != null) {
+                    if(ar.state == ActivityState.DESTROYED ){
+                        /*It's a new app launch */
+                        acquireAppLaunchPerfLock();
+                    }
                     return ar;
                 }
             }
         }
         /* Acquire perf lock during new app launch */
-        if (mIsPerfBoostEnabled == true && mPerf == null) {
-            mPerf = new Performance();
-        }
-        if (mPerf != null) {
-            mPerf.perfLockAcquire(lBoostTimeOut, lBoostPcDisblBoost, lBoostSchedBoost,
-                                  lBoostCpuBoost, lBoostKsmBoost, lBoostSmTaskBoost,
-                                  lBoostIdleLoadBoost, lBoostIdleNrRunBoost,lBoostPreferIdle);
-        }
+        acquireAppLaunchPerfLock();
 
         if (DEBUG_TASKS) Slog.d(TAG, "No task found");
         return null;

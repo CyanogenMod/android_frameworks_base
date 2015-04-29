@@ -1356,6 +1356,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (upgradeVersion == 88) {
             if (mUserHandle == UserHandle.USER_OWNER) {
                 db.beginTransaction();
+                SQLiteStatement stmt = null;
                 try {
                     String[] settingsToMove = {
                             Settings.Global.BATTERY_DISCHARGE_DURATION_THRESHOLD,
@@ -1375,7 +1376,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             Settings.Global.SYS_STORAGE_FULL_THRESHOLD_BYTES,
                             Settings.Global.SYNC_MAX_RETRY_DELAY_IN_SECONDS,
                             Settings.Global.CONNECTIVITY_CHANGE_DELAY,
-                            Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED,
                             Settings.Global.CAPTIVE_PORTAL_SERVER,
                             Settings.Global.NSD_ON,
                             Settings.Global.SET_INSTALL_LOCATION,
@@ -1391,9 +1391,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             Settings.Global.DEFAULT_DNS_SERVER,
                     };
                     moveSettingsToNewTable(db, TABLE_SECURE, TABLE_GLOBAL, settingsToMove, true);
+
+                    stmt = db.compileStatement("INSERT OR REPLACE INTO global(name,value)"
+                            + " VALUES(?,?);");
+                    loadIntegerSetting(stmt, Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED,
+                            R.integer.def_captive_portal_detection_enabled);
+                    stmt.close();
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
+                    if (stmt != null) stmt.close();
                 }
             }
             upgradeVersion = 89;
@@ -2243,12 +2250,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     mContext.getResources().getInteger(R.integer.def_bluetooth_sco_headset_volume));
 
             // set speaker default volume
+            loadSetting(stmt, Settings.System.VOLUME_MUSIC + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_music_speaker_volume));
             loadSetting(stmt, Settings.System.VOLUME_RING + SPEAKER,
                     mContext.getResources().getInteger(R.integer.def_ringtone_speaker_volume));
+            loadSetting(stmt, Settings.System.VOLUME_SYSTEM+ SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_system_speaker_volume));
             loadSetting(
                     stmt,
                     Settings.System.VOLUME_VOICE + SPEAKER,
                     mContext.getResources().getInteger(R.integer.def_voice_call_speaker_volume));
+            loadSetting(stmt, Settings.System.VOLUME_ALARM + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_alarm_speaker_volume));
+            loadSetting(
+                    stmt,
+                    Settings.System.VOLUME_NOTIFICATION + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_notification_speaker_volume));
+            loadSetting(
+                    stmt,
+                    Settings.System.VOLUME_BLUETOOTH_SCO + SPEAKER,
+                    mContext.getResources().getInteger(R.integer.def_bluetooth_sco_speaker_volume));
 
             // set earpiece default volume
             loadSetting(
@@ -2379,11 +2400,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
-            loadStringSetting(stmt, Settings.System.TIME_12_24,
-                    R.string.def_time_format);
+            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_time_format))) {
+                loadStringSetting(stmt, Settings.System.TIME_12_24,
+                        R.string.def_time_format);
+            }
 
-            loadStringSetting(stmt, Settings.System.DATE_FORMAT,
-                    R.string.def_date_format);
+            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_date_format))) {
+                loadStringSetting(stmt, Settings.System.DATE_FORMAT,
+                        R.string.def_date_format);
+            }
 
             loadBooleanSetting(stmt, Settings.System.STATUS_BAR_SHOW_BATTERY_PERCENT,
                     R.bool.def_status_bar_show_battery_percent);
@@ -2742,6 +2767,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadBooleanSetting(stmt, Settings.Global.GUEST_USER_ENABLED,
                     R.bool.def_guest_user_enabled);
+
+            loadIntegerSetting(stmt, Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED,
+                    R.integer.def_captive_portal_detection_enabled);
             // --- New global settings start here
         } finally {
             if (stmt != null) stmt.close();

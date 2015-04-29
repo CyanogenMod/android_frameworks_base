@@ -584,6 +584,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mOverscanRight = 0;
     int mOverscanBottom = 0;
 
+    // Panel Orientation default portrait
+    int mPanelOrientation = Surface.ROTATION_0;
+
     // What we do when the user double-taps on home
     private int mDoubleTapOnHomeBehavior;
 
@@ -1267,6 +1270,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private void triggerVirtualKeypress(final int keyCode) {
         InputManager im = InputManager.getInstance();
         long now = SystemClock.uptimeMillis();
+
+        final KeyEvent downEvent = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
+                keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_FROM_SYSTEM, InputDevice.SOURCE_KEYBOARD);
+        final KeyEvent upEvent = KeyEvent.changeAction(downEvent, KeyEvent.ACTION_UP);
+
+        im.injectInputEvent(downEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+        im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
     private void handleShortPressOnHome() {
@@ -1651,6 +1662,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return;
         }
         mDisplay = display;
+        mPanelOrientation =
+            SystemProperties.getInt("persist.panel.orientation", 0) / 90;
 
         final Resources res = mContext.getResources();
         int shortSize, longSize;
@@ -4699,6 +4712,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mStatusBar.getAttrs().flags &= ~FLAG_SHOW_WALLPAPER;
             return true;
         } else {
+            if (wasOccluded && !isOccluded && !showing) {
+                mKeyguardOccluded = false;
+                mKeyguardDelegate.setOccluded(false);
+            }
             return false;
         }
     }
@@ -5936,7 +5953,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mAllowAllRotations = mContext.getResources().getBoolean(
                             com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
                 }
-                if (sensorRotation != Surface.ROTATION_180
+                if (sensorRotation != mUpsideDownRotation
                         || mAllowAllRotations == 1
                         || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
                         || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_USER) {
@@ -6014,7 +6031,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (preferredRotation >= 0) {
                         return preferredRotation;
                     }
-                    return Surface.ROTATION_0;
+                    return mPanelOrientation;
             }
         }
     }

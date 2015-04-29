@@ -1296,6 +1296,17 @@ public final class ActivityManagerService extends ActivityManagerNative
     int mThumbnailWidth;
     int mThumbnailHeight;
 
+    /**
+     *  This is flag used for the first time boot of fresh new phone.
+     *
+     *  1. startHomeActivityLocked will be called three times at first time boot, we also
+     *  need to set three time in order to successfully set the default home.
+     *
+     *  2. there are won't set anymore after the first time boot, because a property will
+     *  ignore the default home set.
+     */
+    int mStartHomeSetDefaultLauncherCount = 3;
+
     final ServiceThread mHandlerThread;
     final MainHandler mHandler;
 
@@ -3119,6 +3130,20 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     boolean startHomeActivityLocked(int userId, String reason) {
+        // Only set at first time boot up for a fresh new phone
+        if (mStartHomeSetDefaultLauncherCount > 0) {
+            mStartHomeSetDefaultLauncherCount--;
+
+            boolean firstLaunch = SystemProperties.getBoolean("persist.sys.sw.firstLaunch", true);
+            if(firstLaunch){
+                setDefaultLauncher();
+
+                if (mStartHomeSetDefaultLauncherCount == 0) {
+                    SystemProperties.set("persist.sys.sw.firstLaunch", "false");
+                }
+            }
+        }
+
         if (mFactoryTest == FactoryTest.FACTORY_TEST_LOW_LEVEL
                 && mTopAction == null) {
             // We are running in factory test mode, but unable to find
@@ -11374,14 +11399,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
 
-            // Only set at first time boot up for a fresh new phone
-            boolean firstLaunch = SystemProperties.getBoolean("persist.sys.sw.firstLaunch", true);
-            if(firstLaunch){
-                SystemProperties.set("persist.sys.sw.firstLaunch", "false");
-
-                setDefaultLauncher();
-            }
-
             // Start up initial activity.
             mBooting = true;
             startHomeActivityLocked(mCurrentUserId, "systemReady");
@@ -18311,8 +18328,37 @@ public final class ActivityManagerService extends ActivityManagerNative
         int nextCachedAdj = curCachedAdj+1;
         int curEmptyAdj = ProcessList.CACHED_APP_MIN_ADJ;
         int nextEmptyAdj = curEmptyAdj+2;
+        ProcessRecord selectedAppRecord = null;
+        long serviceLastActivity = 0;
+        int numBServices = 0;
         for (int i=N-1; i>=0; i--) {
             ProcessRecord app = mLruProcesses.get(i);
+            if (ProcessList.ENABLE_B_SERVICE_PROPAGATION && app.serviceb) {
+                numBServices++;
+                for (int s=app.services.size()-1; s>=0; s--) {
+                    ServiceRecord sr = app.services.valueAt(s);
+                    if (DEBUG_OOM_ADJ) {
+                        Slog.d(TAG,"app.processName = "+app.processName+ " serviceb = "+ app.serviceb+ " s = "+s+" sr.lastActivity = "+sr.lastActivity+
+                                   " packageName = "+sr.packageName+" processName = "+sr.processName);
+                    }
+                    if (SystemClock.uptimeMillis()-sr.lastActivity < ProcessList.MIN_BSERVICE_AGING_TIME) {
+                        if (DEBUG_OOM_ADJ) {
+                            Slog.d(TAG,"Not aged enough!!!");
+                        }
+                        continue;
+                    }
+                    if (serviceLastActivity == 0) {
+                        serviceLastActivity = sr.lastActivity;
+                        selectedAppRecord = app;
+                    } else if (sr.lastActivity < serviceLastActivity) {
+                        serviceLastActivity = sr.lastActivity;
+                        selectedAppRecord = app;
+                    }
+                }
+            }
+            if (DEBUG_OOM_ADJ && selectedAppRecord != null) {
+                Slog.d(TAG,"Identified app.processName = "+selectedAppRecord.processName+" app.pid = "+selectedAppRecord.pid);
+            }
             if (!app.killedByAm && app.thread != null) {
                 app.procStateChanged = false;
                 computeOomAdjLocked(app, ProcessList.UNKNOWN_ADJ, TOP_APP, true, now);
@@ -18413,6 +18459,13 @@ public final class ActivityManagerService extends ActivityManagerNative
                         && !app.killedByAm) {
                     numTrimming++;
                 }
+            }
+        }
+        if ((numBServices > ProcessList.BSERVICE_APP_THRESHOLD) && (true == mAllowLowerMemLevel) && (selectedAppRecord!=null)) {
+            ProcessList.setOomAdj(selectedAppRecord.pid, selectedAppRecord.info.uid ,ProcessList.CACHED_APP_MAX_ADJ);
+            selectedAppRecord.setAdj = selectedAppRecord.curAdj;
+            if (DEBUG_OOM_ADJ) {
+                Slog.d(TAG,"app.processName = "+ selectedAppRecord.processName + " app.pid = "+selectedAppRecord.pid + " is moved to higher adj");
             }
         }
 

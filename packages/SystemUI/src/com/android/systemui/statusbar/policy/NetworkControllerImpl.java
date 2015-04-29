@@ -814,6 +814,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
         if (DEBUG) Log.d(TAG, "updateSimState: mSimState=" + mSimState);
         updateSimIcon();
+        updateTelephonySignalStrength();
     }
 
     private boolean isCdma() {
@@ -859,8 +860,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
             Log.d(TAG, "updateTelephonySignalStrength: hasService=" + hasService()
                     + " ss=" + mSignalStrength);
         }
-        if (!hasService() &&
-              (mDataServiceState != ServiceState.STATE_IN_SERVICE)) {
+        if ((!hasService() &&
+              (mDataServiceState != ServiceState.STATE_IN_SERVICE)) ||
+              mSimState == IccCardConstants.State.ABSENT) {
             if (CHATTY) Log.d(TAG, "updateTelephonySignalStrength: No Service");
             mPhoneSignalIconId = TelephonyIcons.getSignalNullIcon();
             mQSPhoneSignalIconId = R.drawable.ic_qs_signal_no_signal;
@@ -1034,6 +1036,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
         }
         StringBuilder str = new StringBuilder();
         boolean something = false;
+        boolean withSamePlmnSpn = showPlmn && plmn != null
+                && showSpn && spn != null && plmn.equals(spn);
         if (showPlmn && plmn != null) {
             if(mContext.getResources().getBoolean(com.android.internal.R.bool.config_display_rat) &&
                     mServiceState != null) {
@@ -1042,7 +1046,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
             str.append(plmn);
             something = true;
         }
-        if (showSpn && spn != null) {
+        if (!withSamePlmnSpn && showSpn && spn != null) {
             if(mContext.getResources().getBoolean(
                     com.android.internal.R.bool.config_spn_display_control)
                     && something){

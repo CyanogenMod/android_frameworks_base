@@ -94,7 +94,7 @@ public class NotificationsTile extends QSTile<NotificationsTile.NotificationsSta
         state.visible = true;
         state.zen = mZenController.getZen();
         state.ringerMode = mAudioManager.getRingerMode();
-        state.iconId = getNotificationIconId(state.zen, state.ringerMode);
+        state.icon = ResourceIcon.get(getNotificationIconId(state.zen, state.ringerMode));
         state.label = mContext.getString(R.string.quick_settings_notifications_label);
     }
 

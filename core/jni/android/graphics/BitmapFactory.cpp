@@ -1,5 +1,6 @@
 #define LOG_TAG "BitmapFactory"
 
+//#define LOG_NDEBUG 0
 #include "BitmapFactory.h"
 #include "NinePatchPeeker.h"
 #include "SkData.h"
@@ -24,6 +25,7 @@
 #include <stdio.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <drm/drm_framework_common.h>
 #include <drm/DrmManagerClient.h>
 #include <utils/Log.h>
 #include <fcntl.h>
@@ -213,7 +215,7 @@ private:
 };
 
 static jobject doDecode(JNIEnv* env, SkStreamRewindable* stream, jobject padding,
-        jobject options, bool consumeRights ) {
+        jobject options ) {
 
     int sampleSize = 1;
 
@@ -261,76 +263,6 @@ static jobject doDecode(JNIEnv* env, SkStreamRewindable* stream, jobject padding
     const bool willScale = scale != 1.0f;
 
     SkImageDecoder* decoder = SkImageDecoder::Factory(stream);
-    if (NULL == decoder) {
-        DrmManagerClient* mDrmManagerClient = new DrmManagerClient();
-        sp<DecryptHandle> mDecryptHandle = NULL;
-        if (mDrmManagerClient != NULL) {
-            const int size = 4096;
-            int readBytes = 0;
-            int encodedFD = -1;
-            char tempFile[50];
-            char tempDecodedFile[50];
-            int temp1 = rand();
-            int temp2 = rand();
-            sprintf(tempFile, "/data/local/.Drm/%d.temp", temp1);
-            sprintf(tempDecodedFile, "/data/local/.Drm/%d.temp", temp2);
-            ALOGV("dodecode:t1=%s ,t2=%s", tempFile, tempDecodedFile);
-
-            encodedFD = open (tempFile, O_WRONLY | O_CREAT, 0777);
-            char* encodedData = new char[size];
-
-            while ((readBytes = stream->read(encodedData, size)) > 0) {
-                write(encodedFD, encodedData, readBytes);
-            }
-            close(encodedFD);
-            if (encodedData != NULL) {
-                delete [] encodedData;
-            }
-            encodedFD = -1;
-            encodedFD = open (tempFile, O_RDONLY);
-
-            mDecryptHandle = mDrmManagerClient->openDecryptSession(encodedFD, 0, 1, NULL);
-            if ((mDecryptHandle != NULL) && (mDecryptHandle->status == RightsStatus::RIGHTS_VALID)) {
-                char* data = new char[size];
-                int len = 0;
-                int decodedFD = -1;
-
-                decodedFD = open(tempDecodedFile, O_WRONLY | O_CREAT, 0777);
-                int offset = 0;
-                while ((len = mDrmManagerClient->pread(mDecryptHandle, data, size, offset)) > 0) {
-                    write(decodedFD, data, len);
-                    offset += len;
-                }
-
-                //Consume  Rights
-                if (consumeRights) {
-                    ALOGV("bitmap factory:doDecode: calling consumeRights");
-                    mDrmManagerClient->consumeRights(mDecryptHandle, Action::DISPLAY, true);
-                }
-                close(decodedFD);
-                decodedFD = -1;
-                decodedFD = open(tempDecodedFile, O_RDONLY);
-                bool weOwnTheFD = true;
-                SkAutoTUnref<SkData> drmdata(SkData::NewFromFD(decodedFD));
-                stream = new SkMemoryStream(drmdata);
-                decoder = SkImageDecoder::Factory(stream);
-                if (data != NULL)
-                    delete [] data;
-            }
-            if (mDecryptHandle != NULL) {
-                mDrmManagerClient->closeDecryptSession(mDecryptHandle);
-                mDecryptHandle = NULL;
-            }
-            if (mDrmManagerClient != NULL) {
-                delete mDrmManagerClient;
-                mDrmManagerClient = NULL;
-            }
-            if (encodedFD >= 0) close(encodedFD);
-            remove(tempFile);
-            remove(tempDecodedFile);
-        }
-    }
-
     if (decoder == NULL) {
         return nullObjectReturn("SkImageDecoder::Factory returned null");
     }
@@ -540,7 +472,7 @@ static jobject doDecode(JNIEnv* env, SkStreamRewindable* stream, jobject padding
 #define BYTES_TO_BUFFER 64
 
 static jobject nativeDecodeStream(JNIEnv* env, jobject clazz, jobject is, jbyteArray storage,
-        jobject padding, jobject options, jboolean consumeRights = true) {
+        jobject padding, jobject options) {
 
     jobject bitmap = NULL;
     SkAutoTUnref<SkStream> stream(CreateJavaInputStreamAdaptor(env, is, storage));
@@ -549,13 +481,13 @@ static jobject nativeDecodeStream(JNIEnv* env, jobject clazz, jobject is, jbyteA
         SkAutoTUnref<SkStreamRewindable> bufferedStream(
                 SkFrontBufferedStream::Create(stream, BYTES_TO_BUFFER));
         SkASSERT(bufferedStream.get() != NULL);
-        bitmap = doDecode(env, bufferedStream, padding, options, consumeRights);
+        bitmap = doDecode(env, bufferedStream, padding, options);
     }
     return bitmap;
 }
 
 static jobject nativeDecodeFileDescriptor(JNIEnv* env, jobject clazz, jobject fileDescriptor,
-        jobject padding, jobject bitmapFactoryOptions, jboolean consumeRights = true) {
+        jobject padding, jobject bitmapFactoryOptions) {
 
     NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
 
@@ -595,52 +527,27 @@ static jobject nativeDecodeFileDescriptor(JNIEnv* env, jobject clazz, jobject fi
     SkAutoTUnref<SkStreamRewindable> stream(SkFrontBufferedStream::Create(fileStream,
             BYTES_TO_BUFFER));
 
-    //return doDecode(env, stream, padding, bitmapFactoryOptions, isPurgeable);
-    jobject obj = doDecode(env, stream, padding, bitmapFactoryOptions, false);
-    if (consumeRights) {
-        ALOGV("nativeDecodeFileDescriptor1 with consumeRights=true");
-        DrmManagerClient* drmManagerClient = new DrmManagerClient();
-        sp<DecryptHandle> decryptHandle = NULL;
-        decryptHandle = drmManagerClient->openDecryptSession(descriptor, 0, 1, NULL);
-        if (decryptHandle != NULL) {
-            //Consume Rights
-            if (consumeRights) {
-                ALOGV("bitmap factory: calling consumeRights");
-                drmManagerClient->consumeRights(decryptHandle, Action::DISPLAY, true);
-            }
-        }
-        if (decryptHandle != NULL) {
-            drmManagerClient->closeDecryptSession(decryptHandle);
-            decryptHandle = NULL;
-        }
-        if (drmManagerClient != NULL) {
-            delete drmManagerClient;
-            drmManagerClient = NULL;
-        }
-    } else {
-        ALOGV("nativeDecodeFileDescriptor1 with consumeRights=false");
-    }
-    return obj;
+    return doDecode(env, stream, padding, bitmapFactoryOptions);
 }
 
 static jobject nativeDecodeAsset(JNIEnv* env, jobject clazz, jlong native_asset,
-        jobject padding, jobject options, jboolean consumeRights = true) {
+        jobject padding, jobject options) {
 
     Asset* asset = reinterpret_cast<Asset*>(native_asset);
     // since we know we'll be done with the asset when we return, we can
     // just use a simple wrapper
     SkAutoTUnref<SkStreamRewindable> stream(new AssetStreamAdaptor(asset,
             AssetStreamAdaptor::kNo_OwnAsset, AssetStreamAdaptor::kNo_HasMemoryBase));
-    return doDecode(env, stream, padding, options, consumeRights);
+    return doDecode(env, stream, padding, options);
 }
 
 static jobject nativeDecodeByteArray(JNIEnv* env, jobject, jbyteArray byteArray,
-        jint offset, jint length, jobject options, jboolean consumeRights = true) {
+        jint offset, jint length, jobject options) {
 
     AutoJavaByteArray ar(env, byteArray);
     SkMemoryStream* stream = new SkMemoryStream(ar.ptr() + offset, length, false);
     SkAutoUnref aur(stream);
-    return doDecode(env, stream, NULL, options, consumeRights);
+    return doDecode(env, stream, NULL, options);
 }
 
 static void nativeRequestCancel(JNIEnv*, jobject joptions) {
@@ -652,32 +559,162 @@ static jboolean nativeIsSeekable(JNIEnv* env, jobject, jobject fileDescriptor) {
     return ::lseek64(descriptor, 0, SEEK_CUR) != -1 ? JNI_TRUE : JNI_FALSE;
 }
 
+static jobject nativeDecodeDrmFileDescriptor(JNIEnv* env, jobject clazz, jobject fileDescriptor,
+        jobject options) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+
+    jint fd = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(fd, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return nullObjectReturn("fstat return -1");
+    }
+
+    // Restore the descriptor's offset on exiting this function.
+    AutoFDSeek autoRestore(fd);
+
+    jobject bitmap = NULL;
+
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(fd, 0, 1, NULL);
+    if ((decryptHandle != NULL) && (decryptHandle->status == RightsStatus::RIGHTS_VALID)) {
+        int offset = 0;
+        int size = decryptHandle->decryptInfo->decryptBufferLength;
+        if (size > 0) {
+            char* array = (char *) malloc(size * sizeof(char));
+            if (drmManagerClient->pread(decryptHandle, array, size, offset) > 0 ) {
+                SkMemoryStream* stream = new SkMemoryStream(array, size, false);
+                SkAutoUnref aur(stream);
+                bitmap = doDecode(env, stream, NULL, options);
+                if (bitmap == NULL) {
+                    ALOGV("nativeDecodeDrmFileDescriptor : Faile to decode drm bitmap file");
+                }
+            }
+            if (array) free(array);
+        }
+    }
+    if (decryptHandle != NULL) {
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+
+    return bitmap;
+}
+
+static bool nativeConsumeDrmImageRights(JNIEnv* env, jobject clazz, jobject fileDescriptor) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+
+    jint fd = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(fd, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return nullObjectReturn("fstat return -1");
+    }
+
+    // Restore the descriptor's offset on exiting this function.
+    AutoFDSeek autoRestore(fd);
+
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(fd, 0, 1, NULL);
+    if (decryptHandle != NULL) {
+        drmManagerClient->setPlaybackStatus(decryptHandle, Playback::STOP, 0);
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+    return false;
+}
+
+static jbyteArray nativeGetDrmImageBytes(JNIEnv* env, jobject clazz, jobject fileDescriptor) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+    jint fd = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(fd, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return NULL;
+    }
+
+    // Restore the descriptor's offset on exiting this function.
+    AutoFDSeek autoRestore(fd);
+
+    jbyteArray byteArray = NULL;
+
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(fd, 0, 1, NULL);
+    if ((decryptHandle != NULL) && (decryptHandle->status == RightsStatus::RIGHTS_VALID)) {
+        int offset = 0;
+        int size = decryptHandle->decryptInfo->decryptBufferLength;
+        if (size > 0) {
+            char* array = (char *) malloc(size * sizeof(char));
+            if (drmManagerClient->pread(decryptHandle, array, size, offset) > 0 ) {
+                byteArray = env->NewByteArray (size);
+                env->SetByteArrayRegion (byteArray, 0, size, reinterpret_cast<jbyte*>(array));
+            }
+            if (array) free(array);
+        }
+    }
+    if (decryptHandle != NULL) {
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+    return byteArray;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 static JNINativeMethod gMethods[] = {
     {   "nativeDecodeStream",
-        "(Ljava/io/InputStream;[BLandroid/graphics/Rect;Landroid/graphics/BitmapFactory$Options;Z)Landroid/graphics/Bitmap;",
+        "(Ljava/io/InputStream;[BLandroid/graphics/Rect;Landroid/graphics/BitmapFactory$Options;)Landroid/graphics/Bitmap;",
         (void*)nativeDecodeStream
     },
 
     {   "nativeDecodeFileDescriptor",
-        "(Ljava/io/FileDescriptor;Landroid/graphics/Rect;Landroid/graphics/BitmapFactory$Options;Z)Landroid/graphics/Bitmap;",
+        "(Ljava/io/FileDescriptor;Landroid/graphics/Rect;Landroid/graphics/BitmapFactory$Options;)Landroid/graphics/Bitmap;",
         (void*)nativeDecodeFileDescriptor
     },
 
     {   "nativeDecodeAsset",
-        "(JLandroid/graphics/Rect;Landroid/graphics/BitmapFactory$Options;Z)Landroid/graphics/Bitmap;",
+        "(JLandroid/graphics/Rect;Landroid/graphics/BitmapFactory$Options;)Landroid/graphics/Bitmap;",
         (void*)nativeDecodeAsset
     },
 
     {   "nativeDecodeByteArray",
-        "([BIILandroid/graphics/BitmapFactory$Options;Z)Landroid/graphics/Bitmap;",
+        "([BIILandroid/graphics/BitmapFactory$Options;)Landroid/graphics/Bitmap;",
         (void*)nativeDecodeByteArray
     },
 
     {   "nativeIsSeekable",
         "(Ljava/io/FileDescriptor;)Z",
         (void*)nativeIsSeekable
+    },
+
+    {   "nativeDecodeDrmFileDescriptor",
+        "(Ljava/io/FileDescriptor;Landroid/graphics/BitmapFactory$Options;)Landroid/graphics/Bitmap;",
+        (void*)nativeDecodeDrmFileDescriptor
+    },
+
+    {   "nativeConsumeDrmImageRights",
+        "(Ljava/io/FileDescriptor;)Z",
+        (void*)nativeConsumeDrmImageRights
+    },
+
+    {   "nativeGetDrmImageBytes",
+        "(Ljava/io/FileDescriptor;)[B",
+        (void*)nativeGetDrmImageBytes
     },
 };
 

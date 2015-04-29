@@ -2269,9 +2269,11 @@
 
   <!-- cpu boost for AppLaunch -->
   <java-symbol type="bool" name="config_enableCpuBoostForAppLaunch" />
+  <java-symbol type="integer" name="disablepacking_timeout_param" />
   <java-symbol type="integer" name="launchboost_timeout_param" />
   <java-symbol type="integer" name="launchboost_schedboost_param" />
   <java-symbol type="integer" name="launchboost_cpuboost_param" />
+  <java-symbol type="integer" name="launchboost_cpunumboost_param" />
   <java-symbol type="integer" name="launchboost_pcdisbl_param" />
   <java-symbol type="integer" name="launchboost_ksmboost_param" />
   <java-symbol type="integer" name="launchboost_smtaskboost_param" />
@@ -2335,4 +2337,9 @@
   <java-symbol type="bool" name="config_use_sim_language_file" />
   <java-symbol type="bool" name="config_LTE_eri_for_network_name" />
   <java-symbol type="bool" name="config_defaultInTouchMode" />
+  <java-symbol type="bool" name="config_fdn_contact_search"/>
+  <java-symbol type="string" name="def_hipri_share_component_pkg"/>
+  <java-symbol type="string" name="def_hipri_share_component_class"/>
+  <java-symbol type="string" name="card_string" />
+
 </resources>

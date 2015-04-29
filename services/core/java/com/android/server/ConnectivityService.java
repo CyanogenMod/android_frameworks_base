@@ -2252,6 +2252,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
                         ReapUnvalidatedNetworks.DONT_REAP);
             }
         }
+        NetworkFactoryInfo nfi = mNetworkFactoryInfos.remove(msg.replyTo);
+        if (DBG && nfi != null) log("unregisterNetworkFactory for " + nfi.name);
     }
 
     // If this method proves to be too slow then we can maintain a separate
@@ -2283,26 +2285,23 @@ public class ConnectivityService extends IConnectivityManager.Stub
 
     private void handleRegisterNetworkRequest(Message msg) {
         final NetworkRequestInfo nri = (NetworkRequestInfo) (msg.obj);
-        final NetworkCapabilities newCap = nri.request.networkCapabilities;	
-        int score = 0;
+        mNetworkRequests.put(nri.request, nri);
 
         // Check for the best currently alive network that satisfies this request
         NetworkAgentInfo bestNetwork = null;
         for (NetworkAgentInfo network : mNetworkAgentInfos.values()) {
             if (DBG) log("handleRegisterNetworkRequest checking " + network.name());
-            if (newCap.satisfiedByNetworkCapabilities(network.networkCapabilities)) {
+            if (network.satisfies(nri.request)) {
                 if (DBG) log("apparently satisfied.  currentScore=" + network.getCurrentScore());
-                if ((bestNetwork == null) ||
-                        bestNetwork.getCurrentScore() < network.getCurrentScore()) {
-                    if (!nri.isRequest) {
-                        // Not setting bestNetwork here as a listening NetworkRequest may be
-                        // satisfied by multiple Networks.  Instead the request is added to
-                        // each satisfying Network and notified about each.
-                        network.addRequest(nri.request);
-                        notifyNetworkCallback(network, nri);
-                    } else {
-                        bestNetwork = network;
-                    }
+                if (!nri.isRequest) {
+                   // Not setting bestNetwork here as a listening NetworkRequest may be
+                   // satisfied by multiple Networks.  Instead the request is added to
+                   // each satisfying Network and notified about each.
+                   network.addRequest(nri.request);
+                   notifyNetworkCallback(network, nri);
+                } else if (bestNetwork == null ||
+                   bestNetwork.getCurrentScore() < network.getCurrentScore()) {
+                   bestNetwork = network;
                 }
             }
         }
@@ -2320,7 +2319,6 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 bestNetwork.addRequest(nri.request);
                 mNetworkForRequestId.put(nri.request.requestId, bestNetwork);
                 notifyNetworkCallback(bestNetwork, nri);
-                score = bestNetwork.getCurrentScore();
                 if (nri.isRequest && nri.request.legacyType != TYPE_NONE) {
                     //To support legacy calls for network request
                     mLegacyTypeTracker.add(nri.request.legacyType, bestNetwork);
@@ -2329,7 +2327,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
             mNetworkRequests.put(nri.request, nri);
             if (nri.isRequest) {
                 if (DBG) log("sending new NetworkRequest to factories");
-                for (NetworkFactoryInfo nfi : mNetworkFactoryInfos.values()) {
+                final int score = bestNetwork == null ? 0 : bestNetwork.getCurrentScore();
+                    for (NetworkFactoryInfo nfi : mNetworkFactoryInfos.values()) {
                     nfi.asyncChannel.sendMessage(android.net.NetworkFactory.CMD_REQUEST_NETWORK,
                             score, 0, nri.request);
                 }
@@ -4461,8 +4460,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 // TODO: support proxy per network.
             }
             // Consider network even though it is not yet validated.
-            //FIXME: L-MR1 fix
-            //rematchNetworkAndRequests(networkAgent, false);
+            rematchNetworkAndRequests(networkAgent, NascentState.NOT_JUST_VALIDATED,
+                                         ReapUnvalidatedNetworks.REAP);
             int val = SystemProperties.getInt("persist.cne.feature", 0);
             boolean isPropFeatureEnabled = (val == 3) ? true : false;
             if (isPropFeatureEnabled) {

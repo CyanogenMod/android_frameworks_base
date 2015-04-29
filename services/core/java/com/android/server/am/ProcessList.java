@@ -120,6 +120,13 @@ final class ProcessList {
     // without empty apps being able to push them out of memory.
     static final int MIN_CACHED_APPS = 2;
 
+    // Min aging threshold in milliseconds to consider a B services for propagation to higher adj
+    static final int MIN_BSERVICE_AGING_TIME = SystemProperties.getInt("ro.sys.fw.bservice_age",5000);
+    // Threshold for B Services when in memory pressure
+    static final int BSERVICE_APP_THRESHOLD = SystemProperties.getInt("ro.sys.fw.bservice_limit",5);
+    // Enable B service aging propagation on memory pressure.
+    static final boolean ENABLE_B_SERVICE_PROPAGATION = SystemProperties.getBoolean("ro.sys.fw.bservice_enable",false);
+
     // The maximum number of cached processes we will keep around before killing them.
     // NOTE: this constant is *only* a control to not let us go too crazy with
     // keeping around processes on devices with large amounts of RAM.  For devices that
@@ -195,13 +202,13 @@ final class ProcessList {
 
     // These are the low-end OOM level limits for 32bit 1 GB RAM
     private final int[] mOomMinFreeLow32Bit = new int[] {
-            8192, 12288, 16384,
-            24576, 28672, 32768
+            12288, 18432, 24576,
+            36864, 43008, 49152
     };
     // These are the high-end OOM level limits for 32bit 1 GB RAM
     private final int[] mOomMinFreeHigh32Bit = new int[] {
-            49152, 61440, 73728,
-            86016, 98304, 122880
+            61440, 76800, 92160,
+            107520, 137660, 174948
     };
     // These are the low-end OOM level limits.  This is appropriate for an
     // HVGA or smaller phone with less than 512MB.  Values are in KB.

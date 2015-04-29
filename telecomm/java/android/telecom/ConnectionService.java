@@ -579,6 +579,13 @@ public abstract class ConnectionService extends Service {
         }
 
         @Override
+        public void onPostDialChar(Connection c, char nextChar) {
+            String id = mIdByConnection.get(c);
+            Log.d(this, "Adapter onPostDialChar %s, %s", c, nextChar);
+            mAdapter.onPostDialChar(id, nextChar);
+        }
+
+        @Override
         public void onRingbackRequested(Connection c, boolean ringback) {
             String id = mIdByConnection.get(c);
             Log.d(this, "Adapter onRingback %b", ringback);
@@ -903,7 +910,10 @@ public abstract class ConnectionService extends Service {
     private void addParticipantWithConference(String callId, String participant) {
         Log.d(this, "ConnectionService addParticipantWithConference(%s, %s)", participant, callId);
         Conference conference = findConferenceForAction(callId, "addParticipantWithConference");
-        if (conference != null) {
+        Connection connection = findConnectionForAction(callId, "addParticipantWithConnection");
+        if (connection != getNullConnection()) {
+            onAddParticipant(connection, participant);
+        } else if (conference != getNullConference()) {
             conference.onAddParticipant(participant);
         }
     }
@@ -1130,6 +1140,7 @@ public abstract class ConnectionService extends Service {
      * Connection is part of a conference controller but is not yet added to Connection
      * Service and hence cannot be added to the conference call.
      */
+    /** @hide */
     public void triggerConferenceRecalculate() {
     }
 
@@ -1188,6 +1199,19 @@ public abstract class ConnectionService extends Service {
      * @param connection2 A connection to merge into a conference call.
      */
     public void onConference(Connection connection1, Connection connection2) {}
+
+    /**
+     * Add participant with connection. Invoked when user has made a request to add
+     * participant with specified connection. In response, the participant should add with
+     * the connection.
+     *
+     * @param connection A connection where participant need to add.
+     * @param participant Address of participant which will be added.
+     * @return
+     *
+     * @hide
+     */
+    public void onAddParticipant(Connection connection, String participant) {}
 
     /**
      * Indicates that a remote conference has been created for existing {@link RemoteConnection}s.

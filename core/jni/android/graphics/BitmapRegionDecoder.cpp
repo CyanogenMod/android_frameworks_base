@@ -33,14 +33,12 @@
 #include "android_util_Binder.h"
 #include "android_nio_utils.h"
 #include "CreateJavaOutputStreamAdaptor.h"
-#include <drm/DrmManagerClient.h>
-#include <utils/Log.h>
-#include <fcntl.h>
 
 #include <binder/Parcel.h>
 #include <jni.h>
 #include <androidfw/Asset.h>
 #include <sys/stat.h>
+#include <drm/DrmManagerClient.h>
 
 #if 0
     #define TRACE_BITMAP(code)  code
@@ -80,77 +78,6 @@ private:
 static jobject createBitmapRegionDecoder(JNIEnv* env, SkStreamRewindable* stream) {
     SkImageDecoder* decoder = SkImageDecoder::Factory(stream);
     int width, height;
-    if (NULL == decoder) {
-        ALOGV("decoder is null and entered drm path");
-        DrmManagerClient* mDrmManagerClient = new DrmManagerClient();
-        sp<DecryptHandle> mDecryptHandle = NULL;
-        if (mDrmManagerClient != NULL) {
-            const int size = 4096;
-            int readBytes = 0;
-            int encodedFD = -1;
-            char tempFile[50];
-            char temp[50];
-            int temp1 = rand();
-            int temp2 = rand();
-            sprintf(tempFile, "/data/local/.Drm/%d.tmp", temp1);
-            sprintf(temp, "/data/local/.Drm/%d.tmp", temp2);
-            ALOGV("dodecode:t1=%s ,t2=%s", tempFile, temp);
-            encodedFD = open(tempFile, O_WRONLY | O_CREAT, 0777);
-            char* encodedData = new char[size];
-
-            while ((readBytes = stream->read(encodedData, size)) > 0)
-                write(encodedFD, encodedData, readBytes);
-
-            close(encodedFD);
-            if (encodedData != NULL)
-                delete [] encodedData;
-
-            encodedFD = -1;
-            encodedFD = open (tempFile, O_RDONLY);
-
-            ALOGV("opening Decrypt Session");
-            mDecryptHandle = mDrmManagerClient->openDecryptSession(encodedFD, 0, 1, NULL);
-            if(mDecryptHandle == NULL) {
-                ALOGV("Got mDecryptHandle == NULL");
-            }
-            if ((mDecryptHandle != NULL) && (mDecryptHandle->status == RightsStatus::RIGHTS_VALID)) {
-                ALOGV("bitmap factory: mDecryptHandle not null");
-                char* data = new char[size];
-                int len = 0;
-                int decodedFD = -1;
-
-                decodedFD = open(temp, O_WRONLY | O_CREAT, 0777);
-                int offset = 0;
-                while ((len = mDrmManagerClient->pread(mDecryptHandle, data, size, offset)) > 0) {
-                    ALOGV("pread returned bytes=%d", len);
-                    write(decodedFD, data, len);
-                    offset += len;
-                }
-                close(decodedFD);
-                decodedFD = -1;
-                decodedFD = open (temp, O_RDONLY);
-                bool weOwnTheFD = true;
-                SkAutoTUnref<SkData> drmdata(SkData::NewFromFD(decodedFD));
-                stream = new SkMemoryStream(drmdata);
-                decoder = SkImageDecoder::Factory(stream);
-                if (data != NULL)
-                    delete [] data;
-            }
-
-            if (mDecryptHandle != NULL) {
-                mDrmManagerClient->closeDecryptSession(mDecryptHandle);
-                mDecryptHandle = NULL;
-            }
-            if (mDrmManagerClient != NULL) {
-                delete mDrmManagerClient;
-                mDrmManagerClient = NULL;
-            }
-            if (encodedFD >= 0) close(encodedFD);
-            remove(tempFile);
-            remove(temp);
-        }
-    }
-
     if (NULL == decoder) {
         doThrowIOE(env, "Image format not supported");
         return nullObjectReturn("SkImageDecoder::Factory returned null");
@@ -345,6 +272,51 @@ static void nativeClean(JNIEnv* env, jobject, jlong brdHandle) {
     delete brd;
 }
 
+
+static jobject nativeNewInstanceFromDrmFileDescriptor(JNIEnv* env, jobject clazz,
+                                          jobject fileDescriptor, jboolean isShareable) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+
+    jint descriptor = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(descriptor, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return nullObjectReturn("fstat return -1");
+    }
+
+    SkMemoryStream* stream = NULL;
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(descriptor, 0, 1, NULL);
+    if ((decryptHandle != NULL) && (decryptHandle->status == RightsStatus::RIGHTS_VALID)) {
+        int offset = 0;
+        int size = decryptHandle->decryptInfo->decryptBufferLength;
+        if (size > 0) {
+            char* array = (char *) malloc(size * sizeof(char));
+            if (drmManagerClient->pread(decryptHandle, array, size, offset) > 0 ) {
+                stream = new SkMemoryStream(array, size, false);
+            }
+        }
+    }
+
+    if (decryptHandle != NULL) {
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+
+    if (stream == NULL) {
+        return nullObjectReturn("Drm decryption failed");
+    }
+
+    jobject brd = createBitmapRegionDecoder(env, stream);
+    SkSafeUnref(stream); // the decoder now holds a reference
+    return brd;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <android_runtime/AndroidRuntime.h>
@@ -378,6 +350,11 @@ static JNINativeMethod gBitmapRegionDecoderMethods[] = {
     {   "nativeNewInstance",
         "(JZ)Landroid/graphics/BitmapRegionDecoder;",
         (void*)nativeNewInstanceFromAsset
+    },
+
+    {   "nativeNewInstanceFromDrmFileDescriptor",
+        "(Ljava/io/FileDescriptor;Z)Landroid/graphics/BitmapRegionDecoder;",
+        (void*)nativeNewInstanceFromDrmFileDescriptor
     },
 };
 

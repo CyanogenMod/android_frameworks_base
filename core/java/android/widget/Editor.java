@@ -516,7 +516,7 @@ public class Editor {
     }
 
     private void hideCursorControllers() {
-        if (mSuggestionsPopupWindow != null && mSuggestionsPopupWindow.isShowingUp()) {
+        if (mSuggestionsPopupWindow != null && !mSuggestionsPopupWindow.isShowingUp()) {
             // Should be done before hide insertion point controller since it triggers a show of it
             mSuggestionsPopupWindow.hide();
         }

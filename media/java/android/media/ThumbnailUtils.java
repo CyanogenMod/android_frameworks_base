@@ -105,7 +105,7 @@ public class ThumbnailUtils {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 1;
                 options.inJustDecodeBounds = true;
-                BitmapFactory.decodeFileDescriptor(fd, null, options, false);
+                BitmapFactory.decodeFileDescriptor(fd, null, options);
                 if (options.mCancel || options.outWidth == -1
                         || options.outHeight == -1) {
                     return null;
@@ -116,7 +116,7 @@ public class ThumbnailUtils {
 
                 options.inDither = false;
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                bitmap = BitmapFactory.decodeFileDescriptor(fd, null, options, false);
+                bitmap = BitmapFactory.decodeFileDescriptor(fd, null, options);
             } catch (IOException ex) {
                 Log.e(TAG, "", ex);
             } catch (OutOfMemoryError oom) {
@@ -311,7 +311,7 @@ public class ThumbnailUtils {
             FileDescriptor fd = pfd.getFileDescriptor();
             options.inSampleSize = 1;
             options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFileDescriptor(fd, null, options, false);
+            BitmapFactory.decodeFileDescriptor(fd, null, options);
             if (options.mCancel || options.outWidth == -1
                     || options.outHeight == -1) {
                 return null;
@@ -322,7 +322,7 @@ public class ThumbnailUtils {
 
             options.inDither = false;
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            b = BitmapFactory.decodeFileDescriptor(fd, null, options, false);
+            b = BitmapFactory.decodeFileDescriptor(fd, null, options);
         } catch (OutOfMemoryError ex) {
             Log.e(TAG, "Got oom exception ", ex);
             return null;
@@ -490,14 +490,14 @@ public class ThumbnailUtils {
         // Compute exifThumbWidth.
         if (thumbData != null) {
             exifOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeByteArray(thumbData, 0, thumbData.length, exifOptions, false);
+            BitmapFactory.decodeByteArray(thumbData, 0, thumbData.length, exifOptions);
             exifOptions.inSampleSize = computeSampleSize(exifOptions, targetSize, maxPixels);
             exifThumbWidth = exifOptions.outWidth / exifOptions.inSampleSize;
         }
 
         // Compute fullThumbWidth.
         fullOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, fullOptions, false);
+        BitmapFactory.decodeFile(filePath, fullOptions);
         fullOptions.inSampleSize = computeSampleSize(fullOptions, targetSize, maxPixels);
         fullThumbWidth = fullOptions.outWidth / fullOptions.inSampleSize;
 
@@ -507,7 +507,7 @@ public class ThumbnailUtils {
             int height = exifOptions.outHeight;
             exifOptions.inJustDecodeBounds = false;
             sizedThumbBitmap.mBitmap = BitmapFactory.decodeByteArray(thumbData, 0,
-                    thumbData.length, exifOptions, false);
+                    thumbData.length, exifOptions);
             if (sizedThumbBitmap.mBitmap != null) {
                 sizedThumbBitmap.mThumbnailData = thumbData;
                 sizedThumbBitmap.mThumbnailWidth = width;
@@ -515,7 +515,7 @@ public class ThumbnailUtils {
             }
         } else {
             fullOptions.inJustDecodeBounds = false;
-            sizedThumbBitmap.mBitmap = BitmapFactory.decodeFile(filePath, fullOptions, false);
+            sizedThumbBitmap.mBitmap = BitmapFactory.decodeFile(filePath, fullOptions);
         }
     }
 }

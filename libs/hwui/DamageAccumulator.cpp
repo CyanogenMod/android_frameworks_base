@@ -138,6 +138,7 @@ static inline void mapRect(const RenderProperties& props, const SkRect& in, SkRe
     }
     temp.offset(props.getLeft(), props.getTop());
     out->join(temp);
+    out->join(in);
 }
 
 static DirtyStack* findParentRenderNode(DirtyStack* frame) {

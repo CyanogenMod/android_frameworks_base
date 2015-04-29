@@ -23,12 +23,13 @@ import android.annotation.SystemApi;
  * merge.
  * @hide
  */
-@SystemApi
 public final class PhoneCapabilities {
     /** Call can currently be put on hold or unheld. */
+    /** @hide */
     public static final int HOLD               = 0x00000001;
 
     /** Call supports the hold feature. */
+    /** @hide */
     public static final int SUPPORT_HOLD       = 0x00000002;
 
     /**
@@ -39,6 +40,7 @@ public final class PhoneCapabilities {
      * of the in-call UI.
      * <p>
      * This is only intended for use by a {@link Conference}.
+     * @hide
      */
     public static final int MERGE_CONFERENCE   = 0x00000004;
 
@@ -47,6 +49,7 @@ public final class PhoneCapabilities {
      * See {@link #MERGE_CONFERENCE} for additional information.
      * <p>
      * This is only intended for use by a {@link Conference}.
+     * @hide
      */
     public static final int SWAP_CONFERENCE    = 0x00000008;
 
@@ -56,15 +59,18 @@ public final class PhoneCapabilities {
     public static final int UNUSED             = 0x00000010;
 
     /** Call supports responding via text option. */
+    /** @hide */
     public static final int RESPOND_VIA_TEXT   = 0x00000020;
 
     /** Call can be muted. */
+    /** @hide */
     public static final int MUTE               = 0x00000040;
 
     /**
      * Call supports conference call management. This capability only applies to {@link Conference}
      * calls which can have {@link Connection}s as children.
      */
+    /** @hide */
     public static final int MANAGE_CONFERENCE = 0x00000080;
 
     /**
@@ -94,11 +100,13 @@ public final class PhoneCapabilities {
     /**
      * Call is able to be separated from its parent {@code Conference}, if any.
      */
+    /** @hide */
     public static final int SEPARATE_FROM_CONFERENCE = 0x00001000;
 
     /**
      * Call is able to be individually disconnected when in a {@code Conference}.
      */
+    /** @hide */
     public static final int DISCONNECT_FROM_CONFERENCE = 0x00002000;
 
     /**
@@ -111,6 +119,7 @@ public final class PhoneCapabilities {
      */
     public static final int GENERIC_CONFERENCE = 0x00004000;
 
+    /** @hide */
     public static final int ALL = HOLD | SUPPORT_HOLD | MERGE_CONFERENCE | SWAP_CONFERENCE
             | RESPOND_VIA_TEXT | MUTE | MANAGE_CONFERENCE | SEPARATE_FROM_CONFERENCE
             | DISCONNECT_FROM_CONFERENCE;
@@ -130,6 +139,12 @@ public final class PhoneCapabilities {
      * @hide
      */
     public static final int CALL_TYPE_MODIFIABLE = 0x00020000;
+
+    /**
+     * This will include as capability for GSM call and if FDN is enabled.
+     * @hide
+     */
+    public static final int FDN_ENABLED = 0x00040000;
 
     /**
      * Whether this set of capabilities supports the specified capability.
@@ -153,6 +168,7 @@ public final class PhoneCapabilities {
         return capabilities & ~capability;
     }
 
+    /** @hide */
     public static String toString(int capabilities) {
         StringBuilder builder = new StringBuilder();
         builder.append("[Capabilities:");

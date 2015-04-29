@@ -139,6 +139,7 @@ public final class Choreographer {
     private boolean mCallbacksRunning;
     private long mLastFrameTimeNanos;
     private long mFrameIntervalNanos;
+    private boolean mSoftwareRendered;
 
     /**
      * Callback type: Input callback.  Runs first.
@@ -173,6 +174,7 @@ public final class Choreographer {
         for (int i = 0; i <= CALLBACK_LAST; i++) {
             mCallbackQueues[i] = new CallbackQueue();
         }
+        mSoftwareRendered = false;
     }
 
     private static float getRefreshRate() {
@@ -272,6 +274,10 @@ public final class Choreographer {
                 writer.println(mFrameScheduled);
         writer.print(innerPrefix); writer.print("mLastFrameTime=");
                 writer.println(TimeUtils.formatUptime(mLastFrameTimeNanos / 1000000));
+    }
+
+    void setSoftwareRendering(boolean softRendered) {
+        mSoftwareRendered = softRendered;
     }
 
     /**
@@ -478,7 +484,7 @@ public final class Choreographer {
     private void scheduleFrameLocked(long now) {
         if (!mFrameScheduled) {
             mFrameScheduled = true;
-            if (USE_VSYNC) {
+            if (USE_VSYNC && !mSoftwareRendered) {
                 if (DEBUG) {
                     Log.d(TAG, "Scheduling next frame on vsync.");
                 }

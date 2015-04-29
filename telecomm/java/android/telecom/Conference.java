@@ -41,6 +41,7 @@ public abstract class Conference implements IConferenceable {
      */
     public static long CONNECT_TIME_NOT_SPECIFIED = 0;
 
+    /** @hide */
     public static final long NO_CONNECTTIME = 0;
     /** @hide */
     public abstract static class Listener {
@@ -162,7 +163,10 @@ public abstract class Conference implements IConferenceable {
      * @hide
      */
     public void removeCapability(int capability) {
-        mConnectionCapabilities &= ~capability;
+        int newCapabilities = mConnectionCapabilities;
+        newCapabilities &= ~capability;
+
+        setConnectionCapabilities(newCapabilities);
     }
 
     /**
@@ -172,7 +176,10 @@ public abstract class Conference implements IConferenceable {
      * @hide
      */
     public void addCapability(int capability) {
-        mConnectionCapabilities |= capability;
+        int newCapabilities = mConnectionCapabilities;
+        newCapabilities |= capability;
+
+        setConnectionCapabilities(newCapabilities);
     }
 
     /**
@@ -217,6 +224,7 @@ public abstract class Conference implements IConferenceable {
      *
      * @param participant The participant to be added with conference call.
      */
+    /** @hide */
     public void onAddParticipant(String participant) {}
 
     /**
@@ -392,6 +400,7 @@ public abstract class Conference implements IConferenceable {
         fireOnConferenceableConnectionsChanged();
     }
 
+    /** @hide */
     public final void setVideoState(Connection c, int videoState) {
         Log.d(this, "setVideoState Conference: %s Connection: %s VideoState: %s",
                 this, c, videoState);

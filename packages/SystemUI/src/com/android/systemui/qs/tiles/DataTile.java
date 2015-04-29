@@ -92,11 +92,11 @@ public class DataTile extends QSTile<QSTile.BooleanState> {
         state.visible = true;
         state.label = mContext.getString(R.string.quick_settings_mobile_data_label);
         if (dataOn) {
-            state.iconId = R.drawable.ic_qs_data_on;
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_data_on);
             state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_data_on);
         } else {
-            state.iconId = R.drawable.ic_qs_data_off;
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_data_off);
             state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_data_off);
         }

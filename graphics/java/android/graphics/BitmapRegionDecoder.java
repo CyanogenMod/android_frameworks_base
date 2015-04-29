@@ -16,7 +16,9 @@
 package android.graphics;
 
 import android.content.res.AssetManager;
+import android.util.Log;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -254,6 +256,36 @@ public final class BitmapRegionDecoder {
         }
     }
 
+    /**
+    * @hide
+    * Internal drm api
+    */
+    public static BitmapRegionDecoder newInstanceDrmFile(
+            String path, boolean isShareable) throws IOException {
+        FileInputStream is = null;
+        BitmapRegionDecoder decoder = null;
+        try {
+            FileDescriptor fd = null;
+            File file = new File(path);
+            if (file.exists()) {
+                is = new FileInputStream(file);
+                fd = is.getFD();
+            }
+            decoder = nativeNewInstanceFromDrmFileDescriptor(fd, isShareable);
+        } catch (IOException ioe) {
+            Log.e("BitmapRegionDecoder", "Unable to decode drm file: " + ioe);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    Log.e("BitmapRegionDecoder", "Unable to close drm file: " + e);
+                }
+            }
+        }
+        return decoder;
+    }
+
     private static native Bitmap nativeDecodeRegion(long lbm,
             int start_x, int start_y, int width, int height,
             BitmapFactory.Options options);
@@ -269,4 +301,6 @@ public final class BitmapRegionDecoder {
             InputStream is, byte[] storage, boolean isShareable);
     private static native BitmapRegionDecoder nativeNewInstance(
             long asset, boolean isShareable);
+    private static native BitmapRegionDecoder nativeNewInstanceFromDrmFileDescriptor(
+            FileDescriptor fd, boolean isShareable);
 }

@@ -263,6 +263,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     public void setPhoneStatusBar(PhoneStatusBar phoneStatusBar) {
         mPhoneStatusBar = phoneStatusBar;
+        updateCameraVisibility(); // in case onFinishInflate() was called too early
     }
 
     private Intent getCameraIntent() {
@@ -274,6 +275,10 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     private void updateCameraVisibility() {
+        if (mCameraImageView == null) {
+            // Things are not set up yet; reply hazy, ask again later
+            return;
+        }
         ResolveInfo resolved = mContext.getPackageManager().resolveActivityAsUser(getCameraIntent(),
                 PackageManager.MATCH_DEFAULT_ONLY,
                 mLockPatternUtils.getCurrentUser());
@@ -300,7 +305,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private boolean isCameraDisabledByDpm() {
         final DevicePolicyManager dpm =
                 (DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
-        if (dpm != null) {
+        if (dpm != null && mPhoneStatusBar != null) {
             try {
                 final int userId = ActivityManagerNative.getDefault().getCurrentUser().id;
                 final int disabledFlags = dpm.getKeyguardDisabledFeatures(null, userId);

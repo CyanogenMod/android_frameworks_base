@@ -94,8 +94,8 @@ public class VideoCallImpl extends VideoCall {
         }
 
         @Override
-        public void changeCallDataUsage(long dataUsage) {
-            mHandler.obtainMessage(MSG_CHANGE_CALL_DATA_USAGE, dataUsage).sendToTarget();
+        public void changeCallDataUsage(int dataUsage) {
+            mHandler.obtainMessage(MSG_CHANGE_CALL_DATA_USAGE, dataUsage, 0).sendToTarget();
         }
 
         @Override
@@ -145,7 +145,7 @@ public class VideoCallImpl extends VideoCall {
                     }
                     break;
                 case MSG_CHANGE_CALL_DATA_USAGE:
-                    mVideoCallListener.onCallDataUsageChanged((long) msg.obj);
+                    mVideoCallListener.onCallDataUsageChanged(msg.arg1);
                     break;
                 case MSG_CHANGE_CAMERA_CAPABILITIES:
                     mVideoCallListener.onCameraCapabilitiesChanged(

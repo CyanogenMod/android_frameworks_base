@@ -77,17 +77,32 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <!-- Ringtone speaker Volume,its value is from 0 to 7,default value is 5 -->
     <integer name="def_ringtone_speaker_volume" translatable="false">5</integer>
 
+    <!-- Music speaker Volume,its value is from 0 to 15,default value is 11 -->
+    <integer name="def_music_speaker_volume" translatable="false">11</integer>
+
+    <!-- System speaker Volume,its value is from 0 to 7,default value is 7 -->
+    <integer name="def_system_speaker_volume" translatable="false">7</integer>
+
     <!-- Voice Call speaker Volume,its value is from 0 to 5,default value is 4 -->
     <integer name="def_voice_call_speaker_volume" translatable="false">4</integer>
+
+    <!-- Alarm speaker Volume,its value is from 0 to 7,default value is 6 -->
+    <integer name="def_alarm_speaker_volume" translatable="false">6</integer>
+
+    <!-- Notification speaker Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_notification_speaker_volume" translatable="false">5</integer>
+
+    <!-- Bluetooth sco speaker Volume,its value is from 0 to 15,default value is 7 -->
+    <integer name="def_bluetooth_sco_speaker_volume" translatable="false">7</integer>
 
     <!-- Voice Call earpiece Volume,its value is from 0 to 5,default value is 4 -->
     <integer name="def_voice_call_earpiece_volume" translatable="false">4</integer>
 
     <!-- Time format,default vlaue is 24 : 24 format,other value is 12 format -->
-    <string name="def_time_format" translatable="false">24</string>
+    <string name="def_time_format" translatable="false"></string>
 
     <!-- Date format,yyyy-MM-dd: 2013/07/30; MM-dd-yyyy:07/30/2013; dd-MM-yyyy:30/07/2013 -->
-    <string name="def_date_format" translatable="false">MM-dd-yyyy</string>
+    <string name="def_date_format" translatable="false"></string>
 
     <!--
          Default Input Method, its value is from inputmethod's package name and main class name
