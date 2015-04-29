@@ -39,6 +39,7 @@ import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.VolumeComponent;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -95,6 +96,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         Boolean getToggleState();
         View createDetailView(Context context, View convertView, ViewGroup parent);
         Intent getSettingsIntent();
+        StatusBarPanelCustomTile getCustomTile();
         void setToggleState(boolean state);
     }
 
@@ -291,6 +293,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
     }
 
     public interface Host {
+        void removeCustomTile(StatusBarPanelCustomTile customTile);
         void startSettingsActivity(Intent intent);
         void warn(String message, Throwable t);
         void collapsePanels();
