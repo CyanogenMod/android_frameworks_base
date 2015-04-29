@@ -80,6 +80,7 @@ import com.android.systemui.statusbar.policy.UserSwitcherController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.VolumeComponent;
 
+import cyanogenmod.app.CustomTile;
 import cyanogenmod.app.CustomTileListenerService;
 import cyanogenmod.app.StatusBarPanelCustomTile;
 
@@ -190,6 +191,12 @@ public class QSTileHost implements QSTile.Host {
     @Override
     public void startSettingsActivity(final Intent intent) {
         mStatusBar.postStartSettingsActivity(intent, 0);
+    }
+
+    @Override
+    public void removeCustomTile(StatusBarPanelCustomTile customTile) {
+        mCustomTileListenerService.removeCustomTile(customTile.getPackage(),
+                customTile.getTag(), customTile.getId());
     }
 
     @Override
@@ -415,7 +422,7 @@ public class QSTileHost implements QSTile.Host {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            removeCustomTile(sbc.getKey());
+                            removeCustomTileSysUi(sbc.getKey());
                         }
                     });
                 }
@@ -443,7 +450,7 @@ public class QSTileHost implements QSTile.Host {
         }
     }
 
-    private void removeCustomTile(String key) {
+    private void removeCustomTileSysUi(String key) {
         if (mTiles.containsKey(key)) {
             mTiles.remove(key);
             mCustomTileData.remove(key);
