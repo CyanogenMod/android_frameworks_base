@@ -83,6 +83,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     protected void handleClick() {
         try {
             if (mOnClick != null) {
+                mHost.collapsePanels();
                 mOnClick.send();
             } else if (mOnClickUri != null) {
                 final Intent intent = new Intent().setData(mOnClickUri);
