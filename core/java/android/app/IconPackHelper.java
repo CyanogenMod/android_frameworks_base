@@ -573,8 +573,15 @@ public class IconPackHelper {
 
     public static boolean shouldComposeIcon(ComposedIconInfo iconInfo) {
         return iconInfo != null &&
-                (iconInfo.iconBacks != null || iconInfo.iconMask != 0 ||
-                        iconInfo.iconUpon != 0 || iconInfo.colorFilter != null);
+                (iconInfo.iconBacks != null ||
+                        iconInfo.iconMask != 0 ||
+                        iconInfo.iconUpon != 0 ||
+                        iconInfo.colorFilter != null ||
+                        iconInfo.iconPaletteBack != 0 ||
+                        iconInfo.iconRotation != 0 ||
+                        iconInfo.iconRotationVariance != 0 ||
+                        iconInfo.iconTranslationX != 0 ||
+                        iconInfo.iconTranslationY != 0);
     }
 
     public static class IconCustomizer {
