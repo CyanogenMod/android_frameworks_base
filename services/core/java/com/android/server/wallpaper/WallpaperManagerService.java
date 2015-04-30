@@ -1119,16 +1119,19 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                 Slog.w(TAG, msg);
                 return false;
             }
-            
+
             WallpaperInfo wi = null;
-            
             Intent intent = new Intent(WallpaperService.SERVICE_INTERFACE);
+            Intent hiddenIntent = new Intent(WallpaperService.HIDDEN_SERVICE_INTERFACE);
             if (componentName != null && !componentName.equals(mImageWallpaper)) {
                 // Make sure the selected service is actually a wallpaper service.
                 List<ResolveInfo> ris =
                         mIPackageManager.queryIntentServices(intent,
                                 intent.resolveTypeIfNeeded(mContext.getContentResolver()),
                                 PackageManager.GET_META_DATA, serviceUserId);
+                ris.addAll(mIPackageManager.queryIntentServices(hiddenIntent,
+                        hiddenIntent.resolveTypeIfNeeded(mContext.getContentResolver()),
+                        PackageManager.GET_META_DATA, serviceUserId));
                 for (int i=0; i<ris.size(); i++) {
                     ServiceInfo rsi = ris.get(i).serviceInfo;
                     if (rsi.name.equals(si.name) &&

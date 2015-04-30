@@ -87,6 +87,16 @@ public abstract class WallpaperService extends Service {
             "android.service.wallpaper.WallpaperService";
 
     /**
+     * The {@link Intent} that must be declared as handled by the service.
+     * To be supported, the service must also require the
+     * {@link android.Manifest.permission#BIND_WALLPAPER} permission so
+     * that other applications can not abuse it.
+     */
+    @SdkConstant(SdkConstantType.SERVICE_ACTION)
+    public static final String HIDDEN_SERVICE_INTERFACE =
+            "android.service.wallpaper.HiddenWallpaperService";
+
+    /**
      * Name under which a WallpaperService component publishes information
      * about itself.  This meta-data must reference an XML resource containing
      * a <code>&lt;{@link android.R.styleable#Wallpaper wallpaper}&gt;</code>
