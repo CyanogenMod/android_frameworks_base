@@ -39,6 +39,7 @@ import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.VolumeComponent;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -95,6 +96,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         Boolean getToggleState();
         View createDetailView(Context context, View convertView, ViewGroup parent);
         Intent getSettingsIntent();
+        StatusBarPanelCustomTile getCustomTile();
         void setToggleState(boolean state);
     }
 
@@ -291,6 +293,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
     }
 
     public interface Host {
+        void removeCustomTile(StatusBarPanelCustomTile customTile);
         void startSettingsActivity(Intent intent);
         void warn(String message, Throwable t);
         void collapsePanels();
@@ -353,6 +356,42 @@ public abstract class QSTile<TState extends State> implements Listenable {
         @Override
         public String toString() {
             return String.format("ResourceIcon[resId=0x%08x]", mResId);
+        }
+    }
+
+    protected class ExternalIcon extends AnimationIcon {
+        private Context mPackageContext;
+        private String mPkg;
+        private int mResId;
+
+        public ExternalIcon(String pkg, int resId) {
+            super(resId);
+            mPkg = pkg;
+            mResId = resId;
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            // Get the drawable from the package context
+            Drawable d = null;
+            try {
+                d = super.getDrawable(getPackageContext());
+            } catch (Throwable t) {
+                Log.w(TAG, "Error creating package context" + mPkg + " id=" + mResId, t);
+            }
+            return d;
+        }
+
+        private Context getPackageContext() {
+            if (mPackageContext == null) {
+                try {
+                    mPackageContext = mContext.createPackageContext(mPkg, 0);
+                } catch (Throwable t) {
+                    Log.w(TAG, "Error creating package context" + mPkg, t);
+                    return null;
+                }
+            }
+            return mPackageContext;
         }
     }
 
