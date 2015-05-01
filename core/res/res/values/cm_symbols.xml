@@ -336,4 +336,5 @@
     <java-symbol type="drawable" name="ic_signal_flashlight_disable" />
 
     <java-symbol type="array" name="config_externalCMServices" />
+    <java-symbol type="string" name="custom_tile_listener_binding_label" />
 </resources>
