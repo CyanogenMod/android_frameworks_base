@@ -28,4 +28,5 @@
   <string name="pick_wallpaper">Шпалери</string>
   <string name="activity_not_found">Програма не встановлена.</string>
   <string name="lockscreen_wallpaper_instructions">Встановити шпалери екрану блокування</string>
+  <string name="image_decode_error">Не вдалося декодувати зображення</string>
 </resources>

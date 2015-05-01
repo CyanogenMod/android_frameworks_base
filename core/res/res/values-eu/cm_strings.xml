@@ -17,6 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="profileNameDefault">Lehenetsia</string>
   <string name="profileNameWork">Lanean</string>
   <string name="profileNameHome">Etxean</string>
   <string name="profileNameSilent">Isilik</string>
