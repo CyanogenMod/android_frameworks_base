@@ -129,6 +129,8 @@ public final class Profile implements Parcelable, Comparable {
         private String mId;
         private String mName;
         private int mState;
+        private String mPackageOwner;
+        private String mStringState;
 
         public ProfileTrigger(int type, String id, int state, String name) {
             mType = type;
@@ -137,11 +139,25 @@ public final class Profile implements Parcelable, Comparable {
             mName = name;
         }
 
+        public ProfileTrigger(int type, String name, String packageOwner,
+                              String stringState) {
+            this(type, packageOwner + ":" + name, -1, name);
+            mPackageOwner = packageOwner;
+            mStringState = stringState;
+        }
+
         private ProfileTrigger(Parcel in) {
             mType = in.readInt();
             mId = in.readString();
             mState = in.readInt();
             mName = in.readString();
+            if (in.readInt() == 1) {
+                mStringState = in.readString();
+                mPackageOwner = in.readString();
+            } else {
+                mStringState = null;
+                mPackageOwner = null;
+            }
         }
 
         @Override
@@ -150,6 +166,13 @@ public final class Profile implements Parcelable, Comparable {
             dest.writeString(mId);
             dest.writeInt(mState);
             dest.writeString(mName);
+            if (mStringState != null) {
+                dest.writeInt(1);
+                dest.writeString(mStringState);
+                dest.writeString(mPackageOwner);
+            } else {
+                dest.writeInt(0);
+            }
         }
 
         @Override
@@ -170,11 +193,25 @@ public final class Profile implements Parcelable, Comparable {
         }
 
         public int getState() {
+            if (mType == TriggerType.STRING) {
+                throw new IllegalStateException("No int state associated with String trigger type");
+            }
             return mState;
         }
 
+        public String getStringState() {
+            return mStringState;
+        }
+
         public void getXmlString(StringBuilder builder, Context context) {
-            final String itemType = mType == TriggerType.WIFI ? "wifiAP" : "btDevice";
+            String itemType;
+            if (mType == TriggerType.STRING) {
+                itemType = "custom";
+            } else if (mType == TriggerType.WIFI) {
+                itemType = "wifiAP";
+            } else {
+                itemType = "btDevice";
+            }
 
             builder.append("<");
             builder.append(itemType);
@@ -184,6 +221,12 @@ public final class Profile implements Parcelable, Comparable {
             builder.append(mId);
             builder.append("\" state=\"");
             builder.append(mState);
+            if (mPackageOwner != null && mStringState != null) {
+                builder.append("\" packageOwner=\"");
+                builder.append(mPackageOwner);
+                builder.append("\" stringState=\"");
+                builder.append(mStringState);
+            }
             builder.append("\" name=\"");
             builder.append(mName);
             builder.append("\"></");
@@ -199,6 +242,8 @@ public final class Profile implements Parcelable, Comparable {
                 type = TriggerType.WIFI;
             } else if (name.equals("btDevice")) {
                 type = TriggerType.BLUETOOTH;
+            } else if (name.equals("custom")) {
+                type = TriggerType.STRING;
             } else {
                 return null;
             }
@@ -210,10 +255,19 @@ public final class Profile implements Parcelable, Comparable {
                 triggerName = id;
             }
 
-            return new ProfileTrigger(type, id, state, triggerName);
+            if (type == TriggerType.STRING) {
+                String packageOwner = xpp.getAttributeValue(null, "packageOwner");
+                String triggerState = xpp.getAttributeValue(null, "stringState");
+                return new ProfileTrigger(type, triggerName, packageOwner, triggerState);
+            } else {
+                return new ProfileTrigger(type, id, state, triggerName);
+            }
         }
 
         private static String getIdType(int type) {
+            if (type == TriggerType.STRING) {
+                return "string";
+            }
             return type == TriggerType.WIFI ? "ssid" : "address";
         }
 
@@ -266,6 +320,14 @@ public final class Profile implements Parcelable, Comparable {
         return TriggerState.DISABLED;
     }
 
+    public String getStringTrigger(String packageOwner, String id) {
+        ProfileTrigger trigger = mTriggers.get(packageOwner + ":" + id);
+        if (trigger != null && trigger.getType() == TriggerType.STRING) {
+            return trigger.getStringState();
+        }
+        return null;
+    }
+
     public ArrayList<ProfileTrigger> getTriggersFromType(int type) {
         ArrayList<ProfileTrigger> result = new ArrayList<ProfileTrigger>();
         for (Entry<String, ProfileTrigger> profileTrigger:  mTriggers.entrySet()) {
@@ -295,6 +357,14 @@ public final class Profile implements Parcelable, Comparable {
         } else {
             mTriggers.put(id, new ProfileTrigger(type, id, state, name));
         }
+
+        mDirty = true;
+    }
+
+    public void setTrigger(String packageOwner, String triggerId, String stringState) {
+        // TODO ensure state is valid
+        mTriggers.put(packageOwner + ":" + triggerId,
+                new ProfileTrigger(TriggerType.STRING, triggerId, packageOwner, stringState));
 
         mDirty = true;
     }
