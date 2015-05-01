@@ -3052,6 +3052,20 @@
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
 
+    <!-- Must be required by an, to ensure that only the system can bind to it.
+     @hide -->
+    <permission android:name="android.permission.BIND_CUSTOM_TILE_LISTENER_SERVICE"
+                android:label="@string/permlab_bindCustomTileListenerService"
+                android:description="@string/permdesc_bindCustomTileListenerService"
+                android:protectionLevel="signature" />
+
+    <!-- Allows a 3rd party application to publish or unpublish a quick settings tile
+         @hide-->
+    <permission android:name="android.permission.PUBLISH_CUSTOM_TILE"
+                android:label="@string/permlab_publishCustomTile"
+                android:description="@string/permdesc_publishCustomTile"
+                android:protectionLevel="normal" />
+
     <application android:process="system"
                  android:persistent="true"
                  android:hasCode="false"
