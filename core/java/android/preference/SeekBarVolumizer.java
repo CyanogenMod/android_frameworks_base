@@ -126,16 +126,20 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
 
     protected void updateSeekBar() {
         if (mNotificationOrRing && mRingerMode == AudioManager.RINGER_MODE_VIBRATE) {
-            mSeekBar.setEnabled(true);
+            mSeekBar.setEnabled(enableSeekBar());
             mSeekBar.setProgress(0);
         } else if (mMuted) {
             mSeekBar.setEnabled(false);
             mSeekBar.setProgress(0);
         } else {
-            mSeekBar.setEnabled(mStreamType != AudioManager.STREAM_NOTIFICATION
-                    || !isNotificationStreamLinked());
+            mSeekBar.setEnabled(enableSeekBar());
             mSeekBar.setProgress(mLastProgress > -1 ? mLastProgress : mOriginalStreamVolume);
         }
+    }
+
+    private boolean enableSeekBar() {
+        return mStreamType != AudioManager.STREAM_NOTIFICATION
+                || !isNotificationStreamLinked();
     }
 
     @Override
