@@ -46,6 +46,7 @@ import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.VolumeComponent;
 import com.android.systemui.volume.VolumePanel;
 import com.android.systemui.volume.ZenModePanel;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 /** Quick settings tile: Notifications **/
 public class NotificationsTile extends QSTile<NotificationsTile.NotificationsState> {
@@ -168,6 +169,11 @@ public class NotificationsTile extends QSTile<NotificationsTile.NotificationsSta
 
         public Intent getSettingsIntent() {
             return ZenModePanel.ZEN_SETTINGS;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
         }
 
         @Override
