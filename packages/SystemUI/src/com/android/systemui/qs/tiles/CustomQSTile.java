@@ -83,7 +83,9 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     protected void handleClick() {
         try {
             if (mOnClick != null) {
-                mHost.collapsePanels();
+                if (mOnClick.isActivity()) {
+                    mHost.collapsePanels();
+                }
                 mOnClick.send();
             } else if (mOnClickUri != null) {
                 final Intent intent = new Intent().setData(mOnClickUri);
@@ -152,11 +154,14 @@ public class CustomQSTile extends QSTile<QSTile.State> {
             TextView customTileTitle = (TextView) rootView.findViewById(R.id.custom_qs_tile_title);
             TextView customTilePkg = (TextView) rootView
                     .findViewById(R.id.custom_qs_tile_package);
+            TextView customTileContentDesc = (TextView) rootView
+                    .findViewById(R.id.custom_qs_tile_content_description);
 
             // icon is cached in state, fetch it
             imageView.setImageDrawable(getState().icon.getDrawable(mContext));
             customTileTitle.setText(mTile.getCustomTile().label);
             customTilePkg.setText(mTile.getPackage());
+            customTileContentDesc.setText(mTile.getCustomTile().contentDescription);
             return rootView;
         }
     }

@@ -434,9 +434,6 @@ public class QSTileHost implements QSTile.Host {
             if (tile instanceof CustomQSTile) {
                 CustomQSTile qsTile = (CustomQSTile) tile;
                 qsTile.update(sbc);
-                if (mCallback != null) {
-                    mCallback.onTilesChanged();
-                }
             }
         }
     }
