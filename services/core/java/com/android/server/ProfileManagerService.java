@@ -31,7 +31,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.XmlResourceParser;
+import android.os.Binder;
 import android.os.Environment;
 import android.os.RemoteException;
 import android.os.UserHandle;
@@ -180,6 +182,13 @@ public class ProfileManagerService extends IProfileManager.Stub {
         return true;
     }
 
+    @Override
+    public void sendTrigger(String triggerId, String triggerState) {
+        PackageManager packageManager = mContext.getPackageManager();
+        String ownerPackage = packageManager.getNameForUid(Binder.getCallingUid());
+        mTriggerHelper.sendTrigger(ownerPackage, triggerId, triggerState);
+    }
+
     /* package */ void setActiveProfile(Profile newActiveProfile, boolean doInit) {
         /*
          * NOTE: Since this is not a public function, and all public functions
@@ -189,7 +198,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
          * list, and THEN add it.
          */
 
-        enforceChangePermissions();
+        //enforceChangePermissions();
 
         Log.d(TAG, "Set active profile to: " + newActiveProfile.getUuid().toString()
                 + " - " + newActiveProfile.getName());

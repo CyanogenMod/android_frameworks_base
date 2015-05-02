@@ -246,6 +246,18 @@ public class ProfileManager {
         }
     }
 
+    /** @hide */
+    public void sendTrigger(String triggerId, String triggerState) {
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                SYSTEM_PROFILES_ENABLED, 1) == 1) {
+            try {
+                getService().sendTrigger(triggerId, triggerState);
+            } catch (RemoteException e) {
+                Log.e(TAG, e.getLocalizedMessage(), e);
+            }
+        }
+    }
+
     public Profile getActiveProfile() {
         if (Settings.System.getInt(mContext.getContentResolver(),
                 SYSTEM_PROFILES_ENABLED, 1) == 1) {
