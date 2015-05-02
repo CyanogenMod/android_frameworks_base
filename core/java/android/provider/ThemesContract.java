@@ -422,7 +422,7 @@ public class ThemesContract {
     }
 
     /**
-     * Table containing cached preview blobs for a given theme
+     * Table containing cached preview files for a given theme
      */
     public static class PreviewColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "previews");
@@ -448,150 +448,89 @@ public class ThemesContract {
         public static final String THEME_ID = "theme_id";
 
         /**
-         * Cached image of the themed status bar background.
-         * <P>Type: BLOB (bitmap)</P>
+         * The unique ID for the component within a theme.
+         * <P>Type: INTEGER (long)</P>
          */
-        public static final String STATUSBAR_BACKGROUND = "statusbar_background";
+        public static final String COMPONENT_ID = "component_id";
 
         /**
-         * Cached image of the themed bluetooth status icon.
-         * <P>Type: BLOB (bitmap)</P>
+         * The unique key for a row. See the KEY_* constants
+         * for valid examples
+         * <P>Type: TEXT</P>
          */
-        public static final String STATUSBAR_BLUETOOTH_ICON = "statusbar_bluetooth_icon";
+        public static final String COL_KEY = "key";
 
         /**
-         * Cached image of the themed wifi status icon.
-         * <P>Type: BLOB (bitmap)</P>
+         * The package name that corresponds to a given component.
+         * <P>Type: String</P>
          */
-        public static final String STATUSBAR_WIFI_ICON = "statusbar_wifi_icon";
+        public static final String COL_VALUE = "value";
 
         /**
-         * Cached image of the themed cellular signal status icon.
-         * <P>Type: BLOB (bitmap)</P>
+         * Valid keys
          */
-        public static final String STATUSBAR_SIGNAL_ICON = "statusbar_signal_icon";
+        public static final String KEY_STATUSBAR_BACKGROUND = "preview_statusbar_background";
+        public static final String KEY_STATUSBAR_BLUETOOTH_ICON =
+                "preview_statusbar_bluetooth_icon";
+        public static final String KEY_STATUSBAR_WIFI_ICON = "preview_statusbar_wifi_icon";
+        public static final String KEY_STATUSBAR_SIGNAL_ICON = "preview_statusbar_signal_icon";
+        public static final String KEY_STATUSBAR_BATTERY_PORTRAIT =
+                "preview_statusbar_battery_portrait";
+        public static final String KEY_STATUSBAR_BATTERY_LANDSCAPE =
+                "preview_statusbar_battery_landscape";
+        public static final String KEY_STATUSBAR_BATTERY_CIRCLE =
+                "preview_statusbar_battery_circle";
+        public static final String KEY_STATUSBAR_CLOCK_TEXT_COLOR =
+                "preview_statusbar_clock_text_color";
+        public static final String KEY_STATUSBAR_WIFI_COMBO_MARGIN_END =
+                "preview_statusbar_wifi_combo_margin_end";
+        public static final String KEY_NAVBAR_BACKGROUND = "preview_navbar_background";
+        public static final String KEY_NAVBAR_BACK_BUTTON = "preview_navbar_back_button";
+        public static final String KEY_NAVBAR_HOME_BUTTON = "preview_navbar_home_button";
+        public static final String KEY_NAVBAR_RECENT_BUTTON = "preview_navbar_recent_button";
+        public static final String KEY_ICON_PREVIEW_1 = "preview_icon_preview_1";
+        public static final String KEY_ICON_PREVIEW_2 = "preview_icon_preview_2";
+        public static final String KEY_ICON_PREVIEW_3 = "preview_icon_preview_3";
+        public static final String KEY_ICON_PREVIEW_4 = "preview_icon_preview_4";
+        public static final String KEY_WALLPAPER_FULL = "preview_wallpaper_full";
+        public static final String KEY_WALLPAPER_PREVIEW = "preview_wallpaper_preview";
+        public static final String KEY_WALLPAPER_THUMBNAIL = "preview_wallpaper_thumbnail";
+        public static final String KEY_LOCK_WALLPAPER_FULL = "preview_lock_wallpaper_full";
+        public static final String KEY_LOCK_WALLPAPER_PREVIEW = "preview_lock_wallpaper_preview";
+        public static final String KEY_LOCK_WALLPAPER_THUMBNAIL =
+                "preview_lock_wallpaper_thumbnail";
+        public static final String KEY_STYLE_PREVIEW = "preview_style_preview";
+        public static final String KEY_STYLE_THUMBNAIL = "preview_style_thumbnail";
+        public static final String KEY_BOOTANIMATION_THUMBNAIL = "preview_bootanimation_thumbnail";
 
-        /**
-         * Cached image of the themed battery using portrait style.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String STATUSBAR_BATTERY_PORTRAIT = "statusbar_battery_portrait";
-
-        /**
-         * Cached image of the themed battery using landscape style.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String STATUSBAR_BATTERY_LANDSCAPE = "statusbar_battery_landscape";
-
-        /**
-         * Cached image of the themed battery using circle style.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String STATUSBAR_BATTERY_CIRCLE = "statusbar_battery_circle";
-
-        /**
-         * The themed margin value between the wifi and rssi signal icons.
-         * <P>Type: INTEGER (int)</P>
-         */
-        public static final String STATUSBAR_WIFI_COMBO_MARGIN_END = "wifi_combo_margin_end";
-
-        /**
-         * The themed color used for clock text in the status bar.
-         * <P>Type: INTEGER (int)</P>
-         */
-        public static final String STATUSBAR_CLOCK_TEXT_COLOR = "statusbar_clock_text_color";
-
-        /**
-         * Cached image of the themed navigation bar background.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String NAVBAR_BACKGROUND = "navbar_background";
-
-        /**
-         * Cached image of the themed back button.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String NAVBAR_BACK_BUTTON = "navbar_back_button";
-
-        /**
-         * Cached image of the themed home button.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String NAVBAR_HOME_BUTTON = "navbar_home_button";
-
-        /**
-         * Cached image of the themed recents button.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String NAVBAR_RECENT_BUTTON = "navbar_recent_button";
-
-        /**
-         * Cached image of the 1/4 icons
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String ICON_PREVIEW_1 = "icon_preview_1";
-
-        /**
-         * Cached image of the 2/4 icons
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String ICON_PREVIEW_2 = "icon_preview_2";
-
-        /**
-         * Cached image of the 3/4 icons
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String ICON_PREVIEW_3 = "icon_preview_3";
-
-        /**
-         * Cached image of the 4/4 icons
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String ICON_PREVIEW_4 = "icon_preview_4";
-
-        /**
-         * Cached preview of UI controls representing the theme's style
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String STYLE_PREVIEW = "style_preview";
-
-        /**
-         * Cached thumbnail preview of UI controls representing the theme's style
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String STYLE_THUMBNAIL = "style_thumbnail";
-
-        /**
-         * Cached thumbnail of the theme's boot animation
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String BOOTANIMATION_THUMBNAIL = "bootanimation_thumbnail";
-
-        /**
-         * Cached thumbnail of the theme's wallpaper
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String WALLPAPER_THUMBNAIL = "wallpaper_thumbnail";
-
-        /**
-         * Cached preview of the theme's wallpaper which is larger than the thumbnail
-         * but smaller than the full sized wallpaper.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String WALLPAPER_PREVIEW = "wallpaper_preview";
-
-        /**
-         * Cached thumbnail of the theme's lockscreen wallpaper
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String LOCK_WALLPAPER_THUMBNAIL = "lock_wallpaper_thumbnail";
-
-        /**
-         * Cached preview of the theme's lockscreen  wallpaper which is larger than the thumbnail
-         * but smaller than the full sized lockscreen wallpaper.
-         * <P>Type: BLOB (bitmap)</P>
-         */
-        public static final String LOCK_WALLPAPER_PREVIEW = "lock_wallpaper_preview";
+        public static final String[] ROWS = {
+                KEY_STATUSBAR_BACKGROUND,
+                KEY_STATUSBAR_BLUETOOTH_ICON,
+                KEY_STATUSBAR_WIFI_ICON,
+                KEY_STATUSBAR_SIGNAL_ICON,
+                KEY_STATUSBAR_BATTERY_PORTRAIT,
+                KEY_STATUSBAR_BATTERY_LANDSCAPE,
+                KEY_STATUSBAR_BATTERY_CIRCLE,
+                KEY_STATUSBAR_CLOCK_TEXT_COLOR,
+                KEY_STATUSBAR_WIFI_COMBO_MARGIN_END,
+                KEY_NAVBAR_BACKGROUND,
+                KEY_NAVBAR_BACK_BUTTON,
+                KEY_NAVBAR_HOME_BUTTON,
+                KEY_NAVBAR_RECENT_BUTTON,
+                KEY_ICON_PREVIEW_1,
+                KEY_ICON_PREVIEW_2,
+                KEY_ICON_PREVIEW_3,
+                KEY_ICON_PREVIEW_4,
+                KEY_WALLPAPER_FULL,
+                KEY_WALLPAPER_PREVIEW,
+                KEY_WALLPAPER_THUMBNAIL,
+                KEY_LOCK_WALLPAPER_FULL,
+                KEY_LOCK_WALLPAPER_PREVIEW,
+                KEY_LOCK_WALLPAPER_THUMBNAIL,
+                KEY_STYLE_PREVIEW,
+                KEY_STYLE_THUMBNAIL,
+                KEY_BOOTANIMATION_THUMBNAIL
+        };
     }
 
     public static class Intent {
