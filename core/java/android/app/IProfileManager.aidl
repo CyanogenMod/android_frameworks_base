@@ -35,6 +35,7 @@ interface IProfileManager
     Profile getProfile(in ParcelUuid profileParcelUuid);
     Profile getProfileByName(String profileName);
     Profile[] getProfiles();
+    void sendTrigger(String triggerId, String triggerState);
     boolean profileExists(in ParcelUuid profileUuid);
     boolean profileExistsByName(String profileName);
     boolean notificationGroupExistsByName(String notificationGroupName);

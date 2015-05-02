@@ -120,6 +120,23 @@ public class ProfileTriggerHelper extends BroadcastReceiver {
         }
     }
 
+    public void sendTrigger(String ownerPackage, String triggerId, String triggerState) {
+        System.out.println("sendTrigger " + ownerPackage + " " + triggerId + " " + triggerState);
+        checkStringTriggers(ownerPackage, triggerId, triggerState);
+    }
+
+    private void checkStringTriggers(String ownerPackage, String id, String newState) {
+        for (Profile p : mService.getProfileList()) {
+            if (!newState.equals(p.getStringTrigger(ownerPackage, id))) {
+                continue;
+            }
+            UUID currentProfileUuid = mService.getActiveProfile().getUuid();
+            if (!currentProfileUuid.equals(p.getUuid())) {
+                mService.setActiveProfile(p, true);
+            }
+        }
+    }
+
     private void checkTriggers(int type, String id, int newState) {
         for (Profile p : mService.getProfileList()) {
             if (newState != p.getTrigger(type, id)) {
