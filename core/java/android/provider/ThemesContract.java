@@ -422,9 +422,93 @@ public class ThemesContract {
     }
 
     /**
-     * Table containing cached preview blobs for a given theme
+     * Table containing cached preview files for a given theme
      */
     public static class PreviewColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "previews");
+
+        /**
+         * Uri for retrieving the previews for the currently applied components.
+         * Querying the themes provider using this URI will return a cursor with a single row
+         * containing all the previews for the components that are currently applied.
+         */
+        public static final Uri APPLIED_URI = Uri.withAppendedPath(AUTHORITY_URI,
+                "applied_previews");
+
+        /**
+         * The unique ID for a row.
+         * <P>Type: INTEGER (long)</P>
+         */
+        public static final String _ID = "_id";
+
+        /**
+         * The unique ID for the theme these previews belong to.
+         * <P>Type: INTEGER (long)</P>
+         */
+        public static final String THEME_ID = "theme_id";
+
+        /**
+         * The unique ID for the component within a theme.
+         * <P>Type: INTEGER (long)</P>
+         */
+        public static final String COMPONENT_ID = "component_id";
+
+        /**
+         * The unique key for a row. See the KEY_* constants
+         * for valid examples
+         * <P>Type: TEXT</P>
+         */
+        public static final String COL_KEY = "key";
+
+        /**
+         * The package name that corresponds to a given component.
+         * <P>Type: String</P>
+         */
+        public static final String COL_VALUE = "value";
+
+        /**
+         * Valid keys
+         */
+        public static final String KEY_STATUSBAR_BACKGROUND = "preview_statusbar_background";
+        public static final String KEY_STATUSBAR_BLUETOOTH_ICON =
+                "preview_statusbar_bluetooth_icon";
+        public static final String KEY_STATUSBAR_WIFI_ICON = "preview_statusbar_wifi_icon";
+        public static final String KEY_STATUSBAR_SIGNAL_ICON = "preview_statusbar_signal_icon";
+        public static final String KEY_STATUSBAR_BATTERY_PORTRAIT =
+                "preview_statusbar_battery_portrait";
+        public static final String KEY_STATUSBAR_BATTERY_LANDSCAPE =
+                "preview_statusbar_battery_landscape";
+        public static final String KEY_STATUSBAR_BATTERY_CIRCLE =
+                "preview_statusbar_battery_circle";
+        public static final String KEY_STATUSBAR_CLOCK_TEXT_COLOR =
+                "preview_statusbar_clock_text_color";
+        public static final String KEY_STATUSBAR_WIFI_COMBO_MARGIN_END =
+                "preview_statusbar_wifi_combo_margin_end";
+        public static final String KEY_NAVBAR_BACKGROUND = "preview_navbar_background";
+        public static final String KEY_NAVBAR_BACK_BUTTON = "preview_navbar_back_button";
+        public static final String KEY_NAVBAR_HOME_BUTTON = "preview_navbar_home_button";
+        public static final String KEY_NAVBAR_RECENT_BUTTON = "preview_navbar_recent_button";
+        public static final String KEY_ICON_PREVIEW_1 = "preview_icon_preview_1";
+        public static final String KEY_ICON_PREVIEW_2 = "preview_icon_preview_2";
+        public static final String KEY_ICON_PREVIEW_3 = "preview_icon_preview_3";
+        public static final String KEY_ICON_PREVIEW_4 = "preview_icon_preview_4";
+        public static final String KEY_WALLPAPER_FULL = "preview_wallpaper_full";
+        public static final String KEY_WALLPAPER_PREVIEW = "preview_wallpaper_preview";
+        public static final String KEY_WALLPAPER_THUMBNAIL = "preview_wallpaper_thumbnail";
+        public static final String KEY_LOCK_WALLPAPER_FULL = "preview_lock_wallpaper_full";
+        public static final String KEY_LOCK_WALLPAPER_PREVIEW = "preview_lock_wallpaper_preview";
+        public static final String KEY_LOCK_WALLPAPER_THUMBNAIL =
+                "preview_lock_wallpaper_thumbnail";
+        public static final String KEY_STYLE_PREVIEW = "preview_style_preview";
+        public static final String KEY_STYLE_THUMBNAIL = "preview_style_thumbnail";
+        public static final String KEY_BOOTANIMATION_THUMBNAIL = "preview_bootanimation_thumbnail";
+    }
+
+    /**
+     * The following is being depricated in version 15. Only present for build compatibility.
+     * Table containing cached preview blobs for a given theme
+     */
+    public static class LegacyPreviewColumns {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(AUTHORITY_URI, "previews");
 
         /**

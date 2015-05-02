@@ -88,6 +88,8 @@ public class ThemeUtils {
             + File.separator + "alarms";
     public static final String SYSTEM_THEME_ICON_CACHE_DIR = SYSTEM_THEME_PATH
             + File.separator + "icons";
+    public static final String SYSTEM_THEME_PREVIEWS_DIR = SYSTEM_THEME_PATH
+            + File.separator + "previews";
     // internal path to bootanimation.zip inside theme apk
     public static final String THEME_BOOTANIMATION_PATH = "assets/bootanimation/bootanimation.zip";
 
@@ -286,6 +288,17 @@ public class ThemeUtils {
 
     public static void clearIconCache() {
         FileUtils.deleteContents(new File(SYSTEM_THEME_ICON_CACHE_DIR));
+    }
+
+    /**
+     * Create SYSTEM_THEME_PREVIEWS_DIR directory if it does not exist
+     */
+    public static void createPreviewsDirIfNotExists() {
+        createDirIfNotExists(SYSTEM_THEME_PREVIEWS_DIR);
+    }
+
+    public static void clearPreviewsForTheme(String pkgName) {
+        FileUtils.deleteContents(new File(SYSTEM_THEME_PREVIEWS_DIR));
     }
 
     public static InputStream getInputStreamFromAsset(Context ctx, String path) throws IOException {
