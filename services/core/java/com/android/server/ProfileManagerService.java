@@ -180,6 +180,11 @@ public class ProfileManagerService extends IProfileManager.Stub {
         return true;
     }
 
+    @Override
+    public void sendTrigger(String triggerId, int triggerState) {
+        mTriggerHelper.sendTrigger(triggerId, triggerState);
+    }
+
     /* package */ void setActiveProfile(Profile newActiveProfile, boolean doInit) {
         /*
          * NOTE: Since this is not a public function, and all public functions

@@ -120,6 +120,10 @@ public class ProfileTriggerHelper extends BroadcastReceiver {
         }
     }
 
+    public void sendTrigger(String triggerId, int triggerState) {
+        checkTriggers(Profile.TriggerType.STRING, triggerId, triggerState);
+    }
+
     private void checkTriggers(int type, String id, int newState) {
         for (Profile p : mService.getProfileList()) {
             if (newState != p.getTrigger(type, id)) {
