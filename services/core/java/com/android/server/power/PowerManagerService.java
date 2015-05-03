@@ -1922,7 +1922,7 @@ public final class PowerManagerService extends SystemService
                 }
 
                 // Dream has ended or will be stopped.  Update the power state.
-                if (isItBedTimeYetLocked()) {
+                if (isItBedTimeYetLocked() && !mDreamsActivatedOnSleepByDefaultConfig) {
                     goToSleepNoUpdateLocked(SystemClock.uptimeMillis(),
                             PowerManager.GO_TO_SLEEP_REASON_TIMEOUT, 0, Process.SYSTEM_UID);
                     updatePowerStateLocked();
