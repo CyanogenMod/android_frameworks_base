@@ -79,6 +79,8 @@ public final class Profile implements Parcelable, Comparable {
 
     private BrightnessSettings mBrightness = new BrightnessSettings();
 
+    private CustomActions mCustomActions = new CustomActions();
+
     private int mScreenLockMode = LockMode.DEFAULT;
 
     private int mExpandedDesktopMode = ExpandedDesktopMode.DEFAULT;
@@ -110,6 +112,7 @@ public final class Profile implements Parcelable, Comparable {
     public static class TriggerType {
         public static final int WIFI = 0;
         public static final int BLUETOOTH = 1;
+        public static final int STRING = 3;
     }
 
     /** @hide */
@@ -369,6 +372,7 @@ public final class Profile implements Parcelable, Comparable {
         dest.writeParcelable(mRingMode, flags);
         dest.writeParcelable(mAirplaneMode, flags);
         dest.writeParcelable(mBrightness, flags);
+        dest.writeParcelable(mCustomActions, flags);
         dest.writeInt(mScreenLockMode);
         dest.writeMap(mTriggers);
         dest.writeInt(mExpandedDesktopMode);
@@ -405,6 +409,7 @@ public final class Profile implements Parcelable, Comparable {
         mRingMode = (RingModeSettings) in.readParcelable(null);
         mAirplaneMode = (AirplaneModeSettings) in.readParcelable(null);
         mBrightness = (BrightnessSettings) in.readParcelable(null);
+        mCustomActions = (CustomActions) in.readParcelable(null);
         mScreenLockMode = in.readInt();
         in.readMap(mTriggers, null);
         mExpandedDesktopMode = in.readInt();
@@ -542,6 +547,15 @@ public final class Profile implements Parcelable, Comparable {
         mDirty = true;
     }
 
+    public CustomActions getCustomActions() {
+        return mCustomActions;
+    }
+
+    public void setCustomActions(CustomActions actions) {
+        mCustomActions = actions;
+        mDirty = true;
+    }
+
     /** @hide */
     public boolean isDirty() {
         if (mDirty) {
@@ -569,6 +583,9 @@ public final class Profile implements Parcelable, Comparable {
             return true;
         }
         if (mBrightness.isDirty()) {
+            return true;
+        }
+        if (mCustomActions.isDirty()) {
             return true;
         }
         return false;
@@ -619,6 +636,8 @@ public final class Profile implements Parcelable, Comparable {
         mAirplaneMode.getXmlString(builder, context);
 
         mBrightness.getXmlString(builder, context);
+
+        mCustomActions.getXmlString(builder, context);
 
         mRingMode.getXmlString(builder, context);
 
@@ -752,6 +771,10 @@ public final class Profile implements Parcelable, Comparable {
                     BrightnessSettings bd = BrightnessSettings.fromXml(xpp, context);
                     profile.setBrightness(bd);
                 }
+                if (name.equals("customActions")) {
+                    CustomActions customActions = CustomActions.fromXml(xpp, context);
+                    profile.setCustomActions(customActions);
+                }
                 if (name.equals("screen-lock-mode")) {
                     profile.setScreenLockMode(Integer.valueOf(xpp.nextText()));
                 }
@@ -810,6 +833,9 @@ public final class Profile implements Parcelable, Comparable {
 
         // Set brightness
         mBrightness.processOverride(context);
+
+        // Send the custom actions
+        mCustomActions.processActions(context);
 
         // Set expanded desktop
         // if (mExpandedDesktopMode != ExpandedDesktopMode.DEFAULT) {
