@@ -84,6 +84,8 @@ public class ImsReasonInfo implements Parcelable {
     public static final int CODE_LOCAL_CALL_VOLTE_RETRY_REQUIRED = 147;
     // IMS call is already terminated (in TERMINATED state)
     public static final int CODE_LOCAL_CALL_TERMINATED = 148;
+    // Handover not feasible
+    public static final int CODE_LOCAL_HO_NOT_FEASIBLE = 149;
 
     /**
      * TIMEOUT (IMS -> Telephony)
