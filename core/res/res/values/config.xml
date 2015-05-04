@@ -2323,4 +2323,7 @@
 
     <!-- Boolean to enable the advanced settings switch -->
     <bool name="config_advancedSettingsMode">true</bool>
+
+    <!-- Default, comma-delimited, quick settings tiles. See QSConstants.java for a list of all available tiles -->
+    <string name="config_defaultQuickSettingsTiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast</string>
 </resources>
