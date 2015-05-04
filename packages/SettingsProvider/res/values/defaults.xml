@@ -258,4 +258,7 @@
          1. Right
          2. Left -->
     <integer name="def_qs_quick_pulldown">0</integer>
+
+    <!-- Default, comma-delimited, quick settings tiles. See QSUtils.java for a list of all available tiles -->
+    <string name="def_quick_settings_tiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast</string>
 </resources>
