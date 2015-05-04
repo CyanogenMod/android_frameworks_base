@@ -609,8 +609,10 @@ class CCParser {
             if (mLines[mRow] != null) {
                 for (int i = 0; i < mCol; i++) {
                     if (mLines[mRow].charAt(i) != TS) {
-                        for (int j = mCol; j < mLines[mRow].length(); j++) {
-                            mLines[j].setCharAt(j, TS);
+                        for (int j = mCol; j < mLines[mRow].length() && j < mLines.length; j++) {
+                          if (mLines[j] != null){
+                               mLines[j].setCharAt(j, TS);
+                           }
                         }
                         return;
                     }
