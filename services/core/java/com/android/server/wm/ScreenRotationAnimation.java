@@ -51,6 +51,7 @@ class ScreenRotationAnimation {
     final Context mContext;
     final DisplayContent mDisplayContent;
     SurfaceControl mSurfaceControl;
+    final Object mLock = new Object();
     BlackFrame mCustomBlackFrame;
     BlackFrame mExitingBlackFrame;
     BlackFrame mEnteringBlackFrame;
@@ -323,28 +324,30 @@ class ScreenRotationAnimation {
     }
 
     private void setSnapshotTransformInTransaction(Matrix matrix, float alpha) {
-        if (mSurfaceControl != null) {
-            matrix.getValues(mTmpFloats);
-            float x = mTmpFloats[Matrix.MTRANS_X];
-            float y = mTmpFloats[Matrix.MTRANS_Y];
-            if (mForceDefaultOrientation) {
-                mDisplayContent.getLogicalDisplayRect(mCurrentDisplayRect);
-                x -= mCurrentDisplayRect.left;
-                y -= mCurrentDisplayRect.top;
-            }
-            mSurfaceControl.setPosition(x, y);
-            mSurfaceControl.setMatrix(
+        synchronized(mLock) {
+            if (mSurfaceControl != null) {
+                matrix.getValues(mTmpFloats);
+                float x = mTmpFloats[Matrix.MTRANS_X];
+                float y = mTmpFloats[Matrix.MTRANS_Y];
+                if (mForceDefaultOrientation) {
+                    mDisplayContent.getLogicalDisplayRect(mCurrentDisplayRect);
+                    x -= mCurrentDisplayRect.left;
+                    y -= mCurrentDisplayRect.top;
+                }
+                mSurfaceControl.setPosition(x, y);
+                mSurfaceControl.setMatrix(
                     mTmpFloats[Matrix.MSCALE_X], mTmpFloats[Matrix.MSKEW_Y],
                     mTmpFloats[Matrix.MSKEW_X], mTmpFloats[Matrix.MSCALE_Y]);
-            mSurfaceControl.setAlpha(alpha);
-            if (DEBUG_TRANSFORMS) {
-                float[] srcPnts = new float[] { 0, 0, mWidth, mHeight };
-                float[] dstPnts = new float[4];
-                matrix.mapPoints(dstPnts, srcPnts);
-                Slog.i(TAG, "Original  : (" + srcPnts[0] + "," + srcPnts[1]
+                mSurfaceControl.setAlpha(alpha);
+                if (DEBUG_TRANSFORMS) {
+                    float[] srcPnts = new float[] { 0, 0, mWidth, mHeight };
+                    float[] dstPnts = new float[4];
+                    matrix.mapPoints(dstPnts, srcPnts);
+                    Slog.i(TAG, "Original  : (" + srcPnts[0] + "," + srcPnts[1]
                         + ")-(" + srcPnts[2] + "," + srcPnts[3] + ")");
-                Slog.i(TAG, "Transformed: (" + dstPnts[0] + "," + dstPnts[1]
+                    Slog.i(TAG, "Transformed: (" + dstPnts[0] + "," + dstPnts[1]
                         + ")-(" + dstPnts[2] + "," + dstPnts[3] + ")");
+                }
             }
         }
     }
@@ -1048,14 +1051,15 @@ class ScreenRotationAnimation {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SCREENSHOT_FREEZE_TIMEOUT: {
-                     if ((mSurfaceControl != null) && (isAnimating())) {
-                        Slog.e(TAG, "Exceeded Freeze timeout. Destroy layers");
-                        kill();
-                     } else if (mSurfaceControl != null){
-                        Slog.e(TAG,
-                          "No animation, exceeded freeze timeout. Destroy Screenshot layer");
-                        mSurfaceControl.destroy();
-                        mSurfaceControl = null;
+                     synchronized(mLock) {
+                         if ((mSurfaceControl != null) && (isAnimating())) {
+                             Slog.e(TAG, "Exceeded Freeze timeout. Destroy layers");
+                             kill();
+                         } else if (mSurfaceControl != null){
+                             Slog.e(TAG,"No animation, exceeded freeze timeout. Destroy Screenshot layer");
+                             mSurfaceControl.destroy();
+                             mSurfaceControl = null;
+                         }
                      }
                      break;
                 }
