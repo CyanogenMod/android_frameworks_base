@@ -1812,6 +1812,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_MUTE:
+            case KeyEvent.KEYCODE_HOME:
                 return true;
         }
         return false;

@@ -5014,8 +5014,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // When the screen is off and the key is not injected, determine whether
             // to wake the device but don't pass the key to the application.
             result = 0;
-            if (isWakeKey && (!down || !isWakeKeyWhenScreenOff(keyCode))) {
+            boolean wakeActivated = isWakeKeyWhenScreenOff(keyCode);
+            if (isWakeKey && (!down || !wakeActivated)) {
                 isWakeKey = false;
+                if (wakeActivated && keyCode == KeyEvent.KEYCODE_HOME) {
+                    // The "!down" event happened while the screen was still off
+                    // so undo the next Home event consumption because we won't
+                    // be dispatching it in the first place.
+                    mHomeConsumed = false;
+                }
+            } else {
+                if (keyCode == KeyEvent.KEYCODE_HOME) {
+                    mHomeConsumed = true;
+                }
             }
         }
 
@@ -5175,12 +5186,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
                 break;
             }
-
-            case KeyEvent.KEYCODE_HOME:
-                if (down && !interactive && mHomeWakeScreen) {
-                    isWakeKey = true;
-                }
-                break;
 
             case KeyEvent.KEYCODE_ENDCALL: {
                 result &= ~ACTION_PASS_TO_USER;
@@ -5374,6 +5379,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_MUTE:
                 return mVolumeWakeScreen || mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED;
+            case KeyEvent.KEYCODE_HOME:
+                return mHomeWakeScreen;
 
             // ignore media and camera keys
             case KeyEvent.KEYCODE_MUTE:
