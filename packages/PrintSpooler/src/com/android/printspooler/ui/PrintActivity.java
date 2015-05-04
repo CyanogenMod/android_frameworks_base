@@ -372,7 +372,17 @@ public class PrintActivity extends Activity implements RemotePrintDocument.Updat
 
     @Override
     protected void onDestroy() {
-        doFinish();
+        if (mState != STATE_INITIALIZING) {
+            mPrintPreviewController.destroy(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            });
+        } else {
+            finish();
+        }
+
         super.onDestroy();
     }
 
