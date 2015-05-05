@@ -427,6 +427,7 @@ public class QSPanel extends ViewGroup {
             mDetailRemoveButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mHost.collapsePanels();
                     mHost.removeCustomTile(customTile);
                 }
             });

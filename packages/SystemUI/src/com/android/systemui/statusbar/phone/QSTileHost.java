@@ -439,8 +439,7 @@ public class QSTileHost implements QSTile.Host {
     }
 
     private void addCustomTile(StatusBarPanelCustomTile sbc) {
-        CustomTileData.Entry entry = new CustomTileData.Entry(sbc);
-        mCustomTileData.add(entry);
+        mCustomTileData.add(new CustomTileData.Entry(sbc));
         mTiles.put(sbc.getKey(), new CustomQSTile(this, sbc));
         if (mCallback != null) {
             mCallback.onTilesChanged();
