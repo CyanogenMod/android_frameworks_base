@@ -428,11 +428,11 @@ public class Typeface {
             Log.w(TAG, "Didn't create default family (most likely, non-Minikin build)", e);
             // TODO: normal in non-Minikin case, remove or make error when Minikin-only
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "Error opening " + configFile);
+            Log.e(TAG, "Error opening " + configFile, e);
         } catch (IOException e) {
-            Log.e(TAG, "Error reading " + configFile);
+            Log.e(TAG, "Error reading " + configFile, e);
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "XML parse exception for " + configFile);
+            Log.e(TAG, "XML parse exception for " + configFile, e);
         }
     }
 
