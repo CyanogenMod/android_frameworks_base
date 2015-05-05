@@ -65,6 +65,7 @@
   <string name="reboot_bootloader">بووتلەودەر</string>
   <string name="reboot_download">داگرتن</string>
   <string name="reboot_soft">کارپێکردنه‌وه‌ی قوڵ</string>
+  <string name="reboot_title">ئیشپێکردنەوە</string>
   <string name="reboot_confirm" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ دەبێت.</string>
   <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ ده‌کوژێته‌وه‌ و داده‌گیرسێته‌وه‌.</string>
   <string name="reboot_progress">سه‌رله‌نوێ خستنه‌ڕێ\u2026</string>
