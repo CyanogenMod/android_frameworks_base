@@ -618,7 +618,8 @@ public class StorageManager {
     /**{@hide} */
     public static StorageVolume getNoEmulatedVolume(StorageVolume[] volumes) {
         for (StorageVolume volume : volumes) {
-            if (!volume.isEmulated()) {
+            if (!volume.isEmulated() &&
+                    Environment.MEDIA_MOUNTED.equals(volume.getState())) {
                 return volume;
             }
         }
