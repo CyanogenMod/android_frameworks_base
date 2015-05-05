@@ -99,6 +99,9 @@ public class QSUtils {
                 case QSConstants.TILE_COMPASS:
                     removeTile = !deviceSupportsCompass(context);
                     break;
+                case QSConstants.TILE_AMBIENT_DISPLAY:
+                    removeTile = !deviceSupportsDoze(context);
+                    break;
             }
             if (removeTile) {
                 iterator.remove();
@@ -169,5 +172,11 @@ public class QSUtils {
         SensorManager sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         return sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
                 && sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null;
+    }
+
+    public static boolean deviceSupportsDoze(Context context) {
+        String name = context.getResources().getString(
+                    com.android.internal.R.string.config_dozeComponent);
+        return !TextUtils.isEmpty(name);
     }
 }
