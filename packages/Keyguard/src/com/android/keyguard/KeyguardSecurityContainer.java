@@ -44,6 +44,16 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
 
     private final KeyguardUpdateMonitor mUpdateMonitor;
 
+    private KeyguardUpdateMonitorCallback mUpdateMonitorCallbacks =
+            new KeyguardUpdateMonitorCallback() {
+                @Override
+                public void onUserSwitchComplete(int userId) {
+                    mSecurityViewFlipper.removeAllViews();
+                    mCurrentSecuritySelection = SecurityMode.Invalid;
+                    showPrimarySecurityScreen(false);
+                }
+            };
+
     // Used to notify the container when something interesting happens.
     public interface SecurityCallback {
         public boolean dismiss(boolean authenticated);
@@ -69,6 +79,18 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
 
     public void setSecurityCallback(SecurityCallback callback) {
         mSecurityCallback = callback;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateMonitorCallbacks);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mUpdateMonitorCallbacks);
     }
 
     @Override
