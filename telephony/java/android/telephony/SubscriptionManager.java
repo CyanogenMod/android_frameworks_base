@@ -1277,7 +1277,6 @@ public class SubscriptionManager {
         } catch (RemoteException ex) {
             simState = TelephonyManager.SIM_STATE_UNKNOWN;
         }
-        logd("getSimStateForSubscriber: simState=" + simState + " subId=" + subId);
         return simState;
     }
 }
