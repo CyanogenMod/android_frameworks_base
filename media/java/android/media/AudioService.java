@@ -650,6 +650,7 @@ public class AudioService extends IAudioService.Stub {
         readPersistedSettings();
         mSettingsObserver = new SettingsObserver();
         createStreamStates();
+        updateNotificationStreamVolumeAlias();
 
         readAndSetLowRamDevice();
 
@@ -953,11 +954,7 @@ public class AudioService extends IAudioService.Stub {
 
         mStreamVolumeAlias[AudioSystem.STREAM_DTMF] = dtmfStreamAlias;
 
-        if (mLinkNotificationWithVolume && mVoiceCapable) {
-            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
-        } else {
-            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
-        }
+        updateNotificationStreamVolumeAlias();
 
         if (updateVolumes) {
             mStreamStates[AudioSystem.STREAM_DTMF].setAllIndexes(mStreamStates[dtmfStreamAlias]);
@@ -969,6 +966,14 @@ public class AudioService extends IAudioService.Stub {
                     0,
                     0,
                     mStreamStates[AudioSystem.STREAM_DTMF], 0);
+        }
+    }
+
+    private void updateNotificationStreamVolumeAlias() {
+        if (mLinkNotificationWithVolume && mVoiceCapable) {
+            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_RING;
+        } else {
+            mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] = AudioSystem.STREAM_NOTIFICATION;
         }
     }
 
@@ -4640,8 +4645,8 @@ public class AudioService extends IAudioService.Stub {
                         Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
                 if (linkNotificationWithVolume != mLinkNotificationWithVolume) {
                     mLinkNotificationWithVolume = linkNotificationWithVolume;
-                    updateStreamVolumeAlias(true);
                     createStreamStates();
+                    updateStreamVolumeAlias(true);
                 }
                 mVolumeKeysControlRingStream = Settings.System.getIntForUser(mContentResolver,
                         Settings.System.VOLUME_KEYS_CONTROL_RING_STREAM, 1,
