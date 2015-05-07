@@ -334,6 +334,17 @@ public class PackageHelper {
     }
 
     /**
+     * Is there storage mounted that would be possible to consider for
+     * installing to an external media?
+     */
+    public static boolean isExternalInstallPossible() {
+        return (!Environment.isExternalStorageEmulated() &&
+            Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) ||
+            (Environment.isNoEmulatedStorageExist() &&
+            Environment.MEDIA_MOUNTED.equals(Environment.getSecondaryStorageState()));
+    }
+
+    /**
      * Given a requested {@link PackageInfo#installLocation} and calculated
      * install size, pick the actual location to install the app.
      */
