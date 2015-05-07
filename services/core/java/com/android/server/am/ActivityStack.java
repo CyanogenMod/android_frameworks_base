@@ -1698,7 +1698,7 @@ final class ActivityStack {
 
         if (DEBUG_SWITCH) Slog.v(TAG_SWITCH, "Resuming " + next);
 
-        mActivityTrigger.activityResumeTrigger(next.intent);
+        mActivityTrigger.activityResumeTrigger(next.intent, next.info, next.appInfo);
 
         // If we are currently pausing an activity, then don't do anything
         // until that is done.
@@ -2168,7 +2168,7 @@ final class ActivityStack {
         task.setFrontOfTask();
 
         r.putInHistory();
-        r.info.flags = mActivityTrigger.activityStartTrigger(r.intent, r.info.flags);
+        mActivityTrigger.activityStartTrigger(r.intent, r.info, r.appInfo);
         if (!isHomeStack() || numActivities() > 0) {
             // We want to show the starting preview window if we are
             // switching to a new task, or the next activity's process is
