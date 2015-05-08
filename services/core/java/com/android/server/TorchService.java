@@ -431,10 +431,13 @@ public class TorchService extends ITorchService.Stub {
         mFlashlightRequest = null;
         if (mSurface != null) {
             mSurface.release();
-            mSurfaceTexture.release();
         }
         mSurface = null;
+        if (mSurfaceTexture != null) {
+            mSurfaceTexture.release();
+        }
         mSurfaceTexture = null;
+        mTorchCameraId = -1;
     }
 
     private void handleError() {
@@ -500,11 +503,12 @@ public class TorchService extends ITorchService.Stub {
             new CameraDevice.StateListener() {
         @Override
         public void onOpened(CameraDevice camera) {
-            if (mOpeningCamera) {
+            if (mOpeningCamera && isTorchOn()) {
                 mCameraDevice = camera;
                 mOpeningCamera = false;
                 postUpdateFlashlight();
             } else {
+                camera.close();
                 teardownTorch();
             }
         }
