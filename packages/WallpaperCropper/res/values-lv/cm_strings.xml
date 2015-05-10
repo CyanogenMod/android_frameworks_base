@@ -28,4 +28,5 @@
   <string name="pick_wallpaper">Tapetes</string>
   <string name="activity_not_found">Lietotne nav uzstādīta.</string>
   <string name="lockscreen_wallpaper_instructions">Iestatīt slēgekrāna tapeti</string>
+  <string name="image_decode_error">Neizdevās dekodēt attēlu</string>
 </resources>
