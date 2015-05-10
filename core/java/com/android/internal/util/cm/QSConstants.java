@@ -50,24 +50,17 @@ public class QSConstants {
     public static final String TILE_HEADS_UP = "heads_up";
     public static final String TILE_AMBIENT_DISPLAY = "ambient_display";
 
-    // Order matters
-    protected static final ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
-
-    static {
-        TILES_DEFAULT.add(TILE_WIFI);
-        TILES_DEFAULT.add(TILE_BLUETOOTH);
-        TILES_DEFAULT.add(TILE_CELLULAR);
-        TILES_DEFAULT.add(TILE_AIRPLANE);
-        TILES_DEFAULT.add(TILE_ROTATION);
-        TILES_DEFAULT.add(TILE_FLASHLIGHT);
-        TILES_DEFAULT.add(TILE_LOCATION);
-        TILES_DEFAULT.add(TILE_CAST);
-    }
-
     protected static final ArrayList<String> TILES_AVAILABLE = new ArrayList<String>();
 
     static {
-        TILES_AVAILABLE.addAll(TILES_DEFAULT);
+        TILES_AVAILABLE.add(TILE_WIFI);
+        TILES_AVAILABLE.add(TILE_BLUETOOTH);
+        TILES_AVAILABLE.add(TILE_CELLULAR);
+        TILES_AVAILABLE.add(TILE_AIRPLANE);
+        TILES_AVAILABLE.add(TILE_ROTATION);
+        TILES_AVAILABLE.add(TILE_FLASHLIGHT);
+        TILES_AVAILABLE.add(TILE_LOCATION);
+        TILES_AVAILABLE.add(TILE_CAST);
         TILES_AVAILABLE.add(TILE_INVERSION);
         TILES_AVAILABLE.add(TILE_HOTSPOT);
         TILES_AVAILABLE.add(TILE_NOTIFICATIONS);
