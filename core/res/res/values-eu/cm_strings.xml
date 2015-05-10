@@ -65,6 +65,8 @@
   <string name="permdesc_writeThemesDesc">Aplikazioa gai berriak sartzera baimentzen du, baita momentuan aplikaturiko gaia aldatzera ere.</string>
   <string name="permlab_useHardwareFramework">Hardware markoa erabili</string>
   <string name="permdesc_useHardwareFramework">Aplikazioari hardware markorako sarbidea gaitzen dio.</string>
+  <string name="permlab_keyguardApplicationWidget">Ezarri blokeo pantailako trepeta</string>
+  <string name="permdesc_keyguardApplicationWidget">Blokeo pantailan trepeta bat ezartzea ahalbidetzen dio aplikazioari.</string>
   <string name="immersive_mode_confirmation_bottom">Atzamarra behetik gora irristatu pantaila osotik irteteko.</string>
   <string name="app_ops_access_camera">Kamerarako sarbidea</string>
   <string name="app_ops_access_location">Kokapenerako sarbidea</string>
@@ -93,7 +95,7 @@
   <string name="app_ops_start_at_bootup">Hasieran exekutatu</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth-a gaitu/ezgaitu</string>
   <string name="app_ops_toggle_mobile_data">Datu mugikorrak gaitu/ezgaitu</string>
-  <string name="app_ops_toggle_wifi">WiFi-a gaitu/ezgaitu</string>
+  <string name="app_ops_toggle_wifi">Txandakatu Wi-Fia</string>
   <string name="app_ops_use_alarm_volume">Alarmen bolumena kontrolatu</string>
   <string name="app_ops_use_audio_focus">Soinuen bolumena kontrolatu</string>
   <string name="app_ops_use_bluetooth_volume">Bluetooth-aren bolumena kontrolatu</string>
@@ -106,7 +108,7 @@
   <string name="app_ops_use_voice_volume">Deiaren bolumena kontrolatu</string>
   <string name="app_ops_write_mms">MMS mezu bat idatzi</string>
   <string name="app_ops_write_sms">SMS mezu bat idatzi</string>
-  <string name="notify_turn_wifi_off_title">Wi-Fi-a ezgaitu</string>
+  <string name="notify_turn_wifi_off_title">Ezgaitu Wi-Fia</string>
   <string name="privacy_guard_dialog_title">Pribatutasuna</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> nahi du.</string>
   <string name="permission_remember_choice">Nire aukera gogoratu</string>
@@ -114,10 +116,24 @@
   <string name="adb_both_active_notification_title">USB eta sare gaineko ADB-a gaitua</string>
   <string name="adb_active_generic_notification_message">Sakatu depurazioa ezgaitzeko.</string>
   <string name="usb_storage_notification_manage_message">Ukitu kudeatzeko</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD txartela ustekabean atera da</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD txartela lasai atera daiteke</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SD txartela lasai atera dezakezu.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD txartela atera da</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD txartela atera da. Sartu beste bat.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB biltegiratzea ustekabean atera da</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB biltegiratzea lasai atera daiteke</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USB biltegiratzea lasai atera dezakezu.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB biltegiratzea atera da</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB biltegiratzea atera da. Sartu beste euskarri bat.</string>
   <string name="stk_cc_ussd_to_dial">USSD eskaera DIAL eskaerara eraldatu da.</string>
   <string name="stk_cc_ussd_to_ss">USSD eskaera SS eskaerara eraldatu da.</string>
   <string name="stk_cc_ussd_to_ussd">USSD eskaera USSD eskaera berrira eraldatu da.</string>
   <string name="stk_cc_ss_to_dial">SS eskaera DIAL eskaerara eraldatu da.</string>
   <string name="stk_cc_ss_to_ussd">SS eskaera USSD eskaerara eraldatu da.</string>
   <string name="stk_cc_ss_to_ss">SS eskaera SS eskaera berrira eraldatu da.</string>
+  <string name="sd_media_bad_removal">SD txartela desmuntatu aurretik atera da.</string>
+  <string name="sd_media_removed">SD txartela atera egin da.</string>
+  <string name="usb_media_bad_removal">USB biltegiratzea desmuntatu aurretik atera da.</string>
+  <string name="usb_media_removed">USB biltegiratzea atera egin da.</string>
 </resources>
