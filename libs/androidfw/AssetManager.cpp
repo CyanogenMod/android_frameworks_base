@@ -1018,6 +1018,9 @@ bool AssetManager::removeOverlayPath(const String8& packageName, int32_t cookie)
         return false;
     }
 
+    const asset_path& oap = mAssetPaths.itemAt(which);
+    mZipSet.closeZip(oap.resApkPath);
+
     mAssetPaths.removeAt(which);
 
     ResTable* rt = mResources;
@@ -2289,6 +2292,10 @@ ZipFileRO* AssetManager::ZipSet::getZip(const String8& path)
         mZipFile.editItemAt(idx) = zip;
     }
     return zip->getZip();
+}
+
+void AssetManager::ZipSet::closeZip(const String8& zip) {
+    closeZip(getIndex(zip));
 }
 
 Asset* AssetManager::ZipSet::getZipResourceTableAsset(const String8& path)
