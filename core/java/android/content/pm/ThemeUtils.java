@@ -99,6 +99,10 @@ public class ThemeUtils {
     public static final String SYSTEM_NOTIFICATIONS_PATH = SYSTEM_MEDIA_PATH + File.separator
             + "notifications";
 
+    // path to asset lockscreen and wallpapers directory
+    public static final String LOCKSCREEN_WALLPAPER_PATH = "lockscreen";
+    public static final String WALLPAPER_PATH = "wallpapers";
+
     private static final String MEDIA_CONTENT_URI = "content://media/internal/audio/media";
 
     // Constants for theme change broadcast
@@ -528,17 +532,29 @@ public class ThemeUtils {
     }
 
     public static String getLockscreenWallpaperPath(AssetManager assetManager) throws IOException {
-        String[] assets = assetManager.list("lockscreen");
+        String[] assets = assetManager.list(LOCKSCREEN_WALLPAPER_PATH);
         String asset = getFirstNonEmptyAsset(assets);
         if (asset == null) return null;
-        return "lockscreen/" + asset;
+        return LOCKSCREEN_WALLPAPER_PATH + File.separator + asset;
     }
 
     public static String getWallpaperPath(AssetManager assetManager) throws IOException {
-        String[] assets = assetManager.list("wallpapers");
+        String[] assets = assetManager.list(WALLPAPER_PATH);
         String asset = getFirstNonEmptyAsset(assets);
         if (asset == null) return null;
-        return "wallpapers/" + asset;
+        return WALLPAPER_PATH + File.separator + asset;
+    }
+
+    public static List<String> getWallpaperPathList(AssetManager assetManager)
+            throws IOException {
+        List<String> wallpaperList = new ArrayList<String>();
+        String[] assets = assetManager.list(WALLPAPER_PATH);
+        for (String asset : assets) {
+            if (!TextUtils.isEmpty(asset)) {
+                wallpaperList.add(WALLPAPER_PATH + File.separator + asset);
+            }
+        }
+        return wallpaperList;
     }
 
     // Returns the first non-empty asset name. Empty assets can occur if the APK is built
@@ -548,7 +564,7 @@ public class ThemeUtils {
         if (assets == null) return null;
         String filename = null;
         for(String asset : assets) {
-            if (!asset.isEmpty()) {
+            if (!TextUtils.isEmpty(asset)) {
                 filename = asset;
                 break;
             }
