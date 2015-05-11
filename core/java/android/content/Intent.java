@@ -3029,6 +3029,10 @@ public class Intent implements Parcelable, Cloneable {
     public static final String EXTRA_PROCESS_TEXT_READONLY =
             "android.intent.extra.PROCESS_TEXT_READONLY";
 
+    /** {@hide} */
+    public static final String ACTION_DOZE_PULSE_STARTING =
+            "android.intent.action.DOZE_PULSE_STARTING";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
