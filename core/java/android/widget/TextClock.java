@@ -518,6 +518,7 @@ public class TextClock extends TextView {
         filter.addAction(Intent.ACTION_TIME_TICK);
         filter.addAction(Intent.ACTION_TIME_CHANGED);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        filter.addAction(Intent.ACTION_DOZE_PULSE_STARTING);
 
         getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
     }
