@@ -259,6 +259,7 @@ public class DozeService extends DreamService {
             @Override
             public void onPulseStarted() {
                 if (mPulsing && mDreaming) {
+                    mContext.sendBroadcast(new Intent(Intent.ACTION_DOZE_PULSE_STARTING));
                     turnDisplayOn();
                 }
             }
