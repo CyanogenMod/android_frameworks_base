@@ -1054,6 +1054,9 @@ bool AssetManager::removeOverlayPath(const String8& packageName, int32_t cookie)
         return false;
     }
 
+    const asset_path& oap = mAssetPaths.itemAt(which);
+    mZipSet.closeZip(mZipSet.getIndex(oap.resApkPath));
+
     mAssetPaths.removeAt(which);
 
     ResTable* rt = mResources;

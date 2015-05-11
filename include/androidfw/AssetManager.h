@@ -378,10 +378,11 @@ private:
         void addOverlay(const String8& path, const asset_path& overlay);
         bool getOverlay(const String8& path, size_t idx, asset_path* out) const;
         
-    private:
         void closeZip(int idx);
 
         int getIndex(const String8& zip) const;
+
+    private:
         mutable Vector<String8> mZipPath;
         mutable Vector<sp<SharedZip> > mZipFile;
     };
