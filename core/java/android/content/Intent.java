@@ -2858,6 +2858,10 @@ public class Intent implements Parcelable, Cloneable {
     /** {@hide} */
     public static final String ACTION_MASTER_CLEAR = "android.intent.action.MASTER_CLEAR";
 
+    /** {@hide} */
+    public static final String ACTION_DOZE_PULSE_STARTING =
+            "android.intent.action.DOZE_PULSE_STARTING";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
