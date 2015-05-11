@@ -17,11 +17,12 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screenshot_delete_action">Ezabatu</string>
-  <string name="screenshot_delete_confirmation">Pantaila-argazkia ezabatua.</string>
+  <string name="screenshot_delete_confirmation">Pantaila-argazkia ezabatu da.</string>
   <string name="advanced_dev_option_wipe_app">Datuak ezabatu</string>
   <string name="advanced_dev_option_force_stop">Gelditzera behartu</string>
   <string name="accessibility_dpad_left">Kurtsorea ezkerrean</string>
   <string name="accessibility_dpad_right">Kurtsorea eskuman</string>
+  <string name="quick_settings_location_high_accuracy_label">Zehaztasun handia</string>
   <string name="quick_settings_compass_init">Hasieratzen\u2026</string>
   <string name="navbar_dialog_title">Erakutsiko den botoia aukeratu</string>
   <string name="navbar_home_button">Hasiera botoia</string>
