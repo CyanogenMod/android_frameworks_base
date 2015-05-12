@@ -21,6 +21,7 @@ import android.util.Xml;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -76,30 +77,53 @@ public class FontListParser {
     }
 
     /* Parse fallback list (no names) */
-    public static Config parse(File configFilename, File fontDir)
+    public static Config parse(File configFilename, String fontDir)
             throws XmlPullParserException, IOException {
-        FileInputStream in = new FileInputStream(configFilename);
-        if (isLegacyFormat(configFilename)) {
-            return parseLegacyFormat(in, fontDir.getAbsolutePath());
-        } else {
-            return parseNormalFormat(in, fontDir.getAbsolutePath());
+        FileInputStream in = null;
+        in = new FileInputStream(configFilename);
+        return FontListParser.parse(in, fontDir);
+    }
+
+    /* Parse fallback list (no names) */
+    public static Config parse(InputStream in, String fontDir)
+            throws XmlPullParserException, IOException {
+        BufferedInputStream bis = null;
+        try {
+            // wrap input stream in a BufferedInputStream, if it's not already, for mark support
+            if (!(in instanceof BufferedInputStream)) {
+                bis = new BufferedInputStream(in);
+            } else {
+                bis = (BufferedInputStream) in;
+            }
+            // mark the beginning so we can reset to this position after checking format
+            bis.mark(in.available());
+            if (isLegacyFormat(bis)) {
+                return parseLegacyFormat(bis, fontDir);
+            } else {
+                return parseNormalFormat(bis, fontDir);
+            }
+        } finally {
+            if (bis != null) bis.close();
         }
     }
 
-    private static boolean isLegacyFormat(File configFilename)
+    public static boolean isLegacyFormat(InputStream in)
             throws XmlPullParserException, IOException {
-        FileInputStream in = new FileInputStream(configFilename);
-        boolean isLegacy = false;
-        try {
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setInput(in, null);
-            parser.nextTag();
-            parser.require(XmlPullParser.START_TAG, null, "familyset");
-            String version = parser.getAttributeValue(null, "version");
-            isLegacy = version == null;
-        } finally {
-            in.close();
+        if (!in.markSupported()) {
+            throw new IllegalArgumentException("InputStream does not support mark");
         }
+        boolean isLegacy = false;
+
+        XmlPullParser parser = Xml.newPullParser();
+        parser.setInput(in, null);
+        parser.nextTag();
+        parser.require(XmlPullParser.START_TAG, null, "familyset");
+        String version = parser.getAttributeValue(null, "version");
+        isLegacy = version == null;
+
+        // reset the stream so we can read it
+        in.reset();
+
         return isLegacy;
     }
 
@@ -116,14 +140,10 @@ public class FontListParser {
 
     public static Config parseNormalFormat(InputStream in, String dirName)
             throws XmlPullParserException, IOException {
-        try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setInput(in, null);
             parser.nextTag();
             return readFamilies(parser, dirName);
-        } finally {
-            in.close();
-        }
     }
 
     private static Config readFamilies(XmlPullParser parser, String dirPath)

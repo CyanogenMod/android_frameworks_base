@@ -2793,6 +2793,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadDefaultThemeSettings(stmt);
             loadProtectedSmsSetting(stmt);
+
+            loadStringSetting(stmt, Settings.Secure.QS_TILES,
+                    com.android.internal.R.string.config_defaultQuickSettingsTiles);
         } finally {
             if (stmt != null) stmt.close();
         }
