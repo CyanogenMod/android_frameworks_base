@@ -67,3 +67,12 @@ option java_package com.android.systemui;
 ## shown: 0:panel is hidden
 ##        1:panel is visible
 36062 sysui_lls_notification_panel_shown (shown|1)
+
+# ---------------------------
+# RecentsView.java
+# ---------------------------
+36070 sysui_recents_event (what|1)
+## what: 1: OPEN
+##       2: CLOSE
+##       3: CHOSE_TASK
+##       4: CLOSE_ALL_TASKS
