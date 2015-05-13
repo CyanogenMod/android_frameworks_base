@@ -339,5 +339,4 @@
     <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
  
     <java-symbol type="array" name="config_externalCMServices" />
-    <java-symbol type="string" name="custom_tile_listener_binding_label" />
 </resources>
