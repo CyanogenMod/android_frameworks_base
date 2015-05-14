@@ -130,6 +130,9 @@
     <!-- Action target -->
     <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
 
+    <!-- Quick Settings Tile Listener -->
+    <uses-permission android:name="cyanogenmod.permission.BIND_CUSTOM_TILE_LISTENER_SERVICE"/>
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"

@@ -36,6 +36,7 @@ import com.android.systemui.R;
 import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,6 +190,11 @@ public class ProfilesTile extends QSTile<QSTile.State> implements KeyguardMonito
         @Override
         public Intent getSettingsIntent() {
             return PROFILES_SETTINGS;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
         }
 
         @Override

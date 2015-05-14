@@ -140,6 +140,10 @@
         <item name="android:textSize">@dimen/qs_detail_item_primary_text_size</item>
     </style>
 
+    <style name="TextAppearance.QS.DetailItemSub">
+        <item name="android:textSize">@dimen/qs_detail_item_secondary_text_size</item>
+    </style>
+
     <style name="TextAppearance.QS.DetailItemSecondary">
         <item name="android:textSize">@dimen/qs_detail_item_secondary_text_size</item>
         <item name="android:textColor">@color/system_accent_color</item>

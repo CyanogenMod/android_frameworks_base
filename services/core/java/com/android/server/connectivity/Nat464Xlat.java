@@ -128,6 +128,7 @@ public class Nat464Xlat extends BaseNetworkObserver {
         }
 
         try {
+            mNMService.unregisterObserver(this);
             mNMService.registerObserver(this);
         } catch(RemoteException e) {
             Slog.e(TAG, "startClat: Can't register interface observer for clat on " + mNetwork);

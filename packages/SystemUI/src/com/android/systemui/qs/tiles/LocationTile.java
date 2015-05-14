@@ -34,6 +34,7 @@ import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.LocationController.LocationSettingsChangeCallback;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -217,6 +218,11 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
         @Override
         public Intent getSettingsIntent() {
             return LOCATION_SETTINGS_INTENT;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
         }
 
         @Override
