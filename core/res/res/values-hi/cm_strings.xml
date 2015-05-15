@@ -148,10 +148,6 @@
   <string name="perf_profile_perf">निष्पादन</string>
   <string name="theme_install_error_title">थीम स्थापित नहीं कर सके</string>
   <string name="theme_install_error_message">%s स्थापन विफल हुआ</string>
-  <string name="android_installing_apk">ऐप स्थापित कर रहे हैं
-        <xliff:g id="number" example="123">%1$d</xliff:g> of
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">ऐंड्रोइड स्थापित हो रहा है\u2026</string>
   <string name="theme_reset_notification_title">थीम रीसेट</string>
   <string name="theme_reset_notification_body">अनेक ऐप बैठ जाने के कारण सिस्टम थीम को बहाल किया गया।</string>
   <string name="stylus_app_not_installed">%s स्थापित नहीं है</string>
@@ -212,6 +208,4 @@
   <string name="live_display_outdoor">बाहर (तेज़ धूप)</string>
   <string name="live_display_outdoor_summary">केवल बाहर की सेटिंग का उपयोग करें</string>
   <string name="live_display_hint">लाइवडिस्प्ले आँखों पर पड़नेवाले दबाव को घटा सकता है और आपको रात को अच्छी तरह से सोने में मदद कर सकता है। इसे आज़माने के लिए यहाँ क्लिक करें।</string>
-  <string name="lock_to_app_toast_no_navbar">इस स्क्रीन को अनपिन करने के लिए, मेनू बटन को छुएँ और पकड़े रखें।</string>
-  <string name="lock_to_app_description_no_navbar">स्क्रीन पिनिंग डिसप्ले को एक अकेले दृश्य के साथ लॉक कर देता है।\n\nअनपिन करने के लिए मेनू बटन को छुएँ और पकड़े रखें।</string>
 </resources>

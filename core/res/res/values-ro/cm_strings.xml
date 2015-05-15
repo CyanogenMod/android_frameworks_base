@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">Performanță</string>
   <string name="theme_install_error_title">Instalarea temei a eșuat</string>
   <string name="theme_install_error_message">%s au eșuat să fie instalate</string>
-  <string name="android_installing_apk">Se instalează aplicația <xliff:g id="number" example="123">%1$d </xliff:g> din <xliff:g id="number" example="123">%2$d </xliff:g>.</string>
-  <string name="android_installing_title">Se instalează Android\u2026</string>
   <string name="theme_reset_notification_title">Resetare temă</string>
   <string name="theme_reset_notification_body">Tema de sistem este restaurată datorită unor multiple erori.</string>
   <string name="stylus_app_not_installed">%s nu este instalată</string>
@@ -208,6 +206,4 @@
   <string name="live_display_outdoor">În aer liber (soare strălucitor)</string>
   <string name="live_display_outdoor_summary">Utilizaţi numai setările în aer liber</string>
   <string name="live_display_hint">LiveDisplay poate reduce oboseala ochilor şi vă poate ajuta să dormiți noaptea. Apasă aici pentru a-l încerca!</string>
-  <string name="lock_to_app_toast_no_navbar">Pentru a anula fixarea acestui ecran, atingeţi şi ţineţi apăsat butonul meniu.</string>
-  <string name="lock_to_app_description_no_navbar">Fixarea ecranului blochează ecranul într-o singur vedere.\n\nPentru a elibera, atingeţi şi ţineţi apăsat butonul meniu.</string>
 </resources>

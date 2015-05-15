@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">Leeschtung</string>
   <string name="theme_install_error_title">Design konnt net installéiert ginn</string>
   <string name="theme_install_error_message">%s konnt net installéiert ginn</string>
-  <string name="android_installing_apk">Installéieren d\'App
-        <xliff:g id="number" example="123">%1$d</xliff:g> /
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android gëtt installéiert\u2026</string>
   <string name="theme_reset_notification_title">Design-Reset</string>
   <string name="theme_reset_notification_body">De System-Design gouf wéinst App-Ofstierz recuperéiert.</string>
   <string name="stylus_app_not_installed">%s ass net installéiert</string>
@@ -176,7 +172,9 @@
   <string name="usb_media_removed">Den USB-Späicher gouf erausgeholl.</string>
   <string name="usb_media_shared">Den USB-Späicher gëtt momentan vun engem Computer benotzt.</string>
   <string name="sd_ext_media_checking_notification_title">SD-Kaart gëtt preparéiert</string>
+  <string name="sd_ext_media_checking_notification_message">SD-Kaart gëtt op Feeler iwwerpréift.</string>
   <string name="sd_ext_media_nofs_notification_title">Eidel SD-Kaart</string>
+  <string name="sd_ext_media_nofs_notification_message">D\'SD-Kaart ass eidel oder huet en net-ënnerstëtzte Fichierssystem.</string>
   <string name="sd_ext_media_unmountable_notification_title">Feelerhaft SD-Kaart</string>
   <string name="sd_ext_media_unmountable_notification_message">D\'SD-Kaart ass feelerhaft. Probéier se nei ze formatéieren.</string>
   <string name="sd_ext_media_badremoval_notification_title">D\'SD-Kaart gouf onerwaart erausgeholl</string>
@@ -207,4 +205,8 @@
   <string name="live_display_night_summary">Just Nuetsmodus benotzen</string>
   <string name="live_display_outdoor">Baussen (hell Sonn)</string>
   <string name="live_display_outdoor_summary">Just Baussemodus benotzen</string>
+  <string name="lock_to_app_toast_no_navbar">Fir dëse Schierm lasszeléisen, dréck den Zréck-Knäppchen an hal e gedréckt.</string>
+  <string name="quick_settings_tile_flashlight_not_title">D\'Täscheluucht ass un</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Drécke fir s\'auszeschalten</string>
+  <string name="storage_sd_dock_card">SD-Kaart vum Dock</string>
 </resources>

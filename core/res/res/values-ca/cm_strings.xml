@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">Rendiment</string>
   <string name="theme_install_error_title">No ha pogut instal·lar el tema</string>
   <string name="theme_install_error_message">%s no s\'ha pogut instal·lar</string>
-  <string name="android_installing_apk">Instal·lant app
-        <xliff:g id="number" example="123">%1$d</xliff:g> de
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android s\'està instal·lant\u2026</string>
   <string name="theme_reset_notification_title">Reinici de tema</string>
   <string name="theme_reset_notification_body">El tema del sistema s\'ha restaurat degut a múltiples fallades d\'app.</string>
   <string name="stylus_app_not_installed">%s no està instal·lat</string>
@@ -210,6 +206,8 @@
   <string name="live_display_outdoor">Exterior (sol intens)</string>
   <string name="live_display_outdoor_summary">Utilitza només la configuració d\'exterior</string>
   <string name="live_display_hint">LiveDisplay pot ajudar-te a reduir la fatiga ocular i ajudar-te a dormir a la nit. Fes clic aquí per provar-ho!</string>
-  <string name="lock_to_app_toast_no_navbar">Per alliberar aquesta pantalla, toca i aguanta el botó Menú.</string>
-  <string name="lock_to_app_description_no_navbar">La fixació de pantalla bloqueja la pantalla en una única vista.\n\nPer alliberar aquesta pantalla, toca i aguanta el botó de Menú.</string>
+  <string name="lock_to_app_toast_no_navbar">Per desancorar aquesta pantalla, toca i aguanta el botó Enrera.</string>
+  <string name="quick_settings_tile_flashlight_not_title">La llanterna està encesa</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Pica per apagar-la</string>
+  <string name="storage_sd_dock_card">Acopla la targeta SD</string>
 </resources>

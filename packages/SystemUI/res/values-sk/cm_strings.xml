@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">Hlásenie polohy: režim šetrenia batérie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Hlásenie polohy: režim iba so snímačmi.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Hlásenie polohy: režim vysokej presnosti.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Plávajúce oznámenia zakázané.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Plávajúce oznámenia povolené.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Plávajúce oznámenia zakázané.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Plávajúce oznámenia povolené.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Ambientné zobrazenie povolené.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Ambientné zobrazenie zakázané.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Ambientné zobrazenie povolené.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Ambientné zobrazenie zakázané.</string>
   <string name="accessibility_dpad_left">Kurzor vľavo</string>
   <string name="accessibility_dpad_right">Kurzor vpravo</string>
   <string name="quick_settings_mobile_data_label">Mobilné dáta</string>
@@ -51,6 +59,9 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Časový limit obrazovky</string>
   <string name="quick_settings_usb_tether_label">Zdieľanie cez USB</string>
+  <string name="quick_settings_heads_up_label">Plávajúce oznámenia</string>
+  <string name="quick_settings_ambient_display_label">Ambientné zobrazenie</string>
+  <string name="quick_settings_custom_tile_detail_title">Vlastná dlaždica</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Potiahnite doprava pre %1$s</string>
   <string name="right_shortcut_hint">Potiahnite doľava pre %1$s</string>
@@ -79,4 +90,8 @@
   <string name="navring_choose_action_title">Vyberte akciu</string>
   <string name="select_application">Vyberte aplikáciu</string>
   <string name="lockscreen_target_empty">Prázdne</string>
+  <string name="screen_pinning_description_no_navbar">Zobrazenie aktuálnej obrazovky je zaistené, dokým ju neuvoľníte. Dotknite a podržte tlačidlo Späť pre uvoľnenie.</string>
+  <string name="interruption_level_silent">Tichý</string>
+  <string name="zen_silent_with_warning">Žiadne prerušenia s výnimkou budíkov.</string>
+  <string name="quick_settings_remove">Odstrániť dlaždicu</string>
 </resources>

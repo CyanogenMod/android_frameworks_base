@@ -37,7 +37,7 @@
   <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> données mobiles</string>
   <string name="quick_settings_data_off">Données mobiles désactivées</string>
   <string name="quick_settings_location_detail_title">Mode de localisation</string>
-  <string name="quick_settings_location_battery_saving_label">Économie d\'énergie</string>
+  <string name="quick_settings_location_battery_saving_label">Économie de batterie</string>
   <string name="quick_settings_location_gps_only_label">Appareil uniquement</string>
   <string name="quick_settings_location_high_accuracy_label">Haute précision</string>
   <string name="quick_settings_nfc_label">NFC</string>
@@ -50,6 +50,7 @@
   <string name="quick_settings_network_adb_label">ADB réseau</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Veille de l\'écran</string>
+  <string name="quick_settings_usb_tether_label">Modem USB</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Balayer à droite pour %1$s</string>
   <string name="right_shortcut_hint">Balayer à gauche pour %1$s</string>

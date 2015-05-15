@@ -17,6 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="profileNameDefault">Lehenetsia</string>
   <string name="profileNameWork">Lanean</string>
   <string name="profileNameHome">Etxean</string>
   <string name="profileNameSilent">Isilik</string>
@@ -32,6 +33,10 @@
   <string name="profile_picker_title">Profilak</string>
   <string name="global_action_choose_profile">Profila</string>
   <string name="global_action_screenshot">Pantaila-argazkia</string>
+  <string name="permlab_receiveProtectedSms">jaso SMS babestua</string>
+  <string name="permdesc_receiveProtectedSms">SMS mezu babestua jasotzea ahalbidetzen dio aplikazioari.</string>
+  <string name="permlab_modifyProtectedSmsList">aldatu SMS babestuen zerrenda</string>
+  <string name="permdesc_modifyProtectedSmsList">SMS babestuen helbide zerrenda aldatzea ahalbidetzen dio aplikazioari.</string>
   <string name="permgrouplab_security">Segurtasuna</string>
   <string name="permgroupdesc_security">Gailuaren segurtasun informazioarekin erlazionaturiko baimenak.</string>
   <string name="permlab_accessThemeService">Gaien zerbitzurako sarbidea</string>
@@ -41,27 +46,50 @@
   <string name="permlab_writeThemes">Gaiak aldatu</string>
   <string name="permdesc_writeThemesDesc">Aplikazioa gai berriak sartzera baimentzen du, baita momentuan aplikaturiko gaia aldatzera ere.</string>
   <string name="permlab_readPhoneBlacklist">Telefonoaren zerrenda beltza irakurri</string>
+  <string name="permdesc_readPhoneBlacklist">Sarrera dei edo SMS mezuak ukatuta dituzten telefono zenbakien informazioa irakurtzea ahalbidetzen dio aplikazioari.</string>
   <string name="permlab_changePhoneBlacklist">Telefonoaren zerrenda beltza aldatu</string>
+  <string name="permdesc_changePhoneBlacklist">Sarrera deiak eta SMS mezuak ukatuta dituzten zenbakien zerrenda aldatzea ahalbidetzen dio aplikazioari.</string>
   <string name="permlab_changePrivacyGuardState">Pribatutasuna gaitu edo ezgaitu</string>
   <string name="permdesc_changePrivacyGuardState">Aplikazioa beste aplikazioen pribatutasun egoera aldatzera baimentzen du. Aplikazio bat pribatutasuna gaituta izanik abiatzen denean ezingo du datu pertsonalik ikusi, ez kontakturik, ez mezurik ezta dei erregistrorik ere.</string>
   <string name="privacy_guard_notification">Pribatutasuna gaituta</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> -k ezingo du datu pertsonalik irakurri</string>
   <string name="permlab_useHardwareFramework">Hardware markoa erabili</string>
   <string name="permdesc_useHardwareFramework">Aplikazioari hardware markorako sarbidea gaitzen dio.</string>
+  <string name="permlab_setKeyguardWallpaper">Ezarri blokeo-pantailarako horma-papera</string>
+  <string name="permdesc_setKeyguardWallpaper">Blokeo-pantailarako horma-papera aldatzea ahalbidetzen dio aplikazioari.</string>
   <string name="privacy_guard_dialog_title">Pribatutasuna</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> nahi du.</string>
   <string name="global_action_reboot">Berrabiarazi</string>
+  <string name="global_action_current_user">Oraingoa</string>
   <string name="reboot_reboot">Berrabiarazi</string>
+  <string name="reboot_recovery">Berreskuratze-irudia</string>
+  <string name="reboot_bootloader">Abiarazlea</string>
+  <string name="reboot_download">Deskarga</string>
   <string name="reboot_soft">Berrabiarazte leuna</string>
+  <string name="reboot_title">Berrabiarazi</string>
+  <string name="reboot_confirm" product="tablet">Tableta berrabiarazi egingo da.</string>
   <string name="reboot_confirm" product="default">Telefonoa berrabiarazi egingo da.</string>
   <string name="reboot_progress">Berrabiarazten\u2026</string>
+  <string name="app_killed_message">Aplikazioa eten da</string>
   <string name="adb_net_active_notification_title">Sare gaineko ADB-a gaitua</string>
   <string name="adb_both_active_notification_title">USB eta sare gaineko ADB-a gaitua</string>
   <string name="adb_active_generic_notification_message">Sakatu depurazioa ezgaitzeko.</string>
+  <string name="usb_choose_notification_title">Ukitu USB aukerak hautatzeko.</string>
+  <string name="permlab_interceptPackageLaunch">Eragotzi aplikazioak abiaraztea</string>
+  <string name="permdesc_interceptPackageLaunch">Beste aplikazioak abiaraztea eragoztea ahalbidetzen dio aplikazioari</string>
   <string name="app_ops_access_camera">Kamerarako sarbidea</string>
   <string name="app_ops_access_location">Kokapenerako sarbidea</string>
   <string name="app_ops_access_notifications">Zure jakinarazpenak irakurri</string>
+  <string name="app_ops_activate_vpn">aktibatu VPN bat</string>
   <string name="app_ops_alarm_wakeup">Gailua esnatu</string>
+  <string name="app_ops_su">eskuratu root sarbidea</string>
+  <string name="app_ops_auto_start">Hasieran exekutatu</string>
+  <string name="app_ops_delete_call_log">ezabatu zure dei egunkaria</string>
+  <string name="app_ops_delete_contacts">ezabatu zure kontaktuak</string>
+  <string name="app_ops_delete_mms">ezabatu zure MMS mezuak</string>
+  <string name="app_ops_delete_sms">ezabatu zure SMS mezuak</string>
+  <string name="app_ops_draw_on_top">Marraztu leihoak besteen gainetik</string>
+  <string name="app_ops_get_usage_stats">jaso aplikazioen erabilera estatistikak</string>
   <string name="app_ops_keep_device_awake">Gailua esnatuta mantendu</string>
   <string name="app_ops_make_phone_call">Telefono dei bat egin</string>
   <string name="app_ops_modify_calendar">Egutegia eguneratu</string>
@@ -69,6 +97,7 @@
   <string name="app_ops_modify_clipboard">Paper-zorroa aldatu</string>
   <string name="app_ops_modify_contacts">Kontaktuak eguneratu</string>
   <string name="app_ops_modify_settings">Sistema ezarpenak aldatu</string>
+  <string name="app_ops_mute_unmute_microphone">mututu/desmututu mikrofonoa</string>
   <string name="app_ops_play_audio">Soinua erreproduzitu</string>
   <string name="app_ops_post_notification">Jakinarazpen bat argitaratu</string>
   <string name="app_ops_read_calendar">Egutegia irakurri</string>
@@ -84,7 +113,7 @@
   <string name="app_ops_start_at_bootup">Hasieran exekutatu</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth-a gaitu/ezgaitu</string>
   <string name="app_ops_toggle_mobile_data">Datu mugikorrak gaitu/ezgaitu</string>
-  <string name="app_ops_toggle_wifi">WiFi-a gaitu/ezgaitu</string>
+  <string name="app_ops_toggle_wifi">Txandakatu Wi-Fia</string>
   <string name="app_ops_use_alarm_volume">Alarmen bolumena kontrolatu</string>
   <string name="app_ops_use_audio_focus">Soinuen bolumena kontrolatu</string>
   <string name="app_ops_use_bluetooth_volume">Bluetooth-aren bolumena kontrolatu</string>
@@ -97,7 +126,39 @@
   <string name="app_ops_use_voice_volume">Deiaren bolumena kontrolatu</string>
   <string name="app_ops_write_mms">MMS mezu bat idatzi</string>
   <string name="app_ops_write_sms">SMS mezu bat idatzi</string>
+  <string name="lockscreen_airplane_mode_on">Hegaldi modua</string>
+  <string name="usb_charging_notification_title">Kargatze moduan konektatuta</string>
+  <string name="China_Mobile">China Mobile</string>
+  <string name="China_Unicom">China Unicom</string>
+  <string name="China_Telecom">China Telecom</string>
+  <string name="permission_remember_choice">Gogoratu nire aukera</string>
   <string name="perf_profile_pwrsv">Energia aurreztea</string>
   <string name="perf_profile_bal">Orekatua</string>
   <string name="perf_profile_perf">Etekin handia</string>
+  <string name="permdesc_interceptSmsSent">Bidalitako SMSak antzematea ahalbidetzen dio aplikazioari. Aplikazio maltzurrek SMSak bidaltzea ekidin dezakete.</string>
+  <string name="permlab_accessTorchService">Atzitu linterna zerbitzua</string>
+  <string name="permdesc_accessTorchService">Linterna zerbitzura sartzea ahalbidetzen dio aplikazioari. Aplikazio arruntek ez dute hau behar.</string>
+  <string name="permlab_preventpower">gainidatzi pizte botoia</string>
+  <string name="permdesc_preventpower">Pizteko teklaren jokabidea gainidaztea ahalbidetzen dio aplikazioari.</string>
+  <string name="sd_media_bad_removal">SD txartela desmuntatu aurretik atera da.</string>
+  <string name="sd_media_removed">SD txartela atera egin da.</string>
+  <string name="sd_media_shared">Ordenagailu bat ari da SD txartela erabiltzen.</string>
+  <string name="usb_media_bad_removal">USB biltegiratzea desmuntatu aurretik atera da.</string>
+  <string name="usb_media_removed">USB biltegiratzea atera egin da.</string>
+  <string name="usb_media_shared">Ordenagailu bat ari da USB biltegiratzea erabiltzen.</string>
+  <string name="sd_ext_media_nofs_notification_title">SD txartel hutsa</string>
+  <string name="sd_ext_media_unmountable_notification_title">Hondatutako SD txartela</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD txartela ustekabean atera da</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD txartela lasai atera daiteke</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SD txartela lasai atera dezakezu.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD txartela atera da</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD txartela atera da. Sartu beste bat.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB biltegiratzea ustekabean atera da</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB biltegiratzea lasai atera daiteke</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USB biltegiratzea lasai atera dezakezu.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB biltegiratzea atera da</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB biltegiratzea atera da. Sartu beste euskarri bat.</string>
+  <string name="live_display_auto">Automatikoa</string>
+  <string name="live_display_off_summary">Ezgaitu doitze guztiak</string>
+  <string name="lock_to_app_toast_no_navbar">Pantaila hau desiltzatzeko sakatu eta mantendu atzera botoia.</string>
 </resources>

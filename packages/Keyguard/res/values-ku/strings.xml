@@ -138,26 +138,6 @@
     
    
 </string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">
-       به‌ هه‌ڵه‌ هەوڵی کردنەوەی تابلێته‌که‌ت داوە <xliff:g id="number">%d</xliff:g> times جار.
-       پاش <xliff:g id="number">%d</xliff:g> هه‌وڵی سه‌رنه‌که‌وتووی زیاتر،
-       تابلێته‌که‌ ده‌چێته‌وه‌ سه‌ر ڕێکخستنی کارخانه‌ وه‌ هه‌موو داتاکانی به‌کارهێنه‌ر ده‌سڕێته‌وه‌.
-    
-         
-    </string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="default">
-       به‌ هه‌ڵه‌ هەوڵی کردنەوەی ته‌له‌فۆنه‌که‌ت داوە <xliff:g id="number">%d</xliff:g> times جار.
-       پاش <xliff:g id="number">%d</xliff:g> هه‌وڵی سه‌رنه‌که‌وتووی زیاتر،
-       ته‌له‌فۆنه‌که‌ت ده‌چێته‌وه‌ سه‌ر ڕێکخستنی کارخانه‌ وه‌ هه‌موو داتاکانی به‌کارهێنه‌ر ده‌سڕێته‌وه‌.
-    </string>
-  <string name="kg_failed_attempts_now_wiping" product="tablet">
-       به‌ هه‌ڵه‌ هەوڵی کردنەوەی تابلێته‌که‌ت داوە <xliff:g id="number">%d</xliff:g> times جار.
-       تابلێته‌که‌ ده‌چێته‌وه‌ سه‌ر ڕێکخستنی کارخانه‌.
-    </string>
-  <string name="kg_failed_attempts_now_wiping" product="default">
-       به‌ هه‌ڵه‌ هەوڵی کردنەوەی ته‌له‌فۆنه‌که‌ت داوە <xliff:g id="number">%d</xliff:g> times جار.
-       ته‌له‌فۆنه‌که‌ ده‌چێته‌وه‌ سه‌ر ڕێکخستنی کارخانه‌.
-    </string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">
        به‌ هه‌ڵه‌ کردنەوەی خه‌تکێشانه‌که‌ت داوە <xliff:g id="number">%d</xliff:g> times جار.
        پاش <xliff:g id="number">%d</xliff:g> هه‌وڵی سه‌رنه‌که‌وتووی زیاتر،
@@ -170,7 +150,6 @@
        داوات لێ ده‌کرێت ته‌له‌فۆنه‌که‌ بکه‌یته‌وه‌ به‌ به‌کارهێنانی هه‌ژماری ئیمه‌یڵ. \n\n
        جارێکی تر هه‌وڵ بده‌ره‌وه‌ له‌ <xliff:g id="number">%d</xliff:g> چرکه‌دا.
     </string>
-  <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">لابردن</string>
   <string name="kg_password_wrong_pin_code_pukked">PIN کۆد هه‌ڵه‌یه‌ پێویسته‌ ئێستا په‌یوه‌ندیی بکه‌یت به‌ کۆمپانیای دابینکه‌ره‌وه‌ بۆ کردنه‌وه‌ی ئامێره‌که‌ت.</string>
   <plurals name="kg_password_wrong_pin_code">

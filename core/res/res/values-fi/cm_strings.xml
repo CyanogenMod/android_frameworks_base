@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">Suorituskyky</string>
   <string name="theme_install_error_title">Teeman asennus epäonnistui</string>
   <string name="theme_install_error_message">Teeman \"%s\" asennus epäonnistui</string>
-  <string name="android_installing_apk">Asennetaan sovellusta
-        <xliff:g id="number" example="123">%1$d</xliff:g> /
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Androidia asennetaan\u2026</string>
   <string name="theme_reset_notification_title">Teeman resetointi</string>
   <string name="theme_reset_notification_body">Järjestelmän teema palautettu lukuisten sovellusvirheiden vuoksi.</string>
   <string name="stylus_app_not_installed">%s ei ole asennettu</string>
@@ -210,6 +206,8 @@
   <string name="live_display_outdoor">Ulkoilma (kirkas aurinko)</string>
   <string name="live_display_outdoor_summary">Käytä vain ulkoilma-asetusta</string>
   <string name="live_display_hint">LiveDisplay voi vähentää silmien rasitusta ja auttaa nukkumaan öisin. Kokeile sitä painamalla tästä!</string>
-  <string name="lock_to_app_toast_no_navbar">Irrottaaksesi tämän näytön, napauta ja pidä valikkonäppäintä pohjassa.</string>
-  <string name="lock_to_app_description_no_navbar">Näytön kiinnittäminen lukitsee näytön yhteen näkymään.\n\nIrrottaaksesi näytön, napauta ja pitä valikkonäppäintä pohjassa.</string>
+  <string name="lock_to_app_toast_no_navbar">Irrottaaksesi tämän näytön, paina ja pidä Takasin-näppäintä pohjassa.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Taskulamppu on päällä</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Paina sammuttaaksesi</string>
+  <string name="storage_sd_dock_card">Telakoi SD-kortti</string>
 </resources>

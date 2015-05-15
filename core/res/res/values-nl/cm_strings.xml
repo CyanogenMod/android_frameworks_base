@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">Prestaties</string>
   <string name="theme_install_error_title">Thema installeren mislukt</string>
   <string name="theme_install_error_message">%s kan niet worden geïnstalleerd</string>
-  <string name="android_installing_apk">App <xliff:g id="number" example="123">%1$d</xliff:g> van <xliff:g id="number" example="123">%2$d</xliff:g> installeren.</string>
-  <string name="android_installing_title">Android wordt geïnstalleerd\u2026</string>
   <string name="theme_reset_notification_title">Thema opnieuw instellen</string>
   <string name="theme_reset_notification_body">Systeemthema hersteld als gevolg van meerdere gecrashte apps.</string>
   <string name="stylus_app_not_installed">%s is niet geïnstalleerd</string>
@@ -208,6 +206,6 @@
   <string name="live_display_outdoor">Buitenshuis (heldere zon)</string>
   <string name="live_display_outdoor_summary">Alleen instellingen voor buitenshuis gebruiken</string>
   <string name="live_display_hint">LiveDisplay kan oogvermoeidheid verminderen en helpt u om \'s nachts te slapen. Tik hier om het uit te proberen</string>
-  <string name="lock_to_app_toast_no_navbar">Blijf \'Terug\' en \'Overzicht\' tegelijk aanraken om dit scherm los te maken.</string>
-  <string name="lock_to_app_description_no_navbar">Met scherm vastzetten wordt het beeldscherm vergrendeld op één weergave.\n\nBlijf \'Terug\' en \'Overzicht\' tegelijk aanraken om het scherm los te maken.</string>
+  <string name="lock_to_app_toast_no_navbar">Blijf de Terug-knop aanraken om dit scherm los te maken.</string>
+  <string name="storage_sd_dock_card">SD-kaart in dock</string>
 </resources>

@@ -140,15 +140,11 @@
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
   <string name="permission_remember_choice">Seçimimi yadda saxla</string>
-  <string name="perf_profile_pwrsv">Güc təsərrüfatı</string>
+  <string name="perf_profile_pwrsv">Gücə qənaət</string>
   <string name="perf_profile_bal">Tarazlı</string>
   <string name="perf_profile_perf">Performans</string>
   <string name="theme_install_error_title">Tema yüklənə bilmədi</string>
   <string name="theme_install_error_message">%s yüklənə bilmədi</string>
-  <string name="android_installing_apk">Tətbiqetmələr quraşdırılır
-        <xliff:g id="number" example="123">%1$d</xliff:g> /
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android yüklənir\u2026</string>
   <string name="theme_reset_notification_title">Tema sıfırlandı</string>
   <string name="theme_reset_notification_body">Tətbiqetmə çökmələrinə görə sistem teması bərpa edildi.</string>
   <string name="stylus_app_not_installed">%s quraşdırılmayıb</string>

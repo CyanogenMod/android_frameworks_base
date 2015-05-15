@@ -44,10 +44,7 @@
   <string name="durationSeconds"><xliff:g id="seconds">%1$d</xliff:g> segs</string>
   <string name="durationSecond"><xliff:g id="seconds">%1$d</xliff:g> seg</string>
   <string name="untitled">&lt;Ensin títulu&gt;</string>
-  <string name="ellipsis">\u2026</string>
-  <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">(Ensin númberu de teléfonu)</string>
-  <string name="unknownName">Desconocíu</string>
   <string name="defaultVoiceMailAlphaTag">Buzón de voz</string>
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <string name="mmiError">Hebo un fallu de conexón o\'l códigu MMI nun ye válidu.</string>
@@ -510,9 +507,6 @@
   <string name="permlab_writeProfile">modificar la propia tarxeta de contautu</string>
   <string name="permdesc_writeProfile" product="default">Permite que l\'aplicación modifique la información del perfil personal almacenada nel preséu (como\'l nome o la información de contautu) o qu\'amieste conteníu a esa información, lo que significa que pue identificar al usuariu y unviar la información del so perfil a otros usuarios.</string>
   <string name="permlab_bodySensors">sens. corp. (mon. frec. card.)</string>
-  <string name="permdesc_bodySensors" product="default">Permite que l\'aplicación
-      acceda a datos de sensores qu\'uses pa midir lo qu\'asocede nel to cuerpu,
-      como frecuencia cardíaca.</string>
   <string name="permlab_readSocialStream" product="default">consulta la to actividá social</string>
   <string name="permdesc_readSocialStream" product="default">Permite que l\'aplicación acceda a novedaes de les tos redes sociales y de los tos collacios y les sincronice. Ten curiáu al compartir información, ya que l\'aplicación pue usar esti permisu pa lleer conversaciones privaes colos tos collacios nes redes sociales ensin tener en cuenta si son confidenciales. Nota: esti permisu nun pue usase en toles redes sociales.</string>
   <string name="permlab_writeSocialStream" product="default">escribir na to actividá social</string>
@@ -521,8 +515,6 @@
   <string name="permdesc_readCalendar" product="tablet">Permite que l\'aplicación consulte tolos eventos de calendariu almacenaos na tablet, incluyíos los de collacios y compañeros de trabayu. L\'aplicación pue usar esti permisu pa compartir o guardar datos del calendariu del usuariu ensin tener en cuenta si son privaos o confidenciales.</string>
   <string name="permdesc_readCalendar" product="default">Permite que l\'aplicación consulte tolos eventos de calendariu almacenaos nel teléfonu, incluyíos los de collacios y compañeros de trabayu. L\'aplicación pue usar esti permisu pa compartir o guardar datos del calendariu del usuariu ensin tener en cuenta si son privaos o confidenciales.</string>
   <string name="permlab_writeCalendar">amestar o modificar eventos de calendariu y unviar mensaxes a los invitaos ensin el consentimientu de los propietarios</string>
-  <string name="permdesc_writeCalendar" product="tablet">Permite que l\'aplicación amieste, desanicie y cambie eventos que puen modificase na tablet, incluyíos los de collacios o compañeros de trabayu. L\'aplicación pue usar esti permisu pa unviar mensaxes que paezan proceder de propietarios d\'un calendariu o pa modificar eventos ensin conocimientu de los propietarios.</string>
-  <string name="permdesc_writeCalendar" product="default">Permite que l\'aplicación amieste, desanicie y cambie eventos que puen modificase nel teléfonu, incluyíos los de collacios o compañeros de trabayu. L\'aplicación pue usar esti permisu pa unviar mensaxes que paezan proceder de propietarios d\'un calendariu o pa modificar eventos ensin conocimientu de los propietarios.</string>
   <string name="permlab_accessMockLocation">simular fontes de llocalización pa prueba</string>
   <string name="permdesc_accessMockLocation">Permite crear fontes de llocalización simulaes pa facer pruebes o instalar un nuevu fornidor de llocalización. Esti permisu autoriza a l\'aplicación a sobrescribir la llocalización o l\'estáu proporcionaos por otres fontes de llocalización, como los fornidores de llocalización o GPS.</string>
   <string name="permlab_accessLocationExtraCommands">acceder a comandos de fornidor de llocalización adicional</string>
@@ -929,10 +921,6 @@
   <string name="lockscreen_pattern_wrong">Vuelvi a intentalo</string>
   <string name="lockscreen_password_wrong">Vuelvi a intentalo</string>
   <string name="faceunlock_multiple_failures">Perpasóse\'l númberu máximu d\'intentos de desbloquéu facial.</string>
-  <string name="lockscreen_plugged_in">Cargando (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)</string>
-  <string name="lockscreen_charged">Cargada</string>
-  <string name="lockscreen_battery_short"><xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g></string>
-  <string name="lockscreen_low_battery">Coneuta\'l cargador.</string>
   <string name="lockscreen_missing_sim_message_short">Falta la tarxeta SIM.</string>
   <string name="lockscreen_missing_sim_message" product="tablet">Nun s\'inxertó nenguna tarxeta SIM na tablet.</string>
   <string name="lockscreen_missing_sim_message" product="default">Nun s\'inxertó nenguna tarxeta SIM nel teléfonu.</string>
@@ -1842,18 +1830,11 @@
   <string name="lock_to_app_toast">Pa desactivar esta pantalla, caltén primíos al empar los botones de retrocesu y Visión xeneral.</string>
   <string name="lock_to_app_toast_accessible">Pa desactivar esta pantalla, caltén primíu\'l botón Visión xeneral.</string>
   <string name="lock_to_app_toast_locked">Fixóse la pantalla. La organización nun pue desactivala.</string>
-  <string name="lock_to_app_title">Quies fixar la pantalla?</string>
-  <string name="lock_to_app_description">Si fixes la pantalla, esta va bloquiase nuna vista única.\n\nPa desactivala, caltén primíos al empar los botones de retrocesu y Visión xeneral.</string>
-  <string name="lock_to_app_description_accessible">Si actives la pantalla, esta va bloquiase nuna vista única.\n\nPa desactivala, caltén primíu\'l botón Visión xeneral.</string>
-  <string name="lock_to_app_negative">NON, GRACIES</string>
-  <string name="lock_to_app_positive">ANICIAR</string>
   <string name="lock_to_app_start">Pantalla fixada</string>
   <string name="lock_to_app_exit">Pantalla desfixada</string>
   <string name="lock_to_app_unlock_pin">Solicitar PIN pa desactivar</string>
   <string name="lock_to_app_unlock_pattern">Solicitar patrón de desbloquéu pa desactivar</string>
   <string name="lock_to_app_unlock_password">Solicitar contraseña pa desactivar</string>
-  <string name="battery_saver_description">P\'ayudar a ameyorar la duración de la batería, la función d\'aforru d\'enerxía amenorga\'l rindimientu del preséu y llenda la vibración y la mayor parte de la tresmisión de datos en segundu planu. Ye dable que les aplicaciones que se sincronicen, como les de corréu y mensaxes, nun s\'anueven sacante que les abras.\n\nLa función d\'aforru d\'enerxía desactívase automáticamente cuando\'l preséu se carga.</string>
-  <string name="downtime_condition_summary">Hasta que\'l tiempu d\'inactividá fine a les <xliff:g id="formattedTime" example="10.00 PM">%1$s</xliff:g></string>
   <plurals name="zen_mode_duration_minutes">
     <item quantity="one">Mientres un minutu</item>
     <item quantity="other">Mientres %d minutos</item>

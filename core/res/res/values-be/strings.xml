@@ -25,10 +25,7 @@
   <string name="gigabyteShort">ГБ</string>
   <string name="terabyteShort">TБ</string>
   <string name="petabyteShort">ПБ</string>
-  <string name="ellipsis">\u2026</string>
-  <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">(Няма нумару тэлефону)</string>
-  <string name="unknownName">(Невядомы)</string>
   <string name="passwordIncorrect">Памылковы пароль.</string>
   <string name="mmiComplete">Запыт MMI завершаны.</string>
   <string name="badPuk">Уведзены памылковы PUK-код.</string>

@@ -30,12 +30,13 @@
   <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">هی تر</string>
   <string name="profile_none">هیچ</string>
-  <string name="profile_picker_title">پرۆفایلەکان</string>
-  <string name="global_action_choose_profile">پرۆفایل</string>
+  <string name="profile_picker_title">زانیاری تایبەتیەکان</string>
+  <string name="global_action_choose_profile">زانیاری تایبەتی</string>
   <string name="global_action_screenshot">وێنەگرتنی ڕوونما</string>
   <string name="permlab_receiveProtectedSms">وەرگرتنی کورتەنامەی پارێزراو</string>
   <string name="permdesc_receiveProtectedSms">ڕێگە بە بەرنامەکە بدە کە کورتەنامە پارێزراوەکەی داهاتوو وەربگرێت.</string>
   <string name="permlab_modifyProtectedSmsList">دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان</string>
+  <string name="permdesc_modifyProtectedSmsList">ڕێگەدان بە بەرنامەکە بۆ دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان.</string>
   <string name="permgrouplab_security">ئاسایش</string>
   <string name="permgroupdesc_security">مۆڵەت پێدان پەیوەندی زانیاری ئاسایشی ئامێرەکە.</string>
   <string name="permlab_accessThemeService">ڕاژەی ڕێگەی تێم</string>
@@ -69,13 +70,22 @@
   <string name="reboot_confirm" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ دەبێت.</string>
   <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ ده‌کوژێته‌وه‌ و داده‌گیرسێته‌وه‌.</string>
   <string name="reboot_progress">سه‌رله‌نوێ خستنه‌ڕێ\u2026</string>
+  <string name="app_killed_message">بەرنامە داخرا</string>
   <string name="adb_net_active_notification_title">ABD سه‌روو هێڵ کارده‌کات</string>
   <string name="adb_both_active_notification_title">ABD سه‌روو USB وamp; هێڵ کارده‌کات</string>
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
+  <string name="usb_choose_notification_title">USB پەنجەی پێدابنێ بۆ هەڵبژاردنەکانی.</string>
   <string name="app_ops_access_camera">ڕێگەدان بەکامێرا</string>
   <string name="app_ops_access_location">ڕێگەی ناوچەی</string>
   <string name="app_ops_access_notifications">تێبنینیەکانت بخوێنەوە</string>
+  <string name="app_ops_activate_vpn">VPN چالاککردنی</string>
   <string name="app_ops_alarm_wakeup">هەڵسانی ئامێرەکەت</string>
+  <string name="app_ops_su">بەدەستهێنانی ڕێگەپێدانی ڕۆت</string>
+  <string name="app_ops_auto_start">کردنەوەی لەکاتی هەڵبوونی ئامێردا</string>
+  <string name="app_ops_delete_call_log">سڕینەوەی تۆمارەکانی پەیوەندیت</string>
+  <string name="app_ops_delete_contacts">سڕینەوەی ناوەکانت</string>
+  <string name="app_ops_delete_mms">MMS سڕینەوەی پەیامە ڕەنگاڵەییەکان</string>
+  <string name="app_ops_delete_sms">SMS سڕینەوەی پەیامەکانت</string>
   <string name="app_ops_keep_device_awake">دانانی ئامێرەکە بە کراوەی</string>
   <string name="app_ops_make_phone_call">تەلەفۆن بکە</string>
   <string name="app_ops_modify_calendar">نوێکردنه‌وه‌ی ڕۆژمێرەکەت</string>
@@ -112,12 +122,24 @@
   <string name="app_ops_use_voice_volume">کۆنترۆڵی دەنگی تەلەفۆن</string>
   <string name="app_ops_write_mms">نوسنی نامەی MMS</string>
   <string name="app_ops_write_sms">نوسینی نامەی SMS</string>
+  <string name="lockscreen_sim_error_message_short">کارته‌که‌ نادرووستە.</string>
+  <string name="lockscreen_airplane_mode_on">شێوازی ناو فڕۆکە</string>
+  <string name="usb_charging_notification_title">پەیوەستکرا بەشێوەی بارگاویکردنەوە</string>
+  <string name="tethered_notification_no_device_message">ئامێر پەیوەست نەکراوە</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ئامێر پەیوەستکراوە</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ئامێری پەیوەستکراو</string>
   <string name="progress_nomediapresent" product="default">ناتوانرێت بسڕێته‌وه‌ میدیا\u2026</string>
   <string name="storage_uicc">UICC بیرگه‌ی</string>
+  <string name="China_Mobile">China Mobile</string>
+  <string name="China_Unicom">China Unicom</string>
+  <string name="China_Telecom">China Telecom</string>
+  <string name="permission_remember_choice">بیرخستنەوەی هەڵبژاردنەکەم</string>
   <string name="perf_profile_pwrsv">پاراستنی هێز</string>
   <string name="perf_profile_bal">باڵانسکرا</string>
   <string name="perf_profile_perf">ئەنجامدان</string>
   <string name="theme_install_error_title">دابەزاندنی ڕووکار سەرکەوتو نەبوو</string>
   <string name="theme_install_error_message">%s دانەبەزێنرا</string>
+  <string name="theme_reset_notification_title">ڕێکخستنەوەی ڕووکار</string>
+  <string name="stylus_app_not_installed">%s دانەمەزراوە</string>
   <string name="permlab_interceptSmsSent">کۆسپ بۆ SMS</string>
 </resources>

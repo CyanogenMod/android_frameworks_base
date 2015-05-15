@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">パフォーマンス</string>
   <string name="theme_install_error_title">テーマをインストールできませんでした</string>
   <string name="theme_install_error_message">%sをインストールできませんでした</string>
-  <string name="android_installing_apk"><xliff:g id="number" example="123">%2$d</xliff:g>個中<xliff:g id="number" example="123">%1$d</xliff:g>個のアプリをインストールしています。</string>
-  <string name="android_installing_title">Androidにインストールしています\u2026</string>
   <string name="theme_reset_notification_title">テーマのリセット</string>
   <string name="theme_reset_notification_body">複数のアプリのクラッシュによりシステムのテーマが復元されました。</string>
   <string name="stylus_app_not_installed">%sはインストールされていません</string>
@@ -208,6 +206,4 @@
   <string name="live_display_outdoor">屋外（日光）</string>
   <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
   <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをクリックして試してみてください。</string>
-  <string name="lock_to_app_toast_no_navbar">この画面の固定を解除するには、メニューボタンを長押ししてください。</string>
-  <string name="lock_to_app_description_no_navbar">画面の固定はディスプレイを一つの表示にロックします。\n\n固定を解除するには、メニューボタンを長押ししてください。</string>
 </resources>

@@ -17,13 +17,24 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screenshot_delete_action">Ezabatu</string>
-  <string name="screenshot_delete_confirmation">Pantaila-argazkia ezabatua.</string>
+  <string name="screenshot_delete_confirmation">Pantaila-argazkia ezabatu da.</string>
   <string name="advanced_dev_option_wipe_app">Datuak ezabatu</string>
   <string name="advanced_dev_option_force_stop">Gelditzera behartu</string>
+  <string name="advanced_dev_option_uninstall">Desinstalatu</string>
+  <string name="accessibility_quick_settings_data_off">Datu mugikorrak desgaituta.</string>
+  <string name="accessibility_quick_settings_roaming_on">Ibiltaritza gaituta.</string>
   <string name="accessibility_dpad_left">Kurtsorea ezkerrean</string>
   <string name="accessibility_dpad_right">Kurtsorea eskuman</string>
+  <string name="quick_settings_roaming_label">Ibiltaritza</string>
+  <string name="quick_settings_data_off">Datu mugikorrak desgaituta</string>
+  <string name="quick_settings_location_detail_title">Kokapen modua</string>
+  <string name="quick_settings_location_battery_saving_label">Bateria aurreztea</string>
+  <string name="quick_settings_location_high_accuracy_label">Zehaztasun handia</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_disabled">Profilak desgaituta</string>
   <string name="quick_settings_compass_init">Hasieratzen\u2026</string>
-  <string name="navbar_dialog_title">Erakutsiko den botoia aukeratu</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="navbar_dialog_title">Hautatu esleituko zaion ekintza</string>
   <string name="navbar_home_button">Hasiera botoia</string>
   <string name="navbar_recent_button">Berrikien botoia</string>
   <string name="navbar_search_button">Bilaketa botoia</string>
@@ -31,5 +42,8 @@
   <string name="navbar_menu_conditional_button">Menu botoia (automatikoki izkutatu)</string>
   <string name="navbar_menu_always_button">Menu botoia (beti erakutsi)</string>
   <string name="navbar_menu_big_button">Menu botoia</string>
+  <string name="navring_target_reset_message">Ezabatu erabiltzaileak sortutako nabigazio-barrako lasterbideak eta berrezarri balio lehenetsiak?</string>
+  <string name="navring_target_reset">Nabigazio-barrako lasterbideak leheneratu dira</string>
   <string name="navring_action_google_now">Google Now</string>
+  <string name="lockscreen_target_empty">Hutsik</string>
 </resources>

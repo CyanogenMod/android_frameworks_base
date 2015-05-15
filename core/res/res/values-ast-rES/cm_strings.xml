@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">Rindimientu</string>
   <string name="theme_install_error_title">Falló al instalar el tema</string>
   <string name="theme_install_error_message">%s falló al instalar</string>
-  <string name="android_installing_apk">Instalando aplicación
-        <xliff:g id="number" example="123">%1$d</xliff:g> de
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android ta instalándose\u2026</string>
   <string name="theme_reset_notification_title">Reaniciu de tema</string>
   <string name="theme_reset_notification_body">Tema de sistema restauráu por mor de múltiples zarros de d\'app</string>
   <string name="stylus_app_not_installed">%s nun ta instalada</string>
@@ -210,6 +206,4 @@
   <string name="live_display_outdoor">Esterior (lluz del sol)</string>
   <string name="live_display_outdoor_summary">Usar namái axustes del esterior</string>
   <string name="live_display_hint">LiveDisplay pue amenorgar reducir la fatiga visual y ayudar a dormir pela nueche. ¡Toca equí pa probalu!</string>
-  <string name="lock_to_app_toast_no_navbar">Pa lliberar esta pantalla, dexa primíu\'l botón Menú.</string>
-  <string name="lock_to_app_description_no_navbar">La fixación de pantalla caltién visible una única pantalla.\n\nPa lliberar esta pantalla, dexa primíu\'l botón Menú.</string>
 </resources>

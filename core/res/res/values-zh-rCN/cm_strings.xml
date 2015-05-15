@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">性能模式</string>
   <string name="theme_install_error_title">安装主题失败</string>
   <string name="theme_install_error_message">%s 安装失败</string>
-  <string name="android_installing_apk">正在安装第 <xliff:g id="NUMBER_0">%1$d</xliff:g> 个应用（共 <xliff:g id="NUMBER_1">%2$d</xliff:g> 个）。</string>
-  <string name="android_installing_title">正在安装 Android\u2026</string>
   <string name="theme_reset_notification_title">重置主题</string>
   <string name="theme_reset_notification_body">由于多个应用崩溃，系统主题已恢复。</string>
   <string name="stylus_app_not_installed">%s 尚未被安装</string>
@@ -208,6 +206,5 @@
   <string name="live_display_outdoor">户外（阳光）</string>
   <string name="live_display_outdoor_summary">仅使用户外设置</string>
   <string name="live_display_hint">LiveDisplay 可以帮助减少眼睛疲劳，帮助您的夜间睡眠。点击此处来试一试！</string>
-  <string name="lock_to_app_toast_no_navbar">要取消固定屏幕，触摸并按住菜单按钮。</string>
-  <string name="lock_to_app_description_no_navbar">固定屏幕使设备一直显示某个视图。\n\n要取消固定，触摸并按住菜单按钮。</string>
+  <string name="storage_sd_dock_card">底座 SD 卡</string>
 </resources>
