@@ -25,6 +25,8 @@
   <string name="label_color">رەنگ</string>
   <string name="label_orientation">باری پیشاندان</string>
   <string name="label_pages">پەڕەکان</string>
+  <string name="template_all_pages">هەموو <xliff:g id="page_count" example="100">%1$s</xliff:g></string>
+  <string name="template_page_range">ڕێژەی <xliff:g id="page_count" example="100">%1$s</xliff:g></string>
   <string name="pages_range_example">نموونە . 1—5,8,11—13</string>
   <string name="print_preview">بینینی پێش چاپ</string>
   <string name="install_for_print_preview">دامەزراندنی بینەری PDF بۆ پێشبینین</string>
@@ -33,7 +35,18 @@
   <string name="save_as_pdf">پاشەکەوت بە PDF</string>
   <string name="all_printers">هەموو چاپکەرەکان&#8230;</string>
   <string name="print_dialog">دیالۆگی چاپ</string>
+  <string name="current_page_template"><xliff:g id="current_page">%1$d</xliff:g>
+        /<xliff:g id="page_count">%2$d</xliff:g></string>
+  <string name="page_description_template">پەڕە <xliff:g id="current_page" example="1">%1$d</xliff:g>
+        لە <xliff:g id="page_count" example="100">%2$d</xliff:g></string>
+  <string name="summary_template">کورتە, لەبەرگرتنەوە <xliff:g id="copies" example="1">%1$s</xliff:g>,
+        قەبارەی پەڕە <xliff:g id="paper_size" example="A4">%2$s</xliff:g></string>
+  <string name="expand_handle">بڵاوکردنەوەی دەست</string>
+  <string name="collapse_handle">دەست دەکەوێت</string>
   <string name="print_button">چاپکردن</string>
+  <string name="savetopdf_button">پاشەکەوتبکە بۆ PDF</string>
+  <string name="print_options_expanded">هەڵبژاردەی لەبەرگرتنەوە بڵاوکرایەوە</string>
+  <string name="print_options_collapsed">هەڵبژادەکانی لەبەرگرتنەوەی دەستکەوت</string>
   <string name="search">گەڕان</string>
   <string name="all_printers_label">هەموو چاپکەرەکان</string>
   <string name="add_print_service_label">زیادکردنی ڕاژە</string>
@@ -70,5 +83,9 @@
     <item>وێنەی شێوە</item>
     <item>وێنەی سروشت</item>
   </string-array>
+  <string name="print_write_error_message">ناتوانرێت فایلێک بنوسرێت</string>
+  <string name="print_error_default_message">ببورە، ئەمە کاری نەکرد. دوبارە هەوڵبدەرەوە.</string>
   <string name="print_error_retry">هەوڵدانەوە</string>
+  <string name="print_error_printer_unavailable">ئەم چاپکەرە لە کارانیە ئێستا.</string>
+  <string name="print_preparing_preview">پیشاندانی ڕێکخستن\u2026</string>
 </resources>

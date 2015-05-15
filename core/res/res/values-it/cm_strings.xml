@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">Prestazioni</string>
   <string name="theme_install_error_title">Impossibile installare il tema</string>
   <string name="theme_install_error_message">Impossibile installare %s</string>
-  <string name="android_installing_apk">Installo app <xliff:g id="number" example="123">%1$d</xliff:g> di <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Installazione di android\u2026</string>
   <string name="theme_reset_notification_title">Reset tema</string>
   <string name="theme_reset_notification_body">Tema di sistema ripristinato a causa di molteplici crash.</string>
   <string name="stylus_app_not_installed">%s non è installato</string>
@@ -208,6 +206,8 @@
   <string name="live_display_outdoor">All\'aperto (sole)</string>
   <string name="live_display_outdoor_summary">Utilizza solo impostazioni all\'aperto</string>
   <string name="live_display_hint">LiveDisplay aiuta a ridurre l\'affaticamento degli occhi e aiuta a dormire di notte. Clicca per provarlo!</string>
-  <string name="lock_to_app_toast_no_navbar">Per sbloccare questo schermo, toccare e tenere premuto il tasto Menu.</string>
-  <string name="lock_to_app_description_no_navbar">Screen pinning blocca il dispositivo in una singola visuale.\n\nPer sbloccare, tocca e tieni premuto il pulsante Menu.</string>
+  <string name="lock_to_app_toast_no_navbar">Per sbloccare questo schermo, tocca e tieni premuto il pulsante indietro.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Torcia accesa</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tocca per spegnere</string>
+  <string name="storage_sd_dock_card">Scheda SD dock</string>
 </resources>

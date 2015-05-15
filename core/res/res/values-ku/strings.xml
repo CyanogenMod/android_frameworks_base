@@ -27,10 +27,7 @@
   <string name="petabyteShort">پیکۆبایت</string>
   <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
   <string name="untitled">&lt;بێ ناونیشان&gt;</string>
-  <string name="ellipsis">\u2026</string>
-  <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">(هیچ ژماره‌ ته‌له‌فۆنێک نییه‌)</string>
-  <string name="unknownName">(نه‌زانراو)</string>
   <string name="defaultVoiceMailAlphaTag">دەنگەپۆست</string>
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <string name="mmiError">کێشه‌ی په‌یوه‌ندی هه‌یه‌ یان کۆدی MMI ناڕاستە.</string>
@@ -639,8 +636,6 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="permdesc_readCalendar" product="tablet">ڕێگه‌دان به‌ به‌رنامه‌ بۆ خوێندنه‌وه‌ی هه‌موو ڕووداوه‌کانی ناو ڕۆژژمێره‌کان له‌ ئامێره‌که‌ت، وه‌ک هاوڕێکان و شوانه‌کان. ئه‌مه‌ ڕێگه‌ به‌ به‌رنامه‌که‌ ده‌دات بۆ به‌شداریپێکردنی یان پاشه‌که‌وتکردنی زانیاری ڕۆژژمێره‌که‌ت وریابه‌.</string>
   <string name="permdesc_readCalendar" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ خوێندنه‌وه‌ی هه‌موو ڕووداوه‌کانی ناو ڕۆژژمێره‌کان له‌ ئامێره‌که‌ت، وه‌ک هاوڕێکان و شوانه‌کان. ئه‌مه‌ ڕێگه‌ به‌ به‌رنامه‌که‌ ده‌دات بۆ به‌شداریپێکردنی یان پاشه‌که‌وتکردنی زانیاری ڕۆژژمێره‌که‌ت وریابه‌.</string>
   <string name="permlab_writeCalendar">زیادکردن یان گۆڕینی ڕووداو له‌ناو ڕۆژژمێر و ناردنی ئیمێل بۆ میوانه‌کان به‌بێ زانیاری له‌ باره‌ی دروستکه‌ره‌که‌ی</string>
-  <string name="permdesc_writeCalendar" product="tablet">ڕێگه‌دان به‌ به‌رنامه‌ بۆ زیادکردن ، سڕینه‌وه‌، گۆڕینی ڕووداوێک که‌ ڕووئه‌دات له‌ تابلێته‌که‌،وه‌ک هاوڕێکانت و شوانه‌کان. ئه‌مه‌ ڕێگه‌ ده‌دات به‌ به‌رنامه‌که‌ بۆ ناردنی که‌ له‌ ڕۆژژمێره‌که‌ ده‌رده‌که‌وێت، یان گۆڕینی ڕووداوه‌کان به‌بێ زانیاری خاوه‌ن ئامێر.</string>
-  <string name="permdesc_writeCalendar" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ زیادکردن ، سڕینه‌وه‌، گۆڕینی ڕووداوێک که‌ ڕووئه‌دات له‌ تابلێته‌که‌،وه‌ک هاوڕێکانت و شوانه‌کان. ئه‌مه‌ ڕێگه‌ ده‌دات به‌ به‌رنامه‌که‌ بۆ ناردنی که‌ له‌ ڕۆژژمێره‌که‌ ده‌رده‌که‌وێت، یان گۆڕینی ڕووداوه‌کان به‌بێ زانیاری خاوه‌ن ئامێر.</string>
   <string name="permlab_accessMockLocation">شوێنی پۆشته‌ری سه‌رچاوه‌ بۆ تاقیکردنه‌وه‌</string>
   <string name="permdesc_accessMockLocation">دروستکردنی سەرچاوەی شوێندۆزینی خەیالی بۆ تاقیکردنەوە.ئەمە ڕێگە بە بەرنامەکە دەدات کە زانیاری دەربارەی شوێن کە لە GPS وەری دەگرێت،پشتگوێ بخا</string>
   <string name="permlab_accessLocationExtraCommands">ده‌سته‌ڵاتی شوێنی زیاتر بۆ فرمانی دابینکردن</string>
@@ -1016,10 +1011,6 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="lockscreen_pattern_wrong">دوبارە هەوڵبدەرەوە</string>
   <string name="lockscreen_password_wrong">دووباره‌ هەوڵ بدەوە</string>
   <string name="faceunlock_multiple_failures">چالاککردنی قوفڵ بە ڕوخسار هەوڵ زۆر دراوە</string>
-  <string name="lockscreen_plugged_in">بارگاوی کردن, <xliff:g id="ژمارە">%d</xliff:g><xliff:g id="لەسەدا">%%</xliff:g></string>
-  <string name="lockscreen_charged">بارگاوی بوە</string>
-  <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="lockscreen_low_battery">بیبەستە بە بارگاویکه‌ر.</string>
   <string name="lockscreen_missing_sim_message_short">سیمکارتی تیا نیە</string>
   <string name="lockscreen_missing_sim_message" product="tablet">سیمکارت نیە لە تاتەبژمێر.</string>
   <string name="lockscreen_missing_sim_message" product="default">سیمکارت نیە لە تەلەفۆن.</string>

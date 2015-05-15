@@ -41,8 +41,8 @@
   <string name="quick_settings_location_gps_only_label">تەنها ئامێر</string>
   <string name="quick_settings_location_high_accuracy_label">بەکارهێنانی زۆر</string>
   <string name="quick_settings_nfc_label">NFC</string>
-  <string name="quick_settings_profiles_detail_title">پرۆفایلەکانی سیستەم</string>
-  <string name="quick_settings_profiles_disabled">پرۆفایل ناچالاکە</string>
+  <string name="quick_settings_profiles_detail_title">زانیاری تایبەتیەکانی سیستەم</string>
+  <string name="quick_settings_profiles_disabled">زانیاری تایبەتی ناچالاکە</string>
   <string name="quick_settings_compass_label">قیبلە نما</string>
   <string name="quick_settings_compass_init">سه‌ره‌تایکردن\u2026</string>
   <string name="quick_settings_lockscreen_label">قفڵی شاشە</string>

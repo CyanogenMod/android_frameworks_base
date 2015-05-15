@@ -32,8 +32,8 @@
   <string name="status_bar_ongoing_events_title">Am Gaang</string>
   <string name="status_bar_latest_events_title">Notifikatiounen</string>
   <string name="battery_low_title">Akku niddreg</string>
-  <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> iwwreg</string>
-  <string name="battery_low_percent_format_saver_started"><xliff:g id="number">%d%%</xliff:g> iwwreg. Den Akkuschouner ass un.</string>
+  <string name="battery_low_percent_format"><xliff:g id="percentage">%s</xliff:g> iwwreg</string>
+  <string name="battery_low_percent_format_saver_started"><xliff:g id="percentage">%s</xliff:g> iwwreg. Akkuschouner ass un.</string>
   <string name="invalid_charger">Oplueden iwwer USB net ënnerstëtzt.\nBenotz just de matgeliwwerten Oplueder.</string>
   <string name="invalid_charger_title">Oplueden iwwer USB net ënnerstëtzt.</string>
   <string name="invalid_charger_text">Benotz just de matgeliwwerten Oplueder.</string>
@@ -87,7 +87,6 @@
   <string name="unlock_label">entspären</string>
   <string name="phone_label">Telefon opmaachen</string>
   <string name="camera_label">Kamera opmaachen</string>
-  <string name="accessibility_ime_switch_button">Knäppche fir d\'Method fir anzeginn ze wiesselen.</string>
   <string name="accessibility_compatibility_zoom_button">Knäppche fir de Kompatibilitéitszoom.</string>
   <string name="accessibility_compatibility_zoom_example">Zoom op ee méi grousse Schierm.</string>
   <string name="accessibility_bluetooth_connected">Bluetooth connectéiert.</string>
@@ -270,13 +269,13 @@
   <string name="quick_settings_cellular_detail_title">Zelldaten</string>
   <string name="quick_settings_cellular_detail_data_usage">Dateverbrauch</string>
   <string name="quick_settings_cellular_detail_remaining_data">Iwwreg Daten</string>
-  <string name="quick_settings_cellular_detail_over_limit">Limitt erreecht - Datebenotzung pauséiert</string>
+  <string name="quick_settings_cellular_detail_over_limit">Iwwer d\'Limitt</string>
   <string name="quick_settings_cellular_detail_data_used"><xliff:g id="data_used" example="2.0 GB">%s</xliff:g> benotzt</string>
   <string name="quick_settings_cellular_detail_data_limit"><xliff:g id="data_limit" example="2.0 GB">%s</xliff:g>-Limitt</string>
   <string name="quick_settings_cellular_detail_data_warning"><xliff:g id="data_limit" example="2.0 GB">%s</xliff:g> Warnung</string>
   <string name="recents_empty_message">Deng rezent Schiermer erschéngen hei</string>
   <string name="recents_app_info_button_label">App-Info</string>
-  <string name="recents_lock_to_app_button_label">Op d\'App aschränken</string>
+  <string name="recents_lock_to_app_button_label">Schiermfixéierung</string>
   <string name="recents_search_bar_label">sichen</string>
   <string name="recents_launch_error_message">Konnt net <xliff:g id="app" example="Calendar">%s</xliff:g> starten.</string>
   <string name="expanded_header_battery_charged">Opgelueden</string>
@@ -356,6 +355,9 @@ iwwerwaacht sinn</string>
   <string name="hidden_notifications_text">Virum Entspären uweisen</string>
   <string name="hidden_notifications_cancel">Nee Merci</string>
   <string name="hidden_notifications_setup">Ariichten</string>
-  <string name="muted_by">Roueg gestallt duerch <xliff:g id="third_party">%1$s</xliff:g></string>
   <string name="zen_mode_and_condition"><xliff:g id="zen_mode" example="Priority interruptions only">%1$s</xliff:g>. <xliff:g id="exit_condition" example="For one hour">%2$s</xliff:g></string>
+  <string name="screen_pinning_title">Schierm ass fixéiert</string>
+  <string name="screen_pinning_negative">Nee Merci</string>
+  <string name="quick_settings_reset_confirmation_title"><xliff:g id="tile_label" example="Hotspot">%1$s</xliff:g> verstoppen?</string>
+  <string name="quick_settings_reset_confirmation_button">Verstoppen</string>
 </resources>

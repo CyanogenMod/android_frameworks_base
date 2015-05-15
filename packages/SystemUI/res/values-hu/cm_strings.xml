@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">Helymeghatározás jelentése: energiatakarékos.</string>
   <string name="accessibility_quick_settings_location_gps_only">Helymeghatározás jelentése: csak GPS.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Helymeghatározás jelentése: nagyon pontos.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Lebegő értesítés ki.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Lebegő értesítés be.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Lebegő értesítés kikapcsolva.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Lebegő értesítés bekapcsolva.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Környezeti kijelző ki.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Környezeti kijelző be.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Környezeti kijelző kikapcsolva.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Környezeti kijelző bekapcsolva.</string>
   <string name="accessibility_dpad_left">Kurzor balra</string>
   <string name="accessibility_dpad_right">Kurzor jobbra</string>
   <string name="quick_settings_mobile_data_label">Mobilinternet</string>
@@ -51,6 +59,9 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Képernyő időkorlátja</string>
   <string name="quick_settings_usb_tether_label">USB megosztás</string>
+  <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
+  <string name="quick_settings_ambient_display_label">Környezeti kijelző</string>
+  <string name="quick_settings_custom_tile_detail_title">Egyéni csempe</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Csúsztasson jobbra ezért: %1$s</string>
   <string name="right_shortcut_hint">Csúsztasson balra ezért: %1$s</string>
@@ -79,4 +90,8 @@
   <string name="navring_choose_action_title">Válasszon eseményt</string>
   <string name="select_application">Válasszon alkalmazást</string>
   <string name="lockscreen_target_empty">Üres</string>
+  <string name="screen_pinning_description_no_navbar">Ez a nézetben tartja, amíg a rögzítést fel nem oldja. Érintse meg és tartsa nyomva a Vissza gombot a rögzítés feloldásához.</string>
+  <string name="interruption_level_silent">Néma</string>
+  <string name="zen_silent_with_warning">Megszakítások nélkül, kivéve a riasztást.</string>
+  <string name="quick_settings_remove">Csempe eltávolítása</string>
 </resources>

@@ -26,7 +26,6 @@
   <string name="status_bar_no_notifications_title">ئۇقتۇرۇش يوق</string>
   <string name="status_bar_ongoing_events_title">ئېلىپ بېرىلىۋاتىدۇ</string>
   <string name="status_bar_latest_events_title">ئۇقتۇرۇشلار</string>
-  <string name="battery_low_percent_format"><xliff:g id="NUMBER">%d</xliff:g>%% قالدى</string>
   <string name="invalid_charger">USB دىن توكلاشنى قوللىمايدۇ.\nتوكلىغۇچتىن توڭلاڭ.</string>
   <string name="status_bar_settings_settings_button">تەڭشەكلەر</string>
   <string name="status_bar_settings_wifi_button">Wi-Fi</string>
@@ -67,7 +66,6 @@
   <string name="accessibility_menu">تىزىملىك</string>
   <string name="accessibility_search_light">ئىزدە</string>
   <string name="accessibility_camera_button">كامېرا</string>
-  <string name="accessibility_ime_switch_button">كىرگۈزگۈچ ئالماشتۇرۇش توپچىسى.</string>
   <string name="accessibility_compatibility_zoom_button">ماسلىشىشچان چوڭايت كىچىكلەت توپچىسى.</string>
   <string name="accessibility_compatibility_zoom_example">ئېكراننى كىچىكتىن چوڭايتىدۇ.</string>
   <string name="accessibility_bluetooth_connected">كۆكچىش باغلاندى.</string>

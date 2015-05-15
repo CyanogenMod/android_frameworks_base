@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">Teljesítménycentrikus</string>
   <string name="theme_install_error_title">Téma telepítése sikertelen</string>
   <string name="theme_install_error_message">Sikertelen telepítés: %s</string>
-  <string name="android_installing_apk">Alkalmazás telepítése <xliff:g id="number" example="123">%1$d</xliff:g> / <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android telepítése\u2026</string>
   <string name="theme_reset_notification_title">Téma viszaállítása</string>
   <string name="theme_reset_notification_body">Több alkalmazás összeomlása miatt a rendszer téma visszaállításra került.</string>
   <string name="stylus_app_not_installed">%s nincs telepítve</string>
@@ -208,6 +206,8 @@
   <string name="live_display_outdoor">Kültéri (erős napfény)</string>
   <string name="live_display_outdoor_summary">Csak a kültéri beállítások használata</string>
   <string name="live_display_hint">A LiveDisplay segíthet a szemek terhelésének csökkentésében és a jobb éjszakai alvásban. Kattintson ide, hogy kipróbálja!</string>
-  <string name="lock_to_app_toast_no_navbar">Képernyő feloldásához érintse meg és tartsa nyomva a Menü gombot.</string>
-  <string name="lock_to_app_description_no_navbar">Egyszerű nézetben PIN zárolja a kijelzőt.\n\nFeloldáshoz érintse meg és tartsa nyomva a Menü gombot.</string>
+  <string name="lock_to_app_toast_no_navbar">Képernyő rögzítésének feloldásához érintse meg és tartsa nyomva a Vissza gombot.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Zseblámpa bekapcsolva</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Kikapcsoláshoz érintse meg</string>
+  <string name="storage_sd_dock_card">Dokkoló SD-kártyája</string>
 </resources>

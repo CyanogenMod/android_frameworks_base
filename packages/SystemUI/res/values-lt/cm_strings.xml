@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">Vietovės ataskaitos: akumuliatoriaus tausojimo režimas.</string>
   <string name="accessibility_quick_settings_location_gps_only">Vietovės ataskaitos: tik daviklių režimas.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Vietovės ataskaitos: didelio tikslumo režimas.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Iššokantys pranešimai išjungti.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Iššokantys pranešimai įjungti.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Iššokantys pranešimai išjungti.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Iššokantys pranešimai įjungti.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Ambient display išjungta.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Ambient display įjungta.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display išjungta.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display įjungta.</string>
   <string name="accessibility_dpad_left">Žymeklis kairėje</string>
   <string name="accessibility_dpad_right">Žymeklis dešinėje</string>
   <string name="quick_settings_mobile_data_label">Mobilieji duomenys</string>
@@ -51,6 +59,9 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Ekrano skirtasis laikas</string>
   <string name="quick_settings_usb_tether_label">USB susiejimas</string>
+  <string name="quick_settings_heads_up_label">Iššokantys pranešimai</string>
+  <string name="quick_settings_ambient_display_label">Ambient display</string>
+  <string name="quick_settings_custom_tile_detail_title">Tinkinta plytelė</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Braukite į dešinę, kad %1$s</string>
   <string name="right_shortcut_hint">Braukite į kairę, kad %1$s</string>
@@ -79,4 +90,8 @@
   <string name="navring_choose_action_title">Pasirinkti veiksmą</string>
   <string name="select_application">Pasirinkti programą</string>
   <string name="lockscreen_target_empty">Tuščia</string>
+  <string name="screen_pinning_description_no_navbar">Tai laikys jį matomą iki kol atsegsite. Palieskite ir laikykite mygtuką atgal, kad atsegtumėte.</string>
+  <string name="interruption_level_silent">Tylus</string>
+  <string name="zen_silent_with_warning">Be pertrūkių, išskyrus signalus.</string>
+  <string name="quick_settings_remove">Pašalinti plytelę</string>
 </resources>

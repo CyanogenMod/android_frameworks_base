@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">Standuertbericht: Akku spueren.</string>
   <string name="accessibility_quick_settings_location_gps_only">Standuertbericht: just Sensoren.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Standuertbericht: héich Genauegkeet.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Pop-Up-Notifikatiounen aus.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Pop-Up-Notifikatiounen un.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Pop-Up-Notifikatiounen ausgeschalt.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Pop-Up-Notifikatiounen ugeschalt.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Ambiente Schierm aus.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Ambiente Schierm un.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Ambiente Schierm ausgeschalt.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Ambiente Schierm ugeschalt.</string>
   <string name="accessibility_dpad_left">Cursor lénks</string>
   <string name="accessibility_dpad_right">Cursor riets</string>
   <string name="quick_settings_mobile_data_label">Mobil Daten</string>
@@ -50,6 +58,10 @@
   <string name="quick_settings_network_adb_label">ADB iwwer Netzwierk</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Schierm-Timeout</string>
+  <string name="quick_settings_usb_tether_label">USB-Tethering</string>
+  <string name="quick_settings_heads_up_label">Pop-Up-Notifikatiounen</string>
+  <string name="quick_settings_ambient_display_label">Ambiente Schierm</string>
+  <string name="quick_settings_custom_tile_detail_title">Eege Kachel</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">No riets wësche fir %1$s</string>
   <string name="right_shortcut_hint">No lénks wësche fir %1$s</string>
@@ -78,4 +90,8 @@
   <string name="navring_choose_action_title">Aktioun auswielen</string>
   <string name="select_application">App auswielen</string>
   <string name="lockscreen_target_empty">Eidel</string>
+  <string name="screen_pinning_description_no_navbar">Doduerch bleift d\'App visibel bis se lassgeléist gëtt. Dréck den Zréck-Knäppchen an hal e gedréckt fir d\'App lasszeléisen.</string>
+  <string name="interruption_level_silent">Roueg</string>
+  <string name="zen_silent_with_warning">Keng Ënnerbriechungen, ausser Weckeren.</string>
+  <string name="quick_settings_remove">Kachel läschen</string>
 </resources>

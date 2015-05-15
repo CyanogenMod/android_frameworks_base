@@ -148,10 +148,6 @@ muuta juba olemasolevaid.</string>
   <string name="perf_profile_perf">Jõudlus</string>
   <string name="theme_install_error_title">Ei saanud paigaldada teemat</string>
   <string name="theme_install_error_message">%s paigaldamine nurjus</string>
-  <string name="android_installing_apk">Paigaldan rakendust
-        <xliff:g id="number" example="123">%1$d</xliff:g> 
-        <xliff:g id="number" example="123">%2$d</xliff:g>st.</string>
-  <string name="android_installing_title">Android installeerib\u2026</string>
   <string name="theme_reset_notification_title">Teema lähtestus</string>
   <string name="theme_reset_notification_body">Systeemi teema taastati paljude rakenduste kokkujooksmise tõttu.</string>
   <string name="stylus_app_not_installed">%s ei ole installitud</string>
@@ -212,6 +208,4 @@ muuta juba olemasolevaid.</string>
   <string name="live_display_outdoor">Õues (ere päike)</string>
   <string name="live_display_outdoor_summary">Kasuta ainult õue seadeid</string>
   <string name="live_display_hint">LiveDisplay võimaldab vähendada silmade pinget ja lasta sul öösel magada. Kliki siin et seda proovida!</string>
-  <string name="lock_to_app_toast_no_navbar">Ekraani vabastamiseks puuduta ja hoia Menüü nuppu.</string>
-  <string name="lock_to_app_description_no_navbar">Ekraani kinnitus lukustab kuva ühele vaatele.\n\nEkraani vabastamiseks puuduta ja hoia Menüü nuppu.</string>
 </resources>

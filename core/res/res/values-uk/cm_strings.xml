@@ -148,10 +148,6 @@
   <string name="perf_profile_perf">Продуктивність</string>
   <string name="theme_install_error_title">Не вдалося інсталювати тему</string>
   <string name="theme_install_error_message">не вдалося інсталювати %s</string>
-  <string name="android_installing_apk">Встановлення програми
-        <xliff:g id="number" example="123">%1$d</xliff:g> із
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android встановлюється\u2026</string>
   <string name="theme_reset_notification_title">Тема відключена</string>
   <string name="theme_reset_notification_body">Через системні збої встановлена системна тема.</string>
   <string name="stylus_app_not_installed">%s не встановлено</string>
@@ -212,6 +208,8 @@
   <string name="live_display_outdoor">Надворі (яскраве сонце)</string>
   <string name="live_display_outdoor_summary">Використовувати параметри для яскравого освітлення надворі</string>
   <string name="live_display_hint">LiveDisplay допоможе зменшити навантаження на зір та покращить Ваш сон. Натисніть тут, щоб спробувати його!</string>
-  <string name="lock_to_app_toast_no_navbar">Аби відкріпити екран, натисніть та утримуйте кнопку «Меню».</string>
-  <string name="lock_to_app_description_no_navbar">Прикріплення екрану дозволяє користуватись лише одним додатком.\n\nАби відкріпити, натисніть та утримуйте кнопку «Меню».</string>
+  <string name="lock_to_app_toast_no_navbar">Щоб відкріпити цей екран, торкніться й утримуйте кнопку назад.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Ліхтарик увімкнений</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Торкніться, щоб вимкнути</string>
+  <string name="storage_sd_dock_card">SD-карта док-станції</string>
 </resources>
