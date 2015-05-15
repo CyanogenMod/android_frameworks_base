@@ -19,6 +19,8 @@
 
 package com.android.server;
 
+import android.app.AppOpsManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,17 @@ public class PermissionDialogReqQueue {
             synchronized (this) {
                 while (!mHasResult) {
                     try {
-                        wait();
+                        long startTime = System.currentTimeMillis();
+                        wait(PermissionDialog.DISMISS_TIMEOUT);
+                        long endTime = System.currentTimeMillis();
+                        // If the time elapsed is greater than the timeout
+                        // Then this thread was most likely notified because the wait timed out.
+                        if ((endTime - startTime) >= PermissionDialog.DISMISS_TIMEOUT) {
+                            // Just reject any calls that have timed out.
+                            mHasResult = true;
+                            mResult = AppOpsManager.MODE_IGNORED;
+                            return mResult;
+                        }
                     } catch (InterruptedException e) {
                     }
                 }
@@ -62,6 +74,18 @@ public class PermissionDialogReqQueue {
     public PermissionDialogReqQueue() {
         mDialog = null;
         resultList = new ArrayList<PermissionDialogReq>();
+    }
+
+    public boolean allHaveResult() {
+        boolean allCompleted = true;
+        synchronized (this) {
+            for (PermissionDialogReq req : resultList) {
+                if (!req.mHasResult) {
+                    allCompleted = false;
+                }
+            }
+        }
+        return allCompleted;
     }
 
     public void register(PermissionDialogReq res) {

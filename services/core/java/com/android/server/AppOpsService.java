@@ -1504,6 +1504,10 @@ public class AppOpsService extends IAppOpsService.Stub {
             synchronized (AppOpsService.this) {
                 Log.e(TAG, "Creating dialog box");
                 op.dialogReqQueue.register(request);
+                if (op.dialogReqQueue.allHaveResult()) {
+                    notifyOperation(code, uid, packageName, AppOpsManager.MODE_IGNORED, false);
+                    return;
+                }
                 if (op.dialogReqQueue.getDialog() == null) {
                     permDialog = new PermissionDialog(mContext,
                             AppOpsService.this, code, uid, packageName);
