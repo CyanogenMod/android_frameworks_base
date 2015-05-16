@@ -275,10 +275,10 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
 
             // Update search bar space height
             if (showSearchBar) {
-                RecentsConfiguration.searchBarSpaceHeightPx = getResources().getDimensionPixelSize(
+                mConfig.searchBarSpaceHeightPx = getResources().getDimensionPixelSize(
                     R.dimen.recents_search_bar_space_height);
             } else {
-                RecentsConfiguration.searchBarSpaceHeightPx = 0;
+                mConfig.searchBarSpaceHeightPx = 0;
             }
         }
 
