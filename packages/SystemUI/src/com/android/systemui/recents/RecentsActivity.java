@@ -259,26 +259,11 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
                 mEmptyView.setOnClickListener(null);
             }
             findViewById(R.id.clear_recents).setVisibility(View.VISIBLE);
-            boolean showSearchBar = Settings.System.getInt(getContentResolver(),
-                       Settings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
-            if (mRecentsView.hasSearchBar()) {
-                if (showSearchBar) {
-                    mRecentsView.setSearchBarVisibility(View.VISIBLE);
-                } else {
-                    mRecentsView.setSearchBarVisibility(View.GONE);
-                }
-            } else {
-                if (showSearchBar) {
-                    addSearchBarAppWidgetView();
-                }
-            }
 
-            // Update search bar space height
-            if (showSearchBar) {
-                RecentsConfiguration.searchBarSpaceHeightPx = getResources().getDimensionPixelSize(
-                    R.dimen.recents_search_bar_space_height);
-            } else {
-                RecentsConfiguration.searchBarSpaceHeightPx = 0;
+            if (mRecentsView.hasSearchBar()) {
+                mRecentsView.setSearchBarVisibility(mConfig.searchBarVisible ? View.VISIBLE : View.GONE);
+            } else if (mConfig.searchBarVisible) {
+                addSearchBarAppWidgetView();
             }
         }
 
