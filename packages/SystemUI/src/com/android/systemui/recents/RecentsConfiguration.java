@@ -77,7 +77,8 @@ public class RecentsConfiguration {
 
     /** Search bar */
     int searchBarAppWidgetId = -1;
-    public static int searchBarSpaceHeightPx;
+    boolean searchBarVisible;
+    int searchBarSpaceHeightPx;
 
     /** Task stack */
     public int taskStackScrollDuration;
@@ -306,6 +307,14 @@ public class RecentsConfiguration {
                 Settings.Global.DEVELOPMENT_SETTINGS_ENABLED) != 0;
         lockToAppEnabled = ssp.getSystemSetting(context,
                 Settings.System.LOCK_TO_APP_ENABLED) != 0;
+
+        searchBarVisible = ssp.getSystemSetting(context,
+                Settings.System.RECENTS_SHOW_SEARCH_BAR) == 1;
+        if (searchBarVisible)
+            searchBarSpaceHeightPx = context.getResources()
+                    .getDimensionPixelSize(R.dimen.recents_search_bar_space_height);
+        else
+            searchBarSpaceHeightPx = 0;
     }
 
     /** Called when the configuration has changed, and we want to reset any configuration specific
