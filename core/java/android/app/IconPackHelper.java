@@ -628,9 +628,14 @@ public class IconPackHelper {
             int hashCode = outValue.string.hashCode() & 0x7fffffff;
             int defaultSwatchColor = 0;
 
+            final ComposedIconInfo iconInfo = res.getComposedIconInfo();
+            if (iconInfo == null) {
+                // No composed icon info available so restore original value and return
+                outValue.setTo(tempValue);
+                return;
+            }
             if (!(new File(outValue.string.toString()).exists())) {
                 // compose the icon and cache it
-                final ComposedIconInfo iconInfo = res.getComposedIconInfo();
                 int back = 0;
                 if (iconInfo.swatchType != ComposedIconInfo.SwatchType.None) {
                     back = iconInfo.iconPaletteBack;
