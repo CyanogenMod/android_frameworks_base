@@ -16,7 +16,9 @@
 
 package com.android.systemui.media;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -25,6 +27,7 @@ import android.net.Uri;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.LinkedList;
@@ -81,7 +84,13 @@ public class NotificationPlayer implements OnCompletionListener {
                 try {
                     MediaPlayer player = new MediaPlayer();
                     player.setAudioAttributes(mCmd.attributes);
-                    player.setDataSource(mCmd.context, mCmd.uri);
+                    String path = getPathFromNotificationUri(mCmd.context, mCmd.uri);
+                    if (path != null && !TextUtils.isEmpty(path.trim())) {
+                        player.setDataSource(path);
+                    } else {
+                        player.setDataSource(mCmd.context, mCmd.uri);
+                    }
+
                     player.setLooping(mCmd.looping);
                     player.prepare();
                     if ((mCmd.uri != null) && (mCmd.uri.getEncodedPath() != null)
@@ -124,6 +133,51 @@ public class NotificationPlayer implements OnCompletionListener {
                 this.notify();
             }
             Looper.loop();
+        }
+
+        private String getPathFromNotificationUri(Context context, Uri uri) {
+            if(uri.getScheme().equals("file"))
+                return uri.getPath();
+            else if(!(uri.getScheme().equals("content")
+                    && (uri.getAuthority().equals("settings"))))
+                return null;
+
+            String uri_str = getContentUriColumn(context, uri,
+                    android.provider.Settings.System.VALUE);
+            if (mDebug)
+                Log.d(mTag, new Throwable().getStackTrace()[0].toString() +"playing uri:" + uri_str);
+
+            String path = null;
+            if (uri_str != null && !TextUtils.isEmpty(uri_str.trim())) {
+                path = getContentUriColumn(context, Uri.parse(uri_str),
+                        android.provider.MediaStore.Audio.Media.DATA);
+            }
+            if (mDebug)
+                Log.d(mTag, new Throwable().getStackTrace()[0].toString() + "path:" + path);
+            return path;
+        }
+
+        private String getContentUriColumn(Context context, Uri uri, String column) {
+            ContentResolver resolver = context.getContentResolver();
+            String value = null;
+            Cursor value_cur = null;
+            String[] projects = new String[]{column};
+
+            try {
+                value_cur = resolver.query(uri, projects, null, null, null);
+                value_cur.moveToFirst();
+                value = value_cur.getString(value_cur
+                        .getColumnIndexOrThrow(column));
+            } catch (Exception e) {
+                Log.e(mTag, Log.getStackTraceString(new Throwable()));
+                value = null;
+            } finally {
+                if (value_cur != null) {
+                    value_cur.close();
+                    value_cur = null;
+                }
+            }
+            return value;
         }
     };
 
