@@ -2011,8 +2011,14 @@
         string that's stored in 8-bit unpacked format) characters.-->
     <bool translatable="false" name="config_sms_decode_gsm_8bit_data">false</bool>
 
-    <!-- Package name providing WebView implementation. -->
+    <!-- Package name providing default WebView implementation. -->
     <string name="config_webViewPackageName" translatable="false">com.android.webview</string>
+
+    <!-- Package name list of possible WebView implementations.
+         Fall back to config_webViewPackageName if no package in list available. -->
+    <string-array name="config_webViewProviderPackageNames" translatable="false">
+        <item>com.google.android.webview</item>
+    </string-array>
 
     <!-- If EMS is not supported, framework breaks down EMS into single segment SMS
          and adds page info " x/y". This config is used to set which carrier doesn't
