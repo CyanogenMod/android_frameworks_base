@@ -2015,6 +2015,7 @@
   <java-symbol type="string" name="websearch" />
   <java-symbol type="drawable" name="ic_media_video_poster" />
   <java-symbol type="string" name="config_webViewPackageName" />
+  <java-symbol type="string" name="config_alternateWebViewPackageName" />
 
   <!-- From SubtitleView -->
   <java-symbol type="dimen" name="subtitle_corner_radius" />
