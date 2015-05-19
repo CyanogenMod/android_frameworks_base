@@ -2328,4 +2328,7 @@
     <string name="config_defaultQuickSettingsTiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast</string>
 
     <string-array name="config_externalCMServices"></string-array>
+
+    <!-- Boolean to identify if TorchService should be enabled -->
+    <bool name="config_TorchEnabled">true</bool>
 </resources>
