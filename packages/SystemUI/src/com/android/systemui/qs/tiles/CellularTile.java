@@ -20,6 +20,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
@@ -94,10 +95,12 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
 
     @Override
     protected void handleLongClick() {
-        if (mTelephonyManager.getDefault().getPhoneCount() > 1) {
-            mHost.startSettingsActivity(MOBILE_NETWORK_SETTINGS_MSIM);
-        } else {
-            mHost.startSettingsActivity(MOBILE_NETWORK_SETTINGS);
+        if (UserHandle.myUserId() == UserHandle.USER_OWNER) {
+            if (mTelephonyManager.getDefault().getPhoneCount() > 1) {
+                mHost.startSettingsActivity(MOBILE_NETWORK_SETTINGS_MSIM);
+            } else {
+                mHost.startSettingsActivity(MOBILE_NETWORK_SETTINGS);
+            }
         }
     }
 

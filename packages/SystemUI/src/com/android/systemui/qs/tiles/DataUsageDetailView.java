@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -110,13 +111,15 @@ public class DataUsageDetailView extends LinearLayout {
         carrier.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                        Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                // Use NetworkSetting to handle the selection intent
-                intent.setComponent(new ComponentName("com.android.phone",
-                        "com.android.phone.NetworkSetting"));
-                mHost.startSettingsActivity(intent);
+                if (UserHandle.myUserId()==UserHandle.USER_OWNER) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                    // Use NetworkSetting to handle the selection intent
+                    intent.setComponent(new ComponentName("com.android.phone",
+                         "com.android.phone.NetworkSetting"));
+                    mHost.startSettingsActivity(intent);
+                }
             }
         });
         final TextView period = (TextView) findViewById(R.id.usage_period_text);
