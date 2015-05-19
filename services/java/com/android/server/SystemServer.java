@@ -661,7 +661,8 @@ public final class SystemServer {
                 }
             }
 
-            if (!disableNonCoreServices) {
+            if (!disableNonCoreServices && context.getResources().getBoolean(
+                    com.android.internal.R.bool.config_torchEnabled)) {
                 try {
                     Slog.i(TAG, "TorchService");
                     ServiceManager.addService(Context.TORCH_SERVICE, new TorchService(context));
