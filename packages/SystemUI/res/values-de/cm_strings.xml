@@ -29,6 +29,10 @@
   <string name="accessibility_quick_settings_location_battery_saving">Standortdienste: Energiesparmodus</string>
   <string name="accessibility_quick_settings_location_gps_only">Standortdienste: Nur Gerät</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Standortdienste: Hohe Genauigkeit</string>
+  <string name="accessibility_quick_settings_heads_up_off">Pop-up aus.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Pop-up an.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Pop-up ausgeschaltet.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Pop-up eingeschaltet.</string>
   <string name="accessibility_dpad_left">Pfeiltaste links</string>
   <string name="accessibility_dpad_right">Pfeiltaste rechts</string>
   <string name="quick_settings_mobile_data_label">Mobile Daten</string>
@@ -51,6 +55,8 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Bildschirm-Timeout</string>
   <string name="quick_settings_usb_tether_label">USB-Tethering</string>
+  <string name="quick_settings_heads_up_label">Pop-up</string>
+  <string name="quick_settings_custom_tile_detail_title">Benutzerdefinierte Kachel</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> – <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Nach Rechts wischen für %1$s</string>
   <string name="right_shortcut_hint">Nach Links wischen für %1$s</string>
@@ -79,4 +85,8 @@
   <string name="navring_choose_action_title">Aktion wählen</string>
   <string name="select_application">App wählen</string>
   <string name="lockscreen_target_empty">Nicht zugewiesen</string>
+  <string name="screen_pinning_description_no_navbar">Dies fixiert die aktuelle Ansicht. Zum Lösen die Zurück-Taste drücken und halten.</string>
+  <string name="interruption_level_silent">Lautlos</string>
+  <string name="zen_silent_with_warning">Keine Unterbrechungen, außer Alarme.</string>
+  <string name="quick_settings_remove">Kachel entfernen</string>
 </resources>

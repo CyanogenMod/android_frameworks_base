@@ -27,10 +27,7 @@
   <string name="petabyteShort">PB</string>
   <string name="fileSizeSuffix"><xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g></string>
   <string name="untitled">&lt;ماۋزۇسىز&gt;</string>
-  <string name="ellipsis">…</string>
-  <string name="ellipsis_two_dots">‥</string>
   <string name="emptyPhoneNumber">(تېلېفون نومۇرى يوق)</string>
-  <string name="unknownName">(يوچۇن)</string>
   <string name="defaultVoiceMailAlphaTag">ئۈنخەت</string>
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <string name="mmiError">باغلىنىشتا مەسىلە كۆرۈلدى ياكى MMI كودى خاتا.</string>
@@ -462,8 +459,6 @@
   <string name="permdesc_readCalendar" product="tablet">ئەپنىڭ  تاختا كومپيۇتېردا ساقلانغان يىلنامەدىكى پائالىيەت ئۇچۇرلىرىنى ئۇقۇشىغا يول قويىدۇ، دوست ياكى ئىشداشلىرىڭىزنىڭ پائالىيەتلىرىنىمۇ ئۆز ئىچىگە ئالىدۇ. بۇ ھوقۇق ئارقىلىق ئەپ يىنامە سانلىق مەلۇماتلىرىڭىزنى ھەمبەھىرلەپ ياكى ساقلىيالايدۇ، بۇ ئۇچۇرلار مەزمۇنى ياكى مەخپىيەتلىكنى ئويلاشمايدۇ.</string>
   <string name="permdesc_readCalendar" product="default">ئەپنىڭ  تېلېفوندا ساقلانغان يىلنامەدىكى پائالىيەت ئۇچۇرلىرىنى ئۇقۇشىغا يول قويىدۇ، دوست ياكى ئىشداشلىرىڭىزنىڭ پائالىيەتلىرىنىمۇ ئۆز ئىچىگە ئالىدۇ. بۇ ھوقۇق ئارقىلىق ئەپ يىنامە سانلىق مەلۇماتلىرىڭىزنى ھەمبەھىرلەپ ياكى ساقلىيالايدۇ، بۇ ئۇچۇرلار مەزمۇنى ياكى مەخپىيەتلىكنى ئويلاشمايدۇ.</string>
   <string name="permlab_writeCalendar">يىلنامەدىكى پائالىيەتلىرىڭىزنى قوشۇپ ئۆزگەرتىدۇ ھەمدە ئىگىسى خەۋەرسىز ئەھۋالدا قارشى تەرەپنىڭ تورخەت يوللىشىنى ئىلتىماس قىلىدۇ.</string>
-  <string name="permdesc_writeCalendar" product="tablet">ئەپنىڭ يىلنامە ئىگىسىنىڭ نامىدا پائالىيەت ئىلتىماسى يوللىشىغا يول قويىدۇ ھەمدە تاختا كومپيۇتېرىڭىزدا ئۆزگەرتەلەيدىغان پائالىيەت(دوستلىرىڭىز ۋە ئىشداشلىرىڭىزنىڭ پائالىيەتلىرىنىمۇ ئۆز ئىچىگە ئالىدۇ)لەرنى قوشۇپ، ئۆچۈرۈپ ۋە ئۆزگەرتىشىگە يول قويىدۇ. بۇ ھوقۇققا ئىگە ئەپلەر يىلنامە ئىگىسىنىڭ ئاتىدا ئەخلەت ئۇچۇر يوللايدۇ، ئۇندىن باشقا ئىگىسى خەۋەرسىز ئەھۋالدا پائالىيەتنى ئۆزگەرتىدۇ ياكى ساختا پائالىيەت قوشىدۇ.</string>
-  <string name="permdesc_writeCalendar" product="default">ئەپنىڭ يىلنامە ئىگىسىنىڭ نامىدا پائالىيەت ئىلتىماسى يوللىشىغا يول قويىدۇ ھەمدە تېلېفونىڭىزدا ئۆزگەرتەلەيدىغان پائالىيەت(دوستلىرىڭىز ۋە ئىشداشلىرىڭىزنىڭ پائالىيەتلىرىنىمۇ ئۆز ئىچىگە ئالىدۇ)لەرنى قوشۇپ، ئۆچۈرۈپ ۋە ئۆزگەرتىشىگە يول قويىدۇ. بۇ ھوقۇققا ئىگە ئەپلەر يىلنامە ئىگىسىنىڭ ئاتىدا ئەخلەت ئۇچۇر يوللايدۇ، ئۇندىن باشقا ئىگىسى خەۋەرسىز ئەھۋالدا پائالىيەتنى ئۆزگەرتىدۇ ياكى ساختا پائالىيەت قوشىدۇ.</string>
   <string name="permlab_accessMockLocation">تەقلىدىي مەنبە ئارقىلىق سىناق ئېلىپ بارىدۇ</string>
   <string name="permdesc_accessMockLocation">تەقلىدىي مەنبە قۇرۇپ سىناق ئېلىپ بارىدۇ ياكى يېڭىدىن ئورۇن تەمىنلەيدىغان ئەپ ئورنىتىدۇ. بۇ ھوقۇق ئارقىلىق  ئەپ تەقلىدىي مەنبەنى ئەمەلىي مەنبەنىڭ ئورنى(مەسىلەن GPS ياكى تور تەمىنلىگۈچى) ۋە ياكى ھالىتىگە دەسسىتېۋېلىشى مۇمكىن.</string>
   <string name="permlab_accessLocationExtraCommands">زىيادە ئورۇن ئۇچۇرىغا ئېرىشىش پىروگرامما بۇيرۇق زىيارىتى</string>
@@ -825,10 +820,6 @@
   <string name="lockscreen_pattern_wrong">قايتا سىنا</string>
   <string name="lockscreen_password_wrong">قايتا سىنا</string>
   <string name="faceunlock_multiple_failures">چىرايدا قۇلۇپ ئاچقۇچنى سىناش قېتىم سانىنىڭ يۇقىرى چېكىدىن ئېشىپ كەتتى</string>
-  <string name="lockscreen_plugged_in">توكلاۋاتىدۇ، <xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g></string>
-  <string name="lockscreen_charged">توكلاندى</string>
-  <string name="lockscreen_battery_short"><xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g></string>
-  <string name="lockscreen_low_battery">توكلىغۇچنى ئۇلاڭ.</string>
   <string name="lockscreen_missing_sim_message_short">SIM كارتا يوق</string>
   <string name="lockscreen_missing_sim_message" product="tablet">تاختا كومپيۇتېردا SIM كارتا يوق.</string>
   <string name="lockscreen_missing_sim_message" product="default">تېلېفوندا SIM كارتا يوق.</string>

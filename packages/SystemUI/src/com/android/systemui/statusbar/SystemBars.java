@@ -16,8 +16,12 @@
 
 package com.android.systemui.statusbar;
 
+import android.content.ContentResolver;
 import android.content.res.Configuration;
+import android.os.SystemProperties;
 import android.provider.Settings;
+import android.provider.Settings.System;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.systemui.R;
@@ -86,7 +90,7 @@ public class SystemBars extends SystemUI implements ServiceMonitor.Callbacks {
 
     private void createStatusBarFromConfig() {
         if (DEBUG) Log.d(TAG, "createStatusBarFromConfig");
-        final String clsName = mContext.getString(R.string.config_statusBarComponent);
+        final String clsName = getStatusBarComponent();
         if (clsName == null || clsName.length() == 0) {
             throw andLog("No status bar component configured", null);
         }
@@ -110,5 +114,34 @@ public class SystemBars extends SystemUI implements ServiceMonitor.Callbacks {
     private RuntimeException andLog(String msg, Throwable t) {
         Log.w(TAG, msg, t);
         throw new RuntimeException(msg, t);
+    }
+
+    /**
+     * Retrieves the statusBarComponent from possible external definitions
+     *
+     * The property 'ro.cm.statusBarComponent' is preferred over other values, if exists
+     * The System.STATUSBAR_COMPONENT value is preferred over the config, if exists
+     * If the dB value and property value are both null, the fallback config_statusBarComponent
+     * is used.
+     */
+    private String getStatusBarComponent() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        String componentPropValue = SystemProperties.get("ro.cm.statusBarComponent");
+        String componentDbValue = Settings.System.getString(resolver, System.STATUSBAR_COMPONENT);
+
+        String statusBarComponentPrefix = "com.android.systemui.statusbar.";
+
+        if (!TextUtils.isEmpty(componentPropValue)) {
+            if (DEBUG) Log.d(TAG, "using ro.cm.statusBarComponent value : " + componentPropValue);
+            return statusBarComponentPrefix + componentPropValue;
+        } else if (componentDbValue != null) {
+            if (DEBUG) Log.d(TAG, "using STATUSBAR_COMPONENT value : " + componentDbValue);
+            return statusBarComponentPrefix + componentDbValue;
+        } else {
+            // fallback to config value
+            if (DEBUG) Log.d(TAG, "Prop and dB value null. Using fallback default component.");
+            return mContext.getString(R.string.config_statusBarComponent);
+        }
     }
 }

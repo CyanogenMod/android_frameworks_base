@@ -324,12 +324,14 @@ public class VideoView extends SurfaceView
         }
 
         Log.i(TAG, "Open Video");
-        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
         // we shouldn't clear the target state, because somebody might have
         // called start() previously
         release(false);
+
+        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
         try {
             mMediaPlayer = new MediaPlayer();
             // TODO: create SubtitleController in MediaPlayer, but we need
@@ -696,6 +698,8 @@ public class VideoView extends SurfaceView
             if (cleartargetstate) {
                 mTargetState  = STATE_IDLE;
             }
+            AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            am.abandonAudioFocus(null);
         }
     }
 

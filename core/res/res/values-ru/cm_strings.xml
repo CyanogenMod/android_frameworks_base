@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">Высокая производит.</string>
   <string name="theme_install_error_title">Не удалось установить тему</string>
   <string name="theme_install_error_message">Сбой при установке «%s»</string>
-  <string name="android_installing_apk">Подготовка приложения <xliff:g id="number" example="123">%1$d</xliff:g> из <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Подготовка Android к первому запуску\u2026</string>
   <string name="theme_reset_notification_title">Тема отключена</string>
   <string name="theme_reset_notification_body">Из-за сбоев приложений восстановлена стандартная тема.</string>
   <string name="stylus_app_not_installed">«%s» не установлено</string>
@@ -208,6 +206,8 @@
   <string name="live_display_outdoor">На улице (яркое солнце)</string>
   <string name="live_display_outdoor_summary">Только уличный режим</string>
   <string name="live_display_hint">LiveDisplay поможет снизить зрительное напряжение и улучшить сон. Нажмите здесь, чтобы попробовать!</string>
-  <string name="lock_to_app_toast_no_navbar">Чтобы открепить экран, нажмите и удерживайте кнопку «Меню».</string>
-  <string name="lock_to_app_description_no_navbar">Функция закрепления позволяет зафиксировать текущий экран.\n\nЧтобы открепить его, нажмите и удерживайте кнопку «Меню».</string>
+  <string name="lock_to_app_toast_no_navbar">Чтобы открепить экран, нажмите и удерживайте кнопку «Назад».</string>
+  <string name="quick_settings_tile_flashlight_not_title">Фонарик включён</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Нажмите для отключения</string>
+  <string name="storage_sd_dock_card">SD-карта док-станции</string>
 </resources>

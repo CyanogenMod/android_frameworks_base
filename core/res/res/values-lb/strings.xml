@@ -33,15 +33,13 @@
   <string name="durationHourMinutes"><xliff:g id="hours">%1$d</xliff:g> St. <xliff:g id="minutes">%2$d</xliff:g> Min.</string>
   <string name="durationHourMinute"><xliff:g id="hours">%1$d</xliff:g> St. <xliff:g id="minutes">%2$d</xliff:g> Min.</string>
   <string name="durationMinutes"><xliff:g id="minutes">%1$d</xliff:g> Min.</string>
+  <string name="durationMinute"><xliff:g id="minutes">%1$d</xliff:g> Min.</string>
   <string name="durationMinuteSeconds"><xliff:g id="minutes">%1$d</xliff:g> Min. <xliff:g id="seconds">%2$d</xliff:g> Sek.</string>
   <string name="durationMinuteSecond"><xliff:g id="minutes">%1$d</xliff:g> Min. <xliff:g id="seconds">%2$d</xliff:g> Sek.</string>
   <string name="durationSeconds"><xliff:g id="seconds">%1$d</xliff:g> Sek.</string>
   <string name="durationSecond"><xliff:g id="seconds">%1$d</xliff:g> Sek.</string>
   <string name="untitled">&lt;Ouni Titel&gt;</string>
-  <string name="ellipsis">\u2026</string>
-  <string name="ellipsis_two_dots">\u2025</string>
   <string name="emptyPhoneNumber">(Keng Telefonsnummer)</string>
-  <string name="unknownName">(Onbekannt)</string>
   <string name="defaultVoiceMailAlphaTag">Sproochopnam</string>
   <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <string name="mmiError">Connectiounsproblem oder ongëltegen MMI-Code.</string>
@@ -148,12 +146,15 @@
   <string name="contentServiceTooManyDeletesNotificationDesc">Ze vill <xliff:g id="content_type">%s</xliff:g> geläscht.</string>
   <string name="low_memory" product="tablet">Den Tabletsspäicher ass voll. Läsch Dateien, fir Späicherplaz fräizeginn.</string>
   <string name="low_memory" product="watch">Den Auerespäicher ass voll. Läsch Dateien, fir Späicherplaz fräizeginn.</string>
+  <string name="low_memory" product="tv">Den Tëleespäicher ass voll. Läsch Dateien, fir Späicherplaz fräizeginn.</string>
   <string name="low_memory" product="default">Den Telefonsspäicher ass voll. Läsch Dateien, fir Späicherplaz fräizeginn.</string>
   <string name="ssl_ca_cert_warning">D\'Netzwierk kéint iwwerwaacht sinn</string>
   <string name="ssl_ca_cert_noti_by_unknown">Vun engem onbekannten Drëtten</string>
   <string name="ssl_ca_cert_noti_managed">Vu(n) <xliff:g id="managing_domain">%s</xliff:g></string>
+  <string name="factory_reset_warning">Däin Apparat gëtt geläscht</string>
   <string name="me">Ech</string>
   <string name="power_dialog" product="tablet">Tabletoptiounen</string>
+  <string name="power_dialog" product="tv">Tëleesoptiounen</string>
   <string name="power_dialog" product="default">Telefonsoptiounen</string>
   <string name="silent_mode">Stëlle Modus</string>
   <string name="turn_on_radio">Funk umaachen</string>
@@ -165,6 +166,7 @@
   <string name="silent_mode_ring">Schelltoun un</string>
   <string name="shutdown_progress">Gëtt ausgemaach\u2026</string>
   <string name="shutdown_confirm" product="tablet">Däin Tablet gëtt ausgemaach.</string>
+  <string name="shutdown_confirm" product="tv">Deng Tëlee schallt sech aus.</string>
   <string name="shutdown_confirm" product="watch">Deng Auer schalt sech aus.</string>
   <string name="shutdown_confirm" product="default">Däin Telefon gëtt ausgemaach.</string>
   <string name="shutdown_confirm_question">Wëlls du den Apparat ausmaachen?</string>
@@ -173,6 +175,7 @@
   <string name="recent_tasks_title">Rezent</string>
   <string name="no_recent_tasks">Keng rezent Appen.</string>
   <string name="global_actions" product="tablet">Tabletoptiounen</string>
+  <string name="global_actions" product="tv">Tëleesoptiounen</string>
   <string name="global_actions" product="default">Telefonsoptiounen</string>
   <string name="global_action_lock">Schiermspär</string>
   <string name="global_action_power_off">Ausmaachen</string>
@@ -289,9 +292,11 @@
   <string name="permdesc_sendRespondViaMessageRequest">Erlaabt der App, Ufroen un aner SMS/MMS-Appen ze schécken, fir Äntwert-per-SMS/MMS-Evenementer fir erakommend Uriff ze veraarbechten.</string>
   <string name="permlab_readSms">SMSen oder MMSe liesen</string>
   <string name="permdesc_readSms" product="tablet">Erlaabt der App, SMSen ze liesen déi um Tablet oder op der SIM-Kaart gespäichert sinn. Doduerch kann d\'App all d\'SMSe liesen, onofhängeg vum Inhalt an egal wéi vertraulech se sinn.</string>
+  <string name="permdesc_readSms" product="tv">Erlaabt der App SMSen ze liesen déi op der Tëlee oder op der SIM-Kaart gespäichert sinn. Doduerch kann d\'App all d\'SMSe liesen, onofhängeg vum Inhalt an egal wéi confidentiell se sinn.</string>
   <string name="permdesc_readSms" product="default">Erlaabt der App, SMSen ze liesen déi um Telefon oder op der SIM-Kaart gespäichert sinn. Doduerch kann d\'App all d\'SMSe liesen, onofhängeg vum Inhalt an egal wéi vertraulech se sinn.</string>
   <string name="permlab_writeSms">SMSen oder MMSen änneren</string>
   <string name="permdesc_writeSms" product="tablet">Erlaabt der App, SMS-Messagen déi um Tablet oder op der SIM-Kaart gespäichert sinn ze beaarbechten. Béiswëlleg Appe kéinten deng Message läschen.</string>
+  <string name="permdesc_writeSms" product="tv">Erlaabt der App, SMS-Messagen déi op der Tëlee oder op der SIM-Kaart gespäichert sinn ze beaarbechten. Béiswëlleg Appe kéinten deng Message läschen.</string>
   <string name="permdesc_writeSms" product="default">Erlaabt der App, SMS-Messagen déi um Telefon oder op der SIM-Kaart gespäichert sinn ze beaarbechten. Béiswëlleg Appe kéinten deng Message läschen.</string>
   <string name="permlab_receiveWapPush">Textmessagen (WAP) empfänken</string>
   <string name="permdesc_receiveWapPush">Erlaabt der App, WAP-Messagen z\'empfänken an ze beaarbechten. Dës Berechtegung huet d\'Fäegkeet, Messagen déi s du geschéckt kriss z\'iwwerwaachen oder ze läschen, ouni datt s du se ze gesi kriss.</string>
@@ -449,7 +454,7 @@
   <string name="permdesc_manageCaCertificates">Erlaabt der App, CA-Zertifikater als vertrauenswierdeg Zouganksdaten z\'installéieren oder deinstalléieren.</string>
   <string name="permdesc_bindJobService">Dës Berechtegung erlaabt dem Android-System, bei enger Ufro d\'App am Hannergrond lafen ze loossen.</string>
   <string name="permlab_diagnostic">Elementer déi der Diagnosgrupp gehéiere liesen a schreiwen</string>
-  <string name="permdesc_diagnostic">Erlaabt der App, all d\'Resourcen déi der Diagnosgrupp gehéieren (zum Beispill Fichieren am Dossier /dev) ze liesen an ze schreiwen. Dat ka méiglecherweis d\'Systemstabilitéit a -sécherheet beaflossen. Dës Berechtegung sollt JUST fir Hardware-spezifesch Diagnostike vum Hiersteller oder Provider benotzt ginn.</string>
+  <string name="permdesc_diagnostic">Erlaabt der App, all d\'Ressourcen déi der Diagnosgrupp gehéieren (zum Beispill Fichieren am Dossier /dev) ze liesen an ze schreiwen. Dat ka méiglecherweis d\'Systemstabilitéit a -sécherheet beaflossen. Dës Berechtegung sollt JUST fir Hardware-spezifesch Diagnostike vum Hiersteller oder Provider benotzt ginn.</string>
   <string name="permlab_changeComponentState">App-Komponenten aktivéieren oder desaktivéieren</string>
   <string name="permdesc_changeComponentState" product="tablet">Erlaabt der App, z\'änneren ob eng Komponent vun enger anerer App aktivéiert ass oder net. Béisaarteg Appe kënnen dat benotze fir wichteg Tablet-Funktiounen ze desaktivéieren. Dës Berechtegung ass mat Virsiicht ze benotzen, well et méiglech ass fir App-Komponenten an en onbenotzbaren, inkonsistenten oder onstabillen Zoustand ze versetzen.</string>
   <string name="permdesc_changeComponentState" product="default">Erlaabt der App, z\'änneren ob eng Komponent vun enger anerer App aktivéiert ass oder net. Béisaarteg Appe kënnen dat benotze fir wichteg Telefons-Funktiounen ze desaktivéieren. Dës Berechtegung ass mat Virsiicht ze benotzen, well et méiglech ass fir App-Komponenten an en onbenotzbaren, inkonsistenten oder onstabillen Zoustand ze versetzen.</string>
@@ -467,8 +472,8 @@
   <string name="permdesc_receiveBootCompleted" product="tablet">Erlaabt der App, sech selwer ze starte soubal de System fäerdeg gelueden ass. Doduerch kéint den Tablet méi laang brauche fir ze starten an d\'App kéint de gesamten Tablet méi lues maache wa se stänneg leeft.</string>
   <string name="permdesc_receiveBootCompleted" product="default">Erlaabt der App, sech selwer ze starte soubal de System fäerdeg gelueden ass. Doduerch kéint den Telefon méi laang brauche fir ze starten an d\'App kéint de gesamten Telefon méi lues maache wa se stänneg leeft.</string>
   <string name="permlab_broadcastSticky">Dauerhafte Broadcast schécken</string>
-  <string name="permdesc_broadcastSticky" product="tablet">Erlaabt der App, dauerhaft Broadcasten ze schécken, déi no der Iwwerdroung bestoe bleiwen. Exzessiv Benotzung kéint den Tablet méi lues oder instabill maachen, andeem ze vill Späicher benotzt gëtt.</string>
-  <string name="permdesc_broadcastSticky" product="default">Erlaabt der App, dauerhaft Broadcasten ze schécken, déi no der Iwwerdroung bestoe bleiwen. Exzessiv Benotzung kéint den Telefon méi lues oder instabill maachen, andeem ze vill Späicher benotzt gëtt.</string>
+  <string name="permdesc_broadcastSticky" product="tablet">Erlaabt der App, dauerhaft Broadcasten ze schécken, déi no der Iwwerdroung bestoe bleiwen. Exzessiv Benotzung kéint den Tablet méi lues oder instabil maachen, andeem ze vill Späicher benotzt gëtt.</string>
+  <string name="permdesc_broadcastSticky" product="default">Erlaabt der App, dauerhaft Broadcasten ze schécken, déi no der Iwwerdroung bestoe bleiwen. Exzessiv Benotzung kéint den Telefon méi lues oder instabil maachen, andeem ze vill Späicher benotzt gëtt.</string>
   <string name="permlab_readContacts">Kontakter liesen</string>
   <string name="permdesc_readContacts" product="tablet">Erlaabt der App, Daten iwwer d\'Kontakter déi op dengem Tablet gespäichert sinn ze liesen, inklusiv der Frequenz mat där s de spezifesch Kontakter ugeruff hues, hinnen E-Maile geschéckt hues, oder anerwäerts mat hinne kommunikéiert hues. Dës Berechtegung erméiglecht et Appen, Kontaktdaten z\'änneren, a béisaarteg Appe kéinte Kontaktdaten ouni däi Wëssen deelen.</string>
   <string name="permdesc_readContacts" product="default">Erlaabt der App, Daten iwwer d\'Kontakter déi op dengem Telefon gespäichert sinn ze liesen, inklusiv der Frequenz mat där s de spezifesch Kontakter ugeruff hues, hinnen E-Maile geschéckt hues, oder anerwäerts mat hinne kommunikéiert hues. Dës Berechtegung erméiglecht et Appen, Kontaktdaten z\'änneren, a béisaarteg Appe kéinte Kontaktdaten ouni däi Wëssen deelen.</string>
@@ -486,17 +491,14 @@
   <string name="permlab_writeProfile">Eege Kontaktkaart änneren</string>
   <string name="permdesc_writeProfile" product="default">Erlaabt der App, perséinlech Profilinformatioune déi um Apparat gespäichert sinn, wéi däin Numm an deng Kontaktinformatiounen, dobäizesetzen oder z\'äneren. Dat bedeit datt d\'App dech identifizéiere kann an deng Profilinformatiounen un anerer schécke kann.</string>
   <string name="permlab_bodySensors">Kierpersensoren (wéi e Bolsmiesser)</string>
-  <string name="permdesc_bodySensors" product="default">Erlaabt der App, op Date vu Sensoren zouzegräifen, déi moosse wat an dengem Kierper geschitt, wéi beispillsweis e Bolsmiesser.</string>
   <string name="permlab_readSocialStream" product="default">Däi soziale Stream liesen</string>
-  <string name="permdesc_readSocialStream" product="default">Erlaabt der App, op Statusmessagë vun dir an denge Frënn zouzegräifen a se ze synchroniséieren. Pass op wann s du Informatiounen deels: Der App gëtt erlaabt, d\'Kommunikatioun tëscht dir an denge Kolleegen a sozialen Netzwierker ze liesen, onofhängeg vun der Vertraulechkeet vun de kommunizéierten Informatiounen. Hiwäis: Dës Berechtegung ka méiglecherweis net an alle sozialen Netzwierker duerchgesat ginn.</string>
+  <string name="permdesc_readSocialStream" product="default">Erlaabt der App, op Statusmessagë vun dir an denge Frënn zouzegräifen a se ze synchroniséieren. Pass op wann s du Informatiounen deels: Der App gëtt erlaabt, d\'Kommunikatioun tëscht dir an denge Kollegen a sozialen Netzwierker ze liesen, onofhängeg vun der Vertraulechkeet vun de kommunizéierten Informatiounen. Hiwäis: Dës Berechtegung ka méiglecherweis net an alle sozialen Netzwierker duerchgesat ginn.</string>
   <string name="permlab_writeSocialStream" product="default">An däi soziale Stream schreiwen</string>
-  <string name="permdesc_writeSocialStream" product="default">Erlaabt der App, Statusmessagë vun dir an denge Frënn unzeweisen. Pass op wann s du Informatiounen deels: Der App gëtt erlaabt, Messagen ze produzéieren déi ausgesi wéi wa se vun engem Kolleeg komm wieren. Hiwäis: Dës Berechtegung ka méiglecherweis net an alle sozialen Netzwierker duerchgesat ginn.</string>
+  <string name="permdesc_writeSocialStream" product="default">Erlaabt der App, Statusmessagë vun dir an denge Frënn unzeweisen. Pass op wann s du Informatiounen deels: Der App gëtt erlaabt, Messagen ze produzéieren déi ausgesi wéi wa se vun engem Kolleg komm wieren. Hiwäis: Dës Berechtegung ka méiglecherweis net an alle sozialen Netzwierker duerchgesat ginn.</string>
   <string name="permlab_readCalendar">Kalenner-Rendezvousen a vertraulech Informatioune liesen</string>
   <string name="permdesc_readCalendar" product="tablet">Erlaabt der App, all d\'Kalenner-Evenementer déi um Tablet gespäichert sinn ze liesen, inklusiv deene vu Frënn a Mataarbechter. Doduerch kéint d\'App deng Kalennerdate späicheren oder deelen, onofhängeg vun der agestallter Konfidentialitéit.</string>
   <string name="permdesc_readCalendar" product="default">Erlaabt der App, all d\'Kalenner-Evenementer déi um Telefon gespäichert sinn ze liesen, inklusiv deene vu Frënn a Mataarbechter. Doduerch kéint d\'App deng Kalennerdate späicheren oder deelen, onofhängeg vun der agestallter Konfidentialitéit.</string>
   <string name="permlab_writeCalendar">Kalenner-Rendezvousen dobäisetzen oder änneren an E-Mailen u Gäscht ouni d\'Wësse vun de Benotzer schécken</string>
-  <string name="permdesc_writeCalendar" product="tablet">Erlaabt der App, Rendezvousen, déi s du op dengem Tablet ännere kanns, dobäizesetzen, ze läschen an z\'änneren, inklusiv deene vu Frënn oder Kolleegen. Doduerch kann d\'App Noriichte verschécken, déi sou ausgesi wéi wa se vum Bestëtzer vum Kalenner géife stamen, oder Rendezvousen änneren ouni datt de Besëtzer et matkritt.</string>
-  <string name="permdesc_writeCalendar" product="default">Erlaabt der App, Rendezvousen, déi s du op dengem Telefon ännere kanns, dobäizesetzen, ze läschen an z\'änneren, inklusiv deene vu Frënn oder Kolleegen. Doduerch kann d\'App Noriichte verschécken, déi sou ausgesi wéi wa se vum Bestëtzer vum Kalenner géife stamen, oder Rendezvousen änneren ouni datt de Besëtzer et matkritt.</string>
   <string name="permlab_accessMockLocation">Standuert fir Testzwecker simuléieren</string>
   <string name="permdesc_accessMockLocation">Erstellung vu simuléierte Standuertquelle fir Testzwecker oder Installatioun vun neie Standuertubidder. Dëst erméiglecht der App, de Standuert an/oder de Status vun anere Standuertquellen (wéi GPS oder Standuertubidder) z\'iwwerschreiwen.</string>
   <string name="permlab_accessLocationExtraCommands">Op zousätzlech Serviceproviderbefeeler fir de Standuert zougräifen</string>
@@ -571,6 +573,7 @@
   <string name="permdesc_accessMtp">Erlaabt der App, op den MTP-Driver vum Kernel zouzegräifen, fir den MTP-USB-Protokoll z\'implementéieren.</string>
   <string name="permlab_hardware_test">Hardware testen</string>
   <string name="permdesc_hardware_test">Erlaabt der App, verschidde Peripherie-Apparaten ze steieren, fir d\'Hardware ze testen.</string>
+  <string name="permlab_fm">op den FM-Radio zougräifen</string>
   <string name="permlab_callPhone">Telefonsnummeren direkt uruffen</string>
   <string name="permdesc_callPhone">Erlaabt der App, Telefonsnummeren ouni deng Awierkung unzeruffen. Doduerch kéinten onerwaart Käschten oder Uriff entstoen. D\'App kann heiduerch awer keng Noutfallnummeren uruffen. Béiswëlleg Appe kéinte Käschte verursaachen andeem se Nummeren ouni deng Bestätegung uruffen.</string>
   <string name="permlab_callPrivileged">All Telefonsnummeren direkt uruffen</string>
@@ -884,10 +887,6 @@
   <string name="lockscreen_pattern_wrong">Probéier nees</string>
   <string name="lockscreen_password_wrong">Probéier nees</string>
   <string name="faceunlock_multiple_failures">Maximal Versich fir mam Gesiicht z\'entspären iwwerschratt</string>
-  <string name="lockscreen_plugged_in">Gëtt opgelueden, <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="lockscreen_charged">Opgelueden</string>
-  <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="lockscreen_low_battery">Connectéier däin Oplueder.</string>
   <string name="lockscreen_missing_sim_message_short">Keng SIM-Kaart</string>
   <string name="lockscreen_missing_sim_message" product="tablet">Keng SIM-Kaart am Tablet.</string>
   <string name="lockscreen_missing_sim_message" product="default">Keng SIM-Kaart am Telefon.</string>
@@ -1786,11 +1785,6 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="lock_to_app_toast">Hal \"Zréck\" an \"Iwwersiicht\" matenee gedréckt fir dëse Schierm fräizeginn.</string>
   <string name="lock_to_app_toast_accessible">Hal \"Iwwersiicht\" gedréckt fir dëse Schierm fräizeginn.</string>
   <string name="lock_to_app_toast_locked">Schierm ass fixéiert. E fräizeginn ass duerch den Organisatioun net erlaabt.</string>
-  <string name="lock_to_app_title">Schiermfixéierung benotzen?</string>
-  <string name="lock_to_app_description">D\'Schiermfixéierung blockéiert de Schierm an enger eenzelner Usiicht.\n\nFir e fräizeginn, hal \"Zréck\" an \"Iwwersiicht\" matenee gedréckt.</string>
-  <string name="lock_to_app_description_accessible">D\'Schiermfixéierung blockéiert de Schierm an enger eenzelner Usiicht.\n\nFir e fräizeginn, dréck hal \"Iwwersiicht\" gedréckt.</string>
-  <string name="lock_to_app_negative">NEE, MERCI</string>
-  <string name="lock_to_app_positive">START</string>
   <string name="lock_to_app_start">Schierm fixéiert</string>
   <string name="lock_to_app_exit">Schierm fräiginn</string>
   <string name="lock_to_app_unlock_pin">E PIN froe fir e Schierm fräizeginn</string>

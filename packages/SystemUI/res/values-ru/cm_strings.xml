@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">Отправка местоположения: режим экономии батареи.</string>
   <string name="accessibility_quick_settings_location_gps_only">Отправка местоположения: только по GPS.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Отправка местоположения: режим высокой точности.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Всплывающие уведомления отключены.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Всплывающие уведомления включены.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Всплывающие уведомления отключены.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Всплывающие уведомления включены.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Индикация событий экраном отключена.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Индикация событий экраном включена.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Индикация событий экраном отключена.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Индикация событий экраном включена.</string>
   <string name="accessibility_dpad_left">Курсор влево</string>
   <string name="accessibility_dpad_right">Курсор вправо</string>
   <string name="quick_settings_mobile_data_label">Мобильные данные</string>
@@ -51,6 +59,9 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Задержка отключения экрана</string>
   <string name="quick_settings_usb_tether_label">USB-модем</string>
+  <string name="quick_settings_heads_up_label">Всплывающие уведомления</string>
+  <string name="quick_settings_ambient_display_label">Индикация событий</string>
+  <string name="quick_settings_custom_tile_detail_title">Пользовательская плитка</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Проведите вправо, чтобы открыть приложение «%1$s»</string>
   <string name="right_shortcut_hint">Проведите влево, чтобы открыть приложение «%1$s»</string>
@@ -79,4 +90,8 @@
   <string name="navring_choose_action_title">Выбор действия</string>
   <string name="select_application">Выбор приложения</string>
   <string name="lockscreen_target_empty">Пусто</string>
+  <string name="screen_pinning_description_no_navbar">Это приложение останется активным, пока вы не отмените блокировку долгим нажатием кнопки «Назад».</string>
+  <string name="interruption_level_silent">Без звука</string>
+  <string name="zen_silent_with_warning">Никаких уведомлений, кроме будильника.</string>
+  <string name="quick_settings_remove">Удалить плитку</string>
 </resources>

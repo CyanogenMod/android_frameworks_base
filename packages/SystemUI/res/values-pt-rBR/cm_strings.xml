@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">Localização: economia de bateria.</string>
   <string name="accessibility_quick_settings_location_gps_only">Localização: apenas no dispositivo.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Localização: alta precisão.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up desativado.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up ativado.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up desligado.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up ligado.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Tela ambiente desativado.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Tela ambiente ativado.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Tela ambiente desligado.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Tela ambiente ligado.</string>
   <string name="accessibility_dpad_left">Cursor à esquerda</string>
   <string name="accessibility_dpad_right">Cursor à direita</string>
   <string name="quick_settings_mobile_data_label">Dados Móveis</string>
@@ -51,6 +59,9 @@
   <string name="quick_settings_lte_label">4G  LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Tempo limite de tela</string>
   <string name="quick_settings_usb_tether_label">Tethering USB</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_ambient_display_label">Tela ambiente</string>
+  <string name="quick_settings_custom_tile_detail_title">Botão personalizado</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="tempo">%1$s</xliff:g> - <xliff:g id="condição">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>
   <string name="right_shortcut_hint">Deslizar para a esquerda para %1$s</string>
@@ -79,4 +90,8 @@
   <string name="navring_choose_action_title">Escolher ação</string>
   <string name="select_application">Selecionar aplicativo</string>
   <string name="lockscreen_target_empty">Vazio</string>
+  <string name="screen_pinning_description_no_navbar">Isto manterá-la na tela até você desafixar. Toque e segure o botão Voltar para desafixar.</string>
+  <string name="interruption_level_silent">Silencioso</string>
+  <string name="zen_silent_with_warning">Sem interrupções, exceto os alarmes.</string>
+  <string name="quick_settings_remove">Remover botão</string>
 </resources>

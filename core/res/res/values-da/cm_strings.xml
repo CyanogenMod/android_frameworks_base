@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">Ydeevne</string>
   <string name="theme_install_error_title">Det lykkedes ikke at installere temaet</string>
   <string name="theme_install_error_message">%s kunne ikke installeres</string>
-  <string name="android_installing_apk">Installerer app
-        <xliff:g id="number" example="123">%1$d</xliff:g> af
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android installerer\u2026</string>
   <string name="theme_reset_notification_title">Nulstil tema</string>
   <string name="theme_reset_notification_body">System-tema er gendannet på grund af flere app nedbrud.</string>
   <string name="stylus_app_not_installed">%s er ikke installeret</string>
@@ -210,6 +206,4 @@
   <string name="live_display_outdoor">Udendørs (stærk sol)</string>
   <string name="live_display_outdoor_summary">Brug kun udendørsindstillinger</string>
   <string name="live_display_hint">LiveDisplay kan hjælpe med at reducere overanstrengelse af øjnene og hjælpe dig med at sove om natten. Klik her for at prøve det!</string>
-  <string name="lock_to_app_toast_no_navbar">Hvis du vil frigøre denne skærm, tryk og hold Menu-knappen.</string>
-  <string name="lock_to_app_description_no_navbar">Fastgørelse af skærmen låser displayet i enkelt visning.\n\nFor at frigøre, tryk og hold Menu-knappen.</string>
 </resources>

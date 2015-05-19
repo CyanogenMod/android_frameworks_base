@@ -32,8 +32,6 @@
   <string name="status_bar_ongoing_events_title">Entrante</string>
   <string name="status_bar_latest_events_title">Notificaciones</string>
   <string name="battery_low_title">Batería baxa</string>
-  <string name="battery_low_percent_format"><xliff:g id="NUMBER">%d%%</xliff:g> restante</string>
-  <string name="battery_low_percent_format_saver_started"><xliff:g id="number">%d%%</xliff:g> restante. Aforru de batería prendíu.</string>
   <string name="invalid_charger">Nun s\'almite la carga por USB.\nUsa namái el cargador proporcionáu.</string>
   <string name="invalid_charger_title">La carga USB nun ta sofitada.</string>
   <string name="invalid_charger_text">Usar namái el cargador suministráu.</string>
@@ -87,7 +85,6 @@
   <string name="unlock_label">desbloquiar</string>
   <string name="phone_label">abrir teléfonu</string>
   <string name="camera_label">abrir cámara</string>
-  <string name="accessibility_ime_switch_button">Botón Camudar métodu d\'entrada</string>
   <string name="accessibility_compatibility_zoom_button">Botón de zoom de compatibilidá</string>
   <string name="accessibility_compatibility_zoom_example">Zoom de pantalla más pequeña a más grande</string>
   <string name="accessibility_bluetooth_connected">Bluetooth coneutáu</string>
@@ -269,13 +266,11 @@
   <string name="quick_settings_cellular_detail_title">Datos móvil</string>
   <string name="quick_settings_cellular_detail_data_usage">Usu de datos</string>
   <string name="quick_settings_cellular_detail_remaining_data">Datos restantes</string>
-  <string name="quick_settings_cellular_detail_over_limit">Algamóse llende de datos - posáu</string>
   <string name="quick_settings_cellular_detail_data_used"><xliff:g id="data_used" example="2.0 GB">%s</xliff:g> usaos</string>
   <string name="quick_settings_cellular_detail_data_limit">Llende <xliff:g id="data_limit" example="2.0 GB">%s</xliff:g></string>
   <string name="quick_settings_cellular_detail_data_warning">Avisu <xliff:g id="data_limit" example="2.0 GB">%s</xliff:g></string>
   <string name="recents_empty_message">Les tos pantalles recientes apaecen equí</string>
   <string name="recents_app_info_button_label">Info d\'aplicación</string>
-  <string name="recents_lock_to_app_button_label">bloquiar app</string>
   <string name="recents_search_bar_label">guetar</string>
   <string name="recents_launch_error_message">Nun pudo aniciase <xliff:g id="app" example="Calendar">%s</xliff:g>.</string>
   <string name="expanded_header_battery_charged">Cargada</string>
@@ -354,6 +349,5 @@
   <string name="hidden_notifications_text">Veles enantes de desbloquiar</string>
   <string name="hidden_notifications_cancel">Non, gracies</string>
   <string name="hidden_notifications_setup">Configurar</string>
-  <string name="muted_by">Silenciáu por <xliff:g id="third_party">%1$s</xliff:g></string>
   <string name="zen_mode_and_condition"><xliff:g id="zen_mode" example="Priority interruptions only">%1$s</xliff:g>. <xliff:g id="exit_condition" example="For one hour">%2$s</xliff:g></string>
 </resources>

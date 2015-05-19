@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">Επιδόσεις</string>
   <string name="theme_install_error_title">Αποτυχία εγκατάστασης του θέματος</string>
   <string name="theme_install_error_message">Αποτυχία εγκατάστασης του %s</string>
-  <string name="android_installing_apk">Εγκατάσταση εφαρμογής
-        <xliff:g id="number" example="123">%1$d</xliff:g> από
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Το Android εγκαθιστά\u2026</string>
   <string name="theme_reset_notification_title">Επαναφορά θέματος</string>
   <string name="theme_reset_notification_body">Έγινε επαναφορά του θέματος συστήματος λόγω πολλαπλών σφαλμάτων εφαρμογών.</string>
   <string name="stylus_app_not_installed">Το %s δεν είναι εγκατεστημένο</string>
@@ -210,6 +206,8 @@
   <string name="live_display_outdoor">Εξωτερικός χώρος (ήλιος)</string>
   <string name="live_display_outdoor_summary">Χρήση μόνο των ρυθμίσεων εξωτερικού χώρου</string>
   <string name="live_display_hint">Το LiveDisplay μπορεί να βοηθήσει στη μείωση της κόπωσης των ματιών και να σας βοηθήσει να κοιμηθείτε τη νύχτα. Κάντε κλικ εδώ για να το δοκιμάσετε!</string>
-  <string name="lock_to_app_toast_no_navbar">Για να ξεκαρφιτσώσετε αυτήν την οθόνη, αγγίξτε και κρατήστε πατημένο το πλήκτρο Μενού.</string>
-  <string name="lock_to_app_description_no_navbar">Το καρφίτσωμα οθόνης κλειδώνει τη συσκευή σε μια μόνο οθόνη.\n\nΓια ξεκαρφίτσωμα, αγγίξτε και κρατήστε πατημένο το πλήκτρο Μενού.</string>
+  <string name="lock_to_app_toast_no_navbar">Για να ξεκαρφιτσώσετε αυτήν την οθόνη, αγγίξτε και κρατήστε πατημένο το πλήκτρο Πίσω.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Ο φακός είναι ενεργοποιημένος</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Πιέστε για απενεργοποίηση</string>
+  <string name="storage_sd_dock_card">Κάρτα SD βάσης σύνδεσης</string>
 </resources>

@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">Našumas</string>
   <string name="theme_install_error_title">Nepavyko įdiegti temos</string>
   <string name="theme_install_error_message">%s nepavyko įdiegti</string>
-  <string name="android_installing_apk">Įdiegiama programa
-<xliff:g id="number" example="123">%1$d</xliff:g> iš
-<xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Įdiegiama „Android“\u2026</string>
   <string name="theme_reset_notification_title">Nustatyti iš naujo temą</string>
   <string name="theme_reset_notification_body">Sistemos tema atkurta dėl pasikartojančių programos klaidų.</string>
   <string name="stylus_app_not_installed">%s neįdiegta</string>
@@ -210,6 +206,8 @@
   <string name="live_display_outdoor">Laukas (ryški saulė)</string>
   <string name="live_display_outdoor_summary">Naudoti tik lauko nustatymus</string>
   <string name="live_display_hint">„LiveDisplay“ gali padėti sumažinti akių įtampą ir padėti jums užmigti naktį. Spauskite čia, kad jį išbandyti!</string>
-  <string name="lock_to_app_toast_no_navbar">Kad atsegtumėte šį ekraną, palieskite ir palaikykite meniu mygtuką.</string>
-  <string name="lock_to_app_description_no_navbar">Ekrano prisegimas užrakina ekraną vienoje pozicijoje.\n\nKad atsegtumėte, palieskite ir palaikykite meniu mygtuką.</string>
+  <string name="lock_to_app_toast_no_navbar">Kad atsegtumėte šį ekraną palieskite ir laikykite mygtuką atgal.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Žibintuvėlis įjungtas</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Bakstelėkite, kad išjungtumėte</string>
+  <string name="storage_sd_dock_card">SD kortelės dokas</string>
 </resources>

@@ -26,7 +26,6 @@
   <string name="status_bar_no_notifications_title">تێبینی نیە</string>
   <string name="status_bar_ongoing_events_title">چونە</string>
   <string name="status_bar_latest_events_title">تێبینی</string>
-  <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g> ماوە</string>
   <string name="invalid_charger">USB پاڵپشتی ناکات .\nتەنها بارگەکەر بەکاربهێنە.</string>
   <string name="battery_low_why">ڕێکخستنه‌کان</string>
   <string name="battery_saver_confirmation_title">باتری پارێز چالاک ئەکەیت?</string>
@@ -77,7 +76,6 @@
   <string name="unlock_label">كردنەوە</string>
   <string name="phone_label">کردنەوەی تەلەفۆن</string>
   <string name="camera_label">کردنەوەی کامێرا</string>
-  <string name="accessibility_ime_switch_button">دوگمەی کلیلی تێكردن.</string>
   <string name="accessibility_compatibility_zoom_button">دوگمەی زومی توانای.</string>
   <string name="accessibility_compatibility_zoom_example">زومکردن لە بچوکەوە بۆ شاشەی گەورە.</string>
   <string name="accessibility_bluetooth_connected">بلوتوس پەیوەندکراوە.</string>

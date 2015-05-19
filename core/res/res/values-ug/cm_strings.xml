@@ -146,10 +146,6 @@
   <string name="perf_profile_perf">ئىقتىدار</string>
   <string name="theme_install_error_title">ئۆرنەك ئورنىتالمىدى</string>
   <string name="theme_install_error_message">%s نى ئورنىتالمىدى</string>
-  <string name="android_installing_apk">ئورنىتىۋاتقان ئەپ
-        <xliff:g id="number" example="123">%1$d</xliff:g>/
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">ئورنىتىۋاتقىنى Android\u2026</string>
   <string name="theme_reset_notification_title">ئۆرنەكنى ئەسلىگە قايتۇرۇش</string>
   <string name="theme_reset_notification_body">بىر قانچە ئەپ يىمىرىلگەنلىكتىن، سىستېما ئۆرنەكنى ئەسلىگە قايتۇردى.</string>
   <string name="stylus_app_not_installed">%s تېخى ئورنىتىلمىغان</string>
@@ -210,6 +206,4 @@
   <string name="live_display_outdoor">تالا (قۇياش نۇرى)</string>
   <string name="live_display_outdoor_summary">تالا تەڭشەكلىرىنىلا ئىشلىتىدۇ</string>
   <string name="live_display_hint">LiveDisplay كۆزنىڭ چارچىشىنى يېنىكلىتىشكە ياردەم بېرىدۇ، كېچىدە ئۇخلىشىڭىزغا ياردەم بېرىدۇ. سىناش ئۈچۈن بۇ جاينى چېكىڭ!</string>
-  <string name="lock_to_app_toast_no_navbar">بۇ ئېكراننى چىقىرىۋېتىشتە، تىزىملىك توپچىنى چېكىپ بېسىپ تۇرۇڭ.</string>
-  <string name="lock_to_app_description_no_navbar">ئېكراننى مىخلاش ئۈسكۈنە مەلۇم بىر كۆرۈنۈشنى ئىزچىل كۆرسىتىدۇ.\n\nمىخلاشنى بىكار قىلىشتا، چېكىپ تىزىملىك توپچىنى بېسىپ تۇرسا بولىدۇ.</string>
 </resources>

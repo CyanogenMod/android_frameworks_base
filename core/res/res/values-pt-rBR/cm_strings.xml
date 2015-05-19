@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">Performance</string>
   <string name="theme_install_error_title">Falha ao instalar o tema</string>
   <string name="theme_install_error_message">%s falhou ao instalar</string>
-  <string name="android_installing_apk">Otimizando aplicativo <xliff:g id="number" example="123">%1$d</xliff:g> de <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">O Android está instalando\u2026</string>
   <string name="theme_reset_notification_title">Restaurar tema</string>
   <string name="theme_reset_notification_body">O tema do sistema foi restaurado devido a vários problemas nas aplicações.</string>
   <string name="stylus_app_not_installed">%s não está instalado</string>
@@ -208,6 +206,8 @@
   <string name="live_display_outdoor">Ao ar livre (sol forte)</string>
   <string name="live_display_outdoor_summary">Usar apenas configurações de ao ar livre</string>
   <string name="live_display_hint">LiveDisplay pode ajudar a reduzir o cansaço visual e ajudá-lo a dormir à noite. Clique aqui para experimentá-lo!</string>
-  <string name="lock_to_app_toast_no_navbar">Para desafixar essa tela, toque e segure o botão Menu.</string>
-  <string name="lock_to_app_description_no_navbar">Travar fixação de tela numa única janela.\n\nPara desafixar, toque e segure o botão Menu.</string>
+  <string name="lock_to_app_toast_no_navbar">Para desafixar esta tela, toque e segure o botão Voltar.</string>
+  <string name="quick_settings_tile_flashlight_not_title">A lanterna está ligada</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Toque para desligar</string>
+  <string name="storage_sd_dock_card">Cartão SD do dock</string>
 </resources>

@@ -66,6 +66,9 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="keyguard_accessibility_password_unlock">Entspäre mat Passwuert.</string>
   <string name="keyguard_accessibility_pattern_area">Musterberäich.</string>
   <string name="keyguard_accessibility_slide_area">Beräich fir Fangerbeweegung.</string>
+  <string name="keyguard_accessibility_pin_area">PIN-Beräich</string>
+  <string name="keyguard_accessibility_sim_pin_area">SIM-PIN-Beräich</string>
+  <string name="keyguard_accessibility_sim_puk_area">SIM-PUK-Beräich</string>
   <string name="keyguard_accessibility_transport_prev_description">Knäppche fir dat Stéck virdrun</string>
   <string name="keyguard_accessibility_transport_next_description">Knäppche fir dat nächst Stéck</string>
   <string name="keyguard_accessibility_transport_pause_description">Paus-Knäppchen</string>
@@ -131,10 +134,6 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
         Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
         \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
-  <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
-  <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">
        Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
        No <xliff:g id="number">%d</xliff:g> weider Versich gëss du gefrot däin Tablet duerch en E-Mail-Kont z\'entspären.
@@ -145,7 +144,6 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
        No <xliff:g id="number">%d</xliff:g> weider Versich gëss du gefrot däin Telefon duerch en E-Mail-Kont z\'entspären.
        Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
-  <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däi Provider kontaktéiere fir däin Apparat z\'entspären.</string>
   <plurals name="kg_password_wrong_pin_code">

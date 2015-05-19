@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">ป้องกันความเป็นส่วนตัว</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ต้องการ <xliff:g id="op">%2$s</xliff:g></string>
   <string name="global_action_reboot">เริ่มระบบใหม่</string>
+  <string name="global_action_current_user">ปัจจุบัน</string>
   <string name="reboot_reboot">เริ่มระบบใหม่</string>
   <string name="reboot_recovery">Recovery</string>
   <string name="reboot_bootloader">Bootloader</string>
@@ -145,10 +146,6 @@
   <string name="perf_profile_perf">ประสิทธิภาพ</string>
   <string name="theme_install_error_title">การติดตั้งชุดรูปแบบล้มเหลว</string>
   <string name="theme_install_error_message">ชุดรูปแบบ %s ติดตั้งล้มเหลว</string>
-  <string name="android_installing_apk">กำลังติดตั้งแอป
-        <xliff:g id="number" example="123">%1$d</xliff:g> จาก
-        <xliff:g id="number" example="123">%2$d</xliff:g></string>
-  <string name="android_installing_title">กำลังติดตั้งแอนดรอยด์\u2026</string>
   <string name="theme_reset_notification_title">ล้างชุดรูปแบบ</string>
   <string name="theme_reset_notification_body">ระบบกลับมาใช้ชุดรูปแบบเดิมเนื่องจากมีแอปเกิดปัญหาขึ้นจำนวนมาก</string>
   <string name="stylus_app_not_installed">%s ไม่ถูกติดตั้ง</string>
@@ -174,6 +171,30 @@
   <string name="usb_media_checking">กำลังตรวจสอบที่เก็บข้อมูล USB</string>
   <string name="usb_media_removed">ที่เก็บข้อมูล USB ถูกนำออก</string>
   <string name="usb_media_shared">ที่เก็บข้อมูล USB ถูกใช้โดยคอมพิวเตอร์</string>
+  <string name="sd_ext_media_checking_notification_title">กำลังเตรียม SD card</string>
+  <string name="sd_ext_media_checking_notification_message">กำลังตรวจสอบ SD card สำหรับข้อผิดพลาด</string>
+  <string name="sd_ext_media_nofs_notification_title">SD card ว่างเปล่า</string>
+  <string name="sd_ext_media_nofs_notification_message">SD card ว่างอยู่ หรือไม่รองรับระบบไฟล์</string>
+  <string name="sd_ext_media_unmountable_notification_title">SD card เสียหาย</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD card เสียหาย ลองฟอร์แมตใหม่</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD card ถูกนำออกโดยไม่ได้คาดคิด</string>
+  <string name="sd_ext_media_badremoval_notification_message">เอา SD card ออกก่อนเพื่อหลีกเลี่ยงการเสียหายของข้อมูล</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">เอา SD card ออกได้อย่างปลอดภัย</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">คุณสามารถเอา SD card ออกไดัอย่างปลอดภัย</string>
+  <string name="sd_ext_media_nomedia_notification_title">นำ SD card ออกแล้ว</string>
+  <string name="sd_ext_media_nomedia_notification_message">นำ SD card ออกแล้ว กรุณาใส่อันใหม่</string>
+  <string name="usb_ext_media_checking_notification_title">กำลังเตรียมที่จัดเก็บข้อมูล USB</string>
+  <string name="usb_ext_media_checking_notification_message">กำลังตรวจสอบข้อผิดพลาดบนที่เก็บข้อมูล USB</string>
+  <string name="usb_ext_media_nofs_notification_title">ที่เก็บ USB ว่างเปล่า</string>
+  <string name="usb_ext_media_nofs_notification_message">ที่เก็บ USB ว่างเปล่าหรือไม่รองรับระบบไฟล์</string>
+  <string name="usb_ext_media_unmountable_notification_title">ที่เก็บ USB เสียหาย</string>
+  <string name="usb_ext_media_unmountable_notification_message">ที่เก็บ USB เสียหาย ลองฟอร์แมตใหม่</string>
+  <string name="usb_ext_media_badremoval_notification_title">ที่เก็บ USB ออกโดยไม่คาดคิด</string>
+  <string name="usb_ext_media_badremoval_notification_message">เลิกเชื่อมต่อที่เก็บ USB ก่อนนำออกเพื่อหลีกเลี่ยงความเสียหาย</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">ที่เก็บ USB สามารถนำออกได้อย่างปลอดภัย</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">คุณสามารถนำที่เก็บ USB ออกได้อย่างปลอดภัย</string>
+  <string name="usb_ext_media_nomedia_notification_title">นำที่เก็บ USB ออกแล้ว</string>
+  <string name="usb_ext_media_nomedia_notification_message">ที่เก็บ USB ถูกนำออกแล้ว กรุณานำชิ้นใหม่มาใช้</string>
   <string name="live_display_auto">อัตโนมัติ</string>
   <string name="live_display_auto_summary">ตั้งอุณหภูมิสีอัตโนมัติเมื่อดวงอาทิตย์ขึ้นหรือตก</string>
   <string name="live_display_off">ปืด</string>
@@ -185,4 +206,8 @@
   <string name="live_display_outdoor">กลางแจ้ง (แดดจ้ามาก)</string>
   <string name="live_display_outdoor_summary">ใช้การตั้งค่ากลางแจ้งเท่านั้น</string>
   <string name="live_display_hint">LiveDisplay สามารถช่วยลดอาการปวดตา และช่วยให้คุณนอนหลับในเวลากลางคืน คลิกที่นี่เพื่อลอง!</string>
+  <string name="lock_to_app_toast_no_navbar">เพื่อยกเลิกการปักหมุดหน้าจอนี้ กดปุ่มกลับค้างไว้</string>
+  <string name="quick_settings_tile_flashlight_not_title">ไฟฉายเปิดอยู่</string>
+  <string name="quick_settings_tile_flashlight_not_summary">แตะเพื่อปิด</string>
+  <string name="storage_sd_dock_card">แท่น SD card</string>
 </resources>

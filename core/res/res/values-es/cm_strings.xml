@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">Alto rendimiento</string>
   <string name="theme_install_error_title">Fallo al instalar el tema</string>
   <string name="theme_install_error_message">Fallo al instalar %s</string>
-  <string name="android_installing_apk">Instalando aplicación <xliff:g id="number" example="123">%1$d</xliff:g> de <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">Android se está instalando\u2026</string>
   <string name="theme_reset_notification_title">Tema restablecido</string>
   <string name="theme_reset_notification_body">Tema del sistema restablecido debido a múltiples cierres de la aplicación.</string>
   <string name="stylus_app_not_installed">%s no está instalada</string>
@@ -208,6 +206,4 @@
   <string name="live_display_outdoor">Al aire libre (luz del sol)</string>
   <string name="live_display_outdoor_summary">Utilizar solo los ajustes al aire libre</string>
   <string name="live_display_hint">LiveDisplay puede reducir la fatiga visual y ayudar a dormir por la noche. ¡Toca aquí para probarlo!</string>
-  <string name="lock_to_app_toast_no_navbar">Para liberar esta pantalla, deja pulsado el botón Menú.</string>
-  <string name="lock_to_app_description_no_navbar">La fijación de pantalla mantiene visible una única pantalla.\n\nPara liberar esta pantalla, deja pulsado el botón Menú.</string>
 </resources>

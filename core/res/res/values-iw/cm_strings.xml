@@ -146,8 +146,6 @@
   <string name="perf_profile_perf">ביצועים</string>
   <string name="theme_install_error_title">התקנת ערכת העיצוב נכשלה</string>
   <string name="theme_install_error_message">התקנת %s נכשלה</string>
-  <string name="android_installing_apk">מתקין יישום <xliff:g id="NUMBER_0">%1$d</xliff:g> מתוך <xliff:g id="NUMBER_1">%2$d</xliff:g>.</string>
-  <string name="android_installing_title">מתקין את Android\u2026</string>
   <string name="theme_reset_notification_title">אפס ערכת עיצוב</string>
   <string name="theme_reset_notification_body">ערכת העיצוב של המערכת שוחזרה עקב קריסות תהליכים מרובות.</string>
   <string name="stylus_app_not_installed">%s לא מותקן</string>
@@ -208,6 +206,4 @@
   <string name="live_display_outdoor">בחוץ (שמש בהירה)</string>
   <string name="live_display_outdoor_summary">השתמש בהגדרות חוץ בלבד</string>
   <string name="live_display_hint">LiveDisplay יכולה למזער את עייפות העין ולעזור לך לישון בלילה. לחץ כאן כדי לנסות!</string>
-  <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, לחץ והחזק את מקש התפריט.</string>
-  <string name="lock_to_app_description_no_navbar">נעיצת מסך נועלת את המסך על תצוגה יחידה.\n\nכדי לבטל נעיצה, לחץ והחזק את מקש התפריט.</string>
 </resources>
