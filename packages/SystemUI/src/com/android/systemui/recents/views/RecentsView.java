@@ -358,6 +358,10 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
             } else {
                 // Adjust to task views
                 params.rightMargin = (width / 2) - (taskViewWidth / 2);
+
+                // If very close to the screen edge, align to it
+                if (params.rightMargin < mClearRecents.getWidth())
+                    params.rightMargin = width - taskStackBounds.right;
             }
             mClearRecents.setLayoutParams(params);
         }
