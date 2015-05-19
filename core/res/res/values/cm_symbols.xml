@@ -339,4 +339,7 @@
     <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
  
     <java-symbol type="array" name="config_externalCMServices" />
+
+    <!-- Boolean to identify if TorchService should be enabled -->
+    <java-symbol type="bool" name="config_torchEnabled" />
 </resources>
