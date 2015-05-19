@@ -339,4 +339,7 @@
     <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
  
     <java-symbol type="array" name="config_externalCMServices" />
+
+    <!-- Bollean to identify if device has no torch -->
+    <java-symbol type="bool" name="config_noTorch" />
 </resources>
