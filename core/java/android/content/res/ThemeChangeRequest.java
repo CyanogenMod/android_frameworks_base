@@ -79,6 +79,10 @@ public final class ThemeChangeRequest implements Parcelable {
         return getThemePackageNameForComponent(MODIFIES_RINGTONES);
     }
 
+    public String getLiveLockScreenThemePackageName() {
+        return getThemePackageNameForComponent(MODIFIES_LIVE_LOCK_SCREEN);
+    }
+
     public final Map<String, String> getThemeComponentsMap() {
         return Collections.unmodifiableMap(mThemeComponents);
     }
@@ -237,6 +241,10 @@ public final class ThemeChangeRequest implements Parcelable {
 
         public Builder setRingtone(String pkgName) {
             return setComponent(MODIFIES_RINGTONES, pkgName);
+        }
+
+        public Builder setLiveLockScreen(String pkgName) {
+            return setComponent(MODIFIES_LIVE_LOCK_SCREEN, pkgName);
         }
 
         public Builder setComponent(String component, String pkgName) {
