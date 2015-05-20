@@ -42,7 +42,6 @@ import android.content.res.ThemeConfig;
 import android.content.res.IThemeChangeListener;
 import android.content.res.IThemeService;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -438,6 +437,11 @@ public class ThemeService extends IThemeService.Stub {
             incrementProgress(progressIncrement);
         }
 
+        if (request.getLiveLockScreenThemePackageName() != null) {
+            updateLiveLockScreen(request.getLiveLockScreenThemePackageName());
+            incrementProgress(progressIncrement);
+        }
+
         try {
             updateProvider(request, updateTime);
         } catch(IllegalArgumentException e) {
@@ -720,6 +724,11 @@ public class ThemeService extends IThemeService.Stub {
                 ThemeUtils.closeQuietly(in);
             }
         }
+        return true;
+    }
+
+    private boolean updateLiveLockScreen(String pkgName) {
+        // TODO: do something meaningful here once ready
         return true;
     }
 

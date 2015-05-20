@@ -630,6 +630,7 @@ public class ThemeUtils {
         components.add(ThemesColumns.MODIFIES_RINGTONES);
         components.add(ThemesColumns.MODIFIES_STATUS_BAR);
         components.add(ThemesColumns.MODIFIES_NAVIGATION_BAR);
+        components.add(ThemesColumns.MODIFIES_LIVE_LOCK_SCREEN);
         return components;
     }
 
