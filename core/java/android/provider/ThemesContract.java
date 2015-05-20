@@ -183,6 +183,13 @@ public class ThemesContract {
         public static final String MODIFIES_NAVIGATION_BAR = "mods_navigation_bar";
 
         /**
+         * 1 if theme has an animated lock screen
+         * <P>Type: INTEGER</P>
+         * <P>Default: 0</P>
+         */
+        public static final String MODIFIES_ANIMATED_LOCKSCREEN = "mods_animated_lockscreen";
+
+        /**
          * URI to the theme's wallpaper. We should support multiple wallpaper
          * but for now we will just have 1.
          * <P>Type: TEXT</P>
