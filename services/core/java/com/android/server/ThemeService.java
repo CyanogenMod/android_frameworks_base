@@ -438,6 +438,11 @@ public class ThemeService extends IThemeService.Stub {
             incrementProgress(progressIncrement);
         }
 
+        if (request.getAnimatedLockScreenThemePackageName() != null) {
+            updateAnimatedLockscreen(request.getAnimatedLockScreenThemePackageName());
+            incrementProgress(progressIncrement);
+        }
+
         try {
             updateProvider(request, updateTime);
         } catch(IllegalArgumentException e) {
@@ -720,6 +725,11 @@ public class ThemeService extends IThemeService.Stub {
                 ThemeUtils.closeQuietly(in);
             }
         }
+        return true;
+    }
+
+    private boolean updateAnimatedLockscreen(String pkgName) {
+        // TODO: do something meaningful here once ready
         return true;
     }
 
