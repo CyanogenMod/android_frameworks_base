@@ -1923,9 +1923,8 @@ public class KeyguardViewMediator extends SystemUI {
             if (DEBUG) Log.d(TAG, "handleNotifyScreenOff");
             if (isThirdPartyKeyguardEnabled()) {
                 showThirdPartyKeyguard(true);
-            } else {
-                mStatusBarKeyguardViewManager.onScreenTurnedOff();
             }
+            mStatusBarKeyguardViewManager.onScreenTurnedOff();
         }
     }
 
