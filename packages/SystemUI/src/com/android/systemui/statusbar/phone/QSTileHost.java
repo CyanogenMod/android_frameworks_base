@@ -80,8 +80,6 @@ import com.android.systemui.statusbar.policy.UserSwitcherController;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.VolumeComponent;
 
-import cyanogenmod.app.CustomTile;
-import cyanogenmod.app.CustomTileListenerService;
 import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import java.util.ArrayList;
@@ -164,15 +162,6 @@ public class QSTileHost implements QSTile.Host {
             }
         };
         recreateTiles();
-
-        // Set up the initial notification state.
-        try {
-            mCustomTileListenerService.registerAsSystemService(mContext,
-                    new ComponentName(mContext.getPackageName(), getClass().getCanonicalName()),
-                    UserHandle.USER_ALL);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Unable to register custom tile listener", e);
-        }
 
         mUserTracker.startTracking();
         mObserver.register();
@@ -394,41 +383,7 @@ public class QSTileHost implements QSTile.Host {
         return tiles;
     }
 
-    private final CustomTileListenerService mCustomTileListenerService =
-            new CustomTileListenerService() {
-                @Override
-                public void onListenerConnected() {
-                    //Connected
-                }
-                @Override
-                public void onCustomTilePosted(final StatusBarPanelCustomTile sbc) {
-                    if (DEBUG) Log.d(TAG, "onCustomTilePosted: " + sbc.getCustomTile());
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            boolean isUpdate = mCustomTileData.get(sbc.getKey()) != null;
-                            if (isUpdate) {
-                                updateCustomTile(sbc);
-                            } else {
-                                addCustomTile(sbc);
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void onCustomTileRemoved(final StatusBarPanelCustomTile sbc) {
-                    if (DEBUG) Log.d(TAG, "onCustomTileRemoved: " + sbc.getCustomTile());
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            removeCustomTileSysUi(sbc.getKey());
-                        }
-                    });
-                }
-            };
-
-    private void updateCustomTile(StatusBarPanelCustomTile sbc) {
+    void updateCustomTile(StatusBarPanelCustomTile sbc) {
         if (mTiles.containsKey(sbc.getKey())) {
             QSTile<?> tile = mTiles.get(sbc.getKey());
             if (tile instanceof CustomQSTile) {
@@ -438,7 +393,7 @@ public class QSTileHost implements QSTile.Host {
         }
     }
 
-    private void addCustomTile(StatusBarPanelCustomTile sbc) {
+    void addCustomTile(StatusBarPanelCustomTile sbc) {
         mCustomTileData.add(new CustomTileData.Entry(sbc));
         mTiles.put(sbc.getKey(), new CustomQSTile(this, sbc));
         if (mCallback != null) {
@@ -446,7 +401,7 @@ public class QSTileHost implements QSTile.Host {
         }
     }
 
-    private void removeCustomTileSysUi(String key) {
+    void removeCustomTileSysUi(String key) {
         if (mTiles.containsKey(key)) {
             mTiles.remove(key);
             mCustomTileData.remove(key);
@@ -454,6 +409,10 @@ public class QSTileHost implements QSTile.Host {
                 mCallback.onTilesChanged();
             }
         }
+    }
+
+    CustomTileData getCustomTileData() {
+        return mCustomTileData;
     }
 
     private class Observer extends ContentObserver {

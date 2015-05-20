@@ -199,6 +199,8 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout.OnChil
 import com.android.systemui.statusbar.stack.StackScrollAlgorithm;
 import com.android.systemui.statusbar.stack.StackScrollState.ViewState;
 import com.android.systemui.volume.VolumeComponent;
+import cyanogenmod.app.CustomTileListenerService;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -1262,7 +1264,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 (ViewStub) mStatusBarWindowContent.findViewById(R.id.keyguard_user_switcher),
                 mKeyguardStatusBar, mNotificationPanel, mUserSwitcherController);
 
-
         // Set up the quick settings tile panel
         mQSPanel = (QSPanel) mStatusBarWindowContent.findViewById(R.id.quick_settings_panel);
         if (mQSPanel != null) {
@@ -1291,6 +1292,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mQSPanel.setTiles(qsh.getTiles());
                 }
             });
+        }
+
+        // Set up the initial custom tile listener state.
+        try {
+            mCustomTileListenerService.registerAsSystemService(mContext,
+                    new ComponentName(mContext.getPackageName(), getClass().getCanonicalName()),
+                    UserHandle.USER_ALL);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Unable to register custom tile listener", e);
         }
 
         // User info. Trigger first load.
@@ -1494,6 +1504,41 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         return mNaturalBarHeight;
     }
+
+    private final CustomTileListenerService mCustomTileListenerService =
+            new CustomTileListenerService() {
+                @Override
+                public void onListenerConnected() {
+                    //Connected
+                }
+                @Override
+                public void onCustomTilePosted(final StatusBarPanelCustomTile sbc) {
+                    if (DEBUG) Log.d(TAG, "onCustomTilePosted: " + sbc.getCustomTile());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            boolean isUpdate = mQSPanel.getHost().getCustomTileData()
+                                    .get(sbc.getKey()) != null;
+                            if (isUpdate) {
+                                mQSPanel.getHost().updateCustomTile(sbc);
+                            } else {
+                                mQSPanel.getHost().addCustomTile(sbc);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onCustomTileRemoved(final StatusBarPanelCustomTile sbc) {
+                    if (DEBUG) Log.d(TAG, "onCustomTileRemoved: " + sbc.getCustomTile());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mQSPanel.getHost().removeCustomTileSysUi(sbc.getKey());
+                        }
+                    });
+                }
+            };
 
     private View.OnClickListener mRecentsClickListener = new View.OnClickListener() {
         public void onClick(View v) {
