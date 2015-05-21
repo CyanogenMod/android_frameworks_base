@@ -224,11 +224,15 @@ public class DisplayMetrics {
 
     /** @hide */
     public void updateDensity() {
-        density = DENSITY_CURRENT / (float) DENSITY_DEFAULT;
-        densityDpi = DENSITY_CURRENT;
+        updateDensity(DENSITY_CURRENT);
+    }
+
+    public void updateDensity(int dpi) {
+        density = dpi / (float) DENSITY_DEFAULT;
+        densityDpi = dpi;
         scaledDensity = density;
-        xdpi = DENSITY_CURRENT;
-        ydpi = DENSITY_CURRENT;
+        xdpi = dpi;
+        ydpi = dpi;
         noncompatDensity = density;
         noncompatDensityDpi = densityDpi;
         noncompatScaledDensity = scaledDensity;
