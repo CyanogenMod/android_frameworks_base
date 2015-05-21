@@ -398,7 +398,8 @@ public class ThemeService extends IThemeService.Stub {
         }
 
         if (request.getWallpaperThemePackageName() != null) {
-            if (updateWallpaper(request.getWallpaperThemePackageName())) {
+            if (updateWallpaper(request.getWallpaperThemePackageName(),
+                    request.getWallpaperId())) {
                 mWallpaperChangedByUs = true;
             }
             incrementProgress(progressIncrement);
@@ -685,7 +686,7 @@ public class ThemeService extends IThemeService.Stub {
         return true;
     }
 
-    private boolean updateWallpaper(String pkgName) {
+    private boolean updateWallpaper(String pkgName, long id) {
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
         if (SYSTEM_DEFAULT.equals(pkgName)) {
             try {
@@ -702,7 +703,7 @@ public class ThemeService extends IThemeService.Stub {
         } else {
             InputStream in = null;
             try {
-                in = ImageUtils.getCroppedWallpaperStream(pkgName, mContext);
+                in = ImageUtils.getCroppedWallpaperStream(pkgName, id, mContext);
                 if (in != null)
                     wm.setStream(in);
             } catch (Exception e) {
