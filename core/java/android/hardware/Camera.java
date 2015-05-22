@@ -560,14 +560,16 @@ public class Camera {
     private void notifyTorch(boolean inUse) {
         IBinder b = ServiceManager.getService(Context.TORCH_SERVICE);
         ITorchService torchService = ITorchService.Stub.asInterface(b);
-        try {
-            if (inUse) {
-                torchService.onCameraOpened(mTorchToken, mCameraId);
-            } else {
-                torchService.onCameraClosed(mTorchToken, mCameraId);
+        if (torchService != null) {
+            try {
+                if (inUse) {
+                    torchService.onCameraOpened(mTorchToken, mCameraId);
+                } else {
+                    torchService.onCameraClosed(mTorchToken, mCameraId);
+                }
+            } catch (RemoteException e) {
+                // Ignore
             }
-        } catch (RemoteException e) {
-            // Ignore
         }
     }
 
