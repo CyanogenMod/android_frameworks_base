@@ -43,6 +43,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 
 import java.io.IOException;
+import java.lang.NullPointerException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -566,7 +567,7 @@ public class Camera {
             } else {
                 torchService.onCameraClosed(mTorchToken, mCameraId);
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | NullPointerException e) {
             // Ignore
         }
     }
