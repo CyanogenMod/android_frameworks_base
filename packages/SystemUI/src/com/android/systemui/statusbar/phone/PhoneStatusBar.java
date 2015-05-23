@@ -1599,7 +1599,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void prepareNavigationBarView(boolean forceReset) {
-        mNavigationBarView.reorient();
+        mNavigationBarView.reorient(true);
         mNavigationBarView.setListeners(mRecentsClickListener, mRecentsPreloadOnTouchListener,
                 mLongPressBackRecentsListener, mHomeActionListener);
 
@@ -1673,15 +1673,22 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return lp;
     }
 
+    private Resources mNavBarRes;
+    private String mLastNavThemePackage;
     private Resources getNavbarThemedResources() {
         String pkgName = mCurrentTheme.getOverlayPkgNameForApp(ThemeConfig.SYSTEMUI_NAVBAR_PKG);
+        if (mLastNavThemePackage != null && pkgName.equals(mLastNavThemePackage)) {
+            return mNavBarRes;
+        }
         Resources res = null;
         try {
             res = mContext.getPackageManager().getThemedResourcesForApplication(
                     mContext.getPackageName(), pkgName);
+            mLastNavThemePackage = pkgName;
         } catch (PackageManager.NameNotFoundException e) {
             res = mContext.getResources();
         }
+        mNavBarRes = res;
         return res;
     }
 
@@ -3872,7 +3879,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateMediaMetaData(true);
 
         if (mNavigationBarView != null) {
-            mNavigationBarView.updateSettings();
+            mNavigationBarView.updateSettings(true);
         }
     }
 
