@@ -1599,7 +1599,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void prepareNavigationBarView(boolean forceReset) {
-        mNavigationBarView.reorient();
+        mNavigationBarView.reorient(true);
         mNavigationBarView.setListeners(mRecentsClickListener, mRecentsPreloadOnTouchListener,
                 mLongPressBackRecentsListener, mHomeActionListener);
 
@@ -3872,7 +3872,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateMediaMetaData(true);
 
         if (mNavigationBarView != null) {
-            mNavigationBarView.updateSettings();
+            mNavigationBarView.updateSettings(true);
         }
     }
 
