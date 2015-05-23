@@ -67,9 +67,15 @@ public class QSFooter implements OnClickListener, DialogInterface.OnClickListene
     }
 
     public void setHost(QSTileHost host) {
+        if (host == null) {
+            setListening(false);
+            mHandler = null;
+            mSecurityController = null;
+        } else {
+            mSecurityController = host.getSecurityController();
+            mHandler = new H(host.getLooper());
+        }
         mHost = host;
-        mSecurityController = host.getSecurityController();
-        mHandler = new H(host.getLooper());
     }
 
     public void setListening(boolean listening) {

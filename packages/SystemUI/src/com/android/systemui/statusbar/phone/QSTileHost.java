@@ -154,6 +154,7 @@ public class QSTileHost implements QSTile.Host {
         mUserTracker = new CurrentUserTracker(mContext) {
             @Override
             public void onUserSwitched(int newUserId) {
+                teardown(true);
                 recreateTiles();
                 for (QSTile<?> tile : mTiles.values()) {
                     tile.userSwitch(newUserId);
@@ -167,6 +168,19 @@ public class QSTileHost implements QSTile.Host {
 
         mUserTracker.startTracking();
         mObserver.register();
+    }
+
+    public void teardown(boolean switchingUsers) {
+        mObserver.unregister();
+        if (!switchingUsers) {
+            mUserTracker.stopTracking();
+            mHandler.getLooper().quitSafely();
+            mHandler = null;
+            mCallback = null;
+            mCustomTileListenerService = null;
+            mCustomTileData = null;
+
+        }
     }
 
     void setCustomTileListenerService(CustomTileListenerService customTileListenerService) {
@@ -441,6 +455,13 @@ public class QSTileHost implements QSTile.Host {
                     Settings.Secure.getUriFor(Settings.Secure.QS_USE_MAIN_TILES),
                     false, this, mUserTracker.getCurrentUserId());
             mRegistered = true;
+        }
+
+        public void unregister() {
+            if (mRegistered) {
+                mContext.getContentResolver().unregisterContentObserver(this);
+                mRegistered = false;
+            }
         }
 
         @Override
