@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Stäng senaste aviseringar</string>
   <string name="screenshot_delete_action">Ta bort</string>
   <string name="screenshot_delete_confirmation">Skärmdump borttagen.</string>
   <string name="advanced_dev_option_wipe_app">Rensa data</string>
@@ -24,6 +25,7 @@
   <string name="accessibility_quick_settings_data_off">Mobildata av.</string>
   <string name="accessibility_quick_settings_data_on">Mobildata på.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
+  <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
@@ -63,4 +65,7 @@
   <string name="navring_choose_action_title">Välj åtgärd</string>
   <string name="select_application">Välj app</string>
   <string name="lockscreen_target_empty">Tom</string>
+  <string name="interruption_level_silent">Ljudlös</string>
+  <string name="zen_silent_with_warning">Inga avbrott, utom alarm.</string>
+  <string name="quick_settings_remove">Ta bort bricka</string>
 </resources>

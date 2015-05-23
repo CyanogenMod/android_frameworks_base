@@ -206,4 +206,8 @@
   <string name="live_display_outdoor">Напољу (јако сунце)</string>
   <string name="live_display_outdoor_summary">Користи само подешавања за напоље</string>
   <string name="live_display_hint">LiveDisplay може смањити напрезање очију и помоћи да спавате ноћу. Додирните да пробате!</string>
+  <string name="lock_to_app_toast_no_navbar">Да искључиш овај екран додирни и држи дугме за назад.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Блиц је укључен</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Додирни да угасиш</string>
+  <string name="storage_sd_dock_card">База SD картице</string>
 </resources>

@@ -206,4 +206,8 @@
   <string name="live_display_outdoor">Vonku (jasné slnko)</string>
   <string name="live_display_outdoor_summary">Používať len nastavenia pre vonkajšie prostredie</string>
   <string name="live_display_hint">LiveDisplay môže pomôcť znížiť únavu očí a pomôže vám spať v noci. Kliknite sem a vyskúšajte túto funkciu!</string>
+  <string name="lock_to_app_toast_no_navbar">Na odopnutie tejto obrazovky stlačte a podržte tlačidlo Späť.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Svietidlo je zapnuté</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Dotykom vypnúť</string>
+  <string name="storage_sd_dock_card">Karta SD v doku</string>
 </resources>
