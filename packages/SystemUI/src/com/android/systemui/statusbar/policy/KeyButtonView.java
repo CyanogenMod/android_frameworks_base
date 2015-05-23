@@ -212,7 +212,7 @@ public class KeyButtonView extends ImageView {
         // relayout() w/o any checks. setImageDrawable performs size checks and only calls relayout
         // if necessary. We rely on this because otherwise the setX/setY attributes which are post
         // layout cause it to mess up the layout.
-        setImageDrawable(res.getDrawable(keyDrawableResId));
+        setImageDrawable(res.getDrawable(keyDrawableResId, mContext.getTheme()));
         updateVisibility();
     }
 

@@ -561,7 +561,7 @@ public class NavigationBarView extends LinearLayout {
         mDeadZone.setStartFromRight(leftInLandscape);
     }
 
-    public void reorient() {
+    public void reorient(boolean init) {
         int orientation = mContext.getResources().getConfiguration().orientation;
         mRotatedViews[Configuration.ORIENTATION_PORTRAIT].setVisibility(View.GONE);
         mRotatedViews[Configuration.ORIENTATION_LANDSCAPE].setVisibility(View.GONE);
@@ -574,7 +574,7 @@ public class NavigationBarView extends LinearLayout {
             mVertical = getWidth() > 0 && getHeight() > getWidth();
         }
         mEditBar = new NavbarEditor(mCurrentView, mVertical, mIsLayoutRtl);
-        updateSettings();
+        updateSettings(init);
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
 
         mDeadZone = (DeadZone) mCurrentView.findViewById(R.id.deadzone);
@@ -627,7 +627,7 @@ public class NavigationBarView extends LinearLayout {
         if (newVertical != mVertical) {
             mVertical = newVertical;
             //Log.v(TAG, String.format("onSizeChanged: h=%d, w=%d, vert=%s", h, w, mVertical?"y":"n"));
-            reorient();
+            reorient(false);
             notifyVerticalChangedListener(newVertical);
         }
 
@@ -657,7 +657,7 @@ public class NavigationBarView extends LinearLayout {
                 .getLayoutDirection() == LAYOUT_DIRECTION_RTL;
         if (mIsLayoutRtl != isLayoutRtl) {
             mIsLayoutRtl = isLayoutRtl;
-            reorient();
+            reorient(true);
         }
     }
 
@@ -860,14 +860,16 @@ public class NavigationBarView extends LinearLayout {
                         mEditBar.saveKeys();
                     }
                     mEditBar.setEditMode(false);
-                    updateSettings();
+                    updateSettings(true);
                 }
             }
         }
     }
 
-    public void updateSettings() {
-        mEditBar.updateKeys();
+    public void updateSettings(boolean forceRefresh) {
+        if (forceRefresh) {
+            mEditBar.updateKeys();
+        }
         removeButtonListeners();
         updateButtonListeners();
         setDisabledFlags(mDisabledFlags, true /* force */);
