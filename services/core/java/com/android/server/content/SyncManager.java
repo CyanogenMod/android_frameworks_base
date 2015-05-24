@@ -3052,7 +3052,7 @@ public class SyncManager {
                 // Need the alarm if
                 //  - it's currently not set
                 //  - if the alarm is set in the past.
-                if (!alarmIsActive || alarmTime < mAlarmScheduleTime) {
+                if (!alarmIsActive || alarmTime != mAlarmScheduleTime) {
                     shouldSet = true;
                 }
             } else {
