@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">位置报告：节电模式。</string>
   <string name="accessibility_quick_settings_location_gps_only">位置报告：仅传感器模式。</string>
   <string name="accessibility_quick_settings_location_high_accuracy">位置报告：高准确度模式。</string>
+  <string name="accessibility_quick_settings_heads_up_off">浮动通知关。</string>
+  <string name="accessibility_quick_settings_heads_up_on">浮动通知开。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">浮动通知已关闭。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">浮动通知已开启。</string>
+  <string name="accessibility_quick_settings_ambient_display_off">关闭环境显示。</string>
+  <string name="accessibility_quick_settings_ambient_display_on">开启环境显示。</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">环境显示已关闭。</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">环境显示已开启。</string>
   <string name="accessibility_dpad_left">光标左移</string>
   <string name="accessibility_dpad_right">光标右移</string>
   <string name="quick_settings_mobile_data_label">移动数据</string>
@@ -52,6 +60,8 @@
   <string name="quick_settings_screen_timeout_detail_title">屏幕超时</string>
   <string name="quick_settings_usb_tether_label">USB 共享网络</string>
   <string name="quick_settings_heads_up_label">浮动通知</string>
+  <string name="quick_settings_ambient_display_label">环境显示</string>
+  <string name="quick_settings_custom_tile_detail_title">自定义瓷片</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">向右滑动以%1$s</string>
   <string name="right_shortcut_hint">向左滑动以%1$s</string>
@@ -80,4 +90,8 @@
   <string name="navring_choose_action_title">选择操作</string>
   <string name="select_application">选择应用</string>
   <string name="lockscreen_target_empty">空</string>
+  <string name="screen_pinning_description_no_navbar">这将会固定显示此屏幕，直到您取消固定为止。触摸并按住返回键即可取消固定。</string>
+  <string name="interruption_level_silent">静音</string>
+  <string name="zen_silent_with_warning">禁止打扰，闹钟除外。</string>
+  <string name="quick_settings_remove">移除瓷片</string>
 </resources>

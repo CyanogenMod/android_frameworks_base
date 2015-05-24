@@ -29,10 +29,18 @@
   <string name="accessibility_quick_settings_location_battery_saving">Zjištění polohy: úsporný režim.</string>
   <string name="accessibility_quick_settings_location_gps_only">Zjištění polohy: pouze GPS.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Zjištění polohy: vysoká přesnost.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Plovoucí upozorněn vyp.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Plovoucí upozornění zap.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Plovoucí upozorněn vyp.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Plovoucí upozornění zap.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Ambientní zobrazení vypnuto.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Ambientní zobrazení zapnuto.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambientní zobrazení vypnuto.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambientní zobrazení zapnuto.</string>
+  <string name="accessibility_quick_settings_sync_off">Synch. vyp.</string>
+  <string name="accessibility_quick_settings_sync_on">Synch. zap.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synchronizace vypnuta.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synchronizace zapnuta.</string>
   <string name="accessibility_dpad_left">Kurzor doleva</string>
   <string name="accessibility_dpad_right">Kurzor doprava</string>
   <string name="quick_settings_mobile_data_label">Mobilní data</string>
@@ -55,7 +63,9 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Zhasínání obrazovky</string>
   <string name="quick_settings_usb_tether_label">USB tethering</string>
+  <string name="quick_settings_heads_up_label">Plovoucí upozornění</string>
   <string name="quick_settings_ambient_display_label">Ambientní zobrazení</string>
+  <string name="quick_settings_sync_label">Synchronizace</string>
   <string name="quick_settings_custom_tile_detail_title">Vlastní dlaždice</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Přejeďte doprava pro %1$s</string>

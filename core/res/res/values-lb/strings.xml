@@ -363,7 +363,7 @@
   <string name="permlab_setAlwaysFinish">Appen am Hannergrond zoumaachen</string>
   <string name="permdesc_setAlwaysFinish">Erlaabt der App, ze kontrolléieren ob Aktivitéite sollen ofgeschloss ginn, soubal s\'an den Hannergrond gesat ginn. Ni néideg fir normal Appen.</string>
   <string name="permlab_batteryStats">Akkustatistiken ausliesen</string>
-  <string name="permdesc_batteryStats">Erlaabt der App, déi aktuell Akkubenotzungsdaten ze liesen. Doduerch kéint d\'App erausfanne wéi eng Appen datt de benotz.</string>
+  <string name="permdesc_batteryStats">Erlaabt der App, déi aktuell Akkubenotzungsdaten ze liesen. Doduerch kéint d\'App erausfanne wéi eng Appen datt s de benotz.</string>
   <string name="permlab_updateBatteryStats">Akkustatistiken änneren</string>
   <string name="permdesc_updateBatteryStats">Erlaabt der App, déi gesammelt Akkustatistiken z\'änneren. Net fir normal Appe geduecht.</string>
   <string name="permlab_getAppOpsStats">App-Virgangsstatistiken ofruffen</string>
@@ -567,12 +567,12 @@
   <string name="permdesc_vibrate">Erlaabt der App, d\'Vibratioun ze steieren.</string>
   <string name="permlab_flashlight">Täscheluucht steieren</string>
   <string name="permdesc_flashlight">Erlaabt der App, d\'Täscheluucht ze steieren.</string>
-  <string name="permlab_manageUsb">Astellungen a Berechtegunge fir USB-Apparate geréieren</string>
-  <string name="permdesc_manageUsb">Erlaabt der App, Astellungen a Berechtegunge fir USB-Apparaten ze geréieren.</string>
+  <string name="permlab_manageUsb">Astellungen a Berechtegunge fir USB-Apparater geréieren</string>
+  <string name="permdesc_manageUsb">Erlaabt der App, Astellungen a Berechtegunge fir USB-Apparater ze geréieren.</string>
   <string name="permlab_accessMtp">MTP-Protokoll implementéieren</string>
   <string name="permdesc_accessMtp">Erlaabt der App, op den MTP-Driver vum Kernel zouzegräifen, fir den MTP-USB-Protokoll z\'implementéieren.</string>
   <string name="permlab_hardware_test">Hardware testen</string>
-  <string name="permdesc_hardware_test">Erlaabt der App, verschidde Peripherie-Apparaten ze steieren, fir d\'Hardware ze testen.</string>
+  <string name="permdesc_hardware_test">Erlaabt der App, verschidde Peripherie-Apparater ze steieren, fir d\'Hardware ze testen.</string>
   <string name="permlab_fm">op den FM-Radio zougräifen</string>
   <string name="permlab_callPhone">Telefonsnummeren direkt uruffen</string>
   <string name="permdesc_callPhone">Erlaabt der App, Telefonsnummeren ouni deng Awierkung unzeruffen. Doduerch kéinten onerwaart Käschten oder Uriff entstoen. D\'App kann heiduerch awer keng Noutfallnummeren uruffen. Béiswëlleg Appe kéinte Käschte verursaachen andeem se Nummeren ouni deng Bestätegung uruffen.</string>
@@ -643,12 +643,12 @@
   <string name="permlab_changeBackgroundDataSetting">Benotzungsastellunge vun der Hannergronddatebenotzung änneren</string>
   <string name="permdesc_changeBackgroundDataSetting">Erlaabt der App, d\'Benotzungsastellunge vun der Hannergronddatebenotzung z\'änneren.</string>
   <string name="permlab_accessWifiState">WLAN-Connectiounen uweisen</string>
-  <string name="permdesc_accessWifiState">Erlaabt der App, Informatiounen iwwer d\'WLAN-Netzwierker auszeliesen. Beispillsweis ob WLAN un ass a wéi eng Nimm déi connectéiert WLAN-Apparaten hunn.</string>
+  <string name="permdesc_accessWifiState">Erlaabt der App, Informatiounen iwwer d\'WLAN-Netzwierker auszeliesen. Beispillsweis ob WLAN un ass a wéi eng Nimm déi connectéiert WLAN-Apparater hunn.</string>
   <string name="permlab_changeWifiState">WLAN-Connectioun hierstellen an trennen</string>
   <string name="permdesc_changeWifiState">Erlaabt der App, Connectioune mat WLAN-Zougankspunkten hierzestellen an ze trennen a fir Ännerungen un der Konfiguratioun vun de WLAN-Netzwierker virzehuelen.</string>
   <string name="permlab_changeWifiMulticastState">WLAN-Multicast-Empfang erlaben</string>
-  <string name="permdesc_changeWifiMulticastState" product="tablet">Erlaabt der App, Päck z\'empfänken, déi iwwer Multicast-Adressen u sämtlech Apparaten an engem WLAN verschéckt ginn, net just un däin Tablet. Dat kascht méi Leeschtung wéi den Net-Multicast-Modus.</string>
-  <string name="permdesc_changeWifiMulticastState" product="default">Erlaabt der App, Päck z\'empfänken, déi iwwer Multicast-Adressen u sämtlech Apparaten an engem WLAN verschéckt ginn, net just un däin Telefon. Dat kascht méi Leeschtung wéi den Net-Multicast-Modus.</string>
+  <string name="permdesc_changeWifiMulticastState" product="tablet">Erlaabt der App, Päck z\'empfänken, déi iwwer Multicast-Adressen u sämtlech Apparater an engem WLAN verschéckt ginn, net just un däin Tablet. Dat kascht méi Leeschtung wéi den Net-Multicast-Modus.</string>
+  <string name="permdesc_changeWifiMulticastState" product="default">Erlaabt der App, Päck z\'empfänken, déi iwwer Multicast-Adressen u sämtlech Apparater an engem WLAN verschéckt ginn, net just un däin Telefon. Dat kascht méi Leeschtung wéi den Net-Multicast-Modus.</string>
   <string name="permlab_bluetoothAdmin">Op d\'Bluetooth-Astellungen zougräifen</string>
   <string name="permdesc_bluetoothAdmin" product="tablet">Erlaabt der App, Bluetooth um Tablet ze konfiguréieren, an anerer Apparater z\'entdecken a Koppelunge mat hinnen hierzestellen.</string>
   <string name="permdesc_bluetoothAdmin" product="default">Erlaabt der App, Bluetooth um Telefon ze konfiguréieren, an anerer Apparater z\'entdecken a Koppelunge mat hinnen hierzestellen.</string>
@@ -911,10 +911,10 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="lockscreen_too_many_failed_attempts_dialog_message">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
-  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g> mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich muss du däin Tablet mat denge Login-Date vu Google entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
-  <string name="lockscreen_failed_attempts_almost_glogin" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g> mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich muss du däin Telefon mat denge Login-Date vu Google entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
-  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
-  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich muss du däin Tablet mat denge Login-Date vu Google entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich muss du däin Telefon mat denge Login-Date vu Google entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
   <string name="lockscreen_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="lockscreen_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
@@ -1208,7 +1208,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="editTextMenuTitle">Textaktiounen</string>
   <string name="low_internal_storage_view_title">De Späicher huet geschwë keng Plaz méi</string>
   <string name="low_internal_storage_view_text">E puer Systemfunktioune funktionéiere vläicht net</string>
-  <string name="low_internal_storage_view_text_no_boot">Net genuch Späicher fir de System. Stell sécher, datt de 250MB fräi Späicherplaz hues a start nei.</string>
+  <string name="low_internal_storage_view_text_no_boot">Net genuch Späicher fir de System. Stell sécher, datt s de 250MB fräi Späicherplaz hues a start nei.</string>
   <string name="app_running_notification_title"><xliff:g id="app_name">%1$s</xliff:g> gëtt ausgeféiert</string>
   <string name="app_running_notification_text">Dréck fir méi Informatiounen
         oder fir d\'App unzehalen.</string>
@@ -1255,6 +1255,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="smv_application">D\'App <xliff:g id="application">%1$s</xliff:g> (Prozess <xliff:g id="process">%2$s</xliff:g>) huet géint déi selwer operluechte StrictMode-Richtlinne verstouss.</string>
   <string name="smv_process">De Prozess <xliff:g id="process">%1$s</xliff:g> huet géint déi selwer operluechte StrictMode-Richtlinne verstouss.</string>
   <string name="android_upgrading_title">Android gëtt aktualiséiert\u2026</string>
+  <string name="android_start_title">Android gëtt gestart\u2026</string>
   <string name="android_upgrading_fstrim">Späicher optiméieren.</string>
   <string name="android_upgrading_apk">Optiméierung vun der App <xliff:g id="number" example="123">%1$d</xliff:g> / <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
   <string name="android_upgrading_starting_apps">Appe gi gestart.</string>
@@ -1413,7 +1414,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="permlab_copyProtectedData">Contenu kopéieren</string>
   <string name="permdesc_copyProtectedData">Erlaabt der App, d\'Opruffe vum Standard-Containerservice fir d\'Kopéiere vun Inhalter. Net fir normal Appe geduecht.</string>
   <string name="permlab_route_media_output">Medienausgab ëmleeden</string>
-  <string name="permdesc_route_media_output">Erlaabt der App, d\'Medienausgab un extern Apparate weiderzeleeden.</string>
+  <string name="permdesc_route_media_output">Erlaabt der App, d\'Medienausgab un extern Apparater weiderzeleeden.</string>
   <string name="permlab_access_keyguard_secure_storage">Op de séchere Späicher vun der Tastespär zougräifen</string>
   <string name="permdesc_access_keyguard_secure_storage">Erlaabt der App, op de séchere Späicher vun der Tastespär zouzegräifen.</string>
   <string name="permlab_control_keyguard">Uweisen an Ausblende vun der Tastespär steieren</string>
@@ -1603,7 +1604,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="media_route_button_content_description">Iwwerdroen</string>
   <string name="media_route_chooser_title">Mat Apparat verbannen</string>
   <string name="media_route_chooser_title_for_remote_display">Schierm op Apparat iwwerdroen</string>
-  <string name="media_route_chooser_searching">Et gëtt no Apparate gesicht\u2026</string>
+  <string name="media_route_chooser_searching">Et gëtt no Apparater gesicht\u2026</string>
   <string name="media_route_chooser_extended_settings">Astellungen</string>
   <string name="media_route_controller_disconnect">Deconnectéieren</string>
   <string name="media_route_status_scanning">Gëtt gescannt...</string>
@@ -1646,12 +1647,12 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="kg_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
-  <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g> mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
   <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
-  <string name="kg_failed_attempts_almost_at_login" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g> mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere Versich gëss de gefrot däin Tablet mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
-  <string name="kg_failed_attempts_almost_at_login" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g> mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere Versich gëss de gefrot däin Telefon mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
+  <string name="kg_failed_attempts_almost_at_login" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss de gefrot däin Tablet mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
+  <string name="kg_failed_attempts_almost_at_login" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss de gefrot däin Telefon mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="safe_media_volume_warning" product="default">D\'Lautstäerkt iwwer de recommandéierten Niveau erhéijen?\n\nIwwer laang Periode bei héijer Lautstäerkt Musek lauschtere kéint däi Gehéier schiedegen.</string>

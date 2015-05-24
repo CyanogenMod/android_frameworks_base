@@ -29,6 +29,14 @@
   <string name="accessibility_quick_settings_location_battery_saving">Konum bildirimi: pil tasarruf modu.</string>
   <string name="accessibility_quick_settings_location_gps_only">Konum bildirimi: sadece sensörler modu.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Konum bildirimi: yüksek hassasiyet modu.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Bildirim pencereleri kapalı.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Bildirim pencereleri açık.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Bildirim pencereleri kapatıldı.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Bildirim pencereleri açıldı.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Bildirim ekranı kapalı.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Bildirim ekranı açık.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Bildirim ekranı kapatıldı.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Bildirim ekranı açıldı.</string>
   <string name="accessibility_dpad_left">Sol imleç</string>
   <string name="accessibility_dpad_right">Sağ imleç</string>
   <string name="quick_settings_mobile_data_label">Mobil veri</string>
@@ -51,6 +59,9 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Ekran zaman aşımı</string>
   <string name="quick_settings_usb_tether_label">USB İnternet Paylaşımı</string>
+  <string name="quick_settings_heads_up_label">Bildirim pencereleri</string>
+  <string name="quick_settings_ambient_display_label">Bildirim ekranı</string>
+  <string name="quick_settings_custom_tile_detail_title">Özel kareler</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">%1$s için sağa kaydırın</string>
   <string name="right_shortcut_hint">%1$s için sola kaydırın</string>
@@ -79,4 +90,8 @@
   <string name="navring_choose_action_title">Eylem seçin</string>
   <string name="select_application">Uygulama seçin</string>
   <string name="lockscreen_target_empty">Boş</string>
+  <string name="screen_pinning_description_no_navbar">Ekrandan kaldırana kadar görünümde tutar. Kaldırmak için Geri tuşuna dokunun ve tutun.</string>
+  <string name="interruption_level_silent">Sessiz</string>
+  <string name="zen_silent_with_warning">Alarmlar dışında rahatsız etme.</string>
+  <string name="quick_settings_remove">Kareyi kaldır</string>
 </resources>

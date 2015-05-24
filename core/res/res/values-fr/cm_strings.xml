@@ -206,4 +206,8 @@
   <string name="live_display_outdoor">Extérieur (plein soleil)</string>
   <string name="live_display_outdoor_summary">Utiliser uniquement les paramètres extérieurs</string>
   <string name="live_display_hint">LiveDisplay peut aider à réduire la fatigue oculaire et vous aider à dormir la nuit. Appuyez ici pour l\'essayer !</string>
+  <string name="lock_to_app_toast_no_navbar">Pour déverrouiller l\'écran, appuyez et maintenez le bouton Retour.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Lampe de poche allumé</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Appuyez pour éteindre</string>
+  <string name="storage_sd_dock_card">Dock carte SD</string>
 </resources>

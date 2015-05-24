@@ -50,6 +50,10 @@
   <string name="quick_settings_network_adb_label">ADB لەڕێی تۆڕەوە</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">کاتی شاشە</string>
+  <string name="quick_settings_usb_tether_label">گرتنەدەستی USB</string>
+  <string name="quick_settings_heads_up_label">فه‌رمووه‌کان</string>
+  <string name="quick_settings_ambient_display_label">پیشاندەری دەوروبەر</string>
+  <string name="quick_settings_custom_tile_detail_title">خشتەی دروستکراو</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">رایکێشە بۆلای ڕاست بۆ %1$s</string>
   <string name="right_shortcut_hint">ڕایکێشە بۆلای چەپ بۆ %1$s</string>
@@ -78,4 +82,7 @@
   <string name="navring_choose_action_title">چالاکیه‌ک هه‌ڵبژێره‌</string>
   <string name="select_application">دیاریکردنی بەرنامە</string>
   <string name="lockscreen_target_empty">بەتاڵ</string>
+  <string name="screen_pinning_description_no_navbar">ئەمە لەسەر پیشاندان ئەمێنێتەوە تاوەکو لەیەکدادەبڕێن. دەستلێدە و دووگمەی دواوە هەڵبگرە بۆ لێدابڕان.</string>
+  <string name="interruption_level_silent">بێدەنگ</string>
+  <string name="quick_settings_remove">سڕینه‌وه‌ی خشتە</string>
 </resources>
