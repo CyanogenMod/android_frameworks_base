@@ -55,7 +55,7 @@ class AutomaticBrightnessController {
     private static final float SCREEN_AUTO_BRIGHTNESS_ADJUSTMENT_MAX_GAMMA = 3.0f;
 
     // Light sensor event rate in milliseconds.
-    private static final int LIGHT_SENSOR_RATE_MILLIS = 1000;
+    private static final int LIGHT_SENSOR_RATE_MILLIS = 2000;
 
     // Period of time in which to consider light samples in milliseconds.
     private static final int AMBIENT_LIGHT_HORIZON = 10000;
@@ -81,7 +81,7 @@ class AutomaticBrightnessController {
     // How long the current sensor reading is assumed to be valid beyond the current time.
     // This provides a bit of prediction, as well as ensures that the weight for the last sample is
     // non-zero, which in turn ensures that the total weight is non-zero.
-    private static final long AMBIENT_LIGHT_PREDICTION_TIME_MILLIS = 100;
+    private static final long AMBIENT_LIGHT_PREDICTION_TIME_MILLIS = 200;
 
     // If true, enables the use of the current time as an auto-brightness adjustment.
     // The basic idea here is to expand the dynamic range of auto-brightness
