@@ -67,6 +67,7 @@
     <java-symbol type="integer" name="config_deviceHardwareWakeKeys" />
     <java-symbol type="bool" name="config_singleStageCameraKey" />
     <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
+    <java-symbol type="integer" name="config_longPressOnAppSwitchBehavior" />
 
     <java-symbol type="string" name="global_action_reboot" />
     <java-symbol type="string" name="lockscreen_missing_sim_message_short" />
