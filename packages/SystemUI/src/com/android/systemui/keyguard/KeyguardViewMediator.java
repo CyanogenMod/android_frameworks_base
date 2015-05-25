@@ -1067,7 +1067,7 @@ public class KeyguardViewMediator extends SystemUI {
         if (isKeyguardDisabled() && !lockedOrMissing) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because lockscreen is off");
             // update state
-            mShowing = false;
+            setShowingLocked(false);
             updateActivityLockScreenState();
             adjustStatusBarLocked();
             userActivity();
