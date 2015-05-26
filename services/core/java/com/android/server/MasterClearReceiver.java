@@ -30,6 +30,8 @@ public class MasterClearReceiver extends BroadcastReceiver {
 
     /* {@hide} */
     public static final String EXTRA_WIPE_MEDIA = "wipe_media";
+    /* {@hide} */
+    public static final String EXTRA_WIPE_SDCARD = "wipe_sdcard";
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -50,7 +52,8 @@ public class MasterClearReceiver extends BroadcastReceiver {
             public void run() {
                 try {
                     boolean wipeMedia = intent.getBooleanExtra(EXTRA_WIPE_MEDIA, false);
-                    RecoverySystem.rebootWipeUserData(context, shutdown, reason, wipeMedia);
+                    boolean wipeSdcard = intent.getBooleanExtra(EXTRA_WIPE_SDCARD, false);
+                    RecoverySystem.rebootWipeUserData(context, shutdown, reason, wipeMedia, wipeSdcard);
                     Log.wtf(TAG, "Still running after master clear?!");
                 } catch (IOException e) {
                     Slog.e(TAG, "Can't perform master clear/factory reset", e);
