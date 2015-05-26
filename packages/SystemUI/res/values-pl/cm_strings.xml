@@ -86,4 +86,5 @@
   <string name="lockscreen_target_empty">Puste</string>
   <string name="screen_pinning_description_no_navbar">Zostaje na widoku do czasu odpięcia. Dotknij i przytrzymaj przycisk Wstecz, aby odpiąć.</string>
   <string name="interruption_level_silent">Cichy</string>
+  <string name="zen_silent_with_warning">Bez przerw, z wyjątkiem alarmów.</string>
 </resources>

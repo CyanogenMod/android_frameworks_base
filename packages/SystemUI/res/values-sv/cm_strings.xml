@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Stäng senaste aviseringar</string>
   <string name="screenshot_delete_action">Ta bort</string>
   <string name="screenshot_delete_confirmation">Skärmdump borttagen.</string>
   <string name="advanced_dev_option_wipe_app">Rensa data</string>
@@ -24,6 +25,7 @@
   <string name="accessibility_quick_settings_data_off">Mobildata av.</string>
   <string name="accessibility_quick_settings_data_on">Mobildata på.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
+  <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
@@ -43,6 +45,7 @@
   <string name="quick_settings_lockscreen_label">Låsskärm</string>
   <string name="quick_settings_network_adb_label">ADB över nätverk</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">Skärmtidsgräns</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="navbar_dialog_title">Välj åtgärd att tilldela</string>
   <string name="navbar_home_button">Hemknapp</string>
@@ -53,6 +56,7 @@
   <string name="navbar_menu_conditional_button">Menyknapp (autogöm)</string>
   <string name="navbar_menu_always_button">Menyknapp (visa alltid)</string>
   <string name="navbar_menu_big_button">Menyknapp</string>
+  <string name="navring_action_kill_app">Stäng av app</string>
   <string name="navring_action_none">Ingen</string>
   <string name="navring_action_take_screenshot">Ta skärmdump</string>
   <string name="navring_action_ring_vibrate">Ringsignal/Vibration</string>
@@ -63,4 +67,7 @@
   <string name="navring_choose_action_title">Välj åtgärd</string>
   <string name="select_application">Välj app</string>
   <string name="lockscreen_target_empty">Tom</string>
+  <string name="interruption_level_silent">Ljudlös</string>
+  <string name="zen_silent_with_warning">Inga avbrott, utom alarm.</string>
+  <string name="quick_settings_remove">Ta bort bricka</string>
 </resources>

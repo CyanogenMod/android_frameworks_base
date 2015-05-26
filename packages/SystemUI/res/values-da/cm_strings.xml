@@ -79,4 +79,5 @@
   <string name="navring_choose_action_title">Vælg handling</string>
   <string name="select_application">Vælg applikation</string>
   <string name="lockscreen_target_empty">Tom</string>
+  <string name="interruption_level_silent">Lydløs</string>
 </resources>

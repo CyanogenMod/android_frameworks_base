@@ -90,6 +90,7 @@
   <string name="navring_choose_action_title">Selecionar ação</string>
   <string name="select_application">Selecionar aplicação</string>
   <string name="lockscreen_target_empty">Vazio</string>
+  <string name="screen_pinning_description_no_navbar">Isto mantém visível até soltar. Toque e segure o botão Voltar até soltar.</string>
   <string name="interruption_level_silent">Silêncio</string>
   <string name="zen_silent_with_warning">Sem interrupções, exceto os alarmes.</string>
   <string name="quick_settings_remove">Remover botão</string>

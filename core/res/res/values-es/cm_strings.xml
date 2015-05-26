@@ -206,4 +206,8 @@
   <string name="live_display_outdoor">Al aire libre (luz del sol)</string>
   <string name="live_display_outdoor_summary">Utilizar solo los ajustes al aire libre</string>
   <string name="live_display_hint">LiveDisplay puede reducir la fatiga visual y ayudar a dormir por la noche. ¡Toca aquí para probarlo!</string>
+  <string name="lock_to_app_toast_no_navbar">Para liberar esta pantalla, mantén pulsado el botón Atrás.</string>
+  <string name="quick_settings_tile_flashlight_not_title">La linterna está encendida</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Toca para apagarla</string>
+  <string name="storage_sd_dock_card">Tarjeta SD de la base</string>
 </resources>
