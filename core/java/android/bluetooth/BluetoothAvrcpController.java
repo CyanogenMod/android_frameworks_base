@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
  * Copyright (C) 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -210,7 +211,7 @@ public final class BluetoothAvrcpController implements BluetoothProfile {
     }
 
     public void sendPassThroughCmd(BluetoothDevice device, int keyCode, int keyState) {
-        if (DBG) Log.d(TAG, "sendPassThroughCmd");
+        if (DBG) Log.d(TAG, "sendPassThroughCmd dev = " + device + " key " + keyCode + " State = " + keyState);
         if (mService != null && isEnabled()) {
             try {
                 mService.sendPassThroughCmd(device, keyCode, keyState);
@@ -221,6 +222,90 @@ public final class BluetoothAvrcpController implements BluetoothProfile {
             }
         }
         if (mService == null) Log.w(TAG, "Proxy not attached to service");
+    }
+
+    public void getMetaData(int[] attributeIds) {
+        if (DBG) Log.d(TAG, "getMetaData num requested Ids = " + attributeIds.length);
+        if (mService != null && isEnabled()) {
+            try {
+                mService.getMetaData(attributeIds);
+                return;
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error talking to BT service in getMetaData", e);
+                return;
+            }
+        }
+        if (mService == null) Log.w(TAG, "Proxy not attached to service");
+    }
+
+    public void getPlayStatus(int[] playStatusIds) {
+        if (DBG) Log.d(TAG, "getPlayStatus num requested Ids  = "+ playStatusIds.length);
+        if (mService != null && isEnabled()) {
+            try {
+                mService.getPlayStatus(playStatusIds);
+                return;
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error talking to BT service in getPlayStatus()", e);
+                return;
+            }
+        }
+        if (mService == null) Log.w(TAG, "Proxy not attached to service");
+    }
+
+    public void getPlayerApplicationSetting() {
+        if (DBG) Log.d(TAG, "getPlayerApplicationSetting");
+        if (mService != null && isEnabled()) {
+            try {
+                mService.getPlayerApplicationSetting();
+                return;
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error talking to BT service in getPlayerApplicationSetting()", e);
+                return;
+            }
+        }
+        if (mService == null) Log.w(TAG, "Proxy not attached to service");
+    }
+
+    public void setPlayerApplicationSetting(int attributeId, int attributeVal) {
+        if (DBG) Log.d(TAG, "setPlayerApplicationSetting attribId = " + attributeId + " attribVal = " + attributeVal);
+        if (mService != null && isEnabled()) {
+            try {
+                mService.setPlayerApplicationSetting(attributeId, attributeVal);
+                return;
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error talking to BT service in setPlayerApplicationSetting()", e);
+                return;
+            }
+        }
+        if (mService == null) Log.w(TAG, "Proxy not attached to service");
+    }
+
+    public BluetoothAvrcpInfo getSupportedPlayerAppSetting(BluetoothDevice device) {
+        if (DBG) Log.d(TAG, "getSupportedPlayerAppSetting dev = " + device);
+        if (mService != null && isEnabled()) {
+            try {
+                return mService.getSupportedPlayerAppSetting(device);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error talking to BT service in getSupportedPlayerAppSetting()", e);
+                return null;
+            }
+        }
+        if (mService == null) Log.w(TAG, "Proxy not attached to service");
+        return null;
+    }
+
+    public int getSupportedFeatures(BluetoothDevice device) {
+        if (DBG) Log.d(TAG, "getSupportedFeatures dev = " + device);
+        if (mService != null && isEnabled()) {
+            try {
+                return mService.getSupportedFeatures(device);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error talking to BT service in getSupportedFeatures()", e);
+                return 0;
+            }
+        }
+        if (mService == null) Log.w(TAG, "Proxy not attached to service");
+        return 0;
     }
 
     private final ServiceConnection mConnection = new ServiceConnection() {
