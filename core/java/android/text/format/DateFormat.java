@@ -179,8 +179,25 @@ public class DateFormat {
      * @hide
      */
     public static boolean is24HourFormat(Context context, int userHandle) {
-        String value = Settings.System.getStringForUser(context.getContentResolver(),
-                Settings.System.TIME_12_24, userHandle);
+        return is24HourFormat(context, userHandle, false);
+    }
+
+    /**
+     * Returns true if user preference with the given user handle is set to 24-hour format.
+     * @param context the context to use for the content resolver
+     * @param userHandle the user handle of the user to query.
+     * @param overrideUserSetting If true, do not take the user TIME_12_24 setting into account
+     *                            and determine the result only using the current locale.
+     * @return true if 24 hour time format is selected, false otherwise.
+     *
+     * @hide
+     */
+    public static boolean is24HourFormat(Context context, int userHandle, boolean overrideUserSetting) {
+        String value = null;
+        if (!overrideUserSetting) {
+            value = Settings.System.getStringForUser(context.getContentResolver(),
+                    Settings.System.TIME_12_24, userHandle);
+        }
 
         if (value == null) {
             Locale locale = context.getResources().getConfiguration().locale;
