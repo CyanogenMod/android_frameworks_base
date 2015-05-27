@@ -66,8 +66,12 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     }
 
     public void reset() {
+        reset(false);
+    }
+
+    protected void reset(boolean animateTransition) {
         // start fresh
-        resetPasswordText(false /* animate */);
+        resetPasswordText(animateTransition);
         // if the user is currently locked out, enforce it.
         long deadline = mLockPatternUtils.getLockoutAttemptDeadline();
         if (shouldLockout(deadline)) {
