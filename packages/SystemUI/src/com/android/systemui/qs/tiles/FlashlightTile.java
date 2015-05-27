@@ -18,7 +18,7 @@ package com.android.systemui.qs.tiles;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.hardware.TorchManager;
+import cyanogenmod.app.TorchManager;
 import android.os.SystemClock;
 
 import com.android.systemui.R;
@@ -42,9 +42,13 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
 
     public FlashlightTile(Host host) {
         super(host);
-        mTorchManager = (TorchManager) mContext.getSystemService(Context.TORCH_SERVICE);
-        mTorchManager.addListener(this);
-        mTorchAvailable = mTorchManager.isAvailable();
+        mTorchManager = TorchManager.getInstance(mContext);
+        if (mTorchManager != null) {
+            mTorchManager.addListener(this);
+            mTorchAvailable = mTorchManager.isAvailable();
+        } else {
+            mTorchAvailable = false;
+        }
     }
 
     @Override

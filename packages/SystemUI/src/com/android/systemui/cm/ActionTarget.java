@@ -25,7 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ResolveInfo;
-import android.hardware.TorchManager;
+import cyanogenmod.app.TorchManager;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -150,7 +150,7 @@ public class ActionTarget {
 
             return true;
         } else if (action.equals(ACTION_TORCH)) {
-            TorchManager torchManager = (TorchManager) mContext.getSystemService(Context.TORCH_SERVICE);
+            TorchManager torchManager = TorchManager.getInstance(mContext);
             torchManager.toggleTorch();
             return true;
         } else {

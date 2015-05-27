@@ -2941,11 +2941,7 @@ public abstract class Context {
     public static final String MEDIA_PROJECTION_SERVICE = "media_projection";
 
     /**
-     * Use with {@link #getSystemService} to retrieve a
-     * {@link com.android.server.TorchService} for accessing torch service.
-     *
-     * @see #getSystemService
-     * @see com.android.server.TorchService
+     * For internal use only.
      * @hide
      */
     public static final String TORCH_SERVICE = "torch";

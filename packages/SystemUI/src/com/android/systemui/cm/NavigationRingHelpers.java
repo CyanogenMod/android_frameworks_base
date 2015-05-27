@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.hardware.TorchManager;
+import cyanogenmod.app.TorchManager;
 import android.media.AudioManager;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -93,8 +93,12 @@ public class NavigationRingHelpers {
     }
 
     public static boolean isTorchAvailable(Context context) {
-        TorchManager torchManager = (TorchManager) context.getSystemService(Context.TORCH_SERVICE);
-        return torchManager.isTorchSupported();
+        TorchManager torchManager = TorchManager.getInstance(context);
+        if (torchManager != null) {
+            return torchManager.isTorchSupported();
+        } else {
+            return false;
+        }
     }
 
     public static Drawable getTargetDrawable(Context context, String action) {
@@ -173,7 +177,7 @@ public class NavigationRingHelpers {
     }
 
     private static int getTorchDrawableResId(Context context) {
-        TorchManager torchManager = (TorchManager) context.getSystemService(Context.TORCH_SERVICE);
+        TorchManager torchManager = TorchManager.getInstance(context);
         boolean active = torchManager.isTorchOn();
         if (active) {
             return R.drawable.ic_navigation_ring_torch_on;
