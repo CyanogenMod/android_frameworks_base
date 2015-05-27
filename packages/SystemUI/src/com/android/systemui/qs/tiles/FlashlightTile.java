@@ -18,7 +18,7 @@ package com.android.systemui.qs.tiles;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.hardware.TorchManager;
+import cyanogenmod.app.TorchManager;
 import android.os.SystemClock;
 
 import com.android.systemui.R;
