@@ -171,9 +171,6 @@ public class SurfaceTextureRenderer {
     private int maPositionHandle;
     private int maTextureHandle;
 
-    private PerfMeasurement mPerfMeasurer = null;
-    private static final String LEGACY_PERF_PROPERTY = "persist.camera.legacy_perf";
-
     public SurfaceTextureRenderer(int facing) {
         mFacing = facing;
 
@@ -501,7 +498,6 @@ public class SurfaceTextureRenderer {
         if (mEGLDisplay != EGL14.EGL_NO_DISPLAY) {
             EGL14.eglMakeCurrent(mEGLDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE,
                     EGL14.EGL_NO_CONTEXT);
-            dumpGlTiming();
             if (mSurfaces != null) {
                 for (EGLSurfaceHolder holder : mSurfaces) {
                     if (holder.eglSurface != null) {
@@ -550,65 +546,6 @@ public class SurfaceTextureRenderer {
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             throw new IllegalStateException(msg + ": GLES20 error: 0x" + Integer.toHexString(error));
         }
-    }
-
-    /**
-     * Save a measurement dump to disk, in
-     * {@code /sdcard/CameraLegacy/durations_<time>_<width1>x<height1>_...txt}
-     */
-    private void dumpGlTiming() {
-        if (mPerfMeasurer == null) return;
-
-        File legacyStorageDir = new File(Environment.getExternalStorageDirectory(), "CameraLegacy");
-        if (!legacyStorageDir.exists()){
-            if (!legacyStorageDir.mkdirs()){
-                Log.e(TAG, "Failed to create directory for data dump");
-                return;
-            }
-        }
-
-        StringBuilder path = new StringBuilder(legacyStorageDir.getPath());
-        path.append(File.separator);
-        path.append("durations_");
-
-        Time now = new Time();
-        now.setToNow();
-        path.append(now.format2445());
-        path.append("_S");
-        for (EGLSurfaceHolder surface : mSurfaces) {
-            path.append(String.format("_%d_%d", surface.width, surface.height));
-        }
-        path.append("_C");
-        for (EGLSurfaceHolder surface : mConversionSurfaces) {
-            path.append(String.format("_%d_%d", surface.width, surface.height));
-        }
-        path.append(".txt");
-        mPerfMeasurer.dumpPerformanceData(path.toString());
-    }
-
-    private void setupGlTiming() {
-        if (PerfMeasurement.isGlTimingSupported()) {
-            Log.d(TAG, "Enabling GL performance measurement");
-            mPerfMeasurer = new PerfMeasurement();
-        } else {
-            Log.d(TAG, "GL performance measurement not supported on this device");
-            mPerfMeasurer = null;
-        }
-    }
-
-    private void beginGlTiming() {
-        if (mPerfMeasurer == null) return;
-        mPerfMeasurer.startTimer();
-    }
-
-    private void addGlTimestamp(long timestamp) {
-        if (mPerfMeasurer == null) return;
-        mPerfMeasurer.addTimestamp(timestamp);
-    }
-
-    private void endGlTiming() {
-        if (mPerfMeasurer == null) return;
-        mPerfMeasurer.stopTimer();
     }
 
     /**
@@ -671,11 +608,6 @@ public class SurfaceTextureRenderer {
                 mConversionSurfaces.get(0).eglSurface);
         initializeGLState();
         mSurfaceTexture = new SurfaceTexture(getTextureId());
-
-        // Set up performance tracking if enabled
-        if (SystemProperties.getBoolean(LEGACY_PERF_PROPERTY, false)) {
-            setupGlTiming();
-        }
     }
 
     /**
@@ -700,10 +632,6 @@ public class SurfaceTextureRenderer {
         boolean doTiming = targetCollector.hasPendingPreviewCaptures();
         checkGlError("before updateTexImage");
 
-        if (doTiming) {
-            beginGlTiming();
-        }
-
         mSurfaceTexture.updateTexImage();
 
         long timestamp = mSurfaceTexture.getTimestamp();
@@ -715,18 +643,12 @@ public class SurfaceTextureRenderer {
             if (DEBUG) {
                 Log.d(TAG, "Dropping preview frame.");
             }
-            if (doTiming) {
-                endGlTiming();
-            }
             return;
         }
 
         RequestHolder request = captureHolder.first;
 
         Collection<Surface> targetSurfaces = request.getHolderTargets();
-        if (doTiming) {
-            addGlTimestamp(timestamp);
-        }
 
         List<Long> targetSurfaceIds = LegacyCameraDevice.getSurfaceIds(targetSurfaces);
         for (EGLSurfaceHolder holder : mSurfaces) {
@@ -771,10 +693,6 @@ public class SurfaceTextureRenderer {
             }
         }
         targetCollector.previewProduced();
-
-        if (doTiming) {
-            endGlTiming();
-        }
     }
 
     /**
