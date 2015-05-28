@@ -14221,9 +14221,15 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     @Override
     public int getInstallLocation() {
-        return android.provider.Settings.Global.getInt(mContext.getContentResolver(),
+        int mInstallLocation = android.provider.Settings.Global.getInt(
+                mContext.getContentResolver(),
                 android.provider.Settings.Global.DEFAULT_INSTALL_LOCATION,
                 PackageHelper.APP_INSTALL_AUTO);
+        if (mInstallLocation == PackageHelper.APP_INSTALL_EXTERNAL
+                && !Environment.MEDIA_MOUNTED.equals(Environment.getSecondaryStorageState())) {
+            mInstallLocation = PackageHelper.APP_INSTALL_AUTO;
+        }
+        return mInstallLocation;
     }
 
     /** Called by UserManagerService */
