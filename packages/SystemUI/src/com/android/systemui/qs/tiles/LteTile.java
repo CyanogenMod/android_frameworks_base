@@ -73,6 +73,9 @@ public class LteTile extends QSTile<QSTile.BooleanState> {
             case Phone.NT_MODE_LTE_ONLY:
             case Phone.NT_MODE_LTE_WCDMA:
             case Phone.NT_MODE_LTE_CDMA_EVDO_GSM_WCDMA:
+            case Phone.NT_MODE_TD_SCDMA_LTE:
+            case Phone.NT_MODE_TD_SCDMA_LTE_CDMA_EVDO_GSM_WCDMA:
+            case Phone.NT_MODE_TD_SCDMA_GSM_LTE:
             case Phone.NT_MODE_TD_SCDMA_GSM_WCDMA_LTE:
             case Phone.NT_MODE_TD_SCDMA_WCDMA_LTE:
                 state.visible = true;
