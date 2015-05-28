@@ -53,12 +53,6 @@ public class MiniThumbFile {
     private ByteBuffer mBuffer;
     private static final Hashtable<String, MiniThumbFile> sThumbFiles =
         new Hashtable<String, MiniThumbFile>();
-    // Add following members for index file use
-    private static final int INDEX_FILE_VERSION = 3;
-    public static final int BYTES_PER_INDEX = 8;
-    private RandomAccessFile mIndexFile;
-    private FileChannel mIndexChannel;
-    private ByteBuffer mIndexBuffer;
 
     /**
      * We store different types of thumbnails in different files. To remain backward compatibility,
@@ -133,59 +127,9 @@ public class MiniThumbFile {
         return mMiniThumbFile;
     }
 
-    private String indexFilePath(int version) {
-        String directoryName =
-                Environment.getExternalStorageDirectory().toString()
-                + "/DCIM/.thumbnails";
-        return directoryName + "/.thumbindex" + version + "-" + mUri.hashCode();
-    }
-
-    private void removeOldIndexFile() {
-        String oldPath = indexFilePath(INDEX_FILE_VERSION - 1);
-        File oldFile = new File(oldPath);
-        if (oldFile.exists()) {
-            try {
-                oldFile.delete();
-            } catch (SecurityException ex) {
-                // ignore exception
-            }
-        }
-    }
-
-    private RandomAccessFile indexFile() {
-        if (mIndexFile == null) {
-            removeOldIndexFile();
-            String path = indexFilePath(INDEX_FILE_VERSION);
-            File directory = new File(path).getParentFile();
-            if (!directory.isDirectory()) {
-                if (!directory.mkdirs()) {
-                    Log.e(TAG, "Unable to create .thumbnails directory "
-                            + directory.toString());
-                }
-            }
-            File f = new File(path);
-            try {
-                mIndexFile = new RandomAccessFile(f, "rw");
-            } catch (IOException ex) {
-                // Open as read-only so we can at least read the existing
-                // thumbnail indexes.
-                try {
-                    mIndexFile = new RandomAccessFile(f, "r");
-                } catch (IOException ex2) {
-                    // ignore exception
-                }
-            }
-            if (mIndexFile != null) {
-                mIndexChannel = mIndexFile.getChannel();
-            }
-        }
-        return mIndexFile;
-    }
-
     public MiniThumbFile(Uri uri) {
         mUri = uri;
         mBuffer = ByteBuffer.allocateDirect(BYTES_PER_MINTHUMB);
-        mIndexBuffer = ByteBuffer.allocateDirect(BYTES_PER_INDEX);
     }
 
     public synchronized void deactivate() {
@@ -193,14 +137,6 @@ public class MiniThumbFile {
             try {
                 mMiniThumbFile.close();
                 mMiniThumbFile = null;
-            } catch (IOException ex) {
-                // ignore exception
-            }
-        }
-        if (mIndexFile != null) {
-            try {
-                mIndexFile.close();
-                mIndexFile = null;
             } catch (IOException ex) {
                 // ignore exception
             }
@@ -213,43 +149,10 @@ public class MiniThumbFile {
         // check the mini thumb file for the right data.  Right is
         // defined as having the right magic number at the offset
         // reserved for this "id".
-        // Firstly, find the position in thumbdata file for this "id" according to index file.
         RandomAccessFile r = miniThumbDataFile();
-        RandomAccessFile ri = indexFile();
-        if (r != null && ri != null) {
+        if (r != null) {
+            long pos = id * BYTES_PER_MINTHUMB;
             FileLock lock = null;
-            long index = BYTES_PER_INDEX * id;
-            long pos = -1;
-            try {
-                mIndexBuffer.clear();
-                mIndexBuffer.limit(8);
-
-                lock = mIndexChannel.lock(index, 8, true);
-                // check that we can read the following 8 bytes
-                // (8 for the long)
-                if (mIndexChannel.read(mIndexBuffer, index) == 8) {
-                    mIndexBuffer.position(0);
-                    pos = mIndexBuffer.getLong();
-                }
-            } catch (IOException ex) {
-                Log.v(TAG, "Got exception checking file position: ", ex);
-            } catch (RuntimeException ex) {
-                // Other NIO related exception like disk full, read only channel..etc
-                Log.e(TAG, "Got exception when reading position, id = " + id +
-                        ", disk full or mount read-only? " + ex.getClass());
-            } finally {
-                try {
-                    if (lock != null) lock.release();
-                }
-                catch (IOException ex) {
-                    // ignore it.
-                }
-            }
-
-            if (pos < 0) return 0;
-
-            // Secondly, find the magic in thumbdata file according to the position.
-            lock = null;
             try {
                 mBuffer.clear();
                 mBuffer.limit(1 + 8);
@@ -284,43 +187,10 @@ public class MiniThumbFile {
     public synchronized void saveMiniThumbToFile(byte[] data, long id, long magic)
             throws IOException {
         RandomAccessFile r = miniThumbDataFile();
-        RandomAccessFile ri = indexFile();
-        if (r == null || ri == null) return;
+        if (r == null) return;
 
-        // Firstly, put into index file the position in thumbdata file for this "id".
+        long pos = id * BYTES_PER_MINTHUMB;
         FileLock lock = null;
-        long index = BYTES_PER_INDEX * id;
-        long pos = mMiniThumbFile.length();
-        boolean writeIndexSuccess = false;
-        try {
-            mIndexBuffer.clear();
-            mIndexBuffer.putLong(pos);
-            mIndexBuffer.flip();
-
-            lock = mIndexChannel.lock(index, BYTES_PER_INDEX, false);
-            mIndexChannel.write(mIndexBuffer, index);
-            writeIndexSuccess = true;
-        } catch (IOException ex) {
-            Log.e(TAG, "couldn't save mini thumbnail position for "
-                    + id + "; ", ex);
-            throw ex;
-        } catch (RuntimeException ex) {
-            // Other NIO related exception like disk full, read only channel..etc
-            Log.e(TAG, "couldn't save mini thumbnail position for "
-                    + id + "; disk full or mount read-only? " + ex.getClass());
-        } finally {
-            try {
-                if (lock != null) lock.release();
-            }
-            catch (IOException ex) {
-                // ignore it.
-            }
-        }
-
-        if (!writeIndexSuccess) return;
-
-        // Secondly, put into thumbdata file thumb data for this "id" according to the position.
-        lock = null;
         try {
             if (data != null) {
                 if (data.length > BYTES_PER_MINTHUMB - HEADER_SIZE) {
@@ -364,43 +234,10 @@ public class MiniThumbFile {
      */
     public synchronized byte [] getMiniThumbFromFile(long id, byte [] data) {
         RandomAccessFile r = miniThumbDataFile();
-        RandomAccessFile ri = indexFile();
-        if (r == null || ri == null) return null;
+        if (r == null) return null;
 
-        // Firstly, find the position in thumbdata file for this "id" according to index file.
+        long pos = id * BYTES_PER_MINTHUMB;
         FileLock lock = null;
-        long index = BYTES_PER_INDEX * id;
-        long pos = -1;
-        try {
-            mIndexBuffer.clear();
-            mIndexBuffer.limit(8);
-
-            lock = mIndexChannel.lock(index, 8, true);
-            // check that we can read the following 8 bytes
-            // (8 for the long)
-            if (mIndexChannel.read(mIndexBuffer, index) == 8) {
-                mIndexBuffer.position(0);
-                pos = mIndexBuffer.getLong();
-            }
-        } catch (IOException ex) {
-            Log.w(TAG, "got exception when reading position id=" + id + ", exception: " + ex);
-        } catch (RuntimeException ex) {
-            // Other NIO related exception like disk full, read only channel..etc
-            Log.e(TAG, "Got exception when reading position, id = " + id +
-                    ", disk full or mount read-only? " + ex.getClass());
-        } finally {
-            try {
-                if (lock != null) lock.release();
-            }
-            catch (IOException ex) {
-                // ignore it.
-            }
-        }
-
-        if (pos < 0) return null;
-
-        // Secondly, find the thumb data for this "id" in thumbdata file according to the position.
-        lock = null;
         try {
             mBuffer.clear();
             lock = mChannel.lock(pos, BYTES_PER_MINTHUMB, true);
