@@ -677,19 +677,26 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         holder.thumbnailViewImage, bm, 0, 0, null).toBundle();
 
         show(false);
-        if (ad.taskId >= 0) {
+        Intent intent = ad.intent;
+        boolean floating = (intent.getFlags() & Intent.FLAG_FLOATING_WINDOW) == Intent.FLAG_FLOATING_WINDOW;
+        if (ad.taskId >= 0 && !floating) {
             // This is an active task; it should just go to the foreground.
             am.moveTaskToFront(ad.taskId, ActivityManager.MOVE_TASK_WITH_HOME,
                     opts);
         } else {
-            Intent intent = ad.intent;
-            intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
-                    | Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                    | Intent.FLAG_ACTIVITY_NEW_TASK);
+            boolean backPressed = ((RecentsActivity) getContext()) != null && ((RecentsActivity) getContext()).mBackPressed;
+            if (!floating || !backPressed) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY
+                        | Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
             if (DEBUG) Log.v(TAG, "Starting activity " + intent);
             try {
                 context.startActivityAsUser(intent, opts,
                         new UserHandle(ad.userId));
+                if (floating && ((RecentsActivity) getContext()) != null) {
+                    ((RecentsActivity) getContext()).finish();
+                }
             } catch (SecurityException e) {
                 Log.e(TAG, "Recents does not have the permission to launch " + intent, e);
             } catch (ActivityNotFoundException e) {
@@ -739,9 +746,11 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     }
 
     private void startApplicationDetailsActivity(String packageName, int userId) {
+        dismissAndGoBack();
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", packageName, null));
         intent.setComponent(intent.resolveActivity(getContext().getPackageManager()));
+        intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
         TaskStackBuilder.create(getContext())
                 .addNextIntentWithParentStack(intent).startActivities(null, new UserHandle(userId));
     }
@@ -773,6 +782,16 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
                         show(false);
                     } else {
                         throw new IllegalStateException("Oops, no tag on view " + selectedView);
+                    }
+                } else if (item.getItemId() == R.id.recent_launch_floating) {
+                    ViewHolder viewHolder = (ViewHolder) selectedView.getTag();
+                    if (viewHolder != null) {
+                        final TaskDescription ad = viewHolder.taskDescription;
+                        Intent intent = ad.intent;
+                        intent.setFlags(Intent.FLAG_FLOATING_WINDOW
+                                | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //dismissAndGoBack();
+                        getContext().startActivity(intent);
                     }
                 } else {
                     return false;

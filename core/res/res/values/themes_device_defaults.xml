@@ -278,6 +278,30 @@ easier.
     the window floating, with a transparent background, and turns off dimming behind the window. -->
     <style name="Theme.DeviceDefault.Panel" parent="Theme.Material.Panel"  />
 
+    <style name="Theme.DeviceDefault.FloatingWindow">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden|adjustPan</item>
+    </style>
+
+    <style name="Theme.DeviceDefault.FloatingWindowLight" parent="Theme.Material.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden|adjustPan</item>
+     </style>
+
     <!-- DeviceDefault theme for windows that want to have the user's selected wallpaper appear
     behind them. -->
     <style name="Theme.DeviceDefault.Wallpaper" parent="Theme.Material.Wallpaper"  />

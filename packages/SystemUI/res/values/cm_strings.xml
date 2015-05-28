@@ -161,4 +161,6 @@
     <string name="zen_silent_with_warning">No interruptions, except alarms.</string>
 
     <string name="quick_settings_remove">Remove tile</string>
+
+    <string name="status_bar_recent_floating_item_title">Floating Mode</string>
 </resources>
