@@ -455,7 +455,9 @@ public class KeyguardViewMediator extends SystemUI {
                 case READY:
                     synchronized (this) {
                         if (isShowing()) {
-                            resetStateLocked();
+                            if (!mInternallyDisabled) { // don't reset the state if we want a disabled lockscreen
+                                resetStateLocked();
+                            }
                         }
                     }
                     break;
@@ -838,8 +840,10 @@ public class KeyguardViewMediator extends SystemUI {
     public void setKeyguardEnabled(boolean enabled) {
         synchronized (this) {
             if (DEBUG) Log.d(TAG, "setKeyguardEnabled(" + enabled + ")");
-
-            if (mInternallyDisabled && enabled && !lockscreenEnforcedByDevicePolicy()) {
+            if (mInternallyDisabled
+                    && enabled
+                    && !mUpdateMonitor.isSimPinSecure()
+                    && !lockscreenEnforcedByDevicePolicy()) {
                 // if keyguard is forcefully disabled internally (by lock screen tile), don't allow
                 // it to be enabled externally, unless the device policy manager says so.
                 return;
@@ -1023,7 +1027,7 @@ public class KeyguardViewMediator extends SystemUI {
      */
     private void doKeyguardLocked(Bundle options) {
         // if another app is disabling us, don't show
-        if (!mExternallyEnabled) {
+        if (!mExternallyEnabled && (!mInternallyDisabled && mUpdateMonitor.isSimPinSecure())) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");
 
             // note: we *should* set mNeedToReshowWhenReenabled=true here, but that makes
