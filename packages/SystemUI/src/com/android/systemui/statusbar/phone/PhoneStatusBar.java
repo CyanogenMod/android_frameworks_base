@@ -4673,7 +4673,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public boolean onMenuPressed() {
-        return mState == StatusBarState.KEYGUARD && mStatusBarKeyguardViewManager.onMenuPressed();
+        if(mState == StatusBarState.KEYGUARD){
+            mStatusBarView.collapseAllPanels(false);
+            showBouncer();
+        }
+        return mState == StatusBarState.KEYGUARD;
     }
 
     public boolean onBackPressed() {
