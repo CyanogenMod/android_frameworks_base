@@ -126,7 +126,7 @@ public class KeyguardViewMediator extends SystemUI {
     private static final int KEYGUARD_DISPLAY_TIMEOUT_DELAY_DEFAULT = 30000;
     private static final long KEYGUARD_DONE_PENDING_TIMEOUT_MS = 3000;
 
-    final static boolean DEBUG = false;
+    final static boolean DEBUG = true;
     private static final boolean DEBUG_SIM_STATES = KeyguardConstants.DEBUG_SIM_STATES;
     private final static boolean DBG_WAKE = false;
 
@@ -454,7 +454,9 @@ public class KeyguardViewMediator extends SystemUI {
                     break;
                 case READY:
                     synchronized (this) {
-                        if (isShowing()) {
+                        if (mInternallyDisabled) {
+                            hideLocked();
+                        } else if (isShowing()) {
                             resetStateLocked();
                         }
                     }
@@ -672,7 +674,7 @@ public class KeyguardViewMediator extends SystemUI {
                     Slog.w(TAG, "Failed to call onKeyguardExitResult(false)", e);
                 }
                 mExitSecureCallback = null;
-                if (!mExternallyEnabled) {
+                if (!mInternallyDisabled && !mExternallyEnabled) {
                     hideLocked();
                 }
             } else if (mShowing) {
@@ -772,6 +774,10 @@ public class KeyguardViewMediator extends SystemUI {
             if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled externally");
             return true;
         }
+        if (mInternallyDisabled) {
+            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled internally");
+            return true;
+        }
         if (mLockPatternUtils.isLockScreenDisabled()) {
             if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by setting");
             return true;
@@ -838,14 +844,14 @@ public class KeyguardViewMediator extends SystemUI {
     public void setKeyguardEnabled(boolean enabled) {
         synchronized (this) {
             if (DEBUG) Log.d(TAG, "setKeyguardEnabled(" + enabled + ")");
-
-            if (mInternallyDisabled && enabled && !lockscreenEnforcedByDevicePolicy()) {
+            mExternallyEnabled = enabled;
+            if (mInternallyDisabled
+                    && enabled
+                    && !lockscreenEnforcedByDevicePolicy()) {
                 // if keyguard is forcefully disabled internally (by lock screen tile), don't allow
                 // it to be enabled externally, unless the device policy manager says so.
                 return;
             }
-
-            mExternallyEnabled = enabled;
 
             if (!enabled && mShowing) {
                 if (mExitSecureCallback != null) {
@@ -1023,7 +1029,7 @@ public class KeyguardViewMediator extends SystemUI {
      */
     private void doKeyguardLocked(Bundle options) {
         // if another app is disabling us, don't show
-        if (!mExternallyEnabled) {
+        if (!mExternallyEnabled && !mUpdateMonitor.isSimPinSecure()) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");
 
             // note: we *should* set mNeedToReshowWhenReenabled=true here, but that makes
