@@ -586,6 +586,11 @@ static jint android_content_AssetManager_addCommonOverlayPath(JNIEnv* env, jobje
         return 0;
     }
 
+    if (!access(packagePath8.c_str(), R_OK) == 0 ||
+        !access(resApkPath8.c_str(), R_OK) == 0) {
+        return 0;
+    }
+
     AssetManager* am = assetManagerForJavaObject(env, clazz);
     if (am == NULL) {
         return 0;
