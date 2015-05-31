@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">开启环境显示。</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">环境显示已关闭。</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">环境显示已开启。</string>
+  <string name="accessibility_quick_settings_sync_off">同步关闭。</string>
+  <string name="accessibility_quick_settings_sync_on">同步开启。</string>
+  <string name="accessibility_quick_settings_sync_changed_off">同步已关闭。</string>
+  <string name="accessibility_quick_settings_sync_changed_on">同步已开启。</string>
   <string name="accessibility_dpad_left">光标左移</string>
   <string name="accessibility_dpad_right">光标右移</string>
   <string name="quick_settings_mobile_data_label">移动数据</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">USB 共享网络</string>
   <string name="quick_settings_heads_up_label">浮动通知</string>
   <string name="quick_settings_ambient_display_label">环境显示</string>
+  <string name="quick_settings_sync_label">同步</string>
   <string name="quick_settings_custom_tile_detail_title">自定义瓷片</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">向右滑动以%1$s</string>

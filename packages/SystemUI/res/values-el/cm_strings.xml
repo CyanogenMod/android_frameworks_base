@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ενεργή οθόνη ambient.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Η οθόνη ambient απενεργοποιήθηκε.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Η οθόνη ambient ενεργοποιήθηκε.</string>
+  <string name="accessibility_quick_settings_sync_off">Ανενεργός συγχρονισμός.</string>
+  <string name="accessibility_quick_settings_sync_on">Ενεργός συγχρονισμός.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Ο συγχρονισμός απενεργοποιήθηκε.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Ο συγχρονισμός ενεργοποιήθηκε.</string>
   <string name="accessibility_dpad_left">Κέρσορας αριστερά</string>
   <string name="accessibility_dpad_right">Κέρσορας δεξιά</string>
   <string name="quick_settings_mobile_data_label">Δεδομένα</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">Πρόσδεση USB</string>
   <string name="quick_settings_heads_up_label">Αναδυόμενες ειδοποιήσεις</string>
   <string name="quick_settings_ambient_display_label">Οθόνη ambient</string>
+  <string name="quick_settings_sync_label">Συγχρονισμός</string>
   <string name="quick_settings_custom_tile_detail_title">Προσαρμοσμένο πλακίδιο</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Σύρετε προς τα δεξιά για %1$s</string>

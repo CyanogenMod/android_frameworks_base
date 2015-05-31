@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Visualização de ambiente ligada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Visualização de ambiente desligou.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Visualização de ambiente ligou.</string>
+  <string name="accessibility_quick_settings_sync_off">Sincronização desligada.</string>
+  <string name="accessibility_quick_settings_sync_on">Sincronização ligada.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Sincronização foi desligada.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Sincronização foi ligada.</string>
   <string name="accessibility_dpad_left">Cursor à esquerda</string>
   <string name="accessibility_dpad_right">Cursor à direita</string>
   <string name="quick_settings_mobile_data_label">Dados móveis</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">Associação USB</string>
   <string name="quick_settings_heads_up_label">Notificações pop-up</string>
   <string name="quick_settings_ambient_display_label">Visualização de ambiente</string>
+  <string name="quick_settings_sync_label">Sincronização</string>
   <string name="quick_settings_custom_tile_detail_title">Botões personalizados</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>

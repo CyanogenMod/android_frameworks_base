@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Környezeti kijelző be.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Környezeti kijelző kikapcsolva.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Környezeti kijelző bekapcsolva.</string>
+  <string name="accessibility_quick_settings_sync_off">Szinkronizálás ki.</string>
+  <string name="accessibility_quick_settings_sync_on">Szinkronizálás be.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Szinkronizálás kikapcsolva.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Szinkronizálás bekapcsolva.</string>
   <string name="accessibility_dpad_left">Kurzor balra</string>
   <string name="accessibility_dpad_right">Kurzor jobbra</string>
   <string name="quick_settings_mobile_data_label">Mobilinternet</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">USB megosztás</string>
   <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
   <string name="quick_settings_ambient_display_label">Környezeti kijelző</string>
+  <string name="quick_settings_sync_label">Szinkronizálás</string>
   <string name="quick_settings_custom_tile_detail_title">Egyéni csempe</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Csúsztasson jobbra ezért: %1$s</string>

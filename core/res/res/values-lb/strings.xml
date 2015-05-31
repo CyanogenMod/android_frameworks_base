@@ -644,7 +644,7 @@
   <string name="permdesc_changeBackgroundDataSetting">Erlaabt der App, d\'Benotzungsastellunge vun der Hannergronddatebenotzung z\'änneren.</string>
   <string name="permlab_accessWifiState">WLAN-Connectiounen uweisen</string>
   <string name="permdesc_accessWifiState">Erlaabt der App, Informatiounen iwwer d\'WLAN-Netzwierker auszeliesen. Beispillsweis ob WLAN un ass a wéi eng Nimm déi connectéiert WLAN-Apparater hunn.</string>
-  <string name="permlab_changeWifiState">WLAN-Connectioun hierstellen an trennen</string>
+  <string name="permlab_changeWifiState">WLAN-Connectiounen hierstellen an trennen</string>
   <string name="permdesc_changeWifiState">Erlaabt der App, Connectioune mat WLAN-Zougankspunkten hierzestellen an ze trennen a fir Ännerungen un der Konfiguratioun vun de WLAN-Netzwierker virzehuelen.</string>
   <string name="permlab_changeWifiMulticastState">WLAN-Multicast-Empfang erlaben</string>
   <string name="permdesc_changeWifiMulticastState" product="tablet">Erlaabt der App, Päck z\'empfänken, déi iwwer Multicast-Adressen u sämtlech Apparater an engem WLAN verschéckt ginn, net just un däin Tablet. Dat kascht méi Leeschtung wéi den Net-Multicast-Modus.</string>
@@ -655,7 +655,7 @@
   <string name="permlab_bluetoothPriv">Hierstellung vu Connectioune mat Bluetooth-Koppelungen no App</string>
   <string name="permdesc_bluetoothPriv" product="tablet">Erlaabt der App, sech mat Remote-Apparater ouni Notzerinteraktioun ze koppelen.</string>
   <string name="permdesc_bluetoothPriv" product="default">Erlaabt der App, sech mat Remote-Apparater ouni Notzerinteraktioun ze koppelen.</string>
-  <string name="permlab_accessWimaxState">WiMAX-Connectioun hierstellen an trennen</string>
+  <string name="permlab_accessWimaxState">WiMAX-Connectiounen hierstellen an trennen</string>
   <string name="permdesc_accessWimaxState">Erlaabt der App, festzestellen ob WiMAX aktivéiert ass an Informatiounen iwwer all WiMAX-Netzwierker déi connectéiert sinn.</string>
   <string name="permlab_changeWimaxState">WiMAX-Status änneren</string>
   <string name="permdesc_changeWimaxState" product="tablet">Erlaabt der App, den Tablet mat WiMAX-Netzwierker ze connectéieren an deconnectéieren.</string>
@@ -682,13 +682,13 @@
   <string name="permdesc_subscribedFeedsWrite">Erlaabt der App, déi momentan synchroniséiert Feeds z\'änneren. Béiswëlleg Appe kéinten déi momentan synchroniséiert Feeds änneren.</string>
   <string name="permlab_readDictionary">Wierder liesen déi an den Dictionnaire gesat goufen</string>
   <string name="permdesc_readDictionary">Erlaabt der App, all d\'Wierder, Nimm a Sätz ze liesen déi de Benotzer a sengem Benotzerdictionnaire gespäichert huet.</string>
-  <string name="permlab_writeDictionary">Wierder an de benotzerdefinéierten Dictionnaire setzen</string>
+  <string name="permlab_writeDictionary">Wierder an de benotzerdefinéierten Dictionnaire dobäisetzen</string>
   <string name="permdesc_writeDictionary">Erlaabt der App, nei Wierder an de Benotzerdictionnaire ze schreiwen.</string>
   <string name="permlab_sdcardRead" product="nosdcard">Inhalter vun dengem USB-Späicher liesen</string>
   <string name="permlab_sdcardRead" product="default">Inhalter vun denger SD-Kaart liesen</string>
   <string name="permdesc_sdcardRead" product="nosdcard">Erlaabt der App, d\'Inhalter vum USB-Späicher ze liesen.</string>
   <string name="permdesc_sdcardRead" product="default">Erlaabt der App, d\'Inhalter vun der SD-Kaart ze liesen.</string>
-  <string name="permlab_sdcardWrite" product="nosdcard">Inhalt vum USB-Späicher änneren oder läschen</string>
+  <string name="permlab_sdcardWrite" product="nosdcard">Inhalter vum USB-Späicher änneren oder läschen</string>
   <string name="permlab_sdcardWrite" product="default">Inhalter vun der SD-Kaart änneren oder läschen</string>
   <string name="permdesc_sdcardWrite" product="nosdcard">Erlaabt der App, op den USB-Späicher ze schreiwen.</string>
   <string name="permdesc_sdcardWrite" product="default">Erlaabt der App, op d\'SD-Kaart ze schreiwen.</string>
@@ -915,8 +915,8 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="lockscreen_failed_attempts_almost_glogin" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich muss du däin Telefon mat denge Login-Date vu Google entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
   <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
   <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
-  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
-  <string name="lockscreen_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="lockscreen_forgot_pattern_button_text">Muster vergiess?</string>
   <string name="lockscreen_glogin_forgot_pattern">Kont-Entspärung</string>
@@ -1649,8 +1649,8 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
   <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Benotzerdate gi verluer.</string>
-  <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
-  <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
+  <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
+  <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. E gëtt elo op d\'Wierksastellungen zréckgesat.</string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss de gefrot däin Tablet mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
   <string name="kg_failed_attempts_almost_at_login" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gezeechent. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss de gefrot däin Telefon mat engem E-Mail-Kont z\'entspären.\n\nProbéier a(n) <xliff:g id="number">%d</xliff:g> Sekonnen nees.</string>
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>

@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Амбијент приказ укључен.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Амбијент приказ ће бити искључен.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Амбијент приказ ће бити укључен.</string>
+  <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
+  <string name="accessibility_quick_settings_sync_on">Синхрон. укључено.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Синхронизација је искључена.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Синхронизација је укључена.</string>
   <string name="accessibility_dpad_left">Курсор лево</string>
   <string name="accessibility_dpad_right">Курсор десно</string>
   <string name="quick_settings_mobile_data_label">Мобилни подаци</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">USB повезивање</string>
   <string name="quick_settings_heads_up_label">Искачуће поруке</string>
   <string name="quick_settings_ambient_display_label">Амбијент приказ</string>
+  <string name="quick_settings_sync_label">Синхрон</string>
   <string name="quick_settings_custom_tile_detail_title">Промени назив</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Превуци десно за %1$s</string>

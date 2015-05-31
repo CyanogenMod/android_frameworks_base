@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambientné zobrazenie zakázané.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambientné zobrazenie povolené.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambientné zobrazenie zakázané.</string>
+  <string name="accessibility_quick_settings_sync_off">Synch. vyp.</string>
+  <string name="accessibility_quick_settings_sync_on">Synch. zap.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synchronizácia vypnutá.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synchronizácia zapnutá.</string>
   <string name="accessibility_dpad_left">Kurzor vľavo</string>
   <string name="accessibility_dpad_right">Kurzor vpravo</string>
   <string name="quick_settings_mobile_data_label">Mobilné dáta</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">Zdieľanie cez USB</string>
   <string name="quick_settings_heads_up_label">Plávajúce oznámenia</string>
   <string name="quick_settings_ambient_display_label">Ambientné zobrazenie</string>
+  <string name="quick_settings_sync_label">Synchronizácia</string>
   <string name="quick_settings_custom_tile_detail_title">Vlastná dlaždica</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Potiahnite doprava pre %1$s</string>
