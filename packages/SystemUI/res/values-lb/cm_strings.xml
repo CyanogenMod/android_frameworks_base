@@ -62,7 +62,7 @@
   </plurals>
   <string name="quick_settings_camera_error_connect">Keng Verbindung zur Kamera méiglech</string>
   <string name="navbar_dialog_title">Funktioun zouweisen</string>
-  <string name="navbar_home_button">Heemknäppchen</string>
+  <string name="navbar_home_button">Startsäit-Knäppchen</string>
   <string name="navbar_recent_button">Verlafknäppchen</string>
   <string name="navbar_search_button">Sichknäppchen</string>
   <string name="navbar_back_button">Zréckknäppchen</string>

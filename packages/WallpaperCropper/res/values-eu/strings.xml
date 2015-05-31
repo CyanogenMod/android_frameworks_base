@@ -15,5 +15,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crop_wallpaper">Ebaki horma-papera</string>
   <string name="wallpaper_instructions">Ezarri horma-papera</string>
+  <string name="wallpaper_load_fail">Ezin izan da irudia horma-paper gisa ezarri</string>
 </resources>

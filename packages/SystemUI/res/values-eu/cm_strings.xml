@@ -18,10 +18,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_dpad_left">Kurtsorea ezkerrean</string>
   <string name="accessibility_dpad_right">Kurtsorea eskuman</string>
+  <string name="dessert_case_settings_cm_title">Erakutsi CM maskotak</string>
+  <string name="dessert_case_settings_cm_summary">Bistaratu CM maskotak Android postreekin batera ametsean</string>
+  <string name="quick_settings_screen_sleep">Lokartu</string>
   <string name="quick_settings_label_enabled">Gaituta</string>
   <string name="quick_settings_ringer_normal">Soinua</string>
+  <string name="quick_settings_lockscreen">Blokeo-pantaila</string>
   <string name="quick_settings_network_type">Sare mugikorra</string>
-  <string name="quick_settings_report_bug">Akatsa jakinarazi</string>
+  <string name="quick_settings_report_bug">Eman errorearen berri</string>
   <string name="quick_settings_sync">Sinkronizatu</string>
   <string name="quick_settings_sync_off">Sinkronizazioa ezgaituta</string>
   <string name="quick_settings_torch">Linterna</string>
@@ -44,28 +48,36 @@
   <string name="quick_settings_equalizer">Ekualizadorea</string>
   <string name="quick_settings_compass_off">Iparorratza ezgaituta</string>
   <string name="quick_settings_compass_init">Hasieratzen\u2026</string>
-  <string name="quick_settings_heads_up_on">Leiho gainerakorreko jakinarazpenak</string>
-  <string name="quick_settings_heads_up_off">Leiho gainerakorreko jakinarazpenak</string>
+  <string name="quick_settings_heads_up_on">Jakinarazpen flotatzaileak gaituta</string>
+  <string name="quick_settings_heads_up_off">Etenaldirik ez</string>
+  <string name="quick_settings_themes">Gaiak</string>
   <string name="location_mode_high_accuracy_title">Zehaztasun handia</string>
   <string name="location_mode_battery_saving_title">Bateria aurreztea</string>
   <string name="location_mode_sensors_only_title">Gailua bakarrik</string>
   <string name="quick_settings_expanded_desktop">Hedatua</string>
   <string name="quick_settings_expanded_desktop_off">Arrunta</string>
+  <plurals name="quick_settings_bluetooth_multi_label">
+    <item quantity="one">%1$d konektatuta</item>
+    <item quantity="other">%1$d konektatuta</item>
+  </plurals>
   <string name="quick_settings_camera_error_connect">Ezin da kamerarekin konektatu</string>
-  <string name="navbar_dialog_title">Erakutsiko den botoia aukeratu</string>
+  <string name="navbar_dialog_title">Hautatu esleituko zaion ekintza</string>
   <string name="navbar_home_button">Hasiera botoia</string>
-  <string name="navbar_recent_button">Berrikien botoia</string>
+  <string name="navbar_recent_button">Azkenak botoia</string>
   <string name="navbar_search_button">Bilaketa botoia</string>
   <string name="navbar_back_button">Atzera botoia</string>
   <string name="navbar_empty_button">Hutsik utzi</string>
-  <string name="navbar_menu_conditional_button">Menu botoia (automatikoki izkutatu)</string>
+  <string name="navbar_menu_conditional_button">Menu botoia (automatikoki ezkutatu)</string>
   <string name="navbar_menu_always_button">Menu botoia (beti erakutsi)</string>
   <string name="navbar_menu_big_button">Menu botoia</string>
-  <string name="advanced_dev_option_wipe_app">Datuak ezabatu</string>
+  <string name="advanced_dev_option_wipe_app">Ezabatu aplikazioaren datuak</string>
   <string name="advanced_dev_option_force_stop">Gelditzera behartu</string>
-  <string name="accessibility_dock_battery_level">Oinarriaren bateriaren portzentaia: <xliff:g id="number">%d</xliff:g>.</string>
+  <string name="advanced_dev_option_uninstall">Desinstalatu</string>
+  <string name="accessibility_dock_battery_level">Oinarriaren bateriaren portzentajea: <xliff:g id="number">%d</xliff:g>.</string>
   <string name="screenshot_delete_action">Ezabatu</string>
   <string name="screenshot_delete_confirmation">Pantaila-argazkia ezabatu da.</string>
-  <string name="accessibility_desc_add_quick_settings">Aginte azkarrak gehitu.</string>
+  <string name="accessibility_desc_add_quick_settings">Gehitu ezarpen azkarrak.</string>
   <string name="status_bar_notification_spam_item_title">Honelako jakinarazpenak ezikusi</string>
+  <string name="protected_app_notification_title">Babestutako aplikazio jakinarazpena</string>
+  <string name="protected_app_notification_summary">Sakatu babestutako aplikazioaren jakinarazpena irekitzeko</string>
 </resources>
