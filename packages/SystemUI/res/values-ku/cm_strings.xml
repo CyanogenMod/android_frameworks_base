@@ -23,7 +23,7 @@
   <string name="quick_settings_screen_sleep">بڕۆ بۆ خەوتن</string>
   <string name="quick_settings_label_enabled">چالاکردن</string>
   <string name="quick_settings_ringer_normal">دەنگ</string>
-  <string name="quick_settings_lockscreen">داخستنی ڕوونما</string>
+  <string name="quick_settings_lockscreen">داخستنی ڕونما</string>
   <string name="quick_settings_network_type">خستنە باری تۆڕ</string>
   <string name="quick_settings_report_bug">راپۆرتکردنی کەموکورتیەکان</string>
   <string name="quick_settings_sync">ناردنی</string>
@@ -47,7 +47,7 @@
   <string name="quick_settings_network_adb_enabled_label">کارا</string>
   <string name="quick_settings_equalizer">یه‌کسانکه‌ری ده‌نگ</string>
   <string name="quick_settings_compass_off">له‌کارخستنی قیبله‌نما</string>
-  <string name="quick_settings_compass_init">سه‌ره‌تایکردن\u2026</string>
+  <string name="quick_settings_compass_init">سه‌ره‌تایکردن\u٢٠٢٦</string>
   <string name="quick_settings_heads_up_on">سه‌رکار کارده‌کات</string>
   <string name="quick_settings_heads_up_off">هیچ له‌جێچوونێک نییه‌</string>
   <string name="quick_settings_themes">ڕوکارەکان</string>
@@ -57,8 +57,8 @@
   <string name="quick_settings_expanded_desktop">زیادکراو</string>
   <string name="quick_settings_expanded_desktop_off">ئاسایی</string>
   <plurals name="quick_settings_bluetooth_multi_label">
-    <item quantity="one">%1$d پەیوەستکرا</item>
-    <item quantity="other">%1$d پەیوەستکرا</item>
+    <item quantity="one">%١$d پەیوەستکرا</item>
+    <item quantity="other">%١$d پەیوەستکرا</item>
   </plurals>
   <string name="quick_settings_camera_error_connect">نەتوانرا کامێرا بکرێتەوە</string>
   <string name="navbar_dialog_title">کارێك هەڵبژێرە بۆ ئەنجام دان </string>
@@ -75,7 +75,7 @@
   <string name="advanced_dev_option_uninstall">سڕینەوە</string>
   <string name="accessibility_dock_battery_level">وزەی نیشاندراو <xliff:g id="number">%d</xliff:g> ڕێژەی</string>
   <string name="screenshot_delete_action">سڕینەوە</string>
-  <string name="screenshot_delete_confirmation">وێنەی ڕوونمای گیراو سڕدرایەوە.</string>
+  <string name="screenshot_delete_confirmation">وێنەی ڕونمای گیراو سڕدرایەوە.</string>
   <string name="accessibility_desc_add_quick_settings">زیادکردنی کاری خێرا</string>
   <string name="status_bar_notification_spam_item_title">پشتگوێخستنی نامه‌کان وه‌ک ئه‌مانه‌</string>
   <string name="protected_app_notification_title">ئاگادارکردنەوەی بەرنامە پارێزراوەکان</string>
