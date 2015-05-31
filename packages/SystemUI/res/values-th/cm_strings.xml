@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">เปิดหน้าจอแวดล้อม</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">หน้าจอแวดล้อมปิดอยู่</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">หน้าจอแวดล้อมเปิดอยู่</string>
+  <string name="accessibility_quick_settings_sync_off">ปิดการซิงค์</string>
+  <string name="accessibility_quick_settings_sync_on">เปิดการซิงค์</string>
+  <string name="accessibility_quick_settings_sync_changed_off">การซิงค์ปิดอยู่</string>
+  <string name="accessibility_quick_settings_sync_changed_on">การซิงค์เปิดอยู่</string>
   <string name="accessibility_dpad_left">เคอร์เซอร์ซ้าย</string>
   <string name="accessibility_dpad_right">เคอร์เซอร์ขวา</string>
   <string name="quick_settings_mobile_data_label">ข้อมูลมือถือ</string>
@@ -62,6 +66,7 @@
   <string name="quick_settings_usb_tether_label">ปล่อยสัญญาณผ่าน USB</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_ambient_display_label">หน้าจอแวดล้อม</string>
+  <string name="quick_settings_sync_label">ซิงค์</string>
   <string name="quick_settings_custom_tile_detail_title">ไทต์กำหนดเอง</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">ปัดไปทางขวาเพื่อ%1$s</string>

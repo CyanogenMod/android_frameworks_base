@@ -29,6 +29,18 @@
   <string name="accessibility_quick_settings_location_battery_saving">위치 보고: 배터리 절약 모드.</string>
   <string name="accessibility_quick_settings_location_gps_only">위치 보고: 기기 전용 모드.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">위치 보고: 높은 정확성 모드.</string>
+  <string name="accessibility_quick_settings_heads_up_off">헤드업 알림이 꺼짐.</string>
+  <string name="accessibility_quick_settings_heads_up_on">헤드업 알림이 켜짐.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">헤드업 알림이 꺼졌습니다.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">헤드업 알림이 켜졌습니다.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">절전 모드 자동 해제가 꺼짐.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">절전 모드 자동 해제가 켜짐.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">절전 모드 자동 해제가 꺼졌습니다.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">절전 모드 자동 해제가 켜졌습니다.</string>
+  <string name="accessibility_quick_settings_sync_off">동기화 꺼짐</string>
+  <string name="accessibility_quick_settings_sync_on">동기화 켜짐</string>
+  <string name="accessibility_quick_settings_sync_changed_off">동기화가 해제되었습니다.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">동기화가 설정되었습니다.</string>
   <string name="accessibility_dpad_left">커서 왼쪽</string>
   <string name="accessibility_dpad_right">커서 오른쪽</string>
   <string name="quick_settings_mobile_data_label">데이터 통신</string>
@@ -50,6 +62,11 @@
   <string name="quick_settings_network_adb_label">네트워크 ADB</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">화면 자동 꺼짐</string>
+  <string name="quick_settings_usb_tether_label">USB 테더링</string>
+  <string name="quick_settings_heads_up_label">헤드업 알림</string>
+  <string name="quick_settings_ambient_display_label">절전 모드 자동 해제</string>
+  <string name="quick_settings_sync_label">동기화</string>
+  <string name="quick_settings_custom_tile_detail_title">개인설정 타일</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">오른쪽으로 밀어서 %1$s</string>
   <string name="right_shortcut_hint">왼쪽으로 밀어서 %1$s</string>
@@ -78,4 +95,8 @@
   <string name="navring_choose_action_title">동작 선택</string>
   <string name="select_application">앱 선택</string>
   <string name="lockscreen_target_empty">비어 있음</string>
+  <string name="screen_pinning_description_no_navbar">고정을 해제할 때까지 계속 표시합니다. 뒤로 버튼을 계속 눌러 고정을 해제하세요.</string>
+  <string name="interruption_level_silent">무음</string>
+  <string name="zen_silent_with_warning">알람을 제외한 모듬 알림 차단</string>
+  <string name="quick_settings_remove">타일 제거</string>
 </resources>

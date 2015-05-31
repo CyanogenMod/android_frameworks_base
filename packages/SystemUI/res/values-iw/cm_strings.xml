@@ -29,6 +29,10 @@
   <string name="accessibility_quick_settings_location_battery_saving">דיווח מיקום: מצב חיסכון בסוללה.</string>
   <string name="accessibility_quick_settings_location_gps_only">דיווח מיקום: מצב חיישנים בלבד.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">דיווח מיקום: מצב רמת דיוק גבוהה.</string>
+  <string name="accessibility_quick_settings_sync_off">סנכרון כבוי.</string>
+  <string name="accessibility_quick_settings_sync_on">סנכרון פעיל.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">סנכרון כובה.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">סנכרון הופעל.</string>
   <string name="accessibility_dpad_left">סמן שמאלה</string>
   <string name="accessibility_dpad_right">סמן ימינה</string>
   <string name="quick_settings_mobile_data_label">נתונים ניידים</string>
@@ -52,6 +56,7 @@
   <string name="quick_settings_screen_timeout_detail_title">משך זמן מסך</string>
   <string name="quick_settings_usb_tether_label">קשירת USB</string>
   <string name="quick_settings_heads_up_label">התראות קופצת</string>
+  <string name="quick_settings_sync_label">סנכרון</string>
   <string name="quick_settings_custom_tile_detail_title">אריח מותאם אישית</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">החלק ימינה בשביל %1$s</string>
@@ -82,5 +87,6 @@
   <string name="select_application">בחר יישום</string>
   <string name="lockscreen_target_empty">ריק</string>
   <string name="interruption_level_silent">שקט</string>
+  <string name="zen_silent_with_warning">ללא הפרעות, למעט שעון מעורר.</string>
   <string name="quick_settings_remove">הסר אריח</string>
 </resources>
