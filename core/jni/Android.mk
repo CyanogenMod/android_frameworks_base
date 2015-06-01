@@ -21,6 +21,12 @@ endif
 
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
 
+ifeq ($(call is-vendor-board-platform,QCOM),true)
+	ifneq ($(strip $(AUDIO_FEATURE_ENABLED_INCALL_MUSIC)),false)
+		LOCAL_CFLAGS += -DAUDIO_EXTN_INCALL_MUSIC_ENABLED
+	endif
+endif
+
 LOCAL_SRC_FILES:= \
 	AndroidRuntime.cpp \
 	com_android_internal_content_NativeLibraryHelper.cpp \
