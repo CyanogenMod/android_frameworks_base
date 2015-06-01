@@ -216,6 +216,6 @@
   <string name="live_display_outdoor">Exterior (sol intens)</string>
   <string name="live_display_outdoor_summary">Utilitza només la configuració d\'exterior</string>
   <string name="live_display_hint">LiveDisplay pot ajudar-te a reduir la fatiga ocular i ajudar-te a dormir a la nit. Fes clic aquí per provar-ho!</string>
-  <string name="lock_to_app_toast_no_navbar">Per alliberar aquesta pantalla, toca i aguanta el botó Menú.</string>
-  <string name="lock_to_app_description_no_navbar">La fixació de pantalla bloqueja la pantalla en una única vista.\n\nPer alliberar aquesta pantalla, toca i aguanta el botó de Menú.</string>
+  <string name="lock_to_app_toast_no_navbar">Per desancorar aquesta pantalla, toca i aguanta el botó Menú.</string>
+  <string name="lock_to_app_description_no_navbar">L\'ancorament de la pantalla bloqueja la pantalla en una única vista.\n\nPer desancorar aquesta pantalla, toca i aguanta el botó de Menú.</string>
 </resources>

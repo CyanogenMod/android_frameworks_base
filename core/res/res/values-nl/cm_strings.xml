@@ -214,6 +214,6 @@
   <string name="live_display_outdoor">Buitenshuis (heldere zon)</string>
   <string name="live_display_outdoor_summary">Alleen instellingen voor buitenshuis gebruiken</string>
   <string name="live_display_hint">LiveDisplay kan oogvermoeidheid verminderen en helpt u om \'s nachts te slapen. Tik hier om het uit te proberen</string>
-  <string name="lock_to_app_toast_no_navbar">Blijf \'Terug\' en \'Overzicht\' tegelijk aanraken om dit scherm los te maken.</string>
-  <string name="lock_to_app_description_no_navbar">Met scherm vastzetten wordt het beeldscherm vergrendeld op één weergave.\n\nBlijf \'Terug\' en \'Overzicht\' tegelijk aanraken om het scherm los te maken.</string>
+  <string name="lock_to_app_toast_no_navbar">Blijf de Menu-knop aanraken om dit scherm los te maken.</string>
+  <string name="lock_to_app_description_no_navbar">Met scherm vastzetten wordt het beeldscherm vergrendeld op één weergave.\n\nBlijf de Menu-knop aanraken om het scherm los te maken.</string>
 </resources>

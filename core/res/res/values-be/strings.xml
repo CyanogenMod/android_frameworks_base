@@ -48,6 +48,27 @@
   <string name="permlab_transmitIr">выкарыстанне інфрачырвонай перадачы</string>
   <string name="permdesc_transmitIr" product="tablet">Дазваляе праграме выкарыстоўваць інфрачырвоны перадатчык планшэту.</string>
   <string name="permdesc_transmitIr" product="default">Дазваляе праграме выкарыстоўваць інфрачырвоны перадатчык тэлефону.</string>
+  <string name="permdesc_accessDrmCertificates">Дазваляе праграме сінхранізаваць і выкарыстоўваць сертыфікаты DRM. Гэты дазвол не патрэбны звычайным праграмам.</string>
+  <plurals name="num_seconds_ago">
+    <item quantity="one">1 секунду таму</item>
+    <item quantity="few"><xliff:g id="COUNT">%d</xliff:g> секунды таму</item>
+    <item quantity="other"><xliff:g id="COUNT">%d</xliff:g> секунд таму</item>
+  </plurals>
+  <plurals name="num_minutes_ago">
+    <item quantity="one">1 хвіліну таму</item>
+    <item quantity="few"><xliff:g id="COUNT">%d</xliff:g> хвіліны таму</item>
+    <item quantity="other"><xliff:g id="COUNT">%d</xliff:g> хвілін таму</item>
+  </plurals>
+  <plurals name="num_hours_ago">
+    <item quantity="one">1 гадзіну таму</item>
+    <item quantity="few"><xliff:g id="COUNT">%d</xliff:g> гадзіны таму</item>
+    <item quantity="other"><xliff:g id="COUNT">%d</xliff:g> гадзін таму</item>
+  </plurals>
+  <plurals name="num_days_ago">
+    <item quantity="one">учора</item>
+    <item quantity="few"><xliff:g id="COUNT">%d</xliff:g> дні таму</item>
+    <item quantity="other"><xliff:g id="COUNT">%d</xliff:g> дзён таму</item>
+  </plurals>
   <string name="cancel">Скасаваць</string>
   <string name="no">Скасаваць</string>
   <string name="capital_on">УКЛ</string>
