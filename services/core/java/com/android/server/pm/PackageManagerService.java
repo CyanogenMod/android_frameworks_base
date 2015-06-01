@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2006 The Android Open Source Project
@@ -1459,9 +1459,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         mAvailableFeatures = systemConfig.getAvailableFeatures();
         mSignatureAllowances = systemConfig.getSignatureAllowances();
 
-        synchronized (mInstallLock) {
+
         // writer
-        synchronized (mPackages) {
             mHandlerThread = new ServiceThread(TAG,
                     Process.THREAD_PRIORITY_BACKGROUND, true /*allowIo*/);
             mHandlerThread.start();
@@ -1954,8 +1953,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
 
             mRequiredVerifierPackage = getRequiredVerifierLPr();
-        } // synchronized (mPackages)
-        } // synchronized (mInstallLock)
+        // end writer
 
         mInstallerService = new PackageInstallerService(context, this, mAppInstallDir);
 
@@ -4357,7 +4355,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         return true;
     }
 
-    private void scanDirLI(File dir, int parseFlags, int scanFlags, long currentTime) {
+    private void scanDirLI(File dir, final int parseFlags, final int scanFlags,
+            final long currentTime) {
         final File[] files = dir.listFiles();
         if (ArrayUtils.isEmpty(files)) {
             Log.d(TAG, "No files in app dir " + dir);
@@ -4369,52 +4368,87 @@ public class PackageManagerService extends IPackageManager.Stub {
                     + " flags=0x" + Integer.toHexString(parseFlags));
         }
 
-        boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
+        final boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
         if (isPrebundled) {
             synchronized (mPackages) {
                 mSettings.readPrebundledPackagesLPr();
             }
         }
 
-        for (File file : files) {
+        final int workers = SystemProperties.getInt("persist.pm.multitask", 0);
+        boolean multitask = workers > 1;
+        final MultiTaskDealer dealer = workers > 1
+                ? MultiTaskDealer.startDealer("packagescan", workers)
+                : null;
+        if (DEBUG_PACKAGE_SCANNING) {
+            Log.d(TAG, "scan: multitask:" + multitask + " workers:" + workers);
+        }
+
+        for (final File file : files) {
             final boolean isPackage = (isApkFile(file) || file.isDirectory())
                     && !PackageInstallerService.isStageName(file.getName());
             if (!isPackage) {
                 // Ignore entries which are not packages
                 continue;
             }
-            try {
-                scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
-                        scanFlags, currentTime, null);
-                if (isPrebundled) {
-                    final PackageParser.Package pkg;
-                    try {
-                        pkg = new PackageParser().parsePackage(file, parseFlags);
-                    } catch (PackageParserException e) {
-                        throw PackageManagerException.from(e);
-                    }
-                    synchronized (mPackages) {
-                        mSettings.markPrebundledPackageInstalledLPr(pkg.packageName);
-                    }
-                }
-            } catch (PackageManagerException e) {
-                Slog.w(TAG, "Failed to parse " + file + ": " + e.getMessage());
 
-                // Delete invalid userdata apps
-                if ((parseFlags & PackageParser.PARSE_IS_SYSTEM) == 0 &&
-                        e.error == PackageManager.INSTALL_FAILED_INVALID_APK) {
-                    logCriticalInfo(Log.WARN, "Deleting invalid package at " + file);
-                    if (file.isDirectory()) {
-                        FileUtils.deleteContents(file);
+            // Process the file (use multitask if supported)
+            if(dealer != null) {
+                dealer.addTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        scanFileLi(file, parseFlags, scanFlags, currentTime, isPrebundled);
                     }
-                    file.delete();
-                }
+                });
+            } else {
+                scanFileLi(file, parseFlags, scanFlags, currentTime, isPrebundled);
             }
+        }
+
+        if(multitask) {
+            dealer.waitAll();
+        }
+
+        if (DEBUG_PACKAGE_SCANNING) {
+            Log.d(TAG, "Scanning of app dir ended: " + dir);
         }
 
         if (isPrebundled) {
             synchronized (mPackages) {
                 mSettings.writePrebundledPackagesLPr();
+            }
+        }
+    }
+
+    private void scanFileLi(File file, int parseFlags, int scanFlags, long currentTime,
+            boolean prebundled) {
+        try {
+            scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
+                scanFlags, currentTime, null);
+            if (prebundled) {
+                final PackageParser.Package pkg;
+                try {
+                    pkg = new PackageParser().parsePackage(file, parseFlags);
+                } catch (PackageParserException e) {
+                    throw PackageManagerException.from(e);
+                }
+                synchronized (mPackages) {
+                    mSettings.markPrebundledPackageInstalledLPr(pkg.packageName);
+                }
+            }
+        } catch (PackageManagerException e) {
+            Slog.w(TAG, "Failed to parse " + file + ": " + e.getMessage());
+
+             // Delete invalid userdata apps
+            if ((parseFlags & PackageParser.PARSE_IS_SYSTEM) == 0 &&
+                e.error == PackageManager.INSTALL_FAILED_INVALID_APK) {
+
+                logCriticalInfo(Log.WARN, "Deleting invalid package at " + file);
+
+                if (file.isDirectory()) {
+                    FileUtils.deleteContents(file);
+                }
+                file.delete();
             }
         }
     }
@@ -4430,7 +4464,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         logCriticalInfo(priority, msg);
     }
 
-    static void logCriticalInfo(int priority, String msg) {
+    static synchronized void logCriticalInfo(int priority, String msg) {
         Slog.println(priority, TAG, msg);
         EventLogTags.writePmCriticalInfo(msg);
         try {
