@@ -19,6 +19,12 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_CFLAGS += -DUSE_OPENGL_RENDERER
 endif
 
+ifeq ($(call is-vendor-board-platform,QCOM),true)
+ifneq ($(strip $(AUDIO_FEATURE_ENABLED_INCALL_MUSIC)),false)
+common_cflags += -DAUDIO_EXTN_INCALL_MUSIC_ENABLED
+endif
+endif
+
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
 
 LOCAL_SRC_FILES:= \
