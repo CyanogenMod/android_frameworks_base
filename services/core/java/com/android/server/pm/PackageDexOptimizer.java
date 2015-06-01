@@ -57,6 +57,8 @@ final class PackageDexOptimizer {
     private final PowerManager.WakeLock mDexoptWakeLock;
     private volatile boolean mSystemReady;
 
+    private Object mDeferredDexOptSync = new Object();
+
     PackageDexOptimizer(PackageManagerService packageManagerService) {
         this.mPackageManagerService = packageManagerService;
         PowerManager powerManager = (PowerManager)packageManagerService.mContext.getSystemService(
@@ -150,7 +152,9 @@ final class PackageDexOptimizer {
                     // We're deciding to defer a needed dexopt. Don't bother dexopting for other
                     // paths and instruction sets. We'll deal with them all together when we process
                     // our list of deferred dexopts.
-                    addPackageForDeferredDexopt(pkg);
+                    synchronized (mDeferredDexOptSync) {
+                        addPackageForDeferredDexopt(pkg);
+                    }
                     return DEX_OPT_DEFERRED;
                 }
 
