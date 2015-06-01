@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2016, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2006 The Android Open Source Project
  * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
@@ -1974,9 +1977,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         mAvailableFeatures = systemConfig.getAvailableFeatures();
         mSignatureAllowances = systemConfig.getSignatureAllowances();
 
-        synchronized (mInstallLock) {
+//        synchronized (mInstallLock) {
         // writer
-        synchronized (mPackages) {
+//        synchronized (mPackages) {
             mHandlerThread = new ServiceThread(TAG,
                     Process.THREAD_PRIORITY_BACKGROUND, true /*allowIo*/);
             mHandlerThread.start();
@@ -2500,8 +2503,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             mIntentFilterVerifier = new IntentVerifierProxy(mContext,
                     mIntentFilterVerifierComponent);
 
-        } // synchronized (mPackages)
-        } // synchronized (mInstallLock)
+        //} // synchronized (mPackages)
+        //} // synchronized (mInstallLock)
 
         // Now after opening every single application zip, make sure they
         // are all flushed.  Not really needed, but keeps things nice and
@@ -5827,7 +5830,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     private void scanDirLI(File dir, int parseFlags, int scanFlags, long currentTime,
-            UserHandle user) {
+            final UserHandle user) {
         final File[] files = dir.listFiles();
         if (ArrayUtils.isEmpty(files)) {
             Log.d(TAG, "No files in app dir " + dir);
@@ -5839,8 +5842,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                     + " flags=0x" + Integer.toHexString(parseFlags));
         }
 
-        int prebundledUserId = user == null ? UserHandle.USER_OWNER : user.getIdentifier();
-        boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
+        final int prebundledUserId = user == null ? UserHandle.USER_OWNER : user.getIdentifier();
+        final boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
         if (isPrebundled) {
             synchronized (mPackages) {
                 if (DEBUG_PREBUNDLED_SCAN) Log.d(TAG, "Reading prebundled packages for user "
@@ -5849,6 +5852,13 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
         }
 
+        Log.d(TAG, "start scanDirLI:"+dir);
+        // use multi thread to speed up scanning
+        int iMultitaskNum = SystemProperties.getInt("persist.pm.multitask", 6);
+        Log.d(TAG, "max thread:" + iMultitaskNum);
+        final MultiTaskDealer dealer = (iMultitaskNum > 1) ? MultiTaskDealer.startDealer(
+                MultiTaskDealer.PACKAGEMANAGER_SCANER, iMultitaskNum) : null;
+
         for (File file : files) {
             final boolean isPackage = (isApkFile(file) || file.isDirectory())
                     && !PackageInstallerService.isStageName(file.getName());
@@ -5856,46 +5866,64 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // Ignore entries which are not packages
                 continue;
             }
-            try {
-                scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
-                        scanFlags, currentTime, user);
-                if (isPrebundled) {
-                    final PackageParser.Package pkg;
+
+            final File ref_file = file;
+            final int ref_parseFlags = parseFlags;
+            final int ref_scanFlags = scanFlags;
+            final long ref_currentTime = currentTime;
+
+            Runnable scanTask = new Runnable() {
+                public void run() {
+
                     try {
-                        pkg = new PackageParser().parsePackage(file, parseFlags);
-                    } catch (PackageParserException e) {
-                        throw PackageManagerException.from(e);
-                    }
-                    synchronized (mPackages) {
-                        if (DEBUG_PREBUNDLED_SCAN) Log.d(TAG,
-                                "Marking prebundled package " + pkg.packageName +
-                                        " for user " + prebundledUserId);
-                        mSettings.markPrebundledPackageInstalledLPr(prebundledUserId,
-                                pkg.packageName);
-                        // do this for every other user
-                        for (UserInfo userInfo : sUserManager.getUsers(true)) {
-                            if (userInfo.id == prebundledUserId) continue;
+                        scanPackageLI(ref_file, ref_parseFlags | PackageParser.PARSE_MUST_BE_APK,
+                                ref_scanFlags, ref_currentTime, user);
+                        if (isPrebundled) {
+                            final PackageParser.Package pkg;
+                            try {
+                                pkg = new PackageParser().parsePackage(ref_file, ref_parseFlags);
+                            } catch (PackageParserException e) {
+                                throw PackageManagerException.from(e);
+                            }
                             if (DEBUG_PREBUNDLED_SCAN) Log.d(TAG,
-                                    "Marking for secondary user " + userInfo.id);
-                            mSettings.markPrebundledPackageInstalledLPr(userInfo.id,
+                                    "Marking prebundled package " + pkg.packageName +
+                                            " for user " + prebundledUserId);
+                            mSettings.markPrebundledPackageInstalledLPr(prebundledUserId,
                                     pkg.packageName);
+                            // do this for every other user
+                            for (UserInfo userInfo : sUserManager.getUsers(true)) {
+                                if (userInfo.id == prebundledUserId) continue;
+                                if (DEBUG_PREBUNDLED_SCAN) Log.d(TAG,
+                                        "Marking for secondary user " + userInfo.id);
+                                mSettings.markPrebundledPackageInstalledLPr(userInfo.id,
+                                        pkg.packageName);
+                            }
+                        }
+                    } catch (PackageManagerException e) {
+                        Slog.w(TAG, "Failed to parse " + ref_file + ": " + e.getMessage());
+
+                        // Delete invalid userdata apps
+                        if ((ref_parseFlags & PackageParser.PARSE_IS_SYSTEM) == 0 &&
+                                e.error == PackageManager.INSTALL_FAILED_INVALID_APK) {
+                            logCriticalInfo(Log.WARN, "Deleting invalid package at " + ref_file);
+                            if (ref_file.isDirectory()) {
+                                mInstaller.rmPackageDir(ref_file.getAbsolutePath());
+                            } else {
+                                ref_file.delete();
+                            }
                         }
                     }
                 }
-            } catch (PackageManagerException e) {
-                Slog.w(TAG, "Failed to parse " + file + ": " + e.getMessage());
+            };
 
-                // Delete invalid userdata apps
-                if ((parseFlags & PackageParser.PARSE_IS_SYSTEM) == 0 &&
-                        e.error == PackageManager.INSTALL_FAILED_INVALID_APK) {
-                    logCriticalInfo(Log.WARN, "Deleting invalid package at " + file);
-                    if (file.isDirectory()) {
-                        mInstaller.rmPackageDir(file.getAbsolutePath());
-                    } else {
-                        file.delete();
-                    }
-                }
-            }
+            if (dealer != null)
+                dealer.addTask(scanTask);
+            else
+                scanTask.run();
+        }
+
+        if (dealer != null) {
+            dealer.waitAll();
         }
 
         if (isPrebundled) {
@@ -5905,6 +5933,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 mSettings.writePrebundledPackagesLPr(prebundledUserId);
             }
         }
+
+        Log.d(TAG, "end scanDirLI:"+dir);
     }
 
     private static File getSettingsProblemFile() {
@@ -5918,7 +5948,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         logCriticalInfo(priority, msg);
     }
 
-    static void logCriticalInfo(int priority, String msg) {
+    static synchronized void logCriticalInfo(int priority, String msg) {
         Slog.println(priority, TAG, msg);
         EventLogTags.writePmCriticalInfo(msg);
         try {
