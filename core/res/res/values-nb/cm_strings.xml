@@ -181,6 +181,30 @@
   <string name="usb_media_checking">USB lagring blir sjekket for feil.</string>
   <string name="usb_media_removed">USB lagring er fjernet.</string>
   <string name="usb_media_shared">USB lagring er i bruk av en datamaskin.</string>
+  <string name="sd_ext_media_checking_notification_title">Forbereder SDkort</string>
+  <string name="sd_ext_media_checking_notification_message">Sjekker SD-kort for feil.</string>
+  <string name="sd_ext_media_nofs_notification_title">Tomt SD-kort</string>
+  <string name="sd_ext_media_nofs_notification_message">SD-kortet er tomt eller har ikke filsystem.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Skadet SD-kort</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD-kortet er skadet. Prøv omformatering på det.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD-kortet uventet fjernet</string>
+  <string name="sd_ext_media_badremoval_notification_message">Demonter SD-kortet før fjerning for å unngå tap av data.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD-kortet er trygt å fjerne</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Du kan trygt fjerne SD-kort.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Fjernet SD-kort</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD-kortet er fjernet. Sett inn ett nytt.</string>
+  <string name="usb_ext_media_checking_notification_title">Klargjør USB-lagring</string>
+  <string name="usb_ext_media_checking_notification_message">Kontrollerer USB-lagring for feil.</string>
+  <string name="usb_ext_media_nofs_notification_title">Tom USB-lagring</string>
+  <string name="usb_ext_media_nofs_notification_message">USB-lagring er tomt eller har ikke filsystem.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Skadet USB-lagring</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB-lagring er skadet. Prøv omformatering på det.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB-lagring uventet fjernet</string>
+  <string name="usb_ext_media_badremoval_notification_message">Demontere USB lagringen før du fjerner for å unngå tap av data.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">Trygt å fjerne USB-lagring</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">Du kan trygt fjerne USB lagring.</string>
+  <string name="usb_ext_media_nomedia_notification_title">Fjernet USB-lagring</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB lagring fjernet. Sett inn nye medier.</string>
   <string name="live_display_auto">Automatisk</string>
   <string name="live_display_auto_summary">Juster fargetemperatur på skjermen etter solnedgang og soloppgang</string>
   <string name="live_display_off">Av</string>
@@ -192,4 +216,6 @@
   <string name="live_display_outdoor">Utendørs (sterkt sollys)</string>
   <string name="live_display_outdoor_summary">Bruk kun utendørs innstillinger</string>
   <string name="live_display_hint">LiveDisplay kan hjelpe deg med å redusere belastningen på øynene og hjelpe deg med å sove om natten. Trykk her for å prøve det ut!</string>
+  <string name="lock_to_app_toast_no_navbar">For å låse opp denne skjermen, trykk og hold på meny knappen.</string>
+  <string name="lock_to_app_description_no_navbar">Skjermfeste låser displayet til en visning.\n\nFor å fjerne dette, tryk og hold på meny knappen.</string>
 </resources>

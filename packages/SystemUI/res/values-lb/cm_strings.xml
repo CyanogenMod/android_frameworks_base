@@ -54,7 +54,7 @@
   <string name="left_shortcut_hint">No riets wësche fir %1$s</string>
   <string name="right_shortcut_hint">No lénks wësche fir %1$s</string>
   <string name="navbar_dialog_title">Funktioun zouweisen</string>
-  <string name="navbar_home_button">Heemknäppchen</string>
+  <string name="navbar_home_button">Startsäit-Knäppchen</string>
   <string name="navbar_recent_button">Verlafknäppchen</string>
   <string name="navbar_search_button">Sichknäppchen</string>
   <string name="navbar_back_button">Zréckknäppchen</string>

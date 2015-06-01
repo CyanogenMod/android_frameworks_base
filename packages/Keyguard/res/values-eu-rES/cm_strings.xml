@@ -17,6 +17,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">SIM/RUIM txartelak blokeo pertsonala  du</string>
   <string name="keyguard_accessibility_status">"Egoera"</string>
+  <string name="kg_dismiss">Baztertu</string>
+  <string name="kg_slot_name"><xliff:g id="number">%d</xliff:g> erretena: SIM txartel berria\u0020</string>
   <string name="lockscreen_sim_error_message_short">Txartela baliogabea.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Sartu SIM txartelaren PIN kodea, saiakera  <xliff:g id="number">%d</xliff:g> geratzen zaizu gailua desblokeatzeko zure operadorearekin kontaktuan jarri behar aurretik.</item>
+    <item quantity="other">Sartu SIM txartelaren PIN kodea, <xliff:g id="number">%d</xliff:g> saiakera geratzen zaizkizu.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">SIM txartela ezgaituta dago. Sartu PUK kodea jarraitzeko. Saiakera <xliff:g id="number">%d</xliff:g> geratzen zaizu SIM txartela behin betiko erabilgarri izateari uzteko. Jarri zure operadorearekin kontaktuan xehetasun gehiagorako.</item>
+    <item quantity="other">SIM txartela ezgaituta dago. Sartu PUK kodea jarraitzeko. <xliff:g id="number">%d</xliff:g> saiakera geratzen zaizkizu SIM txartela behin betiko erabilgarri izateari uzteko. Jarri zure operadorearekin kontaktuan xehetasun gehiagorako.</item>
+  </plurals>
 </resources>
