@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
  * Copyright (C) 2006 The Android Open Source Project
@@ -1459,9 +1459,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         mAvailableFeatures = systemConfig.getAvailableFeatures();
         mSignatureAllowances = systemConfig.getSignatureAllowances();
 
-        synchronized (mInstallLock) {
+//        synchronized (mInstallLock) {
         // writer
-        synchronized (mPackages) {
+//        synchronized (mPackages) {
             mHandlerThread = new ServiceThread(TAG,
                     Process.THREAD_PRIORITY_BACKGROUND, true /*allowIo*/);
             mHandlerThread.start();
@@ -1954,8 +1954,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
 
             mRequiredVerifierPackage = getRequiredVerifierLPr();
-        } // synchronized (mPackages)
-        } // synchronized (mInstallLock)
+//        } // synchronized (mPackages)
+//        } // synchronized (mInstallLock)
 
         mInstallerService = new PackageInstallerService(context, this, mAppInstallDir);
 
@@ -4369,12 +4369,18 @@ public class PackageManagerService extends IPackageManager.Stub {
                     + " flags=0x" + Integer.toHexString(parseFlags));
         }
 
-        boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
+        final boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
         if (isPrebundled) {
             synchronized (mPackages) {
                 mSettings.readPrebundledPackagesLPr();
             }
         }
+
+        Log.d(TAG, "start scanDirLI:"+dir);
+        int iMultitaskNum = Runtime.getRuntime().availableProcessors();
+        boolean bMultitask = (iMultitaskNum > 1);
+        Log.d(TAG, "bMultitask:" + bMultitask + " max thread:" + iMultitaskNum);
+        final MultiTaskDealer dealer = bMultitask ? MultiTaskDealer.startDealer(MultiTaskDealer.PACKAGEMANAGER_SCANER, iMultitaskNum) : null;
 
         for (File file : files) {
             final boolean isPackage = (isApkFile(file) || file.isDirectory())
@@ -4383,34 +4389,53 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // Ignore entries which are not packages
                 continue;
             }
-            try {
-                scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
-                        scanFlags, currentTime, null);
-                if (isPrebundled) {
-                    final PackageParser.Package pkg;
-                    try {
-                        pkg = new PackageParser().parsePackage(file, parseFlags);
-                    } catch (PackageParserException e) {
-                        throw PackageManagerException.from(e);
-                    }
-                    synchronized (mPackages) {
-                        mSettings.markPrebundledPackageInstalledLPr(pkg.packageName);
-                    }
-                }
-            } catch (PackageManagerException e) {
-                Slog.w(TAG, "Failed to parse " + file + ": " + e.getMessage());
 
-                // Delete invalid userdata apps
-                if ((parseFlags & PackageParser.PARSE_IS_SYSTEM) == 0 &&
-                        e.error == PackageManager.INSTALL_FAILED_INVALID_APK) {
-                    logCriticalInfo(Log.WARN, "Deleting invalid package at " + file);
-                    if (file.isDirectory()) {
-                        FileUtils.deleteContents(file);
+            final File ref_file = file;
+            final int ref_parseFlags = parseFlags;
+            final int ref_scanFlags = scanFlags;
+            final long ref_currentTime = currentTime;
+            Runnable scanTask = new Runnable() {
+            public void run() {
+                try {
+                    scanPackageLI(ref_file, ref_parseFlags | PackageParser.PARSE_MUST_BE_APK,
+                        ref_scanFlags, ref_currentTime, null);
+                    if (isPrebundled) {
+                        final PackageParser.Package pkg;
+                        try {
+                            pkg = new PackageParser().parsePackage(ref_file, ref_parseFlags);
+                        } catch (PackageParserException e) {
+                            throw PackageManagerException.from(e);
+                        }
+                        synchronized (mPackages) {
+                            mSettings.markPrebundledPackageInstalledLPr(pkg.packageName);
+                        }
                     }
-                    file.delete();
+                } catch (PackageManagerException e) {
+                    Slog.w(TAG, "Failed to parse " + ref_file + ": " + e.getMessage());
+
+                     // Delete invalid userdata apps
+                    if ((ref_parseFlags & PackageParser.PARSE_IS_SYSTEM) == 0 &&
+                        e.error == PackageManager.INSTALL_FAILED_INVALID_APK) {
+
+                        logCriticalInfo(Log.WARN, "Deleting invalid package at " + ref_file);
+
+                        if (ref_file.isDirectory()) {
+                            FileUtils.deleteContents(ref_file);
+                        }
+                        ref_file.delete();
+                    }
                 }
-            }
+            }};
+
+            if(dealer!=null)
+                dealer.addTask(scanTask);
+            else
+                scanTask.run();
         }
+
+        if(dealer!=null)
+            dealer.waitAll();
+        Log.d(TAG, "end scanDirLI:"+dir);
 
         if (isPrebundled) {
             synchronized (mPackages) {
@@ -4430,7 +4455,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         logCriticalInfo(priority, msg);
     }
 
-    static void logCriticalInfo(int priority, String msg) {
+    static synchronized void logCriticalInfo(int priority, String msg) {
         Slog.println(priority, TAG, msg);
         EventLogTags.writePmCriticalInfo(msg);
         try {
