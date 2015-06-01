@@ -912,7 +912,7 @@ static jint android_media_AudioTrack_get_output_sample_rate(JNIEnv *env,  jobjec
     case AUDIO_STREAM_NOTIFICATION:
     case AUDIO_STREAM_BLUETOOTH_SCO:
     case AUDIO_STREAM_DTMF:
-#ifdef QCOM_HARDWARE
+#if defined(QCOM_HARDWARE) && !defined(QCOM_DIRECTTRACK)
     case AUDIO_STREAM_INCALL_MUSIC:
 #endif
         nativeStreamType = (audio_stream_type_t) javaStreamType;
