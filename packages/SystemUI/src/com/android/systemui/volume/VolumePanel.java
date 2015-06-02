@@ -1716,6 +1716,13 @@ public class VolumePanel extends Handler implements DemoMode {
             final Object tag = seekBar.getTag();
             if (fromUser && tag instanceof StreamControl) {
                 StreamControl sc = (StreamControl) tag;
+                if (sc.streamType == AudioManager.STREAM_BLUETOOTH_SCO
+                        || sc.streamType == AudioManager.STREAM_VOICE_CALL) {
+                    progress--;
+                }
+                if(progress < 0) {
+                    progress = 0;
+                }
                 setStreamVolume(sc, progress,
                         AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
             }
