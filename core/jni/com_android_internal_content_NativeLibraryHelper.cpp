@@ -36,7 +36,7 @@
 #include <inttypes.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
+#include <dlfcn.h>
 
 #define APK_LIB "lib/"
 #define APK_LIB_LEN (sizeof(APK_LIB) - 1)
@@ -54,6 +54,56 @@
 
 #define TMP_FILE_PATTERN "/tmp.XXXXXX"
 #define TMP_FILE_PATTERN_LEN (sizeof(TMP_FILE_PATTERN) - 1)
+
+typedef void* PFilterObject;
+
+typedef PFilterObject (*PRegistFilterObject)(int fd);
+
+typedef void (*PUnRegistFilterObject)(int fd);
+
+typedef PFilterObject (*PGetFilterObject)(int fd);
+
+typedef int (*PNameFilter)(char* name, int length, void* param);
+
+typedef int (*PFilterLibrary)(PFilterObject obj, PNameFilter filter, void* param);
+
+typedef int (*PHasRenderScript)(PFilterObject obj);
+
+#define LIB_UNINIT             0
+#define LIB_INITED_AND_FAIL    -1
+#define LIB_INITED_AND_SUCCESS 1
+static int g_libInit = LIB_UNINIT;
+
+static PRegistFilterObject RegistFilterObjectFunc = NULL;
+static PUnRegistFilterObject UnRegistFilterObjectFunc = NULL;
+static PGetFilterObject GetFilterObjectFunc = NULL;
+static PFilterLibrary FilterLibraryFunc = NULL;
+static PHasRenderScript HasRenderScriptFunc = NULL;
+
+static int initApkScanLib() {
+    if (g_libInit!=LIB_UNINIT)
+        return g_libInit;
+    void* handle = dlopen("libapkscanner.so", RTLD_NOW);
+    if (handle != NULL) {
+        RegistFilterObjectFunc = (PRegistFilterObject)dlsym(handle, "RegistFilterObject");
+        UnRegistFilterObjectFunc = (PUnRegistFilterObject)dlsym(handle, "UnRegistFilterObject");
+        GetFilterObjectFunc = (PGetFilterObject)dlsym(handle, "GetFilterObject");
+        FilterLibraryFunc = (PFilterLibrary)dlsym(handle, "FilterLibrary");
+        HasRenderScriptFunc = (PHasRenderScript)dlsym(handle, "HasRenderScript");
+        if (NULL != RegistFilterObjectFunc &&
+            NULL != UnRegistFilterObjectFunc &&
+            NULL != GetFilterObjectFunc &&
+            NULL != FilterLibraryFunc &&
+            NULL != HasRenderScriptFunc) {
+            g_libInit = LIB_INITED_AND_SUCCESS;
+        } else {
+            g_libInit = LIB_INITED_AND_FAIL;
+        }
+    } else {
+        g_libInit = LIB_INITED_AND_FAIL;
+    }
+    return g_libInit;
+}
 
 namespace android {
 
@@ -390,6 +440,77 @@ private:
     const char* mLastSlash;
 };
 
+typedef struct _LibFileDealer
+{
+    ZipFileRO* zipFile;
+    iterFunc callFunc;
+    JNIEnv *env;
+    void* callArg;
+    const ScopedUtfChars* cpuAbi;
+    install_status_t ret;
+} LibFileDealer, *PLibFileDealer;
+
+typedef struct _LibFileAbiDealer
+{
+    int status;
+    int numAbis;
+    Vector<ScopedUtfChars*>* supportedAbis;
+} LibFileAbiDealer, *PLibFileAbiDealer;
+
+static int dealLibFile(char* fileName, int fileNameLen, void* param)
+{
+    PLibFileDealer dealer = (PLibFileDealer)param;
+    char temp = fileName[fileNameLen];
+    fileName[fileNameLen] = '\0';
+    // Check to make sure the CPU ABI of this file is one we support.
+    const char* lastSlash = strrchr(fileName, '/');
+    const char* cpuAbiOffset = fileName + APK_LIB_LEN;
+    const size_t cpuAbiRegionSize = lastSlash - cpuAbiOffset;
+    int ret = 0;
+    if (dealer->cpuAbi->size() == cpuAbiRegionSize
+            && !strncmp(cpuAbiOffset, dealer->cpuAbi->c_str(), cpuAbiRegionSize)) {
+        ZipEntryRO entry = dealer->zipFile->findEntryByName(fileName);
+        dealer->ret = dealer->callFunc(dealer->env, dealer->callArg,
+                dealer->zipFile, entry, lastSlash + 1);
+        if (dealer->ret != INSTALL_SUCCEEDED) {
+            ALOGV("Failure for entry %s", lastSlash + 1);
+            ret = 1;
+        }
+    }
+    fileName[fileNameLen] = temp;
+    return ret;
+}
+
+static int dealLibAbiFile(char* fileName, int fileNameLen, void* param)
+{
+    PLibFileAbiDealer dealer = (PLibFileAbiDealer)param;
+    char temp = fileName[fileNameLen];
+    fileName[fileNameLen] = '\0';
+    int status = dealer->status;
+    if (status == NO_NATIVE_LIBRARIES) {
+        status = dealer->status = INSTALL_FAILED_NO_MATCHING_ABIS;
+    }
+    const char* abiOffset = fileName + APK_LIB_LEN;
+    const char* lastSlash = strrchr(fileName, '/');
+    const size_t abiSize = lastSlash - abiOffset;
+    int ret = 0;
+    for (int i = 0; i < dealer->numAbis; i++) {
+        const ScopedUtfChars* abi = (*(dealer->supportedAbis))[i];
+        if (abi != NULL && abi->size() == abiSize && !strncmp(abiOffset, abi->c_str(), abiSize)) {
+            // The entry that comes in first (i.e. with a lower index) has the higher priority.
+            if (((i < status) && (status >= 0)) || (status < 0) ) {
+                status = dealer->status = i;
+                if (0 == status) {
+                    ret = 1;
+                    break;
+                }
+            }
+        }
+    }
+    fileName[fileNameLen] = temp;
+    return ret;
+}
+
 static install_status_t
 iterateOverNativeFiles(JNIEnv *env, jlong apkHandle, jstring javaCpuAbi,
                        iterFunc callFunc, void* callArg) {
@@ -397,7 +518,27 @@ iterateOverNativeFiles(JNIEnv *env, jlong apkHandle, jstring javaCpuAbi,
     if (zipFile == NULL) {
         return INSTALL_FAILED_INVALID_APK;
     }
-
+    if (initApkScanLib() == LIB_INITED_AND_SUCCESS) {
+        PFilterObject filter = GetFilterObjectFunc(zipFile->getFileDescriptor());
+        if (filter != NULL) {
+            const ScopedUtfChars cpuAbi(env, javaCpuAbi);
+            if (cpuAbi.c_str() == NULL) {
+                // This would've thrown, so this return code isn't observable by
+                // Java.
+                return INSTALL_FAILED_INVALID_APK;
+            }
+            LibFileDealer param;
+            param.zipFile = zipFile;
+            param.callFunc = callFunc;
+            param.env = env;
+            param.callArg = callArg;
+            param.cpuAbi = &cpuAbi;
+            param.ret = INSTALL_SUCCEEDED;
+            if (0 == FilterLibraryFunc(filter, dealLibFile, &param)) {
+                return param.ret;
+            }
+        }
+    }
     UniquePtr<NativeLibrariesIterator> it(NativeLibrariesIterator::create(zipFile));
     if (it.get() == NULL) {
         return INSTALL_FAILED_INVALID_APK;
@@ -445,6 +586,24 @@ static int findSupportedAbi(JNIEnv *env, jlong apkHandle, jobjectArray supported
     if (zipFile == NULL) {
         return INSTALL_FAILED_INVALID_APK;
     }
+    int status = NO_NATIVE_LIBRARIES;
+    if (initApkScanLib() == LIB_INITED_AND_SUCCESS) {
+        PFilterObject filter = GetFilterObjectFunc(zipFile->getFileDescriptor());
+        if (filter != NULL) {
+            LibFileAbiDealer param;
+            param.status = status;
+            param.numAbis = numAbis;
+            param.supportedAbis = &supportedAbis;
+            int ret = FilterLibraryFunc(filter, dealLibAbiFile, &param);
+            if ((0 == ret) || (1 == ret)) {
+                status = param.status;
+                for (int i = 0; i < numAbis; ++i) {
+                    delete supportedAbis[i];
+                }
+                return status;
+            }
+        }
+    }
 
     UniquePtr<NativeLibrariesIterator> it(NativeLibrariesIterator::create(zipFile));
     if (it.get() == NULL) {
@@ -452,7 +611,7 @@ static int findSupportedAbi(JNIEnv *env, jlong apkHandle, jobjectArray supported
     }
 
     ZipEntryRO entry = NULL;
-    int status = NO_NATIVE_LIBRARIES;
+
     while ((entry = it->next()) != NULL) {
         // We're currently in the lib/ directory of the APK, so it does have some native
         // code. We should return INSTALL_FAILED_NO_MATCHING_ABIS if none of the
@@ -523,6 +682,16 @@ static jint
 com_android_internal_content_NativeLibraryHelper_hasRenderscriptBitcode(JNIEnv *env, jclass clazz,
         jlong apkHandle) {
     ZipFileRO* zipFile = reinterpret_cast<ZipFileRO*>(apkHandle);
+    if (initApkScanLib() == LIB_INITED_AND_SUCCESS) {
+        PFilterObject filter = GetFilterObjectFunc(zipFile->getFileDescriptor());
+        if (filter != NULL) {
+            int ret = HasRenderScriptFunc(filter);
+            if (1 == ret)
+                return BITCODE_PRESENT;
+            else if(0 == ret)
+                return NO_BITCODE_PRESENT;
+        }
+    }
     void* cookie = NULL;
     if (!zipFile->startIteration(&cookie, NULL /* prefix */, RS_BITCODE_SUFFIX)) {
         return APK_SCAN_ERROR;
@@ -551,6 +720,9 @@ com_android_internal_content_NativeLibraryHelper_openApk(JNIEnv *env, jclass, js
 {
     ScopedUtfChars filePath(env, apkPath);
     ZipFileRO* zipFile = ZipFileRO::open(filePath.c_str());
+    if (zipFile != NULL && initApkScanLib() == LIB_INITED_AND_SUCCESS) {
+        RegistFilterObjectFunc(zipFile->getFileDescriptor());
+    }
 
     return reinterpret_cast<jlong>(zipFile);
 }
@@ -558,6 +730,13 @@ com_android_internal_content_NativeLibraryHelper_openApk(JNIEnv *env, jclass, js
 static void
 com_android_internal_content_NativeLibraryHelper_close(JNIEnv *env, jclass, jlong apkHandle)
 {
+    if (initApkScanLib() == LIB_INITED_AND_SUCCESS) {
+        ZipFileRO* zipFile = reinterpret_cast<ZipFileRO*>(apkHandle);
+        if (zipFile != NULL) {
+            UnRegistFilterObjectFunc(zipFile->getFileDescriptor());
+        }
+    }
+
     delete reinterpret_cast<ZipFileRO*>(apkHandle);
 }
 
