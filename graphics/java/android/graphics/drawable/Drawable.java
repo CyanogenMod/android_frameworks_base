@@ -983,8 +983,15 @@ public abstract class Drawable {
         // to the compatibility density only to have them scaled back up when
         // drawn to the screen.
         if (opts == null) opts = new BitmapFactory.Options();
-        opts.inScreenDensity = res != null
-                ? res.getDisplayMetrics().noncompatDensityDpi : DisplayMetrics.DENSITY_DEVICE;
+        if (res != null) {
+            if (DisplayMetrics.DENSITY_DEVICE_DEFAULT != DisplayMetrics.DENSITY_DEVICE_PERSISTED) {
+                opts.inScreenDensity = DisplayMetrics.DENSITY_DEVICE_DEFAULT;
+            } else {
+                opts.inScreenDensity = res.getDisplayMetrics().noncompatDensityDpi;
+            }
+        } else {
+            opts.inScreenDensity = DisplayMetrics.DENSITY_DEVICE;
+        }
         Bitmap  bm = BitmapFactory.decodeResourceStream(res, value, is, pad, opts);
         if (bm != null) {
             byte[] np = bm.getNinePatchChunk();
