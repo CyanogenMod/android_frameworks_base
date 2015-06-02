@@ -16,9 +16,13 @@
 
 package com.android.server.am;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.Message;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.WindowManager;
 import android.view.WindowManagerPolicy;
 import android.view.accessibility.AccessibilityManager;
@@ -39,12 +43,15 @@ public class LockTaskNotify {
     private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
     private AccessibilityManager mAccessibilityManager;
     private Toast mLastToast;
+    private boolean mDevForceNavbar;
 
     public LockTaskNotify(Context context) {
         mContext = context;
         mAccessibilityManager = (AccessibilityManager)
                 mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
         mHandler = new H();
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observe();
     }
 
     public void showToast(boolean isLocked) {
@@ -58,7 +65,7 @@ public class LockTaskNotify {
         } else if (mAccessibilityManager.isEnabled()) {
             textResId = R.string.lock_to_app_toast_accessible;
         } else {
-            textResId = mPolicy.hasNavigationBar()
+            textResId = (mPolicy.hasNavigationBar() || mDevForceNavbar)
                     ? R.string.lock_to_app_toast : R.string.lock_to_app_toast_no_navbar;
         }
         if (mLastToast != null) {
@@ -93,6 +100,27 @@ public class LockTaskNotify {
                     handleShowToast(msg.arg1 != 0);
                     break;
             }
+        }
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            // Observe all users' changes
+            final ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                            Settings.Secure.DEV_FORCE_SHOW_NAVBAR), false, this,
+                    UserHandle.USER_ALL);
+            onChange(true);
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            final ContentResolver resolver = mContext.getContentResolver();
+            mDevForceNavbar = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
         }
     }
 }
