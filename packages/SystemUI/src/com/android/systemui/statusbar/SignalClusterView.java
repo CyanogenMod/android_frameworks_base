@@ -88,8 +88,6 @@ public class SignalClusterView
 
     private int mWideTypeIconStartPadding;
     private int mSecondaryTelephonyPadding;
-    private int mEndPadding;
-    private int mEndPaddingNothingVisible;
 
     private boolean mBlockAirplane;
     private boolean mBlockMobile;
@@ -150,10 +148,6 @@ public class SignalClusterView
                 R.dimen.wide_type_icon_start_padding);
         mSecondaryTelephonyPadding = getContext().getResources().getDimensionPixelSize(
                 R.dimen.secondary_telephony_padding);
-        mEndPadding = getContext().getResources().getDimensionPixelSize(
-                R.dimen.signal_cluster_battery_padding);
-        mEndPaddingNothingVisible = getContext().getResources().getDimensionPixelSize(
-                R.dimen.no_signal_cluster_battery_padding);
     }
 
     @Override
@@ -447,10 +441,6 @@ public class SignalClusterView
         }
 
         mNoSimsCombo.setVisibility(mNoSimsVisible ? View.VISIBLE : View.GONE);
-
-        boolean anythingVisible = mNoSimsVisible || mWifiVisible || mIsAirplaneMode
-                || anyMobileVisible || mVpnVisible || mEthernetVisible;
-        setPaddingRelative(0, 0, anythingVisible ? mEndPadding : mEndPaddingNothingVisible, 0);
     }
 
     public void setIconTint(int tint, float darkIntensity) {
