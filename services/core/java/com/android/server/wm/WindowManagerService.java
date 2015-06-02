@@ -304,6 +304,7 @@ public class WindowManagerService extends IWindowManager.Stub
     private static final String SYSTEM_DEBUGGABLE = "ro.debuggable";
 
     private static final String DENSITY_OVERRIDE = "ro.config.density_override";
+    private static final String DENSITY_PERSIST_CURRENT = "persist.sys.density_current";
     private static final String SIZE_OVERRIDE = "ro.config.size_override";
 
     private static final int MAX_SCREENSHOT_RETRIES = 3;
@@ -8503,11 +8504,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
             }
         }
-        String densityStr = Settings.Global.getString(mContext.getContentResolver(),
-                Settings.Global.DISPLAY_DENSITY_FORCED);
-        if (densityStr == null || densityStr.length() == 0) {
-            densityStr = SystemProperties.get(DENSITY_OVERRIDE, null);
-        }
+        String densityStr = SystemProperties.get(DENSITY_PERSIST_CURRENT,
+                SystemProperties.get(DENSITY_OVERRIDE, null));
         if (densityStr != null && densityStr.length() > 0) {
             int density;
             try {
@@ -8603,9 +8601,8 @@ public class WindowManagerService extends IWindowManager.Stub
             synchronized(mWindowMap) {
                 final DisplayContent displayContent = getDisplayContentLocked(displayId);
                 if (displayContent != null) {
+                    SystemProperties.set(DENSITY_PERSIST_CURRENT, Integer.toString(density));
                     setForcedDisplayDensityLocked(displayContent, density);
-                    Settings.Global.putString(mContext.getContentResolver(),
-                            Settings.Global.DISPLAY_DENSITY_FORCED, Integer.toString(density));
                 }
             }
         } finally {
@@ -8639,10 +8636,9 @@ public class WindowManagerService extends IWindowManager.Stub
             synchronized(mWindowMap) {
                 final DisplayContent displayContent = getDisplayContentLocked(displayId);
                 if (displayContent != null) {
+                    SystemProperties.set(DENSITY_PERSIST_CURRENT, null);
                     setForcedDisplayDensityLocked(displayContent,
                             displayContent.mInitialDisplayDensity);
-                    Settings.Global.putString(mContext.getContentResolver(),
-                            Settings.Global.DISPLAY_DENSITY_FORCED, "");
                 }
             }
         } finally {

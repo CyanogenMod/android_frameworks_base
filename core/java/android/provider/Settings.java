@@ -6675,6 +6675,7 @@ public final class Settings {
         * The saved value for WindowManagerService.setForcedDisplayDensity().
         * One integer in dpi.  If unset, then use the real display density.
         * @hide
+        * @deprecated No longer used at all. Use SystemProperty: persist.sys.density_current
         */
        public static final String DISPLAY_DENSITY_FORCED = "display_density_forced";
 
