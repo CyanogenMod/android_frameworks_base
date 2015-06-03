@@ -6118,6 +6118,14 @@ public final class Settings {
                 "lockscreen_hide_qs_tiles_with_sensitive_data";
 
         /**
+         * Component to start when
+         * {@link android.app.admin.DevicePolicyManager#PASSWORD_THIRD_PARTY_UNSECURED} is used as
+         * the keyguard.
+         * @hide
+         */
+        public static final String THIRD_PARTY_KEYGUARD_COMPONENT = "third_party_keyguard";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
