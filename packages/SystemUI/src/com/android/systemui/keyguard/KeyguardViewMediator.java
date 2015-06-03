@@ -16,6 +16,7 @@
 
 package com.android.systemui.keyguard;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -25,15 +26,20 @@ import android.app.SearchManager;
 import android.app.StatusBarManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.trust.TrustManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
+import android.database.ContentObserver;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -49,6 +55,7 @@ import android.provider.Settings;
 import android.service.fingerprint.FingerprintManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -365,6 +372,9 @@ public class KeyguardViewMediator extends SystemUI {
     private final ArrayList<IKeyguardStateCallback> mKeyguardStateCallbacks = new ArrayList<>();
 
     private boolean mCryptKeeperEnabled = true;
+
+    private ComponentName mThirdPartyKeyguardComponent;
+    private SettingsObserver mSettingsObserver;
 
     KeyguardUpdateMonitorCallback mUpdateCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -910,6 +920,8 @@ public class KeyguardViewMediator extends SystemUI {
             } else {
                 mUpdateMonitor.setAlternateUnlockEnabled(true);
             }
+            mSettingsObserver = new SettingsObserver(mHandler);
+            mSettingsObserver.observe();
 
             doKeyguardLocked(null);
         }
@@ -1370,6 +1382,9 @@ public class KeyguardViewMediator extends SystemUI {
             updateActivityLockScreenState();
             adjustStatusBarLocked();
             userActivity();
+            if (isThirdPartyKeyguardEnabled()) {
+                showThirdPartyKeyguard();
+            }
             return;
         }
 
@@ -1905,7 +1920,36 @@ public class KeyguardViewMediator extends SystemUI {
     private void handleNotifyScreenOff() {
         synchronized (KeyguardViewMediator.this) {
             if (DEBUG) Log.d(TAG, "handleNotifyScreenOff");
-            mStatusBarKeyguardViewManager.onScreenTurnedOff();
+            if (isThirdPartyKeyguardEnabled()) {
+                showThirdPartyKeyguard();
+            } else {
+                mStatusBarKeyguardViewManager.onScreenTurnedOff();
+            }
+        }
+    }
+
+    /**
+     * @return Whether a third party keyguard is enabled
+     */
+    private boolean isThirdPartyKeyguardEnabled() {
+        final int quality = mLockPatternUtils.getActivePasswordQuality();
+        return quality == DevicePolicyManager.PASSWORD_THIRD_PARTY_UNSECURED;
+    }
+
+    /**
+     * Launches the third party keyguard activity as specified by
+     * {@link android.provider.Settings.Secure#THIRD_PARTY_KEYGUARD_COMPONENT}
+     */
+    private void showThirdPartyKeyguard() {
+        if (mThirdPartyKeyguardComponent != null) {
+            Intent intent = new Intent();
+            intent.setComponent(mThirdPartyKeyguardComponent);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                mContext.startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Log.e(TAG, "Unable to start third party keyguard: " + mThirdPartyKeyguardComponent);
+            }
         }
     }
 
@@ -2061,4 +2105,52 @@ public class KeyguardViewMediator extends SystemUI {
         return fp != null && fp.userEnrolled() && lockPatternUtils.usingFingerprint();
     }
 
+    private class SettingsObserver extends ContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            String componentStr = Settings.Secure.getString(mContext.getContentResolver(),
+                    Settings.Secure.THIRD_PARTY_KEYGUARD_COMPONENT);
+            final ComponentName cn = componentStr != null ?
+                    ComponentName.unflattenFromString(componentStr) : null;
+            if (cn != null) {
+                // verify this component hold the necessary permission(s)
+                if (thirdPartyKeyguardHasPermission(cn)) {
+                    mThirdPartyKeyguardComponent = cn;
+                } else {
+                    mThirdPartyKeyguardComponent = null;
+                }
+            } else {
+                mThirdPartyKeyguardComponent = null;
+            }
+        }
+
+        public void observe() {
+            final ContentResolver resolver =
+                    KeyguardViewMediator.this.mContext.getContentResolver();
+            final Uri uri =
+                    Settings.Secure.getUriFor(Settings.Secure.THIRD_PARTY_KEYGUARD_COMPONENT);
+            resolver.registerContentObserver(uri, false, this);
+            onChange(true, uri);
+        }
+
+        /**
+         * Returns whether the given ComponentName has been granted the
+         * {@link android.Manifest.permission.THIRD_PARTY_KEYGUARD} permission
+         * @param cn
+         * @return
+         */
+        private boolean thirdPartyKeyguardHasPermission(ComponentName cn) {
+            if (cn != null) {
+                PackageManager pm = mContext.getPackageManager();
+                return PackageManager.PERMISSION_GRANTED ==
+                        pm.checkPermission(Manifest.permission.THIRD_PARTY_KEYGUARD,
+                                cn.getPackageName());
+            }
+            return false;
+        }
+    }
 }
