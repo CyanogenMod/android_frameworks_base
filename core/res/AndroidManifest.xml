@@ -3048,6 +3048,11 @@
         android:description="@string/permdesc_accessTorchService"
         android:protectionLevel="signature" />
 
+    <permission android:name="android.permission.THIRD_PARTY_KEYGUARD"
+        android:label="@string/permlab_thirdPartyKeyguard"
+        android:description="@string/permdesc_thirdPartyKeyguard"
+        android:protectionLevel="signatureOrSystem" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
