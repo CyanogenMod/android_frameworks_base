@@ -126,9 +126,9 @@ interface ITelecomService {
     String getLine1Number(in PhoneAccountHandle accountHandle);
 
     /**
-     * @see TelecomServiceImpl#hasVoiceMailNumber
+     * @see TelecomServiceImpl#getVoiceMailNumber
      */
-    boolean hasVoiceMailNumber(in PhoneAccountHandle accountHandle);
+    String getVoiceMailNumber(in PhoneAccountHandle accountHandle);
 
     /**
      * @see TelecomServiceImpl#getDefaultPhoneApp

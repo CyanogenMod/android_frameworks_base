@@ -742,23 +742,23 @@ public class TelecomManager {
     }
 
     /**
-     * Return whether a given phone account has a voicemail number configured.
+     * Return the voicemail number for a given phone account.
      *
-     * @param accountHandle The handle for the account to check for a voicemail number.
-     * @return {@code true} If the given phone account has a voicemail number.
+     * @param accountHandle The handle for the account to retrieve the voicemail number for.
+     * @return A string representation if the voicemail number.
      *
      * @hide
      */
     @SystemApi
-    public boolean hasVoiceMailNumber(PhoneAccountHandle accountHandle) {
+    public String getVoiceMailNumber(PhoneAccountHandle accountHandle) {
         try {
             if (isServiceConnected()) {
-                return getTelecomService().hasVoiceMailNumber(accountHandle);
+                return getTelecomService().getVoiceMailNumber(accountHandle);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, "RemoteException calling ITelecomService#hasVoiceMailNumber.", e);
+            Log.e(TAG, "RemoteException calling ITelecomService#getVoiceMailNumber.", e);
         }
-        return false;
+        return null;
     }
 
     /**
