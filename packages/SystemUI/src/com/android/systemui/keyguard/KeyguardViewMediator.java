@@ -50,6 +50,7 @@ import android.provider.Settings;
 import android.service.fingerprint.FingerprintManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -1251,6 +1252,9 @@ public class KeyguardViewMediator extends SystemUI {
             updateActivityLockScreenState();
             adjustStatusBarLocked();
             userActivity();
+            if (isThirdPartyKeyguardEnabled()) {
+                showThirdPartyKeyguard();
+            }
             return;
         }
 
@@ -1779,7 +1783,34 @@ public class KeyguardViewMediator extends SystemUI {
     private void handleNotifyScreenOff() {
         synchronized (KeyguardViewMediator.this) {
             if (DEBUG) Log.d(TAG, "handleNotifyScreenOff");
-            mStatusBarKeyguardViewManager.onScreenTurnedOff();
+            if (isThirdPartyKeyguardEnabled()) {
+                showThirdPartyKeyguard();
+            } else {
+                mStatusBarKeyguardViewManager.onScreenTurnedOff();
+            }
+        }
+    }
+
+    /**
+     * @return Whether a third party keyguard is enabled
+     */
+    private boolean isThirdPartyKeyguardEnabled() {
+        final int quality = mLockPatternUtils.getActivePasswordQuality();
+        return quality == DevicePolicyManager.PASSWORD_THIRD_PARTY_UNSECURED;
+    }
+
+    /**
+     * Launches the third party keyguard activity as specified by
+     * {@link android.provider.Settings.Secure#THIRD_PARTY_KEYGUARD_COMPONENT}
+     */
+    private void showThirdPartyKeyguard() {
+        String componentNameString = Settings.Secure.getString(mContext.getContentResolver(),
+                Settings.Secure.THIRD_PARTY_KEYGUARD_COMPONENT);
+        if (!TextUtils.isEmpty(componentNameString)) {
+            Intent intent = new Intent();
+            intent.setComponent(ComponentName.unflattenFromString(componentNameString));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(intent);
         }
     }
 
