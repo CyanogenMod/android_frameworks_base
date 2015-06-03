@@ -762,6 +762,26 @@ public class TelecomManager {
     }
 
     /**
+     * Return the voicemail number for a given phone account.
+     *
+     * @param accountHandle The handle for the account to retrieve the voicemail number for.
+     * @return A string representation if the voicemail number.
+     *
+     * @hide
+     */
+    @SystemApi
+    public String getVoiceMailNumber(PhoneAccountHandle accountHandle) {
+        try {
+            if (isServiceConnected()) {
+                return getTelecomService().getVoiceMailNumber(accountHandle);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException calling ITelecomService#getVoiceMailNumber.", e);
+        }
+        return null;
+    }
+
+    /**
      * Return the line 1 phone number for given phone account.
      *
      * @param accountHandle The handle for the account retrieve a number for.
