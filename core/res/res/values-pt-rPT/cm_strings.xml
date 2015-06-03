@@ -51,7 +51,7 @@
   <string name="permdesc_changePhoneBlacklist">Permite a uma aplicação alterar os números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
   <string name="permlab_changePrivacyGuardState">ativar ou desativar a Proteção da Privacidade</string>
   <string name="permdesc_changePrivacyGuardState">Permite à aplicação escolher se outra aplicação corre com Proteção da Privacidade. Quando uma aplicação corre com Proteção da Privacidade, não terá acesso a dados pessoais como contactos, registo de chamadas ou mensagens.</string>
-  <string name="privacy_guard_notification">PProteção da Privacidade ativa</string>
+  <string name="privacy_guard_notification">Proteção da Privacidade ativa</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> não poderá aceder a dados pessoais</string>
   <string name="permlab_useHardwareFramework">Utilizar a estrutura de hardware</string>
   <string name="permdesc_useHardwareFramework">Permite o acesso duma aplicação à estrutura de hardware CM.</string>
@@ -206,6 +206,7 @@
   <string name="live_display_outdoor">Exterior (sol brilhante)</string>
   <string name="live_display_outdoor_summary">Usar apenas as definições de exterior</string>
   <string name="live_display_hint">LiveDisplay pode ajudar a reduzir a fadiga ocular e ajudar-te a dormir à noite. Clique aqui para experimentar!</string>
+  <string name="lock_to_app_toast_no_navbar">Para soltar este ecrã, toque e segure o botão Voltar.</string>
   <string name="quick_settings_tile_flashlight_not_title">A lanterna está ligada</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toque para desligar</string>
   <string name="storage_sd_dock_card">Cartão SD da Dock</string>

@@ -208,4 +208,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="live_display_outdoor">Açık alan (parlak güneş)</string>
   <string name="live_display_outdoor_summary">Sadece açık alan ayarlarını kullan</string>
   <string name="live_display_hint">LiveDisplay göz yorgunluğunuzu azaltıp geceleri uyumanıza yardımcı olabilir. Denemek için buraya tıklayın!</string>
+  <string name="lock_to_app_toast_no_navbar">Bu ekranı kaldırmak için Geri tuşuna dokunun ve tutun.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Flaş ışığı açık</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Kapatmak için dokunun</string>
+  <string name="storage_sd_dock_card">Ünite SD kartı</string>
 </resources>

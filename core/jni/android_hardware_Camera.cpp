@@ -1052,6 +1052,18 @@ static void android_hardware_Camera_enableFocusMoveCallback(JNIEnv *env, jobject
 #endif
 }
 
+static void android_hardware_Camera_sendVendorCommand(JNIEnv *env, jobject thiz,
+        jint cmd, jint arg1, jint arg2)
+{
+    ALOGV("sendVendorCommand");
+    sp<Camera> camera = get_native_camera(env, thiz, NULL);
+    if (camera == 0) return;
+
+    if (camera->sendCommand(cmd, arg1, arg2) != NO_ERROR) {
+        jniThrowRuntimeException(env, "sending vendor command failed");
+    }
+}
+
 //-------------------------------------------------
 
 static JNINativeMethod camMethods[] = {
@@ -1148,6 +1160,9 @@ static JNINativeMethod camMethods[] = {
   { "enableFocusMoveCallback",
     "(I)V",
     (void *)android_hardware_Camera_enableFocusMoveCallback},
+  { "_sendVendorCommand",
+    "(III)V",
+    (void *)android_hardware_Camera_sendVendorCommand },
 };
 
 struct field {

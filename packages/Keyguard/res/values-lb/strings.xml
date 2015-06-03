@@ -134,16 +134,8 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
         Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
         \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
-  <string name="kg_failed_attempts_almost_at_login" product="tablet">
-       Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
-       No <xliff:g id="number">%d</xliff:g> weider Versich gëss du gefrot däin Tablet duerch en E-Mail-Kont z\'entspären.
-       Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
-    </string>
-  <string name="kg_failed_attempts_almost_at_login" product="default">
-       Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
-       No <xliff:g id="number">%d</xliff:g> weider Versich gëss du gefrot däin Telefon duerch en E-Mail-Kont z\'entspären.
-       Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
-    </string>
+  <string name="kg_failed_attempts_almost_at_login" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss du gefrot däin Tablet duerch en E-Mail-Kont z\'entspären. Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <string name="kg_failed_attempts_almost_at_login" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss du gefrot däin Telefon duerch en E-Mail-Kont z\'entspären. Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
   <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däi Provider kontaktéiere fir däin Apparat z\'entspären.</string>
   <plurals name="kg_password_wrong_pin_code">

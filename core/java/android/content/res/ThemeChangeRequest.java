@@ -28,9 +28,12 @@ import static android.provider.ThemesContract.ThemesColumns.*;
 
 /** @hide */
 public final class ThemeChangeRequest implements Parcelable {
+    public static final int DEFAULT_WALLPAPER_ID = -1;
+
     private final Map<String, String> mThemeComponents = new HashMap<String, String>();
     private final Map<String, String> mPerAppOverlays = new HashMap<String, String>();
     private RequestType mRequestType;
+    private long mWallpaperId = -1;
 
     public String getOverlayThemePackageName() {
         return getThemePackageNameForComponent(MODIFIES_OVERLAYS);
@@ -80,6 +83,10 @@ public final class ThemeChangeRequest implements Parcelable {
         return Collections.unmodifiableMap(mThemeComponents);
     }
 
+    public long getWallpaperId() {
+        return mWallpaperId;
+    }
+
     /**
      * Get the mapping for per app themes
      * @return A mapping of apps and the theme to apply for each one. or null if none set.
@@ -101,7 +108,7 @@ public final class ThemeChangeRequest implements Parcelable {
     }
 
     private ThemeChangeRequest(Map<String, String> components, Map<String, String> perAppThemes,
-            RequestType requestType) {
+            RequestType requestType, long wallpaperId) {
         if (components != null) {
             mThemeComponents.putAll(components);
         }
@@ -109,6 +116,7 @@ public final class ThemeChangeRequest implements Parcelable {
             mPerAppOverlays.putAll(perAppThemes);
         }
         mRequestType = requestType;
+        mWallpaperId = wallpaperId;
     }
 
     private ThemeChangeRequest(Parcel source) {
@@ -122,6 +130,7 @@ public final class ThemeChangeRequest implements Parcelable {
             mPerAppOverlays.put(source.readString(), source.readString());
         }
         mRequestType = RequestType.values()[source.readInt()];
+        mWallpaperId = source.readLong();
     }
 
     @Override
@@ -142,6 +151,7 @@ public final class ThemeChangeRequest implements Parcelable {
             dest.writeString(mPerAppOverlays.get(appPkgName));
         }
         dest.writeInt(mRequestType.ordinal());
+        dest.writeLong(mWallpaperId);
     }
 
     public static final Parcelable.Creator<ThemeChangeRequest> CREATOR =
@@ -169,6 +179,7 @@ public final class ThemeChangeRequest implements Parcelable {
         Map<String, String> mThemeComponents = new HashMap<String, String>();
         Map<String, String> mPerAppOverlays = new HashMap<String, String>();
         RequestType mRequestType = RequestType.USER_REQUEST;
+        long mWallpaperId;
 
         public Builder() {}
 
@@ -204,6 +215,12 @@ public final class ThemeChangeRequest implements Parcelable {
 
         public Builder setWallpaper(String pkgName) {
             return setComponent(MODIFIES_LAUNCHER, pkgName);
+        }
+
+        // Used in the case that more than one wallpaper exists for a given pkg name
+        public Builder setWallpaperId(long id) {
+            mWallpaperId = id;
+            return this;
         }
 
         public Builder setLockWallpaper(String pkgName) {
@@ -249,7 +266,8 @@ public final class ThemeChangeRequest implements Parcelable {
         }
 
         public ThemeChangeRequest build() {
-            return new ThemeChangeRequest(mThemeComponents, mPerAppOverlays, mRequestType);
+            return new ThemeChangeRequest(mThemeComponents, mPerAppOverlays,
+                    mRequestType, mWallpaperId);
         }
 
         private void buildChangeRequestFromThemeConfig(ThemeConfig themeConfig) {

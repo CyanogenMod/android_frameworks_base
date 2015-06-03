@@ -206,4 +206,8 @@
   <string name="live_display_outdoor">Udendørs (stærk sol)</string>
   <string name="live_display_outdoor_summary">Brug kun udendørsindstillinger</string>
   <string name="live_display_hint">LiveDisplay kan hjælpe med at reducere overanstrengelse af øjnene og hjælpe dig med at sove om natten. Klik her for at prøve det!</string>
+  <string name="lock_to_app_toast_no_navbar">For at frigøre denne skærm, tryk og hold Tilbage-knappen nede.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Lommelygten er tændt</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tryk for at slukke</string>
+  <string name="storage_sd_dock_card">Dock SD-kort</string>
 </resources>

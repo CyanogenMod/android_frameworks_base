@@ -207,5 +207,7 @@
   <string name="live_display_outdoor_summary">Alleen instellingen voor buitenshuis gebruiken</string>
   <string name="live_display_hint">LiveDisplay kan oogvermoeidheid verminderen en helpt u om \'s nachts te slapen. Tik hier om het uit te proberen</string>
   <string name="lock_to_app_toast_no_navbar">Blijf de Terug-knop aanraken om dit scherm los te maken.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Zaklamp staat aan</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tik om uit te schakelen</string>
   <string name="storage_sd_dock_card">SD-kaart in dock</string>
 </resources>

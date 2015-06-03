@@ -206,4 +206,8 @@
   <string name="live_display_outdoor">야외 (밝은 햇빛)</string>
   <string name="live_display_outdoor_summary">야외 설정만으로 사용</string>
   <string name="live_display_hint">LiveDisplay는 눈의 피로를 줄이고 밤에 수면을 돕습니다. 적용하려면 클릭하십시오!</string>
+  <string name="lock_to_app_toast_no_navbar">화면 고정을 해제하려면 뒤로 버튼을 계속 누르세요</string>
+  <string name="quick_settings_tile_flashlight_not_title">손전등이 켜졌습니다</string>
+  <string name="quick_settings_tile_flashlight_not_summary">탭하여 끄기</string>
+  <string name="storage_sd_dock_card">독에 장착된 SD 카드</string>
 </resources>

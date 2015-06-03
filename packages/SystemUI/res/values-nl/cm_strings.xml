@@ -33,6 +33,10 @@
   <string name="accessibility_quick_settings_heads_up_on">Heads-up aan.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads-up uitgeschakeld.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ingeschakeld.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Omgevingsdisplay uit.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Omgevingsdisplay aan.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Omgevingsdisplay uitgeschakeld.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Omgevingsdisplay ingeschakeld.</string>
   <string name="accessibility_dpad_left">Cursor links</string>
   <string name="accessibility_dpad_right">Cursor rechts</string>
   <string name="quick_settings_mobile_data_label">Mobiele gegevens</string>
@@ -56,6 +60,8 @@
   <string name="quick_settings_screen_timeout_detail_title">Schermtime-out</string>
   <string name="quick_settings_usb_tether_label">USB-tethering</string>
   <string name="quick_settings_heads_up_label">Heads-up</string>
+  <string name="quick_settings_ambient_display_label">Omgevingsdisplay</string>
+  <string name="quick_settings_custom_tile_detail_title">Aangepaste tegel</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Veeg naar rechts voor %1$s</string>
   <string name="right_shortcut_hint">Veeg naar links voor %1$s</string>
@@ -84,5 +90,8 @@
   <string name="navring_choose_action_title">Actie selecteren</string>
   <string name="select_application">App selecteren</string>
   <string name="lockscreen_target_empty">Niet toegewezen</string>
+  <string name="screen_pinning_description_no_navbar">Met scherm vastzetten wordt het beeldscherm vergrendeld op één weergave.\n\nBlijf de Terug-knop aanraken om het scherm los te maken.</string>
   <string name="interruption_level_silent">Stil</string>
+  <string name="zen_silent_with_warning">Geen onderbrekingen, behalve alarmen.</string>
+  <string name="quick_settings_remove">Tegel verwijderen</string>
 </resources>

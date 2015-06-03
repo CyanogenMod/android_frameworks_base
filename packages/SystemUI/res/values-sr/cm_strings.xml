@@ -29,6 +29,18 @@
   <string name="accessibility_quick_settings_location_battery_saving">Локација извештај: режим чувања батерије.</string>
   <string name="accessibility_quick_settings_location_gps_only">Локација извештај: режим само сензори.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Локација извештај: режим високе тачности.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Искачуће поруке искључене.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Искачуће поруке укључене.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Искачуће поруке ће бити искључене.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Искачуће поруке ће бити укључене.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Амбијент приказ искључен.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Амбијент приказ укључен.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Амбијент приказ ће бити искључен.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Амбијент приказ ће бити укључен.</string>
+  <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
+  <string name="accessibility_quick_settings_sync_on">Синхрон. укључено.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Синхронизација је искључена.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Синхронизација је укључена.</string>
   <string name="accessibility_dpad_left">Курсор лево</string>
   <string name="accessibility_dpad_right">Курсор десно</string>
   <string name="quick_settings_mobile_data_label">Мобилни подаци</string>
@@ -51,6 +63,10 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Искључивање екрана</string>
   <string name="quick_settings_usb_tether_label">USB повезивање</string>
+  <string name="quick_settings_heads_up_label">Искачуће поруке</string>
+  <string name="quick_settings_ambient_display_label">Амбијент приказ</string>
+  <string name="quick_settings_sync_label">Синхрон</string>
+  <string name="quick_settings_custom_tile_detail_title">Промени назив</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Превуци десно за %1$s</string>
   <string name="right_shortcut_hint">Превуци лево за %1$s</string>
@@ -79,4 +95,8 @@
   <string name="navring_choose_action_title">Изабери акцију</string>
   <string name="select_application">Изабери апликацију</string>
   <string name="lockscreen_target_empty">Празно</string>
+  <string name="screen_pinning_description_no_navbar">Ово задржава преглед док га не уклониш. Додирни и држи дугме за назад да уклониш.</string>
+  <string name="interruption_level_silent">Тишина</string>
+  <string name="zen_silent_with_warning">Нема узнемиравања, осим аларма.</string>
+  <string name="quick_settings_remove">Уклони назив</string>
 </resources>

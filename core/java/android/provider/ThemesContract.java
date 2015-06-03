@@ -295,6 +295,13 @@ public class ThemesContract {
          */
         public static final String COL_UPDATE_TIME = "update_time";
 
+        /*
+         * The unique ID for the component within a theme.
+         * Always 0 unless multiples of a component exist.
+         * <P>Type: INTEGER (long)</P>
+         */
+        public static final String COL_COMPONENT_ID = "component_id";
+
         /**
          * Valid keys
          */

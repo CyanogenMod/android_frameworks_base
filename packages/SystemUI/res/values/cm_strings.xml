@@ -64,6 +64,15 @@
     <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display turned on.</string>
 
+    <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_off">Sync off.</string>
+    <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_on">Sync on.</string>
+
+    <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_changed_off">Sync turned off.</string>
+    <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_changed_on">Sync turned on.</string>
 
     <string name="accessibility_dpad_left">Cursor left</string>
     <string name="accessibility_dpad_right">Cursor right</string>
@@ -104,6 +113,7 @@
     <string name="quick_settings_usb_tether_label">USB tethering</string>
     <string name="quick_settings_heads_up_label">Heads up</string>
     <string name="quick_settings_ambient_display_label">Ambient display</string>
+    <string name="quick_settings_sync_label">Sync</string>
     <string name="quick_settings_custom_tile_detail_title">Custom tile</string>
 
     <!-- Weather string format in expanded statusbar header -->

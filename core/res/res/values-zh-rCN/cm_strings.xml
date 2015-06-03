@@ -206,5 +206,8 @@
   <string name="live_display_outdoor">户外（阳光）</string>
   <string name="live_display_outdoor_summary">仅使用户外设置</string>
   <string name="live_display_hint">LiveDisplay 可以帮助减少眼睛疲劳，帮助您的夜间睡眠。点击此处来试一试！</string>
+  <string name="lock_to_app_toast_no_navbar">要取消固定此屏幕，触摸并按住返回键。</string>
+  <string name="quick_settings_tile_flashlight_not_title">手电筒已开</string>
+  <string name="quick_settings_tile_flashlight_not_summary">轻按以关闭</string>
   <string name="storage_sd_dock_card">底座 SD 卡</string>
 </resources>

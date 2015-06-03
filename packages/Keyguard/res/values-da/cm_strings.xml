@@ -22,4 +22,12 @@
   <string name="kg_dismiss">Annullér</string>
   <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Nyt SIM-kort\u0020</string>
   <string name="lockscreen_sim_error_message_short">Ugyldigt SIM-kort.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Angiv SIM-pinkode, du har <xliff:g id="number">%d</xliff:g> forsøg tilbage, før du må kontakte din udbyder for at låse enheden op.</item>
+    <item quantity="other">Angiv SIM-pinkode, du har <xliff:g id="number">%d</xliff:g> forsøg tilbage.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">SIM-kortet er nu deaktiveret. Indtast PUK-koden for at fortsætte. Du har <xliff:g id="number">%d</xliff:g> forsøg tilbage, før SIM-kortet bliver permanent ubrugeligt. Kontakt din udbyder for detaljer.</item>
+    <item quantity="other">SIM-kortet er nu deaktiveret. Indtast PUK-koden for at fortsætte. Du har <xliff:g id="number">%d</xliff:g> forsøg tilbage, før SIM-kortet bliver permanent ubrugeligt. Kontakt din udbyder for detaljer.</item>
+  </plurals>
 </resources>

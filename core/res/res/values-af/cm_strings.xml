@@ -206,4 +206,8 @@
   <string name="live_display_outdoor">Buitekant (helder son)</string>
   <string name="live_display_outdoor_summary">Alleenlik gebruik buite instellings</string>
   <string name="live_display_hint">LewendigeVertoning kan jou oogspanning verminder en help jou slaap in die nag. Klik hier om dit uit te probeer!</string>
+  <string name="lock_to_app_toast_no_navbar">Om die skerm te ontspeld, raak en hou die Terug knoppie.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Flitslig is aan</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Raak om af te skakel</string>
+  <string name="storage_sd_dock_card">Dok SD-kaart</string>
 </resources>
