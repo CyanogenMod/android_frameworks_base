@@ -26,6 +26,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.os.AsyncTask;
@@ -158,6 +159,14 @@ public class LockPatternUtils {
     public final static String LOCKSCREEN_WIDGETS_ENABLED = "lockscreen.widgets_enabled";
 
     public final static String PASSWORD_HISTORY_KEY = "lockscreen.passwordhistory";
+
+    /**
+     * Component to start when
+     * {@link android.app.admin.DevicePolicyManager#PASSWORD_THIRD_PARTY_UNSECURED} is used as
+     * the keyguard.
+     * @hide
+     */
+    public static final String THIRD_PARTY_KEYGUARD_COMPONENT = "lockscreen.third_party";
 
     private static final String LOCK_SCREEN_OWNER_INFO = Settings.Secure.LOCK_SCREEN_OWNER_INFO;
     private static final String LOCK_SCREEN_OWNER_INFO_ENABLED =
@@ -496,6 +505,10 @@ public class LockPatternUtils {
                     activePasswordQuality = DevicePolicyManager.PASSWORD_QUALITY_COMPLEX;
                 }
                 break;
+            case DevicePolicyManager.PASSWORD_THIRD_PARTY_UNSECURED:
+                if (isThirdPartyKeyguardEnabled()) {
+                    activePasswordQuality = DevicePolicyManager.PASSWORD_THIRD_PARTY_UNSECURED;
+                }
         }
 
         return activePasswordQuality;
@@ -956,6 +969,42 @@ public class LockPatternUtils {
     }
 
     /**
+     * Sets a third party lock screen.
+     * @param component
+     */
+    public void setThirdPartyKeyguard(ComponentName component)
+            throws PackageManager.NameNotFoundException {
+        if (component != null) {
+            // Check that the package this component belongs to has the third party keyguard perm
+            final PackageManager pm = mContext.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(component.getPackageName(),
+                    PackageManager.GET_PERMISSIONS);
+            boolean hasThirdPartyKeyguardPermission = false;
+            for (String perm : pi.requestedPermissions) {
+                if (Manifest.permission.THIRD_PARTY_KEYGUARD.equals(perm)) {
+                    hasThirdPartyKeyguardPermission = true;
+                    break;
+                }
+            }
+            if (!hasThirdPartyKeyguardPermission) {
+                throw new SecurityException("Package " + component.getPackageName() + " does not" +
+                        "have " + Manifest.permission.THIRD_PARTY_KEYGUARD);
+            }
+        }
+
+        setString(THIRD_PARTY_KEYGUARD_COMPONENT,
+                component != null ? component.flattenToString() : "");
+        setLong(PASSWORD_TYPE_KEY,
+                component != null ? DevicePolicyManager.PASSWORD_THIRD_PARTY_UNSECURED :
+                        DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
+    }
+
+    public ComponentName getThirdPartyKeyguardComponent() {
+        String component = getString(THIRD_PARTY_KEYGUARD_COMPONENT);
+        return component != null ? ComponentName.unflattenFromString(component) : null;
+    }
+
+    /**
      * Gets whether the device is encrypted.
      *
      * @return Whether the device is encrypted.
@@ -1305,6 +1354,16 @@ public class LockPatternUtils {
         // entire function and a lot of other code can be removed.
         if (DEBUG) Log.d(TAG, "Forcing isBiometricWeakInstalled() to return false to disable it");
         return false;
+    }
+
+    /**
+     * @return Whether a third party keyguard is set
+     */
+    public boolean isThirdPartyKeyguardEnabled() {
+        String component = getString(THIRD_PARTY_KEYGUARD_COMPONENT);
+        long type = getLong(PASSWORD_TYPE_KEY, DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
+        return !TextUtils.isEmpty(component) &&
+                type == DevicePolicyManager.PASSWORD_THIRD_PARTY_UNSECURED;
     }
 
     /**
@@ -1695,6 +1754,10 @@ public class LockPatternUtils {
         } catch (RemoteException re) {
             return null;
         }
+    }
+
+    private void setString(String secureSettingKey, String value) {
+        setString(secureSettingKey, value, getCurrentOrCallingUserId());
     }
 
     private void setString(String secureSettingKey, String value, int userHandle) {

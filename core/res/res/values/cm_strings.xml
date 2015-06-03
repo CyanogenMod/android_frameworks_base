@@ -351,4 +351,10 @@
 
     <!-- WiFi turn off notification action text -->
     <string name="notify_turn_wifi_off_title">Turn Wi-Fi off</string>
+
+    <!-- Third party keyguard permission label -->
+    <string name="permlab_thirdPartyKeyguard">third party lock screen</string>
+    <!-- Third party keyguard permission description -->
+    <string name="permdesc_thirdPartyKeyguard">Allows an app to be used as an insecure lock screen.</string>
+
 </resources>
