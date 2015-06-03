@@ -605,6 +605,14 @@ public class DevicePolicyManager {
     public static final int PASSWORD_QUALITY_UNSPECIFIED = 0;
 
     /**
+     * Constant for {@link #setPasswordQuality}: the policy has no requirements
+     * for the password.  Used for launching a 3rd party lock screen such as the animated lock
+     * screen.  Note that quality constants are ordered so that higher values are more restrictive.
+     * @hide
+     */
+    public static final int PASSWORD_THIRD_PARTY_UNSECURED = 0x800;
+
+    /**
      * Constant for {@link #setPasswordQuality}: the policy allows for low-security biometric
      * recognition technology.  This implies technologies that can recognize the identity of
      * an individual to about a 3 digit PIN (false detection is less than 1 in 1,000).
