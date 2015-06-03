@@ -349,4 +349,9 @@
     <!-- Storage description for the SD card on the dock -->
     <string name="storage_sd_dock_card">Dock SD card</string>
 
+    <!-- Third party keyguard permission label -->
+    <string name="permlab_thirdPartyKeyguard">Third party keyguard</string>
+    <!-- Third party keyguard permission description -->
+    <string name="permdesc_thirdPartyKeyguard">Allows an app to be used as an insecure keyguard</string>
+
 </resources>

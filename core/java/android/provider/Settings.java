@@ -6096,6 +6096,14 @@ public final class Settings {
         public static final String LOCKSCREEN_VISUALIZER_ENABLED = "lockscreen_visualizer";
 
         /**
+         * Component to start when
+         * {@link android.app.admin.DevicePolicyManager#PASSWORD_THIRD_PARTY_UNSECURED} is used as
+         * the keyguard.
+         * @hide
+         */
+        public static final String THIRD_PARTY_KEYGUARD_COMPONENT = "third_party_keyguard";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear

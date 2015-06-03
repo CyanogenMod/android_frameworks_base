@@ -109,6 +109,10 @@ public class KeyguardSecurityModel {
                             SecurityMode.Account : SecurityMode.Pattern;
                     }
                     break;
+                case DevicePolicyManager.PASSWORD_THIRD_PARTY_UNSECURED:
+                        // currently set this to none and let systemui handle the rest
+                        mode = SecurityMode.None;
+                    break;
 
                 default:
                     throw new IllegalStateException("Unknown security quality:" + security);
