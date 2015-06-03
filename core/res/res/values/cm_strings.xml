@@ -175,7 +175,7 @@
     <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
     <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
     <string name="app_ops_toggle_nfc">toggle NFC</string>
-    <string name="app_ops_toggle_wifi">toggle WiFi</string>
+    <string name="app_ops_toggle_wifi">toggle Wifi</string>
     <string name="app_ops_use_alarm_volume">control alarm volume</string>
     <string name="app_ops_use_audio_focus">control the audio focus</string>
     <string name="app_ops_use_bluetooth_volume">control the Bluetooth volume</string>
@@ -345,4 +345,10 @@
     <!-- Zen mode buttons -->
     <string name="silent_mode_priority">Priority</string>
     <string name="silent_mode_none">None</string>
+
+    <!-- Third party keyguard permission label -->
+    <string name="permlab_thirdPartyKeyguard">third party lock screen</string>
+    <!-- Third party keyguard permission description -->
+    <string name="permdesc_thirdPartyKeyguard">Allows an app to be used as an insecure lock screen.</string>
+
 </resources>
