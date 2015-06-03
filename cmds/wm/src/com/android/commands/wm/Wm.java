@@ -18,12 +18,14 @@
 
 package com.android.commands.wm;
 
+import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.AndroidException;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.IWindowManager;
 import com.android.internal.os.BaseCommand;
@@ -134,7 +136,7 @@ public class Wm extends BaseCommand {
         if (densityStr == null) {
             try {
                 int initialDensity = mWm.getInitialDisplayDensity(Display.DEFAULT_DISPLAY);
-                int baseDensity = mWm.getBaseDisplayDensity(Display.DEFAULT_DISPLAY);
+                int baseDensity = DisplayMetrics.DENSITY_PREFERRED;
                 System.out.println("Physical density: " + initialDensity);
                 if (initialDensity != baseDensity) {
                     System.out.println("Override density: " + baseDensity);
@@ -164,6 +166,7 @@ public class Wm extends BaseCommand {
             } else {
                 mWm.clearForcedDisplayDensity(Display.DEFAULT_DISPLAY);
             }
+            ActivityManagerNative.getDefault().restart();
         } catch (RemoteException e) {
         }
     }
