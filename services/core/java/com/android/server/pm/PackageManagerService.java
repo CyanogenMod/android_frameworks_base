@@ -6018,7 +6018,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
             }
 
-            setNativeLibraryPaths(pkg);
+            setNativeLibraryPaths(pkg, parseFlags);
         } else {
             // TODO: We can probably be smarter about this stuff. For installed apps,
             // we can calculate this information at install time once and for all. For
@@ -6027,7 +6027,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             // Give ourselves some initial paths; we'll come back for another
             // pass once we've determined ABI below.
-            setNativeLibraryPaths(pkg);
+            setNativeLibraryPaths(pkg, parseFlags);
 
             final boolean isAsec = isForwardLocked(pkg) || isExternal(pkg);
             final String nativeLibraryRootStr = pkg.applicationInfo.nativeLibraryRootDir;
@@ -6165,7 +6165,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             // Now that we've calculated the ABIs and determined if it's an internal app,
             // we will go ahead and populate the nativeLibraryPath.
-            setNativeLibraryPaths(pkg);
+            setNativeLibraryPaths(pkg, parseFlags);
 
             if (DEBUG_INSTALL) Slog.i(TAG, "Linking native library dir for " + path);
             final int[] userIds = sUserManager.getUserIds();
@@ -7315,7 +7315,7 @@ public class PackageManagerService extends IPackageManager.Stub {
      * Derive and set the location of native libraries for the given package,
      * which varies depending on where and how the package was installed.
      */
-    private void setNativeLibraryPaths(PackageParser.Package pkg) {
+    private void setNativeLibraryPaths(PackageParser.Package pkg, int parseFlags) {
         final ApplicationInfo info = pkg.applicationInfo;
         final String codePath = pkg.codePath;
         final File codeFile = new File(codePath);
@@ -7361,10 +7361,13 @@ public class PackageManagerService extends IPackageManager.Stub {
             info.nativeLibraryRootRequiresIsa = false;
             info.nativeLibraryDir = info.nativeLibraryRootDir;
         } else {
-            // Cluster install
-            info.nativeLibraryRootDir = new File(codeFile, LIB_DIR_NAME).getAbsolutePath();
+            if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
+                info.nativeLibraryRootDir =
+                        new File(mAppLib32InstallDir, pkg.packageName).getAbsolutePath();
+            } else {
+                info.nativeLibraryRootDir = new File(codeFile, LIB_DIR_NAME).getAbsolutePath();
+            }
             info.nativeLibraryRootRequiresIsa = true;
-
             info.nativeLibraryDir = new File(info.nativeLibraryRootDir,
                     getPrimaryInstructionSet(info)).getAbsolutePath();
 
