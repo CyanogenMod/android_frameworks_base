@@ -7158,7 +7158,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         final String cpuAbiOverride = deriveAbiOverride(pkg.cpuAbiOverride, pkgSetting);
 
         if ((scanFlags & SCAN_NEW_INSTALL) == 0) {
-            derivePackageAbi(pkg, scanFile, cpuAbiOverride, true /* extract libs */);
+            derivePackageAbi(pkg, scanFile, cpuAbiOverride, true /* extract libs */, parseFlags);
 
             // Some system apps still use directory structure for native libraries
             // in which case we might end up not detecting abi solely based on apk
@@ -7166,7 +7166,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (isSystemApp(pkg) && !pkg.isUpdatedSystemApp() &&
                     pkg.applicationInfo.primaryCpuAbi == null) {
                 setBundledAppAbisAndRoots(pkg, pkgSetting);
-                setNativeLibraryPaths(pkg);
+                setNativeLibraryPaths(pkg, parseFlags);
             }
 
         } else {
@@ -7182,7 +7182,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             // ABIs we've determined above. For non-moves, the path will be updated based on the
             // ABIs we determined during compilation, but the path will depend on the final
             // package path (after the rename away from the stage path).
-            setNativeLibraryPaths(pkg);
+            setNativeLibraryPaths(pkg, parseFlags);
         }
 
         if (DEBUG_INSTALL) Slog.i(TAG, "Linking native library dir for " + path);
@@ -7828,7 +7828,8 @@ public class PackageManagerService extends IPackageManager.Stub {
      * If {@code extractLibs} is true, native libraries are extracted from the app if required.
      */
     public void derivePackageAbi(PackageParser.Package pkg, File scanFile,
-                                 String cpuAbiOverride, boolean extractLibs)
+                                 String cpuAbiOverride, boolean extractLibs,
+                                 int parseFlags)
             throws PackageManagerException {
         // TODO: We can probably be smarter about this stuff. For installed apps,
         // we can calculate this information at install time once and for all. For
@@ -7837,7 +7838,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         // Give ourselves some initial paths; we'll come back for another
         // pass once we've determined ABI below.
-        setNativeLibraryPaths(pkg);
+        setNativeLibraryPaths(pkg, parseFlags);
 
         // We would never need to extract libs for forward-locked and external packages,
         // since the container service will do it for us. We shouldn't attempt to
@@ -7957,7 +7958,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         // Now that we've calculated the ABIs and determined if it's an internal app,
         // we will go ahead and populate the nativeLibraryPath.
-        setNativeLibraryPaths(pkg);
+        setNativeLibraryPaths(pkg, parseFlags);
     }
 
     /**
@@ -8470,7 +8471,7 @@ public class PackageManagerService extends IPackageManager.Stub {
      * Derive and set the location of native libraries for the given package,
      * which varies depending on where and how the package was installed.
      */
-    private void setNativeLibraryPaths(PackageParser.Package pkg) {
+    private void setNativeLibraryPaths(PackageParser.Package pkg, int parseFlags) {
         final ApplicationInfo info = pkg.applicationInfo;
         final String codePath = pkg.codePath;
         final File codeFile = new File(codePath);
@@ -8516,10 +8517,17 @@ public class PackageManagerService extends IPackageManager.Stub {
             info.nativeLibraryRootRequiresIsa = false;
             info.nativeLibraryDir = info.nativeLibraryRootDir;
         } else {
-            // Cluster install
-            info.nativeLibraryRootDir = new File(codeFile, LIB_DIR_NAME).getAbsolutePath();
+            if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
+                // mAppLib32InstallDir is the directory /data/app-lib which is used to store native
+                // libs for apps from the system paritition.  It isn't really specific to 32bit in
+                // any way except for the variable name, the system will use the primary/secondary
+                // ABI computed below.
+                info.nativeLibraryRootDir =
+                        new File(mAppLib32InstallDir, pkg.packageName).getAbsolutePath();
+            } else {
+                info.nativeLibraryRootDir = new File(codeFile, LIB_DIR_NAME).getAbsolutePath();
+            }
             info.nativeLibraryRootRequiresIsa = true;
-
             info.nativeLibraryDir = new File(info.nativeLibraryRootDir,
                     getPrimaryInstructionSet(info)).getAbsolutePath();
 
@@ -13013,7 +13021,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             try {
                 derivePackageAbi(pkg, new File(pkg.codePath), args.abiOverride,
-                        true /* extract libs */);
+                        true /* extract libs */, parseFlags);
             } catch (PackageManagerException pme) {
                 Slog.e(TAG, "Error deriving application ABI", pme);
                 res.setError(INSTALL_FAILED_INTERNAL_ERROR, "Error deriving application ABI");
