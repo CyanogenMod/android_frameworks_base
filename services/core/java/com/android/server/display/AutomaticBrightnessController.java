@@ -68,6 +68,8 @@ class AutomaticBrightnessController {
     private static final long BRIGHTENING_LIGHT_FAST_DEBOUNCE = 500;
     private static final long BRIGHTENING_LIGHT_DEBOUNCE = 4000;
     private static final long DARKENING_LIGHT_DEBOUNCE = 8000;
+    private long mBrighteningLightDebounceConfig;
+    private long mDarkeningLightDebounceConfig;
 
     // Hysteresis constraints for brightening or darkening.
     // The recent lux must have changed by at least this fraction relative to the
@@ -191,6 +193,7 @@ class AutomaticBrightnessController {
             SensorManager sensorManager, Spline autoBrightnessSpline, int lightSensorWarmUpTime,
             int brightnessMin, int brightnessMax, float dozeScaleFactor,
             LiveDisplayController ldc) {
+        final Resources resources = context.getResources();
         mContext = context;
         mCallbacks = callbacks;
         mTwilight = LocalServices.getService(TwilightManager.class);
@@ -201,6 +204,19 @@ class AutomaticBrightnessController {
         mLightSensorWarmUpTimeConfig = lightSensorWarmUpTime;
         mDozeScaleFactor = dozeScaleFactor;
         mLiveDisplay = ldc;
+
+        try {
+            mBrighteningLightDebounceConfig = resources.getInteger(
+                com.android.internal.R.integer.config_autoBrightnessBrighteningDebounce);
+        } catch (Exception e) {
+            mBrighteningLightDebounceConfig =  BRIGHTENING_LIGHT_DEBOUNCE;
+        }
+        try {
+            mDarkeningLightDebounceConfig = resources.getInteger(
+                com.android.internal.R.integer.config_autoBrightnessDarkeningDebounce);
+        } catch (Exception e) {
+            mDarkeningLightDebounceConfig = DARKENING_LIGHT_DEBOUNCE;
+        }
 
         mHandler = new AutomaticBrightnessHandler(looper);
         mAmbientLightRingBuffer = new AmbientLightRingBuffer();
@@ -367,7 +383,7 @@ class AutomaticBrightnessController {
         }
 
         long debounceDelay = mLastObservedLux - ambientLux > BRIGHTENING_FAST_THRESHOLD
-                ? BRIGHTENING_LIGHT_FAST_DEBOUNCE : BRIGHTENING_LIGHT_DEBOUNCE;
+                ? BRIGHTENING_LIGHT_FAST_DEBOUNCE : mBrighteningLightDebounceConfig;
         return earliestValidTime + debounceDelay;
     }
 
@@ -381,7 +397,7 @@ class AutomaticBrightnessController {
             earliestValidTime = mAmbientLightRingBuffer.getTime(i);
         }
 
-        return earliestValidTime + DARKENING_LIGHT_DEBOUNCE;
+        return earliestValidTime + mDarkeningLightDebounceConfig;
     }
 
     private void updateAmbientLux() {
