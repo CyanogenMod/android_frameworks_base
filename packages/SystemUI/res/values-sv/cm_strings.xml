@@ -27,6 +27,8 @@
   <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up av.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up på.</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>
@@ -56,6 +58,7 @@
   <string name="navbar_menu_conditional_button">Menyknapp (autogöm)</string>
   <string name="navbar_menu_always_button">Menyknapp (visa alltid)</string>
   <string name="navbar_menu_big_button">Menyknapp</string>
+  <string name="navigation_ring_title">Snabbstartsgenvägar</string>
   <string name="navring_action_kill_app">Stäng av app</string>
   <string name="navring_action_none">Ingen</string>
   <string name="navring_action_take_screenshot">Ta skärmdump</string>

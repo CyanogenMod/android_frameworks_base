@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Tela ambiente ativado.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Tela ambiente desligado.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Tela ambiente ligado.</string>
+  <string name="accessibility_quick_settings_sync_off">Sincr. desl.</string>
+  <string name="accessibility_quick_settings_sync_on">Sincr. lig.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Sincronização desligada.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Sincronização ligada.</string>
   <string name="accessibility_dpad_left">Cursor à esquerda</string>
   <string name="accessibility_dpad_right">Cursor à direita</string>
   <string name="quick_settings_mobile_data_label">Dados Móveis</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">Tethering USB</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_ambient_display_label">Tela ambiente</string>
+  <string name="quick_settings_sync_label">Sincronização</string>
   <string name="quick_settings_custom_tile_detail_title">Botão personalizado</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="tempo">%1$s</xliff:g> - <xliff:g id="condição">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>

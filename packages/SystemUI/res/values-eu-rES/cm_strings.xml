@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display piztuta.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display itzalita.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display piztuta.</string>
+  <string name="accessibility_quick_settings_sync_off">Sinkronizazioa ezgaituta.</string>
+  <string name="accessibility_quick_settings_sync_on">Sinkronizazioa gaituta.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Sinkronizazioa ezgaituta.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Sinkronizazioa gaituta.</string>
   <string name="accessibility_dpad_left">Kurtsorea ezkerrean</string>
   <string name="accessibility_dpad_right">Kurtsorea eskuman</string>
   <string name="quick_settings_mobile_data_label">Datu mugikorrak</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">USB tethering</string>
   <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
+  <string name="quick_settings_sync_label">Sinkronizazioa</string>
   <string name="quick_settings_custom_tile_detail_title">Lauza pertsonalizatua</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Pasatu hatza eskumara: %1$s</string>

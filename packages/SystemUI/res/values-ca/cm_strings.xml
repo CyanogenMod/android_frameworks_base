@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Pantalla ambient activada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">S\'ha desactivat la pantalla ambient.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">S\'ha activat la pantalla ambient.</string>
+  <string name="accessibility_quick_settings_sync_off">Sinc desactivada.</string>
+  <string name="accessibility_quick_settings_sync_on">Sinc activada.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">S\'ha desactivat la sincronització.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">S\'ha activat la sincronització.</string>
   <string name="accessibility_dpad_left">Cursor esquerra</string>
   <string name="accessibility_dpad_right">Cursor dreta</string>
   <string name="quick_settings_mobile_data_label">Dades mòbils</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">Ancoratge USB</string>
   <string name="quick_settings_heads_up_label">Notificacions emergents</string>
   <string name="quick_settings_ambient_display_label">Pantalla ambient</string>
+  <string name="quick_settings_sync_label">Sinc</string>
   <string name="quick_settings_custom_tile_detail_title">Cel·la personalitzada</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Llisca a la dreta per %1$s</string>

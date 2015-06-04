@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Индикация событий экраном включена.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Индикация событий экраном отключена.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Индикация событий экраном включена.</string>
+  <string name="accessibility_quick_settings_sync_off">Синхронизация отключена.</string>
+  <string name="accessibility_quick_settings_sync_on">Синхронизация включена.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Синхронизация отключена.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Синхронизация включена.</string>
   <string name="accessibility_dpad_left">Курсор влево</string>
   <string name="accessibility_dpad_right">Курсор вправо</string>
   <string name="quick_settings_mobile_data_label">Мобильные данные</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">USB-модем</string>
   <string name="quick_settings_heads_up_label">Всплывающие уведомления</string>
   <string name="quick_settings_ambient_display_label">Индикация событий</string>
+  <string name="quick_settings_sync_label">Синхронизация</string>
   <string name="quick_settings_custom_tile_detail_title">Пользовательская плитка</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Проведите вправо, чтобы открыть приложение «%1$s»</string>

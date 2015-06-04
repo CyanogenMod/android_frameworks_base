@@ -27,6 +27,8 @@ import android.nfc.NfcAdapter;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import com.android.internal.telephony.RILConstants;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -121,7 +123,7 @@ public final class ConnectionSettings implements Parcelable {
         BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         NfcAdapter nfcAdapter = null;
         try {
             nfcAdapter = NfcAdapter.getNfcAdapter(context);
@@ -134,9 +136,15 @@ public final class ConnectionSettings implements Parcelable {
 
         switch (getConnectionId()) {
             case PROFILE_CONNECTION_MOBILEDATA:
-                currentState = cm.getMobileDataEnabled();
+                currentState = tm.getDataEnabled();
                 if (forcedState != currentState) {
-// hharte                    cm.setMobileDataEnabled(forcedState);
+                    int phoneCount = tm.getPhoneCount();
+                    for (int i = 0; i < phoneCount; i++) {
+                        Settings.Global.putInt(context.getContentResolver(),
+                                Settings.Global.MOBILE_DATA + i, (forcedState) ? 1 : 0);
+                        int[] subId = SubscriptionManager.getSubId(i);
+                        tm.setDataEnabled(subId[0], forcedState);
+                    }
                 }
                 break;
             case PROFILE_CONNECTION_2G3G4G:

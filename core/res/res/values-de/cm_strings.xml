@@ -207,6 +207,7 @@
   <string name="live_display_outdoor_summary">Nur Außen-Modus verwenden</string>
   <string name="live_display_hint">LiveDisplay kann gegen eine Überanstrengung der Augen und beim Schlafen in der Nacht helfen. Klicken Sie hier, um es auszuprobieren!</string>
   <string name="lock_to_app_toast_no_navbar">Um diese Ansicht zu lösen die Zurück-Taste drücken und halten.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Taschenlampe ist angeschaltet</string>
   <string name="quick_settings_tile_flashlight_not_summary">Zum Ausschalten berühren</string>
   <string name="storage_sd_dock_card">SD-Karte des Docks</string>
 </resources>

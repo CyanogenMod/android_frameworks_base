@@ -88,9 +88,10 @@ static void hal_notify_callback(fingerprint_msg_t msg) {
 
 	// TODO: fix gross hack to attach JNI to calling thread
     JNIEnv* env = AndroidRuntime::getJNIEnv();
+    JavaVM* vm = NULL;
     if (env == NULL) {
         JavaVMAttachArgs args = {JNI_VERSION_1_4, NULL, NULL};
-        JavaVM* vm = AndroidRuntime::getJavaVM();
+        vm = AndroidRuntime::getJavaVM();
         int result = vm->AttachCurrentThread(&env, (void*) &args);
         if (result != JNI_OK) {
             ALOGE("Can't call JNI method: attach failed: %#x", result);
@@ -99,6 +100,9 @@ static void hal_notify_callback(fingerprint_msg_t msg) {
     }
     env->CallVoidMethod(gFingerprintServiceClassInfo.callbackObject,
             gFingerprintServiceClassInfo.notify, msg.type, arg1, arg2);
+    if (vm != NULL) {
+        vm->DetachCurrentThread();
+    }
 }
 
 static void nativeInit(JNIEnv *env, jobject clazz, jobject callbackObj) {
@@ -184,7 +188,7 @@ static jint nativeCloseHal(JNIEnv* env, jobject clazz) {
 // TODO: clean up void methods
 static const JNINativeMethod g_methods[] = {
     { "nativeEnroll", "(I)I", (void*)nativeEnroll },
-    { "nativeEnrollCancel", "()I", (void*)nativeEnroll },
+    { "nativeEnrollCancel", "()I", (void*)nativeEnrollCancel },
     { "nativeRemove", "(I)I", (void*)nativeRemove },
     { "nativeOpenHal", "()I", (void*)nativeOpenHal },
     { "nativeCloseHal", "()I", (void*)nativeCloseHal },

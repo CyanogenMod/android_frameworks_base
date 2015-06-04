@@ -37,6 +37,6 @@
         android:layout_height="14.5dp"
         android:layout_width="9.5dp"
         android:layout_marginBottom="@dimen/battery_margin_bottom"
-        android:layout_marginStart="@dimen/signal_cluster_battery_padding"/>
+        android:layout_marginStart="@dimen/signal_cluster_battery_padding" />
 
 </LinearLayout>

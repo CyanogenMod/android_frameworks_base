@@ -37,6 +37,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">Omgewingstemperatuur vertoning aan.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Omgewingstemperatuur skerm vertoning is afgeskakel.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Omgewingstemperatuur skerm vertoning is aangeskakel.</string>
+  <string name="accessibility_quick_settings_sync_off">Sinchronisering af.</string>
+  <string name="accessibility_quick_settings_sync_on">Sinchronisering aan.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Sinchronisering afgeskakel.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Sinchronisering aangeskakel.</string>
   <string name="accessibility_dpad_left">Wyser na links</string>
   <string name="accessibility_dpad_right">Wyser na regs</string>
   <string name="quick_settings_mobile_data_label">Mobiele data</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">USB internet verbinding</string>
   <string name="quick_settings_heads_up_label">Loer boodskap</string>
   <string name="quick_settings_ambient_display_label">Omgewingstemperatuur skerm</string>
+  <string name="quick_settings_sync_label">Sinkroniseer</string>
   <string name="quick_settings_custom_tile_detail_title">Pasgemaakte teël</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Swiep regs vir %1$s</string>
