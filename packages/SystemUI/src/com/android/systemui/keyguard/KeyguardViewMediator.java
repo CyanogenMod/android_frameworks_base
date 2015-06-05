@@ -57,6 +57,7 @@ import android.view.WindowManagerGlobal;
 import android.view.WindowManagerPolicy;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import com.cyanogenmod.keyguard.cmstats.KeyguardStats;
 import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardShowCallback;
 import com.android.internal.policy.IKeyguardStateCallback;
@@ -468,11 +469,17 @@ public class KeyguardViewMediator extends SystemUI {
         }
 
         public void onFingerprintRecognized(int userId) {
-            if (mStatusBarKeyguardViewManager.isBouncerShowing()) {
-                mViewMediatorCallback.keyguardDone(true);
-            }
+            mViewMediatorCallback.keyguardDone(true);
         };
 
+        @Override
+        public void onFingerprintAttemptFailed() {
+            if (mUpdateMonitor.isMaxFingerprintAttemptsReached()
+                    && !mStatusBarKeyguardViewManager.isBouncerShowing()) {
+                mStatusBarKeyguardViewManager.showBouncerHideNotifications();
+            }
+            userActivity();
+        }
     };
 
     ViewMediatorCallback mViewMediatorCallback = new ViewMediatorCallback() {
@@ -662,7 +669,8 @@ public class KeyguardViewMediator extends SystemUI {
             // This also "locks" the device when not secure to provide easy access to the
             // camera while preventing unwanted input.
             final boolean lockImmediately =
-                mLockPatternUtils.getPowerButtonInstantlyLocks() || !mLockPatternUtils.isSecure();
+                mLockPatternUtils.getPowerButtonInstantlyLocks() || !mLockPatternUtils.isSecure()
+                    || mLockPatternUtils.usingFingerprint();
 
             notifyScreenOffLocked();
 
@@ -1325,9 +1333,15 @@ public class KeyguardViewMediator extends SystemUI {
         }
 
         if (authenticated) {
-            mUpdateMonitor.clearFailedUnlockAttempts();
+            if (mLockPatternUtils.usingFingerprint()) {
+                KeyguardStats.sendUnlockEvent(mContext,
+                        mUpdateMonitor.isFingerprintRecognized(),
+                        mUpdateMonitor.getFailedFingerprintUnlockAttempts());
+            }
+            mUpdateMonitor.clearFailedUnlockAttempts(true /* Clear FingerprintAttempts */);
         }
         mUpdateMonitor.clearFingerprintRecognized();
+        mUpdateMonitor.stopAuthenticatingFingerprint();
 
         if (mExitSecureCallback != null) {
             try {

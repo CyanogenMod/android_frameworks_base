@@ -17,11 +17,16 @@
 package android.service.fingerprint;
 
 import android.content.ContentResolver;
+import android.content.Context;
+import android.hardware.fingerprint.Fingerprint;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Utility class for dealing with fingerprints and fingerprint settings.
@@ -29,42 +34,48 @@ import java.util.Arrays;
  */
 public
 class FingerprintUtils {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final String TAG = "FingerprintUtils";
 
-    public static int[] getFingerprintIdsForUser(ContentResolver res, int userId) {
-        String fingerIdsRaw = Settings.Secure.getStringForUser(res,
-                Settings.Secure.USER_FINGERPRINT_IDS, userId);
+    public static List<Fingerprint> getFingerprintsForUser(ContentResolver res, int userId) {
+        String fingerprintJson = Settings.Global.getString(res,
+                Settings.Global.USER_FINGERPRINTS);
+        List<Fingerprint> fingerprints = Fingerprint.JsonSerializer.fromJson(fingerprintJson);
 
-        int result[] = {};
-        if (!TextUtils.isEmpty(fingerIdsRaw)) {
-            String[] fingerStringIds = fingerIdsRaw.replace("[","").replace("]","").split(", ");
-            result = new int[fingerStringIds.length];
-            for (int i = 0; i < result.length; i++) {
-                try {
-                    result[i] = Integer.decode(fingerStringIds[i]);
-                } catch (NumberFormatException e) {
-                    if (DEBUG) Log.d(TAG, "Error when parsing finger id " + fingerStringIds[i]);
-                }
+        // Filter out fingerprints that do not match userId
+        Iterator<Fingerprint> iter = fingerprints.iterator();
+        while(iter.hasNext()) {
+            Fingerprint fingerprint = iter.next();
+            if (fingerprint.getUserId() != userId) {
+                iter.remove();
             }
         }
-        return result;
+
+        return fingerprints;
     }
 
-    public static void addFingerprintIdForUser(int fingerId, ContentResolver res, int userId) {
-        int[] fingerIds = getFingerprintIdsForUser(res, userId);
-
+    public static void addFingerprintIdForUser(int fingerId, Context context,
+                                               int userId) {
         // FingerId 0 has special meaning.
         if (fingerId == 0) return;
 
+        // Get existing fingerprints from secure settings
+        List<Fingerprint> fingerprints =
+                getFingerprintsForUser(context.getContentResolver(), userId);
+
         // Don't allow dups
-        for (int i = 0; i < fingerIds.length; i++) {
-            if (fingerIds[i] == fingerId) return;
+        for (Fingerprint fingerprint : fingerprints) {
+            if (fingerprint.getFingerId() == fingerId) {
+                return;
+            }
         }
-        int[] newList = Arrays.copyOf(fingerIds, fingerIds.length + 1);
-        newList[fingerIds.length] = fingerId;
-        Settings.Secure.putStringForUser(res, Settings.Secure.USER_FINGERPRINT_IDS,
-                Arrays.toString(newList), userId);
+
+        // Add the new fingerprint and write back to secure settings
+        String defaultName =
+                context.getString(com.android.internal.R.string.fingerprint_default_name, fingerId);
+        Fingerprint fingerprint = new Fingerprint(defaultName, fingerId, userId);
+        fingerprints.add(fingerprint);
+        saveFingerprints(fingerprints, context.getContentResolver(), userId);
     }
 
     public static boolean removeFingerprintIdForUser(int fingerId, ContentResolver res, int userId)
@@ -74,21 +85,48 @@ class FingerprintUtils {
         // something bad has happened.
         if (fingerId == 0) throw new IllegalStateException("Bad fingerId");
 
-        int[] fingerIds = getFingerprintIdsForUser(res, userId);
-        int[] resultIds = Arrays.copyOf(fingerIds, fingerIds.length);
-        int resultCount = 0;
-        for (int i = 0; i < fingerIds.length; i++) {
-            if (fingerId != fingerIds[i]) {
-                resultIds[resultCount++] = fingerIds[i];
+        List<Fingerprint> fingerprints = getFingerprintsForUser(res, userId);
+
+        Iterator<Fingerprint> iter = fingerprints.iterator();
+        while(iter.hasNext()) {
+            if (iter.next().getFingerId() == fingerId) {
+                iter.remove();
             }
         }
-        if (resultCount > 0) {
-            Settings.Secure.putStringForUser(res, Settings.Secure.USER_FINGERPRINT_IDS,
-                    Arrays.toString(Arrays.copyOf(resultIds, resultCount)), userId);
-            return true;
-        }
-        return false;
+
+        saveFingerprints(fingerprints, res, userId);
+        return true;
     }
 
-};
+
+
+    public static void setFingerprintName(int fingerId, String name,
+                                          ContentResolver res, int userId) {
+        // FingerId 0 has special meaning. The HAL layer is supposed to remove each finger one
+        // at a time and invoke notify() for each fingerId.  If we get called with 0 here, it means
+        // something bad has happened.
+        if (fingerId == 0) throw new IllegalStateException("Bad fingerId");
+
+        // Find & Replace old fingerprint with newly named fingerprint in the list
+        List<Fingerprint> fingerprints = getFingerprintsForUser(res, userId);
+        ListIterator<Fingerprint> iter = fingerprints.listIterator();
+        while(iter.hasNext()) {
+            Fingerprint fingerprint = iter.next();
+            if (fingerprint.getFingerId() == fingerId) {
+                Fingerprint.Builder builder = new Fingerprint.Builder(fingerprint);
+                builder.name(name);
+                iter.set(builder.build());
+            }
+        }
+
+        saveFingerprints(fingerprints, res, userId);
+    }
+
+
+    public static void saveFingerprints(List<Fingerprint> fingerprints,
+                                         ContentResolver res, int userId) {
+        String json = Fingerprint.JsonSerializer.toJson(fingerprints);
+        Settings.Global.putString(res, Settings.Global.USER_FINGERPRINTS, json);
+    }
+}
 

@@ -254,7 +254,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     /**
      * The delay to reset the hint text when the hint animation is finished running.
      */
-    private static final int HINT_RESET_DELAY_MS = 1200;
+    private static final int HINT_RESET_DELAY_MS = 4000;
 
     private static final AudioAttributes VIBRATION_ATTRIBUTES = new AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -4717,6 +4717,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     public void onPhoneHintStarted(String hint) {
         mKeyguardIndicationController.showTransientIndication(hint);
+    }
+
+    public void onFingerprintHintStarted() {
+        mKeyguardIndicationController.showTransientIndication(R.string.fingerprint_try_again_hint);
     }
 
     public void onTrackingStopped(boolean expand) {

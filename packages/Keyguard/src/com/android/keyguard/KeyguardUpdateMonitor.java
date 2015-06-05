@@ -38,6 +38,7 @@ import static android.os.BatteryManager.EXTRA_PLUGGED;
 import static android.os.BatteryManager.EXTRA_LEVEL;
 import static android.os.BatteryManager.EXTRA_HEALTH;
 
+import android.hardware.fingerprint.Fingerprint;
 import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Handler;
@@ -62,6 +63,7 @@ import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.widget.LockPatternUtils;
 import com.google.android.collect.Lists;
 
 import java.lang.ref.WeakReference;
@@ -85,6 +87,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final boolean DEBUG_SIM_STATES = DEBUG || false;
     private static final int FAILED_BIOMETRIC_UNLOCK_ATTEMPTS_BEFORE_BACKUP = 3;
+    private static final int FAILED_FINGERPRINT_UNLOCK_ATTEMPTS_BEFORE_BACKUP = 2;
     private static final int LOW_BATTERY_THRESHOLD = 20;
 
     private static final String ACTION_FACE_UNLOCK_STARTED
@@ -157,6 +160,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     // Password attempts
     private int mFailedAttempts = 0;
     private int mFailedBiometricUnlockAttempts = 0;
+    private int mFailedFingerprintAttempts = 0;
 
     private boolean mAlternateUnlockEnabled;
 
@@ -169,6 +173,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private boolean mSwitchingUser;
 
     private boolean mScreenOn;
+
+    private LockPatternUtils mLockPatternUtils;
 
     private int mNumPhones = 0;
     private SubscriptionManager mSubscriptionManager;
@@ -347,6 +353,16 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
     }
 
+    private void onFingerprintAttemptFailed() {
+        mFailedFingerprintAttempts++;
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onFingerprintAttemptFailed();
+            }
+        }
+    }
+
     private void onFingerprintRecognized(int userId) {
         mUserFingerprintRecognized.put(userId, true);
         for (int i = 0; i < mCallbacks.size(); i++) {
@@ -358,7 +374,14 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private void handleFingerprintProcessed(int fingerprintId) {
-        if (fingerprintId == 0) return; // not a valid fingerprint
+        if (fingerprintId == 0) {
+            // Not a valid fingerprint, start another authenticate call to try again
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+            fpm.authenticate();
+            onFingerprintAttemptFailed();
+            return; // not a valid fingerprint
+        }
 
         final int userId;
         try {
@@ -372,9 +395,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             return;
         }
         final ContentResolver res = mContext.getContentResolver();
-        final int ids[] = FingerprintUtils.getFingerprintIdsForUser(res, userId);
-        for (int i = 0; i < ids.length; i++) {
-            if (ids[i] == fingerprintId) {
+        final List<Fingerprint> fingerprints = FingerprintUtils.getFingerprintsForUser(res, userId);
+        for (Fingerprint fingerprint : fingerprints) {
+            if (fingerprint.getFingerId() == fingerprintId) {
                 onFingerprintRecognized(userId);
             }
         }
@@ -711,6 +734,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     protected void handleScreenTurnedOn() {
+        startFingerAuthIfUsingFingerprint();
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
@@ -721,6 +745,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     protected void handleScreenTurnedOff(int arg1) {
+        stopAuthenticatingFingerprint();
         clearFingerprintRecognized();
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
@@ -908,9 +933,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         TrustManager trustManager = (TrustManager) context.getSystemService(Context.TRUST_SERVICE);
         trustManager.registerTrustListener(this);
 
-        FingerprintManager fpm;
-        fpm = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
-        fpm.startListening(mFingerprintManagerReceiver);
+        mLockPatternUtils = new LockPatternUtils(mContext);
+        startFingerAuthIfUsingFingerprint();
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
@@ -1521,13 +1545,46 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         return mFailedAttempts;
     }
 
+    public int getFailedFingerprintUnlockAttempts() {
+        return mFailedFingerprintAttempts;
+    }
+
     public void clearFailedUnlockAttempts() {
+        clearFailedUnlockAttempts(false);
+    }
+
+    public void clearFailedUnlockAttempts(boolean clearFingers) {
         mFailedAttempts = 0;
         mFailedBiometricUnlockAttempts = 0;
+        if (clearFingers) {
+            mFailedFingerprintAttempts = 0;
+        }
+    }
+
+    public void startFingerAuthIfUsingFingerprint() {
+        if (mLockPatternUtils.usingFingerprint()) {
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+            fpm.startListening(mFingerprintManagerReceiver);
+            fpm.authenticate();
+        }
+    }
+
+    public void stopAuthenticatingFingerprint() {
+        if (mLockPatternUtils.isFingerprintInstalled(mContext)) {
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+            fpm.cancel();
+            fpm.stopListening();
+        }
     }
 
     public void clearFingerprintRecognized() {
         mUserFingerprintRecognized.clear();
+    }
+
+    public boolean isFingerprintRecognized() {
+       return (mUserFingerprintRecognized.size() > 0);
     }
 
     public void reportFailedUnlockAttempt() {
@@ -1548,6 +1605,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
     public boolean getMaxBiometricUnlockAttemptsReached() {
         return mFailedBiometricUnlockAttempts >= FAILED_BIOMETRIC_UNLOCK_ATTEMPTS_BEFORE_BACKUP;
+    }
+
+    public boolean isMaxFingerprintAttemptsReached() {
+        return mFailedFingerprintAttempts >= FAILED_FINGERPRINT_UNLOCK_ATTEMPTS_BEFORE_BACKUP;
     }
 
     public boolean isAlternateUnlockEnabled() {
