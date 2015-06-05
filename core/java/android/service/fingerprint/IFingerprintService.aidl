@@ -24,16 +24,18 @@ import android.service.fingerprint.IFingerprintServiceReceiver;
  */
 oneway interface IFingerprintService {
     // Any errors resulting from this call will be returned to the listener
+    void authenticate(IBinder token, int userId);
+
+    // Any errors resulting from this call will be returned to the listener
     void enroll(IBinder token, long timeout, int userId);
     
     // Any errors resulting from this call will be returned to the listener
-    void enrollCancel(IBinder token, int userId);
+    void cancel(IBinder token, int userId);
 
     // Any errors resulting from this call will be returned to the listener
     void remove(IBinder token, int fingerprintId, int userId);
 
-    // Start listening for fingerprint events.  This has the side effect of starting
-    // the hardware if not already started.
+    // Start listening for fingerprint events.
     void startListening(IBinder token, IFingerprintServiceReceiver receiver, int userId);
 
     // Stops listening for fingerprints
