@@ -60,6 +60,8 @@ public class FingerprintManager {
     public static final int FINGERPRINT_ERROR_UNABLE_TO_PROCESS = 2;
     public static final int FINGERPRINT_ERROR_TIMEOUT = 3;
     public static final int FINGERPRINT_ERROR_NO_SPACE = 4;
+    public static final int FINGERPRINT_ERROR_CANCELED = 5;
+    public static final int FINGERPRINT_ERROR_UNABLE_TO_REMOVE = 6;
 
     // FINGERPRINT_ACQUIRED messages.  Must agree with HAL (fingerprint.h)
     public static final int FINGERPRINT_ACQUIRED_GOOD = 0;
@@ -140,6 +142,24 @@ public class FingerprintManager {
         ContentResolver res = mContext.getContentResolver();
         return Settings.Secure.getInt(res, "fingerprint_enabled", 0) != 0
                 && FingerprintUtils.getFingerprintIdsForUser(res, getCurrentUserId()).length > 0;
+    }
+
+    /**
+     * Start the authentication process.
+     *
+     * @param timeout
+     */
+    public void authenticate() {
+        if (mServiceReceiver == null) {
+            sendError(FINGERPRINT_ERROR_NO_RECEIVER, 0, 0);
+            return;
+        }
+        if (mService != null) try {
+            mService.authenticate(mToken, getCurrentUserId());
+        } catch (RemoteException e) {
+            Log.v(TAG, "Remote exception while enrolling: ", e);
+            sendError(FINGERPRINT_ERROR_HW_UNAVAILABLE, 0, 0);
+        }
     }
 
     /**
@@ -227,21 +247,20 @@ public class FingerprintManager {
         }
     }
 
-    public void enrollCancel() {
+    public void cancel() {
         if (mServiceReceiver == null) {
             sendError(FINGERPRINT_ERROR_NO_RECEIVER, 0, 0);
             return;
         }
         if (mService != null) {
             try {
-                mService.enrollCancel(mToken, getCurrentUserId());
-                mClientReceiver = null;
+                mService.cancel(mToken, getCurrentUserId());
             } catch (RemoteException e) {
                 Log.v(TAG, "Remote exception in enrollCancel(): ", e);
                 sendError(FINGERPRINT_ERROR_HW_UNAVAILABLE, 0, 0);
             }
         } else {
-            Log.w(TAG, "enrollCancel(): Service not connected!");
+            Log.w(TAG, "cancel(): Service not connected!");
         }
     }
 
