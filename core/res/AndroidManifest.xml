@@ -3066,6 +3066,13 @@
         android:description="@string/permdesc_accessTorchService"
         android:protectionLevel="signature" />
 
+     <!-- Allows an application to access Fingerprint Service
+          @hide -->
+     <permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE"
+         android:label="@string/permlab_accessFingerprintService"
+         android:description="@string/permdesc_accessFingerprintService"
+         android:protectionLevel="system|signature" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>

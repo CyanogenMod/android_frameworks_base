@@ -140,6 +140,10 @@
     <!-- LiveDisplay -->
     <uses-permission android:name="android.permission.HARDWARE_ABSTRACTION_ACCESS" />
 
+    <!-- Fingerprint -->
+    <uses-permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE" />
+    <uses-permission android:name="com.cyngn.stats.SEND_ANALYTICS" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"

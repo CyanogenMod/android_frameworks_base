@@ -17,19 +17,21 @@
 package android.service.fingerprint;
 
 import android.app.ActivityManagerNative;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.hardware.fingerprint.Fingerprint;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A class that coordinates access to the fingerprint hardware.
@@ -60,6 +62,8 @@ public class FingerprintManager {
     public static final int FINGERPRINT_ERROR_UNABLE_TO_PROCESS = 2;
     public static final int FINGERPRINT_ERROR_TIMEOUT = 3;
     public static final int FINGERPRINT_ERROR_NO_SPACE = 4;
+    public static final int FINGERPRINT_ERROR_CANCELED = 5;
+    public static final int FINGERPRINT_ERROR_UNABLE_TO_REMOVE = 6;
 
     // FINGERPRINT_ACQUIRED messages.  Must agree with HAL (fingerprint.h)
     public static final int FINGERPRINT_ACQUIRED_GOOD = 0;
@@ -139,7 +143,25 @@ public class FingerprintManager {
     public boolean enrolledAndEnabled() {
         ContentResolver res = mContext.getContentResolver();
         return Settings.Secure.getInt(res, "fingerprint_enabled", 0) != 0
-                && FingerprintUtils.getFingerprintIdsForUser(res, getCurrentUserId()).length > 0;
+                && FingerprintUtils.getFingerprintsForUser(res, getCurrentUserId()).size() > 0;
+    }
+
+    /**
+     * Start the authentication process.
+     *
+     * @param timeout
+     */
+    public void authenticate() {
+        if (mServiceReceiver == null) {
+            sendError(FINGERPRINT_ERROR_NO_RECEIVER, 0, 0);
+            return;
+        }
+        if (mService != null) try {
+            mService.authenticate(mToken, getCurrentUserId());
+        } catch (RemoteException e) {
+            Log.v(TAG, "Remote exception while enrolling: ", e);
+            sendError(FINGERPRINT_ERROR_HW_UNAVAILABLE, 0, 0);
+        }
     }
 
     /**
@@ -184,6 +206,26 @@ public class FingerprintManager {
     }
 
     /**
+     * Rename the fingerprint
+     */
+    public void setFingerprintName(int fingerprintId, String newName) {
+        if (mServiceReceiver == null) {
+            sendError(FINGERPRINT_ERROR_NO_RECEIVER, 0, 0);
+            return;
+        }
+        if (mService != null) {
+            try {
+                mService.setFingerprintName(mToken, fingerprintId, newName, getCurrentUserId());
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception renaming fingerprintId: " + fingerprintId, e);
+            }
+        } else {
+            Log.w(TAG, "setFingerprintName(): Service not connected!");
+            sendError(FINGERPRINT_ERROR_HW_UNAVAILABLE, 0, 0);
+        }
+    }
+
+    /**
      * Starts listening for fingerprint events.  When a finger is scanned or recognized, the
      * client will be notified via the callback.
      */
@@ -202,12 +244,7 @@ public class FingerprintManager {
     }
 
     private int getCurrentUserId() {
-        try {
-            return ActivityManagerNative.getDefault().getCurrentUser().id;
-        } catch (RemoteException e) {
-            Log.w(TAG, "Failed to get current user id\n");
-            return UserHandle.USER_NULL;
-        }
+        return Process.myUserHandle().getIdentifier();
     }
 
     /**
@@ -227,22 +264,47 @@ public class FingerprintManager {
         }
     }
 
-    public void enrollCancel() {
+    public void cancel() {
         if (mServiceReceiver == null) {
             sendError(FINGERPRINT_ERROR_NO_RECEIVER, 0, 0);
             return;
         }
         if (mService != null) {
             try {
-                mService.enrollCancel(mToken, getCurrentUserId());
-                mClientReceiver = null;
+                mService.cancel(mToken, getCurrentUserId());
             } catch (RemoteException e) {
                 Log.v(TAG, "Remote exception in enrollCancel(): ", e);
                 sendError(FINGERPRINT_ERROR_HW_UNAVAILABLE, 0, 0);
             }
         } else {
-            Log.w(TAG, "enrollCancel(): Service not connected!");
+            Log.w(TAG, "cancel(): Service not connected!");
         }
+    }
+
+    public List<Fingerprint> getEnrolledFingerprints() {
+        if (mService != null) {
+            try {
+                return mService.getEnrolledFingerprints(mToken, getCurrentUserId());
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in getEnrolledFingerprints(): ", e);
+            }
+        } else {
+            Log.w(TAG, "getEnrolledFingerprints(): Service not connected!");
+        }
+        return Collections.emptyList();
+    }
+
+    public int getNumEnrollmentSteps() {
+        if (mService != null) {
+            try {
+                return mService.getNumEnrollmentSteps(mToken);
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in getNumEnrollmentSteps(): ", e);
+            }
+        } else {
+            Log.w(TAG, "getNumEnrollmentSteps(): Service not connected!");
+        }
+        return -1;
     }
 
     private void sendError(int msg, int arg1, int arg2) {
