@@ -16,6 +16,7 @@
 
 package android.util;
 
+import android.graphics.Bitmap;
 import android.os.SystemProperties;
 
 
@@ -122,7 +123,20 @@ public class DisplayMetrics {
      * density for a display in {@link #densityDpi}.
      */
     @Deprecated
-    public static int DENSITY_DEVICE = getDeviceDensity();
+    public static int DENSITY_DEVICE;
+
+    /** @hide */
+    public static int DENSITY_PREFERRED;
+
+    /** @hide */
+    public static int DENSITY_DEVICE_DEFAULT;
+
+    static {
+        DENSITY_DEVICE = SystemProperties.getInt("qemu.sf.lcd_density", SystemProperties
+            .getInt("ro.sf.lcd_density", DENSITY_DEFAULT));
+        DENSITY_DEVICE_DEFAULT = DENSITY_DEVICE;
+        DENSITY_PREFERRED = SystemProperties.getInt("persist.sys.lcd_density", DENSITY_DEVICE);
+    }
 
     /**
      * The absolute width of the display in pixels.
@@ -213,6 +227,18 @@ public class DisplayMetrics {
      */
     public float noncompatYdpi;
 
+    /** @hide */
+    public void setDensity(int inDensity) {
+        density = inDensity / (float) DENSITY_DEFAULT;
+        densityDpi = inDensity;
+        scaledDensity = density;
+        xdpi = inDensity;
+        ydpi = inDensity;
+
+        DENSITY_DEVICE = inDensity;
+        Bitmap.setDefaultDensity(inDensity);
+    }
+
     public DisplayMetrics() {
     }
     
@@ -302,14 +328,5 @@ public class DisplayMetrics {
         return "DisplayMetrics{density=" + density + ", width=" + widthPixels +
             ", height=" + heightPixels + ", scaledDensity=" + scaledDensity +
             ", xdpi=" + xdpi + ", ydpi=" + ydpi + "}";
-    }
-
-    private static int getDeviceDensity() {
-        // qemu.sf.lcd_density can be used to override ro.sf.lcd_density
-        // when running in the emulator, allowing for dynamic configurations.
-        // The reason for this is that ro.sf.lcd_density is write-once and is
-        // set by the init process when it parses build.prop before anything else.
-        return SystemProperties.getInt("qemu.sf.lcd_density",
-                SystemProperties.getInt("ro.sf.lcd_density", DENSITY_DEFAULT));
     }
 }

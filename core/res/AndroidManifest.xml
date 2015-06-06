@@ -2566,7 +2566,7 @@
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_modifyProtectedSmsList"
         android:description="@string/permdesc_modifyProtectedSmsList"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature|system" />
 
     <!-- Allows an application to receive sms (usually for auth or registration)
          from whitelisted addresses
@@ -2575,7 +2575,7 @@
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_receiveProtectedSms"
         android:description="@string/permdesc_receiveProtectedSms"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature|system" />
 
     <!-- Allows an application to broadcast an SMS receipt notification.
          Not for use by third-party applications. -->

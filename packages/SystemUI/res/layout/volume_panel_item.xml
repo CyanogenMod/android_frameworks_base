@@ -45,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <SeekBar
+        <view
+            class="com.android.systemui.volume.VolumePanel$VolumeSeekBar"
             android:id="@+id/seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
