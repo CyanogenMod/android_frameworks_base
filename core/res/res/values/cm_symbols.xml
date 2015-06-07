@@ -27,6 +27,8 @@
     <!-- External CM specific core services -->
     <java-symbol type="array" name="config_externalCMServices" />
 
+    <java-symbol type="bool" name="config_singleStageCameraKey" />
+
     <!-- Proximity check on screen on -->
     <java-symbol type="bool" name="config_proximityCheckOnWake" />
 
