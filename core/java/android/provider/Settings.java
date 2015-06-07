@@ -3339,6 +3339,24 @@ public final class Settings {
         public static final String APP_SWITCH_WAKE_SCREEN = "app_switch_wake_screen";
 
         /**
+         * Whether to wake the screen with the camera key half-press.
+         * @hide
+         */
+        public static final String CAMERA_WAKE_SCREEN = "camera_wake_screen";
+
+        /**
+         * Whether or not to send device back to sleep if Camera button is released ("Peek")
+         * @hide
+         */
+        public static final String CAMERA_SLEEP_ON_RELEASE = "camera_sleep_on_release";
+
+        /**
+         * Whether to launch secure camera app when key is longpressed
+         * @hide
+         */
+        public static final String CAMERA_LAUNCH = "camera_launch";
+
+        /**
          * Whether to wake the screen with the volume keys, the value is boolean.
          * @hide
          */
