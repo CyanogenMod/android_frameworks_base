@@ -304,6 +304,7 @@ public class NotificationManagerService extends SystemService {
     private static final int REASON_LISTENER_CANCEL_ALL = 11;
     private static final int REASON_GROUP_SUMMARY_CANCELED = 12;
     private static final int REASON_GROUP_OPTIMIZATION = 13;
+    private static final int REASON_PACKAGE_MARKED_SPAM = 14;
 
     private static class Archive {
         final int mBufferSize;
@@ -1996,12 +1997,13 @@ public class NotificationManagerService extends SystemService {
                         return;
                     }
 
+                    int index = indexOfNotificationLocked(n.getKey());
                     if (isNotificationSpam(notification, pkg)) {
                         mArchive.record(r.sbn);
+                        EventLogTags.writeNotificationCanceled(mNotificationList.get(index).getKey(),
+                                REASON_PACKAGE_MARKED_SPAM);
                         return;
                     }
-
-                    int index = indexOfNotificationLocked(n.getKey());
                     if (index < 0) {
                         // Check DOS protection if this this id is unknown to us
                         if (!isSystemNotification && !isNotificationFromListener) {
