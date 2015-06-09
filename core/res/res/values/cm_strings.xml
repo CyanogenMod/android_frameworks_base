@@ -135,4 +135,8 @@
 
     <string name="theme_reset_notification_title">Theme reset</string>
     <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
+
+    <!-- Zen mode buttons -->
+    <string name="silent_mode_priority">Priority</string>
+    <string name="silent_mode_none">None</string>
 </resources>
