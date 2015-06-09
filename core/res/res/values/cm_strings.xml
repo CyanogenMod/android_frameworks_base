@@ -133,4 +133,7 @@
     <!-- stylus gestures support -->
     <string name="stylus_app_not_installed">%s is not installed</string>
 
+    <!-- Zen mode buttons -->
+    <string name="silent_mode_priority">Priority</string>
+    <string name="silent_mode_none">None</string>
 </resources>
