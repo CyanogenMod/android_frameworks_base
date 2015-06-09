@@ -1251,6 +1251,21 @@
         -->
     </declare-styleable>
 
+    <!-- @hide for privileged system apps only.
+         The <code>forces-permission</code> tag allows for privileged system applications to be
+         granted specific "signature" level permissions, unconditionally.
+
+         <p>This appears as a child tag of the root
+         {@link #AndroidManifest manifest} tag. -->
+    <declare-styleable name="AndroidManifestForcesPermission" parent="AndroidManifest">
+        <!-- Required name of the permission you use, as published with the
+        corresponding name attribute of a
+        {@link android.R.styleable#AndroidManifestPermission &lt;permission&gt;}
+        tag; often this is one of the {@link android.Manifest.permission standard
+        system permissions}. -->
+        <attr name="name" />
+    </declare-styleable>
+
     <!-- The <code>uses-configuration</code> tag specifies
          a specific hardware configuration value used by the application.
          For example an application might specify that it requires

@@ -1644,6 +1644,10 @@ public class PackageParser {
                 if (!parseUsesPermission(pkg, res, parser, attrs, outError)) {
                     return null;
                 }
+            } else if (tagName.equals("forces-permission")) {
+                if (!parseForcesPermission(pkg, res, parser, attrs, outError)) {
+                    return null;
+                }
             } else if (tagName.equals("uses-configuration")) {
                 ConfigurationInfo cPref = new ConfigurationInfo();
                 sa = res.obtainAttributes(attrs,
@@ -2109,6 +2113,38 @@ public class PackageParser {
                         return false;
                     }
                 }
+            }
+        }
+
+        XmlUtils.skipCurrentTag(parser);
+        return true;
+    }
+
+    private boolean parseForcesPermission(Package pkg, Resources res, XmlResourceParser parser,
+                                          AttributeSet attrs, String[] outError)
+            throws XmlPullParserException, IOException {
+        TypedArray sa = res.obtainAttributes(attrs,
+                com.android.internal.R.styleable.AndroidManifestForcesPermission);
+        // Note: don't allow this value to be a reference to a resource
+        // that may change.
+        String name = sa.getNonResourceString(
+                com.android.internal.R.styleable.AndroidManifestForcesPermission_name);
+        sa.recycle();
+
+        if (name != null) {
+            int index = pkg.forcedPermissions.indexOf(name);
+            if (index == -1) {
+                pkg.forcedPermissions.add(name.intern());
+                if (pkg.requestedPermissions.contains(name)) {
+                    // needs to be added to requestedPermissions so the system attempts to grant
+                    // this permission
+                    pkg.requestedPermissions.add(name.intern());
+                    pkg.requestedPermissionsRequired.add(Boolean.TRUE);
+                }
+            } else {
+                outError[0] = "conflicting <forces-permission> entries";
+                mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
+                return false;
             }
         }
 
@@ -4420,6 +4456,8 @@ public class PackageParser {
 
         public final ArrayList<String> requestedPermissions = new ArrayList<String>();
         public final ArrayList<Boolean> requestedPermissionsRequired = new ArrayList<Boolean>();
+
+        public final ArrayList<String> forcedPermissions = new ArrayList<String>();
 
         public ArrayList<String> protectedBroadcasts;
 
