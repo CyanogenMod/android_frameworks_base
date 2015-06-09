@@ -2694,9 +2694,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mStatusBarWindowManager.setStatusBarExpanded(true);
         mStatusBarView.setFocusable(false);
 
-        if (!force) {
-            visibilityChanged(true);
-        }
+        visibilityChanged(true);
         mWaitingForKeyguardExit = false;
         disable(mDisabledUnmodified, !force /* animate */);
         setInteracting(StatusBarManager.WINDOW_STATUS_BAR, true);
