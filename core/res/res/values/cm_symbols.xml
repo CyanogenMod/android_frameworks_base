@@ -335,4 +335,8 @@
     <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
  
     <java-symbol type="array" name="config_externalCMServices" />
+    
+    <!-- global actions (zen mode buttons) -->
+    <java-symbol type="id" name="option4" />
+
 </resources>
