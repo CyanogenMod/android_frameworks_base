@@ -26,11 +26,25 @@
         <item>369</item><item>0</item>
     </array>
 
-    <!-- Performance profiles tiles -->
+    <!-- Performance profiles drawables -->
     <string-array name="perf_profile_drawables" translatable="false">
         <item>@drawable/ic_qs_perf_profile_highperf_avd</item>
         <item>@drawable/ic_qs_perf_profile_pwrsv_avd</item>
         <item>@drawable/ic_qs_perf_profile_bal_avd</item>
+    </string-array>
+
+    <!-- Performance profiles description-->
+    <string-array name="perf_profile_description" translatable="false">
+        <item>@string/accessibility_quick_settings_perf_profile_pwrsv</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bal</item>
+        <item>@string/accessibility_quick_settings_perf_profile_perf</item>
+    </string-array>
+
+    <!-- Performance profiles announcement-->
+    <string-array name="perf_profile_announcement" translatable="false">
+        <item>@string/accessibility_quick_settings_perf_profile_changed_pwrsv</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bal</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_perf</item>
     </string-array>
 
     <!-- Cardinal directions for the compass tile -->
@@ -52,6 +66,24 @@
         <item>@drawable/ic_livedisplay_day</item>
         <item>@drawable/ic_livedisplay_night</item>
         <item>@drawable/ic_livedisplay_outdoor</item>
+    </string-array>
+
+    <!-- LiveDisplay description-->
+    <string-array name="live_display_description" translatable="false">
+        <item>@string/accessibility_quick_settings_live_display_auto</item>
+        <item>@string/accessibility_quick_settings_live_display_off</item>
+        <item>@string/accessibility_quick_settings_live_display_day</item>
+        <item>@string/accessibility_quick_settings_live_display_night</item>
+        <item>@string/accessibility_quick_settings_live_display_outdoor</item>
+    </string-array>
+
+    <!-- LiveDisplay announcement-->
+    <string-array name="live_display_announcement" translatable="false">
+        <item>@string/accessibility_quick_settings_live_display_changed_auto</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_off</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_day</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_night</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_outdoor</item>
     </string-array>
 
 </resources>

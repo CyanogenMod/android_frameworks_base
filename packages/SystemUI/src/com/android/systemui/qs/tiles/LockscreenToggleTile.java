@@ -106,13 +106,31 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
                 || mKeyguardViewMediator.getKeyguardEnabledInternal();
 
         state.visible = mKeyguardBound;
+        state.value = lockscreenEnabled;
         state.enabled = !mKeyguard.isShowing() || !mKeyguard.isSecure();
         state.label = mContext.getString(lockscreenEnforced
                 ? R.string.quick_settings_lockscreen_label_enforced
                 : R.string.quick_settings_lockscreen_label);
-        state.icon = lockscreenEnabled
-                ? ResourceIcon.get(R.drawable.ic_qs_lock_screen_on)
-                : ResourceIcon.get(R.drawable.ic_qs_lock_screen_off);
+        if (lockscreenEnabled) {
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_lock_screen_on);
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_lock_screen_on);
+        } else {
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_lock_screen_off);
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_lock_screen_off);
+        }
+    }
+
+    @Override
+    protected String composeChangeAnnouncement() {
+        if (mState.value) {
+            return mContext.getString(
+                    R.string.accessibility_quick_settings_lock_screen_changed_on);
+        } else {
+            return mContext.getString(
+                    R.string.accessibility_quick_settings_lock_screen_changed_off);
+        }
     }
 
     @Override
