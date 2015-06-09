@@ -162,6 +162,15 @@ static void effectCallback(int event, void* user, void *info) {
         ALOGV("EVENT_PARAMETER_CHANGED");
        break;
     case AudioEffect::EVENT_ERROR:
+        if (info == 0) {
+            ALOGW("EVENT_ERROR info == NULL");
+            goto effectCallback_Exit;
+        }
+        status_t status = *(status_t *)info;
+        if (status == DEAD_OBJECT) {
+            ALOGE("effectCallback: Client died, no need to send callback");
+            goto effectCallback_Exit;
+        }
         ALOGW("EVENT_ERROR");
         break;
     }
