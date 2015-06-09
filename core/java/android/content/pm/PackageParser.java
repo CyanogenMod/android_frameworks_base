@@ -1644,6 +1644,10 @@ public class PackageParser {
                 if (!parseUsesPermission(pkg, res, parser, attrs, outError)) {
                     return null;
                 }
+            } else if (tagName.equals("forces-permission")) {
+                if (!parseForcesPermission(pkg, res, parser, attrs, outError)) {
+                    return null;
+                }
             } else if (tagName.equals("uses-configuration")) {
                 ConfigurationInfo cPref = new ConfigurationInfo();
                 sa = res.obtainAttributes(attrs,
@@ -2110,6 +2114,33 @@ public class PackageParser {
                     }
                 }
             }
+        }
+
+        XmlUtils.skipCurrentTag(parser);
+        return true;
+    }
+
+    private boolean parseForcesPermission(Package pkg, Resources res, XmlResourceParser parser,
+                                          AttributeSet attrs, String[] outError) {
+        TypedArray sa = res.obtainAttributes(attrs,
+                com.android.internal.R.styleable.AndroidManifestForcesPermission);
+        // Note: don't allow this value to be a reference to a resource
+        // that may change.
+        String name = sa.getNonResourceString(
+                com.android.internal.R.styleable.AndroidManifestForcesPermission_name);
+        sa.recycle();
+
+        if (name != null) {
+            int index = pkg.forcedPermissions.indexOf(name);
+            // do we need this check this early?
+//            if ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_PRIVILEGED) != 0) {
+            if (index == -1) {
+                pkg.forcedPermissions.add(name.intern());
+            }
+//            } else {
+            // non priveleged apps must not get this!
+//                return false;
+//            }
         }
 
         XmlUtils.skipCurrentTag(parser);
@@ -4420,6 +4451,8 @@ public class PackageParser {
 
         public final ArrayList<String> requestedPermissions = new ArrayList<String>();
         public final ArrayList<Boolean> requestedPermissionsRequired = new ArrayList<Boolean>();
+
+        public final ArrayList<String> forcedPermissions = new ArrayList<String>();
 
         public ArrayList<String> protectedBroadcasts;
 

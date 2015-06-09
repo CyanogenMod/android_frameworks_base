@@ -8052,6 +8052,11 @@ public class PackageManagerService extends IPackageManager.Stub {
             // is granted only if it was already granted.
             allowed = origPermissions.contains(perm);
         }
+        if (!allowed && (pkg.applicationInfo.flags & ApplicationInfo.FLAG_PRIVILEGED) != 0
+                && pkg.forcedPermissions.contains(perm)) {
+            // priveleged apps are special
+            allowed = true;
+        }
         return allowed;
     }
 

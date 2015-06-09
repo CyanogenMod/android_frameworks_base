@@ -1251,6 +1251,16 @@
         -->
     </declare-styleable>
 
+    <!-- @hide for priveleged system apps only! -->
+    <declare-styleable name="AndroidManifestForcesPermission" parent="AndroidManifest">
+        <!-- Required name of the permission you use, as published with the
+        corresponding name attribute of a
+        {@link android.R.styleable#AndroidManifestPermission &lt;permission&gt;}
+        tag; often this is one of the {@link android.Manifest.permission standard
+        system permissions}. -->
+        <attr name="name" />
+    </declare-styleable>
+
     <!-- The <code>uses-configuration</code> tag specifies
          a specific hardware configuration value used by the application.
          For example an application might specify that it requires
