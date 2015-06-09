@@ -86,9 +86,11 @@ public class AmbientDisplayTile extends QSTile<QSTile.BooleanState> {
     @Override
     protected String composeChangeAnnouncement() {
         if (mState.value) {
-            return mContext.getString(R.string.accessibility_quick_settings_ambient_display_changed_on);
+            return mContext.getString(
+                    R.string.accessibility_quick_settings_ambient_display_changed_on);
         } else {
-            return mContext.getString(R.string.accessibility_quick_settings_ambient_display_changed_off);
+            return mContext.getString(
+                    R.string.accessibility_quick_settings_ambient_display_changed_off);
         }
     }
 
