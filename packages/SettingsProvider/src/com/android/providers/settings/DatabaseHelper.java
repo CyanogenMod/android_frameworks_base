@@ -1988,6 +1988,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN,
                         R.integer.def_qs_quick_pulldown);
                 loadSetting(stmt, Settings.System.QS_QUICK_PULLDOWN, quickPulldown);
+
+                int smartPulldown = getIntValueFromSystem(db,
+                        Settings.System.QS_SMART_PULLDOWN,
+                        R.integer.def_qs_smart_pulldown);
+                loadSetting(stmt, Settings.System.QS_SMART_PULLDOWN, smartPulldown);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -2628,6 +2633,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadIntegerSetting(stmt, Settings.System.QS_QUICK_PULLDOWN,
                     R.integer.def_qs_quick_pulldown);
+
+            loadIntegerSetting(stmt, Settings.System.QS_SMART_PULLDOWN,
+                    R.integer.def_qs_smart_pulldown);
 
         } finally {
             if (stmt != null) stmt.close();
