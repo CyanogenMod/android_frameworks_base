@@ -658,13 +658,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private boolean mAutohideSuspended;
     private int mStatusBarMode;
     private int mNavigationBarMode;
-    private Boolean mScreenOn;
-
-    // The second field is a bit different from the first one because it only listens to screen on/
-    // screen of events from Keyguard. We need this so we don't have a race condition with the
-    // broadcast. In the future, we should remove the first field altogether and rename the second
-    // field.
-    private boolean mScreenOnFromKeyguard;
 
     private ViewMediatorCallback mKeyguardViewMediatorCallback;
     private ScrimController mScrimController;
@@ -679,7 +672,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }};
 
-    private boolean mVisible;
     private boolean mWaitingForKeyguardExit;
     private boolean mDozing;
     private boolean mScrimSrcModeEnabled;
