@@ -104,7 +104,15 @@ public class ColorInversionTile extends QSTile<QSTile.BooleanState> {
         state.visible = true;
         state.value = enabled;
         state.label = mContext.getString(R.string.quick_settings_inversion_label);
-        state.icon = enabled ? mEnable : mDisable;
+        if (enabled) {
+            state.icon = mEnable;
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_color_inversion_on);
+        } else {
+            state.icon = mDisable;
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_color_inversion_off);
+        }
     }
 
     @Override
