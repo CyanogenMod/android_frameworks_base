@@ -2256,6 +2256,10 @@ public class PackageParser {
         perm.info.flags = sa.getInt(
                 com.android.internal.R.styleable.AndroidManifestPermission_permissionFlags, 0);
 
+        perm.info.allowViaWhitelist = sa.getBoolean(
+                com.android.internal.R.styleable.AndroidManifestPermission_allowViaWhitelist,
+                false);
+
         sa.recycle();
 
         if (perm.info.protectionLevel == -1) {

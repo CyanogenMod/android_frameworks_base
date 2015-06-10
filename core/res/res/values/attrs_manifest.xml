@@ -1289,6 +1289,9 @@
         <attr name="description" />
         <attr name="protectionLevel" />
         <attr name="permissionFlags" />
+        <!--  @hide Allows permissions to be granted to specific application signatures,
+              which are defined in /system/etc/permissions/someapp.xml. -->
+        <attr name="allowViaWhitelist" format="boolean" />
     </declare-styleable>
     
     <!-- The <code>permission-group</code> tag declares a logical grouping of
