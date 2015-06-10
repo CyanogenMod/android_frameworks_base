@@ -22,6 +22,7 @@ import static android.app.admin.DevicePolicyManager.WIPE_RESET_PROTECTION_DATA;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ActivityManagerNative;
@@ -4094,7 +4095,20 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     private boolean allowedToSetDeviceOwnerOnDevice() {
         int callingId = Binder.getCallingUid();
         if (callingId == Process.SHELL_UID || callingId == Process.ROOT_UID) {
-            return AccountManager.get(mContext).getAccounts().length == 0;
+            Account[] mAccounts = AccountManager.get(mContext).getAccounts();
+            if(mAccounts.length == 0) {
+                return true;
+            } else {
+                int i = mAccounts.length;
+                for (Account account : mAccounts) {
+                    if (account.type
+                            .equals("com.qualcomm.qti.calendarlocalaccount")
+                            || account.type.equals("com.android.localphone")
+                            || account.type.equals("com.android.sim"))
+                        i--;
+                }
+                return i == 0;
+            }
         } else {
             return !hasUserSetupCompleted(UserHandle.USER_OWNER);
         }
