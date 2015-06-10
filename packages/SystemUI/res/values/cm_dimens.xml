@@ -30,4 +30,10 @@
 
     <dimen name="volume_panel_z">4dp</dimen>
 
+    <!-- Side padding for the status bar header -->
+    <dimen name="notification_header_side_padding">@dimen/notification_side_padding</dimen>
+
+    <!-- Side padding for the Quick Settings panel -->
+    <dimen name="qs_panel_side_padding">@dimen/notification_side_padding</dimen>
+
 </resources>
