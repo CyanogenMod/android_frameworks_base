@@ -1161,6 +1161,11 @@
         <attr name="description" />
         <attr name="protectionLevel" />
         <attr name="permissionFlags" />
+        <!--  @hide Optional: allows applications to grant access to specific permissions
+              if the requesting package is a privileged system application. Useful for applications
+              which want to restrict a permission to 'signature' but still allow system privileged
+              apps access. -->
+        <attr name="privilegedCanAccess" format="boolean" />
     </declare-styleable>
     
     <!-- The <code>permission-group</code> tag declares a logical grouping of
