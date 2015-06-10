@@ -44,6 +44,8 @@ final class BasePermission {
 
     int[] gids;
 
+    boolean privilegedCanAccess;
+
     BasePermission(String _name, String _sourcePackage, int _type) {
         name = _name;
         sourcePackage = _sourcePackage;

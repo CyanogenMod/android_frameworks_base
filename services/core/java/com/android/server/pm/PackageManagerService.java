@@ -2728,6 +2728,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         bp.perm = new PackageParser.Permission(tree.perm.owner, info);
         bp.perm.info.packageName = tree.perm.info.packageName;
         bp.uid = tree.uid;
+        bp.privilegedCanAccess = info.privilegedCanAccess;
         if (added) {
             mSettings.mPermissions.put(info.name, bp);
         }
@@ -8051,6 +8052,11 @@ public class PackageManagerService extends IPackageManager.Stub {
             // For development permissions, a development permission
             // is granted only if it was already granted.
             allowed = origPermissions.contains(perm);
+        }
+        if (!allowed && (pkg.applicationInfo.flags & ApplicationInfo.FLAG_PRIVILEGED) != 0) {
+            // If the application has declared that privileged apps can use this permission,
+            // grant it
+            allowed = bp.privilegedCanAccess;
         }
         return allowed;
     }
