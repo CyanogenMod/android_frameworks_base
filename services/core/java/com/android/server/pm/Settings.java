@@ -2737,6 +2737,9 @@ final class Settings {
                     }
                 }
             }
+            if (bp.allowViaWhitelist) {
+                serializer.attribute(null, "allowViaWhitelist", Integer.toString(1));
+            }
             serializer.endTag(null, TAG_ITEM);
         }
     }
@@ -3384,6 +3387,8 @@ final class Settings {
                     bp.protectionLevel = readInt(parser, null, "protection",
                             PermissionInfo.PROTECTION_NORMAL);
                     bp.protectionLevel = PermissionInfo.fixProtectionLevel(bp.protectionLevel);
+                    bp.allowViaWhitelist = readInt(parser, null,
+                            "allowViaWhitelist", 0) == 1;
                     if (dynamic) {
                         PermissionInfo pi = new PermissionInfo();
                         pi.packageName = sourcePackage.intern();
@@ -3391,6 +3396,7 @@ final class Settings {
                         pi.icon = readInt(parser, null, "icon", 0);
                         pi.nonLocalizedLabel = parser.getAttributeValue(null, "label");
                         pi.protectionLevel = bp.protectionLevel;
+                        pi.allowViaWhitelist = bp.allowViaWhitelist;
                         bp.pendingInfo = pi;
                     }
                     out.put(bp.name, bp);

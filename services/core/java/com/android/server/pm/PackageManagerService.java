@@ -294,7 +294,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -630,6 +629,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final int[] mGlobalGids;
     final SparseArray<ArraySet<String>> mSystemPermissions;
     final ArrayMap<String, FeatureInfo> mAvailableFeatures;
+    final ArrayMap<Signature, ArraySet<String>> mSignatureAllowances;
 
     // If mac_permissions.xml was found for seinfo labeling.
     boolean mFoundPolicyFile;
@@ -2275,6 +2275,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         mGlobalGids = systemConfig.getGlobalGids();
         mSystemPermissions = systemConfig.getSystemPermissions();
         mAvailableFeatures = systemConfig.getAvailableFeatures();
+        mSignatureAllowances = systemConfig.getSignatureAllowances();
 
         synchronized (mInstallLock) {
         // writer
@@ -3975,6 +3976,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (!compareStrings(pi1.nonLocalizedLabel, pi2.nonLocalizedLabel)) return false;
         // We'll take care of setting this one.
         if (!compareStrings(pi1.packageName, pi2.packageName)) return false;
+        if (pi1.allowViaWhitelist != pi2.allowViaWhitelist) return false;
         // These are not currently stored in settings.
         //if (!compareStrings(pi1.group, pi2.group)) return false;
         //if (!compareStrings(pi1.nonLocalizedDescription, pi2.nonLocalizedDescription)) return false;
@@ -4097,6 +4099,16 @@ public class PackageManagerService extends IPackageManager.Stub {
             throw new SecurityException("Permission " + bp.name
                     + " is not a changeable permission type");
         }
+    }
+
+    private boolean isAllowedSignature(PackageParser.Package pkg, String permissionName) {
+        for (Signature pkgSig : pkg.mSignatures) {
+            ArraySet<String> perms = mSignatureAllowances.get(pkgSig);
+            if (perms != null && perms.contains(permissionName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -7462,7 +7474,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     Collection<PackageParser.Package> findSharedNonSystemLibraries(PackageParser.Package p) {
         if (p.usesLibraries != null || p.usesOptionalLibraries != null) {
             ArrayList<PackageParser.Package> retValue = new ArrayList<>();
-            Set<String> collectedNames = new HashSet<>();
+            Set<String> collectedNames = new ArraySet<>();
             findSharedNonSystemLibrariesRecursive(p, retValue, collectedNames);
 
             retValue.remove(p);
@@ -8847,6 +8859,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                             bp.perm = p;
                             bp.uid = pkg.applicationInfo.uid;
                             bp.sourcePackage = p.info.packageName;
+                            bp.allowViaWhitelist = p.info.allowViaWhitelist;
                             p.info.flags |= PermissionInfo.FLAG_INSTALLED;
                         } else if (!currentOwnerIsSystem) {
                             String msg = "New decl " + p.owner + " of permission  "
@@ -8860,6 +8873,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (bp == null) {
                     bp = new BasePermission(p.info.name, p.info.packageName,
                             BasePermission.TYPE_NORMAL);
+                    bp.allowViaWhitelist = p.info.allowViaWhitelist;
                     permissionMap.put(p.info.name, bp);
                 }
 
@@ -8873,6 +8887,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                             bp.perm = p;
                             bp.uid = pkg.applicationInfo.uid;
                             bp.sourcePackage = p.info.packageName;
+                            bp.allowViaWhitelist = p.info.allowViaWhitelist;
                             p.info.flags |= PermissionInfo.FLAG_INSTALLED;
                             if ((policyFlags&PackageParser.PARSE_CHATTY) != 0) {
                                 if (r == null) {
@@ -10247,7 +10262,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                 & PermissionInfo.PROTECTION_FLAG_PRIVILEGED) != 0) {
             if (isSystemApp(pkg)) {
                 // For updated system applications, a system permission
-                // is granted only if it had been defined by the original application.
                 if (pkg.isUpdatedSystemApp()) {
                     final PackageSetting sysPs = mSettings
                             .getDisabledSystemPkgLPr(pkg.packageName);
@@ -10342,6 +10356,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // this app is a setup wizard, then it gets the permission.
                 allowed = true;
             }
+        }
+        if (!allowed && bp.allowViaWhitelist) {
+            allowed = isAllowedSignature(pkg, perm);
         }
         return allowed;
     }
