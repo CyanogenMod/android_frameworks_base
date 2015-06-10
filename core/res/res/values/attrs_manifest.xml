@@ -233,6 +233,12 @@
         <flag name="costsMoney" value="0x0001" />
     </attr>
 
+    <!--  @hide allows applications to grant access to specific permissions
+          if the requesting package is a privileged system application. Useful for applications
+          which want to restrict a permission to 'signature' but still allow system privileged
+          apps access -->
+    <attr name="privilegedCanAccess" format="boolean" />
+
     <!-- Specified the name of a group that this permission is associated
          with.  The group must have been defined with the
          {@link android.R.styleable#AndroidManifestPermissionGroup permission-group} tag. -->
@@ -1161,6 +1167,7 @@
         <attr name="description" />
         <attr name="protectionLevel" />
         <attr name="permissionFlags" />
+        <attr name="privilegedCanAccess" />
     </declare-styleable>
     
     <!-- The <code>permission-group</code> tag declares a logical grouping of
