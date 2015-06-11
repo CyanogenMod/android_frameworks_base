@@ -6997,7 +6997,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private void compileResourcesWithAapt(String target, PackageParser.Package pkg)
             throws Exception {
-        String internalPath = APK_PATH_TO_OVERLAY + target;
+        String internalPath = APK_PATH_TO_OVERLAY + target + File.separator;
         String resPath = ThemeUtils.getTargetCacheDir(target, pkg);
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
         int pkgId;
