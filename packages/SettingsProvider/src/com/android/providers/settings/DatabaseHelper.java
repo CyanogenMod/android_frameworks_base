@@ -2801,6 +2801,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadStringSetting(stmt, Settings.Secure.QS_TILES,
                     com.android.internal.R.string.config_defaultQuickSettingsTiles);
+            loadStringSetting(stmt, Settings.Secure.QS_DYNAMIC_TILES,
+                    com.android.internal.R.string.config_defaultDynamicQuickSettingsTiles);
         } finally {
             if (stmt != null) stmt.close();
         }
