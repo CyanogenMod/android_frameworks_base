@@ -153,4 +153,11 @@
     <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Battery mode changed to quick mode.</string>
     <string name="quick_settings_performance_profile_detail_title">Battery mode</string>
+
+    <!-- Dynamic tiles -->
+    <string name="quick_settings_dynamic_tile_detail_title">Dynamic tile</string>
+    <string name="dynamic_qs_tile_next_alarm_label">Next alarm</string>
+    <string name="dynamic_qs_tile_ime_selector_label">IME selector</string>
+    <string name="dynamic_qs_tile_su_label">Root</string>
+    <string name="dynamic_qs_tile_adb_label" translatable="false">ADB</string>
 </resources>

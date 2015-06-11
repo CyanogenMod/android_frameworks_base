@@ -289,6 +289,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         }
         if (DEBUG) Log.d(TAG, "Recreating tiles");
         final List<String> tileSpecs = loadTileSpecs(newValue);
+        removeUnusedDynamicTiles(tileSpecs);
         if (tileSpecs.equals(mTileSpecs)) return;
         for (Map.Entry<String, QSTile<?>> tile : mTiles.entrySet()) {
             if (!tileSpecs.contains(tile.getKey())) {
@@ -315,6 +316,23 @@ public class QSTileHost implements QSTile.Host, Tunable {
         mTiles.putAll(newTiles);
         if (mCallback != null) {
             mCallback.onTilesChanged();
+        }
+    }
+
+    private void removeUnusedDynamicTiles(List<String> tileSpecs) {
+        List<CustomTileData.Entry> tilesToRemove = new ArrayList<>();
+        for (CustomTileData.Entry entry : mCustomTileData.getEntries().values()) {
+            if (entry.sbc.getPackage().equals(mContext.getPackageName())
+                    || entry.sbc.getUid() == Process.SYSTEM_UID) {
+                if (!tileSpecs.contains(entry.sbc.getTag())) {
+                    tilesToRemove.add(entry);
+                }
+            }
+        }
+
+        for (CustomTileData.Entry entry : tilesToRemove) {
+            mCustomTileData.remove(entry.key);
+            removeCustomTile(entry.sbc);
         }
     }
 
@@ -429,29 +447,35 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     void updateCustomTile(StatusBarPanelCustomTile sbc) {
-        if (mTiles.containsKey(sbc.getKey())) {
-            QSTile<?> tile = mTiles.get(sbc.getKey());
-            if (tile instanceof CustomQSTile) {
-                CustomQSTile qsTile = (CustomQSTile) tile;
-                qsTile.update(sbc);
+        synchronized (mTiles) {
+            if (mTiles.containsKey(sbc.getKey())) {
+                QSTile<?> tile = mTiles.get(sbc.getKey());
+                if (tile instanceof CustomQSTile) {
+                    CustomQSTile qsTile = (CustomQSTile) tile;
+                    qsTile.update(sbc);
+                }
             }
         }
     }
 
     void addCustomTile(StatusBarPanelCustomTile sbc) {
-        mCustomTileData.add(new CustomTileData.Entry(sbc));
-        mTiles.put(sbc.getKey(), new CustomQSTile(this, sbc));
-        if (mCallback != null) {
-            mCallback.onTilesChanged();
+        synchronized (mTiles) {
+            mCustomTileData.add(new CustomTileData.Entry(sbc));
+            mTiles.put(sbc.getKey(), new CustomQSTile(this, sbc));
+            if (mCallback != null) {
+                mCallback.onTilesChanged();
+            }
         }
     }
 
     void removeCustomTileSysUi(String key) {
-        if (mTiles.containsKey(key)) {
-            mTiles.remove(key);
-            mCustomTileData.remove(key);
-            if (mCallback != null) {
-                mCallback.onTilesChanged();
+        synchronized (mTiles) {
+            if (mTiles.containsKey(key)) {
+                mTiles.remove(key);
+                mCustomTileData.remove(key);
+                if (mCallback != null) {
+                    mCallback.onTilesChanged();
+                }
             }
         }
     }
