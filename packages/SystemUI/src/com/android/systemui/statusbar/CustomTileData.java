@@ -25,11 +25,12 @@ import android.util.ArrayMap;
  */
 public class CustomTileData {
     public static final class Entry {
-        public String key;
-        public StatusBarPanelCustomTile statusBarPanelCustomTile;
+        public final String key;
+        public final StatusBarPanelCustomTile sbc;
 
         public Entry(StatusBarPanelCustomTile sbc) {
             this.key = sbc.getKey();
+            this.sbc = sbc;
         }
     }
 
