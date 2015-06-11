@@ -293,4 +293,11 @@
     <string name="zen_silent_with_warning">No interruptions, except alarms.</string>
 
     <string name="quick_settings_remove">Remove tile</string>
+
+    <!-- Dynamic tiles -->
+    <string name="quick_settings_dynamic_tile_detail_title">Dynamic tile</string>
+    <string name="dynamic_qs_tile_next_alarm_label">Next alarm</string>
+    <string name="dynamic_qs_tile_ime_selector_label">IME selector</string>
+    <string name="dynamic_qs_tile_su_label">Root</string>
+    <string name="dynamic_qs_tile_adb_label">ADB</string>
 </resources>
