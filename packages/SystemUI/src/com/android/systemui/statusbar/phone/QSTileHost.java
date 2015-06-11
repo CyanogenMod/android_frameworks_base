@@ -121,6 +121,16 @@ public class QSTileHost implements QSTile.Host {
 
     private Callback mCallback;
 
+    // This avoids to call onTilesChanged multiple followed times
+    private Runnable mOnTileChangedRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mCallback != null) {
+                mCallback.onTilesChanged();
+            }
+        }
+    };
+
     public QSTileHost(Context context, PhoneStatusBar statusBar,
             BluetoothController bluetooth, LocationController location,
             RotationLockController rotation, NetworkController network,
@@ -290,9 +300,8 @@ public class QSTileHost implements QSTile.Host {
         for (CustomTileData.Entry entry : mCustomTileData.getEntries().values()) {
             mTiles.put(entry.key, new CustomQSTile(this, entry.statusBarPanelCustomTile));
         }
-        if (mCallback != null) {
-            mCallback.onTilesChanged();
-        }
+        mHandler.removeCallbacks(mOnTileChangedRunnable);
+        mHandler.post(mOnTileChangedRunnable);
     }
 
     private QSTile<?> createTile(String tileSpec) {
@@ -407,18 +416,16 @@ public class QSTileHost implements QSTile.Host {
     void addCustomTile(StatusBarPanelCustomTile sbc) {
         mCustomTileData.add(new CustomTileData.Entry(sbc));
         mTiles.put(sbc.getKey(), new CustomQSTile(this, sbc));
-        if (mCallback != null) {
-            mCallback.onTilesChanged();
-        }
+        mHandler.removeCallbacks(mOnTileChangedRunnable);
+        mHandler.post(mOnTileChangedRunnable);
     }
 
     void removeCustomTileSysUi(String key) {
         if (mTiles.containsKey(key)) {
             mTiles.remove(key);
             mCustomTileData.remove(key);
-            if (mCallback != null) {
-                mCallback.onTilesChanged();
-            }
+            mHandler.removeCallbacks(mOnTileChangedRunnable);
+            mHandler.post(mOnTileChangedRunnable);
         }
     }
 

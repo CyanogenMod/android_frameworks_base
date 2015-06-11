@@ -333,6 +333,7 @@
 
     <!-- Quick Settings tile defaults -->
     <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
+    <java-symbol type="string" name="config_defaultDynamicQuickSettingsTiles" />
  
     <java-symbol type="array" name="config_externalCMServices" />
 </resources>

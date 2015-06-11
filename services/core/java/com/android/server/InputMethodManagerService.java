@@ -23,6 +23,8 @@ import com.android.internal.inputmethod.InputMethodUtils.InputMethodSettings;
 import com.android.internal.os.HandlerCaller;
 import com.android.internal.os.SomeArgs;
 import com.android.internal.util.FastXmlSerializer;
+import com.android.internal.util.cm.DynamicQSUtils;
+import com.android.internal.util.cm.QSConstants;
 import com.android.internal.view.IInputContext;
 import com.android.internal.view.IInputMethod;
 import com.android.internal.view.IInputSessionCallback;
@@ -33,11 +35,15 @@ import com.android.internal.view.InputBindResult;
 import com.android.server.statusbar.StatusBarManagerService;
 import com.android.server.wm.WindowManagerService;
 
+import cyanogenmod.app.CMStatusBarManager;
+import cyanogenmod.app.CustomTile;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.app.ActivityManagerNative;
+import android.app.AlarmManager;
 import android.app.AppGlobals;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
@@ -166,6 +172,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     private static final int NOT_A_SUBTYPE_ID = InputMethodUtils.NOT_A_SUBTYPE_ID;
     private static final String TAG_TRY_SUPPRESSING_IME_SWITCHER = "TrySuppressingImeSwitcher";
 
+    private static final int IME_SELECTOR_CUSTOM_TILE_ID = 1;
 
     final Context mContext;
     final Resources mRes;
@@ -1622,6 +1629,9 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                                 mImeSwitcherNotification, UserHandle.ALL);
                         mNotificationShown = true;
                     }
+
+                    publishImeSelectorCustomTile(imi);
+
                 } else {
                     if (mNotificationShown && mNotificationManager != null) {
                         if (DEBUG) {
@@ -1631,6 +1641,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                                 com.android.internal.R.string.select_input_method, UserHandle.ALL);
                         mNotificationShown = false;
                     }
+
+                    unpublishImeSelectorCustomTile();
                 }
             }
         } finally {
@@ -3328,6 +3340,57 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 }
             }
             return false;
+        }
+    }
+
+    private void publishImeSelectorCustomTile(InputMethodInfo imi) {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            if (!DynamicQSUtils.isDynamicQSTileEnabledForUser(
+                    mContext, QSConstants.DYNAMIC_TILE_IME_SELECTOR, userId)) {
+                return;
+            }
+
+            final UserHandle user = new UserHandle(userId);
+            final int icon = DynamicQSUtils.getQSTileResIconId(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_IME_SELECTOR);
+            final String contentDesc = DynamicQSUtils.getQSTileLabel(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_IME_SELECTOR);
+            final Context resourceContext = DynamicQSUtils.getDynamicQSTileContext(
+                    mContext, userId);
+            CharSequence inputMethodName = null;
+            if (mCurrentSubtype != null) {
+                inputMethodName = mCurrentSubtype.getDisplayName(mContext,
+                        imi.getPackageName(), imi.getServiceInfo().applicationInfo);
+            }
+            final CharSequence label = inputMethodName == null ? contentDesc : inputMethodName;
+
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            CustomTile tile = new CustomTile.Builder(resourceContext)
+                    .setLabel(label.toString())
+                    .setContentDescription(contentDesc)
+                    .setIcon(icon)
+                    .setOnClickIntent(mImeSwitchPendingIntent)
+                    .build();
+            statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_IME_SELECTOR,
+                    IME_SELECTOR_CUSTOM_TILE_ID, tile, user);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private void unpublishImeSelectorCustomTile() {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            statusBarManager.removeTileAsUser(QSConstants.DYNAMIC_TILE_IME_SELECTOR,
+                    IME_SELECTOR_CUSTOM_TILE_ID, new UserHandle(userId));
+        } finally {
+            Binder.restoreCallingIdentity(token);
         }
     }
 
