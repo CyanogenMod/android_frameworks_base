@@ -146,6 +146,12 @@
     <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
     <string name="usb_choose_notification_title">Touch to choose USB options.</string>
 
+    <!-- ADB custom tile -->
+    <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="Usb">%1$s</xliff:g></string>
+    <string name="adb_active_custom_tile_both">Both</string>
+    <string name="adb_active_custom_tile_usb">USB</string>
+    <string name="adb_active_custom_tile_net">Network</string>
+
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_interceptPackageLaunch">intercept app launch</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
