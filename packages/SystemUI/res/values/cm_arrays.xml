@@ -86,4 +86,24 @@
         <item>@string/accessibility_quick_settings_live_display_changed_outdoor</item>
     </string-array>
 
+    <!-- Dynamic tiles -->
+    <string-array name="dynamic_qs_tiles_labels" translatable="false">
+        <item>@string/dynamic_qs_tile_next_alarm_label</item>
+        <item>@string/dynamic_qs_tile_ime_selector_label</item>
+        <item>@string/dynamic_qs_tile_su_label</item>
+        <item>@string/dynamic_qs_tile_adb_label</item>
+    </string-array>
+    <string-array name="dynamic_qs_tiles_icons_resources_ids" translatable="false">
+        <item>ic_dynamic_qs_next_alarm</item>
+        <item>ic_dynamic_qs_ime_selector</item>
+        <item>ic_dynamic_qs_su</item>
+        <item>ic_dynamic_qs_adb</item>
+    </string-array>
+    <string-array name="dynamic_qs_tiles_values" translatable="false">
+        <item>next_alarm</item>
+        <item>ime_selector</item>
+        <item>su</item>
+        <item>adb</item>
+    </string-array>
+
 </resources>
