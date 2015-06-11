@@ -1024,6 +1024,14 @@ public class NetworkControllerImpl extends BroadcastReceiver
         private MobileIconGroup mDefaultIcons;
         private Config mConfig;
 
+        // For localizing carrier names
+        private String mSpn;
+        private String mPlmn;
+        private String mOriginalTelephonyPlmn;
+        private String mOriginalTelephonySpn;
+        private boolean mShowSpn = false;
+        private boolean mShowPlmn = false;
+
         // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
         // need listener lists anymore.
         public MobileSignalController(Context context, Config config, boolean hasMobileData,
@@ -1055,6 +1063,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
             mConfig = config;
             mapIconSets();
             updateTelephony();
+            updateLocalizedNetworkName();
         }
 
         /**
@@ -1280,10 +1289,13 @@ public class NetworkControllerImpl extends BroadcastReceiver
         public void handleBroadcast(Intent intent) {
             String action = intent.getAction();
             if (action.equals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
-                updateNetworkName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
-                        intent.getStringExtra(TelephonyIntents.EXTRA_SPN),
-                        intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(TelephonyIntents.EXTRA_PLMN));
+                mShowSpn = intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false);
+                mShowPlmn = intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false);
+                mSpn = intent.getStringExtra(TelephonyIntents.EXTRA_SPN);
+                mPlmn = intent.getStringExtra(TelephonyIntents.EXTRA_PLMN);
+                mOriginalTelephonySpn = mSpn;
+                mOriginalTelephonyPlmn = mPlmn;
+                updateLocalizedNetworkName();
                 notifyListenersIfNecessary();
             } else if (action.equals(TelephonyIntents.ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED)) {
                 updateDataSim();
@@ -1395,6 +1407,27 @@ public class NetworkControllerImpl extends BroadcastReceiver
             pw.println("  mSignalStrength=" + mSignalStrength + ",");
             pw.println("  mDataState=" + mDataState + ",");
             pw.println("  mDataNetType=" + mDataNetType + ",");
+        }
+
+        private String getLocaleString(String originalCarrier) {
+            String localeCarrier = android.util.NativeTextHelper.getLocalString(mContext,
+                    originalCarrier,
+                    com.android.internal.R.array.origin_carrier_names,
+                    com.android.internal.R.array.locale_carrier_names);
+            return localeCarrier;
+        }
+
+        private void updateLocalizedNetworkName() {
+            if (mContext.getResources().getBoolean(
+                    com.android.internal.R.bool.config_monitor_locale_change)) {
+                if (mShowSpn && mSpn != null) {
+                   mSpn = getLocaleString(mOriginalTelephonySpn);
+                }
+                if (mShowPlmn && mPlmn != null) {
+                    mPlmn = getLocaleString(mOriginalTelephonyPlmn);
+                }
+            }
+            updateNetworkName(mShowSpn, mSpn , mShowPlmn , mPlmn);
         }
 
         class MobilePhoneStateListener extends PhoneStateListener {
