@@ -97,6 +97,6 @@
   <string name="lockscreen_target_empty">비어 있음</string>
   <string name="screen_pinning_description_no_navbar">고정을 해제할 때까지 계속 표시합니다. 뒤로 버튼을 계속 눌러 고정을 해제하세요.</string>
   <string name="interruption_level_silent">무음</string>
-  <string name="zen_silent_with_warning">알람을 제외한 모듬 알림 차단</string>
+  <string name="zen_silent_with_warning">알람을 제외한 모든 알림 차단</string>
   <string name="quick_settings_remove">타일 제거</string>
 </resources>

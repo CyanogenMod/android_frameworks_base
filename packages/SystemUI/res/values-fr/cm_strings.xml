@@ -29,6 +29,7 @@
   <string name="accessibility_quick_settings_location_battery_saving">Localisation : mode économie de batterie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Localisation : mode appareil uniquement.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Localisation : mode haute précision.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notifications flottantes activées.</string>
   <string name="accessibility_dpad_left">Curseur gauche</string>
   <string name="accessibility_dpad_right">Curseur droit</string>
   <string name="quick_settings_mobile_data_label">Données mobiles</string>

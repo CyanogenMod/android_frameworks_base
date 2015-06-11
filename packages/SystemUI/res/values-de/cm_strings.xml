@@ -80,7 +80,7 @@
   <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
   <string name="navbar_menu_big_button">Menü</string>
   <string name="navigation_ring_title">Schnellstart-Verknüpfungen</string>
-  <string name="navring_target_reset_message">Alle selbst erstellten Nvaigationsleisten-Verknüpfungen löschen und auf Standardeinstellungen zurücksetzen?</string>
+  <string name="navring_target_reset_message">Alle selbst erstellten Navigationsleisten-Verknüpfungen löschen und auf Standardeinstellungen zurücksetzen?</string>
   <string name="navring_target_reset">Schnellstart-Verknüpfungen auf Standardeinstellungen zurücksetzen</string>
   <string name="navring_action_open_ime_switcher">Eingabemethoden-Auswahl öffnen</string>
   <string name="navring_action_kill_app">App schließen</string>
