@@ -16,21 +16,14 @@
 
 package com.android.systemui.statusbar.policy;
 
-import android.app.ActivityManager;
 import android.app.AppOpsManager;
-import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.os.UserManager;
-import android.provider.Settings;
 import android.util.Log;
-
-import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +38,11 @@ public class SuControllerImpl implements SuController {
 
     private ArrayList<Callback> mCallbacks = new ArrayList<Callback>();
 
-    private Context mContext;
-
     private AppOpsManager mAppOpsManager;
 
-    private boolean mHasActiveSuSessions;
+    private List<String> mActiveSuSessions = new ArrayList<>();
 
     public SuControllerImpl(Context context) {
-        mContext = context;
-
         mAppOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
 
         IntentFilter intentFilter = new IntentFilter();
@@ -85,7 +74,9 @@ public class SuControllerImpl implements SuController {
 
     @Override
     public boolean hasActiveSessions() {
-        return mHasActiveSuSessions;
+        synchronized (mActiveSuSessions) {
+            return mActiveSuSessions.size() > 0;
+        }
     }
 
     private void fireCallback(Callback callback) {
@@ -98,10 +89,10 @@ public class SuControllerImpl implements SuController {
         }
     }
 
-    /**
-     * Returns true if a su session is active
-     */
-    private boolean hasActiveSuSessions() {
+    // Return the list of package names that currently have an active su session
+    @Override
+    public List<String> getPackageNamesWithActiveSuSessions() {
+        List<String> packageNames = new ArrayList<>();
         List<AppOpsManager.PackageOps> packages
                 = mAppOpsManager.getPackagesForOps(mSuOpArray);
         // AppOpsManager can return null when there is no requested data.
@@ -116,7 +107,8 @@ public class SuControllerImpl implements SuController {
                         AppOpsManager.OpEntry opEntry = opEntries.get(opInd);
                         if (opEntry.getOp() == AppOpsManager.OP_SU) {
                             if (opEntry.isRunning()) {
-                                return true;
+                                packageNames.add(packageOp.getPackageName());
+                                break;
                             }
                         }
                     }
@@ -124,14 +116,17 @@ public class SuControllerImpl implements SuController {
             }
         }
 
-        return false;
+        return packageNames;
     }
 
-    private void updateActiveSuSessions() {
-        boolean hadActiveSuSessions = mHasActiveSuSessions;
-        mHasActiveSuSessions = hasActiveSuSessions();
-        if (mHasActiveSuSessions != hadActiveSuSessions) {
-            fireCallbacks();
+    private synchronized void updateActiveSuSessions() {
+        List<String> newList = getPackageNamesWithActiveSuSessions();
+        synchronized (mActiveSuSessions) {
+            if (!newList.equals(mActiveSuSessions)) {
+                mActiveSuSessions.clear();
+                mActiveSuSessions.addAll(newList);
+                fireCallbacks();
+            }
         }
     }
 }

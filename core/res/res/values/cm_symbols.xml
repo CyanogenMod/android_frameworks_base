@@ -39,6 +39,12 @@
     <java-symbol type="array" name="notification_light_package_mapping" />
     <java-symbol type="array" name="config_notificationNoAlertsVibePattern" />
 
+    <!-- ADB custom tile -->
+    <java-symbol type="string" name="adb_active_custom_tile" />
+    <java-symbol type="string" name="adb_active_custom_tile_both" />
+    <java-symbol type="string" name="adb_active_custom_tile_usb" />
+    <java-symbol type="string" name="adb_active_custom_tile_net" />
+
     <!-- Package Manager -->
     <java-symbol type="array" name="config_disabledComponents" />
     <java-symbol type="array" name="config_forceEnabledComponents" />
