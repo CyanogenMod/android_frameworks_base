@@ -28,7 +28,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Binder;
@@ -42,6 +44,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.WorkSource;
+import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -66,6 +69,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
@@ -78,6 +82,13 @@ import static android.app.AlarmManager.ELAPSED_REALTIME;
 import static android.app.AlarmManager.RTC_POWEROFF_WAKEUP;
 
 import com.android.internal.util.LocalLog;
+
+import cyanogenmod.app.CMStatusBarManager;
+import cyanogenmod.app.CustomTile;
+
+import org.cyanogenmod.internal.util.QSUtils;
+import org.cyanogenmod.internal.util.QSUtils.OnQSChanged;
+import org.cyanogenmod.internal.util.QSConstants;
 
 class AlarmManagerService extends SystemService {
     private static final int RTC_WAKEUP_MASK = 1 << RTC_WAKEUP;
@@ -292,6 +303,14 @@ class AlarmManagerService extends SystemService {
     }
 
     final Constants mConstants;
+
+    private final OnQSChanged mQSListener = new OnQSChanged() {
+        @Override
+        public void onQSChanged() {
+            processQSChangedLocked();
+        }
+    };
+    private ContentObserver mQSObserver;
 
     // Alarm delivery ordering bookkeeping
     static final int PRIO_TICK = 0;
@@ -857,6 +876,8 @@ class AlarmManagerService extends SystemService {
         }
 
         publishBinderService(Context.ALARM_SERVICE, mService);
+
+        mQSObserver = QSUtils.registerObserverForQSChanges(getContext(), mQSListener);
     }
 
     @Override
@@ -868,6 +889,12 @@ class AlarmManagerService extends SystemService {
 
     @Override
     protected void finalize() throws Throwable {
+        try {
+            QSUtils.unregisterObserverForQSChanges(getContext(), mQSObserver);
+        } catch (Exception ex) {
+            // Ignore
+        }
+
         try {
             close(mNativeData);
         } finally {
@@ -1052,6 +1079,8 @@ class AlarmManagerService extends SystemService {
 
         if (a.alarmClock != null) {
             mNextAlarmClockMayChange = true;
+            //Publish as system user
+            publishNextAlarmCustomTile(Process.SYSTEM_UID);
         }
 
         boolean needRebatch = false;
@@ -1611,6 +1640,9 @@ class AlarmManagerService extends SystemService {
                 updateNextAlarmInfoForUserLocked(userId, null);
             }
         }
+
+        // Process dynamic custom tile
+        processQSChangedLocked();
     }
 
     private void updateNextAlarmInfoForUserLocked(int userId,
@@ -2652,6 +2684,121 @@ class AlarmManagerService extends SystemService {
             uidStats.put(pkg, bs);
         }
         return bs;
+    }
+
+    private void publishNextAlarmCustomTile(int userId) {
+        // This action should be performed as system
+        long token = Binder.clearCallingIdentity();
+        try {
+            final UserHandle user = new UserHandle(userId);
+            if (!QSUtils.isQSTileEnabledForUser(
+                    getContext(), QSConstants.DYNAMIC_TILE_NEXT_ALARM, user.getUserId(userId))) {
+                return;
+            }
+
+            final int icon = QSUtils.getDynamicQSTileResIconId(getContext(), userId,
+                    QSConstants.DYNAMIC_TILE_NEXT_ALARM);
+            final String contentDesc = QSUtils.getDynamicQSTileLabel(getContext(), userId,
+                    QSConstants.DYNAMIC_TILE_NEXT_ALARM);
+            final Context resourceContext = QSUtils.getQSTileContext(getContext(), userId);
+
+            // Create the expanded view with all the user alarms
+            AlarmManager.AlarmClockInfo nextAlarm = null;
+            CustomTile.ListExpandedStyle style = new CustomTile.ListExpandedStyle();
+            ArrayList<CustomTile.ExpandedListItem> items = new ArrayList<>();
+            for (Alarm alarm : getAllUserAlarmsLocked(userId)) {
+                if (nextAlarm == null) {
+                    nextAlarm = alarm.alarmClock;
+                }
+
+                final String pkg = alarm.operation.getCreatorPackage();
+                CustomTile.ExpandedListItem item = new CustomTile.ExpandedListItem();
+                item.setExpandedListItemDrawable(icon);
+                item.setExpandedListItemTitle(formatNextAlarm(getContext(), alarm.alarmClock, userId));
+                item.setExpandedListItemSummary(getAlarmApkLabel(pkg));
+                item.setExpandedListItemOnClickIntent(getCustomTilePendingIntent(user, pkg));
+                items.add(item);
+            }
+            style.setListItems(items);
+
+            // Build the custom tile
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(getContext());
+            CustomTile tile = new CustomTile.Builder(resourceContext)
+                    .setLabel(formatNextAlarm(getContext(), nextAlarm, userId))
+                    .setContentDescription(contentDesc)
+                    .setIcon(icon)
+                    .setExpandedStyle(style)
+                    .build();
+            statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_NEXT_ALARM,
+                    AlarmManagerService.class.hashCode(), tile, user);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private void unpublishNextAlarmCustomTile(int userId) {
+        // This action should be performed as system
+        long token = Binder.clearCallingIdentity();
+        try {
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(getContext());
+            statusBarManager.removeTileAsUser(QSConstants.DYNAMIC_TILE_NEXT_ALARM,
+                    AlarmManagerService.class.hashCode(), new UserHandle(userId));
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private List<Alarm> getAllUserAlarmsLocked(int userId) {
+        List<Alarm> userAlarms = new ArrayList<>();
+        synchronized (mLock) {
+            final int N = mAlarmBatches.size();
+            for (int i = 0; i < N; i++) {
+                ArrayList<Alarm> alarms = mAlarmBatches.get(i).alarms;
+                final int M = alarms.size();
+                for (int j = 0; j < M; j++) {
+                    Alarm a = alarms.get(j);
+                    if (a.alarmClock != null && userId == a.uid) {
+                        userAlarms.add(a);
+                    }
+                }
+            }
+        }
+        return userAlarms;
+    }
+
+    private String getAlarmApkLabel(String pkg) {
+        final PackageManager pm = getContext().getPackageManager();
+        ApplicationInfo ai = null;
+        try {
+            ai = pm.getApplicationInfo(pkg, 0);
+        } catch (final NameNotFoundException e) {
+            // Ignore
+        }
+        return (String) (ai != null ? pm.getApplicationLabel(ai) : pkg);
+    }
+
+    private PendingIntent getCustomTilePendingIntent(UserHandle user, String pkg) {
+        Intent i = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
+        i.setPackage(pkg);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getActivityAsUser(getContext(), 0, i,
+                PendingIntent.FLAG_UPDATE_CURRENT, null, user);
+    }
+
+    private void processQSChangedLocked() {
+        synchronized (mLock) {
+            int count = mNextAlarmClockForUser.size();
+            for (int i = 0; i < count; i++) {
+                int userId = mNextAlarmClockForUser.keyAt(i);
+                boolean enabled = QSUtils.isQSTileEnabledForUser(
+                        getContext(), QSConstants.DYNAMIC_TILE_NEXT_ALARM, userId);
+                if (enabled) {
+                    publishNextAlarmCustomTile(userId);
+                } else {
+                    unpublishNextAlarmCustomTile(userId);
+                }
+            }
+        }
     }
 
     class ResultReceiver implements PendingIntent.OnFinished {

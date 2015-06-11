@@ -1477,7 +1477,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         super.handleShowDetailImpl(r, show, x, y);
         if (show) {
             final StatusBarPanelCustomTile customTile = r.detailAdapter.getCustomTile();
-            mDetailRemoveButton.setVisibility(customTile != null ? VISIBLE : GONE);
+            mDetailRemoveButton.setVisibility(customTile != null &&
+                    !(customTile.getPackage().equals(mContext.getPackageName())
+                            || customTile.getUid() == android.os.Process.SYSTEM_UID)
+                    ? VISIBLE : GONE);
             mDetailRemoveButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
