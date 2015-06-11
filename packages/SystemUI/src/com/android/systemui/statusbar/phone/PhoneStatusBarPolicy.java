@@ -20,6 +20,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -29,6 +30,7 @@ import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
@@ -44,11 +46,17 @@ import android.util.Log;
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.util.cm.DynamicQSUtils;
+import com.android.internal.util.cm.QSConstants;
+import com.android.internal.util.cm.DynamicQSUtils.OnDynamicQSChanged;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.CastController.CastDevice;
 import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.SuController;
+
+import cyanogenmod.app.CMStatusBarManager;
+import cyanogenmod.app.CustomTile;
 
 /**
  * This class contains all of the policy about which icons are installed in the status
@@ -121,6 +129,13 @@ public class PhoneStatusBarPolicy {
             else if (action.equals(Intent.ACTION_USER_SWITCHED)) {
                 updateAlarm();
             }
+        }
+    };
+
+    private final DynamicQSUtils.OnDynamicQSChanged mQSListener = new OnDynamicQSChanged() {
+        @Override
+        public void onDynamicQSChanged() {
+            processDynamicQSChangedLocked();
         }
     };
 
@@ -210,6 +225,8 @@ public class PhoneStatusBarPolicy {
         mService.setIcon(SLOT_HOTSPOT, R.drawable.stat_sys_hotspot, 0, null);
         mService.setIconVisibility(SLOT_HOTSPOT, mHotspot.isHotspotEnabled());
         mHotspot.addCallback(mHotspotCallback);
+
+        DynamicQSUtils.registerForDynamicQSSettingsChanges(mContext, mQSListener);
     }
 
     private ContentObserver mAlarmIconObserver = new ContentObserver(null) {
@@ -420,6 +437,11 @@ public class PhoneStatusBarPolicy {
 
     private void updateSu() {
         mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions());
+        if (mSuController.hasActiveSessions()) {
+            publishSuCustomTile();
+        } else {
+            unpublishSuCustomTile();
+        }
     }
 
     private final SuController.Callback mSuCallback = new SuController.Callback() {
@@ -429,4 +451,67 @@ public class PhoneStatusBarPolicy {
         }
     };
 
+    private void publishSuCustomTile() {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            if (!DynamicQSUtils.isDynamicQSTileEnabledForUser(
+                    mContext, QSConstants.DYNAMIC_TILE_SU, userId)) {
+                return;
+            }
+
+            final UserHandle user = new UserHandle(userId);
+            final int icon = DynamicQSUtils.getQSTileResIconId(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_SU);
+            final String contentDesc = DynamicQSUtils.getQSTileLabel(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_SU);
+            final Context resourceContext = DynamicQSUtils.getDynamicQSTileContext(
+                    mContext, userId);
+
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            CustomTile tile = new CustomTile.Builder(resourceContext)
+                    .setLabel(contentDesc)
+                    .setContentDescription(contentDesc)
+                    .setIcon(icon)
+                    .setOnClickIntent(getCustomTilePendingIntent())
+                    .build();
+            statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_SU,
+                    PhoneStatusBarPolicy.class.hashCode(), tile, user);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private void unpublishSuCustomTile() {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            statusBarManager.removeTileAsUser(QSConstants.DYNAMIC_TILE_SU,
+                    PhoneStatusBarPolicy.class.hashCode(), new UserHandle(userId));
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private PendingIntent getCustomTilePendingIntent() {
+        Intent i = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getActivity(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT, null);
+    }
+
+    private void processDynamicQSChangedLocked() {
+        final int userId = UserHandle.myUserId();
+        final boolean hasSuAccess = mSuController.hasActiveSessions();
+        final boolean isEnabledForUser = DynamicQSUtils.isDynamicQSTileEnabledForUser(mContext,
+                QSConstants.DYNAMIC_TILE_SU, userId);
+        boolean enabled = (userId == UserHandle.USER_OWNER) && isEnabledForUser && hasSuAccess;
+        if (enabled) {
+            publishSuCustomTile();
+        } else {
+            unpublishSuCustomTile();
+        }
+    }
 }

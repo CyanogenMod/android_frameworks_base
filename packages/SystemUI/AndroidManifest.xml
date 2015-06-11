@@ -132,6 +132,7 @@
 
     <!-- Quick Settings Tile Listener -->
     <uses-permission android:name="cyanogenmod.permission.BIND_CUSTOM_TILE_LISTENER_SERVICE"/>
+    <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE"/>
 
     <!-- Sync tile -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
