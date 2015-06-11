@@ -35,6 +35,7 @@ import android.database.ContentObserver;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
 import android.media.AudioManager;
+import android.os.Binder;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.Looper;
@@ -52,7 +53,13 @@ import android.util.Pair;
 import android.util.Slog;
 
 import com.android.internal.annotations.GuardedBy;
+import com.android.internal.util.cm.QSConstants;
+import com.android.internal.util.cm.QSUtils;
+import com.android.internal.util.cm.QSUtils.OnQSChanged;
 import com.android.server.FgThread;
+
+import cyanogenmod.app.CMStatusBarManager;
+import cyanogenmod.app.CustomTile;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -143,6 +150,13 @@ public class UsbDeviceManager {
             mHandler.sendMessage(MSG_ENABLE_ADB, enable);
         }
     }
+
+    private final OnQSChanged mQSListener = new OnQSChanged() {
+        @Override
+        public void onQSChanged() {
+            mHandler.processQSChangedLocked();
+        }
+    };
 
     /*
      * Listens for uevent messages from the kernel to monitor the USB state
@@ -403,6 +417,8 @@ public class UsbDeviceManager {
                 mContext.registerReceiver(mBootCompletedReceiver, filter);
                 mContext.registerReceiver(
                         mUserSwitchedReceiver, new IntentFilter(Intent.ACTION_USER_SWITCHED));
+
+                QSUtils.registerObserverForQSChanges(mContext, mQSListener);
             } catch (Exception e) {
                 Slog.e(TAG, "Error initializing UsbHandler", e);
             }
@@ -853,6 +869,12 @@ public class UsbDeviceManager {
                 }
                 mAdbNotificationId = id;
             }
+
+            if (id > 0) {
+                publishAdbCustomTile();
+            } else {
+                unpublishAdbCustomTile();
+            }
         }
 
         private String getDefaultFunctions() {
@@ -880,6 +902,95 @@ public class UsbDeviceManager {
                         + FileUtils.readTextFile(new File(MASS_STORAGE_FILE_PATH), 0, null).trim());
             } catch (IOException e) {
                 pw.println("IOException: " + e);
+            }
+        }
+
+        private void publishAdbCustomTile() {
+            // This action should be performed as system
+            final int userId = UserHandle.myUserId();
+            long token = Binder.clearCallingIdentity();
+            try {
+                if (!QSUtils.isQSTileEnabledForUser(
+                        mContext, QSConstants.DYNAMIC_TILE_ADB, userId)) {
+                    return;
+                }
+
+                final UserHandle user = new UserHandle(userId);
+                final int icon = QSUtils.getDynamicQSTileResIconId(mContext, userId,
+                        QSConstants.DYNAMIC_TILE_ADB);
+                final String contentDesc = QSUtils.getDynamicQSTileLabel(mContext, userId,
+                        QSConstants.DYNAMIC_TILE_ADB);
+                final Context resourceContext = QSUtils.getQSTileContext(mContext, userId);
+
+                CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+                CustomTile tile = new CustomTile.Builder(resourceContext)
+                        .setLabel(getAdbCustomTileLabel())
+                        .setContentDescription(contentDesc)
+                        .setIcon(icon)
+                        .setOnClickIntent(getCustomTilePendingIntent())
+                        .build();
+                statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_ADB,
+                        UsbDeviceManager.class.hashCode(), tile, user);
+            } finally {
+                Binder.restoreCallingIdentity(token);
+            }
+        }
+
+        private void unpublishAdbCustomTile() {
+            // This action should be performed as system
+            final int userId = UserHandle.myUserId();
+            long token = Binder.clearCallingIdentity();
+            try {
+                CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+                statusBarManager.removeTileAsUser(QSConstants.DYNAMIC_TILE_ADB,
+                        UsbDeviceManager.class.hashCode(), new UserHandle(userId));
+            } finally {
+                Binder.restoreCallingIdentity(token);
+            }
+        }
+
+        private PendingIntent getCustomTilePendingIntent() {
+            Intent i = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            return PendingIntent.getActivity(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT, null);
+        }
+
+        private String getAdbCustomTileLabel() {
+            boolean usbAdbActive = mAdbEnabled && mConnected;
+            boolean netAdbActive = mAdbEnabled &&
+                    Settings.Secure.getInt(mContentResolver, Settings.Secure.ADB_PORT, -1) > 0;
+
+            int id = 0;
+            if (usbAdbActive && netAdbActive) {
+                id = com.android.internal.R.string.adb_active_custom_tile_both;
+            } else if (usbAdbActive) {
+                id = com.android.internal.R.string.adb_active_custom_tile_usb;
+            } else if (netAdbActive) {
+                id = com.android.internal.R.string.adb_active_custom_tile_net;
+            }
+
+            Resources res = mContext.getResources();
+            return res.getString(
+                    com.android.internal.R.string.adb_active_custom_tile,
+                    res.getString(id));
+        }
+
+        private void processQSChangedLocked() {
+            final int userId = UserHandle.myUserId();
+            boolean usbAdbActive = mAdbEnabled && mConnected;
+            boolean netAdbActive = mAdbEnabled &&
+                    Settings.Secure.getInt(mContentResolver, Settings.Secure.ADB_PORT, -1) > 0;
+            boolean notifEnabled = "1".equals(SystemProperties.get("persist.adb.notify"))
+                    || Settings.Secure.getInt(mContext.getContentResolver(),
+                            Settings.Secure.ADB_NOTIFY, 1) == 1;
+            boolean isActive = notifEnabled && (usbAdbActive || netAdbActive);
+            final boolean isEnabledForUser = QSUtils.isQSTileEnabledForUser(mContext,
+                    QSConstants.DYNAMIC_TILE_ADB, userId);
+            boolean enabled = (userId == UserHandle.USER_OWNER) && isEnabledForUser && isActive;
+            if (enabled) {
+                publishAdbCustomTile();
+            } else {
+                unpublishAdbCustomTile();
             }
         }
     }
