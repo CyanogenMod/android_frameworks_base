@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Process;
 import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.android.systemui.qs.QSDetailItemsGrid;
 import com.android.systemui.qs.QSDetailItemsList;
 import cyanogenmod.app.CustomTile;
@@ -53,7 +55,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
     public CustomQSTile(Host host, StatusBarPanelCustomTile tile) {
         super(host);
-        refreshState(tile);
+        mTile = tile;
     }
 
     @Override
@@ -95,11 +97,10 @@ public class CustomQSTile extends QSTile<QSTile.State> {
                 showDetail(true);
             }
             if (mOnClick != null) {
-                if (mOnClick.isActivity()) {
-                    mHost.collapsePanels();
-                }
+                mHost.collapsePanels();
                 mOnClick.send();
             } else if (mOnClickUri != null) {
+                mHost.collapsePanels();
                 final Intent intent = new Intent().setData(mOnClickUri);
                 mContext.sendBroadcastAsUser(intent, new UserHandle(mCurrentUserId));
             }
@@ -110,13 +111,14 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
     @Override
     protected void handleUpdateState(State state, Object arg) {
-        if (!(arg instanceof StatusBarPanelCustomTile)) return;
-        mTile = (StatusBarPanelCustomTile) arg;
+        if (arg instanceof StatusBarPanelCustomTile) {
+            mTile = (StatusBarPanelCustomTile) arg;
+        }
         final CustomTile customTile = mTile.getCustomTile();
-        state.visible = true;
         state.contentDescription = customTile.contentDescription;
         state.label = customTile.label;
         state.iconId = 0;
+        state.visible = true;
         final int iconId = customTile.icon;
         if (iconId != 0) {
             final String iconPackage = mTile.getResPkg();
@@ -132,12 +134,22 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         mDetailAdapter = new CustomQSDetailAdapter();
     }
 
+    private boolean isDynamicTile() {
+        return mTile.getPackage().equals(mContext.getPackageName())
+                || mTile.getUid() == Process.SYSTEM_UID;
+    }
+
     private class CustomQSDetailAdapter implements DetailAdapter, AdapterView.OnItemClickListener,
             QSDetailItemsGrid.QSDetailItemsGridAdapter.OnPseudoGriditemClickListener {
         private QSDetailItemsList.QSCustomDetailListAdapter mListAdapter;
         private QSDetailItemsGrid.QSDetailItemsGridAdapter mGridAdapter;
 
         public int getTitle() {
+            if (isDynamicTile()) {
+                return mContext.getResources().getIdentifier(
+                        String.format("dynamic_qs_tile_%s_label", mTile.getTag()),
+                            "string", mContext.getPackageName());
+            }
             return R.string.quick_settings_custom_tile_detail_title;
         }
 
@@ -179,8 +191,12 @@ public class CustomQSTile extends QSTile<QSTile.State> {
                 // icon is cached in state, fetch it
                 imageView.setImageDrawable(getState().icon.getDrawable(mContext));
                 customTileTitle.setText(mTile.getCustomTile().label);
-                customTilePkg.setText(mTile.getPackage());
-                customTileContentDesc.setText(mTile.getCustomTile().contentDescription);
+                if (isDynamicTile()) {
+                    customTilePkg.setText(R.string.quick_settings_dynamic_tile_detail_title);
+                } else {
+                    customTilePkg.setText(mTile.getPackage());
+                    customTileContentDesc.setText(mTile.getCustomTile().contentDescription);
+                }
             } else {
                 switch (mExpandedStyle.getStyle()) {
                     case CustomTile.ExpandedStyle.GRID_STYLE:

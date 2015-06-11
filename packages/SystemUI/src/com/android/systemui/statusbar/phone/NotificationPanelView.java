@@ -380,6 +380,7 @@ public class NotificationPanelView extends PanelView implements
             @Override
             public void onAnimationEnd(Animator animation) {
                 mQsSizeChangeAnimator = null;
+                mQsContainer.setHeightOverride(-1);
             }
         });
         mQsSizeChangeAnimator.start();
