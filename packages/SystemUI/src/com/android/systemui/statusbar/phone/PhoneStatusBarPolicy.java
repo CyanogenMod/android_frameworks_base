@@ -20,15 +20,21 @@ import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
 import android.app.AlarmManager.AlarmClockInfo;
 import android.app.IUserSwitchObserver;
+import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.UserInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IRemoteCallback;
 import android.os.RemoteException;
@@ -51,7 +57,15 @@ import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.SuController;
 
+import cyanogenmod.app.CMStatusBarManager;
+import cyanogenmod.app.CustomTile;
 import cyanogenmod.providers.CMSettings;
+
+import org.cyanogenmod.internal.util.QSUtils;
+import org.cyanogenmod.internal.util.QSUtils.OnQSChanged;
+import org.cyanogenmod.internal.util.QSConstants;
+
+import java.util.ArrayList;
 
 /**
  * This class contains all of the policy about which icons are installed in the status
@@ -123,6 +137,13 @@ public class PhoneStatusBarPolicy implements Callback {
         public void run() {
             if (DEBUG) Log.v(TAG, "updateCast: hiding icon NOW");
             mService.setIconVisibility(SLOT_CAST, false);
+        }
+    };
+
+    private final OnQSChanged mQSListener = new OnQSChanged() {
+        @Override
+        public void onQSChanged() {
+            processQSChangedLocked();
         }
     };
 
@@ -198,6 +219,8 @@ public class PhoneStatusBarPolicy implements Callback {
         mService.setIcon(SLOT_MANAGED_PROFILE, R.drawable.stat_sys_managed_profile_status, 0,
                 mContext.getString(R.string.accessibility_managed_profile));
         mService.setIconVisibility(SLOT_MANAGED_PROFILE, false);
+
+        QSUtils.registerObserverForQSChanges(mContext, mQSListener);
     }
 
     private ContentObserver mAlarmIconObserver = new ContentObserver(null) {
@@ -448,6 +471,12 @@ public class PhoneStatusBarPolicy implements Callback {
 
     private void updateSu() {
         mService.setIconVisibility(SLOT_SU, mSuController.hasActiveSessions());
+        final int userId = UserHandle.myUserId();
+        if (isSuEnabledForUser(userId)) {
+            publishSuCustomTile();
+        } else {
+            unpublishSuCustomTile();
+        }
     }
 
     private final CastController.Callback mCastCallback = new CastController.Callback() {
@@ -479,4 +508,117 @@ public class PhoneStatusBarPolicy implements Callback {
         }
     };
 
+    private void publishSuCustomTile() {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            if (!QSUtils.isQSTileEnabledForUser(
+                    mContext, QSConstants.DYNAMIC_TILE_SU, userId)) {
+                return;
+            }
+
+            final UserHandle user = new UserHandle(userId);
+            final int icon = QSUtils.getDynamicQSTileResIconId(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_SU);
+            final String contentDesc = QSUtils.getDynamicQSTileLabel(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_SU);
+            final Context resourceContext = QSUtils.getQSTileContext(mContext, userId);
+
+            CustomTile.ListExpandedStyle style = new CustomTile.ListExpandedStyle();
+            ArrayList<CustomTile.ExpandedListItem> items = new ArrayList<>();
+            for (String pkg : mSuController.getPackageNamesWithActiveSuSessions()) {
+                CustomTile.ExpandedListItem item = new CustomTile.ExpandedListItem();
+                int appIconIdentifier = getActiveSuApkDrawableId(pkg);
+                if (appIconIdentifier != -1) {
+                    item.setExpandedListItemDrawable(appIconIdentifier);
+                } else {
+                    item.setExpandedListItemDrawable(icon);
+                }
+                item.setExpandedListItemTitle(getActiveSuApkLabel(pkg));
+                item.setExpandedListItemSummary(pkg);
+                item.setExpandedListItemOnClickIntent(getCustomTilePendingIntent(pkg));
+                items.add(item);
+            }
+            style.setListItems(items);
+
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            CustomTile tile = new CustomTile.Builder(resourceContext)
+                    .setLabel(contentDesc)
+                    .setContentDescription(contentDesc)
+                    .setIcon(icon)
+                    .setOnSettingsClickIntent(getCustomTileSettingsIntent())
+                    .setExpandedStyle(style)
+                    .build();
+            statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_SU,
+                    PhoneStatusBarPolicy.class.hashCode(), tile, user);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private void unpublishSuCustomTile() {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            statusBarManager.removeTileAsUser(QSConstants.DYNAMIC_TILE_SU,
+                    PhoneStatusBarPolicy.class.hashCode(), new UserHandle(userId));
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private PendingIntent getCustomTilePendingIntent(String pkg) {
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.setPackage(pkg);
+        i.addCategory(Intent.CATEGORY_LAUNCHER);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getActivity(mContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private Intent getCustomTileSettingsIntent() {
+        Intent i = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return i;
+    }
+
+    private String getActiveSuApkLabel(String pkg) {
+        final PackageManager pm = mContext.getPackageManager();
+        ApplicationInfo ai = null;
+        try {
+            ai = pm.getApplicationInfo(pkg, 0);
+        } catch (final NameNotFoundException e) {
+            // Ignore
+        }
+        return (String) (ai != null ? pm.getApplicationLabel(ai) : pkg);
+    }
+
+    private int getActiveSuApkDrawableId(String pkg) {
+        final PackageManager pm = mContext.getPackageManager();
+        ApplicationInfo ai;
+        try {
+            ai = pm.getApplicationInfo(pkg, 0);
+        } catch (final NameNotFoundException e) {
+            return -1;
+        }
+        return ai.icon;
+    }
+
+    private boolean isSuEnabledForUser(int userId) {
+        final boolean hasSuAccess = mSuController.hasActiveSessions();
+        final boolean isEnabledForUser = QSUtils.isQSTileEnabledForUser(mContext,
+                QSConstants.DYNAMIC_TILE_SU, userId);
+        return  (userId == UserHandle.USER_OWNER) && isEnabledForUser && hasSuAccess;
+    }
+
+    private void processQSChangedLocked() {
+        final int userId = UserHandle.myUserId();
+        if (isSuEnabledForUser(userId)) {
+            publishSuCustomTile();
+        } else {
+            unpublishSuCustomTile();
+        }
+    }
 }

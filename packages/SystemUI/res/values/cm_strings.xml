@@ -129,4 +129,11 @@
 
     <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_screen_timeout_changed">Screen timeout changed to <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+
+    <!-- Dynamic tiles -->
+    <string name="quick_settings_dynamic_tile_detail_title">Dynamic tile</string>
+    <string name="dynamic_qs_tile_next_alarm_label">Next alarm</string>
+    <string name="dynamic_qs_tile_ime_selector_label">IME selector</string>
+    <string name="dynamic_qs_tile_su_label">Root</string>
+    <string name="dynamic_qs_tile_adb_label" translatable="false">ADB</string>
 </resources>
