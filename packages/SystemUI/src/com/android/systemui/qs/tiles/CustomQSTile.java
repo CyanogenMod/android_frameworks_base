@@ -95,11 +95,10 @@ public class CustomQSTile extends QSTile<QSTile.State> {
                 showDetail(true);
             }
             if (mOnClick != null) {
-                if (mOnClick.isActivity()) {
-                    mHost.collapsePanels();
-                }
+                mHost.collapsePanels();
                 mOnClick.send();
             } else if (mOnClickUri != null) {
+                mHost.collapsePanels();
                 final Intent intent = new Intent().setData(mOnClickUri);
                 mContext.sendBroadcastAsUser(intent, new UserHandle(mCurrentUserId));
             }
@@ -119,7 +118,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         state.iconId = 0;
         final int iconId = customTile.icon;
         if (iconId != 0) {
-            final String iconPackage = mTile.getPackage();
+            final String iconPackage =  mTile.getResPkg();
             if (!TextUtils.isEmpty(iconPackage)) {
                 state.icon = new ExternalIcon(iconPackage, iconId);
             } else {
