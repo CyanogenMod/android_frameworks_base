@@ -739,7 +739,7 @@ class UsbSettingsManager {
         }
 
         // Send broadcast to running activity with registered intent
-        mUserContext.sendBroadcast(intent);
+        mUserContext.sendBroadcastAsUser(intent, UserHandle.ALL);
 
         // Start activity with registered intent
         resolveActivity(intent, matches, defaultPackage, device, null);
