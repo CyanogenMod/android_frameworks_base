@@ -189,16 +189,34 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     public void showDialog(boolean keyguardShowing, boolean isDeviceProvisioned) {
         mKeyguardShowing = keyguardShowing;
         mDeviceProvisioned = isDeviceProvisioned;
-        if (mDialog != null && mUiContext == null) {
-            mDialog.dismiss();
-            mDialog = null;
-            mDialog = createDialog();
-            // Show delayed, so that the dismiss of the previous dialog completes
-            mHandler.sendEmptyMessage(MESSAGE_SHOW);
-        } else {
-            mDialog = createDialog();
-            handleShow();
+
+        if (!mKeyguardShowing || !isHiddenOnLockscreen()) {
+            if (mDialog != null && mUiContext == null) {
+                mDialog.dismiss();
+                mDialog = null;
+                mDialog = createDialog();
+                // Show delayed, so that the dismiss of the previous dialog completes
+                mHandler.sendEmptyMessage(MESSAGE_SHOW);
+            } else {
+                mDialog = createDialog();
+                handleShow();
+            }
         }
+    }
+
+    private boolean isHiddenOnLockscreen() {
+        String savedActions = Settings.Secure.getStringForUser(mContext.getContentResolver(),
+                Settings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
+
+        if (savedActions != null) {
+            for (String action : savedActions.split("\\|")) {
+                if (action.equals(GLOBAL_ACTION_MENU_DISABLED)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void awakenIfNecessary() {
