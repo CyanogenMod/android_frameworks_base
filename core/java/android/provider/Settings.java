@@ -4792,6 +4792,13 @@ public final class Settings {
                 "lock_screen_allow_private_notifications";
 
         /**
+         * Separate password for encryption and the lockscreen.
+         * @hide
+         */
+        public static final String LOCK_SEPARATE_ENCRYPTION_PASSWORD =
+                "lock_separate_encryption_password";
+
+        /**
          * Set by the system to track if the user needs to see the call to action for
          * the lockscreen notification policy.
          * @hide
