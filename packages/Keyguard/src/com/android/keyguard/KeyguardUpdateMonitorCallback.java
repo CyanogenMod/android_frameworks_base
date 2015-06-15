@@ -207,22 +207,4 @@ public class KeyguardUpdateMonitorCallback {
      * Called when the state of face unlock changed.
      */
     public void onFaceUnlockStateChanged(boolean running, int userid) { }
-
-    /**
-     * Called when a subId for the slot is changed.
-     * @param oldSubId.
-     * @param newSubId.
-     */
-    public void onSubIdUpdated(int oldSubId, int newSubId) { }
-
-    /**
-     * Called when the SubInfo content changed
-     * @param subId The subscription id which subscription info record is updated
-     * @param column The column name which is updated
-     * @param sValue The new string if the colum value is string
-     * @param iValue The new integer value if the colum value is integer
-     */
-    public void onSubInfoContentChanged(int subId, String column,
-                                String sValue, int iValue) { }
-
 }
