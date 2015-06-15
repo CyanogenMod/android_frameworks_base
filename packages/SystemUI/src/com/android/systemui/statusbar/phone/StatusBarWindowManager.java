@@ -51,6 +51,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private final boolean mKeyguardScreenRotation;
 
     private boolean mKeyguardBlurEnabled;
+    private boolean mShowingMedia;
     private final int mStatusBarLayer;
     private BlurLayer mKeyguardBlur;
     private final SurfaceSession mFxSession;
@@ -219,7 +220,8 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private void applyKeyguardBlurShow(){
         boolean isblur = false;
         if (mCurrentState.keyguardShowing && mKeyguardBlurEnabled
-                && !mCurrentState.keyguardOccluded) {
+                && !mCurrentState.keyguardOccluded
+                && !mShowingMedia) {
             isblur = true;
         }
         if (mKeyguardBlur != null) {
@@ -291,6 +293,11 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
             }
             mKeyguardBlur.setBlur(b);
         }
+    }
+
+    public void setShowingMedia(boolean showingMedia) {
+        mShowingMedia = showingMedia;
+        applyKeyguardBlurShow();
     }
 
     /**
