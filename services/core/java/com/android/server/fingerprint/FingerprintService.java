@@ -16,17 +16,15 @@
 
 package com.android.server.fingerprint;
 
-import android.app.Service;
-import android.content.ContentResolver;
+import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.PowerManager;
-import android.os.RemoteException;
-import android.provider.Settings;
+import android.content.pm.PackageManager;
+import android.hardware.fingerprint.Fingerprint;
+import android.os.*;
+import android.os.Process;
 import android.service.fingerprint.FingerprintManager;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.util.Slog;
 
 import com.android.server.SystemService;
@@ -35,11 +33,12 @@ import android.service.fingerprint.FingerprintUtils;
 import android.service.fingerprint.IFingerprintService;
 import android.service.fingerprint.IFingerprintServiceReceiver;
 
+import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.Iterator;
 
 /**
@@ -127,6 +126,7 @@ public class FingerprintService extends SystemService {
     native int nativeOpenHal();
     native int nativeCloseHal();
     native void nativeInit(FingerprintService service);
+    native Fingerprint[] nativeGetEnrollments();
 
     // JNI methods for communicating from HAL to clients
     void notify(int msg, int arg1, int arg2) {
@@ -323,7 +323,37 @@ public class FingerprintService extends SystemService {
         // TODO
     }
 
+    public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId) {
+        enforceCrossUserPermission(userId, "User " + UserHandle.getCallingUserId()
+                + " trying to add account for " + userId);
+        List<Fingerprint> fingerprints = FingerprintUtils.getFingerprintIdsForUser(
+                getContext().getContentResolver(), userId);
+        return fingerprints;
+    }
+
+    private void enforceCrossUserPermission(int userId, String errorMessage) {
+        if (userId != UserHandle.getCallingUserId()
+                && Binder.getCallingUid() != Process.myUid()
+                && mContext.checkCallingOrSelfPermission(
+                android.Manifest.permission.INTERACT_ACROSS_USERS_FULL)
+                != PackageManager.PERMISSION_GRANTED) {
+            throw new SecurityException(errorMessage);
+        }
+    }
+
+    private int getCurrentUserId () {
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            return ActivityManager.getCurrentUser();
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+    }
+
     private final class FingerprintServiceWrapper extends IFingerprintService.Stub {
+        private final static String DUMP_CMD_ADD_FINGER = "addFinger";
+        private final static String DUMP_CMD_PRINT_ENROLLMENTS = "enrollments";
+
         @Override // Binder call
         public void authenticate(IBinder token, int userId) {
             checkPermission(USE_FINGERPRINT);
@@ -359,6 +389,62 @@ public class FingerprintService extends SystemService {
         public void stopListening(IBinder token, int userId) {
             checkPermission(USE_FINGERPRINT);
             removeListener(token, userId);
+        }
+
+        @Override // Binder call
+        public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId)
+                throws RemoteException {
+            checkPermission(USE_FINGERPRINT);
+            return FingerprintService.this.getEnrolledFingerprints(token, userId);
+        }
+
+        @Override
+        protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+            Log.d(TAG, "Dump called on FingerprintService");
+            pw.println("FingerprintService:");
+            if (args.length != 0 && DUMP_CMD_ADD_FINGER.equals(args[0])) {
+                dumpAddFinger(pw, args);
+            } else if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
+                dumpEnrollments(pw, args);
+            } else if (args.length != 0 && "getEnrollment".equals(args[0])) {
+                Fingerprint[] fingerprints = nativeGetEnrollments();
+                Fingerprint fingerprint = fingerprints[0];
+                pw.println("Found fingerprint!");
+                pw.println("Name: " + fingerprint.getName());
+                pw.println("Id: " + fingerprint.getFingerId());
+            } else {
+                pw.println("Valid Fingerprint Commands:");
+                pw.println(DUMP_CMD_ADD_FINGER + "[id] [name] - Add a finger to enrollment");
+                pw.println(DUMP_CMD_PRINT_ENROLLMENTS + " - Print Enrollments");
+            }
+        }
+
+        private void dumpAddFinger(PrintWriter pw, String[] args) {
+            int id = 1;
+            String name = "";
+            if (args.length > 1) {
+                try {
+                    id = Integer.parseInt(args[1]);
+                } catch(NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (args.length > 2) {
+                name = args[2];
+            }
+            pw.println("Adding finger w/ id" + id + " name: " + name);
+            FingerprintUtils.addFingerprintIdForUser(id, getContext().getContentResolver(),
+                    getCurrentUserId());
+        }
+
+        private void dumpEnrollments(PrintWriter pw, String[] args) {
+            List<Fingerprint> fingerprints = FingerprintUtils.getFingerprintIdsForUser(
+                    getContext().getContentResolver(), getCurrentUserId());
+            if (fingerprints.isEmpty()) pw.println("No fingerprints enrolled");
+            for(Fingerprint fingerprint : fingerprints) {
+                pw.println("Fingerprint id: " +
+                        fingerprint.getFingerId() + " name: " + fingerprint.getName());
+            }
         }
     }
 
