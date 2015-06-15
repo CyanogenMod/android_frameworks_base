@@ -264,6 +264,22 @@ public class FingerprintManager {
         }
     }
 
+    /**
+     * @hide
+     */
+    public List<Fingerprint> getEnrolledFingerprints() {
+        if (mService != null) {
+            try {
+                return mService.getEnrolledFingerprints(mToken, getCurrentUserId());
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in getEnrolledFingerprints(): ", e);
+            }
+        } else {
+            Log.w(TAG, "getEnrolledFingerprints(): Service not connected!");
+        }
+        return Collections.emptyList();
+    }
+
     private void sendError(int msg, int arg1, int arg2) {
         mHandler.obtainMessage(msg, arg1, arg2);
     }
