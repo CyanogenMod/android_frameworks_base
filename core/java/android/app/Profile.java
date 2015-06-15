@@ -628,6 +628,8 @@ public final class Profile implements Parcelable, Comparable {
                 if (trigger != null) {
                     profile.mTriggers.put(trigger.mId, trigger);
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while parsing triggers");
             }
             event = xpp.next();
         }
@@ -720,6 +722,8 @@ public final class Profile implements Parcelable, Comparable {
                 if (name.equals("triggers")) {
                     readTriggersFromXml(xpp, context, profile);
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while parsing profle:" + profileName);
             }
             event = xpp.next();
         }
