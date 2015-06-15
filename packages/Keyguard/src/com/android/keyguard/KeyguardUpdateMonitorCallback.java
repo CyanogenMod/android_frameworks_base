@@ -49,13 +49,8 @@ public class KeyguardUpdateMonitorCallback {
 
     /**
      * Called when the carrier PLMN or SPN changes.
-     *
-     * @param plmn The operator name of the registered network.  May be null if it shouldn't
-     *   be displayed.
-     * @param spn The service provider name.  May be null if it shouldn't be displayed.
-     * @param subId The subscription id which PLMN or SPN changed.
      */
-    void onRefreshCarrierInfo(int subId, CharSequence plmn, CharSequence spn) { }
+    void onRefreshCarrierInfo() { }
 
     /**
      * Called when the airplane mode changes.
@@ -132,7 +127,7 @@ public class KeyguardUpdateMonitorCallback {
      * @param simState
      * @param subId The subscription id which SIM state changed.
      */
-    public void onSimStateChanged(int subId, IccCardConstants.State simState) {}
+    public void onSimStateChanged(int subId, int slotId, IccCardConstants.State simState) {}
 
     /**
      * Called when a user is removed.
@@ -207,22 +202,4 @@ public class KeyguardUpdateMonitorCallback {
      * Called when the state of face unlock changed.
      */
     public void onFaceUnlockStateChanged(boolean running, int userid) { }
-
-    /**
-     * Called when a subId for the slot is changed.
-     * @param oldSubId.
-     * @param newSubId.
-     */
-    public void onSubIdUpdated(int oldSubId, int newSubId) { }
-
-    /**
-     * Called when the SubInfo content changed
-     * @param subId The subscription id which subscription info record is updated
-     * @param column The column name which is updated
-     * @param sValue The new string if the colum value is string
-     * @param iValue The new integer value if the colum value is integer
-     */
-    public void onSubInfoContentChanged(int subId, String column,
-                                String sValue, int iValue) { }
-
 }
