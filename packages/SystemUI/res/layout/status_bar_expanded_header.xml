@@ -74,7 +74,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/header_battery_margin_expanded"
             android:paddingEnd="@dimen/battery_level_padding_end"
-            android:textColor="#ffffff"
+            android:textColor="@color/status_bar_battery_level_text_color"
             android:textSize="@dimen/battery_level_text_size"
             android:importantForAccessibility="noHideDescendants"/>
     </LinearLayout>
@@ -142,7 +142,7 @@
         android:layout_marginBottom="4dp"
         android:drawablePadding="6dp"
         android:drawableStart="@drawable/ic_access_alarms_small"
-        android:textColor="#64ffffff"
+        android:textColor="@color/status_bar_alarm_status_text_color"
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
         android:paddingEnd="6dp"
         android:paddingStart="6dp"
@@ -166,19 +166,17 @@
             android:id="@+id/weather_line_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
+            android:paddingEnd="@dimen/status_bar_weather_padding_end"
             android:gravity="right"
-            android:textColor="@color/status_bar_temperature_text_color"
-            android:textSize="@dimen/weather_text_size"
+            android:textAppearance="@style/TextAppearance.StatusBar.Expanded.WeatherTemp"
             android:importantForAccessibility="noHideDescendants"/>
     <TextView
             android:id="@+id/weather_line_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
+            android:paddingEnd="@dimen/status_bar_weather_padding_end"
             android:gravity="right"
-            android:textColor="@color/status_bar_temperature_location_text_color"
-            android:textSize="@dimen/weather_text_size"
+            android:textAppearance="@style/TextAppearance.StatusBar.Expanded.WeatherLocation"
             android:importantForAccessibility="noHideDescendants"/>
     </LinearLayout>
 
