@@ -349,4 +349,6 @@
     <!-- Storage description for the SD card on the dock -->
     <string name="storage_sd_dock_card">Dock SD card</string>
 
+    <!-- Default fingerprint name when a new fingerprint is added -->
+    <string name="fingerprint_default_name">Fingerprint <xliff:g id="number">%d</xliff:g></string>
 </resources>
