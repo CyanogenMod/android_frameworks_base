@@ -1082,9 +1082,9 @@ public class RemoteViewsAdapter extends BaseAdapter implements Handler.Callback 
     }
 
     public int getCount() {
-        final RemoteViewsMetaData metaData = mCache.getMetaData();
-        synchronized (metaData) {
-            return metaData.count;
+        final RemoteViewsMetaData tmpMetaData = mCache.getTemporaryMetaData();
+        synchronized (tmpMetaData) {
+            return tmpMetaData.count;
         }
     }
 
@@ -1270,6 +1270,11 @@ public class RemoteViewsAdapter extends BaseAdapter implements Handler.Callback 
             return;
         }
 
+        // Clear the data in cache
+        final RemoteViewsMetaData metaData = mCache.getMetaData();
+        synchronized (metaData) {
+            metaData.reset();
+        }
         // Flush the cache so that we can reload new items from the service
         synchronized (mCache) {
             mCache.reset();
