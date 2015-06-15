@@ -38,6 +38,7 @@ import static android.os.BatteryManager.EXTRA_PLUGGED;
 import static android.os.BatteryManager.EXTRA_LEVEL;
 import static android.os.BatteryManager.EXTRA_HEALTH;
 
+import android.hardware.fingerprint.Fingerprint;
 import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Handler;
@@ -361,9 +362,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             return;
         }
         final ContentResolver res = mContext.getContentResolver();
-        final int ids[] = FingerprintUtils.getFingerprintIdsForUser(res, userId);
-        for (int i = 0; i < ids.length; i++) {
-            if (ids[i] == fingerprintId) {
+        final List<Fingerprint> fingerprints = FingerprintUtils.getFingerprintsForUser(res, userId);
+        for (Fingerprint fingerprint : fingerprints) {
+            if (fingerprint.getFingerId() == fingerprintId) {
                 onFingerprintRecognized(userId);
             }
         }
