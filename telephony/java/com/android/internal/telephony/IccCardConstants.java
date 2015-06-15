@@ -81,5 +81,21 @@ public class IccCardConstants {
                     || (this == PERSO_LOCKED) || (this == READY)
                     || (this == PERM_DISABLED) || (this == CARD_IO_ERROR));
         }
+
+        public static State intToState(int state) throws IllegalArgumentException {
+            switch(state) {
+                case 0: return UNKNOWN;
+                case 1: return ABSENT;
+                case 2: return PIN_REQUIRED;
+                case 3: return PUK_REQUIRED;
+                case 4: return PERSO_LOCKED;
+                case 5: return READY;
+                case 6: return NOT_READY;
+                case 7: return PERM_DISABLED;
+                case 8: return CARD_IO_ERROR;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
     }
 }
