@@ -103,6 +103,8 @@ public final class StreamSettings implements Parcelable{
                 } else if (name.equals("override")) {
                     streamDescriptor.mOverride = Boolean.parseBoolean(xpp.nextText());
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while parsing stream settings");
             }
             event = xpp.next();
         }
