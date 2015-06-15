@@ -148,7 +148,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
 
         mSubNameView = (TextView) findViewById(R.id.sim_name);
         mSimImageView = (ImageView) findViewById(R.id.keyguard_sim);
-        mSubId = mKgUpdateMonitor.getSimPinLockSubId();
+        mSubId = mKgUpdateMonitor.getNextSubIdForState(IccCardConstants.State.PIN_REQUIRED);
         if (mKgUpdateMonitor.getNumPhones() > 1) {
             mSubNameView.setVisibility(View.VISIBLE);
             handleSubInfoChange();
@@ -343,7 +343,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
     }
 
     private void handleSubInfoChangeIfNeeded() {
-        int subId = mKgUpdateMonitor.getSimPinLockSubId();
+        int subId = mKgUpdateMonitor.getNextSubIdForState(IccCardConstants.State.PIN_REQUIRED);
         if (subId != mSubId && SubscriptionManager.isValidSubscriptionId(subId)) {
             mSubId = subId;
             handleSubInfoChange();
