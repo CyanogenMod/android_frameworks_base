@@ -118,7 +118,7 @@ public class EmergencyButton extends Button {
         if (mLockPatternUtils.isInCall()) {
             enabled = true; // always show "return to call" if phone is off-hook
         } else if (mLockPatternUtils.isEmergencyCallCapable()) {
-            boolean simLocked = KeyguardUpdateMonitor.getInstance(mContext).isSimLocked();
+            boolean simLocked = KeyguardUpdateMonitor.getInstance(mContext).isSimPinVoiceSecure();
             if (simLocked) {
                 // Some countries can't handle emergency calls while SIM is locked.
                 enabled = mLockPatternUtils.isEmergencyCallEnabledWhileSimLocked();

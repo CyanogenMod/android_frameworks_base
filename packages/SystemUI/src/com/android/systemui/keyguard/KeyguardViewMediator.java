@@ -47,6 +47,7 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.EventLog;
 import android.util.Log;
@@ -1038,15 +1039,12 @@ public class KeyguardViewMediator extends SystemUI {
         // if the setup wizard hasn't run yet, don't show
         final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
                 false);
-        final boolean provisioned = mUpdateMonitor.isDeviceProvisioned();
-        boolean lockedOrMissing = false;
-        for (int i = 0; i < mUpdateMonitor.getNumPhones(); i++) {
-            int subId = mUpdateMonitor.getSubIdByPhoneId(i);
-            if (isSimLockedOrMissing(subId, requireSim)) {
-                lockedOrMissing = true;
-                break;
-            }
-        }
+        final boolean absent = SubscriptionManager.isValidSubscriptionId(
+                mUpdateMonitor.getNextSubIdForState(IccCardConstants.State.ABSENT));
+        final boolean disabled = SubscriptionManager.isValidSubscriptionId(
+                mUpdateMonitor.getNextSubIdForState(IccCardConstants.State.PERM_DISABLED));
+        final boolean lockedOrMissing = mUpdateMonitor.isSimPinSecure()
+                || ((absent || disabled) && requireSim);
 
         if (!lockedOrMissing && shouldWaitForProvisioning()) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because device isn't provisioned"
