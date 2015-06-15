@@ -66,8 +66,8 @@ class AutomaticBrightnessController {
     // brightness changes occur in response to an observed change in light level that exceeds the
     // hysteresis threshold.
     private static final long BRIGHTENING_LIGHT_FAST_DEBOUNCE = 500;
-    private static final long BRIGHTENING_LIGHT_DEBOUNCE = 4000;
-    private static final long DARKENING_LIGHT_DEBOUNCE = 8000;
+    private static final long BRIGHTENING_LIGHT_DEBOUNCE = 3000;
+    private static final long DARKENING_LIGHT_DEBOUNCE = 4000;
 
     // Hysteresis constraints for brightening or darkening.
     // The recent lux must have changed by at least this fraction relative to the

@@ -86,9 +86,26 @@ public class ProfilesTile extends QSTile<QSTile.State> implements KeyguardMonito
     protected void handleUpdateState(State state, Object arg) {
         state.visible = true;
         state.enabled = !mKeyguardMonitor.isShowing() || !mKeyguardMonitor.isSecure();
-        state.label = profilesEnabled() ? mProfileManager.getActiveProfile().getName()
-                : mContext.getString(R.string.quick_settings_profiles_disabled);
         state.icon = ResourceIcon.get(R.drawable.ic_qs_system_profiles);
+        if (profilesEnabled()) {
+            state.label = mProfileManager.getActiveProfile().getName();
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_profiles, state.label);
+        } else {
+            state.label = mContext.getString(R.string.quick_settings_profiles_disabled);
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_profiles_off);
+        }
+    }
+
+    @Override
+    protected String composeChangeAnnouncement() {
+        if (profilesEnabled()) {
+            return mContext.getString(R.string.accessibility_quick_settings_profiles_changed,
+                    mState.label);
+        } else {
+            return mContext.getString(R.string.accessibility_quick_settings_profiles_changed_off);
+        }
     }
 
     private boolean profilesEnabled() {

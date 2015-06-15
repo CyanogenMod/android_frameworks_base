@@ -26,6 +26,14 @@
   <string name="accessibility_quick_settings_data_on">נתונים ניידים פעילים.</string>
   <string name="accessibility_quick_settings_roaming_off">מצב נדידה כבוי.</string>
   <string name="accessibility_quick_settings_roaming_on">מצב נדידה פעיל.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">תצוגה מותאמת כבויה.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">תצוגה מותאמת פעילה.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">תצוגה מותאמת כובתה.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">תצוגה מותאמת הופעלה.</string>
+  <string name="accessibility_quick_settings_heads_up_off">התראות קופצות כבויות.</string>
+  <string name="accessibility_quick_settings_heads_up_on">התראות קופצות פעילות.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">התראות קופצות כובו.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">התראות קופצות הופעלו.</string>
   <string name="accessibility_quick_settings_location_battery_saving">דיווח מיקום: מצב חיסכון בסוללה.</string>
   <string name="accessibility_quick_settings_location_gps_only">דיווח מיקום: מצב חיישנים בלבד.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">דיווח מיקום: מצב רמת דיוק גבוהה.</string>
@@ -56,6 +64,7 @@
   <string name="quick_settings_screen_timeout_detail_title">משך זמן מסך</string>
   <string name="quick_settings_usb_tether_label">קשירת USB</string>
   <string name="quick_settings_heads_up_label">התראות קופצת</string>
+  <string name="quick_settings_ambient_display_label">תצוגה מותאמת</string>
   <string name="quick_settings_sync_label">סנכרון</string>
   <string name="quick_settings_custom_tile_detail_title">אריח מותאם אישית</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>

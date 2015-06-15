@@ -238,7 +238,15 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
 
         state.visible = true;
         state.label = makeTimeoutSummaryString(newTimeout);
+        state.contentDescription = mContext.getString(
+                R.string.accessibility_quick_settings_screen_timeout, state.label);
         state.previousTimeout = newTimeout;
+    }
+
+    @Override
+    protected String composeChangeAnnouncement() {
+        return mContext.getString(R.string.accessibility_quick_settings_screen_timeout_changed,
+                mState.label);
     }
 
     private class RadioAdapter extends ArrayAdapter<String> {

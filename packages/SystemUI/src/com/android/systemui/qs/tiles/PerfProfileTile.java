@@ -37,8 +37,10 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     private AnimationIcon mBattery = new AnimationIcon(R.drawable.ic_qs_perf_profile_pwrsv_avd);
     private AnimationIcon mBalanced = new AnimationIcon(R.drawable.ic_qs_perf_profile_bal_avd);
 
-    private String[] mEntries;
-    private String[] mPerfProfileValues;
+    private final String[] mEntries;
+    private final String[] mDescriptionEntries;
+    private final String[] mAnnouncementEntries;
+    private final String[] mPerfProfileValues;
     private String mPerfProfileDefaultEntry;
 
     private final PowerManager mPm;
@@ -57,6 +59,8 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         mPerfProfileValues = res.getStringArray(com.android.internal.R.array.perf_profile_values);
 
         mEntries = res.getStringArray(com.android.internal.R.array.perf_profile_entries);
+        mDescriptionEntries = res.getStringArray(R.array.perf_profile_description);
+        mAnnouncementEntries = res.getStringArray(R.array.perf_profile_announcement);
     }
 
     @Override
@@ -83,6 +87,12 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         state.profile = arg == null ? getCurrentProfileIndex() : (Integer) arg;
         state.label = mEntries[state.profile];
         state.icon = getIconForState(state.profile);
+        state.contentDescription = mDescriptionEntries[state.profile];
+    }
+
+    @Override
+    protected String composeChangeAnnouncement() {
+        return mAnnouncementEntries[getCurrentProfileIndex()];
     }
 
     private Icon getIconForState(int powerIndex) {
@@ -93,8 +103,8 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
             case 1:
                 return mBattery;
 
-            default:
             case 2:
+            default:
                 return mBalanced;
         }
     }

@@ -94,9 +94,25 @@ public class NfcTile extends QSTile<QSTile.BooleanState> {
         }
         state.visible = mNfcAdapter != null;
         state.value = mNfcAdapter != null && isEnabled();
-        state.icon = state.value ? ResourceIcon.get(R.drawable.ic_qs_nfc_on)
-                : ResourceIcon.get(R.drawable.ic_qs_nfc_off);
         state.label = mContext.getString(R.string.quick_settings_nfc_label);
+        if (state.value) {
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_nfc_on);
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_nfc_on);
+        } else {
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_nfc_off);
+            state.contentDescription = mContext.getString(
+                    R.string.accessibility_quick_settings_nfc_off);
+        }
+    }
+
+    @Override
+    protected String composeChangeAnnouncement() {
+        if (mState.value) {
+            return mContext.getString(R.string.accessibility_quick_settings_nfc_changed_on);
+        } else {
+            return mContext.getString(R.string.accessibility_quick_settings_nfc_changed_off);
+        }
     }
 
     @Override

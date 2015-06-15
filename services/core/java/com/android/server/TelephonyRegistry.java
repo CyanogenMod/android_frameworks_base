@@ -688,10 +688,6 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         broadcastCallStateChanged(state, incomingNumber, subId);
     }
 
-     public void notifyServiceState(ServiceState state) {
-         notifyServiceStateForPhoneId(mDefaultPhoneId, mDefaultSubId, state);
-     }
-
     public void notifyServiceStateForPhoneId(int phoneId, int subId, ServiceState state) {
         if (!checkNotifyPermission("notifyServiceState()")){
             return;
@@ -859,17 +855,13 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
     }
 
-    public void notifyMessageWaitingChanged(boolean mwi) {
-        notifyMessageWaitingChangedForPhoneId(mDefaultPhoneId, mDefaultSubId, mwi);
-    }
-
     public void notifyMessageWaitingChangedForPhoneId(int phoneId, int subId, boolean mwi) {
         if (!checkNotifyPermission("notifyMessageWaitingChanged()")) {
             return;
         }
         if (VDBG) {
-            log("notifyMessageWaitingChangedForPhoneId: phoneId = " + phoneId
-                + "subId=" + subId + " mwi=" + mwi);
+            log("notifyMessageWaitingChangedForSubscriberPhoneID: subId=" + phoneId
+                + " mwi=" + mwi);
         }
         synchronized (mRecords) {
             if (validatePhoneId(phoneId)) {

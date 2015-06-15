@@ -177,6 +177,8 @@ public class VisualizerTile extends QSTile<QSTile.State>
     protected void handleUpdateState(State state, Object arg) {
         state.visible = true;
         state.label = mContext.getString(R.string.quick_settings_visualizer_label);
+        state.contentDescription = mContext.getString(
+                R.string.accessibility_quick_settings_visualizer);
 
         mUiHandler.post(mUpdateVisibilities);
     }

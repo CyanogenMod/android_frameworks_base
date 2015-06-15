@@ -26,17 +26,21 @@
   <string name="accessibility_quick_settings_data_on">Mobildata på.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
-  <string name="accessibility_quick_settings_location_battery_saving">Lokasjonsmodus: strømsparemodus.</string>
-  <string name="accessibility_quick_settings_location_gps_only">Lokasjonsmodus: kun sensorer.</string>
-  <string name="accessibility_quick_settings_location_high_accuracy">Lokasjonsmodus: høy nøyaktighet.</string>
-  <string name="accessibility_quick_settings_heads_up_off">Heads up notifikasjoner er av.</string>
-  <string name="accessibility_quick_settings_heads_up_on">Heads up notifikasjoner er på.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_off">Heads-up ble deaktivert.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ble aktivert.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Ambient visning av.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Ambient visning på.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient visning er skrudd av.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient visning er skrudd på.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up notifikasjoner er av.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up notifikasjoner er på.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads-up ble deaktivert.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ble aktivert.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Lokasjonsmodus: strømsparemodus.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Lokasjonsmodus: kun sensorer.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Lokasjonsmodus: høy nøyaktighet.</string>
+  <string name="accessibility_quick_settings_sync_off">Synkronisering av.</string>
+  <string name="accessibility_quick_settings_sync_on">Synkronisering på.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synkronisering avskrudd.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synkronisering aktivert.</string>
   <string name="accessibility_dpad_left">Markør til venstre</string>
   <string name="accessibility_dpad_right">Markør til høyre</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>
@@ -61,6 +65,7 @@
   <string name="quick_settings_usb_tether_label">USB tethering</string>
   <string name="quick_settings_heads_up_label">Flytende notifikasjoner</string>
   <string name="quick_settings_ambient_display_label">Ambient skjerm</string>
+  <string name="quick_settings_sync_label">Synkronisering</string>
   <string name="quick_settings_custom_tile_detail_title">Egendefinerte fliser</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Sveip til høyre for %1$s</string>

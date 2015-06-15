@@ -26,9 +26,9 @@
   <string name="accessibility_quick_settings_data_on">Mobildata på.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
-  <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
   <string name="accessibility_quick_settings_heads_up_off">Heads up av.</string>
   <string name="accessibility_quick_settings_heads_up_on">Heads up på.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>

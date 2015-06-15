@@ -41,6 +41,7 @@ public class ExternalStorageFormatter extends Service
     public static final String FORMAT_AND_FACTORY_RESET = "com.android.internal.os.storage.FORMAT_AND_FACTORY_RESET";
 
     public static final String EXTRA_ALWAYS_RESET = "always_reset";
+    public static final String EXTRA_WIPE_MEDIA = "wipe_media";
 
     // If non-null, the volume to format. Otherwise, will use the default external storage directory
     private StorageVolume mStorageVolume;
@@ -59,6 +60,7 @@ public class ExternalStorageFormatter extends Service
 
     private boolean mFactoryReset = false;
     private boolean mAlwaysReset = false;
+    private boolean mWipeInternalStorage = false;
     private String mReason = null;
     private boolean mIsFormatSuccess = false;
 
@@ -94,6 +96,7 @@ public class ExternalStorageFormatter extends Service
         if (intent.getBooleanExtra(EXTRA_ALWAYS_RESET, false)) {
             mAlwaysReset = true;
         }
+        mWipeInternalStorage = intent.getBooleanExtra(EXTRA_WIPE_MEDIA, false);
 
         mReason = intent.getStringExtra(Intent.EXTRA_REASON);
         mStorageVolume = intent.getParcelableExtra(StorageVolume.EXTRA_STORAGE_VOLUME);
@@ -277,6 +280,7 @@ public class ExternalStorageFormatter extends Service
                                 Intent intent = new Intent(Intent.ACTION_MASTER_CLEAR);
                                 intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                                 intent.putExtra(Intent.EXTRA_REASON, mReason);
+                                intent.putExtra(EXTRA_WIPE_MEDIA, mWipeInternalStorage);
                                 sendBroadcast(intent);
                                 // Intent handling is asynchronous -- assume it will happen soon.
                                 stopSelf();
@@ -289,6 +293,7 @@ public class ExternalStorageFormatter extends Service
                             Intent intent = new Intent(Intent.ACTION_MASTER_CLEAR);
                             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                             intent.putExtra(Intent.EXTRA_REASON, mReason);
+                            intent.putExtra(EXTRA_WIPE_MEDIA, mWipeInternalStorage);
                             sendBroadcast(intent);
                         } else {
                             try {

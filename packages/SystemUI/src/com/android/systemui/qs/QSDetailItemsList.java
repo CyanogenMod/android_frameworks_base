@@ -17,8 +17,10 @@
 package com.android.systemui.qs;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,6 +33,8 @@ import android.widget.ListView;
 
 import android.widget.TextView;
 import com.android.systemui.R;
+
+import cyanogenmod.app.CustomTile;
 
 import java.util.List;
 
@@ -91,6 +95,63 @@ public class QSDetailItemsList extends LinearLayout {
         mEmptyText = (TextView) mEmpty.findViewById(android.R.id.title);
         mEmptyIcon = (ImageView) mEmpty.findViewById(android.R.id.icon);
         mListView.setEmptyView(mEmpty);
+    }
+
+    public static class QSCustomDetailListAdapter extends ArrayAdapter<CustomTile.ExpandedItem> {
+        private String mPackage;
+
+        public QSCustomDetailListAdapter(String externalPackage, Context context,
+                List<CustomTile.ExpandedItem> objects) {
+            super(context, R.layout.qs_detail_item, objects);
+            mPackage = externalPackage;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            LinearLayout view = (LinearLayout) inflater.inflate(
+                    R.layout.qs_detail_item, parent, false);
+
+            view.setClickable(false); // let list view handle this
+
+            final CustomTile.ExpandedItem item = getItem(position);
+            Drawable d = null;
+            try {
+                d = getPackageContext(mPackage, getContext()).getResources()
+                        .getDrawable(item.itemDrawableResourceId);
+            } catch (Throwable t) {
+                Log.w(TAG, "Error creating package context" + mPackage +
+                        " id=" + item.itemDrawableResourceId, t);
+            }
+            final ImageView iv = (ImageView) view.findViewById(android.R.id.icon);
+            iv.setImageDrawable(d);
+            iv.getOverlay().clear();
+            //TODO: hide icon for the time being until the API supports granular item manipulation
+            final ImageView iv2 = (ImageView) view.findViewById(android.R.id.icon2);
+            iv2.setVisibility(View.GONE);
+            final TextView title = (TextView) view.findViewById(android.R.id.title);
+            title.setText(item.itemTitle);
+            final TextView summary = (TextView) view.findViewById(android.R.id.summary);
+            final boolean twoLines = !TextUtils.isEmpty(item.itemSummary);
+            title.setMaxLines(twoLines ? 1 : 2);
+            summary.setVisibility(twoLines ? VISIBLE : GONE);
+            summary.setText(twoLines ? item.itemSummary : null);
+            view.setMinimumHeight(getContext().getResources().getDimensionPixelSize(
+                    twoLines ? R.dimen.qs_detail_item_height_twoline
+                            : R.dimen.qs_detail_item_height));
+            return view;
+        }
+    }
+
+    private static Context getPackageContext(String pkg, Context context) {
+        Context packageContext;
+        try {
+            packageContext = context.createPackageContext(pkg, 0);
+        } catch (Throwable t) {
+            Log.w(TAG, "Error creating package context" + pkg, t);
+            return null;
+        }
+        return packageContext;
     }
 
     public static class QSDetailListAdapter extends ArrayAdapter<QSDetailItems.Item> {

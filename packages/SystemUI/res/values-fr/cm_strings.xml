@@ -26,9 +26,21 @@
   <string name="accessibility_quick_settings_data_on">Données mobiles activées.</string>
   <string name="accessibility_quick_settings_roaming_off">Itinérance désactivée.</string>
   <string name="accessibility_quick_settings_roaming_on">Itinérance activée.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Affichage ambiant désactivé.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Affichage ambiant activé.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Affichage ambiant désactivé.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Affichage ambiant activé.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Notifications flottantes désactivées.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notifications flottantes activées.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Notifications flottantes désactivées.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Notifications flottantes activées.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Localisation : mode économie de batterie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Localisation : mode appareil uniquement.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Localisation : mode haute précision.</string>
+  <string name="accessibility_quick_settings_sync_off">Synchronisation désactivée.</string>
+  <string name="accessibility_quick_settings_sync_on">Synchronisation activée.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synchronisation désactivée.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synchronisation activée.</string>
   <string name="accessibility_dpad_left">Curseur gauche</string>
   <string name="accessibility_dpad_right">Curseur droit</string>
   <string name="quick_settings_mobile_data_label">Données mobiles</string>
@@ -51,6 +63,10 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Veille de l\'écran</string>
   <string name="quick_settings_usb_tether_label">Modem USB</string>
+  <string name="quick_settings_heads_up_label">Notifications flottantes</string>
+  <string name="quick_settings_ambient_display_label">Affichage ambiant</string>
+  <string name="quick_settings_sync_label">Synchronisation</string>
+  <string name="quick_settings_custom_tile_detail_title">Personnaliser le raccourci</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Balayer à droite pour %1$s</string>
   <string name="right_shortcut_hint">Balayer à gauche pour %1$s</string>
@@ -79,4 +95,8 @@
   <string name="navring_choose_action_title">Choisir une action</string>
   <string name="select_application">Sélectionner une application</string>
   <string name="lockscreen_target_empty">Vide</string>
+  <string name="screen_pinning_description_no_navbar">Cela le laisse en vue jusqu\'à ce que vous le détachiez. Appuyez et maintenez le bouton retour pour détacher.</string>
+  <string name="interruption_level_silent">Silencieux</string>
+  <string name="zen_silent_with_warning">Aucune interruption, sauf pour les alarmes.</string>
+  <string name="quick_settings_remove">Supprimer le raccourci</string>
 </resources>
