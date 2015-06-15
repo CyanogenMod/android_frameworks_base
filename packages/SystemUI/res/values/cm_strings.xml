@@ -242,6 +242,10 @@
     <string name="quick_settings_lte_label">LTE</string>
     <string name="quick_settings_visualizer_label" translatable="false">AudioFX</string>
     <string name="quick_settings_screen_timeout_detail_title">Screen timeout</string>
+    <string name="quick_settings_screenshot">Screenshot</string>
+    <string name="quick_settings_screen_off">Screen off</string>
+    <string name="quick_settings_expanded_desktop">Expanded</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
     <string name="quick_settings_usb_tether_label">USB tethering</string>
     <string name="quick_settings_heads_up_label">Heads up</string>
     <string name="quick_settings_ambient_display_label">Ambient display</string>
