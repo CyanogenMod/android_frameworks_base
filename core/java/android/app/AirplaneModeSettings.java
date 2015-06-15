@@ -101,7 +101,8 @@ public final class AirplaneModeSettings implements Parcelable {
             throws XmlPullParserException, IOException {
         int event = xpp.next();
         AirplaneModeSettings airplaneModeDescriptor = new AirplaneModeSettings();
-        while (event != XmlPullParser.END_TAG || !xpp.getName().equals("airplaneModeDescriptor")) {
+        while ((event != XmlPullParser.END_TAG && event != XmlPullParser.END_DOCUMENT) ||
+                !xpp.getName().equals("airplaneModeDescriptor")) {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("value")) {
@@ -109,6 +110,8 @@ public final class AirplaneModeSettings implements Parcelable {
                 } else if (name.equals("override")) {
                     airplaneModeDescriptor.mOverride = Boolean.parseBoolean(xpp.nextText());
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while parsing airplane mode settings");
             }
             event = xpp.next();
         }
