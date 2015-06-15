@@ -1372,17 +1372,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         mAlternateUnlockEnabled = enabled;
     }
 
-    public boolean isSimLocked() {
-        boolean bSimLocked = false;
-        for (int slotId = 0; slotId < mSubIdForSlot.length; slotId++) {
-            if (isSimLocked(mSimState.get(slotId))) {
-                bSimLocked = true;
-                break;
-            }
-        }
-        return bSimLocked;
-    }
-
     public boolean isSimPinSecure() {
         // True if any SIM is pin secure
         for (SubscriptionInfo info : getSubscriptionInfo(false /* forceReload */)) {
@@ -1397,15 +1386,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         || state == IccCardConstants.State.PERM_DISABLED;
     }
 
-    public boolean isSimPinSecure() {
-        boolean isSecure = false;
-        for (int slotId = 0; slotId < mSubIdForSlot.length; slotId++) {
-            if (isSimPinSecure(mSimState.get(slotId))) {
-                isSecure = true;
-                break;
-            }
-        }
-        return isSecure;
+    public boolean isSimPinVoiceSecure() {
+        // TODO: only count SIMs that handle voice
+        return isSimPinSecure();
     }
 
     public State getSimState(int subId) {
@@ -1452,10 +1435,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     public static boolean isSimPinSecure(IccCardConstants.State state) {
-        final IccCardConstants.State simState = state;
-        return (simState == IccCardConstants.State.PIN_REQUIRED
-                || simState == IccCardConstants.State.PUK_REQUIRED
-                || simState == IccCardConstants.State.PERM_DISABLED);
+        return state == IccCardConstants.State.PIN_REQUIRED
+                || state == IccCardConstants.State.PUK_REQUIRED
+                || state == IccCardConstants.State.PERM_DISABLED;
     }
 
     public DisplayClientState getCachedDisplayClientState() {
@@ -1482,34 +1464,16 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         return mScreenOn;
     }
 
-    //return subId of first SIM that is PIN locked.
-    public int getSimPinLockSubId() {
-        int currentSimPinSubId = INVALID_SUBID;
+    public int getNextSubIdForState(State state) {
         for (int slotId = 0; slotId < mSubIdForSlot.length; slotId++) {
-            if (DEBUG) Log.d(TAG, "getSimPinLockSubId, slotId = " + slotId
+            if (DEBUG) Log.d(TAG, "getNextSubIdForState, slotId = " + slotId
                     + ", subId = "+ mSubIdForSlot[slotId]
-                    + ", SimState = " + mSimState.get(slotId));
-            if (mSimState.get(slotId) == IccCardConstants.State.PIN_REQUIRED) {
-                currentSimPinSubId = mSubIdForSlot[slotId];
-                break;
+                    + ", simState = " + mSimState.get(slotId));
+            if (mSimState.get(slotId) == state) {
+                return mSubIdForSlot[slotId];
             }
         }
-        return currentSimPinSubId;
-    }
-
-    //return subId of first SIM that is PUK locked.
-    public int getSimPukLockSubId() {
-        int currentSimPukSubId = INVALID_SUBID;
-        for (int slotId = 0; slotId < mSubIdForSlot.length; slotId++) {
-            if (DEBUG) Log.d(TAG, "getSimPukLockSubId, slotId = " + slotId
-                    + ", subId = "+ mSubIdForSlot[slotId]
-                    + ", SimState = " + mSimState.get(slotId));
-            if (mSimState.get(slotId) == IccCardConstants.State.PUK_REQUIRED) {
-                currentSimPukSubId = mSubIdForSlot[slotId];
-                break;
-            }
-        }
-        return currentSimPukSubId;
+        return INVALID_SUBID;
     }
 
     /**
@@ -1539,34 +1503,4 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
         return mNumPhones;
     }
-
-    public boolean isValidPhoneId(int phoneId) {
-        if ((0 <= phoneId) && (phoneId < mNumPhones)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public int getPhoneIdBySubId(int subId) {
-        int phoneId = -1;
-        if (subId != INVALID_SUBID) {
-            for (int i = 0; i < getNumPhones(); i++) {
-                if (mSubIdForSlot[i] == subId) {
-                    phoneId = i;
-                    break;
-                }
-            }
-        }
-        return phoneId;
-    }
-
-    public int getSubIdByPhoneId(int phoneId) {
-        int subId = INVALID_SUBID;
-        if (isValidPhoneId(phoneId)) {
-            subId = mSubIdForSlot[phoneId];
-        }
-        return subId;
-    }
-
 }
