@@ -62,32 +62,16 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
 
     private KeyguardUpdateMonitorCallback mUpdateCallback = new KeyguardUpdateMonitorCallback() {
         @Override
-        public void onSubIdUpdated(int oldSubId, int newSubId) {
-            if (mSubId == oldSubId) {
-                mSubId = newSubId;
-                //subId updated, handle sub info changed.
-                handleSubInfoChange();
-            }
-        }
-
-        @Override
-        public void onSubInfoContentChanged(int subId, String column,
-                                String sValue, int iValue) {
-            if (column != null && column.equals(SubscriptionManager.DISPLAY_NAME)
-                    && mSubId == subId) {
-                //display name changed, handle sub info changed.
-                handleSubInfoChange();
-            }
-        }
-
-        @Override
-        public void onSimStateChanged(int subId, IccCardConstants.State simState) {
+        public void onSimStateChanged(int subId, int slotId, IccCardConstants.State simState) {
             if (DEBUG) Log.d(TAG, "onSimStateChangedUsingSubId: " + simState + ", subId=" + subId);
             if (subId != mSubId) return;
             switch (simState) {
                 case NOT_READY:
                 case ABSENT:
-                        closeKeyGuard();
+                    closeKeyGuard();
+                    break;
+                default:
+                    handleSubInfoChange();
                     break;
             }
         }
