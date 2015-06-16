@@ -93,12 +93,11 @@ import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 import libcore.io.IoUtils;
 
 /**
@@ -359,6 +358,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     private int mPositionMode;
 
+    private HashSet<String> mLastKnownMccMnc;
     private boolean mAGPSConfigDb = false;
 
     // Current request from underlying location clients.
@@ -499,18 +499,14 @@ public class GpsLocationProvider implements LocationProviderInterface {
     };
 
     private void subscriptionOrSimChanged(Context context) {
-        Log.d(TAG, "received SIM realted action: ");
-        TelephonyManager phone = (TelephonyManager)
-                mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String mccMnc = phone.getSimOperator();
-        if (!TextUtils.isEmpty(mccMnc)) {
-            Log.d(TAG, "SIM MCC/MNC is available: " + mccMnc);
-            synchronized (mLock) {
-                reloadGpsProperties(context, mProperties);
+        HashSet<String> mccMnc = getKnownMccMnc(context);
+        Log.d(TAG, "received SIM change, new known MCC/MNC: " + mccMnc);
+        synchronized (mLock) {
+            if (!mccMnc.isEmpty() && !mccMnc.equals(mLastKnownMccMnc)) {
+                reloadGpsProperties(context, mProperties, mccMnc);
                 mNIHandler.setSuplEsEnabled(mSuplEsEnabled);
             }
-        } else {
-            Log.d(TAG, "SIM MCC/MNC is still not available");
+            mLastKnownMccMnc = mccMnc;
         }
     }
 
@@ -547,7 +543,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
         return native_is_supported();
     }
 
-    private void reloadGpsProperties(Context context, Properties properties) {
+    private void reloadGpsProperties(Context context, Properties properties,
+            HashSet<String> mccMnc) {
         Log.d(TAG, "Reset GPS properties, previous size = " + properties.size());
         loadPropertiesFromResource(context, properties);
         boolean isPropertiesLoadedFromFile = false;
@@ -562,7 +559,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             loadPropertiesFromFile(DEFAULT_PROPERTIES_FILE, properties);
         }
         // Store GPS configuration to Settings Database and then reload it
-        mAGPSConfigDb = testMccMncConfigurable(context);
+        mAGPSConfigDb = testMccMncConfigurable(context, mccMnc);
         loadPropertiesFromSettingsDb(context, properties);
         Log.d(TAG, "GPS properties reloaded, size = " + properties.size());
 
@@ -656,32 +653,39 @@ public class GpsLocationProvider implements LocationProviderInterface {
         context.getContentResolver().registerContentObserver(agpsResetTypeUri, true, observerForResetType);
     }
 
+    private HashSet<String> getKnownMccMnc(Context context) {
+        final TelephonyManager phone = (TelephonyManager)
+                context.getSystemService(Context.TELEPHONY_SERVICE);
+        final HashSet<String> mccMnc = new HashSet<String>();
+        final int phoneCnt = phone.getPhoneCount();
+        for (int i = 0;i < phoneCnt; ++i) {
+            String operator = phone.getNetworkOperatorForPhone(i);
+            if (!TextUtils.isEmpty(operator)) {
+                mccMnc.add(operator);
+            }
+        }
+        return mccMnc;
+    }
+
     /**
      * Test whether current mcc+mnc is in the configurable list
      */
-    private boolean testMccMncConfigurable(Context context) {
-        TelephonyManager phone = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
-        int phoneCnt = phone.getPhoneCount();
-        Vector<String> mccMnc = new Vector<String>();
-        for(int i = 0;i<phoneCnt;++i) {
-            int[] subIds = SubscriptionManager.getSubId(i);
-            if (subIds != null && subIds.length > 0) {
-                mccMnc.add(phone.getNetworkOperatorForSubscription(subIds[0]));
-            }
+    private boolean testMccMncConfigurable(Context context, HashSet<String> mccMnc) {
+        if (mccMnc.isEmpty()) {
+            return false;
         }
-        if (mccMnc.size() > 0) {
-            ContentResolver objContentResolver = context.getContentResolver();
-            String configurable_list = Settings.Global.getString(objContentResolver,
-                    Settings.Global.ASSISTED_GPS_CONFIGURABLE_LIST);
-            if (!TextUtils.isEmpty(configurable_list)) {
-                String[] list = configurable_list.split(",");
-                for (String item:list) {
-                    if(mccMnc.contains(item))
-                        return true;
+
+        ContentResolver resolver = context.getContentResolver();
+        String configurableList = Settings.Global.getString(resolver,
+                Settings.Global.ASSISTED_GPS_CONFIGURABLE_LIST);
+        if (!TextUtils.isEmpty(configurableList)) {
+            for (String item : configurableList.split(",")) {
+                if (mccMnc.contains(item)) {
+                    return true;
                 }
             }
         }
+
         return false;
     }
 
@@ -748,9 +752,11 @@ public class GpsLocationProvider implements LocationProviderInterface {
         mBatteryStats = IBatteryStats.Stub.asInterface(ServiceManager.getService(
                 BatteryStats.SERVICE_NAME));
 
+        mLastKnownMccMnc = getKnownMccMnc(mContext);
+
         // Load GPS configuration.
         mProperties = new Properties();
-        reloadGpsProperties(mContext, mProperties);
+        reloadGpsProperties(mContext, mProperties, mLastKnownMccMnc);
 
         // Create a GPS net-initiated handler.
         mNIHandler = new GpsNetInitiatedHandler(context,
