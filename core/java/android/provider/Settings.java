@@ -6038,6 +6038,13 @@ public final class Settings {
         public static final String ADVANCED_MODE = "advanced_mode";
 
         /**
+         * Whether to enable power menu on Lockscreen
+         * Boolean setting. 0 = no, 1 = yes.
+         * @hide
+         */
+        public static final String POWER_MENU_ON_LOCKSCREEN = "power_menu_on_lockscreen";
+
+        /**
          * String to contain power menu actions
          * @hide
          */
