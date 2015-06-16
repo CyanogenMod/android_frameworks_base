@@ -4282,6 +4282,9 @@ public final class ActivityManagerService extends ActivityManagerNative
             callingUid = task.mCallingUid;
             callingPackage = task.mCallingPackage;
             intent = task.intent;
+            if (task.origActivity != null) {
+                intent.setComponent(task.origActivity);
+            }
             intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
             userId = task.userId;
         }
