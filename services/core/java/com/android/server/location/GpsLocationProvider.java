@@ -88,6 +88,7 @@ import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -359,6 +360,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private String mC2KServerHost;
     private int mC2KServerPort;
     private boolean mSuplEsEnabled = false;
+    private HashSet<String> mLastKnownMccMnc;
 
     private final Context mContext;
     private final NtpTrustedTime mNtpTime;
@@ -482,18 +484,14 @@ public class GpsLocationProvider implements LocationProviderInterface {
     };
 
     private void subscriptionOrSimChanged(Context context) {
-        Log.d(TAG, "received SIM related action: ");
-        TelephonyManager phone = (TelephonyManager)
-                mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        String mccMnc = phone.getSimOperator();
-        if (!TextUtils.isEmpty(mccMnc)) {
-            Log.d(TAG, "SIM MCC/MNC is available: " + mccMnc);
-            synchronized (mLock) {
+        HashSet<String> mccMnc = getKnownMccMnc(context);
+        Log.d(TAG, "received SIM change, new known MCC/MNC: " + mccMnc);
+        synchronized (mLock) {
+            if (!mccMnc.isEmpty() && !mccMnc.equals(mLastKnownMccMnc)) {
                 reloadGpsProperties(context, mProperties);
                 mNIHandler.setSuplEsEnabled(mSuplEsEnabled);
             }
-        } else {
-            Log.d(TAG, "SIM MCC/MNC is still not available");
+            mLastKnownMccMnc = mccMnc;
         }
     }
 
@@ -585,6 +583,20 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
     }
 
+    private HashSet<String> getKnownMccMnc(Context context) {
+        final TelephonyManager phone = (TelephonyManager)
+                context.getSystemService(Context.TELEPHONY_SERVICE);
+        final HashSet<String> mccMnc = new HashSet<String>();
+        final int phoneCnt = phone.getPhoneCount();
+        for (int i = 0;i < phoneCnt; ++i) {
+            String operator = phone.getNetworkOperatorForPhone(i);
+            if (!TextUtils.isEmpty(operator)) {
+                mccMnc.add(operator);
+            }
+        }
+        return mccMnc;
+    }
+
     private void loadPropertiesFromResource(Context context,
                                             Properties properties) {
         String[] configValues = context.getResources().getStringArray(
@@ -649,6 +661,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
         // Construct internal handler
         mHandler = new ProviderHandler(looper);
+
+        mLastKnownMccMnc = getKnownMccMnc(mContext);
 
         // Load GPS configuration and register listeners in the background:
         // some operations, such as opening files and registering broadcast receivers, can take a
