@@ -685,7 +685,8 @@ public class MediaScanner
             } else if (mProcessGenres &&
                     (name.equalsIgnoreCase("genre") || name.startsWith("genre;"))) {
                 mGenre = getGenreName(value);
-            } else if (name.equalsIgnoreCase("year") || name.startsWith("year;")) {
+            } else if (name.equalsIgnoreCase("year") || name.startsWith("year;")
+                    || name.equalsIgnoreCase("date") || name.startsWith("date;")) {
                 mYear = parseSubstring(value, 0, 0);
             } else if (name.equalsIgnoreCase("tracknumber") || name.startsWith("tracknumber;")) {
                 // track number might be of the form "2/12"
