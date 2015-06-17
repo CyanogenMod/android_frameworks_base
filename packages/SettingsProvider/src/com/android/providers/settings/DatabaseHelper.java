@@ -689,6 +689,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                    Secure.LOCK_PATTERN_ENABLED,
                    Secure.LOCK_PATTERN_VISIBLE,
                    Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED,
+                   Secure.LOCK_PASS_TO_SECURITY_VIEW,
                    Secure.LOCK_PATTERN_SIZE,
                    Secure.LOCK_DOTS_VISIBLE,
                    Secure.LOCK_SHOW_ERROR_PATH,
