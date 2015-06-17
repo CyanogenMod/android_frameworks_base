@@ -353,6 +353,8 @@ public final class ProfileGroup implements Parcelable {
                 } else if (name.equals("lightsMode")) {
                     profileGroup.setLightsMode(Mode.valueOf(xpp.nextText()));
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while parsing profleGroup:" + name);
             }
             event = xpp.next();
         }

@@ -103,7 +103,8 @@ public final class RingModeSettings implements Parcelable {
             throws XmlPullParserException, IOException {
         int event = xpp.next();
         RingModeSettings ringModeDescriptor = new RingModeSettings();
-        while (event != XmlPullParser.END_TAG || !xpp.getName().equals("ringModeDescriptor")) {
+        while ((event != XmlPullParser.END_TAG && event != XmlPullParser.END_DOCUMENT) ||
+                !xpp.getName().equals("ringModeDescriptor")) {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("value")) {
@@ -111,6 +112,8 @@ public final class RingModeSettings implements Parcelable {
                 } else if (name.equals("override")) {
                     ringModeDescriptor.mOverride = Boolean.parseBoolean(xpp.nextText());
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while parsing ring mode settings");
             }
             event = xpp.next();
         }

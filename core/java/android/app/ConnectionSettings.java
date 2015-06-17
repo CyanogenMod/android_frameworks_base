@@ -257,6 +257,8 @@ public final class ConnectionSettings implements Parcelable {
                 } else if (name.equals("override")) {
                     connectionDescriptor.mOverride = Boolean.parseBoolean(xpp.nextText());
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while parsing connection settings");
             }
             event = xpp.next();
         }
