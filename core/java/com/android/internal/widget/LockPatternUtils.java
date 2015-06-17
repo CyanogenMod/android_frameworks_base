@@ -1309,6 +1309,14 @@ public class LockPatternUtils {
         return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true);
     }
 
+    public boolean shouldPassToSecurityView() {
+        return getBoolean(Settings.Secure.LOCK_PASS_TO_SECURITY_VIEW, false);
+    }
+
+    public void setPassToSecurityView(boolean enabled) {
+        setBoolean(Settings.Secure.LOCK_PASS_TO_SECURITY_VIEW, enabled);
+    }
+
     /**
      * Set and store the lockout deadline, meaning the user can't attempt his/her unlock
      * pattern until the deadline has passed.
