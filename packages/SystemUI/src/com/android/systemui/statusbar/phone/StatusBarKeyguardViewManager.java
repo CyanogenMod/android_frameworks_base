@@ -117,23 +117,38 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         mShowing = true;
         mStatusBarWindowManager.setKeyguardShowing(true);
         mScrimController.abortKeyguardFadingOut();
-        reset();
+        reset(false);
     }
 
     /**
      * Shows the notification keyguard or the bouncer depending on
      * {@link KeyguardBouncer#needsFullscreenBouncer()}.
      */
-    protected void showBouncerOrKeyguard() {
-        if (mBouncer.needsFullscreenBouncer()) {
-
-            // The keyguard might be showing (already). So we need to hide it.
-            mPhoneStatusBar.hideKeyguard();
-            mBouncer.show(true /* resetSecuritySelection */);
-        } else {
-            mPhoneStatusBar.showKeyguard();
-            mBouncer.hide(false /* destroyView */);
-            mBouncer.prepare();
+    protected void showBouncerOrKeyguard(boolean isBackPressed) {
+        switch (mBouncer.needsFullscreenBouncer()) {
+            case KeyguardBouncer.UNLOCK_SEQUENCE_FORCE_BOUNCER:
+                // SIM PIN/PUK
+                // The keyguard might be showing (already). So we need to hide it.
+                mPhoneStatusBar.hideKeyguard();
+                mBouncer.show(true /* resetSecuritySelection */);
+                break;
+            case KeyguardBouncer.UNLOCK_SEQUENCE_BOUNCER_FIRST:
+                // Pattern/PIN/Password with "Directly pass to security view" enabled
+                if (isBackPressed) {
+                    mPhoneStatusBar.showKeyguard();
+                    mBouncer.hide(false /* destroyView */);
+                    mBouncer.prepare();
+                } else {
+                    // The keyguard might be showing (already). So we need to hide it.
+                    mPhoneStatusBar.hideKeyguard();
+                    mBouncer.show(true /* resetSecuritySelection */);
+                }
+                break;
+            case KeyguardBouncer.UNLOCK_SEQUENCE_DEFAULT:
+                mPhoneStatusBar.showKeyguard();
+                mBouncer.hide(false /* destroyView */);
+                mBouncer.prepare();
+                break;
         }
     }
 
@@ -160,14 +175,14 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     /**
      * Reset the state of the view.
      */
-    public void reset() {
+    public void reset(boolean isBackPressed) {
         if (mShowing) {
             if (mOccluded) {
                 mPhoneStatusBar.hideKeyguard();
                 mPhoneStatusBar.stopWaitingForKeyguardExit();
                 mBouncer.hide(false /* destroyView */);
             } else {
-                showBouncerOrKeyguard();
+                showBouncerOrKeyguard(isBackPressed);
             }
             KeyguardUpdateMonitor.getInstance(mContext).sendKeyguardReset();
             updateStates();
@@ -251,7 +266,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
                             @Override
                             public void run() {
                                 mStatusBarWindowManager.setKeyguardOccluded(mOccluded);
-                                reset();
+                                reset(false);
                             }
                         });
                 return;
@@ -261,7 +276,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         mPhoneStatusBar.updateMediaMetaData(false, false);
         mStatusBarWindowManager.setKeyguardOccluded(occluded);
         mPhoneStatusBar.getVisualizer().setOccluded(occluded);
-        reset();
+        reset(false);
     }
 
     public boolean isOccluded() {
@@ -431,7 +446,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     public boolean onBackPressed() {
         if (mBouncer.isShowing()) {
             mPhoneStatusBar.endAffordanceLaunch();
-            reset();
+            reset(true);
             return true;
         }
         return false;
@@ -464,7 +479,8 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         boolean showing = mShowing;
         boolean occluded = mOccluded;
         boolean bouncerShowing = mBouncer.isShowing();
-        boolean bouncerDismissible = !mBouncer.isFullscreenBouncer();
+        boolean bouncerDismissible = (mBouncer.isFullscreenBouncer() !=
+                KeyguardBouncer.UNLOCK_SEQUENCE_FORCE_BOUNCER);
         boolean remoteInputActive = mRemoteInputActive;
 
         if ((bouncerDismissible || !showing || remoteInputActive) !=
