@@ -57,8 +57,7 @@
             android:layout_alignStart="@android:id/title"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorSecondaryActivated"
-            android:ellipsize="end"
-            android:maxLines="2" />
+            android:ellipsize="end" />
 
     </RelativeLayout>
 
