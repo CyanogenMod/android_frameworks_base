@@ -58,6 +58,13 @@ public class KeyguardBouncer {
         mWindowManager = windowManager;
     }
 
+    public static final class LockscreenStagePriority
+    {
+        public static final int DEFAULT = 0;
+        public static final int BOUNCER_FIRST = 1;
+        public static final int FORCE_BOUNCER = 2;
+    }
+
     public void show(boolean resetSecuritySelection) {
         ensureView();
         if (resetSecuritySelection) {
@@ -191,27 +198,39 @@ public class KeyguardBouncer {
     }
 
     /**
-     * @return True if and only if the security method should be shown before showing the
-     * notifications on Keyguard, like SIM PIN/PUK.
+     * @return Whether the bouncer should be shown first, this could be because of SIM PIN/PUK
+     * or it just could be chosen to be shown first.
      */
-    public boolean needsFullscreenBouncer() {
+    public int needsFullscreenBouncer() {
         if (mKeyguardView != null) {
             SecurityMode mode = mKeyguardView.getSecurityMode();
-            return mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk;
+            if (mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk)
+                return LockscreenStagePriority.FORCE_BOUNCER;
+            // "Bouncer first" mode currently only available to some security methods.
+            else if ((mode == SecurityMode.Pattern || mode == SecurityMode.Password
+                    || mode == SecurityMode.PIN) && (mLockPatternUtils != null &&
+                    mLockPatternUtils.shouldPassToSecurityView()))
+                return LockscreenStagePriority.BOUNCER_FIRST;
         }
-        return false;
+        return LockscreenStagePriority.DEFAULT;
     }
 
     /**
      * Like {@link #needsFullscreenBouncer}, but uses the currently visible security method, which
      * makes this method much faster.
      */
-    public boolean isFullscreenBouncer() {
+    public int isFullscreenBouncer() {
         if (mKeyguardView != null) {
             SecurityMode mode = mKeyguardView.getCurrentSecurityMode();
-            return mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk;
+            if (mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk)
+                return LockscreenStagePriority.FORCE_BOUNCER;
+            // "Bouncer first" mode currently only available to some security methods.
+            else if ((mode == SecurityMode.Pattern || mode == SecurityMode.Password
+                    || mode == SecurityMode.PIN) && (mLockPatternUtils != null &&
+                    mLockPatternUtils.shouldPassToSecurityView()))
+                return LockscreenStagePriority.BOUNCER_FIRST;
         }
-        return false;
+        return LockscreenStagePriority.DEFAULT;
     }
 
     /**
