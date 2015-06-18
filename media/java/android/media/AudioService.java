@@ -17,6 +17,7 @@
 package android.media;
 
 import static android.Manifest.permission.REMOTE_AUDIO_PLAYBACK;
+import static android.media.AudioManager.MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static android.media.AudioManager.RINGER_MODE_VIBRATE;
@@ -4978,7 +4979,8 @@ public class AudioService extends IAudioService.Stub {
     private void startMusicPlayer()
     {
         boolean launchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
+                Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT) != 0
+                && mMode == MODE_NORMAL /* do not launch while in call or ringing */;
         if (launchPlayer) {
             Intent playerIntent = new Intent(Intent.ACTION_MAIN);
             playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
