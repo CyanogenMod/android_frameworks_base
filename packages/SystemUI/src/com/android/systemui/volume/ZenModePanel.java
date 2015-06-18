@@ -68,7 +68,7 @@ public class ZenModePanel extends LinearLayout {
     private static final int MINUTES_MS = 60 * SECONDS_MS;
 
     private static final int[] MINUTE_BUCKETS = DEBUG
-            ? new int[] { 0, 1, 2, 5, 15, 30, 45, 60, 120, 180, 240, 480, 600, 720 }
+            ? new int[] { 0, 1, 2, 5, 15, 30, 45, 60, 90, 120, 180, 240, 480, 600, 720 }
             : ZenModeConfig.MINUTE_BUCKETS;
     private static final int MIN_BUCKET_MINUTES = MINUTE_BUCKETS[0];
     private static final int MAX_BUCKET_MINUTES = MINUTE_BUCKETS[MINUTE_BUCKETS.length - 1];
