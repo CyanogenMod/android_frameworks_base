@@ -17,6 +17,7 @@
 package android.media;
 
 import static android.Manifest.permission.REMOTE_AUDIO_PLAYBACK;
+import static android.media.AudioManager.MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static android.media.AudioManager.RINGER_MODE_VIBRATE;
@@ -4979,7 +4980,8 @@ public class AudioService extends IAudioService.Stub {
     {
         boolean launchPlayer = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.HEADSET_CONNECT_PLAYER, 0, UserHandle.USER_CURRENT) != 0;
-        if (launchPlayer) {
+        boolean notInCall = mMediaFocusControl.canReassignAudioFocus();
+        if (launchPlayer && notInCall) {
             Intent playerIntent = new Intent(Intent.ACTION_MAIN);
             playerIntent.addCategory(Intent.CATEGORY_APP_MUSIC);
             playerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
