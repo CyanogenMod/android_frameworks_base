@@ -574,7 +574,7 @@ public class MediaFocusControl implements OnFinished {
      * Modifications to the implementation that break this assumption will cause focus requests to
      * misbehave when honoring the AudioManager.AUDIOFOCUS_FLAG_DELAY_OK flag.
      */
-    private boolean canReassignAudioFocus() {
+    protected boolean canReassignAudioFocus() {
         // focus requests are rejected during a phone call or when the phone is ringing
         // this is equivalent to IN_VOICE_COMM_FOCUS_ID having the focus
         if (!mFocusStack.isEmpty() && isLockedFocusOwner(mFocusStack.peek())) {
