@@ -639,14 +639,17 @@ public class ThemeUtils {
         Cursor c = context.getContentResolver().query(ThemesContract.ThemesColumns.CONTENT_URI,
                 null, selection, selectionArgs, null);
 
-        if (c != null && c.moveToFirst()) {
-            List<String> allComponents = getAllComponents();
-            for(String component : allComponents) {
-                int index = c.getColumnIndex(component);
-                if (c.getInt(index) == 1) {
-                    supportedComponents.add(component);
+        if (c != null) {
+            if (c.moveToFirst()) {
+                List<String> allComponents = getAllComponents();
+                for (String component : allComponents) {
+                    int index = c.getColumnIndex(component);
+                    if (c.getInt(index) == 1) {
+                        supportedComponents.add(component);
+                    }
                 }
             }
+            c.close();
         }
         return supportedComponents;
     }
