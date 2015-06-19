@@ -422,12 +422,12 @@ public class NavigationBarView extends LinearLayout {
             View one = getCurrentView().findViewById(mVertical ? R.id.six : R.id.one);
             View six = getCurrentView().findViewById(mVertical ? R.id.one : R.id.six);
             if (showingIme) {
-                if (mSlotOneVisibility == View.VISIBLE) {
-                    mSlotOneVisibility = one.getVisibility();
+                if (mSlotOneVisibility == View.VISIBLE || one.getVisibility() == View.VISIBLE) {
+                    mSlotOneVisibility = View.VISIBLE;
                     setVisibleOrGone(one, false);
                 }
-                if (mSlotSixVisibility == View.VISIBLE) {
-                    mSlotSixVisibility = six.getVisibility();
+                if (mSlotSixVisibility == View.VISIBLE || six.getVisibility() == View.VISIBLE) {
+                    mSlotSixVisibility = View.VISIBLE;
                     setVisibleOrGone(six, false);
                 }
             } else {
