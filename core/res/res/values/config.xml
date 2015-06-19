@@ -2328,4 +2328,8 @@
     <string name="config_defaultQuickSettingsTiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast</string>
 
     <string-array name="config_externalCMServices"></string-array>
+
+    <!-- Some vendors don't want to allow non slot 0 to be set to default for calls/sms -->
+    <bool name="config_disableAltAlwaysSmsCallSimPref">false</bool>
+
 </resources>
