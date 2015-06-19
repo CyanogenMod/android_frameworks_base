@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.ActivityManager;
 import android.app.ActivityThread;
@@ -98,21 +99,20 @@ public class AppOpsService extends IAppOpsService.Stub {
         AppOpsManager.OP_READ_SMS
     };
 
-    boolean mWriteScheduled;
-    boolean mFastWriteScheduled;
+    final AtomicBoolean mWriteScheduled = new AtomicBoolean(false);
+    final AtomicBoolean mFastWriteScheduled = new AtomicBoolean(false);
+
     final Runnable mWriteRunner = new Runnable() {
         public void run() {
-            synchronized (AppOpsService.this) {
-                mWriteScheduled = false;
-                mFastWriteScheduled = false;
-                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                    @Override protected Void doInBackground(Void... params) {
-                        writeState();
-                        return null;
-                    }
-                };
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-            }
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override protected Void doInBackground(Void... params) {
+                    writeState();
+                    mWriteScheduled.set(false);
+                    mFastWriteScheduled.set(false);
+                    return null;
+                }
+            };
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
         }
     };
 
@@ -350,14 +350,7 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     public void shutdown() {
         Slog.w(TAG, "Writing app ops before shutdown...");
-        boolean doWrite = false;
-        synchronized (this) {
-            if (mWriteScheduled) {
-                mWriteScheduled = false;
-                doWrite = true;
-            }
-        }
-        if (doWrite) {
+        if (mWriteScheduled.compareAndSet(true, false)) {
             writeState();
         }
     }
@@ -992,16 +985,14 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     private void scheduleWriteLocked() {
-        if (!mWriteScheduled) {
-            mWriteScheduled = true;
+        if (mWriteScheduled.compareAndSet(false, true)) {
             mHandler.postDelayed(mWriteRunner, WRITE_DELAY);
         }
     }
 
     private void scheduleFastWriteLocked() {
-        if (!mFastWriteScheduled) {
-            mWriteScheduled = true;
-            mFastWriteScheduled = true;
+        if (mFastWriteScheduled.compareAndSet(false, true)) {
+            mWriteScheduled.set(true);
             mHandler.removeCallbacks(mWriteRunner);
             mHandler.postDelayed(mWriteRunner, 10*1000);
         }
