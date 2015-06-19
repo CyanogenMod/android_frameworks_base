@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import android.app.ActivityManager;
 import android.app.ActivityThread;
@@ -98,21 +100,30 @@ public class AppOpsService extends IAppOpsService.Stub {
         AppOpsManager.OP_READ_SMS
     };
 
-    boolean mWriteScheduled;
-    boolean mFastWriteScheduled;
+    private final ReentrantReadWriteLock mLock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock.ReadLock mR = mLock.readLock();
+    private final ReentrantReadWriteLock.WriteLock mW = mLock.writeLock();
+
+    private final AtomicBoolean mWriteScheduled = new AtomicBoolean(false);
+    private final AtomicBoolean mFastWriteScheduled = new AtomicBoolean(false);
+
     final Runnable mWriteRunner = new Runnable() {
         public void run() {
-            synchronized (AppOpsService.this) {
-                mWriteScheduled = false;
-                mFastWriteScheduled = false;
-                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-                    @Override protected Void doInBackground(Void... params) {
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        mR.lock();
                         writeState();
-                        return null;
+                        mWriteScheduled.set(false);
+                        mFastWriteScheduled.set(false);
+                    } finally {
+                        mR.unlock();
                     }
-                };
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-            }
+                    return null;
+                }
+            };
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
         }
     };
 
@@ -230,11 +241,14 @@ public class AppOpsService extends IAppOpsService.Stub {
 
         @Override
         public void binderDied() {
-            synchronized (AppOpsService.this) {
+            try {
+                mW.lock();
                 for (int i=mStartedOps.size()-1; i>=0; i--) {
                     finishOperationLocked(mStartedOps.get(i));
                 }
                 mClients.remove(mAppToken);
+            } finally {
+                mW.unlock();
             }
 
             // We cannot broadcast on the synchronized block above because the broadcast might
@@ -261,8 +275,9 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     public void systemReady() {
-        synchronized (this) {
-            boolean changed = false;
+        boolean changed = false;
+        try {
+            mW.lock();
             for (int i=0; i<mUidOps.size(); i++) {
                 HashMap<String, Ops> pkgs = mUidOps.valueAt(i);
                 Iterator<Ops> it = pkgs.values().iterator();
@@ -319,45 +334,54 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
                 mLoadPrivLaterPkgs = null;
             }
-            if (changed) {
-                scheduleFastWriteLocked();
-            }
+        } finally {
+            mW.unlock();
+        }
+        if (changed) {
+            scheduleFastWrite();
         }
     }
 
     public void packageRemoved(int uid, String packageName) {
-        synchronized (this) {
+        boolean changed = false;
+        try {
+            mW.lock();
             HashMap<String, Ops> pkgs = mUidOps.get(uid);
             if (pkgs != null) {
                 if (pkgs.remove(packageName) != null) {
                     if (pkgs.size() <= 0) {
                         mUidOps.remove(uid);
+                        changed = true;
                     }
-                    scheduleFastWriteLocked();
                 }
             }
+        } finally {
+            mW.unlock();
+        }
+        if (changed) {
+            scheduleFastWrite();
         }
     }
 
     public void uidRemoved(int uid) {
-        synchronized (this) {
+        boolean changed = false;
+        try {
+            mW.lock();
             if (mUidOps.indexOfKey(uid) >= 0) {
                 mUidOps.remove(uid);
-                scheduleFastWriteLocked();
+                changed = true;
             }
+        } finally {
+            mW.unlock();
+        }
+        if (changed) {
+            scheduleFastWrite();
         }
     }
 
     public void shutdown() {
         Slog.w(TAG, "Writing app ops before shutdown...");
-        boolean doWrite = false;
-        synchronized (this) {
-            if (mWriteScheduled) {
-                mWriteScheduled = false;
-                doWrite = true;
-            }
-        }
-        if (doWrite) {
+        if (mWriteScheduled.compareAndSet(true, false)) {
             writeState();
         }
     }
@@ -365,7 +389,7 @@ public class AppOpsService extends IAppOpsService.Stub {
     private ArrayList<AppOpsManager.OpEntry> collectOps(Ops pkgOps, int[] ops) {
         ArrayList<AppOpsManager.OpEntry> resOps = null;
         if (ops == null) {
-            resOps = new ArrayList<AppOpsManager.OpEntry>();
+            resOps = new ArrayList<AppOpsManager.OpEntry>(pkgOps.size());
             for (int j=0; j<pkgOps.size(); j++) {
                 Op curOp = pkgOps.valueAt(j);
                 resOps.add(new AppOpsManager.OpEntry(curOp.op, curOp.mode, curOp.time,
@@ -393,7 +417,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         mContext.enforcePermission(android.Manifest.permission.GET_APP_OPS_STATS,
                 Binder.getCallingPid(), Binder.getCallingUid(), null);
         ArrayList<AppOpsManager.PackageOps> res = null;
-        synchronized (this) {
+        try {
+            mR.lock();
             for (int i=0; i<mUidOps.size(); i++) {
                 HashMap<String, Ops> packages = mUidOps.valueAt(i);
                 for (Ops pkgOps : packages.values()) {
@@ -408,6 +433,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                 }
             }
+        } finally {
+            mR.unlock();
         }
         return res;
     }
@@ -417,7 +444,8 @@ public class AppOpsService extends IAppOpsService.Stub {
             int[] ops) {
         mContext.enforcePermission(android.Manifest.permission.GET_APP_OPS_STATS,
                 Binder.getCallingPid(), Binder.getCallingUid(), null);
-        synchronized (this) {
+        try {
+            mR.lock();
             Ops pkgOps = getOpsLocked(uid, packageName, false);
             if (pkgOps == null) {
                 return null;
@@ -431,6 +459,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                     pkgOps.packageName, pkgOps.uid, resOps);
             res.add(resPackage);
             return res;
+        } finally {
+            mR.unlock();
         }
     }
 
@@ -461,7 +491,9 @@ public class AppOpsService extends IAppOpsService.Stub {
         verifyIncomingOp(code);
         ArrayList<Callback> repCbs = null;
         code = AppOpsManager.opToSwitch(code);
-        synchronized (this) {
+        boolean changed = true;
+        try {
+            mW.lock();
             Op op = getOpLocked(code, uid, packageName, true);
             if (op != null) {
                 if (op.mode != mode) {
@@ -485,9 +517,14 @@ public class AppOpsService extends IAppOpsService.Stub {
                         // if there is nothing else interesting in it.
                         pruneOp(op, uid, packageName);
                     }
-                    scheduleFastWriteLocked();
+                    changed = true;
                 }
             }
+        } finally {
+            mW.unlock();
+        }
+        if (changed) {
+            scheduleFastWrite();
         }
         if (repCbs != null) {
             for (int i=0; i<repCbs.size(); i++) {
@@ -529,8 +566,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         reqUserId = ActivityManager.handleIncomingUser(callingPid, callingUid, reqUserId,
                 true, true, "resetAllModes", null);
         HashMap<Callback, ArrayList<Pair<String, Integer>>> callbacks = null;
-        synchronized (this) {
-            boolean changed = false;
+        boolean changed = false;
+        try {
             for (int i=mUidOps.size()-1; i>=0; i--) {
                 HashMap<String, Ops> packages = mUidOps.valueAt(i);
                 if (reqUserId != UserHandle.USER_ALL
@@ -572,9 +609,11 @@ public class AppOpsService extends IAppOpsService.Stub {
                     mUidOps.removeAt(i);
                 }
             }
-            if (changed) {
-                scheduleFastWriteLocked();
-            }
+        } finally {
+            mW.unlock();
+        }
+        if (changed) {
+            scheduleFastWrite();
         }
         if (callbacks != null) {
             for (Map.Entry<Callback, ArrayList<Pair<String, Integer>>> ent : callbacks.entrySet()) {
@@ -593,7 +632,8 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     @Override
     public void startWatchingMode(int op, String packageName, IAppOpsCallback callback) {
-        synchronized (this) {
+        try {
+            mW.lock();
             op = AppOpsManager.opToSwitch(op);
             Callback cb = mModeWatchers.get(callback.asBinder());
             if (cb == null) {
@@ -616,12 +656,15 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
                 cbs.add(cb);
             }
+        } finally {
+            mW.unlock();
         }
     }
 
     @Override
     public void stopWatchingMode(IAppOpsCallback callback) {
-        synchronized (this) {
+        try {
+            mW.lock();
             Callback cb = mModeWatchers.remove(callback.asBinder());
             if (cb != null) {
                 cb.unlinkToDeath();
@@ -640,18 +683,23 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                 }
             }
+        } finally {
+            mW.unlock();
         }
     }
 
     @Override
     public IBinder getToken(IBinder clientToken) {
-        synchronized (this) {
+        try {
+            mR.lock();
             ClientState cs = mClients.get(clientToken);
             if (cs == null) {
                 cs = new ClientState(clientToken);
                 mClients.put(clientToken, cs);
             }
             return cs;
+        } finally {
+            mR.unlock();
         }
     }
 
@@ -659,7 +707,8 @@ public class AppOpsService extends IAppOpsService.Stub {
     public int checkOperation(int code, int uid, String packageName) {
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
-        synchronized (this) {
+        try {
+            mR.lock();
             if (isOpRestricted(uid, code, packageName)) {
                 return AppOpsManager.MODE_IGNORED;
             }
@@ -668,16 +717,21 @@ public class AppOpsService extends IAppOpsService.Stub {
                 return getDefaultMode(code, uid, packageName);
             }
             return op.mode;
+        } finally {
+            mR.unlock();
         }
     }
 
     @Override
     public int checkAudioOperation(int code, int usage, int uid, String packageName) {
-        synchronized (this) {
+        try {
+            mR.lock();
             final int mode = checkRestrictionLocked(code, usage, uid, packageName);
             if (mode != AppOpsManager.MODE_ALLOWED) {
                 return mode;
             }
+        } finally {
+            mR.unlock();
         }
         return checkOperation(code, uid, packageName);
     }
@@ -698,7 +752,8 @@ public class AppOpsService extends IAppOpsService.Stub {
             String[] exceptionPackages) {
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
-        synchronized (this) {
+        try {
+            mW.lock();
             SparseArray<Restriction> usageRestrictions = mAudioRestrictions.get(code);
             if (usageRestrictions == null) {
                 usageRestrictions = new SparseArray<Restriction>();
@@ -720,17 +775,22 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
                 usageRestrictions.put(usage, r);
             }
+        } finally {
+            mW.unlock();
         }
     }
 
     @Override
     public int checkPackage(int uid, String packageName) {
-        synchronized (this) {
+        try {
+            mR.lock();
             if (getOpsRawLocked(uid, packageName, true) != null) {
                 return AppOpsManager.MODE_ALLOWED;
             } else {
                 return AppOpsManager.MODE_ERRORED;
             }
+        } finally {
+            mR.unlock();
         }
     }
 
@@ -739,7 +799,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         final PermissionDialogReq req;
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
-        synchronized (this) {
+        try {
+            mW.lock();
             Ops ops = getOpsLocked(uid, packageName, true);
             if (ops == null) {
                 if (DEBUG) Log.d(TAG, "noteOperation: no op for code " + code + " uid " + uid
@@ -791,6 +852,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                 op.noteOpCount++;
                 req = askOperationLocked(code, uid, packageName, switchOp);
             }
+        } finally {
+            mW.unlock();
         }
 
         int result = req.get();
@@ -805,7 +868,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
         ClientState client = (ClientState)token;
-        synchronized (this) {
+        try {
+            mW.lock();
             Ops ops = getOpsLocked(uid, packageName, true);
             if (ops == null) {
                 if (DEBUG) Log.d(TAG, "startOperation: no op for code " + code + " uid " + uid
@@ -861,6 +925,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                 op.clientTokens.add(clientToken);
                 req = askOperationLocked(code, uid, packageName, switchOp);
             }
+        } finally {
+            mW.unlock();
         }
         int result = req.get();
         broadcastOpIfNeeded(code);
@@ -872,7 +938,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         verifyIncomingUid(uid);
         verifyIncomingOp(code);
         ClientState client = (ClientState)token;
-        synchronized (this) {
+        try {
+            mW.lock();
             Op op = getOpLocked(code, uid, packageName, true);
             if (op == null) {
                 return;
@@ -884,6 +951,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
             }
             finishOperationLocked(op);
+        } finally {
+            mW.unlock();
         }
         broadcastOpIfNeeded(code);
     }
@@ -991,17 +1060,15 @@ public class AppOpsService extends IAppOpsService.Stub {
         return ops;
     }
 
-    private void scheduleWriteLocked() {
-        if (!mWriteScheduled) {
-            mWriteScheduled = true;
+    private void scheduleWrite() {
+        if (mWriteScheduled.compareAndSet(false, true)) {
             mHandler.postDelayed(mWriteRunner, WRITE_DELAY);
         }
     }
 
-    private void scheduleFastWriteLocked() {
-        if (!mFastWriteScheduled) {
-            mWriteScheduled = true;
-            mFastWriteScheduled = true;
+    private void scheduleFastWrite() {
+        if (mFastWriteScheduled.compareAndSet(false, true)) {
+            mWriteScheduled.set(true);
             mHandler.removeCallbacks(mWriteRunner);
             mHandler.postDelayed(mWriteRunner, 10*1000);
         }
@@ -1027,7 +1094,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             ops.put(code, op);
         }
         if (edit) {
-            scheduleWriteLocked();
+            scheduleWrite();
         }
         return op;
     }
@@ -1037,11 +1104,14 @@ public class AppOpsService extends IAppOpsService.Stub {
         boolean[] opRestrictions = mOpRestrictions.get(userHandle);
         if ((opRestrictions != null) && opRestrictions[code]) {
             if (AppOpsManager.opAllowSystemBypassRestriction(code)) {
-                synchronized (this) {
+                try {
+                    mR.lock();
                     Ops ops = getOpsLocked(uid, packageName, true);
                     if ((ops != null) && ops.isPrivileged) {
                         return false;
                     }
+                } finally {
+                    mR.unlock();
                 }
             }
             return true;
@@ -1051,7 +1121,8 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     void readState() {
         synchronized (mFile) {
-            synchronized (this) {
+            try {
+                mW.lock();
                 FileInputStream stream;
                 try {
                     stream = mFile.openRead();
@@ -1111,6 +1182,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                     } catch (IOException e) {
                     }
                 }
+            } finally {
+                mW.unlock();
             }
         }
     }
@@ -1258,7 +1331,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                         }
                         out.startTag(null, "uid");
                         out.attribute(null, "n", Integer.toString(pkg.getUid()));
-                        synchronized (this) {
+                        try {
+                            mR.lock();
                             Ops ops = getOpsLocked(pkg.getUid(), pkg.getPackageName(), false);
                             // Should always be present as the list of PackageOps is generated
                             // from Ops.
@@ -1267,6 +1341,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                             } else {
                                 out.attribute(null, "p", Boolean.toString(false));
                             }
+                        } finally {
+                            mR.unlock();
                         }
                         List<AppOpsManager.OpEntry> ops = pkg.getOps();
                         for (int j=0; j<ops.size(); j++) {
@@ -1330,7 +1406,8 @@ public class AppOpsService extends IAppOpsService.Stub {
             return;
         }
 
-        synchronized (this) {
+        try {
+            mR.lock();
             pw.println("Current AppOps Service state:");
             final long now = System.currentTimeMillis();
             boolean needSep = false;
@@ -1440,6 +1517,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                 }
             }
+        } finally {
+            mR.unlock();
         }
     }
 
@@ -1501,7 +1580,8 @@ public class AppOpsService extends IAppOpsService.Stub {
         @Override
         public void run() {
             PermissionDialog permDialog = null;
-            synchronized (AppOpsService.this) {
+            try {
+                mW.lock();
                 Log.e(TAG, "Creating dialog box");
                 op.dialogReqQueue.register(request);
                 if (op.dialogReqQueue.getDialog() == null) {
@@ -1509,6 +1589,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                             AppOpsService.this, code, uid, packageName);
                     op.dialogReqQueue.setDialog(permDialog);
                 }
+            } finally {
+                mW.unlock();
             }
             if (permDialog != null) {
                 permDialog.show();
@@ -1603,7 +1685,9 @@ public class AppOpsService extends IAppOpsService.Stub {
         verifyIncomingOp(code);
         ArrayList<Callback> repCbs = null;
         int switchCode = AppOpsManager.opToSwitch(code);
-        synchronized (this) {
+        boolean changed = true;
+        try {
+            mW.lock();
             recordOperationLocked(code, uid, packageName, mode);
             Op op = getOpLocked(switchCode, uid, packageName, true);
             if (op != null) {
@@ -1633,9 +1717,14 @@ public class AppOpsService extends IAppOpsService.Stub {
                         // if there is nothing else interesting in it.
                         pruneOp(op, uid, packageName);
                     }
-                    scheduleFastWriteLocked();
+                    changed = true;
                 }
             }
+        } finally {
+            mW.unlock();
+        }
+        if (changed) {
+            scheduleFastWrite();
         }
         if (repCbs != null) {
             for (int i = 0; i < repCbs.size(); i++) {
@@ -1700,7 +1789,8 @@ public class AppOpsService extends IAppOpsService.Stub {
     public void resetCounters() {
         mContext.enforcePermission(android.Manifest.permission.UPDATE_APP_OPS_STATS,
                 Binder.getCallingPid(), Binder.getCallingUid(), null);
-        synchronized (this) {
+        try {
+            mW.lock();
             for (int i=0; i<mUidOps.size(); i++) {
                 HashMap<String, Ops> packages = mUidOps.valueAt(i);
                 for (Map.Entry<String, Ops> ent : packages.entrySet()) {
@@ -1713,8 +1803,10 @@ public class AppOpsService extends IAppOpsService.Stub {
                     }
                 }
             }
-            // ensure the counter reset persists
-            scheduleFastWriteLocked();
+        } finally {
+            mW.unlock();
         }
+        // ensure the counter reset persists
+        scheduleFastWrite();
     }
 }
