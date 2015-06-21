@@ -128,10 +128,10 @@ public class AudioService extends IAudioService.Stub {
     private static final boolean DEBUG_SESSIONS = Log.isLoggable(TAG + ".SESSIONS", Log.DEBUG);
 
     /** Allow volume changes to set ringer mode to silent? */
-    private static final boolean VOLUME_SETS_RINGER_MODE_SILENT = false;
+    private static final boolean VOLUME_SETS_RINGER_MODE_SILENT = true;
 
     /** In silent mode, are volume adjustments (raises) prevented? */
-    private static final boolean PREVENT_VOLUME_ADJUSTMENT_IF_SILENT = true;
+    private static final boolean PREVENT_VOLUME_ADJUSTMENT_IF_SILENT = false;
 
     /** How long to delay before persisting a change in volume/ringer mode. */
     private static final int PERSIST_DELAY = 500;
