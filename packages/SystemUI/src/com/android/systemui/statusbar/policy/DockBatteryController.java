@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (C) 2016 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Handler;
-import android.os.PowerManager;
-import android.util.Log;
+import android.provider.Settings;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -34,22 +33,9 @@ import java.util.ArrayList;
 
 import cyanogenmod.providers.CMSettings;
 
-public class BatteryController extends BroadcastReceiver implements BatteryStateRegistar {
-    private static final String TAG = "BatteryController";
-    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-
-    public static final int STYLE_ICON_PORTRAIT = 0;
-    public static final int STYLE_CIRCLE = 2;
-    public static final int STYLE_GONE = 4;
-    public static final int STYLE_ICON_LANDSCAPE = 5;
-    public static final int STYLE_TEXT = 6;
-
-    public static final int PERCENTAGE_MODE_OFF = 0;
-    public static final int PERCENTAGE_MODE_INSIDE = 1;
-    public static final int PERCENTAGE_MODE_OUTSIDE = 2;
+public class DockBatteryController extends BroadcastReceiver implements BatteryStateRegistar {
 
     private final ArrayList<BatteryStateChangeCallback> mChangeCallbacks = new ArrayList<>();
-    private final PowerManager mPowerManager;
 
     private int mLevel;
     private boolean mPresent;
@@ -63,16 +49,10 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
     private int mUserId;
     private SettingsObserver mObserver;
 
-    public BatteryController(Context context, Handler handler) {
-        mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-
+    public DockBatteryController(Context context, Handler handler) {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
-        filter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGING);
         context.registerReceiver(this, filter);
-
-        updatePowerSave();
 
         mObserver = new SettingsObserver(context, handler);
         mObserver.observe();
@@ -109,50 +89,24 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
         final String action = intent.getAction();
         if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             mLevel = (int)(100f
-                    * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
-                    / intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
-            mPresent = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
-            mPluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
+                    * intent.getIntExtra(BatteryManager.EXTRA_DOCK_LEVEL, 0)
+                    / intent.getIntExtra(BatteryManager.EXTRA_DOCK_SCALE, 100));
+            mPresent = intent.getBooleanExtra(BatteryManager.EXTRA_DOCK_PRESENT, false);
+            mPluggedIn = intent.getIntExtra(BatteryManager.EXTRA_DOCK_PLUGGED, 0) != 0;
 
-            final int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
+            final int status = intent.getIntExtra(BatteryManager.EXTRA_DOCK_STATUS,
                     BatteryManager.BATTERY_STATUS_UNKNOWN);
             mCharged = status == BatteryManager.BATTERY_STATUS_FULL;
-            mCharging = mCharged || status == BatteryManager.BATTERY_STATUS_CHARGING;
+            mCharging = mPluggedIn && (mCharged || status == BatteryManager.BATTERY_STATUS_CHARGING);
 
             fireBatteryLevelChanged();
-        } else if (action.equals(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)) {
-            updatePowerSave();
-        } else if (action.equals(PowerManager.ACTION_POWER_SAVE_MODE_CHANGING)) {
-            setPowerSave(intent.getBooleanExtra(PowerManager.EXTRA_POWER_SAVE_MODE, false));
         }
-    }
-
-    public boolean isPowerSave() {
-        return mPowerSave;
-    }
-
-    private void updatePowerSave() {
-        setPowerSave(mPowerManager.isPowerSaveMode());
-    }
-
-    private void setPowerSave(boolean powerSave) {
-        if (powerSave == mPowerSave) return;
-        mPowerSave = powerSave;
-        if (DEBUG) Log.d(TAG, "Power save is " + (mPowerSave ? "on" : "off"));
-        firePowerSaveChanged();
     }
 
     private void fireBatteryLevelChanged() {
         final int N = mChangeCallbacks.size();
         for (int i = 0; i < N; i++) {
-            mChangeCallbacks.get(i).onBatteryLevelChanged(mPresent, mLevel, mPluggedIn, mCharging);
-        }
-    }
-
-    private void firePowerSaveChanged() {
-        final int N = mChangeCallbacks.size();
-        for (int i = 0; i < N; i++) {
-            mChangeCallbacks.get(i).onPowerSaveChanged();
+            mChangeCallbacks.get(i).onBatteryLevelChanged(mPresent, mLevel, mPresent, mCharging);
         }
     }
 
