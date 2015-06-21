@@ -17,6 +17,7 @@
 package com.android.systemui;
 
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.BatteryStateRegistar;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -28,7 +29,10 @@ import java.text.NumberFormat;
 
 public class BatteryLevelTextView extends TextView implements
         BatteryController.BatteryStateChangeCallback{
-    private BatteryController mBatteryController;
+
+    private BatteryStateRegistar mBatteryStateRegistar;
+    private boolean mBatteryPresent;
+
     private boolean mBatteryCharging;
     private boolean mForceShow;
     private boolean mAttached;
@@ -38,7 +42,9 @@ public class BatteryLevelTextView extends TextView implements
 
     public BatteryLevelTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mRequestedVisibility = getVisibility();
+        // setBatteryStateRegistar (if called) will made the view visible and ready to be hidden
+        // if the view shouldn't be displayed. Otherwise this view should be hidden from start.
+        mRequestedVisibility = GONE;
     }
 
     public void setForceShown(boolean forceShow) {
@@ -46,10 +52,11 @@ public class BatteryLevelTextView extends TextView implements
         updateVisibility();
     }
 
-    public void setBatteryController(BatteryController batteryController) {
-        mBatteryController = batteryController;
+    public void setBatteryStateRegistar(BatteryStateRegistar batteryStateRegistar) {
+        mRequestedVisibility = VISIBLE;
+        mBatteryStateRegistar = batteryStateRegistar;
         if (mAttached) {
-            mBatteryController.addStateChangedCallback(this);
+            mBatteryStateRegistar.addStateChangedCallback(this);
         }
     }
 
@@ -69,10 +76,12 @@ public class BatteryLevelTextView extends TextView implements
     }
 
     @Override
-    public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
+    public void onBatteryLevelChanged(boolean present, int level, boolean pluggedIn,
+            boolean charging) {
         String percentage = NumberFormat.getPercentInstance().format((double) level / 100.0);
         setText(percentage);
-        if (mBatteryCharging != charging) {
+        if (mBatteryPresent != present || mBatteryCharging != charging) {
+            mBatteryPresent = present;
             mBatteryCharging = charging;
             updateVisibility();
         }
@@ -94,8 +103,8 @@ public class BatteryLevelTextView extends TextView implements
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (mBatteryController != null) {
-            mBatteryController.addStateChangedCallback(this);
+        if (mBatteryStateRegistar != null) {
+            mBatteryStateRegistar.addStateChangedCallback(this);
         }
 
         mAttached = true;
@@ -106,21 +115,22 @@ public class BatteryLevelTextView extends TextView implements
         super.onDetachedFromWindow();
         mAttached = false;
 
-        if (mBatteryController != null) {
-            mBatteryController.removeStateChangedCallback(this);
+        if (mBatteryStateRegistar != null) {
+            mBatteryStateRegistar.removeStateChangedCallback(this);
         }
     }
 
     private void updateVisibility() {
-        boolean showNextPercent = mPercentMode == BatteryController.PERCENTAGE_MODE_OUTSIDE
-                || (mBatteryCharging && mPercentMode == BatteryController.PERCENTAGE_MODE_INSIDE);
+        boolean showNextPercent = mBatteryPresent && (
+                mPercentMode == BatteryController.PERCENTAGE_MODE_OUTSIDE
+                || (mBatteryCharging && mPercentMode == BatteryController.PERCENTAGE_MODE_INSIDE));
         if (mStyle == BatteryController.STYLE_GONE) {
             showNextPercent = false;
         } else if (mStyle == BatteryController.STYLE_TEXT) {
             showNextPercent = true;
         }
 
-        if (showNextPercent || mForceShow) {
+        if (mBatteryStateRegistar != null && (showNextPercent || mForceShow)) {
             super.setVisibility(mRequestedVisibility);
         } else {
             super.setVisibility(GONE);
