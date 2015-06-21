@@ -14630,21 +14630,21 @@ public class PackageManagerService extends IPackageManager.Stub {
                 "could not update icon mapping because caller "
                 + "does not have change config permission");
 
-        synchronized (mPackages) {
-            ThemeUtils.clearIconCache();
-            if (pkgName == null) {
-                clearIconMapping();
-                return;
-            }
-            mIconPackHelper = new IconPackHelper(mContext);
-            try {
-                mIconPackHelper.loadIconPack(pkgName);
-            } catch(NameNotFoundException e) {
-                Log.e(TAG, "Unable to find icon pack: " + pkgName);
-                clearIconMapping();
-                return;
-            }
+        ThemeUtils.clearIconCache();
+        if (pkgName == null) {
+            clearIconMapping();
+            return;
+        }
+        mIconPackHelper = new IconPackHelper(mContext);
+        try {
+            mIconPackHelper.loadIconPack(pkgName);
+        } catch(NameNotFoundException e) {
+            Log.e(TAG, "Unable to find icon pack: " + pkgName);
+            clearIconMapping();
+            return;
+        }
 
+        synchronized (mPackages) {
             for (Activity activity : mActivities.mActivities.values()) {
                 activity.info.themedIcon =
                         mIconPackHelper.getResourceIdForActivityIcon(activity.info);
