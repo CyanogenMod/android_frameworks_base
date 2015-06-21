@@ -17,6 +17,7 @@
 package com.android.systemui;
 
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.BatteryStateRegistar;
 
 import android.animation.ArgbEvaluator;
 import android.content.BroadcastReceiver;
@@ -73,6 +74,7 @@ public class BatteryMeterView extends View implements DemoMode,
     private final Path mClipPath = new Path();
     private final Path mTextPath = new Path();
 
+    private BatteryStateRegistar mBatteryStateRegistar;
     private BatteryController mBatteryController;
     private boolean mPowerSaveEnabled;
 
@@ -92,7 +94,7 @@ public class BatteryMeterView extends View implements DemoMode,
     private BatteryMeterDrawable mBatteryMeterDrawable;
     private int mIconTint = Color.WHITE;
 
-    private class BatteryTracker extends BroadcastReceiver {
+    protected class BatteryTracker extends BroadcastReceiver {
         public static final int UNKNOWN_LEVEL = -1;
 
         // current battery status
@@ -128,7 +130,6 @@ public class BatteryMeterView extends View implements DemoMode,
                 technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
                 voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
                 temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-
                 setContentDescription(
                         context.getString(R.string.accessibility_battery_level, level));
                 if (mBatteryMeterDrawable != null) {
@@ -193,7 +194,9 @@ public class BatteryMeterView extends View implements DemoMode,
             // preload the battery level
             mTracker.onReceive(getContext(), sticky);
         }
-        mBatteryController.addStateChangedCallback(this);
+        if (mBatteryStateRegistar != null) {
+            mBatteryStateRegistar.addStateChangedCallback(this);
+        }
         mAttached = true;
     }
 
@@ -203,7 +206,9 @@ public class BatteryMeterView extends View implements DemoMode,
 
         mAttached = false;
         getContext().unregisterReceiver(mTracker);
-        mBatteryController.removeStateChangedCallback(this);
+        if (mBatteryStateRegistar != null) {
+            mBatteryStateRegistar.removeStateChangedCallback(this);
+        }
     }
 
     public BatteryMeterView(Context context) {
@@ -279,11 +284,18 @@ public class BatteryMeterView extends View implements DemoMode,
             width = height;
         } else if (mMeterMode == BatteryMeterMode.BATTERY_METER_TEXT) {
             onSizeChanged(width, height, 0, 0); // Force a size changed event
-        } else if (mMeterMode.compareTo(BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE) == 0) {
+        } else if (mMeterMode == BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE) {
             width = (int)(height * 1.2f);
         }
 
         setMeasuredDimension(width, height);
+    }
+
+    public void setBatteryStateRegistar(BatteryStateRegistar batteryStateRegistar) {
+        mBatteryStateRegistar = batteryStateRegistar;
+        if (!mAttached) {
+            mBatteryStateRegistar.addStateChangedCallback(this);
+        }
     }
 
     public void setBatteryController(BatteryController batteryController) {
@@ -292,7 +304,8 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     @Override
-    public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
+    public void onBatteryLevelChanged(boolean present, int level, boolean pluggedIn,
+            boolean charging) {
         // TODO: Use this callback instead of own broadcast receiver.
     }
 
@@ -742,9 +755,7 @@ public class BatteryMeterView extends View implements DemoMode,
         }
 
         private float[] loadBoltPoints(Resources res) {
-            final int[] pts = res.getIntArray((mHorizontal
-                    ? R.array.batterymeter_inverted_bolt_points
-                    : R.array.batterymeter_bolt_points));
+            final int[] pts = res.getIntArray(getBoltPointsArrayResource());
             int maxX = 0, maxY = 0;
             for (int i = 0; i < pts.length; i += 2) {
                 maxX = Math.max(maxX, pts[i]);
@@ -756,6 +767,12 @@ public class BatteryMeterView extends View implements DemoMode,
                 ptsF[i + 1] = (float)pts[i + 1] / maxY;
             }
             return ptsF;
+        }
+
+        protected int getBoltPointsArrayResource() {
+            return mHorizontal
+                    ? R.array.batterymeter_inverted_bolt_points
+                    : R.array.batterymeter_bolt_points;
         }
     }
 
@@ -858,7 +875,7 @@ public class BatteryMeterView extends View implements DemoMode,
         }
 
         private float[] loadBoltPoints(Resources res) {
-            final int[] pts = res.getIntArray(R.array.batterymeter_bolt_points);
+            final int[] pts = res.getIntArray(getBoltPointsArrayResource());
             int maxX = 0, maxY = 0;
             for (int i = 0; i < pts.length; i += 2) {
                 maxX = Math.max(maxX, pts[i]);
@@ -870,6 +887,10 @@ public class BatteryMeterView extends View implements DemoMode,
                 ptsF[i + 1] = (float)pts[i + 1] / maxY;
             }
             return ptsF;
+        }
+
+        protected int getBoltPointsArrayResource() {
+            return R.array.batterymeter_bolt_points;
         }
 
         private void drawCircle(Canvas canvas, BatteryTracker tracker,

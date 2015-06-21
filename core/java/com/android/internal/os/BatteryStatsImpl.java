@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006-2007 The Android Open Source Project
+ * Copyright (C) 2016 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +92,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * battery life.  All times are represented in microseconds except where indicated
  * otherwise.
  */
-public final class BatteryStatsImpl extends BatteryStats {
+public class BatteryStatsImpl extends BatteryStats {
     private static final String TAG = "BatteryStatsImpl";
     private static final boolean DEBUG = false;
     public static final boolean DEBUG_ENERGY = false;
@@ -6839,13 +6840,13 @@ public final class BatteryStatsImpl extends BatteryStats {
 
     public BatteryStatsImpl(File systemDir, Handler handler, ExternalStatsSync externalSync) {
         if (systemDir != null) {
-            mFile = new JournaledFile(new File(systemDir, "batterystats.bin"),
-                    new File(systemDir, "batterystats.bin.tmp"));
+            mFile = new JournaledFile(new File(systemDir, getStatsName() + ".bin"),
+                    new File(systemDir, getStatsName() + ".bin.tmp"));
         } else {
             mFile = null;
         }
-        mCheckinFile = new AtomicFile(new File(systemDir, "batterystats-checkin.bin"));
-        mDailyFile = new AtomicFile(new File(systemDir, "batterystats-daily.xml"));
+        mCheckinFile = new AtomicFile(new File(systemDir, getStatsName() + "-checkin.bin"));
+        mDailyFile = new AtomicFile(new File(systemDir, getStatsName () + "-daily.xml"));
         mExternalSync = externalSync;
         mHandler = new MyHandler(handler.getLooper());
         mStartCount++;
@@ -6919,6 +6920,16 @@ public final class BatteryStatsImpl extends BatteryStats {
         mExternalSync = null;
         clearHistoryLocked();
         readFromParcel(p);
+    }
+
+    /** @hide */
+    protected String getStatsName() {
+        return "batterystats";
+    }
+
+    /** @hide */
+    protected String getLogName() {
+        return "BatteryStats";
     }
 
     public void setPowerProfile(PowerProfile profile) {
@@ -8434,7 +8445,13 @@ public final class BatteryStatsImpl extends BatteryStats {
 
     public void setBatteryStateLocked(int status, int health, int plugType, int level,
             int temp, int volt) {
-        final boolean onBattery = plugType == BATTERY_PLUGGED_NONE;
+        // We need to add a extra check over the status because of dock batteries
+        // PlugType doesn't means that the dock battery is charging (some devices
+        // doesn't charge under dock usb)
+        boolean onBattery = plugType == BATTERY_PLUGGED_NONE &&
+                (status != BatteryManager.BATTERY_STATUS_CHARGING ||
+                status != BatteryManager.BATTERY_STATUS_FULL);
+
         final long uptime = SystemClock.uptimeMillis();
         final long elapsedRealtime = SystemClock.elapsedRealtime();
         if (!mHaveBatteryLevel) {
