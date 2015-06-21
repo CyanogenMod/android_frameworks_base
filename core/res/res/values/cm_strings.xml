@@ -351,4 +351,12 @@
 
     <!-- Default fingerprint name when a new fingerprint is added -->
     <string name="fingerprint_default_name">Fingerprint <xliff:g id="number">%d</xliff:g></string>
+
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+    <string name="permlab_resetBatteryStats">reset battery statistics</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+    <string name="permdesc_resetBatteryStats">Allows an application to reset the current low-level
+        battery usage data.</string>
 </resources>
