@@ -27,6 +27,7 @@ import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
+import android.os.BatteryManager;
 import android.os.BatteryStats;
 import android.os.BatteryStats.Uid;
 import android.os.Bundle;
@@ -69,15 +70,18 @@ public final class BatteryStatsHelper {
     private static final String TAG = BatteryStatsHelper.class.getSimpleName();
 
     private static BatteryStats sStatsXfer;
+    private static BatteryStats sDockStatsXfer;
     private static Intent sBatteryBroadcastXfer;
     private static ArrayMap<File, BatteryStats> sFileXfer = new ArrayMap<>();
 
     final private Context mContext;
+    final private BatteryManager mBatteryService;
     final private boolean mCollectBatteryBroadcast;
     final private boolean mWifiOnly;
 
     private IBatteryStats mBatteryInfo;
     private BatteryStats mStats;
+    private BatteryStats mDockStats;
     private Intent mBatteryBroadcast;
     private PowerProfile mPowerProfile;
 
@@ -123,12 +127,14 @@ public final class BatteryStatsHelper {
 
     public BatteryStatsHelper(Context context, boolean collectBatteryBroadcast) {
         mContext = context;
+        mBatteryService = ((BatteryManager) context.getSystemService(Context.BATTERY_SERVICE));
         mCollectBatteryBroadcast = collectBatteryBroadcast;
         mWifiOnly = checkWifiOnly(context);
     }
 
     public BatteryStatsHelper(Context context, boolean collectBatteryBroadcast, boolean wifiOnly) {
         mContext = context;
+        mBatteryService = ((BatteryManager) context.getSystemService(Context.BATTERY_SERVICE));
         mCollectBatteryBroadcast = collectBatteryBroadcast;
         mWifiOnly = wifiOnly;
     }
@@ -140,14 +146,22 @@ public final class BatteryStatsHelper {
     }
 
     public void storeStatsHistoryInFile(String fname) {
+        internalStoreStatsHistoryInFile(getStats(), fname);
+    }
+
+    public void storeDockStatsHistoryInFile(String fname) {
+        internalStoreStatsHistoryInFile(getDockStats(), fname);
+    }
+
+    public void internalStoreStatsHistoryInFile(BatteryStats stats, String fname) {
         synchronized (sFileXfer) {
             File path = makeFilePath(mContext, fname);
-            sFileXfer.put(path, this.getStats());
+            sFileXfer.put(path, stats);
             FileOutputStream fout = null;
             try {
                 fout = new FileOutputStream(path);
                 Parcel hist = Parcel.obtain();
-                getStats().writeToParcelWithoutUids(hist, 0);
+                stats.writeToParcelWithoutUids(hist, 0);
                 byte[] histData = hist.marshall();
                 fout.write(histData);
             } catch (IOException e) {
@@ -204,18 +218,38 @@ public final class BatteryStatsHelper {
     /** Clears the current stats and forces recreating for future use. */
     public void clearStats() {
         mStats = null;
+        mDockStats = null;
+    }
+
+    private void clearAllStats() {
+        clearStats();
+        sStatsXfer = null;
+        sDockStatsXfer = null;
+        sBatteryBroadcastXfer = null;
+        for (File f : sFileXfer.keySet()) {
+            f.delete();
+        }
+        sFileXfer.clear();
     }
 
     public BatteryStats getStats() {
         if (mStats == null) {
-            load();
+            loadStats();
         }
         return mStats;
     }
 
+    public BatteryStats getDockStats() {
+        if (mDockStats == null) {
+            loadDockStats();
+        }
+        return mDockStats;
+    }
+
     public Intent getBatteryBroadcast() {
         if (mBatteryBroadcast == null && mCollectBatteryBroadcast) {
-            load();
+            loadStats();
+            loadDockStats();
         }
         return mBatteryBroadcast;
     }
@@ -232,6 +266,7 @@ public final class BatteryStatsHelper {
     public void create(Bundle icicle) {
         if (icicle != null) {
             mStats = sStatsXfer;
+            mDockStats = sDockStatsXfer;
             mBatteryBroadcast = sBatteryBroadcastXfer;
         }
         mBatteryInfo = IBatteryStats.Stub.asInterface(
@@ -241,6 +276,7 @@ public final class BatteryStatsHelper {
 
     public void storeState() {
         sStatsXfer = mStats;
+        sDockStatsXfer = mDockStats;
         sBatteryBroadcastXfer = mBatteryBroadcast;
     }
 
@@ -290,6 +326,7 @@ public final class BatteryStatsHelper {
             long rawUptimeUs) {
         // Initialize mStats if necessary.
         getStats();
+        getDockStats();
 
         mMaxPower = 0;
         mMaxRealPower = 0;
@@ -961,7 +998,7 @@ public final class BatteryStatsHelper {
         }
     }
 
-    private void load() {
+    private void loadStats() {
         if (mBatteryInfo == null) {
             return;
         }
@@ -969,6 +1006,26 @@ public final class BatteryStatsHelper {
         if (mCollectBatteryBroadcast) {
             mBatteryBroadcast = mContext.registerReceiver(null,
                     new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        }
+    }
+
+    private void loadDockStats() {
+        if (mBatteryInfo == null) {
+            return;
+        }
+        if (mBatteryService.isDockBatterySupported()) {
+            mDockStats = getDockStats(mBatteryInfo);
+        } else {
+            mDockStats = null;
+        }
+    }
+
+    public void resetStatistics() {
+        try {
+            clearAllStats();
+            mBatteryInfo.resetStatistics();
+        } catch (RemoteException e) {
+            Log.e(TAG, "RemoteException:", e);
         }
     }
 
@@ -983,6 +1040,30 @@ public final class BatteryStatsHelper {
                     parcel.unmarshall(data, 0, data.length);
                     parcel.setDataPosition(0);
                     BatteryStatsImpl stats = com.android.internal.os.BatteryStatsImpl.CREATOR
+                            .createFromParcel(parcel);
+                    stats.distributeWorkLocked(BatteryStats.STATS_SINCE_CHARGED);
+                    return stats;
+                } catch (IOException e) {
+                    Log.w(TAG, "Unable to read statistics stream", e);
+                }
+            }
+        } catch (RemoteException e) {
+            Log.w(TAG, "RemoteException:", e);
+        }
+        return new BatteryStatsImpl();
+    }
+
+    private static BatteryStatsImpl getDockStats(IBatteryStats service) {
+        try {
+            ParcelFileDescriptor pfd = service.getDockStatisticsStream();
+            if (pfd != null) {
+                FileInputStream fis = new ParcelFileDescriptor.AutoCloseInputStream(pfd);
+                try {
+                    byte[] data = readFully(fis, MemoryFile.getSize(pfd.getFileDescriptor()));
+                    Parcel parcel = Parcel.obtain();
+                    parcel.unmarshall(data, 0, data.length);
+                    parcel.setDataPosition(0);
+                    BatteryStatsImpl stats = com.android.internal.os.DockBatteryStatsImpl.CREATOR
                             .createFromParcel(parcel);
                     stats.distributeWorkLocked(BatteryStats.STATS_SINCE_CHARGED);
                     return stats;
