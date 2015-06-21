@@ -38,5 +38,25 @@
         android:layout_width="9.5dp"
         android:layout_marginBottom="@dimen/battery_margin_bottom"
         android:layout_marginStart="@dimen/signal_cluster_battery_padding" />
+     <com.android.systemui.BatteryLevelTextView android:id="@+id/battery_level_text"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_vertical"
+         android:layout_marginStart="@dimen/header_battery_margin_keyguard"
+         android:textColor="#ffffff"
+         android:textSize="@dimen/battery_level_text_size" />
+
+    <com.android.systemui.DockBatteryMeterView android:id="@+id/dock_battery"
+        android:layout_height="14.5dp"
+        android:layout_width="9.5dp"
+        android:layout_marginBottom="@dimen/battery_margin_bottom"
+        android:layout_marginStart="@dimen/signal_cluster_battery_padding" />
+    <com.android.systemui.BatteryLevelTextView android:id="@+id/dock_battery_level_text"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center_vertical"
+         android:layout_marginStart="@dimen/header_battery_margin_keyguard"
+         android:textColor="#ffffff"
+         android:textSize="@dimen/battery_level_text_size" />
 
 </LinearLayout>

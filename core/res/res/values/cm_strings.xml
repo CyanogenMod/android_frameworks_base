@@ -356,4 +356,12 @@
     <string name="permlab_accessFingerprintService">access fingerprint service</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessFingerprintService">Allows an app to access the fingerprint service. The app can add, delete, rename and authenticate against fingerprints</string>
+
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+    <string name="permlab_resetBatteryStats">reset battery statistics</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+    <string name="permdesc_resetBatteryStats">Allows an application to reset the current low-level
+        battery usage data.</string>
 </resources>
