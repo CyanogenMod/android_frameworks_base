@@ -18606,19 +18606,19 @@ public final class ActivityManagerService extends ActivityManagerNative
                         mNumCachedHiddenProcs++;
                         numCached++;
                         if (numCached > cachedProcessLimit) {
-                            postKillProc(app, "cached #" + numCached, true);
+                            app.kill("cached #" + numCached, true);
                         }
                         break;
                     case ActivityManager.PROCESS_STATE_CACHED_EMPTY:
                         if (numEmpty > ProcessList.TRIM_EMPTY_APPS
                                 && app.lastActivityTime < oldTime) {
-                            postKillProc(app, "empty for "
+                            app.kill("empty for "
                                     + ((oldTime + ProcessList.MAX_EMPTY_TIME - app.lastActivityTime)
                                     / 1000) + "s", true);
                         } else {
                             numEmpty++;
                             if (numEmpty > emptyProcessLimit) {
-                                postKillProc(app, "empty #" + numEmpty, true);
+                                app.kill("empty #" + numEmpty, true);
                             }
                         }
                         break;
@@ -18634,7 +18634,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     // definition not re-use the same process again, and it is
                     // good to avoid having whatever code was running in them
                     // left sitting around after no longer needed.
-                    postKillProc(app, "isolated not needed", true);
+                    app.kill("isolated not needed", true);
                 }
 
                 if (app.curProcState >= ActivityManager.PROCESS_STATE_HOME
@@ -18857,15 +18857,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Slog.d(TAG, "Did OOM ADJ in " + (SystemClock.uptimeMillis()-now) + "ms");
             }
         }
-    }
-
-    private void postKillProc(final ProcessRecord app, final String reason, final boolean noisy) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                app.kill(reason, noisy);
-            }
-        });
     }
 
     final void trimApplications() {
