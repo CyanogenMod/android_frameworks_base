@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2016 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package android.os;
 
+import android.app.IBatteryService;
 import android.content.Context;
 import android.os.BatteryProperty;
 import android.os.IBatteryPropertiesRegistrar;
@@ -95,6 +97,79 @@ public class BatteryManager {
 
     /**
      * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer containing the current dock status constant.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_STATUS = "dock_status";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer containing the current dock health constant.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_HEALTH = "dock_health";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * boolean indicating whether a dock battery is present.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_PRESENT = "dock_present";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer field containing the current dock battery level, from 0 to
+     * {@link #EXTRA_SCALE}.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_LEVEL = "dock_level";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer containing the maximum dock battery level.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_SCALE = "dock_scale";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer containing the resource ID of a small status bar icon
+     * indicating the current dock battery state.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_ICON_SMALL = "dock_icon-small";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer indicating whether the device is plugged in to a dock power
+     * source.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_PLUGGED = "dock_plugged";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer containing the current dock battery voltage level.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_VOLTAGE = "dock_voltage";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer containing the current dock battery temperature.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_TEMPERATURE = "dock_temperature";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * String describing the technology of the current dock battery.
+     * @hide
+     */
+    public static final String EXTRA_DOCK_TECHNOLOGY = "dock_technology";
+
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
      * Int value set to nonzero if an unsupported charger is attached
      * to the device.
      * {@hide}
@@ -133,9 +208,22 @@ public class BatteryManager {
     /** Power source is wireless. */
     public static final int BATTERY_PLUGGED_WIRELESS = 4;
 
+    // values of the "dock_plugged" field in the ACTION_BATTERY_CHANGED intent.
+    // These must be powers of 2.
+    /** Power source is an DockAC charger.
+     * @hide*/
+    public static final int BATTERY_DOCK_PLUGGED_AC = 1;
+    /** Power source is an DockUSB charger.
+     * @hide*/
+    public static final int BATTERY_DOCK_PLUGGED_USB = 2;
+
     /** @hide */
     public static final int BATTERY_PLUGGED_ANY =
             BATTERY_PLUGGED_AC | BATTERY_PLUGGED_USB | BATTERY_PLUGGED_WIRELESS;
+
+    /** @hide */
+    public static final int BATTERY_DOCK_PLUGGED_ANY =
+            BATTERY_DOCK_PLUGGED_AC | BATTERY_DOCK_PLUGGED_USB;
 
     /**
      * Sent when the device's battery has started charging (or has reached full charge
@@ -191,6 +279,7 @@ public class BatteryManager {
      */
     public static final int BATTERY_PROPERTY_ENERGY_COUNTER = 5;
 
+    private final IBatteryService mBatteryService;
     private final IBatteryStats mBatteryStats;
     private final IBatteryPropertiesRegistrar mBatteryPropertiesRegistrar;
 
@@ -202,6 +291,27 @@ public class BatteryManager {
                 ServiceManager.getService(BatteryStats.SERVICE_NAME));
         mBatteryPropertiesRegistrar = IBatteryPropertiesRegistrar.Stub.asInterface(
                 ServiceManager.getService("batteryproperties"));
+        mBatteryService = null;
+    }
+
+    /** @hide */
+    public BatteryManager(IBatteryService service) {
+        super();
+        mBatteryStats = IBatteryStats.Stub.asInterface(
+                ServiceManager.getService(BatteryStats.SERVICE_NAME));
+        mBatteryPropertiesRegistrar = IBatteryPropertiesRegistrar.Stub.asInterface(
+                ServiceManager.getService("batteryproperties"));
+        mBatteryService = service;
+    }
+
+    /** @hide */
+    public boolean isDockBatterySupported() {
+        try {
+            return mBatteryService != null && mBatteryService.isDockBatterySupported();
+        } catch (RemoteException ex) {
+            // Ignore
+        }
+        return false;
     }
 
     /**
@@ -223,8 +333,10 @@ public class BatteryManager {
      *
      * Returns the requested value, or Long.MIN_VALUE if property not
      * supported on this system or on other error.
+     * fromDock determines if the property is query from the normal battery
+     * or the dock battery.
      */
-    private long queryProperty(int id) {
+    private long queryProperty(int id, boolean fromDock) {
         long ret;
 
         if (mBatteryPropertiesRegistrar == null) {
@@ -234,7 +346,13 @@ public class BatteryManager {
         try {
             BatteryProperty prop = new BatteryProperty();
 
-            if (mBatteryPropertiesRegistrar.getProperty(id, prop) == 0)
+            final int callResult;
+            if (!fromDock) {
+                callResult = mBatteryPropertiesRegistrar.getProperty(id, prop);
+            } else {
+                callResult = mBatteryPropertiesRegistrar.getDockProperty(id, prop);
+            }
+            if (callResult == 0)
                 ret = prop.getLong();
             else
                 ret = Long.MIN_VALUE;
@@ -255,7 +373,7 @@ public class BatteryManager {
      * @return the property value, or Integer.MIN_VALUE if not supported.
      */
     public int getIntProperty(int id) {
-        return (int)queryProperty(id);
+        return (int)queryProperty(id, false);
     }
 
     /**
@@ -268,6 +386,40 @@ public class BatteryManager {
      * @return the property value, or Long.MIN_VALUE if not supported.
      */
     public long getLongProperty(int id) {
-        return queryProperty(id);
+        return queryProperty(id, false);
+    }
+
+    /**
+     * Return the value of a dock battery property of integer type.  If the
+     * platform does not provide the property queried, this value will
+     * be Integer.MIN_VALUE.
+     *
+     * @param id identifier of the requested property
+     *
+     * @return the property value, or Integer.MIN_VALUE if not supported.
+     * @hide
+     */
+    public int getIntDockProperty(int id) {
+        if (!isDockBatterySupported()) {
+            return Integer.MIN_VALUE;
+        }
+        return (int)queryProperty(id, true);
+    }
+
+    /**
+     * Return the value of a dock battery property of long type If the
+     * platform does not provide the property queried, this value will
+     * be Long.MIN_VALUE.
+     *
+     * @param id identifier of the requested property
+     *
+     * @return the property value, or Long.MIN_VALUE if not supported.
+     * @hide
+     */
+    public long getLongDockProperty(int id) {
+        if (!isDockBatterySupported()) {
+            return Long.MIN_VALUE;
+        }
+        return queryProperty(id, true);
     }
 }
