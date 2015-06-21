@@ -1,4 +1,5 @@
 /* Copyright 2013, The Android Open Source Project
+ * Copyright 2015, The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +31,16 @@ public class BatteryProperties implements Parcelable {
     public int batteryTemperature;
     public String batteryTechnology;
 
+    public boolean dockBatterySupported;
+    public boolean chargerDockAcOnline;
+    public int dockBatteryStatus;
+    public int dockBatteryHealth;
+    public boolean dockBatteryPresent;
+    public int dockBatteryLevel;
+    public int dockBatteryVoltage;
+    public int dockBatteryTemperature;
+    public String dockBatteryTechnology;
+
     public BatteryProperties() {
     }
 
@@ -44,6 +55,16 @@ public class BatteryProperties implements Parcelable {
         batteryVoltage = other.batteryVoltage;
         batteryTemperature = other.batteryTemperature;
         batteryTechnology = other.batteryTechnology;
+
+        dockBatterySupported = other.dockBatterySupported;
+        chargerDockAcOnline = other.chargerDockAcOnline;
+        dockBatteryStatus = other.dockBatteryStatus;
+        dockBatteryHealth = other.dockBatteryHealth;
+        dockBatteryPresent = other.dockBatteryPresent;
+        dockBatteryLevel = other.dockBatteryLevel;
+        dockBatteryVoltage = other.dockBatteryVoltage;
+        dockBatteryTemperature = other.dockBatteryTemperature;
+        dockBatteryTechnology = other.dockBatteryTechnology;
     }
 
     /*
@@ -62,6 +83,27 @@ public class BatteryProperties implements Parcelable {
         batteryVoltage = p.readInt();
         batteryTemperature = p.readInt();
         batteryTechnology = p.readString();
+
+        dockBatterySupported = p.readInt() == 1 ? true : false;
+        if (dockBatterySupported) {
+            chargerDockAcOnline = p.readInt() == 1 ? true : false;
+            dockBatteryStatus = p.readInt();
+            dockBatteryHealth = p.readInt();
+            dockBatteryPresent = p.readInt() == 1 ? true : false;
+            dockBatteryLevel = p.readInt();
+            dockBatteryVoltage = p.readInt();
+            dockBatteryTemperature = p.readInt();
+            dockBatteryTechnology = p.readString();
+        } else {
+            chargerDockAcOnline = false;
+            dockBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
+            dockBatteryHealth = BatteryManager.BATTERY_HEALTH_UNKNOWN;
+            dockBatteryPresent = false;
+            dockBatteryLevel = 0;
+            dockBatteryVoltage = 0;
+            dockBatteryTemperature = 0;
+            dockBatteryTechnology = "";
+        }
     }
 
     public void writeToParcel(Parcel p, int flags) {
@@ -75,6 +117,18 @@ public class BatteryProperties implements Parcelable {
         p.writeInt(batteryVoltage);
         p.writeInt(batteryTemperature);
         p.writeString(batteryTechnology);
+
+        p.writeInt(dockBatterySupported ? 1 : 0);
+        if (dockBatterySupported) {
+            p.writeInt(chargerDockAcOnline ? 1 : 0);
+            p.writeInt(dockBatteryStatus);
+            p.writeInt(dockBatteryHealth);
+            p.writeInt(dockBatteryPresent ? 1 : 0);
+            p.writeInt(dockBatteryLevel);
+            p.writeInt(dockBatteryVoltage);
+            p.writeInt(dockBatteryTemperature);
+            p.writeString(dockBatteryTechnology);
+        }
     }
 
     public static final Parcelable.Creator<BatteryProperties> CREATOR
