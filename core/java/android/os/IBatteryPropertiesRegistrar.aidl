@@ -1,5 +1,6 @@
 /*
 ** Copyright 2013, The Android Open Source Project
+** Copyright 2016, The CyanogenMod Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -27,4 +28,5 @@ interface IBatteryPropertiesRegistrar {
     void registerListener(IBatteryPropertiesListener listener);
     void unregisterListener(IBatteryPropertiesListener listener);
     int getProperty(in int id, out BatteryProperty prop);
+    int getDockProperty(in int id, out BatteryProperty prop);
 }
