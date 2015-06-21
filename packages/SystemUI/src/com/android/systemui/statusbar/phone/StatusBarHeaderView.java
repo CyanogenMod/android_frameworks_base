@@ -18,9 +18,7 @@
 package com.android.systemui.statusbar.phone;
 
 import android.app.ActivityManager;
-import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
-import android.app.IUserSwitchObserver;
 import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentResolver;
@@ -28,22 +26,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.IRemoteCallback;
-import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
 import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.MathUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -58,12 +51,14 @@ import android.widget.TextView;
 import com.android.keyguard.KeyguardStatusView;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.BatteryLevelTextView;
+import com.android.systemui.DockBatteryMeterView;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.DockBatteryController;
 import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.WeatherController;
@@ -98,6 +93,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private ImageView mQsDetailHeaderProgress;
     private TextView mEmergencyCallsOnly;
     private BatteryLevelTextView mBatteryLevel;
+    private BatteryLevelTextView mDockBatteryLevel;
     private TextView mAlarmStatus;
     private TextView mWeatherLine1, mWeatherLine2;
 
@@ -127,7 +123,6 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private float mAvatarCollapsedScaleFactor;
 
     private ActivityStarter mActivityStarter;
-    private BatteryController mBatteryController;
     private NextAlarmController mNextAlarmController;
     private WeatherController mWeatherController;
     private QSPanel mQSPanel;
@@ -177,6 +172,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mQsDetailHeaderProgress = (ImageView) findViewById(R.id.qs_detail_header_progress);
         mEmergencyCallsOnly = (TextView) findViewById(R.id.header_emergency_calls_only);
         mBatteryLevel = (BatteryLevelTextView) findViewById(R.id.battery_level_text);
+        mDockBatteryLevel = (BatteryLevelTextView) findViewById(R.id.dock_battery_level_text);
         mAlarmStatus = (TextView) findViewById(R.id.alarm_status);
         mAlarmStatus.setOnClickListener(this);
         mSignalCluster = findViewById(R.id.signal_cluster);
@@ -299,9 +295,26 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     }
 
     public void setBatteryController(BatteryController batteryController) {
-        mBatteryController = batteryController;
-        ((BatteryMeterView) findViewById(R.id.battery)).setBatteryController(batteryController);
-        mBatteryLevel.setBatteryController(batteryController);
+        BatteryMeterView v = ((BatteryMeterView) findViewById(R.id.battery));
+        v.setBatteryStateRegistar(batteryController);
+        v.setBatteryController(batteryController);
+        mBatteryLevel.setBatteryStateRegistar(batteryController);
+    }
+
+    public void setDockBatteryController(DockBatteryController dockBatteryController) {
+        DockBatteryMeterView v = ((DockBatteryMeterView) findViewById(R.id.dock_battery));
+        if (dockBatteryController != null) {
+            v.setBatteryStateRegistar(dockBatteryController);
+            mDockBatteryLevel.setBatteryStateRegistar(dockBatteryController);
+        } else {
+            if (v != null) {
+                removeView(v);
+            }
+            if (mDockBatteryLevel != null) {
+                removeView(mDockBatteryLevel);
+                mDockBatteryLevel = null;
+            }
+        }
     }
 
     public void setNextAlarmController(NextAlarmController nextAlarmController) {
@@ -373,6 +386,10 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mEmergencyCallsOnly.setVisibility(mExpanded && mShowEmergencyCallsOnly ? VISIBLE : GONE);
         mBatteryLevel.setForceShown(mExpanded && mShowBatteryTextExpanded);
         mBatteryLevel.setVisibility(View.VISIBLE);
+        if (mDockBatteryLevel != null) {
+            mDockBatteryLevel.setForceShown(mExpanded && mShowBatteryTextExpanded);
+            mDockBatteryLevel.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateSignalClusterDetachment() {
@@ -707,6 +724,9 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         applyAlpha(mDateCollapsed, values.dateCollapsedAlpha);
         applyAlpha(mDateExpanded, values.dateExpandedAlpha);
         applyAlpha(mBatteryLevel, values.batteryLevelAlpha);
+        if (mDockBatteryLevel != null) {
+            applyAlpha(mDockBatteryLevel, values.batteryLevelAlpha);
+        }
         applyAlpha(mSettingsButton, values.settingsAlpha);
         applyAlpha(mWeatherLine1, values.settingsAlpha);
         applyAlpha(mWeatherLine2, values.settingsAlpha);
