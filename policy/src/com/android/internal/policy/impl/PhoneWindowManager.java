@@ -6353,11 +6353,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // Rotation setting bitmask
                 // 1=0 2=90 4=180 8=270
                 boolean allowed = true;
-                if (mUserRotationAngles < 0) {
-                    // Not set by user so use these defaults
-                    mUserRotationAngles = mAllowAllRotations == 1 ?
+                if(orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+                        && orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_USER) 
+                {
+                    if (mUserRotationAngles < 0) {
+                        // Not set by user so use these defaults
+                        mUserRotationAngles = mAllowAllRotations == 1 ?
                             (1 | 2 | 4 | 8) : // All angles
-                                (1 | 2 | 8); // All except 180
+                            (1 | 2 | 8); // All except 180
                 }
                 switch (sensorRotation) {
                     case Surface.ROTATION_0:
@@ -6372,6 +6375,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     case Surface.ROTATION_270:
                         allowed = (mUserRotationAngles & 8) != 0;
                         break;
+                    }
                 }
                 if (allowed) {
                     preferredRotation = sensorRotation;
