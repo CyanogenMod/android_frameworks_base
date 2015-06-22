@@ -197,7 +197,7 @@
   <string name="usb_ext_media_nomedia_notification_message">USB saugykla pašalinta. Įdėkite naują mediją.</string>
   <string name="live_display_auto">Automatinis</string>
   <string name="live_display_auto_summary">Automatiškai sureguliuoti ekrano spalvos temperatūrą po saulėlydžio ir saulėtekio</string>
-  <string name="live_display_off">Išjungti</string>
+  <string name="live_display_off">Išjungta</string>
   <string name="live_display_off_summary">Neleisti visų reguliavimų</string>
   <string name="live_display_day">Diena</string>
   <string name="live_display_day_summary">Naudoti tik dienos nustatymus</string>
