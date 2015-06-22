@@ -147,8 +147,8 @@
     <string name="usb_choose_notification_title">Touch to choose USB options.</string>
 
     <!-- ADB custom tile -->
-    <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="Usb">%1$s</xliff:g></string>
-    <string name="adb_active_custom_tile_both">Both</string>
+    <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+    <string name="adb_active_custom_tile_both">USB &amp; network</string>
     <string name="adb_active_custom_tile_usb">USB</string>
     <string name="adb_active_custom_tile_net">Network</string>
 
