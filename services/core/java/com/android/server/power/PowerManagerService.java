@@ -1531,7 +1531,22 @@ public final class PowerManagerService extends SystemService
             final boolean wasStayOn = mStayOn;
             if (mStayOnWhilePluggedInSetting != 0
                     && !isMaximumScreenOffTimeoutFromDeviceAdminEnforcedLocked()) {
-                mStayOn = mBatteryManagerInternal.isPowered(mStayOnWhilePluggedInSetting);
+
+                boolean isDebugging = mPlugType == BatteryManager.BATTERY_PLUGGED_USB
+                        && Settings.Secure.getInt(mContext.getContentResolver(),
+                           Settings.Secure.ADB_ENABLED, 0) != 0;
+
+                switch (mStayOnWhilePluggedInSetting) {
+                    case 1: // Debugging only
+                        mStayOn = isDebugging;
+                        break;
+                    case 2: // charging
+                        mStayOn = mBatteryManagerInternal.isPowered(mStayOnWhilePluggedInSetting);
+                        break;
+                    case 0:
+                    default:
+                        mStayOn = false;
+                }
             } else {
                 mStayOn = false;
             }
