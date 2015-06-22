@@ -2162,7 +2162,6 @@ public class NotificationStackScrollLayout extends ViewGroup
         } else {
             mPhoneStatusBar.requestVisualizer(true, 300);
         }
-
     }
 
     public ActivatableNotificationView getActivatedChild() {

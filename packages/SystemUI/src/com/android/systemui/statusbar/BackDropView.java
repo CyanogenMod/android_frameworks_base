@@ -27,6 +27,9 @@ import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.session.MediaController;
+import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -46,6 +49,9 @@ import com.pheelicks.visualizer.FFTData;
 import com.pheelicks.visualizer.VisualizerView;
 import com.pheelicks.visualizer.renderer.Renderer;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * A view who contains media artwork.
  */
@@ -62,31 +68,35 @@ public class BackDropView extends FrameLayout {
 
     private VisualizerView mVisualizer;
     private boolean mScreenOn;
-    private boolean mLinked;
+    private AtomicBoolean mLinked = new AtomicBoolean();
     private boolean mVisualizerEnabled;
     private boolean mPowerSaveModeEnabled;
     private SettingsObserver mSettingsObserver;
+    private MediaSessionManager mMediaSessionManager;
 
     public BackDropView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public BackDropView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public BackDropView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        this(context, attrs, defStyleAttr, 0);
     }
 
     public BackDropView(Context context, AttributeSet attrs, int defStyleAttr,
                         int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+
+        mMediaSessionManager = (MediaSessionManager)
+                mContext.getSystemService(Context.MEDIA_SESSION_SERVICE);
     }
 
     @Override
     public boolean hasOverlappingRendering() {
-        return mLinked;
+        return mLinked.get();
     }
 
     @Override
@@ -167,7 +177,7 @@ public class BackDropView extends FrameLayout {
                 && mPhoneStatusBar.getCurrentMediaNotificationKey() != null) {
             if (DEBUG) Log.d(TAG, "--> starting visualizer");
             postDelayed(mStartVisualizer, delay);
-        } else {
+        } else if (!show) {
             if (DEBUG) Log.d(TAG, "--> stopping visualizer");
             postDelayed(mStopVisualizer, delay);
         }
@@ -184,23 +194,29 @@ public class BackDropView extends FrameLayout {
         }
     };
 
+    private boolean isAnythingPlayingColdCheck() {
+        List<MediaController> activeSessions = mMediaSessionManager.getActiveSessions(null);
+        for (MediaController activeSession : activeSessions) {
+            PlaybackState playbackState = activeSession.getPlaybackState();
+            if (playbackState != null && playbackState.getState()
+                    == PlaybackState.STATE_PLAYING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private final Runnable mStartVisualizer = new Runnable() {
         @Override
         public void run() {
-            if (DEBUG) Log.w(TAG, "mStartVisualizer");
-
-            mVisualizer.animate()
-                    .alpha(1f)
-                    .setDuration(VISUALIZER_ANIMATION_DURATION_IN);
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVisualizer != null && !mLinked) {
-                        mVisualizer.link(0);
-                        mLinked = true;
-                    }
-                }
-            });
+            if (isAnythingPlayingColdCheck()) {
+                if (DEBUG) Log.w(TAG, "mStartVisualizer");
+                mVisualizer.animate().cancel();
+                mVisualizer.animate()
+                        .alpha(1f)
+                        .setDuration(VISUALIZER_ANIMATION_DURATION_IN);
+                AsyncTask.execute(mLinkRunnable);
+            }
         }
     };
 
@@ -209,18 +225,31 @@ public class BackDropView extends FrameLayout {
         public void run() {
             if (DEBUG) Log.w(TAG, "mStopVisualizer");
 
+            mVisualizer.animate().cancel();
             mVisualizer.animate()
                     .alpha(0f)
                     .setDuration(VISUALIZER_ANIMATION_DURATION_OUT);
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVisualizer != null && mLinked) {
-                        mVisualizer.unlink();
-                        mLinked = false;
-                    }
-                }
-            });
+            AsyncTask.execute(mUnlinkRunnable);
+        }
+    };
+
+    private final Runnable mUnlinkRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null && mLinked.get()) {
+                mVisualizer.unlink();
+                mLinked.set(false);
+            }
+        }
+    };
+
+    private final Runnable mLinkRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null && !mLinked.get()) {
+                mVisualizer.link(0);
+                mLinked.set(true);
+            }
         }
     };
 

@@ -1118,13 +1118,14 @@ public class NotificationPanelView extends PanelView implements
                     .setDuration(320)
                     .setInterpolator(PhoneStatusBar.ALPHA_IN)
                     .withEndAction(mAnimateKeyguardStatusViewVisibleEndRunnable);
-            mStatusBar.requestVisualizer(true, 320);
+            mStatusBar.requestVisualizer(true, 350);
         } else if (statusBarState == StatusBarState.KEYGUARD) {
             mKeyguardStatusView.animate().cancel();
             mKeyguardStatusViewAnimating = false;
             mKeyguardStatusView.setVisibility(View.VISIBLE);
             mKeyguardStatusView.setAlpha(1f);
         } else {
+            mStatusBar.requestVisualizer(false, 0);
             mKeyguardStatusView.animate().cancel();
             mKeyguardStatusViewAnimating = false;
             mKeyguardStatusView.setVisibility(View.GONE);
@@ -1975,7 +1976,7 @@ public class NotificationPanelView extends PanelView implements
 
     public void setEmptyDragAmount(float amount) {
         if (amount == 0 && mStatusBarState == StatusBarState.KEYGUARD) {
-            mStatusBar.requestVisualizer(true, 300);
+            mStatusBar.requestVisualizer(true, 350);
         }
         float factor = 0.8f;
         if (mNotificationStackScroller.getNotGoneChildCount() > 0) {
