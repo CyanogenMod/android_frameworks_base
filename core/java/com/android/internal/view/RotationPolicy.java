@@ -42,7 +42,6 @@ import com.android.internal.R;
 public final class RotationPolicy {
     private static final String TAG = "RotationPolicy";
     private static final int CURRENT_ROTATION = -1;
-    private static final int NATURAL_ROTATION = Surface.ROTATION_0;
 
     private RotationPolicy() {
     }
@@ -73,7 +72,7 @@ public final class RotationPolicy {
      * otherwise Configuration.ORIENTATION_UNDEFINED if any orientation is lockable.
      */
     public static int getRotationLockOrientation(Context context) {
-        if (!areAllRotationsAllowed(context)) {
+        if (!isCurrentRotationAllowed(context)) {
             final Point size = new Point();
             final IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
             try {
@@ -113,7 +112,8 @@ public final class RotationPolicy {
                 Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY, 0,
                 UserHandle.USER_CURRENT);
 
-        final int rotation = areAllRotationsAllowed(context) ? CURRENT_ROTATION : NATURAL_ROTATION;
+        final int rotation = isCurrentRotationAllowed(context) ? CURRENT_ROTATION :
+                SystemProperties.getInt("persist.panel.orientation", 0) / 90;
         setRotationLock(enabled, rotation);
     }
 
@@ -127,11 +127,41 @@ public final class RotationPolicy {
                 Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY, enabled ? 1 : 0,
                         UserHandle.USER_CURRENT);
 
-        setRotationLock(enabled, NATURAL_ROTATION);
+        setRotationLock(enabled, SystemProperties.getInt("persist.panel.orientation", 0) / 90);
     }
 
-    private static boolean areAllRotationsAllowed(Context context) {
-        return context.getResources().getBoolean(R.bool.config_allowAllRotations);
+    private static boolean isCurrentRotationAllowed(Context context) {
+        int mUserRotationAngles = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
+        boolean allowed = false;
+        int mAllowAllRotations = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
+        if (mUserRotationAngles < 0) {
+            // Not set by user so use these defaults
+            mUserRotationAngles = mAllowAllRotations == 1 ?
+                    (1 | 2 | 4 | 8) : // All angles
+                    (1 | 2 | 8); // All except 180
+        }
+        final IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
+        try {
+            switch (wm.getRotation()) {
+                case Surface.ROTATION_0:
+                    allowed = (mUserRotationAngles & 1) != 0;
+                    break;
+                case Surface.ROTATION_90:
+                    allowed = (mUserRotationAngles & 2) != 0;
+                    break;
+                case Surface.ROTATION_180:
+                    allowed = (mUserRotationAngles & 4) != 0;
+                    break;
+                case Surface.ROTATION_270:
+                    allowed = (mUserRotationAngles & 8) != 0;
+                    break;
+            }
+        } catch (RemoteException exc) {
+            Log.w(TAG, "Unable to getWindowManagerService.getRotation()");
+        }
+        return allowed;
     }
 
     private static void setRotationLock(final boolean enabled, final int rotation) {
@@ -141,8 +171,7 @@ public final class RotationPolicy {
                 try {
                     IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
                     if (enabled) {
-                        wm.freezeRotation(SystemProperties.getInt(
-                                          "persist.panel.orientation", 0) / 90);
+                        wm.freezeRotation(rotation);
                     } else {
                         wm.thawRotation();
                     }
