@@ -21,10 +21,10 @@
   <string name="dessert_case_settings_cm_title">Erakutsi CM maskotak</string>
   <string name="dessert_case_settings_cm_summary">Bistaratu CM maskotak Android postreekin batera ametsean</string>
   <string name="quick_settings_screen_sleep">Lokartu</string>
-  <string name="quick_settings_label_enabled">Gaituta</string>
+  <string name="quick_settings_label_enabled">Bai</string>
   <string name="quick_settings_ringer_normal">Soinua</string>
   <string name="quick_settings_lockscreen">Blokeo-pantaila</string>
-  <string name="quick_settings_network_type">Sare mugikorra</string>
+  <string name="quick_settings_network_type">Sare modua</string>
   <string name="quick_settings_report_bug">Eman errorearen berri</string>
   <string name="quick_settings_sync">Sinkronizatu</string>
   <string name="quick_settings_sync_off">Sinkronizazioa ezgaituta</string>
@@ -46,7 +46,7 @@
   <string name="quick_settings_network_adb_disabled_label">Ezgaituta</string>
   <string name="quick_settings_network_adb_enabled_label">Gaituta</string>
   <string name="quick_settings_equalizer">Ekualizadorea</string>
-  <string name="quick_settings_compass_off">Iparorratza ezgaituta</string>
+  <string name="quick_settings_compass_off">Iparrorratza ezgaituta</string>
   <string name="quick_settings_compass_init">Hasieratzen\u2026</string>
   <string name="quick_settings_heads_up_on">Jakinarazpen flotatzaileak gaituta</string>
   <string name="quick_settings_heads_up_off">Etenaldirik ez</string>

@@ -15,17 +15,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_keyguard_wallpaper">Garbitu</string>
+  <string name="clear_keyguard_wallpaper">پاک کردن</string>
   <plurals name="number_of_items_selected">
-    <item quantity="one">%1$d hautatuta</item>
-    <item quantity="other">%1$d hautatuta</item>
+    <item quantity="other">%1$d انتخاب شد</item>
   </plurals>
-  <string name="wallpaper_accessibility_name">%2$d-tik %1$d. horma-papera</string>
-  <string name="announce_selection"><xliff:g id="label" example="Wallpaper 3 of 10">%1$s</xliff:g> hautatuta</string>
-  <string name="wallpaper_delete">Ezabatu</string>
-  <string name="pick_image">Hautatu irudia</string>
-  <string name="pick_wallpaper">Horma-paperak</string>
-  <string name="activity_not_found">Aplikazioa ez dago instalatuta.</string>
-  <string name="lockscreen_wallpaper_instructions">Ezarri blokeo-pantailako horma-papera</string>
-  <string name="image_decode_error">Ezin izan da irudia deskodetu</string>
+  <string name="wallpaper_accessibility_name">کاغذدیواری %1$d از %2$d</string>
+  <string name="announce_selection">انتخاب <xliff:g id="label" example="Wallpaper 3 of 10">%1$s </xliff:g></string>
+  <string name="wallpaper_delete">حذف</string>
+  <string name="pick_image">انتخاب تصویر</string>
+  <string name="pick_wallpaper">کاغذدیواری‌ها</string>
+  <string name="lockscreen_wallpaper_instructions">تنظیم کاغذدیواری قفل صفحه</string>
+  <string name="image_decode_error">عدم امکان رمزگشایی تصویر</string>
 </resources>

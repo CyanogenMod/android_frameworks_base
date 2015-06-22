@@ -68,7 +68,7 @@
   <string name="permlab_interceptSmsSent">intercepta els SMS sortints</string>
   <string name="permdesc_interceptSmsSent">Permet a l\'aplicació interceptar un SMS sortint. Aplicacions malicioses podrien utilitzar això per impedir que sortissin missatges SMS.</string>
   <string name="permlab_receiveProtectedSms">rebre SMS protegits</string>
-  <string name="permdesc_receiveProtectedSms">Permet a l\'app rebre un SMS entrant protegit.</string>
+  <string name="permdesc_receiveProtectedSms">Permet a l\'aplicació rebre un SMS entrant protegit.</string>
   <string name="permlab_modifyProtectedSmsList">modifica la llista d\'SMS protegits</string>
   <string name="permdesc_modifyProtectedSmsList">Permet a l\'aplicació modificar la llista d\'adreces d\'SMS protegits.</string>
   <string name="permlab_resetBatteryStats">reinicia estadítiques de la bateria</string>
@@ -90,9 +90,9 @@
   <string name="permlab_useHardwareFramework">utilitza el marc de hardware</string>
   <string name="permdesc_useHardwareFramework">Permet a una aplicació accedir al marc de hardware de CM.</string>
   <string name="permlab_keyguardApplicationWidget">estableix el widget de l\'aplicació a la pantalla de bloqueig</string>
-  <string name="permdesc_keyguardApplicationWidget">Permet que una app estableixi el widget de l\'app a la pantalla de bloqueig.</string>
+  <string name="permdesc_keyguardApplicationWidget">Permet que una aplicació estableixi el widget de l\'aplicació a la pantalla de bloqueig.</string>
   <string name="permlab_interceptPackageLaunch">intercepta l\'execució d\'una aplicació</string>
-  <string name="permdesc_interceptPackageLaunch">Permet a una app d\'interceptar l\'execució d\'altres aplicacions</string>
+  <string name="permdesc_interceptPackageLaunch">Permet a una aplicació d\'interceptar l\'execució d\'altres aplicacions</string>
   <string name="immersive_mode_confirmation_bottom">Deslliça cap amunt des de baix per sortir de la pantalla sencera.</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
   <string name="app_ops_access_location">accedir a la teva ubicació</string>
