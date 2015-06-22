@@ -217,7 +217,7 @@ public class VisualizerTile extends QSTile<QSTile.State>
     }
 
     private void checkIfPlaying() {
-        boolean anythingPlaying = false;
+        boolean anythingPlaying = mIsAnythingPlaying;
         if (!mPowerSaveModeEnabled) {
             for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
                 if (entry.getValue().isPlaying()) {
