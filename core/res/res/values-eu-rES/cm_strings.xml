@@ -26,7 +26,7 @@
   <string name="profileGroupPhone">Telefonoa</string>
   <string name="profileGroupCalendar">Egutegia</string>
   <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
+  <string name="profileGroupEmail">Posta</string>
   <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">Besteak</string>
   <string name="profile_none">Bat ere ez</string>
@@ -42,10 +42,10 @@
   <string name="permlab_accessThemeService">Gaien zerbitzurako sarbidea</string>
   <string name="permdesc_accessThemeService">Gai zerbitzura sartzea ahalbidetzen du aplikazioa. Aplikazio arruntek ez dute hau behar.</string>
   <string name="permlab_readThemes">Gaiei buruzko informazioa irakurri</string>
-  <string name="permdesc_readThemesDesc">Aplikazioa instalaturiko gaiak irakurtzera baimentzen du, baita momentuan aplikaturikoa zein den determinatzera ere.</string>
+  <string name="permdesc_readThemesDesc">Zure gaiak irakurri eta ezarrita duzun gaia zein den jakitea ahalbidetzen dio aplikazioari.</string>
   <string name="permlab_writeThemes">Gaiak aldatu</string>
   <string name="permdesc_writeThemesDesc">Gai berriak sartu eta ezarrita duzun gaia aldatzea ahalbidetzen dio aplikazioari.</string>
-  <string name="permlab_readPhoneBlacklist">Telefonoaren zerrenda beltza irakurri</string>
+  <string name="permlab_readPhoneBlacklist">irakurri telefonoen zerrenda beltza</string>
   <string name="permdesc_readPhoneBlacklist">Sarrera dei edo SMS mezuak blokeatuta dituzten telefono zenbakien informazioa irakurtzea ahalbidetzen dio aplikazioari.</string>
   <string name="permlab_changePhoneBlacklist">aldatu telefonoen zerrenda beltza</string>
   <string name="permdesc_changePhoneBlacklist">Sarrera deiak eta SMS mezuak blokeatuta dituzten zenbakien zerrenda aldatzea ahalbidetzen dio aplikazioari.</string>
@@ -54,7 +54,7 @@
   <string name="privacy_guard_notification">Privacy Guard aktibo</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> aplikazioak ezingo du datu pertsonalik irakurri</string>
   <string name="permlab_useHardwareFramework">Hardware markoa erabili</string>
-  <string name="permdesc_useHardwareFramework">Aplikazioari hardware markorako sarbidea gaitzen dio.</string>
+  <string name="permdesc_useHardwareFramework">CM hardware markora sartzea ahalbidetzen dio aplikazioari.</string>
   <string name="permlab_setKeyguardWallpaper">Ezarri blokeo-pantailarako horma-papera</string>
   <string name="permdesc_setKeyguardWallpaper">Blokeo-pantailarako horma-papera aldatzea ahalbidetzen dio aplikazioari.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>

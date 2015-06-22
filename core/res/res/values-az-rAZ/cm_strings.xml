@@ -60,6 +60,7 @@
   <string name="privacy_guard_dialog_title">Gizlilik Qoruması</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> icazəsindən istifadə etmək istəyir.</string>
   <string name="global_action_reboot">Yenidən başlat</string>
+  <string name="global_action_current_user">Hazırki</string>
   <string name="reboot_reboot">Yenidən başlat</string>
   <string name="reboot_recovery">Bərpa rejimi (Recovery)</string>
   <string name="reboot_bootloader">Önyükləyici (Bootloader)</string>
@@ -180,6 +181,10 @@
   <string name="usb_media_checking">USB yaddaş hal-hazırda yoxlanılır.</string>
   <string name="usb_media_removed">USB yaddaş çıxarıldı.</string>
   <string name="usb_media_shared">USB yaddaş kompüter tərəfindən istifadə olunur.</string>
+  <string name="sd_ext_media_checking_notification_title">SD kart hazırlanır</string>
+  <string name="sd_ext_media_checking_notification_message">SD kartda xətalar yoxlanılır.</string>
+  <string name="sd_ext_media_nofs_notification_title">Boş SD kart</string>
+  <string name="sd_ext_media_badremoval_notification_message">Verilənlər itkisinin qarşısını almaq üçün SD kartı çıxarmamışdan əvvəl əlaqəsini kəsin.</string>
   <string name="live_display_auto">Avtomatik</string>
   <string name="live_display_auto_summary">Gün çıxandan və batandan sonra ekranın rəng hərarətini avtomatik tənzimləyər</string>
   <string name="live_display_off">Bağlı</string>
