@@ -42,16 +42,17 @@
   <string name="permlab_accessThemeService">دسترسی به سرویس مضمون</string>
   <string name="permdesc_accessThemeService">به برنامه مجوز دسترسی به سرویس مضمون را می‌دهد. این مجوز هرگز برای برنامه‌های معمول لازم نیست.</string>
   <string name="permlab_readThemes">مشاهده اطلاعات مضمون شما</string>
-  <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا مضمون‌های شما را بخواند و تعیین کند شما کدام مضمون را انتخاب کرده‌اید.</string>
+  <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا مضامین شما را بخواند و بفهمد شما کدام مضمون را انتخاب کرده‌اید.</string>
   <string name="permlab_writeThemes">ویرایش مضمون شما</string>
-  <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا مضمون‌های جدید ایجاد کرده و مضمون انتخابی شما را تغییر دهد.</string>
+  <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا مضامین جدید ایجاد کرده و مضمون انتخابی شما را تغییر دهد.</string>
   <string name="permlab_readPhoneBlacklist">مشاهده لیست سیاه تلفن</string>
   <string name="permlab_changePhoneBlacklist">تغییر لیست سیاه گوشی</string>
+  <string name="permlab_changePrivacyGuardState">فعال یا غیرفعال کردن نگهبان حریم خصوصی</string>
   <string name="privacy_guard_notification">نگهبان حریم خصوصی فعال است</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> قادر به دسترسی به اصلاعات شخصی نخواهد بود</string>
   <string name="permlab_useHardwareFramework">استفاده از چارچوب سخت‌افزار</string>
   <string name="permlab_setKeyguardWallpaper">تنظیم کاغذدیواری قفل کیبورد</string>
-  <string name="privacy_guard_dialog_title">حریم شخصی</string>
+  <string name="privacy_guard_dialog_title">نگهبان حریم خصوصی</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app"> %1$s </xliff:g> <xliff:g id="op"> %2$s </xliff:g> می‌کند.</string>
   <string name="global_action_reboot">راه‌اندازی مجدد</string>
   <string name="global_action_current_user">فعلی</string>
@@ -101,8 +102,18 @@
   <string name="app_ops_send_sms">ارسال یک پیام کوتاه</string>
   <string name="app_ops_start_at_bootup">شروع هنگام روشن شدن</string>
   <string name="app_ops_toast_window">نمایش پیام‌های روان</string>
-  <string name="app_ops_toggle_wifi">فعال کردن وای‌فای</string>
+  <string name="app_ops_toggle_bluetooth">سوئیچ بلوتوث</string>
+  <string name="app_ops_toggle_mobile_data">سوئیچ داده همراه</string>
+  <string name="app_ops_toggle_nfc">سوئیچ ان‌اف‌سی</string>
+  <string name="app_ops_toggle_wifi">سوئیچ وای‌فای</string>
+  <string name="app_ops_use_alarm_volume">کنترل صدای هشدار</string>
+  <string name="app_ops_use_bluetooth_volume">کنترل صدای بلوتوث</string>
+  <string name="app_ops_use_master_volume">کنترل صدای اصلی</string>
   <string name="app_ops_use_media_buttons">استفاده از کلیدهای رسانه</string>
+  <string name="app_ops_use_media_volume">کنترل صدای رسانه</string>
+  <string name="app_ops_use_notification_volume">کنترل صدای اعلان</string>
+  <string name="app_ops_use_ring_volume">کنترل صدای زنگ</string>
+  <string name="app_ops_use_voice_volume">کنترل صدای تماس صوتی</string>
   <string name="lockscreen_airplane_mode_on">حالت هواپیما</string>
   <string name="perf_profile_pwrsv">ذخیره انرژی</string>
   <string name="perf_profile_bal">متعادل</string>
@@ -117,4 +128,5 @@
   <string name="usb_progress_unmounting">خارج‌سازی حافظه یو‌اس‌بی\u2026</string>
   <string name="sd_ext_media_checking_notification_title">آماده‌سازی کارت حافظه</string>
   <string name="usb_ext_media_checking_notification_title">آماده‌سازی حافظه یو‌اس‌بی</string>
+  <string name="quick_settings_tile_flashlight_not_title">چراغ‌قوه روشن است</string>
 </resources>
