@@ -94,7 +94,7 @@ public final class RingModeSettings implements Parcelable {
                 ringerMode = AudioManager.RINGER_MODE_VIBRATE;
             }
             AudioManager amgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            amgr.setRingerMode(ringerMode);
+            amgr.setRingerModeInternal(ringerMode);
         }
     }
 
