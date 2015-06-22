@@ -4652,6 +4652,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (previousView != null) {
             previousView.makeInactive(true /* animate */);
         }
+        requestVisualizer(false, 0);
         mStackScroller.setActivatedChild(view);
     }
 
@@ -4677,6 +4678,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     @Override
     public void onActivationReset(ActivatableNotificationView view) {
+        requestVisualizer(true, 350);
         if (view == mStackScroller.getActivatedChild()) {
             mKeyguardIndicationController.hideTransientIndication();
             mStackScroller.setActivatedChild(null);
