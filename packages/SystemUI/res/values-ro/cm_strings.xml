@@ -29,6 +29,10 @@
   <string name="accessibility_quick_settings_location_battery_saving">Raportarea locaţiei:  mod economisire baterie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Raportarea locaţiei: doar senzori.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Raportarea locaţiei: precizie ridicată.</string>
+  <string name="accessibility_quick_settings_lte_off">4G oprit.</string>
+  <string name="accessibility_quick_settings_lte_on">4G pornit.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC oprit.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC pornit.</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizare pornită.</string>
   <string name="accessibility_dpad_left">Cursor stânga</string>
