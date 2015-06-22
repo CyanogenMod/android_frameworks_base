@@ -6517,6 +6517,8 @@ public final class Settings {
                 "wireless_charging_started_sound";
 
         /**
+         * @deprecated. This is now set via a ListPreference. See {@link STAY_ON_WHILE_PLUGGED_IN}
+         *
          * Whether we keep the device on while the device is plugged in.
          * Supported values are:
          * <ul>
@@ -6527,7 +6529,18 @@ public final class Settings {
          * </ul>
          * These values can be OR-ed together.
          */
-        public static final String STAY_ON_WHILE_PLUGGED_IN = "stay_on_while_plugged_in";
+        public static final String STAY_ON_WHILE_PLUGGED_IN_OLD = "stay_on_while_plugged_in";
+
+        /**
+         * Whether we keep the device on while the device is plugged in.
+         * Supported values are:
+         * <ul>
+         * <li>{@code 0} to never stay on while plugged in</li>
+         * <li>{@code 1} to stay on while {@link BatteryManager#BATTERY_PLUGGED_USB}
+         *                            and {@link ADB_ENABLED}</li>
+         * <li>{@code 2} to stay on while on charger</li>
+         */
+         public static final String STAY_ON_WHILE_PLUGGED_IN = "stay_on_while_plugged_in_new";
 
         /**
          * When the user has enable the option to have a "bug report" command
