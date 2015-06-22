@@ -2157,11 +2157,6 @@ public class NotificationStackScrollLayout extends ViewGroup
             mNeedsAnimation =  true;
         }
         requestChildrenUpdate();
-        if (activatedChild != null) {
-            mPhoneStatusBar.requestVisualizer(false, 0);
-        } else {
-            mPhoneStatusBar.requestVisualizer(true, 300);
-        }
 
     }
 
