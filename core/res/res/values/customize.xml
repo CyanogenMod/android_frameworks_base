@@ -40,26 +40,4 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     <!-- custom date format or not  -->
     <bool name="def_custom_dateformat">false</bool>
-
-    <!-- custom system sound or not -->
-    <bool name="def_custom_sys_sound">false</bool>
-
-    <!-- Default ringtone for SIM1,the value is ringtone file name. -->
-    <string name="def_custom_sys_ringtone"></string>
-
-    <!-- Default ringtone for SIM2,the value is ringtone file name. -->
-    <string name="def_custom_sys_ringtone2"></string>
-
-    <!-- Default ringtone for SIM3,the value is ringtone file name. -->
-    <string name="def_custom_sys_ringtone3"></string>
-
-    <!-- Default ringtone for system notification,the value is ringtone file name. -->
-    <string name="def_custom_sys_notification"></string>
-
-    <!-- Default ringtone for mms,the value is ringtone file name. -->
-    <string name="def_custom_sys_mms"></string>
-
-    <!-- Default ringtone for alarm,the value is ringtone file name. -->
-    <string name="def_custom_sys_alarm"></string>
-
 </resources>
