@@ -81,10 +81,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // settings.
     private static final int DATABASE_VERSION = 125;
 
-    private static final String HEADSET = "_headset";
-    private static final String SPEAKER = "_speaker";
-    private static final String EARPIECE = "_earpiece";
-
     private Context mContext;
     private int mUserHandle;
 
@@ -2347,10 +2343,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     private void loadVolumeLevels(SQLiteDatabase db) {
         SQLiteStatement stmt = null;
-        if (mContext.getResources().getBoolean(R.bool.def_custom_sys_volume)) {
-            loadCustomizedVolumeLevels(db);
-            return;
-        }
         try {
             stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
                     + " VALUES(?,?);");
@@ -2375,97 +2367,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     stmt,
                     Settings.System.VOLUME_BLUETOOTH_SCO,
                     AudioManager.DEFAULT_STREAM_VOLUME[AudioManager.STREAM_BLUETOOTH_SCO]);
-
-            // By default:
-            // - ringtones, notification, system and music streams are affected by ringer mode
-            // on non voice capable devices (tablets)
-            // - ringtones, notification and system streams are affected by ringer mode
-            // on voice capable devices (phones)
-            int ringerModeAffectedStreams = (1 << AudioManager.STREAM_RING) |
-                                            (1 << AudioManager.STREAM_NOTIFICATION) |
-                                            (1 << AudioManager.STREAM_SYSTEM) |
-                                            (1 << AudioManager.STREAM_SYSTEM_ENFORCED);
-            if (!mContext.getResources().getBoolean(
-                    com.android.internal.R.bool.config_voice_capable)) {
-                ringerModeAffectedStreams |= (1 << AudioManager.STREAM_MUSIC);
-            }
-            loadSetting(stmt, Settings.System.MODE_RINGER_STREAMS_AFFECTED,
-                    ringerModeAffectedStreams);
-
-            loadSetting(stmt, Settings.System.MUTE_STREAMS_AFFECTED,
-                    ((1 << AudioManager.STREAM_MUSIC) |
-                     (1 << AudioManager.STREAM_RING) |
-                     (1 << AudioManager.STREAM_NOTIFICATION) |
-                     (1 << AudioManager.STREAM_SYSTEM)));
-        } finally {
-            if (stmt != null) stmt.close();
-        }
-
-        loadVibrateWhenRingingSetting(db);
-    }
-
-    private void loadCustomizedVolumeLevels(SQLiteDatabase db) {
-        SQLiteStatement stmt = null;
-        try {
-            stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
-                    + " VALUES(?,?);");
-
-            loadSetting(stmt, Settings.System.VOLUME_MUSIC,
-                    mContext.getResources().getInteger(R.integer.def_music_volume));
-            loadSetting(stmt, Settings.System.VOLUME_RING,
-                    mContext.getResources().getInteger(R.integer.def_ringtone_volume));
-            loadSetting(stmt, Settings.System.VOLUME_SYSTEM,
-                    mContext.getResources().getInteger(R.integer.def_system_volume));
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_VOICE,
-                    mContext.getResources().getInteger(R.integer.def_voice_call_volume));
-            loadSetting(stmt, Settings.System.VOLUME_ALARM,
-                    mContext.getResources().getInteger(R.integer.def_alarm_volume));
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_NOTIFICATION,
-                    mContext.getResources().getInteger(R.integer.def_notification_volume));
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_BLUETOOTH_SCO,
-                    mContext.getResources().getInteger(R.integer.def_bluetooth_sco_volume));
-
-            // set headset default volume
-            loadSetting(stmt, Settings.System.VOLUME_MUSIC + HEADSET,
-                    mContext.getResources().getInteger(R.integer.def_music_headset_volume));
-            loadSetting(stmt, Settings.System.VOLUME_RING + HEADSET,
-                    mContext.getResources().getInteger(R.integer.def_ringtone_headset_volume));
-            loadSetting(stmt, Settings.System.VOLUME_SYSTEM + HEADSET,
-                    mContext.getResources().getInteger(R.integer.def_system_headset_volume));
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_VOICE + HEADSET,
-                    mContext.getResources().getInteger(R.integer.def_voice_call_headset_volume));
-            loadSetting(stmt, Settings.System.VOLUME_ALARM + HEADSET,
-                    mContext.getResources().getInteger(R.integer.def_alarm_headset_volume));
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_NOTIFICATION + HEADSET,
-                    mContext.getResources().getInteger(R.integer.def_notification_headset_volume));
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_BLUETOOTH_SCO + HEADSET,
-                    mContext.getResources().getInteger(R.integer.def_bluetooth_sco_headset_volume));
-
-            // set speaker default volume
-            loadSetting(stmt, Settings.System.VOLUME_RING + SPEAKER,
-                    mContext.getResources().getInteger(R.integer.def_ringtone_speaker_volume));
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_VOICE + SPEAKER,
-                    mContext.getResources().getInteger(R.integer.def_voice_call_speaker_volume));
-
-            // set earpiece default volume
-            loadSetting(
-                    stmt,
-                    Settings.System.VOLUME_VOICE + EARPIECE,
-                    mContext.getResources().getInteger(R.integer.def_voice_call_earpiece_volume));
 
             // By default:
             // - ringtones, notification, system and music streams are affected by ringer mode
