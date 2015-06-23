@@ -209,7 +209,7 @@ public class QSUtils {
         final ContentResolver resolver = context.getContentResolver();
         String order = Settings.Secure.getStringForUser(resolver,
                 Settings.Secure.QS_TILES, userId);
-        return Arrays.asList(order.split(",")).contains(tileSpec);
+        return !TextUtils.isEmpty(order) && Arrays.asList(order.split(",")).contains(tileSpec);
     }
 
     public static ContentObserver registerObserverForQSChanges(Context ctx, final OnQSChanged cb) {
