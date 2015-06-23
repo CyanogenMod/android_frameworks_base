@@ -126,6 +126,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private Action mSilentModeAction;
     private ToggleAction mAirplaneModeOn;
+    private ToggleAction mKeysDisable;
 
     private MyAdapter mAdapter;
 
@@ -293,6 +294,26 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         };
         onAirplaneModeChanged();
 
+        mKeysDisable = new ToggleAction(
+                R.drawable.ic_lock_airplane_mode,
+                R.drawable.ic_lock_airplane_mode_off,
+                R.string.global_action_toggle_key_disable,
+                R.string.global_action_keys_disabled_status,
+                R.string.global_action_keys_enabled_status) {
+
+            void onToggle(boolean on) {
+                PhoneWindowManager.disableKeys(on);
+            }
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return false;
+            }
+        };
+
         mItems = new ArrayList<Action>();
 
         String[] actionsArray;
@@ -365,6 +386,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             }
 
                         });
+            } else if (GLOBAL_ACTION_KEY_ALLOW_DISABLE.equals(actionKey)) {
+                mItems.add(mKeysDisable);
             } else {
                 Log.e(TAG, "Invalid global action key " + actionKey);
             }
@@ -814,6 +837,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private void prepareDialog() {
         refreshSilentMode();
+        refreshKeysDisabledState();
         mAirplaneModeOn.updateState(mAirplaneState);
         mAdapter.notifyDataSetChanged();
         mDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
@@ -831,6 +855,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     silentModeOn ? ToggleAction.State.On : ToggleAction.State.Off);
         }
     }
+
+    private void refreshKeysDisabledState() {
+        final boolean disabled = PhoneWindowManager.keysDisabled();
+        ((ToggleAction)mKeysDisable).updateState(
+                disabled ? ToggleAction.State.On : ToggleAction.State.Off);
+
+    }
+
 
     /** {@inheritDoc} */
     public void onDismiss(DialogInterface dialog) {

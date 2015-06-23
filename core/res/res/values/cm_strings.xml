@@ -110,6 +110,12 @@
     <string name="global_action_reboot">Reboot</string>
     <!-- label for current user in phone options dialog -->
     <string name="global_action_current_user">Current</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_toggle_key_disable">Disable nav keys</string>
+    <!-- status message in phone options dialog for when nav keys are enabled -->
+    <string name="global_action_keys_enabled_status">Keys are enabled</string>
+    <!-- status message in phone options dialog for when nav keys are disabled -->
+    <string name="global_action_keys_disabled_status">Keys are disabled</string>
 
     <!-- Reboot menu -->
     <!-- Button to reboot the phone, within the Reboot Options dialog -->

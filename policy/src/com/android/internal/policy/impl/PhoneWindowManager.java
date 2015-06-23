@@ -298,6 +298,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private final Object mLock = new Object();
     private final Object mQuickBootLock = new Object();
 
+    private static boolean mKeysDisabled = false;
+
     Context mContext;
     IWindowManager mWindowManager;
     WindowManagerFuncs mWindowManagerFuncs;
@@ -2980,6 +2982,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mHandler.removeCallbacks(mBackLongPress);
         }
 
+        if (keysDisabled()) {
+            if (keyCode == KeyEvent.KEYCODE_HOME
+                    || keyCode == KeyEvent.KEYCODE_BACK
+                    || keyCode == KeyEvent.KEYCODE_MENU) {
+                return -1;
+            }
+        }
+
         // First we always handle the home key here, so applications
         // can never break it, although if keyguard is on, we do let
         // it handle it, because that gives us the correct 5 second
@@ -3079,6 +3089,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (DEBUG) Log.d(TAG, "KEY: Menu");
             // Hijack modified menu keys for debugging features
             final int chordBug = KeyEvent.META_SHIFT_ON;
 
@@ -3410,6 +3421,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // Let the application handle the key.
         return 0;
+    }
+
+    public static boolean keysDisabled() {
+        return mKeysDisabled;
+    }
+
+    public static void disableKeys(boolean disable) {
+        mKeysDisabled = disable;
     }
 
     private boolean unpinActivity(boolean checkOnly) {

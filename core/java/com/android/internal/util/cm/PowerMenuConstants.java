@@ -28,6 +28,7 @@ public class PowerMenuConstants {
     public static final String GLOBAL_ACTION_KEY_LOCKDOWN = "lockdown";
     public static final String GLOBAL_ACTION_KEY_BUGREPORT = "bugreport";
     public static final String GLOBAL_ACTION_KEY_SILENT = "silent";
+    public static final String GLOBAL_ACTION_KEY_ALLOW_DISABLE = "key_disable";
 
     private static String[] ALL_ACTIONS = {
         GLOBAL_ACTION_KEY_POWER,
@@ -39,7 +40,8 @@ public class PowerMenuConstants {
         GLOBAL_ACTION_KEY_SETTINGS,
         GLOBAL_ACTION_KEY_LOCKDOWN,
         GLOBAL_ACTION_KEY_BUGREPORT,
-        GLOBAL_ACTION_KEY_SILENT
+        GLOBAL_ACTION_KEY_SILENT,
+        GLOBAL_ACTION_KEY_ALLOW_DISABLE
     };
 
     public static String[] getAllActions() {

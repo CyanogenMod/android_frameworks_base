@@ -74,6 +74,10 @@
     <java-symbol type="string" name="lockscreen_sim_puk_locked_message" />
     <java-symbol type="string" name="lockscreen_airplane_mode_on" />
 
+    <java-symbol type="string" name="global_action_keys_disabled_status" />
+    <java-symbol type="string" name="global_action_keys_enabled_status" />
+    <java-symbol type="string" name="global_action_toggle_key_disable" />
+
     <!-- From services -->
     <java-symbol type="array" name="app_ops_labels" />
 
