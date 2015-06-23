@@ -2613,6 +2613,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         R.string.def_date_format);
             }
 
+            loadIntegerSetting(stmt, Settings.System.DOUBLE_TAP_SLEEP_GESTURE,
+                    R.integer.def_double_tap_sleep_gesture);
+
             loadIntegerSetting(stmt, Settings.System.STATUS_BAR_NOTIF_COUNT,
                     R.integer.def_notif_count);
 
