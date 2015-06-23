@@ -222,6 +222,9 @@
     <!-- Default for Settings.Secure.WAKE_GESTURE_ENABLED -->
     <bool name="def_wake_gesture_enabled">true</bool>
 
+    <!-- Default for Settings.System.DOUBLE_TAP_SLEEP_GESTURE -->
+    <integer name="def_double_tap_sleep_gesture">1</integer>
+
     <!-- Default for Settings.Global.GUEST_USER_ENABLED -->
     <bool name="def_guest_user_enabled">true</bool>
 
