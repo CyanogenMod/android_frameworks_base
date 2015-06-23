@@ -582,11 +582,15 @@ public class WindowManagerService extends IWindowManager.Stub
         private final Uri mDisplayInversionEnabledUri =
                 Settings.Secure.getUriFor(Settings.Secure.ACCESSIBILITY_DISPLAY_INVERSION_ENABLED);
 
+        private final Uri mDisableAnimationsUri =
+                Settings.System.getUriFor(Settings.System.DISABLE_TRANSITION_ANIMATIONS);
+
         public SettingsObserver() {
             super(new Handler());
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(mShowImeWithHardKeyboardUri, false, this);
             resolver.registerContentObserver(mDisplayInversionEnabledUri, false, this);
+            resolver.registerContentObserver(mDisableAnimationsUri, false, this);
         }
 
         @Override
@@ -595,6 +599,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 updateShowImeWithHardKeyboard();
             } else if (mDisplayInversionEnabledUri.equals(uri)) {
                 updateCircularDisplayMaskIfNeeded();
+            } else if (mDisableAnimationsUri.equals(uri))  {
+                updateAnimationsDisabledSetting(getAnimationsDisabledByUser());
             }
         }
     }
@@ -839,6 +845,23 @@ public class WindowManagerService extends IWindowManager.Stub
         }, 0);
     }
 
+    private void updateAnimationsDisabledSetting(boolean enabled) {
+        synchronized (mWindowMap) {
+            if (mAnimationsDisabled != enabled) {
+                mAnimationsDisabled = enabled;
+                dispatchNewAnimatorScaleLocked(null);
+            }
+        }
+    }
+
+    private boolean getAnimationsDisabledByUser() {
+        return Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                Settings.System.DISABLE_TRANSITION_ANIMATIONS,
+                0,
+                mCurrentUserId) == 1;
+    }
+
     private WindowManagerService(Context context, InputManagerService inputManager,
             boolean haveInputMethods, boolean showBootMsgs, boolean onlyCore) {
         mContext = context;
@@ -875,15 +898,10 @@ public class WindowManagerService extends IWindowManager.Stub
                 new PowerManagerInternal.LowPowerModeListener() {
             @Override
             public void onLowPowerModeChanged(boolean enabled) {
-                synchronized (mWindowMap) {
-                    if (mAnimationsDisabled != enabled) {
-                        mAnimationsDisabled = enabled;
-                        dispatchNewAnimatorScaleLocked(null);
-                    }
-                }
+                updateAnimationsDisabledSetting(enabled);
             }
         });
-        mAnimationsDisabled = mPowerManagerInternal.getLowPowerModeEnabled();
+        mAnimationsDisabled = getAnimationsDisabledByUser() || mPowerManagerInternal.getLowPowerModeEnabled();
         mScreenFrozenLock = mPowerManager.newWakeLock(
                 PowerManager.PARTIAL_WAKE_LOCK, "SCREEN_FROZEN");
         mScreenFrozenLock.setReferenceCounted(false);
