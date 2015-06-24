@@ -5160,6 +5160,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mBackdrop.requestVisualizer(show, delay);
     }
 
+    public void setVisualizerTouching(boolean touching) {
+        mBackdrop.setTouching(touching);
+    }
+
     public void wakeUpIfDozing(long time, MotionEvent event) {
         if (mDozing && mDozeScrimController.isPulsing()) {
             PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);

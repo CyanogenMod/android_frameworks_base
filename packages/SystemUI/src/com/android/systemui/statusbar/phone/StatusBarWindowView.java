@@ -200,11 +200,11 @@ public class StatusBarWindowView extends FrameLayout {
         if (mService.getBarState() == StatusBarState.KEYGUARD) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    mService.requestVisualizer(false, 0);
+                    mService.setVisualizerTouching(true);
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    mService.requestVisualizer(true, 500);
+                    mService.setVisualizerTouching(false);
                     break;
             }
         }
@@ -249,9 +249,14 @@ public class StatusBarWindowView extends FrameLayout {
             handled = super.onTouchEvent(ev);
         }
         final int action = ev.getAction();
-        if (!handled && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)) {
-            mService.setInteracting(StatusBarManager.WINDOW_STATUS_BAR, false);
-        }
+        if ((action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL))
+            if (mService.getBarState() == StatusBarState.KEYGUARD) {
+                mService.setVisualizerTouching(false);
+//            mService.requestVisualizer(true, 500);
+            }
+            if (!handled) {
+                mService.setInteracting(StatusBarManager.WINDOW_STATUS_BAR, false);
+            }
         return handled;
     }
 
