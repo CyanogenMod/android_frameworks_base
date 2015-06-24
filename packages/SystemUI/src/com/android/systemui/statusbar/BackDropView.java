@@ -27,6 +27,7 @@ import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.session.PlaybackState;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -41,6 +42,7 @@ import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
+import com.android.systemui.statusbar.policy.MediaMonitor;
 import com.pheelicks.visualizer.AudioData;
 import com.pheelicks.visualizer.FFTData;
 import com.pheelicks.visualizer.VisualizerView;
@@ -66,22 +68,44 @@ public class BackDropView extends FrameLayout {
     private boolean mVisualizerEnabled;
     private boolean mPowerSaveModeEnabled;
     private SettingsObserver mSettingsObserver;
+    private boolean mTouching;
+    private MediaMonitor mMediaMonitor;
+    private Handler mHandler;
 
     public BackDropView(Context context) {
         super(context);
+        init();
     }
 
     public BackDropView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public BackDropView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     public BackDropView(Context context, AttributeSet attrs, int defStyleAttr,
                         int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
+    private void init() {
+        mHandler = new Handler();
+        mMediaMonitor = new MediaMonitor(mContext) {
+            @Override
+            public void onPlayStateChanged(boolean playing) {
+                if (playing) {
+                    requestVisualizer(true, 500);
+                } else {
+                    // user paused, hide visualizer to stop flash
+                    requestVisualizer(false, 0);
+                }
+            }
+        };
     }
 
     @Override
@@ -94,9 +118,6 @@ public class BackDropView extends FrameLayout {
         super.onVisibilityChanged(changedView, visibility);
         if (changedView == this && mOnVisibilityChangedRunnable != null) {
             mOnVisibilityChangedRunnable.run();
-        }
-        if (!isShown()) {
-            requestVisualizer(false, 0);
         }
     }
 
@@ -121,10 +142,15 @@ public class BackDropView extends FrameLayout {
 
     @Override
     protected void onDetachedFromWindow() {
+        // explicitly clear everything out and unlink right now.
+        mHandler.removeCallbacks(mResumeVisualizerIfPlayingRunnable);
+        mHandler.removeCallbacks(mStartVisualizer);
+        mHandler.removeCallbacks(mStopVisualizer);
+        mHandler.post(mStopVisualizer);
+
         super.onDetachedFromWindow();
         mSettingsObserver.unobserve();
         mContext.unregisterReceiver(mReceiver);
-        requestVisualizer(false, 0);
     }
 
     @Override
@@ -153,23 +179,37 @@ public class BackDropView extends FrameLayout {
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateMonitorCallback);
     }
 
+    public void setTouching(boolean touching) {
+        if (DEBUG) Log.d(TAG, "setTouching() called with " + "touching = [" + touching + "]");
+        if (mTouching != touching) {
+            mTouching = touching;
+            if (mTouching) {
+                // immediately hide visualizer
+                requestVisualizer(false, 0);
+            } else {
+                // we want to avoid requesting the visualizer when something is paused right here
+                mHandler.postDelayed(mResumeVisualizerIfPlayingRunnable, 500);
+            }
+        }
+    }
+
     public void requestVisualizer(boolean show, int delay) {
         if (mVisualizer == null || !mVisualizerEnabled || mPowerSaveModeEnabled) {
             return;
         }
-        removeCallbacks(mStartVisualizer);
-        removeCallbacks(mStopVisualizer);
-        if (DEBUG) Log.d(TAG, "requestVisualizer(show: " + show + ", delay: " + delay + ")");
+        mHandler.removeCallbacks(mStartVisualizer);
+        mHandler.removeCallbacks(mStopVisualizer);
+        if (DEBUG) Log.v(TAG, "requestVisualizer(show: " + show + ", delay: " + delay + ")");
         if (show && mScreenOn
                 && mPhoneStatusBar.getBarState() == StatusBarState.KEYGUARD
                 && !mPhoneStatusBar.isKeyguardFadingAway()
                 && !mPhoneStatusBar.isGoingToNotificationShade()
                 && mPhoneStatusBar.getCurrentMediaNotificationKey() != null) {
             if (DEBUG) Log.d(TAG, "--> starting visualizer");
-            postDelayed(mStartVisualizer, delay);
-        } else {
+            mHandler.postDelayed(mStartVisualizer, delay);
+        } else if (!show) {
             if (DEBUG) Log.d(TAG, "--> stopping visualizer");
-            postDelayed(mStopVisualizer, delay);
+            mHandler.postDelayed(mStopVisualizer, delay);
         }
     }
 
@@ -179,7 +219,11 @@ public class BackDropView extends FrameLayout {
             if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGING.equals(intent.getAction())) {
                 mPowerSaveModeEnabled = intent.getBooleanExtra(PowerManager.EXTRA_POWER_SAVE_MODE,
                         false);
-                requestVisualizer(true, 0);
+                if (mPowerSaveModeEnabled) {
+                    mHandler.post(mStopVisualizer);
+                } else {
+                    mHandler.post(mResumeVisualizerIfPlayingRunnable);
+                }
             }
         }
     };
@@ -192,15 +236,7 @@ public class BackDropView extends FrameLayout {
             mVisualizer.animate()
                     .alpha(1f)
                     .setDuration(VISUALIZER_ANIMATION_DURATION_IN);
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVisualizer != null && !mLinked) {
-                        mVisualizer.link(0);
-                        mLinked = true;
-                    }
-                }
-            });
+            AsyncTask.execute(mLinkVisualizerRunnable);
         }
     };
 
@@ -212,17 +248,39 @@ public class BackDropView extends FrameLayout {
             mVisualizer.animate()
                     .alpha(0f)
                     .setDuration(VISUALIZER_ANIMATION_DURATION_OUT);
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (mVisualizer != null && mLinked) {
-                        mVisualizer.unlink();
-                        mLinked = false;
-                    }
-                }
-            });
+            AsyncTask.execute(mUninkVisualizerRunnable);
         }
     };
+
+    private final Runnable mLinkVisualizerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null && !mLinked) {
+                mVisualizer.link(0);
+                mLinked = true;
+            }
+        }
+    };
+
+    private final Runnable mUninkVisualizerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mVisualizer != null && mLinked) {
+                mVisualizer.unlink();
+                mLinked = false;
+            }
+        }
+    };
+
+    private Runnable mResumeVisualizerIfPlayingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mMediaMonitor.isAnythingPlaying()) {
+                requestVisualizer(true, 250);
+            }
+        }
+    };
+
 
     private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
             new KeyguardUpdateMonitorCallback() {
@@ -244,6 +302,7 @@ public class BackDropView extends FrameLayout {
 
                 @Override
                 public void onKeyguardVisibilityChanged(boolean showing) {
+                    mMediaMonitor.setListening(showing);
                     if (!showing) {
                         requestVisualizer(false, 0);
                     }
