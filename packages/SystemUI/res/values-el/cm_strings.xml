@@ -153,4 +153,8 @@
   <string name="interruption_level_silent">Αθόρυβο</string>
   <string name="zen_silent_with_warning">Χωρίς διακοπές, εκτός από ξυπνητήρια.</string>
   <string name="quick_settings_remove">Αφαίρεση πλακιδίου</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Δυναμικό πλακίδιο</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Επόμενο ξυπνητήρι</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Επιλογέας μεθόδου εισόδου</string>
+  <string name="dynamic_qs_tile_su_label">Πρόσβαση root</string>
 </resources>
