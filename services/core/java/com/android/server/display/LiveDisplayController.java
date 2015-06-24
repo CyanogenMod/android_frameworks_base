@@ -540,6 +540,8 @@ public class LiveDisplayController {
                     .setContentText(mContext.getResources().getString(
                             com.android.internal.R.string.live_display_hint))
                     .setSmallIcon(com.android.internal.R.drawable.ic_livedisplay_notif)
+                    .setStyle(new Notification.BigTextStyle().bigText(mContext.getResources()
+                             .getString(com.android.internal.R.string.live_display_hint)))
                     .setContentIntent(result);
 
             NotificationManager nm =
