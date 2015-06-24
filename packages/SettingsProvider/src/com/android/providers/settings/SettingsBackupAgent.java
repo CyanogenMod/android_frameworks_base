@@ -255,13 +255,13 @@ public class SettingsBackupAgent extends BackupAgentHelper {
             // Now build the canonical config key paralleling the WifiConfiguration semantics
             final String key;
             if (types.get(KeyMgmt.WPA_PSK)) {
-                key = bareSsid + KeyMgmt.strings[KeyMgmt.WPA_PSK];
+                key = bareSsid + "-" + KeyMgmt.strings[KeyMgmt.WPA_PSK];
             } else if (types.get(KeyMgmt.WPA_EAP) || types.get(KeyMgmt.IEEE8021X)) {
-                key = bareSsid + KeyMgmt.strings[KeyMgmt.WPA_EAP];
+                key = bareSsid + "-" + KeyMgmt.strings[KeyMgmt.WPA_EAP];
             } else if (hasWepKey) {
-                key = bareSsid + "WEP";  // hardcoded this way in WifiConfiguration
+                key = bareSsid + "-WEP";  // hardcoded this way in WifiConfiguration
             } else {
-                key = bareSsid + KeyMgmt.strings[KeyMgmt.NONE];
+                key = bareSsid + "-" + KeyMgmt.strings[KeyMgmt.NONE];
             }
             return key;
         }
