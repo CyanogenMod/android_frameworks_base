@@ -41,6 +41,7 @@ import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.QSTileView;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
+import com.android.systemui.statusbar.policy.MediaMonitor;
 import com.pheelicks.visualizer.AudioData;
 import com.pheelicks.visualizer.FFTData;
 import com.pheelicks.visualizer.VisualizerView;
@@ -50,21 +51,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VisualizerTile extends QSTile<QSTile.State>
-        implements MediaSessionManager.OnActiveSessionsChangedListener, KeyguardMonitor.Callback {
+public class VisualizerTile extends QSTile<QSTile.State> implements KeyguardMonitor.Callback {
 
     private static final Intent AUDIO_EFFECTS =
             new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
 
-    private Map<MediaSession.Token, CallbackInfo> mCallbacks = new HashMap<>();
-    private MediaSessionManager mMediaSessionManager;
     private KeyguardMonitor mKeyguardMonitor;
     private VisualizerView mVisualizer;
     private ImageView mStaticVisualizerIcon;
     private boolean mLinked;
-    private boolean mIsAnythingPlaying;
     private boolean mListening;
     private boolean mPowerSaveModeEnabled;
+
+    private MediaMonitor mMediaMonitor;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -72,15 +71,28 @@ public class VisualizerTile extends QSTile<QSTile.State>
             if (PowerManager.ACTION_POWER_SAVE_MODE_CHANGING.equals(intent.getAction())) {
                 mPowerSaveModeEnabled = intent.getBooleanExtra(PowerManager.EXTRA_POWER_SAVE_MODE,
                         false);
-                checkIfPlaying(null);
+                if (mPowerSaveModeEnabled) {
+                    AsyncTask.execute(mUnlinkVisualizer);
+                } else {
+                    mMediaMonitor.checkIfPlaying(null);
+                }
             }
         }
     };
 
     public VisualizerTile(Host host) {
         super(host);
-        mMediaSessionManager = (MediaSessionManager)
-                mContext.getSystemService(Context.MEDIA_SESSION_SERVICE);
+
+        mMediaMonitor = new MediaMonitor(mContext) {
+            @Override
+            public void onPlayStateChanged(boolean playing) {
+                doLinkage();
+
+                mHandler.removeCallbacks(mRefreshStateRunnable);
+                mHandler.postDelayed(mRefreshStateRunnable, 50);
+            }
+        };
+
         mKeyguardMonitor = host.getKeyguardMonitor();
         mKeyguardMonitor.addCallback(this);
 
@@ -88,23 +100,8 @@ public class VisualizerTile extends QSTile<QSTile.State>
                 new IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGING));
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mPowerSaveModeEnabled = pm.isPowerSaveMode();
-        if (!mPowerSaveModeEnabled) {
-            mIsAnythingPlaying = isAnythingPlayingColdCheck();
-        }
 
-        mMediaSessionManager.addOnActiveSessionsChangedListener(this, null);
-    }
-
-    private boolean isAnythingPlayingColdCheck() {
-        List<MediaController> activeSessions = mMediaSessionManager.getActiveSessions(null);
-        for (MediaController activeSession : activeSessions) {
-            PlaybackState playbackState = activeSession.getPlaybackState();
-            if (playbackState != null && playbackState.getState()
-                    == PlaybackState.STATE_PLAYING) {
-                return true;
-            }
-        }
-        return false;
+        mMediaMonitor.setListening(true);
     }
 
     @Override
@@ -192,50 +189,14 @@ public class VisualizerTile extends QSTile<QSTile.State>
     }
 
     @Override
-    public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
-        if (controllers != null) {
-            for (MediaController controller : controllers) {
-                if (!mCallbacks.containsKey(controller.getSessionToken())) {
-                    mCallbacks.put(controller.getSessionToken(), new CallbackInfo(controller));
-                }
-            }
-        }
-    }
-
-    @Override
     protected void handleDestroy() {
+        mMediaMonitor.setListening(false);
+        mMediaMonitor = null;
         super.handleDestroy();
-        mIsAnythingPlaying = false;
         doLinkage();
-        mMediaSessionManager.removeOnActiveSessionsChangedListener(this);
-        for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
-            entry.getValue().unregister();
-        }
-        mCallbacks.clear();
+
         mKeyguardMonitor.removeCallback(this);
         mContext.unregisterReceiver(mReceiver);
-    }
-
-    private void checkIfPlaying(PlaybackState newState) {
-        boolean anythingPlaying = newState == null
-                ? mIsAnythingPlaying
-                : newState.getState() == PlaybackState.STATE_PLAYING;
-        if (!mPowerSaveModeEnabled && !anythingPlaying) {
-            for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
-                if (entry.getValue().isPlaying()) {
-                    anythingPlaying = true;
-                    break;
-                }
-            }
-        }
-
-        if (anythingPlaying != mIsAnythingPlaying) {
-            mIsAnythingPlaying = anythingPlaying;
-            doLinkage();
-
-            mHandler.removeCallbacks(mRefreshStateRunnable);
-            mHandler.postDelayed(mRefreshStateRunnable, 50);
-        }
     }
 
     @Override
@@ -252,7 +213,10 @@ public class VisualizerTile extends QSTile<QSTile.State>
             }
         } else {
             // no keyguard, relink if there's something playing
-            if (mIsAnythingPlaying && !mLinked && mListening) {
+            if (mMediaMonitor.isAnythingPlaying()
+                    && !mLinked
+                    && mListening
+                    && !mPowerSaveModeEnabled) {
                 AsyncTask.execute(mLinkVisualizer);
             } else if (mLinked) {
                 AsyncTask.execute(mUnlinkVisualizer);
@@ -272,7 +236,7 @@ public class VisualizerTile extends QSTile<QSTile.State>
     private final Runnable mUpdateVisibilities = new Runnable() {
         @Override
         public void run() {
-            boolean showVz = mIsAnythingPlaying && !mKeyguardMonitor.isShowing();
+            boolean showVz = mMediaMonitor.isAnythingPlaying() && !mKeyguardMonitor.isShowing();
             mVisualizer.animate().cancel();
             mVisualizer.animate()
                     .setDuration(200)
@@ -308,46 +272,6 @@ public class VisualizerTile extends QSTile<QSTile.State>
             }
         }
     };
-
-    private class CallbackInfo {
-        MediaController.Callback mCallback;
-        MediaController mController;
-        boolean mIsPlaying;
-
-        public CallbackInfo(final MediaController controller) {
-            this.mController = controller;
-            mCallback = new MediaController.Callback() {
-                @Override
-                public void onSessionDestroyed() {
-                    destroy();
-                    checkIfPlaying(null);
-                }
-
-                @Override
-                public void onPlaybackStateChanged(@NonNull PlaybackState state) {
-                    mIsPlaying = state.getState() == PlaybackState.STATE_PLAYING;
-                    checkIfPlaying(state);
-                }
-            };
-            controller.registerCallback(mCallback);
-        }
-
-        public boolean isPlaying() {
-            return mIsPlaying;
-        }
-
-        public void unregister() {
-            mController.unregisterCallback(mCallback);
-            mIsPlaying = false;
-        }
-
-        public void destroy() {
-            unregister();
-            mCallbacks.remove(mController.getSessionToken());
-            mController = null;
-            mCallback = null;
-        }
-    }
 
     private static class TileBarGraphRenderer extends Renderer {
         private int mDivisions;
