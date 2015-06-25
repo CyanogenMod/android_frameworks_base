@@ -56,6 +56,10 @@ public class VisualizerTile extends QSTile<QSTile.State> implements KeyguardMoni
     private static final Intent AUDIO_EFFECTS =
             new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
 
+    private static final Intent AUDIO_PLAYER = new Intent(Intent.ACTION_MAIN)
+            .addCategory(Intent.CATEGORY_APP_MUSIC)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
     private KeyguardMonitor mKeyguardMonitor;
     private VisualizerView mVisualizer;
     private ImageView mStaticVisualizerIcon;
@@ -167,7 +171,7 @@ public class VisualizerTile extends QSTile<QSTile.State> implements KeyguardMoni
 
     @Override
     protected void handleLongClick() {
-        mHost.startSettingsActivity(AUDIO_EFFECTS);
+        mHost.startSettingsActivity(AUDIO_PLAYER);
     }
 
     @Override
