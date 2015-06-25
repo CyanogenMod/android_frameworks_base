@@ -1532,10 +1532,11 @@ class AlarmManagerService extends SystemService {
     }
 
     private Batch findFirstRtcWakeupBatchLocked() {
+        long elapsed = SystemClock.elapsedRealtime();
         final int N = mAlarmBatches.size();
         for (int i = 0; i < N; i++) {
             Batch b = mAlarmBatches.get(i);
-            long intervalTime  = b.start - SystemClock.elapsedRealtime();
+            long intervalTime = b.start - elapsed;
             if (b.isRtcPowerOffWakeup()) {
                 return b;
             }
