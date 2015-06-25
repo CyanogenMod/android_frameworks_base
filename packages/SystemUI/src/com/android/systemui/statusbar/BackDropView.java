@@ -16,6 +16,8 @@
 
 package com.android.systemui.statusbar;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -23,16 +25,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.session.PlaybackState;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +57,8 @@ import com.pheelicks.visualizer.renderer.Renderer;
 /**
  * A view who contains media artwork.
  */
-public class BackDropView extends FrameLayout {
+public class BackDropView extends FrameLayout implements Palette.PaletteAsyncListener,
+        ValueAnimator.AnimatorUpdateListener {
     final static String TAG = BackDropView.class.getSimpleName();
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -73,6 +79,8 @@ public class BackDropView extends FrameLayout {
     private boolean mTouching;
     private MediaMonitor mMediaMonitor;
     private Handler mHandler;
+    private LockscreenBarEqRenderer mBarRenderer;
+    private ValueAnimator mVisualizerColorAnimator;
 
     public BackDropView(Context context) {
         super(context);
@@ -101,6 +109,9 @@ public class BackDropView extends FrameLayout {
             @Override
             public void onPlayStateChanged(boolean playing) {
                 if (playing) {
+                    if (mVisualizerColorAnimator != null && !mVisualizerColorAnimator.isStarted()) {
+                        mVisualizerColorAnimator.start();
+                    }
                     requestVisualizer(true, 500);
                 } else {
                     // user paused, hide visualizer to stop flash
@@ -168,12 +179,55 @@ public class BackDropView extends FrameLayout {
                 }, 0));
 
                 int bars = res.getInteger(R.integer.kg_visualizer_divisions);
-                mVisualizer.addRenderer(new LockscreenBarEqRenderer(bars, paint,
+                mBarRenderer = new LockscreenBarEqRenderer(bars, paint,
                         res.getInteger(R.integer.kg_visualizer_db_fuzz),
-                        res.getInteger(R.integer.kg_visualizer_db_fuzz_factor)));
+                        res.getInteger(R.integer.kg_visualizer_db_fuzz_factor));
+                mVisualizer.addRenderer(mBarRenderer);
             }
         }
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateMonitorCallback);
+    }
+
+    public void updateVisualizerColor(Bitmap artwork) {
+        if (artwork != null) {
+            Palette.generateAsync(artwork, this);
+        } else {
+            if (mVisualizerColorAnimator != null) {
+                mVisualizerColorAnimator.cancel();
+            }
+            mVisualizerColorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(),
+                    mBarRenderer.mPaint.getColor(),
+                    getResources().getColor(R.color.equalizer_fill_color)
+            );
+            mVisualizerColorAnimator.setStartDelay(500);
+            mVisualizerColorAnimator.setDuration(1000);
+            mVisualizerColorAnimator.addUpdateListener(this);
+            if (mMediaMonitor.isAnythingPlaying()) {
+                mVisualizerColorAnimator.start();
+            }
+        }
+    }
+
+    @Override
+    public void onGenerated(Palette palette) {
+        if (mVisualizerColorAnimator != null) {
+            mVisualizerColorAnimator.cancel();
+        }
+        mVisualizerColorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(),
+                mBarRenderer.mPaint.getColor(),
+                palette.getLightVibrantColor(getResources().getColor(R.color.equalizer_fill_color))
+        );
+        mVisualizerColorAnimator.setStartDelay(500);
+        mVisualizerColorAnimator.setDuration(1000);
+        mVisualizerColorAnimator.addUpdateListener(this);
+        if (mMediaMonitor.isAnythingPlaying()) {
+            mVisualizerColorAnimator.start();
+        }
+    }
+
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        mBarRenderer.mPaint.setColor((Integer) animation.getAnimatedValue());
     }
 
     public void setTouching(boolean touching) {
@@ -215,6 +269,10 @@ public class BackDropView extends FrameLayout {
     }
 
     private void haltVisualizer() {
+        if (mVisualizerColorAnimator != null) {
+            mVisualizerColorAnimator.end();
+            mVisualizerColorAnimator = null;
+        }
         mHandler.removeCallbacks(mResumeVisualizerIfPlayingRunnable);
         mHandler.removeCallbacks(mStartVisualizer);
         mHandler.removeCallbacks(mStopVisualizer);
