@@ -46,7 +46,7 @@ public class EmergencyButton extends Button {
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
-        public void onSimStateChanged(int subId, State simState) {
+        public void onSimStateChanged(int subId, int slotId, State simState) {
             int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
             updateEmergencyCallButton(phoneState);
         }
@@ -118,7 +118,7 @@ public class EmergencyButton extends Button {
         if (mLockPatternUtils.isInCall()) {
             enabled = true; // always show "return to call" if phone is off-hook
         } else if (mLockPatternUtils.isEmergencyCallCapable()) {
-            boolean simLocked = KeyguardUpdateMonitor.getInstance(mContext).isSimLocked();
+            boolean simLocked = KeyguardUpdateMonitor.getInstance(mContext).isSimPinVoiceSecure();
             if (simLocked) {
                 // Some countries can't handle emergency calls while SIM is locked.
                 enabled = mLockPatternUtils.isEmergencyCallEnabledWhileSimLocked();
