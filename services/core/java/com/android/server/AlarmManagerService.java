@@ -765,6 +765,31 @@ class AlarmManagerService extends SystemService {
         }
 
         final long nowElapsed = SystemClock.elapsedRealtime();
+
+        // Sanity check elapsed realtime alarms which are set in the past.
+        // Doing this causes them to trigger immediately, which is a great
+        // opportunity to spam. Or the user forgot to add the current time.
+        // Either way, this is bad.
+        if ((type == ELAPSED_REALTIME || type == ELAPSED_REALTIME_WAKEUP) &&
+                interval == 0 && windowLength < 0) {
+            if (nowElapsed > triggerAtTime) {
+                final long orig = triggerAtTime;
+                final long delta = nowElapsed - triggerAtTime;
+                if (delta > triggerAtTime) {
+                    triggerAtTime = nowElapsed + triggerAtTime;
+                } else {
+                    long offset = nowElapsed + (delta / 2);
+                    if (offset < MIN_FUTURITY) {
+                        offset = MIN_FUTURITY;
+                    }
+                    triggerAtTime = nowElapsed + offset;
+                }
+                Slog.w(TAG, "ELAPSED_REALTIME alarm set far in the past (" + orig +
+                        "), offsetting from current time to " + triggerAtTime +
+                        " from uid=" + Binder.getCallingUid() + " pid=" + Binder.getCallingPid());
+            }
+        }
+
         final long nominalTrigger = convertToElapsed(triggerAtTime, type);
         // Try to prevent spamming by making sure we aren't firing alarms in the immediate future
         final long minTrigger = nowElapsed + MIN_FUTURITY;
