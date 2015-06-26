@@ -776,6 +776,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         FingerprintManager fpm;
         fpm = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
         fpm.startListening(mFingerprintManagerReceiver);
+        fpm.authenticate();
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
