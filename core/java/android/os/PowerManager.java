@@ -446,7 +446,7 @@ public final class PowerManager {
      * @hide
      */
     public static boolean useTwilightAdjustmentFeature() {
-        return SystemProperties.getBoolean("persist.power.usetwilightadj", false);
+        return SystemProperties.getBoolean("persist.power.usetwilightadj", true);
     }
 
     /**

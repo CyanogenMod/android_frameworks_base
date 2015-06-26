@@ -129,6 +129,12 @@ class AutomaticBrightnessController {
     private final int mScreenBrightnessRangeMaximum;
     private final float mDozeScaleFactor;
 
+    // True if twilight adjustment is enabled
+    private boolean mTwilightAdjustmentEnabled;
+
+    // True if twilight adjustment listener is registered
+    private boolean mTwilightListenerRegistered;
+
     // Amount of time to delay auto-brightness after screen on while waiting for
     // the light sensor to warm-up in milliseconds.
     // May be 0 if no warm-up is required.
@@ -208,10 +214,6 @@ class AutomaticBrightnessController {
         if (!DEBUG_PRETEND_LIGHT_SENSOR_ABSENT) {
             mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         }
-
-        if (USE_TWILIGHT_ADJUSTMENT) {
-            mTwilight.registerListener(mTwilightListener, mHandler);
-        }
     }
 
     public int getAutomaticScreenBrightness() {
@@ -221,14 +223,15 @@ class AutomaticBrightnessController {
         return mScreenAutoBrightness;
     }
 
-    public void configure(boolean enable, float adjustment, boolean dozing) {
+    public void configure(boolean enable, float adjustment, boolean twilight, boolean dozing) {
         // While dozing, the application processor may be suspended which will prevent us from
         // receiving new information from the light sensor. On some devices, we may be able to
         // switch to a wake-up light sensor instead but for now we will simply disable the sensor
         // and hold onto the last computed screen auto brightness.  We save the dozing flag for
         // debugging purposes.
         mDozing = dozing;
-        boolean changed = setLightSensorEnabled(enable && !dozing);
+        boolean changed = enable && !dozing && setScreenAutoBrightnessTwilight(twilight);
+        changed |= setLightSensorEnabled(enable && !dozing);
         changed |= setScreenAutoBrightnessAdjustment(adjustment);
         if (changed) {
             updateAutoBrightness(false /*sendUpdate*/);
@@ -258,6 +261,7 @@ class AutomaticBrightnessController {
         pw.println("  mAmbientLightRingBuffer=" + mAmbientLightRingBuffer);
         pw.println("  mScreenAutoBrightness=" + mScreenAutoBrightness);
         pw.println("  mScreenAutoBrightnessAdjustment=" + mScreenAutoBrightnessAdjustment);
+        pw.println("  mTwilightAdjustmentEnabled=" + mTwilightAdjustmentEnabled);
         pw.println("  mLastScreenAutoBrightnessGamma=" + mLastScreenAutoBrightnessGamma);
         pw.println("  mDozing=" + mDozing);
     }
@@ -306,6 +310,23 @@ class AutomaticBrightnessController {
     private boolean setScreenAutoBrightnessAdjustment(float adjustment) {
         if (adjustment != mScreenAutoBrightnessAdjustment) {
             mScreenAutoBrightnessAdjustment = adjustment;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean setScreenAutoBrightnessTwilight(boolean status) {
+        if (status != mTwilightAdjustmentEnabled) {
+            if (status) {
+                if(!USE_TWILIGHT_ADJUSTMENT) {
+                    return false;
+                }
+                if(!mTwilightListenerRegistered) {
+                    mTwilight.registerListener(mTwilightListener, mHandler);
+                    mTwilightListenerRegistered = true;
+                }
+            }
+            mTwilightAdjustmentEnabled = status;
             return true;
         }
         return false;
@@ -471,7 +492,7 @@ class AutomaticBrightnessController {
         // Update LiveDisplay with the current lux
         mLiveDisplay.updateLiveDisplay(mAmbientLux);
 
-        if (USE_TWILIGHT_ADJUSTMENT) {
+        if (mTwilightAdjustmentEnabled) {
             TwilightState state = mTwilight.getCurrentState();
             if (state != null && state.isNight()) {
                 final long now = System.currentTimeMillis();
@@ -571,7 +592,9 @@ class AutomaticBrightnessController {
     private final TwilightListener mTwilightListener = new TwilightListener() {
         @Override
         public void onTwilightStateChanged() {
-            updateAutoBrightness(true /*sendUpdate*/);
+            if(mTwilightAdjustmentEnabled) {
+                updateAutoBrightness(true /*sendUpdate*/);
+            }
         }
     };
 
