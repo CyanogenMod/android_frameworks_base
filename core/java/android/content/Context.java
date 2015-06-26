@@ -2334,18 +2334,6 @@ public abstract class Context {
 
     /**
      * Use with {@link #getSystemService} to retrieve a
-     * {@link android.app.ProfileManager} for setting
-     * notification profiles.
-     *
-     * @see #getSystemService
-     * @see android.app.ProfileManager
-     *
-     * @hide
-     */
-    public static final String PROFILE_SERVICE = "profile";
-
-    /**
-     * Use with {@link #getSystemService} to retrieve a
      * {@link android.view.accessibility.AccessibilityManager} for giving the user
      * feedback for UI events through the registered event listeners.
      *
