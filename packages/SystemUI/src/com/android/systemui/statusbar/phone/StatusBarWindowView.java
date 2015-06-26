@@ -197,7 +197,8 @@ public class StatusBarWindowView extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (mService.getBarState() == StatusBarState.KEYGUARD) {
+        if (mService.getBarState() != StatusBarState.SHADE) {
+            // shade locked or keyguard
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     mService.setVisualizerTouching(true);
@@ -250,7 +251,8 @@ public class StatusBarWindowView extends FrameLayout {
         }
         final int action = ev.getAction();
         if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
-            if (mService.getBarState() == StatusBarState.KEYGUARD) {
+            if (mService.getBarState() != StatusBarState.SHADE) {
+                // shade_locked or keyguard
                 mService.setVisualizerTouching(false);
             }
             if (!handled) {
