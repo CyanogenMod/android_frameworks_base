@@ -74,7 +74,14 @@ public class VisualizerTile extends QSTile<QSTile.State> implements KeyguardMoni
                 if (mPowerSaveModeEnabled) {
                     AsyncTask.execute(mUnlinkVisualizer);
                 } else {
-                    mMediaMonitor.checkIfPlaying(null);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            doLinkage();
+                        }
+                    });
+                    mHandler.removeCallbacks(mRefreshStateRunnable);
+                    mHandler.postDelayed(mRefreshStateRunnable, 50);
                 }
             }
         }
