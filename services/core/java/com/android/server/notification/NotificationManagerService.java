@@ -35,8 +35,6 @@ import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProfileGroup;
-import android.app.ProfileManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -98,6 +96,9 @@ import android.util.Xml;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
+
+import cyanogenmod.app.ProfileGroup;
+import cyanogenmod.app.ProfileManager;
 
 import com.android.internal.R;
 import com.android.internal.util.FastXmlSerializer;
@@ -2210,8 +2211,7 @@ public class NotificationManagerService extends SystemService {
             Binder.restoreCallingIdentity(token);
         }
 
-        final ProfileManager profileManager =
-                (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
+        final ProfileManager profileManager = ProfileManager.getInstance(mContext);
 
         ProfileGroup group = profileManager.getActiveProfileGroup(mContext.getPackageName());
         if (group != null) {
