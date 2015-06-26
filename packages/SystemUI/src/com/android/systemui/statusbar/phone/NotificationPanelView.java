@@ -1449,11 +1449,30 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private int calculatePanelHeightShade() {
-        int emptyBottomMargin = mNotificationStackScroller.getEmptyBottomMargin();
-        int maxHeight = mNotificationStackScroller.getHeight() - emptyBottomMargin
-                - mTopPaddingAdjustment;
-        maxHeight += mNotificationStackScroller.getTopPaddingOverflow();
-        return maxHeight;
+        if (mStatusBarState == StatusBarState.SHADE) {
+            int emptyBottomMargin = mNotificationStackScroller.getEmptyBottomMargin();
+            int maxHeight = mNotificationStackScroller.getHeight() - emptyBottomMargin
+                    - mTopPaddingAdjustment;
+            maxHeight += mNotificationStackScroller.getTopPaddingOverflow();
+            return maxHeight;
+        } else {
+            float notificationHeight = mNotificationStackScroller.getHeight()
+                    - mNotificationStackScroller.getEmptyBottomMargin()
+                    - mNotificationStackScroller.getTopPadding();
+            float maxHeight = Math.max(
+                    mNotificationStackScroller.getNotificationTopPadding(),
+                    mStatusBarState == StatusBarState.KEYGUARD
+                            ? mClockPositionResult.stackScrollerPadding - mTopPaddingAdjustment
+                            : 0)
+                    + notificationHeight;
+            if (maxHeight > mNotificationStackScroller.getHeight()) {
+                float fullyCollapsedHeight = mNotificationStackScroller.getMinStackHeight()
+                        + mNotificationStackScroller.getNotificationTopPadding()
+                        - getScrollViewScrollY();
+                maxHeight = Math.max(fullyCollapsedHeight, mNotificationStackScroller.getHeight());
+            }
+            return (int) maxHeight;
+        }
     }
 
     private int calculatePanelHeightQsExpanded() {
