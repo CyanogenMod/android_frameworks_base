@@ -28,20 +28,16 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.ThemeUtils;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.ThemeConfig;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.media.AudioService;
-import android.media.tv.TvInputManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.FactoryTest;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.IPowerManager;
 import android.os.Looper;
@@ -52,22 +48,18 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.service.dreams.DreamService;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
-import android.util.Log;
 import android.util.Slog;
 import android.view.WindowManager;
 import android.webkit.WebViewFactory;
 
 import com.android.internal.R;
 import com.android.internal.os.BinderInternal;
-import com.android.internal.os.Zygote;
 import com.android.internal.os.SamplingProfilerIntegration;
 import com.android.server.accessibility.AccessibilityManagerService;
 import com.android.server.accounts.AccountManagerService;
 import com.android.server.am.ActivityManagerService;
-import com.android.server.am.BatteryStatsService;
 import com.android.server.clipboard.ClipboardService;
 import com.android.server.content.ContentService;
 import com.android.server.devicepolicy.DevicePolicyManagerService;
@@ -78,7 +70,6 @@ import com.android.server.hdmi.HdmiControlService;
 import com.android.server.gesture.GestureService;
 import com.android.server.input.InputManagerService;
 import com.android.server.job.JobSchedulerService;
-import com.android.server.lights.LightsManager;
 import com.android.server.lights.LightsService;
 import com.android.server.media.MediaRouterService;
 import com.android.server.media.MediaSessionService;
@@ -116,9 +107,6 @@ import java.lang.reflect.Constructor;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import dalvik.system.PathClassLoader;
-import java.lang.reflect.Constructor;
 
 public final class SystemServer {
     private static final String TAG = "SystemServer";
@@ -439,7 +427,6 @@ public final class SystemServer {
         ConsumerIrService consumerIr = null;
         AudioService audioService = null;
         MmsServiceBroker mmsService = null;
-        ProfileManagerService profile = null;
 
         boolean disableStorage = SystemProperties.getBoolean("config.disable_storage", false);
         boolean disableMedia = SystemProperties.getBoolean("config.disable_media", false);
@@ -841,16 +828,6 @@ public final class SystemServer {
                     ServiceManager.addService(Context.WALLPAPER_SERVICE, wallpaper);
                 } catch (Throwable e) {
                     reportWtf("starting Wallpaper Service", e);
-                }
-            }
-
-            if (!disableNonCoreServices) {
-                try {
-                    Slog.i(TAG, "Profile Manager");
-                    profile = new ProfileManagerService(context);
-                    ServiceManager.addService(Context.PROFILE_SERVICE, profile);
-                } catch (Throwable e) {
-                    reportWtf("Failure starting Profile Manager", e);
                 }
             }
 
