@@ -63,6 +63,7 @@ import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.widget.LockPatternUtils;
 import com.google.android.collect.Lists;
 
 import java.lang.ref.WeakReference;
@@ -159,6 +160,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private boolean mSwitchingUser;
 
     private boolean mScreenOn;
+
+    private LockPatternUtils mLockPatternUtils;
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -348,7 +351,13 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private void handleFingerprintProcessed(int fingerprintId) {
-        if (fingerprintId == 0) return; // not a valid fingerprint
+        if (fingerprintId == 0) {
+            // Not a valid fingerprint, start another authenticate call to try again
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+            fpm.authenticate();
+            return; // not a valid fingerprint
+        }
 
         final int userId;
         try {
@@ -655,6 +664,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     protected void handleScreenTurnedOn() {
+        startFingerAuthIfUsingFingerprint();
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
@@ -665,6 +675,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     protected void handleScreenTurnedOff(int arg1) {
+        stopAuthenticatingFingerprint();
         clearFingerprintRecognized();
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
@@ -773,9 +784,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         TrustManager trustManager = (TrustManager) context.getSystemService(Context.TRUST_SERVICE);
         trustManager.registerTrustListener(this);
 
-        FingerprintManager fpm;
-        fpm = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
-        fpm.startListening(mFingerprintManagerReceiver);
+        mLockPatternUtils = new LockPatternUtils(mContext);
+        startFingerAuthIfUsingFingerprint();
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
@@ -1248,6 +1258,22 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     public void clearFailedUnlockAttempts() {
         mFailedAttempts = 0;
         mFailedBiometricUnlockAttempts = 0;
+    }
+
+    public void startFingerAuthIfUsingFingerprint() {
+        if (mLockPatternUtils.usingFingerprint()) {
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+            fpm.startListening(mFingerprintManagerReceiver);
+            fpm.authenticate();
+        }
+    }
+
+    public void stopAuthenticatingFingerprint() {
+        FingerprintManager fpm =
+                (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+        fpm.cancel();
+        fpm.stopListening();
     }
 
     public void clearFingerprintRecognized() {
