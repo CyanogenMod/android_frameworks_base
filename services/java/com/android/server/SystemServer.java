@@ -496,9 +496,9 @@ public final class SystemServer {
             vibrator = new VibratorService(context);
             ServiceManager.addService("vibrator", vibrator);
 
-            Slog.i(TAG, "Consumer IR Service");
-            consumerIr = new ConsumerIrService(context);
-            ServiceManager.addService(Context.CONSUMER_IR_SERVICE, consumerIr);
+            //Slog.i(TAG, "Consumer IR Service");
+            //consumerIr = new ConsumerIrService(context);
+            //ServiceManager.addService(Context.CONSUMER_IR_SERVICE, consumerIr);
 
             mAlarmManagerService = mSystemServiceManager.startService(AlarmManagerService.class);
             alarm = IAlarmManager.Stub.asInterface(
