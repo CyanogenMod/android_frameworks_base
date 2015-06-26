@@ -491,6 +491,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         final boolean mustNotify;
         boolean mustInitialize = false;
         boolean autoBrightnessAdjustmentChanged = false;
+        boolean twilightChanged = false;
 
         synchronized (mLock) {
             mPendingUpdatePowerStateLocked = false;
@@ -507,6 +508,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             } else if (mPendingRequestChangedLocked) {
                 autoBrightnessAdjustmentChanged = (mPowerRequest.screenAutoBrightnessAdjustment
                         != mPendingRequestLocked.screenAutoBrightnessAdjustment);
+                twilightChanged = (mPowerRequest.twilight
+                        != mPendingRequestLocked.twilight);
                 mPowerRequest.copyFrom(mPendingRequestLocked);
                 mWaitingForNegativeProximity |= mPendingWaitForNegativeProximityLocked;
                 mPendingWaitForNegativeProximityLocked = false;
@@ -521,6 +524,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         if (mustInitialize) {
             initialize();
         }
+
+        // Manual -> Automatic with Twilight Mode switch shouldn't make things run twice
+        if (twilightChanged && !mPowerRequest.useAutoBrightness) return;
 
         // Compute the basic display state using the policy.
         // We might override this below based on other factors.
@@ -608,7 +614,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                     && (state == Display.STATE_ON || autoBrightnessEnabledInDoze)
                     && brightness < 0;
             mAutomaticBrightnessController.configure(autoBrightnessEnabled,
-                    mPowerRequest.screenAutoBrightnessAdjustment, state != Display.STATE_ON);
+                    mPowerRequest.screenAutoBrightnessAdjustment, mPowerRequest.twilight,
+                    state != Display.STATE_ON);
         }
 
         // Apply brightness boost.
@@ -630,7 +637,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             if (brightness >= 0) {
                 // Use current auto-brightness value and slowly adjust to changes.
                 brightness = clampScreenBrightness(brightness);
-                if (mAppliedAutoBrightness && !autoBrightnessAdjustmentChanged) {
+                if (mAppliedAutoBrightness && !autoBrightnessAdjustmentChanged
+                        && !twilightChanged) {
                     slowChange = true; // slowly adapt to auto-brightness
                 }
                 mAppliedAutoBrightness = true;
