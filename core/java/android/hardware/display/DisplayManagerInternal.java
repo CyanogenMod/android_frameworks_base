@@ -175,6 +175,9 @@ public abstract class DisplayManagerInternal {
         // If true, scales the brightness to half of desired.
         public boolean lowPowerMode;
 
+        // If true, applies boost to brightness at night.
+        public boolean twilight;
+
         // If true, applies a brightness boost.
         public boolean boostScreenBrightness;
 
@@ -198,6 +201,7 @@ public abstract class DisplayManagerInternal {
             screenBrightness = PowerManager.BRIGHTNESS_ON;
             screenAutoBrightnessAdjustment = 0.0f;
             useAutoBrightness = false;
+            twilight = false;
             blockScreenOn = false;
             dozeScreenBrightness = PowerManager.BRIGHTNESS_DEFAULT;
             dozeScreenState = Display.STATE_UNKNOWN;
@@ -218,6 +222,7 @@ public abstract class DisplayManagerInternal {
             screenAutoBrightnessAdjustment = other.screenAutoBrightnessAdjustment;
             useAutoBrightness = other.useAutoBrightness;
             blockScreenOn = other.blockScreenOn;
+            twilight = other.twilight;
             lowPowerMode = other.lowPowerMode;
             boostScreenBrightness = other.boostScreenBrightness;
             dozeScreenBrightness = other.dozeScreenBrightness;
@@ -238,6 +243,7 @@ public abstract class DisplayManagerInternal {
                     && screenAutoBrightnessAdjustment == other.screenAutoBrightnessAdjustment
                     && useAutoBrightness == other.useAutoBrightness
                     && blockScreenOn == other.blockScreenOn
+                    && twilight == other.twilight
                     && lowPowerMode == other.lowPowerMode
                     && boostScreenBrightness == other.boostScreenBrightness
                     && dozeScreenBrightness == other.dozeScreenBrightness
@@ -256,6 +262,7 @@ public abstract class DisplayManagerInternal {
                     + ", screenBrightness=" + screenBrightness
                     + ", screenAutoBrightnessAdjustment=" + screenAutoBrightnessAdjustment
                     + ", useAutoBrightness=" + useAutoBrightness
+                    + ", twilight=" + twilight
                     + ", blockScreenOn=" + blockScreenOn
                     + ", lowPowerMode=" + lowPowerMode
                     + ", boostScreenBrightness=" + boostScreenBrightness
