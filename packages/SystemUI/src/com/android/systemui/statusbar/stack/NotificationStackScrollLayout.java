@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar.stack;
 
 import android.annotation.Nullable;
+import android.app.StatusBarManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -566,12 +567,10 @@ public class NotificationStackScrollLayout extends ViewGroup
             // We start the swipe and snap back in the same frame, we don't want any animation
             mDragAnimPendingChildren.remove(animView);
         }
-        mPhoneStatusBar.requestVisualizer(true, 300);
     }
 
     @Override
     public boolean updateSwipeProgress(View animView, boolean dismissable, float swipeProgress) {
-        mPhoneStatusBar.requestVisualizer(false, 0);
         return false;
     }
 
@@ -768,6 +767,12 @@ public class NotificationStackScrollLayout extends ViewGroup
                 && !mExpandedInThisMotion
                 && !mOnlyScrollingInThisMotion) {
             horizontalSwipeWantsIt = mSwipeHelper.onTouchEvent(ev);
+            if (isCancelOrUp) {
+                if (mPhoneStatusBar.getBarState() != StatusBarState.SHADE) {
+                    // shade_locked or keyguard
+                    mPhoneStatusBar.setVisualizerTouching(false);
+                }
+            }
         }
 
         if (expandWantsIt && mIsBeingDragged) {
@@ -1570,7 +1575,6 @@ public class NotificationStackScrollLayout extends ViewGroup
             // drawn when removed
             getOverlay().add(child);
         }
-        mPhoneStatusBar.requestVisualizer(true, 300);
         updateAnimationState(false, child);
 
         // Make sure the clipRect we might have set is removed
@@ -2115,6 +2119,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     public void onChildAnimationFinished() {
+        mPhoneStatusBar.requestVisualizer(null, 500);
         requestChildrenUpdate();
     }
 
@@ -2158,12 +2163,6 @@ public class NotificationStackScrollLayout extends ViewGroup
             mNeedsAnimation =  true;
         }
         requestChildrenUpdate();
-        if (activatedChild != null) {
-            mPhoneStatusBar.requestVisualizer(false, 0);
-        } else {
-            mPhoneStatusBar.requestVisualizer(true, 300);
-        }
-
     }
 
     public ActivatableNotificationView getActivatedChild() {

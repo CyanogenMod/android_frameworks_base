@@ -41,8 +41,8 @@ public abstract class MediaMonitor implements MediaSessionManager.OnActiveSessio
         if (mListening == listening) return;
         mListening = listening;
         if (mListening) {
+            mIsAnythingPlaying = isAnythingPlayingColdCheck();
             mMediaSessionManager.addOnActiveSessionsChangedListener(this, null);
-            checkIfPlaying(null);
         } else {
             mMediaSessionManager.removeOnActiveSessionsChangedListener(this);
             cleanup();
@@ -54,7 +54,6 @@ public abstract class MediaMonitor implements MediaSessionManager.OnActiveSessio
             entry.getValue().unregister();
         }
         mCallbacks.clear();
-        mIsAnythingPlaying = false;
     }
 
     @Override
@@ -66,18 +65,15 @@ public abstract class MediaMonitor implements MediaSessionManager.OnActiveSessio
                 }
             }
         }
+        checkIfPlaying();
     }
 
-    public void checkIfPlaying(PlaybackState newState) {
-        boolean anythingPlaying = newState == null
-                ? isAnythingPlayingColdCheck()
-                : isStateConsideredPlaying(newState);
-        if (!anythingPlaying) {
-            for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
-                if (entry.getValue().isPlaying()) {
-                    anythingPlaying = true;
-                    break;
-                }
+    public void checkIfPlaying() {
+        boolean anythingPlaying = false;
+        for (Map.Entry<MediaSession.Token, CallbackInfo> entry : mCallbacks.entrySet()) {
+            if (entry.getValue().isPlaying()) {
+                anythingPlaying = true;
+                break;
             }
         }
 
@@ -86,18 +82,6 @@ public abstract class MediaMonitor implements MediaSessionManager.OnActiveSessio
             if (mListening) {
                 onPlayStateChanged(mIsAnythingPlaying);
             }
-        }
-    }
-
-    private boolean isStateConsideredPlaying(PlaybackState state) {
-        switch (state.getState()) {
-            case PlaybackState.STATE_PLAYING:
-//            case PlaybackState.STATE_SKIPPING_TO_NEXT:
-//            case PlaybackState.STATE_SKIPPING_TO_PREVIOUS:
-//            case PlaybackState.STATE_SKIPPING_TO_QUEUE_ITEM:
-                return true;
-            default:
-                return false;
         }
     }
 
@@ -112,20 +96,19 @@ public abstract class MediaMonitor implements MediaSessionManager.OnActiveSessio
                 @Override
                 public void onSessionDestroyed() {
                     destroy();
-                    checkIfPlaying(null);
+                    checkIfPlaying();
                 }
 
                 @Override
                 public void onPlaybackStateChanged(@NonNull PlaybackState state) {
                     mIsPlaying = state.getState() == PlaybackState.STATE_PLAYING;
-                    checkIfPlaying(state);
+                    checkIfPlaying();
                 }
             };
             controller.registerCallback(mCallback);
 
             mIsPlaying = controller.getPlaybackState() != null
                     && controller.getPlaybackState().getState() == PlaybackState.STATE_PLAYING;
-            checkIfPlaying(controller.getPlaybackState());
         }
 
         public boolean isPlaying() {
