@@ -409,6 +409,9 @@ public final class PowerManagerService extends SystemService
     // One of the Settings.System.SCREEN_BRIGHTNESS_MODE_* constants.
     private int mScreenBrightnessModeSetting;
 
+    // Twilight adjustment which applies boost to brightness at night.
+    private boolean mTwilight;
+
     // The screen brightness setting override from the window manager
     // to allow the current foreground activity to override the brightness.
     // Use -1 to disable.
@@ -628,6 +631,9 @@ public final class PowerManagerService extends SystemService
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_AUTO_BRIGHTNESS_ADJ),
                     false, mSettingsObserver, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SCREEN_AUTO_BRIGHTNESS_TWILIGHT),
+                    false, mSettingsObserver, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.LOW_POWER_MODE),
                     false, mSettingsObserver, UserHandle.USER_ALL);
@@ -759,6 +765,10 @@ public final class PowerManagerService extends SystemService
         if (oldScreenAutoBrightnessAdjustmentSetting != mScreenAutoBrightnessAdjustmentSetting) {
             mTemporaryScreenAutoBrightnessAdjustmentSettingOverride = Float.NaN;
         }
+
+        mTwilight = Settings.System.getIntForUser(resolver,
+                Settings.System.SCREEN_AUTO_BRIGHTNESS_TWILIGHT,
+                0, UserHandle.USER_CURRENT) != 0;
 
         mScreenBrightnessModeSetting = Settings.System.getIntForUser(resolver,
                 Settings.System.SCREEN_BRIGHTNESS_MODE,
@@ -2044,6 +2054,7 @@ public final class PowerManagerService extends SystemService
             mDisplayPowerRequest.screenAutoBrightnessAdjustment =
                     screenAutoBrightnessAdjustment;
             mDisplayPowerRequest.useAutoBrightness = autoBrightness;
+            mDisplayPowerRequest.twilight = mTwilight;
             mDisplayPowerRequest.useProximitySensor = shouldUseProximitySensorLocked();
             mDisplayPowerRequest.lowPowerMode = mLowPowerModeEnabled;
             mDisplayPowerRequest.boostScreenBrightness = mScreenBrightnessBoostInProgress;
@@ -2691,6 +2702,7 @@ public final class PowerManagerService extends SystemService
             pw.println("  mScreenAutoBrightnessAdjustmentSetting="
                     + mScreenAutoBrightnessAdjustmentSetting);
             pw.println("  mScreenBrightnessModeSetting=" + mScreenBrightnessModeSetting);
+            pw.println("  mTwilight=" + mTwilight);
             pw.println("  mScreenBrightnessOverrideFromWindowManager="
                     + mScreenBrightnessOverrideFromWindowManager);
             pw.println("  mUserActivityTimeoutOverrideFromWindowManager="

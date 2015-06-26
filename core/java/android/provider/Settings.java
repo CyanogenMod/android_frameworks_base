@@ -2137,6 +2137,8 @@ public final class Settings {
          */
         public static final int SCREEN_BRIGHTNESS_MODE_AUTOMATIC = 1;
 
+        public static final String SCREEN_AUTO_BRIGHTNESS_TWILIGHT = "screen_auto_brightness_twilight";
+
         /**
          * Whether to control brightness from status bar
          *
@@ -3568,6 +3570,7 @@ public final class Settings {
             SCREEN_BRIGHTNESS,
             SCREEN_BRIGHTNESS_MODE,
             SCREEN_AUTO_BRIGHTNESS_ADJ,
+            SCREEN_AUTO_BRIGHTNESS_TWILIGHT,
             VIBRATE_INPUT_DEVICES,
             MODE_RINGER_STREAMS_AFFECTED,
             VOLUME_VOICE,
