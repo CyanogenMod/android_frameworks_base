@@ -566,12 +566,10 @@ public class NotificationStackScrollLayout extends ViewGroup
             // We start the swipe and snap back in the same frame, we don't want any animation
             mDragAnimPendingChildren.remove(animView);
         }
-        mPhoneStatusBar.requestVisualizer(true, 300);
     }
 
     @Override
     public boolean updateSwipeProgress(View animView, boolean dismissable, float swipeProgress) {
-        mPhoneStatusBar.requestVisualizer(false, 0);
         return false;
     }
 
@@ -768,6 +766,12 @@ public class NotificationStackScrollLayout extends ViewGroup
                 && !mExpandedInThisMotion
                 && !mOnlyScrollingInThisMotion) {
             horizontalSwipeWantsIt = mSwipeHelper.onTouchEvent(ev);
+            if (isCancelOrUp) {
+                if (mPhoneStatusBar.getBarState() != StatusBarState.SHADE) {
+                    // shade_locked or keyguard
+                    mPhoneStatusBar.setVisualizerTouching(false);
+                }
+            }
         }
 
         if (expandWantsIt && mIsBeingDragged) {
@@ -2114,6 +2118,9 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     public void onChildAnimationFinished() {
+        if (mPhoneStatusBar.getBarState() != StatusBarState.SHADE) {
+            mPhoneStatusBar.requestVisualizer(null, 500);
+        }
         requestChildrenUpdate();
     }
 
@@ -2157,12 +2164,6 @@ public class NotificationStackScrollLayout extends ViewGroup
             mNeedsAnimation =  true;
         }
         requestChildrenUpdate();
-        if (activatedChild != null) {
-            mPhoneStatusBar.requestVisualizer(false, 0);
-        } else {
-            mPhoneStatusBar.requestVisualizer(true, 300);
-        }
-
     }
 
     public ActivatableNotificationView getActivatedChild() {
