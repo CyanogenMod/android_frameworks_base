@@ -77,7 +77,7 @@ public class RecentsConfiguration {
 
     /** Search bar */
     int searchBarAppWidgetId = -1;
-    public static int searchBarSpaceHeightPx;
+    public int searchBarSpaceHeightPx;
 
     /** Task stack */
     public int taskStackScrollDuration;
@@ -306,6 +306,10 @@ public class RecentsConfiguration {
                 Settings.Global.DEVELOPMENT_SETTINGS_ENABLED) != 0;
         lockToAppEnabled = ssp.getSystemSetting(context,
                 Settings.System.LOCK_TO_APP_ENABLED) != 0;
+        final boolean showSearch = ssp.getSystemSetting(context,
+                Settings.System.RECENTS_SHOW_SEARCH_BAR) != 0;
+        searchBarSpaceHeightPx = showSearch ? context.getResources().getDimensionPixelSize(
+                R.dimen.recents_search_bar_space_height): 0;
     }
 
     /** Called when the configuration has changed, and we want to reset any configuration specific
@@ -361,7 +365,8 @@ public class RecentsConfiguration {
             taskStackBounds.set(0, topInset, windowWidth - rightInset, windowHeight);
         } else {
             // In portrait, the search bar appears on the top (which already has the inset)
-            taskStackBounds.set(0, searchBarBounds.bottom, windowWidth, windowHeight);
+            taskStackBounds.set(0, Math.max(searchBarBounds.bottom, searchBarSpaceHeightPx),
+                    windowWidth, windowHeight);
         }
     }
 
