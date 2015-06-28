@@ -4049,6 +4049,21 @@ public class Intent implements Parcelable, Cloneable {
      * @hide
      */
     public static final int FLAG_RECEIVER_BOOT_UPGRADE = 0x02000000;
+    /**
+     * Set for {@link #ACTION_BOOT_COMPLETED} when the device is booting.
+     * @hide internal use only
+     */
+    public static final int FLAG_RECEIVER_BOOTING = 0x01000000;
+    /**
+     * Set for broadcast which may have dozens of receivers.
+     * @hide internal use only
+     */
+    public static final int FLAG_RECEIVER_LONG_TIME = 0x00800000;
+    /**
+     * Set when this broadcast is sent from non-system application.
+     * @hide internal use only
+     */
+    public static final int FLAG_RECEIVER_NON_SYSTEM_APP = 0x00400000;
 
     /**
      * @hide Flags that can't be changed with PendingIntent.

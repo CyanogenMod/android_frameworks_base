@@ -27,7 +27,6 @@ import android.content.ComponentName;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -41,7 +40,6 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.util.EventLog;
-import android.util.Log;
 import android.util.Slog;
 
 /**
@@ -53,13 +51,13 @@ import android.util.Slog;
 public final class BroadcastQueue {
     static final String TAG = "BroadcastQueue";
     static final String TAG_MU = ActivityManagerService.TAG_MU;
-    static final boolean DEBUG_BROADCAST = ActivityManagerService.DEBUG_BROADCAST;
-    static final boolean DEBUG_BROADCAST_LIGHT = ActivityManagerService.DEBUG_BROADCAST_LIGHT;
+    static final boolean DEBUG_BROADCAST = ActiveBroadcasts.DEBUG_BROADCAST;
+    static final boolean DEBUG_BROADCAST_LIGHT = ActiveBroadcasts.DEBUG_BROADCAST_LIGHT;
     static final boolean DEBUG_MU = ActivityManagerService.DEBUG_MU;
 
-    static final int MAX_BROADCAST_HISTORY = ActivityManager.isLowRamDeviceStatic() ? 10 : 50;
-    static final int MAX_BROADCAST_SUMMARY_HISTORY
-            = ActivityManager.isLowRamDeviceStatic() ? 25 : 300;
+    // How long we allow a receiver to run before giving up on it.
+    static final int BROADCAST_FG_TIMEOUT = 10 * 1000;
+    static final int BROADCAST_BG_TIMEOUT = 60 * 1000;
 
     final ActivityManagerService mService;
 
@@ -67,6 +65,11 @@ public final class BroadcastQueue {
      * Recognizable moniker for this queue
      */
     final String mQueueName;
+
+    /**
+     * Scheduling group for receiver's process in this queue
+     */
+    final int mSchedGroup;
 
     /**
      * Timeout period for this queue's broadcasts
@@ -86,7 +89,7 @@ public final class BroadcastQueue {
      * a bunch of processes to execute IntentReceiver components.  Background-
      * and foreground-priority broadcasts are queued separately.
      */
-    final ArrayList<BroadcastRecord> mParallelBroadcasts = new ArrayList<BroadcastRecord>();
+    final ArrayList<BroadcastRecord> mParallelBroadcasts = new ArrayList<>();
 
     /**
      * List of all active broadcasts that are to be executed one at a time.
@@ -95,17 +98,7 @@ public final class BroadcastQueue {
      * broadcasts, separate background- and foreground-priority queues are
      * maintained.
      */
-    final ArrayList<BroadcastRecord> mOrderedBroadcasts = new ArrayList<BroadcastRecord>();
-
-    /**
-     * Historical data of past broadcasts, for debugging.
-     */
-    final BroadcastRecord[] mBroadcastHistory = new BroadcastRecord[MAX_BROADCAST_HISTORY];
-
-    /**
-     * Summary of historical data of past broadcasts, for debugging.
-     */
-    final Intent[] mBroadcastSummaryHistory = new Intent[MAX_BROADCAST_SUMMARY_HISTORY];
+    final ArrayList<BroadcastRecord> mOrderedBroadcasts = new ArrayList<>();
 
     /**
      * Set when we current have a BROADCAST_INTENT_MSG in flight.
@@ -180,11 +173,13 @@ public final class BroadcastQueue {
     }
 
     BroadcastQueue(ActivityManagerService service, Handler handler,
-            String name, long timeoutPeriod, boolean allowDelayBehindServices) {
+            String name, int schedGroup, boolean allowDelayBehindServices) {
         mService = service;
         mHandler = new BroadcastHandler(handler.getLooper());
         mQueueName = name;
-        mTimeoutPeriod = timeoutPeriod;
+        mSchedGroup = schedGroup;
+        mTimeoutPeriod = schedGroup == Process.THREAD_GROUP_BG_NONINTERACTIVE ?
+                BROADCAST_BG_TIMEOUT : BROADCAST_FG_TIMEOUT;
         mDelayBehindServices = allowDelayBehindServices;
     }
 
@@ -380,7 +375,8 @@ public final class BroadcastQueue {
             ActivityInfo nextReceiver;
             if (r.nextReceiver < r.receivers.size()) {
                 Object obj = r.receivers.get(r.nextReceiver);
-                nextReceiver = (obj instanceof ActivityInfo) ? (ActivityInfo)obj : null;
+                nextReceiver = (obj instanceof ResolveInfo) ?
+                        ((ResolveInfo) obj).activityInfo : null;
             } else {
                 nextReceiver = null;
             }
@@ -393,7 +389,7 @@ public final class BroadcastQueue {
                 // on.  If there are background services currently starting, then we will go into a
                 // special state where we hold off on continuing this broadcast until they are done.
                 if (mService.mServices.hasBackgroundServices(r.userId)) {
-                    Slog.i(ActivityManagerService.TAG, "Delay finish: "
+                    Slog.i(ActivityManagerService.TAG, "Delay finish: [" + mQueueName + "] "
                             + r.curComponent.flattenToShortString());
                     r.state = BroadcastRecord.WAITING_SERVICES;
                     return false;
@@ -568,14 +564,14 @@ public final class BroadcastQueue {
                 final int N = r.receivers.size();
                 if (DEBUG_BROADCAST_LIGHT) Slog.v(TAG, "Processing parallel broadcast ["
                         + mQueueName + "] " + r);
-                for (int i=0; i<N; i++) {
+                for (int i = 0; i < N; i++) {
                     Object target = r.receivers.get(i);
                     if (DEBUG_BROADCAST)  Slog.v(TAG,
                             "Delivering non-ordered on [" + mQueueName + "] to registered "
                             + target + ": " + r);
-                    deliverToRegisteredReceiverLocked(r, (BroadcastFilter)target, false);
+                    deliverToRegisteredReceiverLocked(r, (BroadcastFilter) target, false);
                 }
-                addBroadcastToHistoryLocked(r);
+                mService.mBroadcasts.addBroadcastToHistoryLocked(r);
                 mCurrentBroadcast = null;
                 if (DEBUG_BROADCAST_LIGHT) Slog.v(TAG, "Done with parallel broadcast ["
                         + mQueueName + "] " + r);
@@ -612,7 +608,7 @@ public final class BroadcastQueue {
             }
 
             boolean looped = false;
-            
+
             do {
                 if (mOrderedBroadcasts.size() == 0) {
                     // No more broadcasts pending, so all done!
@@ -698,7 +694,7 @@ public final class BroadcastQueue {
                             + r);
 
                     // ... and on to the next...
-                    addBroadcastToHistoryLocked(r);
+                    mService.mBroadcasts.addBroadcastToHistoryLocked(r);
                     mOrderedBroadcasts.remove(0);
                     mCurrentBroadcast = null;
                     r = null;
@@ -1093,20 +1089,6 @@ public final class BroadcastQueue {
         }
     }
 
-    private final void addBroadcastToHistoryLocked(BroadcastRecord r) {
-        if (r.callingUid < 0) {
-            // This was from a registerReceiver() call; ignore it.
-            return;
-        }
-        System.arraycopy(mBroadcastHistory, 0, mBroadcastHistory, 1,
-                MAX_BROADCAST_HISTORY-1);
-        r.finishTime = SystemClock.uptimeMillis();
-        mBroadcastHistory[0] = r;
-        System.arraycopy(mBroadcastSummaryHistory, 0, mBroadcastSummaryHistory, 1,
-                MAX_BROADCAST_SUMMARY_HISTORY-1);
-        mBroadcastSummaryHistory[0] = r.intent;
-    }
-
     final void logBroadcastReceiverDiscardLocked(BroadcastRecord r) {
         if (r.nextReceiver > 0) {
             Object curReceiver = r.receivers.get(r.nextReceiver-1);
@@ -1186,73 +1168,6 @@ public final class BroadcastQueue {
                     pw.println("    (null)");
                 }
                 needSep = true;
-            }
-        }
-
-        int i;
-        boolean printed = false;
-        for (i=0; i<MAX_BROADCAST_HISTORY; i++) {
-            BroadcastRecord r = mBroadcastHistory[i];
-            if (r == null) {
-                break;
-            }
-            if (dumpPackage != null && !dumpPackage.equals(r.callerPackage)) {
-                continue;
-            }
-            if (!printed) {
-                if (needSep) {
-                    pw.println();
-                }
-                needSep = true;
-                pw.println("  Historical broadcasts [" + mQueueName + "]:");
-                printed = true;
-            }
-            if (dumpAll) {
-                pw.print("  Historical Broadcast " + mQueueName + " #");
-                        pw.print(i); pw.println(":");
-                r.dump(pw, "    ");
-            } else {
-                pw.print("  #"); pw.print(i); pw.print(": "); pw.println(r);
-                pw.print("    ");
-                pw.println(r.intent.toShortString(false, true, true, false));
-                if (r.targetComp != null && r.targetComp != r.intent.getComponent()) {
-                    pw.print("    targetComp: "); pw.println(r.targetComp.toShortString());
-                }
-                Bundle bundle = r.intent.getExtras();
-                if (bundle != null) {
-                    pw.print("    extras: "); pw.println(bundle.toString());
-                }
-            }
-        }
-
-        if (dumpPackage == null) {
-            if (dumpAll) {
-                i = 0;
-                printed = false;
-            }
-            for (; i<MAX_BROADCAST_SUMMARY_HISTORY; i++) {
-                Intent intent = mBroadcastSummaryHistory[i];
-                if (intent == null) {
-                    break;
-                }
-                if (!printed) {
-                    if (needSep) {
-                        pw.println();
-                    }
-                    needSep = true;
-                    pw.println("  Historical broadcasts summary [" + mQueueName + "]:");
-                    printed = true;
-                }
-                if (!dumpAll && i >= 50) {
-                    pw.println("  ...");
-                    break;
-                }
-                pw.print("  #"); pw.print(i); pw.print(": ");
-                pw.println(intent.toShortString(false, true, true, false));
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    pw.print("    extras: "); pw.println(bundle.toString());
-                }
             }
         }
 
