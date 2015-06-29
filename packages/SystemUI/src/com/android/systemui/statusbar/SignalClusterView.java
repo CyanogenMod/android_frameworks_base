@@ -169,7 +169,11 @@ public class SignalClusterView
             int activityIcon, int typeIcon, String contentDescription,
             String typeContentDescription, boolean isTypeIconWide,
             boolean showRoamingIndicator, int subId) {
-        PhoneState state = getOrInflateState(subId);
+        PhoneState state = getState(subId);
+        if (state == null) {
+            return;
+        }
+
         state.mMobileVisible = visible;
         state.mMobileStrengthId = strengthIcon;
         state.mMobileActivityId = activityIcon;
@@ -200,13 +204,13 @@ public class SignalClusterView
         }
     }
 
-    private PhoneState getOrInflateState(int subId) {
+    private PhoneState getState(int subId) {
         for (PhoneState state : mPhoneStates) {
             if (state.mSubId == subId) {
                 return state;
             }
         }
-        return inflatePhoneState(subId);
+        return null;
     }
 
     private PhoneState inflatePhoneState(int subId) {
