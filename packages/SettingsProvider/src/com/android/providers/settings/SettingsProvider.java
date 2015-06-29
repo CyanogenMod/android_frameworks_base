@@ -147,6 +147,8 @@ public class SettingsProvider extends ContentProvider {
                 UserManager.ENSURE_VERIFY_APPS);
         sRestrictedKeys.put(Settings.Global.PREFERRED_NETWORK_MODE,
                 UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS);
+        sRestrictedKeys.put(Settings.Global.CONFIGURED_NETWORK_MODE,
+                UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS);
 
         sSecureCloneToManagedKeys = new HashSet<String>();
         for (int i = 0; i < Settings.Secure.CLONE_TO_MANAGED_PROFILE.length; i++) {

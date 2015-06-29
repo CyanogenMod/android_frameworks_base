@@ -7723,6 +7723,15 @@ public final class Settings {
                 "preferred_network_mode";
 
         /**
+         * The configured network mode
+         * Like PREFERRED_NETWORK_MODE, but holds the value configured by the
+         * user instead of the currently active value. Those values may differ
+         * e.g. for the non-data SIM in a DSDS MSIM setup.
+         * @hide
+         */
+        public static final String CONFIGURED_NETWORK_MODE = "configured_network_mode";
+
+        /**
          * Setting to 1 will hide carrier network settings.
          * Default is 0.
          * @hide
