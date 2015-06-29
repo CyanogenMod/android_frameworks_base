@@ -348,6 +348,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private void handleFingerprintProcessed(int fingerprintId) {
+        FingerprintManager fpm =
+                (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+        fpm.authenticate();
         if (fingerprintId == 0) return; // not a valid fingerprint
 
         final int userId;
@@ -655,6 +658,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     protected void handleScreenTurnedOn() {
+        startAuthenticatingFingerprint();
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
@@ -665,6 +669,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     protected void handleScreenTurnedOff(int arg1) {
+        stopAuthenticatingFingerprint();
         clearFingerprintRecognized();
         final int count = mCallbacks.size();
         for (int i = 0; i < count; i++) {
@@ -773,10 +778,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         TrustManager trustManager = (TrustManager) context.getSystemService(Context.TRUST_SERVICE);
         trustManager.registerTrustListener(this);
 
-        FingerprintManager fpm;
-        fpm = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
-        fpm.startListening(mFingerprintManagerReceiver);
-        fpm.authenticate();
+        startAuthenticatingFingerprint();
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
@@ -1249,6 +1251,20 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     public void clearFailedUnlockAttempts() {
         mFailedAttempts = 0;
         mFailedBiometricUnlockAttempts = 0;
+    }
+
+    public void startAuthenticatingFingerprint() {
+        FingerprintManager fpm =
+                (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+        fpm.startListening(mFingerprintManagerReceiver);
+        fpm.authenticate();
+    }
+
+    public void stopAuthenticatingFingerprint() {
+        FingerprintManager fpm =
+                (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+        fpm.cancel();
+        fpm.stopListening();
     }
 
     public void clearFingerprintRecognized() {
