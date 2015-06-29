@@ -473,6 +473,14 @@ public class KeyguardViewMediator extends SystemUI {
         public void onFingerprintRecognized(int userId) {
             mViewMediatorCallback.keyguardDone(true);
         };
+
+        @Override
+        public void onFingerprintAttemptFailed() {
+            if (mUpdateMonitor.isMaxFingerprintAttemptsReached()) {
+                mStatusBarKeyguardViewManager.showBouncerHideNotifications();
+            }
+            userActivity();
+        }
     };
 
     ViewMediatorCallback mViewMediatorCallback = new ViewMediatorCallback() {
