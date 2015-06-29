@@ -2983,19 +2983,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // value defined in RILConstants
             final String defVal = SystemProperties.get("ro.telephony.default_network", "");
             final String[] defNetworkSettings = defVal.split(",");
-            final String[] networkSettings = new String[phoneCount];
+            final String[] prefNetworkSettings = new String[phoneCount];
+            final String[] configNetworkSettings = new String[phoneCount];
             boolean error = defNetworkSettings.length != phoneCount;
             for (int i = 0; i < phoneCount; i++) {
                 if (i < defNetworkSettings.length) {
                     try {
-                        networkSettings[i] = String.valueOf(
+                        prefNetworkSettings[i] = String.valueOf(
                                 Integer.parseInt(defNetworkSettings[i]));
+                        configNetworkSettings[i] = String.valueOf(
+                                Integer.parseInt(defNetworkSettings[0]));
                     } catch (NumberFormatException ex) {
-                        networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
+                        prefNetworkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
+                        configNetworkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
                         error = true;
                     }
                 } else {
-                    networkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
+                    prefNetworkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
+                    configNetworkSettings[i] = String.valueOf(RILConstants.PREFERRED_NETWORK_MODE);
                     error = true;
                 }
             }
@@ -3003,7 +3008,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Log.w(TAG, "Invalid ro.telephony.default_network: " + defVal);
             }
             loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, TextUtils.join(",",
-                    networkSettings));
+                    prefNetworkSettings));
+            loadSetting(stmt, Settings.Global.CONFIGURED_NETWORK_MODE, TextUtils.join(",",
+                    configNetworkSettings));
 
             // Set the preferred cdma subscription source to target desired value or default
             // value defined in CdmaSubscriptionSourceManager
