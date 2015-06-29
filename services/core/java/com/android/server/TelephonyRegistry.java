@@ -619,11 +619,21 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         synchronized (mRecords) {
             final int recordCount = mRecords.size();
             for (int i = 0; i < recordCount; i++) {
-                if (mRecords.get(i).binder == binder) {
+                Record r = mRecords.get(i);
+                if (r.binder == binder) {
                     if (DBG) {
-                        Record r = mRecords.get(i);
                         log("remove: binder=" + binder + "r.pkgForDebug" + r.pkgForDebug
                                 + "r.callback" + r.callback);
+                    }
+                    try {
+                        if (r.callback != null) {
+                            r.callback.onUnregistered();
+                        }
+                        if (r.onSubscriptionsChangedListenerCallback != null) {
+                            r.onSubscriptionsChangedListenerCallback.onUnregistered();
+                        }
+                    } catch (RemoteException ex) {
+                        // ignored, we'll remove it anyway
                     }
                     mRecords.remove(i);
                     return;
