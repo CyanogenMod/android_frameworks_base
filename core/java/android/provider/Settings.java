@@ -7723,6 +7723,13 @@ public final class Settings {
                 "preferred_network_mode";
 
         /**
+         * The configured network mode
+         * @hide
+         */
+        public static final String CONFIGURED_NETWORK_MODE =
+                "configured_network_mode";
+
+        /**
          * Setting to 1 will hide carrier network settings.
          * Default is 0.
          * @hide
