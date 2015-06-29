@@ -579,6 +579,10 @@ public class PhoneStateListener {
         public void onOemHookRawEvent(byte[] rawData) {
             Message.obtain(mHandler, LISTEN_OEM_HOOK_RAW_EVENT, 0, 0, rawData).sendToTarget();
         }
+
+        public void onUnregistered() {
+            mHandler.removeCallbacksAndMessages(null);
+        }
     };
 
     private void log(String s) {

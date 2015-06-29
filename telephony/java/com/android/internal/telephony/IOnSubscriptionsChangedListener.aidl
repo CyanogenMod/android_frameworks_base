@@ -18,5 +18,6 @@ package com.android.internal.telephony;
 
 oneway interface IOnSubscriptionsChangedListener {
     void onSubscriptionsChanged();
+    void onUnregistered();
 }
 
