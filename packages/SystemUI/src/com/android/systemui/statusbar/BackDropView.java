@@ -406,7 +406,9 @@ public class BackDropView extends FrameLayout implements Palette.PaletteAsyncLis
                 @Override
                 public void onScreenTurnedOn() {
                     mScreenOn = true;
-                    mHandler.postDelayed(mResumeVisualizerIfPlayingRunnable, 200);
+                    if (mHandler != null) {
+                        mHandler.postDelayed(mResumeVisualizerIfPlayingRunnable, 200);
+                    }
                 }
 
                 @Override
