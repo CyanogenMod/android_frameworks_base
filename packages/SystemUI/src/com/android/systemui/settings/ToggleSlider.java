@@ -28,6 +28,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 
@@ -46,6 +48,13 @@ public class ToggleSlider extends RelativeLayout {
 
     private ToggleSlider mMirror;
     private BrightnessMirrorController mMirrorController;
+
+    private KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
+        @Override
+        public void onScreenTurnedOff(int why) {
+            reset();
+        }
+    };
 
     public ToggleSlider(Context context) {
         this(context, null);
@@ -95,6 +104,13 @@ public class ToggleSlider extends RelativeLayout {
         if (mListener != null) {
             mListener.onInit(this);
         }
+        KeyguardUpdateMonitor.getInstance(getContext()).registerCallback(mCallback);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        KeyguardUpdateMonitor.getInstance(getContext()).removeCallback(mCallback);
+        super.onDetachedFromWindow();
     }
 
     public void setOnChangedListener(Listener l) {
@@ -120,6 +136,25 @@ public class ToggleSlider extends RelativeLayout {
         mSlider.setProgress(value);
         if (mMirror != null) {
             mMirror.setValue(value);
+        }
+    }
+
+    private void reset() {
+        if (mTracking) {
+            mTracking = false;
+
+            if (mListener != null) {
+                mListener.onChanged(
+                        ToggleSlider.this, mTracking, mToggle.isChecked(), mSlider.getProgress());
+            }
+
+            if (mMirror != null) {
+                mMirror.mSlider.setPressed(false);
+            }
+
+            if (mMirrorController != null) {
+                mMirrorController.hideMirror();
+            }
         }
     }
 
@@ -175,20 +210,7 @@ public class ToggleSlider extends RelativeLayout {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            mTracking = false;
-
-            if (mListener != null) {
-                mListener.onChanged(
-                        ToggleSlider.this, mTracking, mToggle.isChecked(), mSlider.getProgress());
-            }
-
-            if (mMirror != null) {
-                mMirror.mSlider.setPressed(false);
-            }
-
-            if (mMirrorController != null) {
-                mMirrorController.hideMirror();
-            }
+            reset();
         }
     };
 }
