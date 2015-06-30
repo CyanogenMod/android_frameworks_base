@@ -15,11 +15,12 @@
  */
 package com.android.keyguard;
 
-import android.app.Profile;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+
+import cyanogenmod.app.Profile;
 
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.widget.LockPatternUtils;

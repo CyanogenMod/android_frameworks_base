@@ -336,6 +336,10 @@ public class SubscriptionManager {
                 if (DBG) log("callback: received, sendEmptyMessage(0) to handler");
                 mHandler.sendEmptyMessage(0);
             }
+            @Override
+            public void onUnregistered() {
+                mHandler.removeMessages(0);
+            }
         };
 
         private void log(String s) {
