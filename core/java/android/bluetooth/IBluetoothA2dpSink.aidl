@@ -30,5 +30,8 @@ interface IBluetoothA2dpSink {
     List<BluetoothDevice> getConnectedDevices();
     List<BluetoothDevice> getDevicesMatchingConnectionStates(in int[] states);
     int getConnectionState(in BluetoothDevice device);
+    boolean setPriority(in BluetoothDevice device, int priority);
+    int getPriority(in BluetoothDevice device);
+    boolean isA2dpPlaying(in BluetoothDevice device);
     BluetoothAudioConfig getAudioConfig(in BluetoothDevice device);
 }
