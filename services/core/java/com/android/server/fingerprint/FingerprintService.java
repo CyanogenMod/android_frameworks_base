@@ -432,6 +432,12 @@ public class FingerprintService extends SystemService {
         }
     }
 
+    private void throwIfNoFingerprint() {
+        if (mHal == 0) {
+            throw new UnsupportedOperationException("Fingerprint sensor not available");
+        }
+    }
+
     private final class FingerprintServiceWrapper extends IFingerprintService.Stub {
         private final static String DUMP_CMD_REMOVE_FINGER = "removeFinger";
         private final static String DUMP_CMD_PRINT_ENROLLMENTS = "printEnrollments";
@@ -440,37 +446,43 @@ public class FingerprintService extends SystemService {
         @Override // Binder call
         public void authenticate(IBinder token, int userId) {
             checkPermission(USE_FINGERPRINT);
+            throwIfNoFingerprint();
             startAuthentication(token, userId);
         }
 
         @Override // Binder call
         public void enroll(IBinder token, long timeout, int userId) {
             checkPermission(ENROLL_FINGERPRINT);
+            throwIfNoFingerprint();
             startEnroll(token, timeout, userId);
         }
 
         @Override // Binder call
         public void cancel(IBinder token,int userId) {
             checkPermission(USE_FINGERPRINT);
+            throwIfNoFingerprint();
             startCancel(token, userId);
         }
 
         @Override // Binder call
         public void remove(IBinder token, int fingerprintId, int userId) {
             checkPermission(ENROLL_FINGERPRINT); // TODO: Maybe have another permission
+            throwIfNoFingerprint();
             startRemove(token, fingerprintId, userId);
         }
 
         @Override // Binder call
-        public void startListening(IBinder token, IFingerprintServiceReceiver receiver, int userId)
-        {
+        public void startListening(IBinder token, IFingerprintServiceReceiver receiver,
+                int userId) {
             checkPermission(USE_FINGERPRINT);
+            throwIfNoFingerprint();
             addListener(token, receiver, userId);
         }
 
         @Override // Binder call
         public void stopListening(IBinder token, int userId) {
             checkPermission(USE_FINGERPRINT);
+            throwIfNoFingerprint();
             removeListener(token, userId);
         }
 
@@ -478,13 +490,15 @@ public class FingerprintService extends SystemService {
         public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId)
                 throws RemoteException {
             checkPermission(USE_FINGERPRINT);
+            throwIfNoFingerprint();
             return FingerprintService.this.getEnrolledFingerprints(token, userId);
         }
 
         @Override
-        public boolean setFingerprintName(IBinder token, int fingerprintId, String name, int userId)
-                throws RemoteException {
+        public boolean setFingerprintName(IBinder token, int fingerprintId, String name,
+                int userId) throws RemoteException {
             checkPermission(USE_FINGERPRINT);
+            throwIfNoFingerprint();
             return FingerprintService.this.setFingerprintName(token, fingerprintId, name, userId);
         }
 
@@ -493,7 +507,9 @@ public class FingerprintService extends SystemService {
          */
         @Override
         protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-            if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
+            if (mHal == 0) {
+                pw.println("Fingerprint sensor not available");
+            } else if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
                 dumpEnrollments(pw, args);
             } else if (args.length >= 3 && DUMP_CMD_SET_FINGER_NAME.equals(args[0])) {
                 dumpSetFingerprintName(pw, args);
@@ -558,8 +574,17 @@ public class FingerprintService extends SystemService {
 
     @Override
     public void onStart() {
-       publishBinderService(Context.FINGERPRINT_SERVICE, new FingerprintServiceWrapper());
-       mHal = nativeOpenHal();
+        publishBinderService(Context.FINGERPRINT_SERVICE, new FingerprintServiceWrapper());
+        mHal = nativeOpenHal();
+        if (mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
+            if (mHal == 0) {
+                throw new RuntimeException(
+                        "FEATURE_FINGERPRINT present, but no Fingerprint HAL loaded!");
+            }
+        } else if (mHal != 0) {
+            throw new RuntimeException(
+                    "Fingerprint HAL present, but FEATURE_FINGERPRINT is not set!");
+        }
     }
 
 }
