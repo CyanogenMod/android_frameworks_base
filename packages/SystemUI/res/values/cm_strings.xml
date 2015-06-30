@@ -300,4 +300,7 @@
     <string name="dynamic_qs_tile_ime_selector_label">IME selector</string>
     <string name="dynamic_qs_tile_su_label">Root access</string>
     <string name="dynamic_qs_tile_adb_label" translatable="false">ADB</string>
+
+   <!-- Fingerprint -->
+   <string name="fingerprint_try_again_hint">Please scan again</string>
 </resources>
