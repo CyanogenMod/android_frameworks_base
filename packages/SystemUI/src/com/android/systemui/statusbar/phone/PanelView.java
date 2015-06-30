@@ -841,6 +841,26 @@ public abstract class PanelView extends FrameLayout {
         mHintAnimationRunning = true;
     }
 
+    protected void startBadFingerHint() {
+        // We don't need to hint the user if an animation is already running or the user is changing
+        // the expansion.
+        if (mHeightAnimator != null || mTracking) {
+            return;
+        }
+        cancelPeek();
+        notifyExpandingStarted();
+        startUnlockHintAnimationPhase1(new Runnable() {
+            @Override
+            public void run() {
+                notifyExpandingFinished();
+                mStatusBar.onHintFinished();
+                mHintAnimationRunning = false;
+            }
+        });
+        mStatusBar.onFingerprintHintStarted();
+        mHintAnimationRunning = true;
+    }
+
     /**
      * Phase 1: Move everything upwards.
      */
