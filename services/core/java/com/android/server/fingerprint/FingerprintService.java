@@ -463,6 +463,12 @@ public class FingerprintService extends SystemService {
         }
     }
 
+    private void throwIfNoFingerprint() {
+        if (mHal == 0) {
+            throw new UnsupportedOperationException("Fingerprint sensor not available");
+        }
+    }
+
     private final class FingerprintServiceWrapper extends IFingerprintService.Stub {
         private final static String DUMP_CMD_REMOVE_FINGER = "removeFinger";
         private final static String DUMP_CMD_PRINT_ENROLLMENTS = "printEnrollments";
@@ -472,37 +478,43 @@ public class FingerprintService extends SystemService {
         @Override // Binder call
         public void authenticate(IBinder token, int userId) {
             checkPermission();
+            throwIfNoFingerprint();
             startAuthentication(token, userId);
         }
 
         @Override // Binder call
         public void enroll(IBinder token, long timeout, int userId) {
             checkPermission();
+            throwIfNoFingerprint();
             startEnroll(token, timeout, userId);
         }
 
         @Override // Binder call
         public void cancel(IBinder token,int userId) {
             checkPermission();
+            throwIfNoFingerprint();
             startCancel(token, userId);
         }
 
         @Override // Binder call
         public void remove(IBinder token, int fingerprintId, int userId) {
             checkPermission();
+            throwIfNoFingerprint();
             startRemove(token, fingerprintId, userId);
         }
 
         @Override // Binder call
-        public void startListening(IBinder token, IFingerprintServiceReceiver receiver, int userId)
-        {
+        public void startListening(IBinder token, IFingerprintServiceReceiver receiver,
+                int userId) {
             checkPermission();
+            throwIfNoFingerprint();
             addListener(token, receiver, userId);
         }
 
         @Override // Binder call
         public void stopListening(IBinder token, int userId) {
             checkPermission();
+            throwIfNoFingerprint();
             removeListener(token, userId);
         }
 
@@ -510,13 +522,15 @@ public class FingerprintService extends SystemService {
         public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId)
                 throws RemoteException {
             checkPermission();
+            throwIfNoFingerprint();
             return FingerprintService.this.getEnrolledFingerprints(token, userId);
         }
 
         @Override
-        public boolean setFingerprintName(IBinder token, int fingerprintId, String name, int userId)
-                throws RemoteException {
+        public boolean setFingerprintName(IBinder token, int fingerprintId, String name,
+                int userId) throws RemoteException {
             checkPermission();
+            throwIfNoFingerprint();
             return FingerprintService.this.setFingerprintName(token, fingerprintId, name, userId);
         }
 
