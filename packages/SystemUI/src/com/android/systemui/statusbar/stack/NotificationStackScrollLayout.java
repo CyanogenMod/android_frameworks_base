@@ -1349,6 +1349,11 @@ public class NotificationStackScrollLayout extends ViewGroup
                 if (child instanceof ExpandableNotificationRow) {
                     ExpandableNotificationRow row = (ExpandableNotificationRow) child;
                     height += row.getIntrinsicHeight();
+                } else if (child instanceof StackScrollerDecorView) {
+                    final StackScrollerDecorView decor = (StackScrollerDecorView) child;
+                    if (!decor.willBeGone()) {
+                        height += decor.getActualHeight();
+                    }
                 } else if (child instanceof ExpandableView) {
                     ExpandableView expandableView = (ExpandableView) child;
                     height += expandableView.getActualHeight();
