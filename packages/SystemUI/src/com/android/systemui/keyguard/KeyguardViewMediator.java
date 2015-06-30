@@ -473,7 +473,8 @@ public class KeyguardViewMediator extends SystemUI {
 
         @Override
         public void onFingerprintAttemptFailed() {
-            if (mUpdateMonitor.isMaxFingerprintAttemptsReached()) {
+            if (mUpdateMonitor.isMaxFingerprintAttemptsReached()
+                    && !mStatusBarKeyguardViewManager.isBouncerShowing()) {
                 mStatusBarKeyguardViewManager.showBouncerHideNotifications();
             }
             userActivity();
