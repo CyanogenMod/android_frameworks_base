@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">ADB sur USB &amp; reto aktiva</string>
   <string name="adb_active_generic_notification_message">Tuŝeti por malŝalti sencimigon.</string>
   <string name="usb_choose_notification_title">Tuŝetu por elekti USB opciojn.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; reto</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Reto</string>
   <string name="permlab_interceptPackageLaunch">interkapti lanĉadon de aplikaĵo</string>
   <string name="permdesc_interceptPackageLaunch">Permesas aplikaĵon interkapti lanĉadon de aliaj aplikaĵoj</string>
   <string name="app_ops_access_camera">aliri al fotilo</string>
@@ -82,7 +86,7 @@
   <string name="app_ops_access_notifications">legi viajn atentigojn</string>
   <string name="app_ops_activate_vpn">aktivigi VPN</string>
   <string name="app_ops_alarm_wakeup">veki la aparaton</string>
-  <string name="app_ops_su">akiri sistemestrajn permesojn</string>
+  <string name="app_ops_su">akiri radikuzantajn permesojn</string>
   <string name="app_ops_auto_start">lanĉiĝi dum sistema ŝaltado</string>
   <string name="app_ops_delete_call_log">forigi vian protokolon de alvokoj</string>
   <string name="app_ops_delete_contacts">forigi viajn kontaktulojn</string>
@@ -124,7 +128,7 @@
   <string name="app_ops_use_media_buttons">uzi la aŭdvidajn butonojn</string>
   <string name="app_ops_use_media_volume">kontroli laŭtecon de aŭdvidaj</string>
   <string name="app_ops_use_notification_volume">kontroli laŭtecon de atentigoj</string>
-  <string name="app_ops_use_ring_volume">kontroli laŭtecon de sonorilo</string>
+  <string name="app_ops_use_ring_volume">kontroli laŭtecon de sonoro</string>
   <string name="app_ops_use_vibrate">uzi tuŝeblan retroefikon</string>
   <string name="app_ops_use_voice_volume">kontroli laŭtecon de voĉaj alvokoj</string>
   <string name="app_ops_write_mms">skribi MMS-mesaĝon</string>
@@ -197,8 +201,8 @@
   <string name="usb_ext_media_nomedia_notification_message">USB memorilo forigita. Enmetu novan memorilon.</string>
   <string name="live_display_auto">Aŭtomata</string>
   <string name="live_display_auto_summary">Aŭtomate alĝustigi kolortemperaturon de la ekrano post sunsubiro kaj suniĝo</string>
-  <string name="live_display_off">malaktiva</string>
-  <string name="live_display_off_summary">Malebligi ĉiujn ĝustigojn</string>
+  <string name="live_display_off">For</string>
+  <string name="live_display_off_summary">Malŝalti ĉiujn ĝustigojn</string>
   <string name="live_display_day">Tago</string>
   <string name="live_display_day_summary">Uzi nur tagajn agordojn</string>
   <string name="live_display_night">Nokto</string>

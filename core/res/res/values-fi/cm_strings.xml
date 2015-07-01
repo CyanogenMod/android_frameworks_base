@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">ADB verkon &amp; USB:n kautta käytössä</string>
   <string name="adb_active_generic_notification_message">Paina poistaaksesi vianetsinnän käytöstä.</string>
   <string name="usb_choose_notification_title">Kosketa valitaksesi USB-asetukset.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; verkko</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Verkko</string>
   <string name="permlab_interceptPackageLaunch">keskeytä sovelluksen käynnistys</string>
   <string name="permdesc_interceptPackageLaunch">Sallii sovelluksen keskeyttää toisen sovelluksen käynnistämisen</string>
   <string name="app_ops_access_camera">käyttää kameraa</string>

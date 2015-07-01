@@ -214,4 +214,5 @@
   <string name="quick_settings_tile_flashlight_not_title">Ο φακός είναι ενεργοποιημένος</string>
   <string name="quick_settings_tile_flashlight_not_summary">Πιέστε για απενεργοποίηση</string>
   <string name="storage_sd_dock_card">Κάρτα SD βάσης σύνδεσης</string>
+  <string name="fingerprint_default_name">Δακτυλικό αποτύπωμα <xliff:g id="number">%d</xliff:g></string>
 </resources>

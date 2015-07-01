@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
   <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
   <string name="usb_choose_notification_title">轻触以选择 USB 选项。</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; 网络</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">网络</string>
   <string name="permlab_interceptPackageLaunch">拦截应用启动</string>
   <string name="permdesc_interceptPackageLaunch">允许应用拦截其他应用的启动</string>
   <string name="app_ops_access_camera">存取相机</string>

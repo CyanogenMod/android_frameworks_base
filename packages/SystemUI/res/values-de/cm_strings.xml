@@ -155,5 +155,6 @@
   <string name="quick_settings_remove">Kachel entfernen</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamische Kachel</string>
   <string name="dynamic_qs_tile_next_alarm_label">Nächster Alarm</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Eingabemethode</string>
   <string name="dynamic_qs_tile_su_label">Root-Zugriff</string>
 </resources>

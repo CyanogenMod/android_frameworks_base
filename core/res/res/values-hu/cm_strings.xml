@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">ADB USB-n &amp; hálózaton keresztül engedélyezve</string>
   <string name="adb_active_generic_notification_message">Érintse meg a hibakeresés letiltásához.</string>
   <string name="usb_choose_notification_title">Érintse meg az USB opciók kiválasztásához.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; hálózat</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Hálózat</string>
   <string name="permlab_interceptPackageLaunch">alkalmazás indításának feltartóztatása</string>
   <string name="permdesc_interceptPackageLaunch">Lehetővé teszi az alkalmazás számára, hogy feltartóztassa más alkalmazások indítását</string>
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>

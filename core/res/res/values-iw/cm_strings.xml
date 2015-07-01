@@ -35,22 +35,22 @@
   <string name="global_action_screenshot">צילום מסך</string>
   <string name="permlab_receiveProtectedSms">קבלת הודעות SMS מוגנות</string>
   <string name="permdesc_receiveProtectedSms">מאפשר ליישום לקבל הודעות SMS מוגנות.</string>
-  <string name="permlab_modifyProtectedSmsList">שינוי רשימת הודעות ה-SMS המוגנות</string>
+  <string name="permlab_modifyProtectedSmsList">שינוי רשימת הודעות SMS מוגנות</string>
   <string name="permdesc_modifyProtectedSmsList">מאפשר ליישום לשנות את רשימת הכתובות של הודעות SMS מוגנות.</string>
   <string name="permgrouplab_security">אבטחה</string>
   <string name="permgroupdesc_security">הרשאות הקשורות לאבטחת המידע במכשיר.</string>
   <string name="permlab_accessThemeService">גישה לשירות ערכות העיצוב</string>
   <string name="permdesc_accessThemeService">מאפשר ליישום לגשת לשירות ערכות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
   <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב שלך</string>
-  <string name="permdesc_readThemesDesc">מאפשר ליישום לקרוא את ערכות העיצוב ולקבוע איזו ערכה החלת.</string>
+  <string name="permdesc_readThemesDesc">מאפשר ליישום להיות מודע לערכות העיצוב הקיימות, ולקבוע איזו ערכה החלת.</string>
   <string name="permlab_writeThemes">שינוי ערכות העיצוב שלך</string>
   <string name="permdesc_writeThemesDesc">מאפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות את הערכה המוחלת.</string>
-  <string name="permlab_readPhoneBlacklist">קריאת הרשימה השחורה</string>
-  <string name="permdesc_readPhoneBlacklist">מאפשר ליישום לגשת למידע אודות מספרי הטלפון שנחסמו עבור הודעות או שיחות נכנסות.</string>
+  <string name="permlab_readPhoneBlacklist">קריאת הרשימה השחורה של המכשיר</string>
+  <string name="permdesc_readPhoneBlacklist">מאפשר ליישום לגשת למידע אודות מספרי הטלפון שנחסמו לקבלת שיחות והודעות נכנסות.</string>
   <string name="permlab_changePhoneBlacklist">שינוי הרשימה השחורה</string>
-  <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים המופיעים ברשימה השחורה, שעבורם נחסמות הודעות ושיחות נכנסות.</string>
+  <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים המופיעים ברשימה השחורה, אשר נחסמו לקבלת שיחות והודעות נכנסות.</string>
   <string name="permlab_changePrivacyGuardState">הפעלה או השבתה של שומר הפרטיות</string>
-  <string name="permdesc_changePrivacyGuardState">מאפשר ליישום לשנות האם יישום אחר פועל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
+  <string name="permdesc_changePrivacyGuardState">מאפשר ליישום לקבוע האם יישום אחר יפעל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
   <string name="privacy_guard_notification">שומר הפרטיות פעיל</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> לא יוכל לגשת למידע אישי</string>
   <string name="permlab_useHardwareFramework">השתמש במסגרת חומרתית</string>
@@ -69,36 +69,36 @@
   <string name="reboot_title">הפעלה מחדש</string>
   <string name="reboot_confirm" product="tablet">הטאבלט יופעל מחדש.</string>
   <string name="reboot_confirm" product="default">המכשיר יופעל מחדש.</string>
-  <string name="reboot_progress">מפעיל מחדש\u2026</string>
+  <string name="reboot_progress">מאתחל\u2026</string>
   <string name="app_killed_message">היישום נסגר</string>
-  <string name="adb_net_active_notification_title">ADB דרך הרשת מופעל</string>
-  <string name="adb_both_active_notification_title">ADB דרך ה-USB והרשת מופעל</string>
-  <string name="adb_active_generic_notification_message">הקש לביטול איתור באגים.</string>
+  <string name="adb_net_active_notification_title">ADB דרך רשת מופעל</string>
+  <string name="adb_both_active_notification_title">ADB דרך USB ורשת מופעל</string>
+  <string name="adb_active_generic_notification_message">לחץ לעצירת איתור באגים.</string>
   <string name="usb_choose_notification_title">לחץ כדי לבחור אפשרויות USB.</string>
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB ורשת</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">רשת</string>
-  <string name="permlab_interceptPackageLaunch">התערב בהפעלת יישום</string>
-  <string name="permdesc_interceptPackageLaunch">מאפשר ליישום להתערב בהפעלה של יישומים אחרים</string>
+  <string name="permlab_interceptPackageLaunch">יירט הפעלת יישום</string>
+  <string name="permdesc_interceptPackageLaunch">מאפשר ליישום ליירט הפעלה של יישומים אחרים</string>
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>
   <string name="app_ops_access_notifications">קריאת ההתראות שלך</string>
   <string name="app_ops_activate_vpn">הפעלת VPN</string>
   <string name="app_ops_alarm_wakeup">להעיר את המכשיר</string>
-  <string name="app_ops_su">קבלת גישת Root</string>
-  <string name="app_ops_auto_start">הפעלה בהדלקת המכשיר</string>
+  <string name="app_ops_su">קבלת גישת שורש (Root)</string>
+  <string name="app_ops_auto_start">התחלת פעילות בהדלקת המכשיר</string>
   <string name="app_ops_delete_call_log">מחיקת יומן השיחות שלך</string>
   <string name="app_ops_delete_contacts">מחיקת אנשי הקשר שלך</string>
   <string name="app_ops_delete_mms">מחיקת הודעות ה-MMS שלך</string>
   <string name="app_ops_delete_sms">מחיקת הודעות ה-SMS שלך</string>
-  <string name="app_ops_draw_on_top">הצגת תוכן מעל אפליקציות אחרות</string>
+  <string name="app_ops_draw_on_top">הצגת תוכן מעל יישומים אחרים</string>
   <string name="app_ops_get_usage_stats">קבלת סטטיסטיקות שימוש ביישום</string>
-  <string name="app_ops_keep_device_awake">להשאיר את המכשיר ער</string>
+  <string name="app_ops_keep_device_awake">השארת המכשיר ער</string>
   <string name="app_ops_make_phone_call">ביצוע שיחת טלפון</string>
   <string name="app_ops_modify_calendar">עדכון לוח השנה שלך</string>
   <string name="app_ops_modify_call_log">עדכון יומן השיחות</string>
-  <string name="app_ops_modify_clipboard">לשנות את לוח העתקה</string>
+  <string name="app_ops_modify_clipboard">שינוי לוח ההעתקה</string>
   <string name="app_ops_modify_contacts">עדכון אנשי הקשר שלך</string>
   <string name="app_ops_modify_settings">עדכון הגדרות המערכת</string>
   <string name="app_ops_mute_unmute_microphone">השתקת/הפעלת המיקרופון</string>
@@ -115,7 +115,7 @@
   <string name="app_ops_record_audio">הקלטת שמע</string>
   <string name="app_ops_send_mms">שליחת הודעת MMS</string>
   <string name="app_ops_send_sms">שליחת הודעת SMS</string>
-  <string name="app_ops_start_at_bootup">להתחיל פעולה בהדלקת המכשיר</string>
+  <string name="app_ops_start_at_bootup">התחלת פעילות בהדלקת המכשיר</string>
   <string name="app_ops_toast_window">הצגת הודעות קופצות</string>
   <string name="app_ops_toggle_bluetooth">שינוי מצב ה-Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">שינוי מצב הנתונים הניידים</string>
@@ -139,7 +139,7 @@
   <string name="tethered_notification_no_device_message">אין מכשירים מחוברים</string>
   <string name="tethered_notification_one_device_message">מכשיר <xliff:g id="count">%1$s</xliff:g> מחובר</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> מכשירים מחוברים</string>
-  <string name="progress_nomediapresent" product="default">אין מדיה חיצונית\u2026</string>
+  <string name="progress_nomediapresent" product="default">אין מדיה חיצונית נוכחת\u2026</string>
   <string name="storage_uicc">אחסון UICC</string>
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
@@ -158,35 +158,35 @@
   <string name="permlab_accessTorchService">גישה לשירות הפנס (מבזק)</string>
   <string name="permdesc_accessTorchService">מאפשר ליישום לגשת לשירות הפנס (מבזק). לא אמור להידרש ליישומים רגילים.</string>
   <string name="permlab_preventpower">עקיפת כפתור ההפעלה</string>
-  <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור הכיבוי.</string>
+  <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור ההפעלה.</string>
   <string name="usb_extmedia_format_message">כל המידע על אחסון ה-USB (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
   <string name="sd_extmedia_format_message">כל המידע על הכרטיס (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
   <string name="sd_progress_unmounting">מבטל טעינת כרטיס זיכרון\u2026</string>
-  <string name="sd_progress_erasing">מוחק כרטיס SD\u2026</string>
-  <string name="sd_format_error">לא ניתן היה למחוק את כרטיס ה-SD.</string>
-  <string name="sd_media_bad_removal">כרטיס ה-SD הוסר לפני ביטול הטעינה.</string>
-  <string name="sd_media_checking">כרטיס הזיכרון נמצא כעת בבדיקה.</string>
-  <string name="sd_media_removed">כרטיס SD הוסר.</string>
-  <string name="sd_media_shared">כרטיס ה-SD נמצא כעת בשימוש על-ידי מחשב.</string>
-  <string name="usb_progress_unmounting">מסיר אחסון USB\u2026</string>
+  <string name="sd_progress_erasing">מוחק כרטיס זיכרון\u2026</string>
+  <string name="sd_format_error">לא ניתן למחוק את כרטיס הזיכרון.</string>
+  <string name="sd_media_bad_removal">כרטיס זיכרון הוסר לפני ביטול הטעינה.</string>
+  <string name="sd_media_checking">כרטיס זיכרון נמצא כעת בבדיקה.</string>
+  <string name="sd_media_removed">כרטיס זיכרון הוסר.</string>
+  <string name="sd_media_shared">כרטיס זיכרון נמצא כעת בשימוש של מחשב.</string>
+  <string name="usb_progress_unmounting">מבטל טעינת אחסון USB\u2026</string>
   <string name="usb_progress_erasing">מוחק אחסון USB\u2026</string>
   <string name="usb_format_error">לא ניתן למחוק את אחסון ה-USB.</string>
-  <string name="usb_media_bad_removal">אחסון ה-USB הוסר לפני להיות שטעינתו בוטלה.</string>
-  <string name="usb_media_checking">אחסון ה-USB נבדק כעת.</string>
+  <string name="usb_media_bad_removal">אחסון USB הוסר לפני שטעינתו בוטלה.</string>
+  <string name="usb_media_checking">אחסון USB נבדק כעת.</string>
   <string name="usb_media_removed">אחסון USB הוסר.</string>
-  <string name="usb_media_shared">אחסון ה-USB נמצא כעת בשימוש על-ידי מחשב.</string>
-  <string name="sd_ext_media_checking_notification_title">מכין כרטיס SD</string>
-  <string name="sd_ext_media_checking_notification_message">בודק כרטיס SD לשגיאות.</string>
-  <string name="sd_ext_media_nofs_notification_title">כרטיס SD ריק</string>
-  <string name="sd_ext_media_nofs_notification_message">כרטיס ה-SD הינו ריק או בעל קבצים שהמערכת לא תומכת בהם.</string>
-  <string name="sd_ext_media_unmountable_notification_title">כרטיס SD פגום</string>
-  <string name="sd_ext_media_unmountable_notification_message">כרטיס ה-SD פגום. נסה לפרמט אותו מחדש.</string>
-  <string name="sd_ext_media_badremoval_notification_title">כרטיס SD הוסר באופן בלתי צפוי</string>
-  <string name="sd_ext_media_badremoval_notification_message">נתק את כרטיס ה-SD לפני הסרתו מהמכשיר בכדי למנוע אובדן נתונים.</string>
-  <string name="sd_ext_media_safe_unmount_notification_title">כרטיס SD ניתן להסרה בבטחה</string>
-  <string name="sd_ext_media_safe_unmount_notification_message">ניתן להסיר בבטחה את כרטיס ה-SD.</string>
-  <string name="sd_ext_media_nomedia_notification_title">כרטיס SD הוסר</string>
-  <string name="sd_ext_media_nomedia_notification_message">כרטיס SD הוסר. הכנס כרטיס חדש.</string>
+  <string name="usb_media_shared">אחסון USB נמצא כעת בשימוש של מחשב.</string>
+  <string name="sd_ext_media_checking_notification_title">מכין כרטיס זיכרון</string>
+  <string name="sd_ext_media_checking_notification_message">בודק כרטיס זיכרון לשגיאות.</string>
+  <string name="sd_ext_media_nofs_notification_title">כרטיס זיכרון ריק</string>
+  <string name="sd_ext_media_nofs_notification_message">כרטיס הזיכרון הינו ריק, או בעל קבצים שהמערכת לא תומכת בהם.</string>
+  <string name="sd_ext_media_unmountable_notification_title">כרטיס זיכרון פגום</string>
+  <string name="sd_ext_media_unmountable_notification_message">כרטיס הזיכרון פגום. נסה לפרמט אותו מחדש.</string>
+  <string name="sd_ext_media_badremoval_notification_title">כרטיס זיכרון הוסר באופן פתאומי</string>
+  <string name="sd_ext_media_badremoval_notification_message">בטל את טעינת כרטיס הזיכרון לפני הסרתו מהמכשיר על מנת למנוע אובדן נתונים.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">כרטיס זיכרון ניתן להסרה בבטחה</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">ניתן להסיר בבטחה את כרטיס הזיכרון.</string>
+  <string name="sd_ext_media_nomedia_notification_title">כרטיס זיכרון הוסר</string>
+  <string name="sd_ext_media_nomedia_notification_message">כרטיס זיכרון הוסר. הכנס כרטיס חדש.</string>
   <string name="usb_ext_media_checking_notification_title">מכין אחסון USB</string>
   <string name="usb_ext_media_checking_notification_message">בודק אחסון USB לשגיאות.</string>
   <string name="usb_ext_media_nofs_notification_title">אחסון USB ריק</string>
@@ -194,8 +194,8 @@
   <string name="usb_ext_media_unmountable_notification_title">אחסון USB פגום</string>
   <string name="usb_ext_media_unmountable_notification_message">אחסון USB פגום. נסה לפרמט אותו.</string>
   <string name="usb_ext_media_badremoval_notification_title">אחסון USB הוסר בפתאומיות</string>
-  <string name="usb_ext_media_badremoval_notification_message">נתק את אחסון ה-USB לפני הסרתו כדי למנוע אובדן נתונים.</string>
-  <string name="usb_ext_media_safe_unmount_notification_title">אחסון ה-USB ניתן להסרה בבטחה</string>
+  <string name="usb_ext_media_badremoval_notification_message">בטל את טעינת אחסון ה-USB לפני הסרתו על מנת למנוע אובדן נתונים.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">אחסון USB ניתן להסרה בבטחה</string>
   <string name="usb_ext_media_safe_unmount_notification_message">אתה יכול להסיר את אחסון ה-USB בבטחה.</string>
   <string name="usb_ext_media_nomedia_notification_title">אחסון USB הוסר</string>
   <string name="usb_ext_media_nomedia_notification_message">אחסון USB הוסר. הכנס מדיה חדשה.</string>
@@ -213,5 +213,6 @@
   <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, לחץ על כפתור \"חזור\" והחזק אותו.</string>
   <string name="quick_settings_tile_flashlight_not_title">הפנס מופעל</string>
   <string name="quick_settings_tile_flashlight_not_summary">לחץ לכיבוי</string>
-  <string name="storage_sd_dock_card">כרטיס SD של תחנת עגינה</string>
+  <string name="storage_sd_dock_card">כרטיס זיכרון של תחנת עגינה</string>
+  <string name="fingerprint_default_name">טביעת אצבע <xliff:g id="number">%d</xliff:g></string>
 </resources>

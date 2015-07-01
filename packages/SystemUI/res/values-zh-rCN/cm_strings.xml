@@ -153,4 +153,8 @@
   <string name="interruption_level_silent">静音</string>
   <string name="zen_silent_with_warning">禁止打扰，闹钟除外。</string>
   <string name="quick_settings_remove">移除瓷片</string>
+  <string name="quick_settings_dynamic_tile_detail_title">动态按钮</string>
+  <string name="dynamic_qs_tile_next_alarm_label">下一个闹铃</string>
+  <string name="dynamic_qs_tile_ime_selector_label">输入法选择器</string>
+  <string name="dynamic_qs_tile_su_label">Root 授权</string>
 </resources>

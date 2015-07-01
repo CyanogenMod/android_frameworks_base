@@ -81,11 +81,11 @@
   <string name="accessibility_quick_settings_perf_profile_changed_bal">รูปแบบแบตเตอรี่เปลี่ยนเป็นสมดุล</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">รูปแบบแบตเตอรี่เปลี่ยนเป็นประสิทธิภาพ</string>
   <string name="accessibility_quick_settings_profiles_off">โปรไฟล์ปิดอยู่</string>
-  <string name="accessibility_quick_settings_profiles">โปรไฟล์: <xliff:g id="profile" example="Default">%s</xliff:g></string>
+  <string name="accessibility_quick_settings_profiles">โปรไฟล์: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">ปิดโปรไฟล์</string>
-  <string name="accessibility_quick_settings_profiles_changed">โปรไฟล์เปลี่ยนเป็น <xliff:g id="profile" example="Default">%s</xliff:g></string>
-  <string name="accessibility_quick_settings_screen_timeout">หมดเวลาหน้าจอ: <xliff:g id="timeout" example="30 seconds">%s</xliff:g></string>
-  <string name="accessibility_quick_settings_screen_timeout_changed">หมดเวลาหน้าจอเปลี่ยนเป็น <xliff:g id="timeout" example="30 seconds">%s</xliff:g></string>
+  <string name="accessibility_quick_settings_profiles_changed">โปรไฟล์เปลี่ยนเป็น <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">หมดเวลาหน้าจอ: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">หมดเวลาหน้าจอเปลี่ยนเป็น <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">ปิดการซิงค์</string>
   <string name="accessibility_quick_settings_sync_on">เปิดการซิงค์</string>
   <string name="accessibility_quick_settings_sync_changed_off">การซิงค์ปิดอยู่</string>

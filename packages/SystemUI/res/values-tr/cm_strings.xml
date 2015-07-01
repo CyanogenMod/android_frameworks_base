@@ -153,4 +153,8 @@
   <string name="interruption_level_silent">Sessiz</string>
   <string name="zen_silent_with_warning">Alarmlar dışında rahatsız etme.</string>
   <string name="quick_settings_remove">Kareyi kaldır</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dinamik kare</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Sonraki alarm</string>
+  <string name="dynamic_qs_tile_ime_selector_label">IME seçici</string>
+  <string name="dynamic_qs_tile_su_label">Root erişimi</string>
 </resources>

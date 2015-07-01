@@ -26,6 +26,10 @@
   <string name="accessibility_quick_settings_data_on">Mobildata slået til.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming slået fra.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming slået til.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB via netværk er slået fra.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB via netværk er slået til.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ADB via netværk er slået fra.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ADB via netværk er slået til.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Placeringsrapportering: Batterisparetilstand.</string>
   <string name="accessibility_quick_settings_location_gps_only">Placeringsrapportering: Kun sensorer-tilstand.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Placeringsrapportering: Høj nøjagtighed-tilstand.</string>

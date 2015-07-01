@@ -153,4 +153,8 @@
   <string name="interruption_level_silent">Stil</string>
   <string name="zen_silent_with_warning">Geen onderbrekings, behalwe wekkers.</string>
   <string name="quick_settings_remove">Verwyder teël</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dinamiese teëls</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Volgende alarm</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Kies IME</string>
+  <string name="dynamic_qs_tile_su_label">\'Root\' toegang</string>
 </resources>

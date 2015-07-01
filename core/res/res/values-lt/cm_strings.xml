@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">USB derinimas per USB ir tinklą įgalintas</string>
   <string name="adb_active_generic_notification_message">Palieskite, kad neleistumėte derinimo.</string>
   <string name="usb_choose_notification_title">Palieskite, kad pasirinktumėte USB parinktys.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB ir tinklas</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Tinklas</string>
   <string name="permlab_interceptPackageLaunch">perimti programos paleidimą</string>
   <string name="permdesc_interceptPackageLaunch">Leidžia programai perimti kitų programų paleidimą</string>
   <string name="app_ops_access_camera">pasiekti fotoaparatą</string>
