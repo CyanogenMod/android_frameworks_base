@@ -378,15 +378,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private static final String COMMON_OVERLAY = ThemeUtils.COMMON_RES_TARGET;
 
-    private static final long PACKAGE_HASH_EXPIRATION = 3*60*1000; // 3 minutes
     private static final long COMMON_RESOURCE_EXPIRATION = 3*60*1000; // 3 minutes
-
-    /**
-     * IDMAP hash version code used to alter the resulting hash and force recreating
-     * of the idmap.  This value should be changed whenever there is a need to force
-     * an update to all idmaps.
-     */
-    private static final byte IDMAP_HASH_VERSION = 3;
 
     /**
      * The offset in bytes to the beginning of the hashes in an idmap
@@ -552,9 +544,6 @@ public class PackageManagerService extends IPackageManager.Stub {
     boolean mResolverReplaced = false;
     private AppOpsManager mAppOps;
     private IconPackHelper mIconPackHelper;
-
-    private Map<String, Pair<Integer, Long>> mPackageHashes =
-            new ArrayMap<String, Pair<Integer, Long>>();
 
     private Map<String, Long> mAvailableCommonResources = new ArrayMap<String, Long>();
 
@@ -4354,7 +4343,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         final String cachePath =
                 ThemeUtils.getTargetCacheDir(pkgName, opkg.packageName);
         if (mInstaller.idmap(pkg.baseCodePath, opkg.baseCodePath, cachePath, sharedGid,
-                getPackageHashCode(pkg), getPackageHashCode(opkg)) != 0) {
+                pkg.manifestHashCode, opkg.manifestHashCode) != 0) {
             Slog.e(TAG, "Failed to generate idmap for " + pkg.baseCodePath +
                     " and " + opkg.baseCodePath);
             return false;
@@ -4472,6 +4461,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                 KeySetManagerService ksms = mSettings.mKeySetManagerService;
                 synchronized (mPackages) {
                     pkg.mSigningKeys = ksms.getPublicKeysFromKeySetLPr(mSigningKeySetId);
+                }
+                // Collect manifest digest
+                try{
+                    pp.collectManifestDigest(pkg);
+                } catch (PackageParserException e) {
+                    throw PackageManagerException.from(e);
                 }
                 return;
             }
@@ -5679,6 +5674,16 @@ public class PackageManagerService extends IPackageManager.Stub {
             pkg.mOriginalPackages = null;
             pkg.mRealPackage = null;
             pkg.mAdoptPermissions = null;
+        }
+
+        // collect manifest digest which includes getting manifest hash code for themes
+        if (pkg.manifestDigest == null || pkg.manifestHashCode == 0) {
+            PackageParser pp = new PackageParser();
+            try {
+                pp.collectManifestDigest(pkg);
+            } catch (PackageParserException e) {
+                Slog.w(TAG, "Unable to collect manifest digest", e);
+            }
         }
 
         // writer
@@ -6915,7 +6920,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             in = new FileInputStream(hashFile);
             dataInput = new DataInputStream(in);
             int storedHashCode = dataInput.readInt();
-            int actualHashCode = getPackageHashCode(pkg);
+            int actualHashCode = pkg.manifestHashCode;
             return storedHashCode != actualHashCode;
         } catch(IOException e) {
             // all is good enough for government work here,
@@ -6984,7 +6989,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         DataOutputStream dataOut = null;
         try {
             createTempManifest(pkg.packageName);
-            int code = getPackageHashCode(pkg);
+            int code = pkg.manifestHashCode;
             String hashFile = ThemeUtils.getIconHashFile(pkg.packageName);
             out = new FileOutputStream(hashFile);
             dataOut = new DataOutputStream(out);
@@ -7143,13 +7148,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                                       PackageParser.Package overlayPkg) {
         if (targetPkg == null || targetPkg.baseCodePath == null || overlayPkg == null) return false;
 
-        int targetHash = getPackageHashCode(targetPkg);
-        int overlayHash = getPackageHashCode(overlayPkg);
+        int targetHash = targetPkg.manifestHashCode;
+        int overlayHash = overlayPkg.manifestHashCode;
 
         File idmap =
                 new File(ThemeUtils.getIdmapPath(targetPkg.packageName, overlayPkg.packageName));
-        if (!idmap.exists())
+        if (!idmap.exists()) {
             return true;
+        }
 
         int[] hashes;
         try {
@@ -7200,49 +7206,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         times[1] = ib.get(1);
 
         return times;
-    }
-
-    /**
-     * Get a 32 bit hashcode for the given package.
-     * @param pkg
-     * @return
-     */
-    private int getPackageHashCode(PackageParser.Package pkg) {
-        Pair<Integer, Long> p = mPackageHashes.get(pkg.packageName);
-        if (p != null && (System.currentTimeMillis() - p.second < PACKAGE_HASH_EXPIRATION)) {
-            return p.first;
-        }
-        if (p != null) {
-            mPackageHashes.remove(p);
-        }
-
-        byte[] crc = getFileCrC(pkg.baseCodePath);
-        if (crc == null) return 0;
-
-        p = new Pair(Arrays.hashCode(ByteBuffer.wrap(crc).put(IDMAP_HASH_VERSION).array()),
-                System.currentTimeMillis());
-        mPackageHashes.put(pkg.packageName, p);
-        return p.first;
-    }
-
-    private byte[] getFileCrC(String path) {
-        ZipFile zfile = null;
-        try {
-            zfile = new ZipFile(path);
-            ZipEntry entry = zfile.getEntry("META-INF/MANIFEST.MF");
-            if (entry == null) {
-                Log.e(TAG, "Unable to get MANIFEST.MF from " + path);
-                return null;
-            }
-
-            long crc = entry.getCrc();
-            if (crc == -1) Log.e(TAG, "Unable to get CRC for " + path);
-            return ByteBuffer.allocate(8).putLong(crc).array();
-        } catch (Exception e) {
-        } finally {
-            IoUtils.closeQuietly(zfile);
-        }
-        return null;
     }
 
     private void setUpCustomResolverActivity(PackageParser.Package pkg) {
