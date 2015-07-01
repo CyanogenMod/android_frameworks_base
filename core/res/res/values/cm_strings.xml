@@ -349,6 +349,11 @@
     <!-- Storage description for the SD card on the dock -->
     <string name="storage_sd_dock_card">Dock SD card</string>
 
+    <!-- FINGERPRINT -->
     <!-- Default fingerprint name when a new fingerprint is added -->
     <string name="fingerprint_default_name">Fingerprint <xliff:g id="number">%d</xliff:g></string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessFingerprintService">access fingerprint service</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessFingerprintService">Allows an app to access the fingerprint service. The app can add, delete, rename and authenticate against fingerprints</string>
 </resources>

@@ -16,6 +16,7 @@
 
 package com.android.server.fingerprint;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -80,9 +81,6 @@ public class FingerprintService extends SystemService {
     private static final int STATE_AUTHENTICATING = 1;
     private static final int STATE_ENROLLING = 2;
     private static final long MS_PER_SEC = 1000;
-    public static final String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
-    public static final String ENROLL_FINGERPRINT = "android.permission.ENROLL_FINGERPRINT";
-
     private long mHal;
 
     private static final class ClientData {
@@ -326,8 +324,9 @@ public class FingerprintService extends SystemService {
         mClients.remove(token);
     }
 
-    void checkPermission(String permisison) {
-        // TODO
+    void checkPermission() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.ACCESS_FINGERPRINT_SERVICE, null);
     }
 
     public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId) {
@@ -446,28 +445,28 @@ public class FingerprintService extends SystemService {
 
         @Override // Binder call
         public void authenticate(IBinder token, int userId) {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
             throwIfNoFingerprint();
             startAuthentication(token, userId);
         }
 
         @Override // Binder call
         public void enroll(IBinder token, long timeout, int userId) {
-            checkPermission(ENROLL_FINGERPRINT);
+            checkPermission();
             throwIfNoFingerprint();
             startEnroll(token, timeout, userId);
         }
 
         @Override // Binder call
         public void cancel(IBinder token,int userId) {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
             throwIfNoFingerprint();
             startCancel(token, userId);
         }
 
         @Override // Binder call
         public void remove(IBinder token, int fingerprintId, int userId) {
-            checkPermission(ENROLL_FINGERPRINT); // TODO: Maybe have another permission
+            checkPermission();
             throwIfNoFingerprint();
             startRemove(token, fingerprintId, userId);
         }
@@ -475,14 +474,14 @@ public class FingerprintService extends SystemService {
         @Override // Binder call
         public void startListening(IBinder token, IFingerprintServiceReceiver receiver,
                 int userId) {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
             throwIfNoFingerprint();
             addListener(token, receiver, userId);
         }
 
         @Override // Binder call
         public void stopListening(IBinder token, int userId) {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
             throwIfNoFingerprint();
             removeListener(token, userId);
         }
@@ -490,7 +489,7 @@ public class FingerprintService extends SystemService {
         @Override // Binder call
         public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId)
                 throws RemoteException {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
             throwIfNoFingerprint();
             return FingerprintService.this.getEnrolledFingerprints(token, userId);
         }
@@ -498,7 +497,7 @@ public class FingerprintService extends SystemService {
         @Override
         public boolean setFingerprintName(IBinder token, int fingerprintId, String name,
                 int userId) throws RemoteException {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
             throwIfNoFingerprint();
             return FingerprintService.this.setFingerprintName(token, fingerprintId, name, userId);
         }
