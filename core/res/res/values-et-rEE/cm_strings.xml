@@ -77,6 +77,10 @@ muuta juba olemasolevaid.</string>
   <string name="adb_both_active_notification_title">ADB üle USB &amp; võrgu aktiveeritud</string>
   <string name="adb_active_generic_notification_message">Puuduta debuggimise lõpetamiseks.</string>
   <string name="usb_choose_notification_title">Puuduta et valida USB sätteid.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; võrk</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Võrk</string>
   <string name="permlab_interceptPackageLaunch">rakenduse käivitamise katkestamine</string>
   <string name="permdesc_interceptPackageLaunch">Luba rakendusel katkestada teiste rakenduste käivitamist</string>
   <string name="app_ops_access_camera">kontrollida kaamerat</string>
@@ -208,4 +212,8 @@ muuta juba olemasolevaid.</string>
   <string name="live_display_outdoor">Õues (ere päike)</string>
   <string name="live_display_outdoor_summary">Kasuta ainult õue seadeid</string>
   <string name="live_display_hint">LiveDisplay võimaldab vähendada silmade pinget ja lasta sul öösel magada. Kliki siin et seda proovida!</string>
+  <string name="lock_to_app_toast_no_navbar">Selle ekraani vabastamiseks puudutage ja hoidke all Tagasi nuppu.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Taskulamp põleb</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Väljalülitamiseks koputage</string>
+  <string name="storage_sd_dock_card">Doki SD-kaart</string>
 </resources>

@@ -26,6 +26,7 @@
   <string name="accessibility_quick_settings_data_on">Date mobile pornite.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming oprit.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming pornit.</string>
+  <string name="accessibility_quick_settings_compass_off">Busolă inactivă.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Raportarea locaţiei:  mod economisire baterie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Raportarea locaţiei: doar senzori.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Raportarea locaţiei: precizie ridicată.</string>
@@ -33,6 +34,9 @@
   <string name="accessibility_quick_settings_lte_on">4G pornit.</string>
   <string name="accessibility_quick_settings_nfc_off">NFC oprit.</string>
   <string name="accessibility_quick_settings_nfc_on">NFC pornit.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC oprit.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC pornit.</string>
+  <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizare pornită.</string>
   <string name="accessibility_dpad_left">Cursor stânga</string>
@@ -53,7 +57,7 @@
   <string name="quick_settings_compass_init">Inițializare\u2026</string>
   <string name="quick_settings_lockscreen_label">Ecran de blocare</string>
   <string name="quick_settings_lockscreen_label_enforced">Blocare ecran impusă</string>
-  <string name="quick_settings_network_adb_label">ADB prin reţea</string>
+  <string name="quick_settings_network_adb_label">ADB prin rețea</string>
   <string name="quick_settings_lte_label">4G</string>
   <string name="quick_settings_screen_timeout_detail_title">Timpul de expirare ecran</string>
   <string name="quick_settings_usb_tether_label">Tethering USB</string>
