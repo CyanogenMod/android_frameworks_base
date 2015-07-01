@@ -58,4 +58,10 @@
     <color name="status_bar_temperature_text_color">#FFFFFFFF</color>
     <color name="status_bar_temperature_location_text_color">#FFFFFFFF</color>
 
+    <!-- Expanded Status Bar Alarm Status Text Color -->
+    <color name="status_bar_alarm_status_text_color">#64ffffff</color>
+
+    <!-- Expanded Status Bar Battery Level Text Color -->
+    <color name="status_bar_battery_level_text_color">#ffffff</color>
+
 </resources>

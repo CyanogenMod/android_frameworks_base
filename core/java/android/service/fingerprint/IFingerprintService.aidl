@@ -16,26 +16,35 @@
 package android.service.fingerprint;
 
 import android.os.Bundle;
+import android.hardware.fingerprint.Fingerprint;
 import android.service.fingerprint.IFingerprintServiceReceiver;
 
 /**
  * Communication channel from client to the fingerprint service.
  * @hide
  */
-oneway interface IFingerprintService {
+interface IFingerprintService {
     // Any errors resulting from this call will be returned to the listener
-    void enroll(IBinder token, long timeout, int userId);
+    oneway void authenticate(IBinder token, int userId);
+
+    // Any errors resulting from this call will be returned to the listener
+    oneway void enroll(IBinder token, long timeout, int userId);
     
     // Any errors resulting from this call will be returned to the listener
-    void enrollCancel(IBinder token, int userId);
+    oneway void cancel(IBinder token, int userId);
 
     // Any errors resulting from this call will be returned to the listener
-    void remove(IBinder token, int fingerprintId, int userId);
+    oneway void remove(IBinder token, int fingerprintId, int userId);
 
-    // Start listening for fingerprint events.  This has the side effect of starting
-    // the hardware if not already started.
-    void startListening(IBinder token, IFingerprintServiceReceiver receiver, int userId);
+    // Start listening for fingerprint events.
+    oneway void startListening(IBinder token, IFingerprintServiceReceiver receiver, int userId);
 
     // Stops listening for fingerprints
-    void stopListening(IBinder token, int userId);
+    oneway void stopListening(IBinder token, int userId);
+
+    // Get a list of fingerprints
+    List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId);
+
+    // Rename fingerprint
+    boolean setFingerprintName(IBinder token, int fingerprintId, String name, int userId);
 }

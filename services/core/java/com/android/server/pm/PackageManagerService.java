@@ -1616,6 +1616,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             // avoid the resulting log spew.
             alreadyDexOpted.add(frameworkDir.getPath() + "/core-libart.jar");
 
+            // Gross hack for now: we know this file doesn't contain any
+            // code, so don't dexopt it to avoid the resulting log spew
+            alreadyDexOpted.add(frameworkDir.getPath() + "/org.cyanogenmod.platform-res.apk");
+
             /**
              * And there are a number of commands implemented in Java, which
              * we currently need to do the dexopt on so that they can be
@@ -2661,6 +2665,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (!compareStrings(pi1.nonLocalizedLabel, pi2.nonLocalizedLabel)) return false;
         // We'll take care of setting this one.
         if (!compareStrings(pi1.packageName, pi2.packageName)) return false;
+        if (pi1.allowViaWhitelist != pi2.allowViaWhitelist) return false;
         // These are not currently stored in settings.
         //if (!compareStrings(pi1.group, pi2.group)) return false;
         //if (!compareStrings(pi1.nonLocalizedDescription, pi2.nonLocalizedDescription)) return false;
@@ -6617,6 +6622,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                                 bp.perm = p;
                                 bp.uid = pkg.applicationInfo.uid;
                                 bp.sourcePackage = p.info.packageName;
+                                bp.allowViaWhitelist = p.info.allowViaWhitelist;
                             } else if (!currentOwnerIsSystem) {
                                 String msg = "New decl " + p.owner + " of permission  "
                                         + p.info.name + " is system; overriding " + bp.sourcePackage;
@@ -6629,6 +6635,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                     if (bp == null) {
                         bp = new BasePermission(p.info.name, p.info.packageName,
                                 BasePermission.TYPE_NORMAL);
+                        bp.allowViaWhitelist = p.info.allowViaWhitelist;
                         permissionMap.put(p.info.name, bp);
                     }
 
@@ -7126,31 +7133,15 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     /**
-     * Checks for existance of resources.arsc in target apk, then
      * Compares the 32 bit hash of the target and overlay to those stored
      * in the idmap and returns true if either hash differs
      * @param targetPkg
      * @param overlayPkg
      * @return
-     * @throws IOException
      */
     private boolean shouldCreateIdmap(PackageParser.Package targetPkg,
                                       PackageParser.Package overlayPkg) {
         if (targetPkg == null || targetPkg.baseCodePath == null || overlayPkg == null) return false;
-
-        // Check if the target app has resources.arsc.
-        // If it does not, then there is nothing to idmap
-        ZipFile zfile = null;
-        try {
-            zfile = new ZipFile(targetPkg.baseCodePath);
-            if (zfile.getEntry("resources.arsc") == null) return false;
-        } catch (IOException e) {
-            Log.e(TAG, "Error while checking resources.arsc on" + targetPkg.baseCodePath, e);
-            return false;
-        } finally {
-            IoUtils.closeQuietly(zfile);
-        }
-
 
         int targetHash = getPackageHashCode(targetPkg);
         int overlayHash = getPackageHashCode(overlayPkg);
@@ -8010,8 +8001,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                         == PackageManager.SIGNATURE_MATCH);
         if (!allowed && (bp.protectionLevel
                 & PermissionInfo.PROTECTION_FLAG_SYSTEM) != 0) {
-            boolean allowedSig = isAllowedSignature(pkg, perm);
-            if (isSystemApp(pkg) || allowedSig) {
+            if (isSystemApp(pkg)) {
                 // For updated system applications, a system permission
                 // is granted only if it had been defined by the original application.
                 if (isUpdatedSystemApp(pkg)) {
@@ -8049,7 +8039,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                         }
                     }
                 } else {
-                    allowed = isPrivilegedApp(pkg) || allowedSig;
+                    allowed = isPrivilegedApp(pkg);
                 }
             }
         }
@@ -8058,6 +8048,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             // For development permissions, a development permission
             // is granted only if it was already granted.
             allowed = origPermissions.contains(perm);
+        }
+        if (!allowed && bp.allowViaWhitelist) {
+            allowed = isAllowedSignature(pkg, perm);
         }
         return allowed;
     }
@@ -14621,26 +14614,26 @@ public class PackageManagerService extends IPackageManager.Stub {
                 "could not update icon mapping because caller "
                 + "does not have change config permission");
 
+        ThemeUtils.clearIconCache();
+        if (pkgName == null) {
+            clearIconMapping();
+            return;
+        }
+        mIconPackHelper = new IconPackHelper(mContext);
+        try {
+            mIconPackHelper.loadIconPack(pkgName);
+        } catch(NameNotFoundException e) {
+            Log.e(TAG, "Unable to find icon pack: " + pkgName);
+            clearIconMapping();
+            return;
+        }
+
+        for (Activity activity : mActivities.mActivities.values()) {
+            activity.info.themedIcon =
+                    mIconPackHelper.getResourceIdForActivityIcon(activity.info);
+        }
+
         synchronized (mPackages) {
-            ThemeUtils.clearIconCache();
-            if (pkgName == null) {
-                clearIconMapping();
-                return;
-            }
-            mIconPackHelper = new IconPackHelper(mContext);
-            try {
-                mIconPackHelper.loadIconPack(pkgName);
-            } catch(NameNotFoundException e) {
-                Log.e(TAG, "Unable to find icon pack: " + pkgName);
-                clearIconMapping();
-                return;
-            }
-
-            for (Activity activity : mActivities.mActivities.values()) {
-                activity.info.themedIcon =
-                        mIconPackHelper.getResourceIdForActivityIcon(activity.info);
-            }
-
             for (Package pkg : mPackages.values()) {
                 pkg.applicationInfo.themedIcon =
                         mIconPackHelper.getResourceIdForApp(pkg.packageName);

@@ -83,8 +83,11 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <!-- Voice Call earpiece Volume,its value is from 0 to 5,default value is 4 -->
     <integer name="def_voice_call_earpiece_volume" translatable="false">4</integer>
 
+    <!-- Time format,default vlaue is 24 : 24 format,other value is 12 format -->
+    <string name="def_time_format" translatable="false"></string>
+
     <!-- Date format,yyyy-MM-dd: 2013/07/30; MM-dd-yyyy:07/30/2013; dd-MM-yyyy:30/07/2013 -->
-    <string name="def_date_format" translatable="false">MM-dd-yyyy</string>
+    <string name="def_date_format" translatable="false"></string>
 
     <!--
          Default Input Method, its value is from inputmethod's package name and main class name
@@ -93,7 +96,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="def_input_method" translatable="false"></string>
 
     <!-- Default for Settings.Global.DATA_ROAMING -->
-    <bool name="def_enable_data_roaming">true</bool>
+    <bool name="def_enable_data_roaming">false</bool>
 
     <!-- Default for Settings.Global.MOBILE_DATA -->
     <bool name="def_enable_mobile_data">true</bool>

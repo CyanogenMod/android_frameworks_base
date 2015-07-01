@@ -43,7 +43,7 @@
 
 namespace android {
 
-static const uint16_t kVersion = HARDWARE_MODULE_API_VERSION(1, 0);
+static const uint16_t kVersion = HARDWARE_MODULE_API_VERSION(1, 1);
 
 static const char* FINGERPRINT_SERVICE = "com/android/server/fingerprint/FingerprintService";
 static struct {
@@ -113,15 +113,21 @@ static void nativeInit(JNIEnv *env, jobject clazz, jobject callbackObj) {
     gFingerprintServiceClassInfo.callbackObject = env->NewGlobalRef(callbackObj);
 }
 
+static jint nativeAuthenticate(JNIEnv* env, jobject clazz) {
+    ALOG(LOG_VERBOSE, LOG_TAG, "nativeAuthenticate()\n");
+    int ret = gContext.device->authenticate(gContext.device);
+    return reinterpret_cast<jint>(ret);
+}
+
 static jint nativeEnroll(JNIEnv* env, jobject clazz, jint timeout) {
     ALOG(LOG_VERBOSE, LOG_TAG, "nativeEnroll()\n");
     int ret = gContext.device->enroll(gContext.device, timeout);
     return reinterpret_cast<jint>(ret);
 }
 
-static jint nativeEnrollCancel(JNIEnv* env, jobject clazz) {
-    ALOG(LOG_VERBOSE, LOG_TAG, "nativeEnrollCancel()\n");
-    int ret = gContext.device->enroll_cancel(gContext.device);
+static jint nativeCancel(JNIEnv* env, jobject clazz) {
+    ALOG(LOG_VERBOSE, LOG_TAG, "nativeCancel()\n");
+    int ret = gContext.device->cancel(gContext.device);
     return reinterpret_cast<jint>(ret);
 }
 
@@ -129,6 +135,45 @@ static jint nativeRemove(JNIEnv* env, jobject clazz, jint fingerprintId) {
     ALOG(LOG_VERBOSE, LOG_TAG, "nativeRemove(%d)\n", fingerprintId);
     int ret = gContext.device->remove(gContext.device, fingerprintId);
     return reinterpret_cast<jint>(ret);
+}
+
+static jobject nativeGetEnrollments(JNIEnv* env) {
+    ALOG(LOG_VERBOSE, LOG_TAG, "nativeGetEnrollMents()\n");
+
+    // Get Enrollment info from the HAL
+    enrollment_info_t *enrollmentInfo;
+    int success = gContext.device->get_enrollment_info(gContext.device, &enrollmentInfo);
+    if (success != 0) {
+       ALOG(LOG_VERBOSE, LOG_TAG, "nativeGetEnrollments(): failed to get info\n");
+       return NULL;
+    }
+
+    // Create return object
+    jclass clazz = env->FindClass("android/hardware/fingerprint/Fingerprint");
+    jobjectArray jFingerprintObjArray = env->NewObjectArray(enrollmentInfo->num_fingers, clazz, NULL);
+
+    // Populate the array with enrolled Fingerprint objects
+    for(int i = 0; i < enrollmentInfo->num_fingers; i++) {
+        fingerprint_t* fp = &(enrollmentInfo->fpinfo[i]);
+
+        // Create the fingerprint object
+        jmethodID constructorMethod = env->GetMethodID(clazz, "<init>", "()V");
+        jobject jFingerprintObj = env->NewObject(clazz, constructorMethod);
+
+        // Set the fields
+        jfieldID indexField = env->GetFieldID(clazz, "mFingerId", "I");
+        jint jindex = fp->index;
+        env->SetIntField(jFingerprintObj, indexField, jindex);
+
+        env->SetObjectArrayElement(jFingerprintObjArray, i, jFingerprintObj);
+    }
+
+    // Only release on success
+    if (success == 0) {
+        gContext.device->release_enrollment_info(gContext.device, enrollmentInfo);
+    }
+
+    return jFingerprintObjArray;
 }
 
 static jint nativeOpenHal(JNIEnv* env, jobject clazz) {
@@ -160,7 +205,7 @@ static jint nativeOpenHal(JNIEnv* env, jobject clazz) {
 
     if (kVersion != device->version) {
         ALOGE("Wrong fp version. Expected %d, got %d", kVersion, device->version);
-        // return 0; // FIXME
+        return 0;
     }
 
     gContext.device = reinterpret_cast<fingerprint_device_t*>(device);
@@ -187,12 +232,14 @@ static jint nativeCloseHal(JNIEnv* env, jobject clazz) {
 
 // TODO: clean up void methods
 static const JNINativeMethod g_methods[] = {
+    { "nativeAuthenticate", "()I", (void*)nativeAuthenticate },
     { "nativeEnroll", "(I)I", (void*)nativeEnroll },
-    { "nativeEnrollCancel", "()I", (void*)nativeEnrollCancel },
+    { "nativeCancel", "()I", (void*)nativeCancel },
     { "nativeRemove", "(I)I", (void*)nativeRemove },
     { "nativeOpenHal", "()I", (void*)nativeOpenHal },
     { "nativeCloseHal", "()I", (void*)nativeCloseHal },
-    { "nativeInit", "(Lcom/android/server/fingerprint/FingerprintService;)V", (void*)nativeInit }
+    { "nativeInit", "(Lcom/android/server/fingerprint/FingerprintService;)V", (void*)nativeInit },
+    { "nativeGetEnrollments", "()[Landroid/hardware/fingerprint/Fingerprint;", (void*)nativeGetEnrollments }
 };
 
 int register_android_server_fingerprint_FingerprintService(JNIEnv* env) {

@@ -109,6 +109,9 @@
          http://clients.txtnation.com/entries/209633-hungary-premium-sms-short-code-regulations -->
     <shortcode country="hu" pattern="[01](?:\\d{3}|\\d{9})" premium="0691227910|1784" free="116\\d{3}" />
 
+    <!-- Indonesia: 2-4 digit codes with a whitelist of free codes -->
+    <shortcode country="id" pattern="\\d{2,4}" free="11|123|1233|1234|2233|228|261|2619|355|388|4444|551|807|808|888|995|999" />
+
     <!-- Ireland: 5 digits, 5xxxx (50xxx=free, 5[12]xxx=standard), plus EU:
          http://www.comreg.ie/_fileupload/publications/ComReg1117.pdf -->
     <shortcode country="ie" pattern="\\d{5}" premium="5[3-9]\\d{3}" free="50\\d{3}|116\\d{3}" standard="5[12]\\d{3}" />

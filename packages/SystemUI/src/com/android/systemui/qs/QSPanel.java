@@ -26,6 +26,7 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -422,8 +423,11 @@ public class QSPanel extends ViewGroup {
                 }
             });
 
+            // Do not display remove tile button for dynamic tiles
             final StatusBarPanelCustomTile customTile = detailAdapter.getCustomTile();
-            mDetailRemoveButton.setVisibility(customTile != null ? VISIBLE : GONE);
+            mDetailRemoveButton.setVisibility(customTile != null &&
+                    !(customTile.getPackage().equals(mContext.getPackageName())
+                    || customTile.getUid() == Process.SYSTEM_UID) ? VISIBLE : GONE);
             mDetailRemoveButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {

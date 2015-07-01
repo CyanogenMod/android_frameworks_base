@@ -1640,6 +1640,12 @@ public abstract class PackageManager {
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_GAMEPAD = "android.hardware.gamepad";
 
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device is capable of reading a user's fingerprint
+     * @hide
+     */
+    public static final String FEATURE_FINGERPRINT = "android.hardware.fingerprint";
 
     /**
      * Action to external storage service to clean out removed apps.

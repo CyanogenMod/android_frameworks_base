@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">ADB דרך ה-USB והרשת מופעל</string>
   <string name="adb_active_generic_notification_message">הקש לביטול איתור באגים.</string>
   <string name="usb_choose_notification_title">לחץ כדי לבחור אפשרויות USB.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB ורשת</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">רשת</string>
   <string name="permlab_interceptPackageLaunch">התערב בהפעלת יישום</string>
   <string name="permdesc_interceptPackageLaunch">מאפשר ליישום להתערב בהפעלה של יישומים אחרים</string>
   <string name="app_ops_access_camera">גישה למצלמה</string>

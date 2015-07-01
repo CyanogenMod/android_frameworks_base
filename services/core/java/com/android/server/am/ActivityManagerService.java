@@ -1298,6 +1298,8 @@ public final class ActivityManagerService extends ActivityManagerNative
     final UiHandler mUiHandler;
     final CpuTrackerHandler mCpuTrackerHandler;
 
+    static KillProcessBackground mKillProcessHandler;
+
     final class UiHandler extends Handler {
         public UiHandler() {
             super(com.android.server.UiThread.get().getLooper(), null, true);
@@ -1892,6 +1894,21 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int SCHEDULE_CPU_STATS_MSG = 1;
     static final int UPDATE_CPU_STATS_MSG = 2;
 
+    final class KillProcessBackground extends Handler {
+        public KillProcessBackground(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case KILL_PROCESS_GROUP_MSG:
+                killProcessGroupBackground(msg.arg1, msg.arg2);
+            break;
+            }
+        }
+    };
+
     final class CpuTrackerHandler extends Handler {
         public CpuTrackerHandler(Looper looper) {
             super(looper);
@@ -1928,9 +1945,10 @@ public final class ActivityManagerService extends ActivityManagerNative
             removeMessages(UPDATE_CPU_STATS_MSG);
             sendEmptyMessage(UPDATE_CPU_STATS_MSG);
         }
-    }
+    };
 
     static final int COLLECT_PSS_BG_MSG = 1;
+    static final int KILL_PROCESS_GROUP_MSG = 44;
 
     final Handler mBgHandler = new Handler(BackgroundThread.getHandler().getLooper()) {
         @Override
@@ -2191,6 +2209,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         HandlerThread cpuTrackerThread = new HandlerThread("CpuTracker");
         cpuTrackerThread.start();
         mCpuTrackerHandler = new CpuTrackerHandler(cpuTrackerThread.getLooper());
+
+        mKillProcessHandler = new KillProcessBackground(BackgroundThread.getHandler().getLooper());
 
         mFgBroadcastQueue = new BroadcastQueue(this, mHandler,
                 "foreground", BROADCAST_FG_TIMEOUT, false);
@@ -2579,7 +2599,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (!app.killed) {
                 Slog.wtfStack(TAG, "Removing process that hasn't been killed: " + app);
                 Process.killProcessQuiet(app.pid);
-                Process.killProcessGroup(app.info.uid, app.pid);
+                killProcessGroup(app.info.uid, app.pid);
             }
             if (lrui <= mLruProcessActivityStart) {
                 mLruProcessActivityStart--;
@@ -2941,7 +2961,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             // clean it up now.
             if (DEBUG_PROCESSES || DEBUG_CLEANUP) Slog.v(TAG, "App died: " + app);
             checkTime(startTime, "startProcess: bad proc running, killing");
-            Process.killProcessGroup(app.info.uid, app.pid);
+            killProcessGroup(app.info.uid, app.pid);
             handleAppDiedLocked(app, true, true);
             checkTime(startTime, "startProcess: done killing old proc");
         }
@@ -4815,7 +4835,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (!fromBinderDied) {
                 Process.killProcessQuiet(pid);
             }
-            Process.killProcessGroup(app.info.uid, pid);
+            killProcessGroup(app.info.uid, pid);
             app.killed = true;
         }
 
@@ -12307,7 +12327,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                             } else {
                                 // Huh.
                                 Process.killProcess(pid);
-                                Process.killProcessGroup(uid, pid);
+                                killProcessGroup(uid, pid);
                             }
                         }
                         return;
@@ -17205,6 +17225,24 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
+    static final boolean DEBUG_KILL_ASYNC = true;
+    static public void killProcessGroup(final int uid , final int pid) {
+        if (mKillProcessHandler == null) {
+            Slog.w(TAG, "thread for killProcessGroup is not ready");
+            Process.killProcessGroup(uid, pid);
+            return;
+        }
+        mKillProcessHandler.sendMessage(mKillProcessHandler.obtainMessage(KILL_PROCESS_GROUP_MSG, uid, pid));
+    }
+
+    private void killProcessGroupBackground(int uid , int pid) {
+        long now = SystemClock.uptimeMillis();
+        Process.killProcessGroup(uid, pid);
+        if (DEBUG_KILL_ASYNC) Slog.v(TAG, "killProcessGroupAsync took "
+            + (SystemClock.uptimeMillis() - now) + " ms for PID " + pid
+            + " on thread " + Thread.currentThread().getId());
+    }
+
     private final int computeOomAdjLocked(ProcessRecord app, int cachedAdj, ProcessRecord TOP_APP,
             boolean doingAll, long now) {
         if (mAdjSeq == app.adjSeq) {
@@ -18606,19 +18644,19 @@ public final class ActivityManagerService extends ActivityManagerNative
                         mNumCachedHiddenProcs++;
                         numCached++;
                         if (numCached > cachedProcessLimit) {
-                            postKillProc(app, "cached #" + numCached, true);
+                            app.kill("cached #" + numCached, true);
                         }
                         break;
                     case ActivityManager.PROCESS_STATE_CACHED_EMPTY:
                         if (numEmpty > ProcessList.TRIM_EMPTY_APPS
                                 && app.lastActivityTime < oldTime) {
-                            postKillProc(app, "empty for "
+                            app.kill("empty for "
                                     + ((oldTime + ProcessList.MAX_EMPTY_TIME - app.lastActivityTime)
                                     / 1000) + "s", true);
                         } else {
                             numEmpty++;
                             if (numEmpty > emptyProcessLimit) {
-                                postKillProc(app, "empty #" + numEmpty, true);
+                                app.kill("empty #" + numEmpty, true);
                             }
                         }
                         break;
@@ -18634,7 +18672,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     // definition not re-use the same process again, and it is
                     // good to avoid having whatever code was running in them
                     // left sitting around after no longer needed.
-                    postKillProc(app, "isolated not needed", true);
+                    app.kill("isolated not needed", true);
                 }
 
                 if (app.curProcState >= ActivityManager.PROCESS_STATE_HOME
@@ -18857,15 +18895,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Slog.d(TAG, "Did OOM ADJ in " + (SystemClock.uptimeMillis()-now) + "ms");
             }
         }
-    }
-
-    private void postKillProc(final ProcessRecord app, final String reason, final boolean noisy) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                app.kill(reason, noisy);
-            }
-        });
     }
 
     final void trimApplications() {

@@ -15,10 +15,12 @@
  */
 package com.android.keyguard;
 
-import android.app.Profile;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+
+import cyanogenmod.app.Profile;
 
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.widget.LockPatternUtils;
@@ -76,21 +78,14 @@ public class KeyguardSecurityModel {
     }
 
     SecurityMode getSecurityMode() {
-        KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
-        IccCardConstants.State simState = IccCardConstants.State.UNKNOWN;
+        KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
         SecurityMode mode = SecurityMode.None;
-        for (int i = 0; i < updateMonitor.getNumPhones(); i++) {
-            int subId = updateMonitor.getSubIdByPhoneId(i);
-            simState = updateMonitor.getSimState(subId);
-            if (simState == IccCardConstants.State.PIN_REQUIRED
-                || simState == IccCardConstants.State.PUK_REQUIRED) {
-                break;
-            }
-        }
 
-        if (simState == IccCardConstants.State.PIN_REQUIRED) {
+        if (SubscriptionManager.isValidSubscriptionId(
+                monitor.getNextSubIdForState(IccCardConstants.State.PIN_REQUIRED))) {
             mode = SecurityMode.SimPin;
-        } else if (simState == IccCardConstants.State.PUK_REQUIRED
+        } else if (SubscriptionManager.isValidSubscriptionId(
+                    monitor.getNextSubIdForState(IccCardConstants.State.PUK_REQUIRED))
                 && mLockPatternUtils.isPukUnlockScreenEnable()) {
             mode = SecurityMode.SimPuk;
         } else {

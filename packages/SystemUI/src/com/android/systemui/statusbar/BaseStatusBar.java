@@ -1091,12 +1091,14 @@ public abstract class BaseStatusBar extends SystemUI implements
             mWindowManager.removeView(mSearchPanelView);
         }
 
-        // Provide SearchPanel with a temporary parent to allow layout params to work.
-        LinearLayout tmpRoot = new LinearLayout(mContext);
-        mSearchPanelView = (SearchPanelView) LayoutInflater.from(mContext).inflate(
-                 R.layout.status_bar_search_panel, tmpRoot, false);
-        mSearchPanelView.setOnTouchListener(
-                 new TouchOutsideListener(MSG_CLOSE_SEARCH_PANEL, mSearchPanelView));
+        if (mSearchPanelView == null) {
+            // Provide SearchPanel with a temporary parent to allow layout params to work.
+            LinearLayout tmpRoot = new LinearLayout(mContext);
+            mSearchPanelView = (SearchPanelView) LayoutInflater.from(mContext).inflate(
+                    R.layout.status_bar_search_panel, tmpRoot, false);
+            mSearchPanelView.setOnTouchListener(
+                    new TouchOutsideListener(MSG_CLOSE_SEARCH_PANEL, mSearchPanelView));
+        }
         mSearchPanelView.setVisibility(View.GONE);
         boolean vertical = mNavigationBarView != null && mNavigationBarView.isVertical();
         mSearchPanelView.setHorizontal(vertical);

@@ -17,8 +17,6 @@
 
 package com.android.providers.settings;
 
-import android.app.Profile;
-import android.app.ProfileManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +28,9 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import cyanogenmod.app.Profile;
+import cyanogenmod.app.ProfileManager;
 
 import com.android.internal.app.AlertActivity;
 import com.android.internal.app.AlertController;
@@ -108,7 +109,7 @@ public final class ProfilePickerActivity extends AlertActivity implements
         mHasNoneItem = intent.getBooleanExtra(ProfileManager.EXTRA_PROFILE_SHOW_NONE, true);
 
         // Give the Activity so it can do managed queries
-        mProfileManager = (ProfileManager) getSystemService(Context.PROFILE_SERVICE);
+        mProfileManager = ProfileManager.getInstance(this);
         mProfiles = Arrays.asList(mProfileManager.getProfiles());
 
         // Get the UUID whose list item should have a checkmark

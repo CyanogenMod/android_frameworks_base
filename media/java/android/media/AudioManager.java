@@ -22,15 +22,12 @@ import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.annotation.SystemApi;
 import android.app.PendingIntent;
-import android.app.ProfileGroup;
-import android.app.ProfileManager;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RemoteController.OnClientUpdateListener;
 import android.media.audiopolicy.AudioPolicy;
-import android.media.audiopolicy.AudioPolicyConfig;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.MediaSessionLegacyHelper;
@@ -44,7 +41,6 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.ServiceManager;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -70,8 +66,6 @@ public class AudioManager {
     private final Binder mToken = new Binder();
     private static String TAG = "AudioManager";
     private static final AudioPortEventHandler sAudioPortEventHandler = new AudioPortEventHandler();
-
-    private final ProfileManager mProfileManager;
 
     /**
      * Broadcast intent, a hint for applications that audio is about to become
@@ -699,7 +693,6 @@ public class AudioManager {
         mUseFixedVolume = getContext().getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
         sAudioPortEventHandler.init();
-        mProfileManager = (ProfileManager) context.getSystemService(Context.PROFILE_SERVICE);
     }
 
     private Context getContext() {
@@ -1382,26 +1375,6 @@ public class AudioManager {
      * current ringer mode that can be queried via {@link #getRingerMode()}.
      */
     public boolean shouldVibrate(int vibrateType) {
-        String packageName = mApplicationContext.getPackageName();
-        // Don't apply profiles for "android" context, as these could
-        // come from the NotificationManager, and originate from a real package.
-        if (!packageName.equals("android")) {
-            ProfileGroup profileGroup = mProfileManager.getActiveProfileGroup(packageName);
-            if (profileGroup != null) {
-                Log.v(TAG, "shouldVibrate, group: " + profileGroup.getUuid()
-                        + " mode: " + profileGroup.getVibrateMode());
-                switch (profileGroup.getVibrateMode()) {
-                    case OVERRIDE :
-                        return true;
-                    case SUPPRESS :
-                        return false;
-                    case DEFAULT :
-                    // Drop through
-                }
-            }
-        } else {
-            Log.v(TAG, "Not applying override for 'android' package");
-        }
         IAudioService service = getService();
         try {
             return service.shouldVibrate(vibrateType);

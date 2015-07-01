@@ -863,7 +863,6 @@ public abstract class PanelView extends FrameLayout {
                 if (mCancelled) {
                     mHeightAnimator = null;
                     onAnimationFinished.run();
-                    mStatusBar.requestVisualizer(true, 250);
                 } else {
                     startUnlockHintAnimationPhase2(onAnimationFinished);
                 }
@@ -900,7 +899,7 @@ public abstract class PanelView extends FrameLayout {
             public void onAnimationEnd(Animator animation) {
                 mHeightAnimator = null;
                 onAnimationFinished.run();
-                mStatusBar.requestVisualizer(true, 200);
+                mStatusBar.requestVisualizer(null, 250);
             }
         });
         animator.start();

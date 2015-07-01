@@ -207,7 +207,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_DEFAULT_VOICE_SUBSCRIPTION_CHANGED);
-        filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION_IMMEDIATE);
         filter.addAction(ConnectivityManager.INET_CONDITION_ACTION);
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
@@ -507,6 +506,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         // inet condition and airplane mode.
         pushConnectivityToSignals();
         updateAirplaneMode(true /* force */);
+        recalculateEmergency();
     }
 
     @VisibleForTesting
@@ -515,8 +515,11 @@ public class NetworkControllerImpl extends BroadcastReceiver
             return false;
         }
         for (SubscriptionInfo info : allSubscriptions) {
-            if (!mMobileSignalControllers.containsKey(info.getSubscriptionId())) {
+            int subId = info.getSubscriptionId();
+            if (!mMobileSignalControllers.containsKey(subId)) {
                 return false;
+            } else {
+                mMobileSignalControllers.get(subId).updateSubscriptionInfo(info);
             }
         }
         return true;
@@ -1279,13 +1282,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
         public void handleBroadcast(Intent intent) {
             String action = intent.getAction();
-            if (action.equals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
-                updateNetworkName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
-                        intent.getStringExtra(TelephonyIntents.EXTRA_SPN),
-                        intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(TelephonyIntents.EXTRA_PLMN));
-                notifyListenersIfNecessary();
-            } else if (action.equals(TelephonyIntents.ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED)) {
+            if (action.equals(TelephonyIntents.ACTION_DEFAULT_DATA_SUBSCRIPTION_CHANGED)) {
                 updateDataSim();
             }
         }
@@ -1307,29 +1304,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
             notifyListenersIfNecessary();
         }
 
-        /**
-         * Updates the network's name based on incoming spn and plmn.
-         */
-        void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
-            if (CHATTY) {
-                Log.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
-                        + " showPlmn=" + showPlmn + " plmn=" + plmn);
-            }
-            StringBuilder str = new StringBuilder();
-            if (showPlmn && plmn != null) {
-                str.append(plmn);
-            }
-            if (showSpn && spn != null) {
-                if (str.length() != 0) {
-                    str.append(mNetworkNameSeparator);
-                }
-                str.append(spn);
-            }
-            if (str.length() != 0) {
-                mCurrentState.networkName = str.toString();
-            } else {
-                mCurrentState.networkName = mNetworkNameDefault;
-            }
+        void updateSubscriptionInfo(SubscriptionInfo info) {
+            CharSequence carrierName = info.getCarrierName();
+            mCurrentState.networkName = carrierName != null ? carrierName.toString() : null;
+            notifyListenersIfNecessary();
         }
 
         /**
