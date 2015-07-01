@@ -20,5 +20,14 @@
   <string name="keyguard_perso_locked_message">SIM/RUIM är Perso-låst</string>
   <string name="keyguard_accessibility_status">"Status"</string>
   <string name="kg_dismiss">Neka</string>
+  <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Nytt SIM-kort\u0020</string>
   <string name="lockscreen_sim_error_message_short">Ogiltigt SIM.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Ange SIM-kortets PIN-kod, du har <xliff:g id="number">%d</xliff:g> försök kvar innan du behöver kontakta din operatör för att låsa upp din enhet.</item>
+    <item quantity="other">Ange SIM-kortets PIN-kod, du har <xliff:g id="number">%d</xliff:g> försök kvar innan du behöver kontakta din operatör för att låsa upp din enhet.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="one">SIM-kortet är nu inaktiverat. Ange PUK-koden för att fortsätta. Du har <xliff:g id="number">%d</xliff:g> försök kvar innan SIM-kortet blir permanent obrukbart. Kontakta din operatör för mer information.</item>
+    <item quantity="other">SIM-kortet är nu inaktiverat. Ange PUK-koden för att fortsätta. Du har <xliff:g id="number">%d</xliff:g> försök kvar innan SIM-kortet blir permanent obrukbart. Kontakta din operatör för mer information.</item>
+  </plurals>
 </resources>

@@ -59,7 +59,7 @@
   <string name="accessibility_quick_settings_location_battery_saving">Vietovės ataskaitos: akumuliatoriaus tausojimo režimas.</string>
   <string name="accessibility_quick_settings_location_gps_only">Vietovės ataskaitos: tik daviklių režimas.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Vietovės ataskaitos: didelio tikslumo režimas.</string>
-  <string name="accessibility_quick_settings_location_changed_battery_saving">Vietovės ataskaitos pakeistos į akumuliatoriaus taupymo režimą.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Vietovės ataskaitos pakeistos į akumuliatoriaus tausojimo režimą.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Vietovės ataskaitos pakeistos į tik jutiklių režimą.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Vietovės ataskaitos pakeistos į didelio tikslumo režimą.</string>
   <string name="accessibility_quick_settings_lock_screen_off">Ekrano užraktas išjungtas.</string>
@@ -153,4 +153,8 @@
   <string name="interruption_level_silent">Tylus</string>
   <string name="zen_silent_with_warning">Be pertrūkių, išskyrus signalus.</string>
   <string name="quick_settings_remove">Pašalinti plytelę</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dinaminė plytelė</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Kitas signalas</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Įvesties metodas</string>
+  <string name="dynamic_qs_tile_su_label">Prieiga prie „Root“</string>
 </resources>
