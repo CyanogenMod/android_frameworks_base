@@ -153,4 +153,8 @@
   <string name="interruption_level_silent">Silêncio</string>
   <string name="zen_silent_with_warning">Sem interrupções, exceto os alarmes.</string>
   <string name="quick_settings_remove">Remover botão</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Botões dinâmicos</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Seletor de IME</string>
+  <string name="dynamic_qs_tile_su_label">Acesso root</string>
 </resources>

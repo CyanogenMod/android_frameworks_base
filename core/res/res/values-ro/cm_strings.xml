@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">ADB prin USB &amp; rețea activ</string>
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
   <string name="usb_choose_notification_title">Atingeți pentru a alege opțiunile USB.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; rețea</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Rețea</string>
   <string name="permlab_interceptPackageLaunch">interceptează lansarea aplicaţiei</string>
   <string name="permdesc_interceptPackageLaunch">Permite unei aplicaţii să intercepteze lansarea altor aplicaţii</string>
   <string name="app_ops_access_camera">accesează camera</string>

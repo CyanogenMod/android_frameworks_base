@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">ADB via USB &amp; netværk aktiveret</string>
   <string name="adb_active_generic_notification_message">Tryk for at deaktivere fejlretning.</string>
   <string name="usb_choose_notification_title">Tryk for at vælge USB-indstillinger.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; netværk</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Netværk</string>
   <string name="permlab_interceptPackageLaunch">afbryd app-opstart</string>
   <string name="permdesc_interceptPackageLaunch">Tillader en app at afbryde opstarten af andre apps</string>
   <string name="app_ops_access_camera">tilgå kameraet</string>
