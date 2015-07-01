@@ -1140,6 +1140,7 @@ public class PackageParser {
                 final ZipEntry je = jarFile.findEntry(ANDROID_MANIFEST_FILENAME);
                 if (je != null) {
                     pkg.manifestDigest = ManifestDigest.fromInputStream(jarFile.getInputStream(je));
+                    pkg.manifestHashCode = ThemeUtils.getPackageHashCode(pkg);
                 }
             } finally {
                 jarFile.close();
@@ -4594,6 +4595,7 @@ public class PackageParser {
         public boolean mTrustedOverlay;
 
         public boolean hasIconPack;
+        public int manifestHashCode;
 
         /**
          * Data used to feed the KeySetManagerService
