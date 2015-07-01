@@ -274,6 +274,7 @@ public class FingerprintService extends SystemService {
         if (clientData != null) {
             if (clientData.userId != userId) throw new IllegalStateException("Bad user");
             if (mState == STATE_IDLE) return;
+            mState = STATE_IDLE;
             nativeCancel();
         } else {
             Slog.w(TAG, "enrollCancel(): No listener registered");
