@@ -121,6 +121,13 @@ public class ThemeUtils {
             "/data/data/com.android.providers.settings/databases/settings.db";
     private static final String SETTINGS_SECURE_TABLE = "secure";
 
+    /**
+     * IDMAP hash version code used to alter the resulting hash and force recreating
+     * of the idmap.  This value should be changed whenever there is a need to force
+     * an update to all idmaps.
+     */
+    private static final byte IDMAP_HASH_VERSION = 3;
+
     // Actions in manifests which identify legacy icon packs
     public static final String[] sSupportedActions = new String[] {
             "org.adw.launcher.THEMES",
@@ -757,5 +764,16 @@ public class ThemeUtils {
         return !(DEFAULT_PKG.equals(component)
                 || ThemeConfig.SYSTEMUI_STATUS_BAR_PKG.equals(component)
                 || ThemeConfig.SYSTEMUI_NAVBAR_PKG.equals(component));
+    }
+
+    /**
+     * Get a 32 bit hashcode for the given package.
+     * @param pkg
+     * @return
+     */
+    public static int getPackageHashCode(PackageParser.Package pkg) {
+        int hash = pkg.manifestDigest != null ? pkg.manifestDigest.hashCode() : 0;
+        hash = 31 * hash + IDMAP_HASH_VERSION;
+        return hash;
     }
 }
