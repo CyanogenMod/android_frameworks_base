@@ -327,6 +327,8 @@ public class FingerprintService extends SystemService {
 
     void checkPermission(String permisison) {
         // TODO
+        // Throw exception if fingerprint permission not present
+        throwIfNoFingerprint();
     }
 
     public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId) {
@@ -446,28 +448,24 @@ public class FingerprintService extends SystemService {
         @Override // Binder call
         public void authenticate(IBinder token, int userId) {
             checkPermission(USE_FINGERPRINT);
-            throwIfNoFingerprint();
             startAuthentication(token, userId);
         }
 
         @Override // Binder call
         public void enroll(IBinder token, long timeout, int userId) {
             checkPermission(ENROLL_FINGERPRINT);
-            throwIfNoFingerprint();
             startEnroll(token, timeout, userId);
         }
 
         @Override // Binder call
         public void cancel(IBinder token,int userId) {
             checkPermission(USE_FINGERPRINT);
-            throwIfNoFingerprint();
             startCancel(token, userId);
         }
 
         @Override // Binder call
         public void remove(IBinder token, int fingerprintId, int userId) {
             checkPermission(ENROLL_FINGERPRINT); // TODO: Maybe have another permission
-            throwIfNoFingerprint();
             startRemove(token, fingerprintId, userId);
         }
 
@@ -475,14 +473,12 @@ public class FingerprintService extends SystemService {
         public void startListening(IBinder token, IFingerprintServiceReceiver receiver,
                 int userId) {
             checkPermission(USE_FINGERPRINT);
-            throwIfNoFingerprint();
             addListener(token, receiver, userId);
         }
 
         @Override // Binder call
         public void stopListening(IBinder token, int userId) {
             checkPermission(USE_FINGERPRINT);
-            throwIfNoFingerprint();
             removeListener(token, userId);
         }
 
@@ -490,7 +486,6 @@ public class FingerprintService extends SystemService {
         public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId)
                 throws RemoteException {
             checkPermission(USE_FINGERPRINT);
-            throwIfNoFingerprint();
             return FingerprintService.this.getEnrolledFingerprints(token, userId);
         }
 
@@ -498,7 +493,6 @@ public class FingerprintService extends SystemService {
         public boolean setFingerprintName(IBinder token, int fingerprintId, String name,
                 int userId) throws RemoteException {
             checkPermission(USE_FINGERPRINT);
-            throwIfNoFingerprint();
             return FingerprintService.this.setFingerprintName(token, fingerprintId, name, userId);
         }
 
