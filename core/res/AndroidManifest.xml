@@ -2567,7 +2567,8 @@
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_interceptSmsSent"
         android:description="@string/permdesc_interceptSmsSent"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to add an address to the whitelisted protected sms
          list
@@ -2576,7 +2577,8 @@
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_modifyProtectedSmsList"
         android:description="@string/permdesc_modifyProtectedSmsList"
-        android:protectionLevel="signature|system" />
+        android:protectionLevel="signature|system"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to receive sms (usually for auth or registration)
          from whitelisted addresses
@@ -2585,7 +2587,8 @@
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_receiveProtectedSms"
         android:description="@string/permdesc_receiveProtectedSms"
-        android:protectionLevel="signature|system" />
+        android:protectionLevel="signature|system"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to broadcast an SMS receipt notification.
          Not for use by third-party applications. -->
@@ -2593,7 +2596,8 @@
         android:permissionGroup="android.permission-group.MESSAGES"
         android:label="@string/permlab_broadcastSmsReceived"
         android:description="@string/permdesc_broadcastSmsReceived"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to broadcast a WAP PUSH receipt notification.
     <p>Not for use by third-party applications. -->
@@ -3011,6 +3015,7 @@
     <permission android:name="android.permission.READ_PHONE_BLACKLIST"
         android:permissionGroup="android.permission-group.SECURITY"
         android:protectionLevel="signature|system"
+        androidprv:allowViaWhitelist="true"
         android:label="@string/permlab_readPhoneBlacklist"
         android:description="@string/permdesc_readPhoneBlacklist" />
 
