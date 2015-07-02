@@ -26,17 +26,75 @@
   <string name="accessibility_quick_settings_data_on">Мобільні дані увімк.</string>
   <string name="accessibility_quick_settings_roaming_off">Роумінг вимк.</string>
   <string name="accessibility_quick_settings_roaming_on">Роумінг увімк.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB через мережу вимкнено.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB через мережу увімкнено.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ADB через мережу вимкнено.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ADB через мережу увімкнено.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Ambient display вимкнено.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display увімкнено.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient дисплей вимкнено.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display увімкнено.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Інверсія кольорів вимкнена.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Інверсія кольорів увімкнена.</string>
+  <string name="accessibility_quick_settings_compass_off">Компас вимкнено.</string>
+  <string name="accessibility_quick_settings_compass_on">Компас увімкнено.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Компас вимкнено.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Компас увімкнено.</string>
   <string name="accessibility_quick_settings_heads_up_off">Спливаючі сповіщення вимкнено.</string>
   <string name="accessibility_quick_settings_heads_up_on">Спливаючі сповіщення увімкнено.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Спливаючі сповіщення вимкнено.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Спливаючі сповіщення увімкнено.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Точка доступу вимкнена.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Точка доступу увімкнена.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay вимкнено.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: автоматичний режим.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: денний режим.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: нічний режим.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: режим «На вулиці».</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay вимкнено.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay у автоматичниому режимі.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay у денному режимі.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay у нічному режимі.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay у режимі «На вулиці».</string>
   <string name="accessibility_quick_settings_location_battery_saving">Надсилання місця розташування: економія батареї.</string>
   <string name="accessibility_quick_settings_location_gps_only">Надсилання місця розташування: тільки датчики.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Надсилання місця розташування: висока точність.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Визначення місцезнаходження у режимі економії батареї.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Визначення місцезнаходження тепер використовує лише датчики пристрою.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Визначення місцезнаходження у режимі високої точності.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Блокування екрана вимкнено.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Блокування екрана увімкнено.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Блокування екрана вимкнено.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Блокування екрана увімкнено.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE вимкнено.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE увімкнено.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE вимкнено.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE увімкнено.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC вимкнено.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC увімкнено.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC вимкнено.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC увімкнено.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим батареї: збереження енергії.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Режим батареї: збалансований режим.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Режим батареї: висока продуктивність.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Акумулятор тепер в режимі економії енергії.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим акумулятора змінено на збалансований.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим акумулятора змінено для високої продуктивності.</string>
+  <string name="accessibility_quick_settings_profiles_off">Профілі вимкнено.</string>
+  <string name="accessibility_quick_settings_profiles">Профіль: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Профілі вимкнено.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Профіль змінено на <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Вимкнення екрана через: <xliff:g id="timeout" example="30 seconds">%s</xliff:g> секунд.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Вимкнення екрана відбувається через <xliff:g id="timeout" example="30 seconds">%s</xliff:g> секунд бездіяльності.</string>
+  <string name="accessibility_quick_settings_sync_off">Синхронізацію вимкнено.</string>
+  <string name="accessibility_quick_settings_sync_on">Синхронізацію увімкнено.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Синхронізацію вимкнено.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Синхронізація увімкнено.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">Прив’язку USB вимкнено.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">Прив’язку USB увімкнено.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">USB-модем вимкнено.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">USB-модем увімкнено.</string>
+  <string name="accessibility_quick_settings_visualizer">Візуалізація.</string>
   <string name="accessibility_dpad_left">Курсор ліворуч</string>
   <string name="accessibility_dpad_right">Курсор праворуч</string>
   <string name="quick_settings_mobile_data_label">Мобільні дані</string>
@@ -61,6 +119,7 @@
   <string name="quick_settings_usb_tether_label">USB-модем</string>
   <string name="quick_settings_heads_up_label">Спливаючі сповіщення</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
+  <string name="quick_settings_sync_label">Синхронізація</string>
   <string name="quick_settings_custom_tile_detail_title">Власна плитка</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Проведіть вправо для %1$s</string>
@@ -94,4 +153,8 @@
   <string name="interruption_level_silent">Тихий</string>
   <string name="zen_silent_with_warning">Жодних переривань, за винятком будильника.</string>
   <string name="quick_settings_remove">Видалити плитку</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Динамічні плитки</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Наступний сигнал</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Вибір способу вводу</string>
+  <string name="dynamic_qs_tile_su_label">Root доступ</string>
 </resources>

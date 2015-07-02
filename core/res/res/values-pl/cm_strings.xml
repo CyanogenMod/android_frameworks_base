@@ -75,6 +75,10 @@
   <string name="adb_both_active_notification_title">ADB przez USB &amp; sieć włączone</string>
   <string name="adb_active_generic_notification_message">Dotknij, aby wyłączyć debugowanie.</string>
   <string name="usb_choose_notification_title">Dotknij, aby wybrać opcje USB.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; sieć</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Sieć</string>
   <string name="permlab_interceptPackageLaunch">przechwytywanie uruchamiania aplikacji</string>
   <string name="permdesc_interceptPackageLaunch">Pozwala aplikacji na przechwytywanie uruchamiania innych aplikacji</string>
   <string name="app_ops_access_camera">dostęp do kamery</string>

@@ -153,4 +153,8 @@
   <string name="interruption_level_silent">무음</string>
   <string name="zen_silent_with_warning">알람을 제외한 모든 알림 차단</string>
   <string name="quick_settings_remove">타일 제거</string>
+  <string name="quick_settings_dynamic_tile_detail_title">동적 타일</string>
+  <string name="dynamic_qs_tile_next_alarm_label">다음 알람</string>
+  <string name="dynamic_qs_tile_ime_selector_label">입력 방법 선택</string>
+  <string name="dynamic_qs_tile_su_label">루트 권한</string>
 </resources>

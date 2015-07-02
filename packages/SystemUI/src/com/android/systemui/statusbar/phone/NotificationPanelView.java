@@ -46,6 +46,8 @@ import android.widget.TextView;
 
 import com.android.internal.util.cm.LockscreenShortcutsHelper;
 import com.android.keyguard.KeyguardStatusView;
+import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.QSContainer;
@@ -351,12 +353,14 @@ public class NotificationPanelView extends PanelView implements
     public void onAttachedToWindow() {
         mSecureCameraLaunchManager.create();
         mSettingsObserver.observe();
+        KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
     }
 
     @Override
     public void onDetachedFromWindow() {
         mSecureCameraLaunchManager.destroy();
         mSettingsObserver.unobserve();
+        KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
     }
 
     private void startQsSizeChangeAnimation(int oldHeight, final int newHeight) {
@@ -2016,7 +2020,9 @@ public class NotificationPanelView extends PanelView implements
 
         // Hide "No notifications" in QS.
         mNotificationStackScroller.updateEmptyShadeView(mShadeEmpty && !mQsExpanded);
-        if (mStatusBarState == StatusBarState.KEYGUARD) {
+        if (mStatusBarState == StatusBarState.KEYGUARD
+                && (!mQsExpanded || mQsExpandImmediate || mIsExpanding
+                && mQsExpandedWhenExpandingStarted)) {
             positionClockAndNotifications();
         }
     }
@@ -2106,4 +2112,13 @@ public class NotificationPanelView extends PanelView implements
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 1, UserHandle.USER_CURRENT) == 1;
         }
     }
+
+    private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
+        @Override
+        public void onFingerprintAttemptFailed() {
+            if (!mStatusBar.isBouncerShowing()) {
+                NotificationPanelView.super.startHintAnimation(true /* fingerprintHint */);
+            }
+        }
+    };
 }

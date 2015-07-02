@@ -34,6 +34,8 @@
   <string name="accessibility_quick_settings_ambient_display_on">Aktywny wyświetlacz włączony.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Aktywny wyświetlacz został wyłączony.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Aktywny wyświetlacz został włączony.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Odwrócenie kolorów wyłączone.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Odwrócenie kolorów włączone.</string>
   <string name="accessibility_quick_settings_compass_off">Kompas wyłączony.</string>
   <string name="accessibility_quick_settings_compass_on">Kompas włączony.</string>
   <string name="accessibility_quick_settings_compass_changed_off">Kompas został wyłączony.</string>
@@ -141,4 +143,8 @@
   <string name="interruption_level_silent">Cichy</string>
   <string name="zen_silent_with_warning">Bez przerw, z wyjątkiem alarmów.</string>
   <string name="quick_settings_remove">Usuń kafelek</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dynamiczne przełączniki</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Następny alarm</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Przełącznik klawiatury</string>
+  <string name="dynamic_qs_tile_su_label">Dostęp do roota</string>
 </resources>
