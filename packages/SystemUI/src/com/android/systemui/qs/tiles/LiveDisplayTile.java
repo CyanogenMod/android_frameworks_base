@@ -16,10 +16,12 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
+import android.hardware.CmHardwareManager;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -69,9 +71,11 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
         mAnnouncementEntries = res.getStringArray(R.array.live_display_announcement);
         mValues = res.getStringArray(com.android.internal.R.array.live_display_values);
 
-        mOutdoorModeAvailable = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_AUTO_OUTDOOR_MODE,
-                -1, UserHandle.USER_CURRENT) > -1;
+        final CmHardwareManager hardware =
+                (CmHardwareManager) mContext.getSystemService(Context.CMHW_SERVICE);
+
+        mOutdoorModeAvailable =
+                hardware.isSupported(CmHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
 
         mDefaultDayTemperature = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_dayColorTemperature);
