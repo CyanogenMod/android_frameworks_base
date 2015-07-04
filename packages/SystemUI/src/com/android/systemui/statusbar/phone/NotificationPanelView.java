@@ -910,6 +910,7 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private void setQsExpanded(boolean expanded) {
+        mStatusBar.setVisualizerAnimating(expanded);
         boolean changed = mQsExpanded != expanded;
         if (changed) {
             mQsExpanded = expanded;
@@ -1676,6 +1677,7 @@ public class NotificationPanelView extends PanelView implements
         }
         if (mStatusBar.getBarState() == StatusBarState.KEYGUARD
                 || mStatusBar.getBarState() == StatusBarState.SHADE_LOCKED) {
+            mStatusBar.setVisualizerTouching(true);
             mAfforanceHelper.animateHideLeftRightIcon();
         }
     }
@@ -1691,6 +1693,7 @@ public class NotificationPanelView extends PanelView implements
                 || mStatusBar.getBarState() == StatusBarState.SHADE_LOCKED)) {
             if (!mHintAnimationRunning) {
                 mAfforanceHelper.reset(true);
+                mStatusBar.setVisualizerTouching(false);
             }
         }
         if (!expand && (mStatusBar.getBarState() == StatusBarState.KEYGUARD
@@ -1804,12 +1807,14 @@ public class NotificationPanelView extends PanelView implements
                 || isDozing()) {
             return;
         }
+        mStatusBar.setVisualizerAnimating(true);
         mHintAnimationRunning = true;
         mAfforanceHelper.startHintAnimation(right, new Runnable() {
             @Override
             public void run() {
                 mHintAnimationRunning = false;
                 mStatusBar.onHintFinished();
+                mStatusBar.setVisualizerAnimating(false);
             }
         });
         boolean start = getLayoutDirection() == LAYOUT_DIRECTION_RTL ? right : !right;
@@ -1847,17 +1852,12 @@ public class NotificationPanelView extends PanelView implements
     }
 
     @Override
-    public void onSwipingStarted() {
-        mSecureCameraLaunchManager.onSwipingStarted();
-        requestDisallowInterceptTouchEvent(true);
-        mOnlyAffordanceInThisMotion = true;
-    }
-
-    @Override
-    public void onSwipingAnimationFinished(boolean snappingBack) {
-        if (snappingBack) {
-            mStatusBar.setVisualizerTouching(false);
-            mStatusBar.requestVisualizer(null, 0);
+    public void setSwipingInProgress(boolean inProgress) {
+        mStatusBar.setVisualizerTouching(inProgress);
+        if (inProgress) {
+            mSecureCameraLaunchManager.onSwipingStarted();
+            requestDisallowInterceptTouchEvent(true);
+            mOnlyAffordanceInThisMotion = true;
         }
     }
 
