@@ -16,6 +16,7 @@ Copyright (C) 2014 The Android Open Source Project
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="32dp"
         android:height="32dp"
+        android:tint="@color/audio_notif_color"
         android:viewportWidth="24.0"
         android:viewportHeight="24.0">
 
