@@ -464,6 +464,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY), false, this);
             update();
         }
@@ -486,6 +488,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mBrightnessControl = Settings.System.getIntForUser(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0,
                     UserHandle.USER_CURRENT) == 1;
+            mVisualizerEnabled = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED, 1,
+                    UserHandle.USER_CURRENT) != 0;
 
             final int oldClockLocation = mClockLocation;
             final View oldClockView = mClockView;
@@ -689,6 +694,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private ImageView mBackdropFront, mBackdropBack;
     private PorterDuffXfermode mSrcXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC);
     private PorterDuffXfermode mSrcOverXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
+    private boolean mVisualizerEnabled;
+    private boolean mVisualizerVisible;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
@@ -1026,7 +1033,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mExpandedContents = mStackScroller;
 
         mBackdrop = (BackDropView) mStatusBarWindowContent.findViewById(R.id.backdrop);
-        mBackdrop.setService(this, mStackScroller);
         mBackdropFront = (ImageView) mBackdrop.findViewById(R.id.backdrop_front);
         mBackdropBack = (ImageView) mBackdrop.findViewById(R.id.backdrop_back);
 
@@ -1072,9 +1078,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mBatteryController.addStateChangedCallback(new BatteryStateChangeCallback() {
                 @Override
                 public void onPowerSaveChanged() {
+                    boolean isPowerSave = mBatteryController.isPowerSave();
+                    if (mVisualizerEnabled) {
+                        mBackdrop.setPowerSaveMode(isPowerSave);
+                    }
                     mHandler.post(mCheckBarModes);
                     if (mDozeServiceHost != null) {
-                        mDozeServiceHost.firePowerSaveChanged(mBatteryController.isPowerSave());
+                        mDozeServiceHost.firePowerSaveChanged(isPowerSave);
                     }
                 }
 
@@ -2193,6 +2203,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
             }
 
+            if (controller != null) {
+                final PlaybackState state = controller.getPlaybackState();
+                if (state != null) {
+                    if (mVisualizerEnabled) {
+                        mBackdrop.setPlaying(state.getState() == PlaybackState.STATE_PLAYING);
+                    }
+                }
+            }
+
             if (!sameSessions(mMediaController, controller)) {
                 // We have a new media session
 
@@ -2287,16 +2306,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 backdropBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
                 // might still be null
             }
-            mBackdrop.updateVisualizerColor(backdropBitmap);
         }
 
-        // apply user lockscreen image
-        if (mMediaMetadata == null && backdropBitmap == null) {
-            WallpaperManager wm = (WallpaperManager)
-                    mContext.getSystemService(Context.WALLPAPER_SERVICE);
-            if (wm != null) {
-                backdropBitmap = wm.getKeyguardBitmap();
-            }
+        WallpaperManager wm = (WallpaperManager) mContext.getSystemService(Context.WALLPAPER_SERVICE);
+
+        if (backdropBitmap == null && (mMediaMetadata == null || mVisualizerEnabled)) {
+            backdropBitmap = wm.getKeyguardBitmap();
+        }
+
+        if (backdropBitmap == null && mMediaMetadata == null && mVisualizerEnabled) {
+            backdropBitmap = wm.getBitmap();
+        }
+
+        final boolean keyguardVisible = mState != StatusBarState.SHADE;
+        if (mVisualizerEnabled && keyguardVisible) {
+            mBackdrop.updateBitmap(backdropBitmap);
         }
 
         final boolean hasBackdrop = backdropBitmap != null;
@@ -2305,8 +2329,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mStatusBarWindowManager.setShowingMedia(mKeyguardShowingMedia);
         }
 
-        if ((hasBackdrop || DEBUG_MEDIA_FAKE_ARTWORK)
-                && (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
+        if ((hasBackdrop || DEBUG_MEDIA_FAKE_ARTWORK) && keyguardVisible) {
             // time to show some art!
             if (mBackdrop.getVisibility() != View.VISIBLE) {
                 mBackdrop.setVisibility(View.VISIBLE);
@@ -4662,6 +4685,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
      * @param state The {@link StatusBarState} to set.
      */
     public void setBarState(int state) {
+        if (mVisualizerEnabled && state == StatusBarState.SHADE) {
+            mBackdrop.reset();
+        }
+        mVisualizerVisible = mVisualizerEnabled && (state == StatusBarState.KEYGUARD);
+        mBackdrop.setVisible(mVisualizerVisible);
         // If we're visible and switched to SHADE_LOCKED (the user dragged
         // down on the lockscreen), clear notification LED, vibration,
         // ringing.
@@ -4737,6 +4765,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override
     public boolean onDraggedDown(View startingChild, int dragLengthY) {
         if (hasActiveNotifications()) {
+            setVisualizerAnimating(true);
             EventLogTags.writeSysuiLockscreenGesture(
                     EventLogConstants.SYSUI_LOCKSCREEN_GESTURE_SWIPE_DOWN_FULL_SHADE,
                     (int) (dragLengthY / mDisplayMetrics.density),
@@ -4769,6 +4798,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     @Override
     public void setEmptyDragAmount(float amount) {
+        setVisualizerAnimating(amount != 0f ? true : false);
         mNotificationPanel.setEmptyDragAmount(amount);
     }
 
@@ -5163,14 +5193,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return !mNotificationData.getActiveNotifications().isEmpty();
     }
 
-    public void requestVisualizer(Boolean show, int delay) {
-        mBackdrop.requestVisualizer(show, delay);
-    }
-
-    public void setVisualizerTouching(boolean touching) {
-        mBackdrop.setTouching(touching);
-    }
-
     public void wakeUpIfDozing(long time, MotionEvent event) {
         if (mDozing && mDozeScrimController.isPulsing()) {
             PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
@@ -5324,6 +5346,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         break;
                 }
             }
+        }
+    }
+
+    public void setVisualizerAnimating(boolean animating) {
+        if (mVisualizerVisible) {
+            mBackdrop.setAnimating(animating);
+        }
+    }
+
+    public void setVisualizerTouching(boolean touching) {
+        if (mVisualizerVisible) {
+            mBackdrop.setTouching(touching);
         }
     }
 }

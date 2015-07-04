@@ -668,6 +668,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     public void setUserLockedChild(View v, boolean userLocked) {
+        mPhoneStatusBar.setVisualizerTouching(userLocked);
         if (v instanceof ExpandableNotificationRow) {
             ((ExpandableNotificationRow) v).setUserLocked(userLocked);
         }
@@ -711,6 +712,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     private void setSwipingInProgress(boolean isSwiped) {
+        mPhoneStatusBar.setVisualizerTouching(isSwiped);
         mSwipingInProgress = isSwiped;
         if(isSwiped) {
             requestDisallowInterceptTouchEvent(true);
@@ -766,12 +768,6 @@ public class NotificationStackScrollLayout extends ViewGroup
                 && !mExpandedInThisMotion
                 && !mOnlyScrollingInThisMotion) {
             horizontalSwipeWantsIt = mSwipeHelper.onTouchEvent(ev);
-            if (isCancelOrUp) {
-                if (mPhoneStatusBar.getBarState() != StatusBarState.SHADE) {
-                    // shade_locked or keyguard
-                    mPhoneStatusBar.setVisualizerTouching(false);
-                }
-            }
         }
 
         if (expandWantsIt && mIsBeingDragged) {
@@ -2005,6 +2001,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     private void setIsBeingDragged(boolean isDragged) {
+        mPhoneStatusBar.setVisualizerTouching(isDragged);
         mIsBeingDragged = isDragged;
         if (isDragged) {
             requestDisallowInterceptTouchEvent(true);
@@ -2118,9 +2115,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     public void onChildAnimationFinished() {
-        if (mPhoneStatusBar.getBarState() != StatusBarState.SHADE) {
-            mPhoneStatusBar.requestVisualizer(null, 500);
-        }
+        mPhoneStatusBar.setVisualizerAnimating(false);
         requestChildrenUpdate();
     }
 
@@ -2158,6 +2153,7 @@ public class NotificationStackScrollLayout extends ViewGroup
      * See {@link AmbientState#setActivatedChild}.
      */
     public void setActivatedChild(ActivatableNotificationView activatedChild) {
+        mPhoneStatusBar.setVisualizerTouching(true);
         mAmbientState.setActivatedChild(activatedChild);
         if (mAnimationsEnabled) {
             mActivateNeedsAnimation = true;
