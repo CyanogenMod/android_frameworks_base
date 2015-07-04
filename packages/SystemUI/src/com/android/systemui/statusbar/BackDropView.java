@@ -423,7 +423,7 @@ public class BackDropView extends FrameLayout implements Palette.PaletteAsyncLis
 
                     if (!showing) {
                         haltVisualizer();
-                    } else if (mScreenOn) {
+                    } else if (mScreenOn && mHandler != null) {
                         // in case keyguard is toggled back on even though screen never went off
                         mHandler.postDelayed(mResumeVisualizerIfPlayingRunnable, 200);
                     }
