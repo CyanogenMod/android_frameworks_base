@@ -734,6 +734,9 @@ public class NotificationStackScrollLayout extends ViewGroup
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        if (ev.getActionMasked() == MotionEvent.ACTION_UP) {
+            mPhoneStatusBar.setVisualizerTouching(false);
+        }
         boolean isCancelOrUp = ev.getActionMasked() == MotionEvent.ACTION_CANCEL
                 || ev.getActionMasked()== MotionEvent.ACTION_UP;
         if (mDelegateToScrollView) {
@@ -766,12 +769,6 @@ public class NotificationStackScrollLayout extends ViewGroup
                 && !mExpandedInThisMotion
                 && !mOnlyScrollingInThisMotion) {
             horizontalSwipeWantsIt = mSwipeHelper.onTouchEvent(ev);
-            if (isCancelOrUp) {
-                if (mPhoneStatusBar.getBarState() != StatusBarState.SHADE) {
-                    // shade_locked or keyguard
-                    mPhoneStatusBar.setVisualizerTouching(false);
-                }
-            }
         }
 
         if (expandWantsIt && mIsBeingDragged) {
@@ -1735,6 +1732,7 @@ public class NotificationStackScrollLayout extends ViewGroup
             mNeedsAnimation = false;
         }
         if (!mAnimationEvents.isEmpty() || isCurrentlyAnimating()) {
+            mPhoneStatusBar.setVisualizerAnimating(true);
             mStateAnimator.startAnimationForEvents(mAnimationEvents, mCurrentStackScrollState,
                     mGoToFullShadeDelay);
             mAnimationEvents.clear();
@@ -2118,9 +2116,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     }
 
     public void onChildAnimationFinished() {
-        if (mPhoneStatusBar.getBarState() != StatusBarState.SHADE) {
-            mPhoneStatusBar.requestVisualizer(null, 500);
-        }
+        mPhoneStatusBar.setVisualizerAnimating(false);
         requestChildrenUpdate();
     }
 
