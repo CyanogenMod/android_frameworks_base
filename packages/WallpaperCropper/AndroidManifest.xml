@@ -22,7 +22,10 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <application android:requiredForAllUsers="true">
+    <application
+        android:requiredForAllUsers="true"
+        android:largeHeap="true">
+
         <activity
             android:name="WallpaperCropActivity"
             android:theme="@style/Theme.WallpaperCropper"
