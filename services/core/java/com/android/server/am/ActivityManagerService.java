@@ -6708,8 +6708,10 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (!cancelCurrent) {
                 if (updateCurrent) {
                     if (rec.key.requestIntent != null) {
-                        rec.key.requestIntent.replaceExtras(intents != null ?
-                                intents[intents.length - 1] : null);
+                        synchronized (rec) {
+                            rec.key.requestIntent.replaceExtras(intents != null ?
+                                    intents[intents.length - 1] : null);
+                        }
                     }
                     if (intents != null) {
                         intents[intents.length-1] = rec.key.requestIntent;
@@ -6844,7 +6846,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
         try {
             PendingIntentRecord res = (PendingIntentRecord)pendingResult;
-            return res.key.requestIntent != null ? new Intent(res.key.requestIntent) : null;
+            synchronized (res) {
+                return res.key.requestIntent != null ? new Intent(res.key.requestIntent) : null;
+            }
         } catch (ClassCastException e) {
         }
         return null;
