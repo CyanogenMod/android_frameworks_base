@@ -150,6 +150,7 @@ public class FingerprintService extends SystemService {
     native int nativeCloseHal();
     native void nativeInit(FingerprintService service);
     native Fingerprint[] nativeGetEnrollments();
+    native int nativeGetNumEnrollmentSteps();
 
     // JNI methods for communicating from HAL to clients
     void notify(int msg, int arg1, int arg2) {
@@ -439,6 +440,10 @@ public class FingerprintService extends SystemService {
         return true;
     }
 
+    public int getNumEnrollmentSteps() {
+        return nativeGetNumEnrollmentSteps();
+    }
+
     private void enforceCrossUserPermission(int userId, String errorMessage) {
         if (userId != UserHandle.getCallingUserId()
                 && Binder.getCallingUid() != Process.myUid()
@@ -468,6 +473,7 @@ public class FingerprintService extends SystemService {
         private final static String DUMP_CMD_REMOVE_FINGER = "removeFinger";
         private final static String DUMP_CMD_PRINT_ENROLLMENTS = "printEnrollments";
         private final static String DUMP_CMD_SET_FINGER_NAME = "setFingerName";
+        private final static String DUMP_CMD_GET_NUM_ENROLLMENT_STEPS = "getNumEnrollmentSteps";
 
         @Override // Binder call
         public void authenticate(IBinder token, int userId) {
@@ -528,6 +534,14 @@ public class FingerprintService extends SystemService {
             return FingerprintService.this.setFingerprintName(token, fingerprintId, name, userId);
         }
 
+        @Override
+        public int getNumEnrollmentSteps(IBinder token)
+                throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
+            return FingerprintService.this.getNumEnrollmentSteps();
+        }
+
         /**
          * "adb shell dumpsys fingerprint [cmd]
          */
@@ -547,6 +561,8 @@ public class FingerprintService extends SystemService {
                 dumpSetFingerprintName(pw, args);
             } else if (args.length > 1 && DUMP_CMD_REMOVE_FINGER.equals(args[0])) {
                 dumpRemoveFinger(pw, args);
+            } else if (args.length >= 1 && DUMP_CMD_GET_NUM_ENROLLMENT_STEPS.equals(args[0])) {
+                dumpGetNumEnrollmentSteps(pw, args);
             } else {
                 dumpCommandList(pw);
             }
@@ -596,11 +612,22 @@ public class FingerprintService extends SystemService {
             }
         }
 
+        private void dumpGetNumEnrollmentSteps(PrintWriter pw, String[] args) {
+            try {
+                int steps = FingerprintService.this.getNumEnrollmentSteps();
+                pw.println("Number of enrollment steps: " + steps);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         private void dumpCommandList(PrintWriter pw) {
             pw.println("Valid Fingerprint Commands:");
             pw.println(DUMP_CMD_PRINT_ENROLLMENTS + " - Print Fingerprint Enrollments");
             pw.println(DUMP_CMD_REMOVE_FINGER + " <id> - Remove fingerprint");
             pw.println(DUMP_CMD_SET_FINGER_NAME + " <id> <name> - Rename a finger");
+            pw.println(DUMP_CMD_GET_NUM_ENROLLMENT_STEPS + " - Returns num of steps the vendor" +
+                    " requires to enroll a finger.");
         }
     }
 

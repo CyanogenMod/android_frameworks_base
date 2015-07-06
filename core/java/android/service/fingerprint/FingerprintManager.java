@@ -294,6 +294,19 @@ public class FingerprintManager {
         return Collections.emptyList();
     }
 
+    public int getNumEnrollmentSteps() {
+        if (mService != null) {
+            try {
+                return mService.getNumEnrollmentSteps(mToken);
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in getNumEnrollmentSteps(): ", e);
+            }
+        } else {
+            Log.w(TAG, "getNumEnrollmentSteps(): Service not connected!");
+        }
+        return -1;
+    }
+
     private void sendError(int msg, int arg1, int arg2) {
         mHandler.obtainMessage(msg, arg1, arg2);
     }
