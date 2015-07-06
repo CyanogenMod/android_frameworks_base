@@ -677,6 +677,9 @@ public class NotificationPanelView extends PanelView implements
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            mStatusBar.setVisualizerTouching(false);
+        }
         if (mBlockTouches) {
             return false;
         }
@@ -910,6 +913,7 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private void setQsExpanded(boolean expanded) {
+        mStatusBar.setVisualizerAnimating(expanded);
         boolean changed = mQsExpanded != expanded;
         if (changed) {
             mQsExpanded = expanded;
@@ -1804,12 +1808,14 @@ public class NotificationPanelView extends PanelView implements
                 || isDozing()) {
             return;
         }
+        mStatusBar.setVisualizerAnimating(true);
         mHintAnimationRunning = true;
         mAfforanceHelper.startHintAnimation(right, new Runnable() {
             @Override
             public void run() {
                 mHintAnimationRunning = false;
                 mStatusBar.onHintFinished();
+                mStatusBar.setVisualizerAnimating(false);
             }
         });
         boolean start = getLayoutDirection() == LAYOUT_DIRECTION_RTL ? right : !right;
@@ -1851,14 +1857,6 @@ public class NotificationPanelView extends PanelView implements
         mSecureCameraLaunchManager.onSwipingStarted();
         requestDisallowInterceptTouchEvent(true);
         mOnlyAffordanceInThisMotion = true;
-    }
-
-    @Override
-    public void onSwipingAnimationFinished(boolean snappingBack) {
-        if (snappingBack) {
-            mStatusBar.setVisualizerTouching(false);
-            mStatusBar.requestVisualizer(null, 0);
-        }
     }
 
     @Override
