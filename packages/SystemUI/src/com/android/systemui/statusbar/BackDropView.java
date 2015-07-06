@@ -240,7 +240,7 @@ public class BackDropView extends FrameLayout implements Palette.PaletteAsyncLis
             if (mTouching) {
                 // immediately hide visualizer
                 requestVisualizer(false, 0);
-            } else {
+            } else if (mHandler != null) {
                 // we want to avoid requesting the visualizer when something is paused right here
                 mHandler.postDelayed(mResumeVisualizerIfPlayingRunnable, 500);
             }
@@ -256,7 +256,8 @@ public class BackDropView extends FrameLayout implements Palette.PaletteAsyncLis
      * @param delay How long to wait before doing the requested action.
      */
     public void requestVisualizer(Boolean show, int delay) {
-        if (mVisualizer == null || !mVisualizerEnabled || mPowerSaveModeEnabled) {
+        if (mVisualizer == null || !mVisualizerEnabled || mPowerSaveModeEnabled
+            || mHandler == null) {
             return;
         }
         mHandler.removeCallbacks(mStartVisualizer);
