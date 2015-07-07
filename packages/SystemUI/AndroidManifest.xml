@@ -137,6 +137,9 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!-- Fingerprint -->
+    <uses-permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
