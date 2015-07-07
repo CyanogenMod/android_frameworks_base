@@ -507,6 +507,12 @@ public class FingerprintService extends SystemService {
          */
         @Override
         protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+            if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
+                    != PackageManager.PERMISSION_GRANTED) {
+                pw.println("Permission Denial: can't dump telephony.registry from from pid="
+                        + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid());
+                return;
+            }
             if (mHal == 0) {
                 pw.println("Fingerprint sensor not available");
             } else if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
