@@ -1284,10 +1284,12 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     public void stopAuthenticatingFingerprint() {
-        FingerprintManager fpm =
-                (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
-        fpm.cancel();
-        fpm.stopListening();
+        if (mLockPatternUtils.isFingerprintInstalled(mContext)) {
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+            fpm.cancel();
+            fpm.stopListening();
+        }
     }
 
     public void clearFingerprintRecognized() {
