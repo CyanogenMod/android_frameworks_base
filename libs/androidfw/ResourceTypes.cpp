@@ -71,6 +71,7 @@ namespace android {
 
 #define APP_PACKAGE_ID      0x7f
 #define SYS_PACKAGE_ID      0x01
+#define CMSDK_PACKAGE_ID    0x7e
 #define OVERLAY_APP_PACKAGE_ID  0x61
 #define OVERLAY_SYS_PACKAGE_ID  0x60
 #define OVERLAY_COMMON_PACKAGE_ID  0x5f
@@ -6068,6 +6069,7 @@ DynamicRefTable::DynamicRefTable(uint8_t packageId)
     // Reserved package ids
     mLookupTable[APP_PACKAGE_ID] = APP_PACKAGE_ID;
     mLookupTable[SYS_PACKAGE_ID] = SYS_PACKAGE_ID;
+    mLookupTable[CMSDK_PACKAGE_ID] = CMSDK_PACKAGE_ID;
     mLookupTable[OVERLAY_APP_PACKAGE_ID] = OVERLAY_APP_PACKAGE_ID;
     mLookupTable[OVERLAY_SYS_PACKAGE_ID] = OVERLAY_SYS_PACKAGE_ID;
     mLookupTable[OVERLAY_COMMON_PACKAGE_ID] = OVERLAY_COMMON_PACKAGE_ID;
@@ -6148,7 +6150,8 @@ status_t DynamicRefTable::lookupResourceId(uint32_t* resId) const {
     size_t packageId = Res_GETPACKAGE(res) + 1;
 
     if (packageId == APP_PACKAGE_ID || packageId == OVERLAY_APP_PACKAGE_ID ||
-                packageId == OVERLAY_SYS_PACKAGE_ID || packageId == OVERLAY_COMMON_PACKAGE_ID) {
+                packageId == OVERLAY_SYS_PACKAGE_ID || packageId == OVERLAY_COMMON_PACKAGE_ID ||
+                packageId == CMSDK_PACKAGE_ID) {
         // No lookup needs to be done, app package IDs are absolute.
         return NO_ERROR;
     }
@@ -6502,7 +6505,7 @@ bool ResTable::isResTypeAllowed(const char* type) const {
 bool ResTable::isDynamicPackageId(const uint32_t pkgId) const {
     return pkgId != APP_PACKAGE_ID && pkgId != SYS_PACKAGE_ID
             && pkgId != OVERLAY_APP_PACKAGE_ID && pkgId != OVERLAY_SYS_PACKAGE_ID
-            && pkgId != OVERLAY_COMMON_PACKAGE_ID;
+            && pkgId != OVERLAY_COMMON_PACKAGE_ID && pkgId != CMSDK_PACKAGE_ID;
 }
 
 status_t ResTable::removeIdmappedTypesFromPackageGroup(PackageGroup* packageGroup) const {
