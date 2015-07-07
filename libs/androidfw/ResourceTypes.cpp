@@ -70,6 +70,7 @@ namespace android {
 #define IDMAP_CURRENT_VERSION   0x00000001
 
 #define APP_PACKAGE_ID      0x7f
+#define CMSDK_PACKAGE_ID    0x3f
 #define SYS_PACKAGE_ID      0x01
 #define OVERLAY_APP_PACKAGE_ID  0x61
 #define OVERLAY_SYS_PACKAGE_ID  0x60
@@ -6068,6 +6069,7 @@ DynamicRefTable::DynamicRefTable(uint8_t packageId)
     // Reserved package ids
     mLookupTable[APP_PACKAGE_ID] = APP_PACKAGE_ID;
     mLookupTable[SYS_PACKAGE_ID] = SYS_PACKAGE_ID;
+    mLookupTable[CMSDK_PACKAGE_ID] = CMSDK_PACKAGE_ID;
     mLookupTable[OVERLAY_APP_PACKAGE_ID] = OVERLAY_APP_PACKAGE_ID;
     mLookupTable[OVERLAY_SYS_PACKAGE_ID] = OVERLAY_SYS_PACKAGE_ID;
     mLookupTable[OVERLAY_COMMON_PACKAGE_ID] = OVERLAY_COMMON_PACKAGE_ID;
@@ -6502,7 +6504,7 @@ bool ResTable::isResTypeAllowed(const char* type) const {
 bool ResTable::isDynamicPackageId(const uint32_t pkgId) const {
     return pkgId != APP_PACKAGE_ID && pkgId != SYS_PACKAGE_ID
             && pkgId != OVERLAY_APP_PACKAGE_ID && pkgId != OVERLAY_SYS_PACKAGE_ID
-            && pkgId != OVERLAY_COMMON_PACKAGE_ID;
+            && pkgId != OVERLAY_COMMON_PACKAGE_ID && pkgId != CMSDK_PACKAGE_ID;
 }
 
 status_t ResTable::removeIdmappedTypesFromPackageGroup(PackageGroup* packageGroup) const {
