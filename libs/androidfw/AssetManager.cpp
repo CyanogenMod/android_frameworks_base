@@ -74,6 +74,7 @@ static const char* kDefaultVendor = "default";
 static const char* kAssetsRoot = "assets";
 static const char* kAppZipName = NULL; //"classes.jar";
 static const char* kSystemAssets = "framework/framework-res.apk";
+static const char* kCMSDKAssets = "framework/org.cyanogenmod.platform-res.apk";
 static const char* kResourceCache = "resource-cache";
 static const char* kAndroidManifest = "AndroidManifest.xml";
 static const int   kComposedIconAsset = 128;
@@ -546,6 +547,10 @@ bool AssetManager::addDefaultAssets()
 {
     const char* root = getenv("ANDROID_ROOT");
     LOG_ALWAYS_FATAL_IF(root == NULL, "ANDROID_ROOT not set");
+
+    String8 pathCM(root);
+    pathCM.appendPath(kCMSDKAssets);
+    addAssetPath(pathCM, NULL);
 
     String8 path(root);
     path.appendPath(kSystemAssets);
