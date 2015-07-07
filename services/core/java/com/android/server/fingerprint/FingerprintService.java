@@ -493,7 +493,15 @@ public class FingerprintService extends SystemService {
          */
         @Override
         protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-            if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
+            if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
+                    != PackageManager.PERMISSION_GRANTED) {
+                pw.println("Permission Denial: can't dump telephony.registry from from pid="
+                        + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid());
+                return;
+            }
+            if (mHal == 0) {
+                pw.println("Fingerprint sensor not available");
+            } else if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
                 dumpEnrollments(pw, args);
             } else if (args.length >= 3 && DUMP_CMD_SET_FINGER_NAME.equals(args[0])) {
                 dumpSetFingerprintName(pw, args);
@@ -558,8 +566,17 @@ public class FingerprintService extends SystemService {
 
     @Override
     public void onStart() {
-       publishBinderService(Context.FINGERPRINT_SERVICE, new FingerprintServiceWrapper());
-       mHal = nativeOpenHal();
+        publishBinderService(Context.FINGERPRINT_SERVICE, new FingerprintServiceWrapper());
+        mHal = nativeOpenHal();
+        if (mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
+            if (mHal == 0) {
+                throw new RuntimeException(
+                        "FEATURE_FINGERPRINT present, but no Fingerprint HAL loaded!");
+            }
+        } else if (mHal != 0) {
+            throw new RuntimeException(
+                    "Fingerprint HAL present, but FEATURE_FINGERPRINT is not set!");
+        }
     }
 
 }
