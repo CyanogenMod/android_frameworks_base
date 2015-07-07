@@ -141,6 +141,9 @@
     <!-- LiveDisplay -->
     <uses-permission android:name="android.permission.HARDWARE_ABSTRACTION_ACCESS" />
 
+    <!-- Fingerprint -->
+    <uses-permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
