@@ -27,6 +27,7 @@ import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.os.Vibrator;
 import android.service.fingerprint.FingerprintManager;
 import android.service.fingerprint.FingerprintUtils;
 import android.service.fingerprint.IFingerprintService;
@@ -81,6 +82,19 @@ public class FingerprintService extends SystemService {
     private static final int STATE_AUTHENTICATING = 1;
     private static final int STATE_ENROLLING = 2;
     private static final long MS_PER_SEC = 1000;
+
+    /**
+     * The time, in milliseconds, to run the device vibrator after a fingerprint
+     * image has been aquired or enrolled by the fingerprint sensor.
+     */
+    private static final long FINGERPRINT_EVENT_VIBRATE_DURATION = 100;
+
+    /**
+     * A local instance of {@link android.os.Vibrator} as retrieved using
+     * {@link android.content.Context#VIBRATOR_SERVICE}
+     */
+    private Vibrator mVibrator;
+
     private long mHal;
 
     private static final class ClientData {
@@ -118,6 +132,11 @@ public class FingerprintService extends SystemService {
     public FingerprintService(Context context) {
         super(context);
         mContext = context;
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // If no physical vibrator is present, set vibrator to null.
+        if (mVibrator != null && !mVibrator.hasVibrator()) {
+            mVibrator = null;
+        }
         nativeInit(this);
     }
 
@@ -161,6 +180,7 @@ public class FingerprintService extends SystemService {
                     final int acquireInfo = arg1;
                     if (mState == STATE_AUTHENTICATING) {
                         try {
+                            vibrateDeviceIfSupported();
                             if (clientData != null && clientData.receiver != null) {
                                 clientData.receiver.onAcquired(acquireInfo);
                             }
@@ -203,6 +223,7 @@ public class FingerprintService extends SystemService {
                             newState = STATE_IDLE;
                         }
                         try {
+                            vibrateDeviceIfSupported();
                             if (clientData != null && clientData.receiver != null) {
                                 clientData.receiver.onEnrollResult(fingerId, remaining);
                             }
@@ -234,6 +255,12 @@ public class FingerprintService extends SystemService {
             }
         }
         mState = newState;
+    }
+
+    private void vibrateDeviceIfSupported() {
+        if (mVibrator != null) {
+            mVibrator.vibrate(FINGERPRINT_EVENT_VIBRATE_DURATION);
+        }
     }
 
     void startEnroll(IBinder token, long timeout, int userId) {
