@@ -27,6 +27,7 @@ import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.os.Vibrator;
 import android.service.fingerprint.FingerprintManager;
 import android.service.fingerprint.FingerprintUtils;
 import android.service.fingerprint.IFingerprintService;
@@ -81,6 +82,19 @@ public class FingerprintService extends SystemService {
     private static final int STATE_AUTHENTICATING = 1;
     private static final int STATE_ENROLLING = 2;
     private static final long MS_PER_SEC = 1000;
+
+    /**
+     * The time, in milliseconds, to run the device vibrator after a fingerprint
+     * image has been aquired by the fingerprint sensor.
+     */
+    private static final long FINGERPRINT_ACQUIRED_VIBRATE_DURATION = 100;
+
+    /**
+     * A local instance of {@link android.os.Vibrator} as retrieved using
+     * {@link android.content.Context#VIBRATOR_SERVICE}
+     */
+    private Vibrator mVibrator;
+
     private long mHal;
 
     private static final class ClientData {
@@ -118,6 +132,7 @@ public class FingerprintService extends SystemService {
     public FingerprintService(Context context) {
         super(context);
         mContext = context;
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         nativeInit(this);
     }
 
@@ -162,6 +177,9 @@ public class FingerprintService extends SystemService {
                     if (mState == STATE_AUTHENTICATING) {
                         try {
                             if (clientData != null && clientData.receiver != null) {
+                                if (mVibrator != null && mVibrator.hasVibrator()) {
+                                    mVibrator.vibrate(FINGERPRINT_ACQUIRED_VIBRATE_DURATION);
+                                }
                                 clientData.receiver.onAcquired(acquireInfo);
                             }
                         } catch (RemoteException e) {
