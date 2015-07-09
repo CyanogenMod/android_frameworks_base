@@ -718,7 +718,7 @@ public final class Call {
      * an outgoing call.
      */
     public void phoneAccountSelected(PhoneAccountHandle accountHandle, boolean setDefault) {
-        mInCallAdapter.phoneAccountSelected(mTelecomCallId, accountHandle);
+        mInCallAdapter.phoneAccountSelected(mTelecomCallId, accountHandle, setDefault);
 
     }
 

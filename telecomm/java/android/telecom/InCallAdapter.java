@@ -210,9 +210,10 @@ public final class InCallAdapter {
      * @param callId The identifier of the call
      * @param accountHandle The PhoneAccountHandle through which to place the call
      */
-    public void phoneAccountSelected(String callId, PhoneAccountHandle accountHandle) {
+    public void phoneAccountSelected(String callId, PhoneAccountHandle accountHandle,
+            boolean setDefault) {
         try {
-            mAdapter.phoneAccountSelected(callId, accountHandle);
+            mAdapter.phoneAccountSelected(callId, accountHandle, setDefault);
         } catch (RemoteException e) {
         }
     }
