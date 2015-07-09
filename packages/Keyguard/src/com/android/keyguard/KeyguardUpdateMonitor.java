@@ -1268,10 +1268,20 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         return mFailedAttempts;
     }
 
+    public int getFailedFingerprintUnlockAttempts() {
+        return mFailedFingerprintAttempts;
+    }
+
     public void clearFailedUnlockAttempts() {
+        clearFailedUnlockAttempts(false);
+    }
+
+    public void clearFailedUnlockAttempts(boolean clearFingers) {
         mFailedAttempts = 0;
         mFailedBiometricUnlockAttempts = 0;
-        mFailedFingerprintAttempts = 0;
+        if (clearFingers) {
+            mFailedFingerprintAttempts = 0;
+        }
     }
 
     public void startFingerAuthIfUsingFingerprint() {
@@ -1294,6 +1304,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
     public void clearFingerprintRecognized() {
         mUserFingerprintRecognized.clear();
+    }
+
+    public boolean isFingerprintRecognized() {
+       return (mUserFingerprintRecognized.size() > 0);
     }
 
     public void reportFailedUnlockAttempt() {
