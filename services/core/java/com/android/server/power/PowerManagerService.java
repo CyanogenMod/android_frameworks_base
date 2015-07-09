@@ -453,6 +453,9 @@ public final class PowerManagerService extends SystemService
     private final ArrayList<PowerManagerInternal.LowPowerModeListener> mLowPowerModeListeners
             = new ArrayList<PowerManagerInternal.LowPowerModeListener>();
 
+    //track the blocked uids.
+    private final ArrayList<Integer> mBlockedUids = new ArrayList<Integer>();
+
     private native void nativeInit();
 
     private static native void nativeAcquireSuspendBlocker(String name);
@@ -800,6 +803,15 @@ public final class PowerManagerService extends SystemService
                 }
                 mWakeLocks.add(wakeLock);
                 setWakeLockDisabledStateLocked(wakeLock);
+                if(mBlockedUids.contains(new Integer(uid)) && uid != Process.myUid()) {
+                    //wakelock acquisition for blocked uid, disable it.
+                    if (DEBUG_SPEW) {
+                        Slog.d(TAG, "uid is blocked disabling wakeLock flags=0x" +
+                                Integer.toHexString(flags) + " tag=" + tag + " uid=" + uid +
+                                " pid =" + pid);
+                    }
+                    updateBlockedWakelock(wakeLock, true);
+                }
                 notifyAcquire = true;
             }
 
@@ -3448,6 +3460,43 @@ public final class PowerManagerService extends SystemService
                 Binder.restoreCallingIdentity(ident);
             }
         }
+
+        /* updates the blocked uids, so if a wake lock is acquired for it
+         * can be released.
+         */
+        public void updateBlockedUids(int uid, boolean isBlocked) {
+            boolean changed = false;
+            if (DEBUG_SPEW) Slog.v(TAG, "updateBlockedUids: uid = " + uid +
+                                   "isBlocked = " + isBlocked);
+            if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+                if (DEBUG_SPEW) Slog.v(TAG, "UpdateBlockedUids is not allowed");
+                return;
+            }
+            synchronized(mLock) {
+                for (int index = 0; index < mWakeLocks.size(); index++) {
+                    WakeLock wl = mWakeLocks.get(index);
+                    if(wl != null) {
+                        // update the wakelock for the blocked uid
+                        if ((wl.mOwnerUid == uid || checkWorkSourceObjectId(uid, wl)) ||
+                            (wl.mTag.startsWith("*sync*") && wl.mOwnerUid == Process.SYSTEM_UID)) {
+                            if(updateBlockedWakelock(wl, isBlocked)){
+                                changed = true;
+                            }
+                        }
+                    }
+                }
+                if(isBlocked) {
+                    mBlockedUids.add(new Integer(uid));
+                }
+                else {
+                    mBlockedUids.clear();
+                }
+            }
+            if(changed){
+                mDirty |= DIRTY_WAKE_LOCKS;
+                updatePowerStateLocked();
+            }
+        }
     }
 
     private final class LocalService extends PowerManagerInternal {
@@ -3534,5 +3583,37 @@ public final class PowerManagerService extends SystemService
         public void uidGone(int uid) {
             uidGoneInternal(uid);
         }
+    }
+
+    private boolean updateBlockedWakelock(WakeLock wakeLock, boolean update) {
+        if (wakeLock != null && ((wakeLock.mFlags & PowerManager.WAKE_LOCK_LEVEL_MASK)
+                == PowerManager.PARTIAL_WAKE_LOCK )) {
+            if(wakeLock.mDisabled != update){
+                wakeLock.mDisabled = update;
+                if (wakeLock.mDisabled) {
+                    // This wake lock is no longer being respected.
+                    notifyWakeLockReleasedLocked(wakeLock);
+                } else {
+                    notifyWakeLockAcquiredLocked(wakeLock);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkWorkSourceObjectId(int uid, WakeLock wl) {
+        try {
+            for (int index = 0; index < wl.mWorkSource.size(); index++) {
+                if (uid == wl.mWorkSource.get(index)) {
+                    if (DEBUG_SPEW) Slog.v(TAG, "WS uid matched");
+                    return true;
+                }
+            }
+        }
+        catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 }
