@@ -57,6 +57,7 @@ import android.view.WindowManagerPolicy;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.cyanogenmod.keyguard.cmstats.KeyguardStats;
 import cyanogenmod.app.Profile;
 import cyanogenmod.app.ProfileManager;
 
@@ -1331,7 +1332,12 @@ public class KeyguardViewMediator extends SystemUI {
         }
 
         if (authenticated) {
-            mUpdateMonitor.clearFailedUnlockAttempts();
+            if (mLockPatternUtils.usingFingerprint()) {
+                KeyguardStats.sendUnlockEvent(mContext,
+                        mUpdateMonitor.isFingerprintRecognized(),
+                        mUpdateMonitor.getFailedFingerprintUnlockAttempts());
+            }
+            mUpdateMonitor.clearFailedUnlockAttempts(true /* Clear FingerprintAttempts */);
         }
         mUpdateMonitor.clearFingerprintRecognized();
         mUpdateMonitor.stopAuthenticatingFingerprint();

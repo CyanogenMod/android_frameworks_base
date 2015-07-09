@@ -41,6 +41,7 @@
     <uses-permission android:name="android.permission.ACCESS_KEYGUARD_SECURE_STORAGE" />
     <uses-permission android:name="android.permission.TRUST_LISTENER" />
     <uses-permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE" />
+    <uses-permission android:name="com.cyngn.stats.SEND_ANALYTICS" />
 
     <application android:label="@string/app_name"
         android:process="com.android.systemui"
