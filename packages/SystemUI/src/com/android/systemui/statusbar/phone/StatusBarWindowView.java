@@ -236,7 +236,8 @@ public class StatusBarWindowView extends FrameLayout {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         final int action = ev.getActionMasked();
-        if (action == MotionEvent.ACTION_UP) {
+        if (mService.getBarState() != StatusBarState.SHADE
+                && action == MotionEvent.ACTION_UP) {
             mService.setVisualizerTouching(false);
         }
         boolean handled = false;

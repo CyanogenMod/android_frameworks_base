@@ -734,7 +734,7 @@ public class NotificationStackScrollLayout extends ViewGroup
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (ev.getActionMasked() == MotionEvent.ACTION_UP) {
+        if ( if (ev.getActionMasked() == MotionEvent.ACTION_UP) {
             mPhoneStatusBar.setVisualizerTouching(false);
         }
         boolean isCancelOrUp = ev.getActionMasked() == MotionEvent.ACTION_CANCEL
