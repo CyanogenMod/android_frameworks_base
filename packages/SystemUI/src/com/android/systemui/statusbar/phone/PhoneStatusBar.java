@@ -696,7 +696,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private ImageView mBackdropFront, mBackdropBack;
     private PorterDuffXfermode mSrcXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC);
     private PorterDuffXfermode mSrcOverXferMode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
-    private boolean mVisualizerEnabled;
+    public boolean mVisualizerEnabled;
 
     private MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
