@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.View;
@@ -39,7 +40,7 @@ import com.pheelicks.visualizer.renderer.Renderer;
 /**
  * A view who contains media artwork.
  */
-public class BackDropView extends FrameLayout {
+public class BackDropView extends FrameLayout implements Palette.PaletteAsyncListener {
     private Runnable mOnVisibilityChangedRunnable;
 
     public BackDropView(Context context) {
@@ -81,6 +82,7 @@ public class BackDropView extends FrameLayout {
     private boolean mAnimating = false;
     private boolean mTouching = false;
     private boolean mPowerSaveMode = false;
+    private boolean mQsExpanded = false;
     private int mColor;
 
     private VisualizerView mVisualizer;
@@ -90,10 +92,8 @@ public class BackDropView extends FrameLayout {
     private final Runnable mLinkVisualizer = new Runnable() {
         @Override
         public void run() {
-            if (mVisualizer != null && !mLinked) {
+            if (mVisualizer != null) {
                 mVisualizer.link(0);
-                mVisualizer.animate().alpha(1f).setDuration(300);
-                mLinked = true;
             }
         }
     };
@@ -101,10 +101,8 @@ public class BackDropView extends FrameLayout {
     private final Runnable mUnlinkVisualizer = new Runnable() {
         @Override
         public void run() {
-            if (mVisualizer != null && mLinked) {
-                mVisualizer.animate().alpha(0f).setDuration(0);
+            if (mVisualizer != null) {
                 mVisualizer.unlink();
-                mLinked = false;
             }
         }
     };
@@ -167,7 +165,7 @@ public class BackDropView extends FrameLayout {
         paint.setStrokeWidth(res.getDimensionPixelSize(R.dimen.kg_visualizer_path_stroke_width));
         paint.setAntiAlias(true);
         paint.setColor(mColor);
-        paint.setPathEffect(new DashPathEffect(new float[] {
+        paint.setPathEffect(new DashPathEffect(new float[]{
                 res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_1),
                 res.getDimensionPixelSize(R.dimen.kg_visualizer_path_effect_2)
         }, 0));
@@ -218,30 +216,49 @@ public class BackDropView extends FrameLayout {
         }
     }
 
-    public void setBitmap(Bitmap bitmap) {
+    public void setQsExpanded(boolean qsExpanded) {
+        if (mQsExpanded != qsExpanded) {
+            mQsExpanded = qsExpanded;
+            checkStateChanged();
+        }
+    }
+
+    @Override
+    public void onGenerated(Palette palette) {
         int color = Color.TRANSPARENT;
 
-        Palette p = Palette.generate(bitmap);
-        color = p.getVibrantColor(color);
+        color = palette.getLightVibrantColor(color);
         if (color == Color.TRANSPARENT) {
-            color = p.getLightVibrantColor(color);
+            color = palette.getVibrantColor(color);
             if (color == Color.TRANSPARENT) {
-                color = p.getDarkVibrantColor(color);
-                if (color == Color.TRANSPARENT) {
-                    color = mContext.getResources().getColor(R.color.equalizer_fill_color);
-                }
+                color = palette.getDarkVibrantColor(color);
             }
         }
+        setVisualizerColor(color);
+    }
 
+    public void setBitmap(Bitmap bitmap) {
+        if (bitmap != null) {
+            Palette.generateAsync(bitmap, this);
+        } else {
+            setVisualizerColor(Color.TRANSPARENT);
+        }
+    }
+
+    private void setVisualizerColor(int color) {
+        if (color == Color.TRANSPARENT) {
+            color = mContext.getResources().getColor(R.color.equalizer_fill_color);
+        }
         if (mColor != color) {
             mColor = color;
+
             if (mLinked) {
                 if (mVisualizerColorAnimator != null) {
                     mVisualizerColorAnimator.cancel();
                 }
                 mVisualizerColorAnimator = ObjectAnimator.ofArgb(mBarRenderer.mPaint, "color",
                         mBarRenderer.mPaint.getColor(), mColor);
-                mVisualizerColorAnimator.setStartDelay(900);
+                mVisualizerColorAnimator.setStartDelay(500);
                 mVisualizerColorAnimator.setDuration(1200);
                 mVisualizerColorAnimator.start();
             } else {
@@ -251,10 +268,18 @@ public class BackDropView extends FrameLayout {
     }
 
     private void checkStateChanged() {
-        if (mVisible && mPlaying && !mAnimating && !mTouching && !mPowerSaveMode) {
-            mLinkVisualizer.run();
+        if (mVisible && mPlaying && !mAnimating && !mTouching && !mPowerSaveMode && !mQsExpanded) {
+            if (!mLinked) {
+                mVisualizer.animate().alpha(1f).setDuration(300);
+                AsyncTask.execute(mLinkVisualizer);
+                mLinked = true;
+            }
         } else {
-            mUnlinkVisualizer.run();
+            if (mLinked) {
+                mVisualizer.animate().alpha(0f).setDuration(0);
+                AsyncTask.execute(mUnlinkVisualizer);
+                mLinked = false;
+            }
         }
     }
 }
