@@ -197,11 +197,17 @@ public class StatusBarWindowView extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        final int action = ev.getActionMasked();
-        if (action == MotionEvent.ACTION_DOWN) {
-            mService.setVisualizerTouching(true);
-        } else if (action == MotionEvent.ACTION_UP) {
-            mService.setVisualizerTouching(false);
+        if (mService.getBarState() != StatusBarState.SHADE) {
+            final int action = ev.getActionMasked();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    mService.setVisualizerTouching(true);
+
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mService.setVisualizerTouching(false);
+                    break;
+            }
         }
         boolean intercept = false;
         if (mDoubleTapToSleepEnabled
@@ -236,7 +242,8 @@ public class StatusBarWindowView extends FrameLayout {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         final int action = ev.getActionMasked();
-        if (action == MotionEvent.ACTION_UP) {
+        if (mService.getBarState() != StatusBarState.SHADE
+                && action == MotionEvent.ACTION_UP) {
             mService.setVisualizerTouching(false);
         }
         boolean handled = false;
