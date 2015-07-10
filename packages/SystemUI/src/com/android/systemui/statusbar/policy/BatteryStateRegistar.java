@@ -18,7 +18,7 @@ package com.android.systemui.statusbar.policy;
 
 public interface BatteryStateRegistar {
     interface BatteryStateChangeCallback {
-        void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging);
+        void onBatteryLevelChanged(boolean present, int level, boolean pluggedIn, boolean charging);
         void onPowerSaveChanged();
         void onBatteryStyleChanged(int style, int percentMode);
     }
