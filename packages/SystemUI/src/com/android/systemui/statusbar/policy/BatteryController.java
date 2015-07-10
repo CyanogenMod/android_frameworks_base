@@ -93,7 +93,7 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
     @Override
     public void addStateChangedCallback(BatteryStateChangeCallback cb) {
         mChangeCallbacks.add(cb);
-        cb.onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
+        cb.onBatteryLevelChanged(true, mLevel, mPluggedIn, mCharging);
         cb.onBatteryStyleChanged(mStyle, mPercentMode);
     }
 
@@ -141,7 +141,7 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
     private void fireBatteryLevelChanged() {
         final int N = mChangeCallbacks.size();
         for (int i = 0; i < N; i++) {
-            mChangeCallbacks.get(i).onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
+            mChangeCallbacks.get(i).onBatteryLevelChanged(true, mLevel, mPluggedIn, mCharging);
         }
     }
 

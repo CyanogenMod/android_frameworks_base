@@ -300,7 +300,8 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     @Override
-    public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
+    public void onBatteryLevelChanged(boolean present, int level, boolean pluggedIn,
+            boolean charging) {
         // TODO: Use this callback instead of own broadcast receiver.
     }
 

@@ -74,7 +74,7 @@ public class DockBatteryController extends BroadcastReceiver implements BatteryS
     @Override
     public void addStateChangedCallback(BatteryStateChangeCallback cb) {
         mChangeCallbacks.add(cb);
-        cb.onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
+        cb.onBatteryLevelChanged(mPresent, mLevel, mPluggedIn, mCharging);
         cb.onBatteryStyleChanged(mStyle, mPercentMode);
     }
 
@@ -104,7 +104,7 @@ public class DockBatteryController extends BroadcastReceiver implements BatteryS
     private void fireBatteryLevelChanged() {
         final int N = mChangeCallbacks.size();
         for (int i = 0; i < N; i++) {
-            mChangeCallbacks.get(i).onBatteryLevelChanged(mLevel, mPresent, mCharging);
+            mChangeCallbacks.get(i).onBatteryLevelChanged(mPresent, mLevel, mPresent, mCharging);
         }
     }
 
