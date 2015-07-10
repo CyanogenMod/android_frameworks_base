@@ -2341,11 +2341,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         Bitmap backdropBitmap = null;
 
         // apply any album artwork first
+        // might still be null
         if (mMediaMetadata != null) {
-            backdropBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
-            if (backdropBitmap == null) {
-                backdropBitmap = mMediaMetadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
-                // might still be null
+            final String[] keys = new String[] {MediaMetadata.METADATA_KEY_ART,
+                    MediaMetadata.METADATA_KEY_ALBUM_ART};
+            for (String key : keys) {
+                backdropBitmap = mMediaMetadata.getBitmap(key);
+                if (backdropBitmap != null) {
+                    if (DEBUG_MEDIA) {
+                        Log.v(TAG, "DEBUG_MEDIA: using backdrop bitmap from " + key);
+                    }
+                    break;
+                }
             }
         }
 
@@ -2356,10 +2363,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 && (mMediaController != null);
 
         if (backdropBitmap == null && (mMediaMetadata == null || visualizerVisible)) {
+            // ensure keyguard bitmap has been assigned
+            if (mKeyguardWallpaper == null) {
+                mKeyguardWallpaper = wm.getKeyguardBitmap();
+                if (DEBUG_MEDIA) {
+                    Log.v(TAG, "DEBUG_MEDIA: using backdrop bitmap from keyguard");
+                }
+            }
             backdropBitmap = mKeyguardWallpaper;
         }
 
-        if (visualizerVisible) {
+        if (visualizerVisible && backdropBitmap != null) {
             mBackdrop.setBitmap(backdropBitmap);
         }
 
