@@ -1888,6 +1888,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                             ? (UPDATE_PERMISSIONS_REPLACE_PKG|UPDATE_PERMISSIONS_REPLACE_ALL)
                             : 0));
 
+            // Remove any stale app permissions (declared permission that now are undeclared
+            // by the same app, removed from its Manifest in newer versions)
+            if (!onlyCore) {
+                mSettings. removeStalePermissions();
+            }
+
             // If this is the first boot, and it is a normal boot, then
             // we need to initialize the default preferred apps.
             if (!mRestoredSettings && !onlyCore) {
