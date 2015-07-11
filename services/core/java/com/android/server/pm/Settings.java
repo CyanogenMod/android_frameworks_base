@@ -3367,6 +3367,57 @@ final class Settings {
         return false;
     }
 
+    void  removeStalePermissions() {
+        /*
+         * Remove any permission that is not currently declared by any package
+         */
+        List<BasePermission> permissionsToRemove = new ArrayList<>();
+        for (BasePermission basePerm : mPermissions.values()) {
+            // Ignore permissions declared by the system
+            if (basePerm.sourcePackage.equals("android") ||
+                    basePerm.sourcePackage.equals("cyanogenmod.platform")) {
+                continue;
+            }
+            // Ignore permissions other than NORMAL (ignore DYNAMIC and BUILTIN), like the
+            // ones based on permission-trees
+            if (basePerm.type != BasePermission.TYPE_NORMAL) {
+                continue;
+            }
+
+            if (!mPackages.containsKey(basePerm.sourcePackage)) {
+                // Package doesn't exist
+                permissionsToRemove.add(basePerm);
+                continue;
+            }
+            PackageSetting pkgSettings = mPackages.get(basePerm.sourcePackage);
+            if (pkgSettings.pkg == null || pkgSettings.pkg.permissions == null) {
+                // Package doesn't declare permissions
+                permissionsToRemove.add(basePerm);
+                continue;
+            }
+            boolean found = false;
+            for (PackageParser.Permission perm : pkgSettings.pkg.permissions) {
+                if (perm.info.name != null && basePerm.name.equals(perm.info.name)) {
+                    // The original package still declares the permission
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // The original package doesn't currently declare the permission
+                permissionsToRemove.add(basePerm);
+            }
+        }
+        // And now remove all stale permissions
+        for (BasePermission basePerm : permissionsToRemove) {
+            String msg = "Removed stale permission: " + basePerm.name + " originally " +
+                    "assigned to " + basePerm.sourcePackage + "\n";
+            mReadMessages.append(msg);
+            PackageManagerService.reportSettingsProblem(Log.WARN, msg);
+            mPermissions.remove(basePerm.name);
+        }
+    }
+
     private List<UserInfo> getAllUsers() {
         long id = Binder.clearCallingIdentity();
         try {
