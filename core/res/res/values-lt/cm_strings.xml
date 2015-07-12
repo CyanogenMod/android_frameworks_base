@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Numatytasis</string>
-  <string name="profileNameWork">Darbas</string>
-  <string name="profileNameHome">Namai</string>
-  <string name="profileNameSilent">Tylus</string>
-  <string name="profileNameNight">Naktis</string>
-  <string name="profileNameAutomobile">Automobilis</string>
-  <string name="profileGroupPhone">Telefonas</string>
-  <string name="profileGroupCalendar">Kalendorius</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">El. paštas</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Kita</string>
-  <string name="profile_none">Nėra</string>
   <string name="profile_picker_title">Profiliai</string>
   <string name="global_action_choose_profile">Profilis</string>
+  <string name="profile_none">Nėra</string>
   <string name="global_action_screenshot">Ekrano kopija</string>
   <string name="permlab_receiveProtectedSms">gauti apsaugotus SMS</string>
   <string name="permdesc_receiveProtectedSms">Leidžia programai gauti įeinančius apsaugotus SMS.</string>
@@ -214,4 +202,9 @@
   <string name="quick_settings_tile_flashlight_not_title">Žibintuvėlis įjungtas</string>
   <string name="quick_settings_tile_flashlight_not_summary">Bakstelėkite, kad išjungtumėte</string>
   <string name="storage_sd_dock_card">SD kortelės dokas</string>
+  <string name="fingerprint_default_name">Pirštų atspaudas <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">pasiekti pirštų atspaudų paslaugą</string>
+  <string name="permdesc_accessFingerprintService">Leidžia programai pasiekti pirštų atspaudų paslaugą. Programa gali pridėti, ištrinti, pervardyti ir autentikuoti prieš pirštų atspaudus</string>
+  <string name="permlab_resetBatteryStats">Nustatyti iš naujo akumuliatoriaus statistiką</string>
+  <string name="permdesc_resetBatteryStats">Leidžia programai nustatyti iš naujo dabartinio žemo lygio akumuliatoriaus naudojimo duomenis.</string>
 </resources>

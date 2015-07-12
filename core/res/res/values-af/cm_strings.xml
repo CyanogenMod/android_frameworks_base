@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Normaal</string>
-  <string name="profileNameWork">Werk</string>
-  <string name="profileNameHome">Huis</string>
-  <string name="profileNameSilent">Stil</string>
-  <string name="profileNameNight">Nag</string>
-  <string name="profileNameAutomobile">Motor</string>
-  <string name="profileGroupPhone">Foon</string>
-  <string name="profileGroupCalendar">Kalender</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Epos</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Ander</string>
-  <string name="profile_none">Geen</string>
   <string name="profile_picker_title">Profiele</string>
   <string name="global_action_choose_profile">Profiel</string>
+  <string name="profile_none">Geen</string>
   <string name="global_action_screenshot">Skermfoto</string>
   <string name="permlab_receiveProtectedSms">ontvang beskermde SMS</string>
   <string name="permdesc_receiveProtectedSms">Laat die program toe om \'n beskermde inkomende SMS te ontvang.</string>

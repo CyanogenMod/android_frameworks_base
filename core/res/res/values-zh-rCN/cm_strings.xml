@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">默认</string>
-  <string name="profileNameWork">工作</string>
-  <string name="profileNameHome">住宅</string>
-  <string name="profileNameSilent">静音</string>
-  <string name="profileNameNight">夜晚</string>
-  <string name="profileNameAutomobile">汽车</string>
-  <string name="profileGroupPhone">电话</string>
-  <string name="profileGroupCalendar">日历</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">电子邮件</string>
-  <string name="profileGroupSMS">短信</string>
-  <string name="wildcardProfile">其他</string>
-  <string name="profile_none">无</string>
   <string name="profile_picker_title">情景模式</string>
   <string name="global_action_choose_profile">情景模式</string>
+  <string name="profile_none">无</string>
   <string name="global_action_screenshot">屏幕截图</string>
   <string name="permlab_receiveProtectedSms">接收受保护的短信</string>
   <string name="permdesc_receiveProtectedSms">允许应用接收受保护的短信。</string>
@@ -214,4 +202,9 @@
   <string name="quick_settings_tile_flashlight_not_title">手电筒已开</string>
   <string name="quick_settings_tile_flashlight_not_summary">轻按以关闭</string>
   <string name="storage_sd_dock_card">底座 SD 卡</string>
+  <string name="fingerprint_default_name">指纹 <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">访问指纹服务</string>
+  <string name="permdesc_accessFingerprintService">允许应用访问指纹服务。应用可以添加、 删除、 重命名指纹，使用指纹进行身份验证</string>
+  <string name="permlab_resetBatteryStats">重置电池统计信息</string>
+  <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
 </resources>

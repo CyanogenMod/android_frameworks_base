@@ -30,9 +30,71 @@
   <string name="accessibility_quick_settings_network_adb_on">ADB via netværk er slået til.</string>
   <string name="accessibility_quick_settings_network_adb_changed_off">ADB via netværk er slået fra.</string>
   <string name="accessibility_quick_settings_network_adb_changed_on">ADB via netværk er slået til.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Inaktivitetsvisning fra.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Inaktivitetsvisning til.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Inaktivitetsvisning er slået fra.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Inaktivitetsvisning er slået til.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Farveombytning fra.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Farveombytning til.</string>
+  <string name="accessibility_quick_settings_compass_off">Kompas fra.</string>
+  <string name="accessibility_quick_settings_compass_on">Kompas til.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Kompas slået fra.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Kompas slået til.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Svævende meddelelser fra.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Svævende meddelelser til.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Svævende meddelelser er slået fra.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Svævende meddelelser er slået til.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Mobilt hotspot fra.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Mobilt hotspot til.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay fra.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatisk tilstand.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dag tilstand.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nat tilstand.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: udendørstilstand.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay er slået fra.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay ændret til auto tilstand.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ændret til dag tilstand.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ændret til nat tilstand.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ændret til udendørstilstand.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Placeringsrapportering: Batterisparetilstand.</string>
   <string name="accessibility_quick_settings_location_gps_only">Placeringsrapportering: Kun sensorer-tilstand.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Placeringsrapportering: Høj nøjagtighed-tilstand.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Rapportering af placering ændret til batterisparetilstand.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Lokationsrapportering ændret til kun at bruge sensorer.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Lokationsrapportering ændret til høj nøjagtighed.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Skærmlås fra.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Skærmlås til.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Skærmlås er slået fra.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Skærmlås er slået til.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE fra.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE til.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE er slået fra.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE er slået til.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC fra.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC til.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC er slået fra.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC er slået til.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Batteri tilstand: strømsparetilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Batteri tilstand: balanceret tilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Batteri tilstand: høj ydeevne tilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batteritilstand skiftet til strømsparetilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Batteritilstand ændret til balanceret tilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Batteritilstand ændret til tilstanden høj ydeevne.</string>
+  <string name="accessibility_quick_settings_profiles_off">Profiler fra.</string>
+  <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Profiler slået fra.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Profil ændret til <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Tidsudløb for skærm: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Tidsudløb for skærm ændret til <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_sync_off">Synkr. fra.</string>
+  <string name="accessibility_quick_settings_sync_on">Synkr. til.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synkr. er slået fra.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synkr. er slået til.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">USB-internetdeling fra.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">USB-internetdeling til.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">USB-internetdeling er slået fra.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">USB-internetdeling er slået til.</string>
+  <string name="accessibility_quick_settings_visualizer">Visualisator.</string>
   <string name="accessibility_dpad_left">Venstremarkør</string>
   <string name="accessibility_dpad_right">Højremarkør</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>
@@ -55,6 +117,10 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Skærm-timeout</string>
   <string name="quick_settings_usb_tether_label">USB-tethering</string>
+  <string name="quick_settings_heads_up_label">Svævende meddelelser</string>
+  <string name="quick_settings_ambient_display_label">Inaktivitetsvisning</string>
+  <string name="quick_settings_sync_label">Synkr.</string>
+  <string name="quick_settings_custom_tile_detail_title">Tilpasset flise</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Stryg til højre for %1$s</string>
   <string name="right_shortcut_hint">Stryg til venstre for %1$s</string>
@@ -83,5 +149,13 @@
   <string name="navring_choose_action_title">Vælg handling</string>
   <string name="select_application">Vælg applikation</string>
   <string name="lockscreen_target_empty">Tom</string>
+  <string name="screen_pinning_description_no_navbar">Dette fastholder det i visningen indtil du frigører det. Tryk og hold tilbage-knappen nede for at frigøre.</string>
   <string name="interruption_level_silent">Lydløs</string>
+  <string name="zen_silent_with_warning">Ingen afbrydelser, undtagen alarmer.</string>
+  <string name="quick_settings_remove">Fjern flise</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dynamisk flise</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Næste alarm</string>
+  <string name="dynamic_qs_tile_ime_selector_label">IME-vælger</string>
+  <string name="dynamic_qs_tile_su_label">Root-adgang</string>
+  <string name="fingerprint_try_again_hint">Scan venligst igen</string>
 </resources>

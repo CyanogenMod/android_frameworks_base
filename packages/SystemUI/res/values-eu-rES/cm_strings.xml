@@ -157,4 +157,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Hurrengo alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME hautatzailea</string>
   <string name="dynamic_qs_tile_su_label">Root sarbidea</string>
+  <string name="fingerprint_try_again_hint">Eskaneatu berriro mesedez</string>
+  <string name="accessibility_dock_battery_level">Oinarriaren bateria, ehuneko <xliff:g id="number">%d</xliff:g>.</string>
 </resources>

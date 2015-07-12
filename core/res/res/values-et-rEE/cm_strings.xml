@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Vaikimisi</string>
-  <string name="profileNameWork">Töö</string>
-  <string name="profileNameHome">Kodu</string>
-  <string name="profileNameSilent">Vaikne</string>
-  <string name="profileNameNight">Öö</string>
-  <string name="profileNameAutomobile">Sõiduk</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Kalender</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-mail</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Muu</string>
-  <string name="profile_none">Puudub</string>
   <string name="profile_picker_title">Profiilid</string>
   <string name="global_action_choose_profile">Profiil</string>
+  <string name="profile_none">Puudub</string>
   <string name="global_action_screenshot">Ekraanipilt</string>
   <string name="permlab_receiveProtectedSms">saa kaitstud SMSe</string>
   <string name="permdesc_receiveProtectedSms">Lubab rakendusel vastu võtta sissetuleva kaitstud SMSi.</string>

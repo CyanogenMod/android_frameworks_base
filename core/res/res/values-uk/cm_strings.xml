@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Стандартний</string>
-  <string name="profileNameWork">Робота</string>
-  <string name="profileNameHome">Дім</string>
-  <string name="profileNameSilent">Беззвучний</string>
-  <string name="profileNameNight">Ніч</string>
-  <string name="profileNameAutomobile">Автомобіль</string>
-  <string name="profileGroupPhone">Телефон</string>
-  <string name="profileGroupCalendar">Календар</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Інше</string>
-  <string name="profile_none">Немає</string>
   <string name="profile_picker_title">Профілі</string>
   <string name="global_action_choose_profile">Профіль</string>
+  <string name="profile_none">Немає</string>
   <string name="global_action_screenshot">Скріншот</string>
   <string name="permlab_receiveProtectedSms">отримувати захищені SMS</string>
   <string name="permdesc_receiveProtectedSms">Дозволяє програмі отримувати захищені SMS.</string>

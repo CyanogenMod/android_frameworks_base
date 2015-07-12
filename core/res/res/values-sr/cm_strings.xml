@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Подразумевано</string>
-  <string name="profileNameWork">Посао</string>
-  <string name="profileNameHome">Кућа</string>
-  <string name="profileNameSilent">Тишина</string>
-  <string name="profileNameNight">Ноћ</string>
-  <string name="profileNameAutomobile">Аутомобил</string>
-  <string name="profileGroupPhone">Телефон</string>
-  <string name="profileGroupCalendar">Календар</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-пошта</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Друго</string>
-  <string name="profile_none">Ниједан</string>
   <string name="profile_picker_title">Профили</string>
   <string name="global_action_choose_profile">Профил</string>
+  <string name="profile_none">Ниједан</string>
   <string name="global_action_screenshot">Снимак екрана</string>
   <string name="permlab_receiveProtectedSms">прими заштићени SMS</string>
   <string name="permdesc_receiveProtectedSms">Дозволи да апликације приме долазећи заштићени SMS.</string>
@@ -214,4 +202,5 @@
   <string name="quick_settings_tile_flashlight_not_title">Блиц је укључен</string>
   <string name="quick_settings_tile_flashlight_not_summary">Додирни да угасиш</string>
   <string name="storage_sd_dock_card">База SD картице</string>
+  <string name="fingerprint_default_name">Отисак <xliff:g id="number">%d</xliff:g></string>
 </resources>

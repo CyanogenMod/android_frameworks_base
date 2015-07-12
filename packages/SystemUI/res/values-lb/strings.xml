@@ -192,8 +192,8 @@
   <string name="accessibility_quick_settings_flashlight_changed_on">Täscheluucht ugemaach.</string>
   <string name="accessibility_quick_settings_color_inversion_changed_off">Faarfinvertéierung ausgeschalt.</string>
   <string name="accessibility_quick_settings_color_inversion_changed_on">Faarfinvertéierung ugeschalt.</string>
-  <string name="accessibility_quick_settings_hotspot_changed_off">Mobilen Zougankspunkt ausgeschalt.</string>
-  <string name="accessibility_quick_settings_hotspot_changed_on">Mobilen Zougankspunkt ugeschalt.</string>
+  <string name="accessibility_quick_settings_hotspot_changed_off">Mobillen Zougankspunkt ausgeschalt.</string>
+  <string name="accessibility_quick_settings_hotspot_changed_on">Mobillen Zougankspunkt ugeschalt.</string>
   <string name="accessibility_casting_turned_off">Cast vum Schierm gestoppt.</string>
   <string name="accessibility_brightness">Schiermhellegkeet</string>
   <string name="data_usage_disabled_dialog_3g_title">2G-3G-Date sinn aus</string>
@@ -261,6 +261,7 @@
   <string name="quick_settings_more_settings">Méi Astellungen</string>
   <string name="quick_settings_done">Fäerdeg</string>
   <string name="quick_settings_connected">Verbonnen</string>
+  <string name="quick_settings_connected_via_wfa">Connectéiert iwwer de WLAN-Assistent</string>
   <string name="quick_settings_connecting">Gëtt connectéiert...</string>
   <string name="quick_settings_tethering_label">Tethering</string>
   <string name="quick_settings_hotspot_label">Zougankspunkt</string>
@@ -357,7 +358,11 @@ iwwerwaacht sinn</string>
   <string name="hidden_notifications_setup">Ariichten</string>
   <string name="zen_mode_and_condition"><xliff:g id="zen_mode" example="Priority interruptions only">%1$s</xliff:g>. <xliff:g id="exit_condition" example="For one hour">%2$s</xliff:g></string>
   <string name="screen_pinning_title">Schierm ass fixéiert</string>
+  <string name="screen_pinning_description">Dëst gëtt dir ugewisen, bis du d\'Fixéierung ophiefs. Dréck an hal \"Zréck\" an \"Iwwersiicht\" gläichzäiteg un, fir d\'Fixéierung opzehiewen.</string>
+  <string name="screen_pinning_description_accessible">Dëst gëtt dir ugewisen, bis du d\'Fixéierung ophiefs. Dréck an hal \"Zréck\" an \"Iwwersiicht\" un, fir d\'Fixéierung opzehiewen.</string>
+  <string name="screen_pinning_positive">Verstanen</string>
   <string name="screen_pinning_negative">Nee Merci</string>
   <string name="quick_settings_reset_confirmation_title"><xliff:g id="tile_label" example="Hotspot">%1$s</xliff:g> verstoppen?</string>
+  <string name="quick_settings_reset_confirmation_message">Dëst gëtt dir d\'nächst Kéier ugewisen, wann s du et an den Astellungen nees aktivéiers.</string>
   <string name="quick_settings_reset_confirmation_button">Verstoppen</string>
 </resources>

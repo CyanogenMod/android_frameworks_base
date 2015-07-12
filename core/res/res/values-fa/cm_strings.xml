@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">پیش‌فرض</string>
-  <string name="profileNameWork">کار</string>
-  <string name="profileNameHome">خانه</string>
-  <string name="profileNameSilent">سکوت</string>
-  <string name="profileNameNight">شب</string>
-  <string name="profileNameAutomobile">خودرو</string>
-  <string name="profileGroupPhone">تلفن</string>
-  <string name="profileGroupCalendar">تقویم</string>
-  <string name="profileGroupGmail">جیمیل</string>
-  <string name="profileGroupEmail">ایمیل</string>
-  <string name="profileGroupSMS">پیامک</string>
-  <string name="wildcardProfile">دیگر</string>
-  <string name="profile_none">هیچ‌کدام</string>
   <string name="profile_picker_title">پروفایل‌ها</string>
   <string name="global_action_choose_profile">پروفایل</string>
+  <string name="profile_none">هیچ‌کدام</string>
   <string name="global_action_screenshot">عکس صفحه‌نمایش</string>
   <string name="permlab_receiveProtectedSms">دریافت پیامک حفاظت‌شده</string>
   <string name="permdesc_receiveProtectedSms">به برنامه اجازه می‌دهد تا پیام محافظت‌شده‌ی دریافتی را بپذیرد.</string>

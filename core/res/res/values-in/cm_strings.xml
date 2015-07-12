@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Standar</string>
-  <string name="profileNameWork">Kerja</string>
-  <string name="profileNameHome">Home</string>
-  <string name="profileNameSilent">Diam</string>
-  <string name="profileNameNight">Malam</string>
-  <string name="profileNameAutomobile">Otomotif</string>
-  <string name="profileGroupPhone">Telepon</string>
-  <string name="profileGroupCalendar">Kalender</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Lainnya</string>
-  <string name="profile_none">Tidak Ada</string>
   <string name="profile_picker_title">Profil</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Tidak Ada</string>
   <string name="global_action_screenshot">Tangkapan Layar</string>
   <string name="permlab_receiveProtectedSms">terima SMS yang dilindungi</string>
   <string name="permdesc_receiveProtectedSms">Izinkan aplikasi untuk menerima SMS masuk yang dilindungi.</string>

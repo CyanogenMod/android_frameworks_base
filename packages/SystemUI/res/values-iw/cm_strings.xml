@@ -157,4 +157,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">ההתראה הבאה</string>
   <string name="dynamic_qs_tile_ime_selector_label">בורר שיטות קלט</string>
   <string name="dynamic_qs_tile_su_label">גישת שורש</string>
+  <string name="fingerprint_try_again_hint">אנא סרוק שנית</string>
+  <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>
 </resources>

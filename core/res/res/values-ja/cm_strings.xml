@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">デフォルト</string>
-  <string name="profileNameWork">仕事</string>
-  <string name="profileNameHome">自宅</string>
-  <string name="profileNameSilent">サイレント</string>
-  <string name="profileNameNight">夜</string>
-  <string name="profileNameAutomobile">車</string>
-  <string name="profileGroupPhone">電話</string>
-  <string name="profileGroupCalendar">カレンダー</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">メール</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">その他</string>
-  <string name="profile_none">なし</string>
   <string name="profile_picker_title">プロファイル</string>
   <string name="global_action_choose_profile">プロファイル</string>
+  <string name="profile_none">なし</string>
   <string name="global_action_screenshot">スクリーンショット</string>
   <string name="permlab_receiveProtectedSms">保護されたSMSの受信</string>
   <string name="permdesc_receiveProtectedSms">保護されたSMSの受信をアプリに許可します。</string>
@@ -209,9 +197,10 @@
   <string name="live_display_night_summary">夜の設定のみを使用する</string>
   <string name="live_display_outdoor">屋外（日光）</string>
   <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
-  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをクリックして試してみてください。</string>
+  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをタップして試してみてください。</string>
   <string name="lock_to_app_toast_no_navbar">この画面の固定を解除するには、戻るボタンを長押しします。</string>
   <string name="quick_settings_tile_flashlight_not_title">フラッシュライトはONになっています</string>
   <string name="quick_settings_tile_flashlight_not_summary">タップしてOFFにする</string>
   <string name="storage_sd_dock_card">ホルダーのSDカード</string>
+  <string name="fingerprint_default_name">指紋<xliff:g id="number">%d</xliff:g></string>
 </resources>

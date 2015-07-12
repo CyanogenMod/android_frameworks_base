@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">ברירת מחדל</string>
-  <string name="profileNameWork">עבודה</string>
-  <string name="profileNameHome">בית</string>
-  <string name="profileNameSilent">שקט</string>
-  <string name="profileNameNight">לילה</string>
-  <string name="profileNameAutomobile">רכב</string>
-  <string name="profileGroupPhone">טלפון</string>
-  <string name="profileGroupCalendar">לוח שנה</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">דוא\"ל</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">אחר</string>
-  <string name="profile_none">ללא</string>
   <string name="profile_picker_title">פרופילים</string>
   <string name="global_action_choose_profile">פרופיל</string>
+  <string name="profile_none">ללא</string>
   <string name="global_action_screenshot">צילום מסך</string>
   <string name="permlab_receiveProtectedSms">קבלת הודעות SMS מוגנות</string>
   <string name="permdesc_receiveProtectedSms">מאפשר ליישום לקבל הודעות SMS מוגנות.</string>
@@ -58,7 +46,7 @@
   <string name="permlab_setKeyguardWallpaper">הגדרת טפט למסך הנעילה</string>
   <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את הטפט של מסך הנעילה.</string>
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מעוניין ל- <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">הפעלה מחדש</string>
   <string name="global_action_current_user">נוכחי</string>
   <string name="reboot_reboot">הפעלה מחדש</string>
@@ -215,4 +203,8 @@
   <string name="quick_settings_tile_flashlight_not_summary">לחץ לכיבוי</string>
   <string name="storage_sd_dock_card">כרטיס זיכרון של תחנת עגינה</string>
   <string name="fingerprint_default_name">טביעת אצבע <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">גישה לשירות טביעות אצבע</string>
+  <string name="permdesc_accessFingerprintService">אפשר ליישום לגשת לשירות טביעות אצבע. היישום יוכל להוסיף, למחוק, לשנות שם ולבצע אימות מול טביעות אצבע</string>
+  <string name="permlab_resetBatteryStats">איפוס סטטיסטיקות סוללה</string>
+  <string name="permdesc_resetBatteryStats">אפשר ליישום לאפס נתוני רמה-נמוכה של השימוש בסוללה.</string>
 </resources>

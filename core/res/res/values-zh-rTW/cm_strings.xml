@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">預設</string>
-  <string name="profileNameWork">工作</string>
-  <string name="profileNameHome">住家</string>
-  <string name="profileNameSilent">静音</string>
-  <string name="profileNameNight">夜晚</string>
-  <string name="profileNameAutomobile">汽車</string>
-  <string name="profileGroupPhone">電話</string>
-  <string name="profileGroupCalendar">日曆</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">電子郵件</string>
-  <string name="profileGroupSMS">簡訊</string>
-  <string name="wildcardProfile">其他</string>
-  <string name="profile_none">無</string>
   <string name="profile_picker_title">設定檔</string>
   <string name="global_action_choose_profile">設定檔</string>
+  <string name="profile_none">無</string>
   <string name="global_action_screenshot">螢幕擷取</string>
   <string name="permlab_receiveProtectedSms">接收受保護的簡訊</string>
   <string name="permdesc_receiveProtectedSms">允許應用程式接收受保護的簡訊。</string>

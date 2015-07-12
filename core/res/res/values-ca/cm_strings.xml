@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Predeterminat</string>
-  <string name="profileNameWork">Feina</string>
-  <string name="profileNameHome">Casa</string>
-  <string name="profileNameSilent">Silenci</string>
-  <string name="profileNameNight">Nit</string>
-  <string name="profileNameAutomobile">Automòbil</string>
-  <string name="profileGroupPhone">Telèfon</string>
-  <string name="profileGroupCalendar">Calendari</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Correu</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Altres</string>
-  <string name="profile_none">Cap</string>
   <string name="profile_picker_title">Perfils</string>
   <string name="global_action_choose_profile">Perfil</string>
+  <string name="profile_none">Cap</string>
   <string name="global_action_screenshot">Captura de pantalla</string>
   <string name="permlab_receiveProtectedSms">rebre SMS protegits</string>
   <string name="permdesc_receiveProtectedSms">Permet a l\'aplicació rebre un SMS entrant protegit.</string>
@@ -75,6 +63,10 @@
   <string name="adb_both_active_notification_title">ADB sobre USB i xarxa habilitat</string>
   <string name="adb_active_generic_notification_message">Toca per deshabilitar la depuració.</string>
   <string name="usb_choose_notification_title">Toca per escollir opcions USB.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; xarxa</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Xarxa</string>
   <string name="permlab_interceptPackageLaunch">interceptar el llançament d\'una aplicació</string>
   <string name="permdesc_interceptPackageLaunch">Permet a l\'aplicació interceptar el llançament d\'altres aplicacions</string>
   <string name="app_ops_access_camera">accedir a la càmera</string>
@@ -210,4 +202,7 @@
   <string name="quick_settings_tile_flashlight_not_title">La llanterna està encesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Pica per apagar-la</string>
   <string name="storage_sd_dock_card">Acopla la targeta SD</string>
+  <string name="fingerprint_default_name">Empremta digital <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">Accés al servei d\'empremtes dactilars</string>
+  <string name="permdesc_accessFingerprintService">Permet a una aplicació accedir al servei d\'empremtes dactilars. L\'aplicació pot afegir, esborrar, canviar el nom i autenticar-se amb empremtes dactilars</string>
 </resources>

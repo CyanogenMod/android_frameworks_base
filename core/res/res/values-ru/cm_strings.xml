@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Стандартный</string>
-  <string name="profileNameWork">Работа</string>
-  <string name="profileNameHome">Дом</string>
-  <string name="profileNameSilent">Без звука</string>
-  <string name="profileNameNight">Ночь</string>
-  <string name="profileNameAutomobile">Автомобиль</string>
-  <string name="profileGroupPhone">Телефон</string>
-  <string name="profileGroupCalendar">Календарь</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Почта</string>
-  <string name="profileGroupSMS">Сообщения</string>
-  <string name="wildcardProfile">Другой</string>
-  <string name="profile_none">Не выбран</string>
   <string name="profile_picker_title">Профили</string>
   <string name="global_action_choose_profile">Профиль</string>
+  <string name="profile_none">Не выбран</string>
   <string name="global_action_screenshot">Скриншот</string>
   <string name="permlab_receiveProtectedSms">Получение защищённых SMS</string>
   <string name="permdesc_receiveProtectedSms">Приложение сможет получать входящие защищённые SMS-сообщения.</string>
@@ -214,4 +202,9 @@
   <string name="quick_settings_tile_flashlight_not_title">Фонарик включён</string>
   <string name="quick_settings_tile_flashlight_not_summary">Нажмите для отключения</string>
   <string name="storage_sd_dock_card">SD-карта док-станции</string>
+  <string name="fingerprint_default_name">Отпечаток пальца <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">Доступ к отпечаткам пальцев</string>
+  <string name="permdesc_accessFingerprintService">Разрешение доступа к службе отпечатков пальцев. Приложение сможет добавлять, удалять, редактировать и использовать для авторизации отпечатки пальцев</string>
+  <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
+  <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
 </resources>

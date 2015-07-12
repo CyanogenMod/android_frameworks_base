@@ -157,4 +157,5 @@
   <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seletor de IME</string>
   <string name="dynamic_qs_tile_su_label">Acesso super-usuário</string>
+  <string name="fingerprint_try_again_hint">Por favor escaneie novamente</string>
 </resources>

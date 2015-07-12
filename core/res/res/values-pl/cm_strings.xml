@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Domyślny</string>
-  <string name="profileNameWork">Praca</string>
-  <string name="profileNameHome">Dom</string>
-  <string name="profileNameSilent">Wyciszony</string>
-  <string name="profileNameNight">Noc</string>
-  <string name="profileNameAutomobile">Samochód</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Kalendarz</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-mail</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Inny</string>
-  <string name="profile_none">Brak</string>
   <string name="profile_picker_title">Profile</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Brak</string>
   <string name="global_action_screenshot">Zrzut ekranu</string>
   <string name="permlab_receiveProtectedSms">odbieranie chronionych SMS-ów</string>
   <string name="permdesc_receiveProtectedSms">Umożliwia aplikacji odbieranie przychodzących chronionych SMS-ów.</string>
@@ -214,4 +202,7 @@
   <string name="quick_settings_tile_flashlight_not_title">Latarka jest włączona</string>
   <string name="quick_settings_tile_flashlight_not_summary">Dotknij, aby wyłączyć</string>
   <string name="storage_sd_dock_card">Karta pamięci stacji dokującej</string>
+  <string name="fingerprint_default_name">Odcisk palca <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">dostęp do usługi odcisku palca</string>
+  <string name="permdesc_accessFingerprintService">Umożliwia aplikacji dostęp do usługi odcisku palca. Aplikacja może dodać, usunąć, zmienić nazwę i uwierzytelnić odcisk palca</string>
 </resources>

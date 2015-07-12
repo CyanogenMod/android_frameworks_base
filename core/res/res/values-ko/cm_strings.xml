@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">기본</string>
-  <string name="profileNameWork">직장</string>
-  <string name="profileNameHome">집</string>
-  <string name="profileNameSilent">무음</string>
-  <string name="profileNameNight">야간</string>
-  <string name="profileNameAutomobile">자동차</string>
-  <string name="profileGroupPhone">전화</string>
-  <string name="profileGroupCalendar">일정</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">이메일</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">기타</string>
-  <string name="profile_none">없음</string>
   <string name="profile_picker_title">프로필</string>
   <string name="global_action_choose_profile">프로필</string>
+  <string name="profile_none">없음</string>
   <string name="global_action_screenshot">스크린샷</string>
   <string name="permlab_receiveProtectedSms">보안 SMS 수신</string>
   <string name="permdesc_receiveProtectedSms">앱이 들어오는 보안 SMS를 수신할 수 있도록 허용합니다.</string>
@@ -214,4 +202,9 @@
   <string name="quick_settings_tile_flashlight_not_title">손전등이 켜졌습니다</string>
   <string name="quick_settings_tile_flashlight_not_summary">탭하여 끄기</string>
   <string name="storage_sd_dock_card">독에 장착된 SD 카드</string>
+  <string name="fingerprint_default_name">지문 <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">지문 서비스에 접근</string>
+  <string name="permdesc_accessFingerprintService">이 앱이 지문 서비스를 사용할 수 있도록 허용합니다. 이 앱은 지문을 추가, 삭제, 이름 변경, 인증할 수 있습니다</string>
+  <string name="permlab_resetBatteryStats">배터리 통계 재설정</string>
+  <string name="permdesc_resetBatteryStats">앱이 현재의 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
 </resources>

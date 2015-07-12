@@ -26,21 +26,66 @@
   <string name="accessibility_quick_settings_data_on">Мобильные данные включены.</string>
   <string name="accessibility_quick_settings_roaming_off">Роуминг выключен.</string>
   <string name="accessibility_quick_settings_roaming_on">Роуминг включён.</string>
+  <string name="accessibility_quick_settings_network_adb_off">Отладка по сети выключена.</string>
+  <string name="accessibility_quick_settings_network_adb_on">Отладка по сети включена.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">Отладка по сети выключена.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">Отладка по сети включена.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Индикация событий экраном отключена.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Индикация событий экраном включена.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Индикация событий экраном отключена.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Индикация событий экраном включена.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Инверсия цвета выключена.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Инверсия цвета включена.</string>
+  <string name="accessibility_quick_settings_compass_off">Компас выключен.</string>
+  <string name="accessibility_quick_settings_compass_on">Компас включён.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Компас выключен.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Компас включён.</string>
   <string name="accessibility_quick_settings_heads_up_off">Всплывающие уведомления отключены.</string>
   <string name="accessibility_quick_settings_heads_up_on">Всплывающие уведомления включены.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Всплывающие уведомления отключены.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Всплывающие уведомления включены.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Точка доступа выключена.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Точка доступа включена.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay выключен.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay работает в автоматическом режиме.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay работает в дневном режиме.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay работает в ночном режиме.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay работает в режиме «на улице».</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay выключен.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay переключён в автоматический режим.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay переключён в дневной режим.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay переключён в ночной режим.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay переключён в режим «на улице».</string>
   <string name="accessibility_quick_settings_location_battery_saving">Отправка местоположения: режим экономии батареи.</string>
   <string name="accessibility_quick_settings_location_gps_only">Отправка местоположения: только по GPS.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Отправка местоположения: режим высокой точности.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Экран блокировки выключен.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Экран блокировки включён.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Экран блокировки выключен.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Экран блокировки включён.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE выключен.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE включён.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE выключен.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE включён.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC выключен.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC включён.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC выключен.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC включён.</string>
+  <string name="accessibility_quick_settings_profiles_off">Профили выключены.</string>
+  <string name="accessibility_quick_settings_profiles">Профиль: <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Профили выключены.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Профиль изменён на <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Время до выключения экрана: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Время до выключения экрана изменено на <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Синхронизация отключена.</string>
   <string name="accessibility_quick_settings_sync_on">Синхронизация включена.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Синхронизация отключена.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Синхронизация включена.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">USB-модем выключен.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">USB-модем включён.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">USB-модем выключен.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">USB-модем включён.</string>
+  <string name="accessibility_quick_settings_visualizer">Визуализатор.</string>
   <string name="accessibility_dpad_left">Курсор влево</string>
   <string name="accessibility_dpad_right">Курсор вправо</string>
   <string name="quick_settings_mobile_data_label">Мобильные данные</string>
@@ -99,4 +144,9 @@
   <string name="interruption_level_silent">Без звука</string>
   <string name="zen_silent_with_warning">Никаких уведомлений, кроме будильника.</string>
   <string name="quick_settings_remove">Удалить плитку</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Следующий будильник</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Выбор метода ввода</string>
+  <string name="dynamic_qs_tile_su_label">Суперпользователь</string>
+  <string name="fingerprint_try_again_hint">Повторите сканирование</string>
+  <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
 </resources>

@@ -26,21 +26,75 @@
   <string name="accessibility_quick_settings_data_on">Datos móviles activados.</string>
   <string name="accessibility_quick_settings_roaming_off">Itinerancia de datos desactivada.</string>
   <string name="accessibility_quick_settings_roaming_on">Itinerancia de datos activada.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB sobre red desactivado.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB sobre red activado.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ADB sobre red desactivado.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ADB sobre red activado.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Desactivada la pantalla ambiente.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Activada la pantalla ambiente.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Pantalla ambiente desactivada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Pantalla ambiente activada.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Inversión de color desactivada.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Inversión de color activada.</string>
+  <string name="accessibility_quick_settings_compass_off">Brújula desactivada.</string>
+  <string name="accessibility_quick_settings_compass_on">Brújula activada.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Brújula desactivada.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Brújula activada.</string>
   <string name="accessibility_quick_settings_heads_up_off">Desactivar notificaciones emergentes.</string>
   <string name="accessibility_quick_settings_heads_up_on">Activar notificaciones emergentes.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Notificaciones emergentes desactivadas.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Notificaciones emergentes activadas.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Wi-Fi portátil desactivado.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Wi-Fi portátil activado.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay desactivado.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: modo automático.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: modo día.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: modo noche.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modo aire libre.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay desactivado.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay cambiado a modo automático.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay cambiado a día.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay cambiado a modo noche.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay cambiado a modo aire libre.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Informes de ubicación: modo de ahorro de batería.</string>
   <string name="accessibility_quick_settings_location_gps_only">Informes de ubicación: modo de sólo sensores.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Informes de ubicación: modo de alta precisión.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Informes de ubicación cambiados a modo de ahorro de batería.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Informes de ubicación cambiados a modo solo dispositivo.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Informes de ubicación cambiados a modo de gran precisión.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Bloqueo de pantalla desactivado.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Bloqueo de pantalla activado.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Bloqueo de pantalla desactivado.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Bloqueo de pantalla activado.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE desactivado.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE activado.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE desactivado.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE activado.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC desactivado.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC activado.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC desactivado.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC activado.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de batería: ahorro energía.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Modo de batería: equilibrado.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Modo de batería: rendimiento.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modo de batería cambiado a ahorro de energía.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Modo de batería cambiado a equilibrado.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Modo de batería cambiado a modo rendimiento.</string>
+  <string name="accessibility_quick_settings_profiles_off">Perfiles desactivado.</string>
+  <string name="accessibility_quick_settings_profiles">Perfil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Perfiles desactivado.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Perfil cambiado a <xliff:g id="profile" example="Default">%s </xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Tiempo de espera de pantalla: <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Tiempo de espera de pantalla cambiado a <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizar desactivado.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizar activado.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizar cambiado a desactivado.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Sincronizar cambiado a activado.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">Compartición por USB desactivada.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">Compartición por USB activada.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">Compartición por USB desactivada.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">Compartición por USB activada.</string>
+  <string name="accessibility_quick_settings_visualizer">Visualizador.</string>
   <string name="accessibility_dpad_left">Cursor izquierda</string>
   <string name="accessibility_dpad_right">Cursor derecha</string>
   <string name="quick_settings_mobile_data_label">Datos móviles</string>
@@ -99,4 +153,10 @@
   <string name="interruption_level_silent">Silencio</string>
   <string name="zen_silent_with_warning">Sin interrupciones, excepto las alarmas.</string>
   <string name="quick_settings_remove">Eliminar control</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Ajuste rápido dinámico</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Próxima alarma</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
+  <string name="dynamic_qs_tile_su_label">Acceso privilegiado</string>
+  <string name="fingerprint_try_again_hint">Por favor, escanea otra vez</string>
+  <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g> por ciento.</string>
 </resources>

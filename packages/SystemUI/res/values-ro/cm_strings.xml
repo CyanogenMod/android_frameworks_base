@@ -27,11 +27,13 @@
   <string name="accessibility_quick_settings_roaming_off">Roaming oprit.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming pornit.</string>
   <string name="accessibility_quick_settings_compass_off">Busolă inactivă.</string>
+  <string name="accessibility_quick_settings_compass_on">Busolă activă.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Raportarea locaţiei:  mod economisire baterie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Raportarea locaţiei: doar senzori.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Raportarea locaţiei: precizie ridicată.</string>
   <string name="accessibility_quick_settings_lte_off">4G oprit.</string>
   <string name="accessibility_quick_settings_lte_on">4G pornit.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE pornit.</string>
   <string name="accessibility_quick_settings_nfc_off">NFC oprit.</string>
   <string name="accessibility_quick_settings_nfc_on">NFC pornit.</string>
   <string name="accessibility_quick_settings_nfc_changed_off">NFC oprit.</string>
@@ -90,4 +92,5 @@
   <string name="navring_choose_action_title">Alege acțiunea</string>
   <string name="select_application">Selectaţi aplicaţia</string>
   <string name="lockscreen_target_empty">Gol</string>
+  <string name="dynamic_qs_tile_su_label">Acces root</string>
 </resources>

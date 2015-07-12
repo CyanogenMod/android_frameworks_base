@@ -157,4 +157,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Kitas signalas</string>
   <string name="dynamic_qs_tile_ime_selector_label">Įvesties metodas</string>
   <string name="dynamic_qs_tile_su_label">Prieiga prie „Root“</string>
+  <string name="fingerprint_try_again_hint">Prašome nuskaityti dar kartą</string>
+  <string name="accessibility_dock_battery_level">Doko akumuliatorius <xliff:g id="number">%d</xliff:g> proc.</string>
 </resources>
