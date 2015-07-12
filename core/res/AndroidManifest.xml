@@ -2667,6 +2667,15 @@
         android:description="@string/permdesc_batteryStats"
         android:protectionLevel="signature|system|development" />
 
+    <!-- Allows an application to reset the device battery statistics.
+    <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.RESET_BATTERY_STATS"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:label="@string/permlab_resetBatteryStats"
+        android:description="@string/permdesc_resetBatteryStats"
+        android:protectionLevel="signature|system|development" />
+
     <!-- @SystemApi Allows an application to control the backup and restore process.
     <p>Not for use by third-party applications.
          @hide pending API council -->
@@ -3065,6 +3074,13 @@
         android:label="@string/permlab_accessTorchService"
         android:description="@string/permdesc_accessTorchService"
         android:protectionLevel="signature" />
+
+     <!-- Allows an application to access Fingerprint Service
+          @hide -->
+     <permission android:name="android.permission.ACCESS_FINGERPRINT_SERVICE"
+         android:label="@string/permlab_accessFingerprintService"
+         android:description="@string/permdesc_accessFingerprintService"
+         android:protectionLevel="system|signature" />
 
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->

@@ -107,6 +107,8 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     static final String KEYGUARD_WALLPAPER = "keyguard_wallpaper";
     static final String KEYGUARD_WALLPAPER_INFO = "keyguard_wallpaper_info.xml";
 
+    private WallpaperObserver mWallpaperObserver;
+
     /**
      * Observes the wallpaper for changes and notifies all IWallpaperServiceCallbacks
      * that the wallpaper has changed. The CREATE is triggered when there is no
@@ -116,21 +118,26 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     private class WallpaperObserver extends FileObserver {
 
         final WallpaperData mWallpaper;
-        final KeyguardWallpaperData mKeyguardWallpaper;
         final File mWallpaperDir;
         final File mWallpaperFile;
         final File mWallpaperInfoFile;
-        final File mKeyguardWallpaperFile;
 
-        public WallpaperObserver(WallpaperData wallpaper, KeyguardWallpaperData keyguardWallpaper) {
+        final KeyguardWallpaperData mKeyguardWallpaper;
+        final File mKeyguardWallpaperFile;
+        final File mKeyguardWallpaperInfoFile;
+
+        public WallpaperObserver(WallpaperData wallpaper,
+                                 KeyguardWallpaperData keyguardWallpaperData) {
             super(getWallpaperDir(wallpaper.userId).getAbsolutePath(),
                     CLOSE_WRITE | MOVED_TO | DELETE | DELETE_SELF);
             mWallpaperDir = getWallpaperDir(wallpaper.userId);
             mWallpaper = wallpaper;
             mWallpaperFile = new File(mWallpaperDir, WALLPAPER);
             mWallpaperInfoFile = new File(mWallpaperDir, WALLPAPER_INFO);
-            mKeyguardWallpaper = keyguardWallpaper;
+
+            mKeyguardWallpaper = keyguardWallpaperData;
             mKeyguardWallpaperFile = new File(mWallpaperDir, KEYGUARD_WALLPAPER);
+            mKeyguardWallpaperInfoFile = new File(mWallpaperDir, KEYGUARD_WALLPAPER_INFO);
         }
 
         @Override
@@ -148,15 +155,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                     bm.dataChanged();
                     Binder.restoreCallingIdentity(origId);
                 }
+                final boolean written = (event == CLOSE_WRITE || event == MOVED_TO);
                 if (mWallpaperFile.equals(changedFile)) {
-                    // changing the wallpaper means we'll need to back up the new one
-                    long origId = Binder.clearCallingIdentity();
-                    BackupManager bm = new BackupManager(mContext);
-                    bm.dataChanged();
-                    Binder.restoreCallingIdentity(origId);
-
                     notifyCallbacksLocked(mWallpaper);
-                    final boolean written = (event == CLOSE_WRITE || event == MOVED_TO);
                     if (mWallpaper.wallpaperComponent == null
                             || event != CLOSE_WRITE // includes the MOVED_TO case
                             || mWallpaper.imageWallpaperPending) {
@@ -169,9 +170,11 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                     }
                 } else if (mKeyguardWallpaperFile.equals(changedFile)) {
                     notifyCallbacksLocked(mKeyguardWallpaper);
-                    if (event == CLOSE_WRITE
+                    if (written
                             || mKeyguardWallpaper.imageWallpaperPending) {
-                        mKeyguardWallpaper.imageWallpaperPending = false;
+                        if (written) {
+                            mKeyguardWallpaper.imageWallpaperPending = false;
+                        }
                         saveSettingsLocked(mKeyguardWallpaper);
                     }
                 }
@@ -226,7 +229,6 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
         WallpaperConnection connection;
         long lastDiedTime;
         boolean wallpaperUpdating;
-        WallpaperObserver wallpaperObserver;
 
         /**
          * List of callbacks registered they should each be notified when the wallpaper is changed.
@@ -544,9 +546,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        for (int i = 0; i < mWallpaperMap.size(); i++) {
-            WallpaperData wallpaper = mWallpaperMap.valueAt(i);
-            wallpaper.wallpaperObserver.stopWatching();
+        if (mWallpaperObserver != null) {
+            mWallpaperObserver.stopWatching();
+            mWallpaperObserver = null;
         }
     }
 
@@ -555,8 +557,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
         WallpaperData wallpaper = mWallpaperMap.get(UserHandle.USER_OWNER);
         KeyguardWallpaperData keyguardWallpaper = mKeyguardWallpaperMap.get(UserHandle.USER_OWNER);
         switchWallpaper(wallpaper, null);
-        wallpaper.wallpaperObserver = new WallpaperObserver(wallpaper, keyguardWallpaper);
-        wallpaper.wallpaperObserver.startWatching();
+
+        mWallpaperObserver = new WallpaperObserver(wallpaper, keyguardWallpaper);
+        mWallpaperObserver.startWatching();
 
         IntentFilter userFilter = new IntentFilter();
         userFilter.addAction(Intent.ACTION_USER_REMOVED);
@@ -610,13 +613,17 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     void onStoppingUser(int userId) {
         if (userId < 1) return;
         synchronized (mLock) {
+            if (mWallpaperObserver != null) {
+                mWallpaperObserver.stopWatching();
+                mWallpaperObserver = null;
+            }
+
             WallpaperData wallpaper = mWallpaperMap.get(userId);
             if (wallpaper != null) {
-                if (wallpaper.wallpaperObserver != null) {
-                    wallpaper.wallpaperObserver.stopWatching();
-                    wallpaper.wallpaperObserver = null;
-                }
                 mWallpaperMap.remove(userId);
+            }
+            KeyguardWallpaperData kgwallpaper = mKeyguardWallpaperMap.get(userId);
+            if (kgwallpaper != null) {
                 mKeyguardWallpaperMap.remove(userId);
             }
         }
@@ -653,10 +660,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                 mKeyguardWallpaperMap.put(userId, keygaurdWallpaper);
                 loadKeyguardSettingsLocked(userId);
             }
-            // Not started watching yet, in case wallpaper data was loaded for other reasons.
-            if (wallpaper.wallpaperObserver == null) {
-                wallpaper.wallpaperObserver = new WallpaperObserver(wallpaper, keygaurdWallpaper);
-                wallpaper.wallpaperObserver.startWatching();
+            if (mWallpaperObserver == null) {
+                mWallpaperObserver = new WallpaperObserver(wallpaper, keygaurdWallpaper);
+                mWallpaperObserver.startWatching();
             }
             switchWallpaper(wallpaper, reply);
         }
@@ -730,31 +736,25 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     public void clearKeyguardWallpaper() {
         if (DEBUG) Slog.v(TAG, "clearWallpaper");
         synchronized (mLock) {
-            clearKeyguardWallpaperLocked(UserHandle.getCallingUserId(), null);
+            clearKeyguardWallpaperLocked(UserHandle.getCallingUserId());
         }
     }
 
-    void clearKeyguardWallpaperLocked(int userId, IRemoteCallback reply) {
-        KeyguardWallpaperData wallpaper = mKeyguardWallpaperMap.get(userId);
+    void clearKeyguardWallpaperLocked(int userId) {
         final long ident = Binder.clearCallingIdentity();
-        wallpaper.imageWallpaperPending = false;
-        wallpaper.height = -1;
-        wallpaper.width = -1;
-        wallpaper.name = "";
+        try {
+            KeyguardWallpaperData wallpaper = mKeyguardWallpaperMap.get(userId);
+            wallpaper.imageWallpaperPending = false;
+            wallpaper.height = -1;
+            wallpaper.width = -1;
+            wallpaper.name = "";
 
-        File f = new File(getWallpaperDir(userId), KEYGUARD_WALLPAPER);
-        if (f.exists()) {
-            f.delete();
-        }
-        if (userId != mCurrentUserId)
-            return;
-        Binder.restoreCallingIdentity(ident);
-
-        if (reply != null) {
-            try {
-                reply.sendResult(null);
-            } catch (RemoteException e1) {
+            File f = new File(getWallpaperDir(userId), KEYGUARD_WALLPAPER);
+            if (f.exists()) {
+                f.delete();
             }
+        } finally {
+            Binder.restoreCallingIdentity(ident);
         }
     }
 
@@ -921,15 +921,15 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                     outParams.putInt("width", wallpaper.width);
                     outParams.putInt("height", wallpaper.height);
                 }
-                wallpaper.callbacks.register(cb);
                 File f = new File(getWallpaperDir(wallpaperUserId), KEYGUARD_WALLPAPER);
                 if (!f.exists()) {
                     return null;
                 }
+                wallpaper.callbacks.register(cb, new UserHandle(wallpaperUserId));
                 return ParcelFileDescriptor.open(f, MODE_READ_ONLY);
             } catch (FileNotFoundException e) {
                 /* Shouldn't happen as we check to see if the file exists */
-                Slog.w(TAG, "Error getting wallpaper", e);
+                Slog.w(TAG, "Error getting keyguard wallpaper", e);
             }
             return null;
         }
@@ -948,9 +948,8 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
 
     /** @hide */
     public boolean isKeyguardWallpaperSet() {
-        int userId = UserHandle.getCallingUserId();
         synchronized (mLock) {
-            KeyguardWallpaperData data = mKeyguardWallpaperMap.get(userId);
+            KeyguardWallpaperData data = mKeyguardWallpaperMap.get(mCurrentUserId);
             return data.wallpaperFile.exists();
         }
     }

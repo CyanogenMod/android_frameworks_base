@@ -33,7 +33,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class BatteryController extends BroadcastReceiver {
+public class BatteryController extends BroadcastReceiver implements BatteryStateRegistar {
     private static final String TAG = "BatteryController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
@@ -51,6 +51,7 @@ public class BatteryController extends BroadcastReceiver {
     private final PowerManager mPowerManager;
 
     private int mLevel;
+    private boolean mPresent;
     private boolean mPluggedIn;
     private boolean mCharging;
     private boolean mCharged;
@@ -84,18 +85,21 @@ public class BatteryController extends BroadcastReceiver {
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("BatteryController state:");
         pw.print("  mLevel="); pw.println(mLevel);
+        pw.print("  mPresent="); pw.println(mPresent);
         pw.print("  mPluggedIn="); pw.println(mPluggedIn);
         pw.print("  mCharging="); pw.println(mCharging);
         pw.print("  mCharged="); pw.println(mCharged);
         pw.print("  mPowerSave="); pw.println(mPowerSave);
     }
 
+    @Override
     public void addStateChangedCallback(BatteryStateChangeCallback cb) {
         mChangeCallbacks.add(cb);
-        cb.onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
+        cb.onBatteryLevelChanged(mPresent, mLevel, mPluggedIn, mCharging);
         cb.onBatteryStyleChanged(mStyle, mPercentMode);
     }
 
+    @Override
     public void removeStateChangedCallback(BatteryStateChangeCallback cb) {
         mChangeCallbacks.remove(cb);
     }
@@ -106,6 +110,7 @@ public class BatteryController extends BroadcastReceiver {
             mLevel = (int)(100f
                     * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
                     / intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
+            mPresent = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
             mPluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
 
             final int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
@@ -139,7 +144,7 @@ public class BatteryController extends BroadcastReceiver {
     private void fireBatteryLevelChanged() {
         final int N = mChangeCallbacks.size();
         for (int i = 0; i < N; i++) {
-            mChangeCallbacks.get(i).onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
+            mChangeCallbacks.get(i).onBatteryLevelChanged(mPresent, mLevel, mPluggedIn, mCharging);
         }
     }
 
@@ -155,12 +160,6 @@ public class BatteryController extends BroadcastReceiver {
         for (int i = 0; i < N; i++) {
             mChangeCallbacks.get(i).onBatteryStyleChanged(mStyle, mPercentMode);
         }
-    }
-
-    public interface BatteryStateChangeCallback {
-        void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging);
-        void onPowerSaveChanged();
-        void onBatteryStyleChanged(int style, int percentMode);
     }
 
     private final class SettingsObserver extends ContentObserver {

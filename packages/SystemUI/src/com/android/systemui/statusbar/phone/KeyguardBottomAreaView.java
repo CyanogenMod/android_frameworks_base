@@ -69,10 +69,6 @@ import com.android.systemui.statusbar.KeyguardIndicationController;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.policy.AccessibilityController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
-import com.pheelicks.visualizer.AudioData;
-import com.pheelicks.visualizer.FFTData;
-import com.pheelicks.visualizer.VisualizerView;
-import com.pheelicks.visualizer.renderer.Renderer;
 
 import java.util.List;
 
@@ -510,10 +506,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             return;
         }
         // TODO: Real icon for facelock.
-        int iconRes = mUnlockMethodCache.isFaceUnlockRunning()
-                ? com.android.internal.R.drawable.ic_account_circle
-                : mUnlockMethodCache.isCurrentlyInsecure() ? R.drawable.ic_lock_open_24dp
-                : R.drawable.ic_lock_24dp;
+        int iconRes = getIconLockResId();
         if (mLastUnlockIconRes != iconRes) {
             Drawable icon = mContext.getDrawable(iconRes);
             int iconHeight = getResources().getDimensionPixelSize(
@@ -528,6 +521,20 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         boolean trustManaged = mUnlockMethodCache.isTrustManaged();
         mTrustDrawable.setTrustManaged(trustManaged);
         updateLockIconClickability();
+    }
+
+    private int getIconLockResId() {
+        int iconRes;
+        if (mUnlockMethodCache.isFaceUnlockRunning()) {
+            iconRes = com.android.internal.R.drawable.ic_account_circle;
+        } else if (mUnlockMethodCache.isFingerUnlockRunning()) {
+            iconRes = R.drawable.ic_fingerprint;
+        } else if (mUnlockMethodCache.isCurrentlyInsecure()) {
+            iconRes = R.drawable.ic_lock_open_24dp;
+        } else {
+            iconRes =  R.drawable.ic_lock_24dp;
+        }
+        return iconRes;
     }
 
     private String getIndexHint(LockscreenShortcutsHelper.Shortcuts shortcut) {
@@ -594,12 +601,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         return false;
     }
 
-    public void onMethodSecureChanged(boolean methodSecure) {
+    public void onUnlockMethodStateChanged() {
         updateLockIcon();
         updateCameraVisibility();
-    }
-
-    public void onUnlockMethodStateChanged() {
     }
 
     private void inflatePreviews() {

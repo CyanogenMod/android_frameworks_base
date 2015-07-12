@@ -23,6 +23,7 @@ import android.hardware.fingerprint.Fingerprint;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
@@ -243,12 +244,7 @@ public class FingerprintManager {
     }
 
     private int getCurrentUserId() {
-        try {
-            return ActivityManagerNative.getDefault().getCurrentUser().id;
-        } catch (RemoteException e) {
-            Log.w(TAG, "Failed to get current user id\n");
-            return UserHandle.USER_NULL;
-        }
+        return Process.myUserHandle().getIdentifier();
     }
 
     /**
@@ -296,6 +292,19 @@ public class FingerprintManager {
             Log.w(TAG, "getEnrolledFingerprints(): Service not connected!");
         }
         return Collections.emptyList();
+    }
+
+    public int getNumEnrollmentSteps() {
+        if (mService != null) {
+            try {
+                return mService.getNumEnrollmentSteps(mToken);
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in getNumEnrollmentSteps(): ", e);
+            }
+        } else {
+            Log.w(TAG, "getNumEnrollmentSteps(): Service not connected!");
+        }
+        return -1;
     }
 
     private void sendError(int msg, int arg1, int arg2) {

@@ -119,10 +119,8 @@ public class LiveDisplayController {
         mTwilightManager = LocalServices.getService(TwilightManager.class);
         mTwilightManager.registerListener(mTwilightListener, mHandler);
 
-        final boolean sunlightEnhancementSupported =
-                mCmHardwareManager.isSupported(CmHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
 
-        if (sunlightEnhancementSupported) {
+        if (mCmHardwareManager.isSupported(CmHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT)) {
             mOutdoorMode = mCmHardwareManager.get(CmHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
         }
 
@@ -149,12 +147,6 @@ public class LiveDisplayController {
                 -3,
                 UserHandle.USER_CURRENT);
 
-        // Workaround for CMHW - remove once the new patches are merged
-        if (!sunlightEnhancementSupported) {
-            Settings.System.putIntForUser(mContext.getContentResolver(),
-                    Settings.System.DISPLAY_AUTO_OUTDOOR_MODE,
-                    -1, UserHandle.USER_CURRENT);
-        }
         updateSettings();
         mObserver.register(true);
 

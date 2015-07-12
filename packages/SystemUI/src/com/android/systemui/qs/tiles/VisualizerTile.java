@@ -220,7 +220,8 @@ public class VisualizerTile extends QSTile<QSTile.State> implements KeyguardMoni
             }
         } else {
             // no keyguard, relink if there's something playing
-            if (mMediaMonitor.isAnythingPlaying()
+            if (mMediaMonitor != null
+                    && mMediaMonitor.isAnythingPlaying()
                     && !mLinked
                     && mListening
                     && !mPowerSaveModeEnabled) {
