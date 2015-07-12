@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">الافتراضي</string>
-  <string name="profileNameWork">العمل</string>
-  <string name="profileNameHome">الصفحة الرئيسية</string>
-  <string name="profileNameSilent">صامت</string>
-  <string name="profileNameNight">ليلة</string>
-  <string name="profileNameAutomobile">السيارة</string>
-  <string name="profileGroupPhone">الهاتف</string>
-  <string name="profileGroupCalendar">التقويم</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">البريد الإلكتروني</string>
-  <string name="profileGroupSMS">الرسائل القصيرة</string>
-  <string name="wildcardProfile">الأخرى</string>
-  <string name="profile_none">لا شيء</string>
   <string name="profile_picker_title">الأوضاع</string>
   <string name="global_action_choose_profile">الشخصية</string>
+  <string name="profile_none">لا شيء</string>
   <string name="global_action_screenshot">لقطة للشاشة</string>
   <string name="permlab_receiveProtectedSms">استلام رسائل نصية قصيرة محمية</string>
   <string name="permdesc_receiveProtectedSms">يسمح للتطبيق باستلام رسالة نصية قصيرة محمية.</string>
@@ -72,7 +60,7 @@
   <string name="adb_active_generic_notification_message">إللمس لتعطيل التصحيح.</string>
   <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
   <string name="app_ops_access_location">الوصول إلى الموقع الخاص بك</string>
-  <string name="app_ops_access_notifications">قراءة الإعلامات الخاصة بك</string>
+  <string name="app_ops_access_notifications">قراءة إشعاراتك</string>
   <string name="app_ops_alarm_wakeup">استيقظ الجهاز</string>
   <string name="app_ops_keep_device_awake">الحفاظ على الجهاز الخاص بك مستيقظا</string>
   <string name="app_ops_make_phone_call">إجراء إتصال هاتفي</string>

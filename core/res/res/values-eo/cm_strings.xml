@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Defaŭlto</string>
-  <string name="profileNameWork">Laborejo</string>
-  <string name="profileNameHome">Hejmo</string>
-  <string name="profileNameSilent">Silenta</string>
-  <string name="profileNameNight">Nokto</string>
-  <string name="profileNameAutomobile">Aŭto</string>
-  <string name="profileGroupPhone">Telefono</string>
-  <string name="profileGroupCalendar">Kalendaro</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Retmesaĝo</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Alia</string>
-  <string name="profile_none">Nenio</string>
   <string name="profile_picker_title">Profiloj</string>
   <string name="global_action_choose_profile">Profilo</string>
+  <string name="profile_none">Nenio</string>
   <string name="global_action_screenshot">Ekrankopio</string>
   <string name="permlab_receiveProtectedSms">Alvenis protektita SMS</string>
   <string name="permdesc_receiveProtectedSms">Permesi al la aplikaĵo ricevi alvenintan protektitan SMS.</string>
@@ -214,4 +202,7 @@
   <string name="quick_settings_tile_flashlight_not_title">Poŝlampo ŝaltita</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tuŝetu por malŝalti</string>
   <string name="storage_sd_dock_card">Doko SD-karto</string>
+  <string name="fingerprint_default_name">Fingrospuro <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">Aliri al fingrospura servo</string>
+  <string name="permdesc_accessFingerprintService">Permesi al aplikaĵo aliri al fingrospura servo. Tiu aplikaĵo povos aldoni, forigi, alinomi kaj rajtigi fingrospurojn</string>
 </resources>

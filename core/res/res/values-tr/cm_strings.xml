@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Varsayılan</string>
-  <string name="profileNameWork">İş</string>
-  <string name="profileNameHome">Ev</string>
-  <string name="profileNameSilent">Sessiz</string>
-  <string name="profileNameNight">Gece</string>
-  <string name="profileNameAutomobile">Otomobil</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Takvim</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Eposta</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Diğer</string>
-  <string name="profile_none">Yok</string>
   <string name="profile_picker_title">Profiller</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Yok</string>
   <string name="global_action_screenshot">Ekran görüntüsü</string>
   <string name="permlab_receiveProtectedSms">korumalı SMS al</string>
   <string name="permdesc_receiveProtectedSms">Uygulamaya korumalı bir SMS alma izni verir.</string>
@@ -216,4 +204,5 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="quick_settings_tile_flashlight_not_title">Flaş ışığı açık</string>
   <string name="quick_settings_tile_flashlight_not_summary">Kapatmak için dokunun</string>
   <string name="storage_sd_dock_card">Ünite SD kartı</string>
+  <string name="fingerprint_default_name">Parmak izi <xliff:g id="number">%d</xliff:g></string>
 </resources>

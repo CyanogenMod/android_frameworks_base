@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">डिफ़ॉल्ट</string>
-  <string name="profileNameWork">कार्य</string>
-  <string name="profileNameHome">घर</string>
-  <string name="profileNameSilent">नीरव</string>
-  <string name="profileNameNight">रात</string>
-  <string name="profileNameAutomobile">ऑटोमोबाइल</string>
-  <string name="profileGroupPhone">फ़ोन</string>
-  <string name="profileGroupCalendar">कैलेंडर</string>
-  <string name="profileGroupGmail">जीमेल</string>
-  <string name="profileGroupEmail">ईमेल</string>
-  <string name="profileGroupSMS">एसएमएस</string>
-  <string name="wildcardProfile">अन्य</string>
-  <string name="profile_none">कोई नहीं</string>
   <string name="profile_picker_title">प्रोफ़ाइल</string>
   <string name="global_action_choose_profile">प्रोफ़ाइल</string>
+  <string name="profile_none">कोई नहीं</string>
   <string name="global_action_screenshot">स्क्रीनशॉट</string>
   <string name="permlab_receiveProtectedSms">रक्षित एसएमएस प्राप्त करें</string>
   <string name="permdesc_receiveProtectedSms">ऐप को आवक रक्षित एसएमएस प्राप्त करने देता है।</string>

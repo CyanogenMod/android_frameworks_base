@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">முன்னிருப்பு</string>
-  <string name="profileNameWork">வேலை</string>
-  <string name="profileNameHome">வீடு</string>
-  <string name="profileNameSilent">மௌனம்</string>
-  <string name="profileNameNight">இரவு</string>
-  <string name="profileNameAutomobile">வண்டி</string>
-  <string name="profileGroupPhone">தொலைபேசி</string>
-  <string name="profileGroupCalendar">நாட்காட்டி</string>
-  <string name="profileGroupGmail">ஜிமெயில்</string>
-  <string name="profileGroupEmail">மின்னஞ்சல்</string>
-  <string name="profileGroupSMS">எஸ்எம்எஸ்</string>
-  <string name="wildcardProfile">மற்றவை</string>
-  <string name="profile_none">இவற்றில் எதுவுமில்லை</string>
   <string name="profile_picker_title">சுயவிவரங்கள்</string>
   <string name="global_action_choose_profile">சுயவிவரம்</string>
+  <string name="profile_none">இவற்றில் எதுவுமில்லை</string>
   <string name="global_action_screenshot">திரைப்பிடிப்பு</string>
   <string name="permdesc_changePrivacyGuardState">பயன்பாட்டை மற்றொரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்குமா என்பதை மாற்ற அனுமதிக்கிறது. ஒரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்கும் போது, இது போன்ற தொடர்புகள், அழைப்பு பதிவுகள், மற்றும் செய்திகள் போன்ற தனிப்பட்ட தரவுக்கான அணுகல் இருக்காது.</string>
   <string name="privacy_guard_notification">தனியுரிமை பாதுகாப்பு செயலில்</string>

@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">بنەڕەتی</string>
-  <string name="profileNameWork">ئیش</string>
-  <string name="profileNameHome">ماڵ</string>
-  <string name="profileNameSilent">بێ دەنگ</string>
-  <string name="profileNameNight">شەو</string>
-  <string name="profileNameAutomobile">مۆبایل خۆکارانە</string>
-  <string name="profileGroupPhone">تەلەفۆن</string>
-  <string name="profileGroupCalendar">ڕۆژژمێر</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">هی تر</string>
-  <string name="profile_none">هیچ</string>
   <string name="profile_picker_title">زانیاری تایبەتیەکان</string>
   <string name="global_action_choose_profile">زانیاری تایبەتی</string>
+  <string name="profile_none">هیچ</string>
   <string name="global_action_screenshot">وێنەگرتنی ڕوونما</string>
   <string name="permlab_receiveProtectedSms">وەرگرتنی کورتەنامەی پارێزراو</string>
   <string name="permdesc_receiveProtectedSms">ڕێگە بە بەرنامەکە بدە کە کورتەنامە پارێزراوەکەی داهاتوو وەربگرێت.</string>

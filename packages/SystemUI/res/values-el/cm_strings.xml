@@ -157,4 +157,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Επόμενο ξυπνητήρι</string>
   <string name="dynamic_qs_tile_ime_selector_label">Επιλογέας μεθόδου εισόδου</string>
   <string name="dynamic_qs_tile_su_label">Πρόσβαση root</string>
+  <string name="fingerprint_try_again_hint">Παρακαλώ σαρώστε ξανά</string>
+  <string name="accessibility_dock_battery_level">Μπαταρία βάσης σύνδεσης <xliff:g id="number">%d</xliff:g> τοις εκατό.</string>
 </resources>

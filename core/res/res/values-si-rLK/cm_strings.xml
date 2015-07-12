@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">පෙරනිමි</string>
-  <string name="profileNameWork">රක්ෂාව</string>
-  <string name="profileNameHome">නිවස</string>
-  <string name="profileNameSilent">නිශ්ශබ්ද</string>
-  <string name="profileNameNight">රාත්‍රිය</string>
-  <string name="profileNameAutomobile">මොටෝරිය</string>
-  <string name="profileGroupPhone">දුරකථනය</string>
-  <string name="profileGroupCalendar">දින දර්ශකය</string>
-  <string name="profileGroupGmail">ජී-තැපෑල</string>
-  <string name="profileGroupEmail">ඊ-තැපෑල</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">වෙනත්</string>
-  <string name="profile_none">කිසිවක් නැත</string>
   <string name="profile_picker_title">පැතිකඩයන්</string>
   <string name="global_action_choose_profile">පැතිකඩ</string>
+  <string name="profile_none">කිසිවක් නැත</string>
   <string name="global_action_screenshot">තිර සේයාව</string>
   <string name="permlab_receiveProtectedSms">ආරක්‍ෂිත SMS ලබන්න</string>
   <string name="permdesc_receiveProtectedSms">එන ආරක්‍ෂිත SMS ලැබීමට යෙදුමට ඉඩ දෙයි.</string>

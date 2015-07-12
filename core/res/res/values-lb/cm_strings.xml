@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Standard</string>
-  <string name="profileNameWork">Aarbecht</string>
-  <string name="profileNameHome">Doheem</string>
-  <string name="profileNameSilent">Roueg</string>
-  <string name="profileNameNight">Nuecht</string>
-  <string name="profileNameAutomobile">Auto</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Kalenner</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-Mail</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Anescht</string>
-  <string name="profile_none">Keen</string>
   <string name="profile_picker_title">Profiller</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Keen</string>
   <string name="global_action_screenshot">Schiermfoto</string>
   <string name="permlab_receiveProtectedSms">Geschützten SMSen empfänken</string>
   <string name="permdesc_receiveProtectedSms">Erlaabt der App, erakommend geschützten SMS z\'empfänken.</string>
@@ -75,6 +63,10 @@
   <string name="adb_both_active_notification_title">ADB iwwer USB an Netzwierk aktivéiert</string>
   <string name="adb_active_generic_notification_message">Drécke fir Debugging ze desaktivéieren.</string>
   <string name="usb_choose_notification_title">Drécke fir d\'USB-Optiounen auszewielen.</string>
+  <string name="adb_active_custom_tile">ADB: <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB an Netzwierk</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Netzwierk</string>
   <string name="permlab_interceptPackageLaunch">App-Start offänken</string>
   <string name="permdesc_interceptPackageLaunch">Erlaabt enger App, de Start vun aneren Appen ofzefänken</string>
   <string name="app_ops_access_camera">op d\'Kamera zougräifen</string>
@@ -205,8 +197,14 @@
   <string name="live_display_night_summary">Just Nuetsmodus benotzen</string>
   <string name="live_display_outdoor">Baussen (hell Sonn)</string>
   <string name="live_display_outdoor_summary">Just Baussemodus benotzen</string>
+  <string name="live_display_hint">LiveDisplay ka géint Iwwerustrengung vun den Aen a beim Schlofen an der Nuecht hëllefen. Dréck hei, fir et auszeprobéieren!</string>
   <string name="lock_to_app_toast_no_navbar">Fir dëse Schierm lasszeléisen, dréck den Zréck-Knäppchen an hal e gedréckt.</string>
   <string name="quick_settings_tile_flashlight_not_title">D\'Täscheluucht ass un</string>
   <string name="quick_settings_tile_flashlight_not_summary">Drécke fir s\'auszeschalten</string>
   <string name="storage_sd_dock_card">SD-Kaart vum Dock</string>
+  <string name="fingerprint_default_name">Fangerofdrock <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">op de Fangerofdrock-Serivce zougräifen</string>
+  <string name="permdesc_accessFingerprintService">Erlaabt der App, op de Fangerofdrock-Service zouzegräifen. D\'App ka Fangerofdréck dobäisetzen, läschen, änneren a préiwen</string>
+  <string name="permlab_resetBatteryStats">Akkustatistiken zrécksetzen</string>
+  <string name="permdesc_resetBatteryStats">Erlaabt enger App, den Detail vun der Akkubenotzung zréckzesetzen.</string>
 </resources>

@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Προεπιλογή</string>
-  <string name="profileNameWork">Εργασία</string>
-  <string name="profileNameHome">Σπίτι</string>
-  <string name="profileNameSilent">Αθόρυβο</string>
-  <string name="profileNameNight">Νύχτα</string>
-  <string name="profileNameAutomobile">Αυτοκίνητο</string>
-  <string name="profileGroupPhone">Τηλέφωνο</string>
-  <string name="profileGroupCalendar">Ημερολόγιο</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Ηλεκτρονικό ταχυδρομείο</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Άλλο</string>
-  <string name="profile_none">Κανένα</string>
   <string name="profile_picker_title">Προφίλ</string>
   <string name="global_action_choose_profile">Προφίλ</string>
+  <string name="profile_none">Κανένα</string>
   <string name="global_action_screenshot">Στιγμιότυπο οθόνης</string>
   <string name="permlab_receiveProtectedSms">λήψη προστατευμένων SMS</string>
   <string name="permdesc_receiveProtectedSms">Επιτρέπει στην εφαρμογή να λαμβάνει εισερχόμενα προστατευμένα SMS.</string>
@@ -215,4 +203,8 @@
   <string name="quick_settings_tile_flashlight_not_summary">Πιέστε για απενεργοποίηση</string>
   <string name="storage_sd_dock_card">Κάρτα SD βάσης σύνδεσης</string>
   <string name="fingerprint_default_name">Δακτυλικό αποτύπωμα <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">πρόσβαση στην υπηρεσία δακτυλικών αποτυπωμάτων</string>
+  <string name="permdesc_accessFingerprintService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία δακτυλικών αποτυπωμάτων. Η εφαρμογή μπορεί να προσθέσει, να διαγράψει, να μετονομάσει και να ταυτοποιήσει δακτυλικά αποτυπώματα</string>
+  <string name="permlab_resetBatteryStats">επαναφορά στατιστικών μπαταρίας</string>
+  <string name="permdesc_resetBatteryStats">Επιτρέπει σε μια εφαρμογή να κάνει επαναφορά τα χαμηλού επιπέδου δεδομένα χρήσης μπαταρίας.</string>
 </resources>
