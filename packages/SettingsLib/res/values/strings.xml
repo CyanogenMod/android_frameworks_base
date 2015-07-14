@@ -123,6 +123,8 @@
     <string name="bluetooth_profile_map">Message Access</string>
     <!-- Bluetooth settings. The user-visible string that is used whenever referring to the SAP profile (sharing SIM card). -->
     <string name="bluetooth_profile_sap">SIM Access</string>
+    <!-- Bluetooth settings. The user-visible string that is used whenever referring to the dun profile. -->
+    <string name="bluetooth_profile_dun">Dial-up Network Access</string>
 
     <!-- Bluetooth settings.  Connection options screen.  The summary for the A2DP checkbox preference when A2DP is connected. -->
     <string name="bluetooth_a2dp_profile_summary_connected">Connected to media audio</string>
@@ -142,6 +144,8 @@
     <string name="bluetooth_pan_user_profile_summary_connected">Connected to device for Internet access</string>
     <!-- Bluetooth settings. Connection options screen. The summary for the checkbox preference when PAN is connected (NAP role). [CHAR LIMIT=25]-->
     <string name="bluetooth_pan_nap_profile_summary_connected">Sharing local Internet connection with device</string>
+    <!-- Bluetooth settings.  Connection options screen.  The summary for the DUN checkbox preference when DUN is connected. -->
+    <string name="bluetooth_dun_profile_summary_connected">Connected to Dun Server</string>
 
     <!-- Bluetooth settings. Connection options screen. The summary
          for the PAN checkbox preference that describes how checking it
@@ -161,6 +165,8 @@
          for the HID checkbox preference that describes how checking it
          will set the HID profile as preferred. -->
     <string name="bluetooth_hid_profile_summary_use_for">Use for input</string>
+    <!-- Bluetooth settings. Connection options screen.  The summary for the dun checkbox preference that describes how checking it will set the dun profile as preferred. -->
+    <string name="bluetooth_dun_profile_summary_use_for">Use for Dial-up Network access</string>
 
     <!-- Button text for accepting an incoming pairing request. [CHAR LIMIT=20] -->
     <string name="bluetooth_pairing_accept">Pair</string>
