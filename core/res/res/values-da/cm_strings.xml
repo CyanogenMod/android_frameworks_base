@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Standard</string>
-  <string name="profileNameWork">Arbejde</string>
-  <string name="profileNameHome">Hjem</string>
-  <string name="profileNameSilent">Lydløs</string>
-  <string name="profileNameNight">Nat</string>
-  <string name="profileNameAutomobile">Bil</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Kalender</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Andre</string>
-  <string name="profile_none">Ingen</string>
   <string name="profile_picker_title">Profiler</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Ingen</string>
   <string name="global_action_screenshot">Skærmbillede</string>
   <string name="permlab_receiveProtectedSms">modtag beskyttet SMS</string>
   <string name="permdesc_receiveProtectedSms">Tillader at app\'en kan modtage en indgående beskyttet SMS.</string>
@@ -214,4 +202,8 @@
   <string name="quick_settings_tile_flashlight_not_title">Lommelygten er tændt</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tryk for at slukke</string>
   <string name="storage_sd_dock_card">Dock SD-kort</string>
+  <string name="fingerprint_default_name">Fingeraftryk <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">adgang til fingeraftrykstjenesten</string>
+  <string name="permdesc_accessFingerprintService">Gør det muligt for en app at få adgang til fingeraftrykstjenesten. Appen kan tilføje, slette, omdøbe og godkende i forhold til fingeraftryk</string>
+  <string name="permlab_resetBatteryStats">nulstil batteristatistik</string>
 </resources>

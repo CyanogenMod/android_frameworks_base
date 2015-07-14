@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Predvolené</string>
-  <string name="profileNameWork">Práca</string>
-  <string name="profileNameHome">Domov</string>
-  <string name="profileNameSilent">Tichý</string>
-  <string name="profileNameNight">Noc</string>
-  <string name="profileNameAutomobile">Auto</string>
-  <string name="profileGroupPhone">Telefón</string>
-  <string name="profileGroupCalendar">Kalendár</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-mail</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Iný</string>
-  <string name="profile_none">Žiadny</string>
   <string name="profile_picker_title">Profily</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Žiadny</string>
   <string name="global_action_screenshot">Snímka obrazovky</string>
   <string name="permlab_receiveProtectedSms">prijímať chránené SMS</string>
   <string name="permdesc_receiveProtectedSms">Umožňuje aplikácii prijímať chránené prichádzajúce SMS.</string>

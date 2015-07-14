@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Lehenetsia</string>
-  <string name="profileNameWork">Lanean</string>
-  <string name="profileNameHome">Etxean</string>
-  <string name="profileNameSilent">Isilik</string>
-  <string name="profileNameNight">Gaua</string>
-  <string name="profileNameAutomobile">Kotxean</string>
-  <string name="profileGroupPhone">Telefonoa</string>
-  <string name="profileGroupCalendar">Egutegia</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Besteak</string>
-  <string name="profile_none">Bat ere ez</string>
   <string name="profile_picker_title">Profilak</string>
   <string name="global_action_choose_profile">Profila</string>
+  <string name="profile_none">Bat ere ez</string>
   <string name="global_action_screenshot">Pantaila-argazkia</string>
   <string name="permlab_receiveProtectedSms">jaso SMS babestua</string>
   <string name="permdesc_receiveProtectedSms">SMS mezu babestua jasotzea ahalbidetzen dio aplikazioari.</string>
@@ -214,4 +202,9 @@
   <string name="quick_settings_tile_flashlight_not_title">Linterna piztuta dago</string>
   <string name="quick_settings_tile_flashlight_not_summary">Sakatu itzaltzeko</string>
   <string name="storage_sd_dock_card">Oinarriaren SD txartela</string>
+  <string name="fingerprint_default_name"><xliff:g id="number">%d</xliff:g>. hatz-marka</string>
+  <string name="permlab_accessFingerprintService">atzitu hatz-marka zerbitzua</string>
+  <string name="permdesc_accessFingerprintService">Hatz-marka zerbitzua atzitzea ahalbidetzen dio aplikazioari. Aplikazioak hatz-markak gehitu, ezabatu edo izenez aldatu ahal izango ditu eta hauek erabilita identifikatu</string>
+  <string name="permlab_resetBatteryStats">leheneratu bateria estatistikak</string>
+  <string name="permdesc_resetBatteryStats">Bateriaren maila baxuko erabilera datuak leheneratzea ahalbidetzen dio aplikazioari.</string>
 </resources>

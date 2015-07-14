@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Oletus</string>
-  <string name="profileNameWork">Työ</string>
-  <string name="profileNameHome">Koti</string>
-  <string name="profileNameSilent">Äänetön</string>
-  <string name="profileNameNight">Yö</string>
-  <string name="profileNameAutomobile">Auto</string>
-  <string name="profileGroupPhone">Puhelin</string>
-  <string name="profileGroupCalendar">Kalenteri</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Sähköposti</string>
-  <string name="profileGroupSMS">Tekstiviesti</string>
-  <string name="wildcardProfile">Muu</string>
-  <string name="profile_none">Ei mitään</string>
   <string name="profile_picker_title">Profiilit</string>
   <string name="global_action_choose_profile">Profiili</string>
+  <string name="profile_none">Ei mitään</string>
   <string name="global_action_screenshot">Kuvakaappaus</string>
   <string name="permlab_receiveProtectedSms">vastaanota suojattuja tekstiviestejä</string>
   <string name="permdesc_receiveProtectedSms">Sallii sovelluksen vastaanottaa suojattuja tekstiviestejä.</string>
@@ -214,4 +202,7 @@
   <string name="quick_settings_tile_flashlight_not_title">Taskulamppu on päällä</string>
   <string name="quick_settings_tile_flashlight_not_summary">Paina sammuttaaksesi</string>
   <string name="storage_sd_dock_card">Telakoi SD-kortti</string>
+  <string name="fingerprint_default_name">Sormenjälki <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">käytä sormenjälkipalvelua</string>
+  <string name="permdesc_accessFingerprintService">Sallii sovelluksen käyttää sormenjälkipalvelua. Sovellus voi lisätä, poistaa, uudelleennimetä ja todentaa sormenjälkiä</string>
 </resources>

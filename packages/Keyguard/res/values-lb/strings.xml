@@ -110,9 +110,11 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_too_many_failed_attempts_countdown">Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_pattern_instructions">Mol däi Muster</string>
   <string name="kg_sim_pin_instructions">SIM-PIN aginn</string>
+  <string name="kg_sim_pin_instructions_multi">SIM-PIN fir \"<xliff:g id="carrier" example="CARD 1">%1$s</xliff:g>\" aginn</string>
   <string name="kg_pin_instructions">PIN aginn</string>
   <string name="kg_password_instructions">Passwuert aginn</string>
   <string name="kg_puk_enter_puk_hint">D\'SIM ass elo desaktivéiert. Gëff e PUK-Code a fir weiderzemaachen. Kontaktéier däi Provider fir Detailer.</string>
+  <string name="kg_puk_enter_puk_hint_multi">D\'SIM \"<xliff:g id="carrier" example="CARD 1">%1$s</xliff:g>\" ass elo desaktivéiert. Gëff de PUK-Code an, fir weiderzemaachen. Kontaktéier däi Provider fir méi Detailer.</string>
   <string name="kg_puk_enter_pin_hint">Gëff de gewënschte PIN-Code an</string>
   <string name="kg_enter_confirm_pin_hint">Bestäteg de gewënschte PIN-Code</string>
   <string name="kg_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
@@ -134,6 +136,18 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
         Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
         \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Date gi verluer.</string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Date gi verluer.</string>
+  <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Tablet z\'entspären. Dësen Tablet gëtt zréckgesat, wat all d\'Date läscht.</string>
+  <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Telefon z\'entspären. Dësen Telefon gëtt zréckgesat, wat all d\'Date läscht.</string>
+  <string name="kg_failed_attempts_almost_at_erase_user" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt dëse Benotzer a seng Benotzerdate geläscht.</string>
+  <string name="kg_failed_attempts_almost_at_erase_user" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt dëse Benotzer a seng Benotzerdate geläscht.</string>
+  <string name="kg_failed_attempts_now_erasing_user" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Tablet z\'entspären. Dëse Benotzer a seng Date gi geläscht.</string>
+  <string name="kg_failed_attempts_now_erasing_user" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Telefon z\'entspären. Dëse Benotzer a seng Date gi geläscht.</string>
+  <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Aarbechtsprofil a seng Profildate geläscht.</string>
+  <string name="kg_failed_attempts_almost_at_erase_profile" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Aarbechtsprofil a seng Profildate geläscht.</string>
+  <string name="kg_failed_attempts_now_erasing_profile" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. Den Aarbechtsprofil a seng Profildate gi geläscht.</string>
+  <string name="kg_failed_attempts_now_erasing_profile" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. Den Aarbechtsprofil a seng Profildate gi geläscht.</string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss du gefrot däin Tablet duerch en E-Mail-Kont z\'entspären. Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_failed_attempts_almost_at_login" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss du gefrot däin Telefon duerch en E-Mail-Kont z\'entspären. Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_reordering_delete_drop_target_text">Ewechhuelen</string>
@@ -156,4 +170,10 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="keyguard_transport_play_description">Ofspill-Knäppchen</string>
   <string name="keyguard_transport_stop_description">Stopp-Knäppchen</string>
   <string name="keyguard_carrier_default">Kee Service.</string>
+  <string name="kg_remaining_attempts">Iwwreg Versich: <xliff:g id="number">%d</xliff:g></string>
+  <string name="kg_failed_pin_attempts_now_wiping">Du hues de PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn, wëlls du däin Telefon op d\'Wierksastellungen zrécksetzen?</string>
+  <string name="kg_failed_password_attempts_now_wiping">Du hues d\'Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn, wëlls du däin Telefon op d\'Wierksastellungen zrécksetzen?</string>
+  <string name="kg_failed_pattern_attempts_now_wiping">Du hues d\'Muster <xliff:g id="number">%d</xliff:g>-mol falsch aginn, wëlls du däin Telefon op d\'Wierksastellungen zrécksetzen?</string>
+  <string name="kg_failed_attempts_now_wiping_confirm">Dës wäert all d\'Daten, déi um interne Späicher sinn, vum Apparat läschen an däin Apparat gëtt op d\'Wierskastellungen zréckgesat.</string>
+  <string name="accessibility_ime_switch_button" msgid="5032926134740456424">Knäppche fir d\'Method fir anzeginn ze wiesselen.</string>
 </resources>

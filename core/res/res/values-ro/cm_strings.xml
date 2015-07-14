@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Implicit</string>
-  <string name="profileNameWork">Serviciu</string>
-  <string name="profileNameHome">Acasă</string>
-  <string name="profileNameSilent">Silențios</string>
-  <string name="profileNameNight">Noapte</string>
-  <string name="profileNameAutomobile">Automobil</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Calendar</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Altele</string>
-  <string name="profile_none">Niciunul</string>
   <string name="profile_picker_title">Profiluri</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Niciunul</string>
   <string name="global_action_screenshot">Captură de ecran</string>
   <string name="permlab_receiveProtectedSms">primește SMS-uri protejate</string>
   <string name="permdesc_receiveProtectedSms">Permite aplicației să primească un SMS protejat.</string>

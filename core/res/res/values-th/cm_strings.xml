@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">ค่าเริ่มต้น</string>
-  <string name="profileNameWork">ทำงาน</string>
-  <string name="profileNameHome">บ้าน</string>
-  <string name="profileNameSilent">เงียบ</string>
-  <string name="profileNameNight">กลางคืน</string>
-  <string name="profileNameAutomobile">รถยนต์</string>
-  <string name="profileGroupPhone">โทรศัพท์</string>
-  <string name="profileGroupCalendar">ปฏิทิน</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">อีเมล์</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">อื่นๆ</string>
-  <string name="profile_none">ไม่มี</string>
   <string name="profile_picker_title">โปรไฟล์</string>
   <string name="global_action_choose_profile">โปรไฟล์</string>
+  <string name="profile_none">ไม่มี</string>
   <string name="global_action_screenshot">ถ่ายภาพหน้าจอ</string>
   <string name="permlab_receiveProtectedSms">รับ SMS ที่ได้รับการป้องกัน</string>
   <string name="permdesc_receiveProtectedSms">อนุญาตให้แอปรับ SMS ที่ได้รับการป้องกัน</string>
