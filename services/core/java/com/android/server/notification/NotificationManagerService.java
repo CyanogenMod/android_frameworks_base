@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -198,6 +199,9 @@ public class NotificationManagerService extends SystemService {
     /** notification_enqueue status value for an ignored notification. */
     private static final int EVENTLOG_ENQUEUE_STATUS_IGNORED = 2;
 
+    /** notification light maximum brightness value to use. */
+    private static final int LIGHT_BRIGHTNESS_MAXIMUM = 255;
+
     private IActivityManager mAm;
     AudioManager mAudioManager;
     StatusBarManagerInternal mStatusBar;
@@ -215,6 +219,11 @@ public class NotificationManagerService extends SystemService {
 
     private int mDefaultNotificationLedOff;
     private long[] mDefaultVibrationPattern;
+
+    private int mBrightnessNotificationLed;
+
+    private boolean mMultipleLedsEnabledSetting = false;
+    private boolean mMultipleLedsEnabledDefault = false;
 
     private long[] mFallbackVibrationPattern;
     private boolean mUseAttentionLight;
@@ -862,6 +871,12 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(
                     ENABLED_NOTIFICATION_LISTENERS_URI, false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -917,6 +932,16 @@ public class NotificationManagerService extends SystemService {
                         Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
                         UserHandle.USER_CURRENT));
             }
+
+            // Notification LED brightness
+            mBrightnessNotificationLed = Settings.System.getIntForUser(resolver,
+                Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                LIGHT_BRIGHTNESS_MAXIMUM, UserHandle.USER_CURRENT);
+
+            // Multiple LEDs enabled
+            mMultipleLedsEnabledSetting = (Settings.System.getIntForUser(resolver,
+                Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                mMultipleLedsEnabledDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
 
             updateNotificationPulse();
 
@@ -1043,6 +1068,9 @@ public class NotificationManagerService extends SystemService {
                 R.array.config_notificationFallbackVibePattern,
                 VIBRATE_PATTERN_MAXLEN,
                 DEFAULT_VIBRATE_PATTERN);
+
+        mMultipleLedsEnabledDefault = resources.getBoolean(
+                com.android.internal.R.bool.config_multipleNotificationLeds);
 
         mUseAttentionLight = resources.getBoolean(R.bool.config_useAttentionLight);
 
@@ -3035,6 +3063,10 @@ public class NotificationManagerService extends SystemService {
                 ledOnMS = ledno.ledOnMS;
                 ledOffMS = ledno.ledOffMS;
             }
+
+            // update the LEDs modes variables
+            mNotificationLight.setModes(mBrightnessNotificationLed,
+                                        mMultipleLedsEnabledSetting ? 1 : 0);
 
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
