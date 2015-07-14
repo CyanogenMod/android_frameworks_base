@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 125;
+    private static final int DATABASE_VERSION = 127;
 
     private Context mContext;
     private int mUserHandle;
@@ -2011,6 +2011,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 125;
         }
 
+        if (upgradeVersion < 126) {
+            /*
+             * Initialize new multiple notification LEDs setting
+             */
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
+                        + " VALUES(?,?);");
+                loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                        R.bool.def_notification_multiple_leds);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 126;
+        }
+
+        if (upgradeVersion < 127) {
+            /*
+             * Initialize new notification LED brightness setting
+             */
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
+                        + " VALUES(?,?);");
+                loadIntegerSetting(stmt, Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                        R.integer.def_notification_brightness_level);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 127;
+        }
+
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -2537,6 +2575,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadBooleanSetting(stmt, Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION,
                     R.bool.def_swap_volume_keys_on_rotation);
+
+            loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                    R.bool.def_notification_multiple_leds);
+
+            loadIntegerSetting(stmt, Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                    R.integer.def_notification_brightness_level);
 
         } finally {
             if (stmt != null) stmt.close();

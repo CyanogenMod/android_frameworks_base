@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,7 +111,8 @@ static void finalize_native(JNIEnv *env, jobject clazz, jlong ptr)
 }
 
 static void setLight_native(JNIEnv *env, jobject clazz, jlong ptr,
-        jint light, jint colorARGB, jint flashMode, jint onMS, jint offMS, jint brightnessMode)
+        jint light, jint colorARGB, jint flashMode, jint onMS, jint offMS, jint brightnessMode,
+        jint brightnessLevel, jint multipleLeds)
 {
     Devices* devices = (Devices*)ptr;
     light_state_t state;
@@ -125,6 +127,9 @@ static void setLight_native(JNIEnv *env, jobject clazz, jlong ptr,
     state.flashOnMS = onMS;
     state.flashOffMS = offMS;
     state.brightnessMode = brightnessMode;
+    state.brightnessLevel = brightnessLevel;
+    state.ledsModes = 0 |
+                      (multipleLeds ? LIGHT_MODE_MULTIPLE_LEDS : 0);
 
     {
         ALOGD_IF_SLOW(50, "Excessive delay setting light");
@@ -135,7 +140,7 @@ static void setLight_native(JNIEnv *env, jobject clazz, jlong ptr,
 static JNINativeMethod method_table[] = {
     { "init_native", "()J", (void*)init_native },
     { "finalize_native", "(J)V", (void*)finalize_native },
-    { "setLight_native", "(JIIIIII)V", (void*)setLight_native },
+    { "setLight_native", "(JIIIIIIII)V", (void*)setLight_native },
 };
 
 int register_android_server_LightsService(JNIEnv *env)
