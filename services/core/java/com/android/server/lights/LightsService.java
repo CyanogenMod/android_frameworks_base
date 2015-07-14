@@ -70,6 +70,15 @@ public class LightsService extends SystemService {
         }
 
         @Override
+        public void setModes(int brightnessLevel, int multipleLeds) {
+            synchronized (this) {
+                mBrightnessLevel = brightnessLevel;
+                mMultipleLeds = multipleLeds;
+                mModesUpdate = true;
+            }
+        }
+
+        @Override
         public void pulse() {
             pulse(0x00ffffff, 7);
         }
@@ -99,16 +108,18 @@ public class LightsService extends SystemService {
         }
 
         private void setLightLocked(int color, int mode, int onMS, int offMS, int brightnessMode) {
-            if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
+            if (mModesUpdate || color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
                 if (DEBUG) Slog.v(TAG, "setLight #" + mId + ": color=#"
                         + Integer.toHexString(color));
                 mColor = color;
                 mMode = mode;
                 mOnMS = onMS;
                 mOffMS = offMS;
+                mModesUpdate = false;
                 Trace.traceBegin(Trace.TRACE_TAG_POWER, "setLight(" + mId + ", " + color + ")");
                 try {
-                    setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode);
+                    setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode,
+                                    mBrightnessLevel, mMultipleLeds);
                 } finally {
                     Trace.traceEnd(Trace.TRACE_TAG_POWER);
                 }
@@ -120,7 +131,10 @@ public class LightsService extends SystemService {
         private int mMode;
         private int mOnMS;
         private int mOffMS;
+        private int mBrightnessLevel;
+        private int mMultipleLeds;
         private boolean mFlashing;
+        private boolean mModesUpdate;
     }
 
     /* This class implements an obsolete API that was removed after eclair and re-added during the
@@ -208,7 +222,8 @@ public class LightsService extends SystemService {
     private static native void finalize_native(long ptr);
 
     static native void setLight_native(long ptr, int light, int color, int mode,
-            int onMS, int offMS, int brightnessMode);
+            int onMS, int offMS, int brightnessMode,
+            int brightnessLevel, int mMultipleLeds);
 
     private long mNativePointer;
 }

@@ -35,6 +35,7 @@ public abstract class Light {
     public abstract void setBrightness(int brightness, int brightnessMode);
     public abstract void setColor(int color);
     public abstract void setFlashing(int color, int mode, int onMS, int offMS);
+    public abstract void setModes(int brightnessLevel, int multipleLeds);
     public abstract void pulse();
     public abstract void pulse(int color, int onMS);
     public abstract void turnOff();
