@@ -22,6 +22,7 @@ import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.BluetoothMap;
 import android.bluetooth.BluetoothInputDevice;
 import android.bluetooth.BluetoothPan;
+import android.bluetooth.BluetoothDun;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothUuid;
 import android.content.Context;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import android.os.SystemProperties;
 
 /**
  * LocalBluetoothProfileManager provides access to the LocalBluetoothProfile
@@ -78,6 +80,7 @@ public final class LocalBluetoothProfileManager {
     private final HidProfile mHidProfile;
     private OppProfile mOppProfile;
     private final PanProfile mPanProfile;
+    private DunServerProfile mDunProfile;
     private final PbapServerProfile mPbapProfile;
 
     /**
@@ -121,6 +124,12 @@ public final class LocalBluetoothProfileManager {
         addProfile(mMapProfile, MapProfile.NAME,
                 BluetoothMap.ACTION_CONNECTION_STATE_CHANGED);
 
+       // enable DUN only if the property is set
+        if (SystemProperties.getBoolean("ro.bluetooth.dun", false) == true) {
+            mDunProfile = new DunServerProfile(context);
+            addProfile(mDunProfile, DunServerProfile.NAME,
+                    BluetoothDun.ACTION_CONNECTION_STATE_CHANGED);
+        }
        //Create PBAP server profile, but do not add it to list of profiles
        // as we do not need to monitor the profile as part of profile list
         mPbapProfile = new PbapServerProfile(context);
