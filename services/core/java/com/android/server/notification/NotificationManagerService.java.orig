@@ -220,11 +220,16 @@ public class NotificationManagerService extends SystemService {
     private int mDefaultNotificationLedOff;
     private long[] mDefaultVibrationPattern;
 
+<<<<<<< HEAD
     private boolean mBrightnessNotificationLed;
     private int mBrightnessLevelNotificationLed = LIGHT_BRIGHTNESS_MAXIMUM;
 
     private boolean mMultipleNotificationLeds;
     private boolean mMultipleLedsEnabledSetting = false;
+=======
+    private boolean mScreenOnEnabled = false;
+    private boolean mScreenOnDefault = false;
+>>>>>>> 10ded33... Lights with Screen On [1/2]: Optional allowment of lights
 
     private long[] mFallbackVibrationPattern;
     private boolean mUseAttentionLight;
@@ -872,6 +877,9 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(
                     ENABLED_NOTIFICATION_LISTENERS_URI, false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_SCREEN_ON),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -938,6 +946,7 @@ public class NotificationManagerService extends SystemService {
                         UserHandle.USER_CURRENT));
             }
 
+<<<<<<< HEAD
             // Notification LED brightness
             if (mBrightnessNotificationLed) {
                 mBrightnessLevelNotificationLed = Settings.System.getIntForUser(resolver,
@@ -951,6 +960,12 @@ public class NotificationManagerService extends SystemService {
                     Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
                     mMultipleNotificationLeds ? 1 : 0, UserHandle.USER_CURRENT) != 0);
             }
+=======
+            // Notification lights with screen on
+            mScreenOnEnabled = (Settings.System.getIntForUser(resolver,
+                Settings.System.NOTIFICATION_LIGHT_SCREEN_ON,
+                mScreenOnDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
+>>>>>>> 10ded33... Lights with Screen On [1/2]: Optional allowment of lights
 
             updateNotificationPulse();
 
@@ -3045,7 +3060,7 @@ public class NotificationManagerService extends SystemService {
             enableLed = false;
         } else if (isLedNotificationForcedOn(ledNotification)) {
             enableLed = true;
-        } else if (mInCall || mScreenOn) {
+        } else if (! mScreenOnEnabled && (mInCall || mScreenOn)) {
             enableLed = false;
         } else {
             enableLed = true;

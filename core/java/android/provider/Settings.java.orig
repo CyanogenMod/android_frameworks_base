@@ -2821,6 +2821,7 @@ public final class Settings {
         public static final String SHOW_WEB_SUGGESTIONS = "show_web_suggestions";
 
         /**
+<<<<<<< HEAD
          * Contains the notifications light maximum brightness to use.
          * @hide
          */
@@ -2833,6 +2834,14 @@ public final class Settings {
          */
         public static final String NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE =
                 "notification_light_multiple_leds_enable";
+=======
+         * Whether to allow notifications with the screen on or DayDreams.
+         * The value is boolean (1 or 0). Default will always be false.
+         * @hide
+         */
+        public static final String NOTIFICATION_LIGHT_SCREEN_ON =
+                "notification_light_screen_on_enable";
+>>>>>>> 10ded33... Lights with Screen On [1/2]: Optional allowment of lights
 
         /**
          * Whether the notification LED should repeatedly flash when a notification is
@@ -3644,8 +3653,12 @@ public final class Settings {
             LIVE_DISPLAY_HINTED,
             NONE_IS_SILENT,
             ALLOW_LIGHTS,
+<<<<<<< HEAD
             NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
             NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE
+=======
+            NOTIFICATION_LIGHT_SCREEN_ON
+>>>>>>> 10ded33... Lights with Screen On [1/2]: Optional allowment of lights
         };
 
         /**
