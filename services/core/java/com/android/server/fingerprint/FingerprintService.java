@@ -29,6 +29,9 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.os.Vibrator;
 import android.service.fingerprint.FingerprintManager;
+import static android.service.fingerprint.FingerprintManager.STATE_AUTHENTICATING;
+import static android.service.fingerprint.FingerprintManager.STATE_ENROLLING;
+import static android.service.fingerprint.FingerprintManager.STATE_IDLE;
 import android.service.fingerprint.FingerprintUtils;
 import android.service.fingerprint.IFingerprintService;
 import android.service.fingerprint.IFingerprintServiceReceiver;
@@ -78,9 +81,7 @@ public class FingerprintService extends SystemService {
     private Context mContext;
     private int mState = STATE_IDLE;
 
-    private static final int STATE_IDLE = 0;
-    private static final int STATE_AUTHENTICATING = 1;
-    private static final int STATE_ENROLLING = 2;
+
     private static final long MS_PER_SEC = 1000;
 
     /**
@@ -255,7 +256,7 @@ public class FingerprintService extends SystemService {
                 break;
             }
         }
-        mState = newState;
+        changeState(newState);
     }
 
     private void vibrateDeviceIfSupported() {
@@ -273,7 +274,7 @@ public class FingerprintService extends SystemService {
                 return;
             }
             nativeEnroll((int) (timeout / MS_PER_SEC));
-            mState = STATE_ENROLLING;
+            changeState(STATE_ENROLLING);
         } else {
             Slog.w(TAG, "enroll(): No listener registered");
         }
@@ -288,7 +289,7 @@ public class FingerprintService extends SystemService {
                 return;
             }
             nativeAuthenticate();
-            mState = STATE_AUTHENTICATING;
+            changeState(STATE_AUTHENTICATING);
         } else {
             Slog.w(TAG, "authenticate(): No listener registered");
         }
@@ -299,7 +300,7 @@ public class FingerprintService extends SystemService {
         if (clientData != null) {
             if (clientData.userId != userId) throw new IllegalStateException("Bad user");
             if (mState == STATE_IDLE) return;
-            mState = STATE_IDLE;
+            changeState(STATE_IDLE);
             nativeCancel();
         } else {
             Slog.w(TAG, "enrollCancel(): No listener registered");
@@ -349,6 +350,31 @@ public class FingerprintService extends SystemService {
             if (DEBUG) Slog.v(TAG, "listener not registered: " + token);
         }
         mClients.remove(token);
+    }
+
+    public synchronized int getState() {
+        return mState;
+    }
+
+    private synchronized void changeState(int newState) {
+        if (mState == newState) return;
+
+        mState = newState;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (Iterator<Map.Entry<IBinder, ClientData>> it = mClients.entrySet().iterator();
+                     it.hasNext(); ) {
+                    try {
+                        ClientData clientData = it.next().getValue();
+                        clientData.receiver.onStateChanged(mState);
+                    } catch(RemoteException e) {
+                        Slog.e(TAG, "can't send message to client. Did it die?", e);
+                        it.remove();
+                    }
+                }
+            }
+        });
     }
 
     void checkPermission() {
@@ -540,6 +566,13 @@ public class FingerprintService extends SystemService {
             checkPermission();
             throwIfNoFingerprint();
             return FingerprintService.this.getNumEnrollmentSteps();
+        }
+
+        @Override
+        public int getState() throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
+            return FingerprintService.this.getState();
         }
 
         /**
