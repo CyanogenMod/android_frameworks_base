@@ -50,4 +50,7 @@ interface IFingerprintService {
 
     // Get num of fingerprints samples required to enroll
     int getNumEnrollmentSteps(IBinder token);
+
+    // Return the state of FingerprintService
+    int getState();
 }
