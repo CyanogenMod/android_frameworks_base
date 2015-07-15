@@ -73,4 +73,10 @@ public class FingerprintManagerReceiver {
      * @param fingerprintId id of template to remove.
      */
     public void onRemoved(int fingerprintId) { }
+
+    /**
+     * When the fingerprint service's state changes
+     * @param state
+     */
+    public void onStateChanged(int state) { }
 }
