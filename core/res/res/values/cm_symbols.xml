@@ -338,4 +338,7 @@
 
     <!-- Fingerprint default name -->
     <java-symbol type="string" name="fingerprint_default_name" />
+
+    <!-- LED pulse -->
+    <java-symbol type="bool" name="config_ledCanPulse" />
 </resources>
