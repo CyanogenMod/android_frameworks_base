@@ -306,7 +306,9 @@ public class LiveDisplayController {
 
             int max = mCmHardwareManager.getDisplayColorCalibrationMax();
             mCmHardwareManager.setDisplayColorCalibration(new int[] {
-                (int) (rgb[0] * max), (int) (rgb[1] * max), (int) (rgb[2] * max)
+                (int) Math.ceil(rgb[0] * max),
+                (int) Math.ceil(rgb[1] * max),
+                (int) Math.ceil(rgb[2] * max)
             });
             screenRefresh();
         } else {
