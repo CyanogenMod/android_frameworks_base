@@ -237,12 +237,16 @@ public class Nat464Xlat extends BaseNetworkObserver {
     }
 
     @Override
-    public void addressUpdated(String iface, LinkAddress clatAddress) {
+    public void interfaceLinkStateChanged(String iface, boolean up) {
         // Called by the InterfaceObserver on its own thread, so can race with stop().
-        if (isStarted() && mIface.equals(iface) && clatAddress != null) {
+        if (isStarted() && up && mIface.equals(iface)) {
             Slog.i(TAG, "interface " + iface + " is up, mIsRunning " + mIsRunning + "->true");
 
             if (!mIsRunning) {
+                LinkAddress clatAddress = getLinkAddress(iface);
+                if (clatAddress == null) {
+                    return;
+                }
                 mIsRunning = true;
                 maybeSetIpv6NdOffload(mBaseIface, false);
                 LinkProperties lp = new LinkProperties(mNetwork.linkProperties);
