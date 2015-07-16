@@ -63,6 +63,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Internal service helper that no-one should use directly.
@@ -354,6 +356,11 @@ public class MediaScanner
 
     private final BitmapFactory.Options mBitmapOptions = new BitmapFactory.Options();
 
+    // For basic VorbisComment DATE tag support. It can take two forms, YYYY
+    // or YYYY-MM. This pattern is used to extract the year for compatibility
+    // with the ID3 YEAR tag.
+    private static final Pattern dateYear = Pattern.compile("^(\\d{4})(-\\d{2})?$");
+
     private static class FileEntry {
         long mRowId;
         String mPath;
@@ -639,6 +646,11 @@ public class MediaScanner
                 mGenre = getGenreName(value);
             } else if (name.equalsIgnoreCase("year") || name.startsWith("year;")) {
                 mYear = parseSubstring(value, 0, 0);
+            } else if (name.equalsIgnoreCase("date") || name.startsWith("date;")) {
+                Matcher m = dateYear.matcher(value);
+                if (m.find()) {
+                    mYear = parseSubstring(m.group(1), 0, 0);
+                }
             } else if (name.equalsIgnoreCase("tracknumber") || name.startsWith("tracknumber;")) {
                 // track number might be of the form "2/12"
                 // we just read the number before the slash
