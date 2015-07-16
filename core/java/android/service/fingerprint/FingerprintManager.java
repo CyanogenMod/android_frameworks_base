@@ -103,8 +103,10 @@ public class FingerprintManager {
                         break;
                     case MSG_REMOVED:
                         mClientReceiver.onRemoved(msg.arg1);
+                        break;
                     case MSG_STATE_CHANGE:
                         mClientReceiver.onStateChanged(msg.arg1);
+                        break;
                 }
             }
         }
