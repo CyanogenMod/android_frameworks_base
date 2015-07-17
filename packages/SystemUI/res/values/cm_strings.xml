@@ -266,4 +266,7 @@
 
     <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_dock_battery_level">Dock battery <xliff:g id="number">%d</xliff:g> percent.</string>
+
+   <!-- Play queue -->
+   <string name="play_queue_extention">Show play queue</string>
 </resources>
