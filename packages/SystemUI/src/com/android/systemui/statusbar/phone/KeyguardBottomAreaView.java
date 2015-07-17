@@ -508,6 +508,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         // TODO: Real icon for facelock.
         int iconRes = getIconLockResId();
         if (mLastUnlockIconRes != iconRes) {
+            mLastUnlockIconRes = iconRes;
             Drawable icon = mContext.getDrawable(iconRes);
             int iconHeight = getResources().getDimensionPixelSize(
                     R.dimen.keyguard_affordance_icon_height);

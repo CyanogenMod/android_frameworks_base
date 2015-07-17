@@ -30,9 +30,9 @@ import android.view.View;
  */
 public class NotificationBackgroundView extends View {
 
-    private Drawable mBackground;
-    private int mClipTopAmount;
-    private int mActualHeight;
+    protected Drawable mBackground;
+    protected int mClipTopAmount;
+    protected int mActualHeight;
 
     public NotificationBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
