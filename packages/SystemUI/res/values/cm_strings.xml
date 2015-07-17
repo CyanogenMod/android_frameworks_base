@@ -309,4 +309,7 @@
 
     <!-- Empty view text for CustomQSTile -->
     <string name="quick_settings_custom_qs_detail_empty_text">No items found</string>
+
+   <!-- Play queue -->
+   <string name="play_queue_extention">Play Queue Extension</string>
 </resources>
