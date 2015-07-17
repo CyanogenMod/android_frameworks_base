@@ -45,7 +45,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
     private boolean mShowingPublic;
     private boolean mSensitive;
     private boolean mShowingPublicInitialized;
-    private boolean mShowingPublicForIntrinsicHeight;
+    protected boolean mShowingPublicForIntrinsicHeight;
 
     /**
      * Is this notification expanded by the system. The expansion state can be overridden by the
@@ -58,15 +58,15 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
      */
     private boolean mExpansionDisabled;
 
-    private NotificationContentView mPublicLayout;
-    private NotificationContentView mPrivateLayout;
-    private int mMaxExpandHeight;
+    protected NotificationContentView mPublicLayout;
+    protected NotificationContentView mPrivateLayout;
+    protected int mMaxExpandHeight;
+    protected boolean mWasReset;
+    protected NotificationGuts mGuts;
     private View mVetoButton;
     private boolean mClearable;
     private ExpansionLogger mLogger;
     private String mLoggingKey;
-    private boolean mWasReset;
-    private NotificationGuts mGuts;
 
     private StatusBarNotification mStatusBarNotification;
     private boolean mIsHeadsUp;
@@ -342,7 +342,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
      *
      * @return whether the view state is currently expanded.
      */
-    private boolean isExpanded() {
+    protected boolean isExpanded() {
         return !mExpansionDisabled
                 && (!hasUserChangedExpansion() && isSystemExpanded() || isUserExpanded());
     }
@@ -358,7 +358,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         mWasReset = false;
     }
 
-    private void updateMaxExpandHeight() {
+    protected void updateMaxExpandHeight() {
         int intrinsicBefore = getIntrinsicHeight();
         mMaxExpandHeight = mPrivateLayout.getMaxHeight();
         if (intrinsicBefore != getIntrinsicHeight()) {
