@@ -64,4 +64,9 @@
     <!-- Expanded Status Bar Battery Level Text Color -->
     <color name="status_bar_battery_level_text_color">#ffffff</color>
 
+    <color name="notification_guts_media_bg_color">#ff606060</color>
+
+    <color name="queue_background">#303030</color>
+    <color name="queue_background_pressed">#ff606060</color>
+
 </resources>
