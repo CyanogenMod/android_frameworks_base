@@ -3545,6 +3545,13 @@ public final class Settings {
         public static final String STATUSBAR_COMPONENT = "statusbar_component";
 
         /**
+         * Whether to attach a queue to media notifications.
+         * Boolean setting.
+         * @hide
+         */
+        public static final String NOTIFICATION_PLAY_QUEUE = "notification_play_queue";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -3629,7 +3636,8 @@ public final class Settings {
             DISPLAY_AUTO_OUTDOOR_MODE,
             LIVE_DISPLAY_HINTED,
             NONE_IS_SILENT,
-            ALLOW_LIGHTS
+            ALLOW_LIGHTS,
+            NOTIFICATION_PLAY_QUEUE
         };
 
         /**
