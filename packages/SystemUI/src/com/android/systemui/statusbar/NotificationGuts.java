@@ -28,9 +28,9 @@ import com.android.systemui.R;
  */
 public class NotificationGuts extends FrameLayout {
 
-    private Drawable mBackground;
-    private int mClipTopAmount;
-    private int mActualHeight;
+    protected Drawable mBackground;
+    protected int mClipTopAmount;
+    protected int mActualHeight;
 
     public NotificationGuts(Context context, AttributeSet attrs) {
         super(context, attrs);
