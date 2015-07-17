@@ -180,7 +180,7 @@ public class NotificationContentView extends FrameLayout {
         updateClipping();
     }
 
-    private void updateClipping() {
+    protected void updateClipping() {
         mClipBounds.set(0, mClipTopAmount, getWidth(), mActualHeight);
         setClipBounds(mClipBounds);
     }
@@ -239,7 +239,7 @@ public class NotificationContentView extends FrameLayout {
                 });
     }
 
-    private boolean showContractedChild() {
+    protected boolean showContractedChild() {
         return mActualHeight <= mSmallHeight || mExpandedChild == null;
     }
 
