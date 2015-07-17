@@ -39,4 +39,6 @@
 
     <dimen name="detail_exterior_padding">16dp</dimen>
 
+    <dimen name="queue_row_height">52dp</dimen>
+    <dimen name="queue_top_shadow">3dp</dimen>
 </resources>
