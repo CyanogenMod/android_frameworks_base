@@ -369,4 +369,8 @@
         <item name="android:colorBackground">@color/qs_edit_overflow_bg</item>
     </style>
 
+    <style name="ThemeOverlay.SwitchBar.Secondary" parent="@android:style/ThemeOverlay">
+        <item name="android:colorAccent">@color/system_secondary_color</item>
+    </style>
+
 </resources>
