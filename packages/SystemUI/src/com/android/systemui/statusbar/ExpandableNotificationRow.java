@@ -64,7 +64,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
     private boolean mShowingPublic;
     private boolean mSensitive;
     private boolean mShowingPublicInitialized;
-    private boolean mHideSensitiveForIntrinsicHeight;
+    protected boolean mHideSensitiveForIntrinsicHeight;
 
     /**
      * Is this notification expanded by the system. The expansion state can be overridden by the
@@ -77,10 +77,10 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
      */
     private boolean mExpansionDisabled;
 
-    private NotificationContentView mPublicLayout;
-    private NotificationContentView mPrivateLayout;
-    private int mMaxExpandHeight;
-    private int mHeadsUpHeight;
+    protected NotificationContentView mPublicLayout;
+    protected NotificationContentView mPrivateLayout;
+    protected int mMaxExpandHeight;
+    protected int mHeadsUpHeight;
     private View mVetoButton;
     private boolean mClearable;
     private ExpansionLogger mLogger;
@@ -101,7 +101,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
     private ValueAnimator mChildExpandAnimator;
     private float mChildrenExpandProgress;
     private float mExpandButtonStart;
-    private ViewStub mGutsStub;
+    protected ViewStub mGutsStub;
     private boolean mHasExpandAction;
     private boolean mIsSystemChildExpanded;
     private boolean mIsPinned;
@@ -443,10 +443,11 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         mVetoButton = findViewById(R.id.veto);
     }
 
-    public void inflateGuts() {
+    public boolean inflateGuts() {
         if (mGuts == null) {
             mGutsStub.inflate();
         }
+        return false;
     }
 
     private void updateChildrenVisibility(boolean animated) {
@@ -645,7 +646,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         } else if (mChildrenExpanded) {
             maxContentHeight = mChildrenContainer.getIntrinsicHeight();
         } else {
-            maxContentHeight = getMaxExpandHeight();
+            maxContentHeight = mMaxExpandHeight;
         }
         return maxContentHeight + getBottomDecorHeight();
     }
@@ -669,7 +670,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
      *
      * @return whether the view state is currently expanded.
      */
-    private boolean isExpanded() {
+    protected boolean isExpanded() {
         return !mExpansionDisabled
                 && (!hasUserChangedExpansion() && (isSystemExpanded() || isSystemChildExpanded())
                 || isUserExpanded());
@@ -703,7 +704,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         return super.isChildInvisible(child) || isInvisibleChildContainer;
     }
 
-    private void updateMaxHeights() {
+    protected void updateMaxHeights() {
         int intrinsicBefore = getIntrinsicHeight();
         View expandedChild = mPrivateLayout.getExpandedChild();
         if (expandedChild == null) {
@@ -902,10 +903,6 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         }
     }
 
-    public int getMaxExpandHeight() {
-        return mMaxExpandHeight;
-    }
-
     @Override
     public boolean isContentExpandable() {
         NotificationContentView showingLayout = getShowingLayout();
@@ -961,7 +958,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         return mMaxExpandHeight != 0;
     }
 
-    private NotificationContentView getShowingLayout() {
+    protected NotificationContentView getShowingLayout() {
         return mShowingPublic ? mPublicLayout : mPrivateLayout;
     }
 

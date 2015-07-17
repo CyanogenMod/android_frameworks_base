@@ -117,4 +117,9 @@
 
     <!-- Active color for volume slider -->
     <color name="volume_slider_active">@color/system_accent_color</color>
+
+    <!-- Play Queue -->
+    <color name="notification_guts_media_bg_color">#ff606060</color>
+    <color name="queue_background">#ff303030</color>
+    <color name="queue_background_pressed">#ff606060</color>
 </resources>
