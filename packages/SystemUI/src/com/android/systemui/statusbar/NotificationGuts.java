@@ -58,9 +58,9 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
 
     private static final long CLOSE_GUTS_DELAY = 8000;
 
-    private Drawable mBackground;
-    private int mClipTopAmount;
-    private int mActualHeight;
+    protected Drawable mBackground;
+    protected int mClipTopAmount;
+    protected int mActualHeight;
     private boolean mExposed;
     private INotificationManager mINotificationManager;
     private int mStartingUserImportance;

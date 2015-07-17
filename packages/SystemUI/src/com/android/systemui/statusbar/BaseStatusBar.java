@@ -44,6 +44,7 @@ import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.media.session.MediaController;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -906,6 +907,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         return null;
     }
 
+    protected MediaController getCurrentMediaController() {
+        return null;
+    }
+
     @Override
     public NotificationGroupManager getGroupManager() {
         return mGroupManager;
@@ -1157,6 +1162,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                 }
 
                 final ExpandableNotificationRow row = (ExpandableNotificationRow) v;
+                if (v instanceof MediaExpandableNotificationRow
+                        && !((MediaExpandableNotificationRow) v).inflateGuts()) {
+                    return false;
+                }
                 bindGuts(row);
 
                 // Assume we are a status_bar_notification_row
@@ -1618,8 +1627,20 @@ public abstract class BaseStatusBar extends SystemUI implements
             // create the row view
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
-            row = (ExpandableNotificationRow) inflater.inflate(R.layout.status_bar_notification_row,
-                    parent, false);
+
+            // cannot use isMediaNotification()
+            if (sbn.getNotification().category != null
+                    && sbn.getNotification().category.equals(Notification.CATEGORY_TRANSPORT)) {
+                Log.d("ro", "inflating media notification");
+                row = (MediaExpandableNotificationRow) inflater.inflate(
+                        R.layout.status_bar_notification_row_media, parent, false);
+                ((MediaExpandableNotificationRow)row).setMediaController(
+                        getCurrentMediaController());
+            } else {
+                row = (ExpandableNotificationRow) inflater.inflate(
+                        R.layout.status_bar_notification_row,
+                        parent, false);
+            }
             row.setExpansionLogger(this, entry.notification.getKey());
             row.setGroupManager(mGroupManager);
             row.setHeadsUpManager(mHeadsUpManager);

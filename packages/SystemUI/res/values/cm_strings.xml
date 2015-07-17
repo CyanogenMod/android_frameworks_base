@@ -48,4 +48,8 @@
     <string name="select_application">Select application</string>
     <string name="lockscreen_choose_action_title">Choose action</string>
     <string name="lockscreen_none_target">None</string>
+
+    <!-- Play queue -->
+    <string name="play_queue_extension">Show play queue</string>
+
 </resources>
