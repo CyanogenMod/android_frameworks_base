@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -233,6 +234,9 @@ public class NotificationManagerService extends SystemService {
 
     private int mDefaultNotificationLedOff;
     private long[] mDefaultVibrationPattern;
+
+    private boolean mScreenOnEnabled = false;
+    private boolean mScreenOnDefault = false;
 
     private long[] mFallbackVibrationPattern;
     private boolean mUseAttentionLight;
@@ -871,6 +875,9 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_SCREEN_ON),
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK), false,
                     this, UserHandle.USER_ALL);
@@ -912,6 +919,11 @@ public class NotificationManagerService extends SystemService {
                         Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
                         UserHandle.USER_CURRENT));
             }
+
+            // Notification lights with screen on
+            mScreenOnEnabled = (Settings.System.getIntForUser(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_SCREEN_ON,
+                    mScreenOnDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
 
             updateNotificationPulse();
 
@@ -3262,7 +3274,7 @@ public class NotificationManagerService extends SystemService {
             enableLed = false;
         } else if (isLedNotificationForcedOn(ledNotification)) {
             enableLed = true;
-        } else if (mInCall || mScreenOn) {
+        } else if (!mScreenOnEnabled && (mInCall || mScreenOn)) {
             enableLed = false;
         } else {
             enableLed = true;
