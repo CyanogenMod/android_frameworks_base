@@ -2821,6 +2821,14 @@ public final class Settings {
         public static final String SHOW_WEB_SUGGESTIONS = "show_web_suggestions";
 
         /**
+         * Whether to allow notifications with the screen on or DayDreams.
+         * The value is boolean (1 or 0). Default will always be false.
+         * @hide
+         */
+        public static final String NOTIFICATION_LIGHT_ALWAYS_ALLOWED =
+                "notification_light_always_allowed_enable";
+
+        /**
          * Contains the notifications light maximum brightness to use.
          * @hide
          */
@@ -3645,7 +3653,8 @@ public final class Settings {
             NONE_IS_SILENT,
             ALLOW_LIGHTS,
             NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
-            NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE
+            NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+            NOTIFICATION_LIGHT_ALWAYS_ALLOWED
         };
 
         /**

@@ -220,6 +220,9 @@ public class NotificationManagerService extends SystemService {
     private int mDefaultNotificationLedOff;
     private long[] mDefaultVibrationPattern;
 
+    private boolean mAlwaysAllowedEnabledSetting = false;
+    private boolean mAlwaysAllowedEnabledDefault = false;
+
     private int mBrightnessNotificationLed;
 
     private boolean mMultipleLedsEnabledSetting = false;
@@ -871,6 +874,9 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(
                     ENABLED_NOTIFICATION_LISTENERS_URI, false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ALLOWED),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -932,6 +938,11 @@ public class NotificationManagerService extends SystemService {
                         Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
                         UserHandle.USER_CURRENT));
             }
+
+            // Notification always allowed
+            mAlwaysAllowedEnabledSetting = (Settings.System.getIntForUser(resolver,
+                Settings.System.NOTIFICATION_LIGHT_ALWAYS_ALLOWED,
+                mAlwaysAllowedEnabledDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
 
             // Notification LED brightness
             mBrightnessNotificationLed = Settings.System.getIntForUser(resolver,
@@ -3034,7 +3045,7 @@ public class NotificationManagerService extends SystemService {
             enableLed = false;
         } else if (isLedNotificationForcedOn(ledNotification)) {
             enableLed = true;
-        } else if (mInCall || mScreenOn) {
+        } else if (! mAlwaysAllowedEnabledSetting && (mInCall || mScreenOn)) {
             enableLed = false;
         } else {
             enableLed = true;
