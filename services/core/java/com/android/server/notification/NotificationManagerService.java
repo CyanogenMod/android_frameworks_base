@@ -216,6 +216,9 @@ public class NotificationManagerService extends SystemService {
     private int mDefaultNotificationLedOff;
     private long[] mDefaultVibrationPattern;
 
+    private boolean mAlwaysAllowedEnabledSetting = false;
+    private boolean mAlwaysAllowedEnabledDefault = false;
+
     private long[] mFallbackVibrationPattern;
     private boolean mUseAttentionLight;
     boolean mSystemReady;
@@ -862,6 +865,9 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(
                     ENABLED_NOTIFICATION_LISTENERS_URI, false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ALLOWED),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -917,6 +923,11 @@ public class NotificationManagerService extends SystemService {
                         Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
                         UserHandle.USER_CURRENT));
             }
+
+            // Notification always allowed
+            mAlwaysAllowedEnabledSetting = (Settings.System.getIntForUser(resolver,
+                Settings.System.NOTIFICATION_LIGHT_ALWAYS_ALLOWED,
+                mAlwaysAllowedEnabledDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
 
             updateNotificationPulse();
 
@@ -3006,7 +3017,7 @@ public class NotificationManagerService extends SystemService {
             enableLed = false;
         } else if (isLedNotificationForcedOn(ledNotification)) {
             enableLed = true;
-        } else if (mInCall || mScreenOn) {
+        } else if (! mAlwaysAllowedEnabledSetting && (mInCall || mScreenOn)) {
             enableLed = false;
         } else {
             enableLed = true;
