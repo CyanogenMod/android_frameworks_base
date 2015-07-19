@@ -158,4 +158,5 @@
   <string name="dynamic_qs_tile_ime_selector_label">Selettore IME</string>
   <string name="dynamic_qs_tile_su_label">Accesso root</string>
   <string name="fingerprint_try_again_hint">Ripeti la scansione</string>
+  <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
 </resources>

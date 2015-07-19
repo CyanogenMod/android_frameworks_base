@@ -203,4 +203,8 @@
   <string name="quick_settings_tile_flashlight_not_summary">Dotykem vypnout</string>
   <string name="storage_sd_dock_card">SD karta doku</string>
   <string name="fingerprint_default_name">Otisk prstu <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">přístup ke službě otisku prstů</string>
+  <string name="permdesc_accessFingerprintService">Umožní přístup ke službě otisku prstů. Aplikace může přidat, odebrat, přejmenovat a provést ověření otiskem prstů</string>
+  <string name="permlab_resetBatteryStats">obnovení statistiky baterie</string>
+  <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
 </resources>

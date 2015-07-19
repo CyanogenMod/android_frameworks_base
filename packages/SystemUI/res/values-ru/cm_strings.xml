@@ -144,6 +144,7 @@
   <string name="interruption_level_silent">Без звука</string>
   <string name="zen_silent_with_warning">Никаких уведомлений, кроме будильника.</string>
   <string name="quick_settings_remove">Удалить плитку</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Динамическая плитка</string>
   <string name="dynamic_qs_tile_next_alarm_label">Следующий будильник</string>
   <string name="dynamic_qs_tile_ime_selector_label">Выбор метода ввода</string>
   <string name="dynamic_qs_tile_su_label">Суперпользователь</string>

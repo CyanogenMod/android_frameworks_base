@@ -157,4 +157,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Следећи аларм</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME бирач</string>
   <string name="dynamic_qs_tile_su_label">Root приступ</string>
+  <string name="fingerprint_try_again_hint">Молим скенирај поново</string>
+  <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
 </resources>

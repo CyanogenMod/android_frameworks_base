@@ -26,9 +26,75 @@
   <string name="accessibility_quick_settings_data_on">Data seluler hidup.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming mati.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming hidup.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB melalui jaringan, mati.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB melalui jaringan, aktif.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ADB melalui jaringan dimatikan.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ADB melalui jaringan dinyalakan.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Tampilan Ambient nonaktif.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Tampilan Ambient aktif.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Tampilan Ambient dinonaktifkan.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Tampilan Ambient diaktifkan.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Inversi warna mati.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Inversi warna aktif.</string>
+  <string name="accessibility_quick_settings_compass_off">Kompas mati.</string>
+  <string name="accessibility_quick_settings_compass_on">Kompas Aktif.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Kompas dimatikan.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Kompas dinyalakan.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up nonaktif.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up aktif.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up dinonaktifkan.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up diaktifkan.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Hotspot portabel mati.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Hotspot portabel aktif.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay mati.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: modus otomatis.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: modus pagi.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: modus malam.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modus luar ruangan.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay dimatikan.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay diubah menjadi modus otomatis.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay diubah menjadi modus pagi.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay diubah menjadi modus malam.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay diubah menjadi modus luar ruangan.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Laporan Lokasi: mode hemat baterai.</string>
   <string name="accessibility_quick_settings_location_gps_only">Laporan Lokasi: hanya mode sensor.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Laporan Lokasi: mode akurasi tinggi.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Pelaporan lokasi diubah menjadi modus hemat baterai.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Pelaporan lokasi diubah menjadi modus hanya sensor.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Pelaporan lokasi diubah menjadi modus akurasi tinggi.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Kunci layar mati.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Kunci layar aktif.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Kunci layar dimatikan.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Kunci layar diaktifkan.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE mati.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE aktif.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE dimatikan.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE dinyalakan.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC dimatikan.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC menyala.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC dimatikan.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC dinyalakan.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modus baterai: modus hemat daya.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Modus Baterai: modus seimbang.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Modus Baterai: Modus Performa.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modus baterai diubah menjadi modus hemat daya.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Modus baterai diubah menjadi modus seimbang.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Modus baterai diubah menjadi modus performa.</string>
+  <string name="accessibility_quick_settings_profiles_off">Profil mati.</string>
+  <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Profil dimatikan.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Profil diubah menjadi <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Batas waktu layar: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Batas waktu layar diubah menjadi <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_sync_off">Singkron mati.</string>
+  <string name="accessibility_quick_settings_sync_on">Singkron aktif.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Singkron dimatikan.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Singkron diaktifkan.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">Tethering USB mati.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">Tethering USB aktif.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">Tethering USB dimatikan.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">Tethering USB dinyalakan.</string>
+  <string name="accessibility_quick_settings_visualizer">VIsualisasi.</string>
   <string name="accessibility_dpad_left">Kursor kiri</string>
   <string name="accessibility_dpad_right">Kursor kanan</string>
   <string name="quick_settings_mobile_data_label">Data Seluler</string>
@@ -51,6 +117,10 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Waktu layar mati</string>
   <string name="quick_settings_usb_tether_label">Peranggitan USB</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_ambient_display_label">Tampilan Ambient</string>
+  <string name="quick_settings_sync_label">Singkron</string>
+  <string name="quick_settings_custom_tile_detail_title">Tile kustom</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Geser ke kanan untuk %1$s</string>
   <string name="right_shortcut_hint">Geser ke kiri untuk %1$s</string>
@@ -79,4 +149,14 @@
   <string name="navring_choose_action_title">Pilih tindakan</string>
   <string name="select_application">Pilih aplikasi</string>
   <string name="lockscreen_target_empty">Kosong</string>
+  <string name="screen_pinning_description_no_navbar">Hal ini membuatnya tetap dalam pandangan sampai anda melepas sematan. Sentuh dan tahan tombol kembali untuk melepas sematan.</string>
+  <string name="interruption_level_silent">Diam</string>
+  <string name="zen_silent_with_warning">Tidak ada interupsi, kecuali alarm.</string>
+  <string name="quick_settings_remove">Hapus tile</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Petak Dinamis</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Alarm selanjutnya</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Pemilih IME</string>
+  <string name="dynamic_qs_tile_su_label">Akses Root</string>
+  <string name="fingerprint_try_again_hint">Silahka pindai lagi</string>
+  <string name="accessibility_dock_battery_level">Baterai dudukan <xliff:g id="number">%d</xliff:g> persen.</string>
 </resources>

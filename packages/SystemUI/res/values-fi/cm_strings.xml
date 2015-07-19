@@ -158,4 +158,5 @@
   <string name="dynamic_qs_tile_ime_selector_label">Syöttötavan valitsin</string>
   <string name="dynamic_qs_tile_su_label">Root-oikeudet</string>
   <string name="fingerprint_try_again_hint">Skannaa uudelleen</string>
+  <string name="accessibility_dock_battery_level">Telakan akku <xliff:g id="number">%d</xliff:g> prosenttia.</string>
 </resources>

@@ -203,4 +203,8 @@
   <string name="quick_settings_tile_flashlight_not_summary">Tik om uit te schakelen</string>
   <string name="storage_sd_dock_card">SD-kaart in dock</string>
   <string name="fingerprint_default_name">Vingerafdruk <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">toegang tot vingerafdrukservice</string>
+  <string name="permdesc_accessFingerprintService">Hiermee kan de app toegang krijgen tot de vingerafdrukservice. De app kan vingerafdrukken toevoegen, verwijderen, hernoemen en gebruiken ter authenticatie.</string>
+  <string name="permlab_resetBatteryStats">accustatistieken opnieuw instellen</string>
+  <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
 </resources>

@@ -63,6 +63,9 @@
   <string name="adb_both_active_notification_title">ADB cez USB a sieť povolené</string>
   <string name="adb_active_generic_notification_message">Dotykom zakážate ladenie.</string>
   <string name="usb_choose_notification_title">Dotykom vyberte možnosti pre USB.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Sieť</string>
   <string name="permlab_interceptPackageLaunch">zachytiť spustenie aplikácie</string>
   <string name="permdesc_interceptPackageLaunch">Umožňuje aplikácii zachytiť spustenie ďalších aplikácií</string>
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
@@ -198,4 +201,9 @@
   <string name="quick_settings_tile_flashlight_not_title">Svietidlo je zapnuté</string>
   <string name="quick_settings_tile_flashlight_not_summary">Dotykom vypnúť</string>
   <string name="storage_sd_dock_card">Karta SD v doku</string>
+  <string name="fingerprint_default_name">Odtlačok prsta <xliff:g id="number">%d </xliff:g></string>
+  <string name="permlab_accessFingerprintService">prístup k službe odtlačku prstov</string>
+  <string name="permdesc_accessFingerprintService">Umožňuje prístup k službe odtlačku prstov. Aplikácia môže pridať, odstrániť, premenovať a vykonať overenie odtlačkov prstov</string>
+  <string name="permlab_resetBatteryStats">obnoviť štatistiky batérie</string>
+  <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
 </resources>

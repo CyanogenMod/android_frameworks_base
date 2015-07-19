@@ -205,4 +205,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="quick_settings_tile_flashlight_not_summary">Kapatmak için dokunun</string>
   <string name="storage_sd_dock_card">Ünite SD kartı</string>
   <string name="fingerprint_default_name">Parmak izi <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">parmak izi hizmetine eriş</string>
+  <string name="permdesc_accessFingerprintService">Uygulamaların parmak izi hizmetine erişimini sağlar. Uygulama parmak izlerini ekleyebilir, silebilir, yeniden adlandırabilir ve yetkilendirebilir.</string>
+  <string name="permlab_resetBatteryStats">pil istatistiklerini sıfırla</string>
+  <string name="permdesc_resetBatteryStats">Uygulamalara güncel düşük seviye pil kullanım verisini sıfırlama izni verir.</string>
 </resources>
