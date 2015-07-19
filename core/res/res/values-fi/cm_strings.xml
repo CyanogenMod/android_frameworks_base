@@ -205,4 +205,6 @@
   <string name="fingerprint_default_name">Sormenjälki <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">käytä sormenjälkipalvelua</string>
   <string name="permdesc_accessFingerprintService">Sallii sovelluksen käyttää sormenjälkipalvelua. Sovellus voi lisätä, poistaa, uudelleennimetä ja todentaa sormenjälkiä</string>
+  <string name="permlab_resetBatteryStats">nollaa akun tilastot</string>
+  <string name="permdesc_resetBatteryStats">Sallii sovelluksen nollata nykyiset alemman tason akun käytön tilastot.</string>
 </resources>

@@ -63,8 +63,8 @@
   <string name="navbar_menu_always_button">Menyu (hmşGöstər) düyməsi</string>
   <string name="navbar_menu_big_button">Menyu düyməsi</string>
   <string name="navigation_ring_title">Cəld başlat qısayolları</string>
-  <string name="navring_target_reset_message">Bütün istifadəçilərin yaratdığı naviqasiya sətri qısayolları silinib ilkin vəziyyətə qaytarılsın?</string>
-  <string name="navring_target_reset">Naviqasiya sətri qısayolları ilkin vəziyyətə qaytarıldı</string>
+  <string name="navring_target_reset_message">Bütün istifadəçilərin yaratdığı hərəkət zolağı qısayolları silinib ilkin hala qaytarılsın?</string>
+  <string name="navring_target_reset">Hərəkət zolağı qısayolları ilkin hala qaytarıldı</string>
   <string name="navring_action_open_ime_switcher">IME Dəyişdiricini aç</string>
   <string name="navring_action_kill_app">Tətbiqi sonlandır</string>
   <string name="navring_action_none">Yoxdur</string>

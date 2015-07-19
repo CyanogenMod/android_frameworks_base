@@ -205,4 +205,6 @@
   <string name="fingerprint_default_name">Impressão digital <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">aceder ao serviço de impressões digitais</string>
   <string name="permdesc_accessFingerprintService">Permite que uma aplicação aceda ao serviço de impressão digital. A aplicação pode adicionar, eliminar, mudar o nome e autenticar ao comparar impressões digitais</string>
+  <string name="permlab_resetBatteryStats">reiniciar estatísticas da bateria</string>
+  <string name="permdesc_resetBatteryStats">Permite a uma aplicação reiniciar os dados de utilização de baixo nível da bateria.</string>
 </resources>

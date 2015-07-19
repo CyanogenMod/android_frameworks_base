@@ -204,4 +204,9 @@ muuta juba olemasolevaid.</string>
   <string name="quick_settings_tile_flashlight_not_title">Taskulamp põleb</string>
   <string name="quick_settings_tile_flashlight_not_summary">Väljalülitamiseks koputage</string>
   <string name="storage_sd_dock_card">Doki SD-kaart</string>
+  <string name="fingerprint_default_name">Sõrmejälg <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">juurdepääsu sõrmejälgede teenusele</string>
+  <string name="permdesc_accessFingerprintService">Annab rakendusel ligipääsu sõrmejälgede teenusele. Rakendus saab lisada, kustutada, nimetada ümber ja autentida sõrmejälgi</string>
+  <string name="permlab_resetBatteryStats">nulli aku statistika</string>
+  <string name="permdesc_resetBatteryStats">Lubab rakendusel nullida aku praeguse madala-tasemelise kasutuse andmed.</string>
 </resources>

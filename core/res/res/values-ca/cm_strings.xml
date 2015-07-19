@@ -205,4 +205,6 @@
   <string name="fingerprint_default_name">Empremta digital <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">Accés al servei d\'empremtes dactilars</string>
   <string name="permdesc_accessFingerprintService">Permet a una aplicació accedir al servei d\'empremtes dactilars. L\'aplicació pot afegir, esborrar, canviar el nom i autenticar-se amb empremtes dactilars</string>
+  <string name="permlab_resetBatteryStats">reinicia estadítiques de la bateria</string>
+  <string name="permdesc_resetBatteryStats">Permet a una aplicació reiniciar les dades actuals de baix nivell d\'us de la bateria.</string>
 </resources>

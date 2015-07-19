@@ -205,4 +205,6 @@
   <string name="fingerprint_default_name">Impronta digitale <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">Accedi al servizio impronte digitali</string>
   <string name="permdesc_accessFingerprintService">Consenti ad un\'app di accedere al servizio di impronte digitali. L\'app può aggiungere, eliminale, rinominare e riautenticare impronte digitali</string>
+  <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
+  <string name="permdesc_resetBatteryStats">Consente all\'applicazione di reimpostare gli attuali dati di utilizzo della batteria a basso livello.</string>
 </resources>

@@ -198,4 +198,6 @@
   <string name="live_display_outdoor">În aer liber (soare strălucitor)</string>
   <string name="live_display_outdoor_summary">Utilizaţi numai setările în aer liber</string>
   <string name="live_display_hint">LiveDisplay poate reduce oboseala ochilor şi vă poate ajuta să dormiți noaptea. Apasă aici pentru a-l încerca!</string>
+  <string name="quick_settings_tile_flashlight_not_title">Lanterna este pornită</string>
+  <string name="permlab_resetBatteryStats">resetează statisticile bateriei</string>
 </resources>
