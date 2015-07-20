@@ -2276,4 +2276,34 @@
     <string-array name="config_cell_retries_per_error_code">
     </string-array>
 
+    <!-- Whether cpu boost is enabled for AppLaunch -->
+    <bool name="config_enableCpuBoostForAppLaunch">false</bool>
+    <integer name="disablepacking_timeout_param">0</integer>
+    <integer-array name="launchboost_packing_param_value"/>
+    <integer name="launchboost_timeout_param">0</integer>
+    <integer-array name="launchboost_param_value"/>
+
+    <!-- Whether cpu boost is enabled for animation. -->
+    <bool name="config_enablePerfBoostForAnimation">false</bool>
+    <integer name="animationboost_timeout_param">0</integer>
+    <integer-array name="animationboost_param_value"/>
+
+    <!-- Whether cpu boost is enabled for overscroller fling. -->
+    <bool name="config_enableCpuBoostForOverScrollerFling">false</bool>
+    <integer name="flingboost_timeout_param">0</integer>
+    <integer-array name="flingboost_param_value"/>
+
+    <!-- Whether cpu boost is enabled for horizontal scroll. -->
+    <bool name="config_enableCpuBoostForScroller">false</bool>
+    <integer name="scrollboost_timeout_param">0</integer>
+    <integer-array name="scrollboost_param_value"/>
+
+    <!-- Activities list for boost -->
+    <string-array translatable="false" name="boost_activityList">
+    </string-array>
+
+    <!-- Activity scroll boost params -->
+    <integer name="ascrollboost_timeout">0</integer>
+    <integer-array name="ascrollboost_param_value"/>
+
 </resources>

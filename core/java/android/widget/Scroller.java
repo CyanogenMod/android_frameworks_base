@@ -22,6 +22,7 @@ import android.os.Build;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.util.BoostFramework;
 
 
 /**
@@ -108,6 +109,16 @@ public class Scroller  {
     private float mDeceleration;
     private final float mPpi;
 
+    /*
+    * Perf boost related variables
+    * Enabled/Disabled using config_enableCpuBoostForScroller
+    * true value turns it on, by default will be turned off
+    */
+    private BoostFramework mPerf = null;
+    boolean bIsPerfBoostEnabled = false;
+    private int sBoostTimeOut = 0;
+    private int sBoostParamVal[];
+
     // A context-specific coefficient adjusted to physical values.
     private float mPhysicalCoeff;
 
@@ -167,6 +178,7 @@ public class Scroller  {
      * not to support progressive "flywheel" behavior in flinging.
      */
     public Scroller(Context context, Interpolator interpolator, boolean flywheel) {
+        boolean bIsPerfBoostEnabled = false;
         mFinished = true;
         if (interpolator == null) {
             mInterpolator = new ViscousFluidInterpolator();
@@ -178,6 +190,18 @@ public class Scroller  {
         mFlywheel = flywheel;
 
         mPhysicalCoeff = computeDeceleration(0.84f); // look and feel tuning
+        bIsPerfBoostEnabled = context.getResources().getBoolean(
+             com.android.internal.R.bool.config_enableCpuBoostForScroller);
+        if (bIsPerfBoostEnabled) {
+        sBoostTimeOut = context.getResources().getInteger(
+               com.android.internal.R.integer.scrollboost_timeout_param);
+        sBoostParamVal = context.getResources().getIntArray(
+               com.android.internal.R.array.scrollboost_param_value);
+        }
+        if (mPerf == null && bIsPerfBoostEnabled) {
+            mPerf = new BoostFramework();
+        }
+
     }
 
     /**
@@ -395,6 +419,13 @@ public class Scroller  {
         mDeltaX = dx;
         mDeltaY = dy;
         mDurationReciprocal = 1.0f / (float) mDuration;
+
+        if ((mPerf != null) && (duration != 0)) {
+            if (0 == sBoostTimeOut) {
+                sBoostTimeOut = mDuration;
+            }
+            mPerf.perfLockAcquire(sBoostTimeOut, sBoostParamVal);
+        }
     }
 
     /**
