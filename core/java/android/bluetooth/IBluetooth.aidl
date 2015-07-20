@@ -70,6 +70,10 @@ interface IBluetooth
     boolean fetchRemoteUuids(in BluetoothDevice device);
     boolean sdpSearch(in BluetoothDevice device, in ParcelUuid uuid);
 
+    int createMapMnsSdpRecord(in String serviceName, in int rfcommChannel,
+            in int l2capPsm, in int version, in int features);
+    boolean removeSdpRecord(in int recordHandle);
+
     boolean setPin(in BluetoothDevice device, boolean accept, int len, in byte[] pinCode);
     boolean setPasskey(in BluetoothDevice device, boolean accept, int len, in byte[]
     passkey);

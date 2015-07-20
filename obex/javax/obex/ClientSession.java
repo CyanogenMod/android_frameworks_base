@@ -68,7 +68,7 @@ public final class ClientSession extends ObexSession {
 
     private final OutputStream mOutput;
 
-    private final boolean mLocalSrmSupported;
+    private boolean mLocalSrmSupported;
 
     private final ObexTransport mTransport;
 
@@ -612,5 +612,10 @@ public final class ClientSession extends ObexSession {
 
     public boolean isSrmSupported() {
         return mLocalSrmSupported;
+    }
+
+    public void setLocalSrmStatus(boolean SrmEnabled) {
+        mLocalSrmSupported = SrmEnabled;
+        Log.v(TAG, "setLocalSrmStatus: " + mLocalSrmSupported);
     }
 }
