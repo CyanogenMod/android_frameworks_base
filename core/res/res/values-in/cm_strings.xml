@@ -63,6 +63,10 @@
   <string name="adb_both_active_notification_title">ADB melalui USB &amp; jaringan diaktifkan</string>
   <string name="adb_active_generic_notification_message">Sentuh untuk menonaktifkan debug.</string>
   <string name="usb_choose_notification_title">Sentuh untuk memilih pilihan USB.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">Jaringan &amp; USB</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Jaringan</string>
   <string name="permlab_interceptPackageLaunch">Mencegah memulai aplikasi</string>
   <string name="permdesc_interceptPackageLaunch">Ijinkan aplikasi untuk mencegah aplikasi lainnya berjalan</string>
   <string name="app_ops_access_camera">mengakses kamera</string>
@@ -198,4 +202,9 @@
   <string name="quick_settings_tile_flashlight_not_title">Senter aktif</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tekan untuk mematikan</string>
   <string name="storage_sd_dock_card">Kartu SD di dok</string>
+  <string name="fingerprint_default_name">Sidik Jari <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">akses layanan sidik jari</string>
+  <string name="permdesc_accessFingerprintService">Mengizinkan aplikasi untuk mengakses layanan sidik jari. Aplikasi bisa menambah, menghapus, mengubah nama, dan autentikasi sidik jari</string>
+  <string name="permlab_resetBatteryStats">set ulang statistik baterai</string>
+  <string name="permdesc_resetBatteryStats">Mengizinkan aplikasi untuk set ulang data penggunaan baterai rendah yang sekarang.</string>
 </resources>

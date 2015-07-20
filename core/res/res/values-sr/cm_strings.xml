@@ -203,4 +203,8 @@
   <string name="quick_settings_tile_flashlight_not_summary">Додирни да угасиш</string>
   <string name="storage_sd_dock_card">База SD картице</string>
   <string name="fingerprint_default_name">Отисак <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">приступ сервису отиска прста</string>
+  <string name="permdesc_accessFingerprintService">Дозволи апликацији да приступи сервису отиска прста. Апликација може додати, обрисати, преименовати и потврђивати помоћу отиска прста</string>
+  <string name="permlab_resetBatteryStats">ресетуј статистику батерије</string>
+  <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
 </resources>

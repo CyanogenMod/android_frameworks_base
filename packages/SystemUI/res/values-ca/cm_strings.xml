@@ -158,4 +158,5 @@
   <string name="dynamic_qs_tile_ime_selector_label">Selector de l\'IME</string>
   <string name="dynamic_qs_tile_su_label">Accés Superusuari</string>
   <string name="fingerprint_try_again_hint">Si us plau escanneja una altra vegada</string>
+  <string name="accessibility_dock_battery_level">Acoblament bateria <xliff:g id="number">%d</xliff:g> percent.</string>
 </resources>
