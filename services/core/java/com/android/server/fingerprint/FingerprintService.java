@@ -422,7 +422,7 @@ public class FingerprintService extends SystemService {
             Fingerprint nativeFinger = nativeFingerMap.get(settingsFinger.getFingerId());
             if (nativeFinger == null) {
                 // Finger exists in Settings but not in native space. Remove it from settings
-                settingsFingerprints.remove(settingsFinger);
+                iter.remove();
                 modifiedSettingsFingers = true;
             } else {
                 // Finger exists in Settings and in native space, merge it
