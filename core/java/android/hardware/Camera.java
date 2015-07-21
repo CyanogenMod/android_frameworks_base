@@ -4461,7 +4461,7 @@ public class Camera {
         // Example string: "(10000,26623),(10000,30000)". Return null if the
         // passing string is null or the size is 0.
         private ArrayList<int[]> splitRange(String str) {
-            if (str == null || str.charAt(0) != '('
+            if (str == null || str.length() == 0 || str.charAt(0) != '('
                     || str.charAt(str.length() - 1) != ')') {
                 Log.e(TAG, "Invalid range list string=" + str);
                 return null;
