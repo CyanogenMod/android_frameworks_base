@@ -154,6 +154,9 @@ public class LocationManagerService extends ILocationManager.Stub {
     private LocationFudger mLocationFudger;
     private GeofenceManager mGeofenceManager;
     private PackageManager mPackageManager;
+    private String mComboNlpPackageName;
+    private String mComboNlpReadyMarker;
+    private String mComboNlpScreenMarker;
     private PowerManager mPowerManager;
     private UserManager mUserManager;
     private GeocoderProxy mGeocodeProvider;
@@ -555,8 +558,16 @@ public class LocationManagerService extends ILocationManager.Stub {
             if (proxy == null) {
                 Slog.e(TAG, "Unable to bind ActivityRecognitionProxy.");
             }
+
         } else {
             Slog.e(TAG, "Hardware Activity-Recognition not supported.");
+        }
+
+        mComboNlpPackageName = resources.getString(
+            com.android.internal.R.string.config_comboNetworkLocationProvider);
+        if (mComboNlpPackageName != null) {
+            mComboNlpReadyMarker = mComboNlpPackageName + ".nlp:ready";
+            mComboNlpScreenMarker = mComboNlpPackageName + ".nlp:screen";
         }
 
         String[] testProviderStrings = resources.getStringArray(
@@ -2329,6 +2340,70 @@ public class LocationManagerService extends ILocationManager.Stub {
         synchronized (mLock) {
             return mMockProviders.containsKey(provider);
         }
+
+    }
+
+    private Location screenLocationLocked(Location location, String provider) {
+        if (isMockProvider(LocationManager.NETWORK_PROVIDER)) {
+            return location;
+        }
+        LocationProviderProxy providerProxy =
+                (LocationProviderProxy)mProvidersByName.get(LocationManager.NETWORK_PROVIDER);
+        if (mComboNlpPackageName == null || providerProxy == null ||
+            false == provider.equals(LocationManager.NETWORK_PROVIDER) ||
+            isMockProvider(LocationManager.NETWORK_PROVIDER)) {
+            return location;
+        }
+
+        String connectedNlpPackage = providerProxy.getConnectedPackageName();
+        if (connectedNlpPackage == null || !connectedNlpPackage.equals(mComboNlpPackageName)) {
+            return location;
+        }
+
+        Bundle extras = location.getExtras();
+        boolean isBeingScreened = false;
+        if (extras == null) {
+            extras = new Bundle();
+        }
+
+        if (!extras.containsKey(mComboNlpReadyMarker)) {
+            // see if Combo Nlp is a passive listener
+            ArrayList<UpdateRecord> records =
+                mRecordsByProvider.get(LocationManager.PASSIVE_PROVIDER);
+            if (records != null) {
+                for (UpdateRecord r : records) {
+                    if (r.mReceiver.mPackageName.equals(mComboNlpPackageName)) {
+                        if (!isBeingScreened) {
+                            isBeingScreened = true;
+                            extras.putBoolean(mComboNlpScreenMarker, true);
+                        }
+                        // send location to Combo Nlp for screening
+                        if (!r.mReceiver.callLocationChangedLocked(location)) {
+                            Slog.w(TAG, "RemoteException calling onLocationChanged on "
+                                   + r.mReceiver);
+                        } else {
+                            if (D) {
+                                Log.d(TAG, "Sending location for screening");
+                            }
+                        }
+                    }
+                }
+            }
+            if (isBeingScreened) {
+                return null;
+            }
+            if (D) {
+                Log.d(TAG, "Not screening locations");
+            }
+        } else {
+            if (D) {
+                Log.d(TAG, "This location is marked as ready for broadcast");
+            }
+            // clear the ready marker
+            extras.remove(mComboNlpReadyMarker);
+        }
+
+        return location;
     }
 
     private void handleLocationChanged(Location location, boolean passive) {
@@ -2347,6 +2422,10 @@ public class LocationManagerService extends ILocationManager.Stub {
         synchronized (mLock) {
             if (isAllowedByCurrentUserSettingsLocked(provider)) {
                 if (!passive) {
+                    location = screenLocationLocked(location, provider);
+                    if (location == null) {
+                        return;
+                    }
                     // notify passive provider of the new location
                     mPassiveProvider.updateLocation(myLocation);
                 }
