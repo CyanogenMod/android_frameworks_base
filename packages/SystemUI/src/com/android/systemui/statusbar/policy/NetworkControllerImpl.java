@@ -786,7 +786,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
     private SubscriptionInfo addSignalController(int id, int simSlotIndex) {
         SubscriptionInfo info = new SubscriptionInfo(id, "", simSlotIndex, "", "", 0, 0, "", 0,
-                null, 0, 0, "");
+                null, 0, 0, "", 0);
         mMobileSignalControllers.put(id, new MobileSignalController(mContext,
                 mConfig, mHasMobileDataFeature, mPhone, mCallbackHandler, this, info,
                 mSubDefaults, mReceiverHandler.getLooper()));

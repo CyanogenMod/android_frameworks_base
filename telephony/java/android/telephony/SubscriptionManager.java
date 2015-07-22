@@ -127,6 +127,13 @@ public class SubscriptionManager {
     /** @hide */
     public static final String NETWORK_MODE = "network_mode";
 
+    /**
+     * The user configured Network mode of SIM/sub.
+     * <P>Type: INTEGER (int)</P>
+     * {@hide}
+     */
+    public static final String USER_NETWORK_MODE = "user_network_mode";
+
     /** @hide */
     public static final int DEFAULT_NW_MODE = -1;
 
