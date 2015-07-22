@@ -46,6 +46,7 @@ public class BarTransitions {
     public static final int MODE_TRANSPARENT = 4;
     public static final int MODE_WARNING = 5;
     public static final int MODE_LIGHTS_OUT_TRANSPARENT = 6;
+    public static final int MODE_LIGHTS_OUT_TRANSLUCENT = 7;
 
     public static final int LIGHTS_IN_DURATION = 250;
     public static final int LIGHTS_OUT_DURATION = 750;
@@ -89,7 +90,7 @@ public class BarTransitions {
                 || mode == MODE_TRANSPARENT)) {
             mode = MODE_OPAQUE;
         }
-        if (!HIGH_END && (mode == MODE_LIGHTS_OUT_TRANSPARENT)) {
+        if (!HIGH_END && (mode == MODE_LIGHTS_OUT_TRANSPARENT || mode == MODE_LIGHTS_OUT_TRANSLUCENT)) {
             mode = MODE_LIGHTS_OUT;
         }
         if (mMode == mode) return;
@@ -120,6 +121,8 @@ public class BarTransitions {
         if (mode == MODE_TRANSPARENT) return "MODE_TRANSPARENT";
         if (mode == MODE_WARNING) return "MODE_WARNING";
         if (mode == MODE_LIGHTS_OUT_TRANSPARENT) return "MODE_LIGHTS_OUT_TRANSPARENT";
+        if (mode == MODE_LIGHTS_OUT_TRANSLUCENT) return "MODE_LIGHTS_OUT_TRANSLUCENT";
+        if (mode == -1) return "MODE_UNKNOWN";
         throw new IllegalArgumentException("Unknown mode " + mode);
     }
 
@@ -128,7 +131,7 @@ public class BarTransitions {
     }
 
     protected boolean isLightsOut(int mode) {
-        return mode == MODE_LIGHTS_OUT || mode == MODE_LIGHTS_OUT_TRANSPARENT;
+        return mode == MODE_LIGHTS_OUT || mode == MODE_LIGHTS_OUT_TRANSPARENT || mode == MODE_LIGHTS_OUT_TRANSLUCENT;
     }
 
     private static class BarBackgroundDrawable extends Drawable {
@@ -245,7 +248,7 @@ public class BarTransitions {
             int targetGradientAlpha = 0, targetColor = 0;
             if (mMode == MODE_WARNING) {
                 targetColor = mWarning;
-            } else if (mMode == MODE_TRANSLUCENT) {
+            } else if (mMode == MODE_TRANSLUCENT || mMode == MODE_LIGHTS_OUT_TRANSLUCENT) {
                 targetColor = mSemiTransparent;
             } else if (mMode == MODE_SEMI_TRANSPARENT) {
                 targetColor = mSemiTransparent;
