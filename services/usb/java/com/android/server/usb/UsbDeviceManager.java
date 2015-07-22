@@ -928,6 +928,7 @@ public class UsbDeviceManager {
                         .setContentDescription(contentDesc)
                         .setIcon(icon)
                         .setOnClickIntent(getCustomTilePendingIntent())
+                        .shouldCollapsePanel(true)
                         .build();
                 statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_ADB,
                         UsbDeviceManager.class.hashCode(), tile, user);
