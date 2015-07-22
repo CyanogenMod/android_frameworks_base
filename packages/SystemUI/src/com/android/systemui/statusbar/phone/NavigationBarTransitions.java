@@ -67,7 +67,7 @@ public final class NavigationBarTransitions extends BarTransitions {
             // translucent mode not allowed when vertical
             if (mode == MODE_TRANSLUCENT || mode == MODE_TRANSPARENT) {
                 mode = MODE_OPAQUE;
-            } else if (mode == MODE_LIGHTS_OUT_TRANSPARENT) {
+            } else if (mode == MODE_LIGHTS_OUT_TRANSPARENT || mode == MODE_LIGHTS_OUT_TRANSLUCENT) {
                 mode = MODE_LIGHTS_OUT;
             }
         }
