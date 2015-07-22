@@ -3380,6 +3380,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     .setContentDescription(contentDesc)
                     .setIcon(icon)
                     .setOnClickIntent(mImeSwitchPendingIntent)
+                    .shouldCollapsePanel(true)
                     .build();
             statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_IME_SELECTOR,
                     InputMethodManagerService.class.hashCode(), tile, user);
