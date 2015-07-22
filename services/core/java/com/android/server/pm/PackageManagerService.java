@@ -17145,28 +17145,27 @@ public class PackageManagerService extends IPackageManager.Stub {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_CONFIGURATION,
                 "could not update icon mapping because caller "
-                + "does not have change config permission");
+                        + "does not have change config permission");
+
+        if (pkgName == null) {
+            clearIconMapping();
+            return;
+        }
+        mIconPackHelper = new IconPackHelper(mContext);
+        try {
+            mIconPackHelper.loadIconPack(pkgName);
+        } catch(NameNotFoundException e) {
+            Log.e(TAG, "Unable to find icon pack: " + pkgName);
+            clearIconMapping();
+            return;
+        }
+
+        for (Activity activity : mActivities.mActivities.values()) {
+            activity.info.themedIcon =
+                    mIconPackHelper.getResourceIdForActivityIcon(activity.info);
+        }
 
         synchronized (mPackages) {
-            ThemeUtils.clearIconCache();
-            if (pkgName == null) {
-                clearIconMapping();
-                return;
-            }
-            mIconPackHelper = new IconPackHelper(mContext);
-            try {
-                mIconPackHelper.loadIconPack(pkgName);
-            } catch(NameNotFoundException e) {
-                Log.e(TAG, "Unable to find icon pack: " + pkgName);
-                clearIconMapping();
-                return;
-            }
-
-            for (Activity activity : mActivities.mActivities.values()) {
-                activity.info.themedIcon =
-                        mIconPackHelper.getResourceIdForActivityIcon(activity.info);
-            }
-
             for (Package pkg : mPackages.values()) {
                 pkg.applicationInfo.themedIcon =
                         mIconPackHelper.getResourceIdForApp(pkg.packageName);
