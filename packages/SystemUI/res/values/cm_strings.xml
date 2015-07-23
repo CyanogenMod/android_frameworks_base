@@ -247,6 +247,7 @@
     <string name="quick_settings_ambient_display_label">Ambient display</string>
     <string name="quick_settings_sync_label">Sync</string>
     <string name="quick_settings_custom_tile_detail_title">Custom tile</string>
+    <string name="quick_settings_themes">Themes</string>
 
     <!-- Weather string format in expanded statusbar header -->
     <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
