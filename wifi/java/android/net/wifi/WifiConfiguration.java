@@ -1325,14 +1325,14 @@ public class WifiConfiguration implements Parcelable {
             key = FQDN + KeyMgmt.strings[KeyMgmt.WPA_EAP];
         } else {
             if (allowedKeyManagement.get(KeyMgmt.WPA_PSK)) {
-                key = SSID + KeyMgmt.strings[KeyMgmt.WPA_PSK];
+                key = SSID + "-" + KeyMgmt.strings[KeyMgmt.WPA_PSK];
             } else if (allowedKeyManagement.get(KeyMgmt.WPA_EAP) ||
                     allowedKeyManagement.get(KeyMgmt.IEEE8021X)) {
-                key = SSID + KeyMgmt.strings[KeyMgmt.WPA_EAP];
+                key = SSID + "-" + KeyMgmt.strings[KeyMgmt.WPA_EAP];
             } else if (wepKeys[0] != null) {
-                key = SSID + "WEP";
+                key = SSID + "-WEP";
             } else {
-                key = SSID + KeyMgmt.strings[KeyMgmt.NONE];
+                key = SSID + "-" + KeyMgmt.strings[KeyMgmt.NONE];
             }
             mCachedConfigKey = key;
         }
@@ -1354,17 +1354,16 @@ public class WifiConfiguration implements Parcelable {
 
         if (result.capabilities.contains("WEP")) {
             key = key + "-WEP";
-        }
-
-        if (result.capabilities.contains("PSK")) {
+        } else if (result.capabilities.contains("PSK")) {
             key = key + "-" + KeyMgmt.strings[KeyMgmt.WPA_PSK];
-        }
-
-        if (result.capabilities.contains("EAP")) {
+        } else if (result.capabilities.contains("EAP")||
+                   result.capabilities.contains("IEEE8021X")) {
             key = key + "-" + KeyMgmt.strings[KeyMgmt.WPA_EAP];
+        } else {
+            key = key +"-" + KeyMgmt.strings[KeyMgmt.NONE];
         }
 
-        return key;
+	return key;
     }
 
     /** @hide */
