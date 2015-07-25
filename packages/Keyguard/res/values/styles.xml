@@ -87,4 +87,33 @@
         <item name="android:colorControlNormal">#80ffffff</item>
         <item name="android:colorControlActivated">#80ffffff</item>
     </style>
+
+    <!-- SONY Clock -->
+    <style name="BoldTimeTextStyle" parent="@style/TimeShadow">
+        <item name="android:textSize">98.0dip</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:focusable">true</item>
+        <item name="android:fontFamily">x-sst-medium</item>
+    </style>
+    <style name="TimeShadow" parent="@style/WrapContent">
+        <item name="android:shadowColor">@color/time_shadow_color</item>
+        <item name="android:shadowDy">@dimen/time_shadow_dy</item>
+        <item name="android:shadowRadius">@dimen/time_shadow_radius</item>
+    </style>
+    <style name="WrapContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="LightTimeTextStyle" parent="@style/TimeShadow">
+        <item name="android:textSize">98.0dip</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:focusable">true</item>
+        <item name="android:fontFamily">x-sst-ultralight</item>
+    </style>
+    <style name="new_style">
+        <item name="android:textSize">@dimen/widget_label_font_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">sst</item>
+    </style>
 </resources>

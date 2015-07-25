@@ -181,4 +181,8 @@
 
     <!-- The padding around the SIM card name -->
     <dimen name="sim_card_name_padding">4dip</dimen>
+
+    <!-- SONY Clock -->
+    <item type="dimen" name="time_shadow_dy">1.0</item>
+    <item type="dimen" name="time_shadow_radius">3.0</item>
 </resources>
