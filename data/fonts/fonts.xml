@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+    NOTE: This file has been modified by Sony Mobile Communications Inc.
+    Modifications are Copyright (C) 2014 Sony Mobile Communications Inc.,
+    and licensed under the license of the file.
+
     NOTE: this is the newer (L) version of the system font configuration,
     supporting richer weight selection. Some apps will expect the older
     version, so please keep system_fonts.xml and fallback_fonts.xml in sync
@@ -93,6 +97,29 @@
     </family>
 
     <!-- fallback fonts -->
+    <family name="x-sst">
+        <font weight="100" style="normal">.SST-UltraLight.ttf</font>
+        <font weight="100" style="italic">.SST-UltraLightItalic.ttf</font>
+        <font weight="300" style="normal">.SST-Light.ttf</font>
+        <font weight="300" style="italic">.SST-LightItalic.ttf</font>
+        <font weight="400" style="normal">.SSTVietnamese-Roman.ttf</font>
+        <font weight="700" style="normal">.SSTVietnamese-Bold.ttf</font>
+        <font weight="500" style="normal">.SST-Medium.ttf</font>
+        <font weight="500" style="italic">.SST-MediumItalic.ttf</font>
+        <font weight="900" style="normal">.SST-Heavy.ttf</font>
+        <font weight="900" style="italic">.SST-HeavyItalic.ttf</font>
+    </family>
+
+    <alias name="sst" to="x-sst" weight="400" />
+    <alias name="x-sst-ultralight" to="x-sst" weight="100" />
+    <alias name="x-sst-light" to="x-sst" weight="300" />
+    <alias name="x-sst-medium" to="x-sst" weight="500" />
+    <alias name="x-sst-heavy" to="x-sst" weight="900" />
+
+    <family name="x-sst-condensed">
+        <font weight="400" style="normal">.SST-Condensed.ttf</font>
+        <font weight="700" style="normal">.SST-CondensedBd.ttf</font>
+    </family>
     <family variant="elegant">
         <font weight="400" style="normal">NotoNaskh-Regular.ttf</font>
         <font weight="700" style="normal">NotoNaskh-Bold.ttf</font>

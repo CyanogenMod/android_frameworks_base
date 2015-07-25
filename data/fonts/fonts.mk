@@ -44,3 +44,15 @@ PRODUCT_PACKAGES := \
     AndroidClock.ttf \
     AndroidClock_Highlight.ttf \
     AndroidClock_Solid.ttf \
+    .SST-Condensed.ttf \
+    .SST-CondensedBd.ttf \
+    .SST-Heavy.ttf \
+    .SST-HeavyItalic.ttf \
+    .SST-Light.ttf \
+    .SST-LightItalic.ttf \
+    .SST-Medium.ttf \
+    .SST-MediumItalic.ttf \
+    .SST-UltraLight.ttf \
+    .SST-UltraLightItalic.ttf \
+    .SSTVietnamese-Bold.ttf \
+    .SSTVietnamese-Roman.ttf

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+    NOTE: This file has been modified by Sony Mobile Communications Inc.
+    Modifications are Copyright (C) 2014 Sony Mobile Communications Inc.,
+    and licensed under the license of the file.
+
     NOTE: this file is the legacy format, for compatibility with apps. The new,
     more flexible format is fonts.xml. Please keep the two in sync until the legacy
     format can be fully removed.
@@ -33,6 +37,60 @@
     all others.
 -->
 <familyset>
+   <family>
+        <nameset>
+            <name>sst</name>
+        </nameset>
+        <fileset>
+            <file>.SSTVietnamese-Roman.ttf</file>
+            <file>.SSTVietnamese-Bold.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <nameset>
+            <name>x-sst-ultralight</name>
+        </nameset>
+        <fileset>
+            <file>.SST-UltraLight.ttf</file>
+            <file>.SST-UltraLightItalic.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <nameset>
+            <name>x-sst-light</name>
+        </nameset>
+        <fileset>
+            <file>.SST-Light.ttf</file>
+            <file>.SST-LightItalic.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <nameset>
+            <name>x-sst-medium</name>
+        </nameset>
+        <fileset>
+            <file>.SST-Medium.ttf</file>
+            <file>.SST-MediumItalic.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <nameset>
+            <name>x-sst-heavy</name>
+        </nameset>
+        <fileset>
+            <file>.SST-Heavy.ttf</file>
+            <file>.SST-HeavyItalic.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <nameset>
+            <name>x-sst-condensed</name>
+        </nameset>
+        <fileset>
+            <file>.SST-Condensed.ttf</file>
+            <file>.SST-CondensedBd.ttf</file>
+        </fileset>
+    </family>
     <family>
         <fileset>
             <file variant="elegant">NotoNaskh-Regular.ttf</file>

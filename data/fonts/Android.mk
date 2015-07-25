@@ -150,7 +150,19 @@ font_src_files += \
     RobotoCondensed-Italic.ttf \
     RobotoCondensed-BoldItalic.ttf \
     RobotoCondensed-Light.ttf \
-    RobotoCondensed-LightItalic.ttf
+    RobotoCondensed-LightItalic.ttf \
+    .SST-Condensed.ttf \
+    .SST-CondensedBd.ttf \
+    .SST-Heavy.ttf \
+    .SST-HeavyItalic.ttf \
+    .SST-Light.ttf \
+    .SST-LightItalic.ttf \
+    .SST-Medium.ttf \
+    .SST-MediumItalic.ttf \
+    .SST-UltraLight.ttf \
+    .SST-UltraLightItalic.ttf \
+    .SSTVietnamese-Bold.ttf \
+    .SSTVietnamese-Roman.ttf
 
 endif # !MINIMAL_FONT
 
