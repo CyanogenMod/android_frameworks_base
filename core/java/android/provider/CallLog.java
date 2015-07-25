@@ -633,9 +633,6 @@ public class CallLog {
                 ContentValues values) {
             final ContentResolver resolver = context.getContentResolver();
             Uri result = resolver.insert(uri, values);
-            resolver.delete(uri, "_id IN " +
-                    "(SELECT _id FROM calls ORDER BY " + DEFAULT_SORT_ORDER
-                    + " LIMIT -1 OFFSET 500)", null);
             return result;
         }
     }
