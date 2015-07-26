@@ -14577,7 +14577,6 @@ public class PackageManagerService extends IPackageManager.Stub {
                 "could not update icon mapping because caller "
                 + "does not have change config permission");
 
-        ThemeUtils.clearIconCache();
         if (pkgName == null) {
             clearIconMapping();
             return;
