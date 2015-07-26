@@ -2335,4 +2335,6 @@
     <string name="config_defaultQuickSettingsTiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast,visualizer,hotspot,live_display</string>
 
     <string-array name="config_externalCMServices"></string-array>
+
+    <string name="config_connectivity_check_url">connectivitycheck.android.com</string>
 </resources>
