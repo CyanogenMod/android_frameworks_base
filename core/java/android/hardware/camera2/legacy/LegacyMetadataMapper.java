@@ -406,20 +406,22 @@ public class LegacyMetadataMapper {
          */
         {
             List<int[]> fpsRanges = p.getSupportedPreviewFpsRange();
-            if (fpsRanges == null) {
-                throw new AssertionError("Supported FPS ranges cannot be null.");
-            }
-            int rangesSize = fpsRanges.size();
-            if (rangesSize <= 0) {
-                throw new AssertionError("At least one FPS range must be supported.");
-            }
-            Range<Integer>[] ranges = new Range[rangesSize];
-            int i = 0;
-            for (int[] r : fpsRanges) {
-                ranges[i++] = Range.create(r[Camera.Parameters.PREVIEW_FPS_MIN_INDEX],
-                        r[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
-            }
-            m.set(CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES, ranges);
+	    if (fpsRanges == null) {
+                Log.e(TAG, "Supported FPS ranges are null!");
+	    } else {
+                int rangesSize = fpsRanges.size();
+                if (rangesSize <= 0) {
+                    Log.e(TAG, "None of the FPS ranges are supported!");
+                } else {
+                    Range<Integer>[] ranges = new Range[rangesSize];
+                    int i = 0;
+                    for (int[] r : fpsRanges) {
+                        ranges[i++] = Range.create(r[Camera.Parameters.PREVIEW_FPS_MIN_INDEX],
+                                r[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
+                    }
+                    m.set(CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES, ranges);
+		}
+	    }
         }
 
         /*
