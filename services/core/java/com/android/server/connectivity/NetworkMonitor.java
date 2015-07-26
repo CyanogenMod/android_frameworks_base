@@ -51,6 +51,7 @@ import android.telephony.CellInfoWcdma;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.android.internal.R;
 import com.android.internal.util.Protocol;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
@@ -69,7 +70,6 @@ import java.util.Random;
 public class NetworkMonitor extends StateMachine {
     private static final boolean DBG = true;
     private static final String TAG = "NetworkMonitor";
-    private static final String DEFAULT_SERVER = "connectivitycheck.android.com";
     private static final int SOCKET_TIMEOUT_MS = 10000;
     public static final String ACTION_NETWORK_CONDITIONS_MEASURED =
             "android.net.conn.NETWORK_CONDITIONS_MEASURED";
@@ -286,7 +286,8 @@ public class NetworkMonitor extends StateMachine {
 
         mServer = Settings.Global.getString(mContext.getContentResolver(),
                 Settings.Global.CAPTIVE_PORTAL_SERVER);
-        if (mServer == null) mServer = DEFAULT_SERVER;
+        if (mServer == null) mServer = mContext.getResources().getString(
+                com.android.internal.R.string.config_connectivity_check_url);
 
         mLingerDelayMs = SystemProperties.getInt(LINGER_DELAY_PROPERTY, DEFAULT_LINGER_DELAY_MS);
         mReevaluateDelayMs = SystemProperties.getInt(REEVALUATE_DELAY_PROPERTY,
