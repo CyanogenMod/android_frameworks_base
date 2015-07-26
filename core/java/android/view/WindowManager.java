@@ -1101,10 +1101,6 @@ public interface WindowManager extends ViewManager {
          */
         public static final int PRIVATE_FLAG_KEYGUARD = 0x00000400;
 
-        /** Window flag: mark layer as fully transparent
-         * {@hide} */
-        public static final int PRIVATE_FLAG_FULLY_TRANSPARENT = 0x10000000;
-
         /**
          * {@hide}
          */
@@ -1125,7 +1121,11 @@ public interface WindowManager extends ViewManager {
          *
          * {@hide}
          */
-        public static final int PRIVATE_FLAG_DISABLE_WALLPAPER_TOUCH_EVENTS = 0x00000800;
+        public static final int PRIVATE_FLAG_DISABLE_WALLPAPER_TOUCH_EVENTS = 0x00004000;
+
+        /** Window flag: mark layer as fully transparent
+         * {@hide} */
+        public static final int PRIVATE_FLAG_FULLY_TRANSPARENT = 0x10000000;
 
         /**
          * Window flag: Overrides default power key behavior
