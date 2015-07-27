@@ -18,7 +18,9 @@ package com.android.systemui.qs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -392,6 +394,21 @@ public abstract class QSTile<TState extends State> implements Listenable {
                 }
             }
             return mPackageContext;
+        }
+    }
+
+    protected class ExternalBitmapIcon extends Icon {
+        private Bitmap mBitmap;
+
+        public ExternalBitmapIcon(Bitmap bitmap) {
+            mBitmap = bitmap;
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            // This is gross
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), mBitmap);
+            return bitmapDrawable;
         }
     }
 
