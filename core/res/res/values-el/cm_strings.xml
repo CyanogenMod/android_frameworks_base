@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία δακτυλικών αποτυπωμάτων. Η εφαρμογή μπορεί να προσθέσει, να διαγράψει, να μετονομάσει και να ταυτοποιήσει δακτυλικά αποτυπώματα</string>
   <string name="permlab_resetBatteryStats">επαναφορά στατιστικών μπαταρίας</string>
   <string name="permdesc_resetBatteryStats">Επιτρέπει σε μια εφαρμογή να κάνει επαναφορά τα χαμηλού επιπέδου δεδομένα χρήσης μπαταρίας.</string>
+  <string name="silent_mode_priority">Προτεραιότητα</string>
+  <string name="silent_mode_none">Κανένα</string>
 </resources>

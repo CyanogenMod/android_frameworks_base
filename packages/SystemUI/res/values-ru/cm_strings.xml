@@ -59,6 +59,9 @@
   <string name="accessibility_quick_settings_location_battery_saving">Отправка местоположения: режим экономии батареи.</string>
   <string name="accessibility_quick_settings_location_gps_only">Отправка местоположения: только по GPS.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Отправка местоположения: режим высокой точности.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Служба отправки местоположения переключена в режим экономии батареи.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Для отправки местоположения используются только данные GPS.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Служба отправки местоположения переключена в режим высокой точности.</string>
   <string name="accessibility_quick_settings_lock_screen_off">Экран блокировки выключен.</string>
   <string name="accessibility_quick_settings_lock_screen_on">Экран блокировки включён.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Экран блокировки выключен.</string>
@@ -71,6 +74,12 @@
   <string name="accessibility_quick_settings_nfc_on">NFC включён.</string>
   <string name="accessibility_quick_settings_nfc_changed_off">NFC выключен.</string>
   <string name="accessibility_quick_settings_nfc_changed_on">NFC включён.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим батареи: энергосберегающий.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Режим батареи: сбалансированный.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Режим батареи: производительный.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Режим батареи изменён на энергосберегающий.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим батареи изменён на сбалансированный.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим батареи изменён на производительный.</string>
   <string name="accessibility_quick_settings_profiles_off">Профили выключены.</string>
   <string name="accessibility_quick_settings_profiles">Профиль: <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Профили выключены.</string>

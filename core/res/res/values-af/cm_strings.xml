@@ -202,4 +202,11 @@
   <string name="quick_settings_tile_flashlight_not_title">Flitslig is aan</string>
   <string name="quick_settings_tile_flashlight_not_summary">Raak om af te skakel</string>
   <string name="storage_sd_dock_card">Dok SD-kaart</string>
+  <string name="fingerprint_default_name">Vingerafdruk <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">kry toegang tot vingerafdruk diens</string>
+  <string name="permdesc_accessFingerprintService">Laat \'n program toegang tot die vingerafdruk diens. Die program kan byvoeg, verwyder, hernoem en staaf teen vingerafdrukke</string>
+  <string name="permlab_resetBatteryStats">herstel battery statistieke</string>
+  <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data te herstel.</string>
+  <string name="silent_mode_priority">Prioriteit</string>
+  <string name="silent_mode_none">Geen</string>
 </resources>
