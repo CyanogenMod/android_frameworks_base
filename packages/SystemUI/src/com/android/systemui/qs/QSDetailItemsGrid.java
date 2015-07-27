@@ -17,6 +17,7 @@
 package com.android.systemui.qs;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -112,12 +113,16 @@ public class QSDetailItemsGrid extends PseudoGridView {
                     mContext, convertView, parent);
             CustomTile.ExpandedItem item = getItem(i);
             Drawable d = null;
-            try {
-                d = getPackageContext(mPkg, mContext).getResources()
-                        .getDrawable(item.itemDrawableResourceId);
-            } catch (Throwable t) {
-                Log.w(TAG, "Error creating package context" + mPkg +
-                        " id=" + item.itemDrawableResourceId, t);
+            if (item.itemDrawableResourceId != 0 && item.itemBitmapResource == null) {
+                try {
+                    d = getPackageContext(mPkg, mContext).getResources()
+                            .getDrawable(item.itemDrawableResourceId);
+                } catch (Throwable t) {
+                    Log.w(TAG, "Error creating package context" + mPkg +
+                            " id=" + item.itemDrawableResourceId, t);
+                }
+            } else {
+                d = new BitmapDrawable(mContext.getResources(), item.itemBitmapResource);
             }
             if (v != convertView) {
                 v.setOnClickListener(this);
