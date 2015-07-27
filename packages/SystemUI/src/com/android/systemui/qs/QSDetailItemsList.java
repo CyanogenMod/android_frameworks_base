@@ -17,6 +17,7 @@
 package com.android.systemui.qs;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -116,12 +117,16 @@ public class QSDetailItemsList extends LinearLayout {
 
             final CustomTile.ExpandedItem item = getItem(position);
             Drawable d = null;
-            try {
-                d = getPackageContext(mPackage, getContext()).getResources()
-                        .getDrawable(item.itemDrawableResourceId);
-            } catch (Throwable t) {
-                Log.w(TAG, "Error creating package context" + mPackage +
-                        " id=" + item.itemDrawableResourceId, t);
+            if (item.itemDrawableResourceId != 0 && item.itemBitmapResource == null) {
+                try {
+                    d = getPackageContext(mPackage, getContext()).getResources()
+                            .getDrawable(item.itemDrawableResourceId);
+                } catch (Throwable t) {
+                    Log.w(TAG, "Error creating package context" + mPackage +
+                            " id=" + item.itemDrawableResourceId, t);
+                }
+            } else {
+                d = new BitmapDrawable(getContext().getResources(), item.itemBitmapResource);
             }
             final ImageView iv = (ImageView) view.findViewById(android.R.id.icon);
             iv.setImageDrawable(d);
