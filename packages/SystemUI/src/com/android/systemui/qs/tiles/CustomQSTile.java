@@ -123,13 +123,15 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         state.iconId = 0;
         state.visible = true;
         final int iconId = customTile.icon;
-        if (iconId != 0) {
+        if (iconId != 0 && (customTile.remoteIcon == null)) {
             final String iconPackage = mTile.getResPkg();
             if (!TextUtils.isEmpty(iconPackage)) {
                 state.icon = new ExternalIcon(iconPackage, iconId);
             } else {
                 state.iconId = iconId;
             }
+        } else {
+            state.icon = new ExternalBitmapIcon(customTile.remoteIcon);
         }
         mOnClick = customTile.onClick;
         mOnClickUri = customTile.onClickUri;
