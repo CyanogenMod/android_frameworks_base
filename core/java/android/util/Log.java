@@ -118,6 +118,10 @@ public final class Log {
         return println_native(LOG_ID_MAIN, VERBOSE, tag, msg);
     }
 
+    /** @hide */ public static int v(String msg) {
+        return v(tag(), msg);
+    }
+
     /**
      * Send a {@link #VERBOSE} log message and log the exception.
      * @param tag Used to identify the source of a log message.  It usually identifies
@@ -129,6 +133,10 @@ public final class Log {
         return println_native(LOG_ID_MAIN, VERBOSE, tag, msg + '\n' + getStackTraceString(tr));
     }
 
+    /** @hide */ public static int v(String msg, Throwable tr) {
+        return v(tag(), msg, tr);
+    }
+
     /**
      * Send a {@link #DEBUG} log message.
      * @param tag Used to identify the source of a log message.  It usually identifies
@@ -137,6 +145,10 @@ public final class Log {
      */
     public static int d(String tag, String msg) {
         return println_native(LOG_ID_MAIN, DEBUG, tag, msg);
+    }
+
+    /** @hide */ public static int d(String msg) {
+        return d(tag(), msg);
     }
 
     /**
@@ -150,6 +162,10 @@ public final class Log {
         return println_native(LOG_ID_MAIN, DEBUG, tag, msg + '\n' + getStackTraceString(tr));
     }
 
+    /** @hide */ public static int d(String msg, Throwable tr) {
+        return d(tag(), msg, tr);
+    }
+
     /**
      * Send an {@link #INFO} log message.
      * @param tag Used to identify the source of a log message.  It usually identifies
@@ -158,6 +174,10 @@ public final class Log {
      */
     public static int i(String tag, String msg) {
         return println_native(LOG_ID_MAIN, INFO, tag, msg);
+    }
+
+    /** @hide */ public static int i(String msg) {
+        return i(tag(), msg);
     }
 
     /**
@@ -171,6 +191,10 @@ public final class Log {
         return println_native(LOG_ID_MAIN, INFO, tag, msg + '\n' + getStackTraceString(tr));
     }
 
+    /** @hide */ public static int i(String msg, Throwable tr) {
+        return i(tag(), msg, tr);
+    }
+
     /**
      * Send a {@link #WARN} log message.
      * @param tag Used to identify the source of a log message.  It usually identifies
@@ -179,6 +203,10 @@ public final class Log {
      */
     public static int w(String tag, String msg) {
         return println_native(LOG_ID_MAIN, WARN, tag, msg);
+    }
+
+    /** @hide */ public static int w(String msg) {
+        return w(tag(), msg);
     }
 
     /**
@@ -222,6 +250,10 @@ public final class Log {
         return println_native(LOG_ID_MAIN, WARN, tag, getStackTraceString(tr));
     }
 
+    /** @hide */ public static int w(Throwable tr) {
+        return w(tag(), tr);
+    }
+
     /**
      * Send an {@link #ERROR} log message.
      * @param tag Used to identify the source of a log message.  It usually identifies
@@ -230,6 +262,10 @@ public final class Log {
      */
     public static int e(String tag, String msg) {
         return println_native(LOG_ID_MAIN, ERROR, tag, msg);
+    }
+
+    /** @hide */ public static int e(String msg) {
+        return e(tag(), msg);
     }
 
     /**
@@ -241,6 +277,10 @@ public final class Log {
      */
     public static int e(String tag, String msg, Throwable tr) {
         return println_native(LOG_ID_MAIN, ERROR, tag, msg + '\n' + getStackTraceString(tr));
+    }
+
+    /** @hide */ public static int e(String msg, Throwable tr) {
+        return e(tag(), msg, tr);
     }
 
     /**
@@ -256,6 +296,10 @@ public final class Log {
         return wtf(LOG_ID_MAIN, tag, msg, null, false, false);
     }
 
+    /** @hide */ public static int wtf(String msg) {
+        return wtf(tag(), msg);
+    }
+
     /**
      * Like {@link #wtf(String, String)}, but also writes to the log the full
      * call stack.
@@ -263,6 +307,10 @@ public final class Log {
      */
     public static int wtfStack(String tag, String msg) {
         return wtf(LOG_ID_MAIN, tag, msg, null, true, false);
+    }
+
+    /** @hide */ public static int wtfStack(String msg) {
+        return wtfStack(tag(), msg);
     }
 
     /**
@@ -273,6 +321,10 @@ public final class Log {
      */
     public static int wtf(String tag, Throwable tr) {
         return wtf(LOG_ID_MAIN, tag, tr.getMessage(), tr, false, false);
+    }
+
+    /** @hide */ public static int wtf(Throwable tr) {
+        return wtf(tag(), tr);
     }
 
     /**
@@ -289,7 +341,10 @@ public final class Log {
     static int wtf(int logId, String tag, String msg, Throwable tr, boolean localStack,
             boolean system) {
         TerribleFailure what = new TerribleFailure(msg, tr);
-        int bytes = println_native(logId, ASSERT, tag, msg + '\n'
+        // Only mark this as ERROR, do not use ASSERT since that should be
+        // reserved for cases where the system is guaranteed to abort.
+        // The onTerribleFailure call does not always cause a crash.
+        int bytes = println_native(logId, ERROR, tag, msg + '\n'
                 + getStackTraceString(localStack ? what : tr));
         sWtfHandler.onTerribleFailure(tag, what, system);
         return bytes;
@@ -362,4 +417,12 @@ public final class Log {
 
     /** @hide */ public static native int println_native(int bufID,
             int priority, String tag, String msg);
+
+    private static String tag() {
+        String className = new Exception().getStackTrace()[1].getClassName();
+        if (className.length() > 23) {
+            className = className.substring(0, Math.min(className.length(), 23));
+        }
+        return className.substring(className.lastIndexOf('.') + 1);
+    }
 }
