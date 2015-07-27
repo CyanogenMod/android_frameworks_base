@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Разрешение доступа к службе отпечатков пальцев. Приложение сможет добавлять, удалять, редактировать и использовать для авторизации отпечатки пальцев</string>
   <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
   <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
+  <string name="silent_mode_priority">Важные</string>
+  <string name="silent_mode_none">Нет</string>
 </resources>

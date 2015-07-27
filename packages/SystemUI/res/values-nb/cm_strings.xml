@@ -77,6 +77,9 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Batterimodus: strømsparing.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Batterimodus: balansert.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Batterimodus: ytelse.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batterimodus er endret til strømsparingsmodus.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Batterimodus er endret til balansert modus.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Batterimodus er endret til ytelsesmodus.</string>
   <string name="accessibility_quick_settings_profiles_off">Profiler av.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s </xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiler deaktivert.</string>
@@ -88,6 +91,10 @@
   <string name="accessibility_quick_settings_sync_changed_off">Synkronisering avskrudd.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Synkronisering aktivert.</string>
   <string name="accessibility_quick_settings_usb_tether_off">USB tilknytning av.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">USB-Internett-deling er på.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">USB-Internett-deling er slått av.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">USB-Internett-deling er slått på.</string>
+  <string name="accessibility_quick_settings_visualizer">Visualiserer.</string>
   <string name="accessibility_dpad_left">Markør til venstre</string>
   <string name="accessibility_dpad_right">Markør til høyre</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>
@@ -146,4 +153,10 @@
   <string name="interruption_level_silent">Stille</string>
   <string name="zen_silent_with_warning">Ingen avbrudd, unntatt alarmer.</string>
   <string name="quick_settings_remove">Fjern flis</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dynamisk flis</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Neste alarm</string>
+  <string name="dynamic_qs_tile_ime_selector_label">IME-velger</string>
+  <string name="dynamic_qs_tile_su_label">Root-tilgang</string>
+  <string name="fingerprint_try_again_hint">Skann på nytt</string>
+  <string name="accessibility_dock_battery_level">Dokkingstasjonens batteri <xliff:g id="number"> %d</xliff:g> prosent.</string>
 </resources>
