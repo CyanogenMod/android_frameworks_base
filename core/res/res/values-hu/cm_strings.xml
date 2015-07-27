@@ -205,4 +205,6 @@
   <string name="fingerprint_default_name">Ujjlenyomat <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">hozzáférés az ujjlenyomat szolgáltatáshoz</string>
   <string name="permdesc_accessFingerprintService">Lehetővé teszi az alkalmazás számára, hogy hozzáférjen az ujjlenyomat szolgáltatáshoz. Az alkalmazás hozzáadhat, törölhet, átnevezhet és újra hitelesíthet ujjlenyomatokat</string>
+  <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
+  <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse alacsony szintű akkumulátor használatára vonatkozó adatokat.</string>
 </resources>

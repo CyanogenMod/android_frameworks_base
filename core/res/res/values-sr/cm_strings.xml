@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Дозволи апликацији да приступи сервису отиска прста. Апликација може додати, обрисати, преименовати и потврђивати помоћу отиска прста</string>
   <string name="permlab_resetBatteryStats">ресетуј статистику батерије</string>
   <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
+  <string name="silent_mode_priority">Приоритет</string>
+  <string name="silent_mode_none">Ниједан</string>
 </resources>

@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Sallii sovelluksen käyttää sormenjälkipalvelua. Sovellus voi lisätä, poistaa, uudelleennimetä ja todentaa sormenjälkiä</string>
   <string name="permlab_resetBatteryStats">nollaa akun tilastot</string>
   <string name="permdesc_resetBatteryStats">Sallii sovelluksen nollata nykyiset alemman tason akun käytön tilastot.</string>
+  <string name="silent_mode_priority">Prioriteetti</string>
+  <string name="silent_mode_none">Ei mitään</string>
 </resources>

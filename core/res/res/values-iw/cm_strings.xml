@@ -147,8 +147,8 @@
   <string name="permdesc_accessTorchService">מאפשר ליישום לגשת לשירות הפנס (מבזק). לא אמור להידרש ליישומים רגילים.</string>
   <string name="permlab_preventpower">עקיפת כפתור ההפעלה</string>
   <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור ההפעלה.</string>
-  <string name="usb_extmedia_format_message">כל המידע על אחסון ה-USB (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
-  <string name="sd_extmedia_format_message">כל המידע על הכרטיס (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
+  <string name="usb_extmedia_format_message">כל המידע הנמצא על אחסון ה-USB (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
+  <string name="sd_extmedia_format_message">כל המידע הנמצא על הכרטיס (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
   <string name="sd_progress_unmounting">מבטל טעינת כרטיס זיכרון\u2026</string>
   <string name="sd_progress_erasing">מוחק כרטיס זיכרון\u2026</string>
   <string name="sd_format_error">לא ניתן למחוק את כרטיס הזיכרון.</string>
@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">אפשר ליישום לגשת לשירות טביעות אצבע. היישום יוכל להוסיף, למחוק, לשנות שם ולבצע אימות מול טביעות אצבע</string>
   <string name="permlab_resetBatteryStats">איפוס סטטיסטיקות סוללה</string>
   <string name="permdesc_resetBatteryStats">אפשר ליישום לאפס נתוני רמה-נמוכה של השימוש בסוללה.</string>
+  <string name="silent_mode_priority">עדיפות</string>
+  <string name="silent_mode_none">ללא</string>
 </resources>

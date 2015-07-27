@@ -206,4 +206,5 @@
   <string name="permlab_accessFingerprintService">adgang til fingeraftrykstjenesten</string>
   <string name="permdesc_accessFingerprintService">Gør det muligt for en app at få adgang til fingeraftrykstjenesten. Appen kan tilføje, slette, omdøbe og godkende i forhold til fingeraftryk</string>
   <string name="permlab_resetBatteryStats">nulstil batteristatistik</string>
+  <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
 </resources>
