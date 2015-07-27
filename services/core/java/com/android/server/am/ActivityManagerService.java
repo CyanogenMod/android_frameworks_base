@@ -12873,6 +12873,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                         || (!allUids && app.uid != callingUid)) {
                     continue;
                 }
+                if (app.processName.equals("system")) {
+                    continue;
+                }
                 if ((app.thread != null) && (!app.crashing && !app.notResponding)) {
                     // Generate process state info for running application
                     ActivityManager.RunningAppProcessInfo currApp =
