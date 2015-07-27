@@ -18561,7 +18561,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         int numBServices = 0;
         for (int i=N-1; i>=0; i--) {
             ProcessRecord app = mLruProcesses.get(i);
-            if (ProcessList.ENABLE_B_SERVICE_PROPAGATION && app.serviceb) {
+            if (ProcessList.ENABLE_B_SERVICE_PROPAGATION && app.serviceb
+                    && (app.curAdj==ProcessList.SERVICE_B_ADJ)) {
                 numBServices++;
                 for (int s=app.services.size()-1; s>=0; s--) {
                     ServiceRecord sr = app.services.valueAt(s);
