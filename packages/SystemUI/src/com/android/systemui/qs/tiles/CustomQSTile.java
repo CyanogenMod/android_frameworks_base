@@ -146,9 +146,12 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
         public int getTitle() {
             if (isDynamicTile()) {
-                return mContext.getResources().getIdentifier(
+                int resId = mContext.getResources().getIdentifier(
                         String.format("dynamic_qs_tile_%s_label", mTile.getTag()),
                             "string", mContext.getPackageName());
+                if (resId != 0) {
+                    return resId;
+                }
             }
             return R.string.quick_settings_custom_tile_detail_title;
         }
@@ -189,7 +192,11 @@ public class CustomQSTile extends QSTile<QSTile.State> {
                 TextView customTileContentDesc = (TextView) rootView
                         .findViewById(R.id.custom_qs_tile_content_description);
                 // icon is cached in state, fetch it
-                imageView.setImageDrawable(getState().icon.getDrawable(mContext));
+                Drawable d = getState().icon.getDrawable(mContext);
+                imageView.setImageDrawable(d);
+                if (d instanceof AnimatedVectorDrawable) {
+                    ((AnimatedVectorDrawable) d).start();
+                }
                 customTileTitle.setText(mTile.getCustomTile().label);
                 if (isDynamicTile()) {
                     customTilePkg.setText(R.string.quick_settings_dynamic_tile_detail_title);
