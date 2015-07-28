@@ -7470,6 +7470,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                             bp.perm = p;
                             bp.uid = pkg.applicationInfo.uid;
                             bp.sourcePackage = p.info.packageName;
+                            bp.allowViaWhitelist = p.info.allowViaWhitelist;
                             p.info.flags |= PermissionInfo.FLAG_INSTALLED;
                             if ((parseFlags&PackageParser.PARSE_CHATTY) != 0) {
                                 if (r == null) {
