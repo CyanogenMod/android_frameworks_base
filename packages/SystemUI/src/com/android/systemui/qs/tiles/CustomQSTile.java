@@ -146,9 +146,12 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
         public int getTitle() {
             if (isDynamicTile()) {
-                return mContext.getResources().getIdentifier(
+                int resId = mContext.getResources().getIdentifier(
                         String.format("dynamic_qs_tile_%s_label", mTile.getTag()),
                             "string", mContext.getPackageName());
+                if (resId != 0) {
+                    return resId;
+                }
             }
             return R.string.quick_settings_custom_tile_detail_title;
         }
