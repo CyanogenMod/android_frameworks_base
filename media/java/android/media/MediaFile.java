@@ -69,8 +69,10 @@ public class MediaFile {
     
     // More video file types
     public static final int FILE_TYPE_MP2PS   = 200;
+    public static final int FILE_TYPE_DIVX    = 201;
+    public static final int FILE_TYPE_FLV     = 202;
     private static final int FIRST_VIDEO_FILE_TYPE2 = FILE_TYPE_MP2PS;
-    private static final int LAST_VIDEO_FILE_TYPE2 = FILE_TYPE_MP2PS;
+    private static final int LAST_VIDEO_FILE_TYPE2 = FILE_TYPE_FLV;
 
     // Image file types
     public static final int FILE_TYPE_JPEG    = 31;
@@ -87,9 +89,10 @@ public class MediaFile {
     public static final int FILE_TYPE_PLS      = 42;
     public static final int FILE_TYPE_WPL      = 43;
     public static final int FILE_TYPE_HTTPLIVE = 44;
+    public static final int FILE_TYPE_DASH     = 45;
 
     private static final int FIRST_PLAYLIST_FILE_TYPE = FILE_TYPE_M3U;
-    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_HTTPLIVE;
+    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_DASH;
 
     // Drm file types
     public static final int FILE_TYPE_FL      = 51;
@@ -240,6 +243,9 @@ public class MediaFile {
         addFileType("ZIP", FILE_TYPE_ZIP, "application/zip");
         addFileType("MPG", FILE_TYPE_MP2PS, "video/mp2p");
         addFileType("MPEG", FILE_TYPE_MP2PS, "video/mp2p");
+        addFileType("DIVX", FILE_TYPE_DIVX, "video/divx");
+        addFileType("FLV", FILE_TYPE_FLV, "video/flv");
+        addFileType("MPD", FILE_TYPE_DASH, "application/dash+xml");
     }
 
     public static boolean isAudioFileType(int fileType) {
