@@ -219,7 +219,9 @@ static void
 android_media_MediaRecorder_setVideoEncoder(JNIEnv *env, jobject thiz, jint ve)
 {
     ALOGV("setVideoEncoder(%d)", ve);
-    if (ve < VIDEO_ENCODER_DEFAULT || ve >= VIDEO_ENCODER_LIST_END) {
+    if (ve < VIDEO_ENCODER_DEFAULT ||
+            (ve >= VIDEO_ENCODER_LIST_END && ve <= VIDEO_ENCODER_LIST_VENDOR_START) ||
+            ve >= VIDEO_ENCODER_LIST_VENDOR_END) {
         jniThrowException(env, "java/lang/IllegalArgumentException", "Invalid video encoder");
         return;
     }
