@@ -18,9 +18,9 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:orientation="vertical"
-             android:paddingTop="16dp"
-             android:paddingStart="16dp"
-             android:paddingEnd="16dp">
+             android:paddingTop="@dimen/detail_exterior_padding"
+             android:paddingStart="@dimen/detail_exterior_padding"
+             android:paddingEnd="@dimen/detail_exterior_padding">
 
     <LinearLayout android:layout_height="wrap_content"
             android:layout_width="match_parent"
