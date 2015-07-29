@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.android.systemui.qs.QSDetailItemsGrid;
@@ -214,6 +215,18 @@ public class CustomQSTile extends QSTile<QSTile.State> {
                                 .createAndSetAdapter(mTile.getPackage(),
                                         mExpandedStyle.getExpandedItems());
                         mGridAdapter.setOnPseudoGridItemClickListener(this);
+                        break;
+                    case CustomTile.ExpandedStyle.REMOTE_STYLE:
+                        rootView = new LinearLayout(context);
+                        RemoteViews remoteViews = mExpandedStyle.getContentViews();
+                        //TODO: Sanitize the incoming view?
+                        if (remoteViews != null) {
+                            View localView = mTile.getCustomTile().expandedStyle.getContentViews()
+                                    .apply(context, (ViewGroup) rootView);
+                            ((LinearLayout) rootView).addView(localView);
+                        } else {
+                            Log.d(TAG, "Unable to add null remoteview for " + mTile.getOpPkg());
+                        }
                         break;
                     case CustomTile.ExpandedStyle.LIST_STYLE:
                     default:
