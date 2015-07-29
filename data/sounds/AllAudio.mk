@@ -23,7 +23,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/alarms/ogg/Argon.ogg:system/media/audio/alarms/Argon.ogg \
     $(LOCAL_PATH)/alarms/ogg/Barium.ogg:system/media/audio/alarms/Barium.ogg \
     $(LOCAL_PATH)/alarms/ogg/Carbon.ogg:system/media/audio/alarms/Carbon.ogg \
-    $(LOCAL_PATH)/alarms/ogg/Fermium.ogg:system/media/audio/alarms/Fermium.ogg \
     $(LOCAL_PATH)/alarms/ogg/Helium.ogg:system/media/audio/alarms/Helium.ogg \
     $(LOCAL_PATH)/alarms/ogg/Krypton.ogg:system/media/audio/alarms/Krypton.ogg \
     $(LOCAL_PATH)/alarms/ogg/Neon.ogg:system/media/audio/alarms/Neon.ogg \
