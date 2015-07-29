@@ -19,6 +19,8 @@ package com.android.systemui.qs.tiles;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.ThemeConfig;
 import android.net.Uri;
 import android.os.Process;
 import android.os.UserHandle;
@@ -29,9 +31,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.android.systemui.qs.QSDetailItemsGrid;
@@ -215,6 +219,19 @@ public class CustomQSTile extends QSTile<QSTile.State> {
                                         mExpandedStyle.getExpandedItems());
                         mGridAdapter.setOnPseudoGridItemClickListener(this);
                         break;
+                    case CustomTile.ExpandedStyle.REMOTE_STYLE:
+                        rootView = (LinearLayout) LayoutInflater.from(context)
+                                .inflate(R.layout.qs_custom_detail_remote, parent, false);
+                        RemoteViews remoteViews = mExpandedStyle.getContentViews();
+                        if (remoteViews != null) {
+                            View localView = mTile.getCustomTile().expandedStyle.getContentViews()
+                                    .apply(context, (ViewGroup) rootView,
+                                            mHost.getOnClickHandler(), getThemePackageName());
+                            ((LinearLayout) rootView).addView(localView);
+                        } else {
+                            Log.d(TAG, "Unable to add null remoteview for " + mTile.getOpPkg());
+                        }
+                        break;
                     case CustomTile.ExpandedStyle.LIST_STYLE:
                     default:
                         rootView = QSDetailItemsList.convertOrInflate(context, convertView, parent);
@@ -250,6 +267,12 @@ public class CustomQSTile extends QSTile<QSTile.State> {
             } catch (PendingIntent.CanceledException e) {
                 //
             }
+        }
+
+        private String getThemePackageName() {
+            final Configuration config = mContext.getResources().getConfiguration();
+            final ThemeConfig themeConfig = config != null ? config.themeConfig : null;
+            return themeConfig != null ? themeConfig.getOverlayForStatusBar() : null;
         }
     }
 }

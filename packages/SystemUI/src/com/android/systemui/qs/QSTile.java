@@ -30,6 +30,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.RemoteViews;
 import com.android.systemui.qs.QSTile.State;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.CastController;
@@ -299,6 +300,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         void startSettingsActivity(Intent intent);
         void warn(String message, Throwable t);
         void collapsePanels();
+        RemoteViews.OnClickHandler getOnClickHandler();
         Looper getLooper();
         Context getContext();
         Collection<QSTile<?>> getTiles();
