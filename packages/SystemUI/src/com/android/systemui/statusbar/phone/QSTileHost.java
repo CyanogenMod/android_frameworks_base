@@ -32,6 +32,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.logging.MetricsLogger;
+import android.widget.RemoteViews;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
@@ -196,6 +197,11 @@ public class QSTileHost implements QSTile.Host, Tunable {
     @Override
     public void collapsePanels() {
         mStatusBar.postAnimateCollapsePanels();
+    }
+
+    @Override
+    public RemoteViews.OnClickHandler getOnClickHandler() {
+        return mStatusBar.getOnClickHandler();
     }
 
     @Override
