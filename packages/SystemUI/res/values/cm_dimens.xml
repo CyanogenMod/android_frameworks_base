@@ -37,4 +37,6 @@
     <!-- Padding end for weather text -->
     <dimen name="status_bar_weather_padding_end">16dp</dimen>
 
+    <dimen name="detail_exterior_padding">16dp</dimen>
+
 </resources>
