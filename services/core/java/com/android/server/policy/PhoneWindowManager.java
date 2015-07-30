@@ -216,6 +216,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
             .build();
 
+    /**
+     * Broadcast Action: WiFi Display video is enabled or disabled
+     *
+     * <p>The intent will have the following extra values:</p>
+     * <ul>
+     *    <li><em>state</em> - 0 for disabled, 1 for enabled. </li>
+     * </ul>
+     */
+
+    private static final String ACTION_WIFI_DISPLAY_VIDEO =
+                                        "org.codeaurora.intent.action.WIFI_DISPLAY_VIDEO";
+
+
     // The panic gesture may become active only after the keyguard is dismissed and the immersive
     // app shows again. If that doesn't happen for 30s we drop the gesture.
     private static final long PANIC_GESTURE_EXPIRATION = 30000;
@@ -635,6 +648,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int MSG_POWER_DELAYED_PRESS = 13;
     private static final int MSG_POWER_LONG_PRESS = 14;
     private static final int MSG_UPDATE_DREAMING_SLEEP_TOKEN = 15;
+    boolean mWifiDisplayConnected = false;
+    int mWifiDisplayCustomRotation = -1;
 
     private class PolicyHandler extends Handler {
         @Override
@@ -1508,6 +1523,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mWindowManagerFuncs.registerPointerEventListener(mSystemGestures);
 
         mVibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        /* Register for WIFI Display Intents */
+        IntentFilter wifiDisplayFilter = new IntentFilter(ACTION_WIFI_DISPLAY_VIDEO);
+        Intent wifidisplayIntent = context.registerReceiver(
+                                        mWifiDisplayReceiver, wifiDisplayFilter);
         mLongPressVibePattern = getLongIntArray(mContext.getResources(),
                 com.android.internal.R.array.config_longPressVibePattern);
         mVirtualKeyVibePattern = getLongIntArray(mContext.getResources(),
@@ -5452,6 +5472,24 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+
+    BroadcastReceiver mWifiDisplayReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+            if (action.equals(ACTION_WIFI_DISPLAY_VIDEO)) {
+                int state = intent.getIntExtra("state", 0);
+                if(state == 1) {
+                    mWifiDisplayConnected = true;
+                } else {
+                    mWifiDisplayConnected = false;
+                }
+                mWifiDisplayCustomRotation =
+                    intent.getIntExtra("wfd_UIBC_rot", -1);
+                updateRotation(true);
+            }
+        }
+    };
+
     // Called on the PowerManager's Notifier thread.
     @Override
     public void startedGoingToSleep(int why) {
@@ -5823,10 +5861,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // enable 180 degree rotation while docked.
                 preferredRotation = mDeskDockEnablesAccelerometer
                         ? sensorRotation : mDeskDockRotation;
-            } else if (mHdmiPlugged && mDemoHdmiRotationLock) {
+            } else if ((mHdmiPlugged || mWifiDisplayConnected) && mDemoHdmiRotationLock) {
                 // Ignore sensor when plugged into HDMI when demo HDMI rotation lock enabled.
                 // Note that the dock orientation overrides the HDMI orientation.
                 preferredRotation = mDemoHdmiRotation;
+            } else if (mWifiDisplayConnected && (mWifiDisplayCustomRotation > -1)) {
+                // Ignore sensor when WFD is active and UIBC rotation is enabled
+                 preferredRotation = mWifiDisplayCustomRotation;
             } else if (mHdmiPlugged && mDockMode == Intent.EXTRA_DOCK_STATE_UNDOCKED
                     && mUndockedHdmiRotation >= 0) {
                 // Ignore sensor when plugged into HDMI and an undocked orientation has
