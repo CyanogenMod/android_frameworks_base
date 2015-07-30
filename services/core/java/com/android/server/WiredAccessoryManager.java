@@ -390,7 +390,7 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
             } else {
                 Slog.w(TAG, "This kernel does not have samsung usb dock audio support");
             }
-            
+
             // Monitor HDMI
             //
             // If the kernel has support for the "hdmi_audio" switch, use that.  It will be

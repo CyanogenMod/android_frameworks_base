@@ -537,9 +537,9 @@ public class AudioService extends IAudioService.Stub {
 
     private boolean mDockAudioMediaEnabled = true;
 
-    private boolean mForceAnalogDeskDock;  
-    private boolean mForceAnalogCarDock;  
- 
+    private boolean mForceAnalogDeskDock;
+    private boolean mForceAnalogCarDock;
+
     private int mDockState = Intent.EXTRA_DOCK_STATE_UNDOCKED;
 
     // Used when safe volume warning message display is requested by setStreamVolume(). In this
@@ -646,11 +646,11 @@ public class AudioService extends IAudioService.Stub {
         mMasterVolumeRamp = context.getResources().getIntArray(
                 com.android.internal.R.array.config_masterVolumeRamp);
 
-        mForceAnalogDeskDock = mContext.getResources().getBoolean(  
-                com.android.internal.R.bool.config_forceAnalogDeskDock);  
-  
-        mForceAnalogCarDock = mContext.getResources().getBoolean(  
-                com.android.internal.R.bool.config_forceAnalogCarDock);    
+        mForceAnalogDeskDock = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_forceAnalogDeskDock);
+
+        mForceAnalogCarDock = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_forceAnalogCarDock);
 
         // read this in before readPersistedSettings() because updateStreamVolumeAlias needs it
         mLinkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
