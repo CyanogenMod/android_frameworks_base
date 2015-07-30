@@ -383,6 +383,14 @@ final class WiredAccessoryManager implements WiredAccessoryCallbacks {
                 Slog.w(TAG, "This kernel does not have usb audio support");
             }
 
+            // Monitor Samsung USB audio
+            uei = new UEventInfo("dock", BIT_USB_HEADSET_DGTL, BIT_USB_HEADSET_ANLG, 0);
+            if (uei.checkSwitchExists()) {
+                retVal.add(uei);
+            } else {
+                Slog.w(TAG, "This kernel does not have samsung usb dock audio support");
+            }
+
             // Monitor HDMI
             //
             // If the kernel has support for the "hdmi_audio" switch, use that.  It will be
