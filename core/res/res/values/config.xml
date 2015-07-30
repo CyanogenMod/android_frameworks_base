@@ -626,6 +626,14 @@
 
     <bool name="config_carDockEnablesAccelerometer">true</bool>
 
+    <!-- Control whether a desk dock event should override the default bluetooth  
+         audio routing, FORCE_BT_DESK_DOCK, with an analog dock, FORCE_ANALOG_DOCK. -->  
+    <bool name="config_forceAnalogDeskDock">false</bool>  
+  
+    <!-- Control whether a car dock event should override the default bluetooth  
+         audio routing, FORCE_BT_CAR_DOCK, with an analog dock, FORCE_ANALOG_DOCK. -->  
+    <bool name="config_forceAnalogCarDock">false</bool>    
+    
     <!-- HDMI behavior -->
 
     <!-- The number of degrees to rotate the display when the device has HDMI connected
