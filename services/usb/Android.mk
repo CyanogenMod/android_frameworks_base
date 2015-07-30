@@ -9,6 +9,4 @@ LOCAL_SRC_FILES += \
 
 LOCAL_JAVA_LIBRARIES := services.core
 
-LOCAL_JAVA_LIBRARIES += org.cyanogenmod.platform.sdk
-
 include $(BUILD_STATIC_JAVA_LIBRARY)

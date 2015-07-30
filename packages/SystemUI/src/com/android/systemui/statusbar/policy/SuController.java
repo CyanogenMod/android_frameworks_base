@@ -16,13 +16,10 @@
 
 package com.android.systemui.statusbar.policy;
 
-import java.util.List;
-
 public interface SuController {
     void addCallback(Callback callback);
     void removeCallback(Callback callback);
     boolean hasActiveSessions();
-    List<String> getPackageNamesWithActiveSuSessions();
 
     public interface Callback {
         void onSuSessionsChanged();

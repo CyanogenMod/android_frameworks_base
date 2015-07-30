@@ -15,6 +15,4 @@ LOCAL_JAVA_LIBRARIES += services.accessibility
 
 LOCAL_JAVA_LIBRARIES += org.cyanogenmod.hardware
 
-LOCAL_JAVA_LIBRARIES += org.cyanogenmod.platform.sdk
-
 include $(BUILD_STATIC_JAVA_LIBRARY)
