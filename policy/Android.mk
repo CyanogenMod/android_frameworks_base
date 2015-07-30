@@ -7,8 +7,6 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
             
 LOCAL_MODULE := android.policy
-LOCAL_STATIC_JAVA_LIBRARIES := \
-    org.cyanogenmod.platform.sdk
 
 include $(BUILD_JAVA_LIBRARY)
 
