@@ -49,6 +49,7 @@
 #include <gui/Surface.h>
 #include <binder/IPCThreadState.h>
 #include <binder/IServiceManager.h>
+#include <dlfcn.h>
 
 #include "android_util_Binder.h"
 // ----------------------------------------------------------------------------
@@ -135,6 +136,153 @@ void JNIMediaPlayerListener::notify(int msg, int ext1, int ext2, const Parcel *o
         LOGW_EX(env);
         env->ExceptionClear();
     }
+}
+
+
+static const char *EXTMEDIAJNI_LIB_NAME             = "libextmedia_jni.so";
+static const char *kCreateJNIExtMediaPlayerListener = "CreateJNIExtMediaPlayerListener";
+static const char *kCheckExtMedia                   = "checkExtMedia";
+static const char *kCreateNativeQCMediaPlayer       = "CreateNativeQCMediaPlayer";
+typedef MediaPlayerListener* (*CreateJNIExtMediaPlayerListenerFn)(JNIEnv *, jobject, jobject, sp<MediaPlayerListener> listener);
+typedef bool (*CheckExtMediaFn)(JNIEnv *env, jobject);
+typedef MediaPlayer* (*CreateNativeQCMediaPlayerFn)();
+
+
+
+class JNIMediaPlayerFactory {
+  public:
+    JNIMediaPlayerFactory() {};
+    static bool CheckAndCreateExtMediaPlayer(JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> &listener, sp<MediaPlayer> &mp);
+  private:
+    static void *mLibHandle;
+    static void loadLib();
+
+    static CreateJNIExtMediaPlayerListenerFn  loadJNIExtMediaPlayerListener();
+    static CreateJNIExtMediaPlayerListenerFn sExtDashListnerFnPtr;
+
+    static CheckExtMediaFn sExtMediaFn;
+    static CheckExtMediaFn loadExtMedia();
+
+    static CreateNativeQCMediaPlayerFn  sNativeQCMediaPlayerFn;
+    static CreateNativeQCMediaPlayerFn loadNativeQCMediaPlayer();
+
+    static sp<MediaPlayerListener> createExtMediaPlayerListener(JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> listener);
+    static bool checkExtMedia(JNIEnv *env, jobject thiz);
+    static void CreateNativeQCMediaPlayer(sp<MediaPlayer> &mp);
+};
+
+void *JNIMediaPlayerFactory::mLibHandle = NULL;
+
+CreateJNIExtMediaPlayerListenerFn JNIMediaPlayerFactory::sExtDashListnerFnPtr =
+        JNIMediaPlayerFactory::loadJNIExtMediaPlayerListener();
+
+CheckExtMediaFn JNIMediaPlayerFactory::sExtMediaFn =
+        JNIMediaPlayerFactory::loadExtMedia();
+
+CreateNativeQCMediaPlayerFn JNIMediaPlayerFactory::sNativeQCMediaPlayerFn =
+        JNIMediaPlayerFactory::loadNativeQCMediaPlayer();
+
+
+void JNIMediaPlayerFactory::loadLib()
+{
+    if (!mLibHandle) {
+        mLibHandle = ::dlopen(EXTMEDIAJNI_LIB_NAME, RTLD_LAZY);
+        if (!mLibHandle) {
+            ALOGV("%s", dlerror());
+            return;
+        }
+    ALOGV("Opened %s", EXTMEDIAJNI_LIB_NAME);
+  }
+}
+
+CreateJNIExtMediaPlayerListenerFn JNIMediaPlayerFactory::loadJNIExtMediaPlayerListener()
+{
+    loadLib();
+    CreateJNIExtMediaPlayerListenerFn  pCreateExtDashListnerFnPtr = NULL;
+    if (mLibHandle != NULL) {
+        pCreateExtDashListnerFnPtr = (CreateJNIExtMediaPlayerListenerFn)
+            dlsym(mLibHandle, kCreateJNIExtMediaPlayerListener);
+        if (pCreateExtDashListnerFnPtr == NULL) {
+            ALOGW("Failed to load symbol %s : %s", kCreateJNIExtMediaPlayerListener, dlerror());
+        }
+    }
+    return pCreateExtDashListnerFnPtr;
+}
+
+CheckExtMediaFn JNIMediaPlayerFactory::loadExtMedia()
+{
+    loadLib();
+    CheckExtMediaFn pCheckExtMediaFnPtr = NULL;
+    if (mLibHandle != NULL) {
+        pCheckExtMediaFnPtr = (CheckExtMediaFn)dlsym(mLibHandle, kCheckExtMedia);
+        if (pCheckExtMediaFnPtr == NULL) {
+            ALOGW("Failed to load symbol %s : %s", kCheckExtMedia, dlerror());
+        }
+    }
+    return pCheckExtMediaFnPtr;
+}
+
+CreateNativeQCMediaPlayerFn JNIMediaPlayerFactory::loadNativeQCMediaPlayer()
+{
+    loadLib();
+    CreateNativeQCMediaPlayerFn pCreateNativeQCMediaPlayerFnPtr = NULL;
+    if (mLibHandle != NULL) {
+        pCreateNativeQCMediaPlayerFnPtr = (CreateNativeQCMediaPlayerFn)
+            dlsym(mLibHandle, kCreateNativeQCMediaPlayer);
+        if (pCreateNativeQCMediaPlayerFnPtr == NULL) {
+            ALOGW("Failed to load symbol %s : %s", kCreateNativeQCMediaPlayer, dlerror());
+        }
+    }
+    return pCreateNativeQCMediaPlayerFnPtr;
+}
+
+
+sp<MediaPlayerListener> JNIMediaPlayerFactory::createExtMediaPlayerListener(JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> listener)
+{
+    if (checkExtMedia(env, thiz)) {
+        if (sExtDashListnerFnPtr ) {
+            listener = (*sExtDashListnerFnPtr)(env, thiz, weak_this, listener);
+            if (listener != NULL) {
+                ALOGE("JNIMediaPlayerFactory: createExtMediaPlayerListener : success");
+            }
+        }
+    }
+    return listener;
+}
+
+void JNIMediaPlayerFactory::CreateNativeQCMediaPlayer(sp<MediaPlayer> &mp)
+{
+    if (sNativeQCMediaPlayerFn) {
+        mp = (*sNativeQCMediaPlayerFn)();
+        if (mp != NULL) {
+            ALOGE("JNIMediaPlayerFactory:  CreateNativeQCMediaPlayer : Success");
+        }
+    }
+}
+
+
+bool JNIMediaPlayerFactory::checkExtMedia(JNIEnv *env, jobject thiz)
+{
+    bool bIsQCMediaPlayerPresent = false;
+    if (sExtMediaFn) {
+        bIsQCMediaPlayerPresent = (*sExtMediaFn)(env, thiz);
+    }
+    ALOGE("JNIMediaPlayerFactory: bIsQCMediaPlayerPresent %d", bIsQCMediaPlayerPresent);
+    return bIsQCMediaPlayerPresent;
+}
+
+bool JNIMediaPlayerFactory::CheckAndCreateExtMediaPlayer(
+         JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> &listener, sp<MediaPlayer> &mp)
+{
+    bool bOk = false;
+    listener = createExtMediaPlayerListener(env, thiz, weak_this, listener);
+    if (listener != NULL && checkExtMedia(env,thiz)) {
+        CreateNativeQCMediaPlayer(mp);
+        if (mp != NULL) {
+            bOk = true;
+        }
+    }
+    return bOk;
 }
 
 // ----------------------------------------------------------------------------
@@ -868,14 +1016,26 @@ static void
 android_media_MediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 {
     ALOGV("native_setup");
-    sp<MediaPlayer> mp = new MediaPlayer();
+
+    sp<MediaPlayer> mp = NULL;
+
+    bool bOk = false;
+    JNIMediaPlayerFactory *jniMediaPlayerFactory = new JNIMediaPlayerFactory();
+
+    sp<MediaPlayerListener> listener = new JNIMediaPlayerListener(env, thiz, weak_this);
+
+    if (jniMediaPlayerFactory) {
+        bOk = jniMediaPlayerFactory->CheckAndCreateExtMediaPlayer(env, thiz, weak_this, listener, mp);
+        delete(jniMediaPlayerFactory);
+    }
+
+    if (!bOk){
+        mp = new MediaPlayer();
+    }
     if (mp == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
         return;
     }
-
-    // create new listener and give it to MediaPlayer
-    sp<JNIMediaPlayerListener> listener = new JNIMediaPlayerListener(env, thiz, weak_this);
     mp->setListener(listener);
 
     // Stow our new C++ MediaPlayer in an opaque field in the Java object.

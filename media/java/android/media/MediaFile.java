@@ -115,9 +115,10 @@ public class MediaFile {
     public static final int FILE_TYPE_PLS      = 42;
     public static final int FILE_TYPE_WPL      = 43;
     public static final int FILE_TYPE_HTTPLIVE = 44;
+    public static final int FILE_TYPE_DASH     = 45;
 
     private static final int FIRST_PLAYLIST_FILE_TYPE = FILE_TYPE_M3U;
-    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_HTTPLIVE;
+    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_DASH;
 
     // Drm file types
     public static final int FILE_TYPE_FL      = 51;
@@ -281,6 +282,7 @@ public class MediaFile {
         addFileType("MPEG", FILE_TYPE_MP2PS, "video/mp2p");
         addFileType("DIVX", FILE_TYPE_DIVX, "video/divx");
         addFileType("FLV", FILE_TYPE_FLV, "video/flv");
+        addFileType("MPD", FILE_TYPE_DASH, "application/dash+xml");
         addFileType("QCP", FILE_TYPE_QCP, "audio/qcelp");
         addFileType("AC3", FILE_TYPE_AC3, "audio/ac3");
         addFileType("EC3", FILE_TYPE_EC3, "audio/eac3");
