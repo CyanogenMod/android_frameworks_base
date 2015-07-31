@@ -206,6 +206,12 @@ public final class Call {
          */
         public static final int CAPABILITY_CAN_PAUSE_VIDEO = 0x00100000;
 
+        /**
+         * Call has voice privacy capability.
+         * @hide
+         */
+        public static final int CAPABILITY_VOICE_PRIVACY = 0x00400000;
+
         //******************************************************************************************
         // Next CAPABILITY value: 0x00004000
         //******************************************************************************************
@@ -332,6 +338,9 @@ public final class Call {
             }
             if (can(capabilities, CAPABILITY_CAN_PAUSE_VIDEO)) {
                 builder.append(" CAPABILITY_CAN_PAUSE_VIDEO");
+            }
+            if (can(capabilities, CAPABILITY_VOICE_PRIVACY)) {
+                builder.append(" CAPABILITY_VOICE_PRIVACY");
             }
             builder.append("]");
             return builder.toString();
