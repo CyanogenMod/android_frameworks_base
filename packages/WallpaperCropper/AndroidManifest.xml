@@ -20,6 +20,9 @@
         package="com.android.wallpapercropper" >
         <uses-permission android:name="android.permission.SET_WALLPAPER" />
         <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+        <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+        <uses-permission android:name="android.permission.SET_KEYGUARD_WALLPAPER" />
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
         <application android:requiredForAllUsers="true">
         <activity
