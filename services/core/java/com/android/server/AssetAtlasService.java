@@ -416,8 +416,17 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
                 new Thread(worker, "Atlas Worker #" + (i + 1)).start();
             }
 
+            // If minBoot is true, we want to boot to the password screen ASAP.
+            // If minBoot is false, we can take our time since the result will be cached anyways.
+            boolean minBoot = SystemProperties.get("vold.decrypt").equals("trigger_restart_min_framework");
+            long timeout = minBoot ? 5 : 20;
+
             try {
-                signal.await(10, TimeUnit.SECONDS);
+                signal.await(timeout, TimeUnit.SECONDS);
+                if (results.size() == 0 && minBoot) {
+                    // Give it a bit more time
+                    signal.await(5, TimeUnit.SECONDS);
+                }
             } catch (InterruptedException e) {
                 Log.w(LOG_TAG, "Could not complete configuration computation");
                 return null;
@@ -430,14 +439,16 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
         }
 
         // Maximize the number of packed bitmaps, minimize the texture size
-        Collections.sort(results, new Comparator<WorkerResult>() {
-            @Override
-            public int compare(WorkerResult r1, WorkerResult r2) {
-                int delta = r2.count - r1.count;
-                if (delta != 0) return delta;
-                return r1.width * r1.height - r2.width * r2.height;
-            }
-        });
+        synchronized (results) {
+            Collections.sort(results, new Comparator<WorkerResult>() {
+                @Override
+                public int compare(WorkerResult r1, WorkerResult r2) {
+                    int delta = r2.count - r1.count;
+                    if (delta != 0) return delta;
+                    return r1.width * r1.height - r2.width * r2.height;
+                }
+            });
+        }
 
         if (DEBUG_ATLAS) {
             float delay = (System.nanoTime() - begin) / 1000.0f / 1000.0f / 1000.0f;
