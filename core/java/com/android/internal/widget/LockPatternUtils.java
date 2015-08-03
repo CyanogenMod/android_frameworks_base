@@ -1314,7 +1314,7 @@ public class LockPatternUtils {
      * @return Whether the visible pattern is enabled.
      */
     public boolean isVisiblePatternEnabled() {
-        return getBoolean(Settings.Secure.LOCK_PATTERN_VISIBLE, false);
+        return getBoolean(Settings.Secure.LOCK_PATTERN_VISIBLE, true);
     }
 
     /**
