@@ -59,6 +59,16 @@ public class CarrierText extends TextView {
         }
 
         @Override
+        public void onSimStateChanged(int subId, int slotId, IccCardConstants.State simState) {
+            updateCarrierText();
+        }
+
+        @Override
+        public void onKeyguardVisibilityChanged(boolean showing) {
+            updateCarrierText();
+        }
+
+        @Override
         void onAirplaneModeChanged(boolean on) {
             mAirplaneModeActive = on;
             if (mDisplayAirplaneMode) {
@@ -74,21 +84,33 @@ public class CarrierText extends TextView {
         @Override
         public void onScreenTurnedOn() {
             setSelected(true);
+            updateCarrierText();
         };
     };
     /**
      * The status of this lock screen. Primarily used for widgets on LockScreen.
      */
     private static enum StatusMode {
-        Normal, // Normal case (sim card present, it's not locked)
-        PersoLocked, // SIM card is 'perso locked'.
-        SimMissing, // SIM card is missing.
-        SimMissingLocked, // SIM card is missing, and device isn't provisioned; don't allow access
-        SimPukLocked, // SIM card is PUK locked because SIM entered wrong too many times
-        SimLocked, // SIM card is currently locked
-        SimPermDisabled, // SIM card is permanently disabled due to PUK unlock failure
-        SimNotReady, // SIM is not ready yet. May never be on devices w/o a SIM.
-        SimIoError; //The sim card is faulty
+        // Normal case (sim card present, it's not locked)
+        Normal,
+        // SIM card is 'perso locked'.
+        PersoLocked,
+        // SIM card is missing.
+        SimMissing,
+        // SIM card is missing, and device isn't provisioned; dont allow access
+        SimMissingLocked,
+        // SIM card is PUK locked because SIM entered wrong too many times
+        SimPukLocked,
+        // SIM card is currently locked
+        SimLocked,
+        // SIM card is permanently disabled due to PUK unlock failure
+        SimPermDisabled,
+        // SIM is not ready yet. May never be on devices w/o a SIM.
+        SimNotReady,
+        // The sim card is faulty
+        SimIoError,
+        // Unknown - The SIM card isn't really missing.
+        Unknown
     }
 
     public CarrierText(Context context) {
@@ -120,7 +142,9 @@ public class CarrierText extends TextView {
         CharSequence displayText = null;
         List<SubscriptionInfo> subs = mKeyguardUpdateMonitor.getSubscriptionInfo(false);
         final int N = subs.size();
+
         if (DEBUG) Log.d(TAG, "updateCarrierText(): " + N);
+
         for (int i = 0; i < N; i++) {
             int subId = subs.get(i).getSubscriptionId();
             State simState = mKeyguardUpdateMonitor.getSimState(subId);
@@ -133,6 +157,7 @@ public class CarrierText extends TextView {
                 displayText = concatenate(displayText, carrierTextForState, " | ");
             }
         }
+
         if (allSimsMissing) {
             if (N != 0) {
                 // Shows "No SIM card | Emergency calls only" on devices that are voice-capable.
@@ -141,7 +166,7 @@ public class CarrierText extends TextView {
                 // "No SIM card"
                 // Grab the first subscripton, because they all should contain the emergency text,
                 // described above.
-                displayText =  makeCarrierStringOnEmergencyCapable(
+                displayText = makeCarrierStringOnEmergencyCapable(
                         getContext().getText(R.string.keyguard_missing_sim_message_short),
                         subs.get(0).getCarrierName());
             } else {
@@ -201,7 +226,9 @@ public class CarrierText extends TextView {
             ServiceState serviceState, CharSequence text) {
         CharSequence carrierText = null;
         StatusMode status = getStatusForIccState(simState);
+
         switch (status) {
+            case Unknown:
             case Normal:
                 carrierText = text;
                 break;
@@ -307,7 +334,7 @@ public class CarrierText extends TextView {
             case PERM_DISABLED:
                 return StatusMode.SimPermDisabled;
             case UNKNOWN:
-                return StatusMode.SimMissing;
+                return StatusMode.Unknown;
             case CARD_IO_ERROR:
                 return StatusMode.SimIoError;
         }
