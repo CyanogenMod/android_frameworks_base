@@ -418,7 +418,7 @@ public class AssetAtlasService extends IAssetAtlas.Stub {
 
             // If minBoot is true, we want to boot to the password screen ASAP.
             // If minBoot is false, we can take our time since the result will be cached anyways.
-			boolean minBoot = SystemProperties.get("vold.decrypt").equals("1");
+			boolean minBoot = SystemProperties.get("vold.decrypt").equals("trigger_restart_min_framework");
             long timeout = minBoot ? 5 : 20;
 
             try {
