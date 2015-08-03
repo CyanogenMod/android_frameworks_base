@@ -742,6 +742,12 @@ public class DeviceIdleController extends SystemService
             return isPowerSaveWhitelistExceptIdleAppInternal(name);
         }
 
+        @Override public int getIdleStateDetailed() {
+            getContext().enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER,
+                    null);
+            return mState;
+        }
+
         @Override public boolean isPowerSaveWhitelistApp(String name) {
             return isPowerSaveWhitelistAppInternal(name);
         }
@@ -1187,7 +1193,7 @@ public class DeviceIdleController extends SystemService
 
     void scheduleReportActiveLocked(String activeReason, int activeUid) {
         Message msg = mHandler.obtainMessage(MSG_REPORT_ACTIVE, activeUid,
-                mState == STATE_IDLE ? 1 : 0, activeReason);
+            ((mState == STATE_IDLE) || (mState == STATE_IDLE_MAINTENANCE)) ? 1 : 0, activeReason);
         mHandler.sendMessage(msg);
     }
 
