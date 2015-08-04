@@ -59,6 +59,11 @@ public class CarrierText extends TextView {
         }
 
         @Override
+        public void onSimStateChanged(int subId, int slotId, IccCardConstants.State simState) {
+            updateCarrierText();
+        }
+
+        @Override
         void onAirplaneModeChanged(boolean on) {
             mAirplaneModeActive = on;
             if (mDisplayAirplaneMode) {
@@ -88,7 +93,8 @@ public class CarrierText extends TextView {
         SimLocked, // SIM card is currently locked
         SimPermDisabled, // SIM card is permanently disabled due to PUK unlock failure
         SimNotReady, // SIM is not ready yet. May never be on devices w/o a SIM.
-        SimIoError; //The sim card is faulty
+        SimIoError, //The sim card is faulty
+        Unknown; // Unknown - The SIM card isn't really missing.
     }
 
     public CarrierText(Context context) {
@@ -201,11 +207,17 @@ public class CarrierText extends TextView {
             ServiceState serviceState, CharSequence text) {
         CharSequence carrierText = null;
         StatusMode status = getStatusForIccState(simState);
+
+        if ((status == StatusMode.SimNotReady || status == StatusMode.Unknown)
+            && text != null && text.length() != 0)
+            status = StatusMode.Normal;
+
         switch (status) {
             case Normal:
                 carrierText = text;
                 break;
 
+            case Unknown:
             case SimNotReady:
                 // Null is reserved for denoting missing, in this case we have nothing to display.
                 carrierText = ""; // nothing to display yet.
@@ -307,7 +319,7 @@ public class CarrierText extends TextView {
             case PERM_DISABLED:
                 return StatusMode.SimPermDisabled;
             case UNKNOWN:
-                return StatusMode.SimMissing;
+                return StatusMode.Unknown;
             case CARD_IO_ERROR:
                 return StatusMode.SimIoError;
         }
