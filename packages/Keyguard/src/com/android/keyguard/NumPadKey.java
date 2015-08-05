@@ -130,7 +130,7 @@ public class NumPadKey extends ViewGroup {
             if (sKlondike != null && sKlondike.length > mDigit) {
                 String klondike = sKlondike[mDigit];
                 final int len = klondike.length();
-                if (len > 0  && !scramblePin) {
+                if (len > 0  || scramblePin) {
                     mKlondikeText.setText(klondike);
                 } else {
                     mKlondikeText.setVisibility(View.INVISIBLE);
