@@ -1337,7 +1337,7 @@
          <p>Protection level: signature
     -->
     <permission android:name="android.permission.MANAGE_DOCUMENTS"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature|system" />
 
     <!-- ================================== -->
     <!-- Permissions for screenlock         -->
