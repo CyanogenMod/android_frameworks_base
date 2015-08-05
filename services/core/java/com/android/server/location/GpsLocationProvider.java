@@ -1669,6 +1669,55 @@ public class GpsLocationProvider implements LocationProviderInterface {
     /**
      * called from native code to update SV info
      */
+    private void reportGnssSvStatus() {
+        int svCount = native_read_gnss_sv_status(mGnssSvs, mGnssSnrs, mGnssSvElevations
+            , mGnssSvAzimuths, mGnssSvEphemeris, mGnssSvAlmanac, mGnssSvInFix);
+        mListenerHelper.onGnssSvStatusChanged(
+                svCount,
+                mGnssSvs,
+                mGnssSnrs,
+                mGnssSvElevations,
+                mGnssSvAzimuths,
+                mGnssSvEphemeris,
+                mGnssSvAlmanac,
+                mGnssSvInFix);
+
+        if (VERBOSE) {
+            Log.v(TAG, "GNSS SV count: " + svCount +
+                    " ephemerisMask: " + Integer.toHexString(mSvMasks[EPHEMERIS_MASK]) +
+                    " almanacMask: " + Integer.toHexString(mSvMasks[ALMANAC_MASK]));
+            for (int i = 0; i < svCount; i++) {
+                Log.v(TAG, "sv: " + mGnssSvs[i] +
+                        " snr: " + mGnssSnrs[i] / 10 +
+                        " elev: " + mGnssSvElevations[i] +
+                        " azimuth: " + mGnssSvAzimuths[i] +
+                        ((mGnssSvEphemeris[i]) ? " E" : " ") +
+                        ((mGnssSvAlmanac[i]) ? " A" : " ") +
+                        ((mGnssSvInFix[i]) ? " U" : " "));
+            }
+        }
+        int svFixCount = 0;
+        for (boolean value : mGnssSvInFix) {
+            if (value) {
+                svFixCount++;
+            }
+        }
+        updateStatus(mStatus, svFixCount);
+
+
+        if (mNavigating && mStatus == LocationProvider.AVAILABLE && mLastFixTime > 0 &&
+            System.currentTimeMillis() - mLastFixTime > RECENT_FIX_TIMEOUT) {
+            // send an intent to notify that the GPS is no longer receiving fixes.
+            Intent intent = new Intent(LocationManager.GPS_FIX_CHANGE_ACTION);
+            intent.putExtra(LocationManager.EXTRA_GPS_ENABLED, false);
+            mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+            updateStatus(LocationProvider.TEMPORARILY_UNAVAILABLE, mSvCount);
+        }
+    }
+
+    /**
+     * called from native code to update SV info
+     */
     private void reportSvStatus() {
         int svCount = native_read_sv_status(mSvs, mSnrs, mSvElevations, mSvAzimuths, mSvMasks);
         mListenerHelper.onSvStatusChanged(
@@ -2336,6 +2385,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     // for GPS SV statistics
     private static final int MAX_SVS = 32;
+    private static final int MAX_GNSS_SVS = 256;
     private static final int EPHEMERIS_MASK = 0;
     private static final int ALMANAC_MASK = 1;
     private static final int USED_FOR_FIX_MASK = 2;
@@ -2347,6 +2397,16 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private float mSvAzimuths[] = new float[MAX_SVS];
     private int mSvMasks[] = new int[3];
     private int mSvCount;
+
+    // preallocated arrays, to avoid memory allocation in reportStatus()
+    private int mGnssSvs[] = new int[MAX_GNSS_SVS];
+    private float mGnssSnrs[] = new float[MAX_GNSS_SVS];
+    private float mGnssSvElevations[] = new float[MAX_GNSS_SVS];
+    private float mGnssSvAzimuths[] = new float[MAX_GNSS_SVS];
+    private boolean mGnssSvEphemeris[] = new boolean[MAX_GNSS_SVS];
+    private boolean mGnssSvAlmanac[] = new boolean[MAX_GNSS_SVS];
+    private boolean mGnssSvInFix[] = new boolean[MAX_GNSS_SVS];
+
     // preallocated to avoid memory allocation in reportNmea()
     private byte[] mNmeaBuffer = new byte[120];
 
@@ -2367,6 +2427,10 @@ public class GpsLocationProvider implements LocationProviderInterface {
             float[] elevations, float[] azimuths, int[] masks);
     private native int native_read_nmea(byte[] buffer, int bufferSize);
     private native void native_inject_location(double latitude, double longitude, float accuracy);
+    private native int native_read_gnss_sv_status(int[] svs, float[] snrs,
+            float[] elevations, float[] azimuths, boolean[] ephemeris, boolean[] almanac,
+            boolean[] infix);
+
 
     // XTRA Support
     private native void native_inject_time(long time, long timeReference, int uncertainty);
@@ -2416,4 +2480,3 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // GNSS Configuration
     private static native void native_configuration_update(String configData);
 }
-
