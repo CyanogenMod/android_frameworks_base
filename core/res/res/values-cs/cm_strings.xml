@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Umožní přístup ke službě otisku prstů. Aplikace může přidat, odebrat, přejmenovat a provést ověření otiskem prstů</string>
   <string name="permlab_resetBatteryStats">obnovení statistiky baterie</string>
   <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
+  <string name="silent_mode_priority">Priorita</string>
+  <string name="silent_mode_none">Žádný</string>
 </resources>
