@@ -1108,11 +1108,11 @@ public class LockPatternView extends View {
     protected void onRestoreInstanceState(Parcelable state) {
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setPattern(
-                DisplayMode.Correct,
-                mLockPatternUtils.stringToPattern(ss.getSerializedPattern()));
         mPatternDisplayMode = DisplayMode.values()[ss.getDisplayMode()];
         mPatternSize = ss.getPatternSize();
+        setPattern(
+                DisplayMode.Correct,
+                LockPatternUtils.stringToPattern(ss.getSerializedPattern(), mPatternSize));
         mInputEnabled = ss.isInputEnabled();
         mInStealthMode = ss.isInStealthMode();
         mEnableHapticFeedback = ss.isTactileFeedbackEnabled();

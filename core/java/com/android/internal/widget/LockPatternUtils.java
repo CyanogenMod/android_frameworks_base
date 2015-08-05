@@ -1086,9 +1086,17 @@ public class LockPatternUtils {
      * @return The pattern.
      */
     public List<LockPatternView.Cell> stringToPattern(String string) {
+        return stringToPattern(string, getLockPatternSize());
+    }
+
+    /**
+     * Deserialize a pattern.
+     * @return The pattern.
+     */
+    public static List<LockPatternView.Cell> stringToPattern(String string, byte size) {
         List<LockPatternView.Cell> result = Lists.newArrayList();
 
-        final byte size = getLockPatternSize();
+        byte originalLength = (byte) LockPatternView.Cell.sCells.length;
         LockPatternView.Cell.updateSize(size);
 
         final byte[] bytes = string.getBytes();
@@ -1096,6 +1104,8 @@ public class LockPatternUtils {
             byte b = bytes[i];
             result.add(LockPatternView.Cell.of(b / size, b % size, size));
         }
+
+        LockPatternView.Cell.updateSize(originalLength);
         return result;
     }
 
