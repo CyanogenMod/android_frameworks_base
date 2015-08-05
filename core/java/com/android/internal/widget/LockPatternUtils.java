@@ -1086,16 +1086,29 @@ public class LockPatternUtils {
      * @return The pattern.
      */
     public List<LockPatternView.Cell> stringToPattern(String string) {
+        return stringToPattern(string, getLockPatternSize());
+    }
+
+    /**
+     * Deserialize a pattern.
+     * @return The pattern.
+     */
+    public static List<LockPatternView.Cell> stringToPattern(String string, byte size) {
         List<LockPatternView.Cell> result = Lists.newArrayList();
 
-        final byte size = getLockPatternSize();
-        LockPatternView.Cell.updateSize(size);
+        LockPatternView.Cell[][] tmp = new LockPatternView.Cell[size][size];
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                tmp[i][j] = new LockPatternView.Cell(i, j, size);
+            }
+        }
 
         final byte[] bytes = string.getBytes();
         for (int i = 0; i < bytes.length; i++) {
             byte b = bytes[i];
-            result.add(LockPatternView.Cell.of(b / size, b % size, size));
+            result.add(LockPatternView.Cell.of(tmp, b / size, b % size, size));
         }
+
         return result;
     }
 
@@ -1126,6 +1139,26 @@ public class LockPatternUtils {
             res[i] = (byte) (cell.getRow() * patternGridSize + cell.getColumn());
         }
         return new String(res);
+    }
+
+    /**
+     * Check whether two patterns match
+     */
+    public static boolean patternMatches(List<LockPatternView.Cell> p1,
+                                         List<LockPatternView.Cell> p2) {
+        if (p1 == null || p2 == null) {
+            return false;
+        }
+        if (p1.size() != p2.size()) {
+            return false;
+        }
+        byte size = (byte) p1.size();
+        for(int i = 0; i < size; i++) {
+            if (!p1.get(i).equals(p2.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /*
