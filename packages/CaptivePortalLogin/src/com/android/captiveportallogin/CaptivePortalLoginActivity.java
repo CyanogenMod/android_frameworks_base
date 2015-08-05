@@ -94,7 +94,7 @@ public class CaptivePortalLoginActivity extends Activity {
         try {
             mURL = new URL("http", server, "/generate_204");
             final Uri dataUri = getIntent().getData();
-            if (dataUri != null && !dataUri.getScheme().equals("netid")) {
+            if (dataUri == null || !dataUri.getScheme().equals("netid")) {
                 throw new MalformedURLException();
             }
             mNetId = Integer.parseInt(dataUri.getSchemeSpecificPart());

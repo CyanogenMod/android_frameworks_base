@@ -32,6 +32,7 @@
   <string name="accessibility_quick_settings_network_adb_changed_on">ADB över nätverk aktiverat.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Omgivande skärm av.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Omgivande skärm på.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Omgivande skärm avslagen.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Omgivande skärm påslagen.</string>
   <string name="accessibility_quick_settings_color_inversion_off">Färginvertering av.</string>
   <string name="accessibility_quick_settings_color_inversion_on">Färginvertering på.</string>
@@ -115,6 +116,9 @@
   <string name="quick_settings_network_adb_label">ADB över nätverk</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Skärmtidsgräns</string>
+  <string name="quick_settings_usb_tether_label">USB-tethering</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_ambient_display_label">Omgivande skärm</string>
   <string name="quick_settings_sync_label">Synk</string>
   <string name="quick_settings_custom_tile_detail_title">Anpassad bricka</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
@@ -130,6 +134,7 @@
   <string name="navbar_menu_always_button">Menyknapp (visa alltid)</string>
   <string name="navbar_menu_big_button">Menyknapp</string>
   <string name="navigation_ring_title">Snabbstartsgenvägar</string>
+  <string name="navring_target_reset_message">Ta bort alla användarskapade genvägar i navigeringsfältet och återställ till standard?</string>
   <string name="navring_target_reset">Genvägar i navigeringsfältet återställda till standard</string>
   <string name="navring_action_open_ime_switcher">Öppna IME-växlare</string>
   <string name="navring_action_kill_app">Stäng av app</string>
@@ -152,4 +157,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Nästa alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME-väljare</string>
   <string name="dynamic_qs_tile_su_label">Root-åtkomst</string>
+  <string name="fingerprint_try_again_hint">Vänligen skanna igen</string>
+  <string name="accessibility_dock_battery_level">Dockningsstationens batteri<xliff:g id="number">%d</xliff:g> procent.</string>
 </resources>

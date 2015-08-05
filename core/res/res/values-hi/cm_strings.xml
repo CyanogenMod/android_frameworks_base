@@ -65,6 +65,10 @@
   <string name="adb_both_active_notification_title">यूएसबी और नेटवर्क पर एडीबी को सक्षम कर दिया गया</string>
   <string name="adb_active_generic_notification_message">डीबगिंग को अक्षम करने के लिए छुएँ।</string>
   <string name="usb_choose_notification_title">यूएसबी विकल्प चुनने के लिए छुएँ।</string>
+  <string name="adb_active_custom_tile">एडीबी - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">यूएसबी और नेटवर्क</string>
+  <string name="adb_active_custom_tile_usb">यूएसबी</string>
+  <string name="adb_active_custom_tile_net">नेटवर्क</string>
   <string name="permlab_interceptPackageLaunch">ऐप लॉन्च का अंतररोधन करें</string>
   <string name="permdesc_interceptPackageLaunch">ऐप को दूसरे ऐपों के लॉन्च होने का अंतररोधन करने देता है</string>
   <string name="app_ops_access_camera">कैमरे में पहुँचें</string>
@@ -196,4 +200,13 @@
   <string name="live_display_outdoor">बाहर (तेज़ धूप)</string>
   <string name="live_display_outdoor_summary">केवल बाहर की सेटिंग का उपयोग करें</string>
   <string name="live_display_hint">लाइवडिस्प्ले आँखों पर पड़नेवाले दबाव को घटा सकता है और आपको रात को अच्छी तरह से सोने में मदद कर सकता है। इसे आज़माने के लिए यहाँ क्लिक करें।</string>
+  <string name="lock_to_app_toast_no_navbar">इस स्क्रीन को अनपिन करने के लिए पीछे के बटन को कुछ देर के लिए छुएँ।</string>
+  <string name="quick_settings_tile_flashlight_not_title">टॉर्च चालू है</string>
+  <string name="quick_settings_tile_flashlight_not_summary">उसे बंद करने के लिए टैप करें</string>
+  <string name="storage_sd_dock_card">एसडी कार्ड को डॉक करें</string>
+  <string name="fingerprint_default_name">अँगुली छाप <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">अँगुली छाप सेवा में पहुँचें</string>
+  <string name="permdesc_accessFingerprintService">किसी ऐप को अँगुली छाप सेवा में पहुँचने की अनुमति दें। यह ऐप अँगुली छाप के बल पर जोड़ सकता है, हटा सकता है, नाम बदल सकता है और प्रमाणित कर सकता है</string>
+  <string name="permlab_resetBatteryStats">बैटरी के आँकड़ों को रीसेट करें</string>
+  <string name="permdesc_resetBatteryStats">अनुप्रयोग को वर्तमान निम्न-स्तर के बैटरी उपयोग डेटा को रीसेट करने देता है।</string>
 </resources>

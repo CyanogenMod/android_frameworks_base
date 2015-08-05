@@ -19,6 +19,8 @@ package com.android.systemui.qs.tiles;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.ThemeConfig;
 import android.net.Uri;
 import android.os.Process;
 import android.os.UserHandle;
@@ -29,9 +31,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.android.systemui.qs.QSDetailItemsGrid;
@@ -52,6 +56,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     private int mCurrentUserId;
     private StatusBarPanelCustomTile mTile;
     private CustomQSDetailAdapter mDetailAdapter;
+    private boolean mCollapsePanel;
 
     public CustomQSTile(Host host, StatusBarPanelCustomTile tile) {
         super(host);
@@ -95,12 +100,14 @@ public class CustomQSTile extends QSTile<QSTile.State> {
             if (mExpandedStyle != null &&
                     mExpandedStyle.getStyle() != CustomTile.ExpandedStyle.NO_STYLE) {
                 showDetail(true);
+                return;
+            }
+            if (mCollapsePanel) {
+                mHost.collapsePanels();
             }
             if (mOnClick != null) {
-                mHost.collapsePanels();
                 mOnClick.send();
             } else if (mOnClickUri != null) {
-                mHost.collapsePanels();
                 final Intent intent = new Intent().setData(mOnClickUri);
                 mContext.sendBroadcastAsUser(intent, new UserHandle(mCurrentUserId));
             }
@@ -120,17 +127,20 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         state.iconId = 0;
         state.visible = true;
         final int iconId = customTile.icon;
-        if (iconId != 0) {
+        if (iconId != 0 && (customTile.remoteIcon == null)) {
             final String iconPackage = mTile.getResPkg();
             if (!TextUtils.isEmpty(iconPackage)) {
                 state.icon = new ExternalIcon(iconPackage, iconId);
             } else {
                 state.iconId = iconId;
             }
+        } else {
+            state.icon = new ExternalBitmapIcon(customTile.remoteIcon);
         }
         mOnClick = customTile.onClick;
         mOnClickUri = customTile.onClickUri;
         mExpandedStyle = customTile.expandedStyle;
+        mCollapsePanel = customTile.collapsePanel;
         mDetailAdapter = new CustomQSDetailAdapter();
     }
 
@@ -146,9 +156,12 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
         public int getTitle() {
             if (isDynamicTile()) {
-                return mContext.getResources().getIdentifier(
+                int resId = mContext.getResources().getIdentifier(
                         String.format("dynamic_qs_tile_%s_label", mTile.getTag()),
                             "string", mContext.getPackageName());
+                if (resId != 0) {
+                    return resId;
+                }
             }
             return R.string.quick_settings_custom_tile_detail_title;
         }
@@ -206,6 +219,19 @@ public class CustomQSTile extends QSTile<QSTile.State> {
                                         mExpandedStyle.getExpandedItems());
                         mGridAdapter.setOnPseudoGridItemClickListener(this);
                         break;
+                    case CustomTile.ExpandedStyle.REMOTE_STYLE:
+                        rootView = (LinearLayout) LayoutInflater.from(context)
+                                .inflate(R.layout.qs_custom_detail_remote, parent, false);
+                        RemoteViews remoteViews = mExpandedStyle.getContentViews();
+                        if (remoteViews != null) {
+                            View localView = mTile.getCustomTile().expandedStyle.getContentViews()
+                                    .apply(context, (ViewGroup) rootView,
+                                            mHost.getOnClickHandler(), getThemePackageName());
+                            ((LinearLayout) rootView).addView(localView);
+                        } else {
+                            Log.d(TAG, "Unable to add null remoteview for " + mTile.getOpPkg());
+                        }
+                        break;
                     case CustomTile.ExpandedStyle.LIST_STYLE:
                     default:
                         rootView = QSDetailItemsList.convertOrInflate(context, convertView, parent);
@@ -241,6 +267,12 @@ public class CustomQSTile extends QSTile<QSTile.State> {
             } catch (PendingIntent.CanceledException e) {
                 //
             }
+        }
+
+        private String getThemePackageName() {
+            final Configuration config = mContext.getResources().getConfiguration();
+            final ThemeConfig themeConfig = config != null ? config.themeConfig : null;
+            return themeConfig != null ? themeConfig.getOverlayForStatusBar() : null;
         }
     }
 }
