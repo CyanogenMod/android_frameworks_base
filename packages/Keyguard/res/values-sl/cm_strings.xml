@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">SIM/RUIM je zaklenjena v načinu Perso</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM je zaklenjen v načinu Perso</string>
   <string name="keyguard_accessibility_status">"Stanje"</string>
   <string name="kg_dismiss">Opusti</string>
   <string name="kg_slot_name">Reža <xliff:g id="number">%d</xliff:g>: nova kartica SIM\u0020</string>

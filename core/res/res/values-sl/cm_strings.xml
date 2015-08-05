@@ -22,31 +22,31 @@
   <string name="profile_none">Brez</string>
   <string name="global_action_screenshot">Zaslonska slika</string>
   <string name="permlab_receiveProtectedSms">prejemanje zaščitenih SMS-ov</string>
-  <string name="permdesc_receiveProtectedSms">Omogoča aplikaciji prejemanje zaščitenih dohodnih SMS-ov.</string>
+  <string name="permdesc_receiveProtectedSms">Omogoča programu prejemanje zaščitenih dohodnih SMS-ov.</string>
   <string name="permlab_modifyProtectedSmsList">spreminjanje seznama zaščitenih SMS-ov</string>
-  <string name="permdesc_modifyProtectedSmsList">Omogoča aplikaciji spreminjanje seznama naslovov zaščitenih SMS-ov.</string>
+  <string name="permdesc_modifyProtectedSmsList">Omogoča programu spreminjanje seznama naslovov zaščitenih SMS-ov.</string>
   <string name="permgrouplab_security">Varnost</string>
   <string name="permgroupdesc_security">Dovoljenja, ki so povezana z varnostnimi podatki naprave.</string>
   <string name="permlab_accessThemeService">dostop do storitev tem</string>
-  <string name="permdesc_accessThemeService">Omogoča aplikaciji dostop do storitve tem. Navadno ni potrebno za običajne programe.</string>
+  <string name="permdesc_accessThemeService">Omogoča programu dostop do storitve tem. Navadno ni potrebno za običajne programe.</string>
   <string name="permlab_readThemes">branje podatkov o vaši temi</string>
-  <string name="permdesc_readThemesDesc">Omogoča aplikaciji branje vaših tem in
+  <string name="permdesc_readThemesDesc">Omogoča programu branje vaših tem in
        določanje, katero temo uporabljate.</string>
   <string name="permlab_writeThemes">spreminjanje tem</string>
-  <string name="permdesc_writeThemesDesc">Omogoča aplikaciji vstavljanje novih tem in
+  <string name="permdesc_writeThemesDesc">Omogoča programu vstavljanje novih tem in
        spreminjanje uporabljene teme.</string>
   <string name="permlab_readPhoneBlacklist">branje črnega seznama telefona</string>
-  <string name="permdesc_readPhoneBlacklist">Omogoča aplikaciji branje podatkov o blokiranih telefonskih številkah za dohodne klice in sporočila.</string>
+  <string name="permdesc_readPhoneBlacklist">Omogoča programu branje podatkov o blokiranih telefonskih številkah za dohodne klice in sporočila.</string>
   <string name="permlab_changePhoneBlacklist">spreminjanje črnega seznama telefona</string>
-  <string name="permdesc_changePhoneBlacklist">Omogoča aplikaciji spreminjanje blokiranih telefonskih številk za dohodne klice in sporočila.</string>
+  <string name="permdesc_changePhoneBlacklist">Omogoča programu spreminjanje blokiranih telefonskih številk za dohodne klice in sporočila.</string>
   <string name="permlab_changePrivacyGuardState">omogočanje ali onemogočanje Privacy Guarda</string>
-  <string name="permdesc_changePrivacyGuardState">Omogoča aplikaciji spreminjanje, ali se drug program izvaja s Privacy Guardom. Kadar se program izvaja s Privacy Guardom, ne bo imel dostopa do osebnih podatkov, kot so stiki, dnevniki klicev ali sporočila.</string>
+  <string name="permdesc_changePrivacyGuardState">Omogoča programu spreminjanje, ali se drug program izvaja s Privacy Guardom. Kadar se program izvaja s Privacy Guardom, ne bo imel dostopa do osebnih podatkov, kot so stiki, dnevniki klicev ali sporočila.</string>
   <string name="privacy_guard_notification">Privacy Guard dejaven</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne bo imel dostopa do osebnih podatkov</string>
   <string name="permlab_useHardwareFramework">uporaba strojnega ogrodja</string>
-  <string name="permdesc_useHardwareFramework">Omogoča aplikaciji dostop do strojnega ogrodja CM.</string>
+  <string name="permdesc_useHardwareFramework">Omogoča programu dostop do strojnega ogrodja CM.</string>
   <string name="permlab_setKeyguardWallpaper">nastavitev slike ozadja keyguard</string>
-  <string name="permdesc_setKeyguardWallpaper">Omogoča aplikaciji spreminjanje slike ozadja zaslona za zaklepanje.</string>
+  <string name="permdesc_setKeyguardWallpaper">Omogoča programu spreminjanje slike ozadja zaslona za zaklepanje.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> bi rad <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Ponovno zaženi</string>
@@ -60,7 +60,7 @@
   <string name="reboot_confirm" product="tablet">Tablica se bo ponovno zagnala.</string>
   <string name="reboot_confirm" product="default">Telefon se bo ponovno zagnal.</string>
   <string name="reboot_progress">Ponovno zaganjanje \u2026</string>
-  <string name="app_killed_message">Aplikacija uničena</string>
+  <string name="app_killed_message">Program uničen</string>
   <string name="adb_net_active_notification_title">ADB preko omrežja omogočen</string>
   <string name="adb_both_active_notification_title">ADB preko USB-ja in omrežja omogočen</string>
   <string name="adb_active_generic_notification_message">Dotaknite se, da onemogočite razhroščevanje.</string>
@@ -69,8 +69,8 @@
   <string name="adb_active_custom_tile_both">USB in omrežje</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Omrežje</string>
-  <string name="permlab_interceptPackageLaunch">prestrezanje zagona aplikacije</string>
-  <string name="permdesc_interceptPackageLaunch">Omogoča aplikaciji prestrezanje zagona drugih aplikacij</string>
+  <string name="permlab_interceptPackageLaunch">prestrezanje zagona programa</string>
+  <string name="permdesc_interceptPackageLaunch">Omogoča programu prestrezanje zagona drugih programov</string>
   <string name="app_ops_access_camera">dostop do fotoaparata</string>
   <string name="app_ops_access_location">dostop do lokacije</string>
   <string name="app_ops_access_notifications">branje obvestil</string>
@@ -83,7 +83,7 @@
   <string name="app_ops_delete_mms">brisanje vaših sporočil MMS</string>
   <string name="app_ops_delete_sms">brisanje vaših sporočil SMS</string>
   <string name="app_ops_draw_on_top">risanje oken v ospredju</string>
-  <string name="app_ops_get_usage_stats">pridobivanje uporabniške statistike aplikacije</string>
+  <string name="app_ops_get_usage_stats">pridobivanje uporabniške statistike programa</string>
   <string name="app_ops_keep_device_awake">ohranjanje budnosti naprave</string>
   <string name="app_ops_make_phone_call">opravljanje klicev</string>
   <string name="app_ops_modify_calendar">posodabljanje koledarja</string>
@@ -141,14 +141,14 @@
   <string name="theme_install_error_title">Namestitev teme je spodletela</string>
   <string name="theme_install_error_message">Namestitev %s je spodletela</string>
   <string name="theme_reset_notification_title">Ponastavitev theme</string>
-  <string name="theme_reset_notification_body">Sistemska tema obnovljena zaradi večkratnih sesutij aplikacije.</string>
+  <string name="theme_reset_notification_body">Sistemska tema obnovljena zaradi večkratnih sesutij programa.</string>
   <string name="stylus_app_not_installed">%s ni nameščen</string>
   <string name="permlab_interceptSmsSent">prestrezanje odhodnih SMS-ov</string>
-  <string name="permdesc_interceptSmsSent">Omogoča aplikaciji, da prestreže odhodne SMS-e. Zlonamerne aplikacije lahko uporabijo to, da preprečijo odhodna SMS sporočila.</string>
+  <string name="permdesc_interceptSmsSent">Omogoča programu, da prestreže odhodne SMS-e. Zlonamerni programi lahko uporabijo to, da preprečijo odhodna sporočila SMS.</string>
   <string name="permlab_accessTorchService">dostop do storitve svetilke</string>
-  <string name="permdesc_accessTorchService">Omogoča aplikaciji dostop do storitve svetilke. Navadno ni potrebno za običajne aplikacije.</string>
+  <string name="permdesc_accessTorchService">Omogoča programu dostop do storitve svetilke. Navadno ni potrebno za običajne programe.</string>
   <string name="permlab_preventpower">preglasitev tipke za vklop/izklop</string>
-  <string name="permdesc_preventpower">Omogoča aplikaciji, da preglasi tipko za vklop/izklop.</string>
+  <string name="permdesc_preventpower">Omogoča programu, da preglasi tipko za vklop/izklop.</string>
   <string name="usb_extmedia_format_message">Vsi podatki v pomnilniški napravi USB (v \'%1$s\') bodo izbrisani. Tega dejanja ni mogoče povrniti!</string>
   <string name="sd_extmedia_format_message">Vsi podatki na vaši kartici (v \'%1$s\') bodo izbrisani. Tega dejanja ni mogoče povrniti!</string>
   <string name="sd_progress_unmounting">Odklapljanje kartice SD \u2026</string>
@@ -206,9 +206,9 @@
   <string name="storage_sd_dock_card">Kartica SD postaje</string>
   <string name="fingerprint_default_name">Prstni odtis <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">dostop do storitve prstnih odtisov</string>
-  <string name="permdesc_accessFingerprintService">Omogoča aplikaciji dostop do storitve prstnih odtisov. Aplikacija lahko doda, izbriše preimenuje ali overi s prstnimi odtisi</string>
+  <string name="permdesc_accessFingerprintService">Omogoča programu dostop do storitve prstnih odtisov. Program lahko doda, izbriše preimenuje ali overi s prstnimi odtisi</string>
   <string name="permlab_resetBatteryStats">ponastavitev statistike baterije</string>
-  <string name="permdesc_resetBatteryStats">Omogoča aplikaciji ponastavitev trenutnih podatkov uporabe baterije ob nizkem stanju.</string>
+  <string name="permdesc_resetBatteryStats">Omogoča programu ponastavitev trenutnih podatkov uporabe baterije ob nizkem stanju.</string>
   <string name="silent_mode_priority">Prednost</string>
   <string name="silent_mode_none">Brez</string>
 </resources>

@@ -151,10 +151,10 @@
   <string name="lockscreen_target_empty">ಖಾಲಿ</string>
   <string name="screen_pinning_description_no_navbar">ಇದು ನೀವು ಅನ್‍ಪಿನ್ ಮಾಡುವವರೆಗೂ ವೀಕ್ಷಣೆಯಲ್ಲಿ ಇಡುತ್ತದೆ. ಅನ್‍ಪಿನ್ ಮಾಡಲು ಬ್ಯಾಕ್ ಬಟನ್ ಸ್ಪರ್ಶಿಸಿ ಹಿಡಿಯಿರಿ.</string>
   <string name="interruption_level_silent">ನಿಶ್ಯಬ್ಧ</string>
-  <string name="zen_silent_with_warning">ಯಾವುದೇ ಅಡಚಣೆಗಳಿಲ್ಲ, ಅಲಾರ್ಮ್‍ಗಳನ್ನು ಹೊರತುಪಡಿಸಿ.</string>
+  <string name="zen_silent_with_warning">ಯಾವುದೇ ಅಡಚಣೆಗಳಿಲ್ಲ, ಅಲಾರಂ ಹೊರತುಪಡಿಸಿ.</string>
   <string name="quick_settings_remove">ಟೈಲ್ ತೆಗೆ</string>
   <string name="quick_settings_dynamic_tile_detail_title">ಕ್ರಿಯಾತ್ಮಕ ಟೈಲ್</string>
-  <string name="dynamic_qs_tile_next_alarm_label">ಮುಂದಿನ ಅಲಾರ್ಮ್</string>
+  <string name="dynamic_qs_tile_next_alarm_label">ಮುಂದಿನ ಅಲಾರಂ</string>
   <string name="dynamic_qs_tile_ime_selector_label">ಇಎಂಇ ಆಯ್ಕೆ</string>
   <string name="dynamic_qs_tile_su_label">ರೂಟ್ ಪ್ರವೇಶ</string>
   <string name="fingerprint_try_again_hint">ದಯವಿಟ್ಟು ಇನ್ನೊಮ್ಮೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</string>

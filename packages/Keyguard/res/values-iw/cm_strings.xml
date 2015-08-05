@@ -19,7 +19,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM נעול להתאמות</string>
   <string name="keyguard_accessibility_status">"מצב"</string>
-  <string name="kg_dismiss">בטל</string>
+  <string name="kg_dismiss">ביטול</string>
   <string name="kg_slot_name">חריץ <xliff:g id="number">%d </xliff:g>: כרטיס SIM חדש\u0020</string>
   <string name="lockscreen_sim_error_message_short">כרטיס SIM לא חוקי.</string>
   <plurals name="kg_password_default_pin_message">

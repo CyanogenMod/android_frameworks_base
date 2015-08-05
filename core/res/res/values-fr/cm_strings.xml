@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Permet à une application d\'accéder au service d\'empreintes digitales. L\'application peut ajouter, supprimer, renommer et authentifier des empreintes digitales</string>
   <string name="permlab_resetBatteryStats">réinitialiser les statistiques de la batterie</string>
   <string name="permdesc_resetBatteryStats">Permet à une application de réinitialiser les données actuelles d\'utilisation de la batterie à faible niveau.</string>
+  <string name="silent_mode_priority">Priorité</string>
+  <string name="silent_mode_none">Aucun</string>
 </resources>
