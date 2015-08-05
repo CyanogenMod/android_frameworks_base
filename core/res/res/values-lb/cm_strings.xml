@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Erlaabt der App, op de Fangerofdrock-Service zouzegräifen. D\'App ka Fangerofdréck dobäisetzen, läschen, änneren a préiwen</string>
   <string name="permlab_resetBatteryStats">Akkustatistiken zrécksetzen</string>
   <string name="permdesc_resetBatteryStats">Erlaabt enger App, den Detail vun der Akkubenotzung zréckzesetzen.</string>
+  <string name="silent_mode_priority">Prioritéit</string>
+  <string name="silent_mode_none">Keen</string>
 </resources>

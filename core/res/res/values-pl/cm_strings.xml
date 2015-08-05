@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Umożliwia aplikacji dostęp do usługi odcisku palca. Aplikacja może dodać, usunąć, zmienić nazwę i uwierzytelnić odcisk palca</string>
   <string name="permlab_resetBatteryStats">resetowanie statystyk baterii</string>
   <string name="permdesc_resetBatteryStats">Umożliwia aplikacji na zresetowanie statystyk użycia baterii.</string>
+  <string name="silent_mode_priority">Priorytet</string>
+  <string name="silent_mode_none">Brak</string>
 </resources>
