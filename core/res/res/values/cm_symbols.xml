@@ -349,4 +349,8 @@
 
     <!-- LED pulse -->
     <java-symbol type="bool" name="config_ledCanPulse" />
+
+    <!-- Wifi tethering-->
+    <java-symbol type="plurals" name="tethered_clients_connected" />
+    <java-symbol type="xml" name="vendors" />
 </resources>
