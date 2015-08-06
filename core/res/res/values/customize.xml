@@ -39,4 +39,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          of telephony base classes.-->
     <java-symbol type="string" name="telephony_plugin_lib_path" />
     <string name="telephony_plugin_lib_path" translatable="false"></string>
+
+    <!-- Support for disabling to fetch APN from OMH card
+         for some cdma carriers -->
+    <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
+    <bool name="config_fetch_apn_from_omh_card">false</bool>
 </resources>
