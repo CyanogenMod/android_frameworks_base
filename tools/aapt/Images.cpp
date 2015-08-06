@@ -1284,6 +1284,9 @@ status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& assets, //n
     png_structp write_ptr = NULL;
     png_infop write_info = NULL;
 
+    PngMemoryFile* pmf = NULL;
+    ZipFile* zip = NULL;
+
     status_t error = UNKNOWN_ERROR;
 
     const size_t nameLen = file->getPath().length();
@@ -1305,13 +1308,12 @@ status_t preProcessImage(const Bundle* bundle, const sp<AaptAssets>& assets, //n
     }
 
     if (isImageInZip) {
-        PngMemoryFile* pmf = new PngMemoryFile();
-
-        ZipFile* zip = new ZipFile;
+        pmf = new PngMemoryFile();
+        zip = new ZipFile;
         status_t err = zip->open(file->getZipFile(), ZipFile::kOpenReadOnly);
         if (NO_ERROR != err) {
             fprintf(stderr, "ERROR: Unable to open %s\n", file->getZipFile().string());
-            return err;
+            goto bail;
         }
 
         ZipEntry* entry = zip->getEntryByName(file->getSourceFile().string());
@@ -1394,6 +1396,12 @@ bail:
     }
     if (write_ptr) {
         png_destroy_write_struct(&write_ptr, &write_info);
+    }
+    if (zip) {
+        delete zip;
+    }
+    if (pmf) {
+        delete pmf;
     }
 
     if (error != NO_ERROR) {
