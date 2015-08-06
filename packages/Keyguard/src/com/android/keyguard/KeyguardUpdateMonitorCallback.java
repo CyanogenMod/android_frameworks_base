@@ -194,6 +194,11 @@ public class KeyguardUpdateMonitorCallback {
     public void onFingerprintRecognized(int userId) { }
 
     /**
+     * Called when a fingerprint is recognized.
+     */
+    public void onFingerprintAttemptFailed() { }
+
+    /**
      * Called when fingerprint is acquired but not yet recognized
      */
     public void onFingerprintAcquired(int info) { }

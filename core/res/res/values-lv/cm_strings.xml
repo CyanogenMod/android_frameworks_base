@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Noklusētais</string>
-  <string name="profileNameWork">Darbs</string>
-  <string name="profileNameHome">Mājas</string>
-  <string name="profileNameSilent">Klusums</string>
-  <string name="profileNameNight">Nakts</string>
-  <string name="profileNameAutomobile">Mašīnā</string>
-  <string name="profileGroupPhone">Telefons</string>
-  <string name="profileGroupCalendar">Kalendārs</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-pasts</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Cits</string>
-  <string name="profile_none">Neviens</string>
   <string name="profile_picker_title">Profili</string>
   <string name="global_action_choose_profile">Profils</string>
+  <string name="profile_none">Neviens</string>
   <string name="global_action_screenshot">Ekrānattēls</string>
   <string name="permlab_receiveProtectedSms">saņemt aizsargātu īsziņu</string>
   <string name="permdesc_receiveProtectedSms">Ļauj lietotnēm saņemt aizsargātu ienākošo īsziņu.</string>

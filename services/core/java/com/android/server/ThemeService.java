@@ -114,6 +114,7 @@ public class ThemeService extends IThemeService.Stub {
     private int mProgress;
     private boolean mWallpaperChangedByUs = false;
     private long mIconCacheSize = 0L;
+    private int mCurrentUserId = UserHandle.USER_OWNER;
 
     private boolean mIsThemeApplying = false;
 
@@ -511,6 +512,7 @@ public class ThemeService extends IThemeService.Stub {
     }
 
     private boolean updateIcons(String pkgName) {
+        ThemeUtils.clearIconCache();
         try {
             if (pkgName.equals(SYSTEM_DEFAULT)) {
                 mPM.updateIconMaps(null);
@@ -1161,7 +1163,8 @@ public class ThemeService extends IThemeService.Stub {
         @Override
         public void onReceive(Context context, Intent intent) {
             int userHandle = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1);
-            if (userHandle >= 0) {
+            if (userHandle >= 0 && userHandle != mCurrentUserId) {
+                mCurrentUserId = userHandle;
                 ThemeConfig config = ThemeConfig.getBootThemeForUser(mContext.getContentResolver(),
                         userHandle);
                 if (DEBUG) {

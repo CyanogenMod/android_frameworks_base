@@ -26,13 +26,75 @@
   <string name="accessibility_quick_settings_data_on">داده همراه روشن.</string>
   <string name="accessibility_quick_settings_roaming_off">رومینگ خاموش.</string>
   <string name="accessibility_quick_settings_roaming_on">رومینگ روشن.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB‌ شبکه خاموش است.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB‌ شبکه روشن است.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ADB‌ شبکه خاموش شد.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ADB‌ شبکه روشن شد.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">صفحه نمایش محاصره‌شده خاموش است.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">صفحه نمایش محاصره‌شده روشن است.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">صفحه نمایش محاصره‌شده خاموش شد.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">صفحه نمایش محاصره‌شده روشن شد.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">وارونگی رنگ خاموش است.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">وارونگی رنگ روشن است.</string>
+  <string name="accessibility_quick_settings_compass_off">قطب‌نما خاموش است.</string>
+  <string name="accessibility_quick_settings_compass_on">قطب‌نما روشن است.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">قطب‌نما خاموش شد.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">قطب‌نما روشن شد.</string>
+  <string name="accessibility_quick_settings_heads_up_off">اعلان فوری خاموش است.</string>
+  <string name="accessibility_quick_settings_heads_up_on">اعلان فوری روشن است.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">اعلان فوری خاموش شد.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">اعلان فوری روشن شد.</string>
+  <string name="accessibility_quick_settings_hotspot_off">هات‌اسپات تلفن همراه خاموش است.</string>
+  <string name="accessibility_quick_settings_hotspot_on">هات‌اسپات تلفن همراه روشن است.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay خاموش است.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: حالت خودکار.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: حالت روز.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: حالت شب.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: حالت فضای باز.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay خاموش شد.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay به حالت خودکار تغییر کرد.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay به حالت روز تغییر کرد.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay به حالت شب تغییر کرد.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay به حالت فضای باز تغییر کرد.</string>
   <string name="accessibility_quick_settings_location_battery_saving">گزارش مکان: حالت صرفه‌جویی باتری.</string>
   <string name="accessibility_quick_settings_location_gps_only">گزارش مکان: حالت فقط سنسورها.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">گزارش مکان: حالت دقت بالا.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">گزارش‌گیری موقعیت به حالت ذخیره‌کننده باتری تغییر یافت.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">گزارش‌گیری موقعیت به حالت تنها حسگرها تغییر یافت.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">گزارش‌گیری موقعیت به حالت دقت بالا تغییر یافت.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">صفحه قفل خاموش است.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">صفحه قفل روشن است.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">صفحه قفل خاموش شد.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">صفحه قفل روشن شد.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE خاموش است.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE روشن است.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE خاموش شد.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE روشن شد.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC خاموش است.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC روشن است.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC خاموش شد.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC روشن شد.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">حالت باتری: حالت ذخیره نیرو.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">حالت باتری: حالت متعادل.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">حالت باتری: حالت عملکرد.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">حالت باتری به حالت ذخیره نیرو تغییر یافت.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">حالت باتری به حالت متعادل تغییر یافت.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">حالت باتری به حالت عملکرد تغییر یافت.</string>
+  <string name="accessibility_quick_settings_profiles_off">پروفایل‌ها خاموش است.</string>
+  <string name="accessibility_quick_settings_profiles">پروفایل: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">پروفایل‌ها خاموش شدند.</string>
+  <string name="accessibility_quick_settings_profiles_changed">پروفایل به <xliff:g id="profile" example="Default">%s</xliff:g> تغییر یافت.</string>
+  <string name="accessibility_quick_settings_screen_timeout">زمان خاموش شدن صفحه: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">زمان خاموش شدن صفحه به <xliff:g id="timeout" example="30 seconds">%s</xliff:g> تغییر یافت.</string>
   <string name="accessibility_quick_settings_sync_off">همگام‌سازی خاموش.</string>
   <string name="accessibility_quick_settings_sync_on">همگام‌سازی روشن.</string>
   <string name="accessibility_quick_settings_sync_changed_off">همگام‌سازی خاموش شد.</string>
   <string name="accessibility_quick_settings_sync_changed_on">همگام‌سازی روشن شد.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">تترینگ USB خاموش است.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">تترینگ USB روشن است.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">تترینگ USB خاموش شد.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">تترینگ USB روشن شد.</string>
+  <string name="accessibility_quick_settings_visualizer">مجسم‌کننده.</string>
   <string name="accessibility_dpad_left">نشانگر چپ</string>
   <string name="accessibility_dpad_right">نشانگر راست</string>
   <string name="quick_settings_mobile_data_label">داده همراه</string>
@@ -48,17 +110,21 @@
   <string name="quick_settings_profiles_detail_title">پروفایل‌های سیستم</string>
   <string name="quick_settings_profiles_disabled">پروفایل‌ها غیرفعالند</string>
   <string name="quick_settings_compass_label">قطب‌نما</string>
+  <string name="quick_settings_compass_init">مقدار اولیه\u2026</string>
   <string name="quick_settings_lockscreen_label">قفل صفحه</string>
   <string name="quick_settings_lockscreen_label_enforced">اجرای قفل صفحه</string>
   <string name="quick_settings_network_adb_label">ای‌دی‌بی روی شبکه</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">ﺯﻣﺎﻥ ﻭﻗﻔﻪ ﺻﻔﺤﻪ‌نمایش</string>
   <string name="quick_settings_usb_tether_label">تترینگ یو‌اس‌بی</string>
+  <string name="quick_settings_heads_up_label">اعلان فوری</string>
+  <string name="quick_settings_ambient_display_label">صفحه نمایش محاصره‌شده</string>
   <string name="quick_settings_sync_label">همگام‌‌سازی</string>
   <string name="quick_settings_custom_tile_detail_title">کاشی سفارشی</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s </xliff:g> - <xliff:g id="condition">%2$s </xliff:g></string>
   <string name="left_shortcut_hint">به راست بکشید برای %1$s</string>
   <string name="right_shortcut_hint">به چپ بکشید برای %1$s</string>
+  <string name="navbar_dialog_title">یکی را انتخاب کنید</string>
   <string name="navbar_home_button">دکمه صفحه اصلی</string>
   <string name="navbar_recent_button">دکمه برنامه‌های اخیر</string>
   <string name="navbar_search_button">دکمه جستجو</string>
@@ -69,6 +135,7 @@
   <string name="navbar_menu_big_button">دکمه منو</string>
   <string name="navigation_ring_title">کلیدهای میانبر دسترسی سریع</string>
   <string name="navring_target_reset_message">همه‌ی میانبرهای ساخته شده در نوار پیمایش حذف شود و به حالت پیش‌فرض بازگردانی شود؟</string>
+  <string name="navring_target_reset">میانبرهای نوار پیمایش به حالت پیش‌فرض بازگردانی شد</string>
   <string name="navring_action_open_ime_switcher">باز کردن سوییچر IME</string>
   <string name="navring_action_kill_app">توقف برنامه</string>
   <string name="navring_action_none">هیچ‌کدام</string>
@@ -86,4 +153,10 @@
   <string name="interruption_level_silent">سکوت</string>
   <string name="zen_silent_with_warning">بدون مزاحمت، به جز هشدارها.</string>
   <string name="quick_settings_remove">حذف کاشی</string>
+  <string name="quick_settings_dynamic_tile_detail_title">کاشی پویا</string>
+  <string name="dynamic_qs_tile_next_alarm_label">هشدار بعدی</string>
+  <string name="dynamic_qs_tile_ime_selector_label">انتخابگر IME</string>
+  <string name="dynamic_qs_tile_su_label">دسترسی به روت</string>
+  <string name="fingerprint_try_again_hint">لطفاً دوباره اسکن کنید</string>
+  <string name="accessibility_dock_battery_level">باتری داک <xliff:g id="number">%d</xliff:g> درصد.</string>
 </resources>

@@ -26,17 +26,75 @@
   <string name="accessibility_quick_settings_data_on">Mobil Daten un.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming aus.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming un.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB iwwer Netzwierk aus.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB iwwer Netzwierk un.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ADB iwwer Netzwierk ausgeschalt.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ADB iwwer Netzwierk ugeschalt.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Ambiente Schierm aus.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Ambiente Schierm un.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambiente Schierm ausgeschalt.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambiente Schierm ugeschalt.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Faarfinvertéierung aus.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Faarfinvertéierung un.</string>
+  <string name="accessibility_quick_settings_compass_off">Kompass aus.</string>
+  <string name="accessibility_quick_settings_compass_on">Kompass un.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Kompass ausgeschalt.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Kompass ugeschalt.</string>
   <string name="accessibility_quick_settings_heads_up_off">Pop-Up-Notifikatiounen aus.</string>
   <string name="accessibility_quick_settings_heads_up_on">Pop-Up-Notifikatiounen un.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Pop-Up-Notifikatiounen ausgeschalt.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Pop-Up-Notifikatiounen ugeschalt.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Mobillen Hotspot aus.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Mobillen Hotspot un.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay aus.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: Automatesch.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: Dag.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: Nuecht.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: Dobaussen.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay ausgeschalt.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay-Modus op \"Automatesch\" geännert.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay-Modus op \"Dag\" geännert.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay-Modus op \"Nuecht\" geännert.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay-Modus op \"Dobaussen\" geännert.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Standuertbericht: Akku spueren.</string>
-  <string name="accessibility_quick_settings_location_gps_only">Standuertbericht: just Sensoren.</string>
-  <string name="accessibility_quick_settings_location_high_accuracy">Standuertbericht: héich Genauegkeet.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Standuertbericht: Just Sensoren.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Standuertbericht: Héich Genauegkeet.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Standuertbericht op \"Akku spueren\" geännert.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Standuertbericht op \"Just Sensoren\" geännert.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Standuertbericht op \"Héich Genauegkeet\" geännert.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Schiermspär aus.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Schiermspär un.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Schiermspär ausgeschalt.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Schiermspär ugeschalt.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE aus.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE un.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE ausgeschalt.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE ugeschalt.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC aus.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC un.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC ausgeschalt.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC ugeschalt.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Akkumodus: Energie spueren.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Akkumodus: Equilibréiert.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Akkumodus: Héich Leeschtung.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Akkumodus op \"Energie spueren\" geännert.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Akkumodus op \"Equilibréiert\" geännert.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Akkumodus op \"Héich Leeschtung\" geännert.</string>
+  <string name="accessibility_quick_settings_profiles_off">Profiller aus.</string>
+  <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Profiller ausgeschalt.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Profil op <xliff:g id="profile" example="Default">%s</xliff:g> geännert.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Rouzoustand no <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Zäit bis zum Rouzoustand op <xliff:g id="timeout" example="30 seconds">%s</xliff:g> geännert.</string>
+  <string name="accessibility_quick_settings_sync_off">Synchronisatioun aus.</string>
+  <string name="accessibility_quick_settings_sync_on">Synchronisatioun un.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synchronisatioun ausgeschalt.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synchronisatioun ugeschalt.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">USB-Tethering aus.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">USB-Tethering un.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">USB-Tethering ausgeschalt.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">USB-Tethering ugeschalt.</string>
+  <string name="accessibility_quick_settings_visualizer">Musekvisualiséierung.</string>
   <string name="accessibility_dpad_left">Cursor lénks</string>
   <string name="accessibility_dpad_right">Cursor riets</string>
   <string name="quick_settings_mobile_data_label">Mobil Daten</string>
@@ -61,6 +119,7 @@
   <string name="quick_settings_usb_tether_label">USB-Tethering</string>
   <string name="quick_settings_heads_up_label">Pop-Up-Notifikatiounen</string>
   <string name="quick_settings_ambient_display_label">Ambiente Schierm</string>
+  <string name="quick_settings_sync_label">Synchronisatioun</string>
   <string name="quick_settings_custom_tile_detail_title">Eege Kachel</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">No riets wësche fir %1$s</string>
@@ -94,4 +153,10 @@
   <string name="interruption_level_silent">Roueg</string>
   <string name="zen_silent_with_warning">Keng Ënnerbriechungen, ausser Weckeren.</string>
   <string name="quick_settings_remove">Kachel läschen</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dynamesch Kachelen</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Nächste Wecker</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Method fir anzeginn</string>
+  <string name="dynamic_qs_tile_su_label">Root-Zougrëff</string>
+  <string name="fingerprint_try_again_hint">W.e.g. scann nees</string>
+  <string name="accessibility_dock_battery_level">Dockakku <xliff:g id="number">%d</xliff:g> Prozent.</string>
 </resources>

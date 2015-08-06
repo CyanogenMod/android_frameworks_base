@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Zadano</string>
-  <string name="profileNameWork">Posao</string>
-  <string name="profileNameHome">Kuća</string>
-  <string name="profileNameSilent">Bešumno</string>
-  <string name="profileNameNight">Noć</string>
-  <string name="profileNameAutomobile">Automobil</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Kalendar</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-pošta</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Ostalo</string>
-  <string name="profile_none">Ništa</string>
   <string name="profile_picker_title">Profili</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Ništa</string>
   <string name="global_action_screenshot">Snimak zaslona</string>
   <string name="permgrouplab_security">Sigurnost</string>
   <string name="permgroupdesc_security">Dopuštenja vezana za sigurnosne informacije uređaja.</string>

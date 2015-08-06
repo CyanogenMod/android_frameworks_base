@@ -813,6 +813,10 @@
          Used to decide if the user can change the colors -->
     <bool name="config_multiColorBatteryLed">false</bool>
 
+    <!-- Do the battery/notification LEDs support pulsing?
+         Used to decide if we show pulse settings -->
+    <bool name="config_ledCanPulse">true</bool>
+
     <!-- Default value for LED off time when the battery is low on charge in miliseconds -->
     <integer name="config_notificationsBatteryLedOff">2875</integer>
 
@@ -909,6 +913,10 @@
          For example, a device with Home, Back and Menu keys would set this
          config to 7. -->
     <integer name="config_deviceHardwareWakeKeys">79</integer>
+
+    <!-- Indicates that the device has Single-stage Camera key
+         (without "Focus" state) instead of Dual-stage. -->
+    <bool name="config_singleStageCameraKey">false</bool>
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
@@ -2040,6 +2048,9 @@
         <item>SUPL_MODE=1</item>
     </string-array>
 
+    <!-- Enable support for legacy GPS HALs -->
+    <bool name="config_legacyGpsHAL">false</bool>
+
     <!-- If there is no preload VM number in the sim card, carriers such as
          Verizon require to load a default vm number from the configurantion.
          Define config_default_vm_number for this purpose. And there are two
@@ -2325,7 +2336,7 @@
     <bool name="config_advancedSettingsMode">true</bool>
 
     <!-- Default, comma-delimited, quick settings tiles. See QSConstants.java for a list of all available tiles -->
-    <string name="config_defaultQuickSettingsTiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast</string>
+    <string name="config_defaultQuickSettingsTiles">wifi,bt,cell,airplane,rotation,flashlight,location,cast,visualizer,hotspot,live_display</string>
 
     <string-array name="config_externalCMServices"></string-array>
 </resources>

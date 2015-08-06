@@ -146,7 +146,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         mRowMinHeight = 0;
         final boolean wasExpanded = isExpanded();
         mRowMaxHeight = 0;
-        mExpandable = false;
+        setExpandable(false);
         mHasUserChangedExpansion = false;
         mUserLocked = false;
         mShowingPublic = false;

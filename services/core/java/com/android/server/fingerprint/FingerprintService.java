@@ -16,6 +16,7 @@
 
 package com.android.server.fingerprint;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -26,7 +27,11 @@ import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
+import android.os.Vibrator;
 import android.service.fingerprint.FingerprintManager;
+import static android.service.fingerprint.FingerprintManager.STATE_AUTHENTICATING;
+import static android.service.fingerprint.FingerprintManager.STATE_ENROLLING;
+import static android.service.fingerprint.FingerprintManager.STATE_IDLE;
 import android.service.fingerprint.FingerprintUtils;
 import android.service.fingerprint.IFingerprintService;
 import android.service.fingerprint.IFingerprintServiceReceiver;
@@ -76,12 +81,20 @@ public class FingerprintService extends SystemService {
     private Context mContext;
     private int mState = STATE_IDLE;
 
-    private static final int STATE_IDLE = 0;
-    private static final int STATE_AUTHENTICATING = 1;
-    private static final int STATE_ENROLLING = 2;
+
     private static final long MS_PER_SEC = 1000;
-    public static final String USE_FINGERPRINT = "android.permission.USE_FINGERPRINT";
-    public static final String ENROLL_FINGERPRINT = "android.permission.ENROLL_FINGERPRINT";
+
+    /**
+     * The time, in milliseconds, to run the device vibrator after a fingerprint
+     * image has been aquired or enrolled by the fingerprint sensor.
+     */
+    private static final long FINGERPRINT_EVENT_VIBRATE_DURATION = 100;
+
+    /**
+     * A local instance of {@link android.os.Vibrator} as retrieved using
+     * {@link android.content.Context#VIBRATOR_SERVICE}
+     */
+    private Vibrator mVibrator;
 
     private long mHal;
 
@@ -120,6 +133,11 @@ public class FingerprintService extends SystemService {
     public FingerprintService(Context context) {
         super(context);
         mContext = context;
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // If no physical vibrator is present, set vibrator to null.
+        if (mVibrator != null && !mVibrator.hasVibrator()) {
+            mVibrator = null;
+        }
         nativeInit(this);
     }
 
@@ -133,6 +151,7 @@ public class FingerprintService extends SystemService {
     native int nativeCloseHal();
     native void nativeInit(FingerprintService service);
     native Fingerprint[] nativeGetEnrollments();
+    native int nativeGetNumEnrollmentSteps();
 
     // JNI methods for communicating from HAL to clients
     void notify(int msg, int arg1, int arg2) {
@@ -163,6 +182,7 @@ public class FingerprintService extends SystemService {
                     final int acquireInfo = arg1;
                     if (mState == STATE_AUTHENTICATING) {
                         try {
+                            vibrateDeviceIfSupported();
                             if (clientData != null && clientData.receiver != null) {
                                 clientData.receiver.onAcquired(acquireInfo);
                             }
@@ -198,20 +218,20 @@ public class FingerprintService extends SystemService {
                     final int fingerId = arg1;
                     final int remaining = arg2;
                     if (mState == STATE_ENROLLING) {
+                        // Update the database with new finger id.
+                        if (remaining == 0) {
+                            FingerprintUtils.addFingerprintIdForUser(fingerId,
+                                    mContext, clientData.userId);
+                            newState = STATE_IDLE;
+                        }
                         try {
+                            vibrateDeviceIfSupported();
                             if (clientData != null && clientData.receiver != null) {
                                 clientData.receiver.onEnrollResult(fingerId, remaining);
                             }
                         } catch (RemoteException e) {
                             Slog.e(TAG, "can't send message to client. Did it die?", e);
                             it.remove();
-                        }
-                        // Update the database with new finger id.
-                        // TODO: move to client code (Settings)
-                        if (remaining == 0) {
-                            FingerprintUtils.addFingerprintIdForUser(fingerId,
-                                    mContext, clientData.userId);
-                            newState = STATE_IDLE;
                         }
                     } else {
                         if (DEBUG) Slog.w(TAG, "Client not enrolling");
@@ -236,7 +256,13 @@ public class FingerprintService extends SystemService {
                 break;
             }
         }
-        mState = newState;
+        changeState(newState);
+    }
+
+    private void vibrateDeviceIfSupported() {
+        if (mVibrator != null) {
+            mVibrator.vibrate(FINGERPRINT_EVENT_VIBRATE_DURATION);
+        }
     }
 
     void startEnroll(IBinder token, long timeout, int userId) {
@@ -248,7 +274,7 @@ public class FingerprintService extends SystemService {
                 return;
             }
             nativeEnroll((int) (timeout / MS_PER_SEC));
-            mState = STATE_ENROLLING;
+            changeState(STATE_ENROLLING);
         } else {
             Slog.w(TAG, "enroll(): No listener registered");
         }
@@ -263,7 +289,7 @@ public class FingerprintService extends SystemService {
                 return;
             }
             nativeAuthenticate();
-            mState = STATE_AUTHENTICATING;
+            changeState(STATE_AUTHENTICATING);
         } else {
             Slog.w(TAG, "authenticate(): No listener registered");
         }
@@ -274,6 +300,7 @@ public class FingerprintService extends SystemService {
         if (clientData != null) {
             if (clientData.userId != userId) throw new IllegalStateException("Bad user");
             if (mState == STATE_IDLE) return;
+            changeState(STATE_IDLE);
             nativeCancel();
         } else {
             Slog.w(TAG, "enrollCancel(): No listener registered");
@@ -325,8 +352,34 @@ public class FingerprintService extends SystemService {
         mClients.remove(token);
     }
 
-    void checkPermission(String permisison) {
-        // TODO
+    public synchronized int getState() {
+        return mState;
+    }
+
+    private synchronized void changeState(int newState) {
+        if (mState == newState) return;
+
+        mState = newState;
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (Iterator<Map.Entry<IBinder, ClientData>> it = mClients.entrySet().iterator();
+                     it.hasNext(); ) {
+                    try {
+                        ClientData clientData = it.next().getValue();
+                        clientData.receiver.onStateChanged(mState);
+                    } catch(RemoteException e) {
+                        Slog.e(TAG, "can't send message to client. Did it die?", e);
+                        it.remove();
+                    }
+                }
+            }
+        });
+    }
+
+    void checkPermission() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.ACCESS_FINGERPRINT_SERVICE, null);
     }
 
     public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId) {
@@ -369,7 +422,7 @@ public class FingerprintService extends SystemService {
             Fingerprint nativeFinger = nativeFingerMap.get(settingsFinger.getFingerId());
             if (nativeFinger == null) {
                 // Finger exists in Settings but not in native space. Remove it from settings
-                settingsFingerprints.remove(settingsFinger);
+                iter.remove();
                 modifiedSettingsFingers = true;
             } else {
                 // Finger exists in Settings and in native space, merge it
@@ -413,6 +466,10 @@ public class FingerprintService extends SystemService {
         return true;
     }
 
+    public int getNumEnrollmentSteps() {
+        return nativeGetNumEnrollmentSteps();
+    }
+
     private void enforceCrossUserPermission(int userId, String errorMessage) {
         if (userId != UserHandle.getCallingUserId()
                 && Binder.getCallingUid() != Process.myUid()
@@ -432,60 +489,90 @@ public class FingerprintService extends SystemService {
         }
     }
 
+    private void throwIfNoFingerprint() {
+        if (mHal == 0) {
+            throw new UnsupportedOperationException("Fingerprint sensor not available");
+        }
+    }
+
     private final class FingerprintServiceWrapper extends IFingerprintService.Stub {
         private final static String DUMP_CMD_REMOVE_FINGER = "removeFinger";
         private final static String DUMP_CMD_PRINT_ENROLLMENTS = "printEnrollments";
         private final static String DUMP_CMD_SET_FINGER_NAME = "setFingerName";
+        private final static String DUMP_CMD_GET_NUM_ENROLLMENT_STEPS = "getNumEnrollmentSteps";
 
         @Override // Binder call
         public void authenticate(IBinder token, int userId) {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
+            throwIfNoFingerprint();
             startAuthentication(token, userId);
         }
 
         @Override // Binder call
         public void enroll(IBinder token, long timeout, int userId) {
-            checkPermission(ENROLL_FINGERPRINT);
+            checkPermission();
+            throwIfNoFingerprint();
             startEnroll(token, timeout, userId);
         }
 
         @Override // Binder call
         public void cancel(IBinder token,int userId) {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
+            throwIfNoFingerprint();
             startCancel(token, userId);
         }
 
         @Override // Binder call
         public void remove(IBinder token, int fingerprintId, int userId) {
-            checkPermission(ENROLL_FINGERPRINT); // TODO: Maybe have another permission
+            checkPermission();
+            throwIfNoFingerprint();
             startRemove(token, fingerprintId, userId);
         }
 
         @Override // Binder call
-        public void startListening(IBinder token, IFingerprintServiceReceiver receiver, int userId)
-        {
-            checkPermission(USE_FINGERPRINT);
+        public void startListening(IBinder token, IFingerprintServiceReceiver receiver,
+                int userId) {
+            checkPermission();
+            throwIfNoFingerprint();
             addListener(token, receiver, userId);
         }
 
         @Override // Binder call
         public void stopListening(IBinder token, int userId) {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
+            throwIfNoFingerprint();
             removeListener(token, userId);
         }
 
         @Override // Binder call
         public List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId)
                 throws RemoteException {
-            checkPermission(USE_FINGERPRINT);
+            checkPermission();
+            throwIfNoFingerprint();
             return FingerprintService.this.getEnrolledFingerprints(token, userId);
         }
 
         @Override
-        public boolean setFingerprintName(IBinder token, int fingerprintId, String name, int userId)
-                throws RemoteException {
-            checkPermission(USE_FINGERPRINT);
+        public boolean setFingerprintName(IBinder token, int fingerprintId, String name,
+                int userId) throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
             return FingerprintService.this.setFingerprintName(token, fingerprintId, name, userId);
+        }
+
+        @Override
+        public int getNumEnrollmentSteps(IBinder token)
+                throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
+            return FingerprintService.this.getNumEnrollmentSteps();
+        }
+
+        @Override
+        public int getState() throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
+            return FingerprintService.this.getState();
         }
 
         /**
@@ -493,12 +580,22 @@ public class FingerprintService extends SystemService {
          */
         @Override
         protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-            if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
+            if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
+                    != PackageManager.PERMISSION_GRANTED) {
+                pw.println("Permission Denial: can't dump telephony.registry from from pid="
+                        + Binder.getCallingPid() + ", uid=" + Binder.getCallingUid());
+                return;
+            }
+            if (mHal == 0) {
+                pw.println("Fingerprint sensor not available");
+            } else if (args.length != 0 && DUMP_CMD_PRINT_ENROLLMENTS.equals(args[0])) {
                 dumpEnrollments(pw, args);
             } else if (args.length >= 3 && DUMP_CMD_SET_FINGER_NAME.equals(args[0])) {
                 dumpSetFingerprintName(pw, args);
             } else if (args.length > 1 && DUMP_CMD_REMOVE_FINGER.equals(args[0])) {
                 dumpRemoveFinger(pw, args);
+            } else if (args.length >= 1 && DUMP_CMD_GET_NUM_ENROLLMENT_STEPS.equals(args[0])) {
+                dumpGetNumEnrollmentSteps(pw, args);
             } else {
                 dumpCommandList(pw);
             }
@@ -548,18 +645,38 @@ public class FingerprintService extends SystemService {
             }
         }
 
+        private void dumpGetNumEnrollmentSteps(PrintWriter pw, String[] args) {
+            try {
+                int steps = FingerprintService.this.getNumEnrollmentSteps();
+                pw.println("Number of enrollment steps: " + steps);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         private void dumpCommandList(PrintWriter pw) {
             pw.println("Valid Fingerprint Commands:");
             pw.println(DUMP_CMD_PRINT_ENROLLMENTS + " - Print Fingerprint Enrollments");
             pw.println(DUMP_CMD_REMOVE_FINGER + " <id> - Remove fingerprint");
             pw.println(DUMP_CMD_SET_FINGER_NAME + " <id> <name> - Rename a finger");
+            pw.println(DUMP_CMD_GET_NUM_ENROLLMENT_STEPS + " - Returns num of steps the vendor" +
+                    " requires to enroll a finger.");
         }
     }
 
     @Override
     public void onStart() {
-       publishBinderService(Context.FINGERPRINT_SERVICE, new FingerprintServiceWrapper());
-       mHal = nativeOpenHal();
+        publishBinderService(Context.FINGERPRINT_SERVICE, new FingerprintServiceWrapper());
+        mHal = nativeOpenHal();
+        if (mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
+            if (mHal == 0) {
+                throw new RuntimeException(
+                        "FEATURE_FINGERPRINT present, but no Fingerprint HAL loaded!");
+            }
+        } else if (mHal != 0) {
+            throw new RuntimeException(
+                    "Fingerprint HAL present, but FEATURE_FINGERPRINT is not set!");
+        }
     }
 
 }

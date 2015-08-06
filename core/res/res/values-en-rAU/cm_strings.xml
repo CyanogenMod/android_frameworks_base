@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Default</string>
-  <string name="profileNameWork">Work</string>
-  <string name="profileNameHome">Home</string>
-  <string name="profileNameSilent">Silent</string>
-  <string name="profileNameNight">Night</string>
-  <string name="profileNameAutomobile">Automobile</string>
-  <string name="profileGroupPhone">Phone</string>
-  <string name="profileGroupCalendar">Calendar</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Email</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Other</string>
-  <string name="profile_none">None</string>
   <string name="profile_picker_title">Profiles</string>
   <string name="global_action_choose_profile">Profile</string>
+  <string name="profile_none">None</string>
   <string name="global_action_screenshot">Screenshot</string>
   <string name="permlab_receiveProtectedSms">receive protected SMS</string>
   <string name="permdesc_receiveProtectedSms">Allows the app to receive an incoming protected SMS.</string>

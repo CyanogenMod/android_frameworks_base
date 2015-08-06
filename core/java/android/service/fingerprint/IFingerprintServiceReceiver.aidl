@@ -28,4 +28,5 @@ oneway interface IFingerprintServiceReceiver {
     void onProcessed(int fingerprintId);
     void onError(int error);
     void onRemoved(int fingerprintId);
+    void onStateChanged(int state);
 }

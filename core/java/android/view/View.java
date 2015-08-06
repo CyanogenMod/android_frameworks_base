@@ -2791,6 +2791,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
     /**
      * @hide
+     *
+     * Allow navbars to become transparent when vertical. Only enable this
+     * if you know how to deal with the bugs!
+     */
+    public static final int SYSTEM_UI_ALLOW_TRANSPARENT_VERTICAL_NAV = 0x00000010;
+
+    /**
+     * @hide
      */
     public static final int PUBLIC_STATUS_BAR_VISIBILITY_MASK = 0x00003FFF;
 

@@ -145,6 +145,8 @@ public final class MessageQueue {
             synchronized (this) {
                 // Try to retrieve the next message.  Return if found.
                 final long now = SystemClock.uptimeMillis();
+                boolean validMsgs = (mMessages != null);
+
                 Message prevMsg = null;
                 Message msg = mMessages;
                 if (msg != null && msg.target == null) {
@@ -171,6 +173,23 @@ public final class MessageQueue {
                         return msg;
                     }
                 } else {
+                    /* Check if all of the messages in the list are barrier
+                     * messages. If so we still consider the queue idle, cause
+                     * barrier messages are not real messages. */
+                    Message msgBarr = mMessages;
+                    boolean found = false;
+                    while (msgBarr != null)
+                    {
+                        /* Found one non barrier message? Stop progressing. */
+                        if (msgBarr.target != null)
+                        {
+                            found = true;
+                            break;
+                        }
+                        msgBarr = msgBarr.next;
+                    }
+                    if (!found)
+                        validMsgs = false;
                     // No more messages.
                     nextPollTimeoutMillis = -1;
                 }
@@ -183,9 +202,9 @@ public final class MessageQueue {
 
                 // If first time idle, then get the number of idlers to run.
                 // Idle handles only run if the queue is empty or if the first message
-                // in the queue (possibly a barrier) is due to be handled in the future.
+                // in the queue is due to be handled in the future.
                 if (pendingIdleHandlerCount < 0
-                        && (mMessages == null || now < mMessages.when)) {
+                        && (!validMsgs || now < mMessages.when)) {
                     pendingIdleHandlerCount = mIdleHandlers.size();
                 }
                 if (pendingIdleHandlerCount <= 0) {

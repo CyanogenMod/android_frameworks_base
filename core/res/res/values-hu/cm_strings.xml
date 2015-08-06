@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Alapértelmezett</string>
-  <string name="profileNameWork">Munka</string>
-  <string name="profileNameHome">Otthon</string>
-  <string name="profileNameSilent">Néma</string>
-  <string name="profileNameNight">Éjszaka</string>
-  <string name="profileNameAutomobile">Autóban</string>
-  <string name="profileGroupPhone">Telefon</string>
-  <string name="profileGroupCalendar">Naptár</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">E-mail</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Egyéb</string>
-  <string name="profile_none">Nincs</string>
   <string name="profile_picker_title">Profilok</string>
   <string name="global_action_choose_profile">Profil</string>
+  <string name="profile_none">Nincs</string>
   <string name="global_action_screenshot">Képernyőmentés</string>
   <string name="permlab_receiveProtectedSms">védett SMS fogadása</string>
   <string name="permdesc_receiveProtectedSms">Lehetővé teszi az alkalmazás számára, hogy védett SMS-t fogadjon.</string>
@@ -75,6 +63,10 @@
   <string name="adb_both_active_notification_title">ADB USB-n &amp; hálózaton keresztül engedélyezve</string>
   <string name="adb_active_generic_notification_message">Érintse meg a hibakeresés letiltásához.</string>
   <string name="usb_choose_notification_title">Érintse meg az USB opciók kiválasztásához.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; hálózat</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Hálózat</string>
   <string name="permlab_interceptPackageLaunch">alkalmazás indításának feltartóztatása</string>
   <string name="permdesc_interceptPackageLaunch">Lehetővé teszi az alkalmazás számára, hogy feltartóztassa más alkalmazások indítását</string>
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>
@@ -210,4 +202,11 @@
   <string name="quick_settings_tile_flashlight_not_title">Zseblámpa bekapcsolva</string>
   <string name="quick_settings_tile_flashlight_not_summary">Kikapcsoláshoz érintse meg</string>
   <string name="storage_sd_dock_card">Dokkoló SD-kártyája</string>
+  <string name="fingerprint_default_name">Ujjlenyomat <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">hozzáférés az ujjlenyomat szolgáltatáshoz</string>
+  <string name="permdesc_accessFingerprintService">Lehetővé teszi az alkalmazás számára, hogy hozzáférjen az ujjlenyomat szolgáltatáshoz. Az alkalmazás hozzáadhat, törölhet, átnevezhet és újra hitelesíthet ujjlenyomatokat</string>
+  <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
+  <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse alacsony szintű akkumulátor használatára vonatkozó adatokat.</string>
+  <string name="silent_mode_priority">Prioritás</string>
+  <string name="silent_mode_none">Nincs</string>
 </resources>

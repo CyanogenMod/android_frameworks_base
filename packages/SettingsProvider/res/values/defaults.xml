@@ -264,4 +264,8 @@
 
     <!-- Defaults for Settings.Secure.SPELL_CHECKER_ENABLED. -->
     <bool name="def_spell_checker">true</bool>
+
+    <!-- Default for Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION -->
+    <bool name="def_swap_volume_keys_on_rotation">false</bool>
+
 </resources>

@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">كۆڭۈلدىكى</string>
-  <string name="profileNameWork">ئىش</string>
-  <string name="profileNameHome">ئۆي</string>
-  <string name="profileNameSilent">ئۈنسىز</string>
-  <string name="profileNameNight">كېچە</string>
-  <string name="profileNameAutomobile">ئاپتوموبىل</string>
-  <string name="profileGroupPhone">تېلېفون</string>
-  <string name="profileGroupCalendar">يىلنامە</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">تورخەت</string>
-  <string name="profileGroupSMS">قىسقا ئۇچۇر</string>
-  <string name="wildcardProfile">باشقا</string>
-  <string name="profile_none">يوق</string>
   <string name="profile_picker_title">سەپلىمە ھۆججەتلەر</string>
   <string name="global_action_choose_profile">سەپلىمە ھۆججەت</string>
+  <string name="profile_none">يوق</string>
   <string name="global_action_screenshot">ئېكراندىن تۇتۇلغان سۈرەت</string>
   <string name="permlab_receiveProtectedSms">قوغدالغان قىسقا ئۇچۇرنى قوبۇل قىلىش</string>
   <string name="permdesc_receiveProtectedSms">ئەپنىڭ قوغدالغان قىسقا ئۇچۇرنى قوبۇللىشىغا يول قويىدۇ.</string>

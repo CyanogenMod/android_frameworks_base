@@ -58,19 +58,47 @@ public class ProcessCpuTracker {
         PROC_SPACE_TERM,
         PROC_SPACE_TERM|PROC_OUT_LONG,                  // 14: utime
         PROC_SPACE_TERM|PROC_OUT_LONG,                  // 15: stime
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM|PROC_OUT_LONG                  // 42: delayacct_blkio_ticks
     };
 
     static final int PROCESS_STAT_MINOR_FAULTS = 0;
     static final int PROCESS_STAT_MAJOR_FAULTS = 1;
     static final int PROCESS_STAT_UTIME = 2;
     static final int PROCESS_STAT_STIME = 3;
+    static final int PROCESS_STAT_BLOCKIO = 4;
 
     /** Stores user time and system time in 100ths of a second. */
-    private final long[] mProcessStatsData = new long[4];
+    private final long[] mProcessStatsData = new long[5];
 
     /** Stores user time and system time in 100ths of a second.  Used for
      * public API to retrieve CPU use for a process.  Must lock while in use. */
-    private final long[] mSinglePidStatsData = new long[4];
+    private final long[] mSinglePidStatsData = new long[5];
 
     private static final int[] PROCESS_FULL_STATS_FORMAT = new int[] {
         PROC_SPACE_TERM,
@@ -96,6 +124,25 @@ public class ProcessCpuTracker {
         PROC_SPACE_TERM,
         PROC_SPACE_TERM,
         PROC_SPACE_TERM|PROC_OUT_LONG,                  // 23: vsize
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM,
+        PROC_SPACE_TERM|PROC_OUT_LONG                  // 42: delayacct_blkio_ticks
     };
 
     static final int PROCESS_FULL_STAT_MINOR_FAULTS = 1;
@@ -103,9 +150,10 @@ public class ProcessCpuTracker {
     static final int PROCESS_FULL_STAT_UTIME = 3;
     static final int PROCESS_FULL_STAT_STIME = 4;
     static final int PROCESS_FULL_STAT_VSIZE = 5;
+    static final int PROCESS_FULL_STAT_BLOCKIO = 6;
 
-    private final String[] mProcessFullStatsStringData = new String[6];
-    private final long[] mProcessFullStatsData = new long[6];
+    private final String[] mProcessFullStatsStringData = new String[7];
+    private final long[] mProcessFullStatsData = new long[7];
 
     private static final int[] SYSTEM_CPU_FORMAT = new int[] {
         PROC_SPACE_TERM|PROC_COMBINE,
@@ -213,6 +261,9 @@ public class ProcessCpuTracker {
         public int rel_minfaults;
         public int rel_majfaults;
 
+        public long base_iowait;
+        public int rel_iowait;
+
         public boolean active;
         public boolean working;
         public boolean added;
@@ -250,8 +301,8 @@ public class ProcessCpuTracker {
     private final static Comparator<Stats> sLoadComparator = new Comparator<Stats>() {
         public final int
         compare(Stats sta, Stats stb) {
-            int ta = sta.rel_utime + sta.rel_stime;
-            int tb = stb.rel_utime + stb.rel_stime;
+            int ta = sta.rel_utime + sta.rel_stime + sta.rel_iowait;
+            int tb = stb.rel_utime + stb.rel_stime + stb.rel_iowait;
             if (ta != tb) {
                 return ta > tb ? -1 : 1;
             }
@@ -393,12 +444,14 @@ public class ProcessCpuTracker {
                     final long majfaults = procStats[PROCESS_STAT_MAJOR_FAULTS];
                     final long utime = procStats[PROCESS_STAT_UTIME];
                     final long stime = procStats[PROCESS_STAT_STIME];
+                    final long iowait = procStats[PROCESS_STAT_BLOCKIO];
 
                     if (utime == st.base_utime && stime == st.base_stime) {
                         st.rel_utime = 0;
                         st.rel_stime = 0;
                         st.rel_minfaults = 0;
                         st.rel_majfaults = 0;
+                        st.rel_iowait = 0;
                         if (st.active) {
                             st.active = false;
                         }
@@ -421,7 +474,8 @@ public class ProcessCpuTracker {
                             + " utime=" + utime + "-" + st.base_utime
                             + " stime=" + stime + "-" + st.base_stime
                             + " minfaults=" + minfaults + "-" + st.base_minfaults
-                            + " majfaults=" + majfaults + "-" + st.base_majfaults);
+                            + " majfaults=" + majfaults + "-" + st.base_majfaults
+                            + " iowait=" + iowait + "-" + st.base_iowait);
 
                     st.rel_uptime = uptime - st.base_uptime;
                     st.base_uptime = uptime;
@@ -433,6 +487,8 @@ public class ProcessCpuTracker {
                     st.rel_majfaults = (int)(majfaults - st.base_majfaults);
                     st.base_minfaults = minfaults;
                     st.base_majfaults = majfaults;
+                    st.rel_iowait = (int)(iowait - st.base_iowait);
+                    st.base_iowait = iowait;
                     st.working = true;
                 }
 
@@ -468,6 +524,7 @@ public class ProcessCpuTracker {
                         st.base_majfaults = procStats[PROCESS_FULL_STAT_MAJOR_FAULTS];
                         st.base_utime = procStats[PROCESS_FULL_STAT_UTIME];
                         st.base_stime = procStats[PROCESS_FULL_STAT_STIME];
+                        st.base_iowait = procStats[PROCESS_FULL_STAT_BLOCKIO];
                     } else {
                         Slog.i(TAG, "Skipping kernel process pid " + pid
                                 + " name " + procStatsString[0]);
@@ -478,6 +535,7 @@ public class ProcessCpuTracker {
                     st.baseName = "<unknown>";
                     st.base_utime = st.base_stime = 0;
                     st.base_minfaults = st.base_majfaults = 0;
+                    st.base_iowait = 0;
                 }
 
                 if (parentPid < 0) {
@@ -493,12 +551,14 @@ public class ProcessCpuTracker {
 
                 if (DEBUG) Slog.v("Load", "Stats added " + st.name + " pid=" + st.pid
                         + " utime=" + st.base_utime + " stime=" + st.base_stime
-                        + " minfaults=" + st.base_minfaults + " majfaults=" + st.base_majfaults);
+                        + " minfaults=" + st.base_minfaults + " majfaults=" + st.base_majfaults
+                        + " iowait=" + st.base_iowait);
 
                 st.rel_utime = 0;
                 st.rel_stime = 0;
                 st.rel_minfaults = 0;
                 st.rel_majfaults = 0;
+                st.rel_iowait = 0;
                 st.added = true;
                 if (!first && st.interesting) {
                     st.working = true;
@@ -511,6 +571,7 @@ public class ProcessCpuTracker {
             st.rel_stime = 0;
             st.rel_minfaults = 0;
             st.rel_majfaults = 0;
+            st.rel_iowait = 0;
             st.removed = true;
             st.working = true;
             allProcs.remove(curStatsIndex);
@@ -531,6 +592,7 @@ public class ProcessCpuTracker {
             st.rel_stime = 0;
             st.rel_minfaults = 0;
             st.rel_majfaults = 0;
+            st.rel_iowait = 0;
             st.removed = true;
             st.working = true;
             allProcs.remove(curStatsIndex);
@@ -756,16 +818,17 @@ public class ProcessCpuTracker {
         for (int i=0; i<N; i++) {
             Stats st = mWorkingProcs.get(i);
             printProcessCPU(pw, st.added ? " +" : (st.removed ? " -": "  "),
-                    st.pid, st.name, (int)(st.rel_uptime+5)/10,
-                    st.rel_utime, st.rel_stime, 0, 0, 0, st.rel_minfaults, st.rel_majfaults);
+                    st.pid, st.name, (int)(st.rel_uptime+st.rel_iowait+5)/10,
+                    st.rel_utime, st.rel_stime, st.rel_iowait, 0, 0,
+                    st.rel_minfaults, st.rel_majfaults);
             if (!st.removed && st.workingThreads != null) {
                 int M = st.workingThreads.size();
                 for (int j=0; j<M; j++) {
                     Stats tst = st.workingThreads.get(j);
                     printProcessCPU(pw,
                             tst.added ? "   +" : (tst.removed ? "   -": "    "),
-                            tst.pid, tst.name, (int)(st.rel_uptime+5)/10,
-                            tst.rel_utime, tst.rel_stime, 0, 0, 0, 0, 0);
+                            tst.pid, tst.name, (int)(st.rel_uptime+st.rel_iowait+5)/10,
+                            tst.rel_utime, tst.rel_stime, tst.rel_iowait, 0, 0, 0, 0);
                 }
             }
         }

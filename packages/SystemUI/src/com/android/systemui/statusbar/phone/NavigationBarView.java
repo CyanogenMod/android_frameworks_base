@@ -269,6 +269,10 @@ public class NavigationBarView extends LinearLayout {
         notifyVerticalChangedListener(mVertical);
     }
 
+    public void setTransparencyAllowedWhenVertical(boolean allowed) {
+        mBarTransitions.setTransparencyAllowedWhenVertical(allowed);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         initDownStates(event);
@@ -504,6 +508,7 @@ public class NavigationBarView extends LinearLayout {
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_BACK, !disableBack);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_HOME, !disableHome);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_RECENT, !disableRecent);
+        setButtonWithTagVisibility(NavbarEditor.NAVBAR_SEARCH, !disableSearch);
 
         mBarTransitions.applyBackButtonQuiescentAlpha(mBarTransitions.getMode(), true /*animate*/);
     }

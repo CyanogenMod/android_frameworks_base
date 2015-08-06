@@ -2817,6 +2817,12 @@ public class BackupManagerService {
             // Okay, the agent successfully reported back to us!
             final String pkgName = mCurrentPackage.packageName;
             final long filepos = mBackupDataName.length();
+            if (mBackupDataName == null) {
+                failAgent(mAgentBinder, "Backup data was null: " + mBackupDataName);
+                addBackupTrace("backup data was null: " + mBackupDataName);
+                agentErrorCleanup();
+                return;
+            }
             FileDescriptor fd = mBackupData.getFileDescriptor();
             try {
                 // If it's a 3rd party app, see whether they wrote any protected keys

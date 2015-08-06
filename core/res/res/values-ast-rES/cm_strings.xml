@@ -17,21 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profileNameDefault">Predet.</string>
-  <string name="profileNameWork">Trabayu</string>
-  <string name="profileNameHome">Aniciu</string>
-  <string name="profileNameSilent">Silenciu</string>
-  <string name="profileNameNight">Nueche</string>
-  <string name="profileNameAutomobile">Automóvil</string>
-  <string name="profileGroupPhone">Teléfonu</string>
-  <string name="profileGroupCalendar">Calendariu</string>
-  <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Corréu</string>
-  <string name="profileGroupSMS">SMS</string>
-  <string name="wildcardProfile">Otru</string>
-  <string name="profile_none">Darréu</string>
   <string name="profile_picker_title">Perfiles</string>
   <string name="global_action_choose_profile">Perfil</string>
+  <string name="profile_none">Darréu</string>
   <string name="global_action_screenshot">Capturar pantalla</string>
   <string name="permlab_receiveProtectedSms">recibir SMS protexíos</string>
   <string name="permdesc_receiveProtectedSms">Permite que l\'aplicación reciba mensaxes SMS entrantes protexíos.</string>

@@ -69,6 +69,12 @@ public class ResourcesManager {
     Configuration mResConfiguration;
     final Configuration mTmpConfig = new Configuration();
 
+    /**
+     * Number of default assets attached to a Resource object's AssetManager
+     * This currently includes framework and cmsdk resources
+     */
+    private static final int NUM_DEFAULT_ASSETS = 2;
+
     public static ResourcesManager getInstance() {
         synchronized (ResourcesManager.class) {
             if (sResourcesManager == null) {
@@ -525,10 +531,10 @@ public class ResourcesManager {
         String basePackageName = null;
         String resourcePackageName = null;
         int count = assets.getBasePackageCount();
-        if (count > 1) {
-            basePackageName  = assets.getBasePackageName(1);
-            resourcePackageName = assets.getBaseResourcePackageName(1);
-        } else if (count == 1) {
+        if (count > NUM_DEFAULT_ASSETS) {
+            basePackageName  = assets.getBasePackageName(NUM_DEFAULT_ASSETS);
+            resourcePackageName = assets.getBaseResourcePackageName(NUM_DEFAULT_ASSETS);
+        } else if (count == NUM_DEFAULT_ASSETS) {
             basePackageName  = assets.getBasePackageName(0);
         } else {
             return false;
@@ -657,9 +663,9 @@ public class ResourcesManager {
         // first or else the system will crash!
         String basePackageName;
         int count = assets.getBasePackageCount();
-        if (count > 1) {
-            basePackageName  = assets.getBasePackageName(1);
-        } else if (count == 1) {
+        if (count > NUM_DEFAULT_ASSETS) {
+            basePackageName  = assets.getBasePackageName(NUM_DEFAULT_ASSETS);
+        } else if (count == NUM_DEFAULT_ASSETS) {
             basePackageName  = assets.getBasePackageName(0);
         } else {
             return false;

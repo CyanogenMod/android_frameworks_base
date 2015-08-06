@@ -122,6 +122,11 @@ public class StatusBarKeyguardViewManager {
         }
     }
 
+    public void showBouncerHideNotifications() {
+        mPhoneStatusBar.makeExpandedInvisible();
+        mBouncer.show(false /* resetSecuritySelection */);
+    }
+
     private void showBouncer() {
         if (mShowing) {
             mBouncer.show(false /* resetSecuritySelection */);
@@ -450,7 +455,7 @@ public class StatusBarKeyguardViewManager {
             return Profile.LockMode.DEFAULT;
         }
         final Profile profile = ProfileManager.getInstance(mContext).getActiveProfile();
-        return profile == null ? Profile.LockMode.DEFAULT : profile.getScreenLockMode();
+        return profile == null ? Profile.LockMode.DEFAULT : profile.getScreenLockMode().getValue();
     }
 
     public DevicePolicyManager getDevicePolicyManager() {

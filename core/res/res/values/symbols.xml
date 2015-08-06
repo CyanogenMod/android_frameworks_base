@@ -243,7 +243,6 @@
   <java-symbol type="attr" name="accessibilityFocusedDrawable"/>
 
   <java-symbol type="bool" name="def_custom_dateformat" />
-  <java-symbol type="bool" name="def_custom_sys_sound" />
   <java-symbol type="bool" name="action_bar_embed_tabs" />
   <java-symbol type="bool" name="action_bar_embed_tabs_pre_jb" />
   <java-symbol type="bool" name="action_bar_expanded_action_views_exclusive" />
@@ -348,6 +347,7 @@
   <java-symbol type="bool" name="config_restricted_merge" />
 
   <java-symbol type="integer" name="config_wifi_framework_current_network_boost" />
+  <java-symbol type="bool" name="config_legacyGpsHAL" />
 
   <java-symbol type="integer" name="config_bluetooth_max_advertisers" />
   <java-symbol type="integer" name="config_bluetooth_max_scan_filters" />
@@ -448,12 +448,6 @@
   <java-symbol type="string" name="CLIRDefaultOnNextCallOff" />
   <java-symbol type="string" name="CLIRDefaultOnNextCallOn" />
   <java-symbol type="string" name="CLIRPermanent" />
-  <java-symbol type="string" name="def_custom_sys_ringtone" />
-  <java-symbol type="string" name="def_custom_sys_ringtone2" />
-  <java-symbol type="string" name="def_custom_sys_ringtone3" />
-  <java-symbol type="string" name="def_custom_sys_notification" />
-  <java-symbol type="string" name="def_custom_sys_mms" />
-  <java-symbol type="string" name="def_custom_sys_alarm" />
   <java-symbol type="string" name="CfMmi" />
   <java-symbol type="string" name="ClipMmi" />
   <java-symbol type="string" name="ClirMmi" />

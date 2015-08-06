@@ -65,6 +65,7 @@ public class StorageNotification extends SystemUI {
     private StorageManager mStorageManager;
 
     private Handler        mAsyncEventHandler;
+    private Handler        mStartupHandler;
 
     private class StorageNotificationEventListener extends StorageEventListener {
         public void onUsbMassStorageConnectionChanged(final boolean connected) {
@@ -88,6 +89,19 @@ public class StorageNotification extends SystemUI {
 
     @Override
     public void start() {
+        HandlerThread startupThread = new HandlerThread("SystemUI StorageNotification Startup");
+        startupThread.start();
+        mStartupHandler = new Handler(startupThread.getLooper());
+
+        mStartupHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                startAsync();
+            }
+        });
+    }
+
+    private void startAsync() {
         mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
         final boolean connected = mStorageManager.isUsbMassStorageConnected();
         if (DEBUG) Log.d(TAG, String.format( "Startup with UMS connection %s (media state %s)",

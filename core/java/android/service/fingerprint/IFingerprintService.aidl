@@ -47,4 +47,10 @@ interface IFingerprintService {
 
     // Rename fingerprint
     boolean setFingerprintName(IBinder token, int fingerprintId, String name, int userId);
+
+    // Get num of fingerprints samples required to enroll
+    int getNumEnrollmentSteps(IBinder token);
+
+    // Return the state of FingerprintService
+    int getState();
 }

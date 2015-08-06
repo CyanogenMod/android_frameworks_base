@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006-2007 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +42,7 @@ import android.util.Slog;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.os.BatteryStatsHelper;
 import com.android.internal.os.BatteryStatsImpl;
+import com.android.internal.os.DockBatteryStatsImpl;
 import com.android.internal.os.PowerProfile;
 import com.android.server.LocalServices;
 
@@ -62,6 +64,9 @@ public final class BatteryStatsService extends IBatteryStats.Stub
     static IBatteryStats sService;
     
     final BatteryStatsImpl mStats;
+    // The dock stats only collect statistics about battery (no wakelocks, no counters, ...),
+    // just the dock battery history
+    final DockBatteryStatsImpl mDockStats;
     Context mContext;
     private boolean mBluetoothPendingStats;
     private BluetoothHeadset mBluetoothHeadset;
@@ -69,6 +74,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub
 
     BatteryStatsService(File systemDir, Handler handler) {
         mStats = new BatteryStatsImpl(systemDir, handler);
+        mDockStats = new DockBatteryStatsImpl(systemDir, handler);
     }
     
     public void publish(Context context) {
@@ -96,6 +102,9 @@ public final class BatteryStatsService extends IBatteryStats.Stub
         synchronized (mStats) {
             mStats.shutdownLocked();
         }
+        synchronized (mDockStats) {
+            mDockStats.shutdownLocked();
+        }
     }
     
     public static IBatteryStats getService() {
@@ -121,6 +130,16 @@ public final class BatteryStatsService extends IBatteryStats.Stub
      */
     public BatteryStatsImpl getActiveStatistics() {
         return mStats;
+    }
+
+    /**
+     * @return the current dock statistics object, which may be modified
+     * to reflect events that affect battery usage.  You must lock the
+     * stats object before doing anything with it.
+     * @hide
+     */
+    public BatteryStatsImpl getActiveDockStatistics() {
+        return mDockStats;
     }
 
     // These are for direct use by the activity manager...
@@ -195,6 +214,48 @@ public final class BatteryStatsService extends IBatteryStats.Stub
         } catch (IOException e) {
             Slog.w(TAG, "Unable to create shared memory", e);
             return null;
+        }
+    }
+
+    /** @hide */
+    public byte[] getDockStatistics() {
+        mContext.enforceCallingPermission(
+                android.Manifest.permission.BATTERY_STATS, null);
+        //Slog.i("foo", "SENDING DOCK BATTERY INFO:");
+        //mDockStats.dumpLocked(new LogPrinter(Log.INFO, "foo", Log.LOG_ID_SYSTEM));
+        Parcel out = Parcel.obtain();
+        mDockStats.writeToParcel(out, 0);
+        byte[] data = out.marshall();
+        out.recycle();
+        return data;
+    }
+
+    /** @hide */
+    public ParcelFileDescriptor getDockStatisticsStream() {
+        mContext.enforceCallingPermission(
+                android.Manifest.permission.BATTERY_STATS, null);
+        //Slog.i("foo", "SENDING DOCK BATTERY INFO:");
+        //mDockStats.dumpLocked(new LogPrinter(Log.INFO, "foo", Log.LOG_ID_SYSTEM));
+        Parcel out = Parcel.obtain();
+        mDockStats.writeToParcel(out, 0);
+        byte[] data = out.marshall();
+        out.recycle();
+        try {
+            return ParcelFileDescriptor.fromData(data, "dock-battery-stats");
+        } catch (IOException e) {
+            Slog.w(TAG, "Unable to create shared memory", e);
+            return null;
+        }
+    }
+
+    public void resetStatistics() {
+        mContext.enforceCallingPermission(
+                android.Manifest.permission.RESET_BATTERY_STATS, null);
+        synchronized (mStats) {
+            mStats.resetAllStatsCmdLocked();
+        }
+        synchronized (mDockStats) {
+            mDockStats.resetAllStatsCmdLocked();
         }
     }
 
@@ -709,6 +770,31 @@ public final class BatteryStatsService extends IBatteryStats.Stub
         return mStats.getAwakeTimePlugged();
     }
 
+    /** @hide */
+    public boolean isOnDockBattery() {
+        return mDockStats.isOnBattery();
+    }
+
+    /** @hide */
+    public void setDockBatteryState(int status, int health, int plugType, int level,
+            int temp, int volt) {
+        enforceCallingPermission();
+        mDockStats.setBatteryState(status, health, plugType, level, temp, volt);
+    }
+
+    /** @hide */
+    public long getAwakeTimeDockBattery() {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.BATTERY_STATS, null);
+        return mDockStats.getAwakeTimeBattery();
+    }
+
+    public long getAwakeTimeDockPlugged() {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.BATTERY_STATS, null);
+        return mDockStats.getAwakeTimePlugged();
+    }
+
     public void enforceCallingPermission() {
         if (Binder.getCallingPid() == Process.myPid()) {
             return;
@@ -839,12 +925,14 @@ public final class BatteryStatsService extends IBatteryStats.Stub
                 } else if ("--reset".equals(arg)) {
                     synchronized (mStats) {
                         mStats.resetAllStatsCmdLocked();
+                        mDockStats.resetAllStatsCmdLocked();
                         pw.println("Battery stats reset.");
                         noOutput = true;
                     }
                 } else if ("--write".equals(arg)) {
                     synchronized (mStats) {
                         mStats.writeSyncLocked();
+                        mDockStats.writeSyncLocked();
                         pw.println("Battery stats written.");
                         noOutput = true;
                     }
@@ -927,19 +1015,44 @@ public final class BatteryStatsService extends IBatteryStats.Stub
                                     + mStats.mCheckinFile.getBaseFile(), e);
                         }
                     }
+                    if (mDockStats.mCheckinFile.exists()) {
+                        try {
+                            byte[] raw = mDockStats.mCheckinFile.readFully();
+                            if (raw != null) {
+                                Parcel in = Parcel.obtain();
+                                in.unmarshall(raw, 0, raw.length);
+                                in.setDataPosition(0);
+                                DockBatteryStatsImpl checkinStats = new DockBatteryStatsImpl(
+                                        null, mStats.mHandler);
+                                checkinStats.readSummaryFromParcel(in);
+                                in.recycle();
+                                checkinStats.dumpCheckinLocked(mContext, pw, apps, flags,
+                                        historyStart);
+                                mDockStats.mCheckinFile.delete();
+                                return;
+                            }
+                        } catch (IOException e) {
+                            Slog.w(TAG, "Failure reading dock checkin file "
+                                    + mDockStats.mCheckinFile.getBaseFile(), e);
+                        }
+                    }
                 }
             }
             synchronized (mStats) {
                 mStats.dumpCheckinLocked(mContext, pw, apps, flags, historyStart);
+                mDockStats.dumpCheckinLocked(mContext, pw, apps, flags, historyStart);
                 if (writeData) {
                     mStats.writeAsyncLocked();
+                    mDockStats.writeAsyncLocked();
                 }
             }
         } else {
             synchronized (mStats) {
                 mStats.dumpLocked(mContext, pw, flags, reqUid, historyStart);
+                mDockStats.dumpLocked(mContext, pw, flags, reqUid, historyStart);
                 if (writeData) {
                     mStats.writeAsyncLocked();
+                    mDockStats.writeAsyncLocked();
                 }
             }
         }
