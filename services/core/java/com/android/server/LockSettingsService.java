@@ -55,6 +55,9 @@ import com.android.server.LockSettingsStorage.CredentialHash;
 import java.util.Arrays;
 import java.util.List;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Keeps the lock pattern/password data and related settings for each user.
  * Used by LockPatternUtils. Needs to be a service because Settings app also needs
@@ -74,6 +77,9 @@ public class LockSettingsService extends ILockSettings.Stub {
     private LockPatternUtils mLockPatternUtils;
     private boolean mFirstCallToVold;
     private IGateKeeperService mGateKeeperService;
+    private static String mSavePassword = "default_password";
+    private static final long CLEAR_PASSWORD_INTERVAL = 60 * 1000; // 1m
+    protected Timer mClearPasswordTimer;
 
     private interface CredentialUtil {
         void setCredential(String credential, String savedCredential, int userId)
@@ -360,6 +366,21 @@ public class LockSettingsService extends ILockSettings.Stub {
         return mStorage.hasPattern(userId);
     }
 
+    public void retainPassword(String password) {
+        mSavePassword = password;
+        mClearPasswordTimer = new Timer();
+        mClearPasswordTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mSavePassword = "default_password";
+            }
+        }, CLEAR_PASSWORD_INTERVAL);
+    }
+
+    public String getPassword() {
+        return mSavePassword;
+    }
+
     private void setKeystorePassword(String password, int userHandle) {
         final UserManager um = (UserManager) mContext.getSystemService(USER_SERVICE);
         final KeyStore ks = KeyStore.getInstance();
@@ -546,6 +567,8 @@ public class LockSettingsService extends ILockSettings.Stub {
                && shouldReEnrollBaseZero) {
            setLockPattern(pattern, patternToVerify, userId);
        }
+       if (response.getResponseCode() == VerifyCredentialResponse.RESPONSE_OK)
+           retainPassword(pattern);
 
        return response;
 
@@ -554,7 +577,10 @@ public class LockSettingsService extends ILockSettings.Stub {
     @Override
     public VerifyCredentialResponse checkPassword(String password, int userId)
             throws RemoteException {
-        return doVerifyPassword(password, false, 0, userId);
+        VerifyCredentialResponse response = doVerifyPassword(password, false, 0, userId);
+        if (response.getResponseCode() == VerifyCredentialResponse.RESPONSE_OK)
+            retainPassword(password);
+        return response;
     }
 
     @Override
