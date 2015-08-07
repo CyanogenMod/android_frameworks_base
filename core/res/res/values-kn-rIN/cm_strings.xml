@@ -74,7 +74,7 @@
   <string name="app_ops_access_camera">ಕ್ಯಾಮೆರಾ ಪ್ರವೇಶ</string>
   <string name="app_ops_access_location">ನಿಮ್ಮ  ಸ್ಥಳವನ್ನು ಪ್ರವೇಶಿಸುವಿಕೆ</string>
   <string name="app_ops_access_notifications">ನಿಮ್ಮ ಅಧಿಸೂಚನೆಗಳನ್ನು ಓದು</string>
-  <string name="app_ops_activate_vpn">VPN ಸಶಕ್ತಗೊಳಿಸು</string>
+  <string name="app_ops_activate_vpn">ವಿಪಿಎನ್ ಸಶಕ್ತಗೊಳಿಸು</string>
   <string name="app_ops_alarm_wakeup">ಸಾಧನವನ್ನು ಎಬ್ಬಿಸು</string>
   <string name="app_ops_su">ರೂಟ್ ಪ್ರವೇಶ ಪಡೆ</string>
   <string name="app_ops_auto_start">ಪವರ್ ಅಪ್ ವೇಳೆ ಆರಂಭವಾಗು</string>
@@ -111,7 +111,7 @@
   <string name="app_ops_toggle_mobile_data">ಟಾಗಲ್ ಮೊಬೈಲ್ ಡೇಟಾ</string>
   <string name="app_ops_toggle_nfc">ಟಾಗಲ್ NFC</string>
   <string name="app_ops_toggle_wifi">ಟಾಗಲ್ ವೈಫೈ</string>
-  <string name="app_ops_use_alarm_volume">ಅಲಾರ್ಮ್ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
+  <string name="app_ops_use_alarm_volume">ಅಲಾರಂ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_audio_focus">ಆಡಿಯೋ ಫೋಕಸ್ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_bluetooth_volume">ಬ್ಲೂಟೂತ್ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_master_volume">ಮಾಸ್ಟರ್ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_write_mms">ಎಂಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
   <string name="app_ops_write_sms">ಎಸ್ಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
   <string name="lockscreen_sim_error_message_short">ಅಮಾನ್ಯವಾದ ಕಾರ್ಡ್.</string>
-  <string name="lockscreen_airplane_mode_on">ಏರ್‍ಪ್ಲೇನ್ ಮೋಡ್</string>
+  <string name="lockscreen_airplane_mode_on">ಏರೋಪ್ಲೇನ್ ಮೋಡ್</string>
   <string name="usb_charging_notification_title">ಚಾರ್ಜಿಂಗ್ ಮೋಡ್‍ನಲ್ಲಿ ಸಂಪರ್ಕಗೊಳಿಸಲಾಗಿದೆ</string>
   <string name="tethered_notification_no_device_message">ಯಾವುದೇ ಸಂಪರ್ಕಗೊಂಡ ಸಾಧನವಿಲ್ಲ</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ಸಂಪರ್ಕಗೊಳಿಸಿದ ಸಾಧನ</string>

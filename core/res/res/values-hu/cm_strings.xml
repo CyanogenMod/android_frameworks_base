@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Lehetővé teszi az alkalmazás számára, hogy hozzáférjen az ujjlenyomat szolgáltatáshoz. Az alkalmazás hozzáadhat, törölhet, átnevezhet és újra hitelesíthet ujjlenyomatokat</string>
   <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
   <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse alacsony szintű akkumulátor használatára vonatkozó adatokat.</string>
+  <string name="silent_mode_priority">Prioritás</string>
+  <string name="silent_mode_none">Nincs</string>
 </resources>

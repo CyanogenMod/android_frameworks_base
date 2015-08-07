@@ -18,7 +18,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="profile_picker_title">الأوضاع</string>
-  <string name="global_action_choose_profile">الشخصية</string>
+  <string name="global_action_choose_profile">الوضع</string>
   <string name="profile_none">لا شيء</string>
   <string name="global_action_screenshot">لقطة للشاشة</string>
   <string name="permlab_receiveProtectedSms">استلام رسائل نصية قصيرة محمية</string>

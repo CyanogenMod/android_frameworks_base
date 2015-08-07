@@ -149,7 +149,7 @@ public class LockPatternView extends View {
          * @param row The row of the cell.
          * @param column The column of the cell.
          */
-        private Cell(int row, int column, byte size) {
+        /* package */ Cell(int row, int column, byte size) {
             checkRange(row, column, size);
             this.row = row;
             this.column = column;
@@ -168,8 +168,12 @@ public class LockPatternView extends View {
          * @param column The column of the cell.
          */
         public static synchronized Cell of(int row, int column, byte size) {
+            return of(sCells, row, column, size);
+        }
+
+        public static Cell of(Cell[][] cells, int row, int column, byte size) {
             checkRange(row, column, size);
-            return sCells[row][column];
+            return cells[row][column];
         }
 
         public static void updateSize(byte size) {
@@ -188,6 +192,16 @@ public class LockPatternView extends View {
             if (column < 0 || column > size - 1) {
                 throw new IllegalArgumentException("column must be in range 0-" + (size - 1));
             }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof Cell) {
+                final Cell other = (Cell) o;
+                return other.getColumn() == getColumn()
+                        && other.getRow() == getRow();
+            }
+            return false;
         }
 
         public String toString() {
@@ -1108,9 +1122,6 @@ public class LockPatternView extends View {
     protected void onRestoreInstanceState(Parcelable state) {
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setPattern(
-                DisplayMode.Correct,
-                mLockPatternUtils.stringToPattern(ss.getSerializedPattern()));
         mPatternDisplayMode = DisplayMode.values()[ss.getDisplayMode()];
         mPatternSize = ss.getPatternSize();
         mInputEnabled = ss.isInputEnabled();
@@ -1118,6 +1129,8 @@ public class LockPatternView extends View {
         mEnableHapticFeedback = ss.isTactileFeedbackEnabled();
         mVisibleDots = ss.isVisibleDots();
         mShowErrorPath = ss.isShowErrorPath();
+        setPattern(DisplayMode.Correct,
+                LockPatternUtils.stringToPattern(ss.getSerializedPattern(), mPatternSize));
     }
 
     /**
