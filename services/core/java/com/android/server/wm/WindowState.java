@@ -75,6 +75,7 @@ class WindowList extends ArrayList<WindowState> {
 final class WindowState implements WindowManagerPolicy.WindowState {
     static final String TAG = "WindowState";
 
+    Rect remoteBounds;
     final WindowManagerService mService;
     final WindowManagerPolicy mPolicy;
     final Context mContext;

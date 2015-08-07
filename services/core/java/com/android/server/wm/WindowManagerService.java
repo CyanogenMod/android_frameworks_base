@@ -123,22 +123,23 @@ import android.view.InputEventReceiver;
 import android.view.KeyEvent;
 import android.view.MagnificationSpec;
 import android.view.MotionEvent;
-import android.view.WindowManagerInternal;
-import android.view.Surface.OutOfResourcesException;
 import android.view.Surface;
+import android.view.Surface.OutOfResourcesException;
 import android.view.SurfaceControl;
 import android.view.SurfaceSession;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.WindowManagerGlobal;
-import android.view.WindowManagerPolicy;
 import android.view.WindowManager.LayoutParams;
+import android.view.WindowManagerGlobal;
+import android.view.WindowManagerInternal;
+import android.view.WindowManagerPolicy;
 import android.view.WindowManagerPolicy.FakeWindow;
 import android.view.WindowManagerPolicy.PointerEventListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
+import com.android.server.EventLogTags;
 
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -158,6 +159,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 /** {@hide} */
 public class WindowManagerService extends IWindowManager.Stub
@@ -2347,6 +2349,9 @@ public class WindowManagerService extends IWindowManager.Stub
             return res;
         }
 
+        String inv = "addWindow " + new Random().nextInt() + " ";
+        Log.d("sarbs", inv + "start");
+
         boolean reportNewConfig = false;
         WindowState attachedWindow = null;
         WindowState win = null;
@@ -2375,11 +2380,21 @@ public class WindowManagerService extends IWindowManager.Stub
                 return WindowManagerGlobal.ADD_DUPLICATE_ADD;
             }
 
+            IBinder remoteWindowToken = null;
             if (type >= FIRST_SUB_WINDOW && type <= LAST_SUB_WINDOW) {
+                if (type == TYPE_APPLICATION_REMOTE_WINDOW) {
+                    remoteWindowToken = attrs.token;
+                    Log.d("sarbs", inv + "it's a remote window! remoteWindowToken=" + remoteWindowToken);
+                    attrs.token = mRemoteWindowTokens.get(attrs.token);
+                    if (attrs.token == null) {
+                        return WindowManagerGlobal.ADD_BAD_SUBWINDOW_TOKEN;
+                    }
+                }
+
                 attachedWindow = windowForClientLocked(null, attrs.token, false);
                 if (attachedWindow == null) {
                     Slog.w(TAG, "Attempted to add window with token that is not a window: "
-                          + attrs.token + ".  Aborting.");
+                            + attrs.token + ".  Aborting.");
                     return WindowManagerGlobal.ADD_BAD_SUBWINDOW_TOKEN;
                 }
                 if (attachedWindow.mAttrs.type >= FIRST_SUB_WINDOW
@@ -2620,6 +2635,12 @@ public class WindowManagerService extends IWindowManager.Stub
 
             if (win.isVisibleOrAdding() && updateOrientationFromAppTokensLocked(false)) {
                 reportNewConfig = true;
+            }
+
+            if (remoteWindowToken != null) {
+                mRemoteWindowStates.put(remoteWindowToken, win);
+                win.remoteBounds = mRemoteWindowBounds.get(remoteWindowToken);
+                Log.d("sarbs", inv + "added remoteWindow state with bounds, win=" + win);
             }
         }
 
@@ -3084,6 +3105,22 @@ public class WindowManagerService extends IWindowManager.Stub
             if (win == null) {
                 return 0;
             }
+
+            String inv = "relayoutWindow " + new Random().nextInt() + " ";
+            Log.d("sarbs", inv + "start win=" + win);
+
+            if (win.remoteBounds != null) {
+                if (attrs != null) {
+                    attrs.x = win.remoteBounds.left;
+                    attrs.y = win.remoteBounds.top;
+                    attrs.width = win.remoteBounds.right - win.remoteBounds.left;
+                    attrs.height = win.remoteBounds.bottom - win.remoteBounds.top;
+                }
+                Log.d("sarbs", inv + " found bounds! bounds=" + win.remoteBounds);
+                requestedWidth = attrs.width;
+                requestedHeight = attrs.height;
+            }
+
             WindowStateAnimator winAnimator = win.mWinAnimator;
             if (viewVisibility != View.GONE && (win.mRequestedWidth != requestedWidth
                     || win.mRequestedHeight != requestedHeight)) {
@@ -11178,7 +11215,7 @@ public class WindowManagerService extends IWindowManager.Stub
         return mPolicy.hasPermanentMenuKey();
     }
 
-    @Override 
+    @Override
     public boolean needsNavigationBar() {
         return mPolicy.needsNavigationBar();
     }
@@ -12088,6 +12125,68 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
                 WindowManagerService.this.removeWindowToken(token);
             }
+        }
+    }
+
+    // key: remote token, value: app (parent) token
+    private final HashMap<IBinder, IBinder> mRemoteWindowTokens = new HashMap<>();
+    private final HashMap<IBinder, WindowState> mRemoteWindowStates = new HashMap<>();
+    private final HashMap<IBinder, Rect> mRemoteWindowBounds = new HashMap<>();
+
+    @Override
+    public IBinder createRemoteWindowToken(IBinder appToken) {
+        // TODO check ownership of appToken vs caller
+        synchronized (mWindowMap) {
+
+            IBinder token = new Binder();
+            mRemoteWindowTokens.put(token, appToken);
+            mRemoteWindowBounds.put(token, new Rect());
+
+            return token;
+        }
+    }
+
+    @Override
+    public void destroyRemoteWindowToken(IBinder remoteToken, IBinder appToken) {
+        // TODO check ownership of appToken vs caller
+        synchronized (mWindowMap) {
+            mRemoteWindowStates.remove(remoteToken);
+            mRemoteWindowTokens.remove(remoteToken);
+            mRemoteWindowBounds.remove(remoteToken);
+        }
+    }
+
+    @Override
+    public void updateRemoteWindow(int x, int y, int width, int height, IBinder remoteToken, IBinder appToken) {
+        synchronized (mWindowMap) {
+            Log.d("sarbs", String.format("updateRemoteWindow x=%d y=%d w=%d h=%d remoteToken=%s", x, y, width, height, remoteToken));
+
+            Rect bounds = mRemoteWindowBounds.get(remoteToken);
+            bounds.left = x;
+            bounds.top = y;
+            bounds.right = x + width;
+            bounds.bottom = y + height;
+
+            WindowState state = mRemoteWindowStates.get(remoteToken);
+            if (state == null)
+                return;
+            LayoutParams params = state.getAttrs();
+            params.x = x;
+            params.y = y;
+            params.width = width;
+            params.height = height;
+            relayoutWindow(state.mSession, state.mClient, state.mSeq, params, width, height, state.mViewVisibility,
+                    0, new Rect(), new Rect(), new Rect(), new Rect(),
+                    new Rect(), new Configuration(), null);
+        }
+    }
+
+    @Override
+    public void setRemoteWindowVisibility(boolean visible, IBinder remoteToken, IBinder appToken) {
+        synchronized (mWindowMap) {
+            WindowState state = mRemoteWindowStates.get(remoteToken);
+//            LayoutParams params = state.getAttrs();
+            // TODO: figure out what to do here
         }
     }
 }

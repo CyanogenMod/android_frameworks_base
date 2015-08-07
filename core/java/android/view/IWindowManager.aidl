@@ -279,4 +279,27 @@ interface IWindowManager
      * @return The frame statistics or null if the window does not exist.
      */
     WindowContentFrameStats getWindowContentFrameStats(IBinder token);
+
+    /**
+     * Creates a token that is associated with an app token, and can be used to create a new sub-window
+     * for that app token, by a different app.
+     *
+     * @param appToken The application's window token.
+     * @return A sub-app-token that can be given to a remote process without sharing your master app window token.
+     * @hide
+     */
+    IBinder createRemoteWindowToken(IBinder appToken);
+
+    /**
+     * Destroys a previously-created remote token. Any associated windows will be hidden immediately.
+     *
+     * @param remoteToken The remote window token to destroy
+     * @param appToken The app token that the remote token was created for
+     * @hide
+     */
+    void destroyRemoteWindowToken(IBinder remoteToken, IBinder appToken);
+
+    void updateRemoteWindow(in int x, in int y, in int width, in int height, in IBinder remoteToken, in IBinder appToken);
+
+    void setRemoteWindowVisibility(in boolean visible, in IBinder remoteToken, in IBinder appToken);
 }
