@@ -16,42 +16,13 @@
 
 package com.android.server.wm;
 
-import static android.view.WindowManager.LayoutParams.*;
-
-import static android.view.WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER;
-import android.app.AppOpsManager;
-import android.os.Build;
-import android.os.SystemService;
-import android.util.ArraySet;
-import android.util.TimeUtils;
-import android.view.IWindowId;
-import android.view.IWindowSessionCallback;
-import android.view.WindowContentFrameStats;
-import com.android.server.display.DigitalPenOffScreenDisplayAdapter;
-import com.android.internal.app.IBatteryStats;
-import com.android.internal.policy.PolicyManager;
-import com.android.internal.policy.impl.PhoneWindowManager;
-import com.android.internal.util.FastPrintWriter;
-import com.android.internal.view.IInputContext;
-import com.android.internal.view.IInputMethodClient;
-import com.android.internal.view.IInputMethodManager;
-import com.android.internal.view.WindowManagerPolicyThread;
-import com.android.server.AttributeCache;
-import com.android.server.DisplayThread;
-import com.android.server.EventLogTags;
-import com.android.server.LocalServices;
-import com.android.server.UiThread;
-import com.android.server.Watchdog;
-import com.android.server.am.BatteryStatsService;
-import com.android.server.input.InputManagerService;
-import com.android.server.power.ShutdownThread;
-
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.app.ActivityManagerNative;
+import android.app.AppOpsManager;
 import android.app.IActivityManager;
 import android.app.StatusBarManager;
 import android.app.admin.DevicePolicyManager;
-import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -76,6 +47,7 @@ import android.hardware.display.DisplayManager;
 import android.hardware.display.DisplayManagerInternal;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
@@ -93,17 +65,20 @@ import android.os.ServiceManager;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.SystemService;
 import android.os.Trace;
 import android.os.UserHandle;
 import android.os.WorkSource;
 import android.provider.Settings;
+import android.util.ArraySet;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
-import android.util.SparseArray;
 import android.util.Pair;
 import android.util.Slog;
+import android.util.SparseArray;
 import android.util.SparseIntArray;
+import android.util.TimeUtils;
 import android.util.TypedValue;
 import android.view.Choreographer;
 import android.view.Display;
@@ -114,8 +89,10 @@ import android.view.IInputFilter;
 import android.view.IOnKeyguardExitResult;
 import android.view.IRotationWatcher;
 import android.view.IWindow;
+import android.view.IWindowId;
 import android.view.IWindowManager;
 import android.view.IWindowSession;
+import android.view.IWindowSessionCallback;
 import android.view.InputChannel;
 import android.view.InputDevice;
 import android.view.InputEvent;
@@ -123,22 +100,41 @@ import android.view.InputEventReceiver;
 import android.view.KeyEvent;
 import android.view.MagnificationSpec;
 import android.view.MotionEvent;
-import android.view.WindowManagerInternal;
-import android.view.Surface.OutOfResourcesException;
 import android.view.Surface;
+import android.view.Surface.OutOfResourcesException;
 import android.view.SurfaceControl;
 import android.view.SurfaceSession;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowContentFrameStats;
 import android.view.WindowManager;
-import android.view.WindowManagerGlobal;
-import android.view.WindowManagerPolicy;
 import android.view.WindowManager.LayoutParams;
+import android.view.WindowManagerGlobal;
+import android.view.WindowManagerInternal;
+import android.view.WindowManagerPolicy;
 import android.view.WindowManagerPolicy.FakeWindow;
 import android.view.WindowManagerPolicy.PointerEventListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
+import com.android.internal.app.IBatteryStats;
+import com.android.internal.policy.PolicyManager;
+import com.android.internal.policy.impl.PhoneWindowManager;
+import com.android.internal.util.FastPrintWriter;
+import com.android.internal.view.IInputContext;
+import com.android.internal.view.IInputMethodClient;
+import com.android.internal.view.IInputMethodManager;
+import com.android.internal.view.WindowManagerPolicyThread;
+import com.android.server.AttributeCache;
+import com.android.server.DisplayThread;
+import com.android.server.EventLogTags;
+import com.android.server.LocalServices;
+import com.android.server.UiThread;
+import com.android.server.Watchdog;
+import com.android.server.am.BatteryStatsService;
+import com.android.server.display.DigitalPenOffScreenDisplayAdapter;
+import com.android.server.input.InputManagerService;
+import com.android.server.power.ShutdownThread;
 
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -156,8 +152,43 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import static android.view.WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW;
+import static android.view.WindowManager.LayoutParams.FIRST_SUB_WINDOW;
+import static android.view.WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+import static android.view.WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+import static android.view.WindowManager.LayoutParams.FLAG_SECURE;
+import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+import static android.view.WindowManager.LayoutParams.LAST_APPLICATION_WINDOW;
+import static android.view.WindowManager.LayoutParams.LAST_SUB_WINDOW;
+import static android.view.WindowManager.LayoutParams.PRIVATE_FLAG_COMPATIBLE_WINDOW;
+import static android.view.WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST;
+import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION;
+import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING;
+import static android.view.WindowManager.LayoutParams.TYPE_BASE_APPLICATION;
+import static android.view.WindowManager.LayoutParams.TYPE_BOOT_PROGRESS;
+import static android.view.WindowManager.LayoutParams.TYPE_DREAM;
+import static android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD;
+import static android.view.WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG;
+import static android.view.WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG;
+import static android.view.WindowManager.LayoutParams.TYPE_KEYGUARD_SCRIM;
+import static android.view.WindowManager.LayoutParams.TYPE_PRIVATE_PRESENTATION;
+import static android.view.WindowManager.LayoutParams.TYPE_STATUS_BAR;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_DIALOG;
+import static android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+import static android.view.WindowManager.LayoutParams.TYPE_UNIVERSE_BACKGROUND;
+import static android.view.WindowManager.LayoutParams.TYPE_VOICE_INTERACTION;
+import static android.view.WindowManager.LayoutParams.TYPE_WALLPAPER;
+import static android.view.WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER;
 
 /** {@hide} */
 public class WindowManagerService extends IWindowManager.Stub
@@ -11178,7 +11209,7 @@ public class WindowManagerService extends IWindowManager.Stub
         return mPolicy.hasPermanentMenuKey();
     }
 
-    @Override 
+    @Override
     public boolean needsNavigationBar() {
         return mPolicy.needsNavigationBar();
     }
@@ -12089,5 +12120,54 @@ public class WindowManagerService extends IWindowManager.Stub
                 WindowManagerService.this.removeWindowToken(token);
             }
         }
+    }
+
+    private final HashMap<IBinder, HashSet<IBinder>> mRemoteWindowTokens = new HashMap<>();
+    private final HashMap<IBinder, LayoutParams> mRemoteWindowParams = new HashMap<>();
+
+    @Override
+    public IBinder createRemoteWindowToken(IBinder appToken, LayoutParams params) {
+        // TODO check ownership of appToken vs caller
+        synchronized (mWindowMap) {
+            HashSet<IBinder> remoteTokens = mRemoteWindowTokens.get(appToken);
+            if (remoteTokens == null) {
+                remoteTokens = new HashSet<>();
+                mRemoteWindowTokens.put(appToken, remoteTokens);
+            }
+
+            IBinder token = new Binder();
+            remoteTokens.add(token);
+            mRemoteWindowParams.put(token, params);
+
+            return token;
+        }
+    }
+
+    @Override
+    public void destroyRemoteWindowToken(IBinder remoteToken, IBinder appToken) {
+        // TODO check ownership of appToken vs caller
+        synchronized (mWindowMap) {
+            mRemoteWindowParams.remove(remoteToken);
+
+            HashSet<IBinder> remoteTokens = mRemoteWindowTokens.get(appToken);
+            if (remoteTokens == null) {
+                return;
+            }
+
+            remoteTokens.remove(remoteToken);
+            if (remoteTokens.isEmpty()) {
+                mRemoteWindowTokens.remove(remoteTokens);
+            }
+        }
+    }
+
+    @Override
+    public void updateRemoteWindow(int x, int y, int width, int height, IBinder remoteToken, IBinder appToken) {
+
+    }
+
+    @Override
+    public void setRemoteWindowVisibility(boolean visible, IBinder remoteToken, IBinder appToken) {
+
     }
 }

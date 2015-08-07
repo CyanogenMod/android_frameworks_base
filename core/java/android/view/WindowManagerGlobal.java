@@ -550,6 +550,43 @@ public final class WindowManagerGlobal {
             }
         }
     }
+
+    /** @hide */
+    public IBinder createRemoteWindowToken(IBinder appToken) {
+        try {
+            return getWindowManagerService().createRemoteWindowToken(appToken);
+        } catch (RemoteException e) {
+            Log.e("sarbs", "createRemoteWindowToken", e);
+            return null;
+        }
+    }
+
+    /** @hide */
+    public void destroyRemoteWindowToken(IBinder remoteToken, IBinder appToken) {
+        try {
+            getWindowManagerService().destroyRemoteWindowToken(remoteToken, appToken);
+        } catch (RemoteException e) {
+            Log.e("sarbs", "destroyRemoteWindowToken", e);
+        }
+    }
+
+    /** @hide */
+    public void updateRemoteWindow(int x, int y, int width, int height, IBinder remoteToken, IBinder appToken) {
+        try {
+            getWindowManagerService().updateRemoteWindow(x, y, width, height, remoteToken, appToken);
+        } catch (RemoteException e) {
+            Log.e("sarbs", "updateRemoteWindow", e);
+        }
+    }
+
+    /** @hide */
+    public void setRemoteWindowVisibility(boolean visible, IBinder remoteToken, IBinder appToken) {
+        try {
+            getWindowManagerService().setRemoteWindowVisibility(visible, remoteToken, appToken);
+        } catch (RemoteException e) {
+            Log.e("sarbs", "setRemoteWindowVisibility", e);
+        }
+    }
 }
 
 final class WindowLeaked extends AndroidRuntimeException {
