@@ -313,7 +313,7 @@ public abstract class ContentProvider implements ComponentCallbacks2 {
         public int delete(String callingPkg, Uri uri, String selection, String[] selectionArgs) {
             validateIncomingUri(uri);
             uri = getUriWithoutUserId(uri);
-            if (enforceWritePermission(callingPkg, uri, null) != AppOpsManager.MODE_ALLOWED) {
+            if (enforceDeletePermission(callingPkg, uri) != AppOpsManager.MODE_ALLOWED) {
                 return 0;
             }
             final String original = setCallingPackage(callingPkg);
