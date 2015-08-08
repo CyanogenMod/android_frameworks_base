@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Hiermee kan de app toegang krijgen tot de vingerafdrukservice. De app kan vingerafdrukken toevoegen, verwijderen, hernoemen en gebruiken ter authenticatie.</string>
   <string name="permlab_resetBatteryStats">accustatistieken opnieuw instellen</string>
   <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
+  <string name="silent_mode_priority">Prioriteit</string>
+  <string name="silent_mode_none">Geen</string>
 </resources>

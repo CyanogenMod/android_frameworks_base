@@ -1421,7 +1421,7 @@
         android:permissionGroup="android.permission-group.STORAGE"
         android:label="@string/permlab_manageDocs"
         android:description="@string/permdesc_manageDocs"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature|system" />
 
     <!-- ================================== -->
     <!-- Permissions for screenlock         -->

@@ -40,7 +40,9 @@ public class BatteryLevelTextView extends TextView implements
 
     public BatteryLevelTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mRequestedVisibility = getVisibility();
+        // setBatteryStateRegistar (if called) will made the view visible and ready to be hidden
+        // if the view shouldn't be displayed. Otherwise this view should be hidden from start.
+        mRequestedVisibility = GONE;
     }
 
     public void setForceShown(boolean forceShow) {
@@ -49,6 +51,7 @@ public class BatteryLevelTextView extends TextView implements
     }
 
     public void setBatteryStateRegistar(BatteryStateRegistar batteryStateRegistar) {
+        mRequestedVisibility = VISIBLE;
         mBatteryStateRegistar = batteryStateRegistar;
         if (mAttached) {
             mBatteryStateRegistar.addStateChangedCallback(this);

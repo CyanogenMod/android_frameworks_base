@@ -209,4 +209,6 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permdesc_accessFingerprintService">Uygulamaların parmak izi hizmetine erişimini sağlar. Uygulama parmak izlerini ekleyebilir, silebilir, yeniden adlandırabilir ve yetkilendirebilir.</string>
   <string name="permlab_resetBatteryStats">pil istatistiklerini sıfırla</string>
   <string name="permdesc_resetBatteryStats">Uygulamalara güncel düşük seviye pil kullanım verisini sıfırlama izni verir.</string>
+  <string name="silent_mode_priority">Öncelik</string>
+  <string name="silent_mode_none">Yok</string>
 </resources>

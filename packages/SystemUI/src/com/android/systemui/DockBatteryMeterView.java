@@ -26,7 +26,7 @@ import android.view.View;
 public class DockBatteryMeterView extends BatteryMeterView {
 
     private BatteryManager mBatteryService;
-    private boolean mSupported;
+    private final boolean mSupported;
 
     private class DockBatteryTracker extends BatteryTracker {
 
@@ -40,8 +40,6 @@ public class DockBatteryMeterView extends BatteryMeterView {
             final String action = intent.getAction();
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 if (testmode && ! intent.getBooleanExtra("testmode", false)) return;
-
-                mSupported = mBatteryService.isDockBatterySupported();
 
                 if (mSupported) {
                     present = intent.getBooleanExtra(BatteryManager.EXTRA_DOCK_PRESENT, false);
@@ -65,7 +63,8 @@ public class DockBatteryMeterView extends BatteryMeterView {
                     plugged = plugType != 0 && (status == BatteryManager.BATTERY_STATUS_CHARGING ||
                             status == BatteryManager.BATTERY_STATUS_FULL);
 
-                    if (present && mMeterMode != BatteryMeterMode.BATTERY_METER_GONE) {
+                    if (present && (mMeterMode != BatteryMeterMode.BATTERY_METER_GONE &&
+                            mMeterMode != BatteryMeterMode.BATTERY_METER_TEXT)) {
                         setContentDescription(context.getString(
                                 R.string.accessibility_dock_battery_level, level));
                         invalidateIfVisible();
@@ -128,6 +127,7 @@ public class DockBatteryMeterView extends BatteryMeterView {
     public DockBatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mBatteryService = ((BatteryManager) context.getSystemService(Context.BATTERY_SERVICE));
+        mSupported = mBatteryService.isDockBatterySupported();
         mDemoTracker = new DockBatteryTracker();
         mTracker = new DockBatteryTracker();
     }

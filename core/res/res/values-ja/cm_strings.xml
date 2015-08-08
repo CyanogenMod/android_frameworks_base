@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">指紋サービスへのアクセスをアプリに許可します。アプリは指紋を追加、削除および認証することができます。</string>
   <string name="permlab_resetBatteryStats">電池統計情報のリセット</string>
   <string name="permdesc_resetBatteryStats">現在の電池消費量の低レベルデータをリセットすることをアプリに許可します。</string>
+  <string name="silent_mode_priority">優先順位</string>
+  <string name="silent_mode_none">なし</string>
 </resources>

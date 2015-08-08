@@ -18,7 +18,9 @@ package com.android.systemui.qs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +30,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.RemoteViews;
 import com.android.systemui.qs.QSTile.State;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.CastController;
@@ -297,6 +300,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         void startSettingsActivity(Intent intent);
         void warn(String message, Throwable t);
         void collapsePanels();
+        RemoteViews.OnClickHandler getOnClickHandler();
         Looper getLooper();
         Context getContext();
         Collection<QSTile<?>> getTiles();
@@ -392,6 +396,21 @@ public abstract class QSTile<TState extends State> implements Listenable {
                 }
             }
             return mPackageContext;
+        }
+    }
+
+    protected class ExternalBitmapIcon extends Icon {
+        private Bitmap mBitmap;
+
+        public ExternalBitmapIcon(Bitmap bitmap) {
+            mBitmap = bitmap;
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            // This is gross
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), mBitmap);
+            return bitmapDrawable;
         }
     }
 
