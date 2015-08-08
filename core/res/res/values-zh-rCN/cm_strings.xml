@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">允许应用访问指纹服务。应用可以添加、 删除、 重命名指纹，使用指纹进行身份验证</string>
   <string name="permlab_resetBatteryStats">重置电池统计信息</string>
   <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
+  <string name="silent_mode_priority">优先级</string>
+  <string name="silent_mode_none">无</string>
 </resources>

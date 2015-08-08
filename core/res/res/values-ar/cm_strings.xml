@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">يسمح للتطبيق بالوصول إلى خدمة بصمات الأصابع. ويمكن للتطبيق إضافة وحذف وإعادة تسمية ومصادقة بصمات الأصابع</string>
   <string name="permlab_resetBatteryStats">إعادة تعيين إحصائيات البطارية</string>
   <string name="permdesc_resetBatteryStats">يسمح للتطبيق بإعادة تعيين بيانات استخدام بطارية ذات المستوى المنخفض الحالي.</string>
+  <string name="silent_mode_priority">الأولوية</string>
+  <string name="silent_mode_none">لا شيء</string>
 </resources>
