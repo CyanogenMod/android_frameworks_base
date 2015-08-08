@@ -971,7 +971,7 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
         final NetworkStats uidSnapshot = getNetworkStatsUidDetail();
         final NetworkStats xtSnapshot = mNetworkManager.getNetworkStatsSummaryXt();
         final NetworkStats devSnapshot = mNetworkManager.getNetworkStatsSummaryDev();
-
+        NetPluginDelegate.getTetherStats(uidSnapshot, xtSnapshot, devSnapshot);
         VpnInfo[] vpnArray = mConnManager.getAllVpnInfo();
         mDevRecorder.recordSnapshotLocked(devSnapshot, mActiveIfaces, null, currentTime);
         mXtRecorder.recordSnapshotLocked(xtSnapshot, mActiveIfaces, null, currentTime);
