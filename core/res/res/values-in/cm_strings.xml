@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Mengizinkan aplikasi untuk mengakses layanan sidik jari. Aplikasi bisa menambah, menghapus, mengubah nama, dan autentikasi sidik jari</string>
   <string name="permlab_resetBatteryStats">set ulang statistik baterai</string>
   <string name="permdesc_resetBatteryStats">Mengizinkan aplikasi untuk set ulang data penggunaan baterai rendah yang sekarang.</string>
+  <string name="silent_mode_priority">Prioritas</string>
+  <string name="silent_mode_none">Tidak Ada</string>
 </resources>
