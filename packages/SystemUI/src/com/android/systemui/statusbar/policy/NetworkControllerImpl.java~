@@ -1418,7 +1418,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
                 if ((Settings.Global.getInt(mContext.getContentResolver(),
                         Settings.Global.AIRPLANE_MODE_ON, 0) == 0)) {
-                    int id = android.R.drawable.stat_notify_rssi_in_range;
+                    int id = android.R.drawable.stat_notify_error;
 
                     NotificationManager notificationManager = (NotificationManager)
                             mContext.getSystemService(Context.NOTIFICATION_SERVICE);
