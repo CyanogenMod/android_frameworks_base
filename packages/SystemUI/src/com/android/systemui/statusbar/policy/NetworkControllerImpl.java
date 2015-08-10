@@ -22,11 +22,15 @@ import static android.net.NetworkCapabilities.TRANSPORT_CELLULAR;
 import static android.net.NetworkCapabilities.TRANSPORT_ETHERNET;
 import static android.net.NetworkCapabilities.TRANSPORT_WIFI;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -40,6 +44,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompatSideChannelService;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -73,54 +79,52 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-/** Platform implementation of the network controller. **/
+/**
+ * Platform implementation of the network controller.
+ **/
 public class NetworkControllerImpl extends BroadcastReceiver
         implements NetworkController, DemoMode {
     // debug
     static final String TAG = "NetworkController";
     static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     // additional diagnostics, but not logspew
-    static final boolean CHATTY =  Log.isLoggable(TAG + ".Chat", Log.DEBUG);
+    static final boolean CHATTY = Log.isLoggable(TAG + ".Chat", Log.DEBUG);
     // Save the previous SignalController.States of all SignalControllers for dumps.
     static final boolean RECORD_HISTORY = true;
     // If RECORD_HISTORY how many to save, must be a power of 2.
     static final int HISTORY_SIZE = 16;
 
     private static final int INET_CONDITION_THRESHOLD = 50;
-
-    private final Context mContext;
-    private final TelephonyManager mPhone;
-    private final WifiManager mWifiManager;
-    private final ConnectivityManager mConnectivityManager;
-    private final SubscriptionManager mSubscriptionManager;
-    private final boolean mHasMobileDataFeature;
-    private Config mConfig;
-
     // Subcontrollers.
     @VisibleForTesting
     final WifiSignalController mWifiSignalController;
     @VisibleForTesting
     final Map<Integer, MobileSignalController> mMobileSignalControllers =
             new HashMap<Integer, MobileSignalController>();
-    // When no SIMs are around at setup, and one is added later, it seems to default to the first
-    // SIM for most actions.  This may be null if there aren't any SIMs around.
-    private MobileSignalController mDefaultSignalController;
+    private final Context mContext;
+    private final TelephonyManager mPhone;
+    private final WifiManager mWifiManager;
+    private final ConnectivityManager mConnectivityManager;
+    private final SubscriptionManager mSubscriptionManager;
+    private final boolean mHasMobileDataFeature;
     private final AccessPointControllerImpl mAccessPoints;
     private final MobileDataControllerImpl mMobileDataController;
-
-    // Network types that replace the carrier label if the device does not support mobile data.
-    private boolean mBluetoothTethered = false;
-    private boolean mEthernetConnected = false;
-
-    // state of inet connection
-    private boolean mConnected = false;
-    private boolean mInetCondition; // Used for Logging and demo.
-
     // BitSets indicating which network transport types (e.g., TRANSPORT_WIFI, TRANSPORT_MOBILE) are
     // connected and validated, respectively.
     private final BitSet mConnectedTransports = new BitSet();
     private final BitSet mValidatedTransports = new BitSet();
-
+    @VisibleForTesting
+    boolean mListening;
+    private Config mConfig;
+    // When no SIMs are around at setup, and one is added later, it seems to default to the first
+    // SIM for most actions.  This may be null if there aren't any SIMs around.
+    private MobileSignalController mDefaultSignalController;
+    // Network types that replace the carrier label if the device does not support mobile data.
+    private boolean mBluetoothTethered = false;
+    private boolean mEthernetConnected = false;
+    // state of inet connection
+    private boolean mConnected = false;
+    private boolean mInetCondition; // Used for Logging and demo.
     // States that don't belong to a subcontroller.
     private boolean mAirplaneMode = false;
     private boolean mHasNoSims;
@@ -128,7 +132,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
     // This list holds our ordering.
     private List<SubscriptionInfo> mCurrentSubscriptions
             = new ArrayList<SubscriptionInfo>();
-
     // All the callbacks.
     private ArrayList<EmergencyListener> mEmergencyListeners = new ArrayList<EmergencyListener>();
     private ArrayList<CarrierLabelListener> mCarrierListeners =
@@ -136,11 +139,20 @@ public class NetworkControllerImpl extends BroadcastReceiver
     private ArrayList<SignalCluster> mSignalClusters = new ArrayList<SignalCluster>();
     private ArrayList<NetworkSignalChangedCallback> mSignalsChangedCallbacks =
             new ArrayList<NetworkSignalChangedCallback>();
-    @VisibleForTesting
-    boolean mListening;
+    private final OnSubscriptionsChangedListener mSubscriptionListener =
+            new OnSubscriptionsChangedListener() {
+                @Override
+                public void onSubscriptionsChanged() {
+                    updateMobileControllers();
+                }
 
+                ;
+            };
     // The current user ID.
     private int mCurrentUserId;
+    private boolean mDemoMode;
+    private int mDemoInetCondition;
+    private WifiSignalController.WifiState mDemoWifiState;
 
     /**
      * Construct this controller object and register for updates.
@@ -156,10 +168,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
     @VisibleForTesting
     NetworkControllerImpl(Context context, ConnectivityManager connectivityManager,
-            TelephonyManager telephonyManager, WifiManager wifiManager,
-            SubscriptionManager subManager, Config config,
-            AccessPointControllerImpl accessPointController,
-            MobileDataControllerImpl mobileDataController) {
+                          TelephonyManager telephonyManager, WifiManager wifiManager,
+                          SubscriptionManager subManager, Config config,
+                          AccessPointControllerImpl accessPointController,
+                          MobileDataControllerImpl mobileDataController) {
         mContext = context;
         mConfig = config;
 
@@ -287,7 +299,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         int voiceSubId = SubscriptionManager.getDefaultVoiceSubId();
         if (!SubscriptionManager.isValidSubscriptionId(voiceSubId)) {
             for (MobileSignalController mobileSignalController :
-                                            mMobileSignalControllers.values()) {
+                    mMobileSignalControllers.values()) {
                 if (!mobileSignalController.isEmergencyOnly()) {
                     return false;
                 }
@@ -648,13 +660,13 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 // Suppress "No internet connection." from mobile if wifi connected.
                 label = "";
             } else {
-                 if (!mHasMobileDataFeature) {
-                      label = context.getString(
-                              R.string.status_bar_settings_signal_meter_disconnected);
-                 }
+                if (!mHasMobileDataFeature) {
+                    label = context.getString(
+                            R.string.status_bar_settings_signal_meter_disconnected);
+                }
             }
         } else if (!isMobileDataConnected() && !wifiState.connected && !mBluetoothTethered &&
-                 !mEthernetConnected && !mHasMobileDataFeature) {
+                !mEthernetConnected && !mHasMobileDataFeature) {
             // Pretty much no connection.
             label = context.getString(R.string.status_bar_settings_signal_meter_disconnected);
         }
@@ -701,10 +713,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         }
         mWifiSignalController.dump(pw);
     }
-
-    private boolean mDemoMode;
-    private int mDemoInetCondition;
-    private WifiSignalController.WifiState mDemoWifiState;
 
     @Override
     public void dispatchDemoCommand(String command, Bundle args) {
@@ -799,15 +807,15 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 if (datatype != null) {
                     controller.getState().iconGroup =
                             datatype.equals("1x") ? TelephonyIcons.ONE_X :
-                            datatype.equals("3g") ? TelephonyIcons.THREE_G :
-                            datatype.equals("4g") ? TelephonyIcons.FOUR_G :
-                            datatype.equals("e") ? TelephonyIcons.E :
-                            datatype.equals("g") ? TelephonyIcons.G :
-                            datatype.equals("h") ? TelephonyIcons.H :
-                            datatype.equals("hp") ? TelephonyIcons.HP :
-                            datatype.equals("lte") ? TelephonyIcons.LTE :
-                            datatype.equals("roam") ? TelephonyIcons.ROAMING :
-                            TelephonyIcons.UNKNOWN;
+                                    datatype.equals("3g") ? TelephonyIcons.THREE_G :
+                                            datatype.equals("4g") ? TelephonyIcons.FOUR_G :
+                                                    datatype.equals("e") ? TelephonyIcons.E :
+                                                            datatype.equals("g") ? TelephonyIcons.G :
+                                                                    datatype.equals("h") ? TelephonyIcons.H :
+                                                                            datatype.equals("hp") ? TelephonyIcons.HP :
+                                                                                    datatype.equals("lte") ? TelephonyIcons.LTE :
+                                                                                            datatype.equals("roam") ? TelephonyIcons.ROAMING :
+                                                                                                    TelephonyIcons.UNKNOWN;
                 }
                 int[][] icons = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH;
                 String level = args.getString("level");
@@ -823,13 +831,28 @@ public class NetworkControllerImpl extends BroadcastReceiver
         }
     }
 
-    private final OnSubscriptionsChangedListener mSubscriptionListener =
-            new OnSubscriptionsChangedListener() {
-        @Override
-        public void onSubscriptionsChanged() {
-            updateMobileControllers();
-        };
-    };
+    public interface SignalCluster {
+        void setWifiIndicators(boolean visible, int strengthIcon,
+                               int activityIcon, String contentDescription);
+
+        void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
+                                     int typeIcon, String contentDescription, String typeContentDescription,
+                                     boolean isTypeIconWide, boolean showRoamingIndicator, int subId);
+
+        void setSubs(List<SubscriptionInfo> subs);
+
+        void setNoSims(boolean show);
+
+        void setIsAirplaneMode(boolean is, int airplaneIcon, int contentDescription);
+    }
+
+    public interface EmergencyListener {
+        void setEmergencyCallsOnly(boolean emergencyOnly);
+    }
+
+    public interface CarrierLabelListener {
+        void setCarrierLabel(String label);
+    }
 
     // TODO: Move to its own file.
     static class WifiSignalController extends
@@ -839,8 +862,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
         private final boolean mHasMobileData;
 
         public WifiSignalController(Context context, boolean hasMobileData,
-                List<NetworkSignalChangedCallback> signalCallbacks,
-                List<SignalCluster> signalClusters, NetworkControllerImpl networkController) {
+                                    List<NetworkSignalChangedCallback> signalCallbacks,
+                                    List<SignalCluster> signalClusters, NetworkControllerImpl networkController) {
             super("WifiSignalController", context, NetworkCapabilities.TRANSPORT_WIFI,
                     signalCallbacks, signalClusters, networkController);
             mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -862,7 +885,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     WifiIcons.WIFI_NO_NETWORK,
                     WifiIcons.QS_WIFI_NO_NETWORK,
                     AccessibilityContentDescriptions.WIFI_NO_CONNECTION
-                    );
+            );
         }
 
         @Override
@@ -953,6 +976,29 @@ public class NetworkControllerImpl extends BroadcastReceiver
             notifyListenersIfNecessary();
         }
 
+        static class WifiState extends SignalController.State {
+            String ssid;
+
+            @Override
+            public void copyFrom(State s) {
+                super.copyFrom(s);
+                WifiState state = (WifiState) s;
+                ssid = state.ssid;
+            }
+
+            @Override
+            protected void toString(StringBuilder builder) {
+                super.toString(builder);
+                builder.append(',').append("ssid=").append(ssid);
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                return super.equals(o)
+                        && Objects.equals(((WifiState) o).ssid, ssid);
+            }
+        }
+
         /**
          * Handler to receive the data activity on wifi.
          */
@@ -977,45 +1023,20 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
             }
         }
-
-        static class WifiState extends SignalController.State {
-            String ssid;
-
-            @Override
-            public void copyFrom(State s) {
-                super.copyFrom(s);
-                WifiState state = (WifiState) s;
-                ssid = state.ssid;
-            }
-
-            @Override
-            protected void toString(StringBuilder builder) {
-                super.toString(builder);
-                builder.append(',').append("ssid=").append(ssid);
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                return super.equals(o)
-                        && Objects.equals(((WifiState) o).ssid, ssid);
-            }
-        }
     }
 
     // TODO: Move to its own file.
     public static class MobileSignalController extends SignalController<
             MobileSignalController.MobileState, MobileSignalController.MobileIconGroup> {
+        @VisibleForTesting
+        final PhoneStateListener mPhoneStateListener;
+        // @VisibleForDemoMode
+        final SparseArray<MobileIconGroup> mNetworkToIconLookup;
         private final TelephonyManager mPhone;
         private final String mNetworkNameDefault;
         private final String mNetworkNameSeparator;
-        @VisibleForTesting
-        final PhoneStateListener mPhoneStateListener;
         // Save entire info for logging, we only use the id.
         private final SubscriptionInfo mSubscriptionInfo;
-
-        // @VisibleForDemoMode
-        final SparseArray<MobileIconGroup> mNetworkToIconLookup;
-
         // Since some pieces of the phone state are interdependent we store it locally,
         // this could potentially become part of MobileState for simplification/complication
         // of code.
@@ -1030,9 +1051,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
         // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
         // need listener lists anymore.
         public MobileSignalController(Context context, Config config, boolean hasMobileData,
-                TelephonyManager phone, List<NetworkSignalChangedCallback> signalCallbacks,
-                List<SignalCluster> signalClusters, NetworkControllerImpl networkController,
-                SubscriptionInfo info) {
+                                      TelephonyManager phone, List<NetworkSignalChangedCallback> signalCallbacks,
+                                      List<SignalCluster> signalClusters, NetworkControllerImpl networkController,
+                                      SubscriptionInfo info) {
             super("MobileSignalController(" + info.getSubscriptionId() + ")", context,
                     NetworkCapabilities.TRANSPORT_CELLULAR, signalCallbacks, signalClusters,
                     networkController);
@@ -1063,8 +1084,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
         /**
          * Get (the mobile parts of) the carrier string.
          *
-         * @param currentLabel can be used for concatenation, currently just empty
-         * @param connected whether the device has connection to the internet at all
+         * @param currentLabel  can be used for concatenation, currently just empty
+         * @param connected     whether the device has connection to the internet at all
          * @param isMobileLabel whether to always return the network or just when data is connected
          */
         public String getLabel(String currentLabel, boolean connected, boolean isMobileLabel) {
@@ -1206,7 +1227,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 int length = mSignalsChangedCallbacks.size();
                 for (int i = 0; i < length; i++) {
                     mSignalsChangedCallbacks.get(i).onMobileDataSignalChanged(mCurrentState.enabled
-                            && !mCurrentState.isEmergency,
+                                    && !mCurrentState.isEmergency,
                             getQsCurrentIconId(), contentDescription,
                             qsTypeIcon,
                             mCurrentState.dataConnected && mCurrentState.activityIn,
@@ -1274,7 +1295,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 final int iconMode = mServiceState.getCdmaEriIconMode();
                 return mServiceState.getCdmaEriIconIndex() != EriInfo.ROAMING_INDICATOR_OFF
                         && (iconMode == EriInfo.ROAMING_ICON_MODE_NORMAL
-                            || iconMode == EriInfo.ROAMING_ICON_MODE_FLASH);
+                        || iconMode == EriInfo.ROAMING_ICON_MODE_FLASH);
             } else {
                 return mServiceState != null && mServiceState.getRoaming();
             }
@@ -1375,51 +1396,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
             pw.println("  mDataNetType=" + mDataNetType + ",");
         }
 
-        class MobilePhoneStateListener extends PhoneStateListener {
-            public MobilePhoneStateListener(int subId) {
-                super(subId);
-            }
-
-            @Override
-            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-                if (DEBUG) {
-                    Log.d(mTag, "onSignalStrengthsChanged signalStrength=" + signalStrength +
-                            ((signalStrength == null) ? "" : (" level=" + signalStrength.getLevel())));
-                }
-                mSignalStrength = signalStrength;
-                updateTelephony();
-            }
-
-            @Override
-            public void onServiceStateChanged(ServiceState state) {
-                if (DEBUG) {
-                    Log.d(mTag, "onServiceStateChanged voiceState=" + state.getVoiceRegState()
-                            + " dataState=" + state.getDataRegState());
-                }
-                mServiceState = state;
-                updateTelephony();
-            }
-
-            @Override
-            public void onDataConnectionStateChanged(int state, int networkType) {
-                if (DEBUG) {
-                    Log.d(mTag, "onDataConnectionStateChanged: state=" + state
-                            + " type=" + networkType);
-                }
-                mDataState = state;
-                mDataNetType = networkType;
-                updateTelephony();
-            }
-
-            @Override
-            public void onDataActivity(int direction) {
-                if (DEBUG) {
-                    Log.d(mTag, "onDataActivity: direction=" + direction);
-                }
-                setActivity(direction);
-            }
-        };
-
         static class MobileIconGroup extends SignalController.IconGroup {
             final int mDataContentDescription; // mContentDescriptionDataType
             final int mDataType;
@@ -1427,9 +1403,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
             final int[] mQsDataType;
 
             public MobileIconGroup(String name, int[][] sbIcons, int[][] qsIcons, int[] contentDesc,
-                    int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
-                    int discContentDesc, int dataContentDesc, int dataType, boolean isWide,
-                    int[] qsDataType) {
+                                   int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
+                                   int discContentDesc, int dataContentDesc, int dataType, boolean isWide,
+                                   int[] qsDataType) {
                 super(name, sbIcons, qsIcons, contentDesc, sbNullState, qsNullState, sbDiscState,
                         qsDiscState, discContentDesc);
                 mDataContentDescription = dataContentDesc;
@@ -1438,6 +1414,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 mQsDataType = qsDataType;
             }
         }
+
+        ;
 
         static class MobileState extends SignalController.State {
             String networkName;
@@ -1486,6 +1464,95 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         && ((MobileState) o).inetForNetwork == inetForNetwork;
             }
         }
+
+        class MobilePhoneStateListener extends PhoneStateListener {
+            public MobilePhoneStateListener(int subId) {
+                super(subId);
+            }
+
+            @Override
+            public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+                if (DEBUG) {
+                    Log.d(mTag, "onSignalStrengthsChanged signalStrength=" + signalStrength +
+                            ((signalStrength == null) ? "" : (" level=" + signalStrength.getLevel())));
+                }
+                mSignalStrength = signalStrength;
+                updateTelephony();
+            }
+
+            @Override
+            public void onServiceStateChanged(ServiceState state) {
+                if (DEBUG) {
+                    Log.d(mTag, "onServiceStateChanged voiceState=" + state.getVoiceRegState()
+                            + " dataState=" + state.getDataRegState());
+                }
+                mServiceState = state;
+                updateTelephony();
+
+                if ((Settings.Global.getInt(mContext.getContentResolver(),
+                        Settings.Global.AIRPLANE_MODE_ON, 0) == 0)) {
+                    int id = android.R.drawable.stat_notify_error;
+
+                    NotificationManager notificationManager = (NotificationManager)
+                            mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(mContext)
+                                    .setSmallIcon(id)
+                                    .setVibrate(new long[]{100, 300, 100, 300})
+                                    .setLights(Color.RED, 300, 1000);
+
+                    Intent resultIntent = new Intent(Intent.ACTION_MAIN);
+                    resultIntent.setClassName("com.android.phone",
+                            "com.android.phone.NetworkSetting");
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent =
+                            stackBuilder.getPendingIntent(
+                                    0,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                    mBuilder.setContentIntent(resultPendingIntent);
+
+                    switch (state.getState()) {
+                        case ServiceState.STATE_EMERGENCY_ONLY:
+                            mBuilder.setContentTitle(mContext.getString(R.string.title_emerg_warn));
+                            notificationManager.notify(id, mBuilder.build());
+                            break;
+                        case ServiceState.STATE_IN_SERVICE:
+                            notificationManager.cancel(id);
+                            break;
+                        case ServiceState.STATE_OUT_OF_SERVICE:
+                        case ServiceState.STATE_POWER_OFF:
+                            mBuilder.setContentTitle(mContext.getString(R.string.title_no_srv_warn))
+                                    .setContentText(mContext.getString(R.string.text_no_srv_warn));
+                            notificationManager.notify(id, mBuilder.build());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onDataConnectionStateChanged(int state, int networkType) {
+                if (DEBUG) {
+                    Log.d(mTag, "onDataConnectionStateChanged: state=" + state
+                            + " type=" + networkType);
+                }
+                mDataState = state;
+                mDataNetType = networkType;
+                updateTelephony();
+            }
+
+            @Override
+            public void onDataActivity(int direction) {
+                if (DEBUG) {
+                    Log.d(mTag, "onDataActivity: direction=" + direction);
+                }
+                setActivity(direction);
+            }
+        }
     }
 
     /**
@@ -1511,8 +1578,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
         private int mHistoryIndex;
 
         public SignalController(String tag, Context context, int type,
-                List<NetworkSignalChangedCallback> signalCallbacks,
-                List<SignalCluster> signalClusters, NetworkControllerImpl networkController) {
+                                List<NetworkSignalChangedCallback> signalCallbacks,
+                                List<SignalCluster> signalClusters, NetworkControllerImpl networkController) {
             mTag = TAG + "." + tag;
             mNetworkController = networkController;
             mTransportType = type;
@@ -1546,7 +1613,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
          * Used at the end of demo mode to clear out any ugly state that it has created.
          * Since we haven't had any callbacks, then isDirty will not have been triggered,
          * so we can just take the last good state directly from there.
-         *
+         * <p/>
          * Used for demo mode.
          */
         void resetLastState() {
@@ -1666,7 +1733,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
                 // Print out the previous states in ordered number.
                 for (int i = mHistoryIndex + HISTORY_SIZE - 1;
-                        i >= mHistoryIndex + HISTORY_SIZE - size; i--) {
+                     i >= mHistoryIndex + HISTORY_SIZE - size; i--) {
                     pw.println("  Previous State(" + (mHistoryIndex + HISTORY_SIZE - i) + ": "
                             + mHistory[i & (HISTORY_SIZE - 1)]);
                 }
@@ -1703,8 +1770,8 @@ public class NetworkControllerImpl extends BroadcastReceiver
             final String mName;
 
             public IconGroup(String name, int[][] sbIcons, int[][] qsIcons, int[] contentDesc,
-                    int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
-                    int discContentDesc) {
+                             int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
+                             int discContentDesc) {
                 mName = name;
                 mSbIcons = sbIcons;
                 mQsIcons = qsIcons;
@@ -1786,27 +1853,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         && other.rssi == rssi;
             }
         }
-    }
-
-    public interface SignalCluster {
-        void setWifiIndicators(boolean visible, int strengthIcon,
-                int activityIcon, String contentDescription);
-
-        void setMobileDataIndicators(boolean visible, int strengthIcon, int activityIcon,
-                int typeIcon, String contentDescription, String typeContentDescription,
-                boolean isTypeIconWide, boolean showRoamingIndicator, int subId);
-        void setSubs(List<SubscriptionInfo> subs);
-        void setNoSims(boolean show);
-
-        void setIsAirplaneMode(boolean is, int airplaneIcon, int contentDescription);
-    }
-
-    public interface EmergencyListener {
-        void setEmergencyCallsOnly(boolean emergencyOnly);
-    }
-
-    public interface CarrierLabelListener {
-        void setCarrierLabel(String label);
     }
 
     @VisibleForTesting
