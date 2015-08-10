@@ -22,11 +22,16 @@ import static android.net.NetworkCapabilities.TRANSPORT_CELLULAR;
 import static android.net.NetworkCapabilities.TRANSPORT_ETHERNET;
 import static android.net.NetworkCapabilities.TRANSPORT_WIFI;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -1410,6 +1415,50 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
                 mServiceState = state;
                 updateTelephony();
+
+                if ((Settings.Global.getInt(mContext.getContentResolver(),
+                        Settings.Global.AIRPLANE_MODE_ON, 0) == 0)) {
+                    int id = android.R.drawable.stat_notify_error;
+
+                    NotificationManager notificationManager = (NotificationManager)
+                            mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    Notification.Builder mBuilder =
+                            new Notification.Builder(mContext)
+                                    .setSmallIcon(id)
+                                    .setVibrate(new long[]{100, 300, 100, 300})
+                                    .setLights(Color.RED, 300, 1000);
+
+                    Intent resultIntent = new Intent(Intent.ACTION_MAIN);
+                    resultIntent.setClassName("com.android.phone",
+                            "com.android.phone.NetworkSetting");
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent =
+                            stackBuilder.getPendingIntent(
+                                    0,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                    mBuilder.setContentIntent(resultPendingIntent);
+
+                    switch (state.getState()) {
+                        case ServiceState.STATE_EMERGENCY_ONLY:
+                            mBuilder.setContentTitle(mContext.getString(R.string.title_emerg_warn));
+                            notificationManager.notify(id, mBuilder.build());
+                            break;
+                        case ServiceState.STATE_IN_SERVICE:
+                            notificationManager.cancel(id);
+                            break;
+                        case ServiceState.STATE_OUT_OF_SERVICE:
+                        case ServiceState.STATE_POWER_OFF:
+                            mBuilder.setContentTitle(mContext.getString(R.string.title_no_srv_warn))
+                                    .setContentText(mContext.getString(R.string.text_no_srv_warn));
+                            notificationManager.notify(id, mBuilder.build());
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
 
             @Override
