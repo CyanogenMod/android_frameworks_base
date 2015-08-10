@@ -5996,6 +5996,12 @@ public final class Settings {
          * @hide
          */
         public static final String QS_SHOW_BRIGHTNESS_SLIDER = "qs_show_brightness_slider";
+        
+        /**
+         * Whether to show the volume slider in quick settings panel.
+         * @hide
+         */
+        public static final String QS_SHOW_VOLUME_SLIDER = "qs_show_volume_slider";
 
         /**
          * List of QS tile names

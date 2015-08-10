@@ -58,6 +58,7 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
     private final boolean mVoiceCapable;
     private boolean mAffectedByRingerMode;
     private boolean mNotificationOrRing;
+    private boolean mPlaySample;
     private final Receiver mReceiver = new Receiver();
 
     private Handler mHandler;
@@ -76,12 +77,13 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
     private static final int MSG_INIT_SAMPLE = 3;
     private static final int CHECK_RINGTONE_PLAYBACK_DELAY_MS = 1000;
 
-    public SeekBarVolumizer(Context context, int streamType, Uri defaultUri, Callback callback) {
+    public SeekBarVolumizer(Context context, int streamType, Uri defaultUri, Callback callback, boolean playSample) {
         mContext = context;
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mStreamType = streamType;
         mAffectedByRingerMode = mAudioManager.isStreamAffectedByRingerMode(mStreamType);
         mNotificationOrRing = isNotificationOrRing(mStreamType);
+        mPlaySample = playSample;
         if (mNotificationOrRing) {
             mRingerMode = mAudioManager.getRingerModeInternal();
         }
@@ -104,6 +106,10 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
             }
         }
         mDefaultUri = defaultUri;
+    }
+
+    public SeekBarVolumizer(Context context, int streamType, Uri defaultUri, Callback callback) {
+        this(context, streamType, defaultUri, callback, true /*play sample*/);
     }
 
     private boolean isNotificationOrRing(int stream) {
@@ -180,7 +186,7 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
     }
 
     private void onStartSample() {
-        if (!isSamplePlaying()) {
+        if (!isSamplePlaying() && mPlaySample == true) {
             if (mCallback != null) {
                 mCallback.onSampleStarting(this);
             }

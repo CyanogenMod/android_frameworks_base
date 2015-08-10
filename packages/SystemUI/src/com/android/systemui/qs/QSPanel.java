@@ -24,17 +24,21 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
 import android.os.UserHandle;
+import android.preference.SeekBarVolumizer;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.systemui.FontSizeUtils;
@@ -51,6 +55,7 @@ import java.util.Collection;
 
 /** View that represents the quick settings tile panel. **/
 public class QSPanel extends ViewGroup {
+    private static final String TAG = "StatusBar.QSPanel";
     private static final float TILE_ASPECT = 1.2f;
 
     private final Context mContext;
@@ -60,7 +65,7 @@ public class QSPanel extends ViewGroup {
     private final TextView mDetailRemoveButton;
     private final TextView mDetailSettingsButton;
     private final TextView mDetailDoneButton;
-    private final View mBrightnessView;
+    private final View mBrightnessView, mVolumeView;
     private final QSDetailClipper mClipper;
     private final H mHandler = new H();
 
@@ -72,6 +77,7 @@ public class QSPanel extends ViewGroup {
     private int mPanelPaddingBottom;
     private int mDualTileUnderlap;
     private int mBrightnessPaddingTop;
+    private int mVolumePaddingTop;
     private int mGridHeight;
     private int mTranslationTop;
     private boolean mExpanded;
@@ -81,6 +87,7 @@ public class QSPanel extends ViewGroup {
     private Record mDetailRecord;
     private Callback mCallback;
     private BrightnessController mBrightnessController;
+    private SeekBarVolumizer mSeekBarVolumizer;
     private QSTileHost mHost;
 
     private QSFooter mFooter;
@@ -109,9 +116,12 @@ public class QSPanel extends ViewGroup {
         mDetail.setClickable(true);
         mBrightnessView = LayoutInflater.from(context).inflate(
                 R.layout.quick_settings_brightness_dialog, this, false);
+        mVolumeView = LayoutInflater.from(context).inflate(
+                R.layout.quick_settings_volume_slider, this, false);
         mFooter = new QSFooter(this, context);
         addView(mDetail);
         addView(mBrightnessView);
+        addView(mVolumeView);
         addView(mFooter.getView());
         mClipper = new QSDetailClipper(mDetail);
         updateResources();
@@ -135,7 +145,7 @@ public class QSPanel extends ViewGroup {
         boolean brightnessSliderEnabled = Settings.Secure.getInt(
             mContext.getContentResolver(), Settings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
                 1) == 1;
-        ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);
+        ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);        
         if (brightnessSliderEnabled) {
             mBrightnessView.setVisibility(VISIBLE);
             brightnessSlider.setVisibility(VISIBLE);
@@ -145,6 +155,31 @@ public class QSPanel extends ViewGroup {
         }
         updateResources();
         return brightnessSliderEnabled;
+    }
+
+    /**
+     * Enable/disable volume slider.
+     */
+    private boolean showVolumeSlider() {
+        boolean volumeSliderEnabled = Settings.Secure.getInt(
+            mContext.getContentResolver(), Settings.Secure.QS_SHOW_VOLUME_SLIDER,
+                1) == 1;
+        SeekBar volumeSlider = (SeekBar) mVolumeView.findViewById(R.id.volume_slider);
+        if (volumeSliderEnabled) {
+            mVolumeView.setVisibility(VISIBLE);
+            volumeSlider.setVisibility(VISIBLE);
+            // use the android preferences' seekbar volumizer
+            mSeekBarVolumizer = new SeekBarVolumizer(mContext,
+                                AudioManager.STREAM_MUSIC,
+                                null, null, false /*don't play preview sample*/);
+            mSeekBarVolumizer.start();
+            mSeekBarVolumizer.setSeekBar(volumeSlider);
+        } else {
+            mVolumeView.setVisibility(GONE);
+            volumeSlider.setVisibility(GONE);
+        }
+        updateResources();
+        return volumeSliderEnabled;
     }
 
     private void updateDetailText() {
@@ -192,6 +227,7 @@ public class QSPanel extends ViewGroup {
         mPanelPaddingBottom = res.getDimensionPixelSize(R.dimen.qs_panel_padding_bottom);
         mDualTileUnderlap = res.getDimensionPixelSize(R.dimen.qs_dual_tile_padding_vertical);
         mBrightnessPaddingTop = res.getDimensionPixelSize(R.dimen.qs_brightness_padding_top);
+        mVolumePaddingTop = res.getDimensionPixelSize(R.dimen.qs_volume_padding_top);
         if (mColumns != columns) {
             mColumns = columns;
             postInvalidate();
@@ -244,6 +280,7 @@ public class QSPanel extends ViewGroup {
         } else {
             mBrightnessController.unregisterCallbacks();
         }
+        showVolumeSlider();
     }
 
     public void refreshAllTiles() {
@@ -462,13 +499,16 @@ public class QSPanel extends ViewGroup {
             }
         }
         mBrightnessView.setVisibility(showBrightnessSlider() ? newVis : GONE);
+        mVolumeView.setVisibility(showBrightnessSlider() ? newVis : GONE);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int width = MeasureSpec.getSize(widthMeasureSpec);
         mBrightnessView.measure(exactly(width), MeasureSpec.UNSPECIFIED);
+        mVolumeView.measure(exactly(width), MeasureSpec.UNSPECIFIED);
         final int brightnessHeight = mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop;
+        final int volumeHeight = mVolumeView.getMeasuredHeight() + mVolumePaddingTop;
         mFooter.getView().measure(exactly(width), MeasureSpec.UNSPECIFIED);
         int r = -1;
         int c = -1;
@@ -496,7 +536,7 @@ public class QSPanel extends ViewGroup {
             final int ch = (mUseMainTiles && record.row == 0) ? mLargeCellHeight : mCellHeight;
             record.tileView.measure(exactly(cw), exactly(ch));
         }
-        int h = rows == 0 ? brightnessHeight : (getRowTop(rows) + mPanelPaddingBottom);
+        int h = rows == 0 ? brightnessHeight + volumeHeight : (getRowTop(rows) + mPanelPaddingBottom);
         if (mFooter.hasFooter()) {
             h += mFooter.getView().getMeasuredHeight();
         }
@@ -525,12 +565,27 @@ public class QSPanel extends ViewGroup {
         return MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY);
     }
 
+    /*
+    * Called from layout when this view should assign a size and position to each of its children.
+    * l,t,r,b relative to parent
+    * */
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         final int w = getWidth();
-        mBrightnessView.layout(0, mBrightnessPaddingTop,
-                mBrightnessView.getMeasuredWidth(),
-                mBrightnessPaddingTop + mBrightnessView.getMeasuredHeight());
+        int bTop = mBrightnessPaddingTop;
+        int bRight = mBrightnessView.getMeasuredWidth();
+        int bBottom = mBrightnessPaddingTop + mBrightnessView.getMeasuredHeight();
+        int vTop = bBottom;
+        int vRight = mVolumeView.getMeasuredWidth();
+        int vBottom = mVolumeView.getMeasuredHeight();
+        vBottom += mBrightnessView.getMeasuredHeight();
+        vBottom += mBrightnessPaddingTop;
+        vBottom += mVolumePaddingTop;
+
+        mBrightnessView.layout(0, bTop, bRight, bBottom);
+        mVolumeView.layout(0, vTop, vRight, vBottom);
+
+        // set the tile layouts
         boolean isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
         for (TileRecord record : mRecords) {
             if (record.tileView.getVisibility() == GONE) continue;
@@ -559,10 +614,15 @@ public class QSPanel extends ViewGroup {
     }
 
     private int getRowTop(int row) {
-        if (row <= 0) return mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop;
-        return mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop
-                + (mUseMainTiles ? mLargeCellHeight - mDualTileUnderlap : mCellHeight)
-                + (row - 1) * mCellHeight;
+        if (row <= 0) {
+            return mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop +
+                   mVolumeView.getMeasuredHeight() + mVolumePaddingTop;
+        } else {
+            return mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop +
+                   mVolumeView.getMeasuredHeight() + mVolumePaddingTop
+                    + (mUseMainTiles ? mLargeCellHeight - mDualTileUnderlap : mCellHeight)
+                    + (row - 1) * mCellHeight;
+        }
     }
 
     private int getColumnCount(int row) {
