@@ -44,7 +44,7 @@
   <string name="permlab_useHardwareFramework">folosește framework-ul hardware</string>
   <string name="permdesc_useHardwareFramework">Permite unei aplicații să acceseze framework-ul hardware.</string>
   <string name="permlab_setKeyguardWallpaper">setare fundal ecran de blocare</string>
-  <string name="permdesc_setKeyguardWallpaper">Permite unei aplicații să schimbe imaginea de fundal a ecranului  de blocare.</string>
+  <string name="permdesc_setKeyguardWallpaper">Permite unei aplicații să schimbe imaginea de fundal a ecranului de blocare.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> dorește să <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">Repornire</string>
@@ -58,7 +58,7 @@
   <string name="reboot_confirm" product="tablet">Tableta va reporni.</string>
   <string name="reboot_confirm" product="default">Telefonul dvs. va reporni.</string>
   <string name="reboot_progress">Repornire\u2026</string>
-  <string name="app_killed_message">Aplicaţie oprită</string>
+  <string name="app_killed_message">Aplicație oprită</string>
   <string name="adb_net_active_notification_title">ADB prin rețea activ</string>
   <string name="adb_both_active_notification_title">ADB prin USB &amp; rețea activ</string>
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
@@ -67,21 +67,21 @@
   <string name="adb_active_custom_tile_both">USB &amp; rețea</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rețea</string>
-  <string name="permlab_interceptPackageLaunch">interceptează lansarea aplicaţiei</string>
-  <string name="permdesc_interceptPackageLaunch">Permite unei aplicaţii să intercepteze lansarea altor aplicaţii</string>
+  <string name="permlab_interceptPackageLaunch">interceptează lansarea aplicației</string>
+  <string name="permdesc_interceptPackageLaunch">Permite unei aplicații să intercepteze lansarea altor aplicații</string>
   <string name="app_ops_access_camera">accesează camera</string>
   <string name="app_ops_access_location">accesează locația</string>
   <string name="app_ops_access_notifications">citește notificările</string>
   <string name="app_ops_activate_vpn">activați un VPN</string>
   <string name="app_ops_alarm_wakeup">trezește dispozitivul</string>
-  <string name="app_ops_su">obţine acces root</string>
+  <string name="app_ops_su">obține acces root</string>
   <string name="app_ops_auto_start">lansează la pornire</string>
   <string name="app_ops_delete_call_log">șterge lista de apeluri</string>
   <string name="app_ops_delete_contacts">șterge lista de contacte</string>
   <string name="app_ops_delete_mms">șterge mesajele MMS</string>
   <string name="app_ops_delete_sms">șterge mesajele SMS</string>
   <string name="app_ops_draw_on_top">lansează ferestre deasupra</string>
-  <string name="app_ops_get_usage_stats">obține statistici de utilizare a aplicaţiei</string>
+  <string name="app_ops_get_usage_stats">obține statistici de utilizare a aplicației</string>
   <string name="app_ops_keep_device_awake">ține dispozitivul deschis</string>
   <string name="app_ops_make_phone_call">inițiază un apel telefonic</string>
   <string name="app_ops_modify_calendar">actualizează calendarul</string>
@@ -150,18 +150,18 @@
   <string name="usb_extmedia_format_message">Toate datele de pe dispozitivul de stocare USB (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
   <string name="sd_extmedia_format_message">Toate datele de pe card-ul dvs. (cu calea \'%1$s\') vor fi șterse. Această acțiune nu poate fi anulată!</string>
   <string name="sd_progress_unmounting">Demontarea cardului SD\u2026</string>
-  <string name="sd_progress_erasing">Ştergerea cardului SD\u2026</string>
-  <string name="sd_format_error">Nu s-a putut şterge cardul SD.</string>
+  <string name="sd_progress_erasing">Ștergerea cardului SD\u2026</string>
+  <string name="sd_format_error">Nu s-a putut șterge cardul SD.</string>
   <string name="sd_media_bad_removal">Cardul SD a fost înlăturat înainte de a fi demontat.</string>
   <string name="sd_media_checking">Cardul SD este în curs de verificare.</string>
   <string name="sd_media_removed">Cardul SD a fost înlăturat.</string>
   <string name="sd_media_shared">Cardul SD este în prezent utilizat de un computer.</string>
   <string name="usb_progress_unmounting">Demontarea mediul de stocare USB\u2026</string>
-  <string name="usb_progress_erasing">Ştergerea mediului de stocare USB\u2026</string>
-  <string name="usb_format_error">Nu s-a putut şterge mediul de stocare USB.</string>
+  <string name="usb_progress_erasing">Ștergerea mediului de stocare USB\u2026</string>
+  <string name="usb_format_error">Nu s-a putut șterge mediul de stocare USB.</string>
   <string name="usb_media_bad_removal">Mediul de stocare USB a fost înlăturat înainte de a fi demontat.</string>
   <string name="usb_media_checking">Mediul stocare USB este în curs de verificare.</string>
-  <string name="usb_media_removed">Mediul de stocare USB a fost înlaturat.</string>
+  <string name="usb_media_removed">Mediul de stocare USB a fost înlăturat.</string>
   <string name="usb_media_shared">Mediul de stocare USB este în prezent utilizat de un computer.</string>
   <string name="sd_ext_media_checking_notification_title">Se pregătește cardul SD</string>
   <string name="sd_ext_media_checking_notification_message">Se verifică cardul SD pentru erori.</string>
@@ -178,28 +178,32 @@
   <string name="usb_ext_media_checking_notification_title">Pregătirea stocării USB</string>
   <string name="usb_ext_media_checking_notification_message">Verificarea stocării USB pentru erori.</string>
   <string name="usb_ext_media_nofs_notification_title">Stocare USB goală</string>
-  <string name="usb_ext_media_nofs_notification_message">Mediul de stocare USB este gol sau are un sistem de fişiere neaceptat.</string>
+  <string name="usb_ext_media_nofs_notification_message">Mediul de stocare USB este gol sau are un sistem de fișiere neacceptat.</string>
   <string name="usb_ext_media_unmountable_notification_title">Mediu de stocare USB deteriorat</string>
   <string name="usb_ext_media_unmountable_notification_message">Mediul de stocare USB este deteriorat. Încercați reformatarea acestuia.</string>
-  <string name="usb_ext_media_badremoval_notification_title">Mediu de stocare USB eliminat în mod neaşteptat</string>
+  <string name="usb_ext_media_badremoval_notification_title">Mediu de stocare USB eliminat în mod neașteptat</string>
   <string name="usb_ext_media_badremoval_notification_message">Demontați mediul de stocare USB înainte de înlăturare pentru a evita pierderea de date.</string>
   <string name="usb_ext_media_safe_unmount_notification_title">Mediul de stocare USB poate fi înlăturat în siguranță</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Puteți elimina în condiții de siguranță mediul de stocare USB.</string>
   <string name="usb_ext_media_nomedia_notification_title">Mediul de stocare USB eliminat</string>
   <string name="usb_ext_media_nomedia_notification_message">Mediul de stocare USB eliminat. Introduceți mediu nou.</string>
   <string name="live_display_auto">Automat</string>
-  <string name="live_display_auto_summary">Reglează automat temperatura de culoare de pe ecran după apus şi răsărit</string>
+  <string name="live_display_auto_summary">Reglează automat temperatura de culoare de pe ecran după apus și răsărit</string>
   <string name="live_display_off">Oprit</string>
   <string name="live_display_off_summary">Dezactivează toate ajustările</string>
   <string name="live_display_day">Zi</string>
-  <string name="live_display_day_summary">Utilizaţi numai setările de zi</string>
+  <string name="live_display_day_summary">Utilizați numai setările de zi</string>
   <string name="live_display_night">Noapte</string>
-  <string name="live_display_night_summary">Utilizaţi numai setările de noapte</string>
+  <string name="live_display_night_summary">Utilizați numai setările de noapte</string>
   <string name="live_display_outdoor">În aer liber (soare strălucitor)</string>
-  <string name="live_display_outdoor_summary">Utilizaţi numai setările în aer liber</string>
+  <string name="live_display_outdoor_summary">Utilizați numai setările în aer liber</string>
   <string name="live_display_hint">LiveDisplay poate reduce oboseala ochilor și vă poate ajuta să dormiți noaptea. Apăsați aici pentru a-l încerca!</string>
   <string name="lock_to_app_toast_no_navbar">Pentru a anula fixarea acestui ecran, atingeți și țineți apăsat butonul Înapoi.</string>
   <string name="quick_settings_tile_flashlight_not_title">Lanterna este pornită</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Atingeți pentru a dezactiva</string>
+  <string name="storage_sd_dock_card">Andocare card SD</string>
+  <string name="fingerprint_default_name">Amprentă digitală <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">accesează serviciul amprentă digitală</string>
   <string name="permlab_resetBatteryStats">resetează statisticile bateriei</string>
   <string name="silent_mode_priority">Prioritate</string>
 </resources>

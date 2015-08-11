@@ -21,16 +21,22 @@
   <string name="screenshot_delete_confirmation">Captură ecran ștearsă.</string>
   <string name="advanced_dev_option_wipe_app">Șterge datele aplicației</string>
   <string name="advanced_dev_option_force_stop">Oprire forțată</string>
-  <string name="advanced_dev_option_uninstall">Dezinstalaţi</string>
+  <string name="advanced_dev_option_uninstall">Dezinstalați</string>
   <string name="accessibility_quick_settings_data_off">Date mobile oprite.</string>
   <string name="accessibility_quick_settings_data_on">Date mobile pornite.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming oprit.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming pornit.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB prin rețea inactiv.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB prin rețea activ.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Afișare ambientală oprită.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Afișare ambientală pornită.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Inversiune de culoare oprită.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Inversiune de culoare pornită.</string>
   <string name="accessibility_quick_settings_compass_off">Busolă inactivă.</string>
   <string name="accessibility_quick_settings_compass_on">Busolă activă.</string>
-  <string name="accessibility_quick_settings_location_battery_saving">Raportarea locaţiei:  mod economisire baterie.</string>
-  <string name="accessibility_quick_settings_location_gps_only">Raportarea locaţiei: doar senzori.</string>
-  <string name="accessibility_quick_settings_location_high_accuracy">Raportarea locaţiei: precizie ridicată.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Raportarea locației: mod economisire baterie.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Raportarea locației: doar senzori.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Raportarea locației: precizie ridicată.</string>
   <string name="accessibility_quick_settings_lte_off">4G oprit.</string>
   <string name="accessibility_quick_settings_lte_on">4G pornit.</string>
   <string name="accessibility_quick_settings_lte_changed_off">LTE oprit.</string>
@@ -66,6 +72,7 @@
   <string name="quick_settings_lte_label">4G</string>
   <string name="quick_settings_screen_timeout_detail_title">Timpul de expirare ecran</string>
   <string name="quick_settings_usb_tether_label">Tethering USB</string>
+  <string name="quick_settings_ambient_display_label">Afișare ambientală</string>
   <string name="quick_settings_sync_label">Sincronizare</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Glisați dreapta pentru %1$s</string>
@@ -93,7 +100,7 @@
   <string name="navring_action_torch">Comutare lanternă</string>
   <string name="navring_action_google_now">Google Now</string>
   <string name="navring_choose_action_title">Alege acțiunea</string>
-  <string name="select_application">Selectaţi aplicaţia</string>
+  <string name="select_application">Selectați aplicația</string>
   <string name="lockscreen_target_empty">Gol</string>
   <string name="interruption_level_silent">Silențios</string>
   <string name="zen_silent_with_warning">Fără întreruperi, exceptând alarme.</string>
