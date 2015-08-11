@@ -119,6 +119,8 @@ import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
 import android.view.Display;
+import com.android.internal.app.ActivityTrigger;
+
 
 import com.android.internal.app.IVoiceInteractor;
 import com.android.internal.content.ReferrerIntent;
@@ -353,6 +355,8 @@ final class ActivityStack {
     }
 
     final Handler mHandler;
+
+    static final ActivityTrigger mActivityTrigger = new ActivityTrigger();
 
     final class ActivityStackHandler extends Handler {
 
@@ -2233,7 +2237,10 @@ final class ActivityStack {
 
         if (DEBUG_SWITCH) Slog.v(TAG_SWITCH, "Resuming " + next);
 
-        // If we are currently pausing an activity, then don't do anything until that is done.
+        mActivityTrigger.activityResumeTrigger(next.intent);
+
+        // If we are currently pausing an activity, then don't do anything
+        // until that is done.
         if (!mStackSupervisor.allPausedActivitiesComplete()) {
             if (DEBUG_SWITCH || DEBUG_PAUSE || DEBUG_STATES) Slog.v(TAG_PAUSE,
                     "resumeTopActivityLocked: Skip resume: some activity pausing.");
@@ -2699,6 +2706,7 @@ final class ActivityStack {
         task.setFrontOfTask();
 
         r.putInHistory();
+        r.info.flags = mActivityTrigger.activityStartTrigger(r.intent, r.info.flags);
         if (!isHomeStack() || numActivities() > 0) {
             // We want to show the starting preview window if we are
             // switching to a new task, or the next activity's process is
