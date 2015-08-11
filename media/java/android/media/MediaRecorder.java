@@ -394,6 +394,13 @@ public class MediaRecorder
 
         /** VP8/VORBIS data in a WEBM container */
         public static final int WEBM = 9;
+
+        /** @hide QCP file format */
+        public static final int QCP = 20;
+
+        /** @hide WAVE media file format*/
+        public static final int WAVE = 21;
+
     };
 
     /**
@@ -418,6 +425,12 @@ public class MediaRecorder
         public static final int AAC_ELD = 5;
         /** Ogg Vorbis audio codec */
         public static final int VORBIS = 6;
+        /** @hide EVRC audio codec */
+        public static final int EVRC = 10;
+        /** @hide QCELP audio codec */
+        public static final int QCELP = 11;
+        /** @hide Linear PCM audio codec */
+        public static final int LPCM = 12;
     }
 
     /**
