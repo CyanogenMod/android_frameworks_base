@@ -22,8 +22,8 @@
   <string name="advanced_dev_option_wipe_app">앱 데이터 삭제</string>
   <string name="advanced_dev_option_force_stop">강제 종료</string>
   <string name="advanced_dev_option_uninstall">제거</string>
-  <string name="accessibility_quick_settings_data_off">데이터 통신 꺼짐.</string>
-  <string name="accessibility_quick_settings_data_on">데이터 통신 켜짐.</string>
+  <string name="accessibility_quick_settings_data_off">모바일 데이터 꺼짐.</string>
+  <string name="accessibility_quick_settings_data_on">모바일 데이터 켜짐.</string>
   <string name="accessibility_quick_settings_roaming_off">로밍 꺼짐.</string>
   <string name="accessibility_quick_settings_roaming_on">로밍 켜짐.</string>
   <string name="accessibility_quick_settings_network_adb_off">네트워크를 통한 ADB 꺼짐.</string>
@@ -97,11 +97,11 @@
   <string name="accessibility_quick_settings_visualizer">음악 효과.</string>
   <string name="accessibility_dpad_left">커서 왼쪽</string>
   <string name="accessibility_dpad_right">커서 오른쪽</string>
-  <string name="quick_settings_mobile_data_label">데이터 통신</string>
+  <string name="quick_settings_mobile_data_label">모바일 데이터</string>
   <string name="quick_settings_roaming_label">로밍</string>
   <string name="quick_settings_apn_switch_label">APN 스위치</string>
-  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> 데이터 통신</string>
-  <string name="quick_settings_data_off">데이터 통신 꺼짐</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> 모바일 데이터</string>
+  <string name="quick_settings_data_off">모바일 데이터 꺼짐</string>
   <string name="quick_settings_location_detail_title">위치 모드</string>
   <string name="quick_settings_location_battery_saving_label">배터리 절약</string>
   <string name="quick_settings_location_gps_only_label">기기 전용</string>
