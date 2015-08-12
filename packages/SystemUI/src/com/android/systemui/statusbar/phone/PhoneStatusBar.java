@@ -1843,7 +1843,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override
     protected void updateNotificationRanking(RankingMap ranking) {
         mNotificationData.updateRanking(ranking);
-        updateNotifications();
+        updateNotifications(false);
     }
 
     @Override
@@ -2032,9 +2032,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
-    protected void updateNotifications() {
-        if (!mHandler.hasMessages(MSG_UPDATE_NOTIFICATIONS)) {
-            mHandler.sendEmptyMessage(MSG_UPDATE_NOTIFICATIONS);
+    protected void updateNotifications(boolean immediate) {
+        if (immediate) {
+            mHandler.removeMessages(MSG_UPDATE_NOTIFICATIONS);
+            handleUpdateNotifications();
+        } else {
+            if (!mHandler.hasMessages(MSG_UPDATE_NOTIFICATIONS)) {
+                mHandler.sendEmptyMessage(MSG_UPDATE_NOTIFICATIONS);
+            }
         }
     }
 
@@ -3869,7 +3874,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (MULTIUSER_DEBUG) mNotificationPanelDebugText.setText("USER " + newUserId);
         animateCollapsePanels();
         updatePublicMode(); 
-        updateNotifications();
+        updateNotifications(true);
         resetUserSetupObserver();
         setControllerUsers();
 
@@ -4642,7 +4647,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateDozingState();
         updatePublicMode();
         updateStackScrollerState(goingToFullShade);
-        updateNotifications();
+        updateNotifications(true);
         checkBarModes();
         updateCarrierLabelVisibility(false);
         updateMediaMetaData(false);
@@ -5189,29 +5194,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             }
         }
-    }
-
-    private ActivityManager.RunningTaskInfo getLastTask(final ActivityManager am) {
-        final String defaultHomePackage = resolveCurrentLauncherPackage();
-        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(5);
-
-        for (int i = 1; i < tasks.size(); i++) {
-            String packageName = tasks.get(i).topActivity.getPackageName();
-            if (!packageName.equals(defaultHomePackage)
-                    && !packageName.equals(mContext.getPackageName())) {
-                return tasks.get(i);
-            }
-        }
-
-        return null;
-    }
-
-    private String resolveCurrentLauncherPackage() {
-        final Intent launcherIntent = new Intent(Intent.ACTION_MAIN)
-                .addCategory(Intent.CATEGORY_HOME);
-        final PackageManager pm = mContext.getPackageManager();
-        final ResolveInfo launcherInfo = pm.resolveActivity(launcherIntent, 0);
-        return launcherInfo.activityInfo.packageName;
     }
 
     // Recents
