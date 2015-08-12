@@ -272,7 +272,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     mContext.getContentResolver(), Settings.Global.DEVICE_PROVISIONED, 0);
             if (provisioned != mDeviceProvisioned) {
                 mDeviceProvisioned = provisioned;
-                updateNotifications();
+                updateNotifications(false);
             }
             final int mode = Settings.Global.getInt(mContext.getContentResolver(),
                     Settings.Global.ZEN_MODE, Settings.Global.ZEN_MODE_OFF);
@@ -289,7 +289,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             // so we just dump our cache ...
             mUsersAllowingPrivateNotifications.clear();
             // ... and refresh all the notifications
-            updateNotifications();
+            updateNotifications(false);
         }
     };
 
@@ -406,7 +406,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     action)) {
                 mUsersAllowingPrivateNotifications.clear();
                 updateLockscreenNotificationSetting();
-                updateNotifications();
+                updateNotifications(false);
             } else if (BANNER_ACTION_CANCEL.equals(action) || BANNER_ACTION_SETUP.equals(action)) {
                 mNoMan.cancel(HIDDEN_NOTIFICATION_ID);
 
@@ -1709,7 +1709,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             Log.w(TAG, "removeNotification for unknown key: " + key);
             return null;
         }
-        updateNotifications();
+        updateNotifications(false);
         return entry.notification;
     }
 
@@ -1748,7 +1748,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
         // Add the expanded view and icon.
         mNotificationData.add(entry, ranking);
-        updateNotifications();
+        updateNotifications(false);
     }
 
     /**
@@ -1835,7 +1835,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected void setZenMode(int mode) {
         if (!isDeviceProvisioned()) return;
         mZenMode = mode;
-        updateNotifications();
+        updateNotifications(true);
     }
 
     // extended in PhoneStatusBar
@@ -1857,7 +1857,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected abstract void haltTicker();
     protected abstract void setAreThereNotifications();
-    protected abstract void updateNotifications();
+    protected abstract void updateNotifications(boolean immediate);
     protected abstract void tick(StatusBarNotification n, boolean firstTime);
     protected abstract void updateExpandedViewPos(int expandedPosition);
     protected abstract boolean shouldDisableNavbarGestures();
@@ -1991,7 +1991,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     }
                 }
                 mNotificationData.updateRanking(ranking);
-                updateNotifications();
+                updateNotifications(false);
                 updateSuccessful = true;
             }
             catch (RuntimeException e) {
@@ -2039,7 +2039,7 @@ public abstract class BaseStatusBar extends SystemUI implements
                     oldEntry.icon.set(ic);
                     inflateViews(oldEntry, mStackScroller, wasHeadsUp);
                     mNotificationData.updateRanking(ranking);
-                    updateNotifications();
+                    updateNotifications(false);
                 }
             }
         }

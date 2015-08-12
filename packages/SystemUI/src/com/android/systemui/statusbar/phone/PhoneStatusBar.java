@@ -1843,7 +1843,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override
     protected void updateNotificationRanking(RankingMap ranking) {
         mNotificationData.updateRanking(ranking);
-        updateNotifications();
+        updateNotifications(false);
     }
 
     @Override
@@ -2032,9 +2032,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
-    protected void updateNotifications() {
-        if (!mHandler.hasMessages(MSG_UPDATE_NOTIFICATIONS)) {
-            mHandler.sendEmptyMessage(MSG_UPDATE_NOTIFICATIONS);
+    protected void updateNotifications(boolean immediate) {
+        if (immediate) {
+            mHandler.removeMessages(MSG_UPDATE_NOTIFICATIONS);
+            handleUpdateNotifications();
+        } else {
+            if (!mHandler.hasMessages(MSG_UPDATE_NOTIFICATIONS)) {
+                mHandler.sendEmptyMessage(MSG_UPDATE_NOTIFICATIONS);
+            }
         }
     }
 
@@ -3869,7 +3874,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (MULTIUSER_DEBUG) mNotificationPanelDebugText.setText("USER " + newUserId);
         animateCollapsePanels();
         updatePublicMode(); 
-        updateNotifications();
+        updateNotifications(true);
         resetUserSetupObserver();
         setControllerUsers();
 
@@ -4642,7 +4647,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateDozingState();
         updatePublicMode();
         updateStackScrollerState(goingToFullShade);
-        updateNotifications();
+        updateNotifications(true);
         checkBarModes();
         updateCarrierLabelVisibility(false);
         updateMediaMetaData(false);
