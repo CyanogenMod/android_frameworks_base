@@ -40,7 +40,7 @@
 
 #include <system/audio.h>
 #include <android_runtime/android_view_Surface.h>
-
+#include <media/AVMediaExtensions.h>
 // ----------------------------------------------------------------------------
 
 using namespace android;
@@ -463,7 +463,7 @@ android_media_MediaRecorder_native_setup(JNIEnv *env, jobject thiz, jobject weak
 
     ScopedUtfChars opPackageNameStr(env, opPackageName);
 
-    sp<MediaRecorder> mr = new MediaRecorder(String16(opPackageNameStr.c_str()));
+    sp<MediaRecorder> mr = AVMediaUtils::get()->createMediaRecorder(String16(opPackageNameStr.c_str()));
     if (mr == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
         return;
