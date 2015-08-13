@@ -306,4 +306,7 @@
 
     <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_dock_battery_level">Dock battery <xliff:g id="number">%d</xliff:g> percent.</string>
+
+    <!-- Empty view text for CustomQSTile -->
+    <string name="quick_settings_custom_qs_detail_empty_text">No items found</string>
 </resources>
