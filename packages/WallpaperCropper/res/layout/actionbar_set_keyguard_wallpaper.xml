@@ -18,12 +18,10 @@
 */
 -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?android:actionButtonStyle"
-    android:id="@+id/set_wallpaper_button"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    <TextView style="?android:actionBarTabTextStyle"
+<TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/set_wallpaper_button"
+        style="@style/ActionBarSetWallpaperStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
@@ -31,6 +29,4 @@
         android:drawableLeft="@drawable/ic_actionbar_accept"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:text="@string/keyguard_wallpaper_instructions"
-        android:textColor="@android:color/white" />
-</FrameLayout>
+        android:text="@string/keyguard_wallpaper_instructions" />
