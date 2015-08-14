@@ -52,7 +52,8 @@ import android.util.Log;
 public final class ObexHelper {
 
     private static final String TAG = "ObexHelper";
-    public static final boolean VDBG = false;
+    public static final String LOG_TAG = "BluetoothObex";
+    public static final boolean VDBG = Log.isLoggable(LOG_TAG, Log.VERBOSE);
     /**
      * Defines the basic packet length used by OBEX. Every OBEX packet has the
      * same basic format:<BR>
@@ -190,6 +191,7 @@ public final class ObexHelper {
         try {
             while (index < headerArray.length) {
                 headerID = 0xFF & headerArray[index];
+                if (VDBG) Log.v(TAG,"updateHeaderSet headerID = " + headerID);
                 switch (headerID & (0xC0)) {
 
                     /*
@@ -375,8 +377,9 @@ public final class ObexHelper {
              * Determine if there is a connection ID to send.  If there is,
              * then it should be the first header in the packet.
              */
+            if (VDBG) Log.v(TAG,"createHeader = " + head);
             if ((headImpl.mConnectionID != null) && (headImpl.getHeader(HeaderSet.TARGET) == null)) {
-
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.CONNECTION_ID);
                 out.write((byte)HeaderSet.CONNECTION_ID);
                 out.write(headImpl.mConnectionID);
             }
@@ -384,6 +387,7 @@ public final class ObexHelper {
             // Count Header
             intHeader = (Long)headImpl.getHeader(HeaderSet.COUNT);
             if (intHeader != null) {
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.COUNT);
                 out.write((byte)HeaderSet.COUNT);
                 value = ObexHelper.convertToByteArray(intHeader.longValue());
                 out.write(value);
@@ -395,6 +399,7 @@ public final class ObexHelper {
             // Name Header
             stringHeader = (String)headImpl.getHeader(HeaderSet.NAME);
             if (stringHeader != null) {
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.NAME);
                 out.write((byte)HeaderSet.NAME);
                 value = ObexHelper.convertToUnicodeByteArray(stringHeader);
                 length = value.length + 3;
@@ -415,6 +420,7 @@ public final class ObexHelper {
             // Type Header
             stringHeader = (String)headImpl.getHeader(HeaderSet.TYPE);
             if (stringHeader != null) {
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.TYPE);
                 out.write((byte)HeaderSet.TYPE);
                 try {
                     value = stringHeader.getBytes("ISO8859_1");
@@ -436,6 +442,7 @@ public final class ObexHelper {
             // Length Header
             intHeader = (Long)headImpl.getHeader(HeaderSet.LENGTH);
             if (intHeader != null) {
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.LENGTH);
                 out.write((byte)HeaderSet.LENGTH);
                 value = ObexHelper.convertToByteArray(intHeader.longValue());
                 out.write(value);
@@ -447,7 +454,7 @@ public final class ObexHelper {
             // Time ISO Header
             dateHeader = (Calendar)headImpl.getHeader(HeaderSet.TIME_ISO_8601);
             if (dateHeader != null) {
-
+                if (VDBG) Log.v(TAG," Add dateHeader = " + HeaderSet.TIME_ISO_8601);
                 /*
                  * The ISO Header should take the form YYYYMMDDTHHMMSSZ.  The
                  * 'Z' will only be included if it is a UTC time.
@@ -509,6 +516,7 @@ public final class ObexHelper {
             // Time 4 Byte Header
             dateHeader = (Calendar)headImpl.getHeader(HeaderSet.TIME_4_BYTE);
             if (dateHeader != null) {
+                if (VDBG) Log.v(TAG," Add dateHeader = " + HeaderSet.TIME_4_BYTE);
                 out.write(HeaderSet.TIME_4_BYTE);
 
                 /*
@@ -543,6 +551,7 @@ public final class ObexHelper {
             // Target Header
             value = (byte[])headImpl.getHeader(HeaderSet.TARGET);
             if (value != null) {
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.TARGET);
                 out.write((byte)HeaderSet.TARGET);
                 length = value.length + 3;
                 lengthArray[0] = (byte)(255 & (length >> 8));
@@ -571,6 +580,7 @@ public final class ObexHelper {
             // Who Header
             value = (byte[])headImpl.getHeader(HeaderSet.WHO);
             if (value != null) {
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.WHO);
                 out.write((byte)HeaderSet.WHO);
                 length = value.length + 3;
                 lengthArray[0] = (byte)(255 & (length >> 8));
@@ -582,9 +592,10 @@ public final class ObexHelper {
                 }
             }
 
-            // Connection ID Header
+            // Application Parameter Header
             value = (byte[])headImpl.getHeader(HeaderSet.APPLICATION_PARAMETER);
             if (value != null) {
+                if (VDBG) Log.v(TAG," Add APP PARAM Header = " + HeaderSet.APPLICATION_PARAMETER);
                 out.write((byte)HeaderSet.APPLICATION_PARAMETER);
                 length = value.length + 3;
                 lengthArray[0] = (byte)(255 & (length >> 8));
@@ -623,6 +634,7 @@ public final class ObexHelper {
                     lengthArray[1] = (byte)(255 & length);
                     out.write(lengthArray);
                     out.write(value);
+                    if (VDBG) Log.v(TAG," Add Unicode String value = " + value);
                     if (nullOut) {
                         headImpl.setHeader(i + 0x30, null);
                     }
@@ -637,6 +649,7 @@ public final class ObexHelper {
                     lengthArray[1] = (byte)(255 & length);
                     out.write(lengthArray);
                     out.write(value);
+                    if (VDBG) Log.v(TAG," Add ByteSeq value = " + value);
                     if (nullOut) {
                         headImpl.setHeader(i + 0x70, null);
                     }
@@ -647,6 +660,7 @@ public final class ObexHelper {
                 if (byteHeader != null) {
                     out.write((byte)i + 0xB0);
                     out.write(byteHeader.byteValue());
+                    if (VDBG) Log.v(TAG," Add ByteHeader value = " + byteHeader.byteValue());
                     if (nullOut) {
                         headImpl.setHeader(i + 0xB0, null);
                     }
@@ -657,6 +671,7 @@ public final class ObexHelper {
                 if (intHeader != null) {
                     out.write((byte)i + 0xF0);
                     out.write(ObexHelper.convertToByteArray(intHeader.longValue()));
+                    if (VDBG) Log.v(TAG," Add Int value = " + intHeader.longValue());
                     if (nullOut) {
                         headImpl.setHeader(i + 0xF0, null);
                     }
@@ -671,6 +686,7 @@ public final class ObexHelper {
                 lengthArray[1] = (byte)(255 & length);
                 out.write(lengthArray);
                 out.write(headImpl.mAuthChall);
+                if (VDBG) Log.v(TAG," Add mAuthChall value = " + headImpl.mAuthChall);
                 if (nullOut) {
                     headImpl.mAuthChall = null;
                 }
@@ -684,6 +700,7 @@ public final class ObexHelper {
                 lengthArray[1] = (byte)(255 & length);
                 out.write(lengthArray);
                 out.write(headImpl.mAuthResp);
+                if (VDBG) Log.v(TAG," Add mAuthChall value = " + headImpl.mAuthResp);
                 if (nullOut) {
                     headImpl.mAuthResp = null;
                 }
@@ -699,8 +716,10 @@ public final class ObexHelper {
             // Add the SRM header
             byteHeader = (Byte)headImpl.getHeader(HeaderSet.SINGLE_RESPONSE_MODE);
             if (byteHeader != null) {
+                if (VDBG) Log.v(TAG," Add SRM Header = " + HeaderSet.SINGLE_RESPONSE_MODE);
                 out.write((byte)HeaderSet.SINGLE_RESPONSE_MODE);
                 out.write(byteHeader.byteValue());
+                if (VDBG) Log.v(TAG," Add SRM value = " + byteHeader.byteValue());
                 if (nullOut) {
                     headImpl.setHeader(HeaderSet.SINGLE_RESPONSE_MODE, null);
                 }
@@ -709,6 +728,7 @@ public final class ObexHelper {
             // Add the SRM parameter header
             byteHeader = (Byte)headImpl.getHeader(HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER);
             if (byteHeader != null) {
+                if (VDBG) Log.v(TAG," Add Header = " + HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER);
                 out.write((byte)HeaderSet.SINGLE_RESPONSE_MODE_PARAMETER);
                 out.write(byteHeader.byteValue());
                 if (nullOut) {
