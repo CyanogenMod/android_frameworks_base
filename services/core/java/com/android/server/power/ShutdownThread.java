@@ -728,8 +728,6 @@ public final class ShutdownThread extends Thread {
 
     private static void deviceRebootOrShutdown(boolean reboot, String reason) {
         Class<?> cl;
-        PathClassLoader oemClassLoader = new PathClassLoader("/system/framework/oem-services.jar",
-                                                             ClassLoader.getSystemClassLoader());
         String deviceShutdownClassName = "com.qti.server.power.ShutdownOem";
         try {
             cl = Class.forName(deviceShutdownClassName);
