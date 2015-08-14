@@ -2160,6 +2160,7 @@
 
   <!-- From SignalStrength -->
   <java-symbol type="integer" name="config_LTE_RSRP_threshold_type" />
+  <java-symbol type="array" name="config_LTE_RSRP_threshold_bucket" />
 
   <java-symbol type="string" name="android_system_label" />
   <java-symbol type="string" name="system_error_wipe_data" />
@@ -2172,7 +2173,5 @@
   <java-symbol type="bool" name="config_LTE_eri_for_network_name" />
   <java-symbol type="bool" name="config_defaultInTouchMode" />
 
-  <!-- From SignalStrength -->
-  <java-symbol type="integer" name="config_LTE_RSRP_threshold_type" />
 
 </resources>

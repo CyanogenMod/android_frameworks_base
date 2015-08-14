@@ -797,12 +797,15 @@ public class SignalStrength implements Parcelable {
     public int getAlternateLteLevel() {
         int rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
-        if (mLteRsrp > -44) rsrpIconLevel = -1;
-        else if (mLteRsrp >= -97) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
-        else if (mLteRsrp >= -105) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
-        else if (mLteRsrp >= -113) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
-        else if (mLteRsrp >= -120) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
-        else if (mLteRsrp >= -140) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+        int []bucket = Resources.getSystem().getIntArray(com.android.internal.R.array.
+                       config_LTE_RSRP_threshold_bucket);
+
+        if (mLteRsrp > bucket[5]) rsrpIconLevel = -1;
+        else if (mLteRsrp >= bucket[4]) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
+        else if (mLteRsrp >= bucket[3]) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
+        else if (mLteRsrp >= bucket[2]) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
+        else if (mLteRsrp >= bucket[1]) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
+        else if (mLteRsrp >= bucket[0]) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
         return rsrpIconLevel;
     }

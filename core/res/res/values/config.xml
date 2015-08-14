@@ -2219,6 +2219,16 @@
     -->
     <integer name="config_LTE_RSRP_threshold_type">1</integer>
 
+    <integer-array name="config_LTE_RSRP_threshold_bucket">
+        <item>-140</item>
+        <item>-120</item>
+        <item>-113</item>
+        <item>-105</item>
+        <item>-97</item>
+        <item>-44</item>
+    </integer-array>
+
+
     <!-- Enabled built-in zen mode condition providers -->
     <string-array translatable="false" name="config_system_condition_providers">
         <item>countdown</item>
