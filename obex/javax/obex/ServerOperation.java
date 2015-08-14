@@ -59,7 +59,7 @@ public final class ServerOperation implements Operation, BaseStream {
 
     private static final String TAG = "ServerOperation";
 
-    private static final boolean V = ObexHelper.VDBG; // Verbose debugging
+    private static final boolean V = Log.isLoggable(ObexHelper.LOG_TAG, Log.VERBOSE);
 
     public boolean isAborted;
 
@@ -124,6 +124,7 @@ public final class ServerOperation implements Operation, BaseStream {
      */
     public ServerOperation(ServerSession p, InputStream in, int request, int maxSize,
             ServerRequestHandler listen) throws IOException {
+        if (V)  Log.v(TAG, "ServerOperation");
 
         isAborted = false;
         mParent = p;
@@ -330,14 +331,17 @@ public final class ServerOperation implements Operation, BaseStream {
      */
     public synchronized boolean continueOperation(boolean sendEmpty, boolean inStream)
             throws IOException {
+        if (V) Log.v(TAG, "continueOperation");
         if (!mGetOperation) {
             if (!finalBitSet) {
                 if (sendEmpty) {
                     sendReply(ResponseCodes.OBEX_HTTP_CONTINUE);
+                    if (V) Log.v(TAG, "continueOperation:ServerSet SRM sendEmpty clause");
                     return true;
                 } else {
                     if ((mResponseSize > 3) || (mPrivateOutput.size() > 0)) {
                         sendReply(ResponseCodes.OBEX_HTTP_CONTINUE);
+                        if (V) Log.v(TAG, "continueOperation: Server setting SRM");
                         return true;
                     } else {
                         return false;
@@ -347,6 +351,7 @@ public final class ServerOperation implements Operation, BaseStream {
                 return false;
             }
         } else {
+            if (V) Log.v(TAG, "Get continueOperation ");
             sendReply(ResponseCodes.OBEX_HTTP_CONTINUE);
             return true;
         }
@@ -395,6 +400,8 @@ public final class ServerOperation implements Operation, BaseStream {
             bodyLength = mPrivateOutput.size();
             orginalBodyLength = bodyLength;
         }
+        if(V)Log.v(TAG, "mMaxPcKLen : " + mMaxPacketLength);
+        if(V)Log.v(TAG, "headerArryLen : " + headerArray.length);
 
         if ((ObexHelper.BASE_PACKET_LENGTH + headerArray.length) > mMaxPacketLength) {
 
