@@ -218,7 +218,9 @@ public class AlternateRecentsComponent implements ActivityOptions.OnAnimationSta
         // Initialize some static datastructures
         TaskStackViewLayoutAlgorithm.initializeCurve();
         // Load the header bar layout
-        reloadHeaderBarLayout(true);
+        if (mBootCompleted) {
+            reloadHeaderBarLayout(true);
+        }
 
         // When we start, preload the data associated with the previous recent tasks.
         // We can use a new plan since the caches will be the same.
