@@ -521,7 +521,29 @@ public final class CachedBluetoothDevice implements Comparable<CachedBluetoothDe
      * Refreshes the UI when framework alerts us of a UUID change.
      */
     void onUuidChanged() {
+        Log.d(TAG, " onUuidChanged, mProfile Size " + mProfiles.size());
+        List<LocalBluetoothProfile> mPrevProfiles =
+                new ArrayList<LocalBluetoothProfile>();
+        mPrevProfiles.clear();
+        mPrevProfiles.addAll(mProfiles);
         updateProfiles();
+        /*
+         * Check if new profiles are added
+         */
+        if ((mPrevProfiles.containsAll(mProfiles)) && (!mPrevProfiles.isEmpty())) {
+            Log.d(TAG,"UUID not udpated, returning");
+            mProfiles.clear();
+            mProfiles.addAll(mPrevProfiles);
+            return;
+        }
+        for (int i = 0; i<mProfiles.size(); ++i) {
+            if (!mPrevProfiles.contains(mProfiles.get(i))) {
+                mPrevProfiles.add(mProfiles.get(i));
+            }
+        }
+        mProfiles.clear();
+        mProfiles.addAll(mPrevProfiles);
+
         ParcelUuid[] uuids = mDevice.getUuids();
 
         long timeout = MAX_UUID_DELAY_FOR_AUTO_CONNECT;
