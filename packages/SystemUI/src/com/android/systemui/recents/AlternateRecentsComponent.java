@@ -158,6 +158,7 @@ public class AlternateRecentsComponent implements ActivityOptions.OnAnimationSta
     TaskStackListenerImpl mTaskStackListener;
     RecentsOwnerEventProxyReceiver mProxyBroadcastReceiver;
     boolean mBootCompleted;
+    boolean mDelayLoadTilBoot;
     boolean mStartAnimationTriggered;
     boolean mCanReuseTaskStackViews = true;
 
@@ -217,6 +218,14 @@ public class AlternateRecentsComponent implements ActivityOptions.OnAnimationSta
     public void onStart() {
         // Initialize some static datastructures
         TaskStackViewLayoutAlgorithm.initializeCurve();
+        if (mBootCompleted) {
+            load();
+        } else {
+            mDelayLoadTilBoot = true;
+        }
+    }
+
+    private void load() {
         // Load the header bar layout
         reloadHeaderBarLayout(true);
 
@@ -234,6 +243,12 @@ public class AlternateRecentsComponent implements ActivityOptions.OnAnimationSta
 
     public void onBootCompleted() {
         mBootCompleted = true;
+
+        if (mDelayLoadTilBoot) {
+            mDelayLoadTilBoot = false;
+
+            load();
+        }
     }
 
     /** Shows the Recents. */
