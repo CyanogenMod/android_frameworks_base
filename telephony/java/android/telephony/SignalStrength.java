@@ -53,6 +53,7 @@ public class SignalStrength implements Parcelable {
     public static final int INVALID = 0x7FFFFFFF;
 
     private static final int RSRP_THRESH_TYPE_STRICT = 0;
+    private static final int RSRP_THRESH_TYPE_CUSTOM = 2;
     private static final int[] RSRP_THRESH_STRICT = new int[] {-140, -115, -105, -95, -85, -44};
     private static final int[] RSRP_THRESH_LENIENT = new int[] {-140, -128, -118, -108, -98, -44};
 
@@ -795,16 +796,7 @@ public class SignalStrength implements Parcelable {
      * @hide
      */
     public int getAlternateLteLevel() {
-        int rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
-
-        if (mLteRsrp > -44) rsrpIconLevel = -1;
-        else if (mLteRsrp >= -97) rsrpIconLevel = SIGNAL_STRENGTH_GREAT;
-        else if (mLteRsrp >= -105) rsrpIconLevel = SIGNAL_STRENGTH_GOOD;
-        else if (mLteRsrp >= -113) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
-        else if (mLteRsrp >= -120) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
-        else if (mLteRsrp >= -140) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
-
-        return rsrpIconLevel;
+        return getLteLevel(true);
     }
 
     /**
@@ -813,6 +805,15 @@ public class SignalStrength implements Parcelable {
      * @hide
      */
     public int getLteLevel() {
+        return getLteLevel(false);
+    }
+
+    /**
+     * Get LTE as level 0..4
+     *
+     * @hide
+     */
+    private int getLteLevel(boolean forceRsrp) {
         /*
          * TS 36.214 Physical Layer Section 5.1.3 TS 36.331 RRC RSSI = received
          * signal + noise RSRP = reference signal dBm RSRQ = quality of signal
@@ -826,6 +827,9 @@ public class SignalStrength implements Parcelable {
         int[] threshRsrp;
         if (rsrpThreshType == RSRP_THRESH_TYPE_STRICT) {
             threshRsrp = RSRP_THRESH_STRICT;
+        } else if (rsrpThreshType == RSRP_THRESH_TYPE_CUSTOM) {
+            threshRsrp = Resources.getSystem().getIntArray(com.android.internal.R.array.
+                    config_LTE_RSRP_custom_levels);
         } else {
             threshRsrp = RSRP_THRESH_LENIENT;
         }
@@ -836,6 +840,10 @@ public class SignalStrength implements Parcelable {
         else if (mLteRsrp >= threshRsrp[2]) rsrpIconLevel = SIGNAL_STRENGTH_MODERATE;
         else if (mLteRsrp >= threshRsrp[1]) rsrpIconLevel = SIGNAL_STRENGTH_POOR;
         else if (mLteRsrp >= threshRsrp[0]) rsrpIconLevel = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
+
+        if (forceRsrp) {
+            return rsrpIconLevel;
+        }
 
         /*
          * Values are -200 dB to +300 (SNR*10dB) RS_SNR >= 13.0 dB =>4 bars 4.5
