@@ -46,7 +46,7 @@ import com.android.internal.util.Protocol;
  **/
 public class NetworkFactory extends Handler {
     private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    private static final boolean VDBG = true;
 
     private static final int BASE = Protocol.BASE_NETWORK_FACTORY;
     /**
@@ -242,7 +242,12 @@ public class NetworkFactory extends Handler {
     }
 
     private void evalRequest(NetworkRequestInfo n) {
-        if (VDBG) log("evalRequest");
+        if (VDBG) {
+            log("evalRequest, n.requested = " + n.requested);
+            log("n.score = " + n.score + ", mScore = "  + mScore);
+            log("satisfiedByNetworkCapabilities = " + n.request.networkCapabilities.satisfiedByNetworkCapabilities(mCapabilityFilter));
+            log("acceptRequest = " + acceptRequest(n.request, n.score));
+        }
         if (n.requested == false && n.score < mScore &&
                 n.request.networkCapabilities.satisfiedByNetworkCapabilities(
                 mCapabilityFilter) && acceptRequest(n.request, n.score)) {

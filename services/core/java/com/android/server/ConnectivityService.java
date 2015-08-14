@@ -2166,7 +2166,10 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 }
             } else {
                 loge("Error connecting NetworkFactory");
-                mNetworkFactoryInfos.remove(msg.obj);
+                NetworkFactoryInfo foo = mNetworkFactoryInfos.remove(msg.obj);
+                if (foo != null) {
+                    log("EMAN removed nfi: " + foo.name);
+                }
             }
         } else if (mNetworkAgentInfos.containsKey(msg.replyTo)) {
             if (msg.arg1 == AsyncChannel.STATUS_SUCCESSFUL) {
@@ -2265,7 +2268,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
             }
         }
         NetworkFactoryInfo nfi = mNetworkFactoryInfos.remove(msg.replyTo);
-        if (DBG && nfi != null) log("unregisterNetworkFactory for " + nfi.name);
+        if (DBG && nfi != null) log("EMAN unregisterNetworkFactory for " + nfi.name);
     }
 
     // If this method proves to be too slow then we can maintain a separate
@@ -2345,6 +2348,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
             if (nri.isRequest) {
                 if (DBG) log("sending new NetworkRequest to factories");
                 for (NetworkFactoryInfo nfi : mNetworkFactoryInfos.values()) {
+                    log("EMAN send message for: " + nfi.name);
                     nfi.asyncChannel.sendMessage(android.net.NetworkFactory.CMD_REQUEST_NETWORK,
                             score, 0, nri.request);
                 }
