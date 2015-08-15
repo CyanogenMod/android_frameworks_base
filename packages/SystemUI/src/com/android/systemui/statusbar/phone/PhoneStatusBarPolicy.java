@@ -492,6 +492,7 @@ public class PhoneStatusBarPolicy {
                     .setIcon(icon)
                     .setOnSettingsClickIntent(getCustomTileSettingsIntent())
                     .setExpandedStyle(style)
+                    .hasSensitiveData(true)
                     .build();
             statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_SU,
                     PhoneStatusBarPolicy.class.hashCode(), tile, user);
