@@ -73,6 +73,11 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
     }
 
     @Override
+    public boolean hasSensitiveData() {
+        return true;
+    }
+
+    @Override
     public void setListening(boolean listening) {
         if (listening) {
             mKeyguard.addCallback(this);

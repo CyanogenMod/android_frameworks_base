@@ -6092,6 +6092,15 @@ public final class Settings {
         public static final String LOCKSCREEN_VISUALIZER_ENABLED = "lockscreen_visualizer";
 
         /**
+         * Whether to show quick settings tiles with sensible data in secure lockscreens.
+         * 0 will ignore the sensible data flag, anything else will take care of that
+         * flag. Default is off.
+         * @hide
+         */
+        public static final String LOCKSCREEN_HIDE_TILES_WITH_SENSIBLE_DATA =
+                "lockscreen_hide_qs_tiles_with_sensible_data";
+
+        /**
          * This are the settings to be backed up.
          *
          * NOTE: Settings are backed up and restored in the order they appear
