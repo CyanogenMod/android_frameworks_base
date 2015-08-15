@@ -36,6 +36,11 @@ public class AdbOverNetworkTile extends QSTile<QSTile.BooleanState> {
             new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
 
     @Override
+    public boolean hasSensitiveData() {
+        return true;
+    }
+
+    @Override
     protected BooleanState newTileState() {
         return new BooleanState();
     }

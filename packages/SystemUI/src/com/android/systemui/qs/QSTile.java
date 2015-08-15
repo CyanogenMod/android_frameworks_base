@@ -105,6 +105,10 @@ public abstract class QSTile<TState extends State> implements Listenable {
 
     // safe to call from any thread
 
+    public boolean hasSensitiveData() {
+        return false;
+    }
+
     public void setCallback(Callback callback) {
         mHandler.obtainMessage(H.SET_CALLBACK, callback).sendToTarget();
     }

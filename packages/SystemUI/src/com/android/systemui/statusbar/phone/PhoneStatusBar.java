@@ -475,6 +475,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.LOCKSCREEN_HIDE_TILES_WITH_SENSITIVE_DATA),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -499,6 +502,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mVisualizerEnabled = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.LOCKSCREEN_VISUALIZER_ENABLED, 1,
                     UserHandle.USER_CURRENT) != 0;
+            mQSPanel.setHideQsTilesWithSensitiveData(
+                    Settings.Secure.getIntForUser(resolver,
+                        Settings.Secure.LOCKSCREEN_HIDE_TILES_WITH_SENSITIVE_DATA, 0,
+                            UserHandle.USER_CURRENT) != 0);
 
             final int oldClockLocation = mClockLocation;
             final View oldClockView = mClockView;
@@ -1256,6 +1263,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mQSPanel.getHost().setCustomTileListenerService(mCustomTileListenerService);
+        mQSPanel.setHideQsTilesWithSensitiveData(
+                Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                    Settings.Secure.LOCKSCREEN_HIDE_TILES_WITH_SENSITIVE_DATA, 0,
+                        UserHandle.USER_CURRENT) != 0);
 
         // User info. Trigger first load.
         mHeader.setUserInfoController(mUserInfoController);
