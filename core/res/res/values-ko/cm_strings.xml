@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">다른 앱이 프라이버시 가드와 함께 실행될 것인지 변경할 수 있도록  앱을 허용합니다. 앱이 프라이버시 가드와 함께 실행중일 땐 연락처, 통화 기록, 메시지 등의 개인 정보에 접근할 수 없게 됩니다.</string>
   <string name="privacy_guard_notification">프라이버시 가드 활성화</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>은(는) 개인 데이터에 접근할 수 없습니다.</string>
-  <string name="permlab_useHardwareFramework">하드웨어 프레임워크 사용</string>
-  <string name="permdesc_useHardwareFramework">앱이 CM 하드웨어 프레임워크에 접근할 수 있도록 허용합니다.</string>
   <string name="permlab_setKeyguardWallpaper">잠금화면 배경 설정</string>
   <string name="permdesc_setKeyguardWallpaper">앱이 잠금화면 배경을 바꿀 수 있도록 허용합니다.</string>
   <string name="privacy_guard_dialog_title">프라이버시 가드</string>

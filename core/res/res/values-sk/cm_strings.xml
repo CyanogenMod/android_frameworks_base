@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s Ochranou súkromia. Keď je aplikácia spustená s Ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
   <string name="privacy_guard_notification">Aktívna ochrana súkromia</string>
   <string name="privacy_guard_notification_detail">Aplikácii <xliff:g id="app">%1$s</xliff:g> nebude umožnený prístup k osobným údajom</string>
-  <string name="permlab_useHardwareFramework">používať hardvérový framework</string>
-  <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu obrazovky uzamknutia</string>
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu obrazovky uzamknutia.</string>
   <string name="privacy_guard_dialog_title">Ochrana súkromia</string>

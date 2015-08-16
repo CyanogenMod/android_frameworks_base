@@ -37,8 +37,6 @@
   <string name="permdesc_changePrivacyGuardState">Dopušta aplikaciji odrediti hoće li druga aplikacija biti pokrenuta pod Nadzorom Privatnosti. Kada ja aplikacija pod Nadzorom Privatnosti, neće imati pristup osobnim podacima kao što su kontakti, zapisi poziva ili poruke.</string>
   <string name="privacy_guard_notification">Nadzor privatnosti aktivan</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> neće moći pristupiti osobnim podacima</string>
-  <string name="permlab_useHardwareFramework">koristiti hardware framework</string>
-  <string name="permdesc_useHardwareFramework">Dopušta aplikaciji pristupiti CM hardware framework.</string>
   <string name="permlab_setKeyguardWallpaper">postaviti pozadinu zaslona zaključavanja</string>
   <string name="permdesc_setKeyguardWallpaper">Dozvoljava aplikaciji promjenu pozadine zaslona zaključavanja.</string>
   <string name="privacy_guard_dialog_title">Nadzor privatnosti</string>

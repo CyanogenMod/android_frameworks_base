@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">به برنامه اجازه می‌دهد اینکه برنامه‌های دیگر با محافظ حریم خصوصی اجرا شوند را تغییر دهد. هنگامی که یک برنامه با محافظ حریم خصوصی اجرا می‌شود، به اطلاعات شخصی مانند مخاطبین، گزارشات تماس یا پیام‌ها دسترسی نخواهد داشت.</string>
   <string name="privacy_guard_notification">نگهبان حریم خصوصی فعال است</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> قادر به دسترسی به اصلاعات شخصی نخواهد بود</string>
-  <string name="permlab_useHardwareFramework">استفاده از چارچوب سخت‌افزار</string>
-  <string name="permdesc_useHardwareFramework">به برنامه اجازه می‌دهد به چارچوب سخت‌افزاری CM دسترسی داشته باشد.</string>
   <string name="permlab_setKeyguardWallpaper">تنظیم کاغذدیواری قفل کیبورد</string>
   <string name="permdesc_setKeyguardWallpaper">به برنامه اجازه می‌دهد تصویر زمینه صفحه قفل را تغییر دهد.</string>
   <string name="privacy_guard_dialog_title">نگهبان حریم خصوصی</string>

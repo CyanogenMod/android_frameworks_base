@@ -40,8 +40,6 @@
   <string name="permdesc_changePrivacyGuardState">තවත් යෙදුමක් පෞද්ගලිකත්වයේ මුරකරු සමග ධාවනය විය යුතුද නැද්ද යන්න වෙනස් කිරීම සඳහා යෙදුමට අවසර දෙන්න. යෙදුමක් පෞද්ගලිකත්වයේ මුරකරු සමග ධාවනය වන විට, එයට සම්බන්ධතා, ඇමතුම් ලොග හෝ පණිවිඩ පරිශීලනය කල නොහැක.</string>
   <string name="privacy_guard_notification">පෞද්ගලිකත්වයේ මුරකරු සක්‍රීයයි</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>ට පුද්ගලික දත්ත පරිශීලනය කල නොහැක</string>
-  <string name="permlab_useHardwareFramework">දෘඩාංග රාමුව භාවිතාකරන්න</string>
-  <string name="permdesc_useHardwareFramework">යෙදුමක් CM දෘඩාංග රාමුව පරිශීලනය කිරීම අනුමත කරයි.</string>
   <string name="permlab_setKeyguardWallpaper">යතුරු රැක්මේ වෝල්පේපරය සකසන්න</string>
   <string name="permdesc_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය වෙනස්කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="privacy_guard_dialog_title">පෞද්ගලිකත්වයේ මුරකරු</string>

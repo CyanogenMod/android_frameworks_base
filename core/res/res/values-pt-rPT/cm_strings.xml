@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Permite à aplicação escolher se outra aplicação corre com Proteção da Privacidade. Quando uma aplicação corre com Proteção da Privacidade, não terá acesso a dados pessoais como contactos, registo de chamadas ou mensagens.</string>
   <string name="privacy_guard_notification">Proteção da Privacidade ativa</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> não poderá aceder a dados pessoais</string>
-  <string name="permlab_useHardwareFramework">Utilizar a estrutura de hardware</string>
-  <string name="permdesc_useHardwareFramework">Permite o acesso duma aplicação à estrutura de hardware CM.</string>
   <string name="permlab_setKeyguardWallpaper">Definir a imagem de fundo do ecrã de bloqueio</string>
   <string name="permdesc_setKeyguardWallpaper">Permite a uma aplicação trocar a imagem de fundo do ecrã de bloqueio.</string>
   <string name="privacy_guard_dialog_title">Proteção da Privacidade</string>

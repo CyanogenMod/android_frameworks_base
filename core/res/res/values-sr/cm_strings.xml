@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Дозвољава апликацији да промени да ли се друга апликација покреће са заштитом приватности. Када је апликација покренута са заштитом приватности, она неће имати приступ личним подацима, као што су контакти, евиденција позива или поруке.</string>
   <string name="privacy_guard_notification">Заштита приватности је активна</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> неће бити у могућности да приступи личним подацима</string>
-  <string name="permlab_useHardwareFramework">користи хардверски оквир</string>
-  <string name="permdesc_useHardwareFramework">Дозвољава апликацији приступ CM хардверском оквиру.</string>
   <string name="permlab_setKeyguardWallpaper">постави позадину закључаног екрана</string>
   <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени позадину на закључаном екрану.</string>
   <string name="privacy_guard_dialog_title">Заштита приватности</string>

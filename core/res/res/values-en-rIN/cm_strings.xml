@@ -43,8 +43,6 @@
   <string name="permdesc_changePrivacyGuardState">Allows the app to change whether another app runs with Privacy Guard. When an app is running with Privacy Guard, it will not have access to personal data such as contacts, call logs, or messages.</string>
   <string name="privacy_guard_notification">Privacy Guard active</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> will not be able to access personal data</string>
-  <string name="permlab_useHardwareFramework">use hardware framework</string>
-  <string name="permdesc_useHardwareFramework">Allows an app access to the CM hardware framework.</string>
   <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
   <string name="permdesc_setKeyguardWallpaper">Allows an app to change the lock screen wallpaper.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>

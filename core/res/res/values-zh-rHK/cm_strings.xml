@@ -40,8 +40,6 @@
   <string name="permdesc_changePrivacyGuardState">允許應用程式變更其他應用程式執行時是否啟用私隱守衛。當應用程式執行時啟用了私隱守衛，應用程式將無法存取個人資料，例如：聯絡人、通話記錄或訊息。</string>
   <string name="privacy_guard_notification">私隱守衛啟用</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 將無法存取個人資料</string>
-  <string name="permlab_useHardwareFramework">使用硬件框架</string>
-  <string name="permdesc_useHardwareFramework">允許應用程式存取 CM 硬件框架。</string>
   <string name="permlab_setKeyguardWallpaper">設定鎖定畫面牆紙</string>
   <string name="permdesc_setKeyguardWallpaper">允許應用程式更改鎖定畫面牆紙。</string>
   <string name="privacy_guard_dialog_title">私隱守衛</string>
