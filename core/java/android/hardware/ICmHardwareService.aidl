@@ -40,4 +40,9 @@ interface ICmHardwareService {
     String getSerialNumber();
 
     boolean requireAdaptiveBacklightForSunlightEnhancement();
+
+    String[] getDisplayModes();
+    String getCurrentDisplayMode();
+    String getDefaultDisplayMode();
+    boolean setDisplayMode(String mode);
 }

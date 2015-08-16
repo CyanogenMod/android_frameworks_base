@@ -25,9 +25,11 @@ import android.util.Log;
 import java.io.File;
 
 import org.cyanogenmod.hardware.AdaptiveBacklight;
+import org.cyanogenmod.hardware.AutoContrast;
 import org.cyanogenmod.hardware.ColorEnhancement;
 import org.cyanogenmod.hardware.DisplayColorCalibration;
 import org.cyanogenmod.hardware.DisplayGammaCalibration;
+import org.cyanogenmod.hardware.DisplayMode;
 import org.cyanogenmod.hardware.HighTouchSensitivity;
 import org.cyanogenmod.hardware.KeyDisabler;
 import org.cyanogenmod.hardware.LongTermOrbits;
@@ -66,6 +68,11 @@ public class CmHardwareService extends ICmHardwareService.Stub {
         public String getSerialNumber();
 
         public boolean requireAdaptiveBacklightForSunlightEnhancement();
+
+        public String[] getDisplayModes();
+        public String getCurrentDisplayMode();
+        public String getDefaultDisplayMode();
+        public boolean setDisplayMode(String mode);
     }
 
     private class LegacyCmHardware implements CmHardwareInterface {
@@ -97,6 +104,10 @@ public class CmHardwareService extends ICmHardwareService.Stub {
                 mSupportedFeatures |= CmHardwareManager.FEATURE_VIBRATOR;
             if (TouchscreenHovering.isSupported())
                 mSupportedFeatures |= CmHardwareManager.FEATURE_TOUCH_HOVERING;
+            if (AutoContrast.isSupported())
+                mSupportedFeatures |= CmHardwareManager.FEATURE_AUTO_CONTRAST;
+            if (DisplayMode.isSupported())
+                mSupportedFeatures |= CmHardwareManager.FEATURE_DISPLAY_MODES;
         }
 
         public int getSupportedFeatures() {
@@ -119,6 +130,8 @@ public class CmHardwareService extends ICmHardwareService.Stub {
                     return TapToWake.isEnabled();
                 case CmHardwareManager.FEATURE_TOUCH_HOVERING:
                     return TouchscreenHovering.isEnabled();
+                case CmHardwareManager.FEATURE_AUTO_CONTRAST:
+                    return AutoContrast.isEnabled();
                 default:
                     Log.e(TAG, "feature " + feature + " is not a boolean feature");
                     return false;
@@ -141,6 +154,8 @@ public class CmHardwareService extends ICmHardwareService.Stub {
                     return TapToWake.setEnabled(enable);
                 case CmHardwareManager.FEATURE_TOUCH_HOVERING:
                     return TouchscreenHovering.setEnabled(enable);
+                case CmHardwareManager.FEATURE_AUTO_CONTRAST:
+                    return AutoContrast.setEnabled(enable);
                 default:
                     Log.e(TAG, "feature " + feature + " is not a boolean feature");
                     return false;
@@ -255,6 +270,22 @@ public class CmHardwareService extends ICmHardwareService.Stub {
 
         public boolean requireAdaptiveBacklightForSunlightEnhancement() {
             return SunlightEnhancement.isAdaptiveBacklightRequired();
+        }
+
+        public String[] getDisplayModes() {
+            return DisplayMode.getAvailableModes();
+        }
+
+        public String getCurrentDisplayMode() {
+            return DisplayMode.getCurrentMode();
+        }
+
+        public String getDefaultDisplayMode() {
+            return DisplayMode.getDefaultMode();
+        }
+
+        public boolean setDisplayMode(String mode) {
+            return DisplayMode.setMode(mode);
         }
     }
 
@@ -434,5 +465,49 @@ public class CmHardwareService extends ICmHardwareService.Stub {
             return false;
         }
         return mCmHwImpl.requireAdaptiveBacklightForSunlightEnhancement();
+    }
+
+    @Override
+    public String[] getDisplayModes() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (!isSupported(CmHardwareManager.FEATURE_DISPLAY_MODES)) {
+            Log.e(TAG, "Display modes are not supported");
+            return null;
+        }
+        return mCmHwImpl.getDisplayModes();
+    }
+
+    @Override
+    public String getCurrentDisplayMode() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (!isSupported(CmHardwareManager.FEATURE_DISPLAY_MODES)) {
+            Log.e(TAG, "Display modes are not supported");
+            return null;
+        }
+        return mCmHwImpl.getCurrentDisplayMode();
+    }
+
+    @Override
+    public String getDefaultDisplayMode() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (!isSupported(CmHardwareManager.FEATURE_DISPLAY_MODES)) {
+            Log.e(TAG, "Display modes are not supported");
+            return null;
+        }
+        return mCmHwImpl.getDefaultDisplayMode();
+    }
+
+    @Override
+    public boolean setDisplayMode(String mode) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (!isSupported(CmHardwareManager.FEATURE_DISPLAY_MODES)) {
+            Log.e(TAG, "Display modes are not supported");
+            return false;
+        }
+        return mCmHwImpl.setDisplayMode(mode);
     }
 }
