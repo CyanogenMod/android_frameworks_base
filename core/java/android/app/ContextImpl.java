@@ -63,7 +63,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.hardware.CmHardwareManager;
 import android.hardware.ConsumerIrManager;
 import android.hardware.ISerialManager;
 import android.hardware.SerialManager;
@@ -790,11 +789,6 @@ class ContextImpl extends Context {
                 ITorchService service = ITorchService.Stub.asInterface(b);
                 final Context outerContext = ctx.getOuterContext();
                 return new TorchManager(outerContext, service);
-            }});
-
-        registerService(CMHW_SERVICE, new ServiceFetcher() {
-            public Object createService(ContextImpl ctx) {
-                return new CmHardwareManager(ctx);
             }});
     }
 

@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">מאפשר ליישום לקבוע האם יישום אחר יפעל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
   <string name="privacy_guard_notification">שומר הפרטיות פעיל</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> לא יוכל לגשת למידע אישי</string>
-  <string name="permlab_useHardwareFramework">השתמש במסגרת חומרתית</string>
-  <string name="permdesc_useHardwareFramework">אפשר ליישום לגשת למסגרת החומרתית של CM.</string>
   <string name="permlab_setKeyguardWallpaper">הגדרת טפט למסך הנעילה</string>
   <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את הטפט של מסך הנעילה.</string>
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
