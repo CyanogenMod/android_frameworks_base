@@ -91,4 +91,22 @@ interface IExtTelephony {
      * Requires Permission: android.Manifest.permission.MODIFY_PHONE_STATE
      */
     int deactivateUiccCard(int slotId);
+
+    /**
+    * Check for Sms Prompt is Enabled or Not.
+    * @return
+    *        true - Sms Prompt is Enabled
+    *        false - Sms prompt is Disabled
+    * Requires Permission: android.Manifest.permission.READ_PHONE_STATE
+    */
+    boolean isSMSPromptEnabled();
+
+    /**
+    * Enable/Disable Sms prompt option.
+    * @param - enabled
+    *        true - to enable Sms prompt
+    *        false - to disable Sms prompt
+    * Requires Permission: android.Manifest.permission.MODIFY_PHONE_STATE
+    */
+    void setSMSPromptEnabled(boolean enabled);
 }
