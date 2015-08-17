@@ -28,6 +28,8 @@
   <string name="accessibility_quick_settings_roaming_on">Roaming pornit.</string>
   <string name="accessibility_quick_settings_network_adb_off">ADB prin rețea inactiv.</string>
   <string name="accessibility_quick_settings_network_adb_on">ADB prin rețea activ.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ADB prin rețea dezactivat.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ADB prin rețea activat.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Afișare ambientală oprită.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Afișare ambientală pornită.</string>
   <string name="accessibility_quick_settings_color_inversion_off">Inversiune de culoare oprită.</string>
@@ -72,6 +74,7 @@
   <string name="quick_settings_lte_label">4G</string>
   <string name="quick_settings_screen_timeout_detail_title">Timpul de expirare ecran</string>
   <string name="quick_settings_usb_tether_label">Tethering USB</string>
+  <string name="quick_settings_heads_up_label">Atenționare</string>
   <string name="quick_settings_ambient_display_label">Afișare ambientală</string>
   <string name="quick_settings_sync_label">Sincronizare</string>
   <string name="quick_settings_custom_tile_detail_title">Card personalizat</string>
