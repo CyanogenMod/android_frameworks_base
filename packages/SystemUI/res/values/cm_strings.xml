@@ -108,4 +108,5 @@
     <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_sync_changed_on">Sync turned on.</string>
     <string name="quick_settings_sync_label">Sync</string>
+    <string name="quick_settings_volume_panel_label">Volume panel</string>
 </resources>
