@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">Πρόσβαση root</string>
   <string name="fingerprint_try_again_hint">Παρακαλώ σαρώστε ξανά</string>
   <string name="accessibility_dock_battery_level">Μπαταρία βάσης σύνδεσης <xliff:g id="number">%d</xliff:g> τοις εκατό.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Δεν βρέθηκε κανένα αντικείμενο</string>
 </resources>
