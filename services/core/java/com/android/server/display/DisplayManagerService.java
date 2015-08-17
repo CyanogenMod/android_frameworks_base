@@ -279,6 +279,8 @@ public final class DisplayManagerService extends SystemService {
             mOnlyCore = onlyCore;
         }
 
+        mDisplayPowerController.systemReady();
+
         mHandler.sendEmptyMessage(MSG_REGISTER_ADDITIONAL_DISPLAY_ADAPTERS);
     }
 
