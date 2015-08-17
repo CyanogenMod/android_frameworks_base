@@ -76,7 +76,8 @@ public class LiveDisplayController {
 
     private final Context mContext;
     private final Handler mHandler;
-    private final CMHardwareManager mHardware;
+
+    private CMHardwareManager mHardware;
 
     private int mDayTemperature;
     private int mNightTemperature;
@@ -88,16 +89,18 @@ public class LiveDisplayController {
     private final float[] mColorAdjustment = new float[] { 1.0f, 1.0f, 1.0f };
     private final float[] mRGB = new float[] { 0.0f, 0.0f, 0.0f };
 
-    private final TwilightManager mTwilightManager;
+    private TwilightManager mTwilightManager;
     private boolean mSunset = false;
 
-    private final SettingsObserver mObserver;
+    private SettingsObserver mObserver;
 
     private ValueAnimator mAnimator;
 
-    private final int mDefaultDayTemperature;
-    private final int mDefaultNightTemperature;
-    private final int mDefaultOutdoorLux;
+    private int mDefaultDayTemperature;
+    private int mDefaultNightTemperature;
+    private int mDefaultOutdoorLux;
+
+    private boolean mInitialized = false;
 
     private static final int MSG_UPDATE_LIVE_DISPLAY = 1;
 
@@ -115,10 +118,10 @@ public class LiveDisplayController {
     LiveDisplayController(Context context, Looper looper) {
         mContext = context;
         mHandler = new LiveDisplayHandler(looper);
-        mHardware = CMHardwareManager.getInstance(context);
+    }
 
-        mTwilightManager = LocalServices.getService(TwilightManager.class);
-        mTwilightManager.registerListener(mTwilightListener, mHandler);
+    void systemReady() {
+        mHardware = CMHardwareManager.getInstance(mContext);
 
         mDefaultDayTemperature = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_dayColorTemperature);
@@ -158,6 +161,11 @@ public class LiveDisplayController {
         PowerManagerInternal pmi = LocalServices.getService(PowerManagerInternal.class);
         pmi.registerLowPowerModeObserver(mLowPowerModeListener);
         mLowPerformance = pmi.getLowPowerModeEnabled();
+
+        mTwilightManager = LocalServices.getService(TwilightManager.class);
+        mTwilightManager.registerListener(mTwilightListener, mHandler);
+
+        mInitialized = true;
     }
 
     private void updateSettings() {
@@ -570,6 +578,9 @@ public class LiveDisplayController {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_UPDATE_LIVE_DISPLAY:
+                    if (!mInitialized) {
+                        break;
+                    }
                     TwilightState twilight = mTwilightManager.getCurrentState();
 
                     updateColorTemperature(twilight);
