@@ -753,6 +753,9 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 cb.onScreenTurnedOn();
             }
         }
+        if (isKeyguardVisible()) {
+            startFingerAuthIfUsingFingerprint();
+        }
     }
 
     protected void handleScreenTurnedOff(int arg1) {
@@ -945,7 +948,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         trustManager.registerTrustListener(this);
 
         mLockPatternUtils = new LockPatternUtils(mContext);
-        startFingerAuthIfUsingFingerprint();
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
@@ -1282,8 +1284,13 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             }
         }
         // Make sure if we are not showing that we stop fingerprint authentication
-        if (!isShowing && mLockPatternUtils.usingFingerprint()) {
-            stopAuthenticatingFingerprint();
+        if (mLockPatternUtils.usingFingerprint()) {
+            if (!isShowing) {
+                stopAuthenticatingFingerprint();
+            } else if (isScreenOn()) {
+                // This handles the case when booting and screen is already on
+                startFingerAuthIfUsingFingerprint();
+            }
         }
     }
 
