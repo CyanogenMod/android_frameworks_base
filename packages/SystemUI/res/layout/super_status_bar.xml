@@ -45,19 +45,29 @@
                    android:visibility="invisible" />
     </com.android.systemui.statusbar.BackDropView>
 
-    <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_behind"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:importantForAccessibility="no"
-        sysui:ignoreRightInset="true"
-        />
-
-    <com.android.systemui.statusbar.AlphaOptimizedView
-        android:id="@+id/heads_up_scrim"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/heads_up_scrim_height"
-        android:background="@drawable/heads_up_scrim"
-        android:importantForAccessibility="no"/>
+    <FrameLayout android:id="@+id/scrimview"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:visibility="visible">
+        <com.android.systemui.statusbar.ScrimView
+                android:id="@+id/scrim_behind"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"/>
+        <com.android.systemui.statusbar.AlphaOptimizedView
+            android:id="@+id/heads_up_scrim"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/heads_up_scrim_height"
+            android:background="@drawable/heads_up_scrim"
+            android:importantForAccessibility="no"/>
+        <com.android.systemui.statusbar.VisualizerView
+                android:id="@+id/visualizerview"
+                android:gravity="bottom"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"/>
+    </FrameLayout>
 
     <include layout="@layout/status_bar"
         android:layout_width="match_parent"
