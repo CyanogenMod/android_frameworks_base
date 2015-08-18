@@ -831,7 +831,6 @@ public abstract class PanelView extends FrameLayout {
         if (mHeightAnimator != null || mTracking) {
             return;
         }
-        mStatusBar.setVisualizerAnimating(true);
         cancelPeek();
         notifyExpandingStarted();
         startUnlockHintAnimationPhase1(new Runnable() {
@@ -840,7 +839,6 @@ public abstract class PanelView extends FrameLayout {
                 notifyExpandingFinished();
                 mStatusBar.onHintFinished();
                 mHintAnimationRunning = false;
-                mStatusBar.setVisualizerAnimating(false);
             }
         });
         if (isFingerprintHint) {
