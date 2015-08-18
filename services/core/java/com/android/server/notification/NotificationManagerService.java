@@ -223,6 +223,9 @@ public class NotificationManagerService extends SystemService {
     private boolean mBrightnessNotificationLed;
     private int mBrightnessLevelNotificationLed = LIGHT_BRIGHTNESS_MAXIMUM;
 
+    private boolean mMultipleNotificationLeds;
+    private boolean mMultipleLedsEnabledSetting = false;
+
     private long[] mFallbackVibrationPattern;
     private boolean mUseAttentionLight;
     boolean mSystemReady;
@@ -891,6 +894,11 @@ public class NotificationManagerService extends SystemService {
                         Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
                         false, this, UserHandle.USER_ALL);
             }
+            if (mMultipleNotificationLeds) {
+                resolver.registerContentObserver(Settings.System.getUriFor(
+                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
+                        false, this, UserHandle.USER_ALL);
+            }
             update(null);
         }
 
@@ -935,6 +943,13 @@ public class NotificationManagerService extends SystemService {
                 mBrightnessLevelNotificationLed = Settings.System.getIntForUser(resolver,
                     Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
                     LIGHT_BRIGHTNESS_MAXIMUM, UserHandle.USER_CURRENT);
+            }
+
+            // Multiple LEDs enabled
+            if (mMultipleNotificationLeds) {
+                mMultipleLedsEnabledSetting = (Settings.System.getIntForUser(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                    mMultipleNotificationLeds ? 1 : 0, UserHandle.USER_CURRENT) != 0);
             }
 
             updateNotificationPulse();
@@ -1065,6 +1080,8 @@ public class NotificationManagerService extends SystemService {
 
         mBrightnessNotificationLed = resources.getBoolean(
                 com.android.internal.R.bool.config_brightnessNotificationLed);
+        mMultipleNotificationLeds = resources.getBoolean(
+                com.android.internal.R.bool.config_multipleNotificationLeds);
 
         mUseAttentionLight = resources.getBoolean(R.bool.config_useAttentionLight);
 
@@ -3059,7 +3076,8 @@ public class NotificationManagerService extends SystemService {
             }
 
             // update the LEDs modes variables
-            mNotificationLight.setModes(mBrightnessLevelNotificationLed);
+            mNotificationLight.setModes(mBrightnessLevelNotificationLed,
+                                        mMultipleLedsEnabledSetting);
 
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
