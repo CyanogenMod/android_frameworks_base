@@ -2736,6 +2736,13 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.SHOW_BRIGHTNESS_DIALOG";
 
     /**
+     * Activity Action: Shows the notification brightness setting dialog.
+     * @hide
+     */
+    public static final String ACTION_SHOW_NOTIFICATION_BRIGHTNESS_DIALOG =
+            "android.intent.action.SHOW_NOTIFICATION_BRIGHTNESS_DIALOG";
+
+    /**
      * Broadcast Action:  A global button was pressed.  Includes a single
      * extra field, {@link #EXTRA_KEY_EVENT}, containing the key event that
      * caused the broadcast.
