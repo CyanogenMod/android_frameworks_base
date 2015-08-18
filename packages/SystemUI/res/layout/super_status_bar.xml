@@ -39,21 +39,25 @@
                    android:layout_height="match_parent"
                    android:scaleType="centerCrop"
                    android:visibility="invisible" />
-        <com.pheelicks.visualizer.VisualizerView
-                   android:id="@+id/visualizerView"
-                   android:gravity="bottom"
-                   android:layout_gravity="bottom"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:clipChildren="false"
-                   android:clipToPadding="false"
-                   android:visibility="visible"/>
     </com.android.systemui.statusbar.BackDropView>
 
-    <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_behind"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:importantForAccessibility="no" />
+    <FrameLayout android:id="@+id/scrimview"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:visibility="visible">
+        <com.android.systemui.statusbar.ScrimView
+                android:id="@+id/scrim_behind"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"/>
+        <com.android.systemui.statusbar.VisualizerView
+                android:id="@+id/visualizerview"
+                android:gravity="bottom"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"/>
+    </FrameLayout>
 
     <include layout="@layout/status_bar"
         android:layout_width="match_parent"
