@@ -65,6 +65,11 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
                     mCurrentSecuritySelection = SecurityMode.Invalid;
                     showPrimarySecurityScreen(false);
                 }
+
+                @Override
+                public void onFingerprintRecognized(int userId) {
+                    mSecurityCallback.dismiss(true);
+                }
             };
 
     // Used to notify the container when something interesting happens.
