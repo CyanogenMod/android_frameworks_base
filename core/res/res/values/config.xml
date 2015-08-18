@@ -875,6 +875,10 @@
     <!-- Default value for LED on time when the battery is low on charge in miliseconds -->
     <integer name="config_notificationsBatteryLedOn">125</integer>
 
+    <!-- Is the notification LED brightness adjustable ?
+         Used to decide if the user can set LED brightness -->
+    <bool name="config_adjustableNotificationLedBrightness">false</bool>
+
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">false</bool>
 
