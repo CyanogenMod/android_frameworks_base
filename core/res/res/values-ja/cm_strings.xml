@@ -213,7 +213,7 @@
   <string name="live_display_night_summary">夜の設定のみを使用する</string>
   <string name="live_display_outdoor">屋外（日光）</string>
   <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
-  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをクリックして試してみてください。</string>
+  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをタップして試してみてください。</string>
   <string name="lock_to_app_toast_no_navbar">この画面の固定を解除するには、メニューボタンを長押ししてください。</string>
   <string name="lock_to_app_description_no_navbar">画面の固定はディスプレイを一つの表示にロックします。\n\n固定を解除するには、メニューボタンを長押ししてください。</string>
 </resources>

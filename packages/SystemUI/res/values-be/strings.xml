@@ -23,4 +23,8 @@
   <string name="installer_cd_button_title">Усталяваць праграму Android File Transfer для Mac</string>
   <string name="accessibility_bluetooth_connected">Bluetooth падлучаны.</string>
   <string name="accessibility_bluetooth_disconnected">Bluetooth адлучаны.</string>
+  <string name="accessibility_brightness">Яркасць экрану</string>
+  <string name="accessibility_rotation_lock_off_changed">Цяпер экран будзе паварочвацца аўтаматычна.</string>
+  <string name="accessibility_rotation_lock_on_landscape_changed">Цяпер экран заблакаваны ў альбомнай арыентацыі.</string>
+  <string name="accessibility_rotation_lock_on_portrait_changed">Цяпер экран заблакаваны ў партрэтнай арыентацыі.</string>
 </resources>

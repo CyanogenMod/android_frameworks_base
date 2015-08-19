@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Stäng senaste aviseringar</string>
   <string name="screenshot_delete_action">Ta bort</string>
   <string name="screenshot_delete_confirmation">Skärmdump borttagen.</string>
   <string name="advanced_dev_option_wipe_app">Rensa data</string>
@@ -26,10 +27,13 @@
   <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Platsrapportering: endast sensorläge.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Platsrapportering: högt precisionsläge.</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>
   <string name="quick_settings_roaming_label">Roaming</string>
+  <string name="quick_settings_apn_switch_label">APN-växlare</string>
   <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> mobildata</string>
   <string name="quick_settings_data_off">Mobildata av</string>
   <string name="quick_settings_location_detail_title">Platsläge</string>
@@ -42,10 +46,14 @@
   <string name="quick_settings_compass_label">Kompass</string>
   <string name="quick_settings_compass_init">Initierar\u2026</string>
   <string name="quick_settings_lockscreen_label">Låsskärm</string>
+  <string name="quick_settings_lockscreen_label_enforced">Tvingad låsskärm</string>
   <string name="quick_settings_network_adb_label">ADB över nätverk</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_screen_timeout_detail_title">Skärmtidsgräns</string>
+  <string name="quick_settings_usb_tether_label">USB-sammanlänkning</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Svep höger för %1$s</string>
+  <string name="right_shortcut_hint">Svep vänster för %1$s</string>
   <string name="navbar_dialog_title">Välj åtgärd att tilldela</string>
   <string name="navbar_home_button">Hemknapp</string>
   <string name="navbar_recent_button">Senasteknapp</string>
@@ -55,6 +63,10 @@
   <string name="navbar_menu_conditional_button">Menyknapp (autogöm)</string>
   <string name="navbar_menu_always_button">Menyknapp (visa alltid)</string>
   <string name="navbar_menu_big_button">Menyknapp</string>
+  <string name="navigation_ring_title">Snabbstartsgenvägar</string>
+  <string name="navring_target_reset_message">Ta bort alla användarskapade genvägar i navigeringsfältet och återställ till standard?</string>
+  <string name="navring_target_reset">Genvägar i navigeringsfältet återställda till standard</string>
+  <string name="navring_action_open_ime_switcher">Öppna IME-växlare</string>
   <string name="navring_action_kill_app">Stäng av app</string>
   <string name="navring_action_none">Ingen</string>
   <string name="navring_action_take_screenshot">Ta skärmdump</string>
@@ -62,6 +74,7 @@
   <string name="navring_action_ring_silent">Ringsignal/Tyst</string>
   <string name="navring_action_ring_vibrate_silent">Ringsignal/Vibration/Tyst</string>
   <string name="navring_action_screen_off">Skärm av</string>
+  <string name="navring_action_torch">Växla ficklampa</string>
   <string name="navring_action_google_now">Google Now</string>
   <string name="navring_choose_action_title">Välj åtgärd</string>
   <string name="select_application">Välj app</string>
