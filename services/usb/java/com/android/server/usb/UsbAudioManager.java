@@ -151,6 +151,12 @@ public class UsbAudioManager {
         int card = cardsParser.getNumCardRecords() - 1;
         int device = 0;
 
+        for (int i = 0; i < cardsParser.getNumCardRecords(); i++) {
+            String cardName = cardsParser.getCardRecordAt(i).mCardName;
+            if (cardName.contains("USB-Audio"))
+                card = i;
+        }
+
         boolean hasPlayback = devicesParser.hasPlaybackDevices(card);
         boolean hasCapture = devicesParser.hasCaptureDevices(card);
         boolean hasMidi = devicesParser.hasMIDIDevices(card);

@@ -51,6 +51,7 @@ namespace android {
         int ret;
         uint64_t len = get_block_device_size(fd);
 
+#ifndef NO_SECURE_DISCARD
         range[0] = 0;
         range[1] = len;
 
@@ -60,6 +61,7 @@ namespace android {
         ret = ioctl(fd, BLKSECDISCARD, &range);
         if (ret < 0) {
             ALOGE("Something went wrong secure discarding block: %s\n", strerror(errno));
+#endif
             range[0] = 0;
             range[1] = len;
             ret = ioctl(fd, BLKDISCARD, &range);
@@ -71,7 +73,9 @@ namespace android {
                 return 0;
             }
 
+#ifndef NO_SECURE_DISCARD
         }
+#endif
 
         return ret;
     }
