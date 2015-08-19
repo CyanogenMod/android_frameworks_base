@@ -64,6 +64,7 @@
   <string name="reboot_bootloader">ඇරඹුම් ප්‍රවේශකයට</string>
   <string name="reboot_download">බාගැනීමේ ප්‍රකාරයට</string>
   <string name="reboot_soft">මෘදුව නැවත පනගන්වන්න</string>
+  <string name="reboot_title">යළි පණගන්වන්න</string>
   <string name="reboot_confirm" product="tablet">ඔබගේ ටැබ්ලටය නැවත පනගැන්වෙනු ඇත.</string>
   <string name="reboot_confirm" product="default">ඔබගේ දුරකථනය නැවත පනගැන්වෙනු ඇත.</string>
   <string name="reboot_progress">නැවත පනගැන්වෙමින්\u2026</string>

@@ -16,20 +16,67 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">أغلاق جميع التطبيقات المفتوحة</string>
   <string name="screenshot_delete_action">حذف</string>
   <string name="screenshot_delete_confirmation">حذف صورة الشاشة.</string>
   <string name="advanced_dev_option_wipe_app">مسح بيانات التطبيق</string>
   <string name="advanced_dev_option_force_stop">إيقاف إجباري</string>
   <string name="advanced_dev_option_uninstall">إلغاء التثبيت</string>
+  <string name="accessibility_quick_settings_data_off">إيقاف بيانات الهاتف.</string>
+  <string name="accessibility_quick_settings_data_on">تشغيل بيانات الهاتف.</string>
+  <string name="accessibility_quick_settings_roaming_off">إيقاف خدمة التجوال.</string>
+  <string name="accessibility_quick_settings_roaming_on">تشغيل خدمة التجوال.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">تحديد الموقع: وضع توفير البطارية.</string>
+  <string name="accessibility_quick_settings_location_gps_only">تحديد الموقع: وضع المجسات فقط.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">تحديد الموقع: وضع الدقة العالية.</string>
   <string name="accessibility_dpad_left">المؤشر إلى اليسار</string>
   <string name="accessibility_dpad_right">المؤشر الى اليمين</string>
+  <string name="quick_settings_mobile_data_label">البيانات عبر الجوال</string>
+  <string name="quick_settings_roaming_label">التجوال</string>
+  <string name="quick_settings_apn_switch_label">مفتاح APN</string>
+  <string name="quick_settings_dds_sub">شريحة <xliff:g id="number">%d</xliff:g> بيانات عبر الجوال</string>
+  <string name="quick_settings_data_off">إيقاف بيانات الجوال</string>
+  <string name="quick_settings_location_detail_title">وضع الموقع</string>
+  <string name="quick_settings_location_battery_saving_label">توفير البطارية</string>
+  <string name="quick_settings_location_gps_only_label">الجهاز فقط</string>
+  <string name="quick_settings_location_high_accuracy_label">دقة عالية</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">ملفات تعريف النظام</string>
+  <string name="quick_settings_profiles_disabled">تعطيل ملفات التعريف</string>
+  <string name="quick_settings_compass_label">البوصلة</string>
   <string name="quick_settings_compass_init">بدأ\u2026</string>
+  <string name="quick_settings_lockscreen_label">قفل الشاشة</string>
+  <string name="quick_settings_lockscreen_label_enforced">إعمال قفل الشاشة</string>
+  <string name="quick_settings_network_adb_label">ADB عبر الشبكة</string>
+  <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_screen_timeout_detail_title">انتهت مهلة الشاشة</string>
+  <string name="quick_settings_usb_tether_label">الربط عبر USB</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">تحريك إلى اليمين من أجل %1$s</string>
+  <string name="right_shortcut_hint">تحريك إلى اليسار من أجل %1$s</string>
   <string name="navbar_dialog_title">اختر الإجراء لتعيين</string>
   <string name="navbar_home_button">زر الصفحة الرئيسية</string>
   <string name="navbar_recent_button">زر الأخيرة</string>
   <string name="navbar_search_button">زر البحث</string>
   <string name="navbar_back_button">زر الخلف</string>
+  <string name="navbar_empty_button">زر خالٍ</string>
   <string name="navbar_menu_conditional_button">زر القائمة (الإخفاء التلقائي)</string>
   <string name="navbar_menu_always_button">زر القائمة (يظهر دائماً)</string>
   <string name="navbar_menu_big_button">زر القائمة</string>
+  <string name="navigation_ring_title">اختصارات شريط التشغيل السريع</string>
+  <string name="navring_target_reset_message">حذف كل اختصارات شريط التنقل التي أنشأها المستخدم والعودة إلى الوضع الافتراضي؟</string>
+  <string name="navring_target_reset">إعادة تعيين اختصارات شريط التنقل إلى الوضع الافتراضي</string>
+  <string name="navring_action_open_ime_switcher">فتح مبدل IME</string>
+  <string name="navring_action_kill_app">إنهاء التطبيق </string>
+  <string name="navring_action_none">لا شيء</string>
+  <string name="navring_action_take_screenshot">أخذ لقطة للشاشة</string>
+  <string name="navring_action_ring_vibrate">رنة/اهتزاز</string>
+  <string name="navring_action_ring_silent">رنة/صامت</string>
+  <string name="navring_action_ring_vibrate_silent">نغمة/اهتزاز/صامت</string>
+  <string name="navring_action_screen_off">إغلاق الشاشة</string>
+  <string name="navring_action_torch">تبديل الشعلة</string>
+  <string name="navring_action_google_now">Google Now</string>
+  <string name="navring_choose_action_title">اختر الإجراء</string>
+  <string name="select_application">حدد التطبيق</string>
+  <string name="lockscreen_target_empty">فارغ</string>
 </resources>

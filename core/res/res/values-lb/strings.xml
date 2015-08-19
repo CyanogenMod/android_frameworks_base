@@ -602,8 +602,8 @@
   <string name="permdesc_devicePower" product="tablet">Erlaabt der App, den Tablet un- an auszeschalten.</string>
   <string name="permdesc_devicePower" product="default">Erlaabt der App, den Telefon un- an auszeschalten.</string>
   <string name="permlab_factoryTest">Am Wierkstestmodus ausféieren</string>
-  <string name="permdesc_factoryTest" product="tablet">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Tablethardware zougegraff ka ginn. Nëmmen disponibel, wann den Tablet am Hierstellertestmodus leeft.</string>
-  <string name="permdesc_factoryTest" product="default">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Telefonshardware zougegraff ka ginn. Nëmmen disponibel, wann den Telefon am Hierstellertestmodus leeft.</string>
+  <string name="permdesc_factoryTest" product="tablet">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Tablethardware zougegraff ka ginn. Just disponibel, wann den Tablet am Hierstellertestmodus leeft.</string>
+  <string name="permdesc_factoryTest" product="default">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Telefonshardware zougegraff ka ginn. Just disponibel, wann den Telefon am Hierstellertestmodus leeft.</string>
   <string name="permlab_setWallpaper">Hannergrondbild setzen</string>
   <string name="permdesc_setWallpaper">Erlaabt der App, d\'Hannergrondbild vum System ze setzen.</string>
   <string name="permlab_setWallpaperHints">Gréisst vum Hannergrondbild ajustéieren</string>

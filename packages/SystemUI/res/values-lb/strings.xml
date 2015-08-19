@@ -193,8 +193,8 @@
   <string name="accessibility_quick_settings_flashlight_changed_on">Täscheluucht ugemaach.</string>
   <string name="accessibility_quick_settings_color_inversion_changed_off">Faarfinvertéierung ausgeschalt.</string>
   <string name="accessibility_quick_settings_color_inversion_changed_on">Faarfinvertéierung ugeschalt.</string>
-  <string name="accessibility_quick_settings_hotspot_changed_off">Mobilen Zougankspunkt ausgeschalt.</string>
-  <string name="accessibility_quick_settings_hotspot_changed_on">Mobilen Zougankspunkt ugeschalt.</string>
+  <string name="accessibility_quick_settings_hotspot_changed_off">Mobillen Zougankspunkt ausgeschalt.</string>
+  <string name="accessibility_quick_settings_hotspot_changed_on">Mobillen Zougankspunkt ugeschalt.</string>
   <string name="accessibility_casting_turned_off">Cast vum Schierm gestoppt.</string>
   <string name="accessibility_brightness">Schiermhellegkeet</string>
   <string name="data_usage_disabled_dialog_3g_title">2G-3G-Date sinn aus</string>

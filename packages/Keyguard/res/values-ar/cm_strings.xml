@@ -18,4 +18,16 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM مقفل للإعدادات المخصصة</string>
+  <string name="keyguard_accessibility_status">"الحالة"</string>
+  <string name="kg_dismiss">تجاهل</string>
+  <string name="kg_slot_name">منفذ <xliff:g id="number">%d</xliff:g>: بطاقة شريحة جديدة \u0020</string>
+  <string name="lockscreen_sim_error_message_short">البطاقة غير صالحة.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="zero">أدخل رمز تفعيل الشريحة، متبقي لديك  <xliff:g id="number">%d</xliff:g> محاولة قبل أن يكون عليك الاتصال بمزود الخدمة لفتح قفل الجهاز .</item>
+    <item quantity="one">أدخل رمز تفعيل الشريحة، متبقي لديك  <xliff:g id="number">%d</xliff:g> محاولات قبل أن يكون عليك الاتصال بمزود الخدمة لفتح قفل الجهاز .</item>
+    <item quantity="two">أدخل رمز تفعيل الشريحة، متبقي لديك  <xliff:g id="number">%d</xliff:g> محاولة قبل أن يكون عليك الاتصال بمزود الخدمة لفتح قفل الجهاز .</item>
+    <item quantity="few">أدخل رمز تفعيل الشريحة، متبقي لديك  <xliff:g id="number">%d</xliff:g> محاولات قبل أن يكون عليك الاتصال بمزود الخدمة لفتح قفل الجهاز .</item>
+    <item quantity="many">أدخل رمز تفعيل الشريحة، متبقي لديك  <xliff:g id="number">%d</xliff:g> محاولات قبل أن يكون عليك الاتصال بمزود الخدمة لفتح قفل الجهاز .</item>
+    <item quantity="other">أدخل رمز تفعيل الشريحة، متبقي لديك  <xliff:g id="number">%d</xliff:g> محاولة قبل أن يكون عليك الاتصال بمزود الخدمة لفتح قفل الجهاز .</item>
+  </plurals>
 </resources>
