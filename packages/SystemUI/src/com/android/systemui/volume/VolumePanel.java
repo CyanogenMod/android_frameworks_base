@@ -52,7 +52,6 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -294,8 +293,6 @@ public class VolumePanel extends Handler implements DemoMode {
         private final VolumePanel mVolumePanel;
         private final AudioManager mAudioManager;
 
-        private boolean mNewVolumeUp;
-
         SafetyWarning(Context context, VolumePanel volumePanel, AudioManager audioManager) {
             super(context);
             mContext = context;
@@ -311,24 +308,6 @@ public class VolumePanel extends Handler implements DemoMode {
 
             IntentFilter filter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             context.registerReceiver(mReceiver, filter);
-        }
-
-        @Override
-        public boolean onKeyDown(int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP && event.getRepeatCount() == 0) {
-                mNewVolumeUp = true;
-            }
-            return super.onKeyDown(keyCode, event);
-        }
-
-        @Override
-        public boolean onKeyUp(int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP && mNewVolumeUp) {
-                if (LOGD) Log.d(TAG, "Confirmed warning via VOLUME_UP");
-                mAudioManager.disableSafeMediaVolume();
-                dismiss();
-            }
-            return super.onKeyUp(keyCode, event);
         }
 
         @Override
