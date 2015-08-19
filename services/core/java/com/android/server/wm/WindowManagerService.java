@@ -5741,6 +5741,11 @@ public class WindowManagerService extends IWindowManager.Stub
         ShutdownThread.rebootSafeMode(mContext, confirm);
     }
 
+    @Override
+    public void toggleGlobalMenu() {
+        mPolicy.toggleGlobalMenu();
+    }
+
     public void setCurrentProfileIds(final int[] currentProfileIds) {
         synchronized (mWindowMap) {
             mCurrentProfileIds = currentProfileIds;

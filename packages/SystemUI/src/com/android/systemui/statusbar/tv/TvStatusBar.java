@@ -16,6 +16,7 @@
 
 package com.android.systemui.statusbar.tv;
 
+import android.content.Intent;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService.RankingMap;
 import android.service.notification.StatusBarNotification;
@@ -60,6 +61,7 @@ public class TvStatusBar extends BaseStatusBar {
 
     @Override
     public void disable(int state, boolean animate) {
+        propagateDisabledFlags(state);
     }
 
     @Override
@@ -76,6 +78,7 @@ public class TvStatusBar extends BaseStatusBar {
 
     @Override
     public void topAppWindowChanged(boolean visible) {
+        propagateMenuVisibility(visible);
     }
 
     @Override
@@ -101,6 +104,10 @@ public class TvStatusBar extends BaseStatusBar {
 
     @Override // CommandQueue
     public void notificationLightPulse(int argb, int onMillis, int offMillis) {
+    }
+
+    @Override // CommandQueue
+    public void showCustomIntentAfterKeyguard(Intent intent) {
     }
 
     @Override

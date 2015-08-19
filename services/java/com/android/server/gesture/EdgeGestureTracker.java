@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 The CyanogenMod Project (Jens Doll)
+ * Copyright (C) 2013-2015 The CyanogenMod Project (Jens Doll)
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -46,6 +46,9 @@ public class EdgeGestureTracker {
     private int mGracePeriodDistance;
     private long mTimeOut;
 
+    private boolean mIsImeIsActive;
+    private boolean mOverwriteImeIsActive;
+
     private int mDisplayWidth;
     private int mDisplayHeight;
 
@@ -58,7 +61,8 @@ public class EdgeGestureTracker {
     private int mGracePeriod;
 
     public interface OnActivationListener {
-        public void onActivation(MotionEvent event, int touchX, int touchY, EdgeGesturePosition position);
+        public void onActivation(MotionEvent event,
+                int touchX, int touchY, EdgeGesturePosition position);
     }
     private OnActivationListener mActivationListener;
 
@@ -99,6 +103,14 @@ public class EdgeGestureTracker {
         mActive = false;
     }
 
+    public void setImeIsActive(boolean enabled) {
+        mIsImeIsActive = enabled;
+    }
+
+    public void setOverwriteImeIsActive(boolean enabled) {
+        mOverwriteImeIsActive = enabled;
+    }
+
     public void updateDisplay(Display display) {
         Point outSize = new Point(0,0);
         display.getRealSize(outSize);
@@ -110,7 +122,6 @@ public class EdgeGestureTracker {
     }
 
     public boolean start(MotionEvent motionEvent, int positions, int sensitivity) {
-        final boolean unrestricted = (positions & EdgeServiceConstants.UNRESTRICTED) != 0;
         final int x = (int) motionEvent.getX();
         final float fx = motionEvent.getX() / mDisplayWidth;
         final int y = (int) motionEvent.getY();
@@ -120,30 +131,37 @@ public class EdgeGestureTracker {
         setSensitivity(sensitivity);
 
         if ((positions & EdgeGesturePosition.LEFT.FLAG) != 0) {
-            if (x < mThickness && (unrestricted || (fy > 0.1f && fy < 0.9f))) {
+            if (x < mThickness && fy > 0.15f
+                    && fy < (isImeActive(positions) ? 0.6f : 0.85f)) {
                 startWithPosition(motionEvent, EdgeGesturePosition.LEFT);
                 return true;
             }
         }
         if ((positions & EdgeGesturePosition.BOTTOM.FLAG) != 0) {
-            if (y > mDisplayHeight - mThickness && (unrestricted || (fx > 0.1f && fx < 0.9f))) {
+            if (y > mDisplayHeight - mThickness && fx > 0.1f && fx < 0.9f) {
                 startWithPosition(motionEvent, EdgeGesturePosition.BOTTOM);
                 return true;
             }
         }
         if ((positions & EdgeGesturePosition.RIGHT.FLAG) != 0) {
-            if (x > mDisplayWidth - mThickness && (unrestricted || (fy > 0.1f && fy < 0.9f))) {
+            if (x > mDisplayWidth - mThickness && fy > 0.15f
+                    && fy < (isImeActive(positions) ? 0.6f : 0.85f)) {
                 startWithPosition(motionEvent, EdgeGesturePosition.RIGHT);
                 return true;
             }
         }
         if ((positions & EdgeGesturePosition.TOP.FLAG) != 0) {
-            if (y < mThickness && (unrestricted || (fx > 0.1f && fx < 0.9f))) {
+            if (y < mThickness && fx > 0.1f && fx < 0.9f) {
                 startWithPosition(motionEvent, EdgeGesturePosition.TOP);
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean isImeActive(int positions) {
+        return (positions & EdgeServiceConstants.IME_CONTROL) != 0
+                && mIsImeIsActive && !mOverwriteImeIsActive;
     }
 
     private void startWithPosition(MotionEvent motionEvent, EdgeGesturePosition position) {

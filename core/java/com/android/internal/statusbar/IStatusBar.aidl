@@ -16,6 +16,8 @@
  
 package com.android.internal.statusbar;
 
+import android.content.Intent;
+
 import com.android.internal.statusbar.StatusBarIcon;
 import android.service.notification.StatusBarNotification;
 
@@ -43,5 +45,10 @@ oneway interface IStatusBar
     void preloadRecentApps();
     void cancelPreloadRecentApps();
     void showScreenPinningRequest();
+    void showCustomIntentAfterKeyguard(inout Intent intent);
+    void setPieTriggerMask(int newMask, boolean lock);
+    void toggleLastApp();
+    void toggleKillApp();
+    void toggleScreenshot();
 }
 

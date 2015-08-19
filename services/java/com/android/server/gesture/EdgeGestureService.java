@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 The CyanogenMod Project (Jens Doll)
+ * Copyright (C) 2013-2015 The CyanogenMod Project (Jens Doll)
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,7 +20,6 @@ import static com.android.internal.util.gesture.EdgeServiceConstants.SENSITIVITY
 import static com.android.internal.util.gesture.EdgeServiceConstants.SENSITIVITY_MASK;
 import static com.android.internal.util.gesture.EdgeServiceConstants.SENSITIVITY_NONE;
 import static com.android.internal.util.gesture.EdgeServiceConstants.SENSITIVITY_SHIFT;
-import static com.android.internal.util.gesture.EdgeServiceConstants.LONG_LIVING;
 
 import android.Manifest;
 import android.content.Context;
@@ -80,7 +79,8 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
     private int mGlobalPositions = 0;
     private int mGlobalSensitivity = 3;
 
-    private final class EdgeGestureActivationListenerRecord extends IEdgeGestureHostCallback.Stub implements DeathRecipient {
+    private final class EdgeGestureActivationListenerRecord
+            extends IEdgeGestureHostCallback.Stub implements DeathRecipient {
         private boolean mActive;
 
         public EdgeGestureActivationListenerRecord(IEdgeGestureActivationListener listener) {
@@ -95,14 +95,14 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
         private void updateFlags(int flags) {
             this.positions = flags & POSITION_MASK;
             this.sensitivity = (flags & SENSITIVITY_MASK) >> SENSITIVITY_SHIFT;
-            this.longLiving = (flags & LONG_LIVING) != 0;
         }
 
         private boolean eligibleForActivation(int positionFlag) {
             return (positions & positionFlag) != 0;
         }
 
-        private boolean notifyEdgeGestureActivation(int touchX, int touchY, EdgeGesturePosition position) {
+        private boolean notifyEdgeGestureActivation(
+                int touchX, int touchY, EdgeGesturePosition position) {
             if ((positions & position.FLAG) != 0) {
                 try {
                     mActive = true;
@@ -167,8 +167,8 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
         public int positions;
         public int sensitivity;
         public final IEdgeGestureActivationListener listener;
-        public boolean longLiving = false;
     }
+
     private final List<EdgeGestureActivationListenerRecord> mEdgeGestureActivationListener =
             new ArrayList<EdgeGestureActivationListenerRecord>();
     // end of lock guarded variables
@@ -205,7 +205,6 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
         synchronized(mLock) {
             mGlobalPositions = 0;
             mGlobalSensitivity = SENSITIVITY_NONE;
-            boolean someLongLiving = false;
             int activePositions = 0;
             for (EdgeGestureActivationListenerRecord temp : mEdgeGestureActivationListener) {
                 mGlobalPositions |= temp.positions;
@@ -215,7 +214,6 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
                 if (temp.sensitivity != SENSITIVITY_NONE) {
                     mGlobalSensitivity = Math.max(mGlobalSensitivity, temp.sensitivity);
                 }
-                someLongLiving |= temp.longLiving;
             }
             boolean havePositions = mGlobalPositions != 0;
             mGlobalPositions &= ~activePositions;
@@ -226,7 +224,7 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
 
             if (mInputFilter == null && havePositions) {
                 enforceMonitoringLocked();
-            } else if (mInputFilter != null && !havePositions && !someLongLiving) {
+            } else if (mInputFilter != null && !havePositions) {
                 shutdownMonitoringLocked();
             }
         }
@@ -251,7 +249,8 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
     }
 
     // called through Binder
-    public IEdgeGestureHostCallback registerEdgeGestureActivationListener(IEdgeGestureActivationListener listener) {
+    public IEdgeGestureHostCallback registerEdgeGestureActivationListener(
+            IEdgeGestureActivationListener listener) {
         if (mContext.checkCallingOrSelfPermission(Manifest.permission.INJECT_EVENTS)
                 != PackageManager.PERMISSION_GRANTED) {
             Slog.w(TAG, "Permission Denial: can't register from from pid="
@@ -271,7 +270,8 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
                 try {
                     listener.asBinder().linkToDeath(record, 0);
                 } catch (RemoteException e) {
-                    Slog.w(TAG, "Recipient died during registration pid=" + Binder.getCallingPid());
+                    Slog.w(TAG, "Recipient died during registration pid="
+                            + Binder.getCallingPid());
                     return null;
                 }
                 mEdgeGestureActivationListener.add(record);
@@ -295,6 +295,24 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
             // update input filter only when #systemReady() was called
             if (mHandler != null) {
                 mHandler.sendEmptyMessage(MSG_UPDATE_SERVICE);
+            }
+        }
+    }
+
+    // called through Binder
+    public void setImeIsActive(boolean enabled) {
+        synchronized (mLock) {
+            if (mInputFilter != null) {
+                mInputFilter.setImeIsActive(enabled);
+            }
+        }
+    }
+
+    // called through Binder
+    public void setOverwriteImeIsActive(boolean enabled) {
+        synchronized (mLock) {
+            if (mInputFilter != null) {
+                mInputFilter.setOverwriteImeIsActive(enabled);
             }
         }
     }
