@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Ļauj lietotnei mainīties pat ja cita lietotne lieto Privātuma Sargu. Kad lietotne darbojas ar privātuma sargu, tai nebūs pieejas personīgajiem datiem, kā kontakti, zvanu saraksts, vai īsziņas.</string>
   <string name="privacy_guard_notification">Privātuma Sargs ir aktīvs</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nevarēs piekļūt personīgajiem datiem</string>
+  <string name="permlab_useHardwareFramework">izmantot aparatūras ietvaru</string>
+  <string name="permdesc_useHardwareFramework">Ļauj lietotnei piekļūt CM aparatūras ietvaram.</string>
   <string name="permlab_setKeyguardWallpaper">iestatīt taustiņslēga tapeti</string>
   <string name="permdesc_setKeyguardWallpaper">Ļauj lietotnei manīt slēgekrāna tapeti.</string>
   <string name="privacy_guard_dialog_title">Privātuma sargs</string>

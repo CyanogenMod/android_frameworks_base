@@ -42,6 +42,8 @@
   <string name="permdesc_changePrivacyGuardState">ڕێگە دان بە بەرنامەکە بۆ گۆڕینی کەشوهەوای بەرنامەیەکی تر لە تایبەتی. کاتێک بەرنامەکە ئەکەوێتە کار لەگەڵ تایبەتی .هیچ ڕێگەیەکی نیە بۆ ئەوەی زانیاری تایبیەتیت بەکاربهێنێت وەکو ،ناوەکان،تەلەفۆن لۆگ یان نامە.</string>
   <string name="privacy_guard_notification">پاسەوانی تایبەتی چالاکراوە</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="بەرنامە">%1$s</xliff:g> ناتوانێت زانیاری تایبەتی بەکاربهێنێت</string>
+  <string name="permlab_useHardwareFramework">به‌کارهێنانی هاردوێر بۆ کاری چوارچێوه‌</string>
+  <string name="permdesc_useHardwareFramework">ڕێگه‌دان به‌ به‌رنامه‌یه‌ک بۆ ده‌سته‌ڵاتی چوارچێوه‌ کاری CM.</string>
   <string name="permlab_setKeyguardWallpaper">دانانی کلیلە پارێز بۆ دیوارپۆش</string>
   <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی ڕوونمای دیوارپۆش.</string>
   <string name="privacy_guard_dialog_title">پاسەوانی تایبەتی</string>

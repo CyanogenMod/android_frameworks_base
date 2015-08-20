@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Erlaabt der App, z\'änneren ob eng aner App mam Privatsphärschutz leeft. Wann eng App mam Privatsphärschutz leeft, huet se keen Accès op perséinlech Date wéi Kontakter, Uruffprotokoller oder Messagen.</string>
   <string name="privacy_guard_notification">Privatsphärschutz aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> huet keen Accès op perséinlech Daten</string>
+  <string name="permlab_useHardwareFramework">Hardware-Framework benotzen</string>
+  <string name="permdesc_useHardwareFramework">Erlaabt der App den Accès op den CM-Hardware-Framework.</string>
   <string name="permlab_setKeyguardWallpaper">Hannergrondbild vum Spärschierm setzen</string>
   <string name="permdesc_setKeyguardWallpaper">Erlaabt der App, d\'Hannergrondbild vum Spärschierm z\'änneren.</string>
   <string name="privacy_guard_dialog_title">Privatsphärschutz</string>

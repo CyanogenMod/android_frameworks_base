@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">Root erişimi</string>
   <string name="fingerprint_try_again_hint">Lütfen tekrar tarayın</string>
   <string name="accessibility_dock_battery_level">Ünite pili yüzde <xliff:g id="number">%d</xliff:g>.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Öge bulunamadı</string>
 </resources>
