@@ -49,6 +49,8 @@ public class BoostFramework {
     private static Method mAcquireFunc = null;
     private static Method mReleaseFunc = null;
     private static Method mAcquireTouchFunc = null;
+    private static Method mIOPStart = null;
+    private static Method mIOPStop  = null;
     private static Constructor<Class> mConstructor = null;
 
 /** @hide */
@@ -78,6 +80,14 @@ public class BoostFramework {
                 argClasses = new Class[] {MotionEvent.class, DisplayMetrics.class, int.class, int[].class};
                 mAcquireTouchFunc =  perfClass.getDeclaredMethod("perfLockAcquireTouch", argClasses);
                 Log.v(TAG,"mAcquireTouchFunc method = " + mAcquireTouchFunc);
+
+                argClasses = new Class[] {int.class, String.class};
+                mIOPStart =  perfClass.getDeclaredMethod("perfIOPrefetchStart", argClasses);
+                Log.v(TAG,"mIOPStart method = " + mIOPStart);
+
+                argClasses = new Class[] {};
+                mIOPStop =  perfClass.getDeclaredMethod("perfIOPrefetchStop", argClasses);
+                Log.v(TAG,"mIOPStop method = " + mIOPStop);
 
                 mIsLoaded = true;
             }
@@ -143,6 +153,32 @@ public class BoostFramework {
             Log.e(TAG,"Exception " + e);
         }
         return ret;
+    }
+
+/** @hide */
+    public int perfIOPrefetchStart(int pid, String pkg_name)
+    {
+        int ret = -1;
+        try {
+            Object retVal = mIOPStart.invoke(mPerf,pid,pkg_name);
+            ret = (int)retVal;
+        } catch(Exception e) {
+            Log.e(TAG,"Exception " + e);
+        }
+        return ret;
+    }
+
+/** @hide */
+    public int perfIOPrefetchStop()
+    {
+        int ret = -1;
+         try {
+             Object retVal = mIOPStop.invoke(mPerf);
+             ret = (int)retVal;
+         } catch(Exception e) {
+             Log.e(TAG,"Exception " + e);
+         }
+         return ret;
     }
 
 };
