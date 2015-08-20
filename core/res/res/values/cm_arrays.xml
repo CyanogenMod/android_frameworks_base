@@ -63,4 +63,10 @@
         <item>recovery</item>
         <item>bootloader</item>
      </string-array>
+
+    <!-- List of packages that should not be themed.
+         Note: These strings are checked using String.startsWith() so include as much of the
+         package name as possible to avoid other packages being un-themed unintentionally -->
+    <string-array name="non_themeable_packages" translatable="false">
+    </string-array>
 </resources>

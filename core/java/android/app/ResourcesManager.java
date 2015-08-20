@@ -179,12 +179,12 @@ public class ResourcesManager {
      */
     Resources getTopLevelResources(String resDir, String[] splitResDirs,
             String[] overlayDirs, String[] libDirs, int displayId, String packageName,
-            Configuration overrideConfiguration, CompatibilityInfo compatInfo, Context context) {
+            Configuration overrideConfiguration, CompatibilityInfo compatInfo, Context context,
+            boolean isThemeable) {
         final float scale = compatInfo.applicationScale;
-        final boolean isThemeable = compatInfo.isThemeable;
+        final ThemeConfig themeConfig = getThemeConfig();
         Configuration overrideConfigCopy = (overrideConfiguration != null)
                 ? new Configuration(overrideConfiguration) : null;
-        final ThemeConfig themeConfig = getThemeConfig();
         ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration, scale,
                 isThemeable, themeConfig);
         Resources r;
@@ -210,7 +210,7 @@ public class ResourcesManager {
 
         AssetManager assets = new AssetManager();
         assets.setAppName(packageName);
-        assets.setThemeSupport(compatInfo.isThemeable);
+        assets.setThemeSupport(isThemeable);
         // resDir can be null if the 'android' package is creating a new Resources object.
         // This is fine, since each AssetManager automatically loads the 'android' package
         // already.
@@ -267,7 +267,7 @@ public class ResourcesManager {
 
         boolean iconsAttached = false;
         /* Attach theme information to the resulting AssetManager when appropriate. */
-        if (compatInfo.isThemeable && config != null && !context.getPackageManager().isSafeMode()) {
+        if (isThemeable && config != null && !context.getPackageManager().isSafeMode()) {
             if (config.themeConfig == null) {
                 try {
                     config.themeConfig = ThemeConfig.getBootTheme(context.getContentResolver());
@@ -312,19 +312,16 @@ public class ResourcesManager {
      *
      * @param resDir the resource directory.
      * @param compatInfo the compability info. Must not be null.
-     * @param token the application token for determining stack bounds.
      *
      * @hide
      */
-    public Resources getTopLevelThemedResources(String resDir, int displayId,
-                                                String packageName,
-                                                String themePackageName,
-                                                CompatibilityInfo compatInfo) {
+    public Resources getTopLevelThemedResources(String resDir, int displayId, String packageName,
+            String themePackageName, CompatibilityInfo compatInfo, boolean isThemeable) {
         Resources r;
 
         AssetManager assets = new AssetManager();
         assets.setAppName(packageName);
-        assets.setThemeSupport(true);
+        assets.setThemeSupport(isThemeable);
         if (assets.addAssetPath(resDir) == 0) {
             return null;
         }
@@ -340,19 +337,21 @@ public class ResourcesManager {
             config = getConfiguration();
         }
 
-        /* Attach theme information to the resulting AssetManager when appropriate. */
-        ThemeConfig.Builder builder = new ThemeConfig.Builder();
-        builder.defaultOverlay(themePackageName);
-        builder.defaultIcon(themePackageName);
-        builder.defaultFont(themePackageName);
+        boolean iconsAttached = false;
+        if (isThemeable) {
+            /* Attach theme information to the resulting AssetManager when appropriate. */
+            ThemeConfig.Builder builder = new ThemeConfig.Builder();
+            builder.defaultOverlay(themePackageName);
+            builder.defaultIcon(themePackageName);
+            builder.defaultFont(themePackageName);
 
-        ThemeConfig themeConfig = builder.build();
-        attachThemeAssets(assets, themeConfig);
-        attachCommonAssets(assets, themeConfig);
-        attachIconAssets(assets, themeConfig);
-
+            ThemeConfig themeConfig = builder.build();
+            attachThemeAssets(assets, themeConfig);
+            attachCommonAssets(assets, themeConfig);
+            iconsAttached = attachIconAssets(assets, themeConfig);
+        }
         r = new Resources(assets, dm, config, compatInfo);
-        setActivityIcons(r);
+        if (iconsAttached) setActivityIcons(r);
 
         return r;
     }
@@ -362,8 +361,6 @@ public class ResourcesManager {
      * is then stored in the resource object.
      * When resource.getDrawable(id) is called it will check this mapping and replace
      * the id with the themed resource id if one is available
-     * @param context
-     * @param pkgName
      * @param r
      */
     private void setActivityIcons(Resources r) {
