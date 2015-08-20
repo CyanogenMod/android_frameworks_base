@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Leisti programai keisti, kai kita programa veikia su privatumo sauga. Kai programa veikia su privatumo sauga ji neturės prieigos prie asmeninių duomenų pvz., kontaktų, skambučių žurnalų ar pranešimų.</string>
   <string name="privacy_guard_notification">Privatumo sauga aktyvi</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> negalės prieiti prie asmeninių duomenų</string>
+  <string name="permlab_useHardwareFramework">naudoti aparatinės įrangos sistemą</string>
+  <string name="permdesc_useHardwareFramework">Leidžia programai pasiekti CM aparatinės įrangos sistemą.</string>
   <string name="permlab_setKeyguardWallpaper">nustatyti klaviatūros apsaugos foną</string>
   <string name="permdesc_setKeyguardWallpaper">Leidžia programai pakeisti ekrano užrakto foną.</string>
   <string name="privacy_guard_dialog_title">Privatumo sauga</string>

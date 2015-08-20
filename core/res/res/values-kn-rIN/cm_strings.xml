@@ -43,6 +43,8 @@
   <string name="permdesc_changePrivacyGuardState">ಆಪ್‍ಗೆ ಇತರೆ ಆಪ್ ಗೌಪ್ಯತಾ ರಕ್ಷಕದ ಜೊತೆ  ಚಲಿಸಲು ಅಗುತ್ತದೆಯೆ ಅಥವ ಇಲ್ಲವೇ ಎಂಬುದನ್ನು ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ. ಒಂದು ಆಪ್ Privacy Guard ಜೊತೆ ಚಲಿಸುತ್ತಿದ್ದಲ್ಲಿ, ಅದಕ್ಕೆ ವಯಕ್ತಿಕ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವಿದಿಲ್ಲ, ಉದಾಹರಣೆಗೆ ಸಂಪರ್ಕಗಳು, ಕರೆ ಲಾಗ್ಸ್, ಅಥವ ಸಂದೇಶಗಳು.</string>
   <string name="privacy_guard_notification">ಗೌಪ್ಯತಾ ರಕ್ಷಕ ಸಕ್ರಿಯ</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>ಗೆ ಖಾಸಗಿ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ</string>
+  <string name="permlab_useHardwareFramework">ಹಾರ್ಡ್‍ವೇರ್ ಫ್ರೇಮ್‍ವರ್ಕ್ ಬಳಕೆ</string>
+  <string name="permdesc_useHardwareFramework">ಒಂದು ಆಪ್‍ಗೆ CM ಹಾರ್ಡ್‍ವೇರ್ ಫ್ರೇಮ್‍ವರ್ಕ್ ಪ್ರವೇಶಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="permlab_setKeyguardWallpaper">ಕೀಗಾರ್ಡ್ ವಾಲ್‍ಪೇಪರ್ ಹೊಂದಿಕೆ</string>
   <string name="permdesc_setKeyguardWallpaper">ಒಂದು ಆಪ್‍ಗೆ ಲಾಕ್ ಪರದೆಯ ವಾಲ್‍ಪೇಪರ್ ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="privacy_guard_dialog_title">ಗೌಪ್ಯತಾ ರಕ್ಷಕ</string>

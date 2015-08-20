@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">Skrbniški dostop</string>
   <string name="fingerprint_try_again_hint">Preiščite znova</string>
   <string name="accessibility_dock_battery_level"><xliff:g id="number">%d</xliff:g> odstotkov baterije v postaji.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Ni najdenih predmetov</string>
 </resources>

@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Ermöglicht der App, den Datenschutz für andere Apps zu aktivieren oder deaktivieren. Eine App mit aktiviertem Datenschutz hat keinen Zugriff auf persönliche Daten wie Kontakte, Nachrichten oder das Anrufprotokoll.</string>
   <string name="privacy_guard_notification">Datenschutz aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> hat keinen Zugriff auf persönliche Daten</string>
+  <string name="permlab_useHardwareFramework">Hardware-Framework verwenden</string>
+  <string name="permdesc_useHardwareFramework">Ermöglicht der App, auf das CM-Hardware-Framework zuzugreifen.</string>
   <string name="permlab_setKeyguardWallpaper">Sperrbildschirm-Hintergrund ändern</string>
   <string name="permdesc_setKeyguardWallpaper">Ermöglicht der App, den Sperrbildschirm-Hintergrund zu ändern.</string>
   <string name="privacy_guard_dialog_title">Datenschutz</string>

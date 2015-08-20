@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Lehetővé teszi, hogy más alkalmazások számára engedélyezze, vagy letiltsa az adatvédelmet. Amikor az alkalmazás adatvédelmi módban fut, nem fog hozzáférni az Ön személyes adataihoz, mint a névjegyzékéhez, üzeneteihez, vagy a hívásnaplójához.</string>
   <string name="privacy_guard_notification">Adatvédelem aktív</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nem fog hozzáférni a személyes adataihoz</string>
+  <string name="permlab_useHardwareFramework">hardver keretrendszert használ</string>
+  <string name="permdesc_useHardwareFramework">Lehetővé teszi az alkalmazás számára, hogy a CM hardver hozzáférjen a keretrendszerhez.</string>
   <string name="permlab_setKeyguardWallpaper">billentyűzár háttérképének beállítása</string>
   <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára, hogy módosítsa a képernyőzár hátterét.</string>
   <string name="privacy_guard_dialog_title">Adatvédelmi beállítások</string>

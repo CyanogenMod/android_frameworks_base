@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Permite aplicației să stabilească dacă o altă aplicație rulează cu garda de confidențialitate. Când o aplicație rulează cu garda de confidențialitate, nu va avea acces la date personale, cum ar fi contacte, jurnalul de apeluri sau mesaje.</string>
   <string name="privacy_guard_notification">Protejarea datelor activată</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nu va putea accesa datele personale</string>
+  <string name="permlab_useHardwareFramework">folosește framework-ul hardware</string>
+  <string name="permdesc_useHardwareFramework">Permite unei aplicații să acceseze framework-ul hardware.</string>
   <string name="permlab_setKeyguardWallpaper">setare fundal ecran de blocare</string>
   <string name="permdesc_setKeyguardWallpaper">Permite unei aplicații să schimbe imaginea de fundal a ecranului de blocare.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
