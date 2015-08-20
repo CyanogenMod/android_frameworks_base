@@ -2620,8 +2620,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     @Override
-    public void startActivity(Intent intent, boolean dismissShade) {
-        startActivityDismissingKeyguard(intent, false, dismissShade);
+    public void startActivity(Intent intent, boolean dismissShade, boolean dismissKeyguard) {
+        if (dismissKeyguard) {
+            startActivityDismissingKeyguard(intent, false, dismissShade);
+        } else {
+            startActivityWithoutDismiss(intent, dismissShade);
+        }
     }
 
     public ScrimController getScrimController() {
@@ -3764,6 +3768,17 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 return true;
             }
         }, afterKeyguardGone);
+    }
+
+    public void startActivityWithoutDismiss(final Intent intent, final boolean dismissShade) {
+        intent.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        mContext.startActivityAsUser(
+                intent, new UserHandle(UserHandle.USER_CURRENT));
+        if (dismissShade) {
+            animateCollapsePanels(
+                    CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL, true /* force */);
+        }
     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {

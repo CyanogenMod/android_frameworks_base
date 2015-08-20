@@ -91,7 +91,8 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
                     getContext(), v, ContactsContract.Profile.CONTENT_URI,
                     ContactsContract.QuickContact.MODE_LARGE, null);
             if (mActivityStarter != null) {
-                mActivityStarter.startActivity(intent, true /* dismissShade */);
+                mActivityStarter.startActivity(intent, true /* dismissShade */,
+                        true /* dismissKeyguard */);
             } else {
                 getContext().startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
             }
