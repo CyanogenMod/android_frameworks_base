@@ -244,7 +244,7 @@ public class CarrierText extends TextView {
 
             case NetworkLocked:
                 carrierText = makeCarrierStringOnEmergencyCapable(
-                        mContext.getText(R.string.keyguard_network_locked_message), text);
+                        getContext().getText(R.string.keyguard_perso_locked_message), text);
                 break;
 
             case SimMissing:
@@ -312,7 +312,7 @@ public class CarrierText extends TextView {
             case ABSENT:
                 return StatusMode.SimMissing;
             case NETWORK_LOCKED:
-                return StatusMode.SimMissingLocked;
+                return StatusMode.NetworkLocked;
             case NOT_READY:
                 return StatusMode.SimNotReady;
             case PIN_REQUIRED:
