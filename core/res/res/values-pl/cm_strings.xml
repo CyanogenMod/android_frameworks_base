@@ -135,7 +135,7 @@
   <string name="permission_remember_choice">Zapamiętaj mój wybór</string>
   <string name="perf_profile_pwrsv">Oszczędny</string>
   <string name="perf_profile_bal">Zbalansowany</string>
-  <string name="perf_profile_perf">Wydajny</string>
+  <string name="perf_profile_perf">Wydajność</string>
   <string name="theme_install_error_title">Nie udało się zainstalować motywu</string>
   <string name="theme_install_error_message">%s nie udało się zainstalować</string>
   <string name="theme_reset_notification_title">Reset motywu</string>

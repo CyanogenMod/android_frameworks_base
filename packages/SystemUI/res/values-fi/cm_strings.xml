@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">Root-oikeudet</string>
   <string name="fingerprint_try_again_hint">Skannaa uudelleen</string>
   <string name="accessibility_dock_battery_level">Telakan akku <xliff:g id="number">%d</xliff:g> prosenttia.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Yhtään kohdetta ei löytynyt</string>
 </resources>

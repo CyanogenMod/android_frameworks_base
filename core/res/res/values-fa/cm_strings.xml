@@ -52,7 +52,7 @@
   <string name="reboot_reboot">راه‌اندازی مجدد</string>
   <string name="reboot_recovery">ریکاوری</string>
   <string name="reboot_bootloader">بوت‌لودر</string>
-  <string name="reboot_download">دریافت</string>
+  <string name="reboot_download">دانلود</string>
   <string name="reboot_soft">راه‌اندازی مجدد نرم</string>
   <string name="reboot_title">راه‌اندازی مجدد</string>
   <string name="reboot_confirm" product="tablet">تبلت شما راه‌اندازی مجدد خواهد شد.</string>
@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">به برنامه اجازه می‌دهد به سرویس اثر انگشت دسترسی داشته باشد. برنامه می‌تواند اثر عملیات افرودن، حذف، تغییر نام و تأیید انگشت‌ها را انجام دهد</string>
   <string name="permlab_resetBatteryStats">تنظیم مجدد آمار کارکرد باتری</string>
   <string name="permdesc_resetBatteryStats">به برنامه اجازه می‌دهد داده‌های استفاده از باتری داری سطح شارژ پایین را بازنشانی کند.</string>
+  <string name="silent_mode_priority">اولویت</string>
+  <string name="silent_mode_none">هیچ‌کدام</string>
 </resources>
