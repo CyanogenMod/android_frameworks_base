@@ -350,4 +350,7 @@
 
     <!-- LED pulse -->
     <java-symbol type="bool" name="config_ledCanPulse" />
+
+    <!-- Non-themeable packages -->
+    <java-symbol type="array" name="non_themeable_packages" />
 </resources>
