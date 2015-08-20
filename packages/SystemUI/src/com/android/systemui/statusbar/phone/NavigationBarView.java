@@ -74,7 +74,7 @@ public class NavigationBarView extends LinearLayout {
     final static String NAVBAR_EDIT_ACTION = "android.intent.action.NAVBAR_EDIT";
 
     private boolean mInEditMode;
-    private NavbarEditor mEditBar;
+    private NavbarEditor mEditBar, mPortraitEditor, mLandscapeEditor;
     private NavBarReceiver mNavBarReceiver;
     private OnClickListener mRecentsClickListener;
     private OnTouchListener mRecentsPreloadListener;
@@ -581,6 +581,20 @@ public class NavigationBarView extends LinearLayout {
         mDeadZone.setStartFromRight(leftInLandscape);
     }
 
+    private NavbarEditor getNavBarEditor() {
+        if (mVertical) {
+            if (mPortraitEditor == null) {
+                mPortraitEditor = new NavbarEditor(mCurrentView, true, mIsLayoutRtl);
+            }
+            return mPortraitEditor;
+        } else {
+            if (mLandscapeEditor == null) {
+                mLandscapeEditor = new NavbarEditor(mCurrentView, false, mIsLayoutRtl);
+            }
+            return mLandscapeEditor;
+        }
+    }
+
     public void reorient() {
         int orientation = mContext.getResources().getConfiguration().orientation;
         mRotatedViews[Configuration.ORIENTATION_PORTRAIT].setVisibility(View.GONE);
@@ -593,7 +607,7 @@ public class NavigationBarView extends LinearLayout {
         } else {
             mVertical = getWidth() > 0 && getHeight() > getWidth();
         }
-        mEditBar = new NavbarEditor(mCurrentView, mVertical, mIsLayoutRtl);
+        mEditBar = getNavBarEditor();
         updateSettings();
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
 
@@ -677,6 +691,8 @@ public class NavigationBarView extends LinearLayout {
                 .getLayoutDirection() == LAYOUT_DIRECTION_RTL;
         if (mIsLayoutRtl != isLayoutRtl) {
             mIsLayoutRtl = isLayoutRtl;
+            mPortraitEditor = null;
+            mLandscapeEditor = null;
             reorient();
         }
     }
