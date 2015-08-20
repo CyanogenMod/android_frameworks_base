@@ -174,9 +174,8 @@ public class ResourcesManager {
     public Resources getTopLevelResources(String resDir, String[] splitResDirs,
             String[] overlayDirs, String[] libDirs, int displayId, String packageName,
             Configuration overrideConfiguration, CompatibilityInfo compatInfo, IBinder token,
-            Context context) {
+            Context context, boolean isThemeable) {
         final float scale = compatInfo.applicationScale;
-        final boolean isThemeable = compatInfo.isThemeable;
         final ThemeConfig themeConfig = getThemeConfig();
         ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration, scale,
                 isThemeable, themeConfig, token);
@@ -205,7 +204,7 @@ public class ResourcesManager {
 
         AssetManager assets = new AssetManager();
         assets.setAppName(packageName);
-        assets.setThemeSupport(compatInfo.isThemeable);
+        assets.setThemeSupport(isThemeable);
         // resDir can be null if the 'android' package is creating a new Resources object.
         // This is fine, since each AssetManager automatically loads the 'android' package
         // already.
@@ -257,7 +256,7 @@ public class ResourcesManager {
 
         boolean iconsAttached = false;
         /* Attach theme information to the resulting AssetManager when appropriate. */
-        if (compatInfo.isThemeable && config != null && !context.getPackageManager().isSafeMode()) {
+        if (isThemeable && config != null && !context.getPackageManager().isSafeMode()) {
             if (config.themeConfig == null) {
                 try {
                     config.themeConfig = ThemeConfig.getBootTheme(context.getContentResolver());
@@ -308,15 +307,14 @@ public class ResourcesManager {
      *
      * @hide
      */
-    public Resources getTopLevelThemedResources(String resDir, int displayId,
-                                                String packageName,
-                                                String themePackageName,
-                                                CompatibilityInfo compatInfo, IBinder token) {
+    public Resources getTopLevelThemedResources(String resDir, int displayId, String packageName,
+            String themePackageName, CompatibilityInfo compatInfo, IBinder token,
+            boolean isThemeable) {
         Resources r;
 
         AssetManager assets = new AssetManager();
         assets.setAppName(packageName);
-        assets.setThemeSupport(true);
+        assets.setThemeSupport(isThemeable);
         if (assets.addAssetPath(resDir) == 0) {
             return null;
         }
@@ -332,19 +330,21 @@ public class ResourcesManager {
             config = getConfiguration();
         }
 
-        /* Attach theme information to the resulting AssetManager when appropriate. */
-        ThemeConfig.Builder builder = new ThemeConfig.Builder();
-        builder.defaultOverlay(themePackageName);
-        builder.defaultIcon(themePackageName);
-        builder.defaultFont(themePackageName);
+        boolean iconsAttached = false;
+        if (isThemeable) {
+            /* Attach theme information to the resulting AssetManager when appropriate. */
+            ThemeConfig.Builder builder = new ThemeConfig.Builder();
+            builder.defaultOverlay(themePackageName);
+            builder.defaultIcon(themePackageName);
+            builder.defaultFont(themePackageName);
 
-        ThemeConfig themeConfig = builder.build();
-        attachThemeAssets(assets, themeConfig);
-        attachCommonAssets(assets, themeConfig);
-        attachIconAssets(assets, themeConfig);
-
+            ThemeConfig themeConfig = builder.build();
+            attachThemeAssets(assets, themeConfig);
+            attachCommonAssets(assets, themeConfig);
+            iconsAttached = attachIconAssets(assets, themeConfig);
+        }
         r = new Resources(assets, dm, config, compatInfo, token);
-        setActivityIcons(r);
+        if (iconsAttached) setActivityIcons(r);
 
         return r;
     }
