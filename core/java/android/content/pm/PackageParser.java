@@ -2581,8 +2581,9 @@ public class PackageParser {
         final ApplicationInfo ai = owner.applicationInfo;
         final String pkgName = owner.applicationInfo.packageName;
 
-        // assume that this package is themeable unless explicitly set to false.
-        ai.isThemeable = true;
+        String[] nonThemeablePackages =
+                res.getStringArray(com.android.internal.R.array.non_themeable_packages);
+        ai.isThemeable = isPackageThemeable(pkgName, nonThemeablePackages);
 
         TypedArray sa = res.obtainAttributes(attrs,
                 com.android.internal.R.styleable.AndroidManifestApplication);
@@ -4437,6 +4438,22 @@ public class PackageParser {
                 }
             }
             Slog.d(TAG, cats.toString());
+        }
+
+        return true;
+    }
+
+    /**1
+     * Returns whether the specified package is themeable
+     * @param packageName Name of package to check
+     * @param nonThemeablePackages Array of packages that are declared as non-themeable
+     * @return True if the package is themeable, false otherwise
+     */
+    private static boolean isPackageThemeable(String packageName, String[] nonThemeablePackages) {
+        for (String pkg : nonThemeablePackages) {
+            if (packageName.startsWith(pkg)) {
+                return false;
+            }
         }
 
         return true;
