@@ -69,7 +69,7 @@
   <string name="navring_action_open_ime_switcher">سئیچر IME باز</string>
   <string name="navring_action_kill_app">توقف برنامه</string>
   <string name="navring_action_none">هیچ کدام</string>
-  <string name="navring_action_take_screenshot">عکسبرداری از صفحه نمایش</string>
+  <string name="navring_action_take_screenshot">گرفتن تصویر از صفحه</string>
   <string name="navring_action_ring_vibrate">زنگ/لرزش</string>
   <string name="navring_action_ring_silent">زنگ/سکوت</string>
   <string name="navring_action_ring_vibrate_silent">زنگ/لرزش/سکوت</string>
