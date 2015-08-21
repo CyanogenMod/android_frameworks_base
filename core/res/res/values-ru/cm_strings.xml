@@ -19,7 +19,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="profile_picker_title">Профили</string>
   <string name="global_action_choose_profile">Профиль</string>
-  <string name="profile_none">Не выбран</string>
+  <string name="profile_none">Нет</string>
   <string name="global_action_screenshot">Скриншот</string>
   <string name="permlab_receiveProtectedSms">Получение защищённых SMS</string>
   <string name="permdesc_receiveProtectedSms">Приложение сможет получать входящие защищённые SMS-сообщения.</string>
@@ -135,7 +135,7 @@
   <string name="permission_remember_choice">Запомнить разрешение</string>
   <string name="perf_profile_pwrsv">Экономия энергии</string>
   <string name="perf_profile_bal">Сбалансиров.</string>
-  <string name="perf_profile_perf">Высокая производит.</string>
+  <string name="perf_profile_perf">Производительность</string>
   <string name="theme_install_error_title">Не удалось установить тему</string>
   <string name="theme_install_error_message">Сбой при установке «%s»</string>
   <string name="theme_reset_notification_title">Тема отключена</string>
