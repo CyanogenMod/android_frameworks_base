@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">Acceso privilegiado</string>
   <string name="fingerprint_try_again_hint">Por favor, escanea otra vez</string>
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g> por ciento.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">No se encontraron elementos</string>
 </resources>
