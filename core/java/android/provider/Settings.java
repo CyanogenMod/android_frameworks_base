@@ -4799,6 +4799,11 @@ public final class Settings {
         public static final String LOGGING_ID = "logging_id";
 
         /**
+         * Default theme config name
+         */
+        public static final String NAME_THEME_CONFIG = "themeConfig";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#NETWORK_PREFERENCE} instead
          */
         @Deprecated

@@ -1863,12 +1863,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (upgradeVersion < 117) {
             // CM11 used "holo" as a system default theme. For CM12 and up its been
             // switched to "system". So change all "holo" references in themeConfig to "system"
-            final String NAME_THEME_CONFIG = "themeConfig";
             Cursor c = null;
             try {
                 String[] projection = new String[]{"value"};
                 String selection = "name=?";
-                String[] selectionArgs = new String[] { NAME_THEME_CONFIG };
+                String[] selectionArgs = new String[] { Settings.Secure.NAME_THEME_CONFIG };
                 c = db.query(TABLE_SECURE, projection, selection,
                         selectionArgs, null, null, null);
                 if (c != null && c.moveToFirst()) {
@@ -1882,7 +1881,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 "UPDATE " + TABLE_SECURE + " SET value = ? "
                                         + " WHERE name = ?");
                         stmt.bindString(1, jsonConfig);
-                        stmt.bindString(2, NAME_THEME_CONFIG);
+                        stmt.bindString(2, Settings.Secure.NAME_THEME_CONFIG);
                         stmt.execute();
                     }
                 }
