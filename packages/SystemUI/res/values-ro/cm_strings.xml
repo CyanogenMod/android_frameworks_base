@@ -95,7 +95,7 @@
   <string name="navring_target_reset">Comenzile rapide din bara de navigare au fost resetate la valorile implicite</string>
   <string name="navring_action_open_ime_switcher">Deschide Comutator IME</string>
   <string name="navring_action_kill_app">Opreşte aplicaţia</string>
-  <string name="navring_action_none">Nici una</string>
+  <string name="navring_action_none">Nimic</string>
   <string name="navring_action_take_screenshot">Captează ecranul</string>
   <string name="navring_action_ring_vibrate">Sunet/Vibrație</string>
   <string name="navring_action_ring_silent">Sunet/Silențios</string>
@@ -113,4 +113,5 @@
   <string name="dynamic_qs_tile_next_alarm_label">Următoarea alarmă</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
   <string name="dynamic_qs_tile_su_label">Acces root</string>
+  <string name="fingerprint_try_again_hint">Vă rugăm să scanați din nou</string>
 </resources>

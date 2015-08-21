@@ -25,7 +25,7 @@
   <string name="permdesc_receiveProtectedSms">يسمح للتطبيق باستلام رسالة نصية قصيرة محمية.</string>
   <string name="permlab_modifyProtectedSmsList">تعديل قائمة الرسائل النصية القصيرة المحمية</string>
   <string name="permdesc_modifyProtectedSmsList">السماح للتطبيق بتعديل  قائمة عناوين الرسائل النصية المحمية.</string>
-  <string name="permgrouplab_security">الحماية</string>
+  <string name="permgrouplab_security">الأمان</string>
   <string name="permgroupdesc_security">أذونات ذات الصلة بي أمن المعلومات الجهاز.</string>
   <string name="permlab_accessThemeService">الوصول إلى خدمة الموضوع</string>
   <string name="permdesc_accessThemeService">يسمح تطبيق للوصول إلى خدمة الموضوع. ينبغي أن لا تكون لهاحاجة ابدأ لتطبيقات اىعادية.</string>
@@ -38,8 +38,8 @@
   <string name="permlab_changePhoneBlacklist">تغيير القائمة السوداء الهاتف</string>
   <string name="permdesc_changePhoneBlacklist">يسمح لي التطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
   <string name="permlab_changePrivacyGuardState">تمكين أو تعطيل حارس الخصوصية</string>
-  <string name="permdesc_changePrivacyGuardState">يسمح التطبيق لتغيير ما إذا كان التطبيق آخر يعمل مع \"حارس الخصوصية\". عندما يتم تشغيل تطبيق مع \"حارس الخصوصية\"، لن يكون الوصول إلى بيانات شخصية مثل جهات الاتصال، وسجلات المكالمات أو الرسائل.</string>
-  <string name="privacy_guard_notification">حارس الخصوصية نشط</string>
+  <string name="permdesc_changePrivacyGuardState">يسمح للتطبيق بتغيير ما إذا كان تطبيق آخر يعمل مع \"حارس الخصوصية\". عندما يتم تشغيل تطبيق مع \"حارس الخصوصية\"، فلن يُسمح له بالوصول إلى البيانات الشخصية مثل جهات الاتصال وسجلات المكالمات والرسائل.</string>
+  <string name="privacy_guard_notification">حارس الخصوصية فعّال</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> لن تكون قادراً على الوصول إلى البيانات الشخصية</string>
   <string name="permlab_useHardwareFramework">استخدام نظام الأجهزة</string>
   <string name="permdesc_useHardwareFramework">يسمح لتطبيق وصول إلى نظام أجهزة CM.</string>
@@ -64,7 +64,7 @@
   <string name="adb_active_generic_notification_message">إللمس لتعطيل التصحيح.</string>
   <string name="usb_choose_notification_title">المس لاظهار خيارات منفذ USB.</string>
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
-  <string name="adb_active_custom_tile_both">USB &amp; network</string>
+  <string name="adb_active_custom_tile_both">⁯USB والشبكة</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">الشبكة</string>
   <string name="permlab_interceptPackageLaunch">تم اعتراض تشغيل التطبيق</string>
@@ -134,7 +134,7 @@
   <string name="China_Telecom">China Telecom</string>
   <string name="permission_remember_choice">تذكر خياري</string>
   <string name="perf_profile_pwrsv">حفظ الطاقة</string>
-  <string name="perf_profile_bal">متوازنة</string>
+  <string name="perf_profile_bal">متوازن</string>
   <string name="perf_profile_perf">الأداء</string>
   <string name="theme_install_error_title">فشل تثبيت السمة</string>
   <string name="theme_install_error_message">فشل تثبيت %s</string>

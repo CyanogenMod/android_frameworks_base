@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">\'Root\' toegang</string>
   <string name="fingerprint_try_again_hint">Skandeer asseblief weer</string>
   <string name="accessibility_dock_battery_level">Dok Battery <xliff:g id="number">%d</xliff:g> persent.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Geen items gevind</string>
 </resources>
