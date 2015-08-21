@@ -206,4 +206,5 @@
   <string name="permlab_accessFingerprintService">accesează serviciul amprentă digitală</string>
   <string name="permlab_resetBatteryStats">resetează statisticile bateriei</string>
   <string name="silent_mode_priority">Prioritate</string>
+  <string name="silent_mode_none">Nimic</string>
 </resources>

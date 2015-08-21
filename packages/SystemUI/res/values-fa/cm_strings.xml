@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_recents">بستن تمام برنامه‌های اخیر</string>
+  <string name="clear_recents">بستن تمام اعلان‌های اخیر</string>
   <string name="screenshot_delete_action">حذف</string>
   <string name="screenshot_delete_confirmation">تصویر صفحه حذف شد.</string>
   <string name="advanced_dev_option_wipe_app">پاک کردن داده‌های برنامه</string>
@@ -26,10 +26,10 @@
   <string name="accessibility_quick_settings_data_on">داده همراه روشن.</string>
   <string name="accessibility_quick_settings_roaming_off">رومینگ خاموش.</string>
   <string name="accessibility_quick_settings_roaming_on">رومینگ روشن.</string>
-  <string name="accessibility_quick_settings_network_adb_off">ADB‌ شبکه خاموش است.</string>
-  <string name="accessibility_quick_settings_network_adb_on">ADB‌ شبکه روشن است.</string>
-  <string name="accessibility_quick_settings_network_adb_changed_off">ADB‌ شبکه خاموش شد.</string>
-  <string name="accessibility_quick_settings_network_adb_changed_on">ADB‌ شبکه روشن شد.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ای‌دی‌بی شبکه خاموش است.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ای‌دی‌بی شبکه روشن است.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ای‌دی‌بی شبکه خاموش شد.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">ای‌دی‌بی شبکه روشن شد.</string>
   <string name="accessibility_quick_settings_ambient_display_off">صفحه نمایش محاصره‌شده خاموش است.</string>
   <string name="accessibility_quick_settings_ambient_display_on">صفحه نمایش محاصره‌شده روشن است.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">صفحه نمایش محاصره‌شده خاموش شد.</string>
@@ -139,10 +139,10 @@
   <string name="navring_action_open_ime_switcher">باز کردن سوییچر IME</string>
   <string name="navring_action_kill_app">توقف برنامه</string>
   <string name="navring_action_none">هیچ‌کدام</string>
-  <string name="navring_action_take_screenshot">عکس‌برداری از صفحه‌نمایش</string>
+  <string name="navring_action_take_screenshot">گرفتن تصویر از صفحه</string>
   <string name="navring_action_ring_vibrate">زنگ/لرزش</string>
-  <string name="navring_action_ring_silent">زنگ/سکوت</string>
-  <string name="navring_action_ring_vibrate_silent">زنگ/لرزش/سکوت</string>
+  <string name="navring_action_ring_silent">زنگ/بی‌صدا</string>
+  <string name="navring_action_ring_vibrate_silent">زنگ/لرزش/بی‌صدا</string>
   <string name="navring_action_screen_off">صفحه‌نمایش خاموش</string>
   <string name="navring_action_torch">سوئیچ چراغ‌قوه</string>
   <string name="navring_action_google_now">اکنون گوگل</string>
@@ -150,8 +150,8 @@
   <string name="select_application">انتخاب برنامه</string>
   <string name="lockscreen_target_empty">خالی</string>
   <string name="screen_pinning_description_no_navbar">این صفحه تا زمانی که آن را از سنجاق درآورید نمایش داده می‌شود. برای از سنجاق درآوردن کلید بازگشت را نگه دارید.</string>
-  <string name="interruption_level_silent">سکوت</string>
-  <string name="zen_silent_with_warning">بدون مزاحمت، به جز هشدارها.</string>
+  <string name="interruption_level_silent">بی‌صدا</string>
+  <string name="zen_silent_with_warning">به جز هشدارها وقفه‌ای رخ ندهد.</string>
   <string name="quick_settings_remove">حذف کاشی</string>
   <string name="quick_settings_dynamic_tile_detail_title">کاشی پویا</string>
   <string name="dynamic_qs_tile_next_alarm_label">هشدار بعدی</string>

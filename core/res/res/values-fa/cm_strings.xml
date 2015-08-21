@@ -20,19 +20,19 @@
   <string name="profile_picker_title">پروفایل‌ها</string>
   <string name="global_action_choose_profile">پروفایل</string>
   <string name="profile_none">هیچ‌کدام</string>
-  <string name="global_action_screenshot">عکس صفحه‌نمایش</string>
+  <string name="global_action_screenshot">تصویر صفحه</string>
   <string name="permlab_receiveProtectedSms">دریافت پیامک حفاظت‌شده</string>
   <string name="permdesc_receiveProtectedSms">به برنامه اجازه می‌دهد تا پیام محافظت‌شده‌ی دریافتی را بپذیرد.</string>
   <string name="permlab_modifyProtectedSmsList">ویرایش لیست پیامک محافظت‌شده</string>
   <string name="permdesc_modifyProtectedSmsList">برای ویرایش لیست آدرس پیامک محافظت‌شده به برنامه اجازه می‌دهد.</string>
   <string name="permgrouplab_security">امنیت</string>
   <string name="permgroupdesc_security">مجوزهای مربوط به اطلاعات امنیتی دستگاه.</string>
-  <string name="permlab_accessThemeService">دسترسی به سرویس مضمون</string>
-  <string name="permdesc_accessThemeService">به برنامه مجوز دسترسی به سرویس مضمون را می‌دهد. این مجوز هرگز برای برنامه‌های معمول لازم نیست.</string>
-  <string name="permlab_readThemes">مشاهده اطلاعات مضمون شما</string>
-  <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا مضامین شما را بخواند و بفهمد شما کدام مضمون را انتخاب کرده‌اید.</string>
-  <string name="permlab_writeThemes">ویرایش مضمون شما</string>
-  <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا مضامین جدید ایجاد کرده و مضمون انتخابی شما را تغییر دهد.</string>
+  <string name="permlab_accessThemeService">دسترسی به سرویس تم</string>
+  <string name="permdesc_accessThemeService">به برنامه مجوز دسترسی به سرویس تم را می‌دهد. این مجوز هرگز برای برنامه‌های معمول لازم نیست.</string>
+  <string name="permlab_readThemes">مشاهده اطلاعات تم شما</string>
+  <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا تم‌های شما را مشاهده کرده و بفهمد شما کدام تم را انتخاب کرده‌اید.</string>
+  <string name="permlab_writeThemes">ویرایش تم‌ها</string>
+  <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا تم‌های جدید ایجاد کرده و تم انتخابی شما را تغییر دهد.</string>
   <string name="permlab_readPhoneBlacklist">مشاهده لیست سیاه تلفن</string>
   <string name="permdesc_readPhoneBlacklist">به برنامه اجازه می‌دهد اطلاعات مربوط به شماره تلفن‌های مسدود شده پیام‌ها یا تماس‌های ورودی را بخواند.</string>
   <string name="permlab_changePhoneBlacklist">تغییر لیست سیاه گوشی</string>
@@ -116,7 +116,7 @@
   <string name="app_ops_use_media_buttons">استفاده از کلیدهای رسانه</string>
   <string name="app_ops_use_media_volume">کنترل صدای رسانه</string>
   <string name="app_ops_use_notification_volume">کنترل صدای اعلان</string>
-  <string name="app_ops_use_ring_volume">کنترل صدای زنگ</string>
+  <string name="app_ops_use_ring_volume">کنترل میزان صدای زنگ</string>
   <string name="app_ops_use_vibrate">استفاده از بازخورد لمسی</string>
   <string name="app_ops_use_voice_volume">کنترل صدای تماس صوتی</string>
   <string name="app_ops_write_mms">نوشتن پیام ام ام اس</string>
@@ -207,6 +207,6 @@
   <string name="permdesc_accessFingerprintService">به برنامه اجازه می‌دهد به سرویس اثر انگشت دسترسی داشته باشد. برنامه می‌تواند اثر عملیات افرودن، حذف، تغییر نام و تأیید انگشت‌ها را انجام دهد</string>
   <string name="permlab_resetBatteryStats">تنظیم مجدد آمار کارکرد باتری</string>
   <string name="permdesc_resetBatteryStats">به برنامه اجازه می‌دهد داده‌های استفاده از باتری داری سطح شارژ پایین را بازنشانی کند.</string>
-  <string name="silent_mode_priority">اولویت</string>
+  <string name="silent_mode_priority">اولویت‌دار</string>
   <string name="silent_mode_none">هیچ‌کدام</string>
 </resources>
