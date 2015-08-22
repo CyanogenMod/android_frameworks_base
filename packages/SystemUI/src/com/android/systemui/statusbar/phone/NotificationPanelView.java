@@ -1607,7 +1607,9 @@ public class NotificationPanelView extends PanelView implements
         float alphaQsExpansion = 1 - Math.min(1, getQsExpansionFraction() * 2);
         mKeyguardStatusBar.setAlpha(Math.min(alphaNotifications, alphaQsExpansion)
                 * mKeyguardStatusBarAnimateAlpha);
-        mKeyguardBottomArea.setAlpha(Math.min(1 - getQsExpansionFraction(), alphaNotifications));
+        float alphaBottomArea = Math.min(1 - getQsExpansionFraction(), alphaNotifications);
+        mKeyguardBottomArea.setAlpha(alphaBottomArea);
+        mStatusBar.setVisualizerAlpha(alphaBottomArea);
         setQsTranslation(mQsExpansionHeight);
     }
 
