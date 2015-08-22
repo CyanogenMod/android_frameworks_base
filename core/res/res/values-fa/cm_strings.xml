@@ -20,10 +20,10 @@
   <string name="profileNameDefault">پیش‌فرض</string>
   <string name="profileNameWork">کار</string>
   <string name="profileNameHome">صفحه اصلی</string>
-  <string name="profileNameSilent">سکوت</string>
+  <string name="profileNameSilent">بی‌صدا</string>
   <string name="profileNameNight">شب</string>
   <string name="profileNameAutomobile">خودرو</string>
-  <string name="profileGroupPhone">تلفن</string>
+  <string name="profileGroupPhone">گوشی</string>
   <string name="profileGroupCalendar">تقویم</string>
   <string name="profileGroupGmail">جی میل</string>
   <string name="profileGroupEmail">ایمیل</string>
@@ -32,32 +32,32 @@
   <string name="profile_none">هیچ کدام</string>
   <string name="profile_picker_title">پروفایل ها</string>
   <string name="global_action_choose_profile">پروفایل</string>
-  <string name="global_action_screenshot">عکس از صفحه نمایش</string>
+  <string name="global_action_screenshot">تصویر صفحه</string>
   <string name="permlab_receiveProtectedSms">دریافت پیامک حفاظت شده</string>
   <string name="permdesc_receiveProtectedSms">برنامه می تواند پیام های محافظت شده ی دریافتی را بپذیرد.</string>
   <string name="permlab_modifyProtectedSmsList">ویرایش لیست پیامک محافظت شده</string>
   <string name="permdesc_modifyProtectedSmsList">برای ویرایش لیست آدرس پیامک محافظت‌شده به برنامه اجازه می‌دهد.</string>
   <string name="permgrouplab_security">امنیت</string>
   <string name="permgroupdesc_security">مجوزهای مربوط به اطلاعات امنیتی دستگاه.</string>
-  <string name="permlab_accessThemeService">سرویس دسترسی زمینه</string>
-  <string name="permdesc_accessThemeService">نرم افزار مجوز دسترسی به سرویس زمینه را دارد. این مجوز هرگز برای برنامه های معمول لازم نیست.</string>
-  <string name="permlab_readThemes">مشاهده اطلاعات زمینه شما</string>
-  <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا مضامین شما را بخواند و بفهمد شما کدام مضمون را انتخاب کرده‌اید.</string>
-  <string name="permlab_writeThemes">ویرایش زمینه شما</string>
-  <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا مضامین جدید ایجاد کرده و مضمون انتخابی شما را تغییر دهد.</string>
+  <string name="permlab_accessThemeService">دسترسی به سرویس تم</string>
+  <string name="permdesc_accessThemeService">به برنامه مجوز دسترسی به سرویس تم را می‌دهد. این مجوز هرگز برای برنامه‌های معمول لازم نیست.</string>
+  <string name="permlab_readThemes">مشاهده اطلاعات تم شما</string>
+  <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا تم‌های شما را مشاهده کرده و بفهمد شما کدام تم را انتخاب کرده‌اید.</string>
+  <string name="permlab_writeThemes">ویرایش تم‌ها</string>
+  <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا تم‌های جدید ایجاد کرده و تم انتخابی شما را تغییر دهد.</string>
   <string name="permlab_readPhoneBlacklist">مشاهده لیست سیاه تلفن</string>
   <string name="permdesc_readPhoneBlacklist">اجازه به برنامه برای مشاهده شماره تلفن هایی که جهت دریافت تماس و یا پیام مسدود شده اند.</string>
   <string name="permlab_changePhoneBlacklist">تغییر لیست سیاه تلفن</string>
   <string name="permdesc_changePhoneBlacklist">به برنامه اجازه تغییر شماره تلفن هایی را که برای دریافت تماس و یا پیام مسدود شده اند را می دهند.</string>
-  <string name="permlab_changePrivacyGuardState">فعال یا غیرفعال کردن نگهبان حریم خصوصی</string>
+  <string name="permlab_changePrivacyGuardState">فعال یا غیرفعال کردن محافظ حریم خصوصی</string>
   <string name="permdesc_changePrivacyGuardState">اجازه تغییر در برنامه را می دهد در حالی که دیگر برنامه ها نیز این مجوز را با رعایت اصول حریم شخصی دارند اما نمی توانند به اطلاعات شخصی کاربر دسترسی داشته باشند.</string>
-  <string name="privacy_guard_notification">نگهبان حریم خصوصی فعال است</string>
+  <string name="privacy_guard_notification">محافظ حریم خصوصی فعال است</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> قادر به دسترسی به اصلاعات شخصی نخواهد بود</string>
   <string name="permlab_useHardwareFramework">استفاده از فریم ورک سخت افزار</string>
   <string name="permdesc_useHardwareFramework">مجوز برنامه برای دسترسی به فریم ورک سخت افزار CM.</string>
   <string name="permlab_setKeyguardWallpaper">تنظیم کاغذدیواری قفل کیبورد</string>
   <string name="permdesc_setKeyguardWallpaper">مجوز نرم افزار برای تغییر تصویر پس زمینه قفل صفحه.</string>
-  <string name="privacy_guard_dialog_title">نگهبان حریم خصوصی</string>
+  <string name="privacy_guard_dialog_title">محافظ حریم خصوصی</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app"> %1$s </xliff:g> می خواهد <xliff:g id="op"> %2$s </xliff:g> انجام دهد.</string>
   <string name="global_action_reboot">راه اندازی مجدد</string>
   <string name="global_action_current_user">فعلی</string>
@@ -81,7 +81,7 @@
   <string name="app_ops_access_location">دسترسی به موقعیت مکانی شما</string>
   <string name="app_ops_access_notifications">مشاهده اعلانات شما</string>
   <string name="app_ops_activate_vpn">فعال کردن یک وی‌پی‌ان</string>
-  <string name="app_ops_alarm_wakeup">بیدارباش دستگاه</string>
+  <string name="app_ops_alarm_wakeup">بیدار کردن دستگاه</string>
   <string name="app_ops_su">دسترسی روت</string>
   <string name="app_ops_auto_start">شروع هنگام روشن شدن</string>
   <string name="app_ops_delete_call_log">گزارش تماس خود را حذف کنید</string>
@@ -94,7 +94,7 @@
   <string name="app_ops_make_phone_call">یک تماس برقرار کنید</string>
   <string name="app_ops_modify_calendar">تقویم خود را به روز رسانی کنید</string>
   <string name="app_ops_modify_call_log">گزارش تماس را به روزرسانی کنید</string>
-  <string name="app_ops_modify_clipboard">ویرایش کلیپ‌برد</string>
+  <string name="app_ops_modify_clipboard">ویرایش کلیپ برد</string>
   <string name="app_ops_modify_contacts">به روزرسانی مخاطبین</string>
   <string name="app_ops_modify_settings">به روزرسانی تنظیمات سیستم</string>
   <string name="app_ops_mute_unmute_microphone">قطع/عدم قطع صدای میکروفون</string>
@@ -112,7 +112,7 @@
   <string name="app_ops_send_mms">ارسال پیام چند رسانه ای</string>
   <string name="app_ops_send_sms">ارسال پیامک</string>
   <string name="app_ops_start_at_bootup">شروع هنگام روشن شدن</string>
-  <string name="app_ops_toast_window">نمایش پیام های کوچک</string>
+  <string name="app_ops_toast_window">نمایش متن‌های کوچک</string>
   <string name="app_ops_toggle_bluetooth">سوئیچ بلوتوث</string>
   <string name="app_ops_toggle_mobile_data">سوئیچ داده همراه</string>
   <string name="app_ops_toggle_nfc">سوئیچ ان‌اف‌سی</string>
@@ -124,7 +124,7 @@
   <string name="app_ops_use_media_buttons">استفاده از کلیدهای رسانه</string>
   <string name="app_ops_use_media_volume">کنترل صدای رسانه</string>
   <string name="app_ops_use_notification_volume">کنترل صدای اعلان</string>
-  <string name="app_ops_use_ring_volume">کنترل صدای زنگ</string>
+  <string name="app_ops_use_ring_volume">کنترل میزان صدای زنگ</string>
   <string name="app_ops_use_vibrate">استفاده از بازخورد لمسی</string>
   <string name="app_ops_use_voice_volume">کنترل صدای تماس صوتی</string>
   <string name="app_ops_write_mms">نوشتن پیام چند رسانه ای</string>
@@ -147,7 +147,7 @@
   <string name="China_Unicom">چاینا یونیکام</string>
   <string name="China_Telecom">چاینا تله کام</string>
   <string name="permission_remember_choice">انتخاب من را به یاد داشته باشید</string>
-  <string name="perf_profile_pwrsv">ذخیره انرژی</string>
+  <string name="perf_profile_pwrsv">ذخیره نیرو</string>
   <string name="perf_profile_bal">متعادل</string>
   <string name="perf_profile_perf">کارایی</string>
   <string name="theme_install_error_title">موفق به نصب زمینه نشد</string>
@@ -156,7 +156,7 @@
         <xliff:g id="number" example="123">%1$d</xliff:g> از
         <xliff:g id="number" example="123">%2$d </xliff:g>.</string>
   <string name="android_installing_title">اندروید در حال نصب است\u2026</string>
-  <string name="theme_reset_notification_title">تنظیم مجدد زمینه</string>
+  <string name="theme_reset_notification_title">تنظیم مجدد تم</string>
   <string name="theme_reset_notification_body">به دلیل از کار افتادن چند برنامه زمینه اصلی بازگردانی شد.</string>
   <string name="stylus_app_not_installed">%s نصب نشده است</string>
   <string name="permlab_interceptSmsSent">رهگیری پیامک های ارسالی</string>
@@ -215,7 +215,7 @@
   <string name="live_display_night_summary">فقط استفاده از تنظیمات شب</string>
   <string name="live_display_outdoor">فضای باز (خورشید درخشان)</string>
   <string name="live_display_outdoor_summary">فقط استفاده از تنظیمات فضای باز</string>
-  <string name="live_display_hint">LiveDisplay به کاهش خستگی چشم کمک می‌کند و به شما کمک می‌کند در شب استراحت کنید. برای امتحان آن اینجا کلیک کنید!</string>
+  <string name="live_display_hint">نمایش پویا کمک می‌کند چشم‌هایتان کم‌تر خسته شده و شب راحت‌تر به خواب بروید. برای امتحان آن اینجا کلیک کنید!</string>
   <string name="lock_to_app_toast_no_navbar">برای لغو درج این صفحه، دکمه منو را لمس کنید و نگه دارید.</string>
   <string name="lock_to_app_description_no_navbar">درج صفحه باعث قفل شدن صفحه به صورت تک‌نمایشی می‌شود.\n\nبرای لغو درج، دکمه منو را لمس کنید و نگه دارید.</string>
 </resources>
