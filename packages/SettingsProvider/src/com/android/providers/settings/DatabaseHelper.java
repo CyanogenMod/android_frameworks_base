@@ -2553,6 +2553,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
                     R.integer.def_notification_brightness_level);
 
+            loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                    R.bool.def_notification_multiple_leds);
+
             loadBooleanSetting(stmt, Settings.System.SYSTEM_PROFILES_ENABLED,
                     R.bool.def_system_profiles_enabled);
 
