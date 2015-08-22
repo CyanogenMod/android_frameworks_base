@@ -2829,6 +2829,13 @@ public final class Settings {
                 "notification_light_brightness_level";
 
         /**
+         * Whether to use the all the LEDs for the notifications or just one.
+         * @hide
+         */
+        public static final String NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE =
+                "notification_light_multiple_leds_enable";
+
+        /**
          * Whether to allow notifications with the screen on or DayDreams.
          * The value is boolean (1 or 0). Default will always be false.
          * @hide
@@ -3647,6 +3654,7 @@ public final class Settings {
             NONE_IS_SILENT,
             ALLOW_LIGHTS,
             NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+            NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
             NOTIFICATION_LIGHT_SCREEN_ON
         };
 
