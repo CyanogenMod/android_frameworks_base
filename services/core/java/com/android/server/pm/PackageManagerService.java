@@ -9499,6 +9499,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     public void installPackage(String originPath, IPackageInstallObserver2 observer,
             int installFlags, String installerPackageName, VerificationParams verificationParams,
             String packageAbiOverride) {
+        android.util.SeempLog.record(113);
         installPackageAsUser(originPath, observer, installFlags, installerPackageName,
                 verificationParams, packageAbiOverride, UserHandle.getCallingUserId());
     }

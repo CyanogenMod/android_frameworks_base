@@ -517,6 +517,7 @@ public abstract class SensorManager {
      */
     @Deprecated
     public boolean registerListener(SensorListener listener, int sensors) {
+        android.util.SeempLog.record(107);
         return registerListener(listener, sensors, SENSOR_DELAY_NORMAL);
     }
 
@@ -545,6 +546,7 @@ public abstract class SensorManager {
      */
     @Deprecated
     public boolean registerListener(SensorListener listener, int sensors, int rate) {
+        android.util.SeempLog.record(107);
         return getLegacySensorManager().registerListener(listener, sensors, rate);
     }
 
@@ -682,6 +684,7 @@ public abstract class SensorManager {
      */
     public boolean registerListener(SensorEventListener listener, Sensor sensor,
             int samplingPeriodUs) {
+        android.util.SeempLog.record(107);
         return registerListener(listener, sensor, samplingPeriodUs, null);
     }
 
@@ -739,6 +742,7 @@ public abstract class SensorManager {
      */
     public boolean registerListener(SensorEventListener listener, Sensor sensor,
             int samplingPeriodUs, int maxReportLatencyUs) {
+        android.util.SeempLog.record(107);
         int delay = getDelay(samplingPeriodUs);
         return registerListenerImpl(listener, sensor, delay, null, maxReportLatencyUs, 0);
     }
@@ -774,6 +778,7 @@ public abstract class SensorManager {
      */
     public boolean registerListener(SensorEventListener listener, Sensor sensor,
             int samplingPeriodUs, Handler handler) {
+        android.util.SeempLog.record(107);
         int delay = getDelay(samplingPeriodUs);
         return registerListenerImpl(listener, sensor, delay, handler, 0, 0);
     }
@@ -805,6 +810,7 @@ public abstract class SensorManager {
      */
     public boolean registerListener(SensorEventListener listener, Sensor sensor, int samplingPeriodUs,
             int maxReportLatencyUs, Handler handler) {
+        android.util.SeempLog.record(107);
         int delayUs = getDelay(samplingPeriodUs);
         return registerListenerImpl(listener, sensor, delayUs, handler, maxReportLatencyUs, 0);
     }

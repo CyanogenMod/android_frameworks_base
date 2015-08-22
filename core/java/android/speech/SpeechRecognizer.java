@@ -260,6 +260,7 @@ public class SpeechRecognizer {
      *        not set explicitly, default values will be used by the recognizer.
      */
     public void startListening(final Intent recognizerIntent) {
+        android.util.SeempLog.record(91);
         if (recognizerIntent == null) {
             throw new IllegalArgumentException("intent must not be null");
         }

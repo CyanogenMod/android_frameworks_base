@@ -538,6 +538,7 @@ public final class BluetoothAdapter {
      * @throws IllegalArgumentException if address is invalid
      */
     public BluetoothDevice getRemoteDevice(String address) {
+        android.util.SeempLog.record(79);
         return new BluetoothDevice(address);
     }
 
@@ -553,6 +554,7 @@ public final class BluetoothAdapter {
      * @throws IllegalArgumentException if address is invalid
      */
     public BluetoothDevice getRemoteDevice(byte[] address) {
+        android.util.SeempLog.record(79);
         if (address == null || address.length != 6) {
             throw new IllegalArgumentException("Bluetooth address must have 6 bytes");
         }
@@ -784,6 +786,7 @@ public final class BluetoothAdapter {
     @RequiresPermission(Manifest.permission.BLUETOOTH)
     @AdapterState
     public int getState() {
+        android.util.SeempLog.record(80);
         try {
             synchronized(mManagerCallback) {
                 if (mService != null)
@@ -880,6 +883,7 @@ public final class BluetoothAdapter {
      */
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADMIN)
     public boolean enable() {
+        android.util.SeempLog.record(73);
         int state = STATE_OFF;
         if (isEnabled() == true){
             if (DBG) Log.d(TAG, "enable(): BT is already enabled..!");
@@ -929,6 +933,7 @@ public final class BluetoothAdapter {
      */
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADMIN)
     public boolean disable() {
+        android.util.SeempLog.record(74);
         try {
             return mManagerService.disable(true);
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -946,6 +951,7 @@ public final class BluetoothAdapter {
      * @hide
      */
     public boolean disable(boolean persist) {
+        android.util.SeempLog.record(74);
 
         try {
             return mManagerService.disable(persist);
@@ -1190,6 +1196,7 @@ public final class BluetoothAdapter {
      */
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADMIN)
     public boolean startDiscovery() {
+        android.util.SeempLog.record(75);
         if (getState() != STATE_ON) return false;
         try {
             synchronized(mManagerCallback) {
@@ -1408,6 +1415,7 @@ public final class BluetoothAdapter {
      */
     @RequiresPermission(Manifest.permission.BLUETOOTH)
     public Set<BluetoothDevice> getBondedDevices() {
+        android.util.SeempLog.record(78);
         if (getState() != STATE_ON) {
             return toDeviceSet(new BluetoothDevice[0]);
         }
@@ -1460,6 +1468,7 @@ public final class BluetoothAdapter {
      */
     @RequiresPermission(Manifest.permission.BLUETOOTH)
     public int getProfileConnectionState(int profile) {
+        android.util.SeempLog.record(81);
         if (getState() != STATE_ON) return BluetoothProfile.STATE_DISCONNECTED;
         try {
             synchronized(mManagerCallback) {
@@ -1582,6 +1591,7 @@ public final class BluetoothAdapter {
     @RequiresPermission(Manifest.permission.BLUETOOTH)
     public BluetoothServerSocket listenUsingInsecureRfcommWithServiceRecord(String name, UUID uuid)
             throws IOException {
+        android.util.SeempLog.record(76);
         return createNewRfcommSocketAndRecord(name, uuid, false, false);
     }
 
