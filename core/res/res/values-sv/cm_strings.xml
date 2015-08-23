@@ -189,7 +189,7 @@ modifiera det tema som du har tillämpat.</string>
   <string name="sd_progress_erasing">Rensar SD-kortet\u2026</string>
   <string name="sd_format_error">Kunde inte rensa SD-kortet.</string>
   <string name="sd_media_bad_removal">SD-kortet togs bort innan det avmonterades.</string>
-  <string name="sd_media_checking">SD-kortet konrolleras för närvarande.</string>
+  <string name="sd_media_checking">SD-kortet kontrolleras för närvarande.</string>
   <string name="sd_media_removed">SD-kortet har tagits bort.</string>
   <string name="sd_media_shared">SD-kortet används för närvarande av en dator.</string>
   <string name="usb_progress_unmounting">Avmonterar USB-lagringen\u2026</string>

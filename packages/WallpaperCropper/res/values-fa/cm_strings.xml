@@ -24,6 +24,7 @@
   <string name="wallpaper_delete">حذف</string>
   <string name="pick_image">انتخاب تصویر</string>
   <string name="pick_wallpaper">کاغذدیواری‌ها</string>
+  <string name="activity_not_found">برنامه نصب نشده است.</string>
   <string name="lockscreen_wallpaper_instructions">تنظیم کاغذدیواری قفل صفحه</string>
   <string name="image_decode_error">عدم امکان رمزگشایی تصویر</string>
 </resources>

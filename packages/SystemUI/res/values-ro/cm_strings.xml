@@ -25,7 +25,7 @@
   <string name="quick_settings_ringer_normal">Sunet</string>
   <string name="quick_settings_lockscreen">Ecran de blocare</string>
   <string name="quick_settings_network_type">Mod de rețea</string>
-  <string name="quick_settings_report_bug">Raportare bug</string>
+  <string name="quick_settings_report_bug">Raport de eroare</string>
   <string name="quick_settings_sync">Sincronizare</string>
   <string name="quick_settings_sync_off">Sincronizare oprită</string>
   <string name="quick_settings_torch">Lanternă</string>
@@ -73,12 +73,12 @@
   <string name="navbar_menu_big_button">Buton Meniu</string>
   <string name="advanced_dev_option_wipe_app">Șterge datele aplicației</string>
   <string name="advanced_dev_option_force_stop">Oprire forțată</string>
-  <string name="advanced_dev_option_uninstall">Dezinstalaţi</string>
+  <string name="advanced_dev_option_uninstall">Dezinstalați</string>
   <string name="accessibility_dock_battery_level">Andocare procent <xliff:g id="number">%d</xliff:g> baterie.</string>
   <string name="screenshot_delete_action">Șterge</string>
   <string name="screenshot_delete_confirmation">Captură ecran ștearsă.</string>
   <string name="accessibility_desc_add_quick_settings">Adăugare scurtături.</string>
   <string name="status_bar_notification_spam_item_title">Ignoră mesajele de acest gen</string>
   <string name="protected_app_notification_title">Notificare aplicații protejate</string>
-  <string name="protected_app_notification_summary">Atingeţi pentru a deschide notificarea aplicației protejate</string>
+  <string name="protected_app_notification_summary">Atingeți pentru a deschide notificarea aplicației protejate</string>
 </resources>
