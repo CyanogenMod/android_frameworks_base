@@ -26,4 +26,5 @@
   <string name="pick_wallpaper">Wallpaper</string>
   <string name="activity_not_found">App tidak diinstal.</string>
   <string name="lockscreen_wallpaper_instructions">Set wallpaper layar kunci</string>
+  <string name="image_decode_error">Tidak dapat mengolah gambar</string>
 </resources>

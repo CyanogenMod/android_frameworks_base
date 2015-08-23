@@ -31,4 +31,5 @@
   <string name="pick_wallpaper">خلفيات</string>
   <string name="activity_not_found">لم يتم تثبيت التطبيق.</string>
   <string name="lockscreen_wallpaper_instructions">جعل الخلفية شاشة القفل</string>
+  <string name="image_decode_error">غير قادر على فك ترميز الصورة</string>
 </resources>

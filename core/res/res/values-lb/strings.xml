@@ -567,8 +567,8 @@
   <string name="permdesc_devicePower" product="tablet">Erlaabt der App, den Tablet un- an auszeschalten.</string>
   <string name="permdesc_devicePower" product="default">Erlaabt der App, den Telefon un- an auszeschalten.</string>
   <string name="permlab_factoryTest">Am Wierkstestmodus ausféieren</string>
-  <string name="permdesc_factoryTest" product="tablet">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Tablethardware zougegraff ka ginn. Nëmmen disponibel, wann den Tablet am Hierstellertestmodus leeft.</string>
-  <string name="permdesc_factoryTest" product="default">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Telefonshardware zougegraff ka ginn. Nëmmen disponibel, wann den Telefon am Hierstellertestmodus leeft.</string>
+  <string name="permdesc_factoryTest" product="tablet">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Tablethardware zougegraff ka ginn. Just disponibel, wann den Tablet am Hierstellertestmodus leeft.</string>
+  <string name="permdesc_factoryTest" product="default">Féiert e systemnoen Hierstellertest duerch, bei deem op déi gesamten Telefonshardware zougegraff ka ginn. Just disponibel, wann den Telefon am Hierstellertestmodus leeft.</string>
   <string name="permlab_setWallpaper">Hannergrondbild setzen</string>
   <string name="permdesc_setWallpaper">Erlaabt der App, d\'Hannergrondbild vum System ze setzen.</string>
   <string name="permlab_setWallpaperHints">Gréisst vum Hannergrondbild ajustéieren</string>
@@ -1358,10 +1358,10 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="back_button_label">Zréck</string>
   <string name="next_button_label">Weider</string>
   <string name="skip_button_label">Iwwersprangen</string>
-  <string name="throttle_warning_notification_title">Héije mobilen Dateverbrauch</string>
-  <string name="throttle_warning_notification_message">Dréck fir méi iwwer de mobilen Dateverbrauch gewuer ze ginn.</string>
+  <string name="throttle_warning_notification_title">Héije mobillen Dateverbrauch</string>
+  <string name="throttle_warning_notification_message">Dréck fir méi iwwer de mobillen Dateverbrauch gewuer ze ginn.</string>
   <string name="throttled_notification_title">Mobil-Datelimit iwwerschratt</string>
-  <string name="throttled_notification_message">Dréck fir méi iwwer de mobilen Dateverbrauch gewuer ze ginn.</string>
+  <string name="throttled_notification_message">Dréck fir méi iwwer de mobillen Dateverbrauch gewuer ze ginn.</string>
   <string name="no_matches">Keng Treffer</string>
   <string name="find_on_page">Op der Säit fannen</string>
   <plurals name="matches_found">

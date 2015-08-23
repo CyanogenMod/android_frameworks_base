@@ -16,10 +16,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_name">قفل صفحه</string>
-  <string name="keyguard_discharging">شارژدهی، <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
-  <string name="keyguard_password_wrong_puk_code">کد PUK اشتباه است.</string>
-  <string name="keyguard_password_pin_failed">عملیات پین ناموفق بود.</string>
-  <string name="keyguard_password_puk_failed">عملیات PUK ناموفق بود.</string>
-  <string name="keyguard_accessibility_application_widget">آخرین برنامه مورد استفاده</string>
+  <plurals name="tethered_clients_connected">
+    <item quantity="one">%d klijent je povezan.</item>
+    <item quantity="few">%d klijenta su povezana.</item>
+    <item quantity="other">%d klijenata je povezano.</item>
+  </plurals>
 </resources>
