@@ -72,7 +72,7 @@
   <string name="permlab_modifyProtectedSmsList">보안 SMS 목록 수정</string>
   <string name="permdesc_modifyProtectedSmsList">앱이 보안 SMS 주소 목록을 수정할 수 있도록 허용합니다.</string>
   <string name="permlab_resetBatteryStats">배터리 통계 재설정</string>
-  <string name="permdesc_resetBatteryStats">앱이 현재의 로우레벨 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
+  <string name="permdesc_resetBatteryStats">앱이 현재의 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
   <string name="permgrouplab_security">보안</string>
   <string name="permgroupdesc_security">장치의 보안 정보에 관련된 권한입니다.</string>
   <string name="permlab_readPhoneBlacklist">전화 블랙리스트 읽기</string>

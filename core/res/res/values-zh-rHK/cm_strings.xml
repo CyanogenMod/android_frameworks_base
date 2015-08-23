@@ -182,14 +182,12 @@
   <string name="theme_install_error_title">安裝主題失敗</string>
   <string name="theme_install_error_message">%s 安裝失敗</string>
   <string name="storage_uicc">UICC 儲存</string>
-  <string name="sd_progress_unmounting">卸載 SD 卡\u2026</string>
   <string name="sd_progress_erasing">清除 SD card\u2026</string>
   <string name="sd_format_error">無法清除 SD 卡。</string>
   <string name="sd_media_bad_removal">SD 卡在卸載之前已被移除。</string>
   <string name="sd_media_checking">目前正在檢查 SD 卡。</string>
   <string name="sd_media_removed">SD 卡已移除。</string>
   <string name="sd_media_shared">SD 卡目前正被電腦使用。</string>
-  <string name="usb_progress_unmounting">卸載 USB 儲存裝置\u2026</string>
   <string name="usb_progress_erasing">清除 USB 儲存裝置\u2026</string>
   <string name="usb_format_error">無法清除 USB 儲存裝置。</string>
   <string name="usb_media_bad_removal">USB 儲存裝置在卸載之前已被移除。</string>

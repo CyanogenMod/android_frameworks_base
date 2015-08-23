@@ -26,7 +26,7 @@
   <string name="profileGroupPhone">Telefonoa</string>
   <string name="profileGroupCalendar">Egutegia</string>
   <string name="profileGroupGmail">Gmail</string>
-  <string name="profileGroupEmail">Posta</string>
+  <string name="profileGroupEmail">Eposta</string>
   <string name="profileGroupSMS">SMS</string>
   <string name="wildcardProfile">Besteak</string>
   <string name="global_action_screenshot">Pantaila-argazkia</string>
