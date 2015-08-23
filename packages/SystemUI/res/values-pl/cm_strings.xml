@@ -46,6 +46,16 @@
   <string name="accessibility_quick_settings_heads_up_changed_on">Wyskakujące powiadomienia zostały włączone.</string>
   <string name="accessibility_quick_settings_hotspot_off">Hotspot mobilny wyłączony.</string>
   <string name="accessibility_quick_settings_hotspot_on">Hotspot mobilny włączony.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay wyłączony.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: tryb automatyczny.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: tryb dzienny.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: tryb nocny.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: tryb zewnętrzny.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay wyłączony.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay zmieniony na tryb automatyczny.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay zmieniony na tryb dzienny.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay zmieniony na tryb nocny.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay zmieniony na tryb zewnętrzny.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Raportowanie lokalizacji: tryb oszczędzania baterii.</string>
   <string name="accessibility_quick_settings_location_gps_only">Raportowanie lokalizacji: tylko czujniki.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Raportowanie lokalizacji: wysoka dokładność.</string>

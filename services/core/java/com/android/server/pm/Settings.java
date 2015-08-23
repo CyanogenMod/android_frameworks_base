@@ -2490,6 +2490,11 @@ final class Settings {
             for (int i=0; i<ri.size(); i++) {
                 ActivityInfo ai = ri.get(i).activityInfo;
                 set[i] = new ComponentName(ai.packageName, ai.name);
+                // We have already discovered the best third party match,
+                // so we only need to finish filling set with all results.
+                if (haveNonSys != null) {
+                    continue;
+                }
                 if ((ai.applicationInfo.flags&ApplicationInfo.FLAG_SYSTEM) == 0) {
                     if (ri.get(i).match >= thirdPartyMatch) {
                         // Keep track of the best match we find of all third
@@ -2498,7 +2503,6 @@ final class Settings {
                         if (PackageManagerService.DEBUG_PREFERRED) Log.d(TAG, "Result "
                                 + ai.packageName + "/" + ai.name + ": non-system!");
                         haveNonSys = set[i];
-                        break;
                     }
                 } else if (cn.getPackageName().equals(ai.packageName)
                         && cn.getClassName().equals(ai.name)) {

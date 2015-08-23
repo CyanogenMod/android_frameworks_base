@@ -1957,6 +1957,12 @@ final class ActivityStack {
             ActivityStack lastStack = mStackSupervisor.getLastStack();
             final boolean fromHome = lastStack.isHomeStack();
             if (!isHomeStack() && (fromHome || topTask() != task)) {
+                if( !fromHome && task.isOverHomeStack()) {
+                    int taskNdx = mTaskHistory.indexOf(task);
+                    if ((taskNdx + 1) < mTaskHistory.size()) {
+                        mTaskHistory.get(taskNdx +1).setTaskToReturnTo(task.getTaskToReturnTo());
+                    }
+                }
                 task.setTaskToReturnTo(fromHome
                         ? lastStack.topTask() == null
                                 ? HOME_ACTIVITY_TYPE

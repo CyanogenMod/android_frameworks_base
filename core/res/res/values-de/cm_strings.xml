@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">Ermöglicht der App, auf den Fingerabdruck-Dienst zuzugreifen. Die App kann Fingerabdrücke hinzufügen, löschen, ändern und verifizieren</string>
   <string name="permlab_resetBatteryStats">Akku-Verlaufsdetails zurücksetzen</string>
   <string name="permdesc_resetBatteryStats">Ermöglicht der App, die Akku-Verlaufsdetails zurückzusetzen.</string>
+  <string name="silent_mode_priority">Wichtig</string>
+  <string name="silent_mode_none">Keine</string>
 </resources>

@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">Root приступ</string>
   <string name="fingerprint_try_again_hint">Молим скенирај поново</string>
   <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Нема пронађених ставки</string>
 </resources>

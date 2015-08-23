@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">이 앱이 지문 서비스를 사용할 수 있도록 허용합니다. 이 앱은 지문을 추가, 삭제, 이름 변경, 인증할 수 있습니다</string>
   <string name="permlab_resetBatteryStats">배터리 통계 재설정</string>
   <string name="permdesc_resetBatteryStats">앱이 현재의 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
+  <string name="silent_mode_priority">우선순위</string>
+  <string name="silent_mode_none">없음</string>
 </resources>

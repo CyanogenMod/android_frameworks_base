@@ -209,4 +209,6 @@
   <string name="permdesc_accessFingerprintService">Дозволяє додатку отримувати доступ до служби відбитків пальців. Додаток зможе додавати, видаляти, перейменовувати збережені відбитки та використовувати їх для автентифікації</string>
   <string name="permlab_resetBatteryStats">скинути статистику акумулятора</string>
   <string name="permdesc_resetBatteryStats">Дозволити програмі скидати дані про використання акумулятора.</string>
+  <string name="silent_mode_priority">Пріоритет</string>
+  <string name="silent_mode_none">Немає</string>
 </resources>
