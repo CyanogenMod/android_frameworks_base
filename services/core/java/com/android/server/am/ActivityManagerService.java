@@ -17064,6 +17064,10 @@ public final class ActivityManagerService extends ActivityManagerNative
                         null, AppOpsManager.OP_NONE, false, false, MY_PID,
                         Process.SYSTEM_UID, UserHandle.USER_ALL);
                 if ((changes&ActivityInfo.CONFIG_LOCALE) != 0) {
+                    // if locale changed, time format may have changed
+                    final int is24Hour = android.text.format.DateFormat.is24HourFormat(mContext) ? 1 : 0;
+                    mHandler.sendMessage(mHandler.obtainMessage(UPDATE_TIME, is24Hour, 0));
+                    // now send general broadcast
                     intent = new Intent(Intent.ACTION_LOCALE_CHANGED);
                     intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                     broadcastIntentLocked(null, null, intent,
