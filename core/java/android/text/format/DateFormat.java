@@ -179,12 +179,23 @@ public class DateFormat {
      * @hide
      */
     public static boolean is24HourFormat(Context context, int userHandle) {
-        String value = Settings.System.getStringForUser(context.getContentResolver(),
+        String setting = Settings.System.getStringForUser(context.getContentResolver(),
                 Settings.System.TIME_12_24, userHandle);
+        Locale locale = context.getResources().getConfiguration().locale;
+        return is24HourFormat(setting, locale);
+    }
 
-        if (value == null) {
-            Locale locale = context.getResources().getConfiguration().locale;
-
+    /**
+     * Returns true if user preference with the given user handle is set to 24-hour format.
+     * @param setting value of the TIME_12_24 system setting, which may be null
+     * @param locale current default locale for this device
+     * @param userHandle the user handle of the user to query.
+     * @return true if 24 hour time format is selected, false otherwise.
+     *
+     * @hide
+     */
+    public static boolean is24HourFormat(String setting, Locale locale) {
+        if (setting == null) {
             synchronized (sLocaleLock) {
                 if (sIs24HourLocale != null && sIs24HourLocale.equals(locale)) {
                     return sIs24Hour;
@@ -199,23 +210,23 @@ public class DateFormat {
                 String pattern = sdf.toPattern();
 
                 if (pattern.indexOf('H') >= 0) {
-                    value = "24";
+                    setting = "24";
                 } else {
-                    value = "12";
+                    setting = "12";
                 }
             } else {
-                value = "12";
+                setting = "12";
             }
 
             synchronized (sLocaleLock) {
                 sIs24HourLocale = locale;
-                sIs24Hour = value.equals("24");
+                sIs24Hour = setting.equals("24");
             }
 
             return sIs24Hour;
         }
 
-        return value.equals("24");
+        return setting.equals("24");
     }
 
     /**
