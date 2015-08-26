@@ -136,6 +136,7 @@ public interface IActivityManager extends IInterface {
             ActivityManager.TaskDescription description, Bitmap thumbnail) throws RemoteException;
     public Point getAppTaskThumbnailSize() throws RemoteException;
     public List<RunningTaskInfo> getTasks(int maxNum, int flags) throws RemoteException;
+    public boolean isPackageInForeground(String packageName) throws RemoteException;
     public ParceledListSlice<ActivityManager.RecentTaskInfo> getRecentTasks(int maxNum,
             int flags, int userId) throws RemoteException;
     public ActivityManager.TaskThumbnail getTaskThumbnail(int taskId) throws RemoteException;
@@ -1043,4 +1044,5 @@ public interface IActivityManager extends IInterface {
     int START_CONFIRM_DEVICE_CREDENTIAL_INTENT = IBinder.FIRST_CALL_TRANSACTION + 374;
     int SEND_IDLE_JOB_TRIGGER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 375;
     int SEND_INTENT_SENDER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 376;
+    int IS_PACKAGE_IN_FOREGROUND_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION + 377;
 }
