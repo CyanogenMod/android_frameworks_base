@@ -70,6 +70,8 @@ public class LockSettingsService extends ILockSettings.Stub {
 
     private static final String TAG = "LockSettingsService";
 
+    private static final String DEFAULT_PASSWORD = "default_password";
+
     private final Context mContext;
 
     private final LockSettingsStorage mStorage;
@@ -77,9 +79,7 @@ public class LockSettingsService extends ILockSettings.Stub {
     private LockPatternUtils mLockPatternUtils;
     private boolean mFirstCallToVold;
     private IGateKeeperService mGateKeeperService;
-    private static String mSavePassword = "default_password";
-    private static final long CLEAR_PASSWORD_INTERVAL = 60 * 1000; // 1m
-    protected Timer mClearPasswordTimer;
+    private static String mSavePassword = DEFAULT_PASSWORD;
 
     private interface CredentialUtil {
         void setCredential(String credential, String savedCredential, int userId)
@@ -367,14 +367,18 @@ public class LockSettingsService extends ILockSettings.Stub {
     }
 
     public void retainPassword(String password) {
-        mSavePassword = password;
-        mClearPasswordTimer = new Timer();
-        mClearPasswordTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mSavePassword = "default_password";
-            }
-        }, CLEAR_PASSWORD_INTERVAL);
+        if (LockPatternUtils.isDeviceEncryptionEnabled()) {
+            if (password != null)
+                mSavePassword = password;
+            else
+                mSavePassword = DEFAULT_PASSWORD;
+        }
+    }
+
+    public void sanitizePassword() {
+        if (LockPatternUtils.isDeviceEncryptionEnabled()) {
+            mSavePassword = DEFAULT_PASSWORD;
+        }
     }
 
     public String getPassword() {
