@@ -168,6 +168,42 @@ public final class GpsStatus {
     }
 
     /**
+     * Used internally within {@link LocationManager} to copy GPS status
+     * data from the Location Manager Service to its cached GpsStatus instance.
+     * Is synchronized to ensure that GPS status updates are atomic.
+     *
+     * This is modified to become aware of explicit GNSS support of &gt;32
+     * satellites.
+     */
+    synchronized void setStatusFromGnss(int gnssSvCount, int[] prns, float[] snrs,
+            float[] elevations, float[] azimuths,
+            boolean[] ephemerisPresences,
+            boolean[] almanacPresences,
+            boolean[] usedInFix) {
+        int i;
+
+        for (i = 0; i < mSatellites.length; i++) {
+            mSatellites[i].mValid = false;
+        }
+
+        for (i = 0; i < gnssSvCount; i++) {
+            int prn = prns[i] - 1;
+
+            if (prn >= 0 && prn < mSatellites.length) {
+                GpsSatellite satellite = mSatellites[prn];
+
+                satellite.mValid = true;
+                satellite.mSnr = snrs[i];
+                satellite.mElevation = elevations[i];
+                satellite.mAzimuth = azimuths[i];
+                satellite.mHasEphemeris = ephemerisPresences[i];
+                satellite.mHasAlmanac = almanacPresences[i];
+                satellite.mUsedInFix = usedInFix[i];
+            }
+        }
+    }
+
+    /**
      * Used by {@link LocationManager#getGpsStatus} to copy LocationManager's
      * cached GpsStatus instance to the client's copy.
      * Since this method is only used within {@link LocationManager#getGpsStatus},
