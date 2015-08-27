@@ -19,7 +19,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">امکان شخصی‌سازی SIM/RUIM وجود ندارد</string>
   <string name="keyguard_accessibility_status">"وضعیت"</string>
-  <string name="kg_dismiss">رد کردن</string>
+  <string name="kg_dismiss">رد می‌شود</string>
   <string name="kg_slot_name">اسلات: <xliff:g id="number">%d </xliff:g> سیم کارت جدید\u0020</string>
   <string name="lockscreen_sim_error_message_short">کارت نامعتبر.</string>
   <plurals name="kg_password_default_pin_message">

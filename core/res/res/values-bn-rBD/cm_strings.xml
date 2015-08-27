@@ -40,6 +40,8 @@
   <string name="permdesc_changePrivacyGuardState">অ্যাপটি কে অন্য অ্যাপ পরিবর্তন করার অনুমতি দিন যা গোপনীয়তা রক্ষাকারী সঙ্গে চলমান। যখন একটি অ্যাপ গোপনীয়তা রক্ষাকারী সঙ্গে চলমান থাকে তখন এটি ব্যক্তিগত তথ্য ব্যাবহার করতে পারবে না, যেমন যোগাযোগ, কল লগ, বা বার্তা।</string>
   <string name="privacy_guard_notification">গোপনীয়তা রক্ষাকারী সক্রিয়</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ব্যাক্তিগত তথ্য ব্যাবহার করতে পারবেন না</string>
+  <string name="permlab_useHardwareFramework">হার্ডওয়্যার ফ্রেমওয়ার্ক ব্যবহার করুন</string>
+  <string name="permdesc_useHardwareFramework">একটি অ্যাপকে সিএম হার্ডওয়্যার ফ্রেমওয়ার্ক ব্যাবহারের অনুমতি দিন।</string>
   <string name="permlab_setKeyguardWallpaper">কীগার্ড ওয়ালপেপার নির্ধারণ</string>
   <string name="permdesc_setKeyguardWallpaper">অ্যাপটিকে লক স্ক্রীন ওয়ালপেপার পরিবর্তনের অনুমতি দিন।</string>
   <string name="privacy_guard_dialog_title">গোপনীয়তা রক্ষাকারী</string>

@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Sallii sovelluksen valita, milloin muut sovellukset käyttävät yksityisyyden suojausta. Kun sovellus käyttää yksityisyyden suojausta, sillä ei ole pääsyä henkilökohtaisiin tietoihin kuten yhteystietoihin, puhelulokeihin tai viesteihin.</string>
   <string name="privacy_guard_notification">Yksityisyyden suojaus käytössä</string>
   <string name="privacy_guard_notification_detail">Sovelluksella <xliff:g id="app">%1$s</xliff:g> ei ole pääsyä henkilökohtaisiin tietoihin</string>
+  <string name="permlab_useHardwareFramework">käytä laitteiston kehystä</string>
+  <string name="permdesc_useHardwareFramework">Sallii sovelluksen pääsyn CM-laitteiston kehykseen.</string>
   <string name="permlab_setKeyguardWallpaper">aseta näppäinlukon taustakuva</string>
   <string name="permdesc_setKeyguardWallpaper">Sallii sovelluksen vaihtaa lukitusnäytön taustakuva.</string>
   <string name="privacy_guard_dialog_title">Yksityisyyden suojaus</string>

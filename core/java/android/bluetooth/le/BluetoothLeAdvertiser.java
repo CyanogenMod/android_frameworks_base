@@ -310,7 +310,7 @@ public final class BluetoothLeAdvertiser {
         public void onClientRegistered(int status, int clientIf) {
             Log.d(TAG, "onClientRegistered() - status=" + status + " clientIf=" + clientIf);
             synchronized (this) {
-                if (status == BluetoothGatt.GATT_SUCCESS) {
+                if (status == BluetoothGatt.GATT_SUCCESS && mBluetoothAdapter.isEnabled()) {
                     mClientIf = clientIf;
                     try {
                         mBluetoothGatt.startMultiAdvertising(mClientIf, mAdvertisement,

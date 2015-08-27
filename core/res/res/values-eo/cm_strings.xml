@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Permesas al la aplikaĵo ŝanĝi ĉu alia aplikaĵo funkcias kun protektado de datumoj. Kiam aplikaĵo funkcias kun protektado de datumoj, ĝi ne rajtos aliri al personaj datumoj kiel kontaktuloj, protokoloj de alvokoj, aŭ mesaĝoj.</string>
   <string name="privacy_guard_notification">Protektado de datumoj aktiva</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne povos aliri personajn datumojn</string>
+  <string name="permlab_useHardwareFramework">uzi la materialan framon</string>
+  <string name="permdesc_useHardwareFramework">Permesi al aplikaĵo aliron al la materialan framon de CM.</string>
   <string name="permlab_setKeyguardWallpaper">difini la ŝlosan ekranfonon</string>
   <string name="permdesc_setKeyguardWallpaper">Permesas al aplikaĵo ŝanĝi la ŝlosan fonekranon.</string>
   <string name="privacy_guard_dialog_title">Protektado de datumoj</string>

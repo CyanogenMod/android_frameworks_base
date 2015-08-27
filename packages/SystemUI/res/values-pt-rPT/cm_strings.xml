@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">Acesso root</string>
   <string name="fingerprint_try_again_hint">Por favor verifique novamente</string>
   <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> por cento.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Nenhum item encontrado</string>
 </resources>

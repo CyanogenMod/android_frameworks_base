@@ -43,6 +43,8 @@
   <string name="permdesc_changePrivacyGuardState">ऐप को इसे बदलने देता है कि कोई दूसरा ऐप गोपनीयता रक्षक के साथ चलेगा अथवा नहीं। जब ऐप गोपनीयता रक्षक के साथ चलता है, उसे संपर्क, कॉल लॉग, या संदेश जैसे निजी डेटा तक पहुँचने की अनुमति नहीं होगी।</string>
   <string name="privacy_guard_notification">गोपनीयता रक्षक सक्रिय है</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> निजी डेटा में पहुँच नहीं सकेगा</string>
+  <string name="permlab_useHardwareFramework">हार्डवेयर ढाँचे का उपयोग करें</string>
+  <string name="permdesc_useHardwareFramework">ऐप को सीएम हार्डवेयर ढाँचे में पहुँचने देता है।</string>
   <string name="permlab_setKeyguardWallpaper">कुंजीकवच वॉलपेपर सेट करें</string>
   <string name="permdesc_setKeyguardWallpaper">ऐप को स्क्रीन वॉलपेपर लॉक को बदलने देता है।</string>
   <string name="privacy_guard_dialog_title">गोपनीयता रक्षक</string>
