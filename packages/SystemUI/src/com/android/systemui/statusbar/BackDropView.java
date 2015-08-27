@@ -16,31 +16,16 @@
 
 package com.android.systemui.statusbar;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.os.AsyncTask;
-import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.android.systemui.R;
-import com.pheelicks.visualizer.AudioData;
-import com.pheelicks.visualizer.FFTData;
-import com.pheelicks.visualizer.VisualizerView;
-import com.pheelicks.visualizer.renderer.Renderer;
-
 /**
  * A view who contains media artwork.
  */
-public class BackDropView extends FrameLayout {
+public class BackDropView extends FrameLayout
+{
     private Runnable mOnVisibilityChangedRunnable;
 
     public BackDropView(Context context) {
@@ -55,8 +40,14 @@ public class BackDropView extends FrameLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public BackDropView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BackDropView(Context context, AttributeSet attrs, int defStyleAttr,
+            int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    @Override
+    public boolean hasOverlappingRendering() {
+        return false;
     }
 
     @Override
