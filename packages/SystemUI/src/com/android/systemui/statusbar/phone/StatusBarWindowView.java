@@ -229,7 +229,6 @@ public class StatusBarWindowView extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        final int action = ev.getActionMasked();
         boolean handled = false;
         if (mService.getBarState() == StatusBarState.KEYGUARD && !mService.isQsExpanded()) {
             handled = mDragDownHelper.onTouchEvent(ev);
@@ -237,8 +236,8 @@ public class StatusBarWindowView extends FrameLayout {
         if (!handled) {
             handled = super.onTouchEvent(ev);
         }
-        if (!handled && (action == MotionEvent.ACTION_UP
-                || action == MotionEvent.ACTION_CANCEL)) {
+        final int action = ev.getAction();
+        if (!handled && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)) {
             mService.setInteracting(StatusBarManager.WINDOW_STATUS_BAR, false);
         }
         return handled;

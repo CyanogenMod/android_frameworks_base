@@ -36,9 +36,6 @@
     <color name="navring_edit_fill">#FF558B2F</color>
     <color name="navring_edit_tint">#FF689F38</color>
 
-    <!-- tint of the Visualizer tile -->
-    <color name="visualizer_fill_color">#96FFFFFF</color>
-
     <!-- Background of the volume panel. See also: volume_dialog_background -->
     <color name="volume_panel_background_color">@color/system_secondary_color</color>
 
