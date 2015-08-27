@@ -367,7 +367,9 @@ public class FingerprintService extends SystemService {
                      it.hasNext(); ) {
                     try {
                         ClientData clientData = it.next().getValue();
-                        clientData.receiver.onStateChanged(mState);
+                        if (clientData != null && clientData.receiver != null) {
+                            clientData.receiver.onStateChanged(mState);
+                        }
                     } catch(RemoteException e) {
                         Slog.e(TAG, "can't send message to client. Did it die?", e);
                         it.remove();
