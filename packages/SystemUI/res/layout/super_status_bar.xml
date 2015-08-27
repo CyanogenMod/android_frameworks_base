@@ -41,22 +41,19 @@
                    android:visibility="invisible" />
     </com.android.systemui.statusbar.BackDropView>
 
-    <FrameLayout android:id="@+id/scrimview"
+    <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_behind"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no" />
+
+    <FrameLayout android:id="@+id/visualizer_layout"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+        <com.android.systemui.statusbar.VisualizerView
+                 android:id="@+id/visualizer_view"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
-                 android:visibility="visible">
-        <com.android.systemui.statusbar.ScrimView
-                android:id="@+id/scrim_behind"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:importantForAccessibility="no"/>
-        <com.android.systemui.statusbar.VisualizerView
-                android:id="@+id/visualizerview"
-                android:gravity="bottom"
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible"/>
+                 android:layout_gravity="bottom" />
     </FrameLayout>
 
     <include layout="@layout/status_bar"
