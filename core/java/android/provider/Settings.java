@@ -6084,8 +6084,9 @@ public final class Settings {
          */
         public static final String LIVE_DISPLAY_COLOR_MATRIX = "live_display_color_matrix";
 
+
         /**
-         * Whether to show the keyguard visualizer.
+         * Whether to show the lockscreen visualizer.
          * Boolean setting. 0 = no, 1 = yes.
          * @hide
          */
