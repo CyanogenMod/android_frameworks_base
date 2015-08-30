@@ -159,4 +159,5 @@
   <string name="dynamic_qs_tile_su_label">루트 권한</string>
   <string name="fingerprint_try_again_hint">다시 시도해 주십시오</string>
   <string name="accessibility_dock_battery_level">독의 배터리는 <xliff:g id="number">%d</xliff:g>퍼센트입니다.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">항목을 찾을 수 없음</string>
 </resources>

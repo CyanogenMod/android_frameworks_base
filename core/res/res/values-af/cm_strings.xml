@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Laat \'n program toe om te bepaal of \'n ander program met of sonder Privaatheidswag kan loop. Wanneer Privaatheidswag geaktiveer is kan die program nie toegang kry tot persoonlike data soos kontakte, boodskappe en oproep geskiedenis nie.</string>
   <string name="privacy_guard_notification">Privaatheidswag aktief</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> het nie toegang tot persoonlike data nie</string>
+  <string name="permlab_useHardwareFramework">gebruik hardeware raamwerk</string>
+  <string name="permdesc_useHardwareFramework">Laat program toegang tot die CM hardeware raamwerk.</string>
   <string name="permlab_setKeyguardWallpaper">Stel slotskerm agtergrond in</string>
   <string name="permdesc_setKeyguardWallpaper">Laat \'n program toe om die slotskerm agtergrond te verander.</string>
   <string name="privacy_guard_dialog_title">Privaatheidswag</string>

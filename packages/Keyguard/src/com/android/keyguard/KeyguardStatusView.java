@@ -236,7 +236,10 @@ public class KeyguardStatusView extends GridLayout {
             if (res.getBoolean(com.android.internal.R.bool.def_custom_dateformat)) {
                 final String dateformat = Settings.System.getString(context.getContentResolver(),
                         Settings.System.DATE_FORMAT);
-                dateView = dateformat.equals(dateView) ? dateView : dateformat;
+                if(dateformat != null)
+                    dateView = dateformat.equals(dateView) ? dateView : dateformat;
+                else
+                    Log.e(TAG, "def_custom_dateformat is true but dataformat is not defined actually.");
             } else {
                 final String key = locale.toString() + dateViewSkel + clockView12Skel
                         + clockView24Skel;

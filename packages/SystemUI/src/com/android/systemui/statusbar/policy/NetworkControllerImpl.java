@@ -766,7 +766,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     int start = mSubscriptionManager.getActiveSubscriptionInfoCountMax();
                     for (int i = start /* get out of normal index range */; i < start + num; i++) {
                         SubscriptionInfo info = new SubscriptionInfo(i, "", i, "", "", 0, 0, "", 0,
-                                null, 0, 0, "", 0, 0);
+                                null, 0, 0, "", 0, 0, 0);
                         subs.add(info);
                         mMobileSignalControllers.put(i, new MobileSignalController(mContext,
                                 mConfig, mHasMobileDataFeature, mPhone, mSignalsChangedCallbacks,

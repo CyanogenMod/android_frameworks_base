@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">อนุญาตให้แอปเปลี่ยนแปลงเมื่อมีแอปอื่นทำงานโดยใช้การป้องกันความเป็นส่วนตัวอยู่ เมื่อแอปกำลังทำงานโดยการป้องกันความเป็นส่วนตัว มันจะไม่สามารถเข้าถึงข้อมวลส่วนตัว เช่น รายชื่อผู้ติดต่อ ประวัติการโทร หรือ ข้อความได้</string>
   <string name="privacy_guard_notification">การป้องกันความเป็นส่วนตัวทำงาน</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> จะไม่สามารถเข้าถึงข้อมูลส่วนตัวได้</string>
+  <string name="permlab_useHardwareFramework">ใช้ฮาร์ดแวร์เฟรมเวิร์ค</string>
+  <string name="permdesc_useHardwareFramework">อนุญาตให้แอปเข้าถึง CM ฮาร์ดแวร์เฟรมเวิร์ค</string>
   <string name="permlab_setKeyguardWallpaper">ตั้งภาพล็อคหน้าจอ</string>
   <string name="permdesc_setKeyguardWallpaper">อนุญาตให้แอปเปลี่ยนภาพล็อคหน้าจอได้</string>
   <string name="privacy_guard_dialog_title">ป้องกันความเป็นส่วนตัว</string>

@@ -43,6 +43,8 @@ modifiera det tema som du har tillämpat.</string>
   <string name="permdesc_changePrivacyGuardState">Tillåter appen att ändra huruvida en annan app körs med integritetsskydd. När en app körs med integritetsskydd har den ingen tillgång till personlig data som kontakter, samtalslistor och meddelanden.</string>
   <string name="privacy_guard_notification">Integritetsskydd aktivt</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> kommer inte få tillgång till personlig data</string>
+  <string name="permlab_useHardwareFramework">använda hårdvaruramverk</string>
+  <string name="permdesc_useHardwareFramework">Ger en app åtkomst till CyanogenMods hårdvaruramverk.</string>
   <string name="permlab_setKeyguardWallpaper">ställa in bakgrundsbild på låsskärm</string>
   <string name="permdesc_setKeyguardWallpaper">Tillåter en app att ändra låsskärmens bakgrundsbild.</string>
   <string name="privacy_guard_dialog_title">Integritetsskydd</string>

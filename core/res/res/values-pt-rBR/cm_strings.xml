@@ -41,6 +41,8 @@
   <string name="permdesc_changePrivacyGuardState">Permite ao aplicativo alterar se outra aplicação executa com Proteção à Privacidade. Quando um aplicativo estiver executando com Proteção à Privacidade, ela será capaz de acessar dados pessoais como contatos, registro de chamadas, ou mensagens.</string>
   <string name="privacy_guard_notification">Proteção à Privacidade ativa</string>
   <string name="privacy_guard_notification_detail"><xliff:g xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" id="app">%1$s</xliff:g> não será capaz de acessar dados pessoais</string>
+  <string name="permlab_useHardwareFramework">utilizar a estrutura de hardware</string>
+  <string name="permdesc_useHardwareFramework">Permite o acesso de uma aplicação à estrutura de hardware CM.</string>
   <string name="permlab_setKeyguardWallpaper">definir papel de parede da tela de bloqueio</string>
   <string name="permdesc_setKeyguardWallpaper">Permite um aplicativo a trocar o papel de parede da tela de bloqueio.</string>
   <string name="privacy_guard_dialog_title">Proteção à Privacidade</string>

@@ -205,7 +205,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 bootTheme = builder.build();
             }
         } catch (SecurityException e) {
-            Log.e(TAG, "Could not get boot theme", e);
+            Log.w(TAG, "Could not get boot theme", e);
         }
         return bootTheme;
     }
