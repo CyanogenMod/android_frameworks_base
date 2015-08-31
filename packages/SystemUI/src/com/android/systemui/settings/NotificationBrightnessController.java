@@ -211,9 +211,12 @@ public class NotificationBrightnessController implements ToggleSlider.Listener {
     private void updateNotification() {
         if (mNotificationAllow) {
             // Instead of canceling the notification, force it to update with the color.
-            int notificationColor = mCurrentBrightness +
-                                    (mCurrentBrightness << 8) +
-                                    (mCurrentBrightness << 16);
+            int defaultColor = mContext.getResources().getColor(
+                    com.android.internal.R.color.config_defaultNotificationColor);
+            int color = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR,
+                    defaultColor, UserHandle.USER_CURRENT);
+            int notificationColor = (color & 0xFFFFFF) | (mCurrentBrightness << 24);
             mNotificationBuilder.setLights(notificationColor, 1, 0);
             mNotificationManager.notify(1, mNotificationBuilder.build());
         }
