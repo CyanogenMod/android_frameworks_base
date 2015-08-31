@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">他のアプリでプライバシーガードを有効にするかどうかの変更をアプリに許可します。プライバシーガードを有効にしてアプリを実行すると、そのアプリは連絡先、通話履歴、メッセージなどの個人データにアクセスできなくなります。</string>
   <string name="privacy_guard_notification">プライバシーガードが有効です</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>は個人データにアクセスできません</string>
-  <string name="permlab_useHardwareFramework">ハードウェアフレームワークの使用</string>
-  <string name="permdesc_useHardwareFramework">CMハードウェアフレームワークへのアクセスをアプリに許可します。</string>
   <string name="permlab_setKeyguardWallpaper">キーガードの壁紙の設定</string>
   <string name="permdesc_setKeyguardWallpaper">ロック画面の壁紙の変更をアプリに許可します。</string>
   <string name="privacy_guard_dialog_title">プライバシーガード</string>

@@ -51,7 +51,7 @@
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: tryb dzienny.</string>
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: tryb nocny.</string>
   <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: tryb zewnętrzny.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay wyłączony.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay został wyłączony.</string>
   <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay zmieniony na tryb automatyczny.</string>
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay zmieniony na tryb dzienny.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay zmieniony na tryb nocny.</string>

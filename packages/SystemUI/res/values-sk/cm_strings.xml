@@ -59,6 +59,9 @@
   <string name="accessibility_quick_settings_location_battery_saving">Hlásenie polohy: režim šetrenia batérie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Hlásenie polohy: režim iba so snímačmi.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Hlásenie polohy: režim vysokej presnosti.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Hlásenie polohy sa zmenilo na režim šetrenia batérie.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Hlásenie polohy sa zmenilo na režim iba senzorov.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Hlásenie polohy sa zmenilo na režim vysokej presnosti.</string>
   <string name="accessibility_quick_settings_lock_screen_off">Obrazovka uzamknutia vyp.</string>
   <string name="accessibility_quick_settings_lock_screen_on">Obrazovka uzamknutia zap.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Obrazovka uzamknutia vypnutá.</string>
@@ -67,15 +70,31 @@
   <string name="accessibility_quick_settings_lte_on">LTE zap.</string>
   <string name="accessibility_quick_settings_lte_changed_off">LTE vypnuté.</string>
   <string name="accessibility_quick_settings_lte_changed_on">LTE zapnuté.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC vyp.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC zap.</string>
   <string name="accessibility_quick_settings_nfc_changed_off">NFC vypnuté.</string>
   <string name="accessibility_quick_settings_nfc_changed_on">NFC zapnuté.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Režim batérie: režim šetrenia energie.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Režim batérie: vyvážený režim.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Režim batérie: režim výkonu.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Režim batérie sa zmenil na režim šetrenia energie.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Režim batérie sa zmenil na vyvážený režim.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Režim batérie sa zmenil na režim výkonu.</string>
+  <string name="accessibility_quick_settings_profiles_off">Profily vyp.</string>
+  <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profily vypnuté.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Profil sa zmenil na <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Časový limit obrazovky: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Časový limit obrazovky sa zmenil na <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Synch. vyp.</string>
   <string name="accessibility_quick_settings_sync_on">Synch. zap.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronizácia vypnutá.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Synchronizácia zapnutá.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">Zdieľanie cez USB vyp.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">Zdieľanie cez USB zap.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Zdieľanie cez USB vypnuté.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Zdieľanie cez USB zapnuté.</string>
+  <string name="accessibility_quick_settings_visualizer">Vizualizér.</string>
   <string name="accessibility_dpad_left">Kurzor vľavo</string>
   <string name="accessibility_dpad_right">Kurzor vpravo</string>
   <string name="quick_settings_mobile_data_label">Mobilné dáta</string>
@@ -134,4 +153,11 @@
   <string name="interruption_level_silent">Tichý</string>
   <string name="zen_silent_with_warning">Žiadne prerušenia s výnimkou budíkov.</string>
   <string name="quick_settings_remove">Odstrániť dlaždicu</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dynamické dlaždice</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Ďalší budík</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Výber IME</string>
+  <string name="dynamic_qs_tile_su_label">Root prístup</string>
+  <string name="fingerprint_try_again_hint">Prosím, nasnímajte znovu</string>
+  <string name="accessibility_dock_battery_level">Batéria doku <xliff:g id="number">%d</xliff:g> percent.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Nenašli sa žiadne položky</string>
 </resources>

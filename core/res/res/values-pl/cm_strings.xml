@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Pozwala aplikacji decydować, kiedy inna aplikacja zostanie uruchomiona w trybie ochrony prywatności. W trybie tym aplikacje nie mają dostępu do osobistych danych użytkownika, takich jak kontakty, historia połączeń czy wiadomości.</string>
   <string name="privacy_guard_notification">Ochrona prywatności aktywna</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nie będzie mieć dostępu do osobistych danych</string>
-  <string name="permlab_useHardwareFramework">Użyj sprzętowego frameworka</string>
-  <string name="permdesc_useHardwareFramework">Umożliwia aplikacji na dostęp do frameworka CM.</string>
   <string name="permlab_setKeyguardWallpaper">Ustawianie tła ekranu blokady</string>
   <string name="permdesc_setKeyguardWallpaper">Umożliwia aplikacji zmianę tła ekranu blokady.</string>
   <string name="privacy_guard_dialog_title">Ochrona prywatności</string>

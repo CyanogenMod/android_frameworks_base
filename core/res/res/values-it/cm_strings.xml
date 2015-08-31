@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Consente all\'app di decidere se un\'altra app viene eseguita con Privacy Guard. Quando un\'app viene eseguita con Privacy Guard, non ha accesso a dati personali come contatti, lista chiamate o messaggi.</string>
   <string name="privacy_guard_notification">Privacy Guard attiva</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> non sarà in grado di accedere ai dati personali</string>
-  <string name="permlab_useHardwareFramework">utilizza framework hardware</string>
-  <string name="permdesc_useHardwareFramework">Consente all\'app di accedere al framework hardware di CM.</string>
   <string name="permlab_setKeyguardWallpaper">imposta sfondo sblocco schermo</string>
   <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo della schermata di sblocco.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>

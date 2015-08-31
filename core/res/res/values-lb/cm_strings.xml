@@ -28,7 +28,7 @@
   <string name="permgrouplab_security">Sécherheet</string>
   <string name="permgroupdesc_security">Berechtegungen déi mat der Sécherheet vum Apparat ze dinn hunn.</string>
   <string name="permlab_accessThemeService">Op den Design-Service zougräifen</string>
-  <string name="permdesc_accessThemeService">Erlaabt der App den Accès op den Design-Service. Dat misst fir normal Appen ni gebraucht ginn.</string>
+  <string name="permdesc_accessThemeService">Erlaabt der App, den Accès op den Design-Service. Dat misst fir normal Appen ni néideg sinn.</string>
   <string name="permlab_readThemes">Design-Info liesen</string>
   <string name="permdesc_readThemesDesc">Erlaabt der App, d\'Designen auszeliesen an ze kucke wéi en Design applizéiert ass.</string>
   <string name="permlab_writeThemes">Aktiven Design änneren</string>
@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Erlaabt der App, z\'änneren ob eng aner App mam Privatsphärschutz leeft. Wann eng App mam Privatsphärschutz leeft, huet se keen Accès op perséinlech Date wéi Kontakter, Uruffprotokoller oder Messagen.</string>
   <string name="privacy_guard_notification">Privatsphärschutz aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> huet keen Accès op perséinlech Daten</string>
-  <string name="permlab_useHardwareFramework">Hardware-Framework benotzen</string>
-  <string name="permdesc_useHardwareFramework">Erlaabt der App den Accès op den CM-Hardware-Framework.</string>
   <string name="permlab_setKeyguardWallpaper">Hannergrondbild vum Spärschierm setzen</string>
   <string name="permdesc_setKeyguardWallpaper">Erlaabt der App, d\'Hannergrondbild vum Spärschierm z\'änneren.</string>
   <string name="privacy_guard_dialog_title">Privatsphärschutz</string>
@@ -144,7 +142,7 @@
   <string name="permlab_interceptSmsSent">Erausgoend SMSen offänken</string>
   <string name="permdesc_interceptSmsSent">Erlaabt der App, erausgoend SMSen z\'interceptéieren. Béiswëlleg Appe kënnen dat benotze fir erausgoend SMSen ze blockéieren.</string>
   <string name="permlab_accessTorchService">Op den Täscheluucht-Service zougräifen</string>
-  <string name="permdesc_accessTorchService">Erlaabt der App den Accès op den Täscheluucht-Service. Dat sollt fir normal Appen ni néideg sinn.</string>
+  <string name="permdesc_accessTorchService">Erlaabt der App, den Accès op den Täscheluucht-Service. Dat misst fir normal Appen ni néideg sinn.</string>
   <string name="permlab_preventpower">Un-/Ausschaltknäppchen iwwerschreiwen</string>
   <string name="permdesc_preventpower">Erlaabt d\'App, d\'Un-/Aus-Tast eng aner Funktioun zouzeweisen.</string>
   <string name="usb_extmedia_format_message">All d\'Daten um USB-Späicher (ënner dem Dossier \"%1$s\") gi geläscht. Dës Aktioun kann net réckgängeg gemaach ginn!</string>
