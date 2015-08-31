@@ -835,8 +835,11 @@ public class NotificationManagerService extends SystemService {
                 }
             } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
                 // turn off LED when user passes through lock screen
-                mNotificationLight.turnOff();
-                mStatusBar.notificationLightOff();
+                // if lights with screen on is disabled.
+                if (!mScreenOnEnabled) {
+                    mNotificationLight.turnOff();
+                    mStatusBar.notificationLightOff();
+                }
             } else if (action.equals(Intent.ACTION_USER_SWITCHED)) {
                 final int user = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, UserHandle.USER_NULL);
                 // reload per-user settings
