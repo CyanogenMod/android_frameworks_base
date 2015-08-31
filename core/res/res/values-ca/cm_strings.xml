@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Permet a l\'app si una altra app s\'executa amb el guarda de privacitat. Quan una app s\'executa amb el guarda de privacitat, no tindrà accés a les dades personals com els contactes, registres de trucades, o missatges.</string>
   <string name="privacy_guard_notification">Guarda de privacitat actiu</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no tindrà accés a dades personals</string>
-  <string name="permlab_useHardwareFramework">utilitza el marc de hardware</string>
-  <string name="permdesc_useHardwareFramework">Permet a una aplicació accedir al marc de hardware de CM.</string>
   <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
   <string name="permdesc_setKeyguardWallpaper">Permet que una aplicació estableixi el fons de la pantalla de bloqueig.</string>
   <string name="privacy_guard_dialog_title">Guarda de privacitat</string>
@@ -203,8 +201,8 @@
   <string name="quick_settings_tile_flashlight_not_summary">Pica per apagar-la</string>
   <string name="storage_sd_dock_card">Acopla la targeta SD</string>
   <string name="fingerprint_default_name">Empremta digital <xliff:g id="number">%d</xliff:g></string>
-  <string name="permlab_accessFingerprintService">Accés al servei d\'empremtes dactilars</string>
-  <string name="permdesc_accessFingerprintService">Permet a una aplicació accedir al servei d\'empremtes dactilars. L\'aplicació pot afegir, esborrar, canviar el nom i autenticar-se amb empremtes dactilars</string>
+  <string name="permlab_accessFingerprintService">accés al servei d\'empremtes digitals</string>
+  <string name="permdesc_accessFingerprintService">Permet a una aplicació accedir al servei d\'empremtes digitals. L\'aplicació pot afegir, esborrar, canviar el nom i autenticar-se amb empremtes digitals</string>
   <string name="permlab_resetBatteryStats">reinicia estadítiques de la bateria</string>
   <string name="permdesc_resetBatteryStats">Permet a una aplicació reiniciar les dades actuals de baix nivell d\'us de la bateria.</string>
   <string name="silent_mode_priority">Prioritat</string>

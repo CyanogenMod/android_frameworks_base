@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Permite que la aplicación cambie el estado de privacidad de otra. Cuando una aplicación se ejecuta con la privacidad habilitada, no podrá acceder a los datos personales, tales como contactos, mensajes o registros de llamadas.</string>
   <string name="privacy_guard_notification">Privacidad activada</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no podrá acceder a los datos personales</string>
-  <string name="permlab_useHardwareFramework">usar marco de hardware</string>
-  <string name="permdesc_useHardwareFramework">Permite que la aplicación acceda al marco de hardware de CM.</string>
   <string name="permlab_setKeyguardWallpaper">establecer fondo de pantalla de bloqueo</string>
   <string name="permdesc_setKeyguardWallpaper">Permite que la aplicación establezca el fondo de pantalla de bloqueo.</string>
   <string name="privacy_guard_dialog_title">Privacidad</string>
