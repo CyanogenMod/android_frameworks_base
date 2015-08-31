@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s Ochranou súkromia. Keď je aplikácia spustená s Ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
   <string name="privacy_guard_notification">Aktívna ochrana súkromia</string>
   <string name="privacy_guard_notification_detail">Aplikácii <xliff:g id="app">%1$s</xliff:g> nebude umožnený prístup k osobným údajom</string>
-  <string name="permlab_useHardwareFramework">používať hardvérový framework</string>
-  <string name="permdesc_useHardwareFramework">Umožňuje aplikácii pristupovať k hardvérovému frameworku CM.</string>
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu obrazovky uzamknutia</string>
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu obrazovky uzamknutia.</string>
   <string name="privacy_guard_dialog_title">Ochrana súkromia</string>
@@ -64,6 +62,7 @@
   <string name="adb_active_generic_notification_message">Dotykom zakážate ladenie.</string>
   <string name="usb_choose_notification_title">Dotykom vyberte možnosti pre USB.</string>
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB a sieť</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Sieť</string>
   <string name="permlab_interceptPackageLaunch">zachytiť spustenie aplikácie</string>
@@ -206,4 +205,6 @@
   <string name="permdesc_accessFingerprintService">Umožňuje prístup k službe odtlačku prstov. Aplikácia môže pridať, odstrániť, premenovať a vykonať overenie odtlačkov prstov</string>
   <string name="permlab_resetBatteryStats">obnoviť štatistiky batérie</string>
   <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
+  <string name="silent_mode_priority">Priorita</string>
+  <string name="silent_mode_none">Žiadna</string>
 </resources>

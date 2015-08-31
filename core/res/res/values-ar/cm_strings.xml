@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">يسمح للتطبيق بتغيير ما إذا كان تطبيق آخر يعمل مع \"حارس الخصوصية\". عندما يتم تشغيل تطبيق مع \"حارس الخصوصية\"، فلن يُسمح له بالوصول إلى البيانات الشخصية مثل جهات الاتصال وسجلات المكالمات والرسائل.</string>
   <string name="privacy_guard_notification">حارس الخصوصية فعّال</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> لن تكون قادراً على الوصول إلى البيانات الشخصية</string>
-  <string name="permlab_useHardwareFramework">استخدام نظام الأجهزة</string>
-  <string name="permdesc_useHardwareFramework">يسمح لتطبيق وصول إلى نظام أجهزة CM.</string>
   <string name="permlab_setKeyguardWallpaper">تعيين خلفية للإطار</string>
   <string name="permdesc_setKeyguardWallpaper">يسمح ااتطبيق بتغيير خلفية شاشة القفل.</string>
   <string name="privacy_guard_dialog_title">حارس الخصوصية</string>
@@ -58,7 +56,7 @@
   <string name="reboot_confirm" product="tablet">سيتم إعادة تشغيل الكمبيوتر اللوحي الخاص بك.</string>
   <string name="reboot_confirm" product="default">سيتم إعادة تشغيل الهاتف الخاص بك.</string>
   <string name="reboot_progress">إعادة التشغيل\u2026</string>
-  <string name="app_killed_message">تم إغلاق التطبيق بقوة</string>
+  <string name="app_killed_message">أُغلقَ التّطبيق قسرًا</string>
   <string name="adb_net_active_notification_title">ADB تمكين عبر الشبكة</string>
   <string name="adb_both_active_notification_title">ADB عبر USB &amp; network ممكن</string>
   <string name="adb_active_generic_notification_message">إللمس لتعطيل التصحيح.</string>
@@ -135,7 +133,7 @@
   <string name="permission_remember_choice">تذكر خياري</string>
   <string name="perf_profile_pwrsv">حفظ الطاقة</string>
   <string name="perf_profile_bal">متوازن</string>
-  <string name="perf_profile_perf">الأداء</string>
+  <string name="perf_profile_perf">تحسين الأداء</string>
   <string name="theme_install_error_title">فشل تثبيت السمة</string>
   <string name="theme_install_error_message">فشل تثبيت %s</string>
   <string name="theme_reset_notification_title">إعادة تعيين الموضوع</string>

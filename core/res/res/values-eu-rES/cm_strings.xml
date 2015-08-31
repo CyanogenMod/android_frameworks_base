@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Beste aplikazio bat Privacy Guard menpean dagoen aldatzea ahalbidetzen dio aplikazioari. Aplikazio bat Privacy Guard menpean dagoenean ezin izango du datu pertsonalik ikusi, ez kontakturik, ez dei erregistrorik, ezta mezurik ere.</string>
   <string name="privacy_guard_notification">Privacy Guard aktibo</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> aplikazioak ezingo du datu pertsonalik irakurri</string>
-  <string name="permlab_useHardwareFramework">Hardware markoa erabili</string>
-  <string name="permdesc_useHardwareFramework">Aplikazioari hardware markorako sarbidea gaitzen dio.</string>
   <string name="permlab_setKeyguardWallpaper">Ezarri blokeo-pantailarako horma-papera</string>
   <string name="permdesc_setKeyguardWallpaper">Blokeo-pantailarako horma-papera aldatzea ahalbidetzen dio aplikazioari.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
