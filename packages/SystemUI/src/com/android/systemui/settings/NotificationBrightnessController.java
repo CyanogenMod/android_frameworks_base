@@ -212,9 +212,8 @@ public class NotificationBrightnessController implements ToggleSlider.Listener {
     private void updateNotification() {
         if (mNotificationAllow) {
             // Instead of canceling the notification, force it to update with the color.
-            int notificationColor = mCurrentBrightness +
-                                    (mCurrentBrightness << 8) +
-                                    (mCurrentBrightness << 16);
+            // Use a white light for a better preview of the brightness.
+            int notificationColor = 0xFFFFFF | (mCurrentBrightness << 24);
             mNotificationBuilder.setLights(notificationColor, 1, 0);
             mNotificationManager.notify(1, mNotificationBuilder.build());
         }
