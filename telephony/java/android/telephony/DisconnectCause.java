@@ -249,6 +249,8 @@ public class DisconnectCause {
     public static final int RECOVERY_ON_TIMER_EXPIRED = 88;
     public static final int PROTOCOL_ERROR_UNSPECIFIED = 89;
     public static final int INTERWORKING_UNSPECIFIED = 90;
+    public static final int LOCAL_LOW_BATTERY = 91;
+    public static final int LOW_BATTERY = 92;
 
     /** Private constructor to avoid class instantiation. */
     private DisconnectCause() {
