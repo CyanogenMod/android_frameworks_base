@@ -860,18 +860,6 @@ public class AudioRecord
             return ERROR_BAD_VALUE;
         }
 
-        // PCM_8BIT is not supported at the moment
-        if (audioFormat != AudioFormat.ENCODING_PCM_16BIT
-            && audioFormat != AudioFormat.ENCODING_AMRNB
-            && audioFormat != AudioFormat.ENCODING_AMRWB
-            && audioFormat != AudioFormat.ENCODING_EVRC
-            && audioFormat != AudioFormat.ENCODING_EVRCB
-            && audioFormat != AudioFormat.ENCODING_EVRCWB
-            && audioFormat != AudioFormat.ENCODING_EVRCNW) {
-            loge("getMinBufferSize(): Invalid audio format.");
-            return ERROR_BAD_VALUE;
-        }
-
         int size = native_get_min_buff_size(sampleRateInHz, channelCount, audioFormat);
         if (size == 0) {
             return ERROR_BAD_VALUE;
