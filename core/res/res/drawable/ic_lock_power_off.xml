@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<!-- Copyright (C) 2015 The ParanoidAndroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,6 +14,19 @@
      limitations under the License.
 -->
 
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/ic_lock_power_off_alpha"
-    android:tint="?attr/colorControlNormal" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32.0"
+    android:viewportHeight="32.0">
+
+    <path
+        android:fillColor="#6d6d6c"
+        android:pathData="M16,15.7c0.9,0,1.7-0.7,1.7-1.7V6.3c0-0.9-0.7-1.7-1.7-1.7c-0.9,0-1.7,0.7-1.7,1.7V14C14.3,14.9,15.1,15.7,16,15.7z" />
+
+    <path
+        android:fillColor="#6d6d6c"
+        android:pathData="M19.3,6.5v4c2.2,1.2,3.7,3.5,3.7,6.2c0,3.9-3.1,7-7,7s-7-3.1-7-7c0-2.7,1.5-5,3.7-6.2v-4c-4.3,1.4-7.3,5.4-7.3,10.1
+c0,5.9,4.8,10.7,10.7,10.7s10.7-4.8,10.7-10.7C26.7,11.9,23.6,7.9,19.3,6.5z" />
+
+</vector>

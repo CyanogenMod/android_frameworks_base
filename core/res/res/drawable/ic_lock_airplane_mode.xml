@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<!-- Copyright (C) 2015 The ParanoidAndroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,6 +14,15 @@
      limitations under the License.
 -->
 
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/ic_lock_airplane_mode_alpha"
-    android:tint="?attr/colorControlActivated" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32.0"
+    android:viewportHeight="32.0">
+
+    <path
+        android:fillColor="#6d6d6c"
+        android:pathData="M26,20.2v-2.1l-8.4-5.2V7.1c0-0.9-0.7-1.6-1.6-1.6s-1.6,0.7-1.6,1.6v5.8L6,18.1
+v2.1l8.4-2.6v5.8l-2.1,1.6v1.6l3.7-1l3.7,1v-1.6l-2.1-1.6v-5.8L26,20.2z" />
+
+</vector>
