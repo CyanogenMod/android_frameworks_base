@@ -2030,7 +2030,8 @@ public class NotificationManagerService extends SystemService {
                         return;
                     }
 
-                    if (isNotificationSpam(notification, pkg)) {
+                    // Only check for spam if this is a new notification
+                    if (old == null && isNotificationSpam(notification, pkg)) {
                         mArchive.record(r.sbn);
                         return;
                     }
