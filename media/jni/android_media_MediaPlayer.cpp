@@ -152,9 +152,7 @@ typedef MediaPlayer* (*CreateNativeQCMediaPlayerFn)();
 class JNIMediaPlayerFactory {
   public:
     JNIMediaPlayerFactory() {};
-    static sp<MediaPlayerListener> createExtMediaPlayerListener(JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> listener);
-    static void CreateNativeQCMediaPlayer(sp<MediaPlayer> &mp);
-    static bool checkExtMedia(JNIEnv *env, jobject thiz);
+    static bool CheckAndCreateExtMediaPlayer(JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> &listener, sp<MediaPlayer> &mp);
   private:
     static void *mLibHandle;
     static void loadLib();
@@ -167,6 +165,10 @@ class JNIMediaPlayerFactory {
 
     static CreateNativeQCMediaPlayerFn  sNativeQCMediaPlayerFn;
     static CreateNativeQCMediaPlayerFn loadNativeQCMediaPlayer();
+
+    static sp<MediaPlayerListener> createExtMediaPlayerListener(JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> listener);
+    static bool checkExtMedia(JNIEnv *env, jobject thiz);
+    static void CreateNativeQCMediaPlayer(sp<MediaPlayer> &mp);
 };
 
 void *JNIMediaPlayerFactory::mLibHandle = NULL;
@@ -269,6 +271,19 @@ bool JNIMediaPlayerFactory::checkExtMedia(JNIEnv *env, jobject thiz)
     return bIsQCMediaPlayerPresent;
 }
 
+bool JNIMediaPlayerFactory::CheckAndCreateExtMediaPlayer(
+         JNIEnv *env, jobject thiz, jobject weak_this, sp<MediaPlayerListener> &listener, sp<MediaPlayer> &mp)
+{
+    bool bOk = false;
+    listener = createExtMediaPlayerListener(env, thiz, weak_this, listener);
+    if (listener != NULL && checkExtMedia(env,thiz)) {
+        CreateNativeQCMediaPlayer(mp);
+        if (mp != NULL) {
+            bOk = true;
+        }
+    }
+    return bOk;
+}
 
 // ----------------------------------------------------------------------------
 
@@ -1004,19 +1019,17 @@ android_media_MediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_t
 
     sp<MediaPlayer> mp = NULL;
 
+    bool bOk = false;
     JNIMediaPlayerFactory *jniMediaPlayerFactory = new JNIMediaPlayerFactory();
 
     sp<MediaPlayerListener> listener = new JNIMediaPlayerListener(env, thiz, weak_this);
 
     if (jniMediaPlayerFactory) {
-        listener = jniMediaPlayerFactory->createExtMediaPlayerListener(env, thiz, weak_this, listener);
-        if (jniMediaPlayerFactory->checkExtMedia(env,thiz)) {
-            jniMediaPlayerFactory->CreateNativeQCMediaPlayer(mp);
-        }
+        bOk = jniMediaPlayerFactory->CheckAndCreateExtMediaPlayer(env, thiz, weak_this, listener, mp);
         delete(jniMediaPlayerFactory);
     }
 
-    if (mp == NULL){
+    if (!bOk){
         mp = new MediaPlayer();
     }
     if (mp == NULL) {
