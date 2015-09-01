@@ -1862,11 +1862,6 @@
   </plurals>
     <string name="zen_mode_until" msgid="7336308492289875088">"完成時間：<xliff:g id="FORMATTEDTIME">%1$s</xliff:g>"</string>
     <string name="zen_mode_forever" msgid="4316804956488785559">"無限期"</string>
-
-    <!-- Carrier Name -->
-    <string name="China_Mobile">中國移動</string>
-    <string name="China_Unicom">中國聯通</string>
-    <string name="China_Telecom">中國電信</string>
     <string name="toolbar_collapse_description" msgid="2821479483960330739">"收合"</string>
     <string name="zen_mode_next_alarm_summary" msgid="5915140424683747372">"直到下一個在 <xliff:g id="FORMATTEDTIME">%1$s</xliff:g> 的鬧鐘"</string>
     <string name="zen_mode_next_alarm_line_one" msgid="5537042951553420916">"直到下一個鬧鐘"</string>
