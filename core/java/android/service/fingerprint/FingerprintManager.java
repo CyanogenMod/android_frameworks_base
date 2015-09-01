@@ -164,16 +164,23 @@ public class FingerprintManager {
 
     /**
      * Start the authentication process.
-     *
-     * @param timeout
      */
     public void authenticate() {
+        authenticate(false);
+    }
+
+    /**
+     * Start the authentication process.
+     *
+     * @param disableVibration True to disable vibration when print scanned
+     */
+    public void authenticate(boolean disableVibration) {
         if (mServiceReceiver == null) {
             sendError(FINGERPRINT_ERROR_NO_RECEIVER, 0, 0);
             return;
         }
         if (mService != null) try {
-            mService.authenticate(mToken, getCurrentUserId());
+            mService.authenticate(mToken, getCurrentUserId(), disableVibration);
         } catch (RemoteException e) {
             Log.v(TAG, "Remote exception while enrolling: ", e);
             sendError(FINGERPRINT_ERROR_HW_UNAVAILABLE, 0, 0);
