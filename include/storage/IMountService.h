@@ -71,6 +71,7 @@ public:
     virtual bool getMountedObbPath(const String16& filename, String16& path) = 0;
     virtual int32_t decryptStorage(const String16& password) = 0;
     virtual int32_t encryptStorage(const String16& password) = 0;
+    virtual int32_t encryptWipeStorage(const String16& password) = 0;
 };
 
 // ----------------------------------------------------------------------------
