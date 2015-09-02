@@ -490,7 +490,7 @@
          values/config.xml) and must be truncated. May need to be localized
          for most appropriate textual indicator of "more than X".
          [CHAR LIMIT=4] -->
-    <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="status_bar_notification_info_overflow">\u221e</string>
 
     <!-- Displayed to the user to tell them that they have started up the phone in "safe mode" -->
     <string name="safeMode">Safe mode</string>
