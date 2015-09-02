@@ -63,6 +63,7 @@ public class SearchPanelCircleView extends FrameLayout {
     private float mOffset;
     private float mCircleSize, mLeftCircleSize, mRightCircleSize;
     private boolean mHorizontal;
+    private boolean mLeftNavbar;
     private boolean mCircleHidden;
     private ImageView mLogo;
     private boolean mDraggedFarEnough;
@@ -332,7 +333,11 @@ public class SearchPanelCircleView extends FrameLayout {
         float t = (mStaticOffset - mOffset) / (float) mStaticOffset;
         if (!exitAnimationRunning) {
             if (mHorizontal) {
-                translationX += t * mStaticOffset * 0.3f;
+                if (mLeftNavbar) {
+                    translationX -= t * mStaticOffset * 0.3f;
+                } else {
+                    translationX += t * mStaticOffset * 0.3f;
+                }
             } else {
                 translationY += t * mStaticOffset * 0.3f;
             }
@@ -358,7 +363,11 @@ public class SearchPanelCircleView extends FrameLayout {
         int left, top;
         float circleSize = useStaticSize ? mCircleMinSize : mRightCircleSize;
         if (mHorizontal) {
-            left = (int) (getWidth() - circleSize / 2 - offset);
+            if (mLeftNavbar) {
+                left = (int) (circleSize / 2);
+            } else {
+                left = (int) (getWidth() - circleSize / 2 - offset);
+            }
             top = (int) (getHeight() - circleSize) / 2;
             top = (int) ((top / 2) - (circleSize / 2));
         } else {
@@ -373,7 +382,11 @@ public class SearchPanelCircleView extends FrameLayout {
         int left, top;
         float circleSize = useStaticSize ? mCircleMinSize : mLeftCircleSize;
         if (mHorizontal) {
-            left = (int) (getWidth() - circleSize / 2 - offset);
+            if (mLeftNavbar) {
+                left = (int) (circleSize / 2);
+            } else {
+                left = (int) (getWidth() - circleSize / 2 - offset);
+            }
             top = (int) ((getHeight() / 4) - ((3 * circleSize) / 4));
             top = (int) (getHeight() - top - circleSize);
         } else {
@@ -388,7 +401,11 @@ public class SearchPanelCircleView extends FrameLayout {
         int left, top;
         float circleSize = useStaticSize ? mCircleMinSize : mCircleSize;
         if (mHorizontal) {
-            left = (int) (getWidth() - circleSize / 2 - mBaseMargin - offset);
+            if (mLeftNavbar) {
+                left = (int) (mBaseMargin + offset - circleSize / 2);
+            } else {
+                left = (int) (getWidth() - circleSize / 2 - mBaseMargin - offset);
+            }
             top = (int) ((getHeight() - circleSize) / 2);
         } else {
             left = (int) (getWidth() - circleSize) / 2;
@@ -398,7 +415,15 @@ public class SearchPanelCircleView extends FrameLayout {
     }
 
     public void setHorizontal(boolean horizontal) {
+        startAbortAnimation(null);
         mHorizontal = horizontal;
+        updateCircleRect(mStaticRect, mStaticOffset, true);
+        updateLayout();
+    }
+
+    public void setLeftNavbar(boolean leftNavbar) {
+        startAbortAnimation(null);
+        mLeftNavbar = leftNavbar;
         updateCircleRect(mStaticRect, mStaticOffset, true);
         updateLayout();
     }
@@ -664,7 +689,7 @@ public class SearchPanelCircleView extends FrameLayout {
             return true;
         }
         if (mHorizontal) {
-            return x <= rect.right &&
+            return ((x <= rect.right && !mLeftNavbar) || (x >= rect.left && mLeftNavbar)) &&
                     (y >= rect.top - rect.height() / 2)
                     && (y <= rect.bottom + rect.height() / 2);
         } else {
@@ -677,17 +702,14 @@ public class SearchPanelCircleView extends FrameLayout {
     public int isIntersecting(MotionEvent event) {
         if (isRectConsideredActive(mCircleRect, event)) {
             mIntersectIndex = 1;
-            return 1;
         } else if (isRectConsideredActive(mCircleRectLeft, event)) {
             mIntersectIndex = 0;
-            return 0;
         } else if (isRectConsideredActive(mCircleRectRight, event)) {
             mIntersectIndex = 2;
-            return 2;
         } else {
             mIntersectIndex = -1;
-            return -1;
         }
+        return mIntersectIndex;
     }
 
     public void initializeAdditionalTargets(SearchPanelView panelView) {
