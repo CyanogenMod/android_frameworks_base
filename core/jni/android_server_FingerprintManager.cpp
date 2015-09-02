@@ -181,6 +181,23 @@ static jint nativeGetNumEnrollmentSteps(JNIEnv* env) {
     return reinterpret_cast<jint>(gContext.device->get_num_enrollment_steps(gContext.device));
 }
 
+static jint nativeSetParameters(JNIEnv* env, jstring jParameters) {
+    ALOG(LOG_VERBOSE, LOG_TAG, "nativeSetParameters()\n");
+    int rc;
+
+    if (!gContext.device->set_parameters)
+        return 0;
+    const char *params = NULL;
+    params = jParameters ? env->GetStringUTFChars(jParameters, NULL) : NULL;
+    if (!params) {
+        jniThrowNullPointerException(env, "parameters");
+        return -1;
+    }
+    rc = reinterpret_cast<jint>(gContext.device->set_parameters(gContext.device, params));
+    env->ReleaseStringUTFChars(jParameters, params);
+    return rc;
+}
+
 static jint nativeOpenHal(JNIEnv* env, jobject clazz) {
     ALOG(LOG_VERBOSE, LOG_TAG, "nativeOpenHal()\n");
     int err;
@@ -245,7 +262,8 @@ static const JNINativeMethod g_methods[] = {
     { "nativeCloseHal", "()I", (void*)nativeCloseHal },
     { "nativeInit", "(Lcom/android/server/fingerprint/FingerprintService;)V", (void*)nativeInit },
     { "nativeGetEnrollments", "()[Landroid/hardware/fingerprint/Fingerprint;", (void*)nativeGetEnrollments },
-    { "nativeGetNumEnrollmentSteps", "()I", (void*)nativeGetNumEnrollmentSteps }
+    { "nativeGetNumEnrollmentSteps", "()I", (void*)nativeGetNumEnrollmentSteps },
+    { "nativeSetParameters", "(Ljava/lang/String;)I", (void *)nativeSetParameters }
 };
 
 int register_android_server_fingerprint_FingerprintService(JNIEnv* env) {
