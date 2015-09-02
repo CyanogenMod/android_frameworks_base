@@ -154,6 +154,7 @@ public class FingerprintService extends SystemService {
     native void nativeInit(FingerprintService service);
     native Fingerprint[] nativeGetEnrollments();
     native int nativeGetNumEnrollmentSteps();
+    native int nativeSetParameters(String parameters);
 
     // JNI methods for communicating from HAL to clients
     void notify(int msg, int arg1, int arg2) {
