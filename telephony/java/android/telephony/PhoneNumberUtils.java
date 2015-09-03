@@ -16,6 +16,7 @@
 
 package android.telephony;
 
+import android.util.Log;
 import android.util.SparseArray;
 import com.android.i18n.phonenumbers.NumberParseException;
 import com.android.i18n.phonenumbers.PhoneNumberUtil;
@@ -1910,8 +1911,7 @@ public class PhoneNumberUtils
                     }
                 }
             }
-            // no matches found against the list!
-            return false;
+            // no matches found against the list, fall through to fallback!
         }
 
         Rlog.d(LOG_TAG, "System property doesn't provide any emergency numbers."
@@ -1920,7 +1920,9 @@ public class PhoneNumberUtils
         // If slot id is invalid, means that there is no sim card.
         // According spec 3GPP TS22.101, the following numbers should be
         // ECC numbers when SIM/USIM is not present.
-        emergencyNumbers = ((slotId < 0) ? "112,911,000,08,110,118,119,999" : "112,911");
+        // emergencyNumbers = ((slotId < 0) ? "112,911,000,08,110,118,119,999" : "112,911");
+        // Using this as a fallback, and appending 994 for HAM-159
+        emergencyNumbers = "112,911,000,08,110,118,119,999,994";
 
         for (String emergencyNum : emergencyNumbers.split(",")) {
             if (useExactMatch) {
