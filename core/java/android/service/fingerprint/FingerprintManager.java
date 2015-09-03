@@ -344,6 +344,18 @@ public class FingerprintManager {
         return -1;
     }
 
+    public void setWakeup(boolean wakeup) {
+        if (mService != null) {
+            try {
+                return mService.setWakeup(mToken, getCurrentUserId(), wakeup);
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in setWakeup(): ", e);
+            }
+        } else {
+            Log.w(TAG, "setWakeup(): Service not connected!");
+        }
+    }
+
     private void sendError(int msg, int arg1, int arg2) {
         mHandler.obtainMessage(msg, arg1, arg2);
     }
