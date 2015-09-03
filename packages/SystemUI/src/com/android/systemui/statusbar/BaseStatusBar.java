@@ -160,7 +160,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private static final Uri SPAM_MESSAGE_URI = new Uri.Builder()
            .scheme(ContentResolver.SCHEME_CONTENT)
             .authority(SpamMessageProvider.AUTHORITY)
-            .appendPath("message")
+            .appendPath("messages")
             .build();
 
     protected CommandQueue mCommandQueue;
@@ -902,12 +902,17 @@ public abstract class BaseStatusBar extends SystemUI implements
             filterButton.setVisibility(View.VISIBLE);
             filterButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    ContentValues values = new ContentValues();
-                    String message = SpamFilter.getNotificationContent(
-                    sbn.getNotification());
-                    values.put(NotificationTable.MESSAGE_TEXT, message);
-                    values.put(PackageTable.PACKAGE_NAME, pkg);
-                    mContext.getContentResolver().insert(SPAM_MESSAGE_URI, values);
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            ContentValues values = new ContentValues();
+                            String message = SpamFilter.getNotificationContent(
+                                    sbn.getNotification());
+                            values.put(NotificationTable.MESSAGE_TEXT, message);
+                            values.put(PackageTable.PACKAGE_NAME, pkg);
+                            mContext.getContentResolver().insert(SPAM_MESSAGE_URI, values);
+                        }
+                    });
                     removeNotification(sbn.getKey(), null);
                     onNotificationClear(sbn);
                 }
