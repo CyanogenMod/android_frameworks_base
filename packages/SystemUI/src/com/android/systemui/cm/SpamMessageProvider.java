@@ -67,7 +67,7 @@ public class SpamMessageProvider extends ContentProvider {
                     + NotificationTable.PACKAGE_ID;
             qb.appendWhere(pkgId + "=" + notificationPkgId);
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
-            Cursor ret = qb.query(db, new String[]{NotificationTable.TABLE_NAME + ".*"},
+            Cursor ret = qb.query(db, projection,
                     selection, selectionArgs, null, null, null);
             return ret;
         case MESSAGE_FOR_ID:
