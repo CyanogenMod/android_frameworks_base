@@ -67,7 +67,7 @@ public class SpamMessageProvider extends ContentProvider {
                     + NotificationTable.PACKAGE_ID;
             qb.appendWhere(pkgId + "=" + notificationPkgId);
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
-            Cursor ret = qb.query(db, new String[]{NotificationTable.TABLE_NAME + ".*"},
+            Cursor ret = qb.query(db, projection,
                     selection, selectionArgs, null, null, null);
             ret.moveToFirst();
             return ret;
@@ -140,6 +140,8 @@ public class SpamMessageProvider extends ContentProvider {
     }
 
     private void notifyChange() {
+        // content://spamfilter/123?type=deleted
+        // content://spamfilter/123?type=inserted
         getContext().getContentResolver().notifyChange(SpamFilter.NOTIFICATION_URI, null);
     }
 
@@ -171,6 +173,7 @@ public class SpamMessageProvider extends ContentProvider {
             int result = mDbHelper.getWritableDatabase().delete(NotificationTable.TABLE_NAME,
                     NotificationTable.ID + "=?", new String[]{uri.getLastPathSegment()});
             removePackageIfNecessary(packageId);
+            if (result )
             notifyChange();
             return result;
         default:
