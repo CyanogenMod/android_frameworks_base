@@ -62,6 +62,9 @@ import java.util.Map;
 public class FingerprintService extends SystemService {
     private final String TAG = "FingerprintService";
     private static final boolean DEBUG = true;
+
+    private static final String PARAM_WAKEUP = "wakeup";
+
     private ArrayMap<IBinder, ClientData> mClients = new ArrayMap<IBinder, ClientData>();
 
     private static final int MSG_NOTIFY = 10;
@@ -81,6 +84,9 @@ public class FingerprintService extends SystemService {
     private Context mContext;
     private int mState = STATE_IDLE;
 
+    // Whether the sensor should be in wake up mode
+    private boolean mWakeupMode = false;
+    private IBinder mWakeClient;
 
     private static final long MS_PER_SEC = 1000;
 
@@ -116,7 +122,10 @@ public class FingerprintService extends SystemService {
 
         IBinder getToken() { return token.get(); }
         public void binderDied() {
-            mClients.remove(token);
+            mClients.remove(getToken());
+            if (mWakeClient != null && mWakeClient == getToken()) {
+                setWakeupModeInternal(mWakeClient, false);
+            }
             this.token = null;
         }
 
@@ -124,7 +133,10 @@ public class FingerprintService extends SystemService {
             try {
                 if (token != null) {
                     if (DEBUG) Slog.w(TAG, "removing leaked reference: " + token);
-                    mClients.remove(token);
+                    mClients.remove(getToken());
+                    if (mWakeClient != null && mWakeClient == getToken()) {
+                        setWakeupModeInternal(mWakeClient, false);
+                    }
                 }
             } finally {
                 super.finalize();
@@ -166,7 +178,9 @@ public class FingerprintService extends SystemService {
         int newState = mState;
         for (Iterator<Map.Entry<IBinder, ClientData>> it = mClients.entrySet().iterator();
                 it.hasNext(); ) {
-            ClientData clientData = it.next().getValue();
+            final Map.Entry<IBinder, ClientData> entry = it.next();
+            IBinder client = entry.getKey();
+            ClientData clientData = entry.getValue();
             switch (msg) {
                 case FingerprintManager.FINGERPRINT_ERROR: {
                     final int error = arg1;
@@ -183,7 +197,7 @@ public class FingerprintService extends SystemService {
                 break;
                 case FingerprintManager.FINGERPRINT_ACQUIRED: {
                     final int acquireInfo = arg1;
-                    if (mState == STATE_AUTHENTICATING) {
+                    if (mState == STATE_AUTHENTICATING || client == mWakeClient) {
                         try {
                             vibrateDeviceIfSupported();
                             if (clientData != null && clientData.receiver != null) {
@@ -201,7 +215,7 @@ public class FingerprintService extends SystemService {
                 }
                 case FingerprintManager.FINGERPRINT_PROCESSED: {
                     final int fingerId = arg1;
-                    if (mState == STATE_AUTHENTICATING) {
+                    if (mState == STATE_AUTHENTICATING || client == mWakeClient) {
                         try {
                             newState = STATE_IDLE;
                             if (clientData != null && clientData.receiver != null) {
@@ -502,6 +516,30 @@ public class FingerprintService extends SystemService {
         }
     }
 
+    private void setWakeupModeInternal(IBinder token, boolean wakeupMode) {
+        if (mWakeClient != null && mWakeClient != token) {
+            Slog.e(TAG, "Trying to call setWakeupMode() while another client has not unset it, bailing");
+            return;
+        }
+        if (wakeupMode != mWakeupMode) {
+            mWakeupMode = wakeupMode;
+            if (mWakeupMode) {
+                mWakeClient = token;
+            } else {
+                mWakeClient = null;
+            }
+
+            final String params = PARAM_WAKEUP + "=" + (wakeupMode ? 1 : 0);
+            nativeSetParameters(params);
+        }
+    }
+
+    private void setWakeupMode(IBinder token, int userId, boolean wakeupMode) {
+        enforceCrossUserPermission(userId, "User " + UserHandle.getCallingUserId()
+                + " trying to add account for " + userId);
+        setWakeupModeInternal(token, wakeupMode);
+    }
+
     private final class FingerprintServiceWrapper extends IFingerprintService.Stub {
         private final static String DUMP_CMD_REMOVE_FINGER = "removeFinger";
         private final static String DUMP_CMD_PRINT_ENROLLMENTS = "printEnrollments";
@@ -580,6 +618,13 @@ public class FingerprintService extends SystemService {
             checkPermission();
             throwIfNoFingerprint();
             return FingerprintService.this.getState();
+        }
+
+        @Override
+        public void setWakeup(IBinder token, int userId, boolean wakeup) throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
+            setWakeupMode(token, userId, wakeup);
         }
 
         /**
