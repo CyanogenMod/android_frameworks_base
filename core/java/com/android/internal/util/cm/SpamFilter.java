@@ -38,6 +38,11 @@ public class SpamFilter {
         return msg.toLowerCase().replaceAll("[^\\p{L}\\p{Nd}]+", "");
     }
 
+    public static String getNormalizedNotificationContent(Notification notification) {
+        String content = getNotificationContent(notification);
+        return getNormalizedContent(content);
+    }
+
     public static String getNotificationContent(Notification notification) {
         Bundle extras = notification.extras;
         String titleExtra = extras.containsKey(Notification.EXTRA_TITLE_BIG)
