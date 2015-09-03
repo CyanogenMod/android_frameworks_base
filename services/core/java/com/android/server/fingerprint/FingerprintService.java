@@ -61,7 +61,10 @@ import java.util.Map;
  */
 public class FingerprintService extends SystemService {
     private final String TAG = "FingerprintService";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
+
+    private static final String PARAM_WAKEUP = "wakeup";
+
     private ArrayMap<IBinder, ClientData> mClients = new ArrayMap<IBinder, ClientData>();
 
     private static final int MSG_NOTIFY = 10;
@@ -81,14 +84,12 @@ public class FingerprintService extends SystemService {
     private Context mContext;
     private int mState = STATE_IDLE;
 
+    // Whether the sensor should be in wake up mode
+    private boolean mWakeupMode = false;
+    private IBinder mWakeClient;
 
     private static final long MS_PER_SEC = 1000;
 
-    /**
-     * The time, in milliseconds, to run the device vibrator after a fingerprint
-     * image has been aquired or enrolled by the fingerprint sensor.
-     */
-    private static final long FINGERPRINT_EVENT_VIBRATE_DURATION = 100;
 
     /**
      * A local instance of {@link android.os.Vibrator} as retrieved using
@@ -116,15 +117,23 @@ public class FingerprintService extends SystemService {
 
         IBinder getToken() { return token.get(); }
         public void binderDied() {
-            mClients.remove(token);
+            Slog.i(TAG, "binderDied() called with " + "");
+            mClients.remove(getToken());
+            if (getToken() == mWakeClient) {
+                Slog.e(TAG, "binderDied() cleaning up wake client!");
+                mWakeClient = null;
+            }
             this.token = null;
         }
 
         protected void finalize() throws Throwable {
             try {
                 if (token != null) {
-                    if (DEBUG) Slog.w(TAG, "removing leaked reference: " + token);
-                    mClients.remove(token);
+                    if (DEBUG) Slog.w(TAG, "removing leaked reference: " + getToken());
+                    mClients.remove(getToken());
+                    if (getToken() == mWakeClient) {
+                        mWakeClient = null;
+                    }
                 }
             } finally {
                 super.finalize();
@@ -166,7 +175,9 @@ public class FingerprintService extends SystemService {
         int newState = mState;
         for (Iterator<Map.Entry<IBinder, ClientData>> it = mClients.entrySet().iterator();
                 it.hasNext(); ) {
-            ClientData clientData = it.next().getValue();
+            final Map.Entry<IBinder, ClientData> entry = it.next();
+            IBinder client = entry.getKey();
+            ClientData clientData = entry.getValue();
             switch (msg) {
                 case FingerprintManager.FINGERPRINT_ERROR: {
                     final int error = arg1;
@@ -183,7 +194,7 @@ public class FingerprintService extends SystemService {
                 break;
                 case FingerprintManager.FINGERPRINT_ACQUIRED: {
                     final int acquireInfo = arg1;
-                    if (mState == STATE_AUTHENTICATING) {
+                    if (mState == STATE_AUTHENTICATING || client == mWakeClient) {
                         try {
                             vibrateDeviceIfSupported();
                             if (clientData != null && clientData.receiver != null) {
@@ -201,7 +212,7 @@ public class FingerprintService extends SystemService {
                 }
                 case FingerprintManager.FINGERPRINT_PROCESSED: {
                     final int fingerId = arg1;
-                    if (mState == STATE_AUTHENTICATING) {
+                    if (mState == STATE_AUTHENTICATING || client == mWakeClient) {
                         try {
                             newState = STATE_IDLE;
                             if (clientData != null && clientData.receiver != null) {
@@ -263,8 +274,8 @@ public class FingerprintService extends SystemService {
     }
 
     private void vibrateDeviceIfSupported() {
-        if (mVibrator != null && !mDisableVibration) {
-            mVibrator.vibrate(FINGERPRINT_EVENT_VIBRATE_DURATION);
+        if (mVibrator != null && !mDisableVibration && !mWakeupMode) {
+            mVibrator.vibrate(FingerprintManager.FINGERPRINT_EVENT_VIBRATE_DURATION);
         }
     }
 
@@ -347,14 +358,18 @@ public class FingerprintService extends SystemService {
 
     void removeListener(IBinder token, int userId) {
         if (DEBUG) Slog.v(TAG, "stopListening(" + token + ")");
-        ClientData clientData = mClients.get(token);
+        ClientData clientData = mClients.remove(token);
         if (clientData != null) {
             token.unlinkToDeath(clientData.tokenWatcher, 0);
-            mClients.remove(token);
+            clientData.receiver = null;
+            clientData.tokenWatcher = null;
+            if (token == mWakeClient) {
+                setWakeupModeInternal(mWakeClient, false);
+                mWakeClient = null;
+            }
         } else {
             if (DEBUG) Slog.v(TAG, "listener not registered: " + token);
         }
-        mClients.remove(token);
     }
 
     public synchronized int getState() {
@@ -502,6 +517,23 @@ public class FingerprintService extends SystemService {
         }
     }
 
+    private void setWakeupModeInternal(IBinder token, boolean wakeupMode) {
+        if (wakeupMode != mWakeupMode) {
+            mWakeupMode = wakeupMode;
+            mWakeClient = token;
+            final String params = PARAM_WAKEUP + "=" + (wakeupMode ? 1 : 0);
+            nativeSetParameters(params);
+        }
+    }
+
+    private void setWakeupMode(IBinder token, int userId, boolean wakeupMode) {
+        enforceCrossUserPermission(userId, "User " + UserHandle.getCallingUserId()
+                + " trying to add account for " + userId);
+        // only keyguard should call this
+        mContext.enforceCallingOrSelfPermission(Manifest.permission.CONTROL_KEYGUARD, null);
+        setWakeupModeInternal(token, wakeupMode);
+    }
+
     private final class FingerprintServiceWrapper extends IFingerprintService.Stub {
         private final static String DUMP_CMD_REMOVE_FINGER = "removeFinger";
         private final static String DUMP_CMD_PRINT_ENROLLMENTS = "printEnrollments";
@@ -580,6 +612,13 @@ public class FingerprintService extends SystemService {
             checkPermission();
             throwIfNoFingerprint();
             return FingerprintService.this.getState();
+        }
+
+        @Override
+        public void setWakeup(IBinder token, int userId, boolean wakeup) throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
+            setWakeupMode(token, userId, wakeup);
         }
 
         /**
