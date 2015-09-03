@@ -16,7 +16,6 @@
 
 package android.service.fingerprint;
 
-import android.app.ActivityManagerNative;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.hardware.fingerprint.Fingerprint;
@@ -25,7 +24,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteException;
-import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
@@ -79,6 +77,12 @@ public class FingerprintManager {
     public static final int STATE_IDLE = 0;
     public static final int STATE_AUTHENTICATING = 1;
     public static final int STATE_ENROLLING = 2;
+
+    /**
+     * The time, in milliseconds, to run the device vibrator after a fingerprint
+     * image has been aquired or enrolled by the fingerprint sensor.
+     */
+    public static final long FINGERPRINT_EVENT_VIBRATE_DURATION = 100;
 
     private IFingerprintService mService;
     private FingerprintManagerReceiver mClientReceiver;
@@ -342,6 +346,26 @@ public class FingerprintManager {
             Log.w(TAG, "getNumEnrollmentSteps(): Service not connected!");
         }
         return -1;
+    }
+
+    /**
+     * Set the fingerprint hardware into wake up mode.
+     * During wakeup mode, vibrations will be disabled.
+     *
+     * Requires the caller hold {@link android.Manifest.permission#CONTROL_KEYGUARD} permission.
+     *
+     * @param wakeup whether to enable wakeup mode or not.
+     */
+    public void setWakeup(boolean wakeup) {
+        if (mService != null) {
+            try {
+                mService.setWakeup(mToken, getCurrentUserId(), wakeup);
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in setWakeup(): ", e);
+            }
+        } else {
+            Log.w(TAG, "setWakeup(): Service not connected!");
+        }
     }
 
     private void sendError(int msg, int arg1, int arg2) {
