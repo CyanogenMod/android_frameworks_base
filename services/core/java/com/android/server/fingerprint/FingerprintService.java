@@ -62,6 +62,9 @@ import java.util.Map;
 public class FingerprintService extends SystemService {
     private final String TAG = "FingerprintService";
     private static final boolean DEBUG = true;
+
+    private static final String PARAM_WAKEUP = "wakeup";
+
     private ArrayMap<IBinder, ClientData> mClients = new ArrayMap<IBinder, ClientData>();
 
     private static final int MSG_NOTIFY = 10;
@@ -81,6 +84,8 @@ public class FingerprintService extends SystemService {
     private Context mContext;
     private int mState = STATE_IDLE;
 
+    // Whether the sensor should be in wake up mode
+    private boolean mWakeupMode = false;
 
     private static final long MS_PER_SEC = 1000;
 
@@ -502,6 +507,18 @@ public class FingerprintService extends SystemService {
         }
     }
 
+    private void setWakeupMode(IBinder token, int userId, boolean wakeupMode) {
+        enforceCrossUserPermission(userId, "User " + UserHandle.getCallingUserId()
+                + " trying to add account for " + userId);
+
+        if (wakeupMode != mWakeupMode) {
+            mWakeupMode = wakeupMode;
+
+            final String params = PARAM_WAKEUP + "=" + (wakeupMode ? 1 : 0);
+            nativeSetParameters(params);
+        }
+    }
+
     private final class FingerprintServiceWrapper extends IFingerprintService.Stub {
         private final static String DUMP_CMD_REMOVE_FINGER = "removeFinger";
         private final static String DUMP_CMD_PRINT_ENROLLMENTS = "printEnrollments";
@@ -580,6 +597,13 @@ public class FingerprintService extends SystemService {
             checkPermission();
             throwIfNoFingerprint();
             return FingerprintService.this.getState();
+        }
+
+        @Override
+        public void setWakeup(IBinder token, int userId, boolean wakeup) throws RemoteException {
+            checkPermission();
+            throwIfNoFingerprint();
+            setWakeupMode(token, userId, wakeup);
         }
 
         /**
