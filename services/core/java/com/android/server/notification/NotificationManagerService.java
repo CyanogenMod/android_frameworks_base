@@ -92,6 +92,7 @@ import android.util.AtomicFile;
 import android.util.Log;
 import android.util.LruCache;
 import android.util.Slog;
+import android.util.SparseIntArray;
 import android.util.Xml;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
@@ -138,6 +139,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /** {@hide} */
 public class NotificationManagerService extends SystemService {
@@ -220,7 +222,7 @@ public class NotificationManagerService extends SystemService {
     private boolean mUseAttentionLight;
     boolean mSystemReady;
 
-    private final LruCache<Integer, FilterCacheInfo> mSpamCache;
+    private final SparseIntArray mSpamCache;
     private ExecutorService mSpamExecutor = Executors.newSingleThreadExecutor();
 
     private static final Uri FILTER_MSG_URI = new Uri.Builder()
@@ -845,6 +847,69 @@ public class NotificationManagerService extends SystemService {
         }
     };
 
+    class SpamFilterObserver extends ContentObserver {
+        private static final int NOTIF_ID_COL_INDEX = 0;
+        private static final int NOTIF_PACKAGE_NAME_COL_INDEX = 1;
+        private static final int NOTIF_NORMALIZED_TEXT_COL_INDEX = 2;
+
+        private Future mTask;
+
+        public SpamFilterObserver(Handler handler) {
+            super(handler);
+        }
+
+        private Runnable mFetchFilters = new Runnable() {
+            @Override
+            public void run() {
+                Cursor c = getContext().getContentResolver().query(FILTER_MSG_URI,
+                        new String[]{NotificationTable.ID, PackageTable.PACKAGE_NAME,
+                                NotificationTable.NORMALIZED_TEXT}, null, null, null);
+                if (c != null) {
+                    synchronized (mSpamCache) {
+                        mSpamCache.clear();
+                    }
+                    while (c.moveToNext()) {
+                        int notifId = c.getInt(
+                                NOTIF_ID_COL_INDEX);
+                        String pkgName = c.getString(
+                                NOTIF_PACKAGE_NAME_COL_INDEX);
+                        String normalizedText = c.getString(
+                                NOTIF_NORMALIZED_TEXT_COL_INDEX);
+                        int hash = getSpamCacheHash(normalizedText, pkgName);
+                        synchronized (mSpamCache) {
+                            mSpamCache.put(hash, notifId);
+                        }
+                        if (Thread.interrupted()) {
+                            break;
+                        }
+                    }
+                }
+                c.close();
+            }
+        };
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        void update() {
+            if (mTask != null && !mTask.isDone()) {
+                mTask.cancel(true);
+            }
+            mTask = mSpamExecutor.submit(mFetchFilters);
+        }
+
+        public void observe() {
+            ContentResolver resolver = getContext().getContentResolver();
+            Uri uri = new Uri.Builder()
+                    .scheme(ContentResolver.SCHEME_CONTENT)
+                    .authority(SpamFilter.AUTHORITY).build();
+            resolver.registerContentObserver(uri, false, this, UserHandle.USER_ALL);
+            update();
+        }
+    }
+
     class SettingsObserver extends ContentObserver {
         private final Uri NOTIFICATION_LIGHT_PULSE_URI
                 = Settings.System.getUriFor(Settings.System.NOTIFICATION_LIGHT_PULSE);
@@ -939,6 +1004,7 @@ public class NotificationManagerService extends SystemService {
     }
 
     private SettingsObserver mSettingsObserver;
+    private SpamFilterObserver mSpamFilterObserver;
     private ZenModeHelper mZenModeHelper;
 
     private final Runnable mBuzzBeepBlinked = new Runnable() {
@@ -963,7 +1029,7 @@ public class NotificationManagerService extends SystemService {
 
     public NotificationManagerService(Context context) {
         super(context);
-        mSpamCache = new LruCache<Integer, FilterCacheInfo>(100);
+        mSpamCache = new SparseIntArray();
     }
 
     @Override
@@ -1089,6 +1155,9 @@ public class NotificationManagerService extends SystemService {
 
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
+
+        mSpamFilterObserver = new SpamFilterObserver(mHandler);
+        mSpamFilterObserver.observe();
 
         mArchive = new Archive(resources.getInteger(
                 R.integer.config_notificationServiceArchiveSize));
@@ -2627,47 +2696,29 @@ public class NotificationManagerService extends SystemService {
         return (x < low) ? low : ((x > high) ? high : x);
     }
 
-	private int getNotificationHash(Notification notification, String packageName) {
-        CharSequence message = SpamFilter.getNotificationContent(notification);
-        return (message + ":" + packageName).hashCode();
-    }
-
-    private static final class FilterCacheInfo {
-        String packageName;
-        int notificationId;
+    private int getSpamCacheHash(CharSequence message, String packageName) {
+        return (message + packageName).hashCode();
     }
 
     private boolean isNotificationSpam(Notification notification, String basePkg) {
-        Integer notificationHash = getNotificationHash(notification, basePkg);
+        CharSequence normalizedContent = SpamFilter
+                .getNormalizedNotificationContent(notification);
+        int notificationHash = getSpamCacheHash(normalizedContent, basePkg);
         boolean isSpam = false;
-        if (mSpamCache.get(notificationHash) != null) {
-            isSpam = true;
-        } else {
-            String msg = SpamFilter.getNotificationContent(notification);
-            Cursor c = getContext().getContentResolver().query(FILTER_MSG_URI, null, IS_FILTERED_QUERY,
-                    new String[]{SpamFilter.getNormalizedContent(msg), basePkg}, null);
-            if (c != null) {
-                if (c.moveToFirst()) {
-                    FilterCacheInfo info = new FilterCacheInfo();
-                    info.packageName = basePkg;
-                    int notifId = c.getInt(c.getColumnIndex(NotificationTable.ID));
-                    info.notificationId = notifId;
-                    mSpamCache.put(notificationHash, info);
-                    isSpam = true;
-                }
-                c.close();
+        synchronized (mSpamCache) {
+            if (mSpamCache.indexOfKey(notificationHash) >= 0) {
+                isSpam = true;
+                final int notifId = mSpamCache.get(notificationHash);
+                mSpamExecutor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        Uri updateUri = Uri.withAppendedPath(UPDATE_MSG_URI,
+                                String.valueOf(notifId));
+                        getContext().getContentResolver().update(updateUri,
+                                new ContentValues(), null, null);
+                    }
+                });
             }
-        }
-        if (isSpam) {
-            final int notifId = mSpamCache.get(notificationHash).notificationId;
-            mSpamExecutor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    Uri updateUri = Uri.withAppendedPath(UPDATE_MSG_URI, String.valueOf(notifId));
-                    getContext().getContentResolver().update(updateUri, new ContentValues(),
-                            null, null);
-                }
-            });
         }
         return isSpam;
     }
