@@ -69,7 +69,6 @@ public class SpamMessageProvider extends ContentProvider {
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
             Cursor ret = qb.query(db, new String[]{NotificationTable.TABLE_NAME + ".*"},
                     selection, selectionArgs, null, null, null);
-            ret.moveToFirst();
             return ret;
         case MESSAGE_FOR_ID:
             qb = new SQLiteQueryBuilder();
@@ -118,8 +117,10 @@ public class SpamMessageProvider extends ContentProvider {
             values.clear();
             values.put(PackageTable.PACKAGE_NAME, packageName);
             long packageId = getPackageId(packageName);
+            SQLiteDatabase writableDb = null;
             if (packageId == -1) {
-                packageId = mDbHelper.getWritableDatabase().insert(
+                writableDb = mDbHelper.getWritableDatabase();
+                packageId = writableDb.insert(
                         PackageTable.TABLE_NAME, null, values);
             }
             if (packageId != -1) {
@@ -133,6 +134,8 @@ public class SpamMessageProvider extends ContentProvider {
                         null, values);
                 notifyChange();
             }
+            // Close the writable DB if non-null
+            if (writableDb != null) writableDb.close();
             return null;
         default:
             return null;
@@ -148,8 +151,10 @@ public class SpamMessageProvider extends ContentProvider {
                 NotificationTable.TABLE_NAME, NotificationTable.PACKAGE_ID + "=?",
                 new String[]{String.valueOf(packageId)});
         if (numEntries == 0) {
-            mDbHelper.getWritableDatabase().delete(PackageTable.TABLE_NAME, PackageTable.ID + "=?",
+            SQLiteDatabase writableDb = mDbHelper.getWritableDatabase();
+            writableDb.delete(PackageTable.TABLE_NAME, PackageTable.ID + "=?",
                     new String[]{String.valueOf(packageId)});
+            writableDb.close();
         }
     }
 
@@ -168,8 +173,10 @@ public class SpamMessageProvider extends ContentProvider {
                 }
                 idCursor.close();
             }
-            int result = mDbHelper.getWritableDatabase().delete(NotificationTable.TABLE_NAME,
+            SQLiteDatabase writableDb = mDbHelper.getWritableDatabase();
+            int result = writableDb.delete(NotificationTable.TABLE_NAME,
                     NotificationTable.ID + "=?", new String[]{uri.getLastPathSegment()});
+            writableDb.close();
             removePackageIfNecessary(packageId);
             notifyChange();
             return result;
@@ -185,7 +192,9 @@ public class SpamMessageProvider extends ContentProvider {
         case MESSAGE_UPDATE_COUNT:
             String formattedQuery = String.format(UPDATE_COUNT_QUERY,
                     System.currentTimeMillis(), uri.getLastPathSegment());
-            mDbHelper.getWritableDatabase().execSQL(formattedQuery);
+            SQLiteDatabase writableDb = mDbHelper.getWritableDatabase();
+            writableDb.execSQL(formattedQuery);
+            writableDb.close();
             notifyChange();
             return 0;
         default:
