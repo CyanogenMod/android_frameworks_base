@@ -388,6 +388,11 @@ public class AudioService extends IAudioService.Stub {
                 sendMsg(mAudioHandler, MSG_MEDIA_SERVER_DIED,
                         SENDMSG_NOOP, 0, 0, null, 0);
                 break;
+            case AudioSystem.AUDIO_STATUS_MULTIPLE_HOTWORD_INPUT_ATTEMPT:
+                // TODO handle this
+                android.util.Log.d("TEST", "Received message that multiple hotword inputs" +
+                        "were attempted to be used.");
+                break;
             default:
                 break;
             }

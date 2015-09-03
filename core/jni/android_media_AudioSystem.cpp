@@ -147,6 +147,7 @@ static jmethodID gPostEventFromNative;
 enum AudioError {
     kAudioStatusOk = 0,
     kAudioStatusError = 1,
+    kAudioStatusMultipleHotwordInputAttempt = 2,
     kAudioStatusMediaServerDied = 100
 };
 
@@ -241,6 +242,8 @@ static int check_AudioSystem_Command(status_t status)
         return kAudioStatusMediaServerDied;
     case NO_ERROR:
         return kAudioStatusOk;
+    case INVALID_INPUT_MULTIPLE_HOTWORD:
+        return kAudioStatusMultipleHotwordInputAttempt;
     default:
         break;
     }

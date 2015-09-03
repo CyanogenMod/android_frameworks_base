@@ -65,6 +65,7 @@ public class AudioSystem
 
     // Expose only the getter method publicly so we can change it in the future
     private static final int NUM_STREAM_TYPES = 10;
+
     public static final int getNumStreamTypes() { return NUM_STREAM_TYPES; }
 
     /*
@@ -180,6 +181,9 @@ public class AudioSystem
     public static final int AUDIO_STATUS_OK = 0;
     /* Command failed or unspecified audio error.  see ErrorCallback */
     public static final int AUDIO_STATUS_ERROR = 1;
+    /* A second process attempted to control the HOTWORD input while
+     * it was in use by a different process. */
+    public static final int AUDIO_STATUS_MULTIPLE_HOTWORD_INPUT_ATTEMPT = 2;
     /* Media server died. see ErrorCallback */
     public static final int AUDIO_STATUS_SERVER_DIED = 100;
 
@@ -238,6 +242,7 @@ public class AudioSystem
     public static final int PERMISSION_DENIED  = -4;
     public static final int NO_INIT            = -5;
     public static final int DEAD_OBJECT        = -6;
+    public static final int INVALID_INPUT_MULTIPLE_HOTWORD = -7;
 
     /*
      * AudioPolicyService methods

@@ -32,6 +32,7 @@ enum {
     AUDIO_JAVA_PERMISSION_DENIED  = -4,
     AUDIO_JAVA_NO_INIT            = -5,
     AUDIO_JAVA_DEAD_OBJECT        = -6,
+    AUDIO_JAVA_MULTIPLE_HOTWORD   = -7,
 };
 
 static inline jint nativeToJavaStatus(status_t status) {
@@ -48,6 +49,8 @@ static inline jint nativeToJavaStatus(status_t status) {
         return AUDIO_JAVA_NO_INIT;
     case DEAD_OBJECT:
         return AUDIO_JAVA_DEAD_OBJECT;
+    case INVALID_INPUT_MULTIPLE_HOTWORD:
+        return AUDIO_JAVA_MULTIPLE_HOTWORD;
     default:
         return AUDIO_JAVA_ERROR;
     }
