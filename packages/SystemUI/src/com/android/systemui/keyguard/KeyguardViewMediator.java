@@ -16,7 +16,6 @@
 
 package com.android.systemui.keyguard;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -36,6 +35,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -46,7 +46,9 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.os.Vibrator;
 import android.provider.Settings;
+import android.service.fingerprint.FingerprintManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.EventLog;
@@ -294,6 +296,10 @@ public class KeyguardViewMediator extends SystemUI {
      */
     private boolean mKeyguardBound;
 
+    private boolean mStartFingerAuthOnIdle;
+    private boolean mFingerprintWakeUnlock;
+    private boolean mFingerTurnedScreenOn;
+
     /**
      * we send this intent when the keyguard is dismissed.
      */
@@ -478,9 +484,62 @@ public class KeyguardViewMediator extends SystemUI {
             }
         }
 
+        @Override
+        public void onFingerprintStateChange(int state) {
+            Log.i(TAG, "onFingerprintStateChange() called with " + "state = [" + state + "]");
+            if (!isShowingAndNotOccluded()) {
+                Log.d(TAG, "kg not showing.");
+                return;
+            }
+
+            synchronized (KeyguardViewMediator.this) {
+                Log.i(TAG, "onStateChanged() called with " + "state = [" + state + "]");
+
+                if (state == FingerprintManager.STATE_IDLE
+                        && mStartFingerAuthOnIdle && !mFingerprintWakeUnlock) {
+                    Log.w(TAG, "state changed to idle and we requested an auth on idle.");
+                    mStartFingerAuthOnIdle = false;
+                    FingerprintManager fpm = (FingerprintManager)
+                            mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+                    fpm.authenticate();
+                }
+            }
+        }
+
         public void onFingerprintRecognized(int userId) {
-            mViewMediatorCallback.keyguardDone(true);
-        };
+            Log.i(TAG, "onFingerprintRecognized() called with " + "userId = [" + userId + "]");
+            if (!isShowingAndNotOccluded()) {
+                Log.d(TAG, "kg not showing.");
+                return;
+            }
+
+            Log.i(TAG, "onFingerprintRecognized() called with " + "userId = [" + userId + "]");
+
+            synchronized (KeyguardViewMediator.this) {
+                mFingerprintWakeUnlock = !mScreenOn;
+                if (mScreenOn) {
+                    keyguardDone(true, true);
+                } else {
+                    // immediately hide keyguard to avoid going through animations
+                    setShowingLocked(false);
+                    hideLocked();
+                }
+            }
+        }
+
+        @Override
+        public void onScreenTurnedOn() {
+            super.onScreenTurnedOn();
+            synchronized (KeyguardViewMediator.this) {
+                Log.i(TAG, "onScreenTurnedOn() called, mFingerprintWakeUnlock=" + mFingerprintWakeUnlock);
+                if (mFingerTurnedScreenOn) {
+                    mFingerTurnedScreenOn = false;
+                    mFingerprintWakeUnlock = false;
+                } else {
+                    startFingerAuthIfUsingFingerprint();
+                }
+            }
+        }
 
         @Override
         public void onFingerprintAttemptFailed() {
@@ -490,7 +549,53 @@ public class KeyguardViewMediator extends SystemUI {
             }
             userActivity();
         }
+
+        @Override
+        public void onKeyguardVisibilityChanged(boolean showing) {
+            super.onKeyguardVisibilityChanged(showing);
+            Log.i(TAG, "onKeyguardVisibilityChanged() called with " + "showing = [" + showing + "]");
+            synchronized (KeyguardViewMediator.this) {
+                // Make sure if we are not showing that we stop fingerprint authentication
+                if (mLockPatternUtils.usingFingerprint()) {
+                    if (!showing) {
+                        stopAuthenticatingFingerprint();
+                    } else if (mScreenOn && !mFingerprintWakeUnlock) {
+                        // This handles the case when booting and screen is already on
+                        startFingerAuthIfUsingFingerprint();
+                    }
+                }
+            }
+        }
     };
+
+    public void startFingerAuthIfUsingFingerprint() {
+        Log.i(TAG, "startFingerAuthIfUsingFingerprint()");
+        if (mLockPatternUtils.usingFingerprint()) {
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+
+            // Lazily authenticate if the state isn't ready yet. This can happen
+            // if another app (like camera) is stopping and keyguard is resuming, but
+            // camera hasn't received its onPause method yet to cleanup its fingerprint connection
+            if (FingerprintManager.STATE_IDLE != fpm.getState()) {
+                Log.i(TAG, "deferring authenticate until idle fingerprint state");
+                mStartFingerAuthOnIdle = true;
+            } else {
+                // Fingerprint service is already idle, ready to authenticate
+                fpm.authenticate();
+            }
+        }
+    }
+
+
+    public void stopAuthenticatingFingerprint() {
+        Log.i(TAG, "stopAuthenticatingFingerprint() called with " + "");
+        if (mLockPatternUtils.isFingerprintInstalled(mContext)) {
+            FingerprintManager fpm =
+                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+            fpm.cancel();
+        }
+    }
 
     ViewMediatorCallback mViewMediatorCallback = new ViewMediatorCallback() {
 
@@ -530,6 +635,23 @@ public class KeyguardViewMediator extends SystemUI {
         @Override
         public void keyguardGone() {
             mKeyguardDisplayManager.hide();
+            synchronized (KeyguardViewMediator.this) {
+                if (mFingerprintWakeUnlock) {
+                    if (DEBUG) Log.w(TAG, "waking up device due to fingerprint");
+                    mFingerTurnedScreenOn = true;
+
+                    PowerManager pm = (PowerManager)
+                            mContext.getSystemService(Context.POWER_SERVICE);
+                    pm.wakeUp(SystemClock.uptimeMillis());
+
+                    Vibrator v = (Vibrator)
+                            mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(FingerprintManager.FINGERPRINT_EVENT_VIBRATE_DURATION);
+                }
+                if (!mFingerTurnedScreenOn) {
+                    stopAuthenticatingFingerprint();
+                }
+            }
         }
 
         @Override
@@ -1010,10 +1132,11 @@ public class KeyguardViewMediator extends SystemUI {
                 updateActivityLockScreenState();
                 adjustStatusBarLocked();
 
+                Log.w(TAG, "handleSetOccluded");
                 if (isOccluded) {
-                    mUpdateMonitor.stopAuthenticatingFingerprint();
+                    stopAuthenticatingFingerprint();
                 } else {
-                    mUpdateMonitor.startFingerAuthIfUsingFingerprint();
+                    startFingerAuthIfUsingFingerprint();
                 }
             }
         }
@@ -1372,7 +1495,6 @@ public class KeyguardViewMediator extends SystemUI {
             mUpdateMonitor.clearFailedUnlockAttempts(true /* Clear FingerprintAttempts */);
         }
         mUpdateMonitor.clearFingerprintRecognized();
-        mUpdateMonitor.stopAuthenticatingFingerprint();
 
         if (mExitSecureCallback != null) {
             try {
@@ -1532,7 +1654,7 @@ public class KeyguardViewMediator extends SystemUI {
             if (DEBUG) Log.d(TAG, "handleHide");
 
             mHiding = true;
-            if (mShowing && !mOccluded) {
+            if (!mFingerprintWakeUnlock && mShowing && !mOccluded) {
                 if (!mHideAnimationRun) {
                     mStatusBarKeyguardViewManager.startPreHideAnimation(mKeyguardGoingAwayRunnable);
                 } else {
@@ -1542,9 +1664,11 @@ public class KeyguardViewMediator extends SystemUI {
 
                 // Don't try to rely on WindowManager - if Keyguard wasn't showing, window
                 // manager won't start the exit animation.
+
+                long startOffset = mFingerprintWakeUnlock ? 0 : mHideAnimation.getStartOffset();
+                long duration = mFingerprintWakeUnlock ? 0 : mHideAnimation.getDuration();
                 handleStartKeyguardExitAnimation(
-                        SystemClock.uptimeMillis() + mHideAnimation.getStartOffset(),
-                        mHideAnimation.getDuration());
+                        SystemClock.uptimeMillis() + startOffset, duration);
             }
         }
     }
