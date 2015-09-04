@@ -1645,7 +1645,7 @@ public abstract class PackageManager {
      * {@link #hasSystemFeature}: The device is capable of reading a user's fingerprint
      * @hide
      */
-    public static final String FEATURE_FINGERPRINT = "android.hardware.fingerprint";
+    public static final String FEATURE_FINGERPRINT = "cyanogenmod.hardware.fingerprint";
 
     /**
      * Action to external storage service to clean out removed apps.

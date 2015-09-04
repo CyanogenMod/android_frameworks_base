@@ -559,6 +559,7 @@ public class NavigationBarView extends LinearLayout {
                 StatusBarManager.NAVIGATION_HINT_IME_SHOWN) == 0;
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_ALWAYS_MENU, shouldShowAlwaysMenu);
         setButtonWithTagVisibility(NavbarEditor.NAVBAR_CONDITIONAL_MENU, shouldShow);
+        setButtonWithTagVisibility(NavbarEditor.NAVBAR_SEARCH, shouldShowAlwaysMenu);
     }
 
     @Override

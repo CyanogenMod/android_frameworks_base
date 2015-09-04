@@ -107,7 +107,12 @@ public class ActionTarget {
             mContext.sendBroadcast(new Intent("android.settings.SHOW_INPUT_METHOD_PICKER"));
             return true;
         } else if (action.equals(ACTION_SCREENSHOT)) {
-            takeScreenshot();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    takeScreenshot();
+                }
+            }, 350L); // Animation exit duration = 300
             return true;
         } else if (action.equals(ACTION_ASSIST)) {
             return false;

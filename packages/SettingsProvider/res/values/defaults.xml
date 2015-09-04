@@ -67,6 +67,10 @@
          pending notification -->
     <bool name="def_notification_pulse">true</bool>
 
+    <!-- Default value for the notification LEDs brightness
+         on devices equiped with configurable LED controller -->
+    <integer name="def_notification_brightness_level">255</integer>
+
     <bool name="def_mount_play_notification_snd">true</bool>
     <bool name="def_mount_ums_autostart">false</bool>
     <bool name="def_mount_ums_prompt">true</bool>
@@ -267,5 +271,8 @@
 
     <!-- Default for Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION -->
     <bool name="def_swap_volume_keys_on_rotation">false</bool>
+
+    <!-- Default for Settings.System.SYSTEM_PROFILES_ENABLED -->
+    <bool name="def_system_profiles_enabled">true</bool>
 
 </resources>
