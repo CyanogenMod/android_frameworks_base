@@ -357,4 +357,7 @@
 
     <!-- Non-themeable packages -->
     <java-symbol type="array" name="non_themeable_packages" />
+
+    <!-- Config to disable showing ringtones from removable storage -->
+    <java-symbol type="bool" name="config_excludeRingtonesFromRemovableStorage" />
 </resources>
