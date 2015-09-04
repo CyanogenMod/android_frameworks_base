@@ -90,6 +90,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
             try {
                 mVisualizer = new Visualizer(0);
             } catch (Exception e) {
+                mVisualizer = null;
                 return;
             }
 
@@ -106,6 +107,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         @Override
         public void run() {
             if (mVisualizer != null) {
+                mVisualizer.setDataCaptureListener(null, 0, false, false);
                 mVisualizer.setEnabled(false);
                 mVisualizer.release();
                 mVisualizer = null;
