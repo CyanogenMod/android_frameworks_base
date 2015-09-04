@@ -2473,4 +2473,7 @@
     <!-- Boolean to enable Stylus gestures -->
     <bool name="config_stylusGestures">false</bool>
 
+    <!-- Config to disable showing ringtones from removable storage -->
+    <bool name="config_excludeRingtonesFromRemovableStorage">false</bool>
+
 </resources>
