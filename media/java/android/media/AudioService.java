@@ -1455,6 +1455,14 @@ public class AudioService extends IAudioService.Stub {
         sendVolumeUpdate(streamType, oldIndex, index, flags);
     }
 
+    public void handleHotwordInput(boolean listening) {
+        Intent broadcastIntent = new Intent("cyanogenmod.intent.action.HOTWORD_INPUT");
+        // Protect with perm
+        // add extra that is package name
+        // add extra that is state
+        sendBroadcastToAll(broadcastIntent/*, receiverPermission */);
+    }
+
     /** @see AudioManager#forceVolumeControlStream(int) */
     public void forceVolumeControlStream(int streamType, IBinder cb) {
         synchronized(mForceControlStreamLock) {
@@ -1542,10 +1550,14 @@ public class AudioService extends IAudioService.Stub {
     }
 
     private void sendBroadcastToAll(Intent intent) {
+        sendBroadcastToAll(intent, null);
+    }
+
+    private void sendBroadcastToAll(Intent intent, String receiverPermission) {
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
         final long ident = Binder.clearCallingIdentity();
         try {
-            mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+            mContext.sendBroadcastAsUser(intent, UserHandle.ALL, receiverPermission);
         } finally {
             Binder.restoreCallingIdentity(ident);
         }

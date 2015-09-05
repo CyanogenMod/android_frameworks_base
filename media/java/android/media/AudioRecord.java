@@ -711,6 +711,16 @@ public class AudioRecord
         }
     }
 
+    private void handleHotwordInput(boolean listening) {
+        final IBinder b = ServiceManager.getService(android.content.Context.AUDIO_SERVICE);
+        final IAudioService ias = IAudioService.Stub.asInterface(b);
+        try {
+            ias.handleHotwordInput(listening);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error talking to AudioService when handling hotword input.", e);
+        }
+    }
+
     //---------------------------------------------------------
     // Audio data supply
     //--------------------
