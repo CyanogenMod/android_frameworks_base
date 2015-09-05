@@ -648,6 +648,10 @@ public class AudioRecord
             if (native_start(MediaSyncEvent.SYNC_EVENT_NONE, 0) == SUCCESS) {
                 handleFullVolumeRec(true);
                 mRecordingState = RECORDSTATE_RECORDING;
+
+                if (getAudioSource() == MediaRecorder.AudioSource.HOTWORD) {
+                    handleHotwordInput(true);
+                }
             }
         }
     }
@@ -694,6 +698,10 @@ public class AudioRecord
             handleFullVolumeRec(false);
             native_stop();
             mRecordingState = RECORDSTATE_STOPPED;
+
+            if (getAudioSource() == MediaRecorder.AudioSource.HOTWORD) {
+                handleHotwordInput(false);
+            }
         }
     }
 
@@ -708,6 +716,16 @@ public class AudioRecord
             ias.forceRemoteSubmixFullVolume(starting, mICallBack);
         } catch (RemoteException e) {
             Log.e(TAG, "Error talking to AudioService when handling full submix volume", e);
+        }
+    }
+
+    private void handleHotwordInput(boolean listening) {
+        final IBinder b = ServiceManager.getService(android.content.Context.AUDIO_SERVICE);
+        final IAudioService ias = IAudioService.Stub.asInterface(b);
+        try {
+            ias.handleHotwordInput(listening);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error talking to AudioService when handling hotword input.", e);
         }
     }
 

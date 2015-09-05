@@ -21,6 +21,7 @@ import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static android.media.AudioManager.RINGER_MODE_VIBRATE;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AppOpsManager;
@@ -411,6 +412,15 @@ public class AudioService extends IAudioService.Stub {
 
     /** @see System#MUTE_STREAMS_AFFECTED */
     private int mMuteAffectedStreams;
+
+    /** @see #handleHotwordInput **/
+    private Object mHotwordInputLock = new Object();
+
+    /** The package name of the application that is
+     * currently using the HOTWORD input.
+     */
+    // protected by mHotwordInputLock
+    private String mHotwordAudioInputPackage;
 
     /**
      * NOTE: setVibrateSetting(), getVibrateSetting(), shouldVibrate() are deprecated.
@@ -1455,6 +1465,46 @@ public class AudioService extends IAudioService.Stub {
         sendVolumeUpdate(streamType, oldIndex, index, flags);
     }
 
+    /**
+     * Retrieve the package name of the application that currently controls
+     * the {@link android.media.MediaRecorder.AudioSource#HOTWORD} input.
+     * @return The package name of the application that controls the input
+     * or null if no package currently controls it.
+     */
+    public String getCurrentHotwordInputPackageName() {
+        return mHotwordAudioInputPackage;
+    }
+
+    /**
+     * Handle the change of state of the HOTWORD input.
+     *
+     * When the {@link android.media.MediaRecorder.AudioSource#HOTWORD} input is
+     * in use, send a broadcast to alert the new state and store the name of the current
+     * package that controls the input in mHotwordAudioInputPackage.
+     * @param listening Whether the input is being listened to.
+     */
+    public void handleHotwordInput(boolean listening) {
+        synchronized (mHotwordInputLock) {
+            Intent broadcastIntent = new Intent(Intent.ACTION_HOTWORD_INPUT_CHANGED);
+            String[] packages = mContext.getPackageManager().getPackagesForUid(
+                    Binder.getCallingUid());
+            if (packages.length > 0) {
+                if (listening) {
+                    mHotwordAudioInputPackage = packages[0];
+                }
+                broadcastIntent.putExtra(Intent.EXTRA_CURRENT_PACKAGE_NAME, packages[0]);
+            }
+            broadcastIntent.putExtra(Intent.EXTRA_HOTWORD_INPUT_STATE,
+                                     listening ? AudioRecord.RECORDSTATE_RECORDING :
+                                     AudioRecord.RECORDSTATE_STOPPED);
+            // Set the currently listening package to null if listening has stopped.
+            if (!listening) {
+                mHotwordAudioInputPackage = null;
+            }
+            sendBroadcastToAll(broadcastIntent, Manifest.permission.CAPTURE_AUDIO_HOTWORD);
+        }
+    }
+
     /** @see AudioManager#forceVolumeControlStream(int) */
     public void forceVolumeControlStream(int streamType, IBinder cb) {
         synchronized(mForceControlStreamLock) {
@@ -1542,10 +1592,14 @@ public class AudioService extends IAudioService.Stub {
     }
 
     private void sendBroadcastToAll(Intent intent) {
+        sendBroadcastToAll(intent, null);
+    }
+
+    private void sendBroadcastToAll(Intent intent, String receiverPermission) {
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
         final long ident = Binder.clearCallingIdentity();
         try {
-            mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+            mContext.sendBroadcastAsUser(intent, UserHandle.ALL, receiverPermission);
         } finally {
             Binder.restoreCallingIdentity(ident);
         }
