@@ -509,7 +509,7 @@ public class ActivityInfo extends ComponentInfo
      * can itself handle the screen size. Set from the
      * {@link android.R.attr#configChanges} attribute.  This will be
      * set by default for applications that target an earlier version
-     * than {@link android.os.Build.VERSION_CODES#HONEYCOMB_MR2}...
+     * than {@link android.os.Build.VERSION_CODES#LOLLIPOP_MR1}...
      * <b>however</b>, you will not see the bit set here becomes some
      * applications incorrectly compare {@link #configChanges} against
      * an absolute value rather than correctly masking out the bits
@@ -521,7 +521,7 @@ public class ActivityInfo extends ComponentInfo
      * can itself handle the smallest screen size. Set from the
      * {@link android.R.attr#configChanges} attribute.  This will be
      * set by default for applications that target an earlier version
-     * than {@link android.os.Build.VERSION_CODES#HONEYCOMB_MR2}...
+     * than {@link android.os.Build.VERSION_CODES#LOLLIPOP_MR1}...
      * <b>however</b>, you will not see the bit set here becomes some
      * applications incorrectly compare {@link #configChanges} against
      * an absolute value rather than correctly masking out the bits
@@ -602,7 +602,7 @@ public class ActivityInfo extends ComponentInfo
      * framework call here to get the real value.
      */
     public int getRealConfigChanged() {
-        return applicationInfo.targetSdkVersion < android.os.Build.VERSION_CODES.HONEYCOMB_MR2
+        return applicationInfo.targetSdkVersion < android.os.Build.VERSION_CODES.LOLLIPOP_MR1
                 ? (configChanges | ActivityInfo.CONFIG_SCREEN_SIZE
                         | ActivityInfo.CONFIG_SMALLEST_SCREEN_SIZE)
                 : configChanges;
