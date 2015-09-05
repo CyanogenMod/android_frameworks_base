@@ -45,6 +45,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Process;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -101,6 +103,8 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
     private static final String SCREENSHOT_FILE_NAME_TEMPLATE = "Screenshot_%s.png";
     private static final String SCREENSHOT_SHARE_SUBJECT_TEMPLATE = "Screenshot (%s)";
 
+    private static final int SCREENSHOT_NOTIFICATION_HIDE_DELAY = 1000;
+
     private final SaveImageInBackgroundData mParams;
     private final NotificationManager mNotificationManager;
     private final Notification.Builder mNotificationBuilder, mPublicNotificationBuilder;
@@ -111,6 +115,8 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
     private final BigPictureStyle mNotificationStyle;
     private final int mImageWidth;
     private final int mImageHeight;
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     // WORKAROUND: We want the same notification across screenshots that we update so that we don't
     // spam a user's notification drawer.  However, we only show the ticker for the saving state
@@ -348,6 +354,14 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
                 .setFlag(Notification.FLAG_NO_CLEAR, false);
 
             mNotificationManager.notify(R.id.notification_screenshot, mNotificationBuilder.build());
+
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mNotificationBuilder.setPriority(Notification.PRIORITY_MIN);
+                    mNotificationManager.notify(R.id.notification_screenshot, mNotificationBuilder.build());
+                }
+            }, SCREENSHOT_NOTIFICATION_HIDE_DELAY);
         }
         mParams.finisher.run();
         mParams.clearContext();
