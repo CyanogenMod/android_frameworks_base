@@ -45,6 +45,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Process;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -398,6 +400,7 @@ class GlobalScreenshot {
     static final String SCREENSHOT_URI_ID = "android:screenshot_uri_id";
 
     private static final int SCREENSHOT_FLASH_TO_PEAK_DURATION = 130;
+    private static final int SCREENSHOT_DELAY = 250;
     private static final int SCREENSHOT_DROP_IN_DURATION = 430;
     private static final int SCREENSHOT_DROP_OUT_DELAY = 500;
     private static final int SCREENSHOT_DROP_OUT_DURATION = 430;
@@ -438,6 +441,8 @@ class GlobalScreenshot {
     private MediaActionSound mCameraSound;
 
     private final int mSfHwRotation;
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     /**
      * @param context everything needs a context :(
@@ -549,7 +554,24 @@ class GlobalScreenshot {
     /**
      * Takes a screenshot of the current display and shows an animation.
      */
-    void takeScreenshot(Runnable finisher, boolean statusBarVisible, boolean navBarVisible,
+    void takeScreenshot(final Runnable finisher, final boolean statusBarVisible,
+            final boolean navBarVisible, final int x, final int y,
+            final int width, final int height) {
+        // Cancel notification before taking a screenshot to prevent the notification icon
+        // appearing in the status bar of the next screenshot when taking multiple screenshots
+        mNotificationManager.cancel(R.id.notification_screenshot);
+
+        // Delay taking screenshot a bit to ensure the notification icon is gone
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                takeScreenshotInternal(finisher, statusBarVisible, navBarVisible,
+                        x, y, width, height);
+            }
+        }, SCREENSHOT_DELAY);
+    }
+
+    void takeScreenshotInternal(Runnable finisher, boolean statusBarVisible, boolean navBarVisible,
             int x, int y, int width, int height) {
         // We need to orient the screenshot correctly (and the Surface api seems to take screenshots
         // only in the natural orientation of the device :!)
