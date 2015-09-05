@@ -984,6 +984,11 @@ public class AudioRecord implements AudioRouting
                 mRecordingState = RECORDSTATE_RECORDING;
             }
         }
+
+        if (getRecordingState() == RECORDSTATE_RECORDING &&
+                getAudioSource() == MediaRecorder.AudioSource.HOTWORD) {
+            handleHotwordInput(true);
+        }
     }
 
     /**
@@ -1025,6 +1030,10 @@ public class AudioRecord implements AudioRouting
             native_stop();
             mRecordingState = RECORDSTATE_STOPPED;
         }
+
+        if (getAudioSource() == MediaRecorder.AudioSource.HOTWORD) {
+            handleHotwordInput(false);
+        }
     }
 
     private final IBinder mICallBack = new Binder();
@@ -1038,6 +1047,16 @@ public class AudioRecord implements AudioRouting
             ias.forceRemoteSubmixFullVolume(starting, mICallBack);
         } catch (RemoteException e) {
             Log.e(TAG, "Error talking to AudioService when handling full submix volume", e);
+        }
+    }
+
+    private void handleHotwordInput(boolean listening) {
+        final IBinder b = ServiceManager.getService(android.content.Context.AUDIO_SERVICE);
+        final IAudioService ias = IAudioService.Stub.asInterface(b);
+        try {
+            ias.handleHotwordInput(listening);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Error talking to AudioService when handling hotword input.", e);
         }
     }
 
