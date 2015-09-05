@@ -227,4 +227,9 @@ interface IAudioService {
     void addMediaPlayerAndUpdateRemoteController(String packageName);
 
     void removeMediaPlayerAndUpdateRemoteController(String packageName);
+
+    void handleHotwordInput(boolean listening);
+
+    String getCurrentHotwordInputPackageName();
+
 }
