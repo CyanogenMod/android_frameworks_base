@@ -2678,6 +2678,45 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.GET_RESTRICTION_ENTRIES";
 
     /**
+     * <p>Broadcast Action: The state of the HOTWORD audio input has changed.:</p>
+     * <ul>
+     *   <li><em>state</em> - A String value indicating the state of the input.
+     *   {@link #EXTRA_HOTWORD_INPUT_STATE}. The value will be one of:
+     *   {@link android.media.AudioRecord#RECORDSTATE_RECORDING} or
+     *   {@link android.media.AudioRecord#RECORDSTATE_STOPPED}.
+     *   </li>
+     *   <li><em>package</em> - A String value indicating the package name of the application
+     *   that currently holds the HOTWORD input.
+     *   {@link #EXTRA_CURRENT_PACKAGE_NAME}
+     *   </li>
+     * </ul>
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system. It can only be received by packages that hold
+     * {@link android.Manifest.permission#CAPTURE_AUDIO_HOTWORD}.
+     *
+     * @hide
+     */
+    //@SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_HOTWORD_INPUT_CHANGED
+            = "com.cyanogenmod.intent.action.HOTWORD_INPUT_CHANGED";
+
+    /**
+     * @hide
+     * Activity to challenge the user for a PIN that was configured when setting up
+     * restrictions. Restrictions include blocking of apps and preventing certain user operations,
+     * controlled by {@link android.os.UserManager#setUserRestrictions(Bundle).
+     * Launch the activity using
+     * {@link android.app.Activity#startActivityForResult(Intent, int)} and check if the
+     * result is {@link android.app.Activity#RESULT_OK} for a successful response to the
+     * challenge.<p/>
+     * Before launching this activity, make sure that there is a PIN in effect, by calling
+     * {@link android.os.UserManager#hasRestrictionsChallenge()}.
+     */
+    public static final String ACTION_RESTRICTIONS_CHALLENGE =
+            "android.intent.action.RESTRICTIONS_CHALLENGE";
+
+    /**
      * Sent the first time a user is starting, to allow system apps to
      * perform one time initialization.  (This will not be seen by third
      * party applications because a newly initialized user does not have any
@@ -3880,6 +3919,15 @@ public class Intent implements Parcelable, Cloneable {
      * @hide
      */
     public static final String EXTRA_THEME_PACKAGE_NAME = "android.intent.extra.PACKAGE_NAME";
+
+    /**
+     * Extra for {@link #ACTION_HOTWORD_INPUT_CHANGED} that provides the state of
+     * the input when the broadcast action was sent.
+     * @hide
+     */
+    public static final String EXTRA_HOTWORD_INPUT_STATE =
+            "com.cyanogenmod.intent.extra.HOTWORD_INPUT_STATE";
+
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
