@@ -1821,6 +1821,34 @@ public final class BluetoothAdapter {
     }
 
     /**
+     * Create a client side Phonebook Access Profile Service Record.
+     * Create the record once, and reuse it for all connections.
+     * If changes to a record is needed remove the old record using {@link removeSdpRecord}
+     * and then create a new one.
+     * WARNING: This API requires removeSdpRecord() to be called, to avoid leaking resources!
+     *          A second call to this function - either from two different apps or from the
+     *          same app, without first calling removeSdpRecord() - will make the device
+     *          break the Bluetooth spec, which could lead to severe IOP issues.
+     * @param serviceName   The textual name of the service
+     * @param version       The Profile version number (As specified in the Bluetooth
+     *                      PBAP specification)
+     * @return a handle to the record created. The record can be removed again
+     *          using {@link removeSdpRecord}(). The record is not linked to the
+     *          creation/destruction of BluetoothSockets, hence SDP record cleanup
+     *          is a separate process.
+     *          returns -1 if an error occure and the record was not created.
+     * @hide
+     */
+    public int createPbapPceSdpRecord(String serviceName, int version) {
+        try {
+            return mService.createPbapPceSdpRecord(serviceName, version);
+        } catch (RemoteException e) {
+            Log.e(TAG, "createPbapPceSdpRecord: ", e);
+        }
+        return -1;
+    }
+
+    /**
      * Remove a SDP record created using createSdpRecord().
      * This function shall be called before a new call to createSdpRecord for the same record
      * type can be made, unless the record type created supports multiple instances.
@@ -1832,7 +1860,7 @@ public final class BluetoothAdapter {
         try {
             return mService.removeSdpRecord(recordHandle);
         } catch (RemoteException e) {
-            Log.e(TAG, "createMapMnsSdpRecord: ", e);
+            Log.e(TAG, "removeSdpRecord: ", e);
         }
         return false;
     }

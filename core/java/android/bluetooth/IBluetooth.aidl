@@ -72,6 +72,7 @@ interface IBluetooth
 
     int createMapMnsSdpRecord(in String serviceName, in int rfcommChannel,
             in int l2capPsm, in int version, in int features);
+    int createPbapPceSdpRecord(in String serviceName, in int version);
     boolean removeSdpRecord(in int recordHandle);
 
     boolean setPin(in BluetoothDevice device, boolean accept, int len, in byte[] pinCode);
