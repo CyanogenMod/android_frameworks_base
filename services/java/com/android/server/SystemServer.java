@@ -1119,7 +1119,7 @@ public final class SystemServer {
                 Slog.i(TAG, service);
                 mSystemServiceManager.startService(service);
             } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting " + service , e);
+                reportWtf("starting " + service , e);
             }
         }
 
