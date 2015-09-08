@@ -91,6 +91,7 @@ import com.android.server.pm.Settings.DatabaseVersion;
 import com.android.server.storage.DeviceStorageMonitorInternal;
 import com.android.server.Watchdog;
 
+import cyanogenmod.app.suggest.AppSuggestManager;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.app.ActivityManager;
@@ -3590,6 +3591,13 @@ public class PackageManagerService extends IPackageManager.Stub {
         return null;
     }
 
+    private boolean shouldIncludeResolveActivity(Intent intent) {
+        synchronized(mPackages) {
+            AppSuggestManager suggest = AppSuggestManager.getInstance(mContext);
+            return (suggest != null) ? suggest.handles(intent) : false;
+        }
+    }
+
     @Override
     public List<ResolveInfo> queryIntentActivities(Intent intent,
             String resolvedType, int flags, int userId) {
@@ -3616,6 +3624,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         // reader
         synchronized (mPackages) {
+            boolean shouldIncludeResolveActivity = shouldIncludeResolveActivity(intent);
+
             final String pkgName = intent.getPackage();
             if (pkgName == null) {
                 List<CrossProfileIntentFilter> matchingFilters =
@@ -3639,6 +3649,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                     result.add(resolveInfo);
                     Collections.sort(result, mResolvePrioritySorter);
                 }
+                if (result.size() == 0 && shouldIncludeResolveActivity) {
+                    result.add(mResolveInfo);
+                }
                 return result;
             }
             final PackageParser.Package pkg = mPackages.get(pkgName);
@@ -3646,7 +3659,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 return mActivities.queryIntentForPackage(intent, resolvedType, flags,
                         pkg.activities, userId);
             }
-            return new ArrayList<ResolveInfo>();
+            return new ArrayList<ResolveInfo>(0);
         }
     }
 
