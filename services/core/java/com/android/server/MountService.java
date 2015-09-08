@@ -749,6 +749,10 @@ class MountService extends IMountService.Stub
     }
 
     private void updatePublicVolumeState(StorageVolume volume, String state) {
+        if (volume == null) {
+            Slog.e(TAG, "failed to updatePublicVolumeState, since given volume is null");
+            return;
+        }
         final String path = volume.getPath();
         final String oldState;
         synchronized (mVolumesLock) {
