@@ -91,6 +91,7 @@ import com.android.server.pm.Settings.DatabaseVersion;
 import com.android.server.storage.DeviceStorageMonitorInternal;
 import com.android.server.Watchdog;
 
+import cyanogenmod.app.suggest.AppSuggestManager;
 import org.xmlpull.v1.XmlSerializer;
 
 import android.app.ActivityManager;
@@ -3590,6 +3591,13 @@ public class PackageManagerService extends IPackageManager.Stub {
         return null;
     }
 
+    private boolean shouldIncludeResolveActivity(Intent intent) {
+        synchronized(mPackages) {
+            AppSuggestManager suggest = AppSuggestManager.getInstance(mContext);
+            return (suggest != null) ? suggest.handles(intent) : false;
+        }
+    }
+
     @Override
     public List<ResolveInfo> queryIntentActivities(Intent intent,
             String resolvedType, int flags, int userId) {
@@ -3616,6 +3624,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         // reader
         synchronized (mPackages) {
+            boolean shouldIncludeResolveActivity = shouldIncludeResolveActivity(intent);
+
             final String pkgName = intent.getPackage();
             if (pkgName == null) {
                 List<CrossProfileIntentFilter> matchingFilters =
@@ -3646,7 +3656,14 @@ public class PackageManagerService extends IPackageManager.Stub {
                 return mActivities.queryIntentForPackage(intent, resolvedType, flags,
                         pkg.activities, userId);
             }
-            return new ArrayList<ResolveInfo>();
+            List<ResolveInfo> result;
+            if (shouldIncludeResolveActivity) {
+                result = new ArrayList<ResolveInfo>(1);
+                result.add(mResolveInfo);
+            } else {
+                result = new ArrayList<ResolveInfo>(0);
+            }
+            return result;
         }
     }
 
@@ -7216,27 +7233,25 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     private void setUpCustomResolverActivity(PackageParser.Package pkg) {
-        synchronized (mPackages) {
-            mResolverReplaced = true;
-            // Set up information for custom user intent resolution activity.
-            mResolveActivity.applicationInfo = pkg.applicationInfo;
-            mResolveActivity.name = mCustomResolverComponentName.getClassName();
-            mResolveActivity.packageName = pkg.applicationInfo.packageName;
-            mResolveActivity.processName = pkg.applicationInfo.packageName;
-            mResolveActivity.launchMode = ActivityInfo.LAUNCH_MULTIPLE;
-            mResolveActivity.flags = ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS |
-                    ActivityInfo.FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS;
-            mResolveActivity.theme = 0;
-            mResolveActivity.exported = true;
-            mResolveActivity.enabled = true;
-            mResolveInfo.activityInfo = mResolveActivity;
-            mResolveInfo.priority = 0;
-            mResolveInfo.preferredOrder = 0;
-            mResolveInfo.match = 0;
-            mResolveComponentName = mCustomResolverComponentName;
-            Slog.i(TAG, "Replacing default ResolverActivity with custom activity: " +
-                    mResolveComponentName);
-        }
+        mResolverReplaced = true;
+        // Set up information for custom user intent resolution activity.
+        mResolveActivity.applicationInfo = pkg.applicationInfo;
+        mResolveActivity.name = mCustomResolverComponentName.getClassName();
+        mResolveActivity.packageName = pkg.applicationInfo.packageName;
+        mResolveActivity.processName = pkg.applicationInfo.packageName;
+        mResolveActivity.launchMode = ActivityInfo.LAUNCH_MULTIPLE;
+        mResolveActivity.flags = ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS |
+                ActivityInfo.FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS;
+        mResolveActivity.theme = 0;
+        mResolveActivity.exported = true;
+        mResolveActivity.enabled = true;
+        mResolveInfo.activityInfo = mResolveActivity;
+        mResolveInfo.priority = 0;
+        mResolveInfo.preferredOrder = 0;
+        mResolveInfo.match = 0;
+        mResolveComponentName = mCustomResolverComponentName;
+        Slog.i(TAG, "Replacing default ResolverActivity with custom activity: " +
+                mResolveComponentName);
     }
 
     /**
