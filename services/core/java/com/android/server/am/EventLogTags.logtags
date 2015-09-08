@@ -78,6 +78,8 @@ option java_package com.android.server.am
 30036 am_provider_lost_process (User|1|5),(Package Name|3),(UID|1|5),(Name|3)
 # The activity manager gave up on a new process taking too long to start
 30037 am_process_start_timeout (User|1|5),(PID|1|5),(UID|1|5),(Process Name|3)
+# The activity manager was unable to resolve the intent to an Activity
+30038 am_intent_not_resolved (Calling Package Name|3),(Action|3),(MIME Type|3),(URI|3),(Flags|1|5)
 
 # Unhandled exception
 30039 am_crash (User|1|5),(PID|1|5),(Process Name|3),(Flags|1|5),(Exception|3),(Message|3),(File|3),(Line|1|5)
