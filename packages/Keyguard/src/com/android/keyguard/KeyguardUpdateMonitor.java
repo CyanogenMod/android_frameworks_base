@@ -1464,18 +1464,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         return mScreenOn;
     }
 
-    public int getNextSubIdForState(State state) {
-        for (int slotId = 0; slotId < mSubIdForSlot.length; slotId++) {
-            if (DEBUG) Log.d(TAG, "getNextSubIdForState, slotId = " + slotId
-                    + ", subId = "+ mSubIdForSlot[slotId]
-                    + ", simState = " + mSimState.get(slotId));
-            if (mSimState.get(slotId) == state) {
-                return mSubIdForSlot[slotId];
-            }
-        }
-        return INVALID_SUBID;
-    }
-
     /**
      * Find the next SubscriptionId for a SIM in the given state, favoring lower slot numbers first.
      * @param state
