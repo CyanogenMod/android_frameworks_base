@@ -69,6 +69,7 @@ import android.hardware.display.DisplayManagerGlobal;
 import android.hardware.display.VirtualDisplay;
 import android.hardware.input.InputManager;
 import android.hardware.input.InputManagerInternal;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Debug;
@@ -1402,6 +1403,11 @@ public final class ActivityStackSupervisor implements DisplayListener {
         if (err == ActivityManager.START_SUCCESS && intent.getComponent() == null) {
             // We couldn't find a class that can handle the given Intent.
             // That's the end of that!
+            final Uri data = intent.getData();
+            final String strData = data != null ? data.toSafeString() : null;
+            EventLog.writeEvent(EventLogTags.AM_INTENT_NOT_RESOLVED, callingPackage,
+                    intent.getAction(), intent.getType(), strData, intent.getFlags());
+
             err = ActivityManager.START_INTENT_NOT_RESOLVED;
         }
 
