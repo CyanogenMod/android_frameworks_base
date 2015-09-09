@@ -1486,13 +1486,12 @@ public class AudioService extends IAudioService.Stub {
     public void handleHotwordInput(boolean listening) {
         synchronized (mHotwordInputLock) {
             Intent broadcastIntent = new Intent(Intent.ACTION_HOTWORD_INPUT_CHANGED);
-            String[] packages = mContext.getPackageManager().getPackagesForUid(
-                    Binder.getCallingUid());
-            if (packages.length > 0) {
+            String packageName = getAppNameByPID(Binder.getCallingPid());
+            if (!TextUtils.isEmpty(packageName)) {
                 if (listening) {
-                    mHotwordAudioInputPackage = packages[0];
+                    mHotwordAudioInputPackage = packageName;
                 }
-                broadcastIntent.putExtra(Intent.EXTRA_CURRENT_PACKAGE_NAME, packages[0]);
+                broadcastIntent.putExtra(Intent.EXTRA_CURRENT_PACKAGE_NAME, packageName);
             }
             broadcastIntent.putExtra(Intent.EXTRA_HOTWORD_INPUT_STATE,
                                      listening ? AudioRecord.RECORDSTATE_RECORDING :
@@ -1503,6 +1502,19 @@ public class AudioService extends IAudioService.Stub {
             }
             sendBroadcastToAll(broadcastIntent, Manifest.permission.CAPTURE_AUDIO_HOTWORD);
         }
+    }
+
+    private String getAppNameByPID(int pid){
+        ActivityManager manager = (ActivityManager) mContext
+                .getSystemService(Context.ACTIVITY_SERVICE);
+
+        for(ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()){
+            if(processInfo.pid == pid){
+                return processInfo.processName;
+            }
+        }
+
+        return null;
     }
 
     /** @see AudioManager#forceVolumeControlStream(int) */
