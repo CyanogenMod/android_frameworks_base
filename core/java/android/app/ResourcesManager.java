@@ -32,6 +32,7 @@ import android.content.res.Configuration;
 import android.content.res.ThemeConfig;
 import android.content.res.Resources;
 import android.content.res.ResourcesKey;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -271,6 +272,10 @@ public class ResourcesManager {
                 attachCommonAssets(assets, config.themeConfig);
                 iconsAttached = attachIconAssets(assets, config.themeConfig);
             }
+        } else if (!isThemeable && config.themeConfig != null &&
+                !ThemeConfig.SYSTEM_DEFAULT.equals(config.themeConfig.getFontPkgName())) {
+            // use system fonts if not themeable and a theme font is currently in use
+            Typeface.recreateDefaults(true);
         }
 
         r = new Resources(assets, dm, config, compatInfo, token);
