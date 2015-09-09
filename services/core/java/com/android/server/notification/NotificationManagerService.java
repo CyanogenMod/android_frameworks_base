@@ -40,9 +40,7 @@ import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
@@ -91,9 +89,7 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.AtomicFile;
 import android.util.Log;
-import android.util.LruCache;
 import android.util.Slog;
-import android.util.SparseIntArray;
 import android.util.Xml;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
@@ -104,9 +100,6 @@ import cyanogenmod.app.ProfileManager;
 
 import com.android.internal.R;
 import com.android.internal.util.FastXmlSerializer;
-import com.android.internal.util.cm.SpamFilter;
-import com.android.internal.util.cm.SpamFilter.SpamContract.NotificationTable;
-import com.android.internal.util.cm.SpamFilter.SpamContract.PackageTable;
 import com.android.server.EventLogTags;
 import com.android.server.SystemService;
 import com.android.server.lights.Light;
@@ -138,9 +131,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 /** {@hide} */
 public class NotificationManagerService extends SystemService {
@@ -171,8 +161,6 @@ public class NotificationManagerService extends SystemService {
     static final int JUNK_SCORE = -1000;
     static final int NOTIFICATION_PRIORITY_MULTIPLIER = 10;
     static final int SCORE_DISPLAY_THRESHOLD = Notification.PRIORITY_MIN * NOTIFICATION_PRIORITY_MULTIPLIER;
-	private static final String IS_FILTERED_QUERY = NotificationTable.NORMALIZED_TEXT + "=? AND " +
-        PackageTable.PACKAGE_NAME + "=?";
 
     // Notifications with scores below this will not interrupt the user, either via LED or
     // sound or vibration
@@ -231,22 +219,6 @@ public class NotificationManagerService extends SystemService {
     private long[] mFallbackVibrationPattern;
     private boolean mUseAttentionLight;
     boolean mSystemReady;
-
-    private final SparseIntArray mSpamCache;
-    private ExecutorService mSpamExecutor = Executors.newSingleThreadExecutor();
-
-    private static final Uri FILTER_MSG_URI = new Uri.Builder()
-            .scheme(ContentResolver.SCHEME_CONTENT)
-            .authority(SpamFilter.AUTHORITY)
-            .appendPath("messages")
-            .build();
-
-    private static final Uri UPDATE_MSG_URI = new Uri.Builder()
-            .scheme(ContentResolver.SCHEME_CONTENT)
-            .authority(SpamFilter.AUTHORITY)
-            .appendPath(SpamFilter.MESSAGE_PATH)
-            .appendEncodedPath("inc_count")
-            .build();
 
     private boolean mDisableNotificationEffects;
     private int mCallState;
@@ -850,7 +822,6 @@ public class NotificationManagerService extends SystemService {
             } else if (action.equals(Intent.ACTION_USER_SWITCHED)) {
                 // reload per-user settings
                 mSettingsObserver.update(null);
-                mSpamFilterObserver.update(null);
                 mUserProfiles.updateCache(context);
                 // Refresh managed services
                 mConditionProviders.onUserSwitched();
@@ -860,98 +831,6 @@ public class NotificationManagerService extends SystemService {
             }
         }
     };
-
-    class SpamFilterObserver extends ContentObserver {
-
-        private Future mTask;
-
-        public SpamFilterObserver(Handler handler) {
-            super(handler);
-        }
-
-        private void addToCache(Cursor c) {
-            int notifId = c.getInt(c.getColumnIndex(
-                    NotificationTable.ID));
-            String pkgName = c.getString(c.getColumnIndex(
-                    PackageTable.PACKAGE_NAME));
-            String normalizedText = c.getString(c.getColumnIndex(
-                    NotificationTable.NORMALIZED_TEXT));
-            int hash = getSpamCacheHash(normalizedText, pkgName);
-            synchronized (mSpamCache) {
-                mSpamCache.put(hash, notifId);
-            }
-        }
-
-        private Runnable mFetchAllFilters = new Runnable() {
-            @Override
-            public void run() {
-                Cursor c = getContext().getContentResolver().query(FILTER_MSG_URI,
-                        null, null, null, null);
-                if (c != null) {
-                    synchronized (mSpamCache) {
-                        mSpamCache.clear();
-                        while (c.moveToNext()) {
-                            addToCache(c);
-                            if (Thread.interrupted()) {
-                                break;
-                            }
-                            c.close();
-                        }
-                    }
-                }
-            }
-        };
-
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            update(uri);
-        }
-
-        void update(final Uri uri) {
-            if (mTask != null && !mTask.isDone()) {
-                mTask.cancel(true);
-            }
-            if (uri == null) {
-                mTask = mSpamExecutor.submit(mFetchAllFilters);
-            } else {
-                Runnable r = new Runnable() {
-                    @Override
-                    public void run() {
-                        String id = uri.getLastPathSegment();
-                        Cursor c = getContext().getContentResolver().query(
-                                uri, null, null, null, null);
-
-                        if (c != null) {
-                            int index;
-                            synchronized (mSpamCache) {
-                                index = mSpamCache.indexOfValue(Integer.parseInt(id));
-                            }
-                            if (!c.moveToFirst()) {
-                                synchronized (mSpamCache) {
-                                    // Filter was deleted
-                                    if (index >= 0) {
-                                        mSpamCache.removeAt(index);
-                                    }
-                                }
-                            } else if (index < 0) {
-                                // Filter was added/updated
-                                addToCache(c);
-                            }
-                            c.close();
-                        }
-                    }
-                };
-                mTask = mSpamExecutor.submit(r);
-            }
-        }
-
-        public void observe() {
-            ContentResolver resolver = getContext().getContentResolver();
-            resolver.registerContentObserver(SpamFilter.NOTIFICATION_URI,
-                    true, this, UserHandle.USER_ALL);
-            update(null);
-        }
-    }
 
     class SettingsObserver extends ContentObserver {
         private final Uri NOTIFICATION_LIGHT_PULSE_URI
@@ -1067,7 +946,6 @@ public class NotificationManagerService extends SystemService {
     }
 
     private SettingsObserver mSettingsObserver;
-    private SpamFilterObserver mSpamFilterObserver;
     private ZenModeHelper mZenModeHelper;
 
     private final Runnable mBuzzBeepBlinked = new Runnable() {
@@ -1092,7 +970,6 @@ public class NotificationManagerService extends SystemService {
 
     public NotificationManagerService(Context context) {
         super(context);
-        mSpamCache = new SparseIntArray();
     }
 
     @Override
@@ -1222,9 +1099,6 @@ public class NotificationManagerService extends SystemService {
         mSettingsObserver = new SettingsObserver(mHandler);
         mSettingsObserver.observe();
 
-        mSpamFilterObserver = new SpamFilterObserver(mHandler);
-        mSpamFilterObserver.observe();
-
         mArchive = new Archive(resources.getInteger(
                 R.integer.config_notificationServiceArchiveSize));
 
@@ -1266,7 +1140,6 @@ public class NotificationManagerService extends SystemService {
             // This observer will force an update when observe is called, causing us to
             // bind to listener services.
             mSettingsObserver.observe();
-            mSpamFilterObserver.observe();
             mListeners.onBootPhaseAppsCanStart();
             mConditionProviders.onBootPhaseAppsCanStart();
         }
@@ -2133,12 +2006,6 @@ public class NotificationManagerService extends SystemService {
                         return;
                     }
 
-                    // Only check for spam if this is a new notification
-                    if (old == null && isNotificationSpam(notification, pkg)) {
-                        mArchive.record(r.sbn);
-                        return;
-                    }
-
                     int index = indexOfNotificationLocked(n.getKey());
                     if (index < 0) {
                         // Check DOS protection if this this id is unknown to us
@@ -2762,33 +2629,6 @@ public class NotificationManagerService extends SystemService {
     // ============================================================================
     static int clamp(int x, int low, int high) {
         return (x < low) ? low : ((x > high) ? high : x);
-    }
-
-    private int getSpamCacheHash(CharSequence message, String packageName) {
-        return (message + packageName).hashCode();
-    }
-
-    private boolean isNotificationSpam(Notification notification, String basePkg) {
-        CharSequence normalizedContent = SpamFilter
-                .getNormalizedNotificationContent(notification);
-        int notificationHash = getSpamCacheHash(normalizedContent, basePkg);
-        int notificationId;
-        synchronized (mSpamCache) {
-            notificationId = mSpamCache.get(notificationHash, -1);
-        }
-        if (notificationId != -1) {
-            final String notifIdString = String.valueOf(notificationId);
-            mSpamExecutor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    Uri updateUri = Uri.withAppendedPath(UPDATE_MSG_URI,
-                            notifIdString);
-                    getContext().getContentResolver().update(updateUri,
-                            new ContentValues(), null, null);
-                }
-            });
-        }
-        return notificationId != -1;
     }
 
     void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
