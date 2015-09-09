@@ -323,7 +323,7 @@ public final class StrictMode {
         final int mask;
 
         private ThreadPolicy(int mask) {
-            this.mask = mask;
+            this.mask = 0;
         }
 
         @Override
@@ -367,7 +367,7 @@ public final class StrictMode {
              * Initialize a Builder from an existing ThreadPolicy.
              */
             public Builder(ThreadPolicy policy) {
-                mMask = policy.mask;
+                mMask = 0;
             }
 
             /**
@@ -501,12 +501,10 @@ public final class StrictMode {
             }
 
             private Builder enable(int bit) {
-                mMask |= bit;
                 return this;
             }
 
             private Builder disable(int bit) {
-                mMask &= ~bit;
                 return this;
             }
 
@@ -518,14 +516,7 @@ public final class StrictMode {
              * set.
              */
             public ThreadPolicy build() {
-                // If there are detection bits set but no violation bits
-                // set, enable simple logging.
-                if (mMask != 0 &&
-                    (mMask & (PENALTY_DEATH | PENALTY_LOG |
-                              PENALTY_DROPBOX | PENALTY_DIALOG)) == 0) {
-                    penaltyLog();
-                }
-                return new ThreadPolicy(mMask);
+                return new ThreadPolicy(0);
             }
         }
     }
@@ -550,7 +541,7 @@ public final class StrictMode {
             if (classInstanceLimit == null) {
                 throw new NullPointerException("classInstanceLimit == null");
             }
-            this.mask = mask;
+            this.mask = 0;
             this.classInstanceLimit = classInstanceLimit;
         }
 
@@ -592,7 +583,7 @@ public final class StrictMode {
              * Build upon an existing VmPolicy.
              */
             public Builder(VmPolicy base) {
-                mMask = base.mask;
+                mMask = 0;
                 mClassInstanceLimitNeedCow = true;
                 mClassInstanceLimit = base.classInstanceLimit;
             }
@@ -712,7 +703,6 @@ public final class StrictMode {
             }
 
             private Builder enable(int bit) {
-                mMask |= bit;
                 return this;
             }
 
@@ -724,14 +714,7 @@ public final class StrictMode {
              * set.
              */
             public VmPolicy build() {
-                // If there are detection bits set but no violation bits
-                // set, enable simple logging.
-                if (mMask != 0 &&
-                    (mMask & (PENALTY_DEATH | PENALTY_LOG |
-                              PENALTY_DROPBOX | PENALTY_DIALOG)) == 0) {
-                    penaltyLog();
-                }
-                return new VmPolicy(mMask,
+                return new VmPolicy(0,
                         mClassInstanceLimit != null ? mClassInstanceLimit : EMPTY_CLASS_LIMIT_MAP);
             }
         }
@@ -774,10 +757,10 @@ public final class StrictMode {
         // Binder in order to propagate the value across Binder calls,
         // even across native-only processes.  The two are kept in
         // sync via the callback to onStrictModePolicyChange, below.
-        setBlockGuardPolicy(policyMask);
+        setBlockGuardPolicy(0);
 
         // And set the Android native version...
-        Binder.setThreadStrictModePolicy(policyMask);
+        Binder.setThreadStrictModePolicy(0);
     }
 
     // Sets the policy in Dalvik/libcore (BlockGuard)
@@ -802,7 +785,7 @@ public final class StrictMode {
         if (!(CloseGuard.getReporter() instanceof AndroidCloseGuardReporter)) {
             CloseGuard.setReporter(new AndroidCloseGuardReporter());
         }
-        CloseGuard.setEnabled(enabled);
+        CloseGuard.setEnabled(false);
     }
 
     /**
@@ -1086,7 +1069,7 @@ public final class StrictMode {
         private ArrayMap<Integer, Long> mLastViolationTime;
 
         public AndroidBlockGuardPolicy(final int policyMask) {
-            mPolicyMask = policyMask;
+            mPolicyMask = 0;
         }
 
         @Override
@@ -1096,7 +1079,7 @@ public final class StrictMode {
 
         // Part of BlockGuard.Policy interface:
         public int getPolicyMask() {
-            return mPolicyMask;
+            return 0;
         }
 
         // Part of BlockGuard.Policy interface:
@@ -1155,7 +1138,7 @@ public final class StrictMode {
         }
 
         public void setPolicyMask(int policyMask) {
-            mPolicyMask = policyMask;
+            mPolicyMask = 0;
         }
 
         // Start handling a violation that just started and hasn't
@@ -1530,12 +1513,9 @@ public final class StrictMode {
      */
     public static void enableDefaults() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                                   .detectAll()
-                                   .penaltyLog()
+                                   .permitAll()
                                    .build());
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                               .detectAll()
-                               .penaltyLog()
                                .build());
     }
 
@@ -2082,7 +2062,7 @@ public final class StrictMode {
          * List of tags from active Span instances during this
          * violation, or null for none.
          */
-        public String[] tags;
+        public String[] tags = null;
 
         /**
          * Which violation number this was (1-based) since the last Looper loop,
@@ -2197,7 +2177,7 @@ public final class StrictMode {
             violationUptimeMillis = in.readLong();
             numInstances = in.readLong();
             broadcastIntentAction = in.readString();
-            tags = in.readStringArray();
+            //tags = in.readStringArray();
         }
 
         /**
@@ -2213,7 +2193,7 @@ public final class StrictMode {
             dest.writeLong(violationUptimeMillis);
             dest.writeLong(numInstances);
             dest.writeString(broadcastIntentAction);
-            dest.writeStringArray(tags);
+            dest.writeStringArray(null);
             int total = dest.dataPosition()-start;
             if (total > 10*1024) {
                 Slog.d(TAG, "VIO: policy=" + policy + " dur=" + durationMillis
