@@ -2176,4 +2176,7 @@
   <java-symbol type="integer" name="config_LTE_RSRP_threshold_type" />
   <java-symbol type="array"   name="config_LTE_RSRP_custom_levels" />
 
+  <!-- From Media -->
+  <java-symbol type="bool" name="config_excludeRingtonesFromRemovableStorage" />
+
 </resources>
