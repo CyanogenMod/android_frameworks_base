@@ -178,6 +178,10 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
      * preference until the theme is switched at runtime.
      */
     public static ThemeConfig getBootTheme(ContentResolver resolver) {
+        return getBootThemeForUser(resolver, UserHandle.getCallingUserId());
+    }
+
+    public static ThemeConfig getBootThemeForUser(ContentResolver resolver, int userHandle) {
         ThemeConfig bootTheme = mSystemConfig;
         try {
             String json = Settings.Secure.getString(resolver,
