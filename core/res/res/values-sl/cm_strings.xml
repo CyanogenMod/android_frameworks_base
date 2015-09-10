@@ -43,8 +43,6 @@
   <string name="permdesc_changePrivacyGuardState">Omogoča programu spreminjanje, ali se drug program izvaja s Privacy Guardom. Kadar se program izvaja s Privacy Guardom, ne bo imel dostopa do osebnih podatkov, kot so stiki, dnevniki klicev ali sporočila.</string>
   <string name="privacy_guard_notification">Privacy Guard dejaven</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne bo imel dostopa do osebnih podatkov</string>
-  <string name="permlab_useHardwareFramework">uporaba strojnega ogrodja</string>
-  <string name="permdesc_useHardwareFramework">Omogoča programu dostop do strojnega ogrodja CM.</string>
   <string name="permlab_setKeyguardWallpaper">nastavitev slike ozadja keyguard</string>
   <string name="permdesc_setKeyguardWallpaper">Omogoča programu spreminjanje slike ozadja zaslona za zaklepanje.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>

@@ -9,9 +9,11 @@ import android.text.TextUtils;
 public class SpamFilter {
 
     public static final String AUTHORITY = "com.cyanogenmod.spam";
+    public static final String MESSAGE_PATH = "message";
     public static final Uri NOTIFICATION_URI = new Uri.Builder()
             .scheme(ContentResolver.SCHEME_CONTENT)
             .authority(AUTHORITY)
+            .appendEncodedPath(MESSAGE_PATH)
             .build();
 
     public static final class SpamContract {
@@ -36,6 +38,11 @@ public class SpamFilter {
 
     public static String getNormalizedContent(String msg) {
         return msg.toLowerCase().replaceAll("[^\\p{L}\\p{Nd}]+", "");
+    }
+
+    public static String getNormalizedNotificationContent(Notification notification) {
+        String content = getNotificationContent(notification);
+        return getNormalizedContent(content);
     }
 
     public static String getNotificationContent(Notification notification) {

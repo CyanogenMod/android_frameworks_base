@@ -272,4 +272,7 @@
     <!-- Default for Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION -->
     <bool name="def_swap_volume_keys_on_rotation">false</bool>
 
+    <!-- Default for Settings.System.SYSTEM_PROFILES_ENABLED -->
+    <bool name="def_system_profiles_enabled">true</bool>
+
 </resources>

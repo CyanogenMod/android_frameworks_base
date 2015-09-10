@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Tillader app\'en at ændre, om en anden app kører med Privatlivsvagt. Når en app kører med Privatlivsvagt, vil den ikke have adgang til personlige data såsom kontakter, opkaldslister eller beskeder.</string>
   <string name="privacy_guard_notification">Privatlivsvagt aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> vil ikke kunne tilgå personlige data</string>
-  <string name="permlab_useHardwareFramework">anvend hardware framework</string>
-  <string name="permdesc_useHardwareFramework">Giver en app adgang til CM hardware framework.</string>
   <string name="permlab_setKeyguardWallpaper">angive baggrund til keyguard</string>
   <string name="permdesc_setKeyguardWallpaper">Tillader en app at ændre baggrund for skærmlåsen.</string>
   <string name="privacy_guard_dialog_title">Privatlivsvagt</string>

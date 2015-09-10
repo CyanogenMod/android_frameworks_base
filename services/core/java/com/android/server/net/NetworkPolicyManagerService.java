@@ -50,7 +50,9 @@ import static android.net.NetworkTemplate.MATCH_ETHERNET;
 import static android.net.NetworkTemplate.MATCH_MOBILE_3G_LOWER;
 import static android.net.NetworkTemplate.MATCH_MOBILE_4G;
 import static android.net.NetworkTemplate.MATCH_MOBILE_ALL;
+import static android.net.NetworkTemplate.MATCH_MOBILE_WILDCARD;
 import static android.net.NetworkTemplate.MATCH_WIFI;
+import static android.net.NetworkTemplate.MATCH_WIFI_WILDCARD;
 import static android.net.NetworkTemplate.buildTemplateMobileAll;
 import static android.net.TrafficStats.MB_IN_BYTES;
 import static android.net.wifi.WifiManager.CHANGE_REASON_ADDED;
@@ -987,7 +989,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             final NetworkPolicy policy = mNetworkPolicy.valueAt(i);
             // shortcut when policy has no limit
             if (policy.limitBytes == LIMIT_DISABLED || !policy.hasCycle()) {
-                setNetworkTemplateEnabled(policy.template, true);
+                try {
+                    setNetworkTemplateEnabled(policy.template, true);
+                } catch (IllegalArgumentException e) {
+                    Slog.e(TAG, "", e);
+                }
                 continue;
             }
 
@@ -1000,7 +1006,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                     && policy.lastLimitSnooze < start;
             final boolean networkEnabled = !overLimitWithoutSnooze;
 
-            setNetworkTemplateEnabled(policy.template, networkEnabled);
+            try {
+                setNetworkTemplateEnabled(policy.template, networkEnabled);
+            } catch (IllegalArgumentException e) {
+                Slog.e(TAG, "", e);
+            }
         }
     }
 
@@ -1028,6 +1038,12 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                 break;
             case MATCH_ETHERNET:
                 setPolicyDataEnable(TYPE_ETHERNET, enabled);
+                break;
+            case MATCH_MOBILE_WILDCARD:
+                if (LOGV) Slog.v(TAG, "MOBILE_WILDCARD NetworkTemplate");
+                break;
+            case MATCH_WIFI_WILDCARD:
+                if (LOGV) Slog.v(TAG, "WIFI_WILDCARD NetworkTemplate");
                 break;
             default:
                 throw new IllegalArgumentException("unexpected template");
@@ -1208,40 +1224,45 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
 
         final TelephonyManager tele = TelephonyManager.from(mContext);
 
-        // avoid creating policy when SIM isn't ready
-        if (!isDdsSimStateReady()) return;
-
-        final String subscriberId = tele.getSubscriberId(SubscriptionManager.getDefaultDataSubId());
-        final NetworkIdentity probeIdent = new NetworkIdentity(
-                TYPE_MOBILE, TelephonyManager.NETWORK_TYPE_UNKNOWN, subscriberId, null, false);
-
-        // examine to see if any policy is defined for active mobile
-        boolean mobileDefined = false;
-        for (int i = mNetworkPolicy.size()-1; i >= 0; i--) {
-            if (mNetworkPolicy.valueAt(i).template.matches(probeIdent)) {
-                mobileDefined = true;
-                break;
+        for (int pid = 0; pid < tele.getPhoneCount(); pid++) {
+            int[] subIds = SubscriptionManager.getSubId(pid);
+            if ((subIds == null || subIds.length == 0) ||
+                   !isSimStateReady(pid)) {
+                continue;
             }
-        }
 
-        if (!mobileDefined) {
-            Slog.i(TAG, "no policy for active mobile network; generating default policy");
+            final String subscriberId = tele.getSubscriberId(subIds[0]);
+            final NetworkIdentity probeIdent = new NetworkIdentity(
+                    TYPE_MOBILE, TelephonyManager.NETWORK_TYPE_UNKNOWN, subscriberId, null, false);
 
-            // build default mobile policy, and assume usage cycle starts today
-            final long warningBytes = mContext.getResources().getInteger(
-                    com.android.internal.R.integer.config_networkPolicyDefaultWarning)
-                    * MB_IN_BYTES;
+            // examine to see if any policy is defined for active mobile
+            boolean mobileDefined = false;
+            for (int i = mNetworkPolicy.size()-1; i >= 0; i--) {
+                if (mNetworkPolicy.valueAt(i).template.matches(probeIdent)) {
+                    mobileDefined = true;
+                    break;
+                }
+            }
 
-            final Time time = new Time();
-            time.setToNow();
+            if (!mobileDefined) {
+                Slog.i(TAG, "no policy for active mobile network; generating default policy");
 
-            final int cycleDay = time.monthDay;
-            final String cycleTimezone = time.timezone;
+                // build default mobile policy, and assume usage cycle starts today
+                final long warningBytes = mContext.getResources().getInteger(
+                        com.android.internal.R.integer.config_networkPolicyDefaultWarning)
+                        * MB_IN_BYTES;
 
-            final NetworkTemplate template = buildTemplateMobileAll(subscriberId);
-            final NetworkPolicy policy = new NetworkPolicy(template, cycleDay, cycleTimezone,
-                    warningBytes, LIMIT_DISABLED, SNOOZE_NEVER, SNOOZE_NEVER, true, true);
-            addNetworkPolicyLocked(policy);
+                final Time time = new Time();
+                time.setToNow();
+
+                final int cycleDay = time.monthDay;
+                final String cycleTimezone = time.timezone;
+
+                final NetworkTemplate template = buildTemplateMobileAll(subscriberId);
+                final NetworkPolicy policy = new NetworkPolicy(template, cycleDay, cycleTimezone,
+                        warningBytes, LIMIT_DISABLED, SNOOZE_NEVER, SNOOZE_NEVER, true, true);
+                addNetworkPolicyLocked(policy);
+            }
         }
     }
 
@@ -2268,6 +2289,12 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     private boolean isDdsSimStateReady() {
         final TelephonyManager tm = TelephonyManager.from(mContext);
         int slotId = SubscriptionManager.getSlotId(SubscriptionManager.getDefaultDataSubId());
+        return tm.getSimState(slotId) == TelephonyManager.SIM_STATE_READY;
+    }
+
+    // Return true if SIM state of input subscription is in READY state
+    private boolean isSimStateReady(int slotId) {
+        final TelephonyManager tm = TelephonyManager.from(mContext);
         return tm.getSimState(slotId) == TelephonyManager.SIM_STATE_READY;
     }
 }

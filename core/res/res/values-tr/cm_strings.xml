@@ -43,8 +43,6 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="permdesc_changePrivacyGuardState">Uygulamaya başka bir uygulamanın Gizlilik Korumasını kullanıp kullanamayacağını belirleme olanağı verir. Bir uygulama Gizlilik Koruması ile çalışırken; kişiler, arama kayıtları ya da mesajlar gibi kişisel bilgilere ulaşamaz.</string>
   <string name="privacy_guard_notification">Gizlilik Koruması aktif</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> kişisel bilgilere ulaşamayacak</string>
-  <string name="permlab_useHardwareFramework">donanım altyapısını kullan</string>
-  <string name="permdesc_useHardwareFramework">Uygulamanın CM donanım altyapısına erişimine izin verir.</string>
   <string name="permlab_setKeyguardWallpaper">tuş kilidi duvar kağıdını ayarla</string>
   <string name="permdesc_setKeyguardWallpaper">Bir uygulamanın kilit ekranı duvar kağıdını değiştirmesine izin verir.</string>
   <string name="privacy_guard_dialog_title">Gizlilik Koruması</string>

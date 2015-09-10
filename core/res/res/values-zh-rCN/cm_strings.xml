@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">允许应用更改其他应用是否启用隐私防护。当一个应用运行时启用了隐私防护，它将不能访问个人数据，如联系人、通话记录、短信。</string>
   <string name="privacy_guard_notification">隐私防护激活</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 将不能访问个人数据</string>
-  <string name="permlab_useHardwareFramework">使用硬件框架</string>
-  <string name="permdesc_useHardwareFramework">允许应用访问 CM 硬件框架。</string>
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
   <string name="privacy_guard_dialog_title">隐私防护</string>

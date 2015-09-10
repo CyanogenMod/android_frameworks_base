@@ -53,6 +53,11 @@ public class AirplaneModeTile extends QSTile<QSTile.BooleanState> {
     }
 
     @Override
+    public boolean hasSensitiveData() {
+        return true;
+    }
+
+    @Override
     protected BooleanState newTileState() {
         return new BooleanState();
     }

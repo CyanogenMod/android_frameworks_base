@@ -870,8 +870,10 @@ public class BatteryMeterView extends View implements DemoMode,
 
             // draw thin gray ring first
             canvas.drawArc(drawRect, 270, 360, false, mBackPaint);
-            // draw colored arc representing charge level
-            canvas.drawArc(drawRect, 270 + mAnimOffset, 3.6f * level, false, paint);
+            if (level != 0) {
+                // draw colored arc representing charge level
+                canvas.drawArc(drawRect, 270 + mAnimOffset, 3.6f * level, false, paint);
+            }
             // if chosen by options, draw percentage text in the middle
             // always skip percentage when 100, so layout doesnt break
             if (unknownStatus) {
@@ -925,7 +927,8 @@ public class BatteryMeterView extends View implements DemoMode,
             // Stop animation when battery is full or after the meter
             // rotated back to 0 after unplugging.
             if (!tracker.shouldIndicateCharging() && mAnimOffset == 0
-                    || tracker.status == BatteryManager.BATTERY_STATUS_FULL) {
+                    || tracker.status == BatteryManager.BATTERY_STATUS_FULL
+                    || tracker.level == 0) {
                 if (mIsAnimating) {
                     mIsAnimating = false;
                     mAnimOffset = 0;
