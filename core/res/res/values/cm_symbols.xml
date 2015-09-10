@@ -381,4 +381,6 @@
     <java-symbol type="bool" name="config_forceAnalogCarDock" />
     <java-symbol type="bool" name="config_forceAnalogDeskDock" />
 
+    <!-- WiFi turn off notification -->
+    <java-symbol type="string" name="notify_turn_wifi_off_title" />
 </resources>
