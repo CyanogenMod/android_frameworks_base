@@ -445,7 +445,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         public void onNotificationPosted(final StatusBarNotification sbn,
                 final RankingMap rankingMap) {
             if (DEBUG) Log.d(TAG, "onNotificationPosted: " + sbn);
-            mHandler.post(new Runnable() {
+            final Runnable notificationPost = new Runnable() {
                 @Override
                 public void run() {
                     Notification n = sbn.getNotification();
@@ -475,7 +475,12 @@ public abstract class BaseStatusBar extends SystemUI implements
                         addNotification(sbn, rankingMap);
                     }
                 }
-            });
+            };
+            if (TextUtils.equals(sbn.getNotification().category, Notification.CATEGORY_CALL)) {
+                mHandler.postAtFrontOfQueue(notificationPost);
+            } else {
+                mHandler.post(notificationPost);
+            }
         }
 
         @Override
@@ -1189,7 +1194,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     public abstract void resetHeadsUpDecayTimer();
 
-    public abstract void scheduleHeadsUpOpen();
+    public abstract void scheduleHeadsUpOpen(boolean immediate);
 
     public abstract void scheduleHeadsUpClose();
 
