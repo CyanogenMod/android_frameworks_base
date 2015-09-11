@@ -444,8 +444,9 @@ public abstract class BaseStatusBar extends SystemUI implements
         @Override
         public void onNotificationPosted(final StatusBarNotification sbn,
                 final RankingMap rankingMap) {
+            System.out.println("ADNAN SysUi onNotificationPosted created " + System.currentTimeMillis());
             if (DEBUG) Log.d(TAG, "onNotificationPosted: " + sbn);
-            mHandler.post(new Runnable() {
+            Runnable notificationPost = new Runnable() {
                 @Override
                 public void run() {
                     Notification n = sbn.getNotification();
@@ -475,7 +476,12 @@ public abstract class BaseStatusBar extends SystemUI implements
                         addNotification(sbn, rankingMap);
                     }
                 }
-            });
+            };
+            if (shouldInterrupt(sbn)) {
+                mHandler.postAtFrontOfQueue(notificationPost);
+            } else {
+                mHandler.post(notificationPost);
+            }
         }
 
         @Override
@@ -1320,8 +1326,10 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     private boolean inflateViews(NotificationData.Entry entry, ViewGroup parent, boolean isHeadsUp) {
+        System.out.println("ADNAN SysUi inflateViews " + System.currentTimeMillis());
         PackageManager pmUser = getPackageManagerForUser(
                 entry.notification.getUser().getIdentifier());
+        System.out.println("ADNAN SysUi pmUser " + System.currentTimeMillis());
 
         int maxHeight = mRowMaxHeight;
         final StatusBarNotification sbn = entry.notification;
@@ -1363,11 +1371,13 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         } else {
             // create the row view
+            System.out.println("ADNAN SysUi inflating row " + System.currentTimeMillis());
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
             row = (ExpandableNotificationRow) inflater.inflate(R.layout.status_bar_notification_row,
                     parent, false);
             row.setExpansionLogger(this, entry.notification.getKey());
+            System.out.println("ADNAN SysUi row inflated " + System.currentTimeMillis());
         }
 
         workAroundBadLayerDrawableOpacity(row);
@@ -1400,6 +1410,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         final ThemeConfig themeConfig = mContext.getResources().getConfiguration().themeConfig;
         String themePackageName = themeConfig != null ?
                 themeConfig.getOverlayPkgNameForApp(mContext.getPackageName()) : null;
+        System.out.println("ADNAN SysUi apply remote views " + System.currentTimeMillis());
         try {
             contentViewLocal = contentView.apply(mContext, expanded,
                     mOnClickHandler, themePackageName);
@@ -1413,6 +1424,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             Log.e(TAG, "couldn't inflate view for notification " + ident, e);
             return false;
         }
+        System.out.println("ADNAN SysUi remote views applied " + System.currentTimeMillis());
 
         if (contentViewLocal != null) {
             contentViewLocal.setIsRootNamespace(true);
@@ -1450,6 +1462,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             Log.e(TAG, "Failed looking up ApplicationInfo for " + sbn.getPackageName(), ex);
         }
 
+        System.out.println("ADNAN SysUi set Public View Local " + System.currentTimeMillis());
         if (publicViewLocal == null) {
             // Add a basic notification template
             publicViewLocal = LayoutInflater.from(mContext).inflate(
@@ -1524,6 +1537,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
             entry.autoRedacted = true;
         }
+        System.out.println("ADNAN SysUi set public view local done " + System.currentTimeMillis());
 
         if (MULTIUSER_DEBUG) {
             TextView debug = (TextView) row.findViewById(R.id.debug_info);
@@ -1549,6 +1563,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
         row.setUserLocked(userLocked);
         row.setStatusBarNotification(entry.notification);
+        System.out.println("ADNAN SysUi inflated done" + System.currentTimeMillis());
         return true;
     }
 

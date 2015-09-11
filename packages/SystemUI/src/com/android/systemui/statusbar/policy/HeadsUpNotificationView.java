@@ -111,6 +111,7 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
     }
 
     public boolean showNotification(NotificationData.Entry headsUp) {
+        System.out.println("ADNAN SysUi showNotification " + System.currentTimeMillis());
         if (mHeadsUp != null && headsUp != null && !mHeadsUp.key.equals(headsUp.key)) {
             // bump any previous heads up back to the shade
             release();
@@ -135,7 +136,9 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
             mContentHolder.setX(0);
             mContentHolder.setVisibility(View.VISIBLE);
             mContentHolder.setAlpha(mMaxAlpha);
+            System.out.println("ADNAN SysUi addView " + System.currentTimeMillis());
             mContentHolder.addView(mHeadsUp.row);
+            System.out.println("ADNAN SysUi addedView " + System.currentTimeMillis());
             sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED);
 
             mSwipeHelper.snapChild(mContentHolder, 1f);

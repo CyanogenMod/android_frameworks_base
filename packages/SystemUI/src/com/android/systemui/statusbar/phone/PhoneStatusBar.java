@@ -1704,8 +1704,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                PixelFormat.TRANSLUCENT);
+                    | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH, PixelFormat.TRANSLUCENT);
         lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
         lp.gravity = Gravity.TOP;
         lp.setTitle("Heads Up");
@@ -1772,12 +1771,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     @Override
     public void addNotification(StatusBarNotification notification, RankingMap ranking) {
+        System.out.println("ADNAN SysUi addNotificatoin " + System.currentTimeMillis());
         if (DEBUG) Log.d(TAG, "addNotification key=" + notification.getKey());
         if (mUseHeadsUp && shouldInterrupt(notification)) {
             if (DEBUG) Log.d(TAG, "launching notification in heads up mode");
             Entry interruptionCandidate = new Entry(notification, null);
             ViewGroup holder = mHeadsUpNotificationView.getHolder();
             if (inflateViewsForHeadsUp(interruptionCandidate, holder)) {
+                System.out.println("ADNAN SysUi inflatedheadsupview " + System.currentTimeMillis());
                 // 1. Populate mHeadsUpNotificationView
                 mHeadsUpNotificationView.showNotification(interruptionCandidate);
 
@@ -1842,6 +1843,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     @Override
     public void scheduleHeadsUpOpen() {
+        System.out.println("ADNAN SysUi scheduleHeadsUp " + System.currentTimeMillis());
         mHandler.removeMessages(MSG_SHOW_HEADS_UP);
         mHandler.sendEmptyMessage(MSG_SHOW_HEADS_UP);
     }
@@ -2723,6 +2725,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     animateCollapsePanels();
                     break;
                 case MSG_SHOW_HEADS_UP:
+                    System.out.println("ADNAN SysUi MSG_SHOW_HEADS_UP " + System.currentTimeMillis());
                     setHeadsUpVisibility(true);
                     break;
                 case MSG_DECAY_HEADS_UP:
