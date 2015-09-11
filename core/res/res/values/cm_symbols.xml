@@ -360,4 +360,7 @@
 
     <!-- Config to disable showing ringtones from removable storage -->
     <java-symbol type="bool" name="config_excludeRingtonesFromRemovableStorage" />
+
+    <!-- Wifi AP Disabled from Subscription change -->
+    <java-symbol type="string" name="subscription_change_disabled_wifi_ap" />
 </resources>
