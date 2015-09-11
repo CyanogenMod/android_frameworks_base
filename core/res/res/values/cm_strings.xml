@@ -350,4 +350,7 @@
     <string name="permlab_accessFingerprintService">access fingerprint service</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessFingerprintService">Allows an app to access the fingerprint service. The app can add, delete, rename and authenticate against fingerprints</string>
+
+    <!-- Wifi Hotspot disabled due to subscription change -->
+    <string name="subscription_change_disabled_wifi_ap">Disabled WiFi Hotspot due to SIM subscription change</string>
 </resources>
