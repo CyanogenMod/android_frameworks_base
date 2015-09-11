@@ -48,41 +48,41 @@
   <string name="global_action_reboot">إعادة التشغيل</string>
   <string name="global_action_current_user">الحالي</string>
   <string name="reboot_reboot">إعادة التشغيل</string>
-  <string name="reboot_recovery">Recovery</string>
-  <string name="reboot_bootloader">Bootloader</string>
-  <string name="reboot_download">Download</string>
-  <string name="reboot_soft">إعادة تشغيل ناعمة</string>
+  <string name="reboot_recovery">وضع الاستعادة</string>
+  <string name="reboot_bootloader">وضع محمل الإقلاع</string>
+  <string name="reboot_download">وضع التنزيل</string>
+  <string name="reboot_soft">إعادة تشغيل سريعة</string>
   <string name="reboot_title">إعادة التشغيل</string>
-  <string name="reboot_confirm" product="tablet">سيتم إعادة تشغيل الكمبيوتر اللوحي الخاص بك.</string>
-  <string name="reboot_confirm" product="default">سيتم إعادة تشغيل الهاتف الخاص بك.</string>
-  <string name="reboot_progress">إعادة التشغيل\u2026</string>
+  <string name="reboot_confirm" product="tablet">سيُعاد تشغيل جهازك اللوحي.</string>
+  <string name="reboot_confirm" product="default">سُيعاد تشغيل هاتفك.</string>
+  <string name="reboot_progress">يُعاد التشغيل\u2026</string>
   <string name="app_killed_message">أُغلقَ التّطبيق قسرًا</string>
-  <string name="adb_net_active_notification_title">ADB تمكين عبر الشبكة</string>
-  <string name="adb_both_active_notification_title">ADB عبر USB &amp; network ممكن</string>
-  <string name="adb_active_generic_notification_message">إللمس لتعطيل التصحيح.</string>
+  <string name="adb_net_active_notification_title">فُعِل ADB عبر الشبكة</string>
+  <string name="adb_both_active_notification_title">فُعّل ADB عبر USB والشبكة</string>
+  <string name="adb_active_generic_notification_message">انقر لتعطيل التنقيح.</string>
   <string name="usb_choose_notification_title">المس لاظهار خيارات منفذ USB.</string>
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">⁯USB والشبكة</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">الشبكة</string>
-  <string name="permlab_interceptPackageLaunch">تم اعتراض تشغيل التطبيق</string>
-  <string name="permdesc_interceptPackageLaunch">السماح لتطبيق معين باعتراض تشغيل تطبيقات أخرى</string>
+  <string name="permlab_interceptPackageLaunch">اعتراض تشغيل التطبيقات</string>
+  <string name="permdesc_interceptPackageLaunch">يسمح لتطبيق معين باعتراض تشغيل تطبيقات أخرى</string>
   <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
-  <string name="app_ops_access_location">الوصول إلى الموقع الخاص بك</string>
+  <string name="app_ops_access_location">الوصول إلى موقعك الجغرافي</string>
   <string name="app_ops_access_notifications">قراءة إشعاراتك</string>
-  <string name="app_ops_activate_vpn">تفعيل VPN</string>
-  <string name="app_ops_alarm_wakeup">استيقظ الجهاز</string>
-  <string name="app_ops_su">الحصول على الوصول إلى root</string>
-  <string name="app_ops_auto_start">البدء عند الاقلاع</string>
-  <string name="app_ops_delete_call_log">حذف سجل المكالمات</string>
+  <string name="app_ops_activate_vpn">تفعيل شبكة افتراضية خاصة (VPN)</string>
+  <string name="app_ops_alarm_wakeup">إيقاظ الجهاز</string>
+  <string name="app_ops_su">الحصول على صلاحيات الجذر</string>
+  <string name="app_ops_auto_start">البدء عند تشغيل الجهاز</string>
+  <string name="app_ops_delete_call_log">حذف سجل مكالماتك</string>
   <string name="app_ops_delete_contacts">حذف جهات الاتصال</string>
-  <string name="app_ops_delete_mms">حذف الرسائل متعددة الوسائط</string>
-  <string name="app_ops_delete_sms">حذف الرسائل النصية</string>
-  <string name="app_ops_draw_on_top">رسم نافذة في الأعلى</string>
-  <string name="app_ops_get_usage_stats">الحصول على إحصائيات استخدام التطبيق</string>
-  <string name="app_ops_keep_device_awake">الحفاظ على الجهاز الخاص بك مستيقظا</string>
-  <string name="app_ops_make_phone_call">إجراء إتصال هاتفي</string>
-  <string name="app_ops_modify_calendar">تحديث التقويم الخاص بك</string>
+  <string name="app_ops_delete_mms">حذف رسائل MMS</string>
+  <string name="app_ops_delete_sms">حذف الرسائل القصيرة (SMS)</string>
+  <string name="app_ops_draw_on_top">رسم نوافذ فوق البرامج</string>
+  <string name="app_ops_get_usage_stats">الحصول على إحصائيات استخدام التطبيقات</string>
+  <string name="app_ops_keep_device_awake">إبقاء الجهاز مستيقظًا</string>
+  <string name="app_ops_make_phone_call">إجراء اتصال هاتفي</string>
+  <string name="app_ops_modify_calendar">تحديث تقويمك</string>
   <string name="app_ops_modify_call_log">تحديث سجل المكالمات</string>
   <string name="app_ops_modify_clipboard">تعديل الحافظة</string>
   <string name="app_ops_modify_contacts">تحديث جهات الاتصال الخاصة بك</string>

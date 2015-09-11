@@ -28,7 +28,7 @@
   <string name="accessibility_quick_settings_roaming_on">رومینگ روشن.</string>
   <string name="accessibility_quick_settings_network_adb_off">ای‌دی‌بی از طریق شبکه خاموش.</string>
   <string name="accessibility_quick_settings_network_adb_on">ای‌دی‌بی از طریق شبکه روشن.</string>
-  <string name="accessibility_quick_settings_network_adb_changed_off">ای‌دی‌بی شبکه خاموش شد.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">ای‌دی‌بی از طریق شبکه خاموش شد.</string>
   <string name="accessibility_quick_settings_network_adb_changed_on">ای‌دی‌بی از طریق شبکه روشن شد.</string>
   <string name="accessibility_quick_settings_ambient_display_off">نمایش حساس به محیط خاموش.</string>
   <string name="accessibility_quick_settings_ambient_display_on">نمایش حساس به محیط روشن.</string>
@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">اجرای قفل صفحه</string>
   <string name="quick_settings_network_adb_label">ای‌دی‌بی از طریق شبکه</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">پنل صدا</string>
   <string name="quick_settings_screen_timeout_detail_title">ﺯﻣﺎﻥ خاموش شدن صفحه</string>
   <string name="quick_settings_usb_tether_label">تترینگ یو‌اس‌بی</string>
   <string name="quick_settings_heads_up_label">اعلان فوری</string>
