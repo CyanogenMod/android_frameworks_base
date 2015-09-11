@@ -75,6 +75,11 @@ public class RecentsTaskLoadPlan {
      * An optimization to preload the raw list of tasks.
      */
     public synchronized void preloadRawTasks(boolean isTopTaskHome) {
+        if (mConfig == null) {
+            Log.e(TAG, "mConfig is null");
+            return;
+        }
+        
         mRawTasks = mSystemServicesProxy.getRecentTasks(mConfig.maxNumTasksToLoad,
                 UserHandle.CURRENT.getIdentifier(), isTopTaskHome);
         Collections.reverse(mRawTasks);
