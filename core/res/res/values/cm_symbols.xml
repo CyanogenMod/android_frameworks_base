@@ -96,4 +96,7 @@
 
     <!-- Non-themeable packages -->
     <java-symbol type="array" name="non_themeable_packages" />
+
+    <!-- Wifi AP Disabled from Subscription change -->
+    <java-symbol type="string" name="subscription_change_disabled_wifi_ap" />
 </resources>
