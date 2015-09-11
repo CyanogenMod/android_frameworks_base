@@ -16,6 +16,7 @@
 
 package android.os;
 
+import android.app.ActivityThread;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.util.Log;
@@ -94,6 +95,40 @@ public class SystemVibrator extends Vibrator {
         } else {
             throw new ArrayIndexOutOfBoundsException();
         }
+    }
+
+    /**
+     * Vibrates with a reduced thread priority. Useful in situations like ringtones
+     * where the high-priority task may preempt other activity.
+     *
+     * @hide
+     */
+    public void vibrateLowPriority(int uid, String opPkg, long[] pattern, int repeat,
+            AudioAttributes attributes) {
+        if (mService == null) {
+            Log.w(TAG, "Failed to vibrate; no vibrator service.");
+            return;
+        }
+        // catch this here because the server will do nothing.  pattern may
+        // not be null, let that be checked, because the server will drop it
+        // anyway
+        if (repeat < pattern.length) {
+            try {
+                mService.vibrateLowPriority(uid, opPkg, pattern, repeat, usageForAttributes(attributes),
+                        mToken);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed to vibrate.", e);
+            }
+        } else {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void vibrateLowPriority(long[] pattern, int repeat, AudioAttributes attributes) {
+        vibrateLowPriority(Process.myUid(), ActivityThread.currentPackageName(), pattern, repeat, attributes);
     }
 
     private static int usageForAttributes(AudioAttributes attributes) {
