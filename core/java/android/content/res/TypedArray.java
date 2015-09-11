@@ -401,8 +401,7 @@ public class TypedArray {
             throw new RuntimeException("Failed to resolve attribute at index " + index);
         }
 
-        throw new UnsupportedOperationException("Can't convert to color: type=0x"
-                + Integer.toHexString(type));
+        return defValue;
     }
 
     /**
