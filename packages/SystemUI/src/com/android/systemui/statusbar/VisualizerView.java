@@ -51,6 +51,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private boolean mPowerSaveMode = false;
     private boolean mDisplaying = false; // the state we're animating to
     private boolean mDozing = false;
+    private boolean mOccluded = false;
 
     private int mColor;
     private Bitmap mCurrentBitmap;
@@ -106,6 +107,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         @Override
         public void run() {
             if (mVisualizer != null) {
+                mVisualizer.setDataCaptureListener(null, 0, false, false);
                 mVisualizer.setEnabled(false);
                 mVisualizer.release();
                 mVisualizer = null;
@@ -253,6 +255,13 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         }
     }
 
+    public void setOccluded(boolean occluded) {
+        if (mOccluded != occluded) {
+            mOccluded = occluded;
+            checkStateChanged();
+        }
+    }
+
     public void setBitmap(Bitmap bitmap) {
         if (mCurrentBitmap == bitmap) {
             return;
@@ -307,7 +316,8 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     }
 
     private void checkStateChanged() {
-        if (mVisible && mPlaying && !mDozing && !mPowerSaveMode && mVisualizerEnabled) {
+        if (mVisible && mPlaying && !mDozing && !mPowerSaveMode && mVisualizerEnabled
+                && !mOccluded) {
             if (!mDisplaying) {
                 mDisplaying = true;
                 AsyncTask.execute(mLinkVisualizer);

@@ -7217,25 +7217,31 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private void setUpCustomResolverActivity(PackageParser.Package pkg) {
         synchronized (mPackages) {
-            mResolverReplaced = true;
-            // Set up information for custom user intent resolution activity.
-            mResolveActivity.applicationInfo = pkg.applicationInfo;
-            mResolveActivity.name = mCustomResolverComponentName.getClassName();
-            mResolveActivity.packageName = pkg.applicationInfo.packageName;
-            mResolveActivity.processName = pkg.applicationInfo.packageName;
-            mResolveActivity.launchMode = ActivityInfo.LAUNCH_MULTIPLE;
-            mResolveActivity.flags = ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS |
-                    ActivityInfo.FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS;
-            mResolveActivity.theme = 0;
-            mResolveActivity.exported = true;
-            mResolveActivity.enabled = true;
-            mResolveInfo.activityInfo = mResolveActivity;
-            mResolveInfo.priority = 0;
-            mResolveInfo.preferredOrder = 0;
-            mResolveInfo.match = 0;
-            mResolveComponentName = mCustomResolverComponentName;
-            Slog.i(TAG, "Replacing default ResolverActivity with custom activity: " +
-                    mResolveComponentName);
+            for (Activity a : pkg.activities) {
+                if (a.getComponentName().getClassName()
+                        .equals(mCustomResolverComponentName.getClassName())) {
+                    mResolverReplaced = true;
+                    // Set up information for custom user intent resolution activity.
+                    mResolveActivity.applicationInfo = pkg.applicationInfo;
+                    mResolveActivity.name = mCustomResolverComponentName.getClassName();
+                    mResolveActivity.packageName = pkg.applicationInfo.packageName;
+                    mResolveActivity.processName = pkg.applicationInfo.packageName;
+                    mResolveActivity.launchMode = ActivityInfo.LAUNCH_MULTIPLE;
+                    mResolveActivity.flags = ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS |
+                            ActivityInfo.FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS;
+                    mResolveActivity.theme = a.info.theme;
+                    mResolveActivity.exported = true;
+                    mResolveActivity.enabled = true;
+                    mResolveInfo.activityInfo = mResolveActivity;
+                    mResolveInfo.priority = 0;
+                    mResolveInfo.preferredOrder = 0;
+                    mResolveInfo.match = 0;
+                    mResolveComponentName = mCustomResolverComponentName;
+                    Slog.i(TAG, "Replacing default ResolverActivity with custom activity: " +
+                            mResolveComponentName);
+                    break;
+                }
+            }
         }
     }
 

@@ -2539,6 +2539,12 @@ public final class ActivityStackSupervisor implements DisplayListener {
     }
 
     void findTaskToMoveToFrontLocked(TaskRecord task, int flags, Bundle options, String reason) {
+        ActivityRecord top = task.stack.topRunningActivityLocked(null);
+        /* App is launching from recent apps and it's a new process */
+        if(top != null && top.state == ActivityState.DESTROYED) {
+            mPm.launchBoost();
+        }
+
         if ((flags & ActivityManager.MOVE_TASK_NO_USER_ACTION) == 0) {
             mUserLeaving = true;
         }
@@ -2732,6 +2738,9 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
                 final ActivityRecord ar = stack.findTaskLocked(r);
                 if (ar != null) {
+                    if (ar.state == ActivityState.DESTROYED) {
+                        mPm.launchBoost();
+                    }
                     return ar;
                 }
             }

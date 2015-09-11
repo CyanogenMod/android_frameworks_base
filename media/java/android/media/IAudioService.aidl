@@ -60,6 +60,10 @@ interface IAudioService {
 
     void forceRemoteSubmixFullVolume(boolean startForcing, IBinder cb);
 
+    void handleHotwordInput(boolean listening);
+
+    String getCurrentHotwordInputPackageName();
+
     void setMasterMute(boolean state, int flags, String callingPackage, IBinder cb);
 
     boolean isMasterMute();

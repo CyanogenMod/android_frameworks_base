@@ -1331,7 +1331,7 @@ public final class ActiveServices {
             return null;
         }
 
-        if (!whileRestarting && r.restartDelay > 0 && mRestartingServices.contains(r)) {
+        if (!whileRestarting && r.restartDelay > 0) {
             // If waiting for a restart, then do nothing.
             return null;
         }
