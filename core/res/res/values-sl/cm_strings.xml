@@ -167,8 +167,8 @@
   <string name="sd_ext_media_checking_notification_message">Preverjanje kartice SD za napake.</string>
   <string name="sd_ext_media_nofs_notification_title">Prazna SD kartica</string>
   <string name="sd_ext_media_nofs_notification_message">SD kartica je prazna ali pa ima nepodprt datotečni sistem.</string>
-  <string name="sd_ext_media_unmountable_notification_title">Poškodovana SD kartica</string>
-  <string name="sd_ext_media_unmountable_notification_message">SD kartica je poškodovana. Poskusite jo ponovno formatirati.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Poškodovana kartica SD</string>
+  <string name="sd_ext_media_unmountable_notification_message">Kartica SD je poškodovana. Poskusite jo ponovno formatirati.</string>
   <string name="sd_ext_media_badremoval_notification_title">SD kartica nepričakovano odstranjena</string>
   <string name="sd_ext_media_badremoval_notification_message">Odklopite kartico SD pred odstranitvijo, da preprečite izgubo podatkov.</string>
   <string name="sd_ext_media_safe_unmount_notification_title">SD kartico lahko varno odstranite</string>
