@@ -440,7 +440,7 @@ public class RecentsTaskLoader {
 
     /** Creates a new plan for loading the recent tasks. */
     public RecentsTaskLoadPlan createLoadPlan(Context context) {
-        RecentsConfiguration config = RecentsConfiguration.getInstance();
+        RecentsConfiguration config = RecentsConfiguration.getInstance(context, mSystemServicesProxy);
         RecentsTaskLoadPlan plan = new RecentsTaskLoadPlan(context, config, mSystemServicesProxy);
         return plan;
     }

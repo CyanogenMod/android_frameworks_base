@@ -177,6 +177,14 @@ public class RecentsConfiguration {
         return sInstance;
     }
 
+    /** Returns the current recents configuration or creates and populates it if required */
+    public static RecentsConfiguration getInstance(Context context, SystemServicesProxy ssp) {
+        if (sInstance == null) {
+            sInstance = reinitialize(context, ssp);
+        }
+        return sInstance;
+    }
+
     /** Updates the state, given the specified context */
     void update(Context context) {
         SharedPreferences settings = context.getSharedPreferences(context.getPackageName(), 0);
