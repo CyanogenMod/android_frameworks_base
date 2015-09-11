@@ -82,6 +82,8 @@ public class BatteryMeterView extends View implements DemoMode,
     private final int mCriticalLevel;
     private final int mFrameColor;
 
+    private boolean mAnimationsEnabled;
+
     private final Path mShapePath = new Path();
     private final Path mClipPath = new Path();
     private final Path mTextPath = new Path();
@@ -95,8 +97,6 @@ public class BatteryMeterView extends View implements DemoMode,
     private int mLightModeBackgroundColor;
     private int mLightModeFillColor;
 
-    private final Handler mHandler;
-
     protected BatteryMeterMode mMeterMode = null;
 
     protected boolean mAttached;
@@ -105,7 +105,6 @@ public class BatteryMeterView extends View implements DemoMode,
     protected BatteryTracker mDemoTracker = new BatteryTracker();
     protected BatteryTracker mTracker = new BatteryTracker();
     private BatteryMeterDrawable mBatteryMeterDrawable;
-    private final Object mLock = new Object();
     private int mIconTint = Color.WHITE;
 
     private class BatteryTracker extends BroadcastReceiver {
@@ -147,11 +146,9 @@ public class BatteryMeterView extends View implements DemoMode,
 
                 setContentDescription(
                         context.getString(R.string.accessibility_battery_level, level));
-                synchronized (mLock) {
-                    if (mBatteryMeterDrawable != null) {
-                        setVisibility(View.VISIBLE);
-                        invalidateIfVisible();
-                    }
+                if (mBatteryMeterDrawable != null) {
+                    setVisibility(View.VISIBLE);
+                    invalidate();
                 }
             } else if (action.equals(ACTION_LEVEL_TEST)) {
                 testmode = true;
@@ -199,12 +196,6 @@ public class BatteryMeterView extends View implements DemoMode,
         }
     }
 
-    private final Runnable mInvalidate = new Runnable() {
-        public void run() {
-            invalidateIfVisible();
-        }
-    };
-
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -240,7 +231,6 @@ public class BatteryMeterView extends View implements DemoMode,
 
     public BatteryMeterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mHandler = new Handler();
 
         final Resources res = context.getResources();
         TypedArray atts = context.obtainStyledAttributes(attrs, R.styleable.BatteryMeterView,
@@ -275,6 +265,8 @@ public class BatteryMeterView extends View implements DemoMode,
         mLightModeBackgroundColor =
                 context.getColor(R.color.light_mode_icon_color_dual_tone_background);
         mLightModeFillColor = context.getColor(R.color.light_mode_icon_color_dual_tone_fill);
+
+        setAnimationsEnabled(true);
     }
 
     protected BatteryMeterDrawable createBatteryMeterDrawable(BatteryMeterMode mode) {
@@ -325,6 +317,14 @@ public class BatteryMeterView extends View implements DemoMode,
         invalidate();
     }
 
+    public void setAnimationsEnabled(boolean enabled) {
+        if (mAnimationsEnabled != enabled) {
+            mAnimationsEnabled = enabled;
+            setLayerType(mAnimationsEnabled ? LAYER_TYPE_HARDWARE : LAYER_TYPE_NONE, null);
+            invalidate();
+        }
+    }
+
     @Override
     public void onBatteryStyleChanged(int style, int percentMode) {
         boolean showInsidePercent = percentMode == BatteryController.PERCENTAGE_MODE_INSIDE;
@@ -351,27 +351,16 @@ public class BatteryMeterView extends View implements DemoMode,
 
         setMode(meterMode);
         mShowPercent = showInsidePercent;
-        invalidateIfVisible();
+        invalidate();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
         mHeight = h;
         mWidth = w;
-        synchronized (mLock) {
-            if (mBatteryMeterDrawable != null) {
-                mBatteryMeterDrawable.onSizeChanged(w, h, oldw, oldh);
-            }
-        }
-    }
-
-    protected void invalidateIfVisible() {
-        if (getVisibility() == View.VISIBLE && mAttached) {
-            if (mAttached) {
-                postInvalidate();
-            } else {
-                invalidate();
-            }
+        if (mBatteryMeterDrawable != null) {
+            mBatteryMeterDrawable.onSizeChanged(w, h, oldw, oldh);
         }
     }
 
@@ -385,16 +374,12 @@ public class BatteryMeterView extends View implements DemoMode,
         if (mode == BatteryMeterMode.BATTERY_METER_GONE ||
                 mode == BatteryMeterMode.BATTERY_METER_TEXT) {
             setVisibility(View.GONE);
-            synchronized (mLock) {
-                mBatteryMeterDrawable = null;
-            }
+            mBatteryMeterDrawable = null;
         } else {
-            synchronized (mLock) {
-                if (mBatteryMeterDrawable != null) {
-                    mBatteryMeterDrawable.onDispose();
-                }
-                mBatteryMeterDrawable = createBatteryMeterDrawable(mode);
+            if (mBatteryMeterDrawable != null) {
+                mBatteryMeterDrawable.onDispose();
             }
+            mBatteryMeterDrawable = createBatteryMeterDrawable(mode);
             if (mMeterMode == BatteryMeterMode.BATTERY_METER_ICON_PORTRAIT ||
                     mMeterMode == BatteryMeterMode.BATTERY_METER_ICON_LANDSCAPE) {
                 ((NormalBatteryMeterDrawable)mBatteryMeterDrawable).loadBoltPoints(
@@ -402,8 +387,8 @@ public class BatteryMeterView extends View implements DemoMode,
             }
             if (tracker.present) {
                 setVisibility(View.VISIBLE);
-                postInvalidate();
                 requestLayout();
+                invalidate();
             } else {
                 setVisibility(View.GONE);
             }
@@ -434,12 +419,10 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     public void setDarkIntensity(float darkIntensity) {
-        synchronized (mLock) {
-            if (mBatteryMeterDrawable != null) {
-                int backgroundColor = getBackgroundColor(darkIntensity);
-                int fillColor = getFillColor(darkIntensity);
-                mBatteryMeterDrawable.setDarkIntensity(backgroundColor, fillColor);
-            }
+        if (mBatteryMeterDrawable != null) {
+            int backgroundColor = getBackgroundColor(darkIntensity);
+            int fillColor = getFillColor(darkIntensity);
+            mBatteryMeterDrawable.setDarkIntensity(backgroundColor, fillColor);
         }
     }
 
@@ -458,12 +441,10 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     @Override
-    public void draw(Canvas c) {
-        synchronized (mLock) {
-            if (mBatteryMeterDrawable != null) {
-                BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
-                mBatteryMeterDrawable.onDraw(c, tracker);
-            }
+    protected void onDraw(Canvas canvas) {
+        if (mBatteryMeterDrawable != null) {
+            BatteryTracker tracker = mDemoMode ? mDemoTracker : mTracker;
+            mBatteryMeterDrawable.onDraw(canvas, tracker);
         }
     }
 
@@ -755,7 +736,6 @@ public class BatteryMeterView extends View implements DemoMode,
 
         @Override
         public void onDispose() {
-            mHandler.removeCallbacks(mInvalidate);
             mDisposed = true;
         }
 
@@ -868,13 +848,14 @@ public class BatteryMeterView extends View implements DemoMode,
                 initSizeBasedStuff();
             }
 
-            updateChargeAnim(tracker);
             drawCircle(c, tracker, mTextX, mRectLeft);
+            if (mAnimationsEnabled) {
+                updateChargeAnim(tracker);
+            }
         }
 
         @Override
         public void onDispose() {
-            mHandler.removeCallbacks(mInvalidate);
             mDisposed = true;
         }
 
@@ -936,29 +917,7 @@ public class BatteryMeterView extends View implements DemoMode,
                 canvas.drawText("?", textX, mTextY, mTextPaint);
 
             } else if (tracker.plugged) {
-                // draw the bolt
-                final float bl = (int)(drawRect.left + drawRect.width() / 3.2f);
-                final float bt = (int)(drawRect.top + drawRect.height() / 4f);
-                final float br = (int)(drawRect.right - drawRect.width() / 5.2f);
-                final float bb = (int)(drawRect.bottom - drawRect.height() / 8f);
-                if (mBoltFrame.left != bl || mBoltFrame.top != bt
-                        || mBoltFrame.right != br || mBoltFrame.bottom != bb) {
-                    mBoltFrame.set(bl, bt, br, bb);
-                    mBoltPath.reset();
-                    mBoltPath.moveTo(
-                            mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
-                            mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
-                    for (int i = 2; i < mBoltPoints.length; i += 2) {
-                        mBoltPath.lineTo(
-                                mBoltFrame.left + mBoltPoints[i] * mBoltFrame.width(),
-                                mBoltFrame.top + mBoltPoints[i + 1] * mBoltFrame.height());
-                    }
-                    mBoltPath.lineTo(
-                            mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
-                            mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
-                }
                 canvas.drawPath(mBoltPath, mBoltPaint);
-
             } else {
                 if (level > mCriticalLevel
                         && (mShowPercent && !(tracker.level == 100 && !SHOW_100_PERCENT))) {
@@ -981,13 +940,12 @@ public class BatteryMeterView extends View implements DemoMode,
         private void updateChargeAnim(BatteryTracker tracker) {
             // Stop animation when battery is full or after the meter
             // rotated back to 0 after unplugging.
-            if (!tracker.shouldIndicateCharging() && mAnimOffset == 0
+            if (!tracker.shouldIndicateCharging()
                     || tracker.status == BatteryManager.BATTERY_STATUS_FULL
                     || tracker.level == 0) {
                 if (mIsAnimating) {
                     mIsAnimating = false;
                     mAnimOffset = 0;
-                    mHandler.removeCallbacks(mInvalidate);
                 }
                 return;
             }
@@ -1000,8 +958,7 @@ public class BatteryMeterView extends View implements DemoMode,
                 mAnimOffset += 3;
             }
 
-            mHandler.removeCallbacks(mInvalidate);
-            mHandler.postDelayed(mInvalidate, 50);
+            postInvalidateDelayed(50);
         }
 
         /**
@@ -1030,6 +987,28 @@ public class BatteryMeterView extends View implements DemoMode,
             // the +1dp at end of formula balances out rounding issues.works out on all resolutions
             mTextY = mCircleSize / 2.0f + (bounds.bottom - bounds.top) / 2.0f
                     - strokeWidth / 2.0f + getResources().getDisplayMetrics().density;
+
+            // draw the bolt
+            final float bl = (int) (mRectLeft.left + mRectLeft.width() / 3.2f);
+            final float bt = (int) (mRectLeft.top + mRectLeft.height() / 4f);
+            final float br = (int) (mRectLeft.right - mRectLeft.width() / 5.2f);
+            final float bb = (int) (mRectLeft.bottom - mRectLeft.height() / 8f);
+            if (mBoltFrame.left != bl || mBoltFrame.top != bt
+                    || mBoltFrame.right != br || mBoltFrame.bottom != bb) {
+                mBoltFrame.set(bl, bt, br, bb);
+                mBoltPath.reset();
+                mBoltPath.moveTo(
+                        mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
+                        mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
+                for (int i = 2; i < mBoltPoints.length; i += 2) {
+                    mBoltPath.lineTo(
+                            mBoltFrame.left + mBoltPoints[i] * mBoltFrame.width(),
+                            mBoltFrame.top + mBoltPoints[i + 1] * mBoltFrame.height());
+                }
+                mBoltPath.lineTo(
+                        mBoltFrame.left + mBoltPoints[0] * mBoltFrame.width(),
+                        mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
+            }
         }
     }
 }
