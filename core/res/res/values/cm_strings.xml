@@ -345,4 +345,7 @@
     <!-- Zen mode buttons -->
     <string name="silent_mode_priority">Priority</string>
     <string name="silent_mode_none">None</string>
+
+    <!-- Wifi Hotspot disabled due to subscription change -->
+    <string name="subscription_change_disabled_wifi_ap">Disabled WiFi hotspot due to SIM subscription change</string>
 </resources>
