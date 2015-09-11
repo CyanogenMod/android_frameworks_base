@@ -287,6 +287,7 @@ public class HeadsUpNotificationView extends FrameLayout implements SwipeHelper.
 
     @Override
     protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
     }
 
