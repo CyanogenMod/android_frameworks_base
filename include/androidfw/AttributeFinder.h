@@ -137,7 +137,7 @@ void BackTrackingAttributeFinder<Derived, Iterator>::markCurrentPackageId(const 
             mFrameworkStart = mCurrent;
             break;
         case 0x3f:
-            mCurrent = mCMFrameworkStart;
+            mCMFrameworkStart = mCurrent;
             break;
         case 0x7f:
             mAppStart = mCurrent;

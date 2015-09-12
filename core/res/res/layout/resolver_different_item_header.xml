@@ -30,5 +30,4 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
     android:background="@color/resolver_list_bg"
-    android:elevation="8dp"
     />

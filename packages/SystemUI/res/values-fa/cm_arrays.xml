@@ -18,12 +18,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string-array name="cardinal_directions">
     <item>ش</item>
-    <item>ش‌خ</item>
+    <item>ش خ</item>
     <item>خ</item>
-    <item>ج‌خ</item>
+    <item>ج خ</item>
     <item>ج</item>
-    <item>ج‌ب</item>
+    <item>ج ب</item>
     <item>ب</item>
-    <item>ش‌ب</item>
+    <item>ش ب</item>
   </string-array>
 </resources>

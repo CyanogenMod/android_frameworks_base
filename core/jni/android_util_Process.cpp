@@ -348,27 +348,40 @@ jint android_os_Process_getThreadPriority(JNIEnv* env, jobject clazz,
     return pri;
 }
 
+static bool memcgSupported = false;
+static int memcgTasksFd = -1;
+static int memcgSwapTasksFd = -1;
+static pthread_once_t memcgInitOnce = PTHREAD_ONCE_INIT;
+
+static void memcgInit(void) {
+    if (!access("/sys/fs/cgroup/memory/tasks", F_OK)) {
+        memcgTasksFd = open("/sys/fs/cgroup/memory/tasks", O_WRONLY);
+        if (memcgTasksFd < 0) {
+            return;
+        }
+        memcgSwapTasksFd = open("/sys/fs/cgroup/memory/sw/tasks", O_WRONLY);
+        if (memcgSwapTasksFd < 0) {
+            close(memcgTasksFd);
+            return;
+        }
+        memcgSupported = true;
+    }
+}
+
 jboolean android_os_Process_setSwappiness(JNIEnv *env, jobject clazz,
                                           jint pid, jboolean is_increased)
 {
-    char text[64];
-
-    if (is_increased) {
-        strcpy(text, "/sys/fs/cgroup/memory/sw/tasks");
-    } else {
-        strcpy(text, "/sys/fs/cgroup/memory/tasks");
-    }
-
-    struct stat st;
-    if (stat(text, &st) || !S_ISREG(st.st_mode)) {
+    pthread_once(&memcgInitOnce, memcgInit);
+    if (!memcgSupported) {
         return false;
     }
 
-    int fd = open(text, O_WRONLY);
+    int fd = is_increased ? memcgSwapTasksFd : memcgTasksFd;
+    char text[64];
+
     if (fd >= 0) {
         sprintf(text, "%" PRId32, pid);
         write(fd, text, strlen(text));
-        close(fd);
     }
 
     return true;

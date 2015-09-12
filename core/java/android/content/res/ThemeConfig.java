@@ -179,7 +179,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
      * preference until the theme is switched at runtime.
      */
     public static ThemeConfig getBootTheme(ContentResolver resolver) {
-        return getBootThemeForUser(resolver, UserHandle.USER_OWNER);
+        return getBootThemeForUser(resolver, UserHandle.getCallingUserId());
     }
 
     public static ThemeConfig getBootThemeForUser(ContentResolver resolver, int userHandle) {
@@ -205,7 +205,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 bootTheme = builder.build();
             }
         } catch (SecurityException e) {
-            Log.e(TAG, "Could not get boot theme", e);
+            Log.w(TAG, "Could not get boot theme", e);
         }
         return bootTheme;
     }

@@ -581,7 +581,8 @@ public class IconPackHelper {
                         iconInfo.iconRotation != 0 ||
                         iconInfo.iconRotationVariance != 0 ||
                         iconInfo.iconTranslationX != 0 ||
-                        iconInfo.iconTranslationY != 0);
+                        iconInfo.iconTranslationY != 0 ||
+                        iconInfo.iconScale != 1f);
     }
 
     public static class IconCustomizer {

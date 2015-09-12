@@ -41,8 +41,6 @@
   <string name="permdesc_changePrivacyGuardState">Permite que l\'aplicación cambie l\'estáu de privacidá d\'otra. Cuando una aplicación s\'executa cola privacidá habilitada, nun va poder acceder a los datos personales, talos como contautos, mensaxes o rexistros de llamaes.</string>
   <string name="privacy_guard_notification">Privacidá activada</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nun va poder acceder a los datos personales</string>
-  <string name="permlab_useHardwareFramework">usar marcu de hardware</string>
-  <string name="permdesc_useHardwareFramework">Permite que l\'aplicación acceda al marcu de hardware de CM.</string>
   <string name="permlab_setKeyguardWallpaper">Afita\'l fondu de pantalla de bloquéu</string>
   <string name="permdesc_setKeyguardWallpaper">Permite que l\'aplicación afite\'l fondu de la pantalla de bloquéu.</string>
   <string name="privacy_guard_dialog_title">Privacidá</string>

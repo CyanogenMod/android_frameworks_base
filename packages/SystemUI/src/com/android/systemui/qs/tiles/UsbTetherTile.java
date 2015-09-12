@@ -46,6 +46,11 @@ public class UsbTetherTile extends QSTile<QSTile.BooleanState> {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
+    @Override
+    public boolean hasSensitiveData() {
+        return true;
+    }
+
     protected BooleanState newTileState() {
         return new BooleanState();
     }

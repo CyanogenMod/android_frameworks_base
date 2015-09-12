@@ -172,6 +172,9 @@
     <!-- Proximity check timeout -->
     <java-symbol type="integer" name="config_proximityCheckTimeout" />
 
+    <!-- Proximity check on screen on default -->
+    <java-symbol type="bool" name="config_proximityCheckOnWakeEnabledByDefault" />
+
     <!-- Developer settings - Kill app back press -->
     <java-symbol type="string" name="app_killed_message" />
 
@@ -182,6 +185,7 @@
     <java-symbol type="bool" name="config_hasRemovableLid" />
 
     <!-- Notification and battery light -->
+    <java-symbol type="bool" name="config_adjustableNotificationLedBrightness" />
     <java-symbol type="bool" name="config_intrusiveNotificationLed" />
     <java-symbol type="bool" name="config_multiColorNotificationLed" />
     <java-symbol type="bool" name="config_intrusiveBatteryLed" />
@@ -353,4 +357,7 @@
 
     <!-- Non-themeable packages -->
     <java-symbol type="array" name="non_themeable_packages" />
+
+    <!-- Config to disable showing ringtones from removable storage -->
+    <java-symbol type="bool" name="config_excludeRingtonesFromRemovableStorage" />
 </resources>

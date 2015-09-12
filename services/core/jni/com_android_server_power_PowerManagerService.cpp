@@ -163,6 +163,13 @@ static void nativeCpuBoost(JNIEnv *env, jobject clazz, jint duration) {
     }
 }
 
+static void nativeLaunchBoost(JNIEnv *env, jobject clazz) {
+    // Tell the Power HAL to boost the CPU
+    if (gPowerModule && gPowerModule->powerHint) {
+        gPowerModule->powerHint(gPowerModule, POWER_HINT_LAUNCH_BOOST, NULL);
+    }
+}
+
 static void nativeSetPowerProfile(JNIEnv *env, jobject clazz, jint profile) {
     // Tell the Power HAL to select a power profile
     if (gPowerModule && gPowerModule->powerHint) {
@@ -189,6 +196,8 @@ static JNINativeMethod gPowerManagerServiceMethods[] = {
             (void*) nativeSendPowerHint },
     { "nativeCpuBoost", "(I)V",
             (void*) nativeCpuBoost },
+    { "nativeLaunchBoost", "()V",
+            (void*) nativeLaunchBoost },
     { "nativeSetPowerProfile", "(I)V",
             (void*) nativeSetPowerProfile },
 };

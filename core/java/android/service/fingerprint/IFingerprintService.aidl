@@ -25,7 +25,7 @@ import android.service.fingerprint.IFingerprintServiceReceiver;
  */
 interface IFingerprintService {
     // Any errors resulting from this call will be returned to the listener
-    oneway void authenticate(IBinder token, int userId);
+    oneway void authenticate(IBinder token, int userId, boolean disableVibration);
 
     // Any errors resulting from this call will be returned to the listener
     oneway void enroll(IBinder token, long timeout, int userId);
@@ -41,6 +41,9 @@ interface IFingerprintService {
 
     // Stops listening for fingerprints
     oneway void stopListening(IBinder token, int userId);
+
+    // Any errors resulting from this call will be returned to the listener
+    oneway void setWakeup(IBinder token, int userId, boolean wakeup);
 
     // Get a list of fingerprints
     List<Fingerprint> getEnrolledFingerprints(IBinder token, int userId);

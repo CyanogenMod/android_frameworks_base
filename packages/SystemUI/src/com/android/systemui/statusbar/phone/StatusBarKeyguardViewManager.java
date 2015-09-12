@@ -91,6 +91,7 @@ public class StatusBarKeyguardViewManager {
         mContainer = container;
         mStatusBarWindowManager = statusBarWindowManager;
         mScrimController = scrimController;
+        if (mBouncer != null) mBouncer.removeView();
         mBouncer = new KeyguardBouncer(mContext, mViewMediatorCallback, mLockPatternUtils,
                 mStatusBarWindowManager, container);
     }
@@ -218,6 +219,7 @@ public class StatusBarKeyguardViewManager {
         }
         mOccluded = occluded;
         mStatusBarWindowManager.setKeyguardOccluded(occluded);
+        mPhoneStatusBar.getVisualizer().setOccluded(occluded);
         reset();
     }
 

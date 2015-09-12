@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,13 +111,24 @@ static void finalize_native(JNIEnv *env, jobject clazz, jlong ptr)
 }
 
 static void setLight_native(JNIEnv *env, jobject clazz, jlong ptr,
-        jint light, jint colorARGB, jint flashMode, jint onMS, jint offMS, jint brightnessMode)
+        jint light, jint colorARGB, jint flashMode, jint onMS, jint offMS, jint brightnessMode,
+        jint brightnessLevel)
 {
     Devices* devices = (Devices*)ptr;
     light_state_t state;
+    int colorAlpha;
 
     if (light < 0 || light >= LIGHT_COUNT || devices->lights[light] == NULL) {
         return ;
+    }
+
+    if (brightnessLevel > 0 && brightnessLevel <= 0xFF) {
+        colorAlpha = (colorARGB & 0xFF000000) >> 24;
+        if (colorAlpha == 0x00) {
+            colorAlpha = 0xFF;
+        }
+        colorAlpha = (colorAlpha * brightnessLevel) / 0xFF;
+        colorARGB = (colorAlpha << 24) + (colorARGB & 0x00FFFFFF);
     }
 
     memset(&state, 0, sizeof(light_state_t));
@@ -135,7 +147,7 @@ static void setLight_native(JNIEnv *env, jobject clazz, jlong ptr,
 static JNINativeMethod method_table[] = {
     { "init_native", "()J", (void*)init_native },
     { "finalize_native", "(J)V", (void*)finalize_native },
-    { "setLight_native", "(JIIIIII)V", (void*)setLight_native },
+    { "setLight_native", "(JIIIIIII)V", (void*)setLight_native },
 };
 
 int register_android_server_LightsService(JNIEnv *env)

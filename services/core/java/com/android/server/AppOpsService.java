@@ -1007,6 +1007,14 @@ public class AppOpsService extends IAppOpsService.Stub {
         }
     }
 
+    private void scheduleWriteNowLocked() {
+        if (!mWriteScheduled) {
+            mWriteScheduled = true;
+        }
+        mHandler.removeCallbacks(mWriteRunner);
+        mHandler.post(mWriteRunner);
+    }
+
     private Op getOpLocked(int code, int uid, String packageName, boolean edit) {
         Ops ops = getOpsLocked(uid, packageName, edit);
         if (ops == null) {
@@ -1714,7 +1722,7 @@ public class AppOpsService extends IAppOpsService.Stub {
                 }
             }
             // ensure the counter reset persists
-            scheduleFastWriteLocked();
+            scheduleWriteNowLocked();
         }
     }
 }

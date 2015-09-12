@@ -894,6 +894,22 @@ public final class PowerManager {
     }
 
     /**
+     * Boost the CPU for an application launch.
+     * Requires the {@link android.Manifest.permission#CPU_BOOST} permission.
+     *
+     * @hide
+     */
+    public void launchBoost()
+    {
+        try {
+            if (mService != null) {
+                mService.launchBoost();
+            }
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
      * Intent that is broadcast when the state of {@link #isPowerSaveMode()} changes.
      * This broadcast is only sent to registered receivers.
      */

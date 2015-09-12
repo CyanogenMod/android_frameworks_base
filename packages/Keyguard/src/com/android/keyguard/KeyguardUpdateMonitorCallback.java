@@ -204,6 +204,11 @@ public class KeyguardUpdateMonitorCallback {
     public void onFingerprintAcquired(int info) { }
 
     /**
+     * Called when fingerprint state changes.
+     */
+    public void onFingerprintStateChange(int state) { }
+
+    /**
      * Called when the state of face unlock changed.
      */
     public void onFaceUnlockStateChanged(boolean running, int userid) { }
