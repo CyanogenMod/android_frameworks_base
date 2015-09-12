@@ -38,6 +38,12 @@ public class BatteryManager {
     
     /**
      * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
+     * integer containing the current charge type.
+     */
+    public static final String EXTRA_CHARGE_TYPE = "charge-type";
+    
+    /**
+     * Extra for {@link android.content.Intent#ACTION_BATTERY_CHANGED}:
      * integer containing the current health constant.
      */
     public static final String EXTRA_HEALTH = "health";
@@ -181,6 +187,10 @@ public class BatteryManager {
     public static final int BATTERY_STATUS_DISCHARGING = 3;
     public static final int BATTERY_STATUS_NOT_CHARGING = 4;
     public static final int BATTERY_STATUS_FULL = 5;
+
+    // values for "charge-type" field in the ACTION_BATTERY_CHANGED intent
+    public static final int BATTERY_CHARGE_TYPE_UNKNOWN = 1;
+    public static final int BATTERY_CHARGE_TYPE_FAST_CHARGING = 2;
 
     // values for "health" field in the ACTION_BATTERY_CHANGED Intent
     public static final int BATTERY_HEALTH_UNKNOWN = 1;
