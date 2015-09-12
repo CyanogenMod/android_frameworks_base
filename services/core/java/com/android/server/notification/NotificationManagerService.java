@@ -121,11 +121,13 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
@@ -203,6 +205,9 @@ public class NotificationManagerService extends SystemService {
 
     /** notification light maximum brightness value to use. */
     private static final int LIGHT_BRIGHTNESS_MAXIMUM = 255;
+
+    /** tri state notification sys file. */
+    private static final String TRI_STATE_NOTIFICATION_FILE = "/sys/class/switch/tri-state-key/state";
 
     private IActivityManager mAm;
     AudioManager mAudioManager;
@@ -1233,6 +1238,55 @@ public class NotificationManagerService extends SystemService {
 
         publishBinderService(Context.NOTIFICATION_SERVICE, mService);
         publishLocalService(NotificationManagerInternal.class, mInternalService);
+
+	if (new File(TRI_STATE_NOTIFICATION_FILE).exists())
+            mHandler.post(new Runnable() {
+
+                private int STATE = 0;
+
+                @Override
+                public void run() {
+                    if (mZenModeHelper != null) {
+                        FileReader fileReader = null;
+                        BufferedReader buf = null;
+                        try {
+                            fileReader = new FileReader(TRI_STATE_NOTIFICATION_FILE);
+                            buf = new BufferedReader(fileReader);
+                            int state = Integer.parseInt(buf.readLine());
+                            if (STATE != state) {
+                                STATE = state;
+                                switch (STATE) {
+                                   case 1:
+                                      mZenModeHelper.setZenMode(Settings.Global.ZEN_MODE_NO_INTERRUPTIONS,
+                                              "none");
+                                      break;
+                                   case 2:
+                                      mZenModeHelper.setZenMode(Settings.Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS,
+                                              "priority");
+                                      break;
+                                   case 3:
+                                      mZenModeHelper.setZenMode(Settings.Global.ZEN_MODE_OFF,
+                                              "off");
+                                      break;
+                                }
+                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            Slog.e(TAG, "Failed to read "
+                                    + TRI_STATE_NOTIFICATION_FILE + "\n" + e);
+                        } finally {
+                            try {
+                                if (fileReader != null) fileReader.close();
+                                if (buf != null) buf.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    mHandler.postDelayed(this, 1000);
+                }
+            });
     }
 
     /**
