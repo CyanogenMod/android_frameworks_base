@@ -181,6 +181,7 @@ public class BatteryManager {
     public static final int BATTERY_STATUS_DISCHARGING = 3;
     public static final int BATTERY_STATUS_NOT_CHARGING = 4;
     public static final int BATTERY_STATUS_FULL = 5;
+    public static final int BATTERY_STATUS_QUICK_CHARGING = 6;
 
     // values for "health" field in the ACTION_BATTERY_CHANGED Intent
     public static final int BATTERY_HEALTH_UNKNOWN = 1;
@@ -272,6 +273,11 @@ public class BatteryManager {
             // Ignore
         }
         return false;
+    }
+
+    /** @hide */
+    public static boolean isStatusCharging(int status) {
+        return status == BATTERY_STATUS_CHARGING || status == BATTERY_STATUS_QUICK_CHARGING;
     }
 
     /**

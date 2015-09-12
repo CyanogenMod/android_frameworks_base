@@ -7008,7 +7008,7 @@ public class BatteryStatsImpl extends BatteryStats {
             // PlugType doesn't means that the dock battery is charging (some devices
             // doesn't charge under dock usb)
             boolean onBattery = plugType == BATTERY_PLUGGED_NONE &&
-                    (status != BatteryManager.BATTERY_STATUS_CHARGING ||
+                    (! BatteryManager.isStatusCharging(status) ||
                     status != BatteryManager.BATTERY_STATUS_FULL);
             final long uptime = SystemClock.uptimeMillis();
             final long elapsedRealtime = SystemClock.elapsedRealtime();

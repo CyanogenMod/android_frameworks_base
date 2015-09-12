@@ -35,6 +35,8 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
+import android.util.Log;
+
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BatteryStateRegistar;
 
@@ -170,7 +172,7 @@ public class BatteryMeterView extends View implements DemoMode,
         }
 
         protected boolean shouldIndicateCharging() {
-            if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+            if (BatteryManager.isStatusCharging(status)) {
                 return true;
             }
             if (plugged) {
@@ -763,6 +765,7 @@ public class BatteryMeterView extends View implements DemoMode,
         private float   mTextX, mTextY; // precalculated position for drawText() to appear centered
 
         private Paint   mTextPaint;
+        private Paint   mQCPaint;
         private Paint   mFrontPaint;
         private Paint   mBackPaint;
         private Paint   mBoltPaint;
@@ -782,6 +785,11 @@ public class BatteryMeterView extends View implements DemoMode,
             Typeface font = Typeface.create("sans-serif-condensed", Typeface.BOLD);
             mTextPaint.setTypeface(font);
             mTextPaint.setTextAlign(Paint.Align.CENTER);
+
+            mQCPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            font = Typeface.create("sans-serif", Typeface.BOLD);
+            mQCPaint.setTypeface(font);
+            mQCPaint.setTextAlign(Paint.Align.CENTER);
 
             mFrontPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             mFrontPaint.setStrokeCap(Paint.Cap.BUTT);
@@ -854,6 +862,7 @@ public class BatteryMeterView extends View implements DemoMode,
         private void drawCircle(Canvas canvas, BatteryTracker tracker,
                 float textX, RectF drawRect) {
             boolean unknownStatus = tracker.status == BatteryManager.BATTERY_STATUS_UNKNOWN;
+            boolean quickCharging = tracker.status == BatteryManager.BATTERY_STATUS_QUICK_CHARGING;
             int level = tracker.level;
             Paint paint;
 
@@ -879,7 +888,9 @@ public class BatteryMeterView extends View implements DemoMode,
             if (unknownStatus) {
                 mTextPaint.setColor(paint.getColor());
                 canvas.drawText("?", textX, mTextY, mTextPaint);
-
+            } else if (quickCharging) {
+                mQCPaint.setColor(getColorForLevel(level));
+                canvas.drawText("+", textX, mTextY, mQCPaint);
             } else if (tracker.plugged) {
                 // draw the bolt
                 final float bl = (int)(drawRect.left + drawRect.width() / 3.2f);
@@ -903,7 +914,6 @@ public class BatteryMeterView extends View implements DemoMode,
                             mBoltFrame.top + mBoltPoints[1] * mBoltFrame.height());
                 }
                 canvas.drawPath(mBoltPath, mBoltPaint);
-
             } else {
                 if (level > mCriticalLevel
                         && (mShowPercent && !(tracker.level == 100 && !SHOW_100_PERCENT))) {
@@ -957,6 +967,7 @@ public class BatteryMeterView extends View implements DemoMode,
         private void initSizeBasedStuff() {
             mCircleSize = Math.min(getMeasuredWidth(), getMeasuredHeight());
             mTextPaint.setTextSize(mCircleSize / 2f);
+            mQCPaint.setTextSize(mCircleSize / 1.5f);
             mWarningTextPaint.setTextSize(mCircleSize / 2f);
 
             float strokeWidth = mCircleSize / STROKE_WITH;

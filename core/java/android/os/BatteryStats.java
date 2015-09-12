@@ -3582,6 +3582,9 @@ public abstract class BatteryStats implements Parcelable {
                         case BatteryManager.BATTERY_STATUS_FULL:
                             pw.print(checkin ? "f" : "full");
                             break;
+                        case BatteryManager.BATTERY_STATUS_QUICK_CHARGING:
+                            pw.print(checkin ? "q" : "quick-charging");
+                            break;
                         default:
                             pw.print(oldStatus);
                             break;

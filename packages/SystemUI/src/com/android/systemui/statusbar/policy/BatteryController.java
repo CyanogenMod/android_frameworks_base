@@ -116,7 +116,7 @@ public class BatteryController extends BroadcastReceiver implements BatteryState
             final int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
                     BatteryManager.BATTERY_STATUS_UNKNOWN);
             mCharged = status == BatteryManager.BATTERY_STATUS_FULL;
-            mCharging = mCharged || status == BatteryManager.BATTERY_STATUS_CHARGING;
+            mCharging = mCharged || BatteryManager.isStatusCharging(status);
 
             fireBatteryLevelChanged();
         } else if (action.equals(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED)) {

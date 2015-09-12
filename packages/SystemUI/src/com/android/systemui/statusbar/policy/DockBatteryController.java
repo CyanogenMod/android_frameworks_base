@@ -95,7 +95,7 @@ public class DockBatteryController extends BroadcastReceiver implements BatteryS
             final int status = intent.getIntExtra(BatteryManager.EXTRA_DOCK_STATUS,
                     BatteryManager.BATTERY_STATUS_UNKNOWN);
             mCharged = status == BatteryManager.BATTERY_STATUS_FULL;
-            mCharging = mPluggedIn && (mCharged || status == BatteryManager.BATTERY_STATUS_CHARGING);
+            mCharging = mPluggedIn && (mCharged || BatteryManager.isStatusCharging(status));
 
             fireBatteryLevelChanged();
         }

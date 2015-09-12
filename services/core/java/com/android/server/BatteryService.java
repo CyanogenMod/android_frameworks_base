@@ -778,6 +778,8 @@ public final class BatteryService extends SystemService {
     private int getIconLocked(int level) {
         if (mBatteryProps.batteryStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
             return com.android.internal.R.drawable.stat_sys_battery_charge;
+        } else if (mBatteryProps.batteryStatus == BatteryManager.BATTERY_STATUS_QUICK_CHARGING) {
+            return com.android.internal.R.drawable.stat_sys_battery_charge;
         } else if (mBatteryProps.batteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {
             return com.android.internal.R.drawable.stat_sys_battery;
         } else if (mBatteryProps.batteryStatus == BatteryManager.BATTERY_STATUS_NOT_CHARGING
@@ -795,6 +797,8 @@ public final class BatteryService extends SystemService {
 
     private int getDockIconLocked(int level) {
         if (mBatteryProps.dockBatteryStatus == BatteryManager.BATTERY_STATUS_CHARGING) {
+            return com.android.internal.R.drawable.stat_sys_battery_charge;
+        } else if (mBatteryProps.dockBatteryStatus == BatteryManager.BATTERY_STATUS_QUICK_CHARGING) {
             return com.android.internal.R.drawable.stat_sys_battery_charge;
         } else if (mBatteryProps.dockBatteryStatus == BatteryManager.BATTERY_STATUS_DISCHARGING) {
             return com.android.internal.R.drawable.stat_sys_battery;
@@ -961,7 +965,7 @@ public final class BatteryService extends SystemService {
                 mBatteryLight.turnOff();
             } else if (level < mLowBatteryWarningLevel) {
                 mBatteryLight.setModes(mNotificationLedBrightnessLevel);
-                if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
+                if (BatteryManager.isStatusCharging(status)) {
                     // Battery is charging and low
                     mBatteryLight.setColor(mBatteryLowARGB);
                 } else if (mLedPulseEnabled) {
@@ -972,7 +976,7 @@ public final class BatteryService extends SystemService {
                     // "Pulse low battery light" is disabled, no lights.
                     mBatteryLight.turnOff();
                 }
-            } else if (status == BatteryManager.BATTERY_STATUS_CHARGING
+            } else if (BatteryManager.isStatusCharging(status)
                     || status == BatteryManager.BATTERY_STATUS_FULL) {
                 mBatteryLight.setModes(mNotificationLedBrightnessLevel);
                 if (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90) {
