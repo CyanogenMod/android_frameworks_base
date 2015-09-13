@@ -4006,13 +4006,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // Landscape screen; nav bar goes to the left.
                     int right = overscanLeft + mNavigationBarWidthForRotation[displayRotation];
                     mTmpNavigationFrame.set(0, 0, right, displayHeight);
-                    mStableLeft = mStableFullscreenLeft = mTmpNavigationFrame.right;
-                    mStableFullscreenLeft = mTmpNavigationFrame.right;
+                    mStableLeft = mStableFullscreenLeft = 0;
                     if (transientNavBarShowing) {
                         mNavigationBarController.setBarShowingLw(true);
                     } else if (navVisible) {
                         mNavigationBarController.setBarShowingLw(true);
-                        mDockLeft = mTmpNavigationFrame.right;
+                        mUnrestrictedScreenLeft = mTmpNavigationFrame.right;
+                        mDockLeft = 0;
                         mRestrictedScreenLeft = mDockLeft;
                         mRestrictedScreenWidth = mDockRight - mRestrictedScreenLeft;
                         mRestrictedOverscanScreenLeft = mRestrictedScreenLeft;
