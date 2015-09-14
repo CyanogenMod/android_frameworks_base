@@ -379,11 +379,14 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             return;
         }
         if (fingerprintId == 0) {
-            // Not a valid fingerprint, start another authenticate call to try again
-            FingerprintManager fpm =
-                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
-            fpm.authenticate();
-            onFingerprintAttemptFailed();
+            if (mScreenOn) {
+                // Not a valid fingerprint, start another authenticate call to try again
+                FingerprintManager fpm =
+                        (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+                fpm.cancel();
+                fpm.authenticate();
+                onFingerprintAttemptFailed();
+            }
             return; // not a valid fingerprint
         }
 
@@ -824,10 +827,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         trustManager.registerTrustListener(this);
 
         mLockPatternUtils = new LockPatternUtils(mContext);
-
-        if (mLockPatternUtils.usingFingerprint()) {
-            setFingerprintListening(true);
-        }
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {

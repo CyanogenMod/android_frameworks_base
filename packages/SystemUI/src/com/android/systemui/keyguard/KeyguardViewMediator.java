@@ -1892,19 +1892,20 @@ public class KeyguardViewMediator extends SystemUI {
             // Lazily authenticate if the state isn't ready yet. This can happen
             // if another app (like camera) is stopping and keyguard is resuming, but
             // camera hasn't received its onPause method yet to cleanup its fingerprint connection
-            if (FingerprintManager.STATE_IDLE != fpm.getState()) {
-                if (DBG_FINGERPRINT) {
-                    Log.i(TAG, "deferring authenticate until idle fingerprint state");
-                }
-                mStartFingerAuthOnIdle = true;
-            } else {
+            if (FingerprintManager.STATE_IDLE == fpm.getState()) {
                 if (!mFingerAuthenticating) {
                     mFingerAuthenticating = true;
                     // Fingerprint service is already idle, ready to authenticate
                     if (DBG_FINGERPRINT)
                         Log.w(TAG, "fpm.authenticate()");
+                    fpm.cancel();
                     fpm.authenticate();
                 }
+            } else {
+                if (DBG_FINGERPRINT) {
+                    Log.i(TAG, "deferring authenticate until idle fingerprint state, current state: " + fpm.getState());
+                }
+                mStartFingerAuthOnIdle = true;
             }
         }
     }
