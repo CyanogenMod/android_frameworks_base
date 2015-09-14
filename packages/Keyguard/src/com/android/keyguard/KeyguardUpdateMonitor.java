@@ -378,14 +378,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         if (!hasBootCompleted()) {
             return;
         }
-        if (fingerprintId == 0) {
-            // Not a valid fingerprint, start another authenticate call to try again
-            FingerprintManager fpm =
-                    (FingerprintManager) mContext.getSystemService(Context.FINGERPRINT_SERVICE);
-            fpm.authenticate();
-            onFingerprintAttemptFailed();
-            return; // not a valid fingerprint
-        }
 
         final int userId;
         try {
@@ -398,12 +390,22 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             Log.d(TAG, "Fingerprint disabled by DPM for userId: " + userId);
             return;
         }
+        if (fingerprintId == 0) {
+            // not a valid fingerprint
+            onFingerprintAttemptFailed();
+            return;
+        }
         final ContentResolver res = mContext.getContentResolver();
         final List<Fingerprint> fingerprints = FingerprintUtils.getFingerprintsForUser(res, userId);
+        boolean foundFingerprint = false;
         for (Fingerprint fingerprint : fingerprints) {
             if (fingerprint.getFingerId() == fingerprintId) {
+                foundFingerprint = true;
                 onFingerprintRecognized(userId);
             }
+        }
+        if (!foundFingerprint) {
+            onFingerprintAttemptFailed();
         }
     }
 
@@ -582,7 +584,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
         @Override
         public void onError(int error) {
-            if (DEBUG) Log.w(TAG, "FingerprintManager reported error: " + error);
+            Log.w(TAG, "FingerprintManager reported error: " + error);
         }
     };
 
@@ -824,10 +826,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         trustManager.registerTrustListener(this);
 
         mLockPatternUtils = new LockPatternUtils(mContext);
-
-        if (mLockPatternUtils.usingFingerprint()) {
-            setFingerprintListening(true);
-        }
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
