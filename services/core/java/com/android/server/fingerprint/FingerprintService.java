@@ -117,10 +117,10 @@ public class FingerprintService extends SystemService {
 
         IBinder getToken() { return token.get(); }
         public void binderDied() {
-            Slog.i(TAG, "binderDied() called with " + "");
+            Slog.i(TAG, "binderDied()");
             mClients.remove(getToken());
             if (getToken() == mWakeClient) {
-                Slog.e(TAG, "binderDied() cleaning up wake client!");
+                Slog.e(TAG, "binderDied(), cleaning up wake client!");
                 mWakeClient = null;
             }
             this.token = null;
@@ -129,13 +129,16 @@ public class FingerprintService extends SystemService {
         protected void finalize() throws Throwable {
             try {
                 if (token != null) {
-                    if (DEBUG) Slog.w(TAG, "removing leaked reference: " + getToken());
-                    mClients.remove(getToken());
                     if (getToken() == mWakeClient) {
                         mWakeClient = null;
                     }
+                    final ClientData removed = mClients.remove(getToken());
+                    if (removed != null) {
+                        if (DEBUG) Slog.w(TAG, "removing leaked reference: " + getToken());
+                    }
                 }
             } finally {
+                token = null;
                 super.finalize();
             }
         }
