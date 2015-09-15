@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.android.internal.widget.LockPatternUtils;
+import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardViewBase;
 import com.android.keyguard.R;
 import com.android.keyguard.ViewMediatorCallback;
@@ -195,11 +196,14 @@ public class KeyguardBouncer {
      * notifications on Keyguard, like SIM PIN/PUK.
      */
     public boolean needsFullscreenBouncer() {
+        final boolean neededBySecurePin = KeyguardUpdateMonitor
+                .getInstance(mContext).isSimPinSecure();
+        boolean neededBySecurityMode = false;
         if (mKeyguardView != null) {
             SecurityMode mode = mKeyguardView.getSecurityMode();
-            return mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk;
+            neededBySecurityMode = mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk;
         }
-        return false;
+        return neededBySecurePin || neededBySecurityMode;
     }
 
     /**

@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
 
+import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -137,6 +138,23 @@ public class UnlockMethodCache {
         @Override
         public void onFaceUnlockStateChanged(boolean running, int userId) {
             update(false /* updateAlways */);
+        }
+
+        @Override
+        public void onFingerprintAttemptFailed() {
+            update(true /* updateAlways */);
+        }
+
+        @Override
+        public void onKeyguardBouncerChanged(boolean bouncer) {
+            if (!bouncer && mFingerUnlockRunning) {
+                update(true /* updateAlways */);
+            }
+        }
+
+        @Override
+        public void onSimStateChanged(int subId, int slotId, IccCardConstants.State simState) {
+            update(false);
         }
     };
 
