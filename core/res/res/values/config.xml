@@ -2371,4 +2371,7 @@
     <!-- Config to disable showing ringtones from removable storage -->
     <bool name="config_excludeRingtonesFromRemovableStorage">false</bool>
 
+    <!-- Show data activity indicators on signal bar -->
+    <bool name="config_showDataActivityIndicators">true</bool>
+
 </resources>

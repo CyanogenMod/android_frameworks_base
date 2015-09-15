@@ -1129,12 +1129,16 @@ public class NetworkControllerImpl extends BroadcastReceiver
          * Start listening for phone state changes.
          */
         public void registerListener() {
-            mPhone.listen(mPhoneStateListener,
-                    PhoneStateListener.LISTEN_SERVICE_STATE
-                            | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS
-                            | PhoneStateListener.LISTEN_CALL_STATE
-                            | PhoneStateListener.LISTEN_DATA_CONNECTION_STATE
-                            | PhoneStateListener.LISTEN_DATA_ACTIVITY);
+            int eventMask = PhoneStateListener.LISTEN_SERVICE_STATE |
+                PhoneStateListener.LISTEN_SIGNAL_STRENGTHS |
+                PhoneStateListener.LISTEN_CALL_STATE |
+                PhoneStateListener.LISTEN_DATA_CONNECTION_STATE;
+
+            if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_showDataActivityIndicators)) {
+                eventMask = eventMask | PhoneStateListener.LISTEN_DATA_ACTIVITY;
+            }
+
+            mPhone.listen(mPhoneStateListener, eventMask);
         }
 
         /**
