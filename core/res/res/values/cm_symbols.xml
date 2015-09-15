@@ -363,4 +363,10 @@
 
     <!-- Wifi AP Disabled from Subscription change -->
     <java-symbol type="string" name="subscription_change_disabled_wifi_ap" />
+
+    <!-- Show data activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showDataActivityIndicators" />
+
+    <!-- Show WiFi activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showWifiActivityIndicators" />
 </resources>
