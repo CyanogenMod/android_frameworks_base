@@ -182,8 +182,6 @@ final class Settings {
     // List of replaced system applications
     private final ArrayMap<String, PackageSetting> mDisabledSysPackages =
         new ArrayMap<String, PackageSetting>();
-    private final HashSet<String> mPrebundledPackages =
-            new HashSet<String>();
 
     private static int mFirstAvailableUid = 0;
 
@@ -221,6 +219,10 @@ final class Settings {
     // associated with particular intent filters.
     final SparseArray<PersistentPreferredIntentResolver> mPersistentPreferredActivities =
             new SparseArray<PersistentPreferredIntentResolver>();
+
+    // The persistent prebundled packages for a user
+    final SparseArray<HashSet<String>> mPrebundledPackages =
+            new SparseArray<HashSet<String>>();
 
     // For every user, it is used to find to which other users the intent can be forwarded.
     final SparseArray<CrossProfileIntentResolver> mCrossProfileIntentResolvers =
@@ -278,17 +280,17 @@ final class Settings {
         mSystemDir.mkdirs();
         FileUtils.setPermissions(mSystemDir.toString(),
                 FileUtils.S_IRWXU|FileUtils.S_IRWXG
-                |FileUtils.S_IROTH|FileUtils.S_IXOTH,
+                        |FileUtils.S_IROTH|FileUtils.S_IXOTH,
                 -1, -1);
         mSettingsFilename = new File(mSystemDir, "packages.xml");
         mBackupSettingsFilename = new File(mSystemDir, "packages-backup.xml");
         mPackageListFilename = new File(mSystemDir, "packages.list");
-        mPrebundledPackagesFilename = new File(mSystemDir, "prebundled-packages.list");
         FileUtils.setPermissions(mPackageListFilename, 0640, SYSTEM_UID, PACKAGE_INFO_GID);
 
         // Deprecated: Needed for migration
         mStoppedPackagesFilename = new File(mSystemDir, "packages-stopped.xml");
         mBackupStoppedPackagesFilename = new File(mSystemDir, "packages-stopped-backup.xml");
+        mPrebundledPackagesFilename = new File(mSystemDir, "prebundled-packages.list");
     }
 
     PackageSetting getPackageLPw(PackageParser.Package pkg, PackageSetting origPackage,
@@ -892,6 +894,15 @@ final class Settings {
         return pir;
     }
 
+    HashSet<String> editPrebundledPackagesLPw(int userId) {
+        HashSet<String> hashSet = mPrebundledPackages.get(userId);
+        if (hashSet == null) {
+            hashSet = new HashSet<String>();
+            mPrebundledPackages.put(userId, hashSet);
+        }
+        return hashSet;
+    }
+
     PersistentPreferredIntentResolver editPersistentPreferredActivitiesLPw(int userId) {
         PersistentPreferredIntentResolver ppir = mPersistentPreferredActivities.get(userId);
         if (ppir == null) {
@@ -917,6 +928,10 @@ final class Settings {
     private File getUserPackagesStateBackupFile(int userId) {
         return new File(Environment.getUserSystemDirectory(userId),
                 "package-restrictions-backup.xml");
+    }
+
+    private File getUserPrebundledStateFile(int userId) {
+        return new File(Environment.getUserSystemDirectory(userId), "prebundled-packages.list");
     }
 
     void writeAllUsersPackageRestrictionsLPr() {
@@ -1785,12 +1800,34 @@ final class Settings {
         //Debug.stopMethodTracing();
     }
 
-    void writePrebundledPackagesLPr() {
+    // Migrate from previous prebundled packages file to new one
+    void migratePrebundedPackagesIfNeededLPr(List<UserInfo> users) {
+        if (mPrebundledPackagesFilename.exists()) {
+            // Read old file
+            editPrebundledPackagesLPw(UserHandle.USER_OWNER);
+            readPrebundledPackagesOldLPw();
+            mPrebundledPackagesFilename.delete();
+            // Migrate to new file based on user
+            writePrebundledPackagesLPr(UserHandle.USER_OWNER);
+        } else {
+            if (users == null) {
+                readPrebundledPackagesLPr(UserHandle.USER_OWNER);
+            } else {
+                for (UserInfo user : users) {
+                    editPrebundledPackagesLPw(user.id);
+                    readPrebundledPackagesLPr(user.id);
+                }
+            }
+        }
+    }
+
+    void writePrebundledPackagesLPr(int userId) {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(
-                    new BufferedWriter(new FileWriter(mPrebundledPackagesFilename, false)));
-            for (String packageName : mPrebundledPackages) {
+                    new BufferedWriter(new FileWriter(getUserPrebundledStateFile(userId), false)));
+
+            for (String packageName : mPrebundledPackages.get(userId)) {
                 writer.println(packageName);
             }
         } catch (IOException e) {
@@ -1802,18 +1839,31 @@ final class Settings {
         }
     }
 
-    void readPrebundledPackagesLPr() {
+    // This is done for an intermediate migration step on upgrade
+    void readPrebundledPackagesOldLPw() {
         if (!mPrebundledPackagesFilename.exists()) {
             return;
         }
 
+        readPrebundledPackagesForUserFromFileLPr(UserHandle.USER_OWNER,
+                mPrebundledPackagesFilename);
+    }
+
+    void readPrebundledPackagesLPr(int userId) {
+        if (!getUserPrebundledStateFile(userId).exists()) {
+            return;
+        }
+        readPrebundledPackagesForUserFromFileLPr(userId, getUserPrebundledStateFile(userId));
+    }
+
+    private void readPrebundledPackagesForUserFromFileLPr(int userId, File file) {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(mPrebundledPackagesFilename));
+            reader = new BufferedReader(new FileReader(file));
             String packageName = reader.readLine();
             while (packageName != null) {
                 if (!TextUtils.isEmpty(packageName)) {
-                    mPrebundledPackages.add(packageName);
+                    mPrebundledPackages.get(userId).add(packageName);
                 }
                 packageName = reader.readLine();
             }
@@ -1828,12 +1878,16 @@ final class Settings {
         }
     }
 
-    void markPrebundledPackageInstalledLPr(String packageName) {
-        mPrebundledPackages.add(packageName);
+    void markPrebundledPackageInstalledLPr(int userId, String packageName) {
+        editPrebundledPackagesLPw(userId);
+        mPrebundledPackages.get(userId).add(packageName);
     }
 
-    boolean wasPrebundledPackageInstalledLPr(String packageName) {
-        return mPrebundledPackages.contains(packageName);
+    boolean wasPrebundledPackageInstalledLPr(int userId, String packageName) {
+        if (mPrebundledPackages.get(userId) == null) {
+            return false;
+        }
+        return mPrebundledPackages.get(userId).contains(packageName);
     }
 
     void writeDisabledSysPackageLPr(XmlSerializer serializer, final PackageSetting pkg)
@@ -2268,6 +2322,8 @@ final class Settings {
                 }
             }
         }
+
+        migratePrebundedPackagesIfNeededLPr(users);
 
         /*
          * Make sure all the updated system packages have their shared users
