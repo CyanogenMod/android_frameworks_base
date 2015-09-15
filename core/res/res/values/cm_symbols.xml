@@ -369,4 +369,10 @@
 
     <!-- Region locked prebundled packages -->
     <java-symbol type="array" name="config_region_locked_packages" />
+
+    <!-- Show data activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showDataActivityIndicators" />
+
+    <!-- Show WiFi activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showWifiActivityIndicators" />
 </resources>

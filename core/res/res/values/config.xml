@@ -2375,4 +2375,9 @@
     <string-array name="config_region_locked_packages" translatable="false">
     </string-array>
 
+    <!-- Show data activity indicators on signal bar -->
+    <bool name="config_showDataActivityIndicators">true</bool>
+
+    <!-- Show WiFi activity indicators on signal bar -->
+    <bool name="config_showWifiActivityIndicators">true</bool>
 </resources>
