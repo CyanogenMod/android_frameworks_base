@@ -360,4 +360,10 @@
 
     <!-- Config to disable showing ringtones from removable storage -->
     <java-symbol type="bool" name="config_excludeRingtonesFromRemovableStorage" />
+
+    <!-- Show data activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showDataActivityIndicators" />
+
+    <!-- Show WiFi activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showWifiActivityIndicators" />
 </resources>
