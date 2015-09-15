@@ -1660,24 +1660,24 @@ public class PackageManagerService extends IPackageManager.Stub {
             // overlay packages if they reside in VENDOR_OVERLAY_DIR.
             File vendorOverlayDir = new File(VENDOR_OVERLAY_DIR);
             scanDirLI(vendorOverlayDir, PackageParser.PARSE_IS_SYSTEM
-                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags | SCAN_TRUSTED_OVERLAY, 0);
+                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags | SCAN_TRUSTED_OVERLAY, 0, null);
 
             // Find base frameworks (resource packages without code).
             scanDirLI(frameworkDir, PackageParser.PARSE_IS_SYSTEM
                     | PackageParser.PARSE_IS_SYSTEM_DIR
                     | PackageParser.PARSE_IS_PRIVILEGED,
-                    scanFlags | SCAN_NO_DEX, 0);
+                    scanFlags | SCAN_NO_DEX, 0, null);
 
             // Collected privileged system packages.
             final File privilegedAppDir = new File(Environment.getRootDirectory(), "priv-app");
             scanDirLI(privilegedAppDir, PackageParser.PARSE_IS_SYSTEM
                     | PackageParser.PARSE_IS_SYSTEM_DIR
-                    | PackageParser.PARSE_IS_PRIVILEGED, scanFlags, 0);
+                    | PackageParser.PARSE_IS_PRIVILEGED, scanFlags, 0, null);
 
             // Collect ordinary system packages.
             final File systemAppDir = new File(Environment.getRootDirectory(), "app");
             scanDirLI(systemAppDir, PackageParser.PARSE_IS_SYSTEM
-                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0);
+                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0, null);
 
             // Collect all vendor packages.
             File vendorAppDir = new File("/vendor/app");
@@ -1687,16 +1687,16 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // failed to look up canonical path, continue with original one
             }
             scanDirLI(vendorAppDir, PackageParser.PARSE_IS_SYSTEM
-                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0);
+                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0, null);
 
             // Collect all OEM packages.
             final File oemAppDir = new File(Environment.getOemDirectory(), "app");
             scanDirLI(oemAppDir, PackageParser.PARSE_IS_SYSTEM
-                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0);
+                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0, null);
 
             // Collect all prebundled packages.
             scanDirLI(Environment.getPrebundledDirectory(),
-                    PackageParser.PARSE_IS_PREBUNDLED_DIR, scanFlags, 0);
+                    PackageParser.PARSE_IS_PREBUNDLED_DIR, scanFlags, 0, UserHandle.OWNER);
 
             if (DEBUG_UPGRADE) Log.v(TAG, "Running installd update commands");
             mInstaller.moveFiles();
@@ -1772,10 +1772,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (!mOnlyCore) {
                 EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_DATA_SCAN_START,
                         SystemClock.uptimeMillis());
-                scanDirLI(mAppInstallDir, 0, scanFlags | SCAN_REQUIRE_KNOWN, 0);
+                scanDirLI(mAppInstallDir, 0, scanFlags | SCAN_REQUIRE_KNOWN, 0, null);
 
                 scanDirLI(mDrmAppPrivateInstallDir, PackageParser.PARSE_FORWARD_LOCK,
-                        scanFlags | SCAN_REQUIRE_KNOWN, 0);
+                        scanFlags | SCAN_REQUIRE_KNOWN, 0, null);
 
                 /**
                  * Remove disable package settings for any updated system
@@ -4368,7 +4368,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         return true;
     }
 
-    private void scanDirLI(File dir, int parseFlags, int scanFlags, long currentTime) {
+    private void scanDirLI(File dir, int parseFlags, int scanFlags, long currentTime,
+            UserHandle user) {
         final File[] files = dir.listFiles();
         if (ArrayUtils.isEmpty(files)) {
             Log.d(TAG, "No files in app dir " + dir);
@@ -4383,7 +4384,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         boolean isPrebundled = (parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0;
         if (isPrebundled) {
             synchronized (mPackages) {
-                mSettings.readPrebundledPackagesLPr();
+                Log.d(TAG, "Reading prebundled packages for user  "
+                        + user.toString());
+                mSettings.readPrebundledPackagesLPr(user.getIdentifier());
             }
         }
 
@@ -4396,7 +4399,10 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
             try {
                 scanPackageLI(file, parseFlags | PackageParser.PARSE_MUST_BE_APK,
-                        scanFlags, currentTime, null);
+                        scanFlags, currentTime, user);
+                if (user == null) {
+                    user = new UserHandle(UserHandle.USER_OWNER);
+                }
                 if (isPrebundled) {
                     final PackageParser.Package pkg;
                     try {
@@ -4405,7 +4411,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                         throw PackageManagerException.from(e);
                     }
                     synchronized (mPackages) {
-                        mSettings.markPrebundledPackageInstalledLPr(pkg.packageName);
+                        Log.d(TAG, "Marking prebundled packages for user  "
+                                + user.toString());
+                        mSettings.markPrebundledPackageInstalledLPr(user.getIdentifier(),
+                                pkg.packageName);
                     }
                 }
             } catch (PackageManagerException e) {
@@ -4425,7 +4434,9 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         if (isPrebundled) {
             synchronized (mPackages) {
-                mSettings.writePrebundledPackagesLPr();
+                Log.d(TAG, "Writing prebundled packages for user  "
+                        + user.toString());
+                mSettings.writePrebundledPackagesLPr(user.getIdentifier());
             }
         }
     }
@@ -4529,8 +4540,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
             synchronized (mPackages) {
                 PackageSetting existingSettings = mSettings.peekPackageLPr(pkg.packageName);
-                if (mSettings.wasPrebundledPackageInstalledLPr(pkg.packageName) &&
-                        existingSettings == null) {
+                if (mSettings.wasPrebundledPackageInstalledLPr(user.getIdentifier()
+                        , pkg.packageName) && existingSettings == null) {
                     // The prebundled app was installed at some point in time, but now it is
                     // gone.  Assume that the user uninstalled it intentionally: do not reinstall.
                     throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
@@ -5636,8 +5647,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 Log.d(TAG, "Scanning package " + pkg.packageName);
         }
 
-        if (mPackages.containsKey(pkg.packageName)
-                || mSharedLibraries.containsKey(pkg.packageName)) {
+        if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) == 0
+                && (mPackages.containsKey(pkg.packageName)
+                || mSharedLibraries.containsKey(pkg.packageName))) {
             throw new PackageManagerException(INSTALL_FAILED_DUPLICATE_PACKAGE,
                     "Application package " + pkg.packageName
                     + " already installed.  Skipping duplicate.");
@@ -6408,6 +6420,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             // Add the new setting to mPackages
             mPackages.put(pkg.applicationInfo.packageName, pkg);
+
             // Make sure we don't accidentally delete its data.
             final Iterator<PackageCleanItem> iter = mSettings.mPackagesToBeCleaned.iterator();
             while (iter.hasNext()) {
@@ -14285,6 +14298,12 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (mInstaller != null) {
             mInstaller.createUserConfig(userHandle);
             mSettings.createNewUserLILPw(this, mInstaller, userHandle, path);
+            // Set flag to monitor and not change apk file paths when
+            // scanning install directories.
+            final int scanFlags = SCAN_NO_PATHS | SCAN_DEFER_DEX | SCAN_BOOTING;
+            scanDirLI(Environment.getPrebundledDirectory(),
+                    PackageParser.PARSE_IS_PREBUNDLED_DIR, scanFlags, 0,
+                    new UserHandle(userHandle));
         }
     }
 
