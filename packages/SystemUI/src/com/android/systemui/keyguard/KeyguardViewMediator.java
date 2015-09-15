@@ -453,7 +453,7 @@ public class KeyguardViewMediator extends SystemUI {
                 case ABSENT:
                     // only force lock screen in case of missing sim if user hasn't
                     // gone through setup wizard
-                    synchronized (this) {
+                    synchronized (KeyguardViewMediator.this) {
                         if (shouldWaitForProvisioning()) {
                             if (!isShowing()) {
                                 if (DEBUG) Log.d(TAG, "ICC_ABSENT isn't showing,"
@@ -468,7 +468,7 @@ public class KeyguardViewMediator extends SystemUI {
                     break;
                 case PIN_REQUIRED:
                 case PUK_REQUIRED:
-                    synchronized (this) {
+                    synchronized (KeyguardViewMediator.this) {
                         if (!isShowing()) {
                             if (DEBUG) Log.d(TAG, "INTENT_VALUE_ICC_LOCKED and keygaurd isn't "
                                     + "showing; need to show keyguard so user can enter sim pin");
@@ -479,7 +479,7 @@ public class KeyguardViewMediator extends SystemUI {
                     }
                     break;
                 case PERM_DISABLED:
-                    synchronized (this) {
+                    synchronized (KeyguardViewMediator.this) {
                         if (!isShowing()) {
                             if (DEBUG) Log.d(TAG, "PERM_DISABLED and "
                                   + "keygaurd isn't showing.");
@@ -492,8 +492,8 @@ public class KeyguardViewMediator extends SystemUI {
                     }
                     break;
                 case READY:
-                    synchronized (this) {
-                        if (mInternallyDisabled) {
+                    synchronized (KeyguardViewMediator.this) {
+                        if (mInternallyDisabled || shouldWaitForProvisioning()) {
                             hideLocked();
                         } else if (isShowing()) {
                             resetStateLocked();
@@ -803,7 +803,8 @@ public class KeyguardViewMediator extends SystemUI {
         mLockPatternUtils.setCurrentUser(ActivityManager.getCurrentUser());
 
         // Assume keyguard is showing (unless it's disabled) until we know for sure...
-        setShowingLocked(!shouldWaitForProvisioning() && !mLockPatternUtils.isLockScreenDisabled());
+        setShowingLocked(!shouldWaitForProvisioning() && !mLockPatternUtils.isLockScreenDisabled()
+                && !mUpdateMonitor.isSimPinSecure());
         mTrustManager.reportKeyguardShowingChanged();
 
         mStatusBarKeyguardViewManager = new StatusBarKeyguardViewManager(mContext,
@@ -1294,8 +1295,8 @@ public class KeyguardViewMediator extends SystemUI {
 
         // Ugly hack to ensure keyguard is not shown on top of the CryptKeeper which prevents
         // a user from being able to decrypt their device.
-        if (isCryptKeeperEnabled()) {
-            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because CryptKeeper is enabled");
+        if (isCryptKeeperEnabled() && LockPatternUtils.isDeviceEncrypted()) {
+            if (DEBUG) Log.d(TAG, "doKeyguard: not showing because CryptKeeper is enabled and device is encrypted");
             resetStateLocked();
             return;
         }
@@ -1310,7 +1311,7 @@ public class KeyguardViewMediator extends SystemUI {
         final boolean lockedOrMissing = mUpdateMonitor.isSimPinSecure()
                 || ((absent || disabled) && requireSim);
 
-        if (!lockedOrMissing && shouldWaitForProvisioning()) {
+        if (!lockedOrMissing && !mUpdateMonitor.isDeviceProvisioned()) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because device isn't provisioned"
                     + " and the sim is not locked or missing");
             return;
