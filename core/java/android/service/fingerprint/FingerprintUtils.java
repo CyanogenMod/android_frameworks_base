@@ -71,8 +71,11 @@ class FingerprintUtils {
         }
 
         // Add the new fingerprint and write back to secure settings
+        // We use fingerId % 100 to avoid long names due to differences in device
+        // implementations
         String defaultName =
-                context.getString(com.android.internal.R.string.fingerprint_default_name, fingerId);
+                context.getString(com.android.internal.R.string.fingerprint_default_name,
+                        fingerId % 100);
         Fingerprint fingerprint = new Fingerprint(defaultName, fingerId, userId);
         fingerprints.add(fingerprint);
         saveFingerprints(fingerprints, context.getContentResolver(), userId);
