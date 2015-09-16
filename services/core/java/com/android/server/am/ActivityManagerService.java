@@ -3230,6 +3230,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     boolean startHomeActivityLocked(int userId, String reason) {
+        android.util.Log.i("EMAN", "startHomeActivityLocked(" + userId + "," + reason + ")");
         if (mFactoryTest == FactoryTest.FACTORY_TEST_LOW_LEVEL
                 && mTopAction == null) {
             // We are running in factory test mode, but unable to find
