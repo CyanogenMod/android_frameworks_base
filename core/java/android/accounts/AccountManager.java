@@ -369,7 +369,7 @@ public class AccountManager {
     }
 
     /**
-     * @hide
+     * 
      * Lists the currently registered authenticators for a given user id.
      *
      * <p>It is safe to call this method from the main thread.
