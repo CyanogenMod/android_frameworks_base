@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:scaleType="matrix"
-            android:paddingLeft="@dimen/screen_pinning_request_inner_padding"
+            android:paddingStart="@dimen/screen_pinning_request_inner_padding"
             android:paddingTop="@dimen/screen_pinning_request_inner_padding"
             android:paddingBottom="@dimen/screen_pinning_request_inner_padding"
             android:src="@drawable/screen_pinning_bg_circ" />
@@ -59,7 +59,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:scaleType="center"
-            android:paddingLeft="@dimen/screen_pinning_request_nav_icon_padding"
+            android:paddingStart="@dimen/screen_pinning_request_nav_icon_padding"
             android:paddingTop="@dimen/screen_pinning_request_nav_side_padding"
             android:paddingBottom="@dimen/screen_pinning_request_nav_side_padding"
             android:src="@drawable/ic_sysbar_recent" />
@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:scaleType="center"
-            android:paddingLeft="@dimen/screen_pinning_request_nav_icon_padding"
+            android:paddingStart="@dimen/screen_pinning_request_nav_icon_padding"
             android:paddingTop="@dimen/screen_pinning_request_nav_side_padding"
             android:paddingBottom="@dimen/screen_pinning_request_nav_side_padding"
             android:src="@drawable/ic_sysbar_home" />
@@ -111,7 +111,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:scaleType="matrix"
-            android:paddingLeft="@dimen/screen_pinning_request_inner_padding"
+            android:paddingStart="@dimen/screen_pinning_request_inner_padding"
             android:paddingTop="@dimen/screen_pinning_request_inner_padding"
             android:paddingBottom="@dimen/screen_pinning_request_inner_padding"
             android:src="@drawable/screen_pinning_bg_circ" />
@@ -120,7 +120,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:scaleType="center"
-            android:paddingLeft="@dimen/screen_pinning_request_nav_icon_padding"
+            android:paddingStart="@dimen/screen_pinning_request_nav_icon_padding"
             android:paddingTop="@dimen/screen_pinning_request_nav_side_padding"
             android:paddingBottom="@dimen/screen_pinning_request_nav_side_padding"
             android:src="@drawable/ic_sysbar_back" />

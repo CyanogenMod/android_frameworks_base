@@ -19,6 +19,7 @@ package android.widget;
 import com.android.internal.R;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -281,7 +282,9 @@ public class ExpandableListView extends ListView {
      */
     private boolean isRtlCompatibilityMode() {
         final int targetSdkVersion = mContext.getApplicationInfo().targetSdkVersion;
-        return targetSdkVersion < JELLY_BEAN_MR1 || !hasRtlSupport();
+        final boolean isSystemApp = (mContext.getApplicationInfo().flags &
+            ApplicationInfo.FLAG_SYSTEM) != 0;
+        return (targetSdkVersion < JELLY_BEAN_MR1 && !isSystemApp) || !hasRtlSupport();
     }
 
     /**
