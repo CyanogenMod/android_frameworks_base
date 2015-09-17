@@ -209,4 +209,16 @@
   <string name="permdesc_resetBatteryStats">Permite que la aplicación restablezca los datos actuales de uso de la batería.</string>
   <string name="silent_mode_priority">Prioridad</string>
   <string name="silent_mode_none">Ninguno</string>
+  <string name="profileNameDefault">Predeterminado</string>
+  <string name="profileNameWork">Trabajo</string>
+  <string name="profileNameHome">Casa</string>
+  <string name="profileNameSilent">Silencio</string>
+  <string name="profileNameNight">Noche</string>
+  <string name="profileNameAutomobile">Coche</string>
+  <string name="profileGroupPhone">Teléfono</string>
+  <string name="profileGroupCalendar">Calendario</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">Correo electrónico</string>
+  <string name="profileGroupSMS">SMS</string>
+  <string name="wildcardProfile">Otro</string>
 </resources>
