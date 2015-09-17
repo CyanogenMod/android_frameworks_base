@@ -44,6 +44,7 @@ public class ComposedIconInfo implements Parcelable {
         iconRotation = 0;
         iconTranslationX = 0;
         iconTranslationY = 0;
+        iconScale = 1f;
     }
 
     private ComposedIconInfo(Parcel source) {
