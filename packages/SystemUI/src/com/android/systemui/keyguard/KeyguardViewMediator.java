@@ -26,12 +26,10 @@ import android.app.StatusBarManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.trust.TrustManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -158,6 +156,8 @@ public class KeyguardViewMediator extends SystemUI {
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
             .build();
+
+    private static final String DECRYPT_STATE = "trigger_restart_framework";
 
     // used for handler messages
     private static final int SHOW = 2;
@@ -364,7 +364,7 @@ public class KeyguardViewMediator extends SystemUI {
 
     private final ArrayList<IKeyguardStateCallback> mKeyguardStateCallbacks = new ArrayList<>();
 
-    private int mCyrptKeeperEnabledState = -1;
+    private boolean mCryptKeeperEnabled = true;
 
     KeyguardUpdateMonitorCallback mUpdateCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -1035,13 +1035,14 @@ public class KeyguardViewMediator extends SystemUI {
     }
 
     private boolean isCryptKeeperEnabled() {
-        if (mCyrptKeeperEnabledState == -1) {
-            PackageManager pm = mContext.getPackageManager();
-            mCyrptKeeperEnabledState = pm.getComponentEnabledSetting(
-                    new ComponentName(SETTINGS_PACKAGE, CRYPT_KEEPER_ACTIVITY));
+        if (!mCryptKeeperEnabled) {
+            // once it's disabled, it's disabled.
+            return false;
         }
-
-        return mCyrptKeeperEnabledState != PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+        final String state = SystemProperties.get("vold.decrypt");
+        mCryptKeeperEnabled = !"".equals(state) && !DECRYPT_STATE.equals(state);
+        if (DEBUG) Log.w(TAG, "updated crypt keeper state to: " + mCryptKeeperEnabled);
+        return mCryptKeeperEnabled;
     }
 
     public boolean isKeyguardBound() {
