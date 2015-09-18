@@ -39,6 +39,7 @@ import android.service.notification.ZenModeConfig;
 import android.util.Log;
 import android.util.Slog;
 
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.GlobalSetting;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class ZenModeControllerImpl implements ZenModeController {
                 ServiceManager.getService(Context.NOTIFICATION_SERVICE));
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         mSetupObserver = new SetupObserver(handler);
-        mSetupObserver.register();
+        mSetupObserver.observe();
     }
 
     @Override
@@ -161,7 +162,6 @@ public class ZenModeControllerImpl implements ZenModeController {
         filter.addAction(NotificationManager.ACTION_EFFECTS_SUPPRESSOR_CHANGED);
         mContext.registerReceiverAsUser(mReceiver, new UserHandle(mUserId), filter, null, null);
         mRegistered = true;
-        mSetupObserver.register();
     }
 
     @Override
@@ -239,14 +239,17 @@ public class ZenModeControllerImpl implements ZenModeController {
         }
     };
 
-    private final class SetupObserver extends ContentObserver {
+    private final class SetupObserver extends UserContentObserver {
         private final ContentResolver mResolver;
-
-        private boolean mRegistered;
 
         public SetupObserver(Handler handler) {
             super(handler);
             mResolver = mContext.getContentResolver();
+        }
+
+        @Override
+        protected void update() {
+            fireZenAvailableChanged(isZenAvailable());
         }
 
         public boolean isUserSetup() {
@@ -257,23 +260,19 @@ public class ZenModeControllerImpl implements ZenModeController {
             return Global.getInt(mResolver, Global.DEVICE_PROVISIONED, 0) != 0;
         }
 
-        public void register() {
-            if (mRegistered) {
-                mResolver.unregisterContentObserver(this);
-            }
+        @Override
+        protected void observe() {
+            super.observe();
             mResolver.registerContentObserver(
                     Global.getUriFor(Global.DEVICE_PROVISIONED), false, this);
             mResolver.registerContentObserver(
                     Secure.getUriFor(Secure.USER_SETUP_COMPLETE), false, this, mUserId);
-            fireZenAvailableChanged(isZenAvailable());
         }
 
         @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            if (Global.getUriFor(Global.DEVICE_PROVISIONED).equals(uri)
-                    || Secure.getUriFor(Secure.USER_SETUP_COMPLETE).equals(uri)) {
-                fireZenAvailableChanged(isZenAvailable());
-            }
+        protected void unobserve() {
+            super.unobserve();
+            mResolver.unregisterContentObserver(this);
         }
     }
 }
