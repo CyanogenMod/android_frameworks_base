@@ -2346,8 +2346,8 @@ class ContextImpl extends Context {
                         packageInfo.getAppDir(), overrideConfiguration, compatInfo, activityToken,
                         mOuterContext, packageInfo.getApplicationInfo().isThemeable) :
                 mResourcesManager.getTopLevelThemedResources(packageInfo.getResDir(), displayId,
-                        packageInfo.getPackageName(), themePackageName, compatInfo, activityToken,
-                        packageInfo.getApplicationInfo().isThemeable);
+                        packageInfo.getPackageName(), themePackageName, overrideConfiguration,
+                        compatInfo, activityToken, packageInfo.getApplicationInfo().isThemeable);
             }
         }
         mResources = resources;
