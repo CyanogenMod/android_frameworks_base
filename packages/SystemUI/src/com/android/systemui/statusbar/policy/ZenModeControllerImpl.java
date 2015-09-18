@@ -160,7 +160,6 @@ public class ZenModeControllerImpl implements ZenModeController {
         final IntentFilter filter = new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED);
         filter.addAction(NotificationManager.ACTION_EFFECTS_SUPPRESSOR_CHANGED);
         mContext.registerReceiverAsUser(mReceiver, new UserHandle(mUserId), filter, null, null);
-        mRegistered = true;
         mSetupObserver.register();
     }
 
@@ -242,8 +241,6 @@ public class ZenModeControllerImpl implements ZenModeController {
     private final class SetupObserver extends ContentObserver {
         private final ContentResolver mResolver;
 
-        private boolean mRegistered;
-
         public SetupObserver(Handler handler) {
             super(handler);
             mResolver = mContext.getContentResolver();
@@ -266,6 +263,7 @@ public class ZenModeControllerImpl implements ZenModeController {
             mResolver.registerContentObserver(
                     Secure.getUriFor(Secure.USER_SETUP_COMPLETE), false, this, mUserId);
             fireZenAvailableChanged(isZenAvailable());
+            mRegistered = true;
         }
 
         @Override
