@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">Tela de bloqueio imposta</string>
   <string name="quick_settings_network_adb_label">ADB sobre rede</string>
   <string name="quick_settings_lte_label">4G  LTE</string>
+  <string name="quick_settings_volume_panel_label">Painel de volume</string>
   <string name="quick_settings_screen_timeout_detail_title">Tempo limite de tela</string>
   <string name="quick_settings_usb_tether_label">Tethering USB</string>
   <string name="quick_settings_heads_up_label">Heads up</string>

@@ -80,6 +80,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.service.voice.IVoiceInteractionSession;
 import android.util.EventLog;
 import android.util.Slog;
@@ -1998,13 +1999,15 @@ final class ActivityStack {
 
         boolean privacy = mService.mAppOpsService.getPrivacyGuardSettingForPackage(
                 next.app.uid, next.packageName);
+        boolean privacyNotification = (Settings.Secure.getInt(mService.mContext.getContentResolver(),
+                Settings.Secure.PRIVACY_GUARD_NOTIFICATION, 1) == 1);
 
         if (privacyGuardPackageName != null && !privacy) {
             Message msg = mService.mHandler.obtainMessage(
                     ActivityManagerService.CANCEL_PRIVACY_NOTIFICATION_MSG, next.userId);
             msg.sendToTarget();
             mStackSupervisor.mPrivacyGuardPackageName = null;
-        } else if (privacy) {
+        } else if (privacy && privacyNotification) {
             Message msg = mService.mHandler.obtainMessage(
                     ActivityManagerService.POST_PRIVACY_NOTIFICATION_MSG, next);
             msg.sendToTarget();

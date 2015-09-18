@@ -1261,13 +1261,19 @@ public abstract class BaseStatusBar extends SystemUI implements
         public void handleMessage(Message m) {
             switch (m.what) {
              case MSG_SHOW_RECENT_APPS:
-                 showRecents(m.arg1 > 0);
+                 if (mDeviceProvisioned) {
+                     showRecents(m.arg1 > 0);
+                 }
                  break;
              case MSG_HIDE_RECENT_APPS:
-                 hideRecents(m.arg1 > 0, m.arg2 > 0);
+                 if (mDeviceProvisioned) {
+                     hideRecents(m.arg1 > 0, m.arg2 > 0);
+                 }
                  break;
              case MSG_TOGGLE_RECENTS_APPS:
-                 toggleRecents();
+                 if (mDeviceProvisioned) {
+                     toggleRecents();
+                 }
                  break;
              case MSG_PRELOAD_RECENT_APPS:
                   preloadRecents();

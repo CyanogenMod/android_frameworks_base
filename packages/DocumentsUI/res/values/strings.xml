@@ -108,4 +108,10 @@
     <!-- Title of dialog when prompting user to select an app to share documents with [CHAR LIMIT=32] -->
     <string name="share_via">Share via</string>
 
+    <string name="no_permission_for_drm">"Sorry, DRM file cannot be shared"</string>
+    <string name="drm_license_info">Drm license info</string>
+    <string name="action_consumes_rights">Rights will be consumed for playing this media</string>
+    <string name="rights_expired">Rights expired for the song</string>
+
+    <string name="toast_not_show_thumbnail">Can not show thumbnail on low ram device.</string>
 </resources>

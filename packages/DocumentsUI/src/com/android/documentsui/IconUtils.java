@@ -199,6 +199,13 @@ public class IconUtils {
         add("application/vnd.openxmlformats-officedocument.presentationml.presentation", icon);
         add("application/vnd.openxmlformats-officedocument.presentationml.template", icon);
         add("application/vnd.openxmlformats-officedocument.presentationml.slideshow", icon);
+
+        // DRM
+        icon = R.drawable.ic_doc_drm_am_alpha;
+        add("application/vnd.oma.drm.message", icon);
+        add("application/vnd.oma.drm.content", icon);
+        add("application/vnd.oma.drm.rights+xml", icon);
+        add("application/vnd.oma.drm.rights+wbxml", icon);
     }
 
     public static Drawable loadPackageIcon(Context context, String authority, int icon) {

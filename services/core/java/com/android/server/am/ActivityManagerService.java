@@ -3520,7 +3520,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (sourceRecord == null) {
                 throw new SecurityException("Called with bad activity token: " + resultTo);
             }
-            if (!sourceRecord.info.packageName.equals("android")) {
+            if (!sourceRecord.info.packageName.equals("android") &&
+                    !sourceRecord.info.packageName.equals("org.cyanogenmod.resolver")) {
                 throw new SecurityException(
                         "Must be called from an activity that is declared in the android package");
             }
@@ -18560,7 +18561,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         int numBServices = 0;
         for (int i=N-1; i>=0; i--) {
             ProcessRecord app = mLruProcesses.get(i);
-            if (ProcessList.ENABLE_B_SERVICE_PROPAGATION && app.serviceb) {
+            if (ProcessList.ENABLE_B_SERVICE_PROPAGATION && app.serviceb
+                    && (app.curAdj==ProcessList.SERVICE_B_ADJ)) {
                 numBServices++;
                 for (int s=app.services.size()-1; s>=0; s--) {
                     ServiceRecord sr = app.services.valueAt(s);

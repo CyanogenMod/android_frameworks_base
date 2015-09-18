@@ -110,6 +110,11 @@ public class WallpaperCropActivity extends Activity {
                     public void onClick(View v) {
                         boolean finishActivityWhenDone = true;
                         cropImageAndSetWallpaper(imageUri, null, finishActivityWhenDone);
+                        Intent intent = new Intent("android.drmservice.intent.action.SET_WALLPAPER");
+                        intent.putExtra("DRM_TYPE", "OMAV1");
+                        intent.putExtra("DRM_FILE_PATH", imageUri.toString());
+                        WallpaperCropActivity.this.sendBroadcast(intent);
+                        Log.e(LOGTAG, "imgUri=="+imageUri);
                     }
                 });
         mSetWallpaperButton = findViewById(R.id.set_wallpaper_button);

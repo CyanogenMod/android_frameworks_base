@@ -859,6 +859,17 @@ public class DrmManagerClient {
         return path;
     }
 
+    /**
+     * @hide
+     * Retrieves drm file information based on action path using FileDescriptor.
+     * This helper method is use to get drm metadata | drm constraints | drm rights status
+     * from OmaDrmEngine.
+     * This method must be hidden for external use, only applicable for OmaDrmEngine feature.
+     */
+    public String getInternalInfo(String actionPath, FileDescriptor fd) {
+        return _getOriginalMimeType(mUniqueId, actionPath, fd);
+    }
+
     // private native interfaces
     private native int _initialize();
 

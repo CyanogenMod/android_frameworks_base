@@ -508,6 +508,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         // TODO: Real icon for facelock.
         int iconRes = getIconLockResId();
         if (mLastUnlockIconRes != iconRes) {
+            mLastUnlockIconRes = iconRes;
             Drawable icon = mContext.getDrawable(iconRes);
             int iconHeight = getResources().getDimensionPixelSize(
                     R.dimen.keyguard_affordance_icon_height);
@@ -527,7 +528,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         int iconRes;
         if (mUnlockMethodCache.isFaceUnlockRunning()) {
             iconRes = com.android.internal.R.drawable.ic_account_circle;
-        } else if (mUnlockMethodCache.isFingerUnlockRunning()) {
+        } else if (mUnlockMethodCache.isFingerUnlockRunning()
+                && !KeyguardUpdateMonitor.getInstance(mContext).isMaxFingerprintAttemptsReached()) {
             iconRes = R.drawable.ic_fingerprint;
         } else if (mUnlockMethodCache.isCurrentlyInsecure()) {
             iconRes = R.drawable.ic_lock_open_24dp;
@@ -601,6 +603,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         return false;
     }
 
+    @Override
     public void onUnlockMethodStateChanged() {
         updateLockIcon();
         updateCameraVisibility();
