@@ -1709,7 +1709,8 @@ public final class ActivityThread {
     /**
      * Creates the top level resources for the given package.
      */
-    Resources getTopLevelThemedResources(String resDir, int displayId, LoadedApk pkgInfo,
+    Resources getTopLevelThemedResources(String resDir, int displayId,
+                                         Configuration overrideConfiguration, LoadedApk pkgInfo,
                                          String pkgName, String themePkgName) {
         return mResourcesManager.getTopLevelThemedResources(resDir, displayId, pkgName,
                 themePkgName, pkgInfo.getCompatibilityInfo(),

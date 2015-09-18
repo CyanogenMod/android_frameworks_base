@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.res.ThemeChangeRequest.RequestType;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.JsonReader;
