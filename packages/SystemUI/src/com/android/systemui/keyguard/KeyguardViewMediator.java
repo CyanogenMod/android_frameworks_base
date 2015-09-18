@@ -26,13 +26,11 @@ import android.app.StatusBarManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.trust.TrustManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.database.ContentObserver;
 import android.media.AudioManager;
@@ -153,8 +151,7 @@ public class KeyguardViewMediator extends SystemUI {
             "com.android.internal.action.KEYGUARD_SERVICE_STATE_CHANGED";
     private static final String KEYGUARD_SERVICE_EXTRA_ACTIVE = "active";
 
-    private static final String SETTINGS_PACKAGE = "com.android.settings";
-    private static final String CRYPT_KEEPER_ACTIVITY = SETTINGS_PACKAGE + ".CryptKeeper";
+    private static final String DECRYPT_STATE = "trigger_restart_framework";
 
     // used for handler messages
     private static final int SHOW = 2;
@@ -348,7 +345,7 @@ public class KeyguardViewMediator extends SystemUI {
      */
     private boolean mPendingLock;
 
-    private int mCyrptKeeperEnabledState = -1;
+    private boolean mCryptKeeperEnabled = true;
 
     private boolean mWakeAndUnlocking;
     private IKeyguardDrawnCallback mDrawnCallback;
@@ -929,13 +926,14 @@ public class KeyguardViewMediator extends SystemUI {
     }
 
     private boolean isCryptKeeperEnabled() {
-        if (mCyrptKeeperEnabledState == -1) {
-            PackageManager pm = mContext.getPackageManager();
-            mCyrptKeeperEnabledState = pm.getComponentEnabledSetting(
-                    new ComponentName(SETTINGS_PACKAGE, CRYPT_KEEPER_ACTIVITY));
+        if (!mCryptKeeperEnabled) {
+            // once it's disabled, it's disabled.
+            return false;
         }
-
-        return mCyrptKeeperEnabledState != PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+        final String state = SystemProperties.get("vold.decrypt");
+        mCryptKeeperEnabled = !"".equals(state) && !DECRYPT_STATE.equals(state);
+        if (DEBUG) Log.w(TAG, "updated crypt keeper state to: " + mCryptKeeperEnabled);
+        return mCryptKeeperEnabled;
     }
 
     /**
