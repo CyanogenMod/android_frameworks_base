@@ -25,6 +25,7 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.util.Log;
 
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
@@ -89,8 +90,9 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
 
     @Override
     protected void handleClick() {
-        if (mDataController.isMobileDataSupported() && )
+        if (mDataController.isMobileDataSupported()) {
             mDataController.setMobileDataEnabled(!mDataController.isMobileDataEnabled());
+        }
     }
 
     @Override
