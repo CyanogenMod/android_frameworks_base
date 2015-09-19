@@ -71,6 +71,8 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener {
     private float mCurrentInFrontAlpha;
     private float mCurrentBehindAlpha;
 
+    private ViewTreeObserver mViewTreeObserver;
+
     public ScrimController(ScrimView scrimBehind, ScrimView scrimInFront, boolean scrimSrcEnabled) {
         mScrimBehind = scrimBehind;
         mScrimInFront = scrimInFront;
@@ -152,7 +154,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener {
 
         // Make sure that a frame gets scheduled.
         mScrimBehind.invalidate();
-        mScrimBehind.getViewTreeObserver().addOnPreDrawListener(this);
+        getViewTreeObserver().addOnPreDrawListener(this);
         mUpdatePending = true;
     }
 
@@ -287,9 +289,17 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener {
         return mAnimateKeyguardFadingOut ? mLinearOutSlowInInterpolator : mInterpolator;
     }
 
+    private ViewTreeObserver getViewTreeObserver() {
+        if (mViewTreeObserver == null || !mViewTreeObserver.isAlive()) {
+            mViewTreeObserver = mScrimBehind.getViewTreeObserver();
+        }
+
+        return mViewTreeObserver;
+    }
+
     @Override
     public boolean onPreDraw() {
-        mScrimBehind.getViewTreeObserver().removeOnPreDrawListener(this);
+        getViewTreeObserver().removeOnPreDrawListener(this);
         mUpdatePending = false;
         updateScrims();
         mAnimateKeyguardFadingOut = false;
@@ -314,6 +324,13 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener {
             }
         });
         updateScrimBehindDrawingMode();
+    }
+
+    public void cleanup() {
+        if (mUpdatePending) {
+            getViewTreeObserver().removeOnPreDrawListener(this);
+        }
+        mBackDropView.setOnVisibilityChangedRunnable(null);
     }
 
     private void updateScrimBehindDrawingMode() {
