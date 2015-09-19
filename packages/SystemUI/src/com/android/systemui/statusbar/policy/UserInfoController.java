@@ -40,15 +40,17 @@ import com.android.systemui.BitmapHelper;
 import com.android.systemui.R;
 import com.android.internal.util.UserIcons;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class UserInfoController {
 
     private static final String TAG = "UserInfoController";
 
     private final Context mContext;
-    private final ArrayList<OnUserInfoChangedListener> mCallbacks =
-            new ArrayList<OnUserInfoChangedListener>();
+    private final HashMap<Integer, WeakReference<OnUserInfoChangedListener>> mCallbacks =
+            new HashMap<Integer, WeakReference<OnUserInfoChangedListener>>();
     private AsyncTask<Void, Void, Pair<String, Drawable>> mUserInfoTask;
 
     private boolean mUseDefaultAvatar;
@@ -70,7 +72,11 @@ public final class UserInfoController {
     }
 
     public void addListener(OnUserInfoChangedListener callback) {
-        mCallbacks.add(callback);
+        mCallbacks.put(System.identityHashCode(callback), new WeakReference<OnUserInfoChangedListener>(callback));
+    }
+
+    public void removeListener(OnUserInfoChangedListener callback) {
+        mCallbacks.remove(System.identityHashCode(callback));
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -193,8 +199,10 @@ public final class UserInfoController {
     }
 
     private void notifyChanged() {
-        for (OnUserInfoChangedListener listener : mCallbacks) {
-            listener.onUserInfoChanged(mUserName, mUserDrawable);
+        for (WeakReference<OnUserInfoChangedListener> listener : mCallbacks.values()) {
+            if (listener.get() != null) {
+                listener.get().onUserInfoChanged(mUserName, mUserDrawable);
+            }
         }
     }
 

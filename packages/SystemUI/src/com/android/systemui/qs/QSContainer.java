@@ -46,6 +46,12 @@ public class QSContainer extends FrameLayout {
         updateBottom();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mQSPanel = null;
+    }
+
     /**
      * Overrides the height of this view (post-layout), so that the content is clipped to that
      * height and the background is set to that height.
