@@ -409,16 +409,20 @@ public class KeyguardViewMediator extends SystemUI {
         public void onPhoneStateChanged(int phoneState) {
             synchronized (KeyguardViewMediator.this) {
                 if (TelephonyManager.CALL_STATE_IDLE == phoneState  // call ending
-                        && !mScreenOn                           // screen off
                         && mExternallyEnabled) {                // not disabled by any app
-
-                    // note: this is a way to gracefully reenable the keyguard when the call
-                    // ends and the screen is off without always reenabling the keyguard
-                    // each time the screen turns off while in call (and having an occasional ugly
-                    // flicker while turning back on the screen and disabling the keyguard again).
-                    if (DEBUG) Log.d(TAG, "screen is off and call ended, let's make sure the "
-                            + "keyguard is showing");
-                    doKeyguardLocked(null);
+                    if (!mScreenOn) {
+                        // note: this is a way to gracefully reenable the keyguard when the call
+                        // ends and the screen is off without always reenabling the keyguard
+                        // each time the screen turns off while in call (and having an occasional ugly
+                        // flicker while turning back on the screen and disabling the keyguard again).
+                        if (DEBUG) Log.d(TAG, "screen is off and call ended, let's make sure the "
+                                + "keyguard is showing");
+                        doKeyguardLocked(null);
+                    } else {
+                        // screen on already, we need to restart fingerprint authentication
+                        mHandler.sendMessage(
+                                mHandler.obtainMessage(KEYGUARD_FINGERPRINT_AUTH, 1, 0));
+                    }
                 }
             }
         }
