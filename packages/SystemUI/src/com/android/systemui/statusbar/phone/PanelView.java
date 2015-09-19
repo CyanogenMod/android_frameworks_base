@@ -622,6 +622,12 @@ public abstract class PanelView extends FrameLayout {
         mViewName = getResources().getResourceName(getId());
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        mBar = null;
+        super.onDetachedFromWindow();
+    }
+
     public String getName() {
         return mViewName;
     }
