@@ -152,6 +152,10 @@ public class SecurityControllerImpl implements SecurityController {
         mCallbacks.add(callback);
     }
 
+    public void clearCallbacks() {
+        mCallbacks.clear();
+    }
+
     @Override
     public void onUserSwitched(int newUserId) {
         mCurrentUserId = newUserId;
