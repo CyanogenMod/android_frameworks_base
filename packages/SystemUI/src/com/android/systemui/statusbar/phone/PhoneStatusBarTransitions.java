@@ -56,6 +56,10 @@ public final class PhoneStatusBarTransitions extends BarTransitions {
         applyMode(getMode(), false /*animate*/);
     }
 
+    public void cleanup() {
+        mBattery = null;
+    }
+
     public ObjectAnimator animateTransitionTo(View v, float toAlpha) {
         return ObjectAnimator.ofFloat(v, "alpha", v.getAlpha(), toAlpha);
     }
