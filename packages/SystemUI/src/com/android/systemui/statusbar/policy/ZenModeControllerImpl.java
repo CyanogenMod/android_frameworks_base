@@ -42,7 +42,9 @@ import android.util.Slog;
 import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.GlobalSetting;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /** Platform implementation of the zen mode controller. **/
@@ -50,7 +52,7 @@ public class ZenModeControllerImpl implements ZenModeController {
     private static final String TAG = "ZenModeController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
-    private final ArrayList<Callback> mCallbacks = new ArrayList<Callback>();
+    private final HashMap<Integer, WeakReference<Callback>> mCallbacks = new HashMap<Integer, WeakReference<Callback>>();
     private final Context mContext;
     private final GlobalSetting mModeSetting;
     private final GlobalSetting mConfigSetting;
@@ -88,12 +90,12 @@ public class ZenModeControllerImpl implements ZenModeController {
 
     @Override
     public void addCallback(Callback callback) {
-        mCallbacks.add(callback);
+        mCallbacks.put(System.identityHashCode(callback), new WeakReference<Callback>(callback));
     }
 
     @Override
     public void removeCallback(Callback callback) {
-        mCallbacks.remove(callback);
+        mCallbacks.remove(System.identityHashCode(callback));
     }
 
     @Override
@@ -170,40 +172,40 @@ public class ZenModeControllerImpl implements ZenModeController {
     }
 
     private void fireNextAlarmChanged() {
-        for (Callback cb : mCallbacks) {
-            cb.onNextAlarmChanged();
+        for (WeakReference<Callback> cb : mCallbacks.values()) {
+            if (cb.get() != null) cb.get().onNextAlarmChanged();
         }
     }
 
     private void fireEffectsSuppressorChanged() {
-        for (Callback cb : mCallbacks) {
-            cb.onEffectsSupressorChanged();
+        for (WeakReference<Callback> cb : mCallbacks.values()) {
+            if (cb.get() != null) cb.get().onEffectsSupressorChanged();
         }
     }
 
     private void fireZenChanged(int zen) {
-        for (Callback cb : mCallbacks) {
-            cb.onZenChanged(zen);
+        for (WeakReference<Callback> cb : mCallbacks.values()) {
+            if (cb.get() != null) cb.get().onZenChanged(zen);
         }
     }
 
     private void fireZenAvailableChanged(boolean available) {
-        for (Callback cb : mCallbacks) {
-            cb.onZenAvailableChanged(available);
+        for (WeakReference<Callback> cb : mCallbacks.values()) {
+            if (cb.get() != null) cb.get().onZenAvailableChanged(available);
         }
     }
 
     private void fireConditionsChanged(Condition[] conditions) {
-        for (Callback cb : mCallbacks) {
-            cb.onConditionsChanged(conditions);
+        for (WeakReference<Callback> cb : mCallbacks.values()) {
+            if (cb.get() != null) cb.get().onConditionsChanged(conditions);
         }
     }
 
     private void fireExitConditionChanged() {
         final Condition exitCondition = getExitCondition();
         if (DEBUG) Slog.d(TAG, "exitCondition changed: " + exitCondition);
-        for (Callback cb : mCallbacks) {
-            cb.onExitConditionChanged(exitCondition);
+        for (WeakReference<Callback> cb : mCallbacks.values()) {
+            if (cb.get() != null) cb.get().onExitConditionChanged(exitCondition);
         }
     }
 
