@@ -366,6 +366,7 @@ public class NotificationPanelView extends PanelView implements
         mSecureCameraLaunchManager.destroy();
         mSettingsObserver.unobserve();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
+        mHeader = null;
     }
 
     private void startQsSizeChangeAnimation(int oldHeight, final int newHeight) {

@@ -180,4 +180,10 @@ public class PhoneStatusBarView extends PanelBar {
         mBar.updateCarrierLabelVisibility(false);
         mBar.setBlur(frac);
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mBarTransitions.cleanup();
+    }
 }
