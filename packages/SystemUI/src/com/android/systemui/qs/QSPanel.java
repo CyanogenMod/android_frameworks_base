@@ -235,6 +235,16 @@ public class QSPanel extends ViewGroup {
         mFooter.onConfigurationChanged();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mHost != null) {
+            mHost.getKeyguardMonitor().removeCallback(mKeyguardListener);
+        }
+        mBrightnessController.unregisterCallbacks();
+        mBrightnessController = null;
+    }
+
     public void setExpanded(boolean expanded) {
         if (mExpanded == expanded) return;
         mExpanded = expanded;

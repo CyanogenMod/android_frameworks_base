@@ -1795,4 +1795,9 @@ public class VolumePanel extends Handler implements DemoMode {
         void onInteraction();
         void onVisible(boolean visible);
     }
+
+    public void cleanup() {
+        mZenController.removeCallback(mZenCallback);
+        mContext.getContentResolver().unregisterContentObserver(mSettingsObserver);
+    }
 }

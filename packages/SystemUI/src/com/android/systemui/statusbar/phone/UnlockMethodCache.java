@@ -22,7 +22,9 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Caches whether the current unlock method is insecure, taking trust into account. This information
@@ -35,7 +37,7 @@ public class UnlockMethodCache {
 
     private final LockPatternUtils mLockPatternUtils;
     private final KeyguardUpdateMonitor mKeyguardUpdateMonitor;
-    private final ArrayList<OnUnlockMethodChangedListener> mListeners = new ArrayList<>();
+    private final HashMap<Integer, WeakReference<OnUnlockMethodChangedListener>> mListeners = new HashMap<>();
     /** Whether the user configured a secure unlock method (PIN, password, etc.) */
     private boolean mSecure;
     /** Whether the unlock method is currently insecure (insecure method or trusted environment) */
@@ -73,11 +75,11 @@ public class UnlockMethodCache {
     }
 
     public void addListener(OnUnlockMethodChangedListener listener) {
-        mListeners.add(listener);
+        mListeners.put(System.identityHashCode(listener), new WeakReference(listener));
     }
 
     public void removeListener(OnUnlockMethodChangedListener listener) {
-        mListeners.remove(listener);
+        mListeners.remove(System.identityHashCode(listener));
     }
 
     private void update(boolean updateAlways) {
@@ -103,8 +105,8 @@ public class UnlockMethodCache {
     }
 
     private void notifyListeners() {
-        for (OnUnlockMethodChangedListener listener : mListeners) {
-            listener.onUnlockMethodStateChanged();
+        for (WeakReference<OnUnlockMethodChangedListener> listener : mListeners.values()) {
+            if (listener.get() != null) listener.get().onUnlockMethodStateChanged();
         }
     }
 
