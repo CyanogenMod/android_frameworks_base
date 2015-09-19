@@ -348,6 +348,15 @@ public class NotificationStackScrollLayout extends ViewGroup
         requestChildrenUpdate();
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mChildrenUpdater != null) {
+            getViewTreeObserver().removeOnPreDrawListener(mChildrenUpdater);
+            mChildrenUpdater = null;
+        }
+    }
+
     private void requestAnimationOnViewResize() {
         if (mRequestViewResizeAnimationOnLayout && mIsExpanded && mAnimationsEnabled) {
             mNeedViewResizeAnimation = true;
