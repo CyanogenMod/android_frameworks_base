@@ -289,9 +289,6 @@ public class BatteryMeterView extends View implements DemoMode,
 
     public void setBatteryStateRegistar(BatteryStateRegistar batteryStateRegistar) {
         mBatteryStateRegistar = batteryStateRegistar;
-        if (!mAttached) {
-            mBatteryStateRegistar.addStateChangedCallback(this);
-        }
     }
 
     public void setBatteryController(BatteryController batteryController) {
