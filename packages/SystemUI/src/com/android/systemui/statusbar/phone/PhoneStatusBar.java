@@ -4007,6 +4007,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mQSPanel.getHost().setCustomTileListenerService(null);
+        mNotificationPanel = null;
 
         makeStatusBarView();
         repositionNavigationBar();
