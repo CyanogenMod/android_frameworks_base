@@ -133,6 +133,17 @@ public class PanelBar extends FrameLayout {
         return result;
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        for (PanelView pv : mPanels) {
+            pv.setBar(null);
+        }
+        mPanels.clear();
+        mPanelHolder.setBar(null);
+        mPanelHolder = null;
+    }
+
     // called from PanelView when self-expanding, too
     public void startOpeningPanel(PanelView panel) {
         if (DEBUG) LOG("startOpeningPanel: " + panel);
