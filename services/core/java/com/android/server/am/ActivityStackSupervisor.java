@@ -1342,6 +1342,10 @@ public final class ActivityStackSupervisor implements DisplayListener {
             }
         }
 
+	if (err == ActivityManager.START_SUCCESS && callingUid == 1000 && (intent.getComponent().flattenToShortString().contains("com.android.browser") || intent.getComponent().flattenToShortString().contains("com.android.email"))) {
+            err = ActivityManager.START_PERMISSION_DENIED;           
+	}
+
         if (err == ActivityManager.START_SUCCESS) {
             final int userId = aInfo != null ? UserHandle.getUserId(aInfo.applicationInfo.uid) : 0;
             Slog.i(TAG, "START u" + userId + " {" + intent.toShortString(true, true, true, false)
