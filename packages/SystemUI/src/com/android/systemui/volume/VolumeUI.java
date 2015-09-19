@@ -127,32 +127,33 @@ public class VolumeUI extends SystemUI {
         if (mZenModeController == null) {
             mZenModeController = new ZenModeControllerImpl(mContext, mHandler);
         }
-        mDismissDelay = mContext.getResources().getInteger(R.integer.volume_panel_dismiss_delay);
-        if (mPanel == null) {
-            mPanel = new VolumePanel(mContext, mZenModeController);
-            mPanel.setCallback(new VolumePanel.Callback() {
-                @Override
-                public void onZenSettings() {
-                    mHandler.removeCallbacks(mStartZenSettings);
-                    mHandler.post(mStartZenSettings);
-                }
-
-                @Override
-                public void onInteraction() {
-                    final KeyguardViewMediator kvm = getComponent(KeyguardViewMediator.class);
-                    if (kvm != null) {
-                        kvm.userActivity();
-                    }
-                }
-
-                @Override
-                public void onVisible(boolean visible) {
-                    if (mAudioManager != null && mVolumeController != null) {
-                        mAudioManager.notifyVolumeControllerVisible(mVolumeController, visible);
-                    }
-                }
-            });
+        if (mPanel != null) {
+            mPanel.cleanup();
         }
+        mDismissDelay = mContext.getResources().getInteger(R.integer.volume_panel_dismiss_delay);
+        mPanel = new VolumePanel(mContext, mZenModeController);
+        mPanel.setCallback(new VolumePanel.Callback() {
+            @Override
+            public void onZenSettings() {
+                mHandler.removeCallbacks(mStartZenSettings);
+                mHandler.post(mStartZenSettings);
+            }
+
+            @Override
+            public void onInteraction() {
+                final KeyguardViewMediator kvm = getComponent(KeyguardViewMediator.class);
+                if (kvm != null) {
+                    kvm.userActivity();
+                }
+            }
+
+            @Override
+            public void onVisible(boolean visible) {
+                if (mAudioManager != null && mVolumeController != null) {
+                    mAudioManager.notifyVolumeControllerVisible(mVolumeController, visible);
+                }
+            }
+        });
         mDialogPanel = mPanel;
     }
 
