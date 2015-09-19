@@ -492,7 +492,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        mAccessibilityController.removeStateChangedCallback(this);
+        getContext().unregisterReceiver(mDevicePolicyReceiver);
+        KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mUpdateMonitorCallback);
         mTrustDrawable.stop();
+        mShortcutHelper.cleanup();
     }
 
     private void updateLockIcon() {
