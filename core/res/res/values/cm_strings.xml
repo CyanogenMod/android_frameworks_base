@@ -100,7 +100,7 @@
 
     <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
     <string name="permlab_managePersistentStorage">manage persistent storage</string>
-    <string name="permdesc_managePersistentStorage">Allows an app to read or write properties which may persist thru a factory reset.</string>
+    <string name="permdesc_managePersistentStorage">Allows an app to read or write properties which may persist through a factory reset.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
@@ -358,5 +358,5 @@
     <string name="permdesc_accessFingerprintService">Allows an app to access the fingerprint service. The app can add, delete, rename and authenticate against fingerprints</string>
 
     <!-- Wifi Hotspot disabled due to subscription change -->
-    <string name="subscription_change_disabled_wifi_ap">Disabled WiFi hotspot due to SIM subscription change</string>
+    <string name="subscription_change_disabled_wifi_ap">Disabled Wi-Fi hotspot due to SIM subscription change</string>
 </resources>
