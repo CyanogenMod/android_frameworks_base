@@ -252,6 +252,11 @@ public class DisconnectCause {
     public static final int LOCAL_LOW_BATTERY = 91;
     public static final int LOW_BATTERY = 92;
 
+    /** EMERGENCY call failed with temporary fail cause */
+    public static final int EMERGENCY_TEMP_FAILURE         = 91;
+    /** EMERGENCY call failed with permanent fail cause */
+    public static final int EMERGENCY_PERM_FAILURE         = 92;
+
     /** Private constructor to avoid class instantiation. */
     private DisconnectCause() {
         // Do nothing.

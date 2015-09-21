@@ -23,6 +23,7 @@ import android.telecom.ConnectionRequest;
 import android.telecom.DisconnectCause;
 import android.telecom.ParcelableConnection;
 import android.telecom.ParcelableConference;
+import android.telecom.PhoneAccountHandle;
 import android.telecom.StatusHints;
 
 import com.android.internal.telecom.IVideoProvider;
@@ -86,4 +87,6 @@ oneway interface IConnectionServiceAdapter {
     void addExistingConnection(String callId, in ParcelableConnection connection);
 
     void setExtras(String callId, in Bundle extras);
+
+    void setPhoneAccountHandle(String callId, in PhoneAccountHandle pHandle);
 }

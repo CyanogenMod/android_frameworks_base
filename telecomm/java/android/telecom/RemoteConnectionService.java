@@ -330,6 +330,11 @@ final class RemoteConnectionService {
                         .setExtras(extras);
             }
         }
+
+        public void setPhoneAccountHandle(String callId, PhoneAccountHandle pHandle) {
+            findConnectionForAction(callId, "setPhoneAccountHandle")
+                    .setPhoneAccountHandle(pHandle);
+        }
     };
 
     private final ConnectionServiceAdapterServant mServant =

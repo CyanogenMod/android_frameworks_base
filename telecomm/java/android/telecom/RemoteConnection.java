@@ -209,6 +209,11 @@ public final class RemoteConnection {
          * @param extras The extras containing other information associated with the connection.
          */
         public void onExtrasChanged(RemoteConnection connection, @Nullable Bundle extras) {}
+
+        /** @hide */
+        public void setPhoneAccountHandle(
+                RemoteConnection connection,
+                PhoneAccountHandle pHandle) {}
     }
 
     /**
@@ -1286,6 +1291,20 @@ public final class RemoteConnection {
                 @Override
                 public void run() {
                     callback.onExtrasChanged(connection, extras);
+                }
+            });
+        }
+    }
+
+    /** @hide */
+    void setPhoneAccountHandle(final PhoneAccountHandle pHandle) {
+        for (CallbackRecord record : mCallbackRecords) {
+            final RemoteConnection connection = this;
+            final Callback callback = record.getCallback();
+            record.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.setPhoneAccountHandle(connection, pHandle);
                 }
             });
         }

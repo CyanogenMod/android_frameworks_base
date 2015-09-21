@@ -625,6 +625,13 @@ public abstract class ConnectionService extends Service {
                 mAdapter.setExtras(id, extras);
             }
         }
+
+        @Override
+        public void onPhoneAccountChanged(Connection c, PhoneAccountHandle pHandle) {
+            String id = mIdByConnection.get(c);
+            Log.i(this, "Adapter onPhoneAccountChanged %s, %s", c, pHandle);
+            mAdapter.setPhoneAccountHandle(id, pHandle);
+        }
     };
 
     /** {@inheritDoc} */
@@ -680,7 +687,7 @@ public abstract class ConnectionService extends Service {
                 callId,
                 request,
                 new ParcelableConnection(
-                        request.getAccountHandle(),
+                        getAccountHandle(request, connection),
                         connection.getState(),
                         connection.getConnectionCapabilities(),
                         connection.getAddress(),
@@ -699,6 +706,18 @@ public abstract class ConnectionService extends Service {
                         connection.getExtras()));
         if (isUnknown) {
             triggerConferenceRecalculate();
+        }
+    }
+
+    /** @hide */
+    public PhoneAccountHandle getAccountHandle(
+            final ConnectionRequest request, Connection connection) {
+        PhoneAccountHandle pHandle = connection.getPhoneAccountHandle();
+        if (pHandle != null) {
+            Log.i(this, "getAccountHandle, return account handle from local, %s", pHandle);
+            return pHandle;
+        } else {
+            return request.getAccountHandle();
         }
     }
 
