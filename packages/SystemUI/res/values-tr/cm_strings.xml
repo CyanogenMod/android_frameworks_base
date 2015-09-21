@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">Kilit ekranı zorunlu</string>
   <string name="quick_settings_network_adb_label">Ağ üzerinden ADB</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Ses Paneli</string>
   <string name="quick_settings_screen_timeout_detail_title">Ekran zaman aşımı</string>
   <string name="quick_settings_usb_tether_label">USB İnternet Paylaşımı</string>
   <string name="quick_settings_heads_up_label">Bildirim pencereleri</string>

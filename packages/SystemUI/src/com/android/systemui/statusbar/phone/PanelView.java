@@ -112,6 +112,18 @@ public abstract class PanelView extends FrameLayout {
         }
     };
 
+    private ViewTreeObserver.OnGlobalLayoutListener mInstantExpandLayoutListener =
+            new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            if (mStatusBar.getStatusBarWindow().getHeight() != mStatusBar.getStatusBarHeight()) {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setExpandedFraction(1f);
+                mInstantExpanding = false;
+            }
+        }
+    };
+
     protected void onExpandingFinished() {
         endClosing();
         mBar.onExpandingFinished();
@@ -791,18 +803,7 @@ public abstract class PanelView extends FrameLayout {
 
         // Wait for window manager to pickup the change, so we know the maximum height of the panel
         // then.
-        getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (mStatusBar.getStatusBarWindow().getHeight()
-                                != mStatusBar.getStatusBarHeight()) {
-                            getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            setExpandedFraction(1f);
-                            mInstantExpanding = false;
-                        }
-                    }
-                });
+        getViewTreeObserver().addOnGlobalLayoutListener(mInstantExpandLayoutListener);
 
         // Make sure a layout really happens.
         requestLayout();
@@ -811,6 +812,7 @@ public abstract class PanelView extends FrameLayout {
     public void instantCollapse() {
         abortAnimations();
         setExpandedFraction(0f);
+        getViewTreeObserver().removeOnGlobalLayoutListener(mInstantExpandLayoutListener);
         if (mExpanding) {
             notifyExpandingFinished();
         }

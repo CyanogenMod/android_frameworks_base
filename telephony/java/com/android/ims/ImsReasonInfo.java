@@ -169,14 +169,24 @@ public class ImsReasonInfo implements Parcelable {
     // Others
     public static final int CODE_SIP_CLIENT_ERROR = 342;
     // 5xx responses
-    // 501 : Server Internal Error
+    // 500 : Server Internal Error
     public static final int CODE_SIP_SERVER_INTERNAL_ERROR = 351;
+    // 501 : no support for the request
+    public static final int CODE_SIP_SERVER_NOT_IMPLEMENTED = 352;
+    // 502 : Bad Gateway
+    public static final int CODE_SIP_SERVER_BAD_GATEWAY = 353;
     // 503 : Service Unavailable
-    public static final int CODE_SIP_SERVICE_UNAVAILABLE = 352;
+    public static final int CODE_SIP_SERVICE_UNAVAILABLE = 354;
     // 504 : Server Time-out
-    public static final int CODE_SIP_SERVER_TIMEOUT = 353;
+    public static final int CODE_SIP_SERVER_TIMEOUT = 355;
+    // 505 : version not supported
+    public static final int CODE_SIP_SERVER_VERSION_UNSUPPORTED = 356;
+    // 513 : Message too large
+    public static final int CODE_SIP_SERVER_MESSAGE_TOOLARGE = 357;
+    // 580 : pre-condition failure
+    public static final int CODE_SIP_SERVER_PRECONDITION_FAILURE = 358;
     // Others
-    public static final int CODE_SIP_SERVER_ERROR = 354;
+    public static final int CODE_SIP_SERVER_ERROR = 359;
     // 6xx responses
     // 603 : Decline
     public static final int CODE_SIP_USER_REJECTED = 361;

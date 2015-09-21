@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">Blokeo-pantaila behartuta</string>
   <string name="quick_settings_network_adb_label">Sare gaineko ADB</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Bolumen panela</string>
   <string name="quick_settings_screen_timeout_detail_title">Pantailaren denbora-muga</string>
   <string name="quick_settings_usb_tether_label">USB tethering</string>
   <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>

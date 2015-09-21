@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #define LOG_TAG "BitmapRegionDecoder"
 
 #include "SkBitmap.h"
@@ -39,6 +38,7 @@
 #include <jni.h>
 #include <androidfw/Asset.h>
 #include <sys/stat.h>
+#include <drm/DrmManagerClient.h>
 
 #if 0
     #define TRACE_BITMAP(code)  code
@@ -272,6 +272,51 @@ static void nativeClean(JNIEnv* env, jobject, jlong brdHandle) {
     delete brd;
 }
 
+
+static jobject nativeNewInstanceFromDrmFileDescriptor(JNIEnv* env, jobject clazz,
+                                          jobject fileDescriptor, jboolean isShareable) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+
+    jint descriptor = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(descriptor, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return nullObjectReturn("fstat return -1");
+    }
+
+    SkMemoryStream* stream = NULL;
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(descriptor, 0, 1, NULL);
+    if ((decryptHandle != NULL) && (decryptHandle->status == RightsStatus::RIGHTS_VALID)) {
+        int offset = 0;
+        int size = decryptHandle->decryptInfo->decryptBufferLength;
+        if (size > 0) {
+            char* array = (char *) malloc(size * sizeof(char));
+            if (drmManagerClient->pread(decryptHandle, array, size, offset) > 0 ) {
+                stream = new SkMemoryStream(array, size, false);
+            }
+        }
+    }
+
+    if (decryptHandle != NULL) {
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+
+    if (stream == NULL) {
+        return nullObjectReturn("Drm decryption failed");
+    }
+
+    jobject brd = createBitmapRegionDecoder(env, stream);
+    SkSafeUnref(stream); // the decoder now holds a reference
+    return brd;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <android_runtime/AndroidRuntime.h>
@@ -305,6 +350,11 @@ static JNINativeMethod gBitmapRegionDecoderMethods[] = {
     {   "nativeNewInstance",
         "(JZ)Landroid/graphics/BitmapRegionDecoder;",
         (void*)nativeNewInstanceFromAsset
+    },
+
+    {   "nativeNewInstanceFromDrmFileDescriptor",
+        "(Ljava/io/FileDescriptor;Z)Landroid/graphics/BitmapRegionDecoder;",
+        (void*)nativeNewInstanceFromDrmFileDescriptor
     },
 };
 

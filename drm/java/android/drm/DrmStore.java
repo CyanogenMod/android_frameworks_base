@@ -247,6 +247,30 @@ public class DrmStore {
     }
 
     /**
+     * Defines the drm delivery methods.
+     * This should be in sync with svc_drm.h
+     * @hide
+     */
+    public static class DrmDeliveryType {
+        /**
+         * Forward_lock
+         */
+        public static final int FORWARD_LOCK = 0x01;
+        /**
+         * Combined delivery
+         */
+        public static final int COMBINED_DELIVERY = 0x02;
+        /**
+         * Separate delivery
+         */
+        public static final int SEPARATE_DELIVERY = 0x03;
+        /**
+         * Separate delivery but DCF is forward-lock
+         */
+        public static final int SEPARATE_DELIVERY_FL = 0x04;
+    }
+
+    /**
      * @deprecated This class should have been an interface instead.
      * The default constuctor should have not been exposed.
      */

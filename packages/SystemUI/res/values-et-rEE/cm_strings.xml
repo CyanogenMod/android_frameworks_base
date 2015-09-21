@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">Lukustusekraan sunnitud</string>
   <string name="quick_settings_network_adb_label">ADB üle võrgu</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Helipaneel</string>
   <string name="quick_settings_screen_timeout_detail_title">Ekraani viide</string>
   <string name="quick_settings_usb_tether_label">USB lõastamine</string>
   <string name="quick_settings_heads_up_label">Etteteavitus</string>

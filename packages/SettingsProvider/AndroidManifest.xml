@@ -19,14 +19,5 @@
                   android:singleUser="true"
                   android:initOrder="100" />
 
-        <activity android:name="ProfilePickerActivity"
-                android:theme="@*android:style/Theme.Material.Dialog.Alert"
-                android:excludeFromRecents="true">
-            <intent-filter>
-                <action android:name="cyanogenmod.platform.intent.action.PROFILE_PICKER" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
     </application>
 </manifest>

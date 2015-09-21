@@ -122,10 +122,10 @@
   <string name="permdesc_interceptSmsSent">允許應用程式攔截送出短訊。惡意應用程式可能會利用此阻止短訊送出。</string>
   <string name="permlab_accessTorchService">存取電筒服務</string>
   <string name="permdesc_accessTorchService">允許應用程式存取電筒服務。一般應用程式不需使用。</string>
-  <string name="permlab_preventpower">無視電源鍵</string>
-  <string name="permdesc_preventpower">允許應用程式無視電源鍵。</string>
-  <string name="usb_extmedia_format_message">您 USB 儲存裝置上的所有數據（位於路徑 \'%1$s\' 下）將會被刪除。此操作不可撤銷！</string>
-  <string name="sd_extmedia_format_message">您儲存卡上的所有數據（位於路徑 \'%1$s\' 下）將會被刪除。此操作不可撤銷！</string>
+  <string name="permlab_preventpower">覆蓋電源鍵</string>
+  <string name="permdesc_preventpower">允許應用程式覆蓋電源鍵。</string>
+  <string name="usb_extmedia_format_message">您 USB 儲存裝置上的所有數據（位於路徑 \'%1$s\' 下）將會被清除。此操作不可撤銷！</string>
+  <string name="sd_extmedia_format_message">您儲存卡上的所有數據（位於路徑 \'%1$s\' 下）將會被清除。此操作不可撤銷！</string>
   <string name="sd_progress_unmounting">正在卸載 SD 卡\u2026</string>
   <string name="sd_progress_erasing">清除 SD 卡\u2026</string>
   <string name="sd_format_error">無法清除 SD 卡。</string>
@@ -167,7 +167,7 @@
   <string name="live_display_auto">自動</string>
   <string name="live_display_auto_summary">在白天和夜晚自動調節螢幕顏色溫度</string>
   <string name="live_display_off">關閉</string>
-  <string name="live_display_off_summary">禁用所有調整</string>
+  <string name="live_display_off_summary">停用所有調整</string>
   <string name="live_display_day">白天</string>
   <string name="live_display_day_summary">僅使用白天設定</string>
   <string name="live_display_night">夜間</string>
@@ -175,14 +175,14 @@
   <string name="live_display_outdoor">戶外（陽光）</string>
   <string name="live_display_outdoor_summary">僅使用戶外設定</string>
   <string name="live_display_hint">LiveDisplay 可有助減少眼睛疲勞，有助晚上睡眠。按下此處試試！</string>
-  <string name="lock_to_app_toast_no_navbar">要解鎖此螢幕，觸摸並按住返回鍵。</string>
+  <string name="lock_to_app_toast_no_navbar">要解鎖此螢幕，觸碰並按住返回鍵。</string>
   <string name="quick_settings_tile_flashlight_not_title">手電筒已開啟</string>
   <string name="quick_settings_tile_flashlight_not_summary">按下關閉</string>
   <string name="storage_sd_dock_card">座架 SD 卡</string>
   <string name="fingerprint_default_name">指紋 <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">存取指紋服務</string>
-  <string name="permdesc_accessFingerprintService">允許應用程式存取指紋服務。該應用程式可以新增、刪除、重新命名及驗證指紋。</string>
-  <string name="permlab_resetBatteryStats">重設電池統計數據</string>
+  <string name="permdesc_accessFingerprintService">允許應用程式存取指紋服務。該應用程式可以新增、刪除、重新命名及驗證指紋</string>
+  <string name="permlab_resetBatteryStats">重設電池統計資訊</string>
   <string name="permdesc_resetBatteryStats">允許應用程式重設目前低電量的電池使用數據。</string>
   <string name="silent_mode_priority">優先級</string>
   <string name="silent_mode_none">無</string>

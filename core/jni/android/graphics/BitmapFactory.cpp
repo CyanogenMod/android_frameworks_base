@@ -1,7 +1,9 @@
 #define LOG_TAG "BitmapFactory"
 
+//#define LOG_NDEBUG 0
 #include "BitmapFactory.h"
 #include "NinePatchPeeker.h"
+#include "SkData.h"
 #include "SkFrontBufferedStream.h"
 #include "SkImageDecoder.h"
 #include "SkMath.h"
@@ -23,6 +25,10 @@
 #include <stdio.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+#include <drm/drm_framework_common.h>
+#include <drm/DrmManagerClient.h>
+#include <utils/Log.h>
+#include <fcntl.h>
 
 jfieldID gOptions_justBoundsFieldID;
 jfieldID gOptions_sampleSizeFieldID;
@@ -208,7 +214,8 @@ private:
     const unsigned int mSize;
 };
 
-static jobject doDecode(JNIEnv* env, SkStreamRewindable* stream, jobject padding, jobject options) {
+static jobject doDecode(JNIEnv* env, SkStreamRewindable* stream, jobject padding,
+        jobject options ) {
 
     int sampleSize = 1;
 
@@ -552,6 +559,121 @@ static jboolean nativeIsSeekable(JNIEnv* env, jobject, jobject fileDescriptor) {
     return ::lseek64(descriptor, 0, SEEK_CUR) != -1 ? JNI_TRUE : JNI_FALSE;
 }
 
+static jobject nativeDecodeDrmFileDescriptor(JNIEnv* env, jobject clazz, jobject fileDescriptor,
+        jobject options) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+
+    jint fd = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(fd, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return nullObjectReturn("fstat return -1");
+    }
+
+    // Restore the descriptor's offset on exiting this function.
+    AutoFDSeek autoRestore(fd);
+
+    jobject bitmap = NULL;
+
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(fd, 0, 1, NULL);
+    if ((decryptHandle != NULL) && (decryptHandle->status == RightsStatus::RIGHTS_VALID)) {
+        int offset = 0;
+        int size = decryptHandle->decryptInfo->decryptBufferLength;
+        if (size > 0) {
+            char* array = (char *) malloc(size * sizeof(char));
+            if (drmManagerClient->pread(decryptHandle, array, size, offset) > 0 ) {
+                SkMemoryStream* stream = new SkMemoryStream(array, size, false);
+                SkAutoUnref aur(stream);
+                bitmap = doDecode(env, stream, NULL, options);
+                if (bitmap == NULL) {
+                    ALOGV("nativeDecodeDrmFileDescriptor : Faile to decode drm bitmap file");
+                }
+            }
+            if (array) free(array);
+        }
+    }
+    if (decryptHandle != NULL) {
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+
+    return bitmap;
+}
+
+static bool nativeConsumeDrmImageRights(JNIEnv* env, jobject clazz, jobject fileDescriptor) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+
+    jint fd = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(fd, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return nullObjectReturn("fstat return -1");
+    }
+
+    // Restore the descriptor's offset on exiting this function.
+    AutoFDSeek autoRestore(fd);
+
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(fd, 0, 1, NULL);
+    if (decryptHandle != NULL) {
+        drmManagerClient->setPlaybackStatus(decryptHandle, Playback::STOP, 0);
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+    return false;
+}
+
+static jbyteArray nativeGetDrmImageBytes(JNIEnv* env, jobject clazz, jobject fileDescriptor) {
+    NPE_CHECK_RETURN_ZERO(env, fileDescriptor);
+    jint fd = jniGetFDFromFileDescriptor(env, fileDescriptor);
+
+    struct stat fdStat;
+    if (fstat(fd, &fdStat) == -1) {
+        doThrowIOE(env, "broken file descriptor");
+        return NULL;
+    }
+
+    // Restore the descriptor's offset on exiting this function.
+    AutoFDSeek autoRestore(fd);
+
+    jbyteArray byteArray = NULL;
+
+    DrmManagerClient* drmManagerClient = new DrmManagerClient();
+    sp<DecryptHandle> decryptHandle = drmManagerClient->openDecryptSession(fd, 0, 1, NULL);
+    if ((decryptHandle != NULL) && (decryptHandle->status == RightsStatus::RIGHTS_VALID)) {
+        int offset = 0;
+        int size = decryptHandle->decryptInfo->decryptBufferLength;
+        if (size > 0) {
+            char* array = (char *) malloc(size * sizeof(char));
+            if (drmManagerClient->pread(decryptHandle, array, size, offset) > 0 ) {
+                byteArray = env->NewByteArray (size);
+                env->SetByteArrayRegion (byteArray, 0, size, reinterpret_cast<jbyte*>(array));
+            }
+            if (array) free(array);
+        }
+    }
+    if (decryptHandle != NULL) {
+        drmManagerClient->closeDecryptSession(decryptHandle);
+        decryptHandle = NULL;
+    }
+    if (drmManagerClient != NULL) {
+        delete drmManagerClient;
+        drmManagerClient = NULL;
+    }
+    return byteArray;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 static JNINativeMethod gMethods[] = {
@@ -578,6 +700,21 @@ static JNINativeMethod gMethods[] = {
     {   "nativeIsSeekable",
         "(Ljava/io/FileDescriptor;)Z",
         (void*)nativeIsSeekable
+    },
+
+    {   "nativeDecodeDrmFileDescriptor",
+        "(Ljava/io/FileDescriptor;Landroid/graphics/BitmapFactory$Options;)Landroid/graphics/Bitmap;",
+        (void*)nativeDecodeDrmFileDescriptor
+    },
+
+    {   "nativeConsumeDrmImageRights",
+        "(Ljava/io/FileDescriptor;)Z",
+        (void*)nativeConsumeDrmImageRights
+    },
+
+    {   "nativeGetDrmImageBytes",
+        "(Ljava/io/FileDescriptor;)[B",
+        (void*)nativeGetDrmImageBytes
     },
 };
 

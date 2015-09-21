@@ -84,7 +84,6 @@ LOCAL_SRC_FILES:= \
 	android_util_Binder.cpp \
 	android_util_EventLog.cpp \
 	android_util_Log.cpp \
-	android_util_FloatMath.cpp \
 	android_util_Process.cpp \
 	android_util_StringBlock.cpp \
 	android_util_XmlBlock.cpp \
@@ -238,6 +237,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libjpeg \
 	libusbhost \
 	libharfbuzz_ng \
+	libdrmframework \
 	libz \
 	libaudioutils \
 	libpdfium \

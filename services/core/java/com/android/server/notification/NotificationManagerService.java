@@ -845,8 +845,11 @@ public class NotificationManagerService extends SystemService {
                 }
             } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
                 // turn off LED when user passes through lock screen
-                mNotificationLight.turnOff();
-                mStatusBar.notificationLightOff();
+                // if lights with screen on is disabled.
+                if (!mScreenOnEnabled) {
+                    mNotificationLight.turnOff();
+                    mStatusBar.notificationLightOff();
+                }
             } else if (action.equals(Intent.ACTION_USER_SWITCHED)) {
                 // reload per-user settings
                 mSettingsObserver.update(null);
@@ -2133,8 +2136,7 @@ public class NotificationManagerService extends SystemService {
                         return;
                     }
 
-                    // Only check for spam if this is a new notification
-                    if (old == null && isNotificationSpam(notification, pkg)) {
+                    if (isNotificationSpam(notification, pkg)) {
                         mArchive.record(r.sbn);
                         return;
                     }
