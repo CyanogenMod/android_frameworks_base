@@ -3062,7 +3062,7 @@
     <permission android:name="android.permission.HARDWARE_ABSTRACTION_ACCESS"
         android:label="@string/permlab_useHardwareFramework"
         android:description="@string/permdesc_useHardwareFramework"
-        android:protectionLevel="signature" />
+        android:protectionLevel="system|signature" />
 
     <!-- Allows an application to use the system Torch service
         @hide-->

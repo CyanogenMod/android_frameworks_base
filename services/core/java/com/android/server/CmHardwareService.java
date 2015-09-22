@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.ICmHardwareService;
 import android.hardware.CmHardwareManager;
+import android.os.RemoteCallbackList;
+import android.os.RemoteException;
 import android.util.Log;
 
 import java.io.File;
@@ -34,15 +36,21 @@ import org.cyanogenmod.hardware.LongTermOrbits;
 import org.cyanogenmod.hardware.SerialNumber;
 import org.cyanogenmod.hardware.SunlightEnhancement;
 import org.cyanogenmod.hardware.TapToWake;
+import org.cyanogenmod.hardware.ThermalUpdateCallback;
 import org.cyanogenmod.hardware.TouchscreenHovering;
 import org.cyanogenmod.hardware.VibratorHW;
+import org.cyanogenmod.hardware.ThermalMonitor;
+import android.hardware.IThermalListenerCallback;
+import android.hardware.ThermalListenerCallback;
 
-public class CmHardwareService extends ICmHardwareService.Stub {
+public class CmHardwareService extends ICmHardwareService.Stub implements ThermalUpdateCallback {
     private static final boolean DEBUG = true;
     private static final String TAG = CmHardwareService.class.getSimpleName();
 
     private final Context mContext;
     private final CmHardwareInterface mCmHwImpl;
+    private int mCurrentThermalState;
+    private RemoteCallbackList<IThermalListenerCallback> mRemoteCallbackList;
 
     private interface CmHardwareInterface {
         public int getSupportedFeatures();
@@ -97,6 +105,8 @@ public class CmHardwareService extends ICmHardwareService.Stub {
                 mSupportedFeatures |= CmHardwareManager.FEATURE_VIBRATOR;
             if (TouchscreenHovering.isSupported())
                 mSupportedFeatures |= CmHardwareManager.FEATURE_TOUCH_HOVERING;
+            if (ThermalMonitor.isSupported())
+                mSupportedFeatures |= CmHardwareManager.FEATURE_THERMAL_MONITOR;
         }
 
         public int getSupportedFeatures() {
@@ -119,6 +129,8 @@ public class CmHardwareService extends ICmHardwareService.Stub {
                     return TapToWake.isEnabled();
                 case CmHardwareManager.FEATURE_TOUCH_HOVERING:
                     return TouchscreenHovering.isEnabled();
+                case CmHardwareManager.FEATURE_THERMAL_MONITOR:
+                    return ThermalMonitor.isEnabled();
                 default:
                     Log.e(TAG, "feature " + feature + " is not a boolean feature");
                     return false;
@@ -265,6 +277,14 @@ public class CmHardwareService extends ICmHardwareService.Stub {
     public CmHardwareService(Context context) {
         mContext = context;
         mCmHwImpl = getImpl(context);
+        initialize();
+    }
+
+    private void initialize() {
+        if (ThermalMonitor.isSupported()) {
+            ThermalMonitor.initialize(this);
+            mRemoteCallbackList = new RemoteCallbackList<IThermalListenerCallback>();
+        }
     }
 
     private boolean isSupported(int feature) {
@@ -434,5 +454,51 @@ public class CmHardwareService extends ICmHardwareService.Stub {
             return false;
         }
         return mCmHwImpl.requireAdaptiveBacklightForSunlightEnhancement();
+    }
+
+    @Override
+    public void setThermalState(int state) {
+        mCurrentThermalState = state;
+        int i = mRemoteCallbackList.beginBroadcast();
+        while (i > 0) {
+            i--;
+            try {
+                mRemoteCallbackList.getBroadcastItem(i).onThermalChanged(state);
+            } catch (RemoteException e) {
+                // The RemoteCallbackList will take care of removing
+                // the dead object for us.
+            }
+        }
+        mRemoteCallbackList.finishBroadcast();
+    }
+
+    @Override
+    public int getThermalState() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (isSupported(CmHardwareManager.FEATURE_THERMAL_MONITOR)) {
+            return mCurrentThermalState;
+        }
+        return ThermalListenerCallback.State.STATE_UNKNOWN;
+    }
+
+    @Override
+    public boolean registerThermalListener(IThermalListenerCallback callback) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (isSupported(CmHardwareManager.FEATURE_THERMAL_MONITOR)) {
+            return mRemoteCallbackList.register(callback);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean unRegisterThermalListener(IThermalListenerCallback callback) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (isSupported(CmHardwareManager.FEATURE_THERMAL_MONITOR)) {
+            return mRemoteCallbackList.unregister(callback);
+        }
+        return false;
     }
 }

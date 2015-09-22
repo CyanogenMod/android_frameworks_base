@@ -95,6 +95,8 @@ public final class CmHardwareManager {
      */
     public static final int FEATURE_TOUCH_HOVERING = 0x800;
 
+    public static final int FEATURE_THERMAL_MONITOR = 0x8000;
+
     private static final List<Integer> BOOLEAN_FEATURES = Arrays.asList(
         FEATURE_ADAPTIVE_BACKLIGHT,
         FEATURE_COLOR_ENHANCEMENT,
@@ -102,7 +104,8 @@ public final class CmHardwareManager {
         FEATURE_KEY_DISABLE,
         FEATURE_SUNLIGHT_ENHANCEMENT,
         FEATURE_TAP_TO_WAKE,
-        FEATURE_TOUCH_HOVERING
+        FEATURE_TOUCH_HOVERING,
+        FEATURE_THERMAL_MONITOR
     );
 
     /**
@@ -559,6 +562,47 @@ public final class CmHardwareManager {
 
         try {
             return mService.requireAdaptiveBacklightForSunlightEnhancement();
+        } catch (RemoteException e) {
+        }
+        return false;
+    }
+
+    /**
+     * @return current thermal {@link cyanogenmod.hardware.ThermalListenerCallback.State}
+     */
+    public int getThermalState() {
+        try {
+            if (mService != null) {
+                return mService.getThermalState();
+            }
+        } catch (RemoteException e) {
+        }
+        return ThermalListenerCallback.State.STATE_UNKNOWN;
+    }
+
+    /**
+     * Register a callback to be notified of thermal state changes
+     * @return boolean indicating whether register succeeded or failed
+     */
+    public boolean registerThermalListener(ThermalListenerCallback thermalCallback) {
+        try {
+            if (mService != null && thermalCallback != null) {
+                return mService.registerThermalListener(thermalCallback);
+            }
+        } catch (RemoteException e) {
+        }
+        return false;
+    }
+
+    /**
+     * Unregister a callback previously registered to be notified of thermal state changes
+     * @return boolean indicating whether un-registering succeeded or failed
+     */
+    public boolean unRegisterThermalListener(ThermalListenerCallback thermalCallback) {
+        try {
+            if (mService != null && thermalCallback != null) {
+                return mService.unRegisterThermalListener(thermalCallback);
+            }
         } catch (RemoteException e) {
         }
         return false;
