@@ -533,6 +533,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         if (mUnlockMethodCache.isFaceUnlockRunning()) {
             iconRes = com.android.internal.R.drawable.ic_account_circle;
         } else if (mUnlockMethodCache.isFingerUnlockRunning()
+                && KeyguardUpdateMonitor.getInstance(mContext).isFingerprintActive()
                 && !KeyguardUpdateMonitor.getInstance(mContext).isMaxFingerprintAttemptsReached()) {
             iconRes = R.drawable.ic_fingerprint;
         } else if (mUnlockMethodCache.isCurrentlyInsecure()) {
