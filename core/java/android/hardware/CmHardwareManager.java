@@ -15,6 +15,8 @@
  */
 package android.hardware;
 
+import org.cyanogenmod.hardware.ThermalMonitor;
+
 import android.content.Context;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -95,6 +97,8 @@ public final class CmHardwareManager {
      */
     public static final int FEATURE_TOUCH_HOVERING = 0x800;
 
+    public static final int FEATURE_THERMAL_MONITOR = 0x8000;
+
     private static final List<Integer> BOOLEAN_FEATURES = Arrays.asList(
         FEATURE_ADAPTIVE_BACKLIGHT,
         FEATURE_COLOR_ENHANCEMENT,
@@ -102,7 +106,8 @@ public final class CmHardwareManager {
         FEATURE_KEY_DISABLE,
         FEATURE_SUNLIGHT_ENHANCEMENT,
         FEATURE_TAP_TO_WAKE,
-        FEATURE_TOUCH_HOVERING
+        FEATURE_TOUCH_HOVERING,
+        FEATURE_THERMAL_MONITOR
     );
 
     /**
@@ -559,6 +564,36 @@ public final class CmHardwareManager {
 
         try {
             return mService.requireAdaptiveBacklightForSunlightEnhancement();
+        } catch (RemoteException e) {
+        }
+        return false;
+    }
+
+    public int getThermalState() {
+        try {
+            if (mService != null) {
+                return ThermalMonitor.getThermalState();
+            }
+        } catch (RemoteException e) {
+        }
+        return ThermalListenerCallback.State.STATE_UNKNOWN;
+    }
+
+    public boolean registerThermalListener(ThermalListenerCallback thermalCallback) {
+        try {
+            if (mService != null && thermalCallback != null) {
+                return ThermalMonitor.registerThermalListener(thermalCallback);
+            }
+        } catch (RemoteException e) {
+        }
+        return false;
+    }
+
+    public boolean unRegisterThermalListener(ThermalListenerCallback thermalCallback) {
+        try {
+            if (mService != null && thermalCallback != null) {
+                return ThermalMonitor.unRegisterThermalListener(thermalCallback);
+            }
         } catch (RemoteException e) {
         }
         return false;
