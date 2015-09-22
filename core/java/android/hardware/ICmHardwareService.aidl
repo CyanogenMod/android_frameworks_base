@@ -16,6 +16,8 @@
 
 package android.hardware;
 
+import android.hardware.IThermalListenerCallback;
+
 /** {@hide} */
 interface ICmHardwareService {
 
@@ -40,4 +42,7 @@ interface ICmHardwareService {
     String getSerialNumber();
 
     boolean requireAdaptiveBacklightForSunlightEnhancement();
+    int getThermalState();
+    boolean registerThermalListener(IThermalListenerCallback callback);
+    boolean unRegisterThermalListener(IThermalListenerCallback callback);
 }
