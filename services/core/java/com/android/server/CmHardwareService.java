@@ -36,6 +36,9 @@ import org.cyanogenmod.hardware.SunlightEnhancement;
 import org.cyanogenmod.hardware.TapToWake;
 import org.cyanogenmod.hardware.TouchscreenHovering;
 import org.cyanogenmod.hardware.VibratorHW;
+import org.cyanogenmod.hardware.ThermalMonitor;
+import android.hardware.IThermalListenerCallback;
+import android.hardware.ThermalListenerCallback;
 
 public class CmHardwareService extends ICmHardwareService.Stub {
     private static final boolean DEBUG = true;
@@ -43,6 +46,7 @@ public class CmHardwareService extends ICmHardwareService.Stub {
 
     private final Context mContext;
     private final CmHardwareInterface mCmHwImpl;
+    private final ThermalMonitor mThermalMonitor;
 
     private interface CmHardwareInterface {
         public int getSupportedFeatures();
@@ -97,6 +101,8 @@ public class CmHardwareService extends ICmHardwareService.Stub {
                 mSupportedFeatures |= CmHardwareManager.FEATURE_VIBRATOR;
             if (TouchscreenHovering.isSupported())
                 mSupportedFeatures |= CmHardwareManager.FEATURE_TOUCH_HOVERING;
+            if (mThermalMonitor.isSupported())
+                mSupportedFeatures |= CmHardwareManager.FEATURE_THERMAL_MONITOR;
         }
 
         public int getSupportedFeatures() {
@@ -119,6 +125,8 @@ public class CmHardwareService extends ICmHardwareService.Stub {
                     return TapToWake.isEnabled();
                 case CmHardwareManager.FEATURE_TOUCH_HOVERING:
                     return TouchscreenHovering.isEnabled();
+                case CmHardwareManager.FEATURE_THERMAL_MONITOR:
+                    return mThermalMonitor.isSupported();
                 default:
                     Log.e(TAG, "feature " + feature + " is not a boolean feature");
                     return false;
@@ -264,6 +272,7 @@ public class CmHardwareService extends ICmHardwareService.Stub {
 
     public CmHardwareService(Context context) {
         mContext = context;
+        mThermalMonitor = new ThermalMonitor(context);
         mCmHwImpl = getImpl(context);
     }
 
@@ -434,5 +443,29 @@ public class CmHardwareService extends ICmHardwareService.Stub {
             return false;
         }
         return mCmHwImpl.requireAdaptiveBacklightForSunlightEnhancement();
+    }
+
+    @Override
+    public int getThermalState() {
+        if (isSupported(CmHardwareManager.FEATURE_THERMAL_MONITOR)) {
+            return mThermalMonitor.getThermalState();
+        }
+        return ThermalListenerCallback.State.STATE_UNKNOWN;
+    }
+
+    @Override
+    public boolean registerThermalListener(IThermalListenerCallback callback) {
+        if (isSupported(CmHardwareManager.FEATURE_THERMAL_MONITOR)) {
+            return mThermalMonitor.registerListener(callback);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean unRegisterThermalListener(IThermalListenerCallback callback) {
+        if (isSupported(CmHardwareManager.FEATURE_THERMAL_MONITOR)) {
+            return mThermalMonitor.unRegisterListener(callback);
+        }
+        return false;
     }
 }
