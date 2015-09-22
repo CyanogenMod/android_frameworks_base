@@ -612,7 +612,7 @@ public class KeyguardViewMediator extends SystemUI {
 
         @Override
         public void onScreenTurnedOff(int why) {
-            if (mLockPatternUtils.usingFingerprint()) {
+            if (mUpdateMonitor.isFingerprintActive()) {
                 synchronized (KeyguardViewMediator.this) {
                     mHandler.removeMessages(KEYGUARD_FINGERPRINT_AUTH);
                     mHandler.obtainMessage(KEYGUARD_FINGERPRINT_AUTH, 0, 0).sendToTarget();
@@ -633,7 +633,7 @@ public class KeyguardViewMediator extends SystemUI {
 
         @Override
         public void onScreenTurnedOn() {
-            if (mLockPatternUtils.usingFingerprint()) {
+            if (mUpdateMonitor.isFingerprintActive()) {
                 synchronized (KeyguardViewMediator.this) {
                     FingerprintManager fpm = (FingerprintManager)
                             mContext.getSystemService(Context.FINGERPRINT_SERVICE);
@@ -693,7 +693,7 @@ public class KeyguardViewMediator extends SystemUI {
         @Override
         public void onKeyguardVisibilityChanged(boolean showing) {
             super.onKeyguardVisibilityChanged(showing);
-            if (mLockPatternUtils.usingFingerprint()) {
+            if (mUpdateMonitor.isFingerprintActive()) {
                 synchronized (KeyguardViewMediator.this) {
                     mUpdateMonitor.setFingerprintListening(showing);
                 }
@@ -739,7 +739,7 @@ public class KeyguardViewMediator extends SystemUI {
         @Override
         public void keyguardGone() {
             mKeyguardDisplayManager.hide();
-            if (mLockPatternUtils.usingFingerprint()) {
+            if (mUpdateMonitor.isFingerprintActive()) {
                 synchronized (KeyguardViewMediator.this) {
                     if (mFingerprintWakeUnlock) {
                         if (DBG_FINGERPRINT) {
@@ -902,7 +902,7 @@ public class KeyguardViewMediator extends SystemUI {
             // camera while preventing unwanted input.
             final boolean lockImmediately =
                 mLockPatternUtils.getPowerButtonInstantlyLocks() || !mLockPatternUtils.isSecure()
-                    || mLockPatternUtils.usingFingerprint();
+                    || mUpdateMonitor.isFingerprintActive();
 
             notifyScreenOffLocked();
 
@@ -1591,7 +1591,7 @@ public class KeyguardViewMediator extends SystemUI {
         }
 
         if (authenticated) {
-            if (mLockPatternUtils.usingFingerprint()) {
+            if (mUpdateMonitor.isFingerprintActive()) {
                 KeyguardStats.sendUnlockEvent(mContext,
                         mUpdateMonitor.isFingerprintRecognized(),
                         mUpdateMonitor.getFailedFingerprintUnlockAttempts());
@@ -1972,7 +1972,7 @@ public class KeyguardViewMediator extends SystemUI {
     private void startFingerAuthIfUsingFingerprint() {
         synchronized (KeyguardViewMediator.this) {
             if (DBG_FINGERPRINT) Log.i(TAG, "startFingerAuthIfUsingFingerprint()");
-            if (mLockPatternUtils.usingFingerprint()) {
+            if (mUpdateMonitor.isFingerprintActive()) {
                 if (mFingerprintWakeUnlock) {
                     Log.w(TAG, "fingerprint unlock mode, not authenticating");
                     return;
@@ -2005,7 +2005,7 @@ public class KeyguardViewMediator extends SystemUI {
 
     private void stopAuthenticatingFingerprint() {
         synchronized (KeyguardViewMediator.this) {
-            if (mLockPatternUtils.usingFingerprint()) {
+            if (mUpdateMonitor.isFingerprintActive()) {
                 if (DBG_FINGERPRINT) {
                     Log.i(TAG, "stopAuthenticatingFingerprint()");
                 }
