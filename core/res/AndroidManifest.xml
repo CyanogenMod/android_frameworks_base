@@ -1392,7 +1392,8 @@
          that removes restrictions on where broadcasts can be sent and allows other
          types of interactions. -->
     <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
-        android:protectionLevel="signature|installer" />
+        android:protectionLevel="signature|installer"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- @SystemApi @hide Allows an application to call APIs that allow it to query and manage
          users on the device. This permission is not available to
@@ -1643,7 +1644,8 @@
          {@link android.content.pm.PackageManager#addPackageToPreferred}
          for details. -->
     <permission android:name="android.permission.SET_PREFERRED_APPLICATIONS"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to receive the
          {@link android.content.Intent#ACTION_BOOT_COMPLETED} that is
