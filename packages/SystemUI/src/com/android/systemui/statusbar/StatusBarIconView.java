@@ -61,9 +61,11 @@ public class StatusBarIconView extends AnimatedImageView {
         super(context);
         final Resources res = context.getResources();
         mSlot = slot;
-        setNotification(notification);
 
         mObserver = GlobalSettingsObserver.getInstance(context);
+        mObserver.update();
+
+        setNotification(notification);
 
         // We do not resize and scale system icons (on the right), only notification icons (on the
         // left).
@@ -80,8 +82,6 @@ public class StatusBarIconView extends AnimatedImageView {
 
     public void setNotification(Notification notification) {
         mNotification = notification;
-        mShowNotificationCount = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.STATUS_BAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) == 1;
         setContentDescription(notification);
     }
 
@@ -93,6 +93,9 @@ public class StatusBarIconView extends AnimatedImageView {
         final float scale = (float)imageBounds / (float)outerBounds;
         setScaleX(scale);
         setScaleY(scale);
+
+        mObserver = GlobalSettingsObserver.getInstance(context);
+        mObserver.update();
     }
 
     private static boolean streq(String a, String b) {
@@ -376,7 +379,7 @@ public class StatusBarIconView extends AnimatedImageView {
 
             mContext.getContentResolver().registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUS_BAR_NOTIF_COUNT),
-                    false, this);
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -392,7 +395,6 @@ public class StatusBarIconView extends AnimatedImageView {
                     Settings.System.STATUS_BAR_NOTIF_COUNT, 0, UserHandle.USER_CURRENT) == 1;
             for (StatusBarIconView sbiv : mIconViews) {
                 sbiv.mShowNotificationCount = showIconCount;
-                sbiv.set(sbiv.mIcon, true);
             }
         }
     }
