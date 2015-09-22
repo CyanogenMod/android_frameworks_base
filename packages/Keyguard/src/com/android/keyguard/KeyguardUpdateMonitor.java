@@ -1326,6 +1326,12 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         mUserFingerprintRecognized.clear();
     }
 
+    public boolean isFingerprintActive() {
+        FingerprintManager fp = (FingerprintManager)
+                mContext.getSystemService(Context.FINGERPRINT_SERVICE);
+        return fp != null && fp.userEnrolled() && mLockPatternUtils.usingFingerprint();
+    }
+
     public boolean isFingerprintRecognized() {
        return (mUserFingerprintRecognized.size() > 0);
     }
