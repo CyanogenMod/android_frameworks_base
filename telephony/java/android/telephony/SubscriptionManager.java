@@ -310,6 +310,14 @@ public class SubscriptionManager {
      */
     public static final String CB_CHANNEL_50_ALERT = "enable_channel_50_alerts";
 
+
+
+    /**
+     * TelephonyProvider column name for enable channel60 alert in CB settings
+     *@hide
+     */
+    public static final String CB_CHANNEL_60_ALERT = "enable_channel_60_alerts";
+
     /**
      * TelephonyProvider column name for CMAS test alert in CB settings
      *@hide
