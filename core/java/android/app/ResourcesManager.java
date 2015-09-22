@@ -187,7 +187,7 @@ public class ResourcesManager {
         Configuration overrideConfigCopy = (overrideConfiguration != null)
                 ? new Configuration(overrideConfiguration) : null;
         ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration, scale,
-                isThemeable, themeConfig);
+                isThemeable, getThemeConfig());
         Resources r;
         synchronized (this) {
             // Resources is app scale dependent.
@@ -324,19 +324,14 @@ public class ResourcesManager {
             String themePackageName, CompatibilityInfo compatInfo, boolean isThemeable) {
         Resources r;
 
-        ThemeConfig themeConfig;
-        if (isThemeable) {
-            ThemeConfig.Builder builder = new ThemeConfig.Builder();
-            builder.defaultOverlay(themePackageName);
-            builder.defaultIcon(themePackageName);
-            builder.defaultFont(themePackageName);
-            themeConfig = builder.build();
-        } else {
-            themeConfig = null;
-        }
+        ThemeConfig.Builder builder = new ThemeConfig.Builder();
+        builder.defaultOverlay(themePackageName);
+        builder.defaultIcon(themePackageName);
+        builder.defaultFont(themePackageName);
+        ThemeConfig themeConfig = builder.build();
 
         ResourcesKey key = new ResourcesKey(resDir, displayId, null, compatInfo.applicationScale,
-                isThemeable, isThemeable ? themeConfig : null);
+                isThemeable, themeConfig);
 
         synchronized (this) {
             WeakReference<Resources> wr = mActiveResources.get(key);
