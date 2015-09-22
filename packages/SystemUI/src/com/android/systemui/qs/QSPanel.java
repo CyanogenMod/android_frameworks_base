@@ -89,6 +89,8 @@ public class QSPanel extends ViewGroup {
     private boolean mGridContentVisible = true;
 
     private boolean mUseMainTiles = false;
+    private int mUseThreeTiles = 2;
+    private boolean mUseSmallDetails;
 
     private DetailCallback mDetailCallback;
     private int mContainerTop;
@@ -272,9 +274,23 @@ public class QSPanel extends ViewGroup {
     public void refreshAllTiles() {
         mUseMainTiles = Settings.Secure.getIntForUser(getContext().getContentResolver(),
                 Settings.Secure.QS_USE_MAIN_TILES, 1, UserHandle.myUserId()) == 1;
+        mUseThreeTiles = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.QS_USE_THREE_TILES, 0, UserHandle.myUserId()) == 1 ? 3 : 2;
+        mUseSmallDetails = Settings.Secure.getIntForUser(getContext().getContentResolver(),
+                Settings.Secure.QS_ALLOW_SMALL_SECONDARY_CLICK, 0, UserHandle.myUserId()) == 1;
         for (int i = 0; i < mRecords.size(); i++) {
             TileRecord r = mRecords.get(i);
-            r.tileView.setDual(mUseMainTiles && i < 2);
+
+            if (mUseMainTiles && i < mUseThreeTiles) {
+                r.tileView.setShape(QSTileView.SHAPE.DUAL);
+            }
+            else if (mUseSmallDetails && r.tile.hasDetails()) {
+                r.tileView.setShape(QSTileView.SHAPE.SMALL);
+            }
+            else {
+                r.tileView.setShape(QSTileView.SHAPE.NONE);
+            }
+
             r.tile.refreshState();
 
             // If we are in a secure lockscreen, then we should hide tiles with sensitive
@@ -519,7 +535,7 @@ public class QSPanel extends ViewGroup {
         for (TileRecord record : mRecords) {
             if (record.tileView.getVisibility() == GONE) continue;
             // wrap to next column if we've reached the max # of columns
-            if (mUseMainTiles && r == 0 && c == 1) {
+            if (r == 0 && c == (mUseThreeTiles - 1)) {
                 r = 1;
                 c = 0;
             } else if (r == -1 || c == (mColumns - 1)) {
@@ -535,7 +551,7 @@ public class QSPanel extends ViewGroup {
 
         for (TileRecord record : mRecords) {
             if (record.tileView.getVisibility() == GONE) continue;
-            final int cw = (mUseMainTiles && record.row == 0) ? mLargeCellWidth : mCellWidth;
+            final int cw = mCellWidth;
             final int ch = (mUseMainTiles && record.row == 0) ? mLargeCellHeight : mCellHeight;
             record.tileView.measure(exactly(cw), exactly(ch));
         }
@@ -578,7 +594,7 @@ public class QSPanel extends ViewGroup {
         for (TileRecord record : mRecords) {
             if (record.tileView.getVisibility() == GONE) continue;
             final int cols = getColumnCount(record.row);
-            final int cw = (mUseMainTiles && record.row == 0) ? mLargeCellWidth : mCellWidth;
+            final int cw = mCellWidth;
             final int extra = (w - cw * cols) / (cols + 1);
             int left = record.col * cw + (record.col + 1) * extra;
             final int top = getRowTop(record.row);

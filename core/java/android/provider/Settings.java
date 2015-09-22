@@ -6042,6 +6042,22 @@ public final class Settings {
         public static final String QS_USE_MAIN_TILES = "sysui_qs_main_tiles";
 
         /**
+         * Use either 2 or 3 tiles on the first row os the quick settings panel
+         * 0 = use two tiles
+         * 1 = use three tiles
+         * @hide
+         */
+        public static final String QS_USE_THREE_TILES = "sysui_qs_three_tiles";
+
+        /**
+         * Allow secondaryClick on non-enlarged QS tiles
+         * 0 = do not allow, false
+         * 1 = allow, true
+         * @hide
+         */
+        public static final String QS_ALLOW_SMALL_SECONDARY_CLICK = "sysui_qs_allow_small_secondary_click";
+
+        /**
          * Whether detail view for the location tile is enabled
          * @hide
          */

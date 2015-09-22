@@ -115,6 +115,11 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
     }
 
     @Override
+    public boolean hasDetails() {
+        return true;
+    }
+
+    @Override
     protected void handleUpdateState(SignalState state, Object arg) {
         state.visible = true;
         if (DEBUG) Log.d(TAG, "handleUpdateState arg=" + arg);
