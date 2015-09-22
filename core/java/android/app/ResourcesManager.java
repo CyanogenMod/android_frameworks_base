@@ -177,9 +177,8 @@ public class ResourcesManager {
             Configuration overrideConfiguration, CompatibilityInfo compatInfo, IBinder token,
             Context context, boolean isThemeable) {
         final float scale = compatInfo.applicationScale;
-        final ThemeConfig themeConfig = isThemeable ? getThemeConfig() : null;
         ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration, scale,
-                isThemeable, themeConfig, token);
+                isThemeable, getThemeConfig(), token);
         Resources r;
         synchronized (this) {
             // Resources is app scale dependent.
@@ -325,11 +324,12 @@ public class ResourcesManager {
             builder.defaultFont(themePackageName);
             themeConfig = builder.build();
         } else {
-            themeConfig = null;
+            themeConfig = overrideConfiguration != null && overrideConfiguration.themeConfig != null
+                    ? overrideConfiguration.themeConfig : getThemeConfig();
         }
 
         ResourcesKey key = new ResourcesKey(resDir, displayId, overrideConfiguration,
-                compatInfo.applicationScale, isThemeable, isThemeable ? themeConfig : null, token);
+                compatInfo.applicationScale, isThemeable, themeConfig, token);
 
         synchronized (this) {
             WeakReference<Resources> wr = mActiveResources.get(key);
