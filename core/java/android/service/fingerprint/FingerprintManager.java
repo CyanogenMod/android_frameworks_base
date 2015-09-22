@@ -156,14 +156,13 @@ public class FingerprintManager {
     };
 
     /**
-     * Determine whether the user has at least one fingerprint enrolled and enabled.
+     * Determine whether the user has at least one fingerprint enrolled.
      *
-     * @return true if at least one is enrolled and enabled
+     * @return true if at least one is enrolled
      */
-    public boolean enrolledAndEnabled() {
+    public boolean userEnrolled() {
         ContentResolver res = mContext.getContentResolver();
-        return Settings.Secure.getInt(res, "fingerprint_enabled", 0) != 0
-                && FingerprintUtils.getFingerprintsForUser(res, getCurrentUserId()).size() > 0;
+        return FingerprintUtils.getFingerprintsForUser(res, getCurrentUserId()).size() > 0;
     }
 
     /**
