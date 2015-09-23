@@ -290,6 +290,9 @@
     <!-- Enable the default volume dialog -->
     <bool name="enable_volume_ui">true</bool>
 
+    <!-- Enable operator name on status bar -->
+    <bool name="enable_operator_name">false</bool>
+
     <!-- Duration of the full carrier network change icon animation. -->
     <integer name="carrier_network_change_anim_time">3000</integer>
 
