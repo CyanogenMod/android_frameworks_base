@@ -44,9 +44,7 @@ import android.os.BatteryManager;
 import android.os.Handler;
 import android.os.IRemoteCallback;
 import android.os.Message;
-import android.os.PowerManager;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.fingerprint.FingerprintManager;
@@ -57,7 +55,6 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 
@@ -233,7 +230,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                     handleFingerprintAcquired(msg.arg1);
                     break;
                 case MSG_FINGERPRINT_PROCESSED:
-                    handleFingerprintProcessed(msg.arg1);
+                    handleFingerprintProcessed(msg.arg1 == 1, msg.arg2);
                     break;
                 case MSG_FINGERPRINT_STATE_CHANGED:
                     handleFingerprintStateChanged(msg.arg1);
@@ -348,7 +345,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
     }
 
-    private void handleFingerprintProcessed(int fingerprintId) {
+    private void handleFingerprintProcessed(boolean error, int fingerprintIdOrError) {
         if (!hasBootCompleted() || isSimPinSecure()) {
             return;
         }
@@ -364,32 +361,35 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             Log.d(TAG, "Fingerprint disabled by DPM for userId: " + userId);
             return;
         }
-        if (fingerprintId == 0) {
+        if (error) {
+            onFingerprintAttemptFailed(true, fingerprintIdOrError);
+        } else if (fingerprintIdOrError == 0) {
             // not a valid fingerprint
-            onFingerprintAttemptFailed();
+            onFingerprintAttemptFailed(false, 0);
             return;
         }
         final ContentResolver res = mContext.getContentResolver();
         final List<Fingerprint> fingerprints = FingerprintUtils.getFingerprintsForUser(res, userId);
         boolean foundFingerprint = false;
         for (Fingerprint fingerprint : fingerprints) {
-            if (fingerprint.getFingerId() == fingerprintId) {
+            if (fingerprint.getFingerId() == fingerprintIdOrError) {
                 foundFingerprint = true;
                 onFingerprintRecognized(userId);
                 break;
             }
         }
         if (!foundFingerprint) {
-            onFingerprintAttemptFailed();
+            onFingerprintAttemptFailed(true,
+                    FingerprintManager.FINGERPRINT_ERROR_UNABLE_TO_PROCESS);
         }
     }
 
-    private void onFingerprintAttemptFailed() {
-        mFailedFingerprintAttempts++;
+    private void onFingerprintAttemptFailed(boolean error, int errorCode) {
+        if (!error) mFailedFingerprintAttempts++;
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
             if (cb != null) {
-                cb.onFingerprintAttemptFailed();
+                cb.onFingerprintAttemptFailed(error, errorCode);
             }
         }
     }
@@ -568,7 +568,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             new FingerprintManagerReceiver() {
         @Override
         public void onProcessed(int fingerprintId) {
-            mHandler.obtainMessage(MSG_FINGERPRINT_PROCESSED, fingerprintId, 0).sendToTarget();
+            mHandler.obtainMessage(MSG_FINGERPRINT_PROCESSED, 0 /* no error */, fingerprintId)
+                    .sendToTarget();
         };
 
         @Override
@@ -583,7 +584,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
         @Override
         public void onError(int error) {
-            Log.w(TAG, "FingerprintManager reported error: " + error);
+            mHandler.obtainMessage(MSG_FINGERPRINT_PROCESSED, 1 /* error */, error).sendToTarget();
+
         }
     };
 
