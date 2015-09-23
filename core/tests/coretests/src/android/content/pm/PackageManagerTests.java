@@ -3412,7 +3412,7 @@ public class PackageManagerTests extends AndroidTestCase {
         try {
             ks = pm.getKeySetByAlias(otherPkgName, "A");
             assertTrue(false); // should have thrown
-        } catch (SecurityException e) {
+        } catch (IllegalArgumentException e) {
         }
         cleanUpInstall(otherPkgName);
         ks = pm.getKeySetByAlias(mPkgName, "A");
