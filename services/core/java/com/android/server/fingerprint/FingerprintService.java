@@ -125,23 +125,6 @@ public class FingerprintService extends SystemService {
             }
             this.token = null;
         }
-
-        protected void finalize() throws Throwable {
-            try {
-                if (token != null) {
-                    if (getToken() == mWakeClient) {
-                        mWakeClient = null;
-                    }
-                    final ClientData removed = mClients.remove(getToken());
-                    if (removed != null) {
-                        if (DEBUG) Slog.w(TAG, "removing leaked reference: " + getToken());
-                    }
-                }
-            } finally {
-                token = null;
-                super.finalize();
-            }
-        }
     }
 
     public FingerprintService(Context context) {
@@ -366,10 +349,6 @@ public class FingerprintService extends SystemService {
             token.unlinkToDeath(clientData.tokenWatcher, 0);
             clientData.receiver = null;
             clientData.tokenWatcher = null;
-            if (token == mWakeClient) {
-                setWakeupModeInternal(mWakeClient, false);
-                mWakeClient = null;
-            }
         } else {
             if (DEBUG) Slog.v(TAG, "listener not registered: " + token);
         }
@@ -523,7 +502,7 @@ public class FingerprintService extends SystemService {
     private void setWakeupModeInternal(IBinder token, boolean wakeupMode) {
         if (wakeupMode != mWakeupMode) {
             mWakeupMode = wakeupMode;
-            mWakeClient = token;
+            mWakeClient = wakeupMode ? token : null;
             final String params = PARAM_WAKEUP + "=" + (wakeupMode ? 1 : 0);
             nativeSetParameters(params);
         }
