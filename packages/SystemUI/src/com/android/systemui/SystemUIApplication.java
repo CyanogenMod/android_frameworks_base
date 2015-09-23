@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.content.res.ThemeConfig;
 import android.os.SystemProperties;
 import android.util.Log;
 
@@ -56,6 +57,7 @@ public class SystemUIApplication extends Application {
     private boolean mServicesStarted;
     private boolean mBootCompleted;
     private final Map<Class<?>, Object> mComponents = new HashMap<Class<?>, Object>();
+    private Configuration mConfig;
 
     @Override
     public void onCreate() {
@@ -83,6 +85,8 @@ public class SystemUIApplication extends Application {
                 }
             }
         }, filter);
+        mConfig = new Configuration();
+        mConfig.setTo(getResources().getConfiguration());
     }
 
     /**
@@ -132,6 +136,14 @@ public class SystemUIApplication extends Application {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final ThemeConfig oldThemeConfig = mConfig != null ? mConfig.themeConfig : null;
+        final ThemeConfig newThemeConfig = newConfig != null ? newConfig.themeConfig : null;
+        if (newThemeConfig != null && !newThemeConfig.equals(oldThemeConfig)) {
+            // theme resource changed so recreate styles and attributes
+            recreateTheme();
+        }
+
+        mConfig.setTo(newConfig);
         if (mServicesStarted) {
             int len = mServices.length;
             for (int i = 0; i < len; i++) {
