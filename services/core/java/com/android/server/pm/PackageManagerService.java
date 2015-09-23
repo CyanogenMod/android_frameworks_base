@@ -5750,14 +5750,19 @@ public class PackageManagerService extends IPackageManager.Stub {
                                 origPackage = null;
                                 continue;
                             } else if (origPackage.sharedUser != null) {
-                                // Make sure uid is compatible between packages.
-                                if (!origPackage.sharedUser.name.equals(pkg.mSharedUserId)) {
-                                    Slog.w(TAG, "Unable to migrate data from " + origPackage.name
-                                            + " to " + pkg.packageName + ": old uid "
-                                            + origPackage.sharedUser.name
-                                            + " differs from " + pkg.mSharedUserId);
-                                    origPackage = null;
-                                    continue;
+                                // If the original package is still available...
+                                // (hasn't been deleted via OTA script)
+                                if (isPackageAvailable(origPackage.name, UserHandle.USER_ALL)) {
+                                    // Make sure uid is compatible between packages
+                                    if (!origPackage.sharedUser.name.equals(pkg.mSharedUserId)) {
+                                        Slog.w(TAG, "Unable to migrate data from "
+                                                + origPackage.name
+                                                + " to " + pkg.packageName + ": old uid "
+                                                + origPackage.sharedUser.name
+                                                + " differs from " + pkg.mSharedUserId);
+                                        origPackage = null;
+                                        continue;
+                                    }
                                 }
                             } else {
                                 if (DEBUG_UPGRADE) Log.v(TAG, "Renaming new package "
@@ -5842,18 +5847,22 @@ public class PackageManagerService extends IPackageManager.Stub {
                     // The signature has changed, but this package is in the system
                     // image...  let's recover!
                     pkgSetting.signatures.mSignatures = pkg.mSignatures;
-                    // However...  if this package is part of a shared user, but it
+                    // However...  if this package is part of the same shared user, but it
                     // doesn't match the signature of the shared user, let's fail.
                     // What this means is that you can't change the signatures
                     // associated with an overall shared user, which doesn't seem all
                     // that unreasonable.
                     if (pkgSetting.sharedUser != null) {
-                        if (compareSignatures(pkgSetting.sharedUser.signatures.mSignatures,
-                                              pkg.mSignatures) != PackageManager.SIGNATURE_MATCH) {
-                            throw new PackageManagerException(
-                                    INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES,
-                                            "Signature mismatch for shared user : "
-                                            + pkgSetting.sharedUser);
+                        if (DEBUG_UPGRADE) Log.d(TAG, "Comparing shared user from existing package "
+                                + pkgSetting.sharedUser.name + " to " + pkg.mSharedUserId);
+                        if (TextUtils.equals(pkgSetting.sharedUser.name, pkg.mSharedUserId)) {
+                            if (compareSignatures(pkgSetting.sharedUser.signatures.mSignatures,
+                                    pkg.mSignatures) != PackageManager.SIGNATURE_MATCH) {
+                                throw new PackageManagerException(
+                                        INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES,
+                                        "Signature mismatch for shared user : "
+                                                + pkgSetting.sharedUser);
+                            }
                         }
                     }
                     // File a report about this.
