@@ -151,7 +151,6 @@
   <string name="accessibility_tty_enabled">Teletipu habilitáu</string>
   <string name="accessibility_ringer_vibrate">Mou vibración</string>
   <string name="accessibility_ringer_silent">Mou silenciu</string>
-  <string name="accessibility_casting">@string/quick_settings_casting</string>
   <string name="accessibility_recents_item_will_be_dismissed">Descartar <xliff:g id="app" example="Calendar">%s</xliff:g>.</string>
   <string name="accessibility_recents_item_dismissed">Desanicióse <xliff:g id="APP">%s</xliff:g>.</string>
   <string name="accessibility_recents_item_launched">Aniciando <xliff:g id="app" example="Calendar">%s</xliff:g>.</string>

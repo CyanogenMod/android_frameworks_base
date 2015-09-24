@@ -40,8 +40,8 @@
   <string name="accessibility_quick_settings_compass_on">Kompas vklopljen.</string>
   <string name="accessibility_quick_settings_compass_changed_off">Kompas izklopljen.</string>
   <string name="accessibility_quick_settings_compass_changed_on">Kompas vklopljen.</string>
-  <string name="accessibility_quick_settings_heads_up_off">Obvestila na zasl. izk.</string>
-  <string name="accessibility_quick_settings_heads_up_on">Obvestila na zasl. vkl.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Obvestila na zas. izk.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Obvestila na zas. vkl.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Obvestila na zaslonu izklopljena.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Obvestila na zaslonu vklopljena.</string>
   <string name="accessibility_quick_settings_hotspot_off">Prenosna dostopna točka izklopljena.</string>

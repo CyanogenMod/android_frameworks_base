@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
   <string name="silent_mode_priority">Важные</string>
   <string name="silent_mode_none">Нет</string>
+  <string name="subscription_change_disabled_wifi_ap">Точка доступа Wi-Fi отключена из-за переключения SIM-карты</string>
+  <string name="notify_turn_wifi_off_title">Выключить Wi-Fi</string>
 </resources>

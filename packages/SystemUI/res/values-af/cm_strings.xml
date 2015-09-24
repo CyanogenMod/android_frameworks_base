@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">Slotskerm afgedwing</string>
   <string name="quick_settings_network_adb_label">ADB oor netwerk</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Volume paneel</string>
   <string name="quick_settings_screen_timeout_detail_title">Skerm afsnytyd</string>
   <string name="quick_settings_usb_tether_label">USB internet verbinding</string>
   <string name="quick_settings_heads_up_label">Loer boodskap</string>

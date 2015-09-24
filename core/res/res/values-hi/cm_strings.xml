@@ -207,4 +207,6 @@
   <string name="permdesc_accessFingerprintService">किसी ऐप को अँगुली छाप सेवा में पहुँचने की अनुमति दें। यह ऐप अँगुली छाप के बल पर जोड़ सकता है, हटा सकता है, नाम बदल सकता है और प्रमाणित कर सकता है</string>
   <string name="permlab_resetBatteryStats">बैटरी के आँकड़ों को रीसेट करें</string>
   <string name="permdesc_resetBatteryStats">अनुप्रयोग को वर्तमान निम्न-स्तर के बैटरी उपयोग डेटा को रीसेट करने देता है।</string>
+  <string name="silent_mode_priority">वरीयता</string>
+  <string name="silent_mode_none">कुछ नहीं</string>
 </resources>

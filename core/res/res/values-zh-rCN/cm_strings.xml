@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
   <string name="silent_mode_priority">优先级</string>
   <string name="silent_mode_none">无</string>
+  <string name="subscription_change_disabled_wifi_ap">由于 SIM 卡订阅改变，已禁用 Wi-Fi 热点。</string>
+  <string name="notify_turn_wifi_off_title">关闭 Wi-Fi</string>
 </resources>
