@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:height="56dp"
+        android:width="56dp"
+        android:viewportWidth="56"
+        android:viewportHeight="56"
+        android:name="cursor_vector">
+
+    <group
+            android:name="cursor_group">
+
+        <group
+                android:name="outside_stroke">
+
+            <path
+                    android:strokeColor="#4DD7DCE1"
+                    android:strokeWidth="8"
+                    android:pathData="M52,28c0,13.3-10.7,24-24,24
+	S4,41.3,4,28S14.7,4,28,4S52,14.7,52,28z"/>
+
+        </group>
+
+        <group
+                android:name="inside_fill">
+
+            <path
+                    android:fillColor="#66505A64"
+                    android:pathData="M48,28c0,11-9,20-20,20S8,39,8,28S17,8,28,8S48,17,48,28z"/>
+
+        </group>
+
+        <group
+                android:name="white_stroke">
+
+            <path
+                    android:strokeColor="#CCFFFFFF"
+                    android:strokeWidth="2"
+                    android:pathData="M48,28c0,11-9,20-20,20S8,39,8,28S17,8,28,8S48,17,48,28z"/>
+
+        </group>
+
+
+    </group>
+
+</vector>

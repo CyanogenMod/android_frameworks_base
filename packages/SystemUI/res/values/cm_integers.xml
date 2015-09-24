@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="anim_time">200</integer>
+    <integer name="stroke_width">2</integer>
+</resources>

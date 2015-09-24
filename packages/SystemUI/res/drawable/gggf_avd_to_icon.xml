@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:drawable="@drawable/gggf_vector" >
+    <target
+            android:name="arm1"
+            android:animation="@anim/gggf_arm_pos_to_icon" />
+
+    <target
+            android:name="arm2"
+            android:animation="@anim/gggf_arm_neg_to_icon" />
+
+    <target
+            android:name="arm3"
+            android:animation="@anim/gggf_arm_pos_to_icon" />
+
+    <target
+            android:name="arm4"
+            android:animation="@anim/gggf_arm_neg_to_icon" />
+
+    <target
+            android:name="left_group"
+            android:animation="@anim/gggf_group_left_to_icon" />
+
+    <target
+            android:name="right_group"
+            android:animation="@anim/gggf_group_right_to_icon" />
+
+
+</animated-vector>

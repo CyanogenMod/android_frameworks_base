@@ -27,7 +27,6 @@ import android.util.DisplayMetrics;
 import android.view.DisplayInfo;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -39,6 +38,7 @@ import android.widget.TextView;
 
 import com.android.internal.util.ArrayUtils;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.policy.GhostTouchListener;
 import com.android.systemui.statusbar.policy.KeyButtonView;
 
 import java.util.ArrayList;
@@ -141,10 +141,15 @@ public class NavbarEditor implements View.OnTouchListener {
             0, R.string.accessibility_dpad_right,
             KeyEvent.KEYCODE_DPAD_RIGHT, 0,
             0, R.drawable.ic_sysbar_ime_right);
+    public static final ButtonInfo NAVBAR_GHOST_TOUCH = new ButtonInfo("ghost_touch",
+            R.string.navbar_ghost_touch_button, R.string.accessibility_ghost_touch,
+            0, R.drawable.gggf_avd_to_icon,
+            R.drawable.gggf_avd_to_icon, R.drawable.gggf_avd_to_icon);
 
-    private static final ButtonInfo[] ALL_BUTTONS = new ButtonInfo[] {
-        NAVBAR_EMPTY, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_SEARCH,
-        NAVBAR_RECENT, NAVBAR_CONDITIONAL_MENU, NAVBAR_ALWAYS_MENU, NAVBAR_MENU_BIG
+    private static final ButtonInfo[] ALL_BUTTONS = new ButtonInfo[]{
+            NAVBAR_EMPTY, NAVBAR_HOME, NAVBAR_BACK, NAVBAR_SEARCH,
+            NAVBAR_RECENT, NAVBAR_CONDITIONAL_MENU, NAVBAR_ALWAYS_MENU, NAVBAR_MENU_BIG,
+            NAVBAR_GHOST_TOUCH
     };
 
     private static final String DEFAULT_SETTING_STRING = "empty|back|home|recent|empty|menu0";
@@ -387,6 +392,11 @@ public class NavbarEditor implements View.OnTouchListener {
             }
 
             buttonView.setInfo(button, mVertical, isSmallButton);
+            if (button == NAVBAR_GHOST_TOUCH) {
+                buttonView.setOnTouchListener(new GhostTouchListener(buttonView));
+            } else {
+                buttonView.setOnTouchListener(null);
+            }
             if (button != NAVBAR_EMPTY && !isSmallButton) {
                 visibleCount++;
             }

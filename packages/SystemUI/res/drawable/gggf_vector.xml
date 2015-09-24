@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:height="24.0dp"
+        android:width="24.0dp"
+        android:viewportHeight="24.0"
+        android:viewportWidth="24.0"
+        android:alpha="0.9"
+        >
+
+    <group
+            android:name="left_group"
+            android:pivotX="12"
+            android:pivotY="12"
+            android:rotation="160.935"
+            android:translateX="-8.743"
+            android:translateY="1.507">
+        <group
+                android:name="arm1"
+                android:pivotX="12"
+                android:pivotY="12"
+                android:rotation="126">
+            <path
+                    android:strokeColor="@color/navigation_bar_icon_color_noalpha"
+                    android:strokeWidth="@integer/stroke_width"
+                    android:strokeLineCap="round"
+                    android:pathData="@string/gggf_arm"/>
+
+
+        </group>
+
+        <group
+                android:name="arm2"
+                android:pivotX="12"
+                android:pivotY="12"
+                android:rotation="-126">
+            <path
+                    android:strokeColor="@color/navigation_bar_icon_color_noalpha"
+                    android:strokeWidth="@integer/stroke_width"
+                    android:strokeLineCap="round"
+                    android:pathData="@string/gggf_arm"/>
+
+
+        </group>
+
+
+    </group>
+
+    <group
+            android:name="right_group"
+            android:pivotX="12"
+            android:pivotY="12"
+            android:rotation="19.065"
+            android:translateX="8.743"
+            android:translateY="1.507">
+        <group
+                android:name="arm3"
+                android:pivotX="12"
+                android:pivotY="12"
+                android:rotation="126">
+            <path
+                    android:strokeColor="@color/navigation_bar_icon_color_noalpha"
+                    android:strokeWidth="@integer/stroke_width"
+                    android:strokeLineCap="round"
+                    android:pathData="@string/gggf_arm"/>
+
+
+        </group>
+
+        <group
+                android:name="arm4"
+                android:pivotX="12"
+                android:pivotY="12"
+                android:rotation="-126">
+            <path
+                    android:strokeColor="@color/navigation_bar_icon_color_noalpha"
+                    android:strokeWidth="@integer/stroke_width"
+                    android:strokeLineCap="round"
+                    android:pathData="@string/gggf_arm"/>
+
+
+        </group>
+
+
+    </group>
+
+
+</vector>
