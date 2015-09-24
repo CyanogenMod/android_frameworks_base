@@ -157,8 +157,7 @@ class MemoryUsage implements Serializable {
         return forClass(null);
     }
 
-    private static final String CLASS_PATH = "-Xbootclasspath"
-            + ":/system/framework/core.jar"
+    private static final String CLASS_PATH = "/system/framework/core.jar"
             + ":/system/framework/ext.jar"
             + ":/system/framework/framework.jar"
             + ":/system/framework/framework-tests.jar"
@@ -166,7 +165,7 @@ class MemoryUsage implements Serializable {
             + ":/system/framework/loadclass.jar";
 
     private static final String[] GET_DIRTY_PAGES = {
-        "adb", "shell", "dalvikvm", CLASS_PATH, "LoadClass" };
+        "adb", "shell", "dalvikvm", "-classpath", CLASS_PATH, "LoadClass" };
 
     /**
      * Measures memory usage for the given class.
