@@ -2331,6 +2331,10 @@
 
   <java-symbol type="drawable" name="platlogo_m" />
 
+  <!-- language/locale picker extention feature -->
+  <java-symbol type="string" name="locale_codes" />
+  <java-symbol type="bool"   name="config_display_country_for_locale_codes" />
+
   <!-- config softap extention feature -->
   <java-symbol type="bool" name="config_softap_extention" />
 
