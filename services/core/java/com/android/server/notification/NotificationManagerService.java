@@ -53,6 +53,11 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ParceledListSlice;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioSystem;
@@ -104,6 +109,7 @@ import cyanogenmod.app.ProfileManager;
 
 import com.android.internal.R;
 import com.android.internal.util.FastXmlSerializer;
+import com.android.internal.util.cm.palette.Palette;
 import com.android.internal.util.cm.SpamFilter;
 import com.android.internal.util.cm.SpamFilter.SpamContract.NotificationTable;
 import com.android.internal.util.cm.SpamFilter.SpamContract.PackageTable;
@@ -264,6 +270,7 @@ public class NotificationManagerService extends SystemService {
     private boolean mNotificationPulseEnabled;
     private HashMap<String, NotificationLedValues> mNotificationPulseCustomLedValues;
     private Map<String, String> mPackageNameMappings;
+    private Map<String, Integer> mGeneratedPackageLedColors = new HashMap<String, Integer>();
 
     // for checking lockscreen status
     private KeyguardManager mKeyguardManager;
@@ -1026,6 +1033,9 @@ public class NotificationManagerService extends SystemService {
             mDefaultNotificationLedOff = Settings.System.getIntForUser(resolver,
                     Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF,
                     mDefaultNotificationLedOff, UserHandle.USER_CURRENT);
+
+            // LED generated notification colors
+            mGeneratedPackageLedColors.clear();
 
             // LED custom notification colors
             mNotificationPulseCustomLedValues.clear();
@@ -3148,7 +3158,7 @@ public class NotificationManagerService extends SystemService {
                 ledOnMS = ledValues.onMS >= 0 ? ledValues.onMS : mDefaultNotificationLedOn;
                 ledOffMS = ledValues.offMS >= 0 ? ledValues.offMS : mDefaultNotificationLedOff;
             } else if ((ledno.defaults & Notification.DEFAULT_LIGHTS) != 0) {
-                ledARGB = mDefaultNotificationColor;
+                ledARGB = generateLedColorForNotification(ledNotification);
                 ledOnMS = mDefaultNotificationLedOn;
                 ledOffMS = mDefaultNotificationLedOff;
             } else {
@@ -3206,6 +3216,147 @@ public class NotificationManagerService extends SystemService {
     private NotificationLedValues getLedValuesForNotification(NotificationRecord ledNotification) {
         final String packageName = ledNotification.sbn.getPackageName();
         return mNotificationPulseCustomLedValues.get(mapPackage(packageName));
+    }
+
+    /*
+     * Converts an RGB packed int into L*a*b space, which is well-suited for finding
+     * perceptual differences in color
+     */
+    private float[] convertRGBtoLAB(int rgb) {
+        float[] lab = new float[3];
+        float fx, fy, fz;
+        float eps = 216.f / 24389.f;
+        float k = 24389.f / 27.f;
+
+        float Xr = 0.964221f;  // reference white D50
+        float Yr = 1.0f;
+        float Zr = 0.825211f;
+
+        // RGB to XYZ
+        float r = Color.red(rgb) / 255.f; //R 0..1
+        float g = Color.green(rgb) / 255.f; //G 0..1
+        float b = Color.blue(rgb) / 255.f; //B 0..1
+
+        // assuming sRGB (D65)
+        if (r <= 0.04045)
+            r = r / 12;
+        else
+            r = (float) Math.pow((r + 0.055) / 1.055, 2.4);
+
+        if (g <= 0.04045)
+            g = g / 12;
+        else
+            g = (float) Math.pow((g + 0.055) / 1.055, 2.4);
+
+        if (b <= 0.04045)
+            b = b / 12;
+        else
+            b = (float) Math.pow((b + 0.055) / 1.055, 2.4);
+
+        float X = 0.436052025f * r + 0.385081593f * g + 0.143087414f * b;
+        float Y = 0.222491598f * r + 0.71688606f * g + 0.060621486f * b;
+        float Z = 0.013929122f * r + 0.097097002f * g + 0.71418547f * b;
+
+        // XYZ to Lab
+        float xr = X / Xr;
+        float yr = Y / Yr;
+        float zr = Z / Zr;
+
+        if (xr > eps)
+            fx = (float) Math.pow(xr, 1 / 3.);
+        else
+            fx = (float) ((k * xr + 16.) / 116.);
+
+        if (yr > eps)
+            fy = (float) Math.pow(yr, 1 / 3.);
+        else
+            fy = (float) ((k * yr + 16.) / 116.);
+
+        if (zr > eps)
+            fz = (float) Math.pow(zr, 1 / 3.);
+        else
+            fz = (float) ((k * zr + 16.) / 116);
+
+        float Ls = (116 * fy) - 16;
+        float as = 500 * (fx - fy);
+        float bs = 200 * (fy - fz);
+
+        lab[0] = (2.55f * Ls + .5f);
+        lab[1] = (as + .5f);
+        lab[2] = (bs + .5f);
+
+        return lab;
+    }
+
+    private static int[] NOTIFICATION_COLORS = new int[] {
+        Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN,
+        Color.BLUE, Color.MAGENTA, Color.WHITE, Color.GRAY
+    };
+
+    /*
+     * Finds the "perceptually nearest" color from a given RGB value to
+     * the nearest solid color which is visually pleasing and maximally
+     * compatible with all RGB LEDs. This is done by converting to
+     * L*a*b colorspace and using a simple distance calculation.
+     */
+    private int findNearestSolidColor(int rgb) {
+        int nearest = mDefaultNotificationColor;
+        double distance = 3 * 255;
+
+        float[] original = convertRGBtoLAB(rgb);
+
+        for (int i = 0; i < NOTIFICATION_COLORS.length; i++) {
+            int color = NOTIFICATION_COLORS[i];
+            float[] target = convertRGBtoLAB(color);
+
+            double total = Math.sqrt(Math.pow(original[0] - target[0], 2) +
+                                     Math.pow(original[1] - target[1], 2) +
+                                     Math.pow(original[2] - target[2], 2));
+            if (total < distance) {
+                nearest = color;
+                distance = total;
+            }
+        }
+        return nearest;
+    }
+
+    private int generateLedColorForNotification(NotificationRecord ledNotification) {
+        final String packageName = ledNotification.sbn.getPackageName();
+        final String mapping = mapPackage(packageName);
+        int color = mDefaultNotificationColor;
+
+        if (mGeneratedPackageLedColors.containsKey(mapping)) {
+            return mGeneratedPackageLedColors.get(mapping);
+        }
+
+        PackageManager pm = getContext().getPackageManager();
+        Drawable icon;
+        try {
+            icon = pm.getApplicationIcon(mapping);
+        } catch (NameNotFoundException e) {
+            Slog.e(TAG, e.getMessage(), e);
+            return color;
+        }
+
+        Bitmap bitmap = null;
+        if (icon instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) icon).getBitmap();
+        } else {
+            bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        if (bitmap != null) {
+            Palette p = Palette.generate(bitmap);
+            color = findNearestSolidColor(p.getVibrantColor(0)) & 0xFFFFFF;
+            if (color != 0) {
+                Slog.d(TAG, "Generated color " + color + " for " + mapping);
+            }
+            bitmap.recycle();
+        }
+
+        mGeneratedPackageLedColors.put(mapping, color);
+
+        return color;
     }
 
     private String mapPackage(String pkg) {
