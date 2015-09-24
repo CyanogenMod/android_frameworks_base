@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Sallii sovelluksen nollata nykyiset alemman tason akun käytön tilastot.</string>
   <string name="silent_mode_priority">Prioriteetti</string>
   <string name="silent_mode_none">Ei mitään</string>
+  <string name="subscription_change_disabled_wifi_ap">Wi-Fi-tukiasema poistettiin käytöstä SIMin vaihdon vuoksi</string>
+  <string name="notify_turn_wifi_off_title">Poista Wi-Fi käytöstä</string>
 </resources>

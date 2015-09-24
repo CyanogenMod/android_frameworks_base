@@ -209,4 +209,6 @@
   <string name="permdesc_resetBatteryStats">Omogoča programu ponastavitev trenutnih podatkov uporabe baterije ob nizkem stanju.</string>
   <string name="silent_mode_priority">Prednost</string>
   <string name="silent_mode_none">Brez</string>
+  <string name="subscription_change_disabled_wifi_ap">Dostopna točka Wi-Fi je bila onemogočena zaradi spremembe naročnine SIM</string>
+  <string name="notify_turn_wifi_off_title">Izklopi Wi-Fi</string>
 </resources>

@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">Écran de verrouillage forcé</string>
   <string name="quick_settings_network_adb_label">ADB réseau</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Volume</string>
   <string name="quick_settings_screen_timeout_detail_title">Veille de l\'écran</string>
   <string name="quick_settings_usb_tether_label">Modem USB</string>
   <string name="quick_settings_heads_up_label">Notifications flottantes</string>
@@ -159,4 +160,5 @@
   <string name="dynamic_qs_tile_su_label">Accès root</string>
   <string name="fingerprint_try_again_hint">Veuillez lancer une nouvelle recherche</string>
   <string name="accessibility_dock_battery_level">Batterie de la station d\'accueil chargée à <xliff:g id="number">%d</xliff:g> pour cent.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Aucun élément trouvé</string>
 </resources>

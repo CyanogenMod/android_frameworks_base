@@ -154,4 +154,11 @@
   <string name="interruption_level_silent">เงียบ</string>
   <string name="zen_silent_with_warning">หน้ารบกวนยกเว้นนาฬิกาปลุก</string>
   <string name="quick_settings_remove">นำไทต์ออก</string>
+  <string name="quick_settings_dynamic_tile_detail_title">กระเบื้องแบบไดนามิก</string>
+  <string name="dynamic_qs_tile_next_alarm_label">การปลุกครั้งต่อไป</string>
+  <string name="dynamic_qs_tile_ime_selector_label">ตัวเลือก IME</string>
+  <string name="dynamic_qs_tile_su_label">การเข้าถึงราก</string>
+  <string name="fingerprint_try_again_hint">กรุณาสแกนอีกครั้ง</string>
+  <string name="accessibility_dock_battery_level">แท่นชาร์จแบตเตอร์รี่ <xliff:g id="number">%d</xliff:g> เปอร์เซ็นต์</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">ไม่พบรายการ</string>
 </resources>
