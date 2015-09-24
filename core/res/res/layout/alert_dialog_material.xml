@@ -111,15 +111,18 @@
         android:paddingEnd="12dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:gravity="bottom">
+        android:gravity="center_vertical">
         <Button android:id="@+id/button3"
             style="?attr/buttonBarNeutralButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight=".99"
+            android:maxLines="2"
+            android:ellipsize="end" />
         <Space
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight=".01"
             android:visibility="invisible" />
         <Button android:id="@+id/button2"
             style="?attr/buttonBarNegativeButtonStyle"
