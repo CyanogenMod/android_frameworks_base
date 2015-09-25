@@ -83,7 +83,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
     @Override
     protected void handleUpdateState(ProfileState state, Object arg) {
-        state.visible = true;
+        state.visible = mPm.hasPowerProfiles();
         state.profile = arg == null ? getCurrentProfileIndex() : (Integer) arg;
         state.label = mEntries[state.profile];
         state.icon = getIconForState(state.profile);
