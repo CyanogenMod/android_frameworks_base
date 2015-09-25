@@ -235,6 +235,11 @@ public class MediaRecorder
         public static final int FM_TUNER = 1998;
 
         /**
+         * {@hide}
+         */
+        public static final int FM = 99;
+
+        /**
          * Audio source for preemptible, low-priority software hotword detection
          * It presents the same gain and pre processing tuning as {@link #VOICE_RECOGNITION}.
          * <p>
