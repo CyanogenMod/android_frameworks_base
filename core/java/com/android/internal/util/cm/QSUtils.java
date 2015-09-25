@@ -128,6 +128,9 @@ public class QSUtils {
                 case QSConstants.TILE_PERFORMANCE:
                     removeTile = !deviceSupportsPowerProfiles(context);
                     break;
+                case QSConstants.TILE_BATTERY_SAVER:
+                    removeTile = deviceSupportsPowerProfiles(context);
+                    break;
 
                 case QSConstants.DYNAMIC_TILE_SU:
                     removeTile = !supportsRootAccess();
