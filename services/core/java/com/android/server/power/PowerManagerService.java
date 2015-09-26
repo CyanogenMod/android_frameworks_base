@@ -492,6 +492,7 @@ public final class PowerManagerService extends SystemService
     SensorEventListener mProximityListener;
 
     private PerformanceManager mPerformanceManager;
+    private boolean mHasPowerProfilesSupport;
 
     public PowerManagerService(Context context) {
         super(context);
@@ -553,6 +554,7 @@ public final class PowerManagerService extends SystemService
             mBatteryManagerInternal = getLocalService(BatteryManagerInternal.class);
 
             PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+            mHasPowerProfilesSupport = pm.hasPowerProfiles();
             mScreenBrightnessSettingMinimum = pm.getMinimumScreenBrightnessSetting();
             mScreenBrightnessSettingMaximum = pm.getMaximumScreenBrightnessSetting();
             mScreenBrightnessSettingDefault = pm.getDefaultScreenBrightnessSetting();
@@ -3397,7 +3399,7 @@ public final class PowerManagerService extends SystemService
             final long ident = Binder.clearCallingIdentity();
             try {
                 boolean changed = setLowPowerModeInternal(mode);
-                if (changed) {
+                if (changed && mHasPowerProfilesSupport) {
                     mPerformanceManager.setPowerProfile(mLowPowerModeEnabled ?
                             PowerManager.PROFILE_POWER_SAVE : PowerManager.PROFILE_BALANCED);
                 }
