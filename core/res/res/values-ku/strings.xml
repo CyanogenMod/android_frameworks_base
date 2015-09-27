@@ -1571,7 +1571,6 @@ _پاڵاوتن___پاڵێو كە چەمى هەموو ڕووداوى بەكار�
   <string name="wallpaper_binding_label">وێنەی سەرشاشە</string>
   <string name="chooser_wallpaper">گۆڕینی دیوارپۆش</string>
   <string name="notification_listener_binding_label">گوێگری تێبینییەکان</string>
-  <string name="alternate_eri_file">/data/eri.xml</string>
   <string name="vpn_title">VPN چالاکرا</string>
   <string name="vpn_title_long">VPN چالاکراو لەلایەن <xliff:g id="app" example="FooVPN client">%s</xliff:g></string>
   <string name="vpn_text">دەست لێدە بۆ بەڕێوەبردنی تۆڕەکە.</string>

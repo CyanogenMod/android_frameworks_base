@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Ermöglicht der App, die Akku-Verlaufsdetails zurückzusetzen.</string>
   <string name="silent_mode_priority">Wichtig</string>
   <string name="silent_mode_none">Keine</string>
+  <string name="subscription_change_disabled_wifi_ap">WLAN-Hotspot wurde aufgrund von Änderungen am SIM-Abonnement deaktiviert</string>
+  <string name="notify_turn_wifi_off_title">WLAN ausschalten</string>
 </resources>

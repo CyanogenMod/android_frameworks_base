@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
   <string name="silent_mode_priority">Приоритет</string>
   <string name="silent_mode_none">Ниједан</string>
+  <string name="subscription_change_disabled_wifi_ap">Онемогућен Wi-Fi hotspot због промене SIM претплате</string>
+  <string name="notify_turn_wifi_off_title">Искључи Wi-Fi</string>
 </resources>

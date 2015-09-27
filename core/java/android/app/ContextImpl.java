@@ -870,9 +870,11 @@ class ContextImpl extends Context {
 
     @Override
     public void recreateTheme() {
-        Resources.Theme newTheme = mResources.newTheme();
-        newTheme.applyStyle(mThemeResource, true);
-        mTheme.setTo(newTheme);
+        if (mTheme != null) {
+            Resources.Theme newTheme = mResources.newTheme();
+            newTheme.applyStyle(mThemeResource, true);
+            mTheme.setTo(newTheme);
+        }
     }
 
     @Override
@@ -2346,8 +2348,8 @@ class ContextImpl extends Context {
                         packageInfo.getAppDir(), overrideConfiguration, compatInfo, activityToken,
                         mOuterContext, packageInfo.getApplicationInfo().isThemeable) :
                 mResourcesManager.getTopLevelThemedResources(packageInfo.getResDir(), displayId,
-                        packageInfo.getPackageName(), themePackageName, compatInfo, activityToken,
-                        packageInfo.getApplicationInfo().isThemeable);
+                        packageInfo.getPackageName(), themePackageName, overrideConfiguration,
+                        compatInfo, activityToken, packageInfo.getApplicationInfo().isThemeable);
             }
         }
         mResources = resources;

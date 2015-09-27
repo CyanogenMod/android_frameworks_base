@@ -67,7 +67,7 @@ public class DockBatteryMeterView extends BatteryMeterView {
                             mMeterMode != BatteryMeterMode.BATTERY_METER_TEXT)) {
                         setContentDescription(context.getString(
                                 R.string.accessibility_dock_battery_level, level));
-                        invalidateIfVisible();
+                        invalidate();
                         setVisibility(View.VISIBLE);
                     } else {
                         setContentDescription(null);
