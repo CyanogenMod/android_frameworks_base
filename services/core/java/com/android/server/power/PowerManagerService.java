@@ -803,6 +803,8 @@ public final class PowerManagerService extends SystemService
             // Turn setting off if powered
             Settings.Global.putInt(mContext.getContentResolver(),
                     Settings.Global.LOW_POWER_MODE, 0);
+            // update performance profile
+            mPerformanceManager.setPowerProfile(PowerManager.PROFILE_BALANCED);
             mLowPowerModeSetting = false;
         }
         final boolean autoLowPowerModeEnabled = !mIsPowered && mAutoLowPowerModeConfigured
