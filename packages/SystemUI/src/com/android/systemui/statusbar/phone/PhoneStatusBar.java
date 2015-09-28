@@ -907,8 +907,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mUnlockMethodCache.addListener(this);
         startKeyguard();
 
-        mDozeServiceHost = new DozeServiceHost();
-        putComponent(DozeHost.class, mDozeServiceHost);
+        mDozeServiceHost = (DozeServiceHost) getComponent(DozeHost.class);
+        if (mDozeServiceHost == null) {
+            mDozeServiceHost = new DozeServiceHost();
+            putComponent(DozeHost.class, mDozeServiceHost);
+        }
         putComponent(PhoneStatusBar.class, this);
 
         setControllerUsers();
