@@ -4637,7 +4637,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     private boolean shouldIncludeResolveActivity(Intent intent) {
         synchronized(mPackages) {
             AppSuggestManager suggest = AppSuggestManager.getInstance(mContext);
-            return (suggest != null) ? suggest.handles(intent) : false;
+            return mResolverReplaced && (suggest != null) ? suggest.handles(intent) : false;
         }
     }
 
