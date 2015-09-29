@@ -1510,7 +1510,8 @@
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="signature"
         android:label="@string/permlab_interactAcrossUsersFull"
-        android:description="@string/permdesc_interactAcrossUsersFull" />
+        android:description="@string/permdesc_interactAcrossUsersFull"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- @SystemApi @hide Allows an application to call APIs that allow it to query and manage
          users on the device. This permission is not available to
@@ -1835,7 +1836,8 @@
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="signature"
         android:label="@string/permlab_setPreferredApplications"
-        android:description="@string/permdesc_setPreferredApplications" />
+        android:description="@string/permdesc_setPreferredApplications"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to receive the
          {@link android.content.Intent#ACTION_BOOT_COMPLETED} that is
@@ -3275,18 +3277,6 @@
                 <!-- MCS always uses REMOTE_INTENT: category=MASTER_CLEAR -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="android.intent.category.MASTER_CLEAR" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="com.android.server.AppsFailureReceiver" >
-            <intent-filter>
-                <action android:name="com.tmobile.intent.action.APP_FAILURE" />
-                <action android:name="com.tmobile.intent.action.APP_FAILURE_RESET" />
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <action android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
-                <category android:name="com.tmobile.intent.category.THEME_PACKAGE_INSTALL_STATE_CHANGE" />
-                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 

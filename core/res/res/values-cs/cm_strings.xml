@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žádný</string>
+  <string name="subscription_change_disabled_wifi_ap">Vypnutý hotspot Wi-Fi kvůli změně připojení SIM</string>
+  <string name="notify_turn_wifi_off_title">Vypnout Wi-Fi</string>
 </resources>

@@ -1313,7 +1313,6 @@
   <string name="wallpaper_binding_label">تام قەغىزى</string>
   <string name="chooser_wallpaper">تام قەغەز ئۆزگەرت</string>
   <string name="notification_listener_binding_label">ئۇقتۇرۇش تىڭشىغۇچ</string>
-  <string name="alternate_eri_file">/data/eri.xml</string>
   <string name="vpn_title">VPN ئاكتىپلاندى</string>
   <string name="vpn_title_long">VPN نى <xliff:g id="APP">%s</xliff:g> ئاكتىپلىدى</string>
   <string name="vpn_text">چېكىلسە تورنى باشقۇرىدۇ.</string>

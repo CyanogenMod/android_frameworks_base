@@ -1496,7 +1496,6 @@
   <string name="chooser_wallpaper">Camudar fondu de pantalla</string>
   <string name="notification_listener_binding_label">Deteutor de notificaciones</string>
   <string name="condition_provider_service_binding_label">Fornidor de condiciones</string>
-  <string name="alternate_eri_file">/data/eri.xml</string>
   <string name="vpn_title">VPN activada</string>
   <string name="vpn_title_long">VPN activada por <xliff:g id="APP">%s</xliff:g></string>
   <string name="vpn_text">Toca p\'alministrar la rede.</string>
@@ -1824,9 +1823,6 @@
   <string name="deleted_key"><xliff:g id="key" example="4">%1$s</xliff:g> desaniciáu</string>
   <string name="managed_profile_label_badge"><xliff:g id="label" example="Email">%1$s</xliff:g> de trabayu</string>
   <string name="time_placeholder">--</string>
-  <string name="radial_numbers_typeface">sans-serif</string>
-  <string name="sans_serif">sans-serif</string>
-  <string name="day_of_week_label_typeface">sans-serif</string>
   <string name="lock_to_app_toast">Pa desactivar esta pantalla, caltén primíos al empar los botones de retrocesu y Visión xeneral.</string>
   <string name="lock_to_app_toast_accessible">Pa desactivar esta pantalla, caltén primíu\'l botón Visión xeneral.</string>
   <string name="lock_to_app_toast_locked">Fixóse la pantalla. La organización nun pue desactivala.</string>

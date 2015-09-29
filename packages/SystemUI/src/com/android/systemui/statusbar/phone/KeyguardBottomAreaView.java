@@ -63,6 +63,7 @@ import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.KeyguardAffordanceView;
 import com.android.systemui.statusbar.KeyguardIndicationController;
@@ -492,7 +493,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        mAccessibilityController.removeStateChangedCallback(this);
+        getContext().unregisterReceiver(mDevicePolicyReceiver);
+        KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mUpdateMonitorCallback);
         mTrustDrawable.stop();
+        mShortcutHelper.cleanup();
     }
 
     private void updateLockIcon() {
@@ -529,6 +534,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         if (mUnlockMethodCache.isFaceUnlockRunning()) {
             iconRes = com.android.internal.R.drawable.ic_account_circle;
         } else if (mUnlockMethodCache.isFingerUnlockRunning()
+                && KeyguardViewMediator.isFingerprintActive(mContext, mLockPatternUtils)
                 && !KeyguardUpdateMonitor.getInstance(mContext).isMaxFingerprintAttemptsReached()) {
             iconRes = R.drawable.ic_fingerprint;
         } else if (mUnlockMethodCache.isCurrentlyInsecure()) {
@@ -699,6 +705,10 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     public boolean isTargetCustom(LockscreenShortcutsHelper.Shortcuts shortcut) {
         return mShortcutHelper.isTargetCustom(shortcut);
+    }
+
+    public void cleanup() {
+        mUnlockMethodCache.removeListener(this);
     }
 
     @Override

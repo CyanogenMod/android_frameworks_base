@@ -347,5 +347,8 @@
     <string name="silent_mode_none">None</string>
 
     <!-- Wifi Hotspot disabled due to subscription change -->
-    <string name="subscription_change_disabled_wifi_ap">Disabled WiFi hotspot due to SIM subscription change</string>
+    <string name="subscription_change_disabled_wifi_ap">Disabled Wi-Fi hotspot due to SIM subscription change</string>
+
+    <!-- WiFi turn off notification action text -->
+    <string name="notify_turn_wifi_off_title">Turn Wi-Fi off</string>
 </resources>

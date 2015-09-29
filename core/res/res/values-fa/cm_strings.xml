@@ -209,4 +209,6 @@
   <string name="permdesc_resetBatteryStats">به برنامه اجازه می‌دهد داده‌های مربوط به استفاده از باتری با سطح شارژ پایین را مجددا تنظیم کند.</string>
   <string name="silent_mode_priority">اولویت‌دار</string>
   <string name="silent_mode_none">هیچ‌کدام</string>
+  <string name="subscription_change_disabled_wifi_ap">نقطه اتصال قابل حمل وای‌فای به دلیل تغییر تعرفه سیم کارت، غیرفعال شد</string>
+  <string name="notify_turn_wifi_off_title">خاموش کردن وای‌فای</string>
 </resources>

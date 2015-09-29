@@ -195,8 +195,10 @@ public class KeyguardUpdateMonitorCallback {
 
     /**
      * Called when a fingerprint is recognized.
+     * @param error true if fingerprint service reported an error
+     * @param errorCode if {@code error} was true, this describes the error code
      */
-    public void onFingerprintAttemptFailed() { }
+    public void onFingerprintAttemptFailed(boolean error, int errorCode) { }
 
     /**
      * Called when fingerprint is acquired but not yet recognized

@@ -976,7 +976,8 @@ final class ApplicationPackageManager extends PackageManager {
 
         Resources r = mContext.mMainThread.getTopLevelThemedResources(
                 app.uid == Process.myUid() ? app.sourceDir : app.publicSourceDir,
-                Display.DEFAULT_DISPLAY, mContext.mPackageInfo, app.packageName, themePkgName);
+                Display.DEFAULT_DISPLAY, null, mContext.mPackageInfo, app.packageName,
+                themePkgName);
         if (r != null) {
             return r;
         }

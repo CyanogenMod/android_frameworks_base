@@ -63,6 +63,7 @@ public class VolumeUI extends SystemUI {
     private int mDismissDelay;
 
     private Configuration mConfiguration;
+    private ZenModeControllerImpl mZenModeController;
 
     @Override
     public void start() {
@@ -85,7 +86,6 @@ public class VolumeUI extends SystemUI {
         super.onConfigurationChanged(newConfig);
 
         if (isThemeChange(newConfig)) {
-            mContext.recreateTheme();
             initPanel();
         }
         mConfiguration.setTo(newConfig);
@@ -124,8 +124,14 @@ public class VolumeUI extends SystemUI {
     }
 
     private void initPanel() {
+        if (mZenModeController == null) {
+            mZenModeController = new ZenModeControllerImpl(mContext, mHandler);
+        }
+        if (mPanel != null) {
+            mPanel.cleanup();
+        }
         mDismissDelay = mContext.getResources().getInteger(R.integer.volume_panel_dismiss_delay);
-        mPanel = new VolumePanel(mContext, new ZenModeControllerImpl(mContext, mHandler));
+        mPanel = new VolumePanel(mContext, mZenModeController);
         mPanel.setCallback(new VolumePanel.Callback() {
             @Override
             public void onZenSettings() {
@@ -205,7 +211,7 @@ public class VolumeUI extends SystemUI {
 
         @Override
         public ZenModeController getZenController() {
-            return mDialogPanel.getZenController();
+            return mZenModeController;
         }
 
         @Override
