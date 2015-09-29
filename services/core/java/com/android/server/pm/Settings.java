@@ -28,6 +28,8 @@ import static android.os.Process.PACKAGE_INFO_GID;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -39,6 +41,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.LogPrinter;
 
+import com.android.internal.R;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.JournaledFile;
 import com.android.internal.util.XmlUtils;
@@ -1834,6 +1837,36 @@ final class Settings {
 
     boolean wasPrebundledPackageInstalledLPr(String packageName) {
         return mPrebundledPackages.contains(packageName);
+    }
+
+    boolean isPrebundledPackagedNeededForRegion(String packageName, String mcc) {
+        // Default fallback on lack of mcc or bad package
+        if (TextUtils.isEmpty(mcc) || TextUtils.isEmpty(packageName)) {
+            return false;
+        }
+        // Per MCC configuration isn't set up in system assetmanager this early
+        // Create a new one, set it temporarily, hacks up all the things
+        Configuration originalConfiguration = Resources.getSystem().getConfiguration();
+        Configuration tempConfiguration = new Configuration();
+        tempConfiguration.setTo(originalConfiguration);
+        tempConfiguration.mcc = Integer.parseInt(mcc);
+        Resources.getSystem().updateConfiguration(tempConfiguration,
+                Resources.getSystem().getDisplayMetrics());
+
+        String[] prebundledArray
+                = Resources.getSystem().getStringArray(R.array.config_region_locked_packages);
+        if (prebundledArray != null) {
+            for (String pkg : prebundledArray) {
+                if (TextUtils.equals(packageName, pkg)) {
+                    return true;
+                }
+            }
+        }
+
+        //Revert the configuration
+        Resources.getSystem().updateConfiguration(originalConfiguration,
+                Resources.getSystem().getDisplayMetrics());
+        return false;
     }
 
     void writeDisabledSysPackageLPr(XmlSerializer serializer, final PackageSetting pkg)

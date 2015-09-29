@@ -826,6 +826,14 @@ public abstract class PackageManager {
     public static final int INSTALL_FAILED_UNINSTALLED_PREBUNDLE = -403;
 
     /**
+     * Used for prebundles
+     * Installation failed for a prebundled app because it wasn't needed in the default
+     * mobile country exported by the hardware
+     * @hide
+     */
+    public static final int INSTALL_FAILED_REGION_LOCKED_PREBUNDLE = -404; //bloat not found
+
+    /**
      * Flag parameter for {@link #deletePackage} to indicate that you don't want to delete the
      * package's data directory.
      *
