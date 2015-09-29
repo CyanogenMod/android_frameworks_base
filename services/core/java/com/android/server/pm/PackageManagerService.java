@@ -40,6 +40,7 @@ import static android.content.pm.PackageManager.INSTALL_FAILED_INVALID_APK;
 import static android.content.pm.PackageManager.INSTALL_FAILED_INVALID_INSTALL_LOCATION;
 import static android.content.pm.PackageManager.INSTALL_FAILED_MISSING_SHARED_LIBRARY;
 import static android.content.pm.PackageManager.INSTALL_FAILED_PACKAGE_CHANGED;
+import static android.content.pm.PackageManager.INSTALL_FAILED_REGION_LOCKED_PREBUNDLE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_REPLACE_COULDNT_DELETE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_SHARED_USER_INCOMPATIBLE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_TEST_ONLY;
@@ -63,6 +64,7 @@ import static com.android.internal.util.ArrayUtils.appendInt;
 import static com.android.internal.util.ArrayUtils.removeInt;
 
 import android.app.PackageInstallObserver;
+import android.content.res.Configuration;
 import android.util.ArrayMap;
 
 import com.android.internal.R;
@@ -453,6 +455,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     final Settings mSettings;
     boolean mRestoredSettings;
+
+    private Resources mCustomResources;
 
     // System configuration read by SystemConfig.
     final int[] mGlobalGids;
@@ -1696,9 +1700,11 @@ public class PackageManagerService extends IPackageManager.Stub {
             scanDirLI(oemAppDir, PackageParser.PARSE_IS_SYSTEM
                     | PackageParser.PARSE_IS_SYSTEM_DIR, scanFlags, 0);
 
+            createAndSetCustomResources();
             // Collect all prebundled packages.
             scanDirLI(Environment.getPrebundledDirectory(),
                     PackageParser.PARSE_IS_PREBUNDLED_DIR, scanFlags, 0);
+            mCustomResources = null;
 
             if (DEBUG_UPGRADE) Log.v(TAG, "Running installd update commands");
             mInstaller.moveFiles();
@@ -4537,6 +4543,13 @@ public class PackageManagerService extends IPackageManager.Stub {
                     // gone.  Assume that the user uninstalled it intentionally: do not reinstall.
                     throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
                             "skip reinstall for " + pkg.packageName);
+                } else if (existingSettings == null && mCustomResources != null &&
+                        !mSettings.isPrebundledPackagedNeededForRegion(pkg.packageName,
+                        SystemProperties.get("ro.prebundled.mcc"), mCustomResources)) {
+                    // The prebundled app is not needed for the default mobile country code,
+                    // skip installing it
+                    throw new PackageManagerException(INSTALL_FAILED_REGION_LOCKED_PREBUNDLE,
+                            "skip install for " + pkg.packageName);
                 } else if (existingSettings != null
                         && existingSettings.versionCode >= pkg.mVersionCode
                         && !existingSettings.codePathString.contains(
@@ -14740,6 +14753,16 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (tm != null) {
             tm.processThemeResources(pkgName);
         }
+    }
+
+    private void createAndSetCustomResources() {
+        Configuration tempConfiguration = new Configuration();
+        String mcc = SystemProperties.get("ro.prebundled.mcc");
+        if (!TextUtils.isEmpty(mcc)) {
+            tempConfiguration.mcc = Integer.parseInt(mcc);
+        }
+        mCustomResources = new Resources(new AssetManager(), new DisplayMetrics(),
+                tempConfiguration);
     }
 
     /**
