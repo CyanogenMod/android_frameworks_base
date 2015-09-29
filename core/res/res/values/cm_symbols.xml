@@ -363,4 +363,7 @@
 
     <!-- Wifi AP Disabled from Subscription change -->
     <java-symbol type="string" name="subscription_change_disabled_wifi_ap" />
+
+    <!-- Region locked prebundled packages -->
+    <java-symbol type="array" name="config_region_locked_packages" />
 </resources>
