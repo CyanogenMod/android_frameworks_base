@@ -22,4 +22,6 @@
     <!-- Whether safe headphone volume is enabled or not (country specific). -->
     <bool name="config_safe_media_volume_enabled">false</bool>
 
+    <string-array name="config_region_locked_packages">
+    </string-array>
 </resources>
