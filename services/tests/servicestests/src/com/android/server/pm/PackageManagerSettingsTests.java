@@ -195,4 +195,20 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         hasEnabled = ps.getEnabledComponents(0) != null && ps.getEnabledComponents(0).size() > 0;
         assertEquals(false, hasEnabled);
     }
+
+    public void testPrebundledRegionLockedAccessible() {
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        String expectedPackageNeededForRegion = "com.fat.bloat.spam";
+        String expectedMccCorrect = "310";
+        assertTrue(settings.isPrebundledPackagedNeededForRegion(expectedPackageNeededForRegion,
+                expectedMccCorrect));
+    }
+
+    public void testPrebundledRegionLocked() {
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        String expectedPackageNeededForRegion = "com.fat.bloat.spam";
+        String expectedMccWrong = "311";
+        assertFalse(settings.isPrebundledPackagedNeededForRegion(expectedPackageNeededForRegion,
+                expectedMccWrong));
+    }
 }
