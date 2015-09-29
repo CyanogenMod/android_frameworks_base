@@ -148,4 +148,7 @@
          package name as possible to avoid other packages being un-themed unintentionally -->
     <string-array name="non_themeable_packages" translatable="false">
     </string-array>
+
+    <string-array name="config_region_locked_packages" translatable="false">
+    </string-array>
 </resources>
