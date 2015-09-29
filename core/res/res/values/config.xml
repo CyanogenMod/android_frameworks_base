@@ -2371,4 +2371,8 @@
     <!-- Config to disable showing ringtones from removable storage -->
     <bool name="config_excludeRingtonesFromRemovableStorage">false</bool>
 
+    <!-- Config to enable installation of region locked packages -->
+    <string-array name="config_region_locked_packages" translatable="false">
+    </string-array>
+
 </resources>
