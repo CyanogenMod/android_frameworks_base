@@ -16,6 +16,7 @@
 
 package android.hardware;
 
+/** @hide */
 interface IThermalListenerCallback {
     void onThermalChanged(int state);
 }

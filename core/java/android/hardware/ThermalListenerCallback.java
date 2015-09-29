@@ -16,6 +16,7 @@
 
 package android.hardware;
 
+/** @hide */
 public abstract class ThermalListenerCallback extends IThermalListenerCallback.Stub {
     public static final class State {
         public static final int STATE_UNKNOWN = -1;
