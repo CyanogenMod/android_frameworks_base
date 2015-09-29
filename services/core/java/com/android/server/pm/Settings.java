@@ -34,6 +34,8 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.IntentFilterVerificationInfo;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -57,6 +59,7 @@ import android.util.SparseLongArray;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.util.ArrayUtils;
+import com.android.internal.R;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.JournaledFile;
@@ -2490,6 +2493,25 @@ final class Settings {
             return false;
         }
         return mPrebundledPackages.get(userId).contains(packageName);
+    }
+
+    boolean isPrebundledPackagedNeededForRegion(String packageName, String mcc,
+            Resources configuredResources) {
+        // Default fallback on lack of mcc or bad package
+        if (TextUtils.isEmpty(mcc) || TextUtils.isEmpty(packageName)) {
+            return false;
+        }
+
+        String[] prebundledArray
+                = configuredResources.getStringArray(R.array.config_region_locked_packages);
+        if (prebundledArray != null) {
+            for (String pkg : prebundledArray) {
+                if (TextUtils.equals(packageName, pkg)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     void writeDisabledSysPackageLPr(XmlSerializer serializer, final PackageSetting pkg)
