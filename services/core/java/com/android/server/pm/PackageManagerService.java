@@ -40,6 +40,7 @@ import static android.content.pm.PackageManager.INSTALL_FAILED_INVALID_APK;
 import static android.content.pm.PackageManager.INSTALL_FAILED_INVALID_INSTALL_LOCATION;
 import static android.content.pm.PackageManager.INSTALL_FAILED_MISSING_SHARED_LIBRARY;
 import static android.content.pm.PackageManager.INSTALL_FAILED_PACKAGE_CHANGED;
+import static android.content.pm.PackageManager.INSTALL_FAILED_REGION_LOCKED_PREBUNDLE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_REPLACE_COULDNT_DELETE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_SHARED_USER_INCOMPATIBLE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_TEST_ONLY;
@@ -4537,6 +4538,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                     // gone.  Assume that the user uninstalled it intentionally: do not reinstall.
                     throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
                             "skip reinstall for " + pkg.packageName);
+                } else if (!mSettings.isPrebundledPackagedNeededForRegion(pkg.packageName,
+                        SystemProperties.get("ro.prebundled.mcc")) && existingSettings == null) {
+                    // The prebundled app is not needed for the default mobile country code,
+                    // skip installing it
+                    throw new PackageManagerException(INSTALL_FAILED_REGION_LOCKED_PREBUNDLE,
+                            "skip install for " + pkg.packageName);
                 } else if (existingSettings != null
                         && existingSettings.versionCode >= pkg.mVersionCode
                         && !existingSettings.codePathString.contains(
