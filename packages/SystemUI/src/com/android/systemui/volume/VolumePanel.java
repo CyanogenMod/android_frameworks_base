@@ -73,6 +73,8 @@ import com.android.systemui.DemoMode;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.ZenModeController;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
@@ -283,8 +285,8 @@ public class VolumePanel extends Handler implements DemoMode {
     private ContentObserver mSettingsObserver = new ContentObserver(this) {
         @Override
         public void onChange(boolean selfChange) {
-            mVolumeLinkNotification = Settings.Secure.getInt(mContext.getContentResolver(),
-                    Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+            mVolumeLinkNotification = CMSettings.Secure.getInt(mContext.getContentResolver(),
+                    CMSettings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
         }
     };
     private BroadcastReceiver mReceiver;

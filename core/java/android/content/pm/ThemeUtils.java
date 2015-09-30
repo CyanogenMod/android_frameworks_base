@@ -31,13 +31,14 @@ import android.net.Uri;
 import android.os.FileUtils;
 import android.os.SystemProperties;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.provider.ThemesContract;
 import android.provider.ThemesContract.ThemesColumns;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+
+import cyanogenmod.providers.CMSettings;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -117,9 +118,9 @@ public class ThemeUtils {
     // Package name for any app which does not have a specific theme applied
     private static final String DEFAULT_PKG = "default";
 
-    private static final String SETTINGS_DB =
-            "/data/data/com.android.providers.settings/databases/settings.db";
-    private static final String SETTINGS_SECURE_TABLE = "secure";
+    private static final String CMSETTINGS_DB =
+            "/data/data/org.cyanogenmod.cmsettings/databases/cmsettings.db";
+    private static final String CMSETTINGS_SECURE_TABLE = "secure";
 
     /**
      * IDMAP hash version code used to alter the resulting hash and force recreating
@@ -580,8 +581,8 @@ public class ThemeUtils {
     }
 
     public static String getDefaultThemePackageName(Context context) {
-        final String defaultThemePkg = Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.DEFAULT_THEME_PACKAGE);
+        final String defaultThemePkg = CMSettings.Secure.getString(context.getContentResolver(),
+                CMSettings.Secure.DEFAULT_THEME_PACKAGE);
         if (!TextUtils.isEmpty(defaultThemePkg)) {
             PackageManager pm = context.getPackageManager();
             try {
@@ -723,14 +724,14 @@ public class ThemeUtils {
         ThemeConfig config = null;
         SQLiteDatabase db = null;
         try {
-            db = SQLiteDatabase.openDatabase(SETTINGS_DB, null,
+            db = SQLiteDatabase.openDatabase(CMSETTINGS_DB, null,
                     SQLiteDatabase.OPEN_READONLY);
             if (db != null) {
                 String selection = "name=?";
                 String[] selectionArgs =
-                        { Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY };
+                        { CMSettings.Secure.NAME_THEME_CONFIG };
                 String[] columns = {"value"};
-                Cursor c = db.query(SETTINGS_SECURE_TABLE, columns, selection, selectionArgs,
+                Cursor c = db.query(CMSETTINGS_SECURE_TABLE, columns, selection, selectionArgs,
                         null, null, null);
                 if (c != null) {
                     if (c.getCount() > 0) {
@@ -744,7 +745,7 @@ public class ThemeUtils {
                 }
             }
         } catch (Exception e) {
-            Log.w(TAG, "Unable to open " + SETTINGS_DB, e);
+            Log.w(TAG, "Unable to open " + CMSETTINGS_DB, e);
         } finally {
             if (db != null) {
                 db.close();

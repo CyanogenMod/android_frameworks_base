@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.UserHandle;
-import android.provider.Settings;
 import android.util.Log;
 
 import android.widget.RemoteViews;
@@ -81,6 +80,7 @@ import com.android.systemui.volume.VolumeComponent;
 
 import cyanogenmod.app.CustomTileListenerService;
 import cyanogenmod.app.StatusBarPanelCustomTile;
+import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -389,8 +389,8 @@ public class QSTileHost implements QSTile.Host {
     private List<String> loadTileSpecs() {
         final Resources res = mContext.getResources();
         final String defaultTileList = res.getString(R.string.quick_settings_tiles_default);
-        String tileList = Settings.Secure.getStringForUser(mContext.getContentResolver(),
-                Settings.Secure.QS_TILES, UserHandle.USER_CURRENT);
+        String tileList = CMSettings.Secure.getStringForUser(mContext.getContentResolver(),
+                CMSettings.Secure.QS_TILES, UserHandle.USER_CURRENT);
         if (DEBUG) Log.d(TAG, "Config string: "+tileList);
         if (tileList == null) {
             tileList = res.getString(R.string.quick_settings_tiles);
@@ -467,10 +467,10 @@ public class QSTileHost implements QSTile.Host {
                 mContext.getContentResolver().unregisterContentObserver(this);
             }
             mContext.getContentResolver().registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.QS_TILES),
+                    CMSettings.Secure.getUriFor(CMSettings.Secure.QS_TILES),
                     false, this, mUserTracker.getCurrentUserId());
             mContext.getContentResolver().registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.QS_USE_MAIN_TILES),
+                    CMSettings.Secure.getUriFor(CMSettings.Secure.QS_USE_MAIN_TILES),
                     false, this, mUserTracker.getCurrentUserId());
             mRegistered = true;
         }

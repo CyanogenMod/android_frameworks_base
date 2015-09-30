@@ -18,12 +18,12 @@ package com.android.systemui.qs.tiles;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.Settings;
-import android.provider.Settings.Global;
 
 import com.android.systemui.qs.GlobalSetting;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.R;
+
+import cyanogenmod.providers.CMSettings;
 
 /** Quick settings tile: Heads up **/
 public class HeadsUpTile extends QSTile<QSTile.BooleanState> {
@@ -35,7 +35,8 @@ public class HeadsUpTile extends QSTile<QSTile.BooleanState> {
     public HeadsUpTile(Host host) {
         super(host);
 
-        mSetting = new GlobalSetting(mContext, mHandler, Global.HEADS_UP_NOTIFICATIONS_ENABLED) {
+        mSetting = new GlobalSetting(mContext, mHandler,
+                CMSettings.Global.HEADS_UP_NOTIFICATIONS_ENABLED) {
             @Override
             protected void handleValueChanged(int value) {
                 handleRefreshState(value);
@@ -60,9 +61,8 @@ public class HeadsUpTile extends QSTile<QSTile.BooleanState> {
     }
 
     private void setEnabled(boolean enabled) {
-        Settings.Global.putInt(mContext.getContentResolver(),
-                Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED,
-                enabled ? 1 : 0);
+        CMSettings.Global.putInt(mContext.getContentResolver(),
+                CMSettings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, enabled ? 1 : 0);
     }
 
     @Override
