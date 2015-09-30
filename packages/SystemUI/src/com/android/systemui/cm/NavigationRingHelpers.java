@@ -30,6 +30,8 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import com.android.systemui.R;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.net.URISyntaxException;
 
 import static com.android.internal.util.cm.NavigationRingConstants.*;
@@ -47,8 +49,8 @@ public class NavigationRingHelpers {
         boolean isDefault = true;
 
         for (int i = 0; i < MAX_ACTIONS; i++) {
-            result[i] = Settings.Secure.getStringForUser(cr,
-                    Settings.Secure.NAVIGATION_RING_TARGETS[i], UserHandle.USER_CURRENT);
+            result[i] = CMSettings.Secure.getStringForUser(cr,
+                    CMSettings.Secure.NAVIGATION_RING_TARGETS[i], UserHandle.USER_CURRENT);
             if (result[i] != null) {
                 isDefault = false;
             }
@@ -79,11 +81,11 @@ public class NavigationRingHelpers {
 
     public static void resetActionsToDefaults(Context context) {
         final ContentResolver cr = context.getContentResolver();
-        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[0], null,
+        CMSettings.Secure.putStringForUser(cr, CMSettings.Secure.NAVIGATION_RING_TARGETS[0], null,
                 UserHandle.USER_CURRENT);
-        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[1],
+        CMSettings.Secure.putStringForUser(cr, CMSettings.Secure.NAVIGATION_RING_TARGETS[1],
                 ACTION_ASSIST, UserHandle.USER_CURRENT);
-        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[2], null,
+        CMSettings.Secure.putStringForUser(cr, CMSettings.Secure.NAVIGATION_RING_TARGETS[2], null,
                 UserHandle.USER_CURRENT);
     }
 
