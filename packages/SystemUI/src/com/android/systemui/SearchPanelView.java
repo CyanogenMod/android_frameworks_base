@@ -56,6 +56,8 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.StatusBarPanel;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -434,8 +436,8 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
     public void shortcutPicked(String uri) {
         if (uri != null) {
             int index = mTargetViews.indexOf(mSelectedView);
-            Settings.Secure.putStringForUser(mContext.getContentResolver(),
-                    Settings.Secure.NAVIGATION_RING_TARGETS[index], uri, UserHandle.USER_CURRENT);
+            CMSettings.Secure.putStringForUser(mContext.getContentResolver(),
+                    CMSettings.Secure.NAVIGATION_RING_TARGETS[index], uri, UserHandle.USER_CURRENT);
         }
     }
 
@@ -451,7 +453,7 @@ public class SearchPanelView extends FrameLayout implements StatusBarPanel,
             ContentResolver resolver = mContext.getContentResolver();
             for (int i = 0; i < NavigationRingHelpers.MAX_ACTIONS; i++) {
                 resolver.registerContentObserver(
-                        Settings.Secure.getUriFor(Settings.Secure.NAVIGATION_RING_TARGETS[i]),
+                        CMSettings.Secure.getUriFor(CMSettings.Secure.NAVIGATION_RING_TARGETS[i]),
                         false, this, UserHandle.USER_ALL);
             }
         }
