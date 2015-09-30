@@ -460,11 +460,11 @@ public class ThemeService extends IThemeService.Stub {
 
     private void doApplyDefaultTheme() {
         final ContentResolver resolver = mContext.getContentResolver();
-        final String defaultThemePkg = Settings.Secure.getString(resolver,
-                Settings.Secure.DEFAULT_THEME_PACKAGE);
+        final String defaultThemePkg = CMSettings.Secure.getString(resolver,
+                CMSettings.Secure.DEFAULT_THEME_PACKAGE);
         if (!TextUtils.isEmpty(defaultThemePkg)) {
-            String defaultThemeComponents = Settings.Secure.getString(resolver,
-                    Settings.Secure.DEFAULT_THEME_COMPONENTS);
+            String defaultThemeComponents = CMSettings.Secure.getString(resolver,
+                    CMSettings.Secure.DEFAULT_THEME_COMPONENTS);
             List<String> components;
             if (TextUtils.isEmpty(defaultThemeComponents)) {
                 components = ThemeUtils.getAllComponents();

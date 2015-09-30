@@ -33,12 +33,13 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.UserHandle;
-import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.android.internal.telephony.PhoneConstants;
+
+import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -211,8 +212,8 @@ public class QSUtils {
     public static boolean isQSTileEnabledForUser(
             Context context, String tileSpec, int userId) {
         final ContentResolver resolver = context.getContentResolver();
-        String order = Settings.Secure.getStringForUser(resolver,
-                Settings.Secure.QS_TILES, userId);
+        String order = CMSettings.Secure.getStringForUser(resolver,
+                CMSettings.Secure.QS_TILES, userId);
         return !TextUtils.isEmpty(order) && Arrays.asList(order.split(",")).contains(tileSpec);
     }
 
@@ -225,7 +226,7 @@ public class QSUtils {
         };
 
         ctx.getContentResolver().registerContentObserver(
-                Settings.Secure.getUriFor(Settings.Secure.QS_TILES),
+                CMSettings.Secure.getUriFor(CMSettings.Secure.QS_TILES),
                 false, observer, UserHandle.USER_ALL);
         return observer;
     }
