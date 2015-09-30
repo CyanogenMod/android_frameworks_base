@@ -22,13 +22,14 @@ import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.Message;
 import android.os.UserHandle;
-import android.provider.Settings;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.android.internal.R;
 import com.android.internal.policy.PolicyManager;
+
+import cyanogenmod.providers.CMSettings;
 
 /**
  *  Helper to manage showing/hiding a image to notify them that they are entering
@@ -111,16 +112,16 @@ public class LockTaskNotify {
         void observe() {
             // Observe all users' changes
             final ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                            Settings.Secure.DEV_FORCE_SHOW_NAVBAR), false, this,
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                            CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR), false, this,
                     UserHandle.USER_ALL);
             onChange(true);
         }
 
         @Override public void onChange(boolean selfChange) {
             final ContentResolver resolver = mContext.getContentResolver();
-            mDevForceNavbar = Settings.Secure.getIntForUser(resolver,
-                    Settings.Secure.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
+            mDevForceNavbar = CMSettings.Secure.getIntForUser(resolver,
+                    CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
         }
     }
 }
