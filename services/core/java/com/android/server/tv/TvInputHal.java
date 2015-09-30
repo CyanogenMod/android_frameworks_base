@@ -146,7 +146,7 @@ final class TvInputHal implements Handler.Callback {
 
     private void firstFrameCapturedFromNative(int deviceId, int streamId) {
         mHandler.sendMessage(
-                mHandler.obtainMessage(EVENT_STREAM_CONFIGURATION_CHANGED, deviceId, streamId));
+                mHandler.obtainMessage(EVENT_FIRST_FRAME_CAPTURED, deviceId, streamId));
     }
 
     // Handler.Callback implementation

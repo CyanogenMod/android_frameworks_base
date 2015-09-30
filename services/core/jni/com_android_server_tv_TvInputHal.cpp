@@ -391,7 +391,15 @@ int JTvInputHal::addOrUpdateStream(int deviceId, int streamId, const sp<Surface>
                 connection.mThread->shutdown();
             }
             connection.mThread = new BufferProducerThread(mDevice, deviceId, &stream);
-            connection.mThread->run();
+            if (connection.mThread == NULL) {
+                ALOGE("No memory for BufferProducerThread");
+
+                // clean up
+                if (mDevice->close_stream(mDevice, deviceId, streamId) != 0) {
+                    ALOGE("Couldn't remove stream");
+                }
+                return NO_MEMORY;
+            }
         }
     }
     connection.mSurface = surface;
@@ -399,6 +407,7 @@ int JTvInputHal::addOrUpdateStream(int deviceId, int streamId, const sp<Surface>
         connection.mSurface->setSidebandStream(connection.mSourceHandle);
     } else if (connection.mStreamType == TV_STREAM_TYPE_BUFFER_PRODUCER) {
         connection.mThread->setSurface(surface);
+        connection.mThread->run();
     }
     return NO_ERROR;
 }
@@ -413,13 +422,6 @@ int JTvInputHal::removeStream(int deviceId, int streamId) {
         // Nothing to do
         return NO_ERROR;
     }
-    if (Surface::isValid(connection.mSurface)) {
-        connection.mSurface.clear();
-    }
-    if (connection.mSurface != NULL) {
-        connection.mSurface->setSidebandStream(NULL);
-        connection.mSurface.clear();
-    }
     if (connection.mThread != NULL) {
         connection.mThread->shutdown();
         connection.mThread.clear();
@@ -430,6 +432,13 @@ int JTvInputHal::removeStream(int deviceId, int streamId) {
     }
     if (connection.mSourceHandle != NULL) {
         connection.mSourceHandle.clear();
+    }
+    if (Surface::isValid(connection.mSurface)) {
+        connection.mSurface.clear();
+    }
+    if (connection.mSurface != NULL) {
+        connection.mSurface->setSidebandStream(NULL);
+        connection.mSurface.clear();
     }
     return NO_ERROR;
 }
