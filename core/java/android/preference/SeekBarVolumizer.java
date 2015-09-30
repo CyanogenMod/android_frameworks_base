@@ -35,6 +35,8 @@ import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import cyanogenmod.providers.CMSettings;
+
 /**
  * Turns a {@link SeekBar} into a volume control.
  * @hide
@@ -111,8 +113,8 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
     }
 
     private boolean isNotificationStreamLinked() {
-        return mVoiceCapable && Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+        return mVoiceCapable && CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
     }
 
     public void setSeekBar(SeekBar seekBar) {

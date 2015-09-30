@@ -84,6 +84,8 @@ import android.view.accessibility.AccessibilityManager;
 import com.android.internal.util.XmlUtils;
 import com.android.server.LocalServices;
 
+import cyanogenmod.providers.CMSettings;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.FileDescriptor;
@@ -655,8 +657,8 @@ public class AudioService extends IAudioService.Stub {
                 com.android.internal.R.array.config_masterVolumeRamp);
 
         // read this in before readPersistedSettings() because updateStreamVolumeAlias needs it
-        mLinkNotificationWithVolume = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+        mLinkNotificationWithVolume = CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
 
         // must be called before readPersistedSettings() which needs a valid mStreamVolumeAlias[]
         // array initialized by updateStreamVolumeAlias()
@@ -1054,8 +1056,8 @@ public class AudioService extends IAudioService.Stub {
                     UserHandle.USER_CURRENT) == 1;
         }
 
-        mLinkNotificationWithVolume = Settings.Secure.getInt(cr,
-                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+        mLinkNotificationWithVolume = CMSettings.Secure.getInt(cr,
+                CMSettings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
 
         mMuteAffectedStreams = System.getIntForUser(cr,
                 System.MUTE_STREAMS_AFFECTED,
@@ -4684,8 +4686,8 @@ public class AudioService extends IAudioService.Stub {
             super(new Handler());
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.MODE_RINGER_STREAMS_AFFECTED), false, this);
-            mContentResolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.VOLUME_LINK_NOTIFICATION), false, this);
+            mContentResolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.VOLUME_LINK_NOTIFICATION), false, this);
             mContentResolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.DOCK_AUDIO_MEDIA_ENABLED), false, this);
             mContentResolver.registerContentObserver(Settings.System.getUriFor(
@@ -4709,8 +4711,8 @@ public class AudioService extends IAudioService.Stub {
                 }
                 readDockAudioSettings(mContentResolver);
 
-                boolean linkNotificationWithVolume = Settings.Secure.getInt(mContentResolver,
-                        Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+                boolean linkNotificationWithVolume = CMSettings.Secure.getInt(mContentResolver,
+                        CMSettings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
                 if (linkNotificationWithVolume != mLinkNotificationWithVolume) {
                     mLinkNotificationWithVolume = linkNotificationWithVolume;
                     createStreamStates();

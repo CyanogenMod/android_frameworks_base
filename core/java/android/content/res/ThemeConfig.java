@@ -28,6 +28,8 @@ import android.util.JsonToken;
 import android.util.JsonWriter;
 import android.util.Log;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -185,8 +187,8 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public static ThemeConfig getBootThemeForUser(ContentResolver resolver, int userHandle) {
         ThemeConfig bootTheme = mSystemConfig;
         try {
-            String json = Settings.Secure.getStringForUser(resolver,
-                    Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY, userHandle);
+            String json = CMSettings.Secure.getStringForUser(resolver,
+                    CMSettings.Secure.NAME_THEME_CONFIG, userHandle);
             bootTheme = ThemeConfig.fromJson(json);
 
             // Handle upgrade Case: Previously the theme configuration was in separate fields

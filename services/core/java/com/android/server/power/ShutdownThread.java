@@ -168,8 +168,8 @@ public final class ShutdownThread extends Thread {
         boolean showRebootOption = false;
 
         String[] actionsArray;
-        String actions = Settings.Secure.getStringForUser(context.getContentResolver(),
-                Settings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
+        String actions = CMSettings.Secure.getStringForUser(context.getContentResolver(),
+                CMSettings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
         if (actions == null) {
             actionsArray = context.getResources().getStringArray(
                     com.android.internal.R.array.config_globalActionsList);
