@@ -903,8 +903,19 @@ char *BootAnimation::getAnimationFileName(ImageID image)
             SYSTEM_SHUTDOWN_ANIMATION_FILE,
             SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE} };
     int state;
+    char sku[PROPERTY_VALUE_MAX];
+    char skusuffix[PATH_MAX];
 
     state = checkBootState() ? 0 : 1;
+
+    property_get("ro.prebundled.mcc", sku, "000");
+    sprintf(skusuffix,"-%s",sku);
+
+    String16 skuPath(fileName[state][image]);
+    skuPath.insert(skuPath.size()-4,String16(skusuffix));
+
+    if (access(String8(skuPath).string(), R_OK) == 0)
+        return (char *)String8(skuPath).string();
 
     return fileName[state][image];
 }
