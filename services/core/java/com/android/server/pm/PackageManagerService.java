@@ -13802,7 +13802,23 @@ public class PackageManagerService extends IPackageManager.Stub {
         ArrayMap<AsecInstallArgs, String> processCids = new ArrayMap<>();
         int[] uidArr = EmptyArray.INT;
 
-        final String[] list = PackageHelper.getSecureContainerList();
+        String[] list = PackageHelper.getSecureContainerList();
+        // In case external storage was ejected without unmounting, populate the list with all apps
+        // that are installed on external storage
+        if (ArrayUtils.isEmpty(list)) {
+            synchronized (mPackages) {
+                ArrayList<String> newList = new ArrayList<String>();
+                for (Map.Entry<String, Package> entry : mPackages.entrySet()) {
+                    if (entry.getValue().installLocation == PackageHelper.APP_INSTALL_EXTERNAL) {
+                        newList.add(entry.getKey());
+                    }
+                }
+                if (!newList.isEmpty()) {
+                    list = newList.toArray(new String[newList.size()]);
+                }
+            }
+        }
+
         if (ArrayUtils.isEmpty(list)) {
             Log.i(TAG, "No secure containers found");
         } else {
