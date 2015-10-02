@@ -23,4 +23,7 @@
         <item>404</item>
         <item>405</item>
     </string-array>
+    <!-- Configuration that determines if ACTIVATE_REJECT_GGSN is to be treated as
+         a permanent error -->
+    <bool name="config_reject_ggsn_perm_failure">false</bool>
 </resources>
