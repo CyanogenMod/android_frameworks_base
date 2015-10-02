@@ -323,8 +323,5 @@
     <bool name="config_enableDataSwitch">false</bool>
     <!-- Enable the default volume dialog -->
     <bool name="enable_volume_ui">true</bool>
-
-    <!-- Whether to disable exit-to-home animations for this device -->
-    <bool name="config_disableRecentsToHomeAnimation">false</bool>
 </resources>
 
