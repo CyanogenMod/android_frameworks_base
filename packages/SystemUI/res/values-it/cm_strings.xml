@@ -136,7 +136,7 @@
   <string name="navbar_menu_big_button">Pulsante Menu</string>
   <string name="navigation_ring_title">Scorciatoie avvio rapido</string>
   <string name="navring_target_reset_message">Eliminare tutte le scorciatoie della barra di navigazione create e ripristinare quelle predefinite?</string>
-  <string name="navring_target_reset">Scorciatoie della barra di navigazione ripristinate</string>
+  <string name="navring_target_reset">Scorciatoie della barra di navigazione reimpostate</string>
   <string name="navring_action_open_ime_switcher">Apri selettore di immissione testo</string>
   <string name="navring_action_kill_app">Termina app</string>
   <string name="navring_action_none">Nessuno</string>
