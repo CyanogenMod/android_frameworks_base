@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.UserHandle;
@@ -38,6 +39,7 @@ import android.view.ViewStub;
 import android.widget.Toast;
 
 import com.android.systemui.R;
+import com.android.systemui.recents.RecentsConfiguration;
 import com.android.systemui.recents.misc.DebugTrigger;
 import com.android.systemui.recents.misc.ReferenceCountedTrigger;
 import com.android.systemui.recents.misc.SystemServicesProxy;
@@ -85,8 +87,6 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
     FinishRecentsRunnable mFinishLaunchHomeRunnable;
 
     private PhoneStatusBar mStatusBar;
-
-    private boolean mAnimateHome;
 
     /**
      * A common Runnable to finish Recents either by calling finish() (with a custom animation) or
@@ -357,7 +357,7 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
 
     /** Dismisses Recents directly to Home. */
     void dismissRecentsToHomeRaw(boolean animated) {
-        if (animated && mAnimateHome) {
+        if (animated) {
             ReferenceCountedTrigger exitTrigger = new ReferenceCountedTrigger(this,
                     null, mFinishLaunchHomeRunnable, null);
             mRecentsView.startExitToHomeAnimation(
@@ -382,9 +382,6 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mAnimateHome = !getResources().getBoolean(R.bool.config_disableRecentsToHomeAnimation);
-
         // For the non-primary user, ensure that the SystemServicesProxy and configuration is
         // initialized
         RecentsTaskLoader.initialize(this);
