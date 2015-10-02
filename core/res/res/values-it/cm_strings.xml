@@ -136,7 +136,7 @@
   <string name="perf_profile_perf">Prestazioni</string>
   <string name="theme_install_error_title">Impossibile installare il tema</string>
   <string name="theme_install_error_message">Impossibile installare %s</string>
-  <string name="theme_reset_notification_title">Reset tema</string>
+  <string name="theme_reset_notification_title">Reimposta tema</string>
   <string name="theme_reset_notification_body">Tema di sistema ripristinato a causa di molteplici crash.</string>
   <string name="stylus_app_not_installed">%s non è installato</string>
   <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>

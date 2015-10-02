@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Associação USB ligada.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Associação USB foi desligada.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Associação USB foi ligada.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Economizador de bateria desligado.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Economizador de bateria ligado.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador de bateria desligou.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador de bateria ligou.</string>
   <string name="accessibility_quick_settings_visualizer">Visualizador.</string>
+  <string name="accessibility_quick_settings_volume_panel">Painel de volume.</string>
   <string name="accessibility_dpad_left">Cursor à esquerda</string>
   <string name="accessibility_dpad_right">Cursor à direita</string>
   <string name="quick_settings_mobile_data_label">Dados móveis</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Notificações pop-up</string>
   <string name="quick_settings_ambient_display_label">Visualização de ambiente</string>
   <string name="quick_settings_sync_label">Sincronização</string>
+  <string name="quick_settings_battery_saver_label">Economizador de bateria</string>
   <string name="quick_settings_custom_tile_detail_title">Botões personalizados</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>

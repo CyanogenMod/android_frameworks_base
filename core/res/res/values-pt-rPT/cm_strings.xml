@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Permite a uma aplicação reiniciar os dados de utilização de baixo nível da bateria.</string>
   <string name="silent_mode_priority">Prioridade</string>
   <string name="silent_mode_none">Nenhum</string>
+  <string name="subscription_change_disabled_wifi_ap">Zona Wi-Fi portátil desligada devido à alteração da assinatura SIM</string>
+  <string name="notify_turn_wifi_off_title">Desligar Wi-Fi</string>
 </resources>
