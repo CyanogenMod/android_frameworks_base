@@ -34,10 +34,6 @@ import android.view.SurfaceSession;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
-import android.os.Handler;
-import android.os.Message;
-import com.android.server.DisplayThread;
-import android.os.Looper;
 
 class ScreenRotationAnimation {
     static final String TAG = "ScreenRotationAnimation";
@@ -135,7 +131,6 @@ class ScreenRotationAnimation {
     private boolean mMoreStartExit;
     private boolean mMoreStartFrame;
     long mHalfwayPoint;
-    final H mHandler = new H(DisplayThread.get().getLooper());
 
     public void printTo(String prefix, PrintWriter pw) {
         pw.print(prefix); pw.print("mSurface="); pw.print(mSurfaceControl);
@@ -288,12 +283,6 @@ class ScreenRotationAnimation {
                 mSurfaceControl.setAlpha(0);
                 mSurfaceControl.show();
                 sur.destroy();
-                // If screenshot layer stays for more than freeze
-                // timeout value with no updates on the screen,
-                // destroy the layer explicitly.
-                mHandler.removeMessages(H.SCREENSHOT_FREEZE_TIMEOUT);
-                mHandler.sendEmptyMessageDelayed(H.SCREENSHOT_FREEZE_TIMEOUT,
-                                           H.FREEZE_TIMEOUT_VAL);
             } catch (OutOfResourcesException e) {
                 Slog.w(TAG, "Unable to allocate freeze surface", e);
             }
@@ -1031,38 +1020,5 @@ class ScreenRotationAnimation {
 
     public Transformation getEnterTransformation() {
         return mEnterTransformation;
-    }
-
-    final class H extends Handler {
-        public static final int SCREENSHOT_FREEZE_TIMEOUT = 2;
-
-        //Set the freeze timeout value to 6sec (which is greater than
-        //APP_FREEZE_TIMEOUT value in WindowManagerService)
-        public static final int FREEZE_TIMEOUT_VAL = 6000;
-
-        public H(Looper looper) {
-            super(looper, null, true /*async*/);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SCREENSHOT_FREEZE_TIMEOUT: {
-                     if ((mSurfaceControl != null) && (isAnimating())) {
-                        Slog.e(TAG, "Exceeded Freeze timeout. Destroy layers");
-                        kill();
-                     } else if (mSurfaceControl != null){
-                        Slog.e(TAG,
-                          "No animation, exceeded freeze timeout. Destroy Screenshot layer");
-                        mSurfaceControl.destroy();
-                        mSurfaceControl = null;
-                     }
-                     break;
-                }
-                default:
-                     Slog.e(TAG, "No Valid Message To Handle");
-                break;
-            }
-        }
     }
 }
