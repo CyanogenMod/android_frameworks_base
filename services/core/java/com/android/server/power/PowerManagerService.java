@@ -105,6 +105,10 @@ public final class PowerManagerService extends SystemService
 
     private static final int MSG_WAKE_UP = 5;
 
+    private static final int MSG_CPU_BOOST = 6;
+
+    private static final int MSG_LAUNCH_BOOST = 7;
+
     // Dirty bit: mWakeLocks changed
     private static final int DIRTY_WAKE_LOCKS = 1 << 0;
     // Dirty bit: mWakefulness changed
@@ -2846,6 +2850,25 @@ public final class PowerManagerService extends SystemService
                     cleanupProximity();
                     ((Runnable) msg.obj).run();
                     break;
+                case MSG_CPU_BOOST:
+                    final int duration = msg.arg1;
+                    if (duration > 0 && duration <= MAX_CPU_BOOST_TIME) {
+                        // Don't send boosts if we're in another power profile
+                        String profile = mPerformanceManager.getPowerProfile();
+                        if (profile == null || profile.equals(PowerManager.PROFILE_BALANCED)) {
+                            nativeCpuBoost(duration);
+                        }
+                    } else {
+                        Slog.e(TAG, "Invalid boost duration: " + duration);
+                    }
+                    break;
+                case MSG_LAUNCH_BOOST:
+                    // Don't send boosts if we're in another power profile
+                    String profile = mPerformanceManager.getPowerProfile();
+                    if (profile == null || profile.equals(PowerManager.PROFILE_BALANCED)) {
+                        nativeLaunchBoost();
+                    }
+                    break;
             }
         }
     }
@@ -3435,15 +3458,7 @@ public final class PowerManagerService extends SystemService
          */
         @Override
         public void cpuBoost(int duration) {
-            if (duration > 0 && duration <= MAX_CPU_BOOST_TIME) {
-                // Don't send boosts if we're in another power profile
-                String profile = mPerformanceManager.getPowerProfile();
-                if (profile == null || profile.equals(PowerManager.PROFILE_BALANCED)) {
-                    nativeCpuBoost(duration);
-                }
-            } else {
-                Slog.e(TAG, "Invalid boost duration: " + duration);
-            }
+            mHandler.obtainMessage(MSG_CPU_BOOST, duration, 0).sendToTarget();
         }
 
         /**
@@ -3452,11 +3467,7 @@ public final class PowerManagerService extends SystemService
          */
         @Override
         public void launchBoost() {
-            // Don't send boosts if we're in another power profile
-            String profile = mPerformanceManager.getPowerProfile();
-            if (profile == null || profile.equals(PowerManager.PROFILE_BALANCED)) {
-                nativeLaunchBoost();
-            }
+            mHandler.sendEmptyMessage(MSG_LAUNCH_BOOST);
         }
 
         @Override
