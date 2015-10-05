@@ -26,9 +26,71 @@
   <string name="accessibility_quick_settings_data_on">Mobil verilənlər açıqdır.</string>
   <string name="accessibility_quick_settings_roaming_off">Rouminq bağlıdır.</string>
   <string name="accessibility_quick_settings_roaming_on">Rouminq açıqdır.</string>
+  <string name="accessibility_quick_settings_network_adb_off">Şəbəkə üzərindən ADB bağlıdır.</string>
+  <string name="accessibility_quick_settings_network_adb_on">Şəbəkə üzərindən ADB açıqdır.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">Şəbəkə üzərindən ADB bağlanıldı.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">Şəbəkə üzərindən ADB açıldı.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Rənglərin yerdəyişməsi bağlıdır.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Rənglərin yerdəyişməsi açıqdır.</string>
+  <string name="accessibility_quick_settings_compass_off">Kompas bağlıdır.</string>
+  <string name="accessibility_quick_settings_compass_on">Kompas açıqdır.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Kompas bağlanıldı.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Kompas açıldı.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Açılan başlıq bildirişi bağlıdır.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Açılan başlıq bildişi açıqdır.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Açılan başlıq bildirişi bağlanıldı.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Açılan başlıq bildirişi açıldı.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Mobil bağlantı nöqtəsi bağlıdır.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Mobil bağlantı nöqtəsi açıqdır.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay bağlıdır.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: avtomatik rejim.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: gündüz rejimi.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: gecə rejimi.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: açıq hava rejimi.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay bağlanıldı.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay avtomatik rejimə keçdi.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay gündüz rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay gecə rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay açıq hava rejiminə keçdi.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Yer hesabatı: batareyaya qənaət rejimi.</string>
   <string name="accessibility_quick_settings_location_gps_only">Yer hesabatı: yalnız sensorlar rejimi.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Yer hesabatı: yüksək həssaslıq rejimi.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Yer bildirişi batereyaya qənaət rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Yer bildirişi yalnız sensorlar rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Yer bildirişi yüksək dəqiqlik rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Kilit ekranı bağlıdır.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Kilit ekranı açıldı.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Kilit ekranı bağlanıldı.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Kilit ekranı açıldı.</string>
+  <string name="accessibility_quick_settings_lte_off">LTE bağlıdır.</string>
+  <string name="accessibility_quick_settings_lte_on">LTE açıqdır.</string>
+  <string name="accessibility_quick_settings_lte_changed_off">LTE bağlanıldı.</string>
+  <string name="accessibility_quick_settings_lte_changed_on">LTE açıldı.</string>
+  <string name="accessibility_quick_settings_nfc_off">NFC bağlıdır.</string>
+  <string name="accessibility_quick_settings_nfc_on">NFC açıqdır.</string>
+  <string name="accessibility_quick_settings_nfc_changed_off">NFC bağlanıldı.</string>
+  <string name="accessibility_quick_settings_nfc_changed_on">NFC açıldı.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Batereya rejimi: güc qənaəti rejimi.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Batereya rejimi: tarazlaşdırılmış rejim.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Batereya rejimi: performans rejimi.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batereya rejimi güc qənaəti rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Batereya rejimi tarazlaşdırılmış rejimə keçdi.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Batereya rejimi performans rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_profiles_off">Profillər bağlıdır.</string>
+  <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Profillər bağlıdır.</string>
+  <string name="accessibility_quick_settings_profiles_changed"><xliff:g id="profile" example="Default">%s</xliff:g> profilinə keçildi.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Ekrana qoyulan vaxt: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Ekrana qoyulan vaxt <xliff:g id="timeout" example="30 seconds">%s</xliff:g> olaraq tənzimləndi.</string>
+  <string name="accessibility_quick_settings_sync_off">Eyniləşdirmə bağlıdır.</string>
+  <string name="accessibility_quick_settings_sync_on">Eyniləşdirmə açıqdır.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Eyniləşdirmə bağlanıldı.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Eyniləşdirmə açıldı.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">USB int. payl. bağlıdır.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">USB int. payl. açıqdır.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">USB int. payl. bağlanıldı.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">USB int. payl. açıldı.</string>
+  <string name="accessibility_quick_settings_visualizer">Əyaniləşdirici.</string>
   <string name="accessibility_dpad_left">Sol kursor</string>
   <string name="accessibility_dpad_right">Sağ kursor</string>
   <string name="quick_settings_mobile_data_label">Mobil verilənlər</string>
@@ -49,7 +111,12 @@
   <string name="quick_settings_lockscreen_label_enforced">Kilit ekranı məcburidir</string>
   <string name="quick_settings_network_adb_label">Şəbəkə üzərindən ADB</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Səs paneli</string>
   <string name="quick_settings_screen_timeout_detail_title">Ekrana qoyulan vaxt</string>
+  <string name="quick_settings_usb_tether_label">USB internet paylaşımı</string>
+  <string name="quick_settings_heads_up_label">Açılan başlıqlar</string>
+  <string name="quick_settings_sync_label">Eyniləşdirmə</string>
+  <string name="quick_settings_custom_tile_detail_title">Özəl kvadrat</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">%1$s üçün sağa sürüşdürün</string>
   <string name="right_shortcut_hint">%1$s üçün sola sürüşdürün</string>
@@ -78,4 +145,15 @@
   <string name="navring_choose_action_title">Hərəkət seç</string>
   <string name="select_application">Tətbiqetmə seç</string>
   <string name="lockscreen_target_empty">Boş</string>
+  <string name="screen_pinning_description_no_navbar">Ekrandan çıxarılana qədər görsənəcək. Çıxartmaq üçün Geri düyməsinə toxunub basılı tutun.</string>
+  <string name="interruption_level_silent">Səssiz</string>
+  <string name="zen_silent_with_warning">Zəngli saatlar xaricində narahat etmə.</string>
+  <string name="quick_settings_remove">Kvadratı çıxart</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dinamik kvadrat</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Növbəti zəngli saat</string>
+  <string name="dynamic_qs_tile_ime_selector_label">IME seçici</string>
+  <string name="dynamic_qs_tile_su_label">Root müraciəti</string>
+  <string name="fingerprint_try_again_hint">Zəhmət olmasa yenidən tədqiq edin</string>
+  <string name="accessibility_dock_battery_level">Modul batareya faizi <xliff:g id="number">%d</xliff:g>.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Element tapılmadı</string>
 </resources>

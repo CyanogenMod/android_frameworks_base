@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ingen</string>
+  <string name="subscription_change_disabled_wifi_ap">Deaktiverede Wi-Fi hotspot på grund af en ændring af dit SIM abonnement</string>
+  <string name="notify_turn_wifi_off_title">Slå Wi-Fi fra</string>
 </resources>

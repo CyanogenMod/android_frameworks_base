@@ -3409,11 +3409,6 @@ public class PackageManagerTests extends AndroidTestCase {
         }
         installFromRawResource("keysetApi.apk", R.raw.keyset_splat_api,
                 0, false, false, -1, PackageInfo.INSTALL_LOCATION_UNSPECIFIED);
-        try {
-            ks = pm.getKeySetByAlias(otherPkgName, "A");
-            assertTrue(false); // should have thrown
-        } catch (SecurityException e) {
-        }
         cleanUpInstall(otherPkgName);
         ks = pm.getKeySetByAlias(mPkgName, "A");
         assertNotNull(ks);

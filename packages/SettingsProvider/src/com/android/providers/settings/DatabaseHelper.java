@@ -24,6 +24,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.ThemeConfig;
@@ -47,6 +48,7 @@ import android.provider.Settings.Global;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.android.internal.content.PackageHelper;
@@ -2575,8 +2577,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void loadDefaultThemeSettings(SQLiteStatement stmt) {
-        loadStringSetting(stmt, Settings.Secure.DEFAULT_THEME_PACKAGE, R.string.def_theme_package);
-        loadStringSetting(stmt, Settings.Secure.DEFAULT_THEME_COMPONENTS,
+        loadRegionLockedStringSetting(stmt, Settings.Secure.DEFAULT_THEME_PACKAGE,
+                R.string.def_theme_package);
+        loadRegionLockedStringSetting(stmt, Settings.Secure.DEFAULT_THEME_COMPONENTS,
                 R.string.def_theme_components);
     }
 
@@ -2945,6 +2948,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         stmt.bindString(1, key);
         stmt.bindString(2, value.toString());
         stmt.execute();
+    }
+
+    private void loadRegionLockedStringSetting(SQLiteStatement stmt, String key, int resid) {
+        Configuration tempConfiguration = new Configuration();
+        String mcc = SystemProperties.get("ro.prebundled.mcc");
+        Resources customResources = null;
+        if (!TextUtils.isEmpty(mcc)) {
+            tempConfiguration.mcc = Integer.parseInt(mcc);
+            customResources = new Resources(new AssetManager(), new DisplayMetrics(),
+                    tempConfiguration);
+        }
+        loadSetting(stmt, key, customResources == null ? mContext.getResources().getString(resid)
+                : customResources.getString(resid));
     }
 
     private void loadStringSetting(SQLiteStatement stmt, String key, int resid) {

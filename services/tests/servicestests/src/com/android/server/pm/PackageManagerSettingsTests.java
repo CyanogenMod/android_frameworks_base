@@ -21,8 +21,14 @@ import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.SystemProperties;
 import android.test.AndroidTestCase;
+import android.text.TextUtils;
 import android.util.ArraySet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.android.internal.os.AtomicFile;
@@ -132,7 +138,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
         Settings settings = new Settings(getContext(), getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
         assertNotNull(settings.peekPackageLPr(PACKAGE_NAME_3));
         assertNotNull(settings.peekPackageLPr(PACKAGE_NAME_1));
 
@@ -150,11 +156,11 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
         Settings settings = new Settings(getContext(), getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
 
         // Create Settings again to make it read from the new files
         settings = new Settings(getContext(), getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
 
         PackageSetting ps = settings.peekPackageLPr(PACKAGE_NAME_2);
         assertEquals(COMPONENT_ENABLED_STATE_DISABLED_USER, ps.getEnabled(0));
@@ -165,7 +171,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
         Settings settings = new Settings(getContext(), getContext().getFilesDir());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
 
         // Enable/Disable a package
         PackageSetting ps = settings.peekPackageLPr(PACKAGE_NAME_1);
@@ -194,5 +200,35 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         assertEquals(1, ps.getEnabledComponents(1).size());
         hasEnabled = ps.getEnabledComponents(0) != null && ps.getEnabledComponents(0).size() > 0;
         assertEquals(false, hasEnabled);
+    }
+
+    public void testPrebundledRegionLockedAccessible() {
+        Configuration tempConfiguration = new Configuration();
+        String mcc = ("310");
+        if (!TextUtils.isEmpty(mcc)) {
+            tempConfiguration.mcc = Integer.parseInt(mcc);
+            Resources customResources = new Resources(new AssetManager(), new DisplayMetrics(),
+                    tempConfiguration);
+            Settings settings = new Settings(getContext(), getContext().getFilesDir());
+            String expectedPackageNeededForRegion = "com.fat.bloat.spam";
+            String expectedMccCorrect = "310";
+            assertTrue(settings.isPrebundledPackagedNeededForRegion(expectedPackageNeededForRegion,
+                    expectedMccCorrect, customResources));
+        }
+    }
+
+    public void testPrebundledRegionLocked() {
+        Configuration tempConfiguration = new Configuration();
+        String mcc = ("311");
+        if (!TextUtils.isEmpty(mcc)) {
+            tempConfiguration.mcc = Integer.parseInt(mcc);
+            Resources customResources = new Resources(new AssetManager(), new DisplayMetrics(),
+                    tempConfiguration);
+            Settings settings = new Settings(getContext(), getContext().getFilesDir());
+            String expectedPackageNeededForRegion = "com.fat.bloat.spam";
+            String expectedMccWrong = "311";
+            assertFalse(settings.isPrebundledPackagedNeededForRegion(expectedPackageNeededForRegion,
+                    expectedMccWrong, customResources));
+        }
     }
 }

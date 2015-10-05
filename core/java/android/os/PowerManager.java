@@ -399,6 +399,7 @@ public final class PowerManager {
     final Context mContext;
     final IPowerManager mService;
     final Handler mHandler;
+    private final boolean mHasPowerProfilesSupport;
 
     /**
      * {@hide}
@@ -407,6 +408,10 @@ public final class PowerManager {
         mContext = context;
         mService = service;
         mHandler = handler;
+
+        mHasPowerProfilesSupport = !TextUtils.isEmpty(getDefaultPowerProfile()) &&
+                !TextUtils.isEmpty(mContext.getResources().getString(
+                        com.android.internal.R.string.config_perf_profile_prop));
     }
 
     /**
@@ -936,9 +941,7 @@ public final class PowerManager {
      * @hide
      */
     public boolean hasPowerProfiles() {
-        return !TextUtils.isEmpty(getDefaultPowerProfile()) &&
-               !TextUtils.isEmpty(mContext.getResources().getString(
-                       com.android.internal.R.string.config_perf_profile_prop));
+        return mHasPowerProfilesSupport;
     }
 
     /**

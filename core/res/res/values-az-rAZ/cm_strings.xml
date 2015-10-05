@@ -46,6 +46,7 @@
   <string name="privacy_guard_dialog_title">Gizlilik Qoruması</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> icazəsindən istifadə etmək istəyir.</string>
   <string name="global_action_reboot">Yenidən başlat</string>
+  <string name="global_action_current_user">Hazırki</string>
   <string name="reboot_reboot">Yenidən başlat</string>
   <string name="reboot_recovery">Bərpa rejimi (Recovery)</string>
   <string name="reboot_bootloader">Önyükləyici (Bootloader)</string>
@@ -60,6 +61,10 @@
   <string name="adb_both_active_notification_title">USB &amp; şəbəkə üzərindən ADB fəaldır</string>
   <string name="adb_active_generic_notification_message">Xəta ayırdetməni ləğv etmək üçün toxunun.</string>
   <string name="usb_choose_notification_title">USB seçimləri üçün toxunun.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; şəbəkə</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Şəbəkə</string>
   <string name="permlab_interceptPackageLaunch">tətbiqetmə başlatmanın qarşısını al</string>
   <string name="permdesc_interceptPackageLaunch">Tətbiqetməyə digər tətbiqetmələrin başlamasını əngəlləmək icazə verər</string>
   <string name="app_ops_access_camera">kameraya müraciət</string>
@@ -156,6 +161,30 @@
   <string name="usb_media_checking">USB yaddaş hal-hazırda yoxlanılır.</string>
   <string name="usb_media_removed">USB yaddaş çıxarıldı.</string>
   <string name="usb_media_shared">USB yaddaş kompüter tərəfindən istifadə olunur.</string>
+  <string name="sd_ext_media_checking_notification_title">SD kart hazırlanır</string>
+  <string name="sd_ext_media_checking_notification_message">SD kartda xətalar yoxlanılır.</string>
+  <string name="sd_ext_media_nofs_notification_title">Boş SD kart</string>
+  <string name="sd_ext_media_nofs_notification_message">SD kart boş və ya dəstəklənməyən fayl sisteminə malikdir.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Zədəli SD kart</string>
+  <string name="sd_ext_media_unmountable_notification_message">SD kart zədələnib. Yenidən format etməyi yoxlayın.</string>
+  <string name="sd_ext_media_badremoval_notification_title">SD kart gözlənilmədən çıxarıldı</string>
+  <string name="sd_ext_media_badremoval_notification_message">Verilənlər itkisinin qarşısını almaq üçün SD kartı çıxarmamışdan əvvəl əlaqəsini kəsin.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">SD kartı çıxarmaq təhlükəsizdir</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">SD kartı etibarla çıxara bilərsiniz.</string>
+  <string name="sd_ext_media_nomedia_notification_title">SD kart çıxarıldı</string>
+  <string name="sd_ext_media_nomedia_notification_message">SD kart çıxarıldı. Yeni birini taxın.</string>
+  <string name="usb_ext_media_checking_notification_title">USB yaddaş hazırlanır</string>
+  <string name="usb_ext_media_checking_notification_message">USB yaddaşda xətalar yoxlanılır.</string>
+  <string name="usb_ext_media_nofs_notification_title">Boş USB yaddaş</string>
+  <string name="usb_ext_media_nofs_notification_message">USB yaddaş boş və ya dəstəklənməyən fayl sisteminə malikdir.</string>
+  <string name="usb_ext_media_unmountable_notification_title">Zədəli USB yaddaş</string>
+  <string name="usb_ext_media_unmountable_notification_message">USB yaddaş zədələnib. Yenidən format etməyi yoxlayın.</string>
+  <string name="usb_ext_media_badremoval_notification_title">USB yaddaş gözlənilmədən çıxarıldı</string>
+  <string name="usb_ext_media_badremoval_notification_message">Verilənlər itkisinin qarşısını almaq üçün USB yaddaşı çıxarmamışdan əvvəl əlaqəsini kəsin.</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">USB yaddaşı çıxarmaq təhlükəsizdir</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">USB yaddaşı etibarla çıxara bilərsiniz.</string>
+  <string name="usb_ext_media_nomedia_notification_title">USB yaddaş çıxarıldı</string>
+  <string name="usb_ext_media_nomedia_notification_message">USB yaddaş çıxarıldı. Yeni media daxil edin.</string>
   <string name="live_display_auto">Avtomatik</string>
   <string name="live_display_auto_summary">Gün çıxandan və batandan sonra ekranın rəng hərarətini avtomatik tənzimləyər</string>
   <string name="live_display_off">Bağlı</string>
@@ -167,4 +196,17 @@
   <string name="live_display_outdoor">Açıq hava (parlaq günəş)</string>
   <string name="live_display_outdoor_summary">Yalnız açıq hava tənziml. istifadə et</string>
   <string name="live_display_hint">LiveDisplay göz yorğunluğunuzu azaldıb gecələri yuxulamağınıza kömək edə bilər. Yoxlamaq üçün bura klikləyin!</string>
+  <string name="lock_to_app_toast_no_navbar">Bu ekranı çıxarmaq üçün Geri düyməsinə toxunub basılı tutun.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Fənər açıqdır</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Fənəri bağlamaq üçün toxunun</string>
+  <string name="storage_sd_dock_card">SD kart modulu</string>
+  <string name="fingerprint_default_name">Barmaq izi <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">barmaq izi xidmətinə müraciət</string>
+  <string name="permdesc_accessFingerprintService">Tətbiqetməyə barmaq izi xidmətinə müraciət etməsinə icazə verər. Tətbiqetmə barmaq izlərini əlavə edə, silə, yenidən adlandıra və kimliyinizi təsdiqləyə bilər</string>
+  <string name="permlab_resetBatteryStats">batareya statistikalarını sıfırla</string>
+  <string name="permdesc_resetBatteryStats">Tətbiqetmənin aşağı batareya istifadə verilənlərini sıfırlamasına icazə verər.</string>
+  <string name="silent_mode_priority">Üstünlük</string>
+  <string name="silent_mode_none">Yoxdur</string>
+  <string name="subscription_change_disabled_wifi_ap">SIM abunəliyini dəyişmə ilə əlaqədar Wi-Fi internet paylaşma ləğv edildi</string>
+  <string name="notify_turn_wifi_off_title">Wi-Fi\'ı bağla</string>
 </resources>
