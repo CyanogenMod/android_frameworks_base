@@ -241,6 +241,8 @@ public class DisconnectCause {
     /** EMERGENCY call failed with permanent fail cause */
     public static final int EMERGENCY_PERM_FAILURE         = 97;
 
+    public static final int NON_SELECTED_USER_CLEARING = 98;
+
     /**
      * Call was rejected due to number being blacklisted by user.
      * {@@hide}
@@ -255,7 +257,7 @@ public class DisconnectCause {
     // 4) Update toString() with the newly added disconnect type.
     // 5) Update android.telecom.DisconnectCauseUtil with any mappings to a telecom.DisconnectCause.
     //
-    // NextId: 98
+    // NextId: 99
     //*********************************************************************************************
 
     /** Smallest valid value for call disconnect codes. */
@@ -370,6 +372,8 @@ public class DisconnectCause {
             return "IMS_MERGED_SUCCESSFULLY";
         case CDMA_ALREADY_ACTIVATED:
             return "CDMA_ALREADY_ACTIVATED";
+        case NON_SELECTED_USER_CLEARING:
+            return "NON_SELECTED_USER_CLEARING";
         case HO_NOT_FEASIBLE:
             return "HO_NOT_FEASIBLE";
         case NO_CIRCUIT_AVAIL:
