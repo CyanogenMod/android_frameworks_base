@@ -467,7 +467,7 @@ public class WindowManagerService extends IWindowManager.Stub
     /** All DisplayContents in the world, kept here */
     SparseArray<DisplayContent> mDisplayContents = new SparseArray<>(2);
 
-    int mRotation = 0;
+    int mRotation = SystemProperties.getInt("persist.panel.orientation", 0) / 90;
     int mForcedAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean mAltOrientation = false;
 
