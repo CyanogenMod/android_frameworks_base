@@ -68,5 +68,9 @@ LOCAL_CFLAGS += -DHAVE_QC_TIME_SERVICES=1
 LOCAL_SHARED_LIBRARIES += libtime_genoff
 $(shell mkdir -p $(OUT)/obj/SHARED_LIBRARIES/libtime_genoff_intermediates/)
 $(shell touch $(OUT)/obj/SHARED_LIBRARIES/libtime_genoff_intermediates/export_includes)
+ifeq ($(TARGET_ARCH),arm64)
+$(shell mkdir -p $(OUT)/obj_arm/SHARED_LIBRARIES/libtime_genoff_intermediates/)
+$(shell touch $(OUT)/obj_arm/SHARED_LIBRARIES/libtime_genoff_intermediates/export_includes)
+endif
 endif
 
