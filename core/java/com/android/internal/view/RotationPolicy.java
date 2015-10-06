@@ -16,6 +16,7 @@
 
 package com.android.internal.view;
 
+import android.os.SystemProperties;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -42,8 +43,7 @@ import com.android.internal.R;
 public final class RotationPolicy {
     private static final String TAG = "RotationPolicy";
     private static final int CURRENT_ROTATION = -1;
-    private static final int NATURAL_ROTATION =
-            SystemProperties.getInt("persist.panel.orientation", Surface.ROTATION_0) / 90;
+    private static final int NATURAL_ROTATION = Surface.ROTATION_0;
 
     private RotationPolicy() {
     }
@@ -174,7 +174,7 @@ public final class RotationPolicy {
                 try {
                     IWindowManager wm = WindowManagerGlobal.getWindowManagerService();
                     if (enabled) {
-                        wm.freezeRotation(rotation);
+                        wm.freezeRotation(getSystemPropertyRotation());
                     } else {
                         wm.thawRotation();
                     }
@@ -213,6 +213,10 @@ public final class RotationPolicy {
     public static void unregisterRotationPolicyListener(Context context,
             RotationPolicyListener listener) {
         context.getContentResolver().unregisterContentObserver(listener.mObserver);
+    }
+
+    private static int getSystemPropertyRotation() {
+        return SystemProperties.getInt("persist.panel.orientation", 0) / 90;
     }
 
     /**
