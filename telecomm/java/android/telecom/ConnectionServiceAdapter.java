@@ -424,14 +424,4 @@ final class ConnectionServiceAdapter implements DeathRecipient {
             }
         }
     }
-
-    void setPhoneAccountHandle(String callId, PhoneAccountHandle pHandle) {
-        Log.v(this, "setPhoneAccountHandle: %s, %s", callId, pHandle);
-        for (IConnectionServiceAdapter adapter : mAdapters) {
-            try {
-                adapter.setPhoneAccountHandle(callId, pHandle);
-            } catch (RemoteException ignored) {
-            }
-        }
-    }
 }
