@@ -331,11 +331,6 @@ final class RemoteConnectionService {
             }
         }
 
-        public void setPhoneAccountHandle(String callId, PhoneAccountHandle pHandle) {
-            findConnectionForAction(callId, "setPhoneAccountHandle")
-                    .setPhoneAccountHandle(pHandle);
-        }
-
         @Override
         public void resetCdmaConnectionTime(String callId) {
         }
