@@ -2042,7 +2042,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             // Configure rotation lock.
             int userRotation = Settings.System.getIntForUser(resolver,
-                    Settings.System.USER_ROTATION, Surface.ROTATION_0,
+                    Settings.System.USER_ROTATION, -1,
                     UserHandle.USER_CURRENT);
             if (mUserRotation != userRotation) {
                 mUserRotation = userRotation;
@@ -2050,8 +2050,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             int userRotationMode = Settings.System.getIntForUser(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, 0, UserHandle.USER_CURRENT) != 0 ?
-                            WindowManagerPolicy.USER_ROTATION_FREE :
-                                    WindowManagerPolicy.USER_ROTATION_LOCKED;
+                    WindowManagerPolicy.USER_ROTATION_FREE :
+                    WindowManagerPolicy.USER_ROTATION_LOCKED;
             if (mUserRotationMode != userRotationMode) {
                 mUserRotationMode = userRotationMode;
                 updateRotation = true;
@@ -6423,13 +6423,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mAllowAllRotations = mContext.getResources().getBoolean(
                             com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
                 }
-                boolean allowed = true;
-                if (orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-                        && orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_USER) {
-                   allowed = RotationPolicy.isRotationAllowed(sensorRotation,
-                           mUserRotationAngles, mAllowAllRotations != 0);
-                }
-                if (allowed) {
+
+                // use sensor orientation if it's forced, or if the user has allowed it
+                boolean useSensorOrientation =
+                        orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+                        || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_USER
+                        || RotationPolicy.isRotationAllowed(sensorRotation, mUserRotationAngles,
+                                mAllowAllRotations != 0);
+                if (useSensorOrientation) {
                     preferredRotation = sensorRotation;
                 } else {
                     preferredRotation = lastRotation;
