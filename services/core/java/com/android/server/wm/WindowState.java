@@ -333,6 +333,9 @@ final class WindowState implements WindowManagerPolicy.WindowState {
     /** Is this window now (or just being) removed? */
     boolean mRemoved;
 
+    /** Is this window going to be removed from binderDied callback? */
+    boolean mBinderDied;
+
     /**
      * Temp for keeping track of windows that have been removed when
      * rebuilding window list.
@@ -1209,9 +1212,11 @@ final class WindowState implements WindowManagerPolicy.WindowState {
                     WindowState win = mService.windowForClientLocked(mSession, mClient, false);
                     Slog.i(TAG, "WIN DEATH: " + win);
                     if (win != null) {
+                        win.mBinderDied = true;
                         mService.removeWindowLocked(win);
                     } else if (mHasSurface) {
                         Slog.e(TAG, "!!! LEAK !!! Window removed but surface still valid.");
+                        WindowState.this.mBinderDied = true;
                         mService.removeWindowLocked(WindowState.this);
                     }
                 }

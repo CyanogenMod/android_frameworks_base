@@ -2765,7 +2765,7 @@ public class WindowManagerService extends IWindowManager.Stub
         // to hold off on removing the window until the animation is done.
         // If the display is frozen, just remove immediately, since the
         // animation wouldn't be seen.
-        if (win.mHasSurface && okToDisplay()) {
+        if (win.mHasSurface && okToDisplay() && !win.mBinderDied) {
             // If we are not currently running the exit animation, we
             // need to see about starting one.
             wasVisible = win.isWinVisibleLw();
