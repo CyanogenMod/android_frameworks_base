@@ -42,8 +42,7 @@ import com.android.internal.R;
 public final class RotationPolicy {
     private static final String TAG = "RotationPolicy";
     private static final int CURRENT_ROTATION = -1;
-    private static final int NATURAL_ROTATION =
-            SystemProperties.getInt("persist.panel.orientation", Surface.ROTATION_0) / 90;
+    private static final int NATURAL_ROTATION = getDefaultSystemOrientation();
 
     private RotationPolicy() {
     }
@@ -213,6 +212,10 @@ public final class RotationPolicy {
     public static void unregisterRotationPolicyListener(Context context,
             RotationPolicyListener listener) {
         context.getContentResolver().unregisterContentObserver(listener.mObserver);
+    }
+
+    public static int getDefaultSystemOrientation() {
+        return SystemProperties.getInt("persist.panel.orientation", Surface.ROTATION_0) / 90;
     }
 
     /**
