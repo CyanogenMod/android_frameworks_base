@@ -27,6 +27,7 @@ import android.util.TimeUtils;
 import android.view.IWindowId;
 import android.view.IWindowSessionCallback;
 import android.view.WindowContentFrameStats;
+import com.android.internal.view.RotationPolicy;
 import com.android.server.display.DigitalPenOffScreenDisplayAdapter;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.policy.PolicyManager;
@@ -487,7 +488,7 @@ public class WindowManagerService extends IWindowManager.Stub
     /** All DisplayContents in the world, kept here */
     SparseArray<DisplayContent> mDisplayContents = new SparseArray<DisplayContent>(2);
 
-    int mRotation = SystemProperties.getInt("persist.panel.orientation", 0) / 90;
+    int mRotation = RotationPolicy.getDefaultSystemOrientation();
     int mForcedAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean mAltOrientation = false;
 
