@@ -2041,13 +2041,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             updateKeyAssignments();
 
             // Configure rotation lock.
-            int userRotation = Settings.System.getIntForUser(resolver,
-                    Settings.System.USER_ROTATION, Surface.ROTATION_0,
-                    UserHandle.USER_CURRENT);
-            if (mUserRotation != userRotation) {
-                mUserRotation = userRotation;
-                updateRotation = true;
-            }
             int userRotationMode = Settings.System.getIntForUser(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, 0, UserHandle.USER_CURRENT) != 0 ?
                             WindowManagerPolicy.USER_ROTATION_FREE :
@@ -2056,6 +2049,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mUserRotationMode = userRotationMode;
                 updateRotation = true;
                 updateOrientationListenerLp();
+            }
+            int userRotation;
+            if (mUserRotationMode == WindowManagerPolicy.USER_ROTATION_FREE) {
+                userRotation = Settings.System.getIntForUser(resolver,
+                        Settings.System.USER_ROTATION, -1,
+                        UserHandle.USER_CURRENT);
+            } else {
+                userRotation = -1; // will default to mPanelRotation if it's -1
+            }
+            if (mUserRotation != userRotation) {
+                mUserRotation = userRotation;
+                updateRotation = true;
             }
 
             mUserRotationAngles = Settings.System.getInt(resolver,
@@ -6337,7 +6342,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     @Override
     public int rotationForOrientationLw(int orientation, int lastRotation) {
-        if (false) {
+        if (true) {
             Slog.v(TAG, "rotationForOrientationLw(orient="
                         + orientation + ", last=" + lastRotation
                         + "); user=" + mUserRotation + " "
@@ -6423,13 +6428,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mAllowAllRotations = mContext.getResources().getBoolean(
                             com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
                 }
-                boolean allowed = true;
-                if (orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-                        && orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_USER) {
-                   allowed = RotationPolicy.isRotationAllowed(sensorRotation,
-                           mUserRotationAngles, mAllowAllRotations != 0);
-                }
-                if (allowed) {
+
+                // use sensor orientation if it's forced, or if the user has allowed it
+                boolean useSensorOrientation =
+                        orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+                        || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_USER
+                        || RotationPolicy.isRotationAllowed(sensorRotation, mUserRotationAngles,
+                                mAllowAllRotations != 0);
+                Slog.d(TAG, "*** using sensor orentation: " + useSensorOrientation
+                        + ", sensorRotation: " + sensorRotation + ", orentation=" + orientation);
+                if (useSensorOrientation) {
                     preferredRotation = sensorRotation;
                 } else {
                     preferredRotation = lastRotation;
