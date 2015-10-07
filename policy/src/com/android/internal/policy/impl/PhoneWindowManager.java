@@ -1843,7 +1843,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return;
         }
         mDisplay = display;
-        mPanelOrientation = SystemProperties.getInt("persist.panel.orientation", 0) / 90;
+        mPanelOrientation = RotationPolicy.getDefaultSystemOrientation();
 
         final Resources res = mContext.getResources();
         int shortSize, longSize;
@@ -2041,13 +2041,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             updateKeyAssignments();
 
             // Configure rotation lock.
-            int userRotation = Settings.System.getIntForUser(resolver,
-                    Settings.System.USER_ROTATION, Surface.ROTATION_0,
-                    UserHandle.USER_CURRENT);
-            if (mUserRotation != userRotation) {
-                mUserRotation = userRotation;
-                updateRotation = true;
-            }
             int userRotationMode = Settings.System.getIntForUser(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, 0, UserHandle.USER_CURRENT) != 0 ?
                             WindowManagerPolicy.USER_ROTATION_FREE :
@@ -2056,6 +2049,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mUserRotationMode = userRotationMode;
                 updateRotation = true;
                 updateOrientationListenerLp();
+            }
+            int userRotation;
+            if (mUserRotationMode == WindowManagerPolicy.USER_ROTATION_FREE) {
+                userRotation = Settings.System.getIntForUser(resolver,
+                        Settings.System.USER_ROTATION, mPanelOrientation,
+                        UserHandle.USER_CURRENT);
+            } else {
+                userRotation = mPanelOrientation;
+            }
+            if (mUserRotation != userRotation) {
+                mUserRotation = userRotation;
+                updateRotation = true;
             }
 
             mUserRotationAngles = Settings.System.getInt(resolver,
@@ -6423,9 +6428,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mAllowAllRotations = mContext.getResources().getBoolean(
                             com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
                 }
-                boolean allowed = true;
-                if (orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-                        && orientation != ActivityInfo.SCREEN_ORIENTATION_FULL_USER) {
+                boolean allowed = false;
+                if (mAllowAllRotations > 1
+                        || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+                        || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_USER) {
                    allowed = RotationPolicy.isRotationAllowed(sensorRotation,
                            mUserRotationAngles, mAllowAllRotations != 0);
                 }
