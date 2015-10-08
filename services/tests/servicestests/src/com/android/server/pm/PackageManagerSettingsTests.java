@@ -28,6 +28,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.SystemProperties;
 import android.test.AndroidTestCase;
+import android.test.mock.MockContext;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
@@ -38,6 +39,11 @@ import android.util.LongSparseArray;
 import com.android.internal.os.AtomicFile;
 
 import java.lang.reflect.Constructor;
+
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import com.android.internal.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -164,6 +170,12 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
             }
         }
         folder.delete();
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().toString());
     }
 
     private void writeOldFiles() {
@@ -342,33 +354,37 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         assertEquals(false, hasEnabled);
     }
 
-    public void testPrebundledRegionLockedAccessible() {
-        Configuration tempConfiguration = new Configuration();
-        String mcc = ("310");
-        if (!TextUtils.isEmpty(mcc)) {
-            tempConfiguration.mcc = Integer.parseInt(mcc);
-            Resources customResources = new Resources(new AssetManager(), new DisplayMetrics(),
-                    tempConfiguration);
-            Settings settings = new Settings(getContext(), getContext().getFilesDir());
-            String expectedPackageNeededForRegion = "com.fat.bloat.spam";
-            String expectedMccCorrect = "310";
-            assertTrue(settings.isPrebundledPackagedNeededForRegion(expectedPackageNeededForRegion,
-                    expectedMccCorrect, customResources));
-        }
+    // Checks if a package that is locked to a different region is rejected
+    // from being installed
+     public void testPrebundledDifferentRegionReject() {
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        String expectedPackageNeededForRegion = "org.cyanogenmod.restricted.package";
+        Resources resources = Mockito.mock(Resources.class);
+        String[] regionRestrictedPackages = new String[] {
+                expectedPackageNeededForRegion
+        };
+        Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
+                .thenReturn(regionRestrictedPackages);
+        assertFalse(settings.shouldPrebundledPackageBeInstalled(resources,
+                expectedPackageNeededForRegion, resources));
     }
 
-    public void testPrebundledRegionLocked() {
-        Configuration tempConfiguration = new Configuration();
-        String mcc = ("311");
-        if (!TextUtils.isEmpty(mcc)) {
-            tempConfiguration.mcc = Integer.parseInt(mcc);
-            Resources customResources = new Resources(new AssetManager(), new DisplayMetrics(),
-                    tempConfiguration);
-            Settings settings = new Settings(getContext(), getContext().getFilesDir());
-            String expectedPackageNeededForRegion = "com.fat.bloat.spam";
-            String expectedMccWrong = "311";
-            assertFalse(settings.isPrebundledPackagedNeededForRegion(expectedPackageNeededForRegion,
-                    expectedMccWrong, customResources));
-        }
+    // Checks if a package that is locked to the current region is accepted
+    // This also covers the test for a package that needs to be installed on a
+    // non region locked device
+    public void testPrebundledMatchingRegionAccept() {
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        String expectedPackageNeededForRegion = "org.cyanogenmod.restricted.package";
+        Resources resources = Mockito.mock(Resources.class);
+        String[] regionLockedPackages = new String[] {
+                expectedPackageNeededForRegion
+        };
+        Mockito.when(resources.getStringArray(R.array.config_region_locked_packages))
+                .thenReturn(regionLockedPackages);
+
+        Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
+                .thenReturn(regionLockedPackages);
+        assertTrue(settings.shouldPrebundledPackageBeInstalled(resources,
+                expectedPackageNeededForRegion, resources));
     }
 }
