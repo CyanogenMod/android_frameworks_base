@@ -6569,6 +6569,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     1,
                     UserHandle.USER_CURRENT);
         }
+        // force-update the variables immediately
+        updateSettings();
     }
 
     @Override
