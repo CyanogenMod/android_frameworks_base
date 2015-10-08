@@ -352,6 +352,9 @@
     <!-- Wifi AP Disabled from Subscription change -->
     <java-symbol type="string" name="subscription_change_disabled_wifi_ap" />
 
-    <!-- Region locked prebundled packages -->
+    <!-- Region locked prebundled packages (per mcc) -->
     <java-symbol type="array" name="config_region_locked_packages" />
+
+    <!-- Packages in this list should be a union of all packages defined in values-mccxxx (mcc) -->
+    <java-symbol type="array" name="config_restrict_to_region_locked_devices" />
 </resources>

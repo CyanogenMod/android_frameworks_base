@@ -43,6 +43,7 @@ import android.os.UserManager;
 import android.util.LogPrinter;
 
 import com.android.internal.R;
+import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.JournaledFile;
 import com.android.internal.util.XmlUtils;
@@ -1930,23 +1931,37 @@ final class Settings {
         return mPrebundledPackages.get(userId).contains(packageName);
     }
 
-    boolean isPrebundledPackagedNeededForRegion(String packageName, String mcc,
-            Resources configuredResources) {
-        // Default fallback on lack of mcc or bad package
-        if (TextUtils.isEmpty(mcc) || TextUtils.isEmpty(packageName)) {
+    boolean shouldPrebundledPackageBeInstalled(Resources res, String packageName,
+                                            Resources configuredResources) {
+        // Default fallback on lack of bad package
+        if (TextUtils.isEmpty(packageName)) {
             return false;
         }
 
-        String[] prebundledArray
-                = configuredResources.getStringArray(R.array.config_region_locked_packages);
-        if (prebundledArray != null) {
-            for (String pkg : prebundledArray) {
-                if (TextUtils.equals(packageName, pkg)) {
-                    return true;
-                }
-            }
+        // Configured resources can be null if the device
+        // is not region locked. In such cases, fall back to
+        // the default resources object
+        Resources resources = configuredResources;
+        if (configuredResources == null) {
+            resources = res;
         }
-        return false;
+
+        // If the package is compatible with the current region, install it
+        // Note : If a package needs to be installed only if the device is
+        // not provisioned, overlay values/config_region_locked_packages
+        // TODO change config_region_locked_packages to something that is
+        // not confusing inside a non region resource bucket
+        String[] prebundledArray
+                = resources.getStringArray(R.array.config_region_locked_packages);
+        if (ArrayUtils.contains(prebundledArray, packageName)) {
+            return true;
+        }
+
+        // If the package is not compatible with the current region, check if its locked
+        // to any other region before installing it.
+        prebundledArray = resources
+                .getStringArray(R.array.config_restrict_to_region_locked_devices);
+        return !ArrayUtils.contains(prebundledArray, packageName);
     }
 
     void writeDisabledSysPackageLPr(XmlSerializer serializer, final PackageSetting pkg)
