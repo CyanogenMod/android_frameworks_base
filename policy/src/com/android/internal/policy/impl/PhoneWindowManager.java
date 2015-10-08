@@ -2041,13 +2041,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             updateKeyAssignments();
 
             // Configure rotation lock.
-            int userRotation = Settings.System.getIntForUser(resolver,
-                    Settings.System.USER_ROTATION, Surface.ROTATION_0,
-                    UserHandle.USER_CURRENT);
-            if (mUserRotation != userRotation) {
-                mUserRotation = userRotation;
-                updateRotation = true;
-            }
             int userRotationMode = Settings.System.getIntForUser(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, 0, UserHandle.USER_CURRENT) != 0 ?
                             WindowManagerPolicy.USER_ROTATION_FREE :
@@ -2056,6 +2049,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mUserRotationMode = userRotationMode;
                 updateRotation = true;
                 updateOrientationListenerLp();
+            }
+            int userRotation = -1;
+            if (userRotationMode == WindowManagerPolicy.USER_ROTATION_LOCKED) {
+                userRotation = Settings.System.getIntForUser(resolver,
+                        Settings.System.USER_ROTATION, Surface.ROTATION_0,
+                        UserHandle.USER_CURRENT);
+            }
+            if (mUserRotation != userRotation) {
+                mUserRotation = userRotation;
+                updateRotation = true;
             }
 
             mUserRotationAngles = Settings.System.getInt(resolver,
