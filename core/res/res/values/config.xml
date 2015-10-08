@@ -2383,6 +2383,10 @@
     <string-array name="config_region_locked_packages" translatable="false">
     </string-array>
 
+    <!-- Packages in this list should be a union of all packages defined in values-mccxxx (mcc) -->
+    <string-array name="config_restrict_to_region_locked_devices" translatable="false">
+    </string-array>
+
     <!-- Show data activity indicators on signal bar -->
     <bool name="config_showDataActivityIndicators">true</bool>
 

@@ -4569,9 +4569,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                     // gone.  Assume that the user uninstalled it intentionally: do not reinstall.
                     throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
                             "skip reinstall for " + pkg.packageName);
-                } else if (existingSettings == null && mCustomResources != null &&
-                        !mSettings.isPrebundledPackagedNeededForRegion(pkg.packageName,
-                        SystemProperties.get("ro.prebundled.mcc"), mCustomResources)) {
+                } else if (existingSettings == null &&
+                        !mSettings.shouldPrebundledPackageBeInstalled(mContext.getResources(),
+                                pkg.packageName, mCustomResources)) {
                     // The prebundled app is not needed for the default mobile country code,
                     // skip installing it
                     throw new PackageManagerException(INSTALL_FAILED_REGION_LOCKED_PREBUNDLE,
