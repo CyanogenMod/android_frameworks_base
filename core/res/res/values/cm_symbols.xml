@@ -364,8 +364,23 @@
     <!-- Wifi AP Disabled from Subscription change -->
     <java-symbol type="string" name="subscription_change_disabled_wifi_ap" />
 
+<<<<<<< HEAD
     <!-- Region locked prebundled packages -->
+||||||| parent of 2aefa86... PackageManager : Extend prebundled logic
+    <!-- WiFi turn off notification -->
+    <java-symbol type="string" name="notify_turn_wifi_off_title" />
+
+    <!-- Region locked prebundled packages -->
+=======
+    <!-- WiFi turn off notification -->
+    <java-symbol type="string" name="notify_turn_wifi_off_title" />
+
+    <!-- Region locked prebundled packages (per mcc) -->
+>>>>>>> 2aefa86... PackageManager : Extend prebundled logic
     <java-symbol type="array" name="config_region_locked_packages" />
+
+    <!-- Packages in this list should be a union of all packages defined in values-mccxxx (mcc) -->
+    <java-symbol type="array" name="config_restrict_to_region_locked_devices" />
 
     <!-- Show data activity indicators on signal bar -->
     <java-symbol type="bool" name="config_showDataActivityIndicators" />
