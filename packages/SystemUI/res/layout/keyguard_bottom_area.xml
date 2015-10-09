@@ -36,6 +36,15 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:accessibilityLiveRegion="polite" />
 
+    <include layout="@layout/keyguard_eca"
+        android:id="@+id/keyguard_selector_fade_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center_horizontal" />
+
     <FrameLayout
         android:id="@+id/preview_container"
         android:layout_width="match_parent"
