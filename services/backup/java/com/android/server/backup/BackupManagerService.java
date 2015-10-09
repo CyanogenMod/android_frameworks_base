@@ -7948,6 +7948,11 @@ if (MORE_DEBUG) Slog.v(TAG, "   + got " + nRead + "; now wanting " + (size - soF
                             }
                             int toCopy = result;
                             while (toCopy > 0) {
+                                if (!mEngine.isRunning() && RestoreEngine.SUCCESS != mEngine.getResult()) {
+                                    Slog.e(TAG, "RestoreEngine fail");
+                                    // throw IOException to abandon this package's restore
+                                    throw new IOException();
+                                }
                                 int n = transportIn.read(buffer, 0, toCopy);
                                 engineOut.write(buffer, 0, n);
                                 toCopy -= n;
