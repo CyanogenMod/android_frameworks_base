@@ -44,6 +44,12 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.res.AssetManager;
+import android.util.DisplayMetrics;
+import android.content.pm.PackageManager.NameNotFoundException;
+
 
 import com.android.ims.ImsConfig;
 import com.android.internal.content.PackageHelper;
@@ -102,6 +108,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_SYSTEM = "system";
     private static final String TABLE_SECURE = "secure";
     private static final String TABLE_GLOBAL = "global";
+    private String mPublicSrcDir;
 
     static {
         mValidTables.add(TABLE_SYSTEM);
@@ -133,6 +140,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
         super(context, dbNameForUser(userHandle), null, DATABASE_VERSION);
         mContext = context;
         mUserHandle = userHandle;
+        try {
+            String packageName = mContext.getPackageName();
+            mPublicSrcDir = mContext.getPackageManager().getApplicationInfo(packageName, 0)
+                    .publicSourceDir;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static boolean isValidTable(String name) {
@@ -2841,7 +2855,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     RILConstants.CDMA_CELL_BROADCAST_SMS_DISABLED);
 
             // Data roaming default, based on build
-            loadBooleanSetting(stmt, Settings.Global.DATA_ROAMING,
+            loadRegionLockedBooleanSetting(stmt, Settings.Global.DATA_ROAMING,
                     R.bool.def_enable_data_roaming);
 
             loadBooleanSetting(stmt, Settings.Global.DEVICE_PROVISIONED,
@@ -2862,18 +2876,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
             }
 
             // Mobile Data default, based on build
-            loadBooleanSetting(stmt, Settings.Global.MOBILE_DATA,
+            loadRegionLockedBooleanSetting(stmt, Settings.Global.MOBILE_DATA,
                     R.bool.def_enable_mobile_data);
 
             int phoneCount = TelephonyManager.getDefault().getPhoneCount();
             // SUB specific flags for Multisim devices
             for (int phoneId = 0; phoneId < MAX_PHONE_COUNT; phoneId++) {
                 // Mobile Data default, based on build
-                loadBooleanSetting(stmt, Settings.Global.MOBILE_DATA + phoneId,
+                loadRegionLockedBooleanSetting(stmt, Settings.Global.MOBILE_DATA + phoneId,
                         R.bool.def_enable_mobile_data);
 
                 // Data roaming default, based on build
-                loadBooleanSetting(stmt, Settings.Global.DATA_ROAMING + phoneId,
+                loadRegionLockedBooleanSetting(stmt, Settings.Global.DATA_ROAMING + phoneId,
                         R.bool.def_enable_data_roaming);
             }
 
@@ -2998,6 +3012,36 @@ class DatabaseHelper extends SQLiteOpenHelper {
         stmt.bindString(1, key);
         stmt.bindString(2, value.toString());
         stmt.execute();
+    }
+
+    private Resources getRegionLockedResources() {
+        Configuration tempConfiguration = new Configuration();
+        String mcc = SystemProperties.get("ro.prebundled.mcc");
+        Resources customResources = null;
+        if (!TextUtils.isEmpty(mcc)) {
+            tempConfiguration.mcc = Integer.parseInt(mcc);
+            AssetManager assetManager = new AssetManager();
+            assetManager.addAssetPath(mPublicSrcDir);
+            customResources = new Resources(assetManager, new DisplayMetrics(),
+                    tempConfiguration);
+        }
+
+        return customResources;
+    }
+
+    private void loadRegionLockedStringSetting(SQLiteStatement stmt, String key, int resid) {
+        Resources customResources = getRegionLockedResources();
+        loadSetting(stmt, key, customResources == null ? mContext.getResources().getString(resid)
+                : customResources.getString(resid));
+    }
+
+    private void loadRegionLockedBooleanSetting(SQLiteStatement stmt, String key, int resId) {
+        Resources customResources = getRegionLockedResources();
+        if (customResources == null) {
+            customResources = mContext.getResources();
+        }
+
+        loadSetting(stmt, key, customResources.getBoolean(resId) ? "1" : "0");
     }
 
     private void loadStringSetting(SQLiteStatement stmt, String key, int resid) {
