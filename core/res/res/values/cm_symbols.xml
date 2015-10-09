@@ -367,6 +367,19 @@
     <!-- WiFi turn off notification -->
     <java-symbol type="string" name="notify_turn_wifi_off_title" />
 
-    <!-- Region locked prebundled packages -->
+    <!-- Region locked prebundled packages (per mcc) -->
     <java-symbol type="array" name="config_region_locked_packages" />
+
+    <!-- Packages in this list should be a union of all packages defined in values-mccxxx (mcc) -->
+    <java-symbol type="array" name="config_restrict_to_region_locked_devices" />
+
+    <!-- Show data activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showDataActivityIndicators" />
+
+    <!-- Show WiFi activity indicators on signal bar -->
+    <java-symbol type="bool" name="config_showWifiActivityIndicators" />
+
+    <!-- Support Samsung docks -->
+    <java-symbol type="bool" name="config_forceAnalogCarDock" />
+    <java-symbol type="bool" name="config_forceAnalogDeskDock" />
 </resources>
