@@ -652,6 +652,18 @@ public class ThemesContract {
          */
         public static final String BOOTANIMATION_THUMBNAIL = "bootanimation_thumbnail";
 
+        /**
+         * Cached preview of live lock screen
+         * <P>Type: String (file path)</P>
+         */
+        public static final String LIVE_LOCK_SCREEN_PREVIEW = "live_lock_screen_preview";
+
+        /**
+         * Cached thumbnail preview of live lock screen
+         * <P>Type: String (file path)</P>
+         */
+        public static final String LIVE_LOCK_SCREEN_THUMBNAIL = "live_lock_screen_thumbnail";
+
         public static final String[] VALID_KEYS = {
             STATUSBAR_BACKGROUND,
             STATUSBAR_BLUETOOTH_ICON,
@@ -677,6 +689,8 @@ public class ThemesContract {
             STYLE_PREVIEW,
             STYLE_THUMBNAIL,
             BOOTANIMATION_THUMBNAIL,
+            LIVE_LOCK_SCREEN_PREVIEW,
+            LIVE_LOCK_SCREEN_THUMBNAIL,
         };
     }
 
