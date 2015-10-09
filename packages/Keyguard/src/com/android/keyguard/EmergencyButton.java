@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.telecom.TelecomManager;
 import android.util.AttributeSet;
@@ -135,7 +136,7 @@ public class EmergencyButton extends Button {
         }
     }
 
-    private void updateEmergencyCallButton() {
+    public void updateEmergencyCallButton() {
         boolean visible = false;
         if (mIsVoiceCapable) {
             // Emergency calling requires voice capability.
@@ -149,7 +150,8 @@ public class EmergencyButton extends Button {
                     visible = mEnableEmergencyCallWhileSimLocked;
                 } else {
                     // Only show if there is a secure screen (pin/pattern/SIM pin/SIM puk);
-                    visible = mLockPatternUtils.isSecure(KeyguardUpdateMonitor.getCurrentUser());
+                    visible = mLockPatternUtils.isSecure(KeyguardUpdateMonitor.getCurrentUser()) ||
+                            SystemProperties.getBoolean("persist.radio.emgcy_btn_onswipe", false);
                 }
             }
         }
