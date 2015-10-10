@@ -452,6 +452,4 @@
     <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_ime_switch_button" msgid="5032926134740456424">Switch input method button.</string>
 
-    <string name="keyguard_date_12_hours_format">a - EEEE, d MMM</string>
-    <string name="keyguard_date_24_hours_format">EEEE, d MMM</string>
 </resources>
