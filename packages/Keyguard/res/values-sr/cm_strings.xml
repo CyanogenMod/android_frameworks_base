@@ -25,13 +25,11 @@
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Унеси SIM PIN, имаш <xliff:g id="number">%d</xliff:g> преостали покушај пре него што мораш контактирати свог оператора да откључаш уређај.</item>
     <item quantity="few">Унеси SIM PIN, имаш <xliff:g id="number">%d</xliff:g> преостала покушаја пре него што мораш контактирати свог оператора да откључаш уређај.</item>
-    <item quantity="many">Унеси SIM PIN, имаш <xliff:g id="number">%d</xliff:g> преостала покушаја пре него што мораш контактирати свог оператора да откључаш уређај.</item>
     <item quantity="other">Унеси SIM PIN, имаш <xliff:g id="number">%d</xliff:g> преостала покушаја пре него што мораш контактирати свог оператора да откључаш уређај.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">SIM је сада онемогућен. Унеси PUK код да наставиш. Имаш <xliff:g id="number">%d</xliff:g> преостали покушај пре него што SIM постане трајно неупотребљив. Контактирај оператера за детаље.</item>
     <item quantity="few">SIM је сада онемогућен. Унеси PUK код да наставиш. Имаш <xliff:g id="number">%d</xliff:g> преосталих покушаја пре него што SIM постане трајно неупотребљив. Контактирај оператера за детаље.</item>
-    <item quantity="many">SIM је сада онемогућен. Унеси PUK код да наставиш. Имаш <xliff:g id="number">%d</xliff:g> преосталих покушаја пре него што SIM постане трајно неупотребљив. Контактирај оператера за детаље.</item>
     <item quantity="other">SIM је сада онемогућен. Унеси PUK код да наставиш. Имаш <xliff:g id="number">%d</xliff:g> преосталих покушаја пре него што SIM постане трајно неупотребљив. Контактирај оператера за детаље.</item>
   </plurals>
 </resources>

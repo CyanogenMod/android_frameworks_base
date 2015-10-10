@@ -16,6 +16,7 @@
 
 package com.android.systemui.keyguard;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -25,15 +26,19 @@ import android.app.SearchManager;
 import android.app.StatusBarManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.trust.TrustManager;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -49,6 +54,7 @@ import android.provider.Settings;
 import android.service.fingerprint.FingerprintManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
@@ -1052,6 +1058,15 @@ public class KeyguardViewMediator extends SystemUI {
             if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled internally");
             return true;
         }
+        if (mLockPatternUtils.isThirdPartyKeyguardEnabled()) {
+            // We don't want the stock keyguard to do anything when a third party component is
+            // enabled.  The view mediator will still show take care of showing the third party
+            // component as usual.
+            if (DEBUG) {
+                Log.d(TAG, "iisKeyguardDisabled: keyguard is disabled by third party keyguard");
+            }
+            return true;
+        }
         if (mLockPatternUtils.isLockScreenDisabled()) {
             if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by setting");
             return true;
@@ -1370,6 +1385,7 @@ public class KeyguardViewMediator extends SystemUI {
             updateActivityLockScreenState();
             adjustStatusBarLocked();
             userActivity();
+            if (isThirdPartyKeyguardEnabled()) showThirdPartyKeyguard(false);
             return;
         }
 
@@ -1905,7 +1921,37 @@ public class KeyguardViewMediator extends SystemUI {
     private void handleNotifyScreenOff() {
         synchronized (KeyguardViewMediator.this) {
             if (DEBUG) Log.d(TAG, "handleNotifyScreenOff");
+            if (isThirdPartyKeyguardEnabled()) {
+                showThirdPartyKeyguard(true);
+            }
             mStatusBarKeyguardViewManager.onScreenTurnedOff();
+        }
+    }
+
+    /**
+     * @return Whether a third party keyguard is enabled
+     */
+    private boolean isThirdPartyKeyguardEnabled() {
+        return mLockPatternUtils.isThirdPartyKeyguardEnabled();
+    }
+
+    /**
+     * Launches the third party keyguard activity as specified by
+     * {@link LockPatternUtils#getThirdPartyKeyguardComponent()}
+     */
+    private void showThirdPartyKeyguard(boolean playSounds) {
+        ComponentName thirdPartyKeyguardComponent =
+                mLockPatternUtils.getThirdPartyKeyguardComponent();
+        if (thirdPartyKeyguardComponent != null) {
+            Intent intent = new Intent();
+            intent.setComponent(thirdPartyKeyguardComponent);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                mContext.startActivity(intent);
+                if (playSounds) playSounds(true);
+            } catch (ActivityNotFoundException e) {
+                Log.e(TAG, "Unable to start third party keyguard: " + thirdPartyKeyguardComponent);
+            }
         }
     }
 
@@ -2060,5 +2106,4 @@ public class KeyguardViewMediator extends SystemUI {
                 context.getSystemService(Context.FINGERPRINT_SERVICE);
         return fp != null && fp.userEnrolled() && lockPatternUtils.usingFingerprint();
     }
-
 }
