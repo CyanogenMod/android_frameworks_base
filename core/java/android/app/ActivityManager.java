@@ -1326,6 +1326,23 @@ public class ActivityManager {
     }
 
     /**
+     * Check whether the current foreground tasks belongs to a given package.
+     *
+     * @param packageName Name of the package to check for
+     *
+     * @return Whether the current foreground tasks belongs to the given package
+     * @hide
+     */
+    public boolean isPackageInForeground(String packageName) {
+        try {
+            return ActivityManagerNative.getDefault().isPackageInForeground(packageName);
+        } catch (RemoteException e) {
+            // System dead, we will be dead too soon!
+            return false;
+        }
+    }
+
+    /**
      * Completely remove the given task.
      *
      * @param taskId Identifier of the task to be removed.

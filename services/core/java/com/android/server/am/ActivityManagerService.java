@@ -8605,6 +8605,14 @@ public final class ActivityManagerService extends ActivityManagerNative
         return list;
     }
 
+    @Override
+    public boolean isPackageInForeground(String packageName) {
+        synchronized (this) {
+            ActivityRecord activity = mStackSupervisor.topRunningActivityLocked();
+            return activity != null && activity.packageName.equals(packageName);
+        }
+    }
+
     /**
      * Creates a new RecentTaskInfo from a TaskRecord.
      */
