@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">تترینگ یو‌اس‌بی روشن.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">تترینگ یواس‌بی خاموش شد.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">تترینگ یواس‌بی روشن شد.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">بهینه‌ساز باتری خاموش.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">بهینه‌ساز باتری روشن.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">بهینه‌ساز باتری خاموش شد.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">بهینه‌ساز باتری روشن شد.</string>
   <string name="accessibility_quick_settings_visualizer">رقص نور.</string>
+  <string name="accessibility_quick_settings_volume_panel">پنل صدا.</string>
   <string name="accessibility_dpad_left">نشانگر چپ</string>
   <string name="accessibility_dpad_right">نشانگر راست</string>
   <string name="quick_settings_mobile_data_label">داده همراه</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">اعلان فوری</string>
   <string name="quick_settings_ambient_display_label">نمایش حساس به محیط</string>
   <string name="quick_settings_sync_label">همگام‌‌سازی</string>
+  <string name="quick_settings_battery_saver_label">بهینه‌ساز باتری</string>
   <string name="quick_settings_custom_tile_detail_title">کاشی سفارشی</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s </xliff:g> - <xliff:g id="condition">%2$s </xliff:g></string>
   <string name="left_shortcut_hint">برای %1$s سریع به راست بکشید</string>

@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-модем включён.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-модем выключен.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-модем включён.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Режим энергосбережения выключен.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Режим энергосбережения включён.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Режим энергосбережения выключен.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Режим энергосбережения включён.</string>
   <string name="accessibility_quick_settings_visualizer">Визуализатор.</string>
+  <string name="accessibility_quick_settings_volume_panel">Панель громкости.</string>
   <string name="accessibility_dpad_left">Курсор влево</string>
   <string name="accessibility_dpad_right">Курсор вправо</string>
   <string name="quick_settings_mobile_data_label">Мобильные данные</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Всплывающие уведомления</string>
   <string name="quick_settings_ambient_display_label">Индикация событий</string>
   <string name="quick_settings_sync_label">Синхронизация</string>
+  <string name="quick_settings_battery_saver_label">Энергосбережение</string>
   <string name="quick_settings_custom_tile_detail_title">Пользовательская плитка</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Проведите вправо, чтобы открыть приложение «%1$s»</string>

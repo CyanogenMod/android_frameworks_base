@@ -209,4 +209,6 @@
   <string name="silent_mode_none">Nessuno</string>
   <string name="subscription_change_disabled_wifi_ap">Hotspot WiFi disattivato in seguito al cambio di SIM</string>
   <string name="notify_turn_wifi_off_title">Spegni Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">schermata di sblocco di terze parti</string>
+  <string name="permdesc_thirdPartyKeyguard">Consente ad un\'app di essere usata come schermata di sblocco non sicura.</string>
 </resources>
