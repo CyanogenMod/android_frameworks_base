@@ -17,6 +17,7 @@
 package android.widget;
 
 import android.annotation.IntDef;
+import android.app.ActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.content.Context;
@@ -355,6 +356,7 @@ public class Toast {
         View mNextView;
 
         WindowManager mWM;
+        ActivityManager mAM;
 
         TN() {
             // XXX This should be changed to use a Dialog, with a Theme.Toast
@@ -402,16 +404,20 @@ public class Toast {
                     context = mView.getContext();
                 }
 
-                ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
-                if (appIcon != null) {
-                    PackageManager pm = context.getPackageManager();
-                    Drawable icon = null;
-                    try {
-                        icon = pm.getApplicationIcon(packageName);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        // nothing to do
-                    }
+                mAM = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+                String foregroundPackageName = mAM.getRunningTasks(1).get(0).topActivity.getPackageName();
+                if (!foregroundPackageName.equals(packageName)) {
+                    ImageView appIcon = (ImageView) mView.findViewById(android.R.id.icon);
+                    if (appIcon != null) {
+                        PackageManager pm = context.getPackageManager();
+                        Drawable icon = null;
+                        try {
+                            icon = pm.getApplicationIcon(packageName);
+                        } catch (PackageManager.NameNotFoundException e) {
+                            // nothing to do
+                        }
                     appIcon.setImageDrawable(icon);
+                    }
                 }
                 mWM = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
                 // We can resolve the Gravity here by using the Locale for getting
