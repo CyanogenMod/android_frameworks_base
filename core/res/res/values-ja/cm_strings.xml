@@ -207,4 +207,8 @@
   <string name="permdesc_resetBatteryStats">現在の電池消費量の低レベルデータをリセットすることをアプリに許可します。</string>
   <string name="silent_mode_priority">優先順位</string>
   <string name="silent_mode_none">なし</string>
+  <string name="subscription_change_disabled_wifi_ap">SIMサブスクリプションの変更によってWi-Fiアクセスポイントが無効になりました</string>
+  <string name="notify_turn_wifi_off_title">Wi-FiをOFFにする</string>
+  <string name="permlab_thirdPartyKeyguard">サードパーティのロック画面</string>
+  <string name="permdesc_thirdPartyKeyguard">パスワードのないロック画面として使用されることをアプリに許可します。</string>
 </resources>

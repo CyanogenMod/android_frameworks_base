@@ -207,4 +207,8 @@
   <string name="permdesc_resetBatteryStats">Permite que la aplicación restablezca los datos actuales de uso de la batería.</string>
   <string name="silent_mode_priority">Prioridad</string>
   <string name="silent_mode_none">Ninguno</string>
+  <string name="subscription_change_disabled_wifi_ap">Zona Wi-Fi deshabilitado debido a un cambio de suscripción en la SIM</string>
+  <string name="notify_turn_wifi_off_title">Desactivar Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">pantalla de bloqueo con aplicación de terceros</string>
+  <string name="permdesc_thirdPartyKeyguard">Permite a una aplicación ser utilizada como pantalla de bloqueo insegura.</string>
 </resources>

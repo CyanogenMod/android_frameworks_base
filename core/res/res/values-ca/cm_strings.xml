@@ -209,4 +209,6 @@
   <string name="silent_mode_none">Cap</string>
   <string name="subscription_change_disabled_wifi_ap">S\'ha deshabilitat el punt d\'accés Wi-Fi degut a un canvi en la subscripció de la SIM</string>
   <string name="notify_turn_wifi_off_title">Apaga el Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">pantalla de bloqueig de tercers</string>
+  <string name="permdesc_thirdPartyKeyguard">Permet a una aplicació ser utilitzada com a pantalla de bloqueig no segura.</string>
 </resources>

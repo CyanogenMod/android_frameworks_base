@@ -209,4 +209,6 @@
   <string name="silent_mode_none">ללא</string>
   <string name="subscription_change_disabled_wifi_ap">נקודת Wi-Fi חמה הושבתה עקב שינוי מנוי SIM</string>
   <string name="notify_turn_wifi_off_title">כיבוי Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">מסך נעילה של צד שלישי</string>
+  <string name="permdesc_thirdPartyKeyguard">מאפשר ליישום לשמש כמסך נעילה לא מאובטח.</string>
 </resources>

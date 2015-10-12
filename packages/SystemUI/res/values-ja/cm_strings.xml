@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USBテザリングはONです。</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USBテザリングがOFFになりました。</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USBテザリングがONになりました。</string>
+  <string name="accessibility_quick_settings_battery_saver_off">バッテリーセーバーはOFFです。</string>
+  <string name="accessibility_quick_settings_battery_saver_on">バッテリーセーバーはONです。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">バッテリーセーバーがOFFになりました。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">バッテリーセーバーがONになりました。</string>
   <string name="accessibility_quick_settings_visualizer">ビジュアライザ。</string>
+  <string name="accessibility_quick_settings_volume_panel">音量パネル</string>
   <string name="accessibility_dpad_left">カーソルを左へ</string>
   <string name="accessibility_dpad_right">カーソルを右へ</string>
   <string name="quick_settings_mobile_data_label">データ通信</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">ヘッドアップ</string>
   <string name="quick_settings_ambient_display_label">常時オンディスプレイ</string>
   <string name="quick_settings_sync_label">同期</string>
+  <string name="quick_settings_battery_saver_label">バッテリーセーバー</string>
   <string name="quick_settings_custom_tile_detail_title">カスタムタイル</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">右にスワイプして%1$s</string>
