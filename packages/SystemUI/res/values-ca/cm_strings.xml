@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Ancoratge USB encès.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">S\'ha apagat l\'ancoratge USB.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">S\'ha encès l\'ancoratge USB.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Estalvi de bateria apagat.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Estalvi de bateria encès.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">S\'ha apagat l\'estalvi de bateria.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">S\'ha encès l\'estalvi de bateria.</string>
   <string name="accessibility_quick_settings_visualizer">Visualitzador.</string>
+  <string name="accessibility_quick_settings_volume_panel">Panell de volum.</string>
   <string name="accessibility_dpad_left">Cursor esquerra</string>
   <string name="accessibility_dpad_right">Cursor dreta</string>
   <string name="quick_settings_mobile_data_label">Dades mòbils</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Notificacions emergents</string>
   <string name="quick_settings_ambient_display_label">Pantalla ambient</string>
   <string name="quick_settings_sync_label">Sinc</string>
+  <string name="quick_settings_battery_saver_label">Estalvi de bateria</string>
   <string name="quick_settings_custom_tile_detail_title">Cel·la personalitzada</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Llisca a la dreta per %1$s</string>

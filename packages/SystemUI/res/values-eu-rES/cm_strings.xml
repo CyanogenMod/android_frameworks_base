@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB tethering gaituta.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB tethering ezgaituta.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB tethering gaituta.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Bateria aurrezlea piztuta.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Bateria aurrezlea piztuta.</string>
   <string name="accessibility_quick_settings_visualizer">Irudikatzailea.</string>
+  <string name="accessibility_quick_settings_volume_panel">Bolumen panela.</string>
   <string name="accessibility_dpad_left">Kurtsorea ezkerrean</string>
   <string name="accessibility_dpad_right">Kurtsorea eskuman</string>
   <string name="quick_settings_mobile_data_label">Datu mugikorrak</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_sync_label">Sinkronizazioa</string>
+  <string name="quick_settings_battery_saver_label">Bateria aurrezlea</string>
   <string name="quick_settings_custom_tile_detail_title">Lauza pertsonalizatua</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Pasatu hatza eskumara: %1$s</string>

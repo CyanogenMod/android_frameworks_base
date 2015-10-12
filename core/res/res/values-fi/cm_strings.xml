@@ -209,4 +209,6 @@
   <string name="silent_mode_none">Ei mitään</string>
   <string name="subscription_change_disabled_wifi_ap">Wi-Fi-tukiasema poistettiin käytöstä SIMin vaihdon vuoksi</string>
   <string name="notify_turn_wifi_off_title">Poista Wi-Fi käytöstä</string>
+  <string name="permlab_thirdPartyKeyguard">kolmannen osapuolen lukitusnäyttö</string>
+  <string name="permdesc_thirdPartyKeyguard">Sallii sovellusta käytettävän epäturvallisena lukitusnäyttönä.</string>
 </resources>
