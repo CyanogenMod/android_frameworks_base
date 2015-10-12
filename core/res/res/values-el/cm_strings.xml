@@ -209,4 +209,6 @@
   <string name="silent_mode_none">Κανένα</string>
   <string name="subscription_change_disabled_wifi_ap">Το Wi-Fi hotspot απενεργοποιήθηκε λόγω αλλαγής συνδρομής SIM</string>
   <string name="notify_turn_wifi_off_title">Απενεργοποίηση Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">χρήση ως οθόνη κλειδώματος</string>
+  <string name="permdesc_thirdPartyKeyguard">Επιτρέπει σε μια εφαρμογή να χρησιμοποιηθεί ως μια ανασφαλής οθόνη κλειδώματος.</string>
 </resources>

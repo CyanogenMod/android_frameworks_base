@@ -127,6 +127,18 @@
   <string name="kg_too_many_failed_pin_attempts_dialog_message">Inxertasti un códigu PIN incorreutu <xliff:g id="NUMBER_0">%d</xliff:g> vegaes. \n\nInténtalo otra vegada en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
   <string name="kg_too_many_failed_password_attempts_dialog_message">Inxertasti una contraseña incorreuta <xliff:g id="NUMBER_0">%d</xliff:g> vegaes. \n\nInténtalo otra vegada en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">Fallasti <xliff:g id="NUMBER_0">%d</xliff:g> vegaes al dibuxar el patrón de desbloquéu. \n\nInténtalo otra vegada en <xliff:g id="NUMBER_1">%d</xliff:g> segundos.</string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="tablet">
+       Intentasti desbloquiar la tablet <xliff:g id="number">%d</xliff:g> vegaes.
+       Dempués de <xliff:g id="number">%d</xliff:g> intentos fallíos más,
+       esta tablet va resetease, desaniciando tolos sos datos.
+    </string>
+  <string name="kg_failed_attempts_almost_at_wipe" product="default">
+       Intentasti desbloquiar el teléfonu tablet <xliff:g id="number">%d</xliff:g> vegaes.
+       Dempués de <xliff:g id="number">%d</xliff:g> intentos fallíos más,
+       esta tablet va resetease, desaniciando tolos sos datos.</string>
+  <string name="kg_failed_attempts_now_wiping" product="tablet">
+       Intentasti desbloquiar la tablet <xliff:g id="number">%d</xliff:g> vegaes.
+       Esta tablet va resetease, desaniciando tolos sos datos.    </string>
   <string name="kg_failed_attempts_almost_at_login" product="tablet">Fallasti <xliff:g id="NUMBER_0">%d</xliff:g> vegaes al dibuxar el patrón de desbloquéu. Si falles otres <xliff:g id="NUMBER_1">%d</xliff:g> vegaes, vas tener d\'usar una cuenta de corréu-e pa desbloquiar la tablet.\n\n Inténtalo otra vegada en <xliff:g id="NUMBER_2">%d</xliff:g> segundos.</string>
   <string name="kg_failed_attempts_almost_at_login" product="default">Fallasti <xliff:g id="NUMBER_0">%d</xliff:g> vegaes al dibuxar el patrón de desbloquéu. Si falles otres <xliff:g id="NUMBER_1">%d</xliff:g> vegaes, vas tener d\'usar una cuenta de corréu-e pa desbloquiar el teléfonu.\n\n Inténtalo otra vegada en <xliff:g id="NUMBER_2">%d</xliff:g> segundos.</string>
   <string name="kg_reordering_delete_drop_target_text">Desaniciar</string>

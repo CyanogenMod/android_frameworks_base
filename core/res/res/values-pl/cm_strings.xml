@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Umożliwia aplikacji na zresetowanie statystyk użycia baterii.</string>
   <string name="silent_mode_priority">Priorytet</string>
   <string name="silent_mode_none">Brak</string>
+  <string name="subscription_change_disabled_wifi_ap">Wyłączono hotspot WiFi z powodu zmiany karty SIM</string>
+  <string name="notify_turn_wifi_off_title">Wyłącz Wi-Fi</string>
 </resources>

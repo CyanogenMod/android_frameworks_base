@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-Tethering an.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-Tethering ausgeschaltet.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-Tethering eingeschaltet.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akku-Sparmodus aus.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akku-Sparmodus an.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akku-Sparmodus ausgeschaltet.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akku-Sparmodus eingeschaltet.</string>
   <string name="accessibility_quick_settings_visualizer">Musikvisualisierung.</string>
+  <string name="accessibility_quick_settings_volume_panel">Lautstärkebedienung.</string>
   <string name="accessibility_dpad_left">Pfeiltaste links</string>
   <string name="accessibility_dpad_right">Pfeiltaste rechts</string>
   <string name="quick_settings_mobile_data_label">Mobile Daten</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Pop-up</string>
   <string name="quick_settings_ambient_display_label">Inaktivitätsdisplay</string>
   <string name="quick_settings_sync_label">Sync</string>
+  <string name="quick_settings_battery_saver_label">Akku-Sparmodus</string>
   <string name="quick_settings_custom_tile_detail_title">Benutzerdefinierte Kachel</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> – <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Nach Rechts wischen für %1$s</string>

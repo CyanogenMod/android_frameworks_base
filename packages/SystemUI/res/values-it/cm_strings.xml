@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Tethering USB ON.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Tethering USB disattivato.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Tethering USB attivato.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Risparmio batteria OFF.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Risparmio batteria ON.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Risparmio batteria disattivato.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Risparmio batteria attivato.</string>
   <string name="accessibility_quick_settings_visualizer">Visualizzatore.</string>
+  <string name="accessibility_quick_settings_volume_panel">Pannello volume.</string>
   <string name="accessibility_dpad_left">Cursore a sinistra</string>
   <string name="accessibility_dpad_right">Cursore a destra</string>
   <string name="quick_settings_mobile_data_label">Dati mobili</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Heads Up</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_sync_label">Sincronizzazione</string>
+  <string name="quick_settings_battery_saver_label">Risparmio batteria</string>
   <string name="quick_settings_custom_tile_detail_title">Tile personalizzato</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Scorri a destra per %1$s</string>

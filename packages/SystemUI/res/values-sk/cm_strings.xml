@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Zdieľanie cez USB zap.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Zdieľanie cez USB vypnuté.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Zdieľanie cez USB zapnuté.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Šetrič batérie vypnutý.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Šetrič batérie zapnutý.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Šetrič batérie vypnutý.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Šetrič batérie zapnutý.</string>
   <string name="accessibility_quick_settings_visualizer">Vizualizér.</string>
+  <string name="accessibility_quick_settings_volume_panel">Panel hlasitosti.</string>
   <string name="accessibility_dpad_left">Kurzor vľavo</string>
   <string name="accessibility_dpad_right">Kurzor vpravo</string>
   <string name="quick_settings_mobile_data_label">Mobilné dáta</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Plávajúce oznámenia</string>
   <string name="quick_settings_ambient_display_label">Ambientné zobrazenie</string>
   <string name="quick_settings_sync_label">Synchronizácia</string>
+  <string name="quick_settings_battery_saver_label">Šetrič batérie</string>
   <string name="quick_settings_custom_tile_detail_title">Vlastná dlaždica</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Potiahnite doprava pre %1$s</string>
