@@ -44,4 +44,17 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          for some cdma carriers -->
     <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />
     <bool name="config_fetch_apn_from_omh_card">false</bool>
+    <!-- Set Wifi hotspot security type
+    NONE : 0
+    WPA2 PSK: 4
+    -->
+    <integer name="wifi_hotspot_security_type">4</integer>
+    <!-- Default wi-fi hotspot pass -->
+    <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
+    <!-- Default wi-fi direct name -->
+    <string name="def_wifi_direct_name" translatable="false"></string>
+    <!-- Setting customize default bluetooth name -->
+    <string name="def_custom_bt_defname"></string>
+    <!-- custom date format or not  -->
+    <bool name="config_dateformat">false</bool>
 </resources>
