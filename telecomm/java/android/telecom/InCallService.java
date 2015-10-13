@@ -73,6 +73,7 @@ public abstract class InCallService extends Service {
     private static final int MSG_ON_CALL_AUDIO_STATE_CHANGED = 5;
     private static final int MSG_BRING_TO_FOREGROUND = 6;
     private static final int MSG_ON_CAN_ADD_CALL_CHANGED = 7;
+    private static final int MSG_ON_MERGE_FAILED = 8;
 
     /** Default Handler used to consolidate binder method calls onto a single thread. */
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
@@ -90,6 +91,9 @@ public abstract class InCallService extends Service {
                     break;
                 case MSG_ADD_CALL:
                     mPhone.internalAddCall((ParcelableCall) msg.obj);
+                    break;
+                case MSG_ON_MERGE_FAILED:
+                    mPhone.onMergeFailed((ParcelableCall) msg.obj);
                     break;
                 case MSG_UPDATE_CALL:
                     mPhone.internalUpdateCall((ParcelableCall) msg.obj);
@@ -153,6 +157,11 @@ public abstract class InCallService extends Service {
         @Override
         public void onCallAudioStateChanged(CallAudioState callAudioState) {
             mHandler.obtainMessage(MSG_ON_CALL_AUDIO_STATE_CHANGED, callAudioState).sendToTarget();
+        }
+
+        @Override
+        public void onMergeFailed(ParcelableCall call) {
+            mHandler.obtainMessage(MSG_ON_MERGE_FAILED, call).sendToTarget();
         }
 
         @Override

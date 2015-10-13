@@ -1169,6 +1169,11 @@ public final class Call {
         }
     }
 
+    /** {@hide} */
+    final void onMergeFailed() {
+        fireStateChanged(mState);
+    }
+
     private void fireStateChanged(final int newState) {
         for (CallbackRecord<Callback> record : mCallbackRecords) {
             final Call call = this;
