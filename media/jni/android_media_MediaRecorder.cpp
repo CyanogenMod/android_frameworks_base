@@ -389,7 +389,6 @@ static void
 android_media_MediaRecorder_start(JNIEnv *env, jobject thiz)
 {
     ALOGV("start");
-    SEEMPLOG_RECORD(86, "");
     sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
     process_media_recorder_call(env, mr->start(), "java/lang/RuntimeException", "start failed.");
 }
