@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-Tethering un.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-Tethering ausgeschalt.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-Tethering ugeschalt.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akkuschouner aus.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akkuschouner un.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akkuschouner ausgeschalt.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akkuschouner ugeschalt.</string>
   <string name="accessibility_quick_settings_visualizer">Musekvisualiséierung.</string>
+  <string name="accessibility_quick_settings_volume_panel">Lautstäerktpanneau.</string>
   <string name="accessibility_dpad_left">Cursor lénks</string>
   <string name="accessibility_dpad_right">Cursor riets</string>
   <string name="quick_settings_mobile_data_label">Mobil Daten</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Pop-Up-Notifikatiounen</string>
   <string name="quick_settings_ambient_display_label">Ambiente Schierm</string>
   <string name="quick_settings_sync_label">Synchronisatioun</string>
+  <string name="quick_settings_battery_saver_label">Akkuschouner</string>
   <string name="quick_settings_custom_tile_detail_title">Eege Kachel</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">No riets wësche fir %1$s</string>

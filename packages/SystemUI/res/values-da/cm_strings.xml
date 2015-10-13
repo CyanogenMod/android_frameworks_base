@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-internetdeling til.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-internetdeling er slået fra.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-internetdeling er slået til.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Strømsparetilstand fra.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Strømsparetilstand til.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Strømsparetilstand er slået fra.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Strømsparetilstand er slået til.</string>
   <string name="accessibility_quick_settings_visualizer">Visualisator.</string>
+  <string name="accessibility_quick_settings_volume_panel">Lydstyrkepanel.</string>
   <string name="accessibility_dpad_left">Venstremarkør</string>
   <string name="accessibility_dpad_right">Højremarkør</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Svævende meddelelser</string>
   <string name="quick_settings_ambient_display_label">Inaktivitetsvisning</string>
   <string name="quick_settings_sync_label">Synkr.</string>
+  <string name="quick_settings_battery_saver_label">Strømsparetilstand</string>
   <string name="quick_settings_custom_tile_detail_title">Tilpasset flise</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Stryg til højre for %1$s</string>

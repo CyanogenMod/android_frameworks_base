@@ -71,9 +71,10 @@ public class LightsService extends SystemService {
         }
 
         @Override
-        public void setModes(int brightnessLevel) {
+        public void setModes(int brightnessLevel, boolean multipleLeds) {
             synchronized (this) {
                 mBrightnessLevel = brightnessLevel;
+                mMultipleLeds = multipleLeds;
                 mModesUpdate = true;
             }
         }
@@ -120,7 +121,7 @@ public class LightsService extends SystemService {
                 Trace.traceBegin(Trace.TRACE_TAG_POWER, "setLight(" + mId + ", " + color + ")");
                 try {
                     setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode,
-                            mBrightnessLevel);
+                            mBrightnessLevel, mMultipleLeds ? 1 : 0);
                 } finally {
                     Trace.traceEnd(Trace.TRACE_TAG_POWER);
                 }
@@ -135,6 +136,7 @@ public class LightsService extends SystemService {
         private int mBrightnessLevel;
         private boolean mFlashing;
         private boolean mModesUpdate;
+        private boolean mMultipleLeds;
     }
 
     /* This class implements an obsolete API that was removed after eclair and re-added during the
@@ -222,7 +224,8 @@ public class LightsService extends SystemService {
     private static native void finalize_native(long ptr);
 
     static native void setLight_native(long ptr, int light, int color, int mode,
-            int onMS, int offMS, int brightnessMode, int brightnessLevel);
+            int onMS, int offMS, int brightnessMode, int brightnessLevel,
+            int mMultipleLeds);
 
     private long mNativePointer;
 }

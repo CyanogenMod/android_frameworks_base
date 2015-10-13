@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-jakaminen päällä.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-jakaminen pois päältä.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-jakaminen päällä.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Virransäästö pois.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Virransäästö päällä.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Virransäästö pois käytöstä.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Virransäästö käytössä.</string>
   <string name="accessibility_quick_settings_visualizer">Visualisointi.</string>
+  <string name="accessibility_quick_settings_volume_panel">Äänenvoimakkuuspaneeli.</string>
   <string name="accessibility_dpad_left">Kohdistin vasemmalle</string>
   <string name="accessibility_dpad_right">Kohdistin oikealle</string>
   <string name="quick_settings_mobile_data_label">Mobiilidata</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_ambient_display_label">Ambient-näyttö</string>
   <string name="quick_settings_sync_label">Synkronointi</string>
+  <string name="quick_settings_battery_saver_label">Virransäästö</string>
   <string name="quick_settings_custom_tile_detail_title">Mukautettu tiili</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Pyyhkäise oikealle %1$s kertaa</string>

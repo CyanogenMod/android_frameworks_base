@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB tethering zap.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB tethering vypnutý.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB tethering zapnutý.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Spořič baterie vyp.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Spořič baterie zap.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Spořič baterie vypnut.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Spořič baterie zapnut.</string>
   <string name="accessibility_quick_settings_visualizer">Vizualizér.</string>
+  <string name="accessibility_quick_settings_volume_panel">Panel hlasitosti.</string>
   <string name="accessibility_dpad_left">Kurzor doleva</string>
   <string name="accessibility_dpad_right">Kurzor doprava</string>
   <string name="quick_settings_mobile_data_label">Mobilní data</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Plovoucí upozornění</string>
   <string name="quick_settings_ambient_display_label">Ambientní zobrazení</string>
   <string name="quick_settings_sync_label">Synchronizace</string>
+  <string name="quick_settings_battery_saver_label">Spořič baterie</string>
   <string name="quick_settings_custom_tile_detail_title">Vlastní dlaždice</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Přejeďte doprava pro %1$s</string>

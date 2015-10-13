@@ -207,4 +207,8 @@
   <string name="permdesc_resetBatteryStats">Bateriaren maila baxuko erabilera datuak leheneratzea ahalbidetzen dio aplikazioari.</string>
   <string name="silent_mode_priority">Lehentasuna</string>
   <string name="silent_mode_none">Bat ere ez</string>
+  <string name="subscription_change_disabled_wifi_ap">Wi-Fi gunea desgaitu da SIM harpidetza aldatu delako</string>
+  <string name="notify_turn_wifi_off_title">Ezgaitu Wi-Fia</string>
+  <string name="permlab_thirdPartyKeyguard">hirugarrengoen blokeo pantaila</string>
+  <string name="permdesc_thirdPartyKeyguard">Aplikazio bat blokeo pantaila ez seguru gisa erabiltzea ahalbidetzen du.</string>
 </resources>
