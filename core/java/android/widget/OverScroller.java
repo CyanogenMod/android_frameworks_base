@@ -609,6 +609,7 @@ public class OverScroller {
         private boolean mIsPerfLockAcquired = false;
         private boolean mIsPerfBoostEnabled = false;
         private int fBoostTimeOut = 0;
+        private int flingBoostTimeOut = 0;
         private int fBoostParamVal[];
 
         static {
@@ -663,6 +664,10 @@ public class OverScroller {
                    com.android.internal.R.integer.flingboost_timeout_param);
             fBoostParamVal = context.getResources().getIntArray(
                         com.android.internal.R.array.flingboost_param_value);
+            }
+
+            if (mPerf == null && mIsPerfBoostEnabled) {
+                mPerf = new BoostFramework();
             }
         }
 
@@ -786,16 +791,17 @@ public class OverScroller {
             if (velocity != 0) {
                 mDuration = mSplineDuration = getSplineFlingDuration(velocity);
                 totalDistance = getSplineFlingDistance(velocity);
-                if (mPerf == null && mIsPerfBoostEnabled) {
-                    mPerf = new BoostFramework();
-                }
 
                 if (mPerf != null) {
                     mIsPerfLockAcquired = true;
                     if (0 == fBoostTimeOut) {
-                        fBoostTimeOut = mDuration;
+                        //config value is not defined
+                        flingBoostTimeOut = mDuration;
+                    } else {
+                        //config value is present
+                        flingBoostTimeOut = fBoostTimeOut;
                     }
-                    mPerf.perfLockAcquire(fBoostTimeOut, fBoostParamVal);
+                    mPerf.perfLockAcquire(flingBoostTimeOut, fBoostParamVal);
                 }
             }
 
