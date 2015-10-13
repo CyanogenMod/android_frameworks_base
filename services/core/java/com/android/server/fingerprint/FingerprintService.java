@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A service to manage multiple clients that want to access the fingerprint HAL API.
@@ -65,7 +66,7 @@ public class FingerprintService extends SystemService {
 
     private static final String PARAM_WAKEUP = "wakeup";
 
-    private ArrayMap<IBinder, ClientData> mClients = new ArrayMap<IBinder, ClientData>();
+    private final ArrayMap<IBinder, ClientData> mClients = new ArrayMap<IBinder, ClientData>();
 
     private static final int MSG_NOTIFY = 10;
 
@@ -159,11 +160,10 @@ public class FingerprintService extends SystemService {
     void handleNotify(int msg, int arg1, int arg2) {
         Slog.v(TAG, "handleNotify(msg=" + msg + ", arg1=" + arg1 + ", arg2=" + arg2 + ")");
         int newState = mState;
-        for (Iterator<Map.Entry<IBinder, ClientData>> it = mClients.entrySet().iterator();
-                it.hasNext(); ) {
-            final Map.Entry<IBinder, ClientData> entry = it.next();
-            IBinder client = entry.getKey();
-            ClientData clientData = entry.getValue();
+        final int N = mClients.size();
+        for (int i = N - 1; i >= 0; i--) {
+            IBinder client = mClients.keyAt(N);
+            ClientData clientData = mClients.valueAt(N);
             switch (msg) {
                 case FingerprintManager.FINGERPRINT_ERROR: {
                     final int error = arg1;
@@ -174,7 +174,6 @@ public class FingerprintService extends SystemService {
                         }
                     } catch (RemoteException e) {
                         Slog.e(TAG, "can't send message to client. Did it die?", e);
-                        it.remove();
                     }
                 }
                 break;
@@ -188,7 +187,6 @@ public class FingerprintService extends SystemService {
                             }
                         } catch (RemoteException e) {
                             Slog.e(TAG, "can't send message to client. Did it die?", e);
-                            it.remove();
                         }
                     } else {
                         if (DEBUG) Slog.w(TAG, "Client not authenticating");
@@ -206,7 +204,6 @@ public class FingerprintService extends SystemService {
                             }
                         } catch (RemoteException e) {
                             Slog.e(TAG, "can't send message to client. Did it die?", e);
-                            it.remove();
                         }
                     } else {
                         if (DEBUG) Slog.w(TAG, "Client not authenticating");
@@ -231,7 +228,6 @@ public class FingerprintService extends SystemService {
                             }
                         } catch (RemoteException e) {
                             Slog.e(TAG, "can't send message to client. Did it die?", e);
-                            it.remove();
                         }
                     } else {
                         if (DEBUG) Slog.w(TAG, "Client not enrolling");
@@ -241,7 +237,8 @@ public class FingerprintService extends SystemService {
                 }
                 case FingerprintManager.FINGERPRINT_TEMPLATE_REMOVED: {
                     int fingerId = arg1;
-                    if (fingerId == 0) throw new IllegalStateException("Got illegal id from HAL");
+                    if (fingerId == 0)
+                        throw new IllegalStateException("Got illegal id from HAL");
                     FingerprintUtils.removeFingerprintIdForUser(fingerId,
                             mContext.getContentResolver(), clientData.userId);
                     try {
@@ -250,7 +247,6 @@ public class FingerprintService extends SystemService {
                         }
                     } catch (RemoteException e) {
                         Slog.e(TAG, "can't send message to client. Did it die?", e);
-                        it.remove();
                     }
                 }
                 break;
@@ -365,16 +361,16 @@ public class FingerprintService extends SystemService {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                for (Iterator<Map.Entry<IBinder, ClientData>> it = mClients.entrySet().iterator();
-                     it.hasNext(); ) {
+                final int N = mClients.size();
+                for (int i = N - 1; i >= 0; i--) {
+                    IBinder client = mClients.keyAt(N);
+                    ClientData clientData = mClients.get(client);
                     try {
-                        ClientData clientData = it.next().getValue();
                         if (clientData != null && clientData.receiver != null) {
                             clientData.receiver.onStateChanged(mState);
                         }
-                    } catch(RemoteException e) {
+                    } catch (RemoteException e) {
                         Slog.e(TAG, "can't send message to client. Did it die?", e);
-                        it.remove();
                     }
                 }
             }
