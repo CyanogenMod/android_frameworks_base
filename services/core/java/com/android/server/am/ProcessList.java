@@ -136,7 +136,7 @@ final class ProcessList {
     // process limit.
     static final int MAX_CACHED_APPS = SystemProperties.getInt("ro.sys.fw.bg_apps_limit",32);
     static final boolean USE_TRIM_SETTINGS =
-            SystemProperties.getBoolean("ro.sys.fw.use_trim_settings",true);
+            SystemProperties.getBoolean("ro.sys.fw.use_trim_settings",false);
     static final int EMPTY_APP_PERCENT = SystemProperties.getInt("ro.sys.fw.empty_app_percent",50);
     static final int TRIM_EMPTY_PERCENT =
             SystemProperties.getInt("ro.sys.fw.trim_empty_percent",100);
