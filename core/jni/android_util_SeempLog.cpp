@@ -166,8 +166,8 @@ static jint android_util_SeempLog_println_native(JNIEnv* env, jobject clazz,
 
     int  apiId    = (int)api;
     int  apiIdLen = sizeof(apiId);
-    int  msgLen   = env->GetStringUTFLength(msgObj);
-    int  len      = apiIdLen + 1 + msgLen + 1;
+    int  utf8MsgLen   = env->GetStringUTFLength(msgObj);
+    int  len      = apiIdLen + 1 + utf8MsgLen + 1;
     char *msg     = (char*)malloc(len);
     if ( NULL == msg )
     {
@@ -177,7 +177,7 @@ static jint android_util_SeempLog_println_native(JNIEnv* env, jobject clazz,
 
     *((int*)msg)  = apiId;                              // copy api id
     //                                                  // skip encoding byte
-    env->GetStringUTFRegion(msgObj, 0, msgLen, params); // copy message
+    env->GetStringUTFRegion(msgObj, 0, env->GetStringLength(msgObj), params); // copy message
     msg[len - 1]  = 0;                                  // copy terminating zero
 
     int  res      = __android_seemp_socket_write(len, msg); // send message
