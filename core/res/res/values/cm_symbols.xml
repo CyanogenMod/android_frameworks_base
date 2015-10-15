@@ -79,7 +79,6 @@
     <!-- From services -->
     <java-symbol type="array" name="app_ops_labels" />
 
-    <java-symbol type="bool" name="config_setZenModeWhenSilentModeOn" />
     <java-symbol type="bool" name="config_deviceHasVariableButtonBrightness" />
 
     <java-symbol type="integer" name="config_buttonBrightnessSettingDefault" />
