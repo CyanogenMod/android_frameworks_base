@@ -75,8 +75,15 @@ public final class WebViewFactory {
     private static PackageInfo sPackageInfo;
 
     public static String getWebViewPackageName() {
-        return AppGlobals.getInitialApplication().getString(
+        PackageManager pm = AppGlobals.getInitialApplication().getPackageManager();
+        String googleWebView = "com.google.android.webview";
+        try {
+            pm.getPackageInfo(googleWebView, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            return AppGlobals.getInitialApplication().getString(
                 com.android.internal.R.string.config_webViewPackageName);
+        }
+        return googleWebView;
     }
 
     public static PackageInfo getLoadedPackageInfo() {
