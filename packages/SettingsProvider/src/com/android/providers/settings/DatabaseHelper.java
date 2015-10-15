@@ -2497,8 +2497,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.SCREEN_BRIGHTNESS_MODE,
                     R.bool.def_screen_brightness_automatic_mode);
 
-            loadDefaultAnimationSettings(stmt);
-
             loadBooleanSetting(stmt, Settings.System.ACCELEROMETER_ROTATION,
                     R.bool.def_accelerometer_rotation);
 
@@ -2567,9 +2565,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void loadDefaultAnimationSettings(SQLiteStatement stmt) {
-        loadFractionSetting(stmt, Settings.System.WINDOW_ANIMATION_SCALE,
+        loadFractionSetting(stmt, Settings.Global.WINDOW_ANIMATION_SCALE,
                 R.fraction.def_window_animation_scale, 1);
-        loadFractionSetting(stmt, Settings.System.TRANSITION_ANIMATION_SCALE,
+        loadFractionSetting(stmt, Settings.Global.TRANSITION_ANIMATION_SCALE,
                 R.fraction.def_window_transition_scale, 1);
     }
 
@@ -2940,6 +2938,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadBooleanSetting(stmt, Settings.Global.GUEST_USER_ENABLED,
                     R.bool.def_guest_user_enabled);
+
+            loadDefaultAnimationSettings(stmt);
             // --- New global settings start here
         } finally {
             if (stmt != null) stmt.close();
