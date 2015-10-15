@@ -2213,9 +2213,6 @@
     <!-- Configuration to sending and receiving Mms when mobile data is disable.-->
     <bool name="config_enable_mms_with_mobile_data_off">false</bool>
 
-    <!-- Configuartion to set zen mode when silent mode is on -->
-    <bool name="config_setZenModeWhenSilentModeOn">false</bool>
-
     <!-- Configuartion to support ESN Tracker -->
     <bool name="config_telephony_ESN_Tracker_enabled">false</bool>
 
