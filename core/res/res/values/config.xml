@@ -743,6 +743,10 @@
 
     <!-- Is the device capable of hot swapping an UICC Card -->
     <bool name="config_hotswapCapable">false</bool>
+    
+   <!-- Enable support screen off gesture -->
+    <bool name="g_offscreenGestureSupport">false</bool>
+
 
     <!-- Enable puk unlockscreen by default.
          If unlock screen is disabled, the puk should be unlocked through Emergency Dialer -->
