@@ -1551,16 +1551,16 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     @Override
     public NetworkStats getNetworkStatsSummaryDev() {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        NetworkStats totalStats = null;
         NetworkStats ipaTetherStats = null;
         try {
             ipaTetherStats = getHardwareTetherStats();
         } catch (Exception e) {
-        };
+        }
         try {
-            totalStats = mStatsFactory.readNetworkStatsSummaryDev();
-            if(ipaTetherStats != null)totalStats.combineAllValues(ipaTetherStats);
-            Slog.d(TAG,"getNetworkStatsSummaryDev:"+totalStats);
+            NetworkStats totalStats = mStatsFactory.readNetworkStatsSummaryDev();
+            if (ipaTetherStats != null) {
+                totalStats.combineAllValues(ipaTetherStats);
+            }
             return totalStats;
         } catch (IOException e) {
             throw new IllegalStateException(e);
@@ -1570,16 +1570,16 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     @Override
     public NetworkStats getNetworkStatsSummaryXt() {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
-        NetworkStats totalStats = null;
         NetworkStats ipaTetherStats = null;
         try {
             ipaTetherStats = getHardwareTetherStats();
         } catch (Exception e) {
-        };
+        }
         try {
-            totalStats = mStatsFactory.readNetworkStatsSummaryXt();
-            if(ipaTetherStats != null) totalStats.combineAllValues(ipaTetherStats);
-            Slog.d(TAG,"getNetworkStatsSummaryXt:"+totalStats);
+            NetworkStats totalStats = mStatsFactory.readNetworkStatsSummaryXt();
+            if (ipaTetherStats != null) {
+                totalStats.combineAllValues(ipaTetherStats);
+            }
             return totalStats;
         } catch (IOException e) {
             throw new IllegalStateException(e);
