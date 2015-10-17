@@ -6151,6 +6151,13 @@ public final class Settings {
         public static final String LOCKSCREEN_VISUALIZER_ENABLED = "lockscreen_visualizer";
 
         /**
+         * Whether to show power menu on lockscreen.
+         * Boolean setting. 0 = no, 1 = yes.
+         * @hide
+         */
+        public static final String LOCKSCREEN_POWER_MENU_ENABLED = "lockscreen_power_button_longpress";
+
+        /**
          * Whether to show quick settings tiles with sensitive data in secure lockscreens.
          * 0 will ignore the sensitive data flag, anything else will take care of that
          * flag. Default is off.
