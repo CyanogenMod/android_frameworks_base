@@ -332,5 +332,5 @@
     <string name="status_bar_notification_info_overflow" translatable="false">\u221E</string>
 
    <!-- Play queue -->
-   <string name="play_queue_extention">Play Queue Extension</string>
+   <string name="play_queue_extention">Show play queue</string>
 </resources>
