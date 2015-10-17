@@ -3570,6 +3570,13 @@ public final class Settings {
         public static final String STATUSBAR_COMPONENT = "statusbar_component";
 
         /**
+         * Whether the HighTouchSensitivity is activated or not
+         * @hide
+         */
+        public static final String CM_HARDWARE_HIGH_TOUCH_SENSITIVITY_ENABLE =
+                "high_touch_sensitivity_enable";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -3657,7 +3664,8 @@ public final class Settings {
             ALLOW_LIGHTS,
             NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
             NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
-            NOTIFICATION_LIGHT_SCREEN_ON
+            NOTIFICATION_LIGHT_SCREEN_ON,
+            CM_HARDWARE_HIGH_TOUCH_SENSITIVITY_ENABLE
         };
 
         /**

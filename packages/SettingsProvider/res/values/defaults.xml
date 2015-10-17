@@ -279,4 +279,7 @@
     <!-- Default for Settings.System.SYSTEM_PROFILES_ENABLED -->
     <bool name="def_system_profiles_enabled">true</bool>
 
+    <!-- Default for Settings.System.CM_HARDWARE_HIGH_TOUCH_SENSITIVITY_ENABLE -->
+    <bool name="def_hardware_high_touch_sensitivity_enabled">false</bool>
+
 </resources>
