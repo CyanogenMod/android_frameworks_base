@@ -2559,6 +2559,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.SYSTEM_PROFILES_ENABLED,
                     R.bool.def_system_profiles_enabled);
 
+            loadBooleanSetting(stmt, Settings.System.CM_HARDWARE_HIGH_TOUCH_SENSITIVITY_ENABLE,
+                    R.bool.def_hardware_high_touch_sensitivity_enabled);
+
         } finally {
             if (stmt != null) stmt.close();
         }
