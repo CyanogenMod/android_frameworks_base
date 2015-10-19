@@ -40,6 +40,9 @@ public class LightsService extends SystemService {
 
         private LightImpl(int id) {
             mId = id;
+            mBrightnessLevel = 0xFF;
+            mModesUpdate = false;
+            mMultipleLeds = false;
         }
 
         @Override
@@ -73,9 +76,14 @@ public class LightsService extends SystemService {
         @Override
         public void setModes(int brightnessLevel, boolean multipleLeds) {
             synchronized (this) {
-                mBrightnessLevel = brightnessLevel;
-                mMultipleLeds = multipleLeds;
-                mModesUpdate = true;
+                if (mBrightnessLevel != brightnessLevel) {
+                    mBrightnessLevel = brightnessLevel;
+                    mModesUpdate = true;
+                }
+                if (mMultipleLeds != multipleLeds) {
+                    mMultipleLeds = multipleLeds;
+                    mModesUpdate = true;
+                }
             }
         }
 
