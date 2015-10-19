@@ -1861,6 +1861,11 @@ class ContextImpl extends Context {
         mDisplay = (createDisplayWithId == Display.INVALID_DISPLAY) ? display
                 : ResourcesManager.getInstance().getAdjustedDisplay(displayId, mDisplayAdjustments);
 
+        // We need to create the content resolver before all the context resources creation because
+        // the content resolver is reference by the outer context while the theme information
+        // is created.
+        mContentResolver = new ApplicationContentResolver(this, mainThread, user);
+
         Resources resources = packageInfo.getResources(mainThread);
         if (resources != null) {
             if (displayId != Display.DEFAULT_DISPLAY
@@ -1897,8 +1902,6 @@ class ContextImpl extends Context {
                 mOpPackageName = mBasePackageName;
             }
         }
-
-        mContentResolver = new ApplicationContentResolver(this, mainThread, user);
     }
 
     void installSystemApplicationInfo(ApplicationInfo info, ClassLoader classLoader) {
