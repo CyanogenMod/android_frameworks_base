@@ -119,13 +119,18 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
         state.visible = true;
         if (DEBUG) Log.d(TAG, "handleUpdateState arg=" + arg);
         if (arg == null) return;
-        CallbackInfo cb = (CallbackInfo) arg;
+        final CallbackInfo cb = (CallbackInfo) arg;
 
         boolean wifiConnected = cb.enabled && (cb.wifiSignalIconId > 0) && (cb.enabledDesc != null);
         boolean wifiNotConnected = (cb.wifiSignalIconId > 0) && (cb.enabledDesc == null);
         boolean enabledChanging = state.enabled != cb.enabled;
         if (enabledChanging) {
-            mDetailAdapter.setItemsVisible(cb.enabled);
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDetailAdapter.setItemsVisible(cb.enabled);
+                }
+            });
             fireToggleStateChanged(cb.enabled);
         }
         state.enabled = cb.enabled;
