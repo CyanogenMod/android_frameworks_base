@@ -818,8 +818,10 @@
   <java-symbol type="string" name="reboot_to_update_reboot" />
   <java-symbol type="string" name="reboot_to_reset_title" />
   <java-symbol type="string" name="reboot_to_reset_message" />
+  <java-symbol type="string" name="reboot_confirm" />
   <java-symbol type="string" name="reboot_safemode_confirm" />
   <java-symbol type="string" name="reboot_safemode_title" />
+  <java-symbol type="string" name="reboot_title" />
   <java-symbol type="string" name="relationTypeAssistant" />
   <java-symbol type="string" name="relationTypeBrother" />
   <java-symbol type="string" name="relationTypeChild" />
@@ -1482,6 +1484,7 @@
   <java-symbol type="drawable" name="ic_jog_dial_vibrate_on" />
   <java-symbol type="drawable" name="ic_lock_airplane_mode" />
   <java-symbol type="drawable" name="ic_lock_airplane_mode_off" />
+  <java-symbol type="drawable" name="ic_lock_power_reboot" />
   <java-symbol type="drawable" name="ic_menu_cc" />
   <java-symbol type="drawable" name="jog_tab_bar_left_unlock" />
   <java-symbol type="drawable" name="jog_tab_bar_right_sound_off" />
@@ -1552,6 +1555,7 @@
   <java-symbol type="string" name="bugreport_status" />
   <java-symbol type="string" name="faceunlock_multiple_failures" />
   <java-symbol type="string" name="global_action_power_off" />
+  <java-symbol type="string" name="global_action_reboot" />
   <java-symbol type="string" name="global_actions_airplane_mode_off_status" />
   <java-symbol type="string" name="global_actions_airplane_mode_on_status" />
   <java-symbol type="string" name="global_actions_toggle_airplane_mode" />
@@ -2340,10 +2344,13 @@
 
   <!-- cpu boost for AppLaunch -->
   <java-symbol type="bool" name="config_enableCpuBoostForAppLaunch" />
-  <java-symbol type="integer" name="disablepacking_timeout_param" />
-  <java-symbol type="array" name="launchboost_packing_param_value"/>
   <java-symbol type="integer" name="launchboost_timeout_param" />
   <java-symbol type="array" name="launchboost_param_value" />
+
+  <!-- cpu boost for AppLaunch -->
+  <java-symbol type="bool" name="config_disablePacking" />
+  <java-symbol type="integer" name="disablepacking_timeout_param" />
+  <java-symbol type="array" name="launchboost_packing_param_value" />
 
   <!-- cpu boost for Animationboost -->
   <java-symbol type="bool" name="config_enablePerfBoostForAnimation" />

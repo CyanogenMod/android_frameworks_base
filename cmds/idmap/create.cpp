@@ -33,6 +33,7 @@ namespace {
     int open_idmap(const char *path)
     {
         int fd = TEMP_FAILURE_RETRY(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+        bool needUnlink = true;
         if (fd == -1) {
             ALOGD("error: open %s: %s\n", path, strerror(errno));
             goto fail;
@@ -43,6 +44,8 @@ namespace {
         }
         if (TEMP_FAILURE_RETRY(flock(fd, LOCK_EX | LOCK_NB)) != 0) {
             ALOGD("error: flock %s: %s\n", path, strerror(errno));
+            // If the file is locked by another process, then we needn't unlink the file.
+            needUnlink = false;
             goto fail;
         }
 
@@ -50,7 +53,7 @@ namespace {
 fail:
         if (fd != -1) {
             close(fd);
-            unlink(path);
+            if (needUnlink) unlink(path);
         }
         return -1;
     }

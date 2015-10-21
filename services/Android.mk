@@ -48,6 +48,11 @@ LOCAL_SHARED_LIBRARIES :=
 # include all the jni subdirs to collect their sources
 include $(wildcard $(LOCAL_PATH)/*/jni/Android.mk)
 
+LOCAL_C_INCLUDES += \
+        $(TOP)/frameworks/base/services/libtvextensions \
+
+LOCAL_WHOLE_STATIC_LIBRARIES := libTvInputHalExtensions
+
 LOCAL_CFLAGS += -DEGL_EGLEXT_PROTOTYPES -DGL_GLEXT_PROTOTYPES
 
 LOCAL_MODULE:= libandroid_servers

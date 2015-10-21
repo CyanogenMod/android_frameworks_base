@@ -109,4 +109,11 @@ interface IExtTelephony {
     * Requires Permission: android.Manifest.permission.MODIFY_PHONE_STATE
     */
     void setSMSPromptEnabled(boolean enabled);
+
+    /**
+    * Get logical phone id for Emergency call.
+    * @param - void
+    * @return phone id
+    */
+    int getPhoneIdForECall();
 }

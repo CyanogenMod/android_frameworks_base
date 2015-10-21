@@ -2346,10 +2346,13 @@
 
     <!-- Whether cpu boost is enabled for AppLaunch -->
     <bool name="config_enableCpuBoostForAppLaunch">false</bool>
-    <integer name="disablepacking_timeout_param">0</integer>
-    <integer-array name="launchboost_packing_param_value"/>
     <integer name="launchboost_timeout_param">0</integer>
     <integer-array name="launchboost_param_value"/>
+
+    <!-- Whether disablepacking is enabled or not -->
+    <bool name="config_disablePacking">false</bool>
+    <integer name="disablepacking_timeout_param">0</integer>
+    <integer-array name="launchboost_packing_param_value"/>
 
     <!-- Whether cpu boost is enabled for animation. -->
     <bool name="config_enablePerfBoostForAnimation">false</bool>

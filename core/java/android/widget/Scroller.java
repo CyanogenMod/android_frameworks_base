@@ -117,6 +117,7 @@ public class Scroller  {
     private BoostFramework mPerf = null;
     boolean bIsPerfBoostEnabled = false;
     private int sBoostTimeOut = 0;
+    private int scrollBoostTimeOut = 0;
     private int sBoostParamVal[];
 
     // A context-specific coefficient adjusted to physical values.
@@ -422,9 +423,13 @@ public class Scroller  {
 
         if ((mPerf != null) && (duration != 0)) {
             if (0 == sBoostTimeOut) {
-                sBoostTimeOut = mDuration;
+                //config value is not defined
+                scrollBoostTimeOut = mDuration;
+            } else {
+                //config value is present
+                scrollBoostTimeOut = sBoostTimeOut;
             }
-            mPerf.perfLockAcquire(sBoostTimeOut, sBoostParamVal);
+            mPerf.perfLockAcquire(scrollBoostTimeOut, sBoostParamVal);
         }
     }
 

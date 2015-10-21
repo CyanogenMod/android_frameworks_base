@@ -68,6 +68,8 @@ static dlLibHandler mDlLibHandlers[] = {
      "ro.vendor.at_library"},
     {NULL, NULL, NULL, NULL, NULL,
      "ro.vendor.gt_library"},
+     {NULL, NULL, NULL, NULL, NULL,
+     "ro.vendor.wl_library"}
 };
 
 // ----------------------------------------------------------------------------
