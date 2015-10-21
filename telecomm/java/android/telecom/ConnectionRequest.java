@@ -28,7 +28,7 @@ import android.os.Parcelable;
 public final class ConnectionRequest implements Parcelable {
 
     // TODO: Token to limit recursive invocations
-    private final PhoneAccountHandle mAccountHandle;
+    private PhoneAccountHandle mAccountHandle;
     private final Uri mAddress;
     private final Bundle mExtras;
     private final int mVideoState;
@@ -93,6 +93,9 @@ public final class ConnectionRequest implements Parcelable {
      * The account which should be used to place the call.
      */
     public PhoneAccountHandle getAccountHandle() { return mAccountHandle; }
+
+    /** {@hide} */
+    public void setAccountHandle(PhoneAccountHandle acc) { mAccountHandle = acc; }
 
     /**
      * The handle (e.g., phone number) to which the {@link Connection} is to connect.
