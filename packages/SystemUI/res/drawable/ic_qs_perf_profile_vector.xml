@@ -21,7 +21,7 @@
         android:name="needle"
         android:pivotX="24"
         android:pivotY="24"
-        android:rotation="-225">
+        android:rotation="-135">
 
         <path
             android:strokeColor="#FFFFFFFF"
