@@ -209,4 +209,8 @@
   <string name="permdesc_resetBatteryStats">ಒಂದು ಅಪ್ಲಿಕೇಶನ್‍ಗೆ ಪ್ರಸ್ತುತ ಕಡಿಮೆ-ಮಟ್ಟದ ಬ್ಯಾಟರಿ ಬಳಕೆ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="silent_mode_priority">ಆದ್ಯತೆ</string>
   <string name="silent_mode_none">ಶೂನ್ಯ</string>
+  <string name="subscription_change_disabled_wifi_ap">ಸಿಮ್ ಚಂದಾದಾರಿಕೆ ಬದಲಾದ ಕಾರಣ ವೈ-ಫೈ ಹಾಟ್‍ಸ್ಪಾಟನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</string>
+  <string name="notify_turn_wifi_off_title">ವೈ-ಫೈ ಆಫ್ ಮಾಡಿ</string>
+  <string name="permlab_thirdPartyKeyguard">ಮೂರನೇ ಪಕ್ಷ ಲಾಕ್ ಪರದೆ</string>
+  <string name="permdesc_thirdPartyKeyguard">ಒಂದು ಆಪನ್ನು ಅಸುರಕ್ಷಿತ ಲಾಕ್ ಪರದೆಯಾಗಿ ಉಪಯೋಗಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
 </resources>

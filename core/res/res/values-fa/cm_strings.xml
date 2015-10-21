@@ -211,4 +211,6 @@
   <string name="silent_mode_none">هیچ‌کدام</string>
   <string name="subscription_change_disabled_wifi_ap">نقطه اتصال قابل حمل وای‌فای به دلیل تغییر تعرفه سیم کارت، غیرفعال شد</string>
   <string name="notify_turn_wifi_off_title">خاموش کردن وای‌فای</string>
+  <string name="permlab_thirdPartyKeyguard">قفل صفحه دیگر</string>
+  <string name="permdesc_thirdPartyKeyguard">به برنامه اجازه می‌دهد تا به عنوان یک قفل صفحه غیرایمن استفاده شود.</string>
 </resources>
