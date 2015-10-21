@@ -36,7 +36,10 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     private AnimationIcon mHighPerf = new AnimationIcon(R.drawable.ic_qs_perf_profile_highperf_avd);
     private AnimationIcon mBattery = new AnimationIcon(R.drawable.ic_qs_perf_profile_pwrsv_avd);
     private AnimationIcon mBalanced = new AnimationIcon(R.drawable.ic_qs_perf_profile_bal_avd);
+    private AnimationIcon mBiasPower = new AnimationIcon(R.drawable.ic_qs_perf_profile_bias_power_avd);
+    private AnimationIcon mBiasPerf = new AnimationIcon(R.drawable.ic_qs_perf_profile_bias_perf_avd);
 
+    private final int mNumPerfProfiles;
     private final String[] mEntries;
     private final String[] mDescriptionEntries;
     private final String[] mAnnouncementEntries;
@@ -54,6 +57,8 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
         Resources res = mContext.getResources();
+
+        mNumPerfProfiles = res.getInteger(com.android.internal.R.integer.config_num_perf_profiles);
 
         mPerfProfileDefaultEntry = mPm.getDefaultPowerProfile();
         mPerfProfileValues = res.getStringArray(com.android.internal.R.array.perf_profile_values);
@@ -74,6 +79,8 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         mHighPerf.setAllowAnimation(true);
         mBattery.setAllowAnimation(true);
         mBalanced.setAllowAnimation(true);
+        mBiasPower.setAllowAnimation(true);
+        mBiasPerf.setAllowAnimation(true);
     }
 
     @Override
@@ -102,6 +109,12 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
             case 1:
                 return mBattery;
+
+            case 3:
+                return mBiasPower;
+
+            case 4:
+                return mBiasPerf;
 
             case 2:
             default:
@@ -148,7 +161,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
             perfProfile = mPerfProfileDefaultEntry;
         }
 
-        int count = mPerfProfileValues.length;
+        int count = mNumPerfProfiles;
         for (int i = 0; i < count; i++) {
             if (mPerfProfileValues[i].equals(perfProfile)) {
                 index = i;
@@ -161,7 +174,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
     private void changeToNextProfile() {
         int current = getCurrentProfileIndex() + 1;
-        if (current >= mPerfProfileValues.length) {
+        if (current >= mNumPerfProfiles) {
             current = 0;
         }
         mPm.setPowerProfile(mPerfProfileValues[current]); // content observer will notify

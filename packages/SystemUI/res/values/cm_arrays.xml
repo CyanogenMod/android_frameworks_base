@@ -73,6 +73,8 @@
         <item>@drawable/ic_qs_perf_profile_highperf_avd</item>
         <item>@drawable/ic_qs_perf_profile_pwrsv_avd</item>
         <item>@drawable/ic_qs_perf_profile_bal_avd</item>
+        <item>@drawable/ic_qs_perf_profile_bias_power_avd</item>
+        <item>@drawable/ic_qs_perf_profile_bias_perf_avd</item>
     </string-array>
 
     <!-- Performance profiles description-->
@@ -80,6 +82,8 @@
         <item>@string/accessibility_quick_settings_perf_profile_pwrsv</item>
         <item>@string/accessibility_quick_settings_perf_profile_bal</item>
         <item>@string/accessibility_quick_settings_perf_profile_perf</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bias_power</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bias_perf</item>
     </string-array>
 
     <!-- Performance profiles announcement-->
@@ -87,6 +91,8 @@
         <item>@string/accessibility_quick_settings_perf_profile_changed_pwrsv</item>
         <item>@string/accessibility_quick_settings_perf_profile_changed_bal</item>
         <item>@string/accessibility_quick_settings_perf_profile_changed_perf</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bias_power</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bias_perf</item>
     </string-array>
 
     <!-- Cardinal directions for the compass tile -->

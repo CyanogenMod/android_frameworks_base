@@ -111,12 +111,16 @@
         <item>@string/perf_profile_pwrsv</item>
         <item>@string/perf_profile_bal</item>
         <item>@string/perf_profile_perf</item>
+        <item>@string/perf_profile_bias_power</item>
+        <item>@string/perf_profile_bias_perf</item>
     </string-array>
 
     <string-array name="perf_profile_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
+        <item>4</item>
     </string-array>
 
     <string-array name="live_display_entries" translatable="false">

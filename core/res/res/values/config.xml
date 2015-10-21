@@ -2356,6 +2356,18 @@
     <string-array name="config_auto_perf_activities" translatable="false">
     </string-array>
 
+    <!-- Total number of performance modes implemented on the device.
+         The following modes are available:
+            PROFILE_POWER_SAVE
+            PROFILE_BALANCED
+            PROFILE_HIGH_PERFORMANCE
+            PROFILE_BIAS_POWER
+            PROFILE_BIAS_PERFORMANCE
+        Devices always get the first two, and when config_perf_profile_prop is set
+        then the rest may be available. This defaults to 3 which adds the HIGH_PERFORMANCE
+        mode. Devices may increase this and implement the bias values as well. -->
+    <integer name="config_num_perf_profiles">3</integer>
+
     <!-- If a dock provides a lid switch, that lid can be removed. This
          setting is used to determine, whether lidOpenRotation has to be
          applied. -->
