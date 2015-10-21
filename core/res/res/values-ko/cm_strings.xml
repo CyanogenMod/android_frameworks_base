@@ -207,4 +207,8 @@
   <string name="permdesc_resetBatteryStats">앱이 현재의 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
   <string name="silent_mode_priority">우선순위</string>
   <string name="silent_mode_none">없음</string>
+  <string name="subscription_change_disabled_wifi_ap">SIM 구독 변경으로 인해 Wi-Fi 핫스팟 비활성화함</string>
+  <string name="notify_turn_wifi_off_title">Wi-Fi 끄기</string>
+  <string name="permlab_thirdPartyKeyguard">서드 파티 잠금 화면</string>
+  <string name="permdesc_thirdPartyKeyguard">앱을 안전하지 않은 잠금 화면으로 사용할 수 있도록 허용합니다.</string>
 </resources>

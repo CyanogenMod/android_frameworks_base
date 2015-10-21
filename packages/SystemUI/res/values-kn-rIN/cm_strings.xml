@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">ಯುಎಸ್‍ಬಿ ಟೆಥರಿಂಗ್ ಆನ್.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">ಯುಎಸ್‍ಬಿ ಟೆಥರಿಂಗ್ ಆಫ್ ಆಗಿದೆ.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">ಯುಎಸ್‍ಬಿ ಟೆಥರಿಂಗ್ ಆನ್ ಆಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆಫ್.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆನ್.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆಫ್ ಆಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆನ್ ಆಗಿದೆ.</string>
   <string name="accessibility_quick_settings_visualizer">ದೃಶ್ಯೀಕರಣ.</string>
+  <string name="accessibility_quick_settings_volume_panel">ವಾಲ್ಯೂಂ ಪ್ಯಾನಲ್.</string>
   <string name="accessibility_dpad_left">ಕರ್ಸರ್ ಎಡ</string>
   <string name="accessibility_dpad_right">ಕರ್ಸರ್ ಬಲ</string>
   <string name="quick_settings_mobile_data_label">ಮೊಬೈಲ್ ಡೇಟಾ</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">ಹೆಡ್ಸ್ ಅಪ್</string>
   <string name="quick_settings_ambient_display_label">ಆವರಿಸಿದ ಪರದೆ</string>
   <string name="quick_settings_sync_label">ಸಿಂಕ್</string>
+  <string name="quick_settings_battery_saver_label">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ</string>
   <string name="quick_settings_custom_tile_detail_title">ಕಸ್ಟಮ್ ಟೈಲ್</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">%1$sಗಾಗಿ ಬಲಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ</string>

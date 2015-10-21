@@ -158,7 +158,7 @@
   <string name="lockscreen_target_empty">なし</string>
   <string name="screen_pinning_description_no_navbar">固定を解除するまで表示し続けます。固定を解除するには戻るボタンを押し続けます。</string>
   <string name="interruption_level_silent">サイレント</string>
-  <string name="zen_silent_with_warning">アラーム以外をミュートにします。</string>
+  <string name="zen_silent_with_warning">アラーム以外をサイレントにします。</string>
   <string name="quick_settings_remove">タイルを削除</string>
   <string name="quick_settings_dynamic_tile_detail_title">自動タイル</string>
   <string name="dynamic_qs_tile_next_alarm_label">次のアラーム</string>

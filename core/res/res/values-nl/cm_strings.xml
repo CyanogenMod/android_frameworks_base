@@ -207,4 +207,6 @@
   <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
   <string name="silent_mode_priority">Prioriteit</string>
   <string name="silent_mode_none">Geen</string>
+  <string name="subscription_change_disabled_wifi_ap">Wifi-hotspot uitgeschakeld door een SIM-abonnementwijziging</string>
+  <string name="notify_turn_wifi_off_title">Wifi uitschakelen</string>
 </resources>

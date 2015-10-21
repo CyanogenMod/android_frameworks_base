@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB 테더링 켜짐.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB 테더링이 이제 꺼짐.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB 테더링이 이제 켜짐.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">배터리 절약 끔.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">배터리 절약 킴.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">배터리 절약이 꺼졌습니다.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">배터리 절약이 켜졌습니다.</string>
   <string name="accessibility_quick_settings_visualizer">음악 효과.</string>
+  <string name="accessibility_quick_settings_volume_panel">볼륨 패널.</string>
   <string name="accessibility_dpad_left">커서 왼쪽</string>
   <string name="accessibility_dpad_right">커서 오른쪽</string>
   <string name="quick_settings_mobile_data_label">모바일 데이터</string>
@@ -115,11 +120,13 @@
   <string name="quick_settings_lockscreen_label_enforced">잠금 화면 사용됨</string>
   <string name="quick_settings_network_adb_label">네트워크 ADB</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">볼륨 패널</string>
   <string name="quick_settings_screen_timeout_detail_title">화면 자동 꺼짐</string>
   <string name="quick_settings_usb_tether_label">USB 테더링</string>
   <string name="quick_settings_heads_up_label">헤드업 알림</string>
   <string name="quick_settings_ambient_display_label">절전 모드 자동 해제</string>
   <string name="quick_settings_sync_label">동기화</string>
+  <string name="quick_settings_battery_saver_label">배터리 절약</string>
   <string name="quick_settings_custom_tile_detail_title">개인설정 타일</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">오른쪽으로 밀어서 %1$s</string>
