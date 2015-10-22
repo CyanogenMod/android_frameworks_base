@@ -388,6 +388,7 @@ public class KeyguardViewMediator extends SystemUI {
                 // if the current user has gone to the backup.
                 KeyguardUpdateMonitor.getInstance(mContext).setAlternateUnlockEnabled(true);
             }
+            stopAuthenticatingFingerprint();
         }
 
         @Override
@@ -400,6 +401,7 @@ public class KeyguardViewMediator extends SystemUI {
                     dismiss();
                 }
             }
+            startFingerAuthIfUsingFingerprint();
         }
 
         @Override
