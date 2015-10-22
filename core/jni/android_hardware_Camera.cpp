@@ -376,6 +376,13 @@ void JNICameraContext::postDataTimestamp(nsecs_t timestamp, int32_t msgType, con
 
 void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_metadata_t *metadata)
 {
+#ifdef FORCE_DISABLE_FACE_DETECTION
+    // Discard any face detection metadata from libcamera_client, since
+    // the prebuilt binary returns a non-standard struct that can't
+    // be properly parsed by the logic below.
+    metadata->number_of_faces = 0;
+#endif
+
     jobjectArray obj = NULL;
     obj = (jobjectArray) env->NewObjectArray(metadata->number_of_faces,
                                              mFaceClass, NULL);
