@@ -29,7 +29,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     android-support-v17-leanback \
     framework-protos \
     SystemUI-proto-tags \
-    org.cyanogenmod.platform.sdk
+    org.cyanogenmod.platform.internal
 
 LOCAL_JAVA_LIBRARIES := telephony-common
 

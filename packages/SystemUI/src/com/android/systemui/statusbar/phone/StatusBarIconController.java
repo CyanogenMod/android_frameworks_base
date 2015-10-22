@@ -36,10 +36,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.BatteryMeterView;
-import com.android.systemui.FontSizeUtils;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.SystemUIFactory;
@@ -77,7 +76,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
 
     private BatteryMeterView mBatteryMeterView;
     private BatteryMeterView mBatteryMeterViewKeyguard;
-    private TextView mClock;
+    private ClockController mClockController;
+    private View mCenterClockLayout;
 
     private int mIconSize;
     private int mIconHPadding;
@@ -133,10 +133,11 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mBatteryMeterViewKeyguard = (BatteryMeterView) keyguardStatusBar.findViewById(R.id.battery);
         scaleBatteryMeterViews(context);
 
-        mClock = (TextView) statusBar.findViewById(R.id.clock);
         mDarkModeIconColorSingleTone = context.getColor(R.color.dark_mode_icon_color_single_tone);
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
         mHandler = new Handler();
+        mClockController = new ClockController(statusBar, mNotificationIconAreaController, mHandler);
+        mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
         defineSlots();
         loadDimens();
 
@@ -176,6 +177,10 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         }
         mIconBlacklist.clear();
         mIconBlacklist.addAll(getIconBlacklist(newValue));
+
+        boolean showClock = !mIconBlacklist.remove("clock");
+        mClockController.setVisibility(showClock);
+
         ArrayList<StatusBarIconView> views = new ArrayList<StatusBarIconView>();
         // Get all the current views.
         for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
@@ -195,6 +200,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
                 com.android.internal.R.dimen.status_bar_icon_size);
         mIconHPadding = mContext.getResources().getDimensionPixelSize(
                 R.dimen.status_bar_icon_padding);
+        mClockController.updateFontSize();
     }
 
     public void defineSlots() {
@@ -318,22 +324,26 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
 
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate);
+        animateHide(mCenterClockLayout, animate);
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
+        animateShow(mCenterClockLayout, animate);
     }
 
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconAreaInner, animate);
+        animateHide(mCenterClockLayout, animate);
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconAreaInner, animate);
+        animateShow(mCenterClockLayout, animate);
     }
 
     public void setClockVisibility(boolean visible) {
-        mClock.setVisibility(visible ? View.VISIBLE : View.GONE);
+        mClockController.setVisibility(visible);
     }
 
     public void dump(PrintWriter pw) {
@@ -529,7 +539,7 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mSignalCluster.setIconTint(mIconTint, mDarkIntensity, mTintArea);
         mBatteryMeterView.setDarkIntensity(
                 isInArea(mTintArea, mBatteryMeterView) ? mDarkIntensity : 0);
-        mClock.setTextColor(getTint(mTintArea, mClock, mIconTint));
+        mClockController.setTextColor(mTintArea, mIconTint);
     }
 
     public void appTransitionPending() {
@@ -599,8 +609,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     }
 
     private void updateClock() {
-        FontSizeUtils.updateFontSize(mClock, R.dimen.status_bar_clock_size);
-        mClock.setPaddingRelative(
+        mClockController.updateFontSize();
+        mClockController.setPaddingRelative(
                 mContext.getResources().getDimensionPixelSize(
                         R.dimen.status_bar_clock_starting_padding),
                 0,
