@@ -141,7 +141,7 @@ public class KeyguardViewMediator extends SystemUI {
     final static boolean DEBUG = false;
     private static final boolean DEBUG_SIM_STATES = KeyguardConstants.DEBUG_SIM_STATES;
     private final static boolean DBG_WAKE = false;
-    private final static boolean DBG_FINGERPRINT = false;
+    private final static boolean DBG_FINGERPRINT = true;
 
     private final static String TAG = "KeyguardViewMediator";
 
@@ -393,10 +393,11 @@ public class KeyguardViewMediator extends SystemUI {
         @Override
         public void onUserSwitchComplete(int userId) {
             mSwitchingUser = false;
+            mHandler.obtainMessage(KEYGUARD_FINGERPRINT_AUTH, 1, 0).sendToTarget();
             if (userId != UserHandle.USER_OWNER) {
                 UserInfo info = UserManager.get(mContext).getUserInfo(userId);
                 if (info != null && info.isGuest()) {
-                    // If we just switched to a guest, try to dismiss keyguard.
+                    // If a - we just switched to a guest, try to dismiss keyguard.
                     dismiss();
                 }
             }
