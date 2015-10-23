@@ -245,7 +245,6 @@ LOCAL_SHARED_LIBRARIES := \
     libpdfium \
     libimg_utils \
     libnetd_client \
-    libradio \
     libsoundtrigger \
     libminikin \
     libprocessgroup \
