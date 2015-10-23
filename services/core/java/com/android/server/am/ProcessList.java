@@ -720,16 +720,15 @@ final class ProcessList {
     }
 
     private static void writeLmkd(ByteBuffer buf) {
-
         for (int i = 0; i < 3; i++) {
             if (sLmkdSocket == null) {
-                    if (openLmkdSocket() == false) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                        }
-                        continue;
+                if (openLmkdSocket() == false) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
                     }
+                    continue;
+                }
             }
 
             try {
@@ -746,5 +745,56 @@ final class ProcessList {
                 sLmkdSocket = null;
             }
         }
+    }
+
+    private static final int[] PROCESS_STATS_FORMAT;
+    static {
+        PROCESS_STATS_FORMAT = new int[31];
+        java.util.Arrays.fill(PROCESS_STATS_FORMAT, android.os.Process.PROC_SPACE_TERM);
+        // Process name enclosed in parentheses
+        PROCESS_STATS_FORMAT[1] |= android.os.Process.PROC_PARENS;
+        // Process state (D/R/S/T/Z)
+        PROCESS_STATS_FORMAT[2] |= android.os.Process.PROC_OUT_STRING;
+        // Bit mask of pending signals
+        PROCESS_STATS_FORMAT[30] |= android.os.Process.PROC_OUT_STRING;
+    }
+
+    static boolean isAlive(int pid, boolean noisy) {
+        final String[] procStats = new String[2];
+        final String stat = "/proc/" + pid + "/stat";
+        if (android.os.Process.readProcFile(stat, PROCESS_STATS_FORMAT,
+                procStats, null, null)) {
+            if ("Z".equals(procStats[0])) {
+                if (noisy) {
+                    Slog.i(TAG, pid + " is zombie state");
+                }
+                return false;
+            }
+            try {
+                int pendingSignals = Integer.parseInt(procStats[1]);
+                if ((pendingSignals & (1 << 8)) != 0) {
+                    if (noisy) {
+                        Slog.i(TAG, pid + " has pending signal 9");
+                    }
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                Slog.w(TAG, "Unknown pending signals " + procStats[1] + " of " + pid);
+            }
+        } else {
+            boolean exists = false;
+            try {
+                exists = libcore.io.Libcore.os.access(stat, android.system.OsConstants.F_OK);
+            } catch (android.system.ErrnoException e) {
+                exists = e.errno != android.system.OsConstants.ENOENT;
+            }
+            if (!exists) {
+                if (noisy) {
+                    Slog.i(TAG, stat + " does not exist");
+                }
+                return false;
+            }
+        }
+        return true;
     }
 }
