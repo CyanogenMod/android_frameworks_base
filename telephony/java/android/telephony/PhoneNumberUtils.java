@@ -150,7 +150,6 @@ public class PhoneNumberUtils
      *         <code>null</code> if the number cannot be found.
      */
     public static String getNumberFromIntent(Intent intent, Context context) {
-        android.util.SeempLog.record(12);
         String number = null;
 
         Uri uri = intent.getData();

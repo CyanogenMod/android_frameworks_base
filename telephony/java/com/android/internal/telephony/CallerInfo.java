@@ -165,7 +165,7 @@ public class CallerInfo {
      * number. The returned CallerInfo is null if no number is supplied.
      */
     public static CallerInfo getCallerInfo(Context context, Uri contactRef, Cursor cursor) {
-        android.util.SeempLog.record(15);
+        android.util.SeempLog.record_uri(12, contactRef);
         CallerInfo info = new CallerInfo();
         info.photoResource = 0;
         info.phoneLabel = null;
@@ -284,7 +284,6 @@ public class CallerInfo {
      * number. The returned CallerInfo is null if no number is supplied.
      */
     public static CallerInfo getCallerInfo(Context context, Uri contactRef) {
-        android.util.SeempLog.record(15);
         CallerInfo info = null;
         ContentResolver cr = CallerInfoAsyncQuery.getCurrentProfileContentResolver(context);
         if (cr != null) {
@@ -309,7 +308,6 @@ public class CallerInfo {
      * with all relevant fields empty or null.
      */
     public static CallerInfo getCallerInfo(Context context, String number) {
-        android.util.SeempLog.record(15);
         if (VDBG) Rlog.v(TAG, "getCallerInfo() based on number...");
 
         int subId = SubscriptionManager.getDefaultSubId();
@@ -328,7 +326,7 @@ public class CallerInfo {
      * with all relevant fields empty or null.
      */
     public static CallerInfo getCallerInfo(Context context, String number, int subId) {
-        android.util.SeempLog.record(15);
+        android.util.SeempLog.record_str(12, "number="+number+",subId="+subId);
 
         if (TextUtils.isEmpty(number)) {
             return null;
