@@ -241,6 +241,16 @@ public class ImsReasonInfo implements Parcelable {
     public static final int CODE_ANSWERED_ELSEWHERE = 1014;
 
     /**
+     * For VICE - Call Pull request has failed
+     */
+    public static final int CODE_CALL_PULL_OUT_OF_SYNC = 1015;
+
+    /**
+     * For VICE - Call has been pulled from primary to secondary
+     */
+    public static final int CODE_CALL_END_CAUSE_CALL_PULL = 1016;
+
+    /**
      * Network string error messages.
      * mExtraMessage may have these values.
      */
