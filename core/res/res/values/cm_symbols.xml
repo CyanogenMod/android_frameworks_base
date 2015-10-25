@@ -26,17 +26,7 @@
     -->
     <!-- External CM specific core services -->
     <java-symbol type="array" name="config_externalCMServices" />
-
-    <!-- Proximity check on screen on -->
-    <java-symbol type="bool" name="config_proximityCheckOnWake" />
-
-    <!-- Proximity check timeout -->
-    <java-symbol type="integer" name="config_proximityCheckTimeout" />
-
-    <!-- Proximity check on screen on default -->
-    <java-symbol type="bool" name="config_proximityCheckOnWakeEnabledByDefault" />
-
-    <!-- LiveDisplay -->
+        <!-- LiveDisplay -->
     <java-symbol type="string" name="live_display_title" />
     <java-symbol type="string" name="live_display_hint" />
     <java-symbol type="string" name="live_display_auto" />
