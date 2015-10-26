@@ -1136,6 +1136,12 @@ public class KeyguardViewMediator extends SystemUI {
         return !mInternallyDisabled;
     }
 
+    private boolean isProfileDisablingKeyguard() {
+        final Profile activeProfile = ProfileManager.getInstance(mContext).getActiveProfile();
+        return activeProfile != null
+                && activeProfile.getScreenLockMode().getValue() == Profile.LockMode.DISABLE;
+    }
+
     /**
      * Same semantics as {@link android.view.WindowManagerPolicy#enableKeyguard}; provide
      * a way for external stuff to override normal keyguard behavior.  For instance
@@ -1167,6 +1173,11 @@ public class KeyguardViewMediator extends SystemUI {
                 mNeedToReshowWhenReenabled = true;
                 updateInputRestrictedLocked();
                 hideLocked();
+                if (isProfileDisablingKeyguard()) {
+                    if (DEBUG) Log.w(TAG, "profile is disabling keyguard.");
+                    mNeedToReshowWhenReenabled = false;
+                    doKeyguardLaterLocked();
+                }
             } else if (enabled && mNeedToReshowWhenReenabled) {
                 // reenabled after previously hidden, reshow
                 if (DEBUG) Log.d(TAG, "previously hidden, reshowing, reenabling "
