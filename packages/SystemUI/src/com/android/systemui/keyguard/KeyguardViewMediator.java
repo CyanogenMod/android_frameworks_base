@@ -128,6 +128,8 @@ public class KeyguardViewMediator extends SystemUI {
     private final static boolean DBG_WAKE = false;
 
     private final static String TAG = "KeyguardViewMediator";
+    private static final String ENCRYPTING_STATE = "trigger_restart_min_framework";
+    private static final String ENCRYPTED_STATE = "1";
 
     private static final String DELAYED_KEYGUARD_ACTION =
         "com.android.internal.policy.impl.PhoneWindowManager.DELAYED_KEYGUARD";
@@ -427,6 +429,11 @@ public class KeyguardViewMediator extends SystemUI {
                             if (DEBUG_SIM_STATES) Log.d(TAG,
                                     "INTENT_VALUE_ICC_LOCKED and keygaurd isn't "
                                     + "showing; need to show keyguard so user can enter sim pin");
+                            String cryptState = SystemProperties.get("vold.decrypt");
+                            if (ENCRYPTING_STATE.equals(cryptState) || ENCRYPTED_STATE.equals(cryptState)) {
+                                Log.i(TAG,"do not show the keyguard caused of crypt state: " + cryptState);
+                                return;
+                            }
                             doKeyguardLocked(null);
                         } else {
                             resetStateLocked();
