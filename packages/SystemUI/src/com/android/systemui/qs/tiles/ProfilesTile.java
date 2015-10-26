@@ -16,9 +16,12 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.ContentObserver;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -125,8 +128,13 @@ public class ProfilesTile extends QSTile<QSTile.State> implements KeyguardMonito
         mListening = listening;
         if (listening) {
             mObserver.startObserving();
+            final IntentFilter filter = new IntentFilter();
+            filter.addAction(ProfileManager.INTENT_ACTION_PROFILE_SELECTED);
+            filter.addAction(ProfileManager.INTENT_ACTION_PROFILE_UPDATED);
+            mContext.registerReceiver(mReceiver, filter);
         } else {
             mObserver.endObserving();
+            mContext.unregisterReceiver(mReceiver);
         }
     }
 
@@ -157,6 +165,16 @@ public class ProfilesTile extends QSTile<QSTile.State> implements KeyguardMonito
             return label;
         }
     }
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (ProfileManager.INTENT_ACTION_PROFILE_SELECTED.equals(intent.getAction())
+                    || ProfileManager.INTENT_ACTION_PROFILE_UPDATED.equals(intent.getAction())) {
+                refreshState();
+            }
+        }
+    };
 
     public class ProfileDetailAdapter implements DetailAdapter, AdapterView.OnItemClickListener {
 
