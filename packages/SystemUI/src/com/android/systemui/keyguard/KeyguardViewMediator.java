@@ -203,7 +203,6 @@ public class KeyguardViewMediator extends SystemUI {
     private AudioManager mAudioManager;
     private StatusBarManager mStatusBarManager;
     private boolean mSwitchingUser;
-    private ProfileManager mProfileManager;
     private boolean mSystemReady;
     private boolean mBootCompleted;
     private boolean mBootSendUserPresent;
@@ -625,7 +624,6 @@ public class KeyguardViewMediator extends SystemUI {
 
         mShowKeyguardWakeLock = mPM.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "show keyguard");
         mShowKeyguardWakeLock.setReferenceCounted(false);
-        mProfileManager = ProfileManager.getInstance(mContext);
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(DELAYED_KEYGUARD_ACTION));
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(DISMISS_KEYGUARD_SECURELY_ACTION),
                 android.Manifest.permission.CONTROL_KEYGUARD, null);
@@ -914,14 +912,11 @@ public class KeyguardViewMediator extends SystemUI {
             if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by setting");
             return true;
         }
-        Profile profile = mProfileManager.getActiveProfile();
-        if (profile != null) {
-            if (profile.getScreenLockMode().getValue() == Profile.LockMode.DISABLE) {
-                if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
-                return true;
-            }
+        if (isProfileDisablingKeyguard()) {
+            if (DEBUG) Log.d(TAG, "isKeyguardDisabled: keyguard is disabled by profile");
+            return true;
          }
-        return false;
+         return false;
      }
 
     /**
@@ -965,6 +960,16 @@ public class KeyguardViewMediator extends SystemUI {
         return !mInternallyDisabled;
     }
 
+    private boolean isProfileDisablingKeyguard() {
+        final ProfileManager pm = ProfileManager.getInstance(mContext);
+        if (pm != null) {
+            final Profile activeProfile = pm.getActiveProfile();
+            return activeProfile != null
+                    && activeProfile.getScreenLockMode().getValue() == Profile.LockMode.DISABLE;
+        }
+        return false;
+    }
+
     /**
      * Same semantics as {@link android.view.WindowManagerPolicy#enableKeyguard}; provide
      * a way for external stuff to override normal keyguard behavior.  For instance
@@ -993,7 +998,7 @@ public class KeyguardViewMediator extends SystemUI {
                 // hiding keyguard that is showing, remember to reshow later
                 if (DEBUG) Log.d(TAG, "remembering to reshow, hiding keyguard, "
                         + "disabling status bar expansion");
-                mNeedToReshowWhenReenabled = true;
+                mNeedToReshowWhenReenabled = !isProfileDisablingKeyguard();
                 updateInputRestrictedLocked();
                 hideLocked();
             } else if (enabled && mNeedToReshowWhenReenabled) {
