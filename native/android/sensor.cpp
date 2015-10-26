@@ -90,7 +90,7 @@ ASensorEventQueue* ASensorManager_createEventQueue(ASensorManager* manager,
         ALooper* looper, int ident, ALooper_callbackFunc callback, void* data)
 {
     sp<SensorEventQueue> queue =
-            static_cast<SensorManager*>(manager)->createEventQueue();
+            static_cast<SensorManager*>(manager)->createEventQueue(String8(""), 0);
     if (queue != 0) {
         ALooper_addFd(looper, queue->getFd(), ident, ALOOPER_EVENT_INPUT, callback, data);
         queue->looper = looper;
