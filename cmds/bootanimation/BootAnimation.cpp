@@ -94,7 +94,7 @@ static bool isMPlayerCompleted = false;
 
 class MPlayerListener : public MediaPlayerListener
 {
-    void notify(int msg, int ext1, int ext2, const Parcel *obj)
+    void notify(int msg, int /*ext1*/, int /*ext2*/, const Parcel * /*obj*/)
     {
         switch (msg) {
         case MEDIA_NOP: // interface test message
@@ -117,12 +117,12 @@ class MPlayerListener : public MediaPlayerListener
     }
 };
 
-static long getFreeMemory(void)
+static unsigned long getFreeMemory(void)
 {
     int fd = open("/proc/meminfo", O_RDONLY);
     const char* const sums[] = { "MemFree:", "Cached:", NULL };
-    const int sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), 0 };
-    int num = 2;
+    const size_t sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), 0 };
+    unsigned int num = 2;
 
     if (fd < 0) {
         ALOGW("Unable to open /proc/meminfo");
@@ -140,7 +140,7 @@ static long getFreeMemory(void)
     buffer[len] = 0;
 
     size_t numFound = 0;
-    long mem = 0;
+    unsigned long mem = 0;
 
     char* p = buffer;
     while (*p && numFound < num) {
@@ -894,9 +894,9 @@ bool BootAnimation::movie()
     return false;
 }
 
-char *BootAnimation::getAnimationFileName(ImageID image)
+const char *BootAnimation::getAnimationFileName(ImageID image)
 {
-    char *fileName[2][3] = { { OEM_BOOTANIMATION_FILE,
+    const char *fileName[2][3] = { { OEM_BOOTANIMATION_FILE,
             SYSTEM_BOOTANIMATION_FILE,
             SYSTEM_ENCRYPTED_BOOTANIMATION_FILE }, {
             OEM_SHUTDOWN_ANIMATION_FILE,
@@ -920,13 +920,13 @@ char *BootAnimation::getAnimationFileName(ImageID image)
     return fileName[state][image];
 }
 
-char *BootAnimation::getBootRingtoneFileName(ImageID image)
+const char *BootAnimation::getBootRingtoneFileName(ImageID image)
 {
     if (image == IMG_ENC) {
         return NULL;
     }
 
-    char *fileName[2][2] = { { OEM_BOOT_MUSIC_FILE,
+    const char *fileName[2][2] = { { OEM_BOOT_MUSIC_FILE,
             SYSTEM_BOOT_MUSIC_FILE }, {
             OEM_SHUTDOWN_MUSIC_FILE,
             SYSTEM_SHUTDOWN_MUSIC_FILE } };
@@ -937,51 +937,7 @@ char *BootAnimation::getBootRingtoneFileName(ImageID image)
     return fileName[state][image];
 }
 
-
-void BootAnimation::playBackgroundMusic(void)
-{
-    //Shutdown music is playing in ShutdownThread.java
-    if (!checkBootState()) {
-        return;
-    }
-
-    /* Make sure sound cards are populated */
-    FILE* fp = NULL;
-    if ((fp = fopen("/proc/asound/cards", "r")) == NULL) {
-        ALOGW("Cannot open /proc/asound/cards file to get sound card info.");
-    }
-
-    char value[PROPERTY_VALUE_MAX];
-    property_get("qcom.audio.init", value, "null");
-    if (strncmp(value, "complete", 8) != 0) {
-        ALOGW("Audio service is not initiated.");
-    }
-
-    fclose(fp);
-
-    char *fileName;
-    if (((fileName = getBootRingtoneFileName(IMG_DATA)) != NULL && access(fileName, R_OK) == 0) ||
-                ((fileName = getBootRingtoneFileName(IMG_SYS)) != NULL
-                && access(fileName, R_OK) == 0)) {
-        pthread_t tid;
-        pthread_create(&tid, NULL, playMusic, (void *)fileName);
-        pthread_join(tid, NULL);
-    }
-}
-bool BootAnimation::checkBootState(void)
-{
-    char value[PROPERTY_VALUE_MAX];
-    bool ret = true;
-
-    property_get("sys.shutdown.requested", value, "null");
-    if (strncmp(value, "null", 4) != 0) {
-        ret = false;
-    }
-
-    return ret;
-}
-
-void* playMusic(void* arg)
+static void* playMusic(void* arg)
 {
     int index = 0;
     char *fileName = (char *)arg;
@@ -1021,7 +977,50 @@ void* playMusic(void* arg)
     }
     return NULL;
 }
+
+void BootAnimation::playBackgroundMusic(void)
+{
+    //Shutdown music is playing in ShutdownThread.java
+    if (!checkBootState()) {
+        return;
+    }
+
+    /* Make sure sound cards are populated */
+    FILE* fp = NULL;
+    if ((fp = fopen("/proc/asound/cards", "r")) == NULL) {
+        ALOGW("Cannot open /proc/asound/cards file to get sound card info.");
+    }
+
+    char value[PROPERTY_VALUE_MAX];
+    property_get("qcom.audio.init", value, "null");
+    if (strncmp(value, "complete", 8) != 0) {
+        ALOGW("Audio service is not initiated.");
+    }
+
+    fclose(fp);
+
+    const char *fileName;
+    if (((fileName = getBootRingtoneFileName(IMG_DATA)) != NULL && access(fileName, R_OK) == 0) ||
+                ((fileName = getBootRingtoneFileName(IMG_SYS)) != NULL
+                && access(fileName, R_OK) == 0)) {
+        pthread_t tid;
+        pthread_create(&tid, NULL, playMusic, (void *)fileName);
+        pthread_join(tid, NULL);
+    }
+}
+bool BootAnimation::checkBootState(void)
+{
+    char value[PROPERTY_VALUE_MAX];
+    bool ret = true;
+
+    property_get("sys.shutdown.requested", value, "null");
+    if (strncmp(value, "null", 4) != 0) {
+        ret = false;
+    }
+
+    return ret;
+}
+
 // ---------------------------------------------------------------------------
 
-}
-; // namespace android
+}; // namespace android
