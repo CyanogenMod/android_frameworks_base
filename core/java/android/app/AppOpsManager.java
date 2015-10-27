@@ -405,7 +405,7 @@ public class AppOpsManager {
             OP_WRITE_CALL_LOG,
             OP_READ_CALENDAR,
             OP_WRITE_CALENDAR,
-            OP_COARSE_LOCATION,
+            OP_WIFI_SCAN,
             OP_POST_NOTIFICATION,
             OP_COARSE_LOCATION,
             OP_CALL_PHONE,
@@ -681,7 +681,7 @@ public class AppOpsManager {
             android.Manifest.permission.WRITE_CALL_LOG,
             android.Manifest.permission.READ_CALENDAR,
             android.Manifest.permission.WRITE_CALENDAR,
-            android.Manifest.permission.ACCESS_WIFI_STATE,
+            null, // no permission for wifi scan available
             null, // no permission required for notifications
             null, // neighboring cells shares the coarse location perm
             android.Manifest.permission.CALL_PHONE,
