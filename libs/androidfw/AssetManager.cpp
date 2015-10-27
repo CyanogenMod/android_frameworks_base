@@ -865,7 +865,7 @@ bool AssetManager::appendPathToResTable(const asset_path& ap, size_t* entryIdx) 
         ass = const_cast<AssetManager*>(this)->openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap, false);
         shared = false;
     } else if (ap.type != kFileTypeDirectory) {
-        if (*entryIdx == 0) {
+        if (nextEntryIdx == 0) {
             // The first item is typically the framework resources,
             // which we want to avoid parsing every time.
             sharedRes = const_cast<AssetManager*>(this)->
