@@ -505,7 +505,7 @@ static int findSupportedAbi(JNIEnv *env, jlong apkHandle, jobjectArray supported
     if (rc == LIB_INITED_AND_SUCCESS) {
         asset_status = GetAssetsStatusFunc(zipFile, supportedAbis, numAbis);
     } else {
-        ALOGE("Failed to load assets verifier: %d", rc);
+        ALOGV("Failed to load assets verifier: %d", rc);
     }
     if (asset_status == 1) {
         // override the status if asset_status hints at 32-bit abi
