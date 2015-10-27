@@ -111,6 +111,7 @@ import android.security.IKeyChainAliasCallback;
 import android.security.IKeyChainService;
 import android.security.KeyChain;
 import android.security.KeyChain.KeyChainConnection;
+import android.security.KeyStore;
 import android.service.persistentdata.PersistentDataBlockManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -5594,6 +5595,31 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
         }
     }
+
+    /**
+     * @hide
+     */
+    @Override
+    public boolean requireSecureKeyguard(int userHandle) {
+        if (!mHasFeature) {
+            return false;
+        }
+
+        int passwordQuality = getPasswordQuality(null, userHandle);
+        if (passwordQuality > DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
+            return true;
+        }
+
+        int encryptionStatus = getStorageEncryptionStatus(userHandle);
+        if (encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE
+                || encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
+            return true;
+        }
+
+        final int keyguardDisabledFeatures = getKeyguardDisabledFeatures(null, userHandle);
+        return (keyguardDisabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_TRUST_AGENTS) != 0;
+    }
+
 
     /**
      * Gets the disabled state for features in keyguard for the given admin,
