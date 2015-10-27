@@ -2043,7 +2043,8 @@ public final class PowerManagerService extends SystemService
                 screenBrightness = mScreenBrightnessSetting;
             }
             if (autoBrightness) {
-                screenBrightness = mScreenBrightnessSettingDefault;
+                screenBrightness = isValidBrightness(mScreenBrightnessSetting) ?
+                        mScreenBrightnessSetting : mScreenBrightnessSettingDefault;
                 if (isValidAutoBrightnessAdjustment(
                         mTemporaryScreenAutoBrightnessAdjustmentSettingOverride)) {
                     screenAutoBrightnessAdjustment =
