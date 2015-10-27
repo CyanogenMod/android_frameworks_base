@@ -17,10 +17,12 @@
 package android.app;
 
 import android.annotation.NonNull;
+import android.os.Binder;
 import android.os.PersistableBundle;
 import android.transition.Scene;
 import android.transition.TransitionManager;
 import android.util.ArrayMap;
+import android.util.ArraySet;
 import android.util.SuperNotCalledException;
 import android.widget.Toolbar;
 
@@ -772,6 +774,9 @@ public class Activity extends ContextThemeWrapper
     }
     private final ArrayList<ManagedCursor> mManagedCursors =
         new ArrayList<ManagedCursor>();
+
+    private final ArraySet<Binder> mManagedBinders =
+        new ArraySet<Binder>();
 
     // protected by synchronized (this)
     int mResultCode = RESULT_CANCELED;
@@ -1630,12 +1635,28 @@ public class Activity extends ContextThemeWrapper
             mManagedCursors.clear();
         }
 
+        synchronized (mManagedBinders) {
+            for (Binder b : mManagedBinders) {
+                b.enableCollection();
+            }
+            mManagedBinders.clear();
+        }
+
         // Close any open search dialog
         if (mSearchManager != null) {
             mSearchManager.stopSearch();
         }
 
         getApplication().dispatchActivityDestroyed(this);
+    }
+
+    public final void manageBinder(Binder b) {
+        if (mDestroyed) {
+            throw new IllegalStateException("Cannot begin managing a Binder after onDestroy");
+        }
+        synchronized (mManagedBinders) {
+            mManagedBinders.add(b);
+        }
     }
 
     /**
