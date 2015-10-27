@@ -3328,6 +3328,7 @@ package android.app {
     method public boolean isFinishing();
     method public boolean isImmersive();
     method public boolean isTaskRoot();
+    method public final void manageBinder(android.os.Binder);
     method public final deprecated android.database.Cursor managedQuery(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
     method public boolean moveTaskToBack(boolean);
     method public boolean navigateUpTo(android.content.Intent);
@@ -5058,6 +5059,7 @@ package android.app {
     ctor public Service();
     method protected void dump(java.io.FileDescriptor, java.io.PrintWriter, java.lang.String[]);
     method public final android.app.Application getApplication();
+    method public final void manageBinder(android.os.Binder);
     method public abstract android.os.IBinder onBind(android.content.Intent);
     method public void onConfigurationChanged(android.content.res.Configuration);
     method public void onCreate();
@@ -21386,12 +21388,15 @@ package android.os {
   }
 
   public class Binder implements android.os.IBinder {
+    ctor public Binder(android.app.Service);
+    ctor public Binder(android.app.Activity);
     ctor public Binder();
     method public void attachInterface(android.os.IInterface, java.lang.String);
     method public static final long clearCallingIdentity();
     method public void dump(java.io.FileDescriptor, java.lang.String[]);
     method protected void dump(java.io.FileDescriptor, java.io.PrintWriter, java.lang.String[]);
     method public void dumpAsync(java.io.FileDescriptor, java.lang.String[]);
+    method public final void enableCollection();
     method public static final void flushPendingCommands();
     method public static final int getCallingPid();
     method public static final int getCallingUid();

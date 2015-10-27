@@ -47,7 +47,6 @@ import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
-import android.net.LinkProperties;
 import android.net.Network;
 import android.net.Proxy;
 import android.net.ProxyInfo;
@@ -76,7 +75,6 @@ import android.os.SystemProperties;
 import android.os.Trace;
 import android.os.UserHandle;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.AndroidRuntimeException;
 import android.util.ArrayMap;
 import android.util.DisplayMetrics;
@@ -89,9 +87,6 @@ import android.util.Slog;
 import android.util.SuperNotCalledException;
 import android.view.Display;
 import android.view.HardwareRenderer;
-import android.view.InflateException;
-import android.view.IWindowManager;
-import android.view.IWindowSessionCallback;
 import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewManager;
@@ -2791,7 +2786,7 @@ public final class ActivityThread {
             Application app = packageInfo.makeApplication(false, mInstrumentation);
             service.attach(context, this, data.info.name, data.token, app,
                     ActivityManagerNative.getDefault());
-            service.onCreate();
+            service.dispatchCreate();
             mServices.put(data.token, service);
             try {
                 ActivityManagerNative.getDefault().serviceDoneExecuting(
@@ -2818,11 +2813,11 @@ public final class ActivityThread {
                 data.intent.prepareToEnterProcess();
                 try {
                     if (!data.rebind) {
-                        IBinder binder = s.onBind(data.intent);
+                        IBinder binder = s.dispatchBind(data.intent);
                         ActivityManagerNative.getDefault().publishService(
                                 data.token, data.intent, binder);
                     } else {
-                        s.onRebind(data.intent);
+                        s.dispatchRebind(data.intent);
                         ActivityManagerNative.getDefault().serviceDoneExecuting(
                                 data.token, SERVICE_DONE_EXECUTING_ANON, 0, 0);
                     }
@@ -2845,7 +2840,7 @@ public final class ActivityThread {
             try {
                 data.intent.setExtrasClassLoader(s.getClassLoader());
                 data.intent.prepareToEnterProcess();
-                boolean doRebind = s.onUnbind(data.intent);
+                boolean doRebind = s.dispatchUnbind(data.intent);
                 try {
                     if (doRebind) {
                         ActivityManagerNative.getDefault().unbindFinished(
@@ -2924,9 +2919,9 @@ public final class ActivityThread {
                 }
                 int res;
                 if (!data.taskRemoved) {
-                    res = s.onStartCommand(data.args, data.flags, data.startId);
+                    res = s.dispatchStartCommand(data.args, data.flags, data.startId);
                 } else {
-                    s.onTaskRemoved(data.args);
+                    s.dispatchTaskRemoved(data.args);
                     res = Service.START_TASK_REMOVED_COMPLETE;
                 }
 
@@ -2954,7 +2949,7 @@ public final class ActivityThread {
         if (s != null) {
             try {
                 if (localLOGV) Slog.v(TAG, "Destroying service " + s);
-                s.onDestroy();
+                s.dispatchDestroy();
                 Context context = s.getBaseContext();
                 if (context instanceof ContextImpl) {
                     final String who = s.getClassName();
@@ -3192,7 +3187,7 @@ public final class ActivityThread {
                 if (cv == null) {
                     mThumbnailCanvas = cv = new Canvas();
                 }
-    
+
                 cv.setBitmap(thumbnail);
                 if (!r.activity.onCreateThumbnail(thumbnail, cv)) {
                     mAvailThumbnailBitmap = thumbnail;
@@ -3490,12 +3485,12 @@ public final class ActivityThread {
 
     private void handleWindowVisibility(IBinder token, boolean show) {
         ActivityClientRecord r = mActivities.get(token);
-        
+
         if (r == null) {
             Log.w(TAG, "handleWindowVisibility: no activity for token " + token);
             return;
         }
-        
+
         if (!show && !r.stopped) {
             performStopActivityInner(r, null, show, false);
         } else if (show && r.stopped) {
@@ -3923,10 +3918,10 @@ public final class ActivityThread {
                 }
             }
         }
-        
+
         if (DEBUG_CONFIGURATION) Slog.v(TAG, "Relaunching activity "
                 + tmp.token + ": changedConfig=" + changedConfig);
-        
+
         // If there was a pending configuration change, execute it first.
         if (changedConfig != null) {
             mCurDefaultDisplayDpi = changedConfig.densityDpi;
@@ -4123,7 +4118,7 @@ public final class ActivityThread {
             if (config == null) {
                 return;
             }
-            
+
             if (DEBUG_CONFIGURATION) Slog.v(TAG, "Handle configuration changed: "
                     + config);
 
@@ -4175,7 +4170,7 @@ public final class ActivityThread {
 
         if (DEBUG_CONFIGURATION) Slog.v(TAG, "Handle activity config changed: "
                 + r.activityInfo.name);
-        
+
         performConfigurationChanged(r.activity, mCompatConfiguration);
 
         freeTextLayoutCachesIfNeeded(r.activity.mCurrentConfig.diff(mCompatConfiguration));
@@ -4256,7 +4251,7 @@ public final class ActivityThread {
         ApplicationPackageManager.handlePackageBroadcast(cmd, packages,
                 hasPkgInfo);
     }
-        
+
     final void handleLowMemory() {
         ArrayList<ComponentCallbacks2> callbacks = collectComponentCallbacks(true, null);
 
@@ -4303,7 +4298,7 @@ public final class ActivityThread {
             String[] packages = getPackageManager().getPackagesForUid(uid);
 
             // If there are several packages in this application we won't
-            // initialize the graphics disk caches 
+            // initialize the graphics disk caches
             if (packages != null && packages.length == 1) {
                 HardwareRenderer.setupDiskCache(cacheDir);
                 RenderScript.setupDiskCache(cacheDir);
@@ -4407,7 +4402,7 @@ public final class ActivityThread {
             if (cacheDir != null) {
                 // Provide a usable directory for temporary files
                 System.setProperty("java.io.tmpdir", cacheDir.getAbsolutePath());
-    
+
                 setupGraphicsSupport(data.info, cacheDir);
             } else {
                 Log.e(TAG, "Unable to setupGraphicsSupport due to missing cache directory");
@@ -5186,7 +5181,7 @@ public final class ActivityThread {
                         if (mPendingConfiguration == null ||
                                 mPendingConfiguration.isOtherSeqNewer(newConfig)) {
                             mPendingConfiguration = newConfig;
-                            
+
                             sendMessage(H.CONFIGURATION_CHANGED, newConfig);
                         }
                     }

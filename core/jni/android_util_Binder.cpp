@@ -237,7 +237,7 @@ public:
         incRefsCreated(env);
     }
 
-    bool    checkSubclass(const void* subclassID) const
+    bool checkSubclass(const void* subclassID) const
     {
         return subclassID == &gBinderOffsets;
     }
@@ -318,7 +318,7 @@ protected:
 
 private:
     JavaVM* const   mVM;
-    jobject const   mObject;
+    jobject const   mObject; // the java Binder object
 };
 
 // ----------------------------------------------------------------------------
@@ -830,19 +830,31 @@ static void android_os_Binder_destroy(JNIEnv* env, jobject obj)
     }
 }
 
+static void android_os_Binder_enableCollection(JNIEnv* env, jobject obj) {
+    JavaBBinderHolder* jbh = (JavaBBinderHolder*)
+        env->GetLongField(obj, gBinderOffsets.mObject);
+    if (jbh != NULL) {
+
+    } else {
+        // if we get here, the binder was only half-created.
+        // TODO what does that mean?
+    }
+}
+
 // ----------------------------------------------------------------------------
 
 static const JNINativeMethod gBinderMethods[] = {
      /* name, signature, funcPtr */
-    { "getCallingPid", "()I", (void*)android_os_Binder_getCallingPid },
-    { "getCallingUid", "()I", (void*)android_os_Binder_getCallingUid },
-    { "clearCallingIdentity", "()J", (void*)android_os_Binder_clearCallingIdentity },
-    { "restoreCallingIdentity", "(J)V", (void*)android_os_Binder_restoreCallingIdentity },
-    { "setThreadStrictModePolicy", "(I)V", (void*)android_os_Binder_setThreadStrictModePolicy },
-    { "getThreadStrictModePolicy", "()I", (void*)android_os_Binder_getThreadStrictModePolicy },
-    { "flushPendingCommands", "()V", (void*)android_os_Binder_flushPendingCommands },
-    { "init", "()V", (void*)android_os_Binder_init },
-    { "destroy", "()V", (void*)android_os_Binder_destroy }
+    { "getCallingPid",              "()I", (void*)android_os_Binder_getCallingPid },
+    { "getCallingUid",              "()I", (void*)android_os_Binder_getCallingUid },
+    { "clearCallingIdentity",       "()J", (void*)android_os_Binder_clearCallingIdentity },
+    { "restoreCallingIdentity",     "(J)V", (void*)android_os_Binder_restoreCallingIdentity },
+    { "setThreadStrictModePolicy",  "(I)V", (void*)android_os_Binder_setThreadStrictModePolicy },
+    { "getThreadStrictModePolicy",  "()I", (void*)android_os_Binder_getThreadStrictModePolicy },
+    { "flushPendingCommands",       "()V", (void*)android_os_Binder_flushPendingCommands },
+    { "init",                       "()V", (void*)android_os_Binder_init },
+    { "destroy",                    "()V", (void*)android_os_Binder_destroy },
+    { "enableCollection",           "()V", (void*)android_os_Binder_enableCollection },
 };
 
 const char* const kBinderPathName = "android/os/Binder";
