@@ -234,4 +234,6 @@ interface IDevicePolicyManager {
     boolean setPermissionGrantState(in ComponentName admin, String packageName,
             String permission, int grantState);
     int getPermissionGrantState(in ComponentName admin, String packageName, String permission);
+
+    boolean requireSecureKeyguard(int userHandle);
 }
