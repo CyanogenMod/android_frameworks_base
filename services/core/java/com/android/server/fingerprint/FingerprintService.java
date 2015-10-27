@@ -421,41 +421,8 @@ public class FingerprintService extends SystemService {
             List<Fingerprint> settingsFingerprints,
             int userId) {
 
-        List<Fingerprint> mergedList = new ArrayList<Fingerprint>();
-        HashMap<Integer, Fingerprint> nativeFingerMap = new HashMap<Integer, Fingerprint>();
-
-        for(Fingerprint fingerprint : nativeFingerprints) {
-            nativeFingerMap.put(fingerprint.getFingerId(), fingerprint);
-        }
-
-        boolean modifiedSettingsFingers = false;
-        Iterator<Fingerprint> iter = settingsFingerprints.iterator();
-        while(iter.hasNext()) {
-            Fingerprint settingsFinger = iter.next();
-            Fingerprint nativeFinger = nativeFingerMap.get(settingsFinger.getFingerId());
-            if (nativeFinger == null) {
-                // Finger exists in Settings but not in native space. Remove it from settings
-                iter.remove();
-                modifiedSettingsFingers = true;
-            } else {
-                // Finger exists in Settings and in native space, merge it
-                mergedList.add(mergeFingerprint(nativeFinger, settingsFinger));
-                nativeFingerMap.remove(settingsFinger.getFingerId());
-            }
-        }
-
-        // Fingerprints stored in vendor storage but not in settings are useless
-        // since we have no idea what user id they are
-        for(Fingerprint nativeFinger : nativeFingerMap.values()) {
-            nativeRemove(nativeFinger.getFingerId());
-        }
-
-        // If there were any discrepancies, we should persist the corrected list now
-        if (modifiedSettingsFingers) {
-            FingerprintUtils.saveFingerprints(settingsFingerprints,
-                    mContext.getContentResolver(), userId);
-        }
-
+        List<Fingerprint> mergedList = new ArrayList<>(settingsFingerprints);
+        mergedList.retainAll(nativeFingerprints);
         return mergedList;
     }
 
