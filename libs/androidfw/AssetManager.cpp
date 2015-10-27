@@ -865,7 +865,7 @@ bool AssetManager::appendPathToResTable(const asset_path& ap, size_t* entryIdx) 
         ass = const_cast<AssetManager*>(this)->openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap, false);
         shared = false;
     } else if (ap.type != kFileTypeDirectory) {
-        if (*entryIdx == 0) {
+        if (nextEntryIdx == 0) {
             // The first item is typically the framework resources,
             // which we want to avoid parsing every time.
             sharedRes = const_cast<AssetManager*>(this)->
@@ -896,7 +896,7 @@ bool AssetManager::appendPathToResTable(const asset_path& ap, size_t* entryIdx) 
                 // can quickly copy it out for others.
                 ALOGV("Creating shared resources for %s", ap.path.string());
                 sharedRes = new ResTable();
-                sharedRes->add(ass, idmap, *entryIdx + 1, false, ap.pkgIdOverride);
+                sharedRes->add(ass, idmap, nextEntryIdx + 1, false, ap.pkgIdOverride);
 #ifdef HAVE_ANDROID_OS
                 const char* data = getenv("ANDROID_DATA");
                 LOG_ALWAYS_FATAL_IF(data == NULL, "ANDROID_DATA not set");
@@ -925,7 +925,7 @@ bool AssetManager::appendPathToResTable(const asset_path& ap, size_t* entryIdx) 
             mResources->add(sharedRes);
         } else {
             ALOGV("Parsing resources for %s", ap.path.string());
-            mResources->add(ass, idmap, *entryIdx + 1, !shared, ap.pkgIdOverride);
+            mResources->add(ass, idmap, *nextEntryIdx + 1, !shared, ap.pkgIdOverride);
         }
         onlyEmptyResources = false;
 
