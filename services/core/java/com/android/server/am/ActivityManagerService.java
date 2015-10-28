@@ -1246,6 +1246,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         boolean foregroundActivities;
     }
 
+    private Map<Integer, Object[]> mForegroundActivitiesList = new HashMap<Integer, Object[]>();
     final RemoteCallbackList<IProcessObserver> mProcessObservers = new RemoteCallbackList<>();
     ProcessChangeItem[] mActiveProcessChanges = new ProcessChangeItem[5];
 
@@ -11153,6 +11154,18 @@ public final class ActivityManagerService extends ActivityManagerNative
         enforceCallingPermission(android.Manifest.permission.SET_ACTIVITY_WATCHER,
                 "registerProcessObserver()");
         synchronized (this) {
+            for (Integer key : mForegroundActivitiesList.keySet()) {
+                Object[] o = mForegroundActivitiesList.get(key);
+                if (o.length == 3) {
+                    try {
+                        observer.onForegroundActivitiesChanged((int) o[0],
+                                (int) o[1], (boolean) o[2]);
+                    } catch (RemoteException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
             mProcessObservers.register(observer);
         }
     }
@@ -19059,6 +19072,12 @@ public final class ActivityManagerService extends ActivityManagerNative
             item.changes |= changes;
             item.processState = app.repProcState;
             item.foregroundActivities = app.repForegroundActivities;
+            if (item.foregroundActivities) {
+                Object[] o = new Object[]{item.pid, item.uid, item.foregroundActivities};
+                mForegroundActivitiesList.put(item.pid, o);
+            } else if (!item.foregroundActivities && mForegroundActivitiesList.get(item.pid) != null) {
+                mForegroundActivitiesList.remove(item.pid);
+            }
             if (DEBUG_PROCESS_OBSERVERS) Slog.i(TAG_PROCESS_OBSERVERS,
                     "Item " + Integer.toHexString(System.identityHashCode(item))
                     + " " + app.toShortString() + ": changes=" + item.changes
