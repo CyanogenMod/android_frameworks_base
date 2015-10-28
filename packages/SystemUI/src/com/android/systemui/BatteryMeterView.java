@@ -212,8 +212,36 @@ public class BatteryMeterView extends View implements DemoMode,
         }
     };
 
-    private ContentObserver mObserver = new ContentObserver(new Handler()) {
-        public void onChange(boolean selfChange, Uri uri) {
+    SettingsObserver mObserver = new SettingsObserver(new Handler());
+
+    private class SettingsObserver extends UserContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void observe() {
+            super.observe();
+
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    STATUS_BAR_BATTERY_STYLE), false, this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                    STATUS_BAR_SHOW_BATTERY_PERCENT), false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+
+
+        protected void unobserve() {
+            super.unobserve();
+            getContext().getContentResolver().unregisterContentObserver(this);
+
+        }
+
+
+
+        @Override
+        public void update() {
             loadShowBatterySetting();
             postInvalidate();
         }
@@ -233,10 +261,7 @@ public class BatteryMeterView extends View implements DemoMode,
         }
         mBatteryController.addStateChangedCallback(this);
         mAttached = true;
-        getContext().getContentResolver().registerContentObserver(CMSettings.System.getUriFor(
-                STATUS_BAR_SHOW_BATTERY_PERCENT), false, mObserver);
-        getContext().getContentResolver().registerContentObserver(CMSettings.System.getUriFor(
-                STATUS_BAR_BATTERY_STYLE), false, mObserver);
+        mObserver.observe();
     }
 
     @Override
@@ -245,6 +270,7 @@ public class BatteryMeterView extends View implements DemoMode,
 
         mAttached = false;
         getContext().unregisterReceiver(mTracker);
+        mObserver.unobserve();
         mBatteryController.removeStateChangedCallback(this);
     }
 
