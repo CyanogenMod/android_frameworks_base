@@ -280,11 +280,6 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
         delete codec;
     }
 
-    // FileMap memory is never released until application exit.
-    // Release it now as the texture is already loaded and the memory used for
-    // the packed resource can be released.
-    delete frame.map;
-
     // ensure we can call getPixels(). No need to call unlock, since the
     // bitmap will go out of scope when we return from this method.
     bitmap.lockPixels();
