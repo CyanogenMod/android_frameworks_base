@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Pil modu: güç tasarruf modu.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Pil modu: dengeli mod.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Pil modu: performans modu.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Pil modu: verimlilik modu.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Pil modu: hızlı mod.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Pil modu güç tasarruf moduna geçti.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Pil modu dengeli moda geçti.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Pil modu performans moduna geçti.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Pil modu verimlilik moduna geçti.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Pil modu hızlı moda geçti.</string>
   <string name="accessibility_quick_settings_profiles_off">Profiller kapalı.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiller kapatıldı.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Eşitleme</string>
   <string name="quick_settings_battery_saver_label">Pil tasarrufu</string>
   <string name="quick_settings_custom_tile_detail_title">Özel kareler</string>
+  <string name="quick_settings_performance_profile_detail_title">Pil modu</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">%1$s için sağa kaydırın</string>
   <string name="right_shortcut_hint">%1$s için sola kaydırın</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Lütfen tekrar tarayın</string>
   <string name="accessibility_dock_battery_level">Ünite pili yüzde <xliff:g id="number">%d</xliff:g>.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Öge bulunamadı</string>
+  <string name="play_queue_extention">Oynatma kuyruğunu göster</string>
 </resources>

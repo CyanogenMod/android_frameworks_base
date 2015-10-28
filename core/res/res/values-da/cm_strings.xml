@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Strømbesparelse</string>
   <string name="perf_profile_bal">Balanceret</string>
   <string name="perf_profile_perf">Ydeevne</string>
+  <string name="perf_profile_bias_power">Effektivitet</string>
+  <string name="perf_profile_bias_perf">Hurtig</string>
   <string name="theme_install_error_title">Det lykkedes ikke at installere temaet</string>
   <string name="theme_install_error_message">%s kunne ikke installeres</string>
   <string name="theme_reset_notification_title">Nulstil tema</string>
