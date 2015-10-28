@@ -742,7 +742,7 @@ const char16_t* ResStringPool::stringAt(size_t idx, size_t* u16len) const
                         }
 #else
                         // We do not want to be in this case when actually running Android.
-                        ALOGW("CREATING STRING CACHE OF %zu bytes",
+                        ALOGV("CREATING STRING CACHE OF %zu bytes",
                                 static_cast<size_t>(mHeader->stringCount*sizeof(char16_t**)));
 #endif
                         mCache = (char16_t**)calloc(mHeader->stringCount, sizeof(char16_t**));
