@@ -2090,7 +2090,7 @@ class AlarmManagerService extends SystemService {
             workSource = _ws;
             flags = _flags;
             alarmClock = _info;
-            uid = _uid;
+            uid = operation.getCreatorUid();
             pid = Binder.getCallingPid();
         }
 
@@ -2245,6 +2245,12 @@ class AlarmManagerService extends SystemService {
                 mInFlight.add(inflight);
                 mBroadcastRefCount++;
                 mTriggeredUids.add(new Integer(alarm.uid));
+                if (checkReleaseWakeLock()) {
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                        if (localLOGV) Slog.v(TAG, "AM WakeLock Released Internally deliverAlarms");
+                    }
+                }
 
                 if (allowWhileIdle) {
                     // Record the last time this uid handled an ALLOW_WHILE_IDLE alarm.
@@ -2713,8 +2719,12 @@ class AlarmManagerService extends SystemService {
                     }
                 } else {
                     // the next of our alarms is now in flight.  reattribute the wakelock.
+                    InFlight inFlight = null;
                     if (mInFlight.size() > 0) {
-                        InFlight inFlight = mInFlight.get(0);
+                        for(int index = 0; index < mInFlight.size(); index++){
+                            inFlight = mInFlight.get(index);
+                            if(!mBlockedUids.contains(inFlight.mUid)) break;
+                        }
                         setWakelockWorkSource(inFlight.mPendingIntent, inFlight.mWorkSource,
                                 inFlight.mAlarmType, inFlight.mTag, false);
                     } else {
