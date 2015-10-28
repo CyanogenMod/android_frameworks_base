@@ -21,14 +21,14 @@
 
     <!-- Colors for the system bars -->
     <color name="status_bar_background_opaque">@color/system_bar_background_opaque</color>
-    <color name="status_bar_background_semi_transparent">
+    <drawable name="status_bar_background_semi_transparent">
         @color/system_bar_background_semi_transparent
-    </color>
+    </drawable>
     <color name="status_bar_background_transparent">@color/system_bar_background_transparent</color>
     <color name="navigation_bar_background_opaque">@color/system_bar_background_opaque</color>
-    <color name="navigation_bar_background_semi_transparent">
+    <drawable name="navigation_bar_background_semi_transparent">
         @color/system_bar_background_semi_transparent
-    </color>
+    </drawable>
     <color name="navigation_bar_background_transparent">
         @color/system_bar_background_transparent
     </color>
