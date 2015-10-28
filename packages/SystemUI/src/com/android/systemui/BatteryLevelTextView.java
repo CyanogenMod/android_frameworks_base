@@ -23,11 +23,14 @@ import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
+
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.policy.BatteryController;
 
 import java.text.NumberFormat;
@@ -42,9 +45,32 @@ public class BatteryLevelTextView extends TextView implements
     private boolean mForceShow;
     private boolean mAttached;
     private int mRequestedVisibility;
+   private SettingsObserver mObserver = new SettingsObserver(new Handler());
 
-    private ContentObserver mObserver = new ContentObserver(new Handler()) {
-        public void onChange(boolean selfChange, Uri uri) {
+    private class SettingsObserver extends UserContentObserver {
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void observe() {
+            super.observe();
+
+            getContext().getContentResolver().registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_BATTERY_STYLE), false, this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT), false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+
+            getContext().getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        public void update() {
             loadShowBatteryTextSetting();
             setVisibility(mShow ? View.VISIBLE : View.GONE);
         }
@@ -57,9 +83,9 @@ public class BatteryLevelTextView extends TextView implements
     }
 
         public void setForceShown(boolean forceShow) {
-                mForceShow = forceShow;
-                updateVisibility();
-            }
+            mForceShow = forceShow;
+            updateVisibility();
+        }
 
     public void setBatteryController(BatteryController batteryController) {
                 mBatteryController = batteryController;
@@ -106,8 +132,8 @@ public class BatteryLevelTextView extends TextView implements
         if (mBatteryController != null) {
             mBatteryController.addStateChangedCallback(this);
         }
-        getContext().getContentResolver().registerContentObserver(CMSettings.System.getUriFor(
-               CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT), false, mObserver);
+        mObserver.observe();
+
         mAttached = true;
     }
 
@@ -115,7 +141,7 @@ public class BatteryLevelTextView extends TextView implements
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mAttached = false;
-        getContext().getContentResolver().unregisterContentObserver(mObserver);
+        mObserver.unobserve();
 
         if (mBatteryController != null) {
             mBatteryController.removeStateChangedCallback(this);
