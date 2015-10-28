@@ -136,6 +136,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="perf_profile_pwrsv">Güç tasarrufu</string>
   <string name="perf_profile_bal">Dengeli</string>
   <string name="perf_profile_perf">Performans</string>
+  <string name="perf_profile_bias_power">Verimlilik</string>
+  <string name="perf_profile_bias_perf">Hızlı</string>
   <string name="theme_install_error_title">Tema yüklenemedi</string>
   <string name="theme_install_error_message">%s yüklenemedi</string>
   <string name="theme_reset_notification_title">Tema sıfırlandı</string>

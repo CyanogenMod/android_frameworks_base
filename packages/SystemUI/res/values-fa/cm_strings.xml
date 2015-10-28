@@ -167,4 +167,5 @@
   <string name="fingerprint_try_again_hint">لطفاً دوباره اسکن کنید</string>
   <string name="accessibility_dock_battery_level">باتری داک <xliff:g id="number">%d</xliff:g> درصد.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">موردی پیدا نشد</string>
+  <string name="play_queue_extention">نمایش صف پخش</string>
 </resources>

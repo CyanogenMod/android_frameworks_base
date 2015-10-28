@@ -167,4 +167,5 @@
   <string name="fingerprint_try_again_hint">ದಯವಿಟ್ಟು ಇನ್ನೊಮ್ಮೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</string>
   <string name="accessibility_dock_battery_level">ಡಾಕ್ ಬ್ಯಾಟರಿ <xliff:g id="number">%d</xliff:g> ಶೇಕಡಾ.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">ಯಾವುದೇ ವಸ್ತುಗಳು ಪತ್ತೆಯಾಗಲಿಲ್ಲ</string>
+  <string name="play_queue_extention">ಪ್ಲೇ ಸರದಿಯನ್ನು ತೋರಿಸು</string>
 </resources>

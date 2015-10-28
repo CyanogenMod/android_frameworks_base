@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Λειτουργία μπαταρίας: εξοικονόμηση ενέργειας.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Λειτουργία μπαταρίας: ισορροπημένο.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Λειτουργία μπαταρίας: επιδόσεις.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Λειτουργία μπαταρίας: αποδοτικό.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Λειτουργία μπαταρίας: γρήγορο.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Η λειτουργία μπαταρίας άλλαξε σε εξοικονόμηση ενέργειας.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Η λειτουργία μπαταρίας άλλαξε σε ισορροπημένο.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Η λειτουργία μπαταρίας άλλαξε σε επιδόσεις.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Η λειτουργία μπαταρίας άλλαξε σε αποδοτικό.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Η λειτουργία μπαταρίας άλλαξε σε γρήγορο.</string>
   <string name="accessibility_quick_settings_profiles_off">Ανενεργά προφίλ.</string>
   <string name="accessibility_quick_settings_profiles">Προφίλ: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Τα προφίλ απενεργοποιήθηκαν.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Συγχρονισμός</string>
   <string name="quick_settings_battery_saver_label">Εξοικονόμηση μπαταρίας</string>
   <string name="quick_settings_custom_tile_detail_title">Προσαρμοσμένο πλακίδιο</string>
+  <string name="quick_settings_performance_profile_detail_title">Λειτουργία μπαταρίας</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Σύρετε προς τα δεξιά για %1$s</string>
   <string name="right_shortcut_hint">Σύρετε προς τα αριστερά για %1$s</string>
