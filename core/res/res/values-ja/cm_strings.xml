@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">省電力</string>
   <string name="perf_profile_bal">バランス</string>
   <string name="perf_profile_perf">パフォーマンス</string>
+  <string name="perf_profile_bias_power">効率</string>
+  <string name="perf_profile_bias_perf">クイック</string>
   <string name="theme_install_error_title">テーマをインストールできませんでした</string>
   <string name="theme_install_error_message">%sをインストールできませんでした</string>
   <string name="theme_reset_notification_title">テーマのリセット</string>

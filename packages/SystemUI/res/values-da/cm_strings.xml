@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Batteri tilstand: strømsparetilstand.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Batteri tilstand: balanceret tilstand.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Batteri tilstand: høj ydeevne tilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Batteritilstand: effektivitetstilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Batteritilstand: hurtig tilstand.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batteritilstand skiftet til strømsparetilstand.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Batteritilstand ændret til balanceret tilstand.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Batteritilstand ændret til tilstanden høj ydeevne.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Batteritilstand ændret til effektivitetstilstand.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Batteritilstand ændret til hurtigt tilstand.</string>
   <string name="accessibility_quick_settings_profiles_off">Profiler fra.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiler slået fra.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Synkr.</string>
   <string name="quick_settings_battery_saver_label">Strømsparetilstand</string>
   <string name="quick_settings_custom_tile_detail_title">Tilpasset flise</string>
+  <string name="quick_settings_performance_profile_detail_title">Batteritilstand</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Stryg til højre for %1$s</string>
   <string name="right_shortcut_hint">Stryg til venstre for %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Scan venligst igen</string>
   <string name="accessibility_dock_battery_level">Dockingstations batteri <xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Ingen emner fundet</string>
+  <string name="play_queue_extention">Vis afspillingskø</string>
 </resources>

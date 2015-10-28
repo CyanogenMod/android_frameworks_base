@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Уштеда енергије</string>
   <string name="perf_profile_bal">Уравнотежено</string>
   <string name="perf_profile_perf">Перформансе</string>
+  <string name="perf_profile_bias_power">Ефикасност</string>
+  <string name="perf_profile_bias_perf">Брзина</string>
   <string name="theme_install_error_title">Инсталирање теме није успело</string>
   <string name="theme_install_error_message">%s инсталирање није успело</string>
   <string name="theme_reset_notification_title">Ресетуј тему</string>

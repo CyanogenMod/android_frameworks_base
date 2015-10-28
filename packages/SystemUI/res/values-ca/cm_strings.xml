@@ -167,4 +167,5 @@
   <string name="fingerprint_try_again_hint">Si us plau escanneja una altra vegada</string>
   <string name="accessibility_dock_battery_level">Acoblament bateria <xliff:g id="number">%d</xliff:g> percent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">No s\'han trobat elements</string>
+  <string name="play_queue_extention">Mostra la cua de reproducció</string>
 </resources>
