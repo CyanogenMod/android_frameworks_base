@@ -710,51 +710,6 @@ public class ThemeUtils {
     }
 
     /**
-     * Get the boot theme by accessing the settings.db directly instead of using a content resolver.
-     * Only use this when the system is starting up and the settings content provider is not ready.
-     *
-     * Note: This method will only succeed if the system is calling this since normal apps will not
-     * be able to access the settings db path.
-     *
-     * @return The boot theme or null if unable to read the database or get the entry for theme
-     *         config
-     */
-    public static ThemeConfig getBootThemeDirty() {
-        ThemeConfig config = null;
-        SQLiteDatabase db = null;
-        try {
-            db = SQLiteDatabase.openDatabase(SETTINGS_DB, null,
-                    SQLiteDatabase.OPEN_READONLY);
-            if (db != null) {
-                String selection = "name=?";
-                String[] selectionArgs =
-                        { Configuration.THEME_PKG_CONFIGURATION_PERSISTENCE_PROPERTY };
-                String[] columns = {"value"};
-                Cursor c = db.query(SETTINGS_SECURE_TABLE, columns, selection, selectionArgs,
-                        null, null, null);
-                if (c != null) {
-                    if (c.getCount() > 0) {
-                        c.moveToFirst();
-                        String json = c.getString(0);
-                        if (json != null) {
-                            config = ThemeConfig.fromJson(json);
-                        }
-                    }
-                    c.close();
-                }
-            }
-        } catch (Exception e) {
-            Log.w(TAG, "Unable to open " + SETTINGS_DB, e);
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-
-        return config;
-    }
-
-    /**
      * Convenience method to determine if a theme component is a per app theme and not a standard
      * component.
      * @param component
