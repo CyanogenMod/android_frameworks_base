@@ -219,6 +219,7 @@ public class BrightnessController implements ToggleSlider.Listener {
             }
         } else {
             final float adj = value / (BRIGHTNESS_ADJ_RESOLUTION / 2f) - 1;
+            System.out.println("BrightnessController " + value + " " + adj);
             if (stopTracking) {
                 MetricsLogger.action(mContext, MetricsLogger.ACTION_BRIGHTNESS_AUTO, value);
             }
