@@ -2425,7 +2425,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         final boolean hasBackdrop = backdropBitmap != null;
         mKeyguardShowingMedia = hasBackdrop;
         if (mStatusBarWindowManager != null) {
-            mStatusBarWindowManager.setShowingMedia(mKeyguardShowingMedia);
+            mStatusBarWindowManager.setShowingMedia(mKeyguardShowingMedia && mMediaMetadata != null);
         }
 
         if ((hasBackdrop || DEBUG_MEDIA_FAKE_ARTWORK) && keyguardVisible) {
