@@ -220,4 +220,5 @@
     <string name="app_ops_turn_on_screen">turn the screen on</string>
     <string name="app_ops_get_accounts">get device accounts</string>
     <string name="app_ops_wifi_change">change WiFI state</string>
+    <string name="app_ops_su">get Superuser access</string>
 </resources>
