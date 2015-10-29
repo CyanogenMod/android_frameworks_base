@@ -1388,6 +1388,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         if (upgradeVersion == 88) {
             if (mUserHandle == UserHandle.USER_OWNER) {
                 db.beginTransaction();
+                SQLiteStatement stmt = null;
                 try {
                     String[] settingsToMove = {
                             Settings.Global.BATTERY_DISCHARGE_DURATION_THRESHOLD,
@@ -1407,7 +1408,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                             Settings.Global.SYS_STORAGE_FULL_THRESHOLD_BYTES,
                             Settings.Global.SYNC_MAX_RETRY_DELAY_IN_SECONDS,
                             Settings.Global.CONNECTIVITY_CHANGE_DELAY,
-                            Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED,
                             Settings.Global.CAPTIVE_PORTAL_SERVER,
                             Settings.Global.NSD_ON,
                             Settings.Global.SET_INSTALL_LOCATION,
@@ -1423,9 +1423,16 @@ class DatabaseHelper extends SQLiteOpenHelper {
                             Settings.Global.DEFAULT_DNS_SERVER,
                     };
                     moveSettingsToNewTable(db, TABLE_SECURE, TABLE_GLOBAL, settingsToMove, true);
+
+                    stmt = db.compileStatement("INSERT OR REPLACE INTO global(name,value)"
+                            + " VALUES(?,?);");
+                    loadIntegerSetting(stmt, Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED,
+                            R.integer.def_captive_portal_detection_enabled);
+                    stmt.close();
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
+                    if (stmt != null) stmt.close();
                 }
             }
             upgradeVersion = 89;
@@ -2709,7 +2716,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     R.bool.def_guest_user_enabled);
             loadSetting(stmt, Settings.Global.ENHANCED_4G_MODE_ENABLED,
                     ImsConfig.FeatureValueConstants.ON);
-
             /*
              * IMPORTANT: Do not add any more upgrade steps here as the global,
              * secure, and system settings are no longer stored in a database
@@ -2717,6 +2723,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
              *
              * See: SettingsProvider.UpgradeController#onUpgradeLocked
              */
+            loadIntegerSetting(stmt, Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED,
+                    R.integer.def_captive_portal_detection_enabled);
         } finally {
             if (stmt != null) stmt.close();
         }
