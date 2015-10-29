@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Modem USB activé.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Modem USB désactivé.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Modem USB activé.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Économiseur de batterie désactivé.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Économiseur de batterie activé.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">L\'économiseur de batterie a été désactivé.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">L\'économiseur de batterie a été activé.</string>
   <string name="accessibility_quick_settings_visualizer">Visualiseur.</string>
+  <string name="accessibility_quick_settings_volume_panel">Volume.</string>
   <string name="accessibility_dpad_left">Curseur gauche</string>
   <string name="accessibility_dpad_right">Curseur droit</string>
   <string name="quick_settings_mobile_data_label">Données mobiles</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Notifications flottantes</string>
   <string name="quick_settings_ambient_display_label">Affichage ambiant</string>
   <string name="quick_settings_sync_label">Synchronisation</string>
+  <string name="quick_settings_battery_saver_label">Économiseur de batterie</string>
   <string name="quick_settings_custom_tile_detail_title">Personnaliser le raccourci</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Balayer à droite pour %1$s</string>
@@ -161,4 +167,5 @@
   <string name="fingerprint_try_again_hint">Veuillez lancer une nouvelle recherche</string>
   <string name="accessibility_dock_battery_level">Batterie de la station d\'accueil chargée à <xliff:g id="number">%d</xliff:g> pour cent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Aucun élément trouvé</string>
+  <string name="play_queue_extention">Voir la file d\'attente de lecture</string>
 </resources>

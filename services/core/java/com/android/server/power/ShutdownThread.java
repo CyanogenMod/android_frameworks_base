@@ -212,7 +212,7 @@ public final class ShutdownThread extends Thread {
                                     ? com.android.internal.R.string.reboot_title
                                     : com.android.internal.R.string.power_off);
 
-            if (!advancedReboot) {
+            if (!advancedReboot || mRebootSafeMode) {
                 confirmDialogBuilder.setMessage(resourceId);
             } else {
                 confirmDialogBuilder
@@ -224,7 +224,7 @@ public final class ShutdownThread extends Thread {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (advancedReboot) {
+                            if (!mRebootSafeMode && advancedReboot) {
                                 boolean softReboot = false;
                                 ListView reasonsList = ((AlertDialog)dialog).getListView();
                                 int selected = reasonsList.getCheckedItemPosition();

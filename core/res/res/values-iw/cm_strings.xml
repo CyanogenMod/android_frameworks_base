@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">חיסכון בסוללה</string>
   <string name="perf_profile_bal">מאוזן</string>
   <string name="perf_profile_perf">ביצועים</string>
+  <string name="perf_profile_bias_power">יעילות</string>
+  <string name="perf_profile_bias_perf">מהיר</string>
   <string name="theme_install_error_title">התקנת ערכת העיצוב נכשלה</string>
   <string name="theme_install_error_message">התקנת %s נכשלה</string>
   <string name="theme_reset_notification_title">אפס ערכת עיצוב</string>

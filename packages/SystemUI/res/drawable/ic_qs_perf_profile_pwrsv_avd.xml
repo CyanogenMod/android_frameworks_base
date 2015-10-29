@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_qs_perf_profile_vector">
-    
-    <target
-        android:name="needle"
-        android:animation="@anim/ic_qs_perf_profile_tobalanced"/>
-
-</animated-vector>

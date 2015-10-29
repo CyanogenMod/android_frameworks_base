@@ -167,4 +167,5 @@
   <string name="fingerprint_try_again_hint">Por favor escaneie novamente</string>
   <string name="accessibility_dock_battery_level">Bateria do dock está <xliff:g xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" id="number">%d</xliff:g> porcento.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nenhum item encontrado</string>
+  <string name="play_queue_extention">Mostrar fila de reprodução</string>
 </resources>

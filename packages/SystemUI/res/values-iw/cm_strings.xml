@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">מצב סוללה: מצב חיסכון סוללה.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">מצב סוללה: מצב מאוזן.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">מצב סוללה: מצב ביצועים.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">מצב סוללה: מצב יעילות.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">מצב סוללה: מצב מהיר.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">מצב הסוללה שונה למצב חיסכון סוללה.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">מצב הסוללה שונה למצב מאוזן.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">מצב הסוללה שונה למצב ביצועים.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">מצב סוללה שונה למצב יעילות.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">מצב סוללה שונה למצב מהיר.</string>
   <string name="accessibility_quick_settings_profiles_off">פרופילים כבויים.</string>
   <string name="accessibility_quick_settings_profiles">פרופיל: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">פרופילים כובו.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">סנכרון</string>
   <string name="quick_settings_battery_saver_label">שומר סוללה</string>
   <string name="quick_settings_custom_tile_detail_title">אריח מותאם אישית</string>
+  <string name="quick_settings_performance_profile_detail_title">מצב סוללה</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">החלק ימינה בשביל %1$s</string>
   <string name="right_shortcut_hint">החלק שמאלה בשביל %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">אנא סרוק שנית</string>
   <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">לא נמצאו פריטים</string>
+  <string name="play_queue_extention">הצג תור השמעה</string>
 </resources>
