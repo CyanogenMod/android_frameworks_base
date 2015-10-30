@@ -660,7 +660,7 @@ static void android_location_GpsLocationProvider_agps_set_reference_location_cel
 #ifdef AGPS_USE_PSC
             location.u.cellID.psc = psc;
 #else
-            (void *)psc;
+            (void)psc;
 #endif
             location.u.cellID.cid = cid;
             break;
