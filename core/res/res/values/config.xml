@@ -2312,6 +2312,10 @@
     <integer name="ascrollboost_timeout">0</integer>
     <integer-array name="ascrollboost_param_value"/>
 
+    <!-- cpu boost for PanelView fling -->
+    <bool name="config_enableCpuBoostForPanelViewFling">false</bool>
+    <integer-array name="panelview_flingboost_param_value" />
+
    <!-- Configuration to play sms ringtone during MO/MT call -->
    <bool name="config_sms_ringtone_incall">false</bool>
     <!-- IpReachability monitor enable/Disable -->
