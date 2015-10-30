@@ -300,6 +300,11 @@ public final class ActivityManagerService extends ActivityManagerNative
     private static final String TAG_VISIBILITY = TAG + POSTFIX_VISIBILITY;
     private static final String TAG_VISIBLE_BEHIND = TAG + POSTFIX_VISIBLE_BEHIND;
 
+    private static final String ACTION_POWER_OFF_ALARM =
+            "org.codeaurora.alarm.action.POWER_OFF_ALARM";
+
+    private static final String POWER_OFF_ALARM = "powerOffAlarm";
+
     /** Control over CPU and battery monitoring */
     // write battery stats every 30 minutes.
     static final long BATTERY_STATS_TIME = 30 * 60 * 1000;
@@ -3606,6 +3611,15 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
 
         return true;
+    }
+
+    /**
+     * If system is power off alarm boot mode, we need to start alarm UI.
+     */
+    void startAlarmActivityLocked() {
+        Intent intent = new Intent(ACTION_POWER_OFF_ALARM);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        mContext.startActivityAsUser(intent, UserHandle.CURRENT);
     }
 
     private ActivityInfo resolveActivityInfo(Intent intent, int flags, int userId) {
@@ -12061,6 +12075,12 @@ public final class ActivityManagerService extends ActivityManagerNative
             // Start up initial activity.
             mBooting = true;
             startHomeActivityLocked(mCurrentUserId, "systemReady");
+
+            // start the power off alarm by boot mode
+            boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
+            if (isAlarmBoot) {
+                startAlarmActivityLocked();
+            }
 
             try {
                 if (AppGlobals.getPackageManager().hasSystemUidErrors()) {

@@ -104,8 +104,9 @@ public class AlarmManager {
      * Alarm time in {@link System#currentTimeMillis System.currentTimeMillis()}
      * (wall clock time in UTC), which will wake up the device when
      * it goes off. And it will power on the devices when it shuts down.
+     * Set as 5 to make it be compatible with android_alarm_type.
      */
-    public static final int RTC_POWEROFF_WAKEUP = 4;
+    public static final int RTC_POWEROFF_WAKEUP = 5;
 
     /**
      * Broadcast Action: Sent after the value returned by
