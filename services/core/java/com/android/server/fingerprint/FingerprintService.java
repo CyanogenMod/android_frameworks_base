@@ -404,14 +404,19 @@ public class FingerprintService extends SystemService {
                     "different user than current is not supported");
         }
 
+        if (userId != UserHandle.USER_OWNER) {
+            Log.w(TAG, "fingerprints disabled for secondary users.");
+            return Collections.EMPTY_LIST;
+        }
+
         Fingerprint[] nativeFingerprintsArray = nativeGetEnrollments();
         List<Fingerprint> nativeFingerprints = nativeFingerprintsArray != null ?
                 Arrays.asList(nativeFingerprintsArray) : Collections.EMPTY_LIST;
         List<Fingerprint> settingsFingerprints = FingerprintUtils.getFingerprintsForUser(
-                mContext.getContentResolver(), userId);
+                mContext.getContentResolver(), UserHandle.USER_OWNER);
 
         List<Fingerprint> fingerprints = mergeAndUpdateSettingsFingerprints(nativeFingerprints,
-                settingsFingerprints, userId);
+                settingsFingerprints, UserHandle.USER_OWNER);
 
         return fingerprints;
     }
