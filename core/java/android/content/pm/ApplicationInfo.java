@@ -669,7 +669,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      */
     public boolean protect = false;
 
-    /*
+    /**
      * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
      * @hide
      */

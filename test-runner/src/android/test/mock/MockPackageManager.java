@@ -971,6 +971,10 @@ public class MockPackageManager extends PackageManager {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @hide
+     */
+    @Override
     public void updateIconMaps(String pkgName) {
         throw new UnsupportedOperationException();
     }
