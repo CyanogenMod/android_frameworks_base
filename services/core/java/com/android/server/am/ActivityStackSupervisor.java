@@ -101,7 +101,6 @@ import android.util.ArraySet;
 import android.util.EventLog;
 import android.util.Slog;
 import android.util.SparseArray;
-import android.util.BoostFramework;
 
 import android.util.SparseIntArray;
 import android.view.Display;
@@ -118,6 +117,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.server.LocalServices;
 import com.android.server.am.ActivityStack.ActivityState;
 import com.android.server.wm.WindowManagerService;
+
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -161,15 +161,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
     static final int RESUME_TOP_ACTIVITY_MSG = FIRST_SUPERVISOR_STACK_MSG + 2;
     static final int SLEEP_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 3;
     static final int LAUNCH_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 4;
-    public BoostFramework mPerf_iop = null;
-    public BoostFramework mPerfBoost = null;
-    public BoostFramework mPerfPack = null;
-    public boolean mIsPerfBoostEnabled = false;
-    public boolean mIsperfDisablepackingEnable = false;
-    public int lBoostTimeOut = 0;
-    public int lDisPackTimeOut = 0;
-    public int lBoostCpuParamVal[];
-    public int lBoostPackParamVal[];
     static final int HANDLE_DISPLAY_ADDED = FIRST_SUPERVISOR_STACK_MSG + 5;
     static final int HANDLE_DISPLAY_CHANGED = FIRST_SUPERVISOR_STACK_MSG + 6;
     static final int HANDLE_DISPLAY_REMOVED = FIRST_SUPERVISOR_STACK_MSG + 7;
@@ -356,25 +347,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
         mService = service;
         mRecentTasks = recentTasks;
         mHandler = new ActivityStackSupervisorHandler(mService.mHandler.getLooper());
-        /* Is perf lock for cpu-boost enabled during App 1st launch */
-        mIsPerfBoostEnabled = mService.mContext.getResources().getBoolean(
-                   com.android.internal.R.bool.config_enableCpuBoostForAppLaunch);
-        mIsperfDisablepackingEnable = mService.mContext.getResources().getBoolean(
-                   com.android.internal.R.bool.config_disablePacking);
-
-        if(mIsPerfBoostEnabled) {
-           lBoostTimeOut = mService.mContext.getResources().getInteger(
-                   com.android.internal.R.integer.launchboost_timeout_param);
-           lBoostCpuParamVal = mService.mContext.getResources().getIntArray(
-                           com.android.internal.R.array.launchboost_param_value);
-        }
-
-        if(mIsperfDisablepackingEnable) {
-           lDisPackTimeOut = mService.mContext.getResources().getInteger(
-                   com.android.internal.R.integer.disablepacking_timeout_param);
-           lBoostPackParamVal = mService.mContext.getResources().getIntArray(
-                        com.android.internal.R.array.launchboost_packing_param_value);
-       }
     }
 
     /**
@@ -2807,14 +2779,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
     }
 
     void findTaskToMoveToFrontLocked(TaskRecord task, int flags, Bundle options, String reason) {
-
-        ActivityRecord top_activity;
-        top_activity = task.stack.topRunningActivityLocked(null);
-        /* App is launching from recent apps and it's a new process */
-        if(top_activity != null && top_activity.state == ActivityState.DESTROYED) {
-            acquireAppLaunchPerfLock();
-        }
-
         if ((flags & ActivityManager.MOVE_TASK_NO_USER_ACTION) == 0) {
             mUserLeaving = true;
         }
@@ -3079,23 +3043,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
         resumeTopActivitiesLocked();
     }
 
-    void acquireAppLaunchPerfLock() {
-       /* Acquire perf lock during new app launch */
-       if (mIsperfDisablepackingEnable == true && mPerfPack == null) {
-           mPerfPack = new BoostFramework();
-       }
-       if (mPerfPack != null) {
-           mPerfPack.perfLockAcquire(lDisPackTimeOut, lBoostPackParamVal);
-       }
-
-       if (mIsPerfBoostEnabled == true && mPerfBoost == null) {
-           mPerfBoost = new BoostFramework();
-       }
-       if (mPerfBoost != null) {
-           mPerfBoost.perfLockAcquire(lBoostTimeOut, lBoostCpuParamVal);
-       }
-    }
-
     ActivityRecord findTaskLocked(ActivityRecord r) {
         if (DEBUG_TASKS) Slog.d(TAG_TASKS, "Looking for task of " + r);
         for (int displayNdx = mActivityDisplays.size() - 1; displayNdx >= 0; --displayNdx) {
@@ -3113,32 +3060,10 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 }
                 final ActivityRecord ar = stack.findTaskLocked(r);
                 if (ar != null) {
-                    if(ar.state == ActivityState.DESTROYED ) {
-                        /*It's a new app launch */
-                        acquireAppLaunchPerfLock();
-
-                        // Strat IOP
-                        if (mPerf_iop == null) {
-                            mPerf_iop = new BoostFramework();
-                        }
-                        if (mPerf_iop != null) {
-                            mPerf_iop.perfIOPrefetchStart(-1,r.packageName);
-                        }
-                    }
                     return ar;
                 }
             }
         }
-        /* Acquire perf lock during new app launch */
-        acquireAppLaunchPerfLock();
-        //Start IOP
-        if (mPerf_iop == null) {
-            mPerf_iop = new BoostFramework();
-        }
-        if (mPerf_iop != null) {
-            mPerf_iop.perfIOPrefetchStart(-1,r.packageName);
-        }
-
         if (DEBUG_TASKS) Slog.d(TAG_TASKS, "No task found");
         return null;
     }
