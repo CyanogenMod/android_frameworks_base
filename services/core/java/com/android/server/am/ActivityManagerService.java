@@ -74,7 +74,6 @@ import android.util.ArraySet;
 import android.util.DebugUtils;
 import android.util.SparseIntArray;
 import android.view.Display;
-import android.util.BoostFramework;
 
 import android.view.InflateException;
 import com.android.internal.R;
@@ -3456,17 +3455,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             checkTime(startTime, "startProcess: building log message");
             StringBuilder buf = mStringBuilder;
             buf.setLength(0);
-            if(hostingType.equals("activity"))
-            {
-                BoostFramework mPerf = null;
-                if (null == mPerf) {
-                    mPerf = new BoostFramework();
-                }
-                if (mPerf != null) {
-                    mPerf.perfIOPrefetchStart(startResult.pid,app.processName);
-                }
-            }
-
             buf.append("Start proc ");
             buf.append(startResult.pid);
             buf.append(':');
