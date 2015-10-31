@@ -200,8 +200,6 @@
         <item>@string/app_ops_get_accounts</item>
         <!-- OP_WIFI_CHANGE -->
         <item>@string/app_ops_wifi_change</item>
-        <!-- OP_BLUETOOTH_CHANGE -->
-        <item>@string/app_ops_toggle_bluetooth</item>
         <!-- OP_BOOT_COMPLETED -->
         <item>@string/app_ops_start_at_bootup</item>
         <!-- OP_NFC_CHANGE -->

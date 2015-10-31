@@ -189,7 +189,6 @@
     <string name="app_ops_send_sms">send an SMS message</string>
     <string name="app_ops_start_at_bootup">start at power up</string>
     <string name="app_ops_toast_window">display toast messages</string>
-    <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
     <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
     <string name="app_ops_toggle_nfc">toggle NFC</string>
     <string name="app_ops_toggle_wifi">toggle WiFi</string>
