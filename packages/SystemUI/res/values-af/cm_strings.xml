@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB internet verbinding aan.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB internet verbinding afgeskakel.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB internet verbinding aangeskakel.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Battery bespaarder af.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Battery bespaarder aan.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Battery bespaarder afgeskakel.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Battery bespaarder aangeskakel.</string>
   <string name="accessibility_quick_settings_visualizer">Visualiseerder.</string>
+  <string name="accessibility_quick_settings_volume_panel">Volume paneel.</string>
   <string name="accessibility_dpad_left">Wyser na links</string>
   <string name="accessibility_dpad_right">Wyser na regs</string>
   <string name="quick_settings_mobile_data_label">Mobiele data</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Loer boodskap</string>
   <string name="quick_settings_ambient_display_label">Omgewingstemperatuur skerm</string>
   <string name="quick_settings_sync_label">Sinkroniseer</string>
+  <string name="quick_settings_battery_saver_label">Battery bespaarder</string>
   <string name="quick_settings_custom_tile_detail_title">Pasgemaakte teël</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Swiep regs vir %1$s</string>

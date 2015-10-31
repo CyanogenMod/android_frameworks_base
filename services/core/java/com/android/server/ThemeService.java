@@ -68,6 +68,8 @@ import android.util.Log;
 import com.android.internal.R;
 import com.android.internal.util.cm.ImageUtils;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -467,8 +469,8 @@ public class ThemeService extends IThemeService.Stub {
         final String defaultThemePkg = Settings.Secure.getString(resolver,
                 Settings.Secure.DEFAULT_THEME_PACKAGE);
         if (!TextUtils.isEmpty(defaultThemePkg)) {
-            String defaultThemeComponents = Settings.Secure.getString(resolver,
-                    Settings.Secure.DEFAULT_THEME_COMPONENTS);
+            String defaultThemeComponents = CMSettings.Secure.getString(resolver,
+                    CMSettings.Secure.DEFAULT_THEME_COMPONENTS);
             List<String> components;
             if (TextUtils.isEmpty(defaultThemeComponents)) {
                 components = ThemeUtils.getAllComponents();

@@ -3240,7 +3240,7 @@ status_t OpenGLRenderer::drawColorRects(const float* rects, int count, const SkP
     setupDrawColor(color, ((color >> 24) & 0xFF) * currentSnapshot()->alpha);
     setupDrawShader(getShader(paint));
     setupDrawColorFilter(getColorFilter(paint));
-    setupDrawBlending(paint);
+    setupDrawBlending(paint, false);
     setupDrawProgram();
     setupDrawDirtyRegionsDisabled();
     setupDrawModelView(kModelViewMode_Translate, false,
@@ -3271,7 +3271,7 @@ void OpenGLRenderer::drawColorRect(float left, float top, float right, float bot
     setupDrawColor(color, ((color >> 24) & 0xFF) * currentSnapshot()->alpha);
     setupDrawShader(getShader(paint));
     setupDrawColorFilter(getColorFilter(paint));
-    setupDrawBlending(paint);
+    setupDrawBlending(paint, false);
     setupDrawProgram();
     setupDrawModelView(kModelViewMode_TranslateAndScale, false,
             left, top, right, bottom, ignoreTransform);

@@ -198,7 +198,7 @@
   <string name="live_display_hint">LiveDisplay kann gegen eine Überanstrengung der Augen und beim Schlafen in der Nacht helfen. Klicken Sie hier, um es auszuprobieren!</string>
   <string name="lock_to_app_toast_no_navbar">Um diese Ansicht zu lösen die Zurück-Taste drücken und halten.</string>
   <string name="quick_settings_tile_flashlight_not_title">Taschenlampe ist angeschaltet</string>
-  <string name="quick_settings_tile_flashlight_not_summary">Zum Ausschalten berühren</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Zum Ausschalten tippen</string>
   <string name="storage_sd_dock_card">SD-Karte des Docks</string>
   <string name="fingerprint_default_name">Fingerabdruck <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">auf Fingerabdruck-Dienst zugreifen</string>
@@ -209,4 +209,6 @@
   <string name="silent_mode_none">Keine</string>
   <string name="subscription_change_disabled_wifi_ap">WLAN-Hotspot wurde aufgrund von Änderungen am SIM-Abonnement deaktiviert</string>
   <string name="notify_turn_wifi_off_title">WLAN ausschalten</string>
+  <string name="permlab_thirdPartyKeyguard">Drittanbieter Sperrbildschirm</string>
+  <string name="permdesc_thirdPartyKeyguard">Ermöglicht der App, als unsicherer Sperrbildschirm genutzt zu werden.</string>
 </resources>

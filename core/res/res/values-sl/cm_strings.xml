@@ -211,4 +211,6 @@
   <string name="silent_mode_none">Brez</string>
   <string name="subscription_change_disabled_wifi_ap">Dostopna točka Wi-Fi je bila onemogočena zaradi spremembe naročnine SIM</string>
   <string name="notify_turn_wifi_off_title">Izklopi Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">zaslon za zaklepanje tretjih oseb</string>
+  <string name="permdesc_thirdPartyKeyguard">Omogoča, da se program lahko uporabi kot nezanesljiv zaslon za zaklepanje.</string>
 </resources>

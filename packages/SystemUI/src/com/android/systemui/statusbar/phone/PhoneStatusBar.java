@@ -138,6 +138,7 @@ import android.widget.TextView;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.util.cm.ActionUtils;
 import com.android.keyguard.KeyguardHostView.OnDismissAction;
+import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.BatteryLevelTextView;
@@ -164,6 +165,7 @@ import com.android.systemui.statusbar.EmptyShadeView;
 import com.android.systemui.statusbar.ExpandableNotificationRow;
 import com.android.systemui.statusbar.GestureRecorder;
 import com.android.systemui.statusbar.KeyguardIndicationController;
+import com.android.systemui.statusbar.MediaExpandableNotificationRow;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.NotificationOverflowContainer;
@@ -2308,6 +2310,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mMediaController.unregisterCallback(mMediaListener);
                 }
                 mMediaController = controller;
+                if (mediaNotification != null
+                        && mediaNotification.row != null
+                        && mediaNotification.row instanceof MediaExpandableNotificationRow) {
+                    ((MediaExpandableNotificationRow) mediaNotification.row)
+                            .setMediaController(controller);
+                }
+
 
                 if (mMediaController != null) {
                     mMediaController.registerCallback(mMediaListener);
@@ -2394,7 +2403,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
 
-        boolean keyguardVisible = (mState != StatusBarState.SHADE);
+        // HACK: Consider keyguard as visible if showing sim pin security screen
+        KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
+        boolean keyguardVisible = mState != StatusBarState.SHADE || updateMonitor.isSimPinSecure();
 
         if (!mKeyguardFadingAway && keyguardVisible && backdropBitmap != null && mScreenOn) {
             // if there's album art, ensure visualizer is visible
@@ -2711,6 +2722,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override  // NotificationData.Environment
     public String getCurrentMediaNotificationKey() {
         return mMediaNotificationKey;
+    }
+
+    @Override
+    protected MediaController getCurrentMediaController() {
+        return mMediaController;
     }
 
     public boolean isScrimSrcModeEnabled() {
@@ -3225,9 +3241,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             // private flag to permit a transparent navbar when the bar is vertical (landscape)
             // this is buggy unless carefully controlled.
-            if (mNavigationBarView != null) {
+            if ((diff & View.SYSTEM_UI_ALLOW_TRANSPARENT_VERTICAL_NAV) != 0 &&
+                mNavigationBarView != null) {
                 mNavigationBarView.setTransparencyAllowedWhenVertical(
-                        (diff & View.SYSTEM_UI_ALLOW_TRANSPARENT_VERTICAL_NAV) != 0);
+                        (vis & View.SYSTEM_UI_ALLOW_TRANSPARENT_VERTICAL_NAV) != 0);
             }
 
             mSystemUiVisibility = newVal;

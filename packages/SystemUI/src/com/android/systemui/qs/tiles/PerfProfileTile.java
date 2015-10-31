@@ -19,28 +19,31 @@ package com.android.systemui.qs.tiles;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.database.ContentObserver;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import com.android.systemui.R;
+import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
+
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
     private static final Intent BATTERY_SETTINGS = new Intent(Intent.ACTION_POWER_USAGE_SUMMARY);
 
-    private AnimationIcon mHighPerf = new AnimationIcon(R.drawable.ic_qs_perf_profile_highperf_avd);
-    private AnimationIcon mBattery = new AnimationIcon(R.drawable.ic_qs_perf_profile_pwrsv_avd);
-    private AnimationIcon mBalanced = new AnimationIcon(R.drawable.ic_qs_perf_profile_bal_avd);
-
     private final String[] mEntries;
     private final String[] mDescriptionEntries;
     private final String[] mAnnouncementEntries;
     private final String[] mPerfProfileValues;
+    private final Icon mIcon;
     private String mPerfProfileDefaultEntry;
 
     private final PowerManager mPm;
@@ -61,6 +64,8 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         mEntries = res.getStringArray(com.android.internal.R.array.perf_profile_entries);
         mDescriptionEntries = res.getStringArray(R.array.perf_profile_description);
         mAnnouncementEntries = res.getStringArray(R.array.perf_profile_announcement);
+
+        mIcon = ResourceIcon.get(R.drawable.ic_qs_perf_profile);
     }
 
     @Override
@@ -70,10 +75,12 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
     @Override
     protected void handleClick() {
-        changeToNextProfile();
-        mHighPerf.setAllowAnimation(true);
-        mBattery.setAllowAnimation(true);
-        mBalanced.setAllowAnimation(true);
+        showDetail(true);
+    }
+
+    @Override
+    public DetailAdapter getDetailAdapter() {
+        return new PerfProfileDetailAdapter();
     }
 
     @Override
@@ -86,27 +93,13 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         state.visible = mPm.hasPowerProfiles();
         state.profile = arg == null ? getCurrentProfileIndex() : (Integer) arg;
         state.label = mEntries[state.profile];
-        state.icon = getIconForState(state.profile);
+        state.icon = mIcon;
         state.contentDescription = mDescriptionEntries[state.profile];
     }
 
     @Override
     protected String composeChangeAnnouncement() {
         return mAnnouncementEntries[getCurrentProfileIndex()];
-    }
-
-    private Icon getIconForState(int powerIndex) {
-        switch (powerIndex) {
-            case 0:
-                return mHighPerf;
-
-            case 1:
-                return mBattery;
-
-            case 2:
-            default:
-                return mBalanced;
-        }
     }
 
     @Override
@@ -159,12 +152,8 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         return index;
     }
 
-    private void changeToNextProfile() {
-        int current = getCurrentProfileIndex() + 1;
-        if (current >= mPerfProfileValues.length) {
-            current = 0;
-        }
-        mPm.setPowerProfile(mPerfProfileValues[current]); // content observer will notify
+    private void changeToProfile(int profileIndex) {
+        mPm.setPowerProfile(mPerfProfileValues[profileIndex]); // content observer will notify
     }
 
     public static class ProfileState extends QSTile.State {
@@ -182,6 +171,55 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
             final StringBuilder rt = super.toStringBuilder();
             rt.insert(rt.length() - 1, ",profile=" + profile);
             return rt;
+        }
+    }
+
+    private class PerfProfileDetailAdapter implements DetailAdapter,
+            AdapterView.OnItemClickListener {
+        private QSDetailItemsList mItems;
+
+        @Override
+        public int getTitle() {
+            return R.string.quick_settings_performance_profile_detail_title;
+        }
+
+        @Override
+        public Boolean getToggleState() {
+            return null;
+        }
+
+        @Override
+        public Intent getSettingsIntent() {
+            return BATTERY_SETTINGS;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
+        }
+
+        @Override
+        public void setToggleState(boolean state) {
+            // noop
+        }
+
+        @Override
+        public View createDetailView(Context context, View convertView, ViewGroup parent) {
+            mItems = QSDetailItemsList.convertOrInflate(context, convertView, parent);
+            ArrayAdapter adapter = new ArrayAdapter<String>(mContext,
+                    android.R.layout.simple_list_item_single_choice, mEntries);
+            ListView listView = mItems.getListView();
+            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(this);
+            listView.setDivider(null);
+            listView.setItemChecked(getCurrentProfileIndex(), true);
+            return mItems;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            changeToProfile(position);
         }
     }
 }

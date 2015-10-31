@@ -84,8 +84,8 @@
   <string name="accessibility_quick_settings_profiles">Profila: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profilak ezgaituta.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil honetara aldatu da: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
-  <string name="accessibility_quick_settings_screen_timeout">Pantaila itzaltzeko itxarote denbora: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
-  <string name="accessibility_quick_settings_screen_timeout_changed">Pantaila itzaltzeko itxarote denbora aldatu da: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Pantailaren denbora-muga: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Pantailaren denbora-muga aldatu da: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Sinkronizazioa ezgaituta.</string>
   <string name="accessibility_quick_settings_sync_on">Sinkronizazioa gaituta.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinkronizazioa ezgaituta.</string>
@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB tethering gaituta.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB tethering ezgaituta.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB tethering gaituta.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Bateria aurrezlea piztuta.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Bateria aurrezlea piztuta.</string>
   <string name="accessibility_quick_settings_visualizer">Irudikatzailea.</string>
+  <string name="accessibility_quick_settings_volume_panel">Bolumen panela.</string>
   <string name="accessibility_dpad_left">Kurtsorea ezkerrean</string>
   <string name="accessibility_dpad_right">Kurtsorea eskuman</string>
   <string name="quick_settings_mobile_data_label">Datu mugikorrak</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_sync_label">Sinkronizazioa</string>
+  <string name="quick_settings_battery_saver_label">Bateria aurrezlea</string>
   <string name="quick_settings_custom_tile_detail_title">Lauza pertsonalizatua</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Pasatu hatza eskumara: %1$s</string>
@@ -161,4 +167,5 @@
   <string name="fingerprint_try_again_hint">Eskaneatu berriro mesedez</string>
   <string name="accessibility_dock_battery_level">Oinarriaren bateria, ehuneko <xliff:g id="number">%d</xliff:g>.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Ez da elementurik aurkitu</string>
+  <string name="play_queue_extention">Bistaratu erreprodukzio ilara</string>
 </resources>

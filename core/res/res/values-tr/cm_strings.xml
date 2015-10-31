@@ -136,6 +136,8 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="perf_profile_pwrsv">Güç tasarrufu</string>
   <string name="perf_profile_bal">Dengeli</string>
   <string name="perf_profile_perf">Performans</string>
+  <string name="perf_profile_bias_power">Verimlilik</string>
+  <string name="perf_profile_bias_perf">Hızlı</string>
   <string name="theme_install_error_title">Tema yüklenemedi</string>
   <string name="theme_install_error_message">%s yüklenemedi</string>
   <string name="theme_reset_notification_title">Tema sıfırlandı</string>
@@ -211,4 +213,6 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="silent_mode_none">Yok</string>
   <string name="subscription_change_disabled_wifi_ap">SIM abonelik değişikliği nedeniyle Wi-Fi internet paylaşımı devre dışı bırakıldı</string>
   <string name="notify_turn_wifi_off_title">Wi-Fi\'yi kapat</string>
+  <string name="permlab_thirdPartyKeyguard">üçüncü taraf kilit ekranı</string>
+  <string name="permdesc_thirdPartyKeyguard">Uygulamalara şifresiz kilit ekranı olarak kullanılabilme izni verir.</string>
 </resources>

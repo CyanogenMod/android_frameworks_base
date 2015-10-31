@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим батерије: режим уштеде енергије.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Режим батерије: балансирани режим.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Режим батерије: режим учинка.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Режим батерије: режим ефикасности.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Режим батерије: режим брзине.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Режим батерије промењен у режим уштеде енергије.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим батерије промењен у балансирани режим.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим батерије промењен у режим учинка.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Режим батерије промењен у режим ефикасности.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Режим батерије промењен у режим брзине.</string>
   <string name="accessibility_quick_settings_profiles_off">Профили искључени.</string>
   <string name="accessibility_quick_settings_profiles">Профил: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Профили су искључени.</string>
@@ -94,7 +98,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB tethering укључен.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB tethering је искључен.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB tethering је укључен.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Уштеда батерије искључена.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Уштеда батерије укључена.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Уштеда батерије је искључена.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Уштеда батерије је укључена.</string>
   <string name="accessibility_quick_settings_visualizer">Визализатор.</string>
+  <string name="accessibility_quick_settings_volume_panel">Панел гласноће.</string>
   <string name="accessibility_dpad_left">Курсор лево</string>
   <string name="accessibility_dpad_right">Курсор десно</string>
   <string name="quick_settings_mobile_data_label">Мобилни подаци</string>
@@ -121,7 +130,9 @@
   <string name="quick_settings_heads_up_label">Искачуће поруке</string>
   <string name="quick_settings_ambient_display_label">Амбијент приказ</string>
   <string name="quick_settings_sync_label">Синхрон</string>
+  <string name="quick_settings_battery_saver_label">Уштеда батерије</string>
   <string name="quick_settings_custom_tile_detail_title">Промени назив</string>
+  <string name="quick_settings_performance_profile_detail_title">Режим батерије</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Превуци десно за %1$s</string>
   <string name="right_shortcut_hint">Превуци лево за %1$s</string>
@@ -161,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Молим скенирај поново</string>
   <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Нема пронађених ставки</string>
+  <string name="play_queue_extention">Прикажи на чекању</string>
 </resources>

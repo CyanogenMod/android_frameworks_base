@@ -209,4 +209,6 @@
   <string name="silent_mode_none">Нет</string>
   <string name="subscription_change_disabled_wifi_ap">Точка доступа Wi-Fi отключена из-за переключения SIM-карты</string>
   <string name="notify_turn_wifi_off_title">Выключить Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">Сторонний экран блокировки</string>
+  <string name="permdesc_thirdPartyKeyguard">Приложение сможет работать в качестве небезопасного метода блокировки экрана.</string>
 </resources>

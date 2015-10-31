@@ -207,4 +207,8 @@
   <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žiadna</string>
+  <string name="subscription_change_disabled_wifi_ap">Wi-Fi hotspot bol zakázaný kvôli prepnutiu karty SIM</string>
+  <string name="notify_turn_wifi_off_title">Vypnúť Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">zámok obrazovky tretej strany</string>
+  <string name="permdesc_thirdPartyKeyguard">Umožňuje použiť aplikáciu ako nezabezpečenú zámok obrazovky.</string>
 </resources>

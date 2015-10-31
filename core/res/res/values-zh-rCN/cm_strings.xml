@@ -209,4 +209,6 @@
   <string name="silent_mode_none">无</string>
   <string name="subscription_change_disabled_wifi_ap">由于 SIM 卡订阅改变，已禁用 Wi-Fi 热点。</string>
   <string name="notify_turn_wifi_off_title">关闭 Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">第三方锁屏</string>
+  <string name="permdesc_thirdPartyKeyguard">允许应用用作不安全锁屏。</string>
 </resources>

@@ -114,7 +114,7 @@
   <string name="app_ops_use_media_buttons">media düymələrindən istifadə et</string>
   <string name="app_ops_use_media_volume">media səsinə nəzarət</string>
   <string name="app_ops_use_notification_volume">bildiriş səsinə nəzarət</string>
-  <string name="app_ops_use_ring_volume">melodiyası səsinə nəzarət</string>
+  <string name="app_ops_use_ring_volume">zəng səsini idarə et</string>
   <string name="app_ops_use_vibrate">sensor geri bildirişdən istifadə et</string>
   <string name="app_ops_use_voice_volume">səsli zəng səviyyəsinə nəzarət</string>
   <string name="app_ops_write_mms">MMS mesajı yazın</string>

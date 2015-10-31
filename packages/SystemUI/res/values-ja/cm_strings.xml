@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">バッテリーモード: 省電力モードです。</string>
   <string name="accessibility_quick_settings_perf_profile_bal">バッテリーモード: バランスモードです。</string>
   <string name="accessibility_quick_settings_perf_profile_perf">バッテリーモード: パフォーマンスモードです。</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">バッテリーモード: 効率モードです。</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">バッテリーモード: クイックモードです。</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">バッテリーモードが省電力モードに変更されました。</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">バッテリーモードがバランスモードに変更されました。</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">バッテリーモードがパフォーマンスモードに変更されました。</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">バッテリーモードが効率モードに変更されました。</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">バッテリーモードがクイックモードに変更されました。</string>
   <string name="accessibility_quick_settings_profiles_off">プロファイルはOFFです。</string>
   <string name="accessibility_quick_settings_profiles">プロファイル: <xliff:g id="profile" example="Default">%s</xliff:g>です。</string>
   <string name="accessibility_quick_settings_profiles_changed_off">プロファイルがOFFになりました。</string>
@@ -94,7 +98,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USBテザリングはONです。</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USBテザリングがOFFになりました。</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USBテザリングがONになりました。</string>
+  <string name="accessibility_quick_settings_battery_saver_off">バッテリーセーバーはOFFです。</string>
+  <string name="accessibility_quick_settings_battery_saver_on">バッテリーセーバーはONです。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">バッテリーセーバーがOFFになりました。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">バッテリーセーバーがONになりました。</string>
   <string name="accessibility_quick_settings_visualizer">ビジュアライザ。</string>
+  <string name="accessibility_quick_settings_volume_panel">音量パネル</string>
   <string name="accessibility_dpad_left">カーソルを左へ</string>
   <string name="accessibility_dpad_right">カーソルを右へ</string>
   <string name="quick_settings_mobile_data_label">データ通信</string>
@@ -121,7 +130,9 @@
   <string name="quick_settings_heads_up_label">ヘッドアップ</string>
   <string name="quick_settings_ambient_display_label">常時オンディスプレイ</string>
   <string name="quick_settings_sync_label">同期</string>
+  <string name="quick_settings_battery_saver_label">バッテリーセーバー</string>
   <string name="quick_settings_custom_tile_detail_title">カスタムタイル</string>
+  <string name="quick_settings_performance_profile_detail_title">バッテリーモード</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">右にスワイプして%1$s</string>
   <string name="right_shortcut_hint">左にスワイプして%1$s</string>
@@ -152,7 +163,7 @@
   <string name="lockscreen_target_empty">なし</string>
   <string name="screen_pinning_description_no_navbar">固定を解除するまで表示し続けます。固定を解除するには戻るボタンを押し続けます。</string>
   <string name="interruption_level_silent">サイレント</string>
-  <string name="zen_silent_with_warning">アラーム以外をミュートにします。</string>
+  <string name="zen_silent_with_warning">アラーム以外をサイレントにします。</string>
   <string name="quick_settings_remove">タイルを削除</string>
   <string name="quick_settings_dynamic_tile_detail_title">自動タイル</string>
   <string name="dynamic_qs_tile_next_alarm_label">次のアラーム</string>
@@ -161,4 +172,5 @@
   <string name="fingerprint_try_again_hint">もう一度スキャンしてください</string>
   <string name="accessibility_dock_battery_level">ホルダーの電池は<xliff:g id="number">%d</xliff:g>パーセントです。</string>
   <string name="quick_settings_custom_qs_detail_empty_text">アイテムが見つかりませんでした</string>
+  <string name="play_queue_extention">再生キューを表示</string>
 </resources>

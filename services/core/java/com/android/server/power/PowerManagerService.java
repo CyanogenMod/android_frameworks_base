@@ -73,6 +73,8 @@ import android.util.TimeUtils;
 import android.view.Display;
 import android.view.WindowManagerPolicy;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -644,14 +646,14 @@ public final class PowerManagerService extends SystemService
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.PROXIMITY_ON_WAKE),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.BUTTON_BRIGHTNESS),
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.BUTTON_BRIGHTNESS),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.KEYBOARD_BRIGHTNESS),
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.KEYBOARD_BRIGHTNESS),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.BUTTON_BACKLIGHT_TIMEOUT),
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT),
                     false, mSettingsObserver, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED),
@@ -781,15 +783,15 @@ public final class PowerManagerService extends SystemService
             updateLowPowerModeLocked();
         }
 
-        mButtonTimeout = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.BUTTON_BACKLIGHT_TIMEOUT,
+        mButtonTimeout = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT,
                 DEFAULT_BUTTON_ON_DURATION, UserHandle.USER_CURRENT);
 
-        mButtonBrightness = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.BUTTON_BRIGHTNESS, mButtonBrightnessSettingDefault,
+        mButtonBrightness = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.BUTTON_BRIGHTNESS, mButtonBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
-        mKeyboardBrightness = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.KEYBOARD_BRIGHTNESS, mKeyboardBrightnessSettingDefault,
+        mKeyboardBrightness = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.KEYBOARD_BRIGHTNESS, mKeyboardBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
 
         mDirty |= DIRTY_SETTINGS;
@@ -3273,7 +3275,11 @@ public final class PowerManagerService extends SystemService
                     }
                 }
             };
-            runWithProximityCheck(r);
+            if (checkProximity) {
+                runWithProximityCheck(r);
+            } else {
+                r.run();
+            }
         }
 
         private void runWithProximityCheck(Runnable r) {

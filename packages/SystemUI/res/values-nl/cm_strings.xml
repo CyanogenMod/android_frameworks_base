@@ -94,6 +94,10 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-tethering aan.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-tethering uitgeschakeld.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-tethering ingeschakeld.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Accubesparing uit.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Accubesparing aan.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Accubesparing uitgeschakeld.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Accubesparing ingeschakeld.</string>
   <string name="accessibility_quick_settings_visualizer">Visuele effecten.</string>
   <string name="accessibility_dpad_left">Cursor links</string>
   <string name="accessibility_dpad_right">Cursor rechts</string>
@@ -121,6 +125,7 @@
   <string name="quick_settings_heads_up_label">Heads-up</string>
   <string name="quick_settings_ambient_display_label">Omgevingsdisplay</string>
   <string name="quick_settings_sync_label">Synchroniseren</string>
+  <string name="quick_settings_battery_saver_label">Accubesparing</string>
   <string name="quick_settings_custom_tile_detail_title">Aangepaste tegel</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Veeg naar rechts voor %1$s</string>

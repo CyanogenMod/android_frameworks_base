@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de bateria: modo de poupança de energia.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Modo de bateria: modo equilibrado.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Modo de bateria: modo de desempenho.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Modo de bateria: modo de eficiência.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Modo de bateria: modo rápido.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modo de bateria alterado para o modo de poupança de energia.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Modo de bateria alterado para o modo equilibrado.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Modo de bateria alterado para o modo de desempenho.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Modo de bateria alterado para o modo de eficiência.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Modo de bateria alterado para o modo rápido.</string>
   <string name="accessibility_quick_settings_profiles_off">Perfis desligados.</string>
   <string name="accessibility_quick_settings_profiles">Perfil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Perfis foram desligados.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Sincronização</string>
   <string name="quick_settings_battery_saver_label">Economizador de bateria</string>
   <string name="quick_settings_custom_tile_detail_title">Botões personalizados</string>
+  <string name="quick_settings_performance_profile_detail_title">Modo de bateria</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>
   <string name="right_shortcut_hint">Deslizar para a esquerda para %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Por favor verifique novamente</string>
   <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> por cento.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nenhum item encontrado</string>
+  <string name="play_queue_extention">Mostrar a fila de reprodução</string>
 </resources>

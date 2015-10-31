@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Compartición por USB activada.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Compartición por USB desactivada.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Compartición por USB activada.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Apagar modo de ahorro de batería.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Encender modo de ahorro de batería.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Modo de ahorro de batería apagado.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Modo de ahorro de batería encendido.</string>
   <string name="accessibility_quick_settings_visualizer">Visualizador.</string>
+  <string name="accessibility_quick_settings_volume_panel">Panel de volumen.</string>
   <string name="accessibility_dpad_left">Cursor izquierda</string>
   <string name="accessibility_dpad_right">Cursor derecha</string>
   <string name="quick_settings_mobile_data_label">Datos móviles</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Notificaciones emergentes</string>
   <string name="quick_settings_ambient_display_label">Pantalla ambiente</string>
   <string name="quick_settings_sync_label">Sincronizar</string>
+  <string name="quick_settings_battery_saver_label">Modo de ahorro de batería</string>
   <string name="quick_settings_custom_tile_detail_title">Control personalizado</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Desliza a la derecha para %1$s</string>

@@ -2334,6 +2334,11 @@ class ContextImpl extends Context {
         mDisplayAdjustments.setCompatibilityInfo(compatInfo);
         mDisplayAdjustments.setActivityToken(activityToken);
 
+        // We need to create the content resolver before all the context resources creation because
+        // the content resolver is reference by the outer context while the theme information
+        // is created.
+        mContentResolver = new ApplicationContentResolver(this, mainThread, user);
+
         Resources resources = packageInfo.getResources(mainThread);
         if (resources != null) {
             if (activityToken != null || themePackageName != null
@@ -2370,8 +2375,6 @@ class ContextImpl extends Context {
                 mOpPackageName = mBasePackageName;
             }
         }
-
-        mContentResolver = new ApplicationContentResolver(this, mainThread, user);
     }
 
     void installSystemApplicationInfo(ApplicationInfo info, ClassLoader classLoader) {

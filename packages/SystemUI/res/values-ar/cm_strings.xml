@@ -115,6 +115,7 @@
   <string name="quick_settings_lockscreen_label_enforced">إعمال قفل الشاشة</string>
   <string name="quick_settings_network_adb_label">ADB عبر الشبكة</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">لوحة الصوت</string>
   <string name="quick_settings_screen_timeout_detail_title">مهلة الشاشة</string>
   <string name="quick_settings_usb_tether_label">الربط عبر USB
 </string>
@@ -160,4 +161,5 @@
   <string name="dynamic_qs_tile_su_label">الوصول إلى root</string>
   <string name="fingerprint_try_again_hint">الرجاء إجراء المسح مرة أخرى</string>
   <string name="accessibility_dock_battery_level">بطارية الإرساء <xliff:g id="number">%d</xliff:g>في المائة.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">لم يُعثر على عناص</string>
 </resources>

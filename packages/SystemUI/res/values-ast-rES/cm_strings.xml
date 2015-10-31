@@ -26,9 +26,25 @@
   <string name="accessibility_quick_settings_data_on">Datos móviles encesos.</string>
   <string name="accessibility_quick_settings_roaming_off">Roaming apagáu.</string>
   <string name="accessibility_quick_settings_roaming_on">Roaming encesu.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB sobro rede apagáu.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB sobro rede prendíu.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">Apagóse l\'ADB sobro rede.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">Prendióse l\'ADB sobro rede.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Pantalla ambiente apagada.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Pantalla ambiente prendida.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Apagóse la pantalla ambiente.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Prendióse la pantalla ambiente.</string>
+  <string name="accessibility_quick_settings_color_inversion_off">Inversión de color apagada.</string>
+  <string name="accessibility_quick_settings_color_inversion_on">Inversión de color encesa.</string>
+  <string name="accessibility_quick_settings_compass_off">Brúxula apagada.</string>
+  <string name="accessibility_quick_settings_compass_on">Brúxula prendida.</string>
+  <string name="accessibility_quick_settings_compass_changed_off">Apagóse la brúxula.</string>
+  <string name="accessibility_quick_settings_compass_changed_on">Prendióse la brúxula.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Informes de llocalización: mou d\'aforru de batería.</string>
   <string name="accessibility_quick_settings_location_gps_only">Informes de llocalización: mou de namái sensores.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Informes de llocalización: mou d\'alta precisión.</string>
+  <string name="accessibility_quick_settings_visualizer">Visualizador.</string>
+  <string name="accessibility_quick_settings_volume_panel">Panel de volume.</string>
   <string name="accessibility_dpad_left">Cursor esquierda</string>
   <string name="accessibility_dpad_right">Cursor derecha</string>
   <string name="quick_settings_mobile_data_label">Datos móviles</string>
@@ -49,8 +65,11 @@
   <string name="quick_settings_lockscreen_label_enforced">Bloquéu de pantalla forzáu</string>
   <string name="quick_settings_network_adb_label">ADB sobre rede</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Panel de volume</string>
   <string name="quick_settings_screen_timeout_detail_title">Tiempu d\'espera</string>
   <string name="quick_settings_usb_tether_label">USB tethering</string>
+  <string name="quick_settings_ambient_display_label">Pantalla ambiente</string>
+  <string name="quick_settings_battery_saver_label">Aforrador d\'enerxía</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Esliza a la derecha pa %1$s</string>
   <string name="right_shortcut_hint">Esliza a la esquierda pa %1$s</string>
@@ -79,4 +98,9 @@
   <string name="navring_choose_action_title">Esbillar aición</string>
   <string name="select_application">Esbillar app</string>
   <string name="lockscreen_target_empty">Balero</string>
+  <string name="zen_silent_with_warning">Ensin interrupciones, quitante alarmes.</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Alarma siguiente</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Seleutor d\'IME</string>
+  <string name="dynamic_qs_tile_su_label">Accesu root</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Nun s\'atoparon elementos</string>
 </resources>

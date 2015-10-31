@@ -27,6 +27,8 @@ import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.RotationLockController.RotationLockControllerCallback;
 
+import cyanogenmod.providers.CMSettings;
+
 /** Quick settings tile: Rotation **/
 public class RotationLockTile extends QSTile<QSTile.BooleanState> {
     private final AnimationIcon mPortraitToAuto
@@ -52,8 +54,8 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
         super(host);
         mController = host.getRotationLockController();
 
-        mAdvancedMode = Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.ADVANCED_MODE, 1) == 1;
+        mAdvancedMode = CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.ADVANCED_MODE, 1) == 1;
     }
 
     @Override
@@ -94,6 +96,10 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
                 : mController.isRotationLocked();
         final boolean userInitiated = arg != null ? ((UserBoolean) arg).userInitiated : false;
         state.visible = mController.isRotationLockAffordanceVisible();
+        if (state.value == rotationLocked && state.contentDescription != null) {
+            // No change and initialized, no need to update all the values.
+            return;
+        }
         state.value = rotationLocked;
         final boolean portrait = mContext.getResources().getConfiguration().orientation
                 != Configuration.ORIENTATION_LANDSCAPE;

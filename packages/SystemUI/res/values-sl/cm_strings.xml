@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Deljenje mobilnega interneta USB vklopljeno.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Deljenje mobilnega interneta USB izklopljeno.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Deljenje mobilnega interneta USB vklopljeno.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Ohranjevalnik baterije izklopljen.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Ohranjevalnik baterije vklopljen.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Ohranjevalnik baterije izklopljen.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Ohranjevalnik baterije vklopljen.</string>
   <string name="accessibility_quick_settings_visualizer">Predočilnik.</string>
+  <string name="accessibility_quick_settings_volume_panel">Plošča za glasnost.</string>
   <string name="accessibility_dpad_left">Kazalec levo</string>
   <string name="accessibility_dpad_right">Kazalec desno</string>
   <string name="quick_settings_mobile_data_label">Mobilni podatki</string>
@@ -121,6 +126,7 @@
   <string name="quick_settings_heads_up_label">Obvestila na zaslonu</string>
   <string name="quick_settings_ambient_display_label">Okoliški zaslon</string>
   <string name="quick_settings_sync_label">Sinhronizacija</string>
+  <string name="quick_settings_battery_saver_label">Ohranjevalnik baterije</string>
   <string name="quick_settings_custom_tile_detail_title">Ploščica po meri</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Povlecite desno za %1$s</string>
