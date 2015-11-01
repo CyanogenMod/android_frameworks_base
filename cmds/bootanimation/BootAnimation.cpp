@@ -238,6 +238,16 @@ status_t BootAnimation::readyToRun() {
     if (status)
         return -1;
 
+    char value[PROPERTY_VALUE_MAX];
+    property_get("persist.panel.orientation", value, "0");
+    int orient = atoi(value)/90;
+    if (orient == eOrientation90 || orient == eOrientation270) {
+        int temp = dinfo.h;
+        dinfo.h = dinfo.w;
+        dinfo.w = temp;
+    }
+    Rect destRect(dinfo.w, dinfo.h);
+    mSession->setDisplayProjection(dtoken, orient, destRect, destRect);
     // create the native surface
     sp<SurfaceControl> control = session()->createSurface(String8("BootAnimation"),
             dinfo.w, dinfo.h, PIXEL_FORMAT_RGB_565);
