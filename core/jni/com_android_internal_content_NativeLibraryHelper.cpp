@@ -499,17 +499,28 @@ static int findSupportedAbi(JNIEnv *env, jlong apkHandle, jobjectArray supported
             }
         }
     }
-    int asset_status = NO_NATIVE_LIBRARIES;
 
-    int rc = initAssetsVerifierLib();
-    if (rc == LIB_INITED_AND_SUCCESS) {
-        asset_status = GetAssetsStatusFunc(zipFile, supportedAbis, numAbis);
-    } else {
-        ALOGE("Failed to load assets verifier: %d", rc);
-    }
-    if (asset_status == 1) {
-        // override the status if asset_status hints at 32-bit abi
-        status = 1;
+    if(status <= 0) {
+        // Scan the 'assets' folder only if
+        // the abi (after scanning the lib folder)
+        // is not already set to 32-bit (i.e '1' or '2').
+
+        int asset_status = NO_NATIVE_LIBRARIES;
+        int rc = initAssetsVerifierLib();
+
+        if (rc == LIB_INITED_AND_SUCCESS) {
+            asset_status = GetAssetsStatusFunc(zipFile, supportedAbis, numAbis);
+        } else {
+            ALOGE("Failed to load assets verifier: %d", rc);
+        }
+        if(asset_status >= 0) {
+            // Override the ABI only if
+            // 'asset_status' is a valid ABI (64-bit or 32-bit).
+            // This is to prevent cases where 'lib' folder
+            // has native libraries, but
+            // 'assets' folder has none.
+            status = asset_status;
+        }
     }
 
     for (int i = 0; i < numAbis; ++i) {
