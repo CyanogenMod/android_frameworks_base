@@ -319,7 +319,7 @@ public class WifiTracker {
                 if (config.selfAdded && config.numAssociation == 0) {
                     continue;
                 }
-                AccessPoint accessPoint = getCachedOrCreate(config, cachedAccessPoints);
+                AccessPoint accessPoint = new AccessPoint(mContext, config);
                 if (mLastInfo != null && mLastNetworkInfo != null) {
                     if (config.isPasspoint() == false) {
                         accessPoint.update(connectionConfig, mLastInfo, mLastNetworkInfo);
