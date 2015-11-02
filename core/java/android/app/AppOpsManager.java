@@ -832,11 +832,11 @@ public class AppOpsManager {
             false, // WRITE_EXTERNAL_STORAGE
             false, // TURN_ON_SCREEN
             false, // GET_ACCOUNTS
-            false, // WIFI_CHANGE
-            false, // BLUETOOTH_CHANGE
-            false, // BOOT_COMPLETED
-            false, // NFC_CHANGE
-            false, //DATA_CONNECT_CHANGE
+            true, // WIFI_CHANGE
+            true, // BLUETOOTH_CHANGE
+            true, // BOOT_COMPLETED
+            true, // NFC_CHANGE
+            true, //DATA_CONNECT_CHANGE
             false, //SU
     };
 
