@@ -35,6 +35,8 @@ services := \
 # The convention is to name each service module 'services.$(module_name)'
 LOCAL_STATIC_JAVA_LIBRARIES := $(addprefix services.,$(services))
 
+LOCAL_JAVA_LIBRARIES += org.cyanogenmod.platform.internal
+
 include $(BUILD_JAVA_LIBRARY)
 
 # native library

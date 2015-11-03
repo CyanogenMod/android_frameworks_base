@@ -19,6 +19,8 @@ LOCAL_AIDL_INCLUDES += \
 LOCAL_JAVA_LIBRARIES := services.net telephony-common
 LOCAL_STATIC_JAVA_LIBRARIES := tzdata_update
 
+LOCAL_JAVA_LIBRARIES += org.cyanogenmod.platform.internal
+
 ifneq ($(INCREMENTAL_BUILDS),)
     LOCAL_PROGUARD_ENABLED := disabled
     LOCAL_JACK_ENABLED := incremental
