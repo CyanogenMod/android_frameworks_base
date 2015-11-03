@@ -142,4 +142,12 @@ public abstract class PowerManagerInternal {
     public abstract void updateUidProcState(int uid, int procState);
 
     public abstract void uidGone(int uid);
+
+    public abstract void powerHint(int hintId, int data);
+
+    public abstract boolean setPowerSaveMode(boolean mode);
+
+    public abstract void setFeature(int featureId, int data);
+
+    public abstract int getFeature(int featureId);
 }
