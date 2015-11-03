@@ -18,7 +18,6 @@ package android.net;
 
 import static android.content.pm.PackageManager.GET_SIGNATURES;
 import static android.net.NetworkPolicy.CYCLE_NONE;
-import static android.text.format.Time.MONTH_DAY;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +31,11 @@ import android.text.format.Time;
 import com.google.android.collect.Sets;
 
 import java.io.PrintWriter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Manager for creating and modifying network policy rules.
@@ -192,28 +195,32 @@ public class NetworkPolicyManager {
             throw new IllegalArgumentException("Unable to compute boundary without cycleDay");
         }
 
-        final Time now = new Time(policy.cycleTimezone);
-        now.set(currentTime);
+        GregorianCalendar now = new GregorianCalendar(
+                TimeZone.getTimeZone(policy.cycleTimezone), Locale.getDefault());
+        now.setTimeInMillis(currentTime);
 
         // first, find cycle boundary for current month
-        final Time cycle = new Time(now);
-        cycle.hour = cycle.minute = cycle.second = 0;
+        final GregorianCalendar cycle = (GregorianCalendar) now.clone();
+        cycle.set(Calendar.HOUR_OF_DAY, 0);
+        cycle.set(Calendar.MINUTE, 0);
+        cycle.set(Calendar.SECOND, 0);
         snapToCycleDay(cycle, policy.cycleDay);
 
-        if (Time.compare(cycle, now) >= 0) {
+        if (cycle.compareTo(now) >= 0) {
             // cycle boundary is beyond now, use last cycle boundary; start by
             // pushing ourselves squarely into last month.
-            final Time lastMonth = new Time(now);
-            lastMonth.hour = lastMonth.minute = lastMonth.second = 0;
-            lastMonth.monthDay = 1;
-            lastMonth.month -= 1;
-            lastMonth.normalize(true);
+            final GregorianCalendar lastMonth = (GregorianCalendar) now.clone();
+            lastMonth.set(Calendar.HOUR_OF_DAY, 0);
+            lastMonth.set(Calendar.MINUTE, 0);
+            lastMonth.set(Calendar.SECOND, 0);
+            lastMonth.set(Calendar.DAY_OF_MONTH, 1);
+            lastMonth.add(Calendar.MONTH, -1);
 
-            cycle.set(lastMonth);
+            cycle.setTimeInMillis(lastMonth.getTimeInMillis());
             snapToCycleDay(cycle, policy.cycleDay);
         }
 
-        return cycle.toMillis(true);
+        return cycle.getTimeInMillis();
     }
 
     /** {@hide} */
@@ -222,28 +229,32 @@ public class NetworkPolicyManager {
             throw new IllegalArgumentException("Unable to compute boundary without cycleDay");
         }
 
-        final Time now = new Time(policy.cycleTimezone);
-        now.set(currentTime);
+        GregorianCalendar now = new GregorianCalendar(
+                TimeZone.getTimeZone(policy.cycleTimezone), Locale.getDefault());
+        now.setTimeInMillis(currentTime);
 
         // first, find cycle boundary for current month
-        final Time cycle = new Time(now);
-        cycle.hour = cycle.minute = cycle.second = 0;
+        final GregorianCalendar cycle = (GregorianCalendar) now.clone();
+        cycle.set(Calendar.HOUR_OF_DAY, 0);
+        cycle.set(Calendar.MINUTE, 0);
+        cycle.set(Calendar.SECOND, 0);
         snapToCycleDay(cycle, policy.cycleDay);
 
-        if (Time.compare(cycle, now) <= 0) {
+        if (cycle.compareTo(now) <= 0) {
             // cycle boundary is before now, use next cycle boundary; start by
             // pushing ourselves squarely into next month.
-            final Time nextMonth = new Time(now);
-            nextMonth.hour = nextMonth.minute = nextMonth.second = 0;
-            nextMonth.monthDay = 1;
-            nextMonth.month += 1;
-            nextMonth.normalize(true);
+            final GregorianCalendar nextMonth = (GregorianCalendar) now.clone();
+            nextMonth.set(Calendar.HOUR_OF_DAY, 0);
+            nextMonth.set(Calendar.MINUTE, 0);
+            nextMonth.set(Calendar.SECOND, 0);
+            nextMonth.set(Calendar.DAY_OF_MONTH, 1);
+            nextMonth.add(Calendar.MONTH, 1);
 
-            cycle.set(nextMonth);
+            cycle.setTimeInMillis(nextMonth.getTimeInMillis());
             snapToCycleDay(cycle, policy.cycleDay);
         }
 
-        return cycle.toMillis(true);
+        return cycle.getTimeInMillis();
     }
 
     /**
@@ -252,16 +263,29 @@ public class NetworkPolicyManager {
      *
      * @hide
      */
+    @SuppressWarnings("deprecation")
     public static void snapToCycleDay(Time time, int cycleDay) {
-        if (cycleDay > time.getActualMaximum(MONTH_DAY)) {
+        GregorianCalendar calendar = new GregorianCalendar(
+                TimeZone.getTimeZone(time.timezone), Locale.getDefault());
+        calendar.setTimeInMillis(time.toMillis(true));
+        snapToCycleDay(calendar, cycleDay);
+        time.set(calendar.getTimeInMillis());
+    }
+
+    private static void snapToCycleDay(GregorianCalendar time, int cycleDay) {
+        if (cycleDay > time.getActualMaximum(Calendar.DAY_OF_MONTH)) {
             // cycle day isn't valid this month; snap to last second of month
-            time.month += 1;
-            time.monthDay = 1;
-            time.second = -1;
+            time.add(Calendar.MONTH, 1);
+            time.set(Calendar.DAY_OF_MONTH, 1);
+            time.set(Calendar.DAY_OF_MONTH, 1);
+            time.set(Calendar.HOUR_OF_DAY, 0);
+            time.set(Calendar.MINUTE, 0);
+            time.set(Calendar.SECOND, 0);
+            time.set(Calendar.MILLISECOND, 0);
+            time.add(Calendar.SECOND, -1);
         } else {
-            time.monthDay = cycleDay;
+            time.set(Calendar.DAY_OF_MONTH, cycleDay);
         }
-        time.normalize(true);
     }
 
     /**
