@@ -17,7 +17,7 @@
 
 <com.android.systemui.statusbar.phone.KeyguardBottomAreaView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
+    xmlns:systemui="http://schemas.android.com/apk/res-auto"
     android:id="@+id/keyguard_bottom_area"
     android:layout_height="match_parent"
     android:layout_width="match_parent"

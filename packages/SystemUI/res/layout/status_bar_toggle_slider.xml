@@ -18,7 +18,7 @@
 <!--    android:background="@drawable/status_bar_closed_default_background" -->
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
+    xmlns:systemui="http://schemas.android.com/apk/res-auto"
     >
     <CheckBox
         android:id="@+id/toggle"
