@@ -25,7 +25,6 @@ import android.content.res.TypedArray;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
@@ -45,6 +44,8 @@ import com.android.systemui.R;
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_LONG_CLICK;
 
+import cyanogenmod.power.PerformanceManager;
+
 public class KeyButtonView extends ImageView {
 
     private long mDownTime;
@@ -55,7 +56,7 @@ public class KeyButtonView extends ImageView {
     private boolean mGestureAborted;
     private boolean mPerformedLongClick;
 
-    private PowerManager mPm;
+    private PerformanceManager mPerf;
 
     private final Runnable mCheckLongPress = new Runnable() {
         public void run() {
@@ -93,7 +94,7 @@ public class KeyButtonView extends ImageView {
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         setBackground(new KeyButtonRipple(context, this));
-        mPm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        mPerf = PerformanceManager.getInstance(context);
     }
 
     @Override
@@ -165,7 +166,7 @@ public class KeyButtonView extends ImageView {
         }
 
         // A lot of stuff is about to happen. Lets get ready.
-        mPm.cpuBoost(750000);
+        mPerf.cpuBoost(750000);
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
