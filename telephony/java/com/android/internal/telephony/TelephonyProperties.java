@@ -253,4 +253,13 @@ public interface TelephonyProperties
      * if false: normal dial
      */
     static final String ADD_PARTICIPANT_KEY = "add_participant";
+
+    /**
+     * For VICE Feature
+     * If true: Dial intent is for call pull functionality
+     * if false: normal dial
+     */
+    static final String EXTRA_IS_CALL_PULL =
+            "org.codeaurora.extra.IS_CALL_PULL";
+
 }

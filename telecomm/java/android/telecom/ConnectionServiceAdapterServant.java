@@ -62,7 +62,6 @@ final class ConnectionServiceAdapterServant {
     private static final int MSG_ON_POST_DIAL_CHAR = 22;
     private static final int MSG_SET_CONFERENCE_MERGE_FAILED = 23;
     private static final int MSG_SET_EXTRAS = 24;
-    private static final int MSG_SET_PHONE_ACCOUNT = 25;
 
     private final IConnectionServiceAdapter mDelegate;
 
@@ -219,16 +218,6 @@ final class ConnectionServiceAdapterServant {
                     try {
                         mDelegate.addExistingConnection(
                                 (String) args.arg1, (ParcelableConnection) args.arg2);
-                    } finally {
-                        args.recycle();
-                    }
-                    break;
-                }
-                case MSG_SET_PHONE_ACCOUNT: {
-                    SomeArgs args = (SomeArgs) msg.obj;
-                    try {
-                        mDelegate.setPhoneAccountHandle(
-                                (String) args.arg1, (PhoneAccountHandle) args.arg2);
                     } finally {
                         args.recycle();
                     }
@@ -429,13 +418,6 @@ final class ConnectionServiceAdapterServant {
             args.arg1 = connectionId;
             args.arg2 = extras;
             mHandler.obtainMessage(MSG_SET_EXTRAS, args).sendToTarget();
-        }
-
-        public final void setPhoneAccountHandle(String connectionId, PhoneAccountHandle pHandle) {
-            SomeArgs args = SomeArgs.obtain();
-            args.arg1 = connectionId;
-            args.arg2 = pHandle;
-            mHandler.obtainMessage(MSG_SET_PHONE_ACCOUNT, args).sendToTarget();
         }
 
         @Override
