@@ -66,4 +66,5 @@
     <!-- Title shown in recents popup for uninstalling the application -->
     <string name="advanced_dev_option_uninstall">Uninstall</string>
 
+    <string name="qs_tile_edit_header_instruction">Press and hold a tile to edit</string>
 </resources>

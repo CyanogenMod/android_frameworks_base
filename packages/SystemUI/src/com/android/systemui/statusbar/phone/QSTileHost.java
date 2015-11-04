@@ -16,14 +16,18 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Process;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
@@ -64,7 +68,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     private static final String TAG = "QSTileHost";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
-    protected static final String TILES_SETTING = "sysui_qs_tiles";
+    public static final String TILES_SETTING = "sysui_qs_tiles";
 
     private final Context mContext;
     private final PhoneStatusBar mStatusBar;
@@ -126,6 +130,19 @@ public class QSTileHost implements QSTile.Host, Tunable {
     @Override
     public Collection<QSTile<?>> getTiles() {
         return mTiles.values();
+    }
+
+    public List<String> getTileSpecs() {
+        return mTileSpecs;
+    }
+
+    public String getSpec(QSTile<?> tile) {
+        for (Map.Entry<String, QSTile<?>> entry : mTiles.entrySet()) {
+            if (entry.getValue() == tile) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -242,7 +259,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         }
     }
 
-    protected QSTile<?> createTile(String tileSpec) {
+    public QSTile<?> createTile(String tileSpec) {
         if (tileSpec.equals("wifi")) return new WifiTile(this);
         else if (tileSpec.equals("bt")) return new BluetoothTile(this);
         else if (tileSpec.equals("inversion")) return new ColorInversionTile(this);
@@ -282,5 +299,17 @@ public class QSTileHost implements QSTile.Host, Tunable {
             }
         }
         return tiles;
+    }
+
+    public void remove(String tile) {
+        MetricsLogger.action(getContext(), MetricsLogger.TUNER_QS_REMOVE, tile);
+        List<String> tiles = new ArrayList<>(mTileSpecs);
+        tiles.remove(tile);
+        setTiles(tiles);
+    }
+
+    public void setTiles(List<String> tiles) {
+        Settings.Secure.putStringForUser(getContext().getContentResolver(), TILES_SETTING,
+                TextUtils.join(",", tiles), ActivityManager.getCurrentUser());
     }
 }
