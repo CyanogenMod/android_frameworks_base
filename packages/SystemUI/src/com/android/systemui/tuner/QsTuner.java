@@ -15,14 +15,23 @@
  */
 package com.android.systemui.tuner;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.DragEvent;
@@ -30,11 +39,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -42,6 +49,8 @@ import android.widget.ScrollView;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
+import com.android.systemui.qs.QSDragPanel;
+import com.android.systemui.qs.QSPage;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.QSTile.Host.Callback;
@@ -52,6 +61,7 @@ import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.policy.SecurityController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class QsTuner extends Fragment implements Callback {
@@ -59,15 +69,12 @@ public class QsTuner extends Fragment implements Callback {
     private static final String TAG = "QsTuner";
 
     private static final int MENU_RESET = Menu.FIRST;
+    private static final int MENU_EDIT = Menu.FIRST + 1;
 
     private DraggableQsPanel mQsPanel;
     private CustomHost mTileHost;
 
-    private FrameLayout mDropTarget;
-
     private ScrollView mScrollRoot;
-
-    private FrameLayout mAddTarget;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,7 @@ public class QsTuner extends Fragment implements Callback {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(0, MENU_RESET, 0, com.android.internal.R.string.reset);
+        menu.add(0, MENU_EDIT, 0, "toggle edit");
     }
 
     public void onResume() {
@@ -93,8 +101,11 @@ public class QsTuner extends Fragment implements Callback {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case MENU_EDIT:
+                mQsPanel.setEditing(!mQsPanel.isEditing());
+                break;
             case MENU_RESET:
-                mTileHost.reset();
+                mQsPanel.reset();
                 break;
             case android.R.id.home:
                 getFragmentManager().popBackStack();
@@ -105,7 +116,7 @@ public class QsTuner extends Fragment implements Callback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         mScrollRoot = (ScrollView) inflater.inflate(R.layout.tuner_qs, container, false);
 
         mQsPanel = new DraggableQsPanel(getContext());
@@ -116,10 +127,6 @@ public class QsTuner extends Fragment implements Callback {
         mQsPanel.refreshAllTiles();
         ((ViewGroup) mScrollRoot.findViewById(R.id.all_details)).addView(mQsPanel, 0);
 
-        mDropTarget = (FrameLayout) mScrollRoot.findViewById(R.id.remove_target);
-        setupDropTarget();
-        mAddTarget = (FrameLayout) mScrollRoot.findViewById(R.id.add_target);
-        setupAddTarget();
         return mScrollRoot;
     }
 
@@ -129,78 +136,19 @@ public class QsTuner extends Fragment implements Callback {
         super.onDestroyView();
     }
 
-    private void setupDropTarget() {
-        QSTileView tileView = new QSTileView(getContext());
-        QSTile.State state = new QSTile.State();
-        state.visible = true;
-        state.icon = ResourceIcon.get(R.drawable.ic_delete);
-        state.label = getString(com.android.internal.R.string.delete);
-        tileView.onStateChanged(state);
-        mDropTarget.addView(tileView);
-        mDropTarget.setVisibility(View.GONE);
-        new DragHelper(tileView, new DropListener() {
-            @Override
-            public void onDrop(String sourceText) {
-                mTileHost.remove(sourceText);
-            }
-        });
-    }
-
-    private void setupAddTarget() {
-        QSTileView tileView = new QSTileView(getContext());
-        QSTile.State state = new QSTile.State();
-        state.visible = true;
-        state.icon = ResourceIcon.get(R.drawable.ic_add_circle_qs);
-        state.label = getString(R.string.add_tile);
-        tileView.onStateChanged(state);
-        mAddTarget.addView(tileView);
-        tileView.setClickable(true);
-        tileView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTileHost.showAddDialog();
-            }
-        });
-    }
-
-    public void onStartDrag() {
-        mDropTarget.post(new Runnable() {
-            @Override
-            public void run() {
-                mDropTarget.setVisibility(View.VISIBLE);
-                mAddTarget.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    public void stopDrag() {
-        mDropTarget.post(new Runnable() {
-            @Override
-            public void run() {
-                mDropTarget.setVisibility(View.GONE);
-                mAddTarget.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
     @Override
     public void onTilesChanged() {
         mQsPanel.setTiles(mTileHost.getTiles());
     }
 
-    private static int getLabelResource(String spec) {
-        if (spec.equals("wifi")) return R.string.quick_settings_wifi_label;
-        else if (spec.equals("bt")) return R.string.quick_settings_bluetooth_label;
-        else if (spec.equals("inversion")) return R.string.quick_settings_inversion_label;
-        else if (spec.equals("cell")) return R.string.quick_settings_cellular_detail_title;
-        else if (spec.equals("airplane")) return R.string.airplane_mode;
-        else if (spec.equals("dnd")) return R.string.quick_settings_dnd_label;
-        else if (spec.equals("rotation")) return R.string.quick_settings_rotation_locked_label;
-        else if (spec.equals("flashlight")) return R.string.quick_settings_flashlight_label;
-        else if (spec.equals("location")) return R.string.quick_settings_location_label;
-        else if (spec.equals("cast")) return R.string.quick_settings_cast_title;
-        else if (spec.equals("hotspot")) return R.string.quick_settings_hotspot_label;
-        return 0;
+    @Override
+    public void setEditing(boolean editing) {
+        mQsPanel.setEditing(editing);
+    }
+
+    @Override
+    public boolean isEditing() {
+        return mTileHost.isEditing();
     }
 
     private static class CustomHost extends QSTileHost {
@@ -211,7 +159,7 @@ public class QsTuner extends Fragment implements Callback {
         }
 
         @Override
-        protected QSTile<?> createTile(String tileSpec) {
+        public QSTile<?> createTile(String tileSpec) {
             return new DraggableTile(this, tileSpec);
         }
 
@@ -230,97 +178,6 @@ public class QsTuner extends Fragment implements Callback {
             order.remove(newTile);
             order.add(index, newTile);
             setTiles(order);
-        }
-
-        public void remove(String tile) {
-            MetricsLogger.action(getContext(), MetricsLogger.TUNER_QS_REMOVE, tile);
-            List<String> tiles = new ArrayList<>(mTileSpecs);
-            tiles.remove(tile);
-            setTiles(tiles);
-        }
-
-        public void add(String tile) {
-            MetricsLogger.action(getContext(), MetricsLogger.TUNER_QS_ADD, tile);
-            List<String> tiles = new ArrayList<>(mTileSpecs);
-            tiles.add(tile);
-            setTiles(tiles);
-        }
-
-        public void reset() {
-            Secure.putStringForUser(getContext().getContentResolver(),
-                    TILES_SETTING, "default", ActivityManager.getCurrentUser());
-        }
-
-        private void setTiles(List<String> tiles) {
-            Secure.putStringForUser(getContext().getContentResolver(), TILES_SETTING,
-                    TextUtils.join(",", tiles), ActivityManager.getCurrentUser());
-        }
-
-        public void showAddDialog() {
-            List<String> tiles = mTileSpecs;
-            int numBroadcast = 0;
-            for (int i = 0; i < tiles.size(); i++) {
-                if (tiles.get(i).startsWith(IntentTile.PREFIX)) {
-                    numBroadcast++;
-                }
-            }
-            String[] defaults =
-                getContext().getString(R.string.quick_settings_tiles_default).split(",");
-            final String[] available = new String[defaults.length + 1
-                                                  - (tiles.size() - numBroadcast)];
-            final String[] availableTiles = new String[available.length];
-            int index = 0;
-            for (int i = 0; i < defaults.length; i++) {
-                if (tiles.contains(defaults[i])) {
-                    continue;
-                }
-                int resource = getLabelResource(defaults[i]);
-                if (resource != 0) {
-                    availableTiles[index] = defaults[i];
-                    available[index++] = getContext().getString(resource);
-                } else {
-                    availableTiles[index] = defaults[i];
-                    available[index++] = defaults[i];
-                }
-            }
-            available[index++] = getContext().getString(R.string.broadcast_tile);
-            new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.add_tile)
-                    .setItems(available, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (which < available.length - 1) {
-                                add(availableTiles[which]);
-                            } else {
-                                showBroadcastTileDialog();
-                            }
-                        }
-                    }).show();
-        }
-
-        public void showBroadcastTileDialog() {
-            final EditText editText = new EditText(getContext());
-            new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.broadcast_tile)
-                    .setView(editText)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            String action = editText.getText().toString();
-                            if (isValid(action)) {
-                                add(IntentTile.PREFIX + action + ')');
-                            }
-                        }
-                    }).show();
-        }
-
-        private boolean isValid(String action) {
-            for (int i = 0; i < action.length(); i++) {
-                char c = action.charAt(i);
-                if (!Character.isAlphabetic(c) && !Character.isDigit(c) && c != '.') {
-                    return false;
-                }
-            }
-            return true;
         }
 
         private static class BlankSecurityController implements SecurityController {
@@ -373,8 +230,7 @@ public class QsTuner extends Fragment implements Callback {
         }
     }
 
-    private static class DraggableTile extends QSTile<QSTile.State>
-            implements DropListener {
+    public static class DraggableTile extends QSTile<QSTile.State> {
         private String mSpec;
         private QSTileView mView;
 
@@ -392,7 +248,7 @@ public class QsTuner extends Fragment implements Callback {
 
         @Override
         public boolean supportsDualTargets() {
-            return "wifi".equals(mSpec) || "bt".equals(mSpec);
+            return true;
         }
 
         @Override
@@ -416,7 +272,7 @@ public class QsTuner extends Fragment implements Callback {
         }
 
         private String getLabel() {
-            int resource = getLabelResource(mSpec);
+            int resource = QSTileHost.getLabelResource(mSpec);
             if (resource != 0) {
                 return mContext.getString(resource);
             }
@@ -460,81 +316,19 @@ public class QsTuner extends Fragment implements Callback {
         }
 
         @Override
-        public void onDrop(String sourceText) {
-            ((CustomHost) mHost).replace(mSpec, sourceText);
+        public String toString() {
+            return mSpec;
         }
-
     }
 
-    private class DragHelper implements OnDragListener {
+    private class DraggableQsPanel extends QSDragPanel {
 
-        private final View mView;
-        private final DropListener mListener;
-
-        public DragHelper(View view, DropListener dropListener) {
-            mView = view;
-            mListener = dropListener;
-            mView.setOnDragListener(this);
-        }
-
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            switch (event.getAction()) {
-                case DragEvent.ACTION_DRAG_ENTERED:
-                    mView.setBackgroundColor(0x77ffffff);
-                    break;
-                case DragEvent.ACTION_DRAG_ENDED:
-                    stopDrag();
-                case DragEvent.ACTION_DRAG_EXITED:
-                    mView.setBackgroundColor(0x0);
-                    break;
-                case DragEvent.ACTION_DROP:
-                    stopDrag();
-                    String text = event.getClipData().getItemAt(0).getText().toString();
-                    mListener.onDrop(text);
-                    break;
-            }
-            return true;
-        }
-
-    }
-
-    public interface DropListener {
-        void onDrop(String sourceText);
-    }
-
-    private class DraggableQsPanel extends QSPanel implements OnTouchListener {
         public DraggableQsPanel(Context context) {
             super(context);
-            mBrightnessView.setVisibility(View.GONE);
+
+            setEditing(true);
         }
 
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            for (TileRecord r : mRecords) {
-                new DragHelper(r.tileView, (DraggableTile) r.tile);
-                r.tileView.setTag(r.tile);
-                r.tileView.setOnTouchListener(this);
-
-                for (int i = 0; i < r.tileView.getChildCount(); i++) {
-                    r.tileView.getChildAt(i).setClickable(false);
-                }
-            }
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    String tileSpec = (String) ((DraggableTile) v.getTag()).mSpec;
-                    ClipData data = ClipData.newPlainText(tileSpec, tileSpec);
-                    v.startDrag(data, new View.DragShadowBuilder(v), null, 0);
-                    onStartDrag();
-                    return true;
-            }
-            return false;
-        }
     }
 
 }
