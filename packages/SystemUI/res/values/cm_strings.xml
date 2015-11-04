@@ -30,4 +30,6 @@
 
     <!-- Content description of the superuser tile -->
     <string name="accessibility_su_active">Superuser session active</string>
+
+    <string name="qs_tile_edit_header_instruction">Press and hold a tile to edit</string>
 </resources>

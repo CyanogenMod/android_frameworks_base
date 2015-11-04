@@ -60,6 +60,7 @@ import com.android.systemui.BatteryMeterView;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.qs.QSDragPanel;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.BatteryController;
@@ -548,17 +549,22 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     public void onClick(View v) {
         if (v == mSettingsButton) {
             if (mSettingsButton.isTunerClick()) {
-                if (TunerService.isTunerEnabled(mContext)) {
-                    TunerService.showResetRequest(mContext, new Runnable() {
-                        @Override
-                        public void run() {
-                            // Relaunch settings so that the tuner disappears.
-                            startSettingsActivity();
-                        }
-                    });
-                } else {
-                    Toast.makeText(getContext(), R.string.tuner_toast, Toast.LENGTH_LONG).show();
-                    TunerService.setTunerEnabled(mContext, true);
+//                if (TunerService.isTunerEnabled(mContext)) {
+//                    TunerService.showResetRequest(mContext, new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // Relaunch settings so that the tuner disappears.
+//                            startSettingsActivity();
+//                        }
+//                    });
+//                } else {
+//                    Toast.makeText(getContext(), R.string.tuner_toast, Toast.LENGTH_LONG).show();
+//                    TunerService.setTunerEnabled(mContext, true);
+//                }
+                if (mQSPanel instanceof QSDragPanel) {
+                    final QSDragPanel qsp = (QSDragPanel) this.mQSPanel;
+                    qsp.setEditing(!qsp.isEditing());
+                    return;
                 }
             }
             startSettingsActivity();
