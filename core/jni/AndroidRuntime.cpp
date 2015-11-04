@@ -100,7 +100,6 @@ extern int register_android_media_JetPlayer(JNIEnv *env);
 extern int register_android_media_ToneGenerator(JNIEnv *env);
 
 namespace android {
-extern int register_android_util_SeempLog(JNIEnv* env);
 
 /*
  * JNI-based registration functions.  Note these are properly contained in
@@ -1295,7 +1294,6 @@ static int register_jni_procs(const RegJNIRec array[], size_t count, JNIEnv* env
 }
 
 static const RegJNIRec gRegJNI[] = {
-    REG_JNI(register_android_util_SeempLog),
     REG_JNI(register_com_android_internal_os_RuntimeInit),
     REG_JNI(register_android_os_SystemClock),
     REG_JNI(register_android_util_EventLog),

@@ -244,7 +244,6 @@ public class Browser {
      */
     public static final Cursor getAllBookmarks(ContentResolver cr) throws
             IllegalStateException {
-        android.util.SeempLog.record(41);
         return new MatrixCursor(new String[]{Bookmarks.URL}, 0);
     }
 
@@ -257,7 +256,6 @@ public class Browser {
      */
     public static final Cursor getAllVisitedUrls(ContentResolver cr) throws
             IllegalStateException {
-        android.util.SeempLog.record(42);
         return new MatrixCursor(new String[]{Combined.URL}, 0);
     }
 
@@ -266,7 +264,6 @@ public class Browser {
     }
 
     private static final Cursor getVisitedLike(ContentResolver cr, String url) {
-        android.util.SeempLog.record(44);
         boolean secure = false;
         String compareString = url;
         if (compareString.startsWith("http://")) {
@@ -317,7 +314,6 @@ public class Browser {
      */
     public static final void updateVisitedHistory(ContentResolver cr,
                                                   String url, boolean real) {
-    android.util.SeempLog.record(47);
     }
 
     /**
@@ -328,7 +324,6 @@ public class Browser {
      */
     @Deprecated
     public static final String[] getVisitedHistory(ContentResolver cr) {
-        android.util.SeempLog.record(43);
         return new String[0];
     }
 
@@ -343,7 +338,6 @@ public class Browser {
      * @removed
      */
     public static final void truncateHistory(ContentResolver cr) {
-    android.util.SeempLog.record(46);
     }
 
     /**
@@ -354,7 +348,6 @@ public class Browser {
      * @removed
      */
     public static final boolean canClearHistory(ContentResolver cr) {
-        android.util.SeempLog.record(36);
         return false;
     }
 
@@ -366,7 +359,6 @@ public class Browser {
      *  @removed
      */
     public static final void clearHistory(ContentResolver cr) {
-    android.util.SeempLog.record(37);
 
     }
 
@@ -382,7 +374,6 @@ public class Browser {
      */
     public static final void deleteHistoryTimeFrame(ContentResolver cr,
             long begin, long end) {
-    android.util.SeempLog.record(39);
     }
 
     /**
@@ -394,7 +385,6 @@ public class Browser {
      */
     public static final void deleteFromHistory(ContentResolver cr,
                                                String url) {
-    android.util.SeempLog.record(38);
     }
 
     /**
@@ -405,7 +395,6 @@ public class Browser {
      * @removed
      */
     public static final void addSearchUrl(ContentResolver cr, String search) {
-    android.util.SeempLog.record(35);
     }
 
     /**
@@ -415,7 +404,6 @@ public class Browser {
      * @removed
      */
     public static final void clearSearches(ContentResolver cr) {
-    android.util.SeempLog.record(48);
     }
 
     /**
@@ -432,7 +420,6 @@ public class Browser {
      */
     public static final void requestAllIcons(ContentResolver cr, String where,
             WebIconDatabase.IconListener listener) {
-        android.util.SeempLog.record(45);
         // Do nothing: this is no longer used.
     }
 

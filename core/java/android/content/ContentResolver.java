@@ -431,7 +431,6 @@ public abstract class ContentResolver {
     public final @Nullable Cursor query(@NonNull Uri uri, @Nullable String[] projection,
             @Nullable String selection, @Nullable String[] selectionArgs,
             @Nullable String sortOrder) {
-        android.util.SeempLog.record(16);
         return query(uri, projection, selection, selectionArgs, sortOrder, null);
     }
 
@@ -472,7 +471,6 @@ public abstract class ContentResolver {
     public final @Nullable Cursor query(final @NonNull Uri uri, @Nullable String[] projection,
             @Nullable String selection, @Nullable String[] selectionArgs,
             @Nullable String sortOrder, @Nullable CancellationSignal cancellationSignal) {
-        android.util.SeempLog.record(16);
         Preconditions.checkNotNull(uri, "uri");
         IContentProvider unstableProvider = acquireUnstableProvider(uri);
         if (unstableProvider == null) {
@@ -1223,7 +1221,6 @@ public abstract class ContentResolver {
      * @return the URL of the newly created row.
      */
     public final @Nullable Uri insert(@NonNull Uri url, @Nullable ContentValues values) {
-        android.util.SeempLog.record(50);
         Preconditions.checkNotNull(url, "url");
         IContentProvider provider = acquireProvider(url);
         if (provider == null) {

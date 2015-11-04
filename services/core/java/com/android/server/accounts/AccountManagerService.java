@@ -528,7 +528,6 @@ public class AccountManagerService
 
     @Override
     public String getPassword(Account account) {
-        android.util.SeempLog.record(17);
         int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "getPassword: " + account
@@ -628,7 +627,6 @@ public class AccountManagerService
 
     @Override
     public String getUserData(Account account, String key) {
-        android.util.SeempLog.record(18);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             String msg = String.format("getUserData( account: %s, key: %s, callerUid: %s, pid: %s",
@@ -1201,7 +1199,6 @@ public class AccountManagerService
     @Override
     public void removeAccount(IAccountManagerResponse response, Account account,
             boolean expectActivityLaunch) {
-        android.util.SeempLog.record(20);
         removeAccountAsUser(
                 response,
                 account,
@@ -1590,7 +1587,6 @@ public class AccountManagerService
 
     @Override
     public void setPassword(Account account, String password) {
-        android.util.SeempLog.record(21);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "setAuthToken: " + account
@@ -1655,7 +1651,6 @@ public class AccountManagerService
 
     @Override
     public void clearPassword(Account account) {
-        android.util.SeempLog.record(22);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "clearPassword: " + account
@@ -1682,7 +1677,6 @@ public class AccountManagerService
 
     @Override
     public void setUserData(Account account, String key, String value) {
-        android.util.SeempLog.record(23);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "setUserData: " + account
@@ -2122,7 +2116,6 @@ public class AccountManagerService
     public void addAccount(final IAccountManagerResponse response, final String accountType,
             final String authTokenType, final String[] requiredFeatures,
             final boolean expectActivityLaunch, final Bundle optionsIn) {
-        android.util.SeempLog.record(19);
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "addAccount: accountType " + accountType
                     + ", response " + response
@@ -2376,7 +2369,6 @@ public class AccountManagerService
     @Override
     public void editProperties(IAccountManagerResponse response, final String accountType,
             final boolean expectActivityLaunch) {
-        android.util.SeempLog.record(24);
         final int callingUid = Binder.getCallingUid();
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "editProperties: accountType " + accountType
