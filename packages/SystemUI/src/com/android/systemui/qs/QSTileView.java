@@ -100,6 +100,20 @@ public class QSTileView extends ViewGroup {
         setId(View.generateViewId());
     }
 
+    @Override
+    public void setClickable(boolean clickable) {
+        super.setClickable(clickable && !mDual);
+        if (mLabel != null) {
+            mLabel.setClickable(clickable && !mDual);
+        }
+        if (mDualLabel != null) {
+            mDualLabel.setClickable(clickable && mDual);
+        }
+        if (mTopBackgroundView != null) {
+            mTopBackgroundView.setClickable(clickable && mDual);
+        }
+    }
+
     private void updateTopPadding() {
         Resources res = getResources();
         int padding = res.getDimensionPixelSize(R.dimen.qs_tile_padding_top);
@@ -131,7 +145,7 @@ public class QSTileView extends ViewGroup {
         }
         if (mDualLabel != null) {
             labelText = mDualLabel.getText();
-            labelDescription = mLabel.getContentDescription();
+            labelDescription = mDualLabel.getContentDescription();
             removeView(mDualLabel);
             mDualLabel = null;
         }
@@ -174,29 +188,30 @@ public class QSTileView extends ViewGroup {
         }
     }
 
+    public boolean isDual() {
+        return mDual;
+    }
+
     public boolean setDual(boolean dual) {
         final boolean changed = dual != mDual;
         mDual = dual;
         if (changed) {
             recreateLabel();
         }
-        if (mTileBackground instanceof RippleDrawable) {
-            setRipple((RippleDrawable) mTileBackground);
-        }
+
         if (dual) {
             mTopBackgroundView.setOnClickListener(mClickPrimary);
             setOnClickListener(null);
             setClickable(false);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-            mTopBackgroundView.setBackground(mTileBackground);
         } else {
             mTopBackgroundView.setOnClickListener(null);
             mTopBackgroundView.setClickable(false);
             setOnClickListener(mClickPrimary);
             setOnLongClickListener(mLongClick);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
-            setBackground(mTileBackground);
         }
+        setTileBackground(mTileBackground);
         mTopBackgroundView.setFocusable(dual);
         setFocusable(!dual);
         mDivider.setVisibility(dual ? VISIBLE : GONE);
@@ -204,9 +219,23 @@ public class QSTileView extends ViewGroup {
         return changed;
     }
 
+    protected void setTileBackground(Drawable background) {
+        mTileBackground = background;
+        if (mTileBackground instanceof RippleDrawable) {
+            setRipple((RippleDrawable) mTileBackground);
+        } else {
+            setRipple(null);
+        }
+        if (mDual) {
+            mTopBackgroundView.setBackground(mTileBackground);
+        } else {
+            setBackground(mTileBackground);
+        }
+    }
+
     private void setRipple(RippleDrawable tileBackground) {
         mRipple = tileBackground;
-        if (getWidth() != 0) {
+        if (getWidth() != 0 && mRipple != null) {
             updateRippleSize(getWidth(), getHeight());
         }
     }
@@ -225,7 +254,7 @@ public class QSTileView extends ViewGroup {
         return icon;
     }
 
-    private Drawable newTileBackground() {
+    public Drawable newTileBackground() {
         final int[] attrs = new int[] { android.R.attr.selectableItemBackgroundBorderless };
         final TypedArray ta = mContext.obtainStyledAttributes(attrs);
         final Drawable d = ta.getDrawable(0);
