@@ -156,19 +156,6 @@ public class Build {
          */
         public static final String RELEASE = getString("ro.build.version.release");
 
-         /**
-         * The base OS build the product is based on.
-         * @hide
-         */
-        public static final String BASE_OS = SystemProperties.get("ro.build.version.base_os", "");
-
-        /**
-         * The user-visible security patch level.
-         * @hide
-         */
-        public static final String SECURITY_PATCH = SystemProperties.get(
-                "ro.build.version.security_patch", "");
-
         /**
          * The base OS build the product is based on.
          * For Pre-API 23 - use support libs to access.
