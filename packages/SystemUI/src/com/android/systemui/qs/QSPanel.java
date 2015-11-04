@@ -53,35 +53,34 @@ import cyanogenmod.providers.CMSettings;
 public class QSPanel extends ViewGroup {
     private static final float TILE_ASPECT = 1.2f;
 
-    private final Context mContext;
-    protected final ArrayList<TileRecord> mRecords = new ArrayList<TileRecord>();
-    private final View mDetail;
-    private final ViewGroup mDetailContent;
-    private final TextView mDetailSettingsButton;
-    private final TextView mDetailDoneButton;
-    protected final View mBrightnessView;
-    private final QSDetailClipper mClipper;
+    protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
+    protected View mDetail;
+    protected ViewGroup mDetailContent;
+    protected TextView mDetailSettingsButton;
+    protected TextView mDetailDoneButton;
+    protected View mBrightnessView;
+    protected QSDetailClipper mClipper;
     private final H mHandler = new H();
 
-    private int mColumns;
-    private int mCellWidth;
-    private int mCellHeight;
-    private int mLargeCellWidth;
-    private int mLargeCellHeight;
-    private int mPanelPaddingBottom;
-    private int mDualTileUnderlap;
-    private int mBrightnessPaddingTop;
-    private int mGridHeight;
+    protected int mColumns;
+    protected int mCellWidth;
+    protected int mCellHeight;
+    protected int mLargeCellWidth;
+    protected int mLargeCellHeight;
+    protected int mPanelPaddingBottom;
+    protected int mDualTileUnderlap;
+    protected int mBrightnessPaddingTop;
+    protected int mGridHeight;
     private boolean mExpanded;
-    private boolean mListening;
+    protected boolean mListening;
     private boolean mClosingDetail;
 
-    private Record mDetailRecord;
+    protected Record mDetailRecord;
     private Callback mCallback;
-    private BrightnessController mBrightnessController;
-    private QSTileHost mHost;
+    protected BrightnessController mBrightnessController;
+    protected QSTileHost mHost;
 
-    private QSFooter mFooter;
+    protected QSFooter mFooter;
     private boolean mGridContentVisible = true;
 
     public QSPanel(Context context) {
@@ -91,17 +90,20 @@ public class QSPanel extends ViewGroup {
     public QSPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
+        setupViews();
+    }
 
-        mDetail = LayoutInflater.from(context).inflate(R.layout.qs_detail, this, false);
+    protected void setupViews() {
+        mDetail = LayoutInflater.from(mContext).inflate(R.layout.qs_detail, this, false);
         mDetailContent = (ViewGroup) mDetail.findViewById(android.R.id.content);
         mDetailSettingsButton = (TextView) mDetail.findViewById(android.R.id.button2);
         mDetailDoneButton = (TextView) mDetail.findViewById(android.R.id.button1);
         updateDetailText();
         mDetail.setVisibility(GONE);
         mDetail.setClickable(true);
-        mBrightnessView = LayoutInflater.from(context).inflate(
+        mBrightnessView = LayoutInflater.from(mContext).inflate(
                 R.layout.quick_settings_brightness_dialog, this, false);
-        mFooter = new QSFooter(this, context);
+        mFooter = new QSFooter(this, mContext);
         addView(mDetail);
         addView(mBrightnessView);
         addView(mFooter.getView());
@@ -141,7 +143,7 @@ public class QSPanel extends ViewGroup {
         return brightnessSliderEnabled;
     }
 
-    private void updateDetailText() {
+    protected void updateDetailText() {
         mDetailDoneButton.setText(R.string.quick_settings_done);
         mDetailSettingsButton.setText(R.string.quick_settings_more_settings);
     }
@@ -259,11 +261,11 @@ public class QSPanel extends ViewGroup {
         showDetail(show, r);
     }
 
-    private void showDetail(boolean show, Record r) {
+    protected void showDetail(boolean show, Record r) {
         mHandler.obtainMessage(H.SHOW_DETAIL, show ? 1 : 0, 0, r).sendToTarget();
     }
 
-    private void setTileVisibility(View v, int visibility) {
+    protected void setTileVisibility(View v, int visibility) {
         mHandler.obtainMessage(H.SET_TILE_VISIBILITY, visibility, 0, v).sendToTarget();
     }
 
@@ -288,7 +290,7 @@ public class QSPanel extends ViewGroup {
         }
     }
 
-    private void drawTile(TileRecord r, QSTile.State state) {
+    protected void drawTile(TileRecord r, QSTile.State state) {
         final int visibility = state.visible ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
         r.tileView.onStateChanged(state);
@@ -558,7 +560,7 @@ public class QSPanel extends ViewGroup {
         }
     }
 
-    private int getRowTop(int row) {
+    protected int getRowTop(int row) {
         if (row <= 0) return mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop;
         return mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop
                 + mLargeCellHeight - mDualTileUnderlap + (row - 1) * mCellHeight;
@@ -579,13 +581,13 @@ public class QSPanel extends ViewGroup {
         }
     }
 
-    private void fireToggleStateChanged(boolean state) {
+    protected void fireToggleStateChanged(boolean state) {
         if (mCallback != null) {
             mCallback.onToggleStateChanged(state);
         }
     }
 
-    private void fireScanStateChanged(boolean state) {
+    protected void fireScanStateChanged(boolean state) {
         if (mCallback != null) {
             mCallback.onScanStateChanged(state);
         }
@@ -612,14 +614,14 @@ public class QSPanel extends ViewGroup {
         }
     }
 
-    private static class Record {
+    protected static class Record {
         View detailView;
         DetailAdapter detailAdapter;
         int x;
         int y;
     }
 
-    protected static final class TileRecord extends Record {
+    protected static class TileRecord extends Record {
         public QSTile<?> tile;
         public QSTileView tileView;
         public int row;
