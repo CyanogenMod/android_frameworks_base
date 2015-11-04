@@ -66,4 +66,7 @@
     <!-- Title shown in recents popup for uninstalling the application -->
     <string name="advanced_dev_option_uninstall">Uninstall</string>
 
+    <string name="qs_tile_edit_header_instruction">Press and hold a tile to edit</string>
+    <string name="quick_settings_edit_label">Edit Tiles</string>
+    <string name="qs_tiles_reset_confirmation">Reset quick settings tiles to default configuration?</string>
 </resources>
