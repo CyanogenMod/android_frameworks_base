@@ -2144,6 +2144,25 @@ public class SettingsProvider extends ContentProvider {
                                 SettingsState.SYSTEM_PACKAGE_NAME);
                     }
 
+                    // Allow openmarket OEMs to set default customized
+                    defaultComponent
+                            = getContext().getResources().getString(R.string.def_input_method);
+                    if (!TextUtils.isEmpty(defaultComponent)) {
+                        secureSettings.insertSettingLocked(
+                                Settings.Secure.DEFAULT_INPUT_METHOD,
+                                defaultComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+
+                    defaultComponent = getContext().getResources()
+                            .getString(R.string.def_enable_input_methods);
+                    if (!TextUtils.isEmpty(defaultComponent)) {
+                        secureSettings.insertSettingLocked(
+                                Settings.Secure.ENABLED_INPUT_METHODS,
+                                defaultComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+
                     // Allow OEMs to set volumes in resources.
                     if (getContext().getResources().getBoolean(R.bool.def_custom_sys_volume)) {
                         final SettingsState systemSettings = getSystemSettingsLocked(userId);

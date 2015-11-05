@@ -213,6 +213,19 @@
     <!-- Default for Settings.Secure.NFC_PAYMENT_COMPONENT -->
     <string name="def_nfc_payment_component"></string>
 
+    <!--
+         Default Input Method, its value is from inputmethod's package name and main class name
+              such as "com.android.inputmethod.pinyin/.PinyinIME"
+    -->
+    <string name="def_input_method" translatable="false"></string>
+
+    <!--
+        Default Enable InputMethods, its value is from inputmethod's package name and main class
+        name such as "com.android.inputmethod.pinyin/.PinyinIME" ;This is a string
+        containing the IDs of all enabled input methods, each ID separated by ':'.
+    -->
+    <string name="def_enable_input_methods" translatable="false"></string>
+
     <!-- custom system sound or not -->
     <bool name="def_custom_sys_volume">false</bool>
 
