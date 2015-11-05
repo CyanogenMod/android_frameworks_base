@@ -282,8 +282,8 @@
     <string name="permdesc_receiveWapPush" msgid="748232190220583385">"WAPメッセージの受信と処理をアプリに許可します。これにより、アプリが端末に届いたメッセージを表示することなく監視または削除できるようになります。"</string>
     <string name="permlab_getTasks" msgid="6466095396623933906">"実行中のアプリの取得"</string>
     <string name="permdesc_getTasks" msgid="7454215995847658102">"現在実行中または最近実行したタスクに関する情報の取得をアプリに許可します。これにより、その端末でどのアプリを使用しているかをアプリから識別できるようになる可能性があります。"</string>
-    <string name="permlab_manageProfileAndDeviceOwners" msgid="5979288447973722097">"プロフィールの所有者と端末の所有者の管理"</string>
-    <string name="permdesc_manageProfileAndDeviceOwners" msgid="106894851498657169">"プロフィールの所有者と端末の所有者の設定をアプリに許可します。"</string>
+    <string name="permlab_manageProfileAndDeviceOwners" msgid="5979288447973722097">"プロファイルの所有者と端末の所有者の管理"</string>
+    <string name="permdesc_manageProfileAndDeviceOwners" msgid="106894851498657169">"プロファイルの所有者と端末の所有者の設定をアプリに許可します。"</string>
     <string name="permlab_reorderTasks" msgid="2018575526934422779">"実行中のアプリの順序変更"</string>
     <string name="permdesc_reorderTasks" msgid="7734217754877439351">"タスクをフォアグラウンドやバックグラウンドに移動することをアプリに許可します。これにより、アプリがユーザーからの入力なしでこの処理を実行する可能性があります。"</string>
     <string name="permlab_enableCarMode" msgid="5684504058192921098">"運転モードの有効化"</string>
@@ -1042,7 +1042,7 @@
     <string name="usb_ptp_notification_title" msgid="1347328437083192112">"USBを写真転送に使用"</string>
     <string name="usb_midi_notification_title" msgid="4850904915889144654">"USBをMIDIに使用"</string>
     <string name="usb_accessory_notification_title" msgid="7848236974087653666">"USBアクセサリを接続しました"</string>
-    <string name="usb_notification_message" msgid="7347368030849048437">"タップするとその他のオプションが表示されます。"</string>
+    <string name="usb_notification_message" msgid="7347368030849048437">"タップしてその他のオプションを表示"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"USBデバッグが接続されました"</string>
     <string name="adb_active_notification_message" msgid="1016654627626476142">"タップしてUSBデバッグを無効化"</string>
     <string name="select_input_method" msgid="8547250819326693584">"キーボードの変更"</string>
@@ -1136,7 +1136,7 @@
     <string name="no_file_chosen" msgid="6363648562170759465">"ファイルが選択されていません"</string>
     <string name="reset" msgid="2448168080964209908">"リセット"</string>
     <string name="submit" msgid="1602335572089911941">"送信"</string>
-    <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"運転モードになっています"</string>
+    <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"運転モード中"</string>
     <string name="car_mode_disable_notification_message" msgid="8035230537563503262">"タップすると運転モードを終了します"</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"テザリングまたはアクセスポイントが有効です"</string>
     <string name="tethered_notification_message" msgid="6857031760103062982">"タップしてセットアップします。"</string>

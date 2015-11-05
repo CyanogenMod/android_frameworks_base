@@ -25,6 +25,7 @@ import android.net.wifi.WifiManager;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.telephony.CarrierConfigManager;
 
 public class TetherUtil {
 
@@ -54,34 +55,19 @@ public class TetherUtil {
     public static boolean setWifiTethering(boolean enable, Context context) {
         final WifiManager wifiManager =
                 (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        final ContentResolver cr = context.getContentResolver();
-        /**
-         * Disable Wifi if enabling tethering
-         */
-        int wifiState = wifiManager.getWifiState();
-        if (enable && ((wifiState == WifiManager.WIFI_STATE_ENABLING) ||
-                    (wifiState == WifiManager.WIFI_STATE_ENABLED))) {
-            wifiManager.setWifiEnabled(false);
-            Settings.Global.putInt(cr, Settings.Global.WIFI_SAVED_STATE, 1);
-        }
-
-        boolean success = wifiManager.setWifiApEnabled(null, enable);
-        /**
-         *  If needed, restore Wifi on tether disable
-         */
-        if (!enable) {
-            int wifiSavedState = Settings.Global.getInt(cr, Settings.Global.WIFI_SAVED_STATE, 0);
-            if (wifiSavedState == 1) {
-                wifiManager.setWifiEnabled(true);
-                Settings.Global.putInt(cr, Settings.Global.WIFI_SAVED_STATE, 0);
-            }
-        }
-        return success;
+        return wifiManager.setWifiApEnabled(null, enable);
     }
 
     public static boolean isWifiTetherEnabled(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         return wifiManager.getWifiApState() == WifiManager.WIFI_AP_STATE_ENABLED;
+    }
+
+    private static boolean isEntitlementCheckRequired(Context context) {
+        final CarrierConfigManager configManager = (CarrierConfigManager) context
+             .getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        return configManager.getConfig().getBoolean(CarrierConfigManager
+             .KEY_REQUIRE_ENTITLEMENT_CHECKS_BOOL);
     }
 
     public static boolean isProvisioningNeeded(Context context) {
@@ -91,6 +77,10 @@ public class TetherUtil {
                 com.android.internal.R.array.config_mobile_hotspot_provision_app);
         if (SystemProperties.getBoolean("net.tethering.noprovisioning", false)
                 || provisionApp == null) {
+            return false;
+        }
+        // Check carrier config for entitlement checks
+        if (isEntitlementCheckRequired(context) == false) {
             return false;
         }
         return (provisionApp.length == 2);

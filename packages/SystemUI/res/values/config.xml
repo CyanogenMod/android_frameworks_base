@@ -246,7 +246,7 @@
     <bool name="doze_pulse_on_notifications">true</bool>
 
     <!-- Doze: when to pulse after a buzzworthy notification arrives -->
-    <string name="doze_pulse_schedule" translatable="false">1s,10s,30s,60s</string>
+    <string name="doze_pulse_schedule" translatable="false">10s,30s,60s</string>
 
     <!-- Doze: maximum number of times the notification pulse schedule can be reset -->
     <integer name="doze_pulse_schedule_resets">2</integer>
@@ -265,12 +265,6 @@
 
     <!-- Doze: pulse parameter - how long does it take to fade in after an intent? -->
     <integer name="doze_pulse_duration_in_intent">300</integer>
-
-    <!-- Doze: pulse parameter - delay to wait for the screen to wake up -->
-    <integer name="doze_pulse_delay_in">200</integer>
-
-    <!-- Doze: pulse parameter - delay to wait for the screen to wake up after a pickup -->
-    <integer name="doze_pulse_delay_in_pickup">200</integer>
 
     <!-- Doze: pulse parameter - delay to wait for the screen to wake up after an intent -->
     <integer name="doze_pulse_delay_in_intent">200</integer>

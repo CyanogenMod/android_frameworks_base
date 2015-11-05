@@ -47,6 +47,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.net.ConnectivityManager;
+import android.net.ConnectivityManager.PacketKeepalive;
 import android.net.IConnectivityManager;
 import android.net.INetworkManagementEventObserver;
 import android.net.INetworkPolicyListener;
@@ -118,6 +119,7 @@ import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.XmlUtils;
 import com.android.server.am.BatteryStatsService;
 import com.android.server.connectivity.DataConnectionStats;
+import com.android.server.connectivity.KeepaliveTracker;
 import com.android.server.connectivity.NetworkDiagnostics;
 import com.android.server.connectivity.Nat464Xlat;
 import com.android.server.connectivity.NetworkAgentInfo;
@@ -149,6 +151,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -356,6 +360,9 @@ public class ConnectivityService extends IConnectivityManager.Stub
      */
     private static final int EVENT_REGISTER_NETWORK_LISTENER_WITH_INTENT = 31;
 
+    /** Handler thread used for both of the handlers below. */
+    @VisibleForTesting
+    protected final HandlerThread mHandlerThread;
     /** Handler used for internal events. */
     final private InternalHandler mHandler;
     /** Handler used for incoming {@link NetworkStateTracker} events. */
@@ -399,6 +406,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
     private DataConnectionStats mDataConnectionStats;
 
     TelephonyManager mTelephonyManager;
+
+    private KeepaliveTracker mKeepaliveTracker;
 
     // sequence number for Networks; keep in sync with system/netd/NetworkController.cpp
     private final static int MIN_NET_ID = 100; // some reserved marks
@@ -506,7 +515,6 @@ public class ConnectivityService extends IConnectivityManager.Stub
 
             ArrayList<NetworkAgentInfo> list = mTypeLists[type];
             if (list.contains(nai)) {
-                loge("Attempting to register duplicate agent for type " + type + ": " + nai);
                 return;
             }
 
@@ -610,6 +618,11 @@ public class ConnectivityService extends IConnectivityManager.Stub
     }
     private LegacyTypeTracker mLegacyTypeTracker = new LegacyTypeTracker();
 
+    @VisibleForTesting
+    protected HandlerThread createHandlerThread() {
+        return new HandlerThread("ConnectivityServiceThread");
+    }
+
     public ConnectivityService(Context context, INetworkManagementService netManager,
             INetworkStatsService statsService, INetworkPolicyManager policyManager) {
         if (DBG) log("ConnectivityService starting up");
@@ -623,10 +636,10 @@ public class ConnectivityService extends IConnectivityManager.Stub
         mDefaultMobileDataRequest = createInternetRequestForTransport(
                 NetworkCapabilities.TRANSPORT_CELLULAR);
 
-        HandlerThread handlerThread = new HandlerThread("ConnectivityServiceThread");
-        handlerThread.start();
-        mHandler = new InternalHandler(handlerThread.getLooper());
-        mTrackerHandler = new NetworkStateTrackerHandler(handlerThread.getLooper());
+        mHandlerThread = createHandlerThread();
+        mHandlerThread.start();
+        mHandler = new InternalHandler(mHandlerThread.getLooper());
+        mTrackerHandler = new NetworkStateTrackerHandler(mHandlerThread.getLooper());
 
         // setup our unique device name
         String hostname = Settings.Secure.getString(context.getContentResolver(),
@@ -770,6 +783,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
         mPacManager = new PacManager(mContext, mHandler, EVENT_PROXY_HAS_CHANGED);
 
         mUserManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+
+        mKeepaliveTracker = new KeepaliveTracker(mHandler);
     }
 
     private NetworkRequest createInternetRequestForTransport(int transportType) {
@@ -1456,6 +1471,10 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 "ConnectivityService");
     }
 
+    private void enforceKeepalivePermission() {
+        mContext.enforceCallingOrSelfPermission(KeepaliveTracker.PERMISSION, "ConnectivityService");
+    }
+
     public void sendConnectedBroadcast(NetworkInfo info) {
         enforceConnectivityInternalPermission();
         sendGeneralBroadcast(info, CONNECTIVITY_ACTION);
@@ -1518,10 +1537,14 @@ public class ConnectivityService extends IConnectivityManager.Stub
 
             final long ident = Binder.clearCallingIdentity();
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                final NetworkInfo ni = intent.getParcelableExtra(
+                        ConnectivityManager.EXTRA_NETWORK_INFO);
+                if (ni.getType() == ConnectivityManager.TYPE_MOBILE_SUPL) {
+                    intent.setAction(ConnectivityManager.CONNECTIVITY_ACTION_SUPL);
+                    intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+                }
                 final IBatteryStats bs = BatteryStatsService.getService();
                 try {
-                    NetworkInfo ni = intent.getParcelableExtra(
-                            ConnectivityManager.EXTRA_NETWORK_INFO);
                     bs.noteConnectivityChanged(intent.getIntExtra(
                             ConnectivityManager.EXTRA_NETWORK_TYPE, ConnectivityManager.TYPE_NONE),
                             ni != null ? ni.getState().toString() : "?");
@@ -1847,9 +1870,12 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 pw.println(", last requested never");
             }
         }
-        pw.println();
 
+        pw.println();
         mTethering.dump(fd, pw, args);
+
+        pw.println();
+        mKeepaliveTracker.dump(pw);
 
         if (mInetLog != null && mInetLog.size() > 0) {
             pw.println();
@@ -1928,7 +1954,12 @@ public class ConnectivityService extends IConnectivityManager.Stub
                                 (NetworkCapabilities)msg.obj;
                         if (networkCapabilities.hasCapability(NET_CAPABILITY_CAPTIVE_PORTAL) ||
                                 networkCapabilities.hasCapability(NET_CAPABILITY_VALIDATED)) {
-                            Slog.wtf(TAG, "BUG: " + nai + " has stateful capability.");
+                            Slog.wtf(TAG, "BUG: " + nai + " has CS-managed capability.");
+                        }
+                        if (nai.created && !nai.networkCapabilities.equalImmutableCapabilities(
+                                networkCapabilities)) {
+                            Slog.wtf(TAG, "BUG: " + nai + " changed immutable capabilities: "
+                                    + nai.networkCapabilities + " -> " + networkCapabilities);
                         }
                         updateCapabilities(nai, networkCapabilities);
                     }
@@ -2010,6 +2041,15 @@ public class ConnectivityService extends IConnectivityManager.Stub
                     }
                     nai.networkMisc.explicitlySelected = true;
                     nai.networkMisc.acceptUnvalidated = (boolean) msg.obj;
+                    break;
+                }
+                case NetworkAgent.EVENT_PACKET_KEEPALIVE: {
+                    NetworkAgentInfo nai = mNetworkAgentInfos.get(msg.replyTo);
+                    if (nai == null) {
+                        loge("EVENT_PACKET_KEEPALIVE from unknown NetworkAgent");
+                        break;
+                    }
+                    mKeepaliveTracker.handleEventPacketKeepalive(nai, msg);
                     break;
                 }
                 case NetworkMonitor.EVENT_NETWORK_TESTED: {
@@ -2154,6 +2194,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
             // sending all CALLBACK_LOST messages (for requests, not listens) at the end
             // of rematchAllNetworksAndRequests
             notifyNetworkCallbacks(nai, ConnectivityManager.CALLBACK_LOST);
+            mKeepaliveTracker.handleStopAllKeepalives(nai,
+                    ConnectivityManager.PacketKeepalive.ERROR_INVALID_NETWORK);
             nai.networkMonitor.sendMessage(NetworkMonitor.CMD_NETWORK_DISCONNECTED);
             mNetworkAgentInfos.remove(msg.replyTo);
             updateClat(null, nai.linkProperties, nai);
@@ -2232,6 +2274,14 @@ public class ConnectivityService extends IConnectivityManager.Stub
     private void handleRegisterNetworkRequest(NetworkRequestInfo nri) {
         mNetworkRequests.put(nri.request, nri);
         mNetworkRequestInfoLogs.log("REGISTER " + nri);
+        if (!nri.isRequest) {
+            for (NetworkAgentInfo network : mNetworkAgentInfos.values()) {
+                if (nri.request.networkCapabilities.hasSignalStrength() &&
+                        network.satisfiesImmutableCapabilitiesOf(nri.request)) {
+                    updateSignalStrengthThresholds(network, "REGISTER", nri.request);
+                }
+            }
+        }
         rematchAllNetworksAndRequests(null, 0);
         if (nri.isRequest && mNetworkForRequestId.get(nri.request.requestId) == null) {
             sendUpdatedScoreToFactories(nri.request, 0);
@@ -2345,6 +2395,10 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 // if this listen request applies and remove it.
                 for (NetworkAgentInfo nai : mNetworkAgentInfos.values()) {
                     nai.networkRequests.remove(nri.request.requestId);
+                    if (nri.request.networkCapabilities.hasSignalStrength() &&
+                            nai.satisfiesImmutableCapabilitiesOf(nri.request)) {
+                        updateSignalStrengthThresholds(nai, "RELEASE", nri.request);
+                    }
                 }
             }
             callCallbackForRequest(nri, null, ConnectivityManager.CALLBACK_RELEASED);
@@ -2509,6 +2563,19 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 }
                 case EVENT_CONFIGURE_MOBILE_DATA_ALWAYS_ON: {
                     handleMobileDataAlwaysOn();
+                    break;
+                }
+                // Sent by KeepaliveTracker to process an app request on the state machine thread.
+                case NetworkAgent.CMD_START_PACKET_KEEPALIVE: {
+                    mKeepaliveTracker.handleStartKeepalive(msg);
+                    break;
+                }
+                // Sent by KeepaliveTracker to process an app request on the state machine thread.
+                case NetworkAgent.CMD_STOP_PACKET_KEEPALIVE: {
+                    NetworkAgentInfo nai = getNetworkAgentInfoForNetwork((Network) msg.obj);
+                    int slot = msg.arg1;
+                    int reason = msg.arg2;
+                    mKeepaliveTracker.handleStopKeepalive(nai, slot, reason);
                     break;
                 }
                 case EVENT_SYSTEM_READY: {
@@ -3568,15 +3635,47 @@ public class ConnectivityService extends IConnectivityManager.Stub
         }
     }
 
-    private void ensureImmutableCapabilities(NetworkCapabilities networkCapabilities) {
-        if (networkCapabilities.hasCapability(NET_CAPABILITY_VALIDATED)) {
-            throw new IllegalArgumentException(
-                    "Cannot request network with NET_CAPABILITY_VALIDATED");
+    private void ensureRequestableCapabilities(NetworkCapabilities networkCapabilities) {
+        final String badCapability = networkCapabilities.describeFirstNonRequestableCapability();
+        if (badCapability != null) {
+            throw new IllegalArgumentException("Cannot request network with " + badCapability);
         }
-        if (networkCapabilities.hasCapability(NET_CAPABILITY_CAPTIVE_PORTAL)) {
-            throw new IllegalArgumentException(
-                    "Cannot request network with NET_CAPABILITY_CAPTIVE_PORTAL");
+    }
+
+    private ArrayList<Integer> getSignalStrengthThresholds(NetworkAgentInfo nai) {
+        final SortedSet<Integer> thresholds = new TreeSet();
+        synchronized (nai) {
+            for (NetworkRequestInfo nri : mNetworkRequests.values()) {
+                if (nri.request.networkCapabilities.hasSignalStrength() &&
+                        nai.satisfiesImmutableCapabilitiesOf(nri.request)) {
+                    thresholds.add(nri.request.networkCapabilities.getSignalStrength());
+                }
+            }
         }
+        return new ArrayList<Integer>(thresholds);
+    }
+
+    private void updateSignalStrengthThresholds(
+            NetworkAgentInfo nai, String reason, NetworkRequest request) {
+        ArrayList<Integer> thresholdsArray = getSignalStrengthThresholds(nai);
+        Bundle thresholds = new Bundle();
+        thresholds.putIntegerArrayList("thresholds", thresholdsArray);
+
+        // TODO: Switch to VDBG.
+        if (DBG) {
+            String detail;
+            if (request != null && request.networkCapabilities.hasSignalStrength()) {
+                detail = reason + " " + request.networkCapabilities.getSignalStrength();
+            } else {
+                detail = reason;
+            }
+            log(String.format("updateSignalStrengthThresholds: %s, sending %s to %s",
+                    detail, Arrays.toString(thresholdsArray.toArray()), nai.name()));
+        }
+
+        nai.asyncChannel.sendMessage(
+                android.net.NetworkAgent.CMD_SET_SIGNAL_STRENGTH_THRESHOLDS,
+                0, 0, thresholds);
     }
 
     @Override
@@ -3585,7 +3684,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
         networkCapabilities = new NetworkCapabilities(networkCapabilities);
         enforceNetworkRequestPermissions(networkCapabilities);
         enforceMeteredApnPolicy(networkCapabilities);
-        ensureImmutableCapabilities(networkCapabilities);
+        ensureRequestableCapabilities(networkCapabilities);
 
         if (timeoutMs < 0 || timeoutMs > ConnectivityManager.MAX_NETWORK_REQUEST_TIMEOUT_MS) {
             throw new IllegalArgumentException("Bad timeout specified");
@@ -3654,7 +3753,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
         networkCapabilities = new NetworkCapabilities(networkCapabilities);
         enforceNetworkRequestPermissions(networkCapabilities);
         enforceMeteredApnPolicy(networkCapabilities);
-        ensureImmutableCapabilities(networkCapabilities);
+        ensureRequestableCapabilities(networkCapabilities);
 
         NetworkRequest networkRequest = new NetworkRequest(networkCapabilities, TYPE_NONE,
                 nextNetworkRequestId());
@@ -3880,6 +3979,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
             notifyIfacesChanged();
             notifyNetworkCallbacks(networkAgent, ConnectivityManager.CALLBACK_IP_CHANGED);
         }
+
+        mKeepaliveTracker.handleCheckKeepalivesStillValid(networkAgent);
     }
 
     private void updateClat(LinkProperties newLp, LinkProperties oldLp, NetworkAgentInfo nai) {
@@ -4217,7 +4318,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
         boolean keep = newNetwork.isVPN();
         boolean isNewDefault = false;
         NetworkAgentInfo oldDefaultNetwork = null;
-        if (DBG) log("rematching " + newNetwork.name());
+        if (VDBG) log("rematching " + newNetwork.name());
         // Find and migrate to this Network any NetworkRequests for
         // which this network is now the best.
         ArrayList<NetworkAgentInfo> affectedNetworks = new ArrayList<NetworkAgentInfo>();
@@ -4254,6 +4355,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 }
                 if (currentNetwork == null ||
                         currentNetwork.getCurrentScore() < newNetwork.getCurrentScore()) {
+                    if (DBG) log("rematch for " + newNetwork.name());
                     if (currentNetwork != null) {
                         if (DBG) log("   accepting network in place of " + currentNetwork.name());
                         currentNetwork.networkRequests.remove(nri.request.requestId);
@@ -4546,6 +4648,15 @@ public class ConnectivityService extends IConnectivityManager.Stub
                 // TODO: support proxy per network.
             }
 
+            // Whether a particular NetworkRequest listen should cause signal strength thresholds to
+            // be communicated to a particular NetworkAgent depends only on the network's immutable,
+            // capabilities, so it only needs to be done once on initial connect, not every time the
+            // network's capabilities change. Note that we do this before rematching the network,
+            // so we could decide to tear it down immediately afterwards. That's fine though - on
+            // disconnection NetworkAgents should stop any signal strength monitoring they have been
+            // doing.
+            updateSignalStrengthThresholds(networkAgent, "CONNECT", null);
+
             // Consider network even though it is not yet validated.
             rematchNetworkAndRequests(networkAgent, ReapUnvalidatedNetworks.REAP);
 
@@ -4722,6 +4833,22 @@ public class ConnectivityService extends IConnectivityManager.Stub
             notifyIfacesChanged();
         }
         return success;
+    }
+
+    @Override
+    public void startNattKeepalive(Network network, int intervalSeconds, Messenger messenger,
+            IBinder binder, String srcAddr, int srcPort, String dstAddr) {
+        enforceKeepalivePermission();
+        mKeepaliveTracker.startNattKeepalive(
+                getNetworkAgentInfoForNetwork(network),
+                intervalSeconds, messenger, binder,
+                srcAddr, srcPort, dstAddr, ConnectivityManager.PacketKeepalive.NATT_PORT);
+    }
+
+    @Override
+    public void stopKeepalive(Network network, int slot) {
+        mHandler.sendMessage(mHandler.obtainMessage(
+                NetworkAgent.CMD_STOP_PACKET_KEEPALIVE, slot, PacketKeepalive.SUCCESS, network));
     }
 
     @Override

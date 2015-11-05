@@ -538,7 +538,6 @@ public class AudioService extends IAudioService.Stub {
     private volatile IRingtonePlayer mRingtonePlayer;
 
     private int mDeviceOrientation = Configuration.ORIENTATION_UNDEFINED;
-    private int mDeviceRotation = Surface.ROTATION_0;
 
     // Request to override default use of A2DP for media.
     private boolean mBluetoothA2dpEnabled;
@@ -583,8 +582,6 @@ public class AudioService extends IAudioService.Stub {
     private final Object mA2dpAvrcpLock = new Object();
     // If absolute volume is supported in AVRCP device
     private boolean mAvrcpAbsVolSupported = false;
-
-    private AudioOrientationEventListener mOrientationListener;
 
     private static Long mLastDeviceConnectMsgTime = new Long(0);
 
@@ -713,15 +710,7 @@ public class AudioService extends IAudioService.Stub {
         }
         mMonitorRotation = SystemProperties.getBoolean("ro.audio.monitorRotation", false);
         if (mMonitorRotation) {
-            mDeviceRotation = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE))
-                    .getDefaultDisplay().getRotation();
-            Log.v(TAG, "monitoring device rotation, initial=" + mDeviceRotation);
-
-            mOrientationListener = new AudioOrientationEventListener(mContext);
-            mOrientationListener.enable();
-
-            // initialize rotation in AudioSystem
-            setRotationForAudioSystem();
+            RotationHelper.init(mContext, mAudioHandler);
         }
 
         context.registerReceiverAsUser(mReceiver, UserHandle.ALL, intentFilter, null, null);
@@ -851,7 +840,7 @@ public class AudioService extends IAudioService.Stub {
             setOrientationForAudioSystem();
         }
         if (mMonitorRotation) {
-            setRotationForAudioSystem();
+            RotationHelper.updateOrientation();
         }
 
         synchronized (mBluetoothA2dpEnabledLock) {
@@ -1196,25 +1185,6 @@ public class AudioService extends IAudioService.Stub {
 
     private int rescaleIndex(int index, int srcStream, int dstStream) {
         return (index * mStreamStates[dstStream].getMaxIndex() + mStreamStates[srcStream].getMaxIndex() / 2) / mStreamStates[srcStream].getMaxIndex();
-    }
-
-    private class AudioOrientationEventListener
-            extends OrientationEventListener {
-        public AudioOrientationEventListener(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void onOrientationChanged(int orientation) {
-            //Even though we're responding to phone orientation events,
-            //use display rotation so audio stays in sync with video/dialogs
-            int newRotation = ((WindowManager) mContext.getSystemService(
-                    Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
-            if (newRotation != mDeviceRotation) {
-                mDeviceRotation = newRotation;
-                setRotationForAudioSystem();
-            }
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2708,11 +2678,14 @@ public class AudioService extends IAudioService.Stub {
     }
 
     /** @see AudioManager#setBluetoothScoOn(boolean) */
-    public void setBluetoothScoOn(boolean on){
+    public void setBluetoothScoOn(boolean on) {
         if (!checkAudioSettingsPermission("setBluetoothScoOn()")) {
             return;
         }
+        setBluetoothScoOnInt(on);
+    }
 
+    public void setBluetoothScoOnInt(boolean on) {
         if (on) {
             mForcedUseForComm = AudioSystem.FORCE_BT_SCO;
         } else if (mForcedUseForComm == AudioSystem.FORCE_BT_SCO) {
@@ -3073,6 +3046,8 @@ public class AudioService extends IAudioService.Stub {
             mScoAudioState = SCO_STATE_INACTIVE;
             broadcastScoConnectionState(AudioManager.SCO_AUDIO_STATE_DISCONNECTED);
         }
+        AudioSystem.setParameters("A2dpSuspended=false");
+        setBluetoothScoOnInt(false);
     }
 
     private void broadcastScoConnectionState(int state) {
@@ -5298,14 +5273,13 @@ public class AudioService extends IAudioService.Stub {
                 }
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 if (mMonitorRotation) {
-                    mOrientationListener.onOrientationChanged(0); //argument is ignored anyway
-                    mOrientationListener.enable();
+                    RotationHelper.enable();
                 }
                 AudioSystem.setParameters("screen_state=on");
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 if (mMonitorRotation) {
                     //reduce wakeups (save current) by only listening when display is on
-                    mOrientationListener.disable();
+                    RotationHelper.disable();
                 }
                 AudioSystem.setParameters("screen_state=off");
             } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
@@ -5562,6 +5536,7 @@ public class AudioService extends IAudioService.Stub {
         }
     }
 
+    //TODO move to an external "orientation helper" class
     private void setOrientationForAudioSystem() {
         switch (mDeviceOrientation) {
             case Configuration.ORIENTATION_LANDSCAPE:
@@ -5584,26 +5559,6 @@ public class AudioService extends IAudioService.Stub {
                 Log.e(TAG, "Unknown orientation");
         }
     }
-
-    private void setRotationForAudioSystem() {
-        switch (mDeviceRotation) {
-            case Surface.ROTATION_0:
-                AudioSystem.setParameters("rotation=0");
-                break;
-            case Surface.ROTATION_90:
-                AudioSystem.setParameters("rotation=90");
-                break;
-            case Surface.ROTATION_180:
-                AudioSystem.setParameters("rotation=180");
-                break;
-            case Surface.ROTATION_270:
-                AudioSystem.setParameters("rotation=270");
-                break;
-            default:
-                Log.e(TAG, "Unknown device rotation");
-        }
-    }
-
 
     // Handles request to override default use of A2DP for media.
     // Must be called synchronized on mConnectedDevices

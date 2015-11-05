@@ -34,7 +34,7 @@ public class DozeParameters {
     private static final String TAG = "DozeParameters";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
-    private static final int MAX_DURATION = 10 * 1000;
+    private static final int MAX_DURATION = 60 * 1000;
 
     private final Context mContext;
 
@@ -53,9 +53,6 @@ public class DozeParameters {
         pw.print("    getPulseInDuration(notification): "); pw.println(getPulseInDuration(DozeLog.PULSE_REASON_NOTIFICATION));
         pw.print("    getPulseInDuration(pickup): "); pw.println(getPulseInDuration(DozeLog.PULSE_REASON_SENSOR_PICKUP));
         pw.print("    getPulseInDuration(intent): "); pw.println(getPulseInDuration(DozeLog.PULSE_REASON_INTENT));
-        pw.print("    getPulseInDelay(notification): "); pw.println(getPulseInDelay(DozeLog.PULSE_REASON_NOTIFICATION));
-        pw.print("    getPulseInDelay(pickup): "); pw.println(getPulseInDelay(DozeLog.PULSE_REASON_SENSOR_PICKUP));
-        pw.print("    getPulseInDelay(intent): "); pw.println(getPulseInDelay(DozeLog.PULSE_REASON_INTENT));
         pw.print("    getPulseInVisibleDuration(): "); pw.println(getPulseVisibleDuration());
         pw.print("    getPulseOutDuration(): "); pw.println(getPulseOutDuration());
         pw.print("    getPulseOnSigMotion(): "); pw.println(getPulseOnSigMotion());
@@ -87,17 +84,6 @@ public class DozeParameters {
                 return getInt("doze.pulse.duration.in.intent", R.integer.doze_pulse_duration_in_intent);
         default:
                 return getInt("doze.pulse.duration.in", R.integer.doze_pulse_duration_in);
-        }
-    }
-
-    public int getPulseInDelay(int reason) {
-        switch(reason) {
-        case DozeLog.PULSE_REASON_SENSOR_PICKUP:
-                return getInt("doze.pulse.delay.in.pickup", R.integer.doze_pulse_delay_in_pickup);
-        case DozeLog.PULSE_REASON_INTENT:
-                return getInt("doze.pulse.delay.in.intent", R.integer.doze_pulse_delay_in_intent);
-        default:
-                return getInt("doze.pulse.delay.in", R.integer.doze_pulse_delay_in);
         }
     }
 

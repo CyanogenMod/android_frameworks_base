@@ -22,55 +22,50 @@ import android.util.Log;
 public class CpuPowerCalculator extends PowerCalculator {
     private static final String TAG = "CpuPowerCalculator";
     private static final boolean DEBUG = BatteryStatsHelper.DEBUG;
-
-    private final double[] mPowerCpuNormal;
-
-    /**
-     * Reusable array for calculations.
-     */
-    private final long[] mSpeedStepTimes;
+    private final PowerProfile mProfile;
 
     public CpuPowerCalculator(PowerProfile profile) {
-        final int speedSteps = profile.getNumSpeedSteps();
-        mPowerCpuNormal = new double[speedSteps];
-        mSpeedStepTimes = new long[speedSteps];
-        for (int p = 0; p < speedSteps; p++) {
-            mPowerCpuNormal[p] = profile.getAveragePower(PowerProfile.POWER_CPU_ACTIVE, p);
-        }
+        mProfile = profile;
     }
 
     @Override
     public void calculateApp(BatterySipper app, BatteryStats.Uid u, long rawRealtimeUs,
                              long rawUptimeUs, int statsType) {
-        final int speedSteps = mSpeedStepTimes.length;
-
-        long totalTimeAtSpeeds = 0;
-        for (int step = 0; step < speedSteps; step++) {
-            mSpeedStepTimes[step] = u.getTimeAtCpuSpeed(step, statsType);
-            totalTimeAtSpeeds += mSpeedStepTimes[step];
-        }
-        totalTimeAtSpeeds = Math.max(totalTimeAtSpeeds, 1);
 
         app.cpuTimeMs = (u.getUserCpuTimeUs(statsType) + u.getSystemCpuTimeUs(statsType)) / 1000;
-        if (DEBUG && app.cpuTimeMs != 0) {
-            Log.d(TAG, "UID " + u.getUid() + ": CPU time " + app.cpuTimeMs + " ms");
+
+        // Aggregate total time spent on each cluster.
+        long totalTime = 0;
+        final int numClusters = mProfile.getNumCpuClusters();
+        for (int cluster = 0; cluster < numClusters; cluster++) {
+            final int speedsForCluster = mProfile.getNumSpeedStepsInCpuCluster(cluster);
+            for (int speed = 0; speed < speedsForCluster; speed++) {
+                totalTime += u.getTimeAtCpuSpeed(cluster, speed, statsType);
+            }
         }
+        totalTime = Math.max(totalTime, 1);
 
         double cpuPowerMaMs = 0;
-        for (int step = 0; step < speedSteps; step++) {
-            final double ratio = (double) mSpeedStepTimes[step] / totalTimeAtSpeeds;
-            final double cpuSpeedStepPower = ratio * app.cpuTimeMs * mPowerCpuNormal[step];
-            if (DEBUG && ratio != 0) {
-                Log.d(TAG, "UID " + u.getUid() + ": CPU step #"
-                        + step + " ratio=" + BatteryStatsHelper.makemAh(ratio) + " power="
-                        + BatteryStatsHelper.makemAh(cpuSpeedStepPower / (60 * 60 * 1000)));
+        for (int cluster = 0; cluster < numClusters; cluster++) {
+            final int speedsForCluster = mProfile.getNumSpeedStepsInCpuCluster(cluster);
+            for (int speed = 0; speed < speedsForCluster; speed++) {
+                final double ratio = (double) u.getTimeAtCpuSpeed(cluster, speed, statsType) /
+                        totalTime;
+                final double cpuSpeedStepPower = ratio * app.cpuTimeMs *
+                        mProfile.getAveragePowerForCpu(cluster, speed);
+                if (DEBUG && ratio != 0) {
+                    Log.d(TAG, "UID " + u.getUid() + ": CPU cluster #" + cluster + " step #"
+                            + speed + " ratio=" + BatteryStatsHelper.makemAh(ratio) + " power="
+                            + BatteryStatsHelper.makemAh(cpuSpeedStepPower / (60 * 60 * 1000)));
+                }
+                cpuPowerMaMs += cpuSpeedStepPower;
             }
-            cpuPowerMaMs += cpuSpeedStepPower;
         }
+        app.cpuPowerMah = cpuPowerMaMs / (60 * 60 * 1000);
 
-        if (DEBUG && cpuPowerMaMs != 0) {
-            Log.d(TAG, "UID " + u.getUid() + ": cpu total power="
-                    + BatteryStatsHelper.makemAh(cpuPowerMaMs / (60 * 60 * 1000)));
+        if (DEBUG && (app.cpuTimeMs != 0 || app.cpuPowerMah != 0)) {
+            Log.d(TAG, "UID " + u.getUid() + ": CPU time=" + app.cpuTimeMs + " ms power="
+                    + BatteryStatsHelper.makemAh(app.cpuPowerMah));
         }
 
         // Keep track of the package with highest drain.
@@ -108,8 +103,5 @@ public class CpuPowerCalculator extends PowerCalculator {
             // Statistics may not have been gathered yet.
             app.cpuTimeMs = app.cpuFgTimeMs;
         }
-
-        // Convert the CPU power to mAh
-        app.cpuPowerMah = cpuPowerMaMs / (60 * 60 * 1000);
     }
 }

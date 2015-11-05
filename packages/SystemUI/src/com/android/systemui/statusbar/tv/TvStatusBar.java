@@ -171,6 +171,10 @@ public class TvStatusBar extends BaseStatusBar {
     }
 
     @Override
+    public void onCameraLaunchGestureDetected(int source) {
+    }
+
+    @Override
     protected void updateHeadsUp(String key, NotificationData.Entry entry, boolean shouldInterrupt,
             boolean alertAgain) {
     }

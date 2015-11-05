@@ -29,7 +29,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.hardware.fingerprint.FingerprintManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -80,15 +79,21 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     final static String TAG = "PhoneStatusBar/KeyguardBottomAreaView";
 
+    public static final String CAMERA_LAUNCH_SOURCE_AFFORDANCE = "lockscreen_affordance";
+    public static final String CAMERA_LAUNCH_SOURCE_WIGGLE = "wiggle_gesture";
+    public static final String CAMERA_LAUNCH_SOURCE_POWER_DOUBLE_TAP = "power_double_tap";
+
+    public static final String EXTRA_CAMERA_LAUNCH_SOURCE
+            = "com.android.systemui.camera_launch_source";
+
     private static final Intent SECURE_CAMERA_INTENT =
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
                     .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-    private static final Intent INSECURE_CAMERA_INTENT =
+    public static final Intent INSECURE_CAMERA_INTENT =
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
     private static final Intent PHONE_INTENT = new Intent(Intent.ACTION_DIAL);
     private static final int DOZE_ANIMATION_STAGGER_DELAY = 48;
     private static final int DOZE_ANIMATION_ELEMENT_DURATION = 250;
-    private static final long TRANSIENT_FP_ERROR_TIMEOUT = 1300;
 
     private EmergencyButton mEmergencyButton;
     private KeyguardAffordanceView mCameraImageView;
@@ -175,7 +180,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                             CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL, true /* force */);
                     return true;
                 } else if (host == mCameraImageView) {
-                    launchCamera();
+                    launchCamera(CAMERA_LAUNCH_SOURCE_AFFORDANCE);
                     return true;
                 } else if (host == mLeftAffordanceView) {
                     launchLeftAffordance();
@@ -270,14 +275,21 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         return (secure && !canSkipBouncer) ? SECURE_CAMERA_INTENT : INSECURE_CAMERA_INTENT;
     }
 
+    /**
+     * Resolves the intent to launch the camera application.
+     */
+    public ResolveInfo resolveCameraIntent() {
+        return mContext.getPackageManager().resolveActivityAsUser(getCameraIntent(),
+                PackageManager.MATCH_DEFAULT_ONLY,
+                KeyguardUpdateMonitor.getCurrentUser());
+    }
+
     private void updateCameraVisibility() {
         if (mCameraImageView == null) {
             // Things are not set up yet; reply hazy, ask again later
             return;
         }
-        ResolveInfo resolved = mContext.getPackageManager().resolveActivityAsUser(getCameraIntent(),
-                PackageManager.MATCH_DEFAULT_ONLY,
-                KeyguardUpdateMonitor.getCurrentUser());
+        ResolveInfo resolved = resolveCameraIntent();
         boolean visible = !isCameraDisabledByDpm() && resolved != null
                 && getResources().getBoolean(R.bool.config_keyguardShowCameraAffordance)
                 && mUserSetupComplete;
@@ -350,7 +362,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v == mCameraImageView) {
-            launchCamera();
+            launchCamera(CAMERA_LAUNCH_SOURCE_AFFORDANCE);
         } else if (v == mLeftAffordanceView) {
             launchLeftAffordance();
         } if (v == mLockIcon) {
@@ -391,7 +403,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 serviceIntent.setAction(CameraPrewarmService.ACTION_PREWARM);
                 try {
                     if (getContext().bindServiceAsUser(serviceIntent, mPrewarmConnection,
-                            Context.BIND_AUTO_CREATE, new UserHandle(UserHandle.USER_CURRENT))) {
+                            Context.BIND_AUTO_CREATE | Context.BIND_FOREGROUND_SERVICE,
+                            new UserHandle(UserHandle.USER_CURRENT))) {
                         mPrewarmBound = true;
                     }
                 } catch (SecurityException e) {
@@ -417,8 +430,9 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
     }
 
-    public void launchCamera() {
+    public void launchCamera(String source) {
         final Intent intent = getCameraIntent();
+        intent.putExtra(EXTRA_CAMERA_LAUNCH_SOURCE, source);
         boolean wouldLaunchResolverActivity = PreviewInflater.wouldLaunchResolverActivity(
                 mContext, intent, KeyguardUpdateMonitor.getCurrentUser());
         if (intent == SECURE_CAMERA_INTENT && !wouldLaunchResolverActivity) {
@@ -534,7 +548,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         return mCameraPreview;
     }
 
-    public KeyguardAffordanceView getLockIcon() {
+    public LockIcon getLockIcon() {
         return mLockIcon;
     }
 
@@ -619,21 +633,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
     };
 
-    private final Runnable mTransientFpErrorClearRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mLockIcon.setTransientFpError(false);
-            mIndicationController.hideTransientIndication();
-        }
-    };
-
-    private final Runnable mHideTransientIndicationRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mIndicationController.hideTransientIndication();
-        }
-    };
-
     private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
             new KeyguardUpdateMonitorCallback() {
         @Override
@@ -652,12 +651,18 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
 
         @Override
-        public void onKeyguardVisibilityChanged(boolean showing) {
-            mLockIcon.update();
+        public void onScreenTurnedOn() {
+            mLockIcon.setScreenOn(true);
         }
 
         @Override
-        public void onFingerprintAuthenticated(int userId, boolean wakeAndUnlocking) {
+        public void onScreenTurnedOff() {
+            mLockIcon.setScreenOn(false);
+        }
+
+        @Override
+        public void onKeyguardVisibilityChanged(boolean showing) {
+            mLockIcon.update();
         }
 
         @Override
@@ -666,28 +671,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
 
         @Override
-        public void onFingerprintHelp(int msgId, String helpString) {
-            if (!KeyguardUpdateMonitor.getInstance(mContext).isUnlockingWithFingerprintAllowed()) {
-                return;
-            }
-            mLockIcon.setTransientFpError(true);
-            mIndicationController.showTransientIndication(helpString,
-                    getResources().getColor(R.color.system_warning_color, null));
-            removeCallbacks(mTransientFpErrorClearRunnable);
-            postDelayed(mTransientFpErrorClearRunnable, TRANSIENT_FP_ERROR_TIMEOUT);
-        }
-
-        @Override
-        public void onFingerprintError(int msgId, String errString) {
-            if (!KeyguardUpdateMonitor.getInstance(mContext).isUnlockingWithFingerprintAllowed()
-                    || msgId == FingerprintManager.FINGERPRINT_ERROR_CANCELED) {
-                return;
-            }
-            // TODO: Go to bouncer if this is "too many attempts" (lockout) error.
-            mIndicationController.showTransientIndication(errString,
-                    getResources().getColor(R.color.system_warning_color, null));
-            removeCallbacks(mHideTransientIndicationRunnable);
-            postDelayed(mHideTransientIndicationRunnable, 5000);
+        public void onStrongAuthStateChanged(int userId) {
+            mLockIcon.update();
         }
     };
 

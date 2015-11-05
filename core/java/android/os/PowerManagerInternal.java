@@ -53,6 +53,15 @@ public abstract class PowerManagerInternal {
      */
     public static final int WAKEFULNESS_DOZING = 3;
 
+
+    /**
+     * Power hint: The user is interacting with the device. The corresponding data field must be
+     * the expected duration of the fling, or 0 if unknown.
+     *
+     * This must be kept in sync with the values in hardware/libhardware/include/hardware/power.h
+     */
+    public static final int POWER_HINT_INTERACTION = 2;
+
     public static String wakefulnessToString(int wakefulness) {
         switch (wakefulness) {
             case WAKEFULNESS_ASLEEP:
@@ -150,4 +159,5 @@ public abstract class PowerManagerInternal {
     public abstract void setFeature(int featureId, int data);
 
     public abstract int getFeature(int featureId);
+
 }

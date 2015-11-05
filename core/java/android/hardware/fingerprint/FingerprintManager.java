@@ -27,6 +27,7 @@ import android.os.CancellationSignal.OnCancelListener;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.security.keystore.AndroidKeyStoreProvider;
@@ -392,6 +393,18 @@ public class FingerprintManager {
     };
 
     /**
+     * @hide
+     */
+    public static abstract class LockoutResetCallback {
+
+        /**
+         * Called when lockout period expired and clients are allowed to listen for fingerprint
+         * again.
+         */
+        public void onLockoutReset() { }
+    };
+
+    /**
      * Request authentication of a crypto object. This call warms up the fingerprint hardware
      * and starts scanning for a fingerprint. It terminates when
      * {@link AuthenticationCallback#onAuthenticationError(int, CharSequence)} or
@@ -668,6 +681,60 @@ public class FingerprintManager {
         return 0;
     }
 
+    /**
+     * Reset the lockout timer when asked to do so by keyguard.
+     *
+     * @param token an opaque token returned by password confirmation.
+     *
+     * @hide
+     */
+    public void resetTimeout(byte[] token) {
+        if (mService != null) {
+            try {
+                mService.resetTimeout(token);
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in resetTimeout(): ", e);
+            }
+        } else {
+            Log.w(TAG, "resetTimeout(): Service not connected!");
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void addLockoutResetCallback(final LockoutResetCallback callback) {
+        if (mService != null) {
+            try {
+                final PowerManager powerManager = mContext.getSystemService(PowerManager.class);
+                mService.addLockoutResetCallback(
+                        new IFingerprintServiceLockoutResetCallback.Stub() {
+
+                    @Override
+                    public void onLockoutReset(long deviceId) throws RemoteException {
+                        final PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
+                                PowerManager.PARTIAL_WAKE_LOCK, "lockoutResetCallback");
+                        wakeLock.acquire();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    callback.onLockoutReset();
+                                } finally {
+                                    wakeLock.release();
+                                }
+                            }
+                        });
+                    }
+                });
+            } catch (RemoteException e) {
+                Log.v(TAG, "Remote exception in addLockoutResetCallback(): ", e);
+            }
+        } else {
+            Log.w(TAG, "addLockoutResetCallback(): Service not connected!");
+        }
+    }
+
     private class MyHandler extends Handler {
         private MyHandler(Context context) {
             super(context.getMainLooper());
@@ -677,6 +744,7 @@ public class FingerprintManager {
             super(looper);
         }
 
+        @Override
         public void handleMessage(android.os.Message msg) {
             switch(msg.what) {
                 case MSG_ENROLL_RESULT:
@@ -707,7 +775,7 @@ public class FingerprintManager {
                 if (fingerId != reqFingerId) {
                     Log.w(TAG, "Finger id didn't match: " + fingerId + " != " + reqFingerId);
                 }
-                if (fingerId != reqFingerId) {
+                if (groupId != reqGroupId) {
                     Log.w(TAG, "Group id didn't match: " + groupId + " != " + reqGroupId);
                 }
                 mRemovalCallback.onRemovalSucceeded(mRemovalFingerprint);
