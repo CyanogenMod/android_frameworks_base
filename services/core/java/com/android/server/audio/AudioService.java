@@ -3808,6 +3808,7 @@ public class AudioService extends IAudioService.Stub {
             mConnectedBTDevicesList.add(device);
             if (mConnectedBTDevicesList.size() > 1) {
                 Log.d(TAG, "Second device connected, add new device ");
+                return delay;
             }
         } else if ((state == BluetoothA2dp.STATE_DISCONNECTED) ||
             (state == BluetoothA2dp.STATE_DISCONNECTING)) {
@@ -3817,9 +3818,7 @@ public class AudioService extends IAudioService.Stub {
                 mConnectedBTDevicesList.remove(device);
             }
             if (mConnectedBTDevicesList.size() > 0) {
-                Log.d(TAG, "device removed " + device.getAddress() );
-                mConnectedDevices.remove(makeDeviceListKey(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP,
-                        device.getAddress()));
+                Log.d(TAG, "Not all are disconnected ");
                 return delay;
             }
         }
