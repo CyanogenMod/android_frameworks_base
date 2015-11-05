@@ -82,6 +82,7 @@ import android.view.ThreadedRenderer;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
@@ -312,6 +313,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     int mKeyguardMaxNotificationCount;
 
+    // carrier label
+    private TextView mCarrierLabel;
+    private boolean mShowCarrierInPanel = false;
     boolean mExpandedVisible;
 
     private int mNavigationBarWindowState = WINDOW_STATE_SHOWING;
@@ -843,6 +847,23 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNetworkController.addEmergencyListener(mHeader);
         }
 
+        mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
+        final boolean showCarrierLabel = mContext.getResources().getBoolean(
+                R.bool.config_showCarrierLabel);
+        mShowCarrierInPanel = showCarrierLabel && (mCarrierLabel != null);
+        if (DEBUG) Log.v(TAG, "carrierlabel=" + mCarrierLabel + " show=" + mShowCarrierInPanel);
+        if (mShowCarrierInPanel) {
+            mCarrierLabel.setVisibility(mShowCarrierInPanel ? View.VISIBLE : View.INVISIBLE);
+        }
+
+        // make sure carrier label is not covered by navigation bar
+        if (mCarrierLabel != null && mNavigationBarView != null) {
+            MarginLayoutParams mlp = (MarginLayoutParams) mCarrierLabel.getLayoutParams();
+            if (mlp != null && mlp.bottomMargin < mNavigationBarView.mBarSize) {
+                mlp.bottomMargin = mNavigationBarView.mBarSize;
+                mCarrierLabel.setLayoutParams(mlp);
+            }
+        }
         mFlashlightController = new FlashlightController(mContext);
         mKeyguardBottomArea.setFlashlightController(mFlashlightController);
         mKeyguardBottomArea.setPhoneStatusBar(this);
@@ -1467,6 +1488,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     protected void updateRowStates() {
         super.updateRowStates();
         mNotificationPanel.notifyVisibleChildrenChanged();
+    }
+
+    protected void updateCarrierLabelVisibility() {
+        if (!mShowCarrierInPanel) return;
+
+        final boolean makeVisible = mStackScroller.getVisibility() == View.VISIBLE
+                && mState != StatusBarState.KEYGUARD;
+
+        if ((mCarrierLabel.getVisibility() == View.VISIBLE) != makeVisible) {
+            if (DEBUG) {
+                Log.d(TAG, "making carrier label " + (makeVisible?"visible":"invisible"));
+            }
+
+            mCarrierLabel.setVisibility(makeVisible ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
     @Override
@@ -3552,6 +3588,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         updateStackScrollerState(goingToFullShade);
         updateNotifications();
         checkBarModes();
+        updateCarrierLabelVisibility();
         updateMediaMetaData(false);
         mKeyguardMonitor.notifyKeyguardState(mStatusBarKeyguardViewManager.isShowing(),
                 mStatusBarKeyguardViewManager.isSecure());

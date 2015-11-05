@@ -210,6 +210,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(ConnectivityManager.INET_CONDITION_ACTION);
+        filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         mContext.registerReceiver(this, filter, null, mReceiverHandler);
         mListening = true;
@@ -377,6 +378,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
         } else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
             // Might have different subscriptions now.
             updateMobileControllers();
+        } else if (action.equals(Intent.ACTION_LOCALE_CHANGED)) {
+            for (MobileSignalController controller : mMobileSignalControllers.values()) {
+                controller.handleBroadcast(intent);
+            }
         } else if (action.equals(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED)) {
             mLastServiceState = ServiceState.newFromBundle(intent.getExtras());
             if (mMobileSignalControllers.size() == 0) {
@@ -826,6 +831,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
         boolean alwaysShowCdmaRssi = false;
         boolean show4gForLte = false;
         boolean hspaDataDistinguishable;
+        boolean readIconsFromXml;
+        boolean showRsrpSignalLevelforLTE;
+        boolean showLocale;
+        boolean showRat;
 
         static Config readConfig(Context context) {
             Config config = new Config();
@@ -837,6 +846,14 @@ public class NetworkControllerImpl extends BroadcastReceiver
             config.show4gForLte = res.getBoolean(R.bool.config_show4GForLTE);
             config.hspaDataDistinguishable =
                     res.getBoolean(R.bool.config_hspa_data_distinguishable);
+            config.readIconsFromXml = res.getBoolean(R.bool.config_read_icons_from_xml);
+            config.showRsrpSignalLevelforLTE =
+                    res.getBoolean(R.bool.config_showRsrpSignalLevelforLTE);
+            config.showLocale =
+                    res.getBoolean(com.android.internal.R.bool.config_monitor_locale_change);
+            config.showRat =
+                    res.getBoolean(com.android.internal.R.bool.config_display_rat);
+
             return config;
         }
     }
