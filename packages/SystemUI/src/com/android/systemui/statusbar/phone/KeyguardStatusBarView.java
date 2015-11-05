@@ -104,7 +104,9 @@ public class KeyguardStatusBarView extends RelativeLayout
         } else if (mMultiUserSwitch.getParent() == this && mKeyguardUserSwitcherShowing) {
             removeView(mMultiUserSwitch);
         }
-        mBatteryLevel.setVisibility(mBatteryCharging ? View.VISIBLE : View.GONE);
+        boolean showBatteryLevel = getResources().getBoolean(R.bool.config_showBatteryPercentage);
+        mBatteryLevel.setVisibility(
+                mBatteryCharging || showBatteryLevel ? View.VISIBLE : View.GONE);
     }
 
     private void updateSystemIconsLayoutParams() {
