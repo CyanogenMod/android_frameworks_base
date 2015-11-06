@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">省电模式</string>
   <string name="perf_profile_bal">平衡模式</string>
   <string name="perf_profile_perf">性能模式</string>
+  <string name="perf_profile_bias_power">效率</string>
+  <string name="perf_profile_bias_perf">快速</string>
   <string name="theme_install_error_title">安装主题失败</string>
   <string name="theme_install_error_message">%s 安装失败</string>
   <string name="theme_reset_notification_title">重置主题</string>

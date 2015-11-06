@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Economia</string>
   <string name="perf_profile_bal">Balanceado</string>
   <string name="perf_profile_perf">Performance</string>
+  <string name="perf_profile_bias_power">Eficiente</string>
+  <string name="perf_profile_bias_perf">Rápido</string>
   <string name="theme_install_error_title">Falha ao instalar o tema</string>
   <string name="theme_install_error_message">%s falhou ao instalar</string>
   <string name="theme_reset_notification_title">Restaurar tema</string>

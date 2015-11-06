@@ -205,4 +205,8 @@
   <string name="permdesc_accessFingerprintService">Gjør det mulig for en app å få tilgang til fingeravtrykkstjenesten. Appen kan legge til, slette, gi nytt navn på og godkjenne i forhold til fingeravtrykk</string>
   <string name="permlab_resetBatteryStats">tilbakestill batteristatistikk</string>
   <string name="permdesc_resetBatteryStats">Tillater at et program kan tilbakestille nåværende bruksdata om lavt batteri.</string>
+  <string name="silent_mode_priority">Prioritet</string>
+  <string name="silent_mode_none">Ingen</string>
+  <string name="subscription_change_disabled_wifi_ap">Deaktivert Wi-Fi hotspot på grunn av endring i SIM-abbonement</string>
+  <string name="notify_turn_wifi_off_title">Deaktiver Wi-Fi</string>
 </resources>

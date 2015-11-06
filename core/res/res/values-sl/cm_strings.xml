@@ -136,6 +136,8 @@
   <string name="perf_profile_pwrsv">Varčevanje porabe</string>
   <string name="perf_profile_bal">Uravnoteženo</string>
   <string name="perf_profile_perf">Zmogljivost</string>
+  <string name="perf_profile_bias_power">Učinkovitost</string>
+  <string name="perf_profile_bias_perf">Hitro</string>
   <string name="theme_install_error_title">Namestitev teme je spodletela</string>
   <string name="theme_install_error_message">Namestitev %s je spodletela</string>
   <string name="theme_reset_notification_title">Ponastavitev theme</string>

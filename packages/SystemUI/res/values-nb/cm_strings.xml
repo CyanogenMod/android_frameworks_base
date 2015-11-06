@@ -94,7 +94,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-Internett-deling er på.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-Internett-deling er slått av.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-Internett-deling er slått på.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Batterisparing av.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Batterisparing på.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Batterisparing slått av.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Batterisparing slått på.</string>
   <string name="accessibility_quick_settings_visualizer">Visualiserer.</string>
+  <string name="accessibility_quick_settings_volume_panel">Volumpanel.</string>
   <string name="accessibility_dpad_left">Markør til venstre</string>
   <string name="accessibility_dpad_right">Markør til høyre</string>
   <string name="quick_settings_mobile_data_label">Mobildata</string>
@@ -115,11 +120,13 @@
   <string name="quick_settings_lockscreen_label_enforced">Låseskjerm er påkrevd</string>
   <string name="quick_settings_network_adb_label">ADB over nettverk</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Volumpanel</string>
   <string name="quick_settings_screen_timeout_detail_title">Tidsavbrudd for skjermen</string>
   <string name="quick_settings_usb_tether_label">USB tethering</string>
   <string name="quick_settings_heads_up_label">Flytende notifikasjoner</string>
   <string name="quick_settings_ambient_display_label">Ambient skjerm</string>
   <string name="quick_settings_sync_label">Synkronisering</string>
+  <string name="quick_settings_battery_saver_label">Batterisparing</string>
   <string name="quick_settings_custom_tile_detail_title">Egendefinerte fliser</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Sveip til høyre for %1$s</string>
@@ -159,4 +166,5 @@
   <string name="dynamic_qs_tile_su_label">Root-tilgang</string>
   <string name="fingerprint_try_again_hint">Skann på nytt</string>
   <string name="accessibility_dock_battery_level">Dokkingstasjonens batteri <xliff:g id="number"> %d</xliff:g> prosent.</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Ingen elementer funnet</string>
 </resources>

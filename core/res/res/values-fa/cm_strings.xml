@@ -136,6 +136,8 @@
   <string name="perf_profile_pwrsv">ذخیره نیرو</string>
   <string name="perf_profile_bal">متعادل</string>
   <string name="perf_profile_perf">کارایی</string>
+  <string name="perf_profile_bias_power">بازدهی</string>
+  <string name="perf_profile_bias_perf">سریع</string>
   <string name="theme_install_error_title">موفق به نصب تم نشد</string>
   <string name="theme_install_error_message">%s نصب نشد</string>
   <string name="theme_reset_notification_title">تنظیم مجدد تم</string>

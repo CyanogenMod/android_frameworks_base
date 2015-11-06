@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Virransäästö</string>
   <string name="perf_profile_bal">Tasapainotettu</string>
   <string name="perf_profile_perf">Suorituskyky</string>
+  <string name="perf_profile_bias_power">Virransäästö</string>
+  <string name="perf_profile_bias_perf">Suorituskyky</string>
   <string name="theme_install_error_title">Teeman asennus epäonnistui</string>
   <string name="theme_install_error_message">Teeman \"%s\" asennus epäonnistui</string>
   <string name="theme_reset_notification_title">Teeman resetointi</string>

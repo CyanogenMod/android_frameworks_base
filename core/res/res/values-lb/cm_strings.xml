@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Energie spueren</string>
   <string name="perf_profile_bal">Ausgeglach</string>
   <string name="perf_profile_perf">Leeschtung</string>
+  <string name="perf_profile_bias_power">Effizienz</string>
+  <string name="perf_profile_bias_perf">Séier</string>
   <string name="theme_install_error_title">Design konnt net installéiert ginn</string>
   <string name="theme_install_error_message">%s konnt net installéiert ginn</string>
   <string name="theme_reset_notification_title">Design-Reset</string>
@@ -207,4 +209,8 @@
   <string name="permdesc_resetBatteryStats">Erlaabt enger App, den Detail vun der Akkubenotzung zréckzesetzen.</string>
   <string name="silent_mode_priority">Prioritéit</string>
   <string name="silent_mode_none">Keen</string>
+  <string name="subscription_change_disabled_wifi_ap">WLAN-Zougrëffspunkt gouf opgrond vun Ännerunge am SIM-Abonnement desaktivéiert</string>
+  <string name="notify_turn_wifi_off_title">WLAN ausschalten</string>
+  <string name="permlab_thirdPartyKeyguard">Spärschierm vu Drëttubidder</string>
+  <string name="permdesc_thirdPartyKeyguard">Erlaabt der App, als onséchere Spärschierm benotzt ze ginn.</string>
 </resources>
