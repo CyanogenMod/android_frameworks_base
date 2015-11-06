@@ -116,6 +116,7 @@
     </LinearLayout>
 
     <com.android.keyguard.AlphaOptimizedLinearLayout
+        android:id="@+id/center_clock_layout"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_width="match_parent"

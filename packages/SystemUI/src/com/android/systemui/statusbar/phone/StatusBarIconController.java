@@ -77,6 +77,7 @@ public class StatusBarIconController implements Tunable {
     private ImageView mMoreIcon;
     private BatteryMeterView mBatteryMeterView;
     private ClockController mClockController;
+    private View mCenterClockLayout;
 
     private int mIconSize;
     private int mIconHPadding;
@@ -128,6 +129,7 @@ public class StatusBarIconController implements Tunable {
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
         mHandler = new Handler();
         mClockController = new ClockController(statusBar, mNotificationIcons, mHandler);
+        mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
         updateResources();
 
         TunerService.get(mContext).addTunable(this, ICON_BLACKLIST);
@@ -249,18 +251,22 @@ public class StatusBarIconController implements Tunable {
 
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate);
+        animateHide(mCenterClockLayout, animate);
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
+        animateShow(mCenterClockLayout, animate);
     }
 
     public void hideNotificationIconArea(boolean animate) {
         animateHide(mNotificationIconArea, animate);
+        animateHide(mCenterClockLayout, animate);
     }
 
     public void showNotificationIconArea(boolean animate) {
         animateShow(mNotificationIconArea, animate);
+        animateShow(mCenterClockLayout, animate);
     }
 
     public void setClockVisibility(boolean visible) {
