@@ -2786,7 +2786,8 @@
                  android:backupAgent="com.android.server.backup.SystemBackupAgent"
                  android:killAfterRestore="false"
                  android:icon="@drawable/ic_launcher_android"
-                 android:supportsRtl="true">
+                 android:supportsRtl="true"
+                 android:theme="@style/Theme.Material.DayNight.DarkActionBar">
         <activity android:name="com.android.internal.app.ChooserActivity"
                 android:theme="@style/Theme.DeviceDefault.Resolver"
                 android:finishOnCloseSystemDialogs="true"
@@ -2820,7 +2821,7 @@
                 android:label="@string/managed_profile_label">
         </activity-alias>
         <activity android:name="com.android.internal.app.HeavyWeightSwitcherActivity"
-                android:theme="@style/Theme.Material.Light.Dialog"
+                android:theme="@style/Theme.Material.DayNight.Dialog"
                 android:label="@string/heavy_weight_switcher_title"
                 android:finishOnCloseSystemDialogs="true"
                 android:excludeFromRecents="true"
@@ -2853,7 +2854,7 @@
         <activity android:name="android.accounts.ChooseAccountActivity"
                 android:excludeFromRecents="true"
                 android:exported="true"
-                android:theme="@style/Theme.Material.Light.Dialog"
+                android:theme="@style/Theme.Material.DayNight.Dialog"
                 android:label="@string/choose_account_label"
                 android:process=":ui">
         </activity>
@@ -2861,14 +2862,14 @@
         <activity android:name="android.accounts.ChooseTypeAndAccountActivity"
                 android:excludeFromRecents="true"
                 android:exported="true"
-                android:theme="@style/Theme.Material.Light.Dialog"
+                android:theme="@style/Theme.Material.DayNight.Dialog"
                 android:label="@string/choose_account_label"
                 android:process=":ui">
         </activity>
 
         <activity android:name="android.accounts.ChooseAccountTypeActivity"
                 android:excludeFromRecents="true"
-                android:theme="@style/Theme.Material.Light.Dialog"
+                android:theme="@style/Theme.Material.DayNight.Dialog"
                 android:label="@string/choose_account_label"
                 android:process=":ui">
         </activity>
@@ -2876,19 +2877,19 @@
         <activity android:name="android.accounts.CantAddAccountActivity"
                 android:excludeFromRecents="true"
                 android:exported="true"
-                android:theme="@style/Theme.Material.Light.Dialog.NoActionBar"
+                android:theme="@style/Theme.Material.DayNight.Dialog.NoActionBar"
                 android:process=":ui">
         </activity>
 
         <activity android:name="android.accounts.GrantCredentialsPermissionActivity"
                 android:excludeFromRecents="true"
                 android:exported="true"
-                android:theme="@style/Theme.Material.Light.DialogWhenLarge"
+                android:theme="@style/Theme.Material.DayNight.DialogWhenLarge"
                 android:process=":ui">
         </activity>
 
         <activity android:name="android.content.SyncActivityTooManyDeletes"
-               android:theme="@style/Theme.Material.Light.Dialog"
+               android:theme="@style/Theme.Material.DayNight.Dialog"
                android:label="@string/sync_too_many_deletes"
                android:process=":ui">
         </activity>
@@ -2908,7 +2909,7 @@
         </activity>
 
         <activity android:name="com.android.internal.app.NetInitiatedActivity"
-                android:theme="@style/Theme.Material.Light.Dialog.Alert"
+                android:theme="@style/Theme.Material.DayNight.Dialog.Alert"
                 android:excludeFromRecents="true"
                 android:process=":ui">
         </activity>
