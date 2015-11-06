@@ -1197,6 +1197,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(j).get();
             if (cb != null) {
                 cb.onRefreshCarrierInfo();
+                cb.onServiceStateChanged(subId, serviceState);
             }
         }
     }
@@ -1421,6 +1422,21 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         } else {
             return State.UNKNOWN;
         }
+    }
+
+    public boolean isOOS()
+    {
+        boolean ret = true;
+        for (int subId : mServiceStates.keySet()) {
+            ServiceState state = mServiceStates.get(subId);
+            if (((state.getVoiceRegState() != ServiceState.STATE_OUT_OF_SERVICE)
+                    && (state.getVoiceRegState() != ServiceState.STATE_POWER_OFF))
+                    || (state.isEmergencyOnly())) {
+                ret = false;
+                break;
+            }
+        }
+        return ret;
     }
 
     /**
