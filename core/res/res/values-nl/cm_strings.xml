@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Energiebesparing</string>
   <string name="perf_profile_bal">Gebalanceerd</string>
   <string name="perf_profile_perf">Prestaties</string>
+  <string name="perf_profile_bias_power">Efficiënt</string>
+  <string name="perf_profile_bias_perf">Snel</string>
   <string name="theme_install_error_title">Thema installeren mislukt</string>
   <string name="theme_install_error_message">%s kan niet worden geïnstalleerd</string>
   <string name="theme_reset_notification_title">Thema opnieuw instellen</string>
@@ -209,4 +211,6 @@
   <string name="silent_mode_none">Geen</string>
   <string name="subscription_change_disabled_wifi_ap">Wifi-hotspot uitgeschakeld door een SIM-abonnementwijziging</string>
   <string name="notify_turn_wifi_off_title">Wifi uitschakelen</string>
+  <string name="permlab_thirdPartyKeyguard">vergrendelingsscherm van derden</string>
+  <string name="permdesc_thirdPartyKeyguard">Hiermee kan de app gebruikt worden als onbeveiligd vergrendelingsscherm.</string>
 </resources>

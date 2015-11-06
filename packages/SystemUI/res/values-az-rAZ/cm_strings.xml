@@ -30,6 +30,10 @@
   <string name="accessibility_quick_settings_network_adb_on">Şəbəkə üzərindən ADB açıqdır.</string>
   <string name="accessibility_quick_settings_network_adb_changed_off">Şəbəkə üzərindən ADB bağlanıldı.</string>
   <string name="accessibility_quick_settings_network_adb_changed_on">Şəbəkə üzərindən ADB açıldı.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Bildiriş ekranı bağlıdır.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Bildiriş ekranı açıqdır.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Bildiriş ekranı bağlanıldı.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Bildiriş ekranı açıldı.</string>
   <string name="accessibility_quick_settings_color_inversion_off">Rənglərin yerdəyişməsi bağlıdır.</string>
   <string name="accessibility_quick_settings_color_inversion_on">Rənglərin yerdəyişməsi açıqdır.</string>
   <string name="accessibility_quick_settings_compass_off">Kompas bağlıdır.</string>
@@ -115,6 +119,7 @@
   <string name="quick_settings_screen_timeout_detail_title">Ekrana qoyulan vaxt</string>
   <string name="quick_settings_usb_tether_label">USB internet paylaşımı</string>
   <string name="quick_settings_heads_up_label">Açılan başlıqlar</string>
+  <string name="quick_settings_ambient_display_label">Bildiriş ekranı</string>
   <string name="quick_settings_sync_label">Eyniləşdirmə</string>
   <string name="quick_settings_custom_tile_detail_title">Özəl kvadrat</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>

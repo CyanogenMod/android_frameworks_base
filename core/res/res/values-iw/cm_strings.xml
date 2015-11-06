@@ -166,12 +166,12 @@
   <string name="sd_ext_media_checking_notification_title">מכין כרטיס זיכרון</string>
   <string name="sd_ext_media_checking_notification_message">בודק כרטיס זיכרון לשגיאות.</string>
   <string name="sd_ext_media_nofs_notification_title">כרטיס זיכרון ריק</string>
-  <string name="sd_ext_media_nofs_notification_message">כרטיס הזיכרון הינו ריק, או בעל קבצים שהמערכת לא תומכת בהם.</string>
+  <string name="sd_ext_media_nofs_notification_message">כרטיס הזיכרון ריק, או בעל קבצים שהמערכת לא תומכת בהם.</string>
   <string name="sd_ext_media_unmountable_notification_title">כרטיס זיכרון פגום</string>
   <string name="sd_ext_media_unmountable_notification_message">כרטיס הזיכרון פגום. נסה לפרמט אותו מחדש.</string>
   <string name="sd_ext_media_badremoval_notification_title">כרטיס זיכרון הוסר באופן פתאומי</string>
   <string name="sd_ext_media_badremoval_notification_message">בטל את טעינת כרטיס הזיכרון לפני הסרתו מהמכשיר על מנת למנוע אובדן נתונים.</string>
-  <string name="sd_ext_media_safe_unmount_notification_title">כרטיס זיכרון ניתן להסרה בבטחה</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">כרטיס הזיכרון ניתן להסרה בבטחה</string>
   <string name="sd_ext_media_safe_unmount_notification_message">ניתן להסיר בבטחה את כרטיס הזיכרון.</string>
   <string name="sd_ext_media_nomedia_notification_title">כרטיס זיכרון הוסר</string>
   <string name="sd_ext_media_nomedia_notification_message">כרטיס זיכרון הוסר. הכנס כרטיס חדש.</string>

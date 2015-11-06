@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Akkumodus: Energie sparen.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Akkumodus: Ausgeglichen.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Akkumodus: Mehr Leistung.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Akkumodus: Effizient.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Akkumodus: Schnell.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Akkumodus auf \"Energie sparen\" geändert.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Akkumodus auf \"Ausgeglichen\" geändert.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Akkumodus auf \"Mehr Leistung\" geändert.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Akkumodus auf \"Effizient\" geändert.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Akkumodus auf \"Schnell\" geändert.</string>
   <string name="accessibility_quick_settings_profiles_off">Profile aus.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profile ausgeschaltet.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Sync</string>
   <string name="quick_settings_battery_saver_label">Akku-Sparmodus</string>
   <string name="quick_settings_custom_tile_detail_title">Benutzerdefinierte Kachel</string>
+  <string name="quick_settings_performance_profile_detail_title">Akkumodus</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> – <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Nach Rechts wischen für %1$s</string>
   <string name="right_shortcut_hint">Nach Links wischen für %1$s</string>

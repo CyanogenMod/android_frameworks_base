@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Akkumodus: Energie spueren.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Akkumodus: Equilibréiert.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Akkumodus: Héich Leeschtung.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Akkumodus: effiziente Modus.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Akkumodus: séiere Modus.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Akkumodus op \"Energie spueren\" geännert.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Akkumodus op \"Equilibréiert\" geännert.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Akkumodus op \"Héich Leeschtung\" geännert.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Akkumodus geännert op den effiziente Modus.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Akkumodus geännert op de séiere Modus.</string>
   <string name="accessibility_quick_settings_profiles_off">Profiller aus.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiller ausgeschalt.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Synchronisatioun</string>
   <string name="quick_settings_battery_saver_label">Akkuschouner</string>
   <string name="quick_settings_custom_tile_detail_title">Eege Kachel</string>
+  <string name="quick_settings_performance_profile_detail_title">Akkumodus</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">No riets wësche fir %1$s</string>
   <string name="right_shortcut_hint">No lénks wësche fir %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">W.e.g. scann nees</string>
   <string name="accessibility_dock_battery_level">Dockakku <xliff:g id="number">%d</xliff:g> Prozent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Keen Inhalt fonnt</string>
+  <string name="play_queue_extention">Waardeschlaang uweisen</string>
 </resources>
