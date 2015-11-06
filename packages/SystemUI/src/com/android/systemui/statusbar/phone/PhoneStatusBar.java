@@ -209,6 +209,8 @@ import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSLUCE
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARENT;
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_WARNING;
 
+import cyanogenmod.providers.CMSettings;
+
 public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         DragDownHelper.DragDownCallback, ActivityStarter, OnUnlockMethodChangedListener,
         HeadsUpManager.OnHeadsUpChangedListener {
@@ -448,8 +450,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY), false, this);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.Secure.RECENTS_LONG_PRESS_ACTIVITY), false, this);
             update();
         }
 
@@ -478,7 +480,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
             }
 
-            // This method reads Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY
+            // This method reads CMSettings.Secure.RECENTS_LONG_PRESS_ACTIVITY
             updateCustomRecentsLongPressHandler(false);
         }
     }
@@ -4655,7 +4657,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
      * set and points to a valid app.  Start this activity.
      */
     private void startCustomRecentsLongPressActivity(ComponentName customComponentName) {
-        Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+        Intent intent = new Intent(cyanogenmod.content.Intent.ACTION_RECENTS_LONG_PRESS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // Include the package name of the app currently in the foreground
@@ -4701,8 +4703,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             updateCustomRecentsLongPressCandidates();
         }
 
-        String componentString = Settings.Secure.getString(mContext.getContentResolver(),
-                Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY);
+        String componentString = CMSettings.Secure.getString(mContext.getContentResolver(),
+                CMSettings.Secure.RECENTS_LONG_PRESS_ACTIVITY);
         if (componentString == null) {
             mCustomRecentsLongPressHandler = null;
             return;
@@ -4732,18 +4734,19 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
      * Updates the cache of Recents Long Press applications.
      *
      * These applications must:
-     * - handle the Intent.ACTION_RECENTS_LONG_PRESS (which is permissions protected); and
+     * - handle the cyanogenmod.contentIntent.ACTION_RECENTS_LONG_PRESS
+     *   (which is permissions protected); and
      * - not be disabled by the user or the system.
      *
      * More than one handler can be a candidate.  When the action is invoked,
-     * the user setting (stored in Settings.Secure) is consulted.
+     * the user setting (stored in CMSettings.Secure) is consulted.
      */
     private void updateCustomRecentsLongPressCandidates() {
         synchronized (mCustomRecentsLongPressHandlerCandidates) {
             mCustomRecentsLongPressHandlerCandidates.clear();
 
             PackageManager pm = mContext.getPackageManager();
-            Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+            Intent intent = new Intent(cyanogenmod.content.Intent.ACTION_RECENTS_LONG_PRESS);
 
             // Search for all apps that can handle ACTION_RECENTS_LONG_PRESS
             List<ResolveInfo> activities = pm.queryIntentActivities(intent,
