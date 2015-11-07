@@ -38,6 +38,7 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
@@ -103,7 +104,11 @@ public final class ShutdownThread extends Thread {
     private static final String UNCRYPT_STATUS_FILE = "/cache/recovery/uncrypt_status";
     private static final String UNCRYPT_PACKAGE_FILE = "/cache/recovery/uncrypt_file";
 
+    // recovery command
+    private static File RECOVERY_COMMAND_FILE = new File("/cache/recovery/command");
+
     private static boolean mReboot;
+    private static boolean mRebootWipe = false;
     private static boolean mRebootSafeMode;
     private static boolean mRebootUpdate;
     private static String mRebootReason;
@@ -392,6 +397,13 @@ public final class ShutdownThread extends Thread {
         //   UI: spinning circle only (no progress bar)
         if (PowerManager.REBOOT_RECOVERY.equals(mRebootReason)) {
             mRebootUpdate = new File(UNCRYPT_PACKAGE_FILE).exists();
+            if (RECOVERY_COMMAND_FILE.exists()) {
+                try {
+                    mRebootWipe = new String(FileUtils.readTextFile(
+                            RECOVERY_COMMAND_FILE, 0, null)).contains("wipe");
+                } catch (IOException e) {
+                }
+            }
             if (mRebootUpdate) {
                 pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_update_title));
                 pd.setMessage(context.getText(
@@ -401,11 +413,15 @@ public final class ShutdownThread extends Thread {
                 pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 pd.setProgress(0);
                 pd.setIndeterminate(false);
-            } else {
+            } else if (mRebootWipe) {
                 // Factory reset path. Set the dialog message accordingly.
                 pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_reset_title));
                 pd.setMessage(context.getText(
                         com.android.internal.R.string.reboot_to_reset_message));
+                pd.setIndeterminate(true);
+            } else {
+                pd.setTitle(context.getText(com.android.internal.R.string.reboot_title));
+                pd.setMessage(context.getText(com.android.internal.R.string.reboot_progress));
                 pd.setIndeterminate(true);
             }
         } else {
@@ -416,9 +432,6 @@ public final class ShutdownThread extends Thread {
                 pd.setTitle(context.getText(com.android.internal.R.string.power_off));
                 pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
             }
-
-            pd.setTitle(context.getText(com.android.internal.R.string.power_off));
-            pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
             pd.setIndeterminate(true);
         }
 
