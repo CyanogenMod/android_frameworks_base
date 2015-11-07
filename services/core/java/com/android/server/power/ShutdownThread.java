@@ -92,7 +92,11 @@ public final class ShutdownThread extends Thread {
     private static Object sIsStartedGuard = new Object();
     private static boolean sIsStarted = false;
 
+    // recovery command
+    private static File RECOVERY_COMMAND_FILE = new File("/cache/recovery/command");
+
     private static boolean mReboot;
+    private static boolean mRebootWipe = false;
     private static boolean mRebootSafeMode;
     private static boolean mRebootHasProgressBar;
     private static String mReason;
@@ -361,6 +365,13 @@ public final class ShutdownThread extends Thread {
         //   Condition: Otherwise
         //   UI: spinning circle only (no progress bar)
         if (PowerManager.REBOOT_RECOVERY_UPDATE.equals(mReason)) {
+            if (RECOVERY_COMMAND_FILE.exists()) {
+                try {
+                    mRebootWipe = new String(FileUtils.readTextFile(
+                            RECOVERY_COMMAND_FILE, 0, null)).contains("wipe");
+                    } catch (IOException e) {
+                }
+            }
             // We need the progress bar if uncrypt will be invoked during the
             // reboot, which might be time-consuming.
             mRebootHasProgressBar = RecoverySystem.UNCRYPT_PACKAGE_FILE.exists()
@@ -379,7 +390,7 @@ public final class ShutdownThread extends Thread {
                 pd.setMessage(context.getText(
                             com.android.internal.R.string.reboot_to_update_reboot));
             }
-        } else if (PowerManager.REBOOT_RECOVERY.equals(mReason)) {
+        } else if (PowerManager.REBOOT_RECOVERY.equals(mReason) && mRebootWipe) {
             // Factory reset path. Set the dialog message accordingly.
             pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_reset_title));
             pd.setMessage(context.getText(
@@ -394,8 +405,6 @@ public final class ShutdownThread extends Thread {
                 pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
             }
 
-            pd.setTitle(context.getText(com.android.internal.R.string.power_off));
-            pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
             pd.setIndeterminate(true);
         }
         pd.setCancelable(false);
