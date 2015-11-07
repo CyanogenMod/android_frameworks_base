@@ -190,4 +190,7 @@ interface ISub {
      */
     int getSimStateForSubscriber(int subId);
 
+    /** @hide **/
+    void updatePhoneAccounts(int phoneAccounts);
+
 }

@@ -1229,6 +1229,18 @@ public class SubscriptionManager {
     }
 
     /** {@hide} */
+    public static void updatePhoneAccounts(int phoneAccounts) {
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                iSub.updatePhoneAccounts(phoneAccounts);
+            }
+        } catch (RemoteException ex) {
+         // ignore it
+        }
+    }
+
+    /** {@hide} */
     public static int getOnDemandDataSubId() {
         try {
             ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
