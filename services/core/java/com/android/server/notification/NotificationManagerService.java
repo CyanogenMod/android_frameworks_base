@@ -674,13 +674,15 @@ public class NotificationManagerService extends SystemService {
                 // lights
                 // clear only if lockscreen is not active
                 // and LED is not forced on by Settings app
-                final String owner = mLights.get(mLights.size() - 1);
-                NotificationRecord ledNotification = mNotificationsByKey.get(owner);
-                if (mKeyguardManager != null && !mKeyguardManager.isKeyguardLocked()) {
-                    if (!isLedNotificationForcedOn(ledNotification)) {
-                        mLights.clear();
+                if (mLights.size() > 0) {
+                    final String owner = mLights.get(mLights.size() - 1);
+                    NotificationRecord ledNotification = mNotificationsByKey.get(owner);
+                    if (mKeyguardManager != null && !mKeyguardManager.isKeyguardLocked()) {
+                        if (!isLedNotificationForcedOn(ledNotification)) {
+                            mLights.clear();
+                        }
+                        updateLightsLocked();
                     }
-                    updateLightsLocked();
                 }
             }
         }
