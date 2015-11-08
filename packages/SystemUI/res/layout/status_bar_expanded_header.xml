@@ -165,7 +165,7 @@
         android:paddingStart="6dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/ripple_drawable"
         android:visibility="gone"
         />
 
