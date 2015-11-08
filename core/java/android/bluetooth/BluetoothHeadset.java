@@ -20,10 +20,9 @@ import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.Handler;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -243,8 +242,6 @@ public final class BluetoothHeadset implements BluetoothProfile {
      */
     public static final int STATE_AUDIO_CONNECTED = 12;
 
-    private static final int MESSAGE_HEADSET_SERVICE_CONNECTED = 100;
-    private static final int MESSAGE_HEADSET_SERVICE_DISCONNECTED = 101;
 
     private Context mContext;
     private ServiceListener mServiceListener;
@@ -257,7 +254,14 @@ public final class BluetoothHeadset implements BluetoothProfile {
                     if (DBG) Log.d(TAG, "onBluetoothStateChange: up=" + up);
                     if (!up) {
                         if (VDBG) Log.d(TAG,"Unbinding service...");
-                        doUnbind();
+                        synchronized (mConnection) {
+                            try {
+                                mService = null;
+                                mContext.unbindService(mConnection);
+                            } catch (Exception re) {
+                                Log.e(TAG,"",re);
+                            }
+                        }
                     } else {
                         synchronized (mConnection) {
                             try {
@@ -294,26 +298,15 @@ public final class BluetoothHeadset implements BluetoothProfile {
     }
 
     boolean doBind() {
-        try {
-            return mAdapter.getBluetoothManager().bindBluetoothProfileService(
-                    BluetoothProfile.HEADSET, mConnection);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Unable to bind HeadsetService", e);
+        Intent intent = new Intent(IBluetoothHeadset.class.getName());
+        ComponentName comp = intent.resolveSystemService(mContext.getPackageManager(), 0);
+        intent.setComponent(comp);
+        if (comp == null || !mContext.bindServiceAsUser(intent, mConnection, 0,
+                android.os.Process.myUserHandle())) {
+            Log.e(TAG, "Could not bind to Bluetooth Headset Service with " + intent);
+            return false;
         }
-        return false;
-    }
-
-    void doUnbind() {
-        synchronized (mConnection) {
-            if (mService != null) {
-                try {
-                    mAdapter.getBluetoothManager().unbindBluetoothProfileService(
-                            BluetoothProfile.HEADSET, mConnection);
-                } catch (RemoteException e) {
-                    Log.e(TAG,"Unable to unbind HeadsetService", e);
-                }
-            }
-        }
+        return true;
     }
 
     /**
@@ -333,8 +326,18 @@ public final class BluetoothHeadset implements BluetoothProfile {
                 Log.e(TAG,"",e);
             }
         }
+
+        synchronized (mConnection) {
+            if (mService != null) {
+                try {
+                    mService = null;
+                    mContext.unbindService(mConnection);
+                } catch (Exception re) {
+                    Log.e(TAG,"",re);
+                }
+            }
+        }
         mServiceListener = null;
-        doUnbind();
     }
 
     /**
@@ -948,21 +951,21 @@ public final class BluetoothHeadset implements BluetoothProfile {
         return false;
     }
 
-    private final IBluetoothProfileServiceConnection mConnection
-            = new IBluetoothProfileServiceConnection.Stub()  {
-        @Override
+    private final ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             if (DBG) Log.d(TAG, "Proxy object connected");
             mService = IBluetoothHeadset.Stub.asInterface(service);
-            mHandler.sendMessage(mHandler.obtainMessage(
-                    MESSAGE_HEADSET_SERVICE_CONNECTED));
+
+            if (mServiceListener != null) {
+                mServiceListener.onServiceConnected(BluetoothProfile.HEADSET, BluetoothHeadset.this);
+            }
         }
-        @Override
         public void onServiceDisconnected(ComponentName className) {
             if (DBG) Log.d(TAG, "Proxy object disconnected");
             mService = null;
-            mHandler.sendMessage(mHandler.obtainMessage(
-                    MESSAGE_HEADSET_SERVICE_DISCONNECTED));
+            if (mServiceListener != null) {
+                mServiceListener.onServiceDisconnected(BluetoothProfile.HEADSET);
+            }
         }
     };
 
@@ -986,25 +989,4 @@ public final class BluetoothHeadset implements BluetoothProfile {
     private static void log(String msg) {
         Log.d(TAG, msg);
     }
-
-    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MESSAGE_HEADSET_SERVICE_CONNECTED: {
-                    if (mServiceListener != null) {
-                        mServiceListener.onServiceConnected(BluetoothProfile.HEADSET,
-                                BluetoothHeadset.this);
-                    }
-                    break;
-                }
-                case MESSAGE_HEADSET_SERVICE_DISCONNECTED: {
-                    if (mServiceListener != null) {
-                        mServiceListener.onServiceDisconnected(BluetoothProfile.HEADSET);
-                    }
-                    break;
-                }
-            }
-        }
-    };
 }
