@@ -280,7 +280,7 @@ private:
     const ResTable* getResTable(bool required = true) const;
     void setLocaleLocked(const char* locale);
     void updateResourceParamsLocked() const;
-    bool appendPathToResTable(const asset_path& ap) const;
+    bool appendPathToResTable(const asset_path& ap, size_t* entryIdx) const;
 
     Asset* openIdmapLocked(const struct asset_path& ap) const;
 
