@@ -56,6 +56,7 @@ typedef struct dlLibHandler {
     void (*resumeActivity)(const char *);
     void (*init)(void);
     void (*deinit)(void);
+    void (*startProcessActivity)(const char *, int);
     const char *dlname;
 }dlLibHandler;
 
@@ -64,10 +65,10 @@ typedef struct dlLibHandler {
  * library -both handlers for Start and Resume events.
  */
 static dlLibHandler mDlLibHandlers[] = {
-    {NULL, NULL, NULL, NULL, NULL,
+    {NULL, NULL, NULL, NULL, NULL, NULL,
      "ro.vendor.at_library"},
-    {NULL, NULL, NULL, NULL, NULL,
-     "ro.vendor.gt_library"},
+    {NULL, NULL, NULL, NULL, NULL, NULL,
+     "ro.vendor.gt_library"}
 };
 
 // ----------------------------------------------------------------------------
@@ -120,10 +121,17 @@ com_android_internal_app_ActivityTrigger_native_at_init()
                 errored = true;
             }
         }
+        if (!errored) {
+            *(void **) (&mDlLibHandlers[i].startProcessActivity) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_process_start");
+            if ((rc = dlerror()) != NULL) {
+                errored = true;
+            }
+        }
 
         if (errored) {
             mDlLibHandlers[i].startActivity  = NULL;
             mDlLibHandlers[i].resumeActivity = NULL;
+            mDlLibHandlers[i].startProcessActivity = NULL;
             if (mDlLibHandlers[i].dlhandle) {
                 dlclose(mDlLibHandlers[i].dlhandle);
                 mDlLibHandlers[i].dlhandle = NULL;
@@ -143,6 +151,7 @@ com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject c
         if (mDlLibHandlers[i].dlhandle) {
             mDlLibHandlers[i].startActivity  = NULL;
             mDlLibHandlers[i].resumeActivity = NULL;
+            mDlLibHandlers[i].startProcessActivity = NULL;
 
             *(void **) (&mDlLibHandlers[i].deinit) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_deinit");
             if (mDlLibHandlers[i].deinit) {
@@ -153,6 +162,19 @@ com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject c
             mDlLibHandlers[i].dlhandle = NULL;
         }
     }
+}
+
+static void
+com_android_internal_app_ActivityTrigger_native_at_startProcessActivity(JNIEnv *env, jobject clazz, jstring process, jint pid)
+{
+    size_t numlibs = sizeof (mDlLibHandlers) / sizeof (*mDlLibHandlers);
+    const char *actStr = env->GetStringUTFChars(process, NULL);
+    for(size_t i = 0; i < numlibs; i++){
+        if(mDlLibHandlers[i].startProcessActivity && process && actStr) {
+            (*mDlLibHandlers[i].startProcessActivity)(actStr, pid);
+        }
+    }
+    env->ReleaseStringUTFChars(process, actStr);
 }
 
 static jint
@@ -194,6 +216,7 @@ static JNINativeMethod gMethods[] = {
     {"native_at_startActivity",  "(Ljava/lang/String;I)I", (void *)com_android_internal_app_ActivityTrigger_native_at_startActivity},
     {"native_at_resumeActivity", "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_resumeActivity},
     {"native_at_deinit",         "()V",                   (void *)com_android_internal_app_ActivityTrigger_native_at_deinit},
+    {"native_at_startProcessActivity", "(Ljava/lang/String;I)V", (void *)com_android_internal_app_ActivityTrigger_native_at_startProcessActivity},
 };
 
 

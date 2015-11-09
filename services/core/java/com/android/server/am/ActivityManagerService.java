@@ -29,6 +29,7 @@ import com.android.internal.app.IVoiceInteractor;
 import com.android.internal.app.ProcessMap;
 import com.android.internal.app.SystemUserHomeActivity;
 import com.android.internal.app.procstats.ProcessStats;
+import com.android.internal.app.ActivityTrigger;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.internal.os.IResultReceiver;
@@ -1529,6 +1530,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     static ServiceThread sKillThread = null;
     static KillHandler sKillHandler = null;
+    static final ActivityTrigger mActivityTrigger = new ActivityTrigger();
 
     CompatModeDialog mCompatModeDialog;
     UnsupportedDisplaySizeDialog mUnsupportedDisplaySizeDialog;
@@ -3806,6 +3808,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
             checkTime(startTime, "startProcess: done updating pids map");
+            if ("activity".equals(hostingType) || "service".equals(hostingType)) {
+                mActivityTrigger.activityStartProcessTrigger(app.processName, startResult.pid);
+            }
         } catch (RuntimeException e) {
             Slog.e(TAG, "Failure starting process " + app.processName, e);
 
