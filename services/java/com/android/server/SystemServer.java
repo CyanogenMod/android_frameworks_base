@@ -99,6 +99,7 @@ import com.android.server.vr.VrManagerService;
 import com.android.server.webkit.WebViewUpdateService;
 import com.android.server.wm.WindowManagerService;
 
+import cyanogenmod.providers.CMSettings;
 import dalvik.system.VMRuntime;
 
 import java.io.File;
