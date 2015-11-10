@@ -3330,12 +3330,6 @@ public final class Settings {
                 "notification_light_pulse_custom_values";
 
         /**
-         * Sprint MWI Quirk: Show message wait indicator notifications
-         * @hide
-         */
-        public static final String ENABLE_MWI_NOTIFICATION = "enable_mwi_notification";
-
-        /**
          * Show pointer location on screen?
          * 0 = no
          * 1 = yes
@@ -3386,12 +3380,6 @@ public final class Settings {
          */
         @Deprecated
         public static final String DOCK_SOUNDS_ENABLED = Global.DOCK_SOUNDS_ENABLED;
-
-        /**
-         * Check the proximity sensor during wakeup
-         * @hide
-         */
-        public static final String PROXIMITY_ON_WAKE = "proximity_on_wake";
 
         /**
          * Whether to play sounds when the keyguard is shown and dismissed.

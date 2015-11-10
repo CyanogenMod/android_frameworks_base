@@ -14,6 +14,6 @@ LOCAL_STATIC_JAVA_LIBRARIES := tzdata_update
 
 LOCAL_JAVA_LIBRARIES += services.accessibility
 
-LOCAL_JAVA_LIBRARIES += org.cyanogenmod.platform.sdk
+LOCAL_JAVA_LIBRARIES += org.cyanogenmod.platform.internal
 
 include $(BUILD_STATIC_JAVA_LIBRARY)
