@@ -39,6 +39,7 @@ import android.media.AudioService;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
@@ -2785,7 +2786,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadSetting(stmt, Settings.Global.STAY_ON_WHILE_PLUGGED_IN,
                     ("1".equals(SystemProperties.get("ro.kernel.qemu")) ||
                         mContext.getResources().getBoolean(R.bool.def_stay_on_while_plugged_in))
-                     ? 1 : 0);
+                     ? PowerManager.STAY_ON_WHILE_PLUGGED_CHARGING :
+                            PowerManager.STAY_ON_WHILE_PLUGGED_NONE);
 
             loadIntegerSetting(stmt, Settings.Global.WIFI_SLEEP_POLICY,
                     R.integer.def_wifi_sleep_policy);
