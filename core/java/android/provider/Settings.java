@@ -4883,12 +4883,6 @@ public final class Settings {
         public static final String ADB_ENABLED = Global.ADB_ENABLED;
 
         /**
-         * Whether to display the ADB notification.
-         * @hide
-         */
-        public static final String ADB_NOTIFY = "adb_notify";
-
-        /**
          * The TCP/IP port to run ADB on, or -1 for USB
          * @hide
          */
