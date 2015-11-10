@@ -1779,10 +1779,10 @@ public final class Settings {
             // At one time in System, then Global, but now back in Secure
             MOVED_TO_SECURE.add(Secure.INSTALL_NON_MARKET_APPS);
 
-            MOVED_TO_SECURE.add(Secure.DEV_FORCE_SHOW_NAVBAR);
-            MOVED_TO_SECURE.add(Secure.KEYBOARD_BRIGHTNESS);
-            MOVED_TO_SECURE.add(Secure.BUTTON_BRIGHTNESS);
-            MOVED_TO_SECURE.add(Secure.BUTTON_BACKLIGHT_TIMEOUT);
+            MOVED_TO_SECURE.add(System.DEV_FORCE_SHOW_NAVBAR);
+            MOVED_TO_SECURE.add(System.KEYBOARD_BRIGHTNESS);
+            MOVED_TO_SECURE.add(System.BUTTON_BRIGHTNESS);
+            MOVED_TO_SECURE.add(System.BUTTON_BACKLIGHT_TIMEOUT);
         }
 
         private static final HashSet<String> MOVED_TO_GLOBAL;
@@ -2783,7 +2783,7 @@ public final class Settings {
          * @deprecated
          * @hide
          */
-        public static final String KEYBOARD_BRIGHTNESS = Secure.KEYBOARD_BRIGHTNESS;
+        public static final String KEYBOARD_BRIGHTNESS = "keyboard_brightness";
 
         /**
          * The button brightness to be used while the screen is on or after a button press,
@@ -2792,7 +2792,7 @@ public final class Settings {
          * @deprecated
          * @hide
          */
-        public static final String BUTTON_BRIGHTNESS = Secure.BUTTON_BRIGHTNESS;
+        public static final String BUTTON_BRIGHTNESS = "button_brightness";
 
         /**
          * The time in ms to keep the button backlight on after pressing a button.
@@ -2800,7 +2800,7 @@ public final class Settings {
          * @deprecated
          * @hide
          */
-        public static final String BUTTON_BACKLIGHT_TIMEOUT = Secure.BUTTON_BACKLIGHT_TIMEOUT;
+        public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
 
         /**
          * Whether to control brightness from status bar
@@ -3221,10 +3221,10 @@ public final class Settings {
 
         /**
         * Developer options - Navigation Bar show switch
-        * @deprecated
+        * @deprecated Moved to CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR
         * @hide
         */
-        public static final String DEV_FORCE_SHOW_NAVBAR = Secure.DEV_FORCE_SHOW_NAVBAR;
+        public static final String DEV_FORCE_SHOW_NAVBAR = "dev_force_show_navbar";
 
 
         /**
@@ -4882,12 +4882,6 @@ public final class Settings {
         public static final String ADB_ENABLED = Global.ADB_ENABLED;
 
         /**
-         * Whether to display the ADB notification.
-         * @hide
-         */
-        public static final String ADB_NOTIFY = "adb_notify";
-
-        /**
          * Setting to allow mock locations and location provider status to be injected into the
          * LocationManager service for testing purposes during application development.  These
          * locations and status values  override actual location and status information generated
@@ -6261,12 +6255,6 @@ public final class Settings {
         public static final String SCREENSAVER_DEFAULT_COMPONENT = "screensaver_default_component";
 
         /**
-         * Whether to allow killing of the foreground app by long-pressing the Back button
-         * @hide
-         */
-        public static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
-
-        /**
          * The default NFC payment component
          * @hide
          */
@@ -6451,8 +6439,6 @@ public final class Settings {
                 "camera_double_tap_power_gesture_disabled";
 
         /**
-
-        /**
          * Behavior of twilight on the device.
          * One of {@link #TWILIGHT_MODE_LOCKED_OFF}, {@link #TWILIGHT_MODE_LOCKED_ON}
          * or {@link #TWILIGHT_MODE_AUTO}.
@@ -6503,40 +6489,6 @@ public final class Settings {
          * @hide
          */
         public static final String ENABLED_VR_LISTENERS = "enabled_vr_listeners";
-
-        /**
-         * String to contain power menu actions
-         * @hide
-         */
-        public static final String POWER_MENU_ACTIONS = "power_menu_actions";
-
-        /**
-         * Developer options - Navigation Bar show switch
-         * @hide
-         */
-        public static final String DEV_FORCE_SHOW_NAVBAR = "dev_force_show_navbar";
-
-        /**
-         * The keyboard brightness to be used while the screen is on.
-         * Valid value range is between 0 and {@link PowerManager#getMaximumKeyboardBrightness()}
-         * @hide
-         */
-        public static final String KEYBOARD_BRIGHTNESS = "keyboard_brightness";
-
-        /**
-         * The button brightness to be used while the screen is on or after a button press,
-         * depending on the value of {@link BUTTON_BACKLIGHT_TIMEOUT}.
-         * Valid value range is between 0 and {@link PowerManager#getMaximumButtonBrightness()}
-         * @hide
-         */
-        public static final String BUTTON_BRIGHTNESS = "button_brightness";
-
-        /**
-         * The time in ms to keep the button backlight on after pressing a button.
-         * A value of 0 will keep the buttons on for as long as the screen is on.
-         * @hide
-         */
-        public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
 
         /**
          * Behavior of the display while in VR mode.
@@ -6654,7 +6606,8 @@ public final class Settings {
             TTY_MODE_ENABLED,
             INCALL_POWER_BUTTON_BEHAVIOR,
             WIFI_DISCONNECT_DELAY_DURATION,
-            ADVANCED_REBOOT
+            ADVANCED_REBOOT,
+            CAMERA_GESTURE_DISABLED
         };
 
         /**
@@ -7105,11 +7058,11 @@ public final class Settings {
 
         /**
          * String to contain power menu actions
-         * @deprecated Use {@link android.provider.Settings.Secure#POWER_MENU_ACTIONS} instead
+         * @deprecated Use {@link CMSettings.Secure#POWER_MENU_ACTIONS} instead
          * @hide
          */
         @Deprecated
-        public static final String POWER_MENU_ACTIONS = Secure.POWER_MENU_ACTIONS;
+        public static final String POWER_MENU_ACTIONS = "power_menu_actions";
 
         /**
          * Whether Views are allowed to save their attribute data.
@@ -9011,7 +8964,7 @@ public final class Settings {
         static {
             MOVED_TO_SECURE = new HashSet<String>(1);
             MOVED_TO_SECURE.add(Settings.Global.INSTALL_NON_MARKET_APPS);
-            MOVED_TO_SECURE.add(Settings.Secure.POWER_MENU_ACTIONS);
+            MOVED_TO_SECURE.add(Settings.Global.POWER_MENU_ACTIONS);
         }
 
         /** @hide */

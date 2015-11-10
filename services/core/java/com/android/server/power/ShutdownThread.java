@@ -60,6 +60,8 @@ import com.android.server.pm.PackageManagerService;
 import android.util.Log;
 import android.view.WindowManager;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -146,8 +148,8 @@ public final class ShutdownThread extends Thread {
     private static boolean isAdvancedRebootPossible(final Context context) {
         KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         boolean keyguardLocked = km.inKeyguardRestrictedInputMode() && km.isKeyguardSecure();
-        boolean advancedRebootEnabled = Settings.Secure.getInt(context.getContentResolver(),
-            Settings.Secure.ADVANCED_REBOOT, 0) == 1;
+        boolean advancedRebootEnabled = CMSettings.Secure.getInt(context.getContentResolver(),
+                CMSettings.Secure.ADVANCED_REBOOT, 0) == 1;
         boolean isPrimaryUser = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
 
         return advancedRebootEnabled && !keyguardLocked && isPrimaryUser;
@@ -166,8 +168,8 @@ public final class ShutdownThread extends Thread {
         boolean showRebootOption = false;
 
         String[] actionsArray;
-        String actions = Settings.Secure.getStringForUser(context.getContentResolver(),
-                Settings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
+        String actions = CMSettings.Secure.getStringForUser(context.getContentResolver(),
+                CMSettings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
         if (actions == null) {
             actionsArray = context.getResources().getStringArray(
                     com.android.internal.R.array.config_globalActionsList);

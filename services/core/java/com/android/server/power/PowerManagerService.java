@@ -81,6 +81,8 @@ import com.android.server.vr.VrManagerService;
 import com.android.server.vr.VrStateListener;
 import libcore.util.Objects;
 
+import cyanogenmod.providers.CMSettings;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
@@ -698,14 +700,14 @@ public final class PowerManagerService extends SystemService
                 Slog.e(TAG, "Failed to register VR mode state listener: " + e);
             }
 
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.Secure.BUTTON_BRIGHTNESS),
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.BUTTON_BRIGHTNESS),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.KEYBOARD_BRIGHTNESS),
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.KEYBOARD_BRIGHTNESS),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.BUTTON_BACKLIGHT_TIMEOUT),
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT),
                     false, mSettingsObserver, UserHandle.USER_ALL);
 
             // Go.
@@ -828,15 +830,15 @@ public final class PowerManagerService extends SystemService
             updateLowPowerModeLocked();
         }
 
-        mButtonTimeout = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.BUTTON_BACKLIGHT_TIMEOUT,
+        mButtonTimeout = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT,
                 DEFAULT_BUTTON_ON_DURATION, UserHandle.USER_CURRENT);
 
-        mButtonBrightness = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.BUTTON_BRIGHTNESS, mButtonBrightnessSettingDefault,
+        mButtonBrightness = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.BUTTON_BRIGHTNESS, mButtonBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
-        mKeyboardBrightness = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.KEYBOARD_BRIGHTNESS, mKeyboardBrightnessSettingDefault,
+        mKeyboardBrightness = CMSettings.Secure.getIntForUser(resolver,
+                CMSettings.Secure.KEYBOARD_BRIGHTNESS, mKeyboardBrightnessSettingDefault,
                 UserHandle.USER_CURRENT);
 
         mDirty |= DIRTY_SETTINGS;

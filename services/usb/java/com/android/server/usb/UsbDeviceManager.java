@@ -51,6 +51,7 @@ import android.util.Slog;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.server.FgThread;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -351,14 +352,17 @@ public class UsbDeviceManager {
                 mContentResolver.registerContentObserver(
                         Settings.Global.getUriFor(Settings.Global.ADB_ENABLED),
                                 false, new AdbSettingsObserver());
+
+                ContentObserver adbNotificationObserver = new ContentObserver(null) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateAdbNotification();
+                    }
+                };
+
                 mContentResolver.registerContentObserver(
-                        Settings.Secure.getUriFor(Settings.Secure.ADB_NOTIFY),
-                                false, new ContentObserver(null) {
-                            public void onChange(boolean selfChange) {
-                                updateAdbNotification();
-                            }
-                        }
-                );
+                        CMSettings.Secure.getUriFor(CMSettings.Secure.ADB_NOTIFY),
+                                false, adbNotificationObserver);
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -863,8 +867,8 @@ public class UsbDeviceManager {
             if (mNotificationManager == null) return;
             final int id = com.android.internal.R.string.adb_active_notification_title;
             boolean hideNotification = "0".equals(SystemProperties.get("persist.adb.notify"))
-                    || Settings.Secure.getInt(mContext.getContentResolver(),
-                            Settings.Secure.ADB_NOTIFY, 1) == 0;
+                    || CMSettings.Secure.getInt(mContext.getContentResolver(),
+                            CMSettings.Secure.ADB_NOTIFY, 1) == 0;
 
             if (mAdbEnabled && mConnected && !mAdbNotificationShown && !hideNotification) {
                 Resources r = mContext.getResources();
