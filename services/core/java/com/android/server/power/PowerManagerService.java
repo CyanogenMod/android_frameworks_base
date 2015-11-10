@@ -1539,15 +1539,23 @@ public final class PowerManagerService extends SystemService
     private void updateStayOnLocked(int dirty) {
         if ((dirty & (DIRTY_BATTERY_STATE | DIRTY_SETTINGS)) != 0) {
             final boolean wasStayOn = mStayOn;
-            if (mStayOnWhilePluggedInSetting != 0
-                    && !isMaximumScreenOffTimeoutFromDeviceAdminEnforcedLocked()) {
+            if (!isMaximumScreenOffTimeoutFromDeviceAdminEnforcedLocked()) {
                 switch (mStayOnWhilePluggedInSetting) {
-                    case 1: // Debugging only over usb
+                    case PowerManager.STAY_ON_WHILE_PLUGGED_NONE:
+                        mStayOn = false;
+                        break;
+                    case PowerManager.STAY_ON_WHILE_PLUGGED_USB_DEBUGGING:
+                        // Debugging only over usb
                         mStayOn = ((mPlugType & BatteryManager.BATTERY_PLUGGED_USB) != 0)
                                 && Settings.Global.getInt(mContext.getContentResolver(),
-                                        Settings.Global.ADB_ENABLED, 0) != 0;;
+                                Settings.Global.ADB_ENABLED, 0) != 0;
                         break;
-                    default: // charging
+                    default:
+                        Slog.w(TAG, "Unknown STAY_ON_WHILE_PLUGGED value: " +
+                                mStayOnWhilePluggedInSetting + ". " +
+                                "Defaulting to STAY_ON_WHILE_PLUGGED_CHARGING.");
+                        // FALLTHROUGH
+                    case PowerManager.STAY_ON_WHILE_PLUGGED_CHARGING:
                         mStayOn = mIsPowered;
                         break;
                 }
