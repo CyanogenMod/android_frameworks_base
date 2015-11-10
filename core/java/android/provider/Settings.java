@@ -6308,14 +6308,6 @@ public final class Settings {
         public static final String ASSISTANT = "assistant";
 
         /**
-         * Stored color matrix for LiveDisplay. This is used to allow co-existence with
-         * display tuning done by DisplayAdjustmentUtils when hardware support isn't
-         * available.
-         * @hide
-         */
-        public static final String LIVE_DISPLAY_COLOR_MATRIX = "live_display_color_matrix";
-
-        /**
          * Whether to include options in power menu for rebooting into recovery or bootloader
          * @hide
          */
