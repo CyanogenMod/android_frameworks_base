@@ -1515,10 +1515,10 @@ public final class Settings {
             // At one time in System, then Global, but now back in Secure
             MOVED_TO_SECURE.add(Secure.INSTALL_NON_MARKET_APPS);
 
-            MOVED_TO_SECURE.add(Secure.DEV_FORCE_SHOW_NAVBAR);
-            MOVED_TO_SECURE.add(Secure.KEYBOARD_BRIGHTNESS);
-            MOVED_TO_SECURE.add(Secure.BUTTON_BRIGHTNESS);
-            MOVED_TO_SECURE.add(Secure.BUTTON_BACKLIGHT_TIMEOUT);
+            MOVED_TO_SECURE.add(System.DEV_FORCE_SHOW_NAVBAR);
+            MOVED_TO_SECURE.add(System.KEYBOARD_BRIGHTNESS);
+            MOVED_TO_SECURE.add(System.BUTTON_BRIGHTNESS);
+            MOVED_TO_SECURE.add(System.BUTTON_BACKLIGHT_TIMEOUT);
         }
 
         private static final HashSet<String> MOVED_TO_GLOBAL;
@@ -2531,7 +2531,7 @@ public final class Settings {
          * @deprecated
          * @hide
          */
-        public static final String KEYBOARD_BRIGHTNESS = Secure.KEYBOARD_BRIGHTNESS;
+        public static final String KEYBOARD_BRIGHTNESS = "keyboard_brightness";
 
         /**
          * The button brightness to be used while the screen is on or after a button press,
@@ -2540,7 +2540,7 @@ public final class Settings {
          * @deprecated
          * @hide
          */
-        public static final String BUTTON_BRIGHTNESS = Secure.BUTTON_BRIGHTNESS;
+        public static final String BUTTON_BRIGHTNESS = "button_brightness";
 
         /**
          * The time in ms to keep the button backlight on after pressing a button.
@@ -2548,7 +2548,7 @@ public final class Settings {
          * @deprecated
          * @hide
          */
-        public static final String BUTTON_BACKLIGHT_TIMEOUT = Secure.BUTTON_BACKLIGHT_TIMEOUT;
+        public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
 
         /** Whether to allow one finger quick settings expansion on the right side of the statusbar.
          *
@@ -2990,10 +2990,10 @@ public final class Settings {
 
         /**
         * Developer options - Navigation Bar show switch
-        * @deprecated
+        * @deprecated Moved to CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR
         * @hide
         */
-        public static final String DEV_FORCE_SHOW_NAVBAR = Secure.DEV_FORCE_SHOW_NAVBAR;
+        public static final String DEV_FORCE_SHOW_NAVBAR = "dev_force_show_navbar";
 
 
         /**
@@ -4735,24 +4735,6 @@ public final class Settings {
         public static final String ADB_ENABLED = Global.ADB_ENABLED;
 
         /**
-         * Whether to display the ADB notification.
-         * @hide
-         */
-        public static final String ADB_NOTIFY = "adb_notify";
-
-        /**
-         * The TCP/IP port to run ADB on, or -1 for USB
-         * @hide
-         */
-        public static final String ADB_PORT = "adb_port";
-
-        /**
-         * The hostname for this device
-         * @hide
-         */
-        public static final String DEVICE_HOSTNAME = "device_hostname";
-
-        /**
          * Setting to allow mock locations and location provider status to be injected into the
          * LocationManager service for testing purposes during application development.  These
          * locations and status values  override actual location and status information generated
@@ -6012,12 +5994,6 @@ public final class Settings {
         public static final String SCREENSAVER_DEFAULT_COMPONENT = "screensaver_default_component";
 
         /**
-         * Whether to allow killing of the foreground app by long-pressing the Back button
-         * @hide
-         */
-        public static final String KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
-
-        /**
          * The default NFC payment component
          * @hide
          */
@@ -6174,11 +6150,6 @@ public final class Settings {
          */
         public static final String SLEEP_TIMEOUT = "sleep_timeout";
 
-         /** Protected Components
-         * @hide
-         */
-        public static final String PROTECTED_COMPONENTS = "protected_components";
-
         /**
          * Controls whether double tap to wake is enabled.
          * @hide
@@ -6195,81 +6166,10 @@ public final class Settings {
         public static final String ASSISTANT = "assistant";
 
         /**
-         * Stored color matrix for LiveDisplay. This is used to allow co-existence with
-         * display tuning done by DisplayAdjustmentUtils when hardware support isn't
-         * available.
-         * @hide
-         */
-        public static final String LIVE_DISPLAY_COLOR_MATRIX = "live_display_color_matrix";
-
-        /**
-         * Whether to include options in power menu for rebooting into recovery or bootloader
-         * @hide
-         */
-        public static final String ADVANCED_REBOOT = "advanced_reboot";
-
-        /**
-         * String to contain power menu actions
-         * @hide
-         */
-        public static final String POWER_MENU_ACTIONS = "power_menu_actions";
-
-        /**
-         * Developer options - Navigation Bar show switch
-         * @hide
-         */
-        public static final String DEV_FORCE_SHOW_NAVBAR = "dev_force_show_navbar";
-
-        /**
-         * The keyboard brightness to be used while the screen is on.
-         * Valid value range is between 0 and {@link PowerManager#getMaximumKeyboardBrightness()}
-         * @hide
-         */
-        public static final String KEYBOARD_BRIGHTNESS = "keyboard_brightness";
-
-        /**
-         * The button brightness to be used while the screen is on or after a button press,
-         * depending on the value of {@link BUTTON_BACKLIGHT_TIMEOUT}.
-         * Valid value range is between 0 and {@link PowerManager#getMaximumButtonBrightness()}
-         * @hide
-         */
-        public static final String BUTTON_BRIGHTNESS = "button_brightness";
-
-        /**
-         * The time in ms to keep the button backlight on after pressing a button.
-         * A value of 0 will keep the buttons on for as long as the screen is on.
-         * @hide
-         */
-        public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
-
-        /**
          * Default theme to use.  If empty, use system.
          * @hide
          */
         public static final String DEFAULT_THEME_PACKAGE = "default_theme_package";
-
-        /**
-         * A '|' delimited list of theme components to apply from the default theme on first boot.
-         * Components can be one or more of the "mods_XXXXXXX" found in
-         * {@link ThemesContract$ThemesColumns}.  Leaving this field blank assumes all components
-         * will be applied.
-         *
-         * ex: mods_icons|mods_overlays|mods_homescreen
-         *
-         * @hide
-         */
-        public static final String DEFAULT_THEME_COMPONENTS = "default_theme_components";
-
-        /**
-         * This will be set to the system's current theme API version when ThemeService starts.
-         * It is useful for when an upgrade from one version of CM to another occurs.
-         * For example, after a user upgrades from CM11 to CM12, the value of this field
-         * might be 19. ThemeService would then change the value to 21. This is useful
-         * when an API change breaks a theme. Themeservice can identify old themes and
-         * unapply them from the system.
-         * @hide
-         */
-        public static final String THEME_PREV_BOOT_API_LEVEL = "theme_prev_boot_api_level";
 
         /**
          * Whether the camera launch gesture should be disabled.
@@ -6344,7 +6244,6 @@ public final class Settings {
             MOUNT_UMS_NOTIFY_ENABLED,
             SLEEP_TIMEOUT,
             DOUBLE_TAP_TO_WAKE,
-            ADVANCED_REBOOT,
             CAMERA_GESTURE_DISABLED
         };
 
@@ -6760,11 +6659,11 @@ public final class Settings {
 
         /**
          * String to contain power menu actions
-         * @deprecated Use {@link android.provider.Settings.Secure#POWER_MENU_ACTIONS} instead
+         * @deprecated Use {@link CMSettings.Secure#POWER_MENU_ACTIONS} instead
          * @hide
          */
         @Deprecated
-        public static final String POWER_MENU_ACTIONS = Secure.POWER_MENU_ACTIONS;
+        public static final String POWER_MENU_ACTIONS = "power_menu_actions";
 
         /**
          * Whether Views are allowed to save their attribute data.
@@ -8402,7 +8301,7 @@ public final class Settings {
         static {
             MOVED_TO_SECURE = new HashSet<String>(1);
             MOVED_TO_SECURE.add(Settings.Global.INSTALL_NON_MARKET_APPS);
-            MOVED_TO_SECURE.add(Settings.Secure.POWER_MENU_ACTIONS);
+            MOVED_TO_SECURE.add(Settings.Global.POWER_MENU_ACTIONS);
         }
 
         /** @hide */

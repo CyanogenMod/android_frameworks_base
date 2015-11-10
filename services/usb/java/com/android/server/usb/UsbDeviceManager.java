@@ -51,6 +51,7 @@ import android.util.Slog;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.server.FgThread;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -356,10 +357,10 @@ public class UsbDeviceManager {
                 };
 
                 mContentResolver.registerContentObserver(
-                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                        CMSettings.Secure.getUriFor(CMSettings.Secure.ADB_PORT),
                                 false, adbNotificationObserver);
                 mContentResolver.registerContentObserver(
-                        Settings.Secure.getUriFor(Settings.Secure.ADB_NOTIFY),
+                        CMSettings.Secure.getUriFor(CMSettings.Secure.ADB_NOTIFY),
                                 false, adbNotificationObserver);
 
                 // Watch for USB configuration changes
@@ -809,10 +810,10 @@ public class UsbDeviceManager {
             final int id;
             boolean usbAdbActive = mAdbEnabled && mConnected;
             boolean netAdbActive = mAdbEnabled &&
-                    Settings.Secure.getInt(mContentResolver, Settings.Secure.ADB_PORT, -1) > 0;
+                    CMSettings.Secure.getInt(mContentResolver, CMSettings.Secure.ADB_PORT, -1) > 0;
             boolean hideNotification = "0".equals(SystemProperties.get("persist.adb.notify"))
-                    || Settings.Secure.getInt(mContext.getContentResolver(),
-                            Settings.Secure.ADB_NOTIFY, 1) == 0;
+                    || CMSettings.Secure.getInt(mContext.getContentResolver(),
+                            CMSettings.Secure.ADB_NOTIFY, 1) == 0;
 
             if (hideNotification) {
                 id = 0;
