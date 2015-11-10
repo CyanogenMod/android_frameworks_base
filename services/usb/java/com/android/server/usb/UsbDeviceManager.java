@@ -357,7 +357,7 @@ public class UsbDeviceManager {
                 };
 
                 mContentResolver.registerContentObserver(
-                        Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                        CMSettings.Secure.getUriFor(CMSettings.Secure.ADB_PORT),
                                 false, adbNotificationObserver);
                 mContentResolver.registerContentObserver(
                         CMSettings.Secure.getUriFor(CMSettings.Secure.ADB_NOTIFY),
@@ -810,7 +810,7 @@ public class UsbDeviceManager {
             final int id;
             boolean usbAdbActive = mAdbEnabled && mConnected;
             boolean netAdbActive = mAdbEnabled &&
-                    Settings.Secure.getInt(mContentResolver, Settings.Secure.ADB_PORT, -1) > 0;
+                    CMSettings.Secure.getInt(mContentResolver, CMSettings.Secure.ADB_PORT, -1) > 0;
             boolean hideNotification = "0".equals(SystemProperties.get("persist.adb.notify"))
                     || CMSettings.Secure.getInt(mContext.getContentResolver(),
                             CMSettings.Secure.ADB_NOTIFY, 1) == 0;
