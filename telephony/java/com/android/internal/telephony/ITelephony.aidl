@@ -545,12 +545,12 @@ interface ITelephony {
     int getLteOnGsmMode();
 
     /**
-     * Adds a protected sms address to the {@link Settings.Secure.PROTECTED_SMS_ADDRESSES}
+     * Adds a protected sms address to the {@link CMSettings.Secure.PROTECTED_SMS_ADDRESSES}
      */
     void addProtectedSmsAddress(String address);
 
     /**
-     * Revokes a protected sms address from {@link Settings.Secure.PROTECTED_SMS_ADDRESSES}
+     * Revokes a protected sms address from {@link CMSettings.Secure.PROTECTED_SMS_ADDRESSES}
      */
     boolean revokeProtectedSmsAddress(String address);
 
