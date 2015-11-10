@@ -309,8 +309,8 @@ public class LiveDisplayController {
 
         if (mHardware.isSupported(CMHardwareManager.FEATURE_DISPLAY_COLOR_CALIBRATION)) {
             // Clear this out in case of an upgrade
-            Settings.Secure.putStringForUser(mContext.getContentResolver(),
-                    Settings.Secure.LIVE_DISPLAY_COLOR_MATRIX,
+            CMSettings.Secure.putStringForUser(mContext.getContentResolver(),
+                    CMSettings.Secure.LIVE_DISPLAY_COLOR_MATRIX,
                     null,
                     UserHandle.USER_CURRENT);
 
@@ -334,8 +334,8 @@ public class LiveDisplayController {
 
             // For GPU color transform, go thru DisplayAdjustmentUtils in
             // order to coexist with accessibility settings
-            Settings.Secure.putStringForUser(mContext.getContentResolver(),
-                    Settings.Secure.LIVE_DISPLAY_COLOR_MATRIX,
+            CMSettings.Secure.putStringForUser(mContext.getContentResolver(),
+                    CMSettings.Secure.LIVE_DISPLAY_COLOR_MATRIX,
                     colorMatrixStr,
                     UserHandle.USER_CURRENT);
 

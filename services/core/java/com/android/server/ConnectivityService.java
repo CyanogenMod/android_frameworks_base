@@ -133,6 +133,7 @@ import com.android.server.net.LockdownVpnTracker;
 import com.google.android.collect.Lists;
 import com.google.android.collect.Sets;
 
+import cyanogenmod.providers.CMSettings;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -642,8 +643,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
         mTrackerHandler = new NetworkStateTrackerHandler(mHandlerThread.getLooper());
 
         // setup our unique device name
-        String hostname = Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.DEVICE_HOSTNAME);
+        String hostname = CMSettings.Secure.getString(context.getContentResolver(),
+                CMSettings.Secure.DEVICE_HOSTNAME);
         if (TextUtils.isEmpty(hostname) &&
                 TextUtils.isEmpty(SystemProperties.get("net.hostname"))) {
             String id = Settings.Secure.getString(context.getContentResolver(),
