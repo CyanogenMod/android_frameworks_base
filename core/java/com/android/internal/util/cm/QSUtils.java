@@ -38,6 +38,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
+import com.android.ims.ImsManager;
 import com.android.internal.telephony.PhoneConstants;
 
 import java.util.ArrayList;
@@ -130,6 +131,9 @@ public class QSUtils {
                     break;
                 case QSConstants.TILE_BATTERY_SAVER:
                     removeTile = deviceSupportsPowerProfiles(context);
+                    break;
+                case QSConstants.TILE_VOLTE:
+                    removeTile = !deviceSupportsVolte(context);
                     break;
 
                 case QSConstants.DYNAMIC_TILE_SU:
@@ -304,6 +308,11 @@ public class QSUtils {
     public static boolean deviceSupportsPowerProfiles(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         return pm.hasPowerProfiles();
+    }
+
+    public static boolean deviceSupportsVolte(Context context) {
+        return ImsManager.isVolteEnabledByPlatform(context) &&
+               ImsManager.isVolteProvisionedOnDevice(context);
     }
 
     private static boolean supportsRootAccess() {

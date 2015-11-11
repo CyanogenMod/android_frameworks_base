@@ -28,6 +28,9 @@
     <string name="advanced_dev_option_force_stop">Force stop</string>
     <string name="advanced_dev_option_uninstall">Uninstall</string>
 
+    <!-- Label in the system panel for volte mode (Voice Over LTE)[CHAR LIMIT=30] -->
+    <string name="status_bar_settings_volte">VoLTE</string>
+
     <!-- Content description of the mobile data tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_data_off">Mobile data off.</string>
     <!-- Content description of the mobile data tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -221,11 +224,23 @@
     <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_battery_saver_changed_on">Battery saver turned on.</string>
 
+    <!-- Content description of the VoLTE mode tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_volte_disabled">VoLTE disabled.</string>
+    <!-- Content description of the VoLTE mode tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_volte_enabled">VoLTE enabled.</string>
+    <!-- Announcement made when the VoLTE mode changes to disabled (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_volte_changed_disabled">VoLTE mode disabled.</string>
+    <!-- Announcement made when the VoLTE mode changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_volte_changed_enabled">VoLTE mode enabled.</string>
+
     <!-- Content description of the visualizer tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_visualizer">Visualizer.</string>
 
     <!-- Content description of the volume panel tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_volume_panel">Volume panel.</string>
+
+    <!-- Content description of the VoLTE mode icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_volte_mode">VoLTE.</string>
 
     <string name="accessibility_dpad_left">Cursor left</string>
     <string name="accessibility_dpad_right">Cursor right</string>
@@ -269,6 +284,7 @@
     <string name="quick_settings_ambient_display_label">Ambient display</string>
     <string name="quick_settings_sync_label">Sync</string>
     <string name="quick_settings_battery_saver_label">Battery saver</string>
+    <string name="quick_settings_volte_mode_label">Voice over LTE</string>
     <string name="quick_settings_custom_tile_detail_title">Custom tile</string>
     <string name="quick_settings_performance_profile_detail_title">Battery mode</string>
 

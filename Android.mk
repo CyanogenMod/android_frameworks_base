@@ -424,7 +424,7 @@ LOCAL_INTERMEDIATE_SOURCES := \
 			$(framework_res_source_path)/com/android/internal/R.java
 
 LOCAL_NO_STANDARD_LIBRARIES := true
-LOCAL_JAVA_LIBRARIES := core-libart conscrypt okhttp core-junit bouncycastle ext
+LOCAL_JAVA_LIBRARIES := core-libart conscrypt okhttp core-junit bouncycastle ext ims-common
 
 LOCAL_MODULE := framework
 
