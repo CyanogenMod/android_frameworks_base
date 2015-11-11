@@ -66,4 +66,11 @@
     <!-- Title shown in recents popup for uninstalling the application -->
     <string name="advanced_dev_option_uninstall">Uninstall</string>
 
+    <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_notification_brightness">Light brightness</string>
+
+    <!-- Lights settings, LED notification -->
+    <string name="led_notification_title">Light settings</string>
+    <string name="led_notification_text">LED light enabled by settings</string>
+
 </resources>
