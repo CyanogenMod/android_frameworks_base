@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Bateria modua: energia aurrezteko modua.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Bateria modua: modu orekatua.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Bateria modua: Errendimendu modua.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Bateria modua: modu eraginkorra.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Bateria modua: modu azkarra.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Bateria modua energia aurrezteko modura aldatu da.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Bateria modua modu orekatura aldatu da.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Bateria modua errendimendu modura aldatu da.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Bateria modua modu eraginkorrera aldatu da.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Bateria modua modu azkarrera aldatu da.</string>
   <string name="accessibility_quick_settings_profiles_off">Profilak ezgaituta.</string>
   <string name="accessibility_quick_settings_profiles">Profila: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profilak ezgaituta.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Sinkronizazioa</string>
   <string name="quick_settings_battery_saver_label">Bateria aurrezlea</string>
   <string name="quick_settings_custom_tile_detail_title">Lauza pertsonalizatua</string>
+  <string name="quick_settings_performance_profile_detail_title">Bateria modua</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Pasatu hatza eskumara: %1$s</string>
   <string name="right_shortcut_hint">Pasatu hatza ezkerrera: %1$s</string>

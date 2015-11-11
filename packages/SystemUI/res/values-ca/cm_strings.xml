@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Mode de la bateria: mode estalvi d\'energia.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Mode de la bateria: mode equilibrat.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Mode de la bateria: mode rendiment.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Mode de la bateria: mode d\'eficiència.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Mode de la bateria: mode ràpid.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Mode de la bateria canviat a mode estalvi d\'energia.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Mode de la bateria canviat a mode equilibrat.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Mode de la bateria canviat a mode rendiment.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Mode de la bateria canviat a mode d\'eficiència.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Mode de la bateria canviat a mode ràpid.</string>
   <string name="accessibility_quick_settings_profiles_off">Perfils desactivats.</string>
   <string name="accessibility_quick_settings_profiles">Perfils: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">S\'han desactivat els perfils.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Sinc</string>
   <string name="quick_settings_battery_saver_label">Estalvi de bateria</string>
   <string name="quick_settings_custom_tile_detail_title">Cel·la personalitzada</string>
+  <string name="quick_settings_performance_profile_detail_title">Mode de la bateria</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Llisca a la dreta per %1$s</string>
   <string name="right_shortcut_hint">Llisca a l\'esquerra per %1$s</string>

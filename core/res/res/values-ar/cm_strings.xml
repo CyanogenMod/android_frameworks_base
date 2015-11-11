@@ -44,7 +44,7 @@
   <string name="permlab_setKeyguardWallpaper">تعيين خلفية للإطار</string>
   <string name="permdesc_setKeyguardWallpaper">يسمح ااتطبيق بتغيير خلفية شاشة القفل.</string>
   <string name="privacy_guard_dialog_title">حارس الخصوصية</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> هل تريد <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="privacy_guard_dialog_summary">يريد <xliff:g id="app">%1$s</xliff:g>‏ <xliff:g id="op">%2$s</xliff:g>.</string>
   <string name="global_action_reboot">إعادة التشغيل</string>
   <string name="global_action_current_user">الحالي</string>
   <string name="reboot_reboot">إعادة التشغيل</string>

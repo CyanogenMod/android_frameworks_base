@@ -74,12 +74,16 @@
   <string name="accessibility_quick_settings_nfc_on">NFC включён.</string>
   <string name="accessibility_quick_settings_nfc_changed_off">NFC выключен.</string>
   <string name="accessibility_quick_settings_nfc_changed_on">NFC включён.</string>
-  <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим батареи: энергосберегающий.</string>
-  <string name="accessibility_quick_settings_perf_profile_bal">Режим батареи: сбалансированный.</string>
-  <string name="accessibility_quick_settings_perf_profile_perf">Режим батареи: производительный.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Режим батареи изменён на энергосберегающий.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим батареи изменён на сбалансированный.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим батареи изменён на производительный.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим энергопотребления: экономия энергии.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Режим энергопотребления: сбалансированный.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Режим энергопотребления: высокая производительность.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Режим энергопотребления: энергоэффективный.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Режим энергопотребления: оптимальная производительность.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Режим энергопотребления изменён на режим экономии энергии.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим энергопотребления изменён на сбалансированный.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим энергопотребления изменён на режим высокой производительности.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Режим энергопотребления изменён на энергоэффективный.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Режим энергопотребления изменён на режим оптимальной производительности.</string>
   <string name="accessibility_quick_settings_profiles_off">Профили выключены.</string>
   <string name="accessibility_quick_settings_profiles">Профиль: <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Профили выключены.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Синхронизация</string>
   <string name="quick_settings_battery_saver_label">Энергосбережение</string>
   <string name="quick_settings_custom_tile_detail_title">Пользовательская плитка</string>
+  <string name="quick_settings_performance_profile_detail_title">Энергопотребление</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Проведите вправо, чтобы открыть приложение «%1$s»</string>
   <string name="right_shortcut_hint">Проведите влево, чтобы открыть приложение «%1$s»</string>
