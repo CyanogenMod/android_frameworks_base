@@ -512,6 +512,9 @@
     <!-- Content description of the display brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_brightness">Display brightness</string>
 
+    <!-- Content description of the LEDs brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_notification_brightness">LEDs brightness</string>
+
     <!-- Title of dialog shown when 2G-3G data usage has exceeded limit and has been disabled. [CHAR LIMIT=48] -->
     <string name="data_usage_disabled_dialog_3g_title">2G-3G data is paused</string>
     <!-- Title of dialog shown when 4G data usage has exceeded limit and has been disabled. [CHAR LIMIT=48] -->
