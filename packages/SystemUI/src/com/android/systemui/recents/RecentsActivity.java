@@ -51,6 +51,7 @@ import com.android.systemui.recents.views.DebugOverlayView;
 import com.android.systemui.recents.views.RecentsView;
 import com.android.systemui.recents.views.SystemBarScrimViews;
 import com.android.systemui.recents.views.ViewAnimation;
+import cyanogenmod.providers.CMSettings;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -256,8 +257,8 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
             if (mEmptyView != null) {
                 mEmptyView.setVisibility(View.GONE);
             }
-            boolean showSearchBar = Settings.System.getInt(getContentResolver(),
-                       Settings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
+            boolean showSearchBar = CMSettings.System.getInt(getContentResolver(),
+                       CMSettings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
 
             if (mRecentsView.hasValidSearchBar()) {
                 if (showSearchBar) {
