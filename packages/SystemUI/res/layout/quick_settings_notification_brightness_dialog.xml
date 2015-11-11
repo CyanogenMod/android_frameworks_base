@@ -14,10 +14,9 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-
+    xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     style="@style/BrightnessDialogContainer">
 
     <com.android.systemui.settings.ToggleSlider
@@ -26,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        />
+        android:contentDescription="@string/accessibility_notification_brightness"
+        android:importantForAccessibility="no" />
 
 </LinearLayout>
