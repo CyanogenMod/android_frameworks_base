@@ -70,6 +70,7 @@ import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
+import cyanogenmod.providers.CMSettings;
 
 import java.util.List;
 
@@ -2444,8 +2445,8 @@ public class NotificationPanelView extends PanelView implements
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this);
             update();
         }
 
@@ -2468,8 +2469,8 @@ public class NotificationPanelView extends PanelView implements
             ContentResolver resolver = mContext.getContentResolver();
             mOneFingerQuickSettingsIntercept = Settings.System.getInt(
                     resolver, Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN, 1) == 1;
-            mDoubleTapToSleepEnabled = Settings.System.getInt(
-                    resolver, Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 1) == 1;
+            mDoubleTapToSleepEnabled = CMSettings.System.getInt(
+                    resolver, CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE, 1) == 1;
         }
     }
 
