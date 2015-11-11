@@ -3780,12 +3780,6 @@ public final class Settings {
          */
 
         /**
-         *  Enable statusbar double tap gesture on to put device to sleep
-         * @hide
-         */
-        public static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
-
-        /**
          * Boolean value on whether to show weather in the statusbar
          * @hide
          */
