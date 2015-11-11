@@ -905,10 +905,6 @@
     <!-- Default value for LED on time when the battery is low on charge in miliseconds -->
     <integer name="config_notificationsBatteryLedOn">125</integer>
 
-    <!-- Is the notification LED brightness adjustable ?
-         Used to decide if the user can set LED brightness -->
-    <bool name="config_adjustableNotificationLedBrightness">false</bool>
-
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">false</bool>
 
@@ -922,10 +918,6 @@
     <!-- Does the battery LED support multiple colors?
          Used to decide if the user can change the colors -->
     <bool name="config_multiColorBatteryLed">false</bool>
-
-    <!-- Does the device have multiple LEDs ?
-         Used to decide if the user can change the multiple LEDs settings -->
-    <bool name="config_multipleNotificationLeds">false</bool>
 
     <!-- Do the battery/notification LEDs support pulsing?
          Used to decide if we show pulse settings -->
