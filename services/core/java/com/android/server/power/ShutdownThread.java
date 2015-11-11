@@ -35,6 +35,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -995,7 +996,11 @@ public final class ShutdownThread extends Thread {
         Context uiContext = null;
         if (context != null) {
             uiContext = ThemeUtils.createUiContext(context);
-            uiContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+            if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEVISION)) {
+                uiContext.setTheme(com.android.internal.R.style.Theme_Leanback_Dialog_Alert);
+            } else  {
+                uiContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+            }
         }
         return uiContext != null ? uiContext : context;
     }
