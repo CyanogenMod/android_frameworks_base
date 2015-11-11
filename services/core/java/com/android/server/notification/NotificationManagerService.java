@@ -123,6 +123,8 @@ import com.android.server.notification.ManagedServices.ManagedServiceInfo;
 import com.android.server.notification.ManagedServices.UserProfiles;
 import com.android.server.statusbar.StatusBarManagerInternal;
 
+import cyanogenmod.providers.CMSettings;
+
 import libcore.io.IoUtils;
 
 import org.json.JSONArray;
@@ -992,20 +994,20 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_LIGHT_SCREEN_ON),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.NOTIFICATION_LIGHT_SCREEN_ON),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK), false,
                     this, UserHandle.USER_ALL);
             if (mAdjustableNotificationLedBrightness) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
                         false, this, UserHandle.USER_ALL);
             }
             if (mMultipleNotificationLeds) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
                         false, this, UserHandle.USER_ALL);
             }
             update(null);
@@ -1049,21 +1051,21 @@ public class NotificationManagerService extends SystemService {
 
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
-                mNotificationLedBrightnessLevel = Settings.System.getIntForUser(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                mNotificationLedBrightnessLevel = CMSettings.System.getIntForUser(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
                         LIGHT_BRIGHTNESS_MAXIMUM, UserHandle.USER_CURRENT);
             }
 
             // Multiple LEDs enabled
             if (mMultipleNotificationLeds) {
-                mMultipleLedsEnabledSetting = (Settings.System.getIntForUser(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                mMultipleLedsEnabledSetting = (CMSettings.System.getIntForUser(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
                         mMultipleNotificationLeds ? 1 : 0, UserHandle.USER_CURRENT) != 0);
             }
 
             // Notification lights with screen on
-            mScreenOnEnabled = (Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_SCREEN_ON,
+            mScreenOnEnabled = (CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.NOTIFICATION_LIGHT_SCREEN_ON,
                     mScreenOnDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
 
             updateNotificationPulse();
@@ -1201,9 +1203,9 @@ public class NotificationManagerService extends SystemService {
                 DEFAULT_VIBRATE_PATTERN);
 
         mAdjustableNotificationLedBrightness = resources.getBoolean(
-                com.android.internal.R.bool.config_adjustableNotificationLedBrightness);
+                org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
         mMultipleNotificationLeds = resources.getBoolean(
-                com.android.internal.R.bool.config_multipleNotificationLeds);
+                org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
 
         mUseAttentionLight = resources.getBoolean(R.bool.config_useAttentionLight);
 

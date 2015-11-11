@@ -3222,28 +3222,6 @@ public final class Settings {
         public static final Validator SHOW_WEB_SUGGESTIONS_VALIDATOR = sBooleanValidator;
 
         /**
-         * Contains the notifications light maximum brightness to use.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL =
-                "notification_light_brightness_level";
-
-        /**
-         * Whether to use the all the LEDs for the notifications or just one.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE =
-                "notification_light_multiple_leds_enable";
-
-        /**
-         * Whether to allow notifications with the screen on or DayDreams.
-         * The value is boolean (1 or 0). Default will always be false.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_SCREEN_ON =
-                "notification_light_screen_on_enable";
-
-        /**
          * Whether the notification LED should repeatedly flash when a notification is
          * pending. The value is boolean (1 or 0).
          * @hide
@@ -3845,10 +3823,7 @@ public final class Settings {
             PHONE_BLACKLIST_NOTIFY_ENABLED,
             PHONE_BLACKLIST_PRIVATE_NUMBER_MODE,
             PHONE_BLACKLIST_UNKNOWN_NUMBER_MODE,
-            PHONE_BLACKLIST_REGEX_ENABLED,
-            NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
-            NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
-            NOTIFICATION_LIGHT_SCREEN_ON
+            PHONE_BLACKLIST_REGEX_ENABLED
         };
 
         /**

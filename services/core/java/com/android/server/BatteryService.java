@@ -768,11 +768,11 @@ public final class BatteryService extends SystemService {
 
             // Is the notification LED brightness changeable ?
             mAdjustableNotificationLedBrightness = context.getResources().getBoolean(
-                    com.android.internal.R.bool.config_adjustableNotificationLedBrightness);
+                    org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
 
             // Does the Device have multiple LEDs ?
             mMultipleNotificationLeds = context.getResources().getBoolean(
-                    com.android.internal.R.bool.config_multipleNotificationLeds);
+                    org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
 
             mBatteryLedOn = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
@@ -944,15 +944,15 @@ public final class BatteryService extends SystemService {
 
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
                         false, this, UserHandle.USER_ALL);
             }
 
             // Multiple LEDs enabled
             if (mMultipleNotificationLeds) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
                         false, this, UserHandle.USER_ALL);
             }
 
@@ -1002,15 +1002,15 @@ public final class BatteryService extends SystemService {
 
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
-                mNotificationLedBrightnessLevel = Settings.System.getInt(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                mNotificationLedBrightnessLevel = CMSettings.System.getInt(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
                         LIGHT_BRIGHTNESS_MAXIMUM);
             }
 
             // Multiple LEDs enabled
             if (mMultipleNotificationLeds) {
-                mMultipleLedsEnabled = Settings.System.getInt(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                mMultipleLedsEnabled = CMSettings.System.getInt(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
                         mMultipleNotificationLeds ? 1 : 0) != 0;
             }
 
