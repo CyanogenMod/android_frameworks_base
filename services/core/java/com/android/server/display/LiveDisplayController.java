@@ -47,6 +47,7 @@ import com.android.server.twilight.TwilightManager;
 import com.android.server.twilight.TwilightState;
 
 import cyanogenmod.hardware.CMHardwareManager;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.PrintWriter;
 
@@ -124,16 +125,16 @@ public class LiveDisplayController {
         mHardware = CMHardwareManager.getInstance(mContext);
 
         mDefaultDayTemperature = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_dayColorTemperature);
+                org.cyanogenmod.platform.internal.R.integer.config_dayColorTemperature);
         mDefaultNightTemperature = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_nightColorTemperature);
+                org.cyanogenmod.platform.internal.R.integer.config_nightColorTemperature);
         mDefaultOutdoorLux = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_outdoorAmbientLux);
+                org.cyanogenmod.platform.internal.R.integer.config_outdoorAmbientLux);
 
         // Counter used to determine when we should tell the user about this feature.
         // If it's not used after 3 sunsets, we'll show the hint once.
-        mHintCounter = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.LIVE_DISPLAY_HINTED,
+        mHintCounter = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.LIVE_DISPLAY_HINTED,
                 -3,
                 UserHandle.USER_CURRENT);
 
@@ -169,16 +170,16 @@ public class LiveDisplayController {
     }
 
     private void updateSettings() {
-        mDayTemperature = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_TEMPERATURE_DAY,
+        mDayTemperature = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.DISPLAY_TEMPERATURE_DAY,
                 mDefaultDayTemperature,
                 UserHandle.USER_CURRENT);
-        mNightTemperature = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_TEMPERATURE_NIGHT,
+        mNightTemperature = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.DISPLAY_TEMPERATURE_NIGHT,
                 mDefaultNightTemperature,
                 UserHandle.USER_CURRENT);
-        mMode = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_TEMPERATURE_MODE,
+        mMode = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.DISPLAY_TEMPERATURE_MODE,
                 MODE_OFF,
                 UserHandle.USER_CURRENT);
 
@@ -188,8 +189,8 @@ public class LiveDisplayController {
         }
 
         // Manual color adjustment will be set as a space separated string of float values
-        String colorAdjustmentTemp = Settings.System.getStringForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_COLOR_ADJUSTMENT,
+        String colorAdjustmentTemp = CMSettings.System.getStringForUser(mContext.getContentResolver(),
+                CMSettings.System.DISPLAY_COLOR_ADJUSTMENT,
                 UserHandle.USER_CURRENT);
         String[] colorAdjustment = colorAdjustmentTemp == null ?
                 null : colorAdjustmentTemp.split(" ");
@@ -212,19 +213,19 @@ public class LiveDisplayController {
 
     private final class SettingsObserver extends ContentObserver {
         private final Uri DISPLAY_TEMPERATURE_DAY_URI =
-                Settings.System.getUriFor(Settings.System.DISPLAY_TEMPERATURE_DAY);
+                CMSettings.System.getUriFor(CMSettings.System.DISPLAY_TEMPERATURE_DAY);
         private final Uri DISPLAY_TEMPERATURE_NIGHT_URI =
-                Settings.System.getUriFor(Settings.System.DISPLAY_TEMPERATURE_NIGHT);
+                CMSettings.System.getUriFor(CMSettings.System.DISPLAY_TEMPERATURE_NIGHT);
         private final Uri DISPLAY_TEMPERATURE_MODE_URI =
-                Settings.System.getUriFor(Settings.System.DISPLAY_TEMPERATURE_MODE);
+                CMSettings.System.getUriFor(CMSettings.System.DISPLAY_TEMPERATURE_MODE);
         private final Uri DISPLAY_AUTO_OUTDOOR_MODE_URI =
-                Settings.System.getUriFor(Settings.System.DISPLAY_AUTO_OUTDOOR_MODE);
+                CMSettings.System.getUriFor(CMSettings.System.DISPLAY_AUTO_OUTDOOR_MODE);
         private final Uri DISPLAY_LOW_POWER_URI =
-                Settings.System.getUriFor(Settings.System.DISPLAY_LOW_POWER);
+                CMSettings.System.getUriFor(CMSettings.System.DISPLAY_LOW_POWER);
         private final Uri DISPLAY_COLOR_ENHANCE_URI =
-                Settings.System.getUriFor(Settings.System.DISPLAY_COLOR_ENHANCE);
+                CMSettings.System.getUriFor(CMSettings.System.DISPLAY_COLOR_ENHANCE);
         private final Uri DISPLAY_COLOR_ADJUSTMENT_URI =
-                Settings.System.getUriFor(Settings.System.DISPLAY_COLOR_ADJUSTMENT);
+                CMSettings.System.getUriFor(CMSettings.System.DISPLAY_COLOR_ADJUSTMENT);
         public SettingsObserver() {
             super(mHandler);
         }
@@ -353,8 +354,8 @@ public class LiveDisplayController {
             return;
         }
 
-        boolean value = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_AUTO_OUTDOOR_MODE,
+        boolean value = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.DISPLAY_AUTO_OUTDOOR_MODE,
                 1,
                 UserHandle.USER_CURRENT) == 1;
 
@@ -380,8 +381,8 @@ public class LiveDisplayController {
             return;
         }
 
-        boolean value = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_COLOR_ENHANCE,
+        boolean value = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.DISPLAY_COLOR_ENHANCE,
                 1,
                 UserHandle.USER_CURRENT) == 1;
 
@@ -405,8 +406,8 @@ public class LiveDisplayController {
             return;
         }
 
-        boolean value = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DISPLAY_LOW_POWER,
+        boolean value = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.DISPLAY_LOW_POWER,
                 1,
                 UserHandle.USER_CURRENT) == 1;
 
@@ -508,8 +509,8 @@ public class LiveDisplayController {
         if (mHintCounter == value) {
             return;
         }
-        Settings.System.putIntForUser(mContext.getContentResolver(),
-                Settings.System.LIVE_DISPLAY_HINTED,
+        CMSettings.System.putIntForUser(mContext.getContentResolver(),
+                CMSettings.System.LIVE_DISPLAY_HINTED,
                 value,
                 UserHandle.USER_CURRENT);
         mHintCounter = value;
@@ -546,12 +547,13 @@ public class LiveDisplayController {
                     mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             Notification.Builder builder = new Notification.Builder(mContext)
                     .setContentTitle(mContext.getResources().getString(
-                            com.android.internal.R.string.live_display_title))
+                            org.cyanogenmod.platform.internal.R.string.live_display_title))
                     .setContentText(mContext.getResources().getString(
-                            com.android.internal.R.string.live_display_hint))
-                    .setSmallIcon(com.android.internal.R.drawable.ic_livedisplay_notif)
+                            org.cyanogenmod.platform.internal.R.string.live_display_hint))
+                    .setSmallIcon(org.cyanogenmod.platform.internal.R.drawable.ic_livedisplay_notif)
                     .setStyle(new Notification.BigTextStyle().bigText(mContext.getResources()
-                             .getString(com.android.internal.R.string.live_display_hint)))
+                             .getString(
+                                     org.cyanogenmod.platform.internal.R.string.live_display_hint)))
                     .setContentIntent(result);
 
             NotificationManager nm =

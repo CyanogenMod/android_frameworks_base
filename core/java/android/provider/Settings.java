@@ -3618,54 +3618,6 @@ public final class Settings {
          */
 
         /**
-         * Color temperature of the display during the day
-         * @hide
-         */
-        public static final String DISPLAY_TEMPERATURE_DAY = "display_temperature_day";
-
-        /**
-         * Color temperature of the display at night
-         * @hide
-         */
-        public static final String DISPLAY_TEMPERATURE_NIGHT = "display_temperature_night";
-
-        /**
-         * Display color temperature adjustment mode, one of DAY (default), NIGHT, or AUTO.
-         * @hide
-         */
-        public static final String DISPLAY_TEMPERATURE_MODE = "display_temperature_mode";
-
-        /**
-         * Automatic outdoor mode
-         * @hide
-         */
-        public static final String DISPLAY_AUTO_OUTDOOR_MODE = "display_auto_outdoor_mode";
-
-        /**
-         * Use display power saving features such as CABC or CABL
-         * @hide
-         */
-        public static final String DISPLAY_LOW_POWER = "display_low_power";
-
-        /**
-         * Use color enhancement feature of display
-         * @hide
-         */
-        public static final String DISPLAY_COLOR_ENHANCE = "display_color_enhance";
-
-        /**
-         * Manual display color adjustments (RGB values as floats, separated by spaces)
-         * @hide
-         */
-        public static final String DISPLAY_COLOR_ADJUSTMENT = "display_color_adjustment";
-
-        /**
-         * Did we tell about how they can stop breaking their eyes?
-         * @hide
-         */
-        public static final String LIVE_DISPLAY_HINTED = "live_display_hinted";
-
-        /**
          *  Enable statusbar double tap gesture on to put device to sleep
          * @hide
          */
@@ -3771,12 +3723,6 @@ public final class Settings {
             RINGTONE,
             LOCK_TO_APP_ENABLED,
             NOTIFICATION_SOUND,
-            WIFI_AUTO_CONNECT_TYPE,
-            DISPLAY_TEMPERATURE_NIGHT,
-            DISPLAY_TEMPERATURE_DAY,
-            DISPLAY_TEMPERATURE_MODE,
-            DISPLAY_AUTO_OUTDOOR_MODE,
-            LIVE_DISPLAY_HINTED,
             PHONE_BLACKLIST_ENABLED,
             PHONE_BLACKLIST_NOTIFY_ENABLED,
             PHONE_BLACKLIST_PRIVATE_NUMBER_MODE,
