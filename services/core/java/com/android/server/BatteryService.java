@@ -64,7 +64,6 @@ import java.io.PrintWriter;
 
 import cyanogenmod.providers.CMSettings;
 
-
 /**
  * <p>BatteryService monitors the charging status, and charge level of the device
  * battery.  When these values change this service broadcasts the new values
@@ -770,11 +769,11 @@ public final class BatteryService extends SystemService {
 
             // Is the notification LED brightness changeable ?
             mAdjustableNotificationLedBrightness = context.getResources().getBoolean(
-                    com.android.internal.R.bool.config_adjustableNotificationLedBrightness);
+                    org.cyanogenmod.platform.internal.R.bool.config_adjustableNotificationLedBrightness);
 
             // Does the Device have multiple LEDs ?
             mMultipleNotificationLeds = context.getResources().getBoolean(
-                    com.android.internal.R.bool.config_multipleNotificationLeds);
+                    org.cyanogenmod.platform.internal.R.bool.config_multipleNotificationLeds);
 
             mBatteryLedOn = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
@@ -1011,7 +1010,7 @@ public final class BatteryService extends SystemService {
 
             // Multiple LEDs enabled
             if (mMultipleNotificationLeds) {
-                mMultipleLedsEnabled = Settings.System.getInt(resolver,
+                mMultipleLedsEnabled = CMSettings.System.getInt(resolver,
                         CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
                         mMultipleNotificationLeds ? 1 : 0) != 0;
             }
