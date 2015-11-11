@@ -12,7 +12,8 @@ LOCAL_STATIC_JAVA_LIBRARIES := Keyguard \
     android-visualizer \
     org.cyanogenmod.platform.sdk
 
-LOCAL_JAVA_LIBRARIES := telephony-common
+LOCAL_JAVA_LIBRARIES := telephony-common \
+                        ims-common
 
 LOCAL_PACKAGE_NAME := SystemUI
 LOCAL_CERTIFICATE := platform
