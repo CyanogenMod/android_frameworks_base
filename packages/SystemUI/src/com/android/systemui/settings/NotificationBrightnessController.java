@@ -25,8 +25,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.UserHandle;
 import android.provider.Settings;
+
+import com.android.systemui.R;
 
 import java.lang.Exception;
 import java.util.ArrayList;
@@ -38,6 +41,9 @@ public class NotificationBrightnessController implements ToggleSlider.Listener {
 
     public static final int LIGHT_BRIGHTNESS_MINIMUM = 1;
     public static final int LIGHT_BRIGHTNESS_MAXIMUM = 255;
+
+    // Minimum delay between LED notification updates
+    private final static long LED_UPDATE_DELAY_MS = 250;
 
     private int mCurrentBrightness;
     private final int mMinimumBrightness;
@@ -131,8 +137,18 @@ public class NotificationBrightnessController implements ToggleSlider.Listener {
         mNotificationBuilder = new Notification.Builder(mContext);
 
         mNotificationBundle.putBoolean(Notification.EXTRA_FORCE_SHOW_LIGHTS, true);
-        mNotificationBuilder.setExtras(mNotificationBundle);
+        mNotificationBuilder.setExtras(mNotificationBundle)
+                .setContentTitle(mContext.getString(R.string.led_notification_title))
+                .setContentText(mContext.getString(R.string.led_notification_text))
+                .setSmallIcon(R.drawable.ic_settings)
+                .setOngoing(true);
     }
+
+    private Handler mLedHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            updateNotification();
+        }
+    };
 
     public void addStateChangedCallback(BrightnessStateChangeCallback cb) {
         mChangeCallbacks.add(cb);
@@ -212,7 +228,14 @@ public class NotificationBrightnessController implements ToggleSlider.Listener {
 
     /** Fetch the brightness from the system settings and update the slider */
     private void updateNotification() {
+        // Dampen rate of consecutive LED changes
+        if (mLedHandler.hasMessages(0)) {
+            return;
+        }
+
         if (mNotificationAllow) {
+            mLedHandler.sendEmptyMessageDelayed(0, LED_UPDATE_DELAY_MS);
+
             // Instead of canceling the notification, force it to update with the color.
             // Use a white light for a better preview of the brightness.
             int notificationColor = 0xFFFFFF | (mCurrentBrightness << 24);
