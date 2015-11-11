@@ -66,6 +66,7 @@ import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.VolumeTile;
 import com.android.systemui.qs.tiles.ScreenTimeoutTile;
 import com.android.systemui.qs.tiles.WifiTile;
+import com.android.systemui.qs.tiles.VolteTile;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.CustomTileData;
 import com.android.systemui.statusbar.policy.BluetoothController;
@@ -385,6 +386,8 @@ public class QSTileHost implements QSTile.Host {
                 return new SyncTile(this);
             case QSConstants.TILE_BATTERY_SAVER:
                 return new BatterySaverTile(this);
+            case QSConstants.TILE_VOLTE:
+                return new VolteTile(this);
             default:
                 throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
         }

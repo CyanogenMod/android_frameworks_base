@@ -52,6 +52,7 @@ public class QSConstants {
     public static final String TILE_AMBIENT_DISPLAY = "ambient_display";
     public static final String TILE_SYNC = "sync";
     public static final String TILE_BATTERY_SAVER = "battery_saver";
+    public static final String TILE_VOLTE = "volte";
 
     public static final String DYNAMIC_TILE_NEXT_ALARM = "next_alarm";
     public static final String DYNAMIC_TILE_IME_SELECTOR = "ime_selector";
@@ -85,6 +86,7 @@ public class QSConstants {
         STATIC_TILES_AVAILABLE.add(TILE_COMPASS);
         STATIC_TILES_AVAILABLE.add(TILE_LOCKSCREEN);
         STATIC_TILES_AVAILABLE.add(TILE_LTE);
+        STATIC_TILES_AVAILABLE.add(TILE_VOLTE);
         STATIC_TILES_AVAILABLE.add(TILE_VISUALIZER);
         STATIC_TILES_AVAILABLE.add(TILE_VOLUME);
         STATIC_TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);
