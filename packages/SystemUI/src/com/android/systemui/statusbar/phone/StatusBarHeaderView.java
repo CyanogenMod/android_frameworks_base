@@ -936,8 +936,8 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
             super.observe();
 
             ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_SHOW_WEATHER), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_SHOW_WEATHER), false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -953,8 +953,8 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         public void update() {
 
             ContentResolver resolver = mContext.getContentResolver();
-            mShowWeather = Settings.System.getInt(
-                    resolver, Settings.System.STATUS_BAR_SHOW_WEATHER, 1) == 1;
+            mShowWeather = CMSettings.System.getInt(
+                    resolver, CMSettings.System.STATUS_BAR_SHOW_WEATHER, 1) == 1;
             updateVisibilities();
         }
     }
