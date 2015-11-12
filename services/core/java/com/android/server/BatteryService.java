@@ -1139,15 +1139,15 @@ public final class BatteryService extends SystemService {
 
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
                         false, this, UserHandle.USER_ALL);
             }
 
             // Multiple LEDs enabled
             if (mMultipleNotificationLeds) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
                         false, this, UserHandle.USER_ALL);
             }
 
@@ -1197,8 +1197,8 @@ public final class BatteryService extends SystemService {
 
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
-                mNotificationLedBrightnessLevel = Settings.System.getInt(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                mNotificationLedBrightnessLevel = CMSettings.System.getInt(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
                         LIGHT_BRIGHTNESS_MAXIMUM);
             }
 
