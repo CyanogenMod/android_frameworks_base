@@ -996,8 +996,8 @@ public class NotificationManagerService extends SystemService {
             resolver.registerContentObserver(CMSettings.System.getUriFor(
                     CMSettings.System.NOTIFICATION_LIGHT_SCREEN_ON),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Global.getUriFor(
-                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK), false,
+            resolver.registerContentObserver(CMSettings.Global.getUriFor(
+                    CMSettings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK), false,
                     this, UserHandle.USER_ALL);
             if (mAdjustableNotificationLedBrightness) {
                 resolver.registerContentObserver(CMSettings.System.getUriFor(
@@ -1069,8 +1069,8 @@ public class NotificationManagerService extends SystemService {
 
             updateNotificationPulse();
 
-            mDisableDuckingWhileMedia = Settings.Global.getInt(resolver,
-                    Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK, 0) == 1;
+            mDisableDuckingWhileMedia = CMSettings.Global.getInt(resolver,
+                    CMSettings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK, 0) == 1;
             updateDisableDucking();
         }
     }
