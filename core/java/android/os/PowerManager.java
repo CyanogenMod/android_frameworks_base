@@ -396,6 +396,24 @@ public final class PowerManager {
     public static final String POWER_PROFILE_CHANGED =
             "com.cyanogenmod.power.PROFILE_CHANGED";
 
+    /**
+     * The device should go to sleep normally when it is plugged in or charging.
+     * @hide
+     */
+    public static final int STAY_ON_WHILE_PLUGGED_NONE = 0;
+
+    /**
+     * The device should not go to sleep if it is plugged in to USB debugging.
+     * @hide
+     */
+    public static final int STAY_ON_WHILE_PLUGGED_USB_DEBUGGING = 1;
+
+    /**
+     * The device should not go to sleep if it is plugged in or charging at all.
+     * @hide
+     */
+    public static final int STAY_ON_WHILE_PLUGGED_CHARGING = 2;
+
     final Context mContext;
     final IPowerManager mService;
     final Handler mHandler;
