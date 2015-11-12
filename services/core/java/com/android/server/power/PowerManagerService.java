@@ -687,8 +687,8 @@ public final class PowerManagerService extends SystemService
             resolver.registerContentObserver(CMSettings.System.getUriFor(
                     CMSettings.System.PROXIMITY_ON_WAKE),
                     false, mSettingsObserver, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.Global.getUriFor(
-                    Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED),
+            resolver.registerContentObserver(CMSettings.Global.getUriFor(
+                    CMSettings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED),
                     false, mSettingsObserver, UserHandle.USER_ALL);
 
             // Go.
@@ -776,8 +776,8 @@ public final class PowerManagerService extends SystemService
                 Settings.Global.STAY_ON_WHILE_PLUGGED_IN, 0);
         mTheaterModeEnabled = Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.THEATER_MODE_ON, 0) == 1;
-        mWakeUpWhenPluggedOrUnpluggedSetting = Settings.Global.getInt(resolver,
-                Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
+        mWakeUpWhenPluggedOrUnpluggedSetting = CMSettings.Global.getInt(resolver,
+                CMSettings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
                 (mWakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0));
         mProximityWakeEnabled = CMSettings.System.getInt(resolver,
                 CMSettings.System.PROXIMITY_ON_WAKE, mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;

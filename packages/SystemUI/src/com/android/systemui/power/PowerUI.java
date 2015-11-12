@@ -39,6 +39,7 @@ import android.util.Slog;
 
 import com.android.systemui.SystemUI;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -236,8 +237,8 @@ public class PowerUI extends SystemUI {
                 if (mIgnoreFirstPowerEvent) {
                     mIgnoreFirstPowerEvent = false;
                 } else {
-                    if (Settings.Global.getInt(cr,
-                            Settings.Global.POWER_NOTIFICATIONS_ENABLED, 0) == 1) {
+                    if (CMSettings.Global.getInt(cr,
+                            CMSettings.Global.POWER_NOTIFICATIONS_ENABLED, 0) == 1) {
                         playPowerNotificationSound();
                     }
                 }
@@ -250,7 +251,7 @@ public class PowerUI extends SystemUI {
     void playPowerNotificationSound() {
         final ContentResolver cr = mContext.getContentResolver();
         final String soundPath =
-                Settings.Global.getString(cr, Settings.Global.POWER_NOTIFICATIONS_RINGTONE);
+                CMSettings.Global.getString(cr, CMSettings.Global.POWER_NOTIFICATIONS_RINGTONE);
 
         if (soundPath != null) {
             Ringtone powerRingtone = RingtoneManager.getRingtone(mContext, Uri.parse(soundPath));
@@ -258,8 +259,8 @@ public class PowerUI extends SystemUI {
                 powerRingtone.play();
             }
         }
-        if (Settings.Global.getInt(cr,
-                Settings.Global.POWER_NOTIFICATIONS_VIBRATE, 0) == 1) {
+        if (CMSettings.Global.getInt(cr,
+                CMSettings.Global.POWER_NOTIFICATIONS_VIBRATE, 0) == 1) {
             Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrator != null) {
                 vibrator.vibrate(250);
