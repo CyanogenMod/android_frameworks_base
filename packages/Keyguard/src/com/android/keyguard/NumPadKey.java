@@ -30,6 +30,8 @@ import android.widget.TextView;
 
 import com.android.internal.widget.LockPatternUtils;
 
+import cyanogenmod.providers.CMSettings;
+
 public class NumPadKey extends ViewGroup {
     // list of "ABC", etc per digit, starting with '0'
     static String sKlondike[];
@@ -116,8 +118,8 @@ public class NumPadKey extends ViewGroup {
     }
 
     private void updateText() {
-        boolean scramblePin = (Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
+        boolean scramblePin = (CMSettings.System.getInt(getContext().getContentResolver(),
+                CMSettings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
         if (mDigit >= 0) {
             mDigitText.setText(Integer.toString(mDigit));
             if (sKlondike == null) {

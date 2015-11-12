@@ -123,6 +123,7 @@ import com.android.server.notification.ManagedServices.ManagedServiceInfo;
 import com.android.server.notification.ManagedServices.UserProfiles;
 import com.android.server.statusbar.StatusBarManagerInternal;
 
+import cyanogenmod.providers.CMSettings;
 import libcore.io.IoUtils;
 
 import org.json.JSONArray;
@@ -977,35 +978,35 @@ public class NotificationManagerService extends SystemService {
                     NOTIFICATION_LIGHT_PULSE_URI, false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(
                     ENABLED_NOTIFICATION_LISTENERS_URI, false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NOTIFICATION_LIGHT_SCREEN_ON),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.NOTIFICATION_LIGHT_SCREEN_ON),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.Global.getUriFor(
                     Settings.Global.ZEN_DISABLE_DUCKING_DURING_MEDIA_PLAYBACK), false,
                     this, UserHandle.USER_ALL);
             if (mAdjustableNotificationLedBrightness) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL),
                         false, this, UserHandle.USER_ALL);
             }
             if (mMultipleNotificationLeds) {
-                resolver.registerContentObserver(Settings.System.getUriFor(
-                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE),
                         false, this, UserHandle.USER_ALL);
             }
             update(null);
@@ -1023,47 +1024,47 @@ public class NotificationManagerService extends SystemService {
                     Settings.System.NOTIFICATION_LIGHT_PULSE, 0, UserHandle.USER_CURRENT) != 0;
 
             // LED default color
-            mDefaultNotificationColor = Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR,
+            mDefaultNotificationColor = CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR,
                     mDefaultNotificationColor, UserHandle.USER_CURRENT);
 
             // LED default on MS
-            mDefaultNotificationLedOn = Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON,
+            mDefaultNotificationLedOn = CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON,
                     mDefaultNotificationLedOn, UserHandle.USER_CURRENT);
 
             // LED default off MS
-            mDefaultNotificationLedOff = Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF,
+            mDefaultNotificationLedOff = CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF,
                     mDefaultNotificationLedOff, UserHandle.USER_CURRENT);
 
             // LED custom notification colors
             mNotificationPulseCustomLedValues.clear();
-            if (Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE, 0,
+            if (CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE, 0,
                     UserHandle.USER_CURRENT) != 0) {
-                parseNotificationPulseCustomValuesString(Settings.System.getStringForUser(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
+                parseNotificationPulseCustomValuesString(CMSettings.System.getStringForUser(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
                         UserHandle.USER_CURRENT));
             }
 
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
-                mNotificationLedBrightnessLevel = Settings.System.getIntForUser(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
+                mNotificationLedBrightnessLevel = CMSettings.System.getIntForUser(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
                         LIGHT_BRIGHTNESS_MAXIMUM, UserHandle.USER_CURRENT);
             }
 
             // Multiple LEDs enabled
             if (mMultipleNotificationLeds) {
-                mMultipleLedsEnabledSetting = (Settings.System.getIntForUser(resolver,
-                        Settings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
+                mMultipleLedsEnabledSetting = (CMSettings.System.getIntForUser(resolver,
+                        CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
                         mMultipleNotificationLeds ? 1 : 0, UserHandle.USER_CURRENT) != 0);
             }
 
             // Notification lights with screen on
-            mScreenOnEnabled = (Settings.System.getIntForUser(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_SCREEN_ON,
+            mScreenOnEnabled = (CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.NOTIFICATION_LIGHT_SCREEN_ON,
                     mScreenOnDefault ? 1 : 0, UserHandle.USER_CURRENT) != 0);
 
             updateNotificationPulse();

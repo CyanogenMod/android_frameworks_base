@@ -139,6 +139,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import cyanogenmod.providers.CMSettings;
+
 /**
  * This class provides a system service that manages input methods.
  */
@@ -466,8 +468,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     Settings.Secure.SELECTED_INPUT_METHOD_SUBTYPE), false, this, userId);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.SHOW_IME_WITH_HARD_KEYBOARD), false, this, userId);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_IME_SWITCHER),
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.STATUS_BAR_IME_SWITCHER),
                     false, new ContentObserver(mHandler) {
                         public void onChange(boolean selfChange) {
                             updateFromSettingsLocked(true);
@@ -1921,9 +1923,9 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         }
         // code to disable the CM Phone IME switcher with config_show_cmIMESwitcher set = false
         try {
-            mShowOngoingImeSwitcherForPhones = Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.STATUS_BAR_IME_SWITCHER) == 1;
-        } catch (SettingNotFoundException e) {
+            mShowOngoingImeSwitcherForPhones = CMSettings.System.getInt(mContext.getContentResolver(),
+            CMSettings.System.STATUS_BAR_IME_SWITCHER) == 1;
+        } catch (CMSettings.CMSettingNotFoundException e) {
             mShowOngoingImeSwitcherForPhones = mRes.getBoolean(
             com.android.internal.R.bool.config_show_cmIMESwitcher);
         }

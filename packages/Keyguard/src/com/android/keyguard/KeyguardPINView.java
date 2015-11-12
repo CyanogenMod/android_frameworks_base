@@ -36,6 +36,8 @@ import java.util.List;
 import com.android.settingslib.animation.AppearAnimationUtils;
 import com.android.settingslib.animation.DisappearAnimationUtils;
 
+import cyanogenmod.providers.CMSettings;
+
 /**
  * Displays a PIN pad for unlocking.
  */
@@ -112,8 +114,8 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                         null, mEcaView, null
                 }};
 
-        boolean scramblePin = (Settings.System.getInt(getContext().getContentResolver(),
-                Settings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
+        boolean scramblePin = (CMSettings.System.getInt(getContext().getContentResolver(),
+                CMSettings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
 
         if (scramblePin) {
             Collections.shuffle(sNumbers);

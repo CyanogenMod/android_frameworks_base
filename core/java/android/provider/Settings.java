@@ -2361,13 +2361,6 @@ public final class Settings {
                 new InclusiveIntegerRangeValidator(0, 2);
 
         /**
-         * If all file types can be accepted over Bluetooth OBEX.
-         * @hide
-         */
-        public static final String BLUETOOTH_ACCEPT_ALL_FILES =
-            "bluetooth_accept_all_files";
-
-        /**
          * Bluetooth discoverability timeout.  If this value is nonzero, then
          * Bluetooth becomes discoverable for a certain number of seconds,
          * after which is becomes simply connectable.  The value is in seconds.
@@ -2402,13 +2395,6 @@ public final class Settings {
             "lock_pattern_tactile_feedback_enabled";
 
         /**
-         * Whether to scramble a pin unlock layout
-         * @hide
-         */
-        public static final String LOCKSCREEN_PIN_SCRAMBLE_LAYOUT =
-                "lockscreen_scramble_pin_layout";
-
-        /**
          * A formatted string of the next alarm that is set, or the empty string
          * if there is no alarm set.
          *
@@ -2426,11 +2412,6 @@ public final class Settings {
                 return value == null || value.length() < MAX_LENGTH;
             }
         };
-
-        /**
-         * @hide
-         */
-        public static final String SHOW_ALARM_ICON = "show_alarm_icon";
 
         /**
          * Scaling factor for fonts, float.
@@ -2520,12 +2501,6 @@ public final class Settings {
         public static final int SCREEN_BRIGHTNESS_MODE_AUTOMATIC = 1;
 
         /**
-         * Whether to show the IME switcher in the status bar
-         * @hide
-         */
-        public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
-
-        /**
          * The keyboard brightness to be used while the screen is on.
          * Valid value range is between 0 and {@link PowerManager#getMaximumKeyboardBrightness()}
          * @deprecated
@@ -2549,25 +2524,6 @@ public final class Settings {
          * @hide
          */
         public static final String BUTTON_BACKLIGHT_TIMEOUT = "button_backlight_timeout";
-
-        /** Whether to allow one finger quick settings expansion on the right side of the statusbar.
-         *
-         * @hide
-         */
-        public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
-
-        /** Whether to show the brightness slider in quick settings panel.
-         *
-         * @hide
-         */
-        public static final String QS_SHOW_BRIGHTNESS_SLIDER = "qs_show_brightness_slider";
-
-        /**
-         * Whether to control brightness from status bar
-         *
-         * @hide
-         */
-        public static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
 
         /**
          * Control whether the process CPU usage meter should be shown.
@@ -2702,21 +2658,6 @@ public final class Settings {
         public static final String VOLUME_MASTER_MUTE = "volume_master_mute";
 
         private static final Validator VOLUME_MASTER_MUTE_VALIDATOR = sBooleanValidator;
-
-        /**
-         * Whether or not volume button music controls should be enabled to seek media tracks
-         * @hide
-         */
-        public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
-
-        /**
-         * Swap volume buttons when the screen is rotated
-         * 0 - Disabled
-         * 1 - Enabled (screen is rotated by 90 or 180 degrees: phone, hybrid)
-         * 2 - Enabled (screen is rotated by 180 or 270 degrees: tablet)
-         * @hide
-         */
-        public static final String SWAP_VOLUME_KEYS_ON_ROTATION = "swap_volume_keys_on_rotation";
 
         /**
          * Microphone mute (int 1 = mute, 0 = not muted).
@@ -3071,18 +3012,6 @@ public final class Settings {
         public static final String ACCELEROMETER_ROTATION_ANGLES = "accelerometer_rotation_angles";
 
         /**
-         * Use EdgeGesture Service for system gestures in PhoneWindowManager
-         * @hide
-         */
-        public static final String USE_EDGE_SERVICE_FOR_GESTURES = "edge_service_for_gestures";
-
-        /**
-         * Show the pending notification counts as overlays on the status bar
-         * @hide
-         */
-        public static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
-
-        /**
          * Control whether the accelerometer will be used to change screen
          * orientation.  If 0, it will not be used unless explicitly requested
          * by the application; if 1, it will be used by default unless explicitly
@@ -3124,15 +3053,6 @@ public final class Settings {
         /** @hide */
         public static final Validator HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY_VALIDATOR =
                 sBooleanValidator;
-
-        /**
-         * Call recording format value
-         * 0: AMR_WB
-         * 1: MPEG_4
-         * Default: 0
-         * @hide
-         */
-        public static final String CALL_RECORDING_FORMAT = "call_recording_format";
 
         /**
          * Whether the phone vibrates when it is ringing due to an incoming call. This will
@@ -3222,28 +3142,6 @@ public final class Settings {
         public static final Validator SHOW_WEB_SUGGESTIONS_VALIDATOR = sBooleanValidator;
 
         /**
-         * Contains the notifications light maximum brightness to use.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL =
-                "notification_light_brightness_level";
-
-        /**
-         * Whether to use the all the LEDs for the notifications or just one.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE =
-                "notification_light_multiple_leds_enable";
-
-        /**
-         * Whether to allow notifications with the screen on or DayDreams.
-         * The value is boolean (1 or 0). Default will always be false.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_SCREEN_ON =
-                "notification_light_screen_on_enable";
-
-        /**
          * Whether the notification LED should repeatedly flash when a notification is
          * pending. The value is boolean (1 or 0).
          * @hide
@@ -3252,82 +3150,6 @@ public final class Settings {
 
         /** @hide */
         public static final Validator NOTIFICATION_LIGHT_PULSE_VALIDATOR = sBooleanValidator;
-
-        /**
-         * What color to use for the notification LED by default
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR =
-                "notification_light_pulse_default_color";
-
-        /**
-         * How long to flash the notification LED by default
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON =
-                "notification_light_pulse_default_led_on";
-
-        /**
-         * How long to wait between flashes for the notification LED by default
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF =
-                "notification_light_pulse_default_led_off";
-
-        /**
-         * What color to use for the missed call notification LED
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_CALL_COLOR =
-                "notification_light_pulse_call_color";
-
-        /**
-         * How long to flash the missed call notification LED
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_CALL_LED_ON =
-                "notification_light_pulse_call_led_on";
-
-        /**
-         * How long to wait between flashes for the missed call notification LED
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_CALL_LED_OFF =
-                "notification_light_pulse_call_led_off";
-        /**
-         * What color to use for the voicemail notification LED
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_VMAIL_COLOR =
-                "notification_light_pulse_vmail_color";
-
-        /**
-         * How long to flash the voicemail notification LED
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_VMAIL_LED_ON =
-                "notification_light_pulse_vmail_led_on";
-
-        /**
-         * How long to wait between flashes for the voicemail notification LED
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_VMAIL_LED_OFF =
-                "notification_light_pulse_vmail_led_off";
-
-        /**
-         * Whether to use the custom LED values for the notification pulse LED.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE =
-                "notification_light_pulse_custom_enable";
-
-        /**
-         * Which custom LED values to use for the notification pulse LED.
-         * @hide
-         */
-        public static final String NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES =
-                "notification_light_pulse_custom_values";
 
         /**
          * Show pointer location on screen?
@@ -3660,7 +3482,6 @@ public final class Settings {
             WIFI_STATIC_DNS2,
             BLUETOOTH_DISCOVERABILITY,
             BLUETOOTH_DISCOVERABILITY_TIMEOUT,
-            BLUETOOTH_ACCEPT_ALL_FILES,
             DIM_SCREEN,
             SCREEN_OFF_TIMEOUT,
             SCREEN_BRIGHTNESS,
@@ -3698,9 +3519,6 @@ public final class Settings {
             PHONE_BLACKLIST_PRIVATE_NUMBER_MODE,
             PHONE_BLACKLIST_UNKNOWN_NUMBER_MODE,
             PHONE_BLACKLIST_REGEX_ENABLED,
-            NOTIFICATION_LIGHT_BRIGHTNESS_LEVEL,
-            NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
-            NOTIFICATION_LIGHT_SCREEN_ON
         };
 
         /**

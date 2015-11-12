@@ -51,6 +51,8 @@ import com.android.systemui.statusbar.policy.HotspotController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.SuController;
 
+import cyanogenmod.providers.CMSettings;
+
 /**
  * This class contains all of the policy about which icons are installed in the status
  * bar at boot time.  It goes through the normal API for icons, even though it probably
@@ -156,7 +158,7 @@ public class PhoneStatusBarPolicy implements Callback {
         mService.setIconVisibility(SLOT_ALARM_CLOCK, false);
         mAlarmIconObserver.onChange(true);
         mContext.getContentResolver().registerContentObserver(
-                Settings.System.getUriFor(Settings.System.SHOW_ALARM_ICON),
+                CMSettings.System.getUriFor(CMSettings.System.SHOW_ALARM_ICON),
                 false, mAlarmIconObserver);
 
         // zen
@@ -193,8 +195,8 @@ public class PhoneStatusBarPolicy implements Callback {
     private ContentObserver mAlarmIconObserver = new ContentObserver(null) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            mAlarmIconVisible = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.SHOW_ALARM_ICON, 1) == 1;
+            mAlarmIconVisible = CMSettings.System.getInt(mContext.getContentResolver(),
+                    CMSettings.System.SHOW_ALARM_ICON, 1) == 1;
             updateAlarm();
         }
 
