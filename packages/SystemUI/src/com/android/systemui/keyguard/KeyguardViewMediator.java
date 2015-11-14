@@ -834,6 +834,7 @@ public class KeyguardViewMediator extends SystemUI {
                 android.Manifest.permission.CONTROL_KEYGUARD, null);
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(KEYGUARD_SERVICE_ACTION_STATE_CHANGE),
                 android.Manifest.permission.CONTROL_KEYGUARD, null);
+        mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
 
         mKeyguardDisplayManager = new KeyguardDisplayManager(mContext);
 
@@ -1558,6 +1559,9 @@ public class KeyguardViewMediator extends SystemUI {
                 mKeyguardBound = intent.getBooleanExtra(KEYGUARD_SERVICE_EXTRA_ACTIVE, false);
                 context.sendBroadcast(new Intent(LockscreenToggleTile.ACTION_APPLY_LOCKSCREEN_STATE)
                         .setPackage(context.getPackageName()));
+            } else if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(intent.getAction())) {
+                mPhoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+                if (DEBUG) Log.d(TAG, "phone state change, new state: " + mPhoneState);
             }
         }
     };
