@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Экономия энергии</string>
   <string name="perf_profile_bal">Сбалансиров.</string>
   <string name="perf_profile_perf">Высокая производит.</string>
+  <string name="perf_profile_bias_power">Энергоэффективный</string>
+  <string name="perf_profile_bias_perf">Оптим. производит.</string>
   <string name="theme_install_error_title">Не удалось установить тему</string>
   <string name="theme_install_error_message">Сбой при установке «%s»</string>
   <string name="theme_reset_notification_title">Тема отключена</string>

@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Accumodus: energiebesparing.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Accumodus: gebalanceerd.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Accumodus: prestaties.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Accumodus: efficiënt.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Accumodus: snel.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Accumodus: gewijzigd naar energiebesparing.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Accumodus: gewijzigd naar gebalanceerd.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Accumodus: gewijzigd naar prestaties.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Accumodus: gewijzigd naar efficiënt.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Accumodus: gewijzigd naar snel.</string>
   <string name="accessibility_quick_settings_profiles_off">Profielen uit.</string>
   <string name="accessibility_quick_settings_profiles">Profiel: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profielen uitgeschakeld.</string>
@@ -99,6 +103,7 @@
   <string name="accessibility_quick_settings_battery_saver_changed_off">Accubesparing uitgeschakeld.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_on">Accubesparing ingeschakeld.</string>
   <string name="accessibility_quick_settings_visualizer">Visuele effecten.</string>
+  <string name="accessibility_quick_settings_volume_panel">Volumepaneel.</string>
   <string name="accessibility_dpad_left">Cursor links</string>
   <string name="accessibility_dpad_right">Cursor rechts</string>
   <string name="quick_settings_mobile_data_label">Mobiele gegevens</string>
@@ -127,6 +132,7 @@
   <string name="quick_settings_sync_label">Synchroniseren</string>
   <string name="quick_settings_battery_saver_label">Accubesparing</string>
   <string name="quick_settings_custom_tile_detail_title">Aangepaste tegel</string>
+  <string name="quick_settings_performance_profile_detail_title">Accumodus</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Veeg naar rechts voor %1$s</string>
   <string name="right_shortcut_hint">Veeg naar links voor %1$s</string>
@@ -166,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Opnieuw scannen a.u.b.</string>
   <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Geen items gevonden</string>
+  <string name="play_queue_extention">Wachtrij weergeven</string>
 </resources>

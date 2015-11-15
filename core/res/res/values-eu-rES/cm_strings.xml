@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Energia aurreztea</string>
   <string name="perf_profile_bal">Orekatua</string>
   <string name="perf_profile_perf">Errendimendua</string>
+  <string name="perf_profile_bias_power">Eraginkortasina</string>
+  <string name="perf_profile_bias_perf">Azkarra</string>
   <string name="theme_install_error_title">Ezin izan da gaia instalatu</string>
   <string name="theme_install_error_message">%s ez da instalatu</string>
   <string name="theme_reset_notification_title">Gaia leheneratu da</string>
