@@ -60,12 +60,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
         @Override
         public void onSimStateChanged(int subId, int slotId, State simState) {
            if (DEBUG) Log.v(TAG, "onSimStateChanged(subId=" + subId + ",state=" + simState + ")");
-           switch (simState) {
-               case NOT_READY:
-               case ABSENT:
-                   closeKeyGuard();
-                   break;
-           }
+           resetState();
        };
     };
 
@@ -262,7 +257,12 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
                             }
                             resetPasswordText(true /* animate */);
                             if (result == PhoneConstants.PIN_RESULT_SUCCESS) {
-                                closeKeyGuard();
+                                KeyguardUpdateMonitor.getInstance(getContext())
+                                        .reportSimUnlocked(mSubId);
+                                mRemainingAttempts = -1;
+                                if (mCallback != null) {
+                                    mCallback.dismiss(true);
+                                }
                             } else {
                                 mShowDefaultMessage = false;
                                 if (result == PhoneConstants.PIN_PASSWORD_INCORRECT) {
@@ -303,16 +303,6 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
     @Override
     public boolean startDisappearAnimation(Runnable finishRunnable) {
         return false;
-    }
-
-    private void closeKeyGuard() {
-        if (DEBUG) Log.d(TAG, "closeKeyGuard: Verification Completed, closing Keyguard.");
-        mRemainingAttempts = -1;
-        KeyguardUpdateMonitor.getInstance(getContext())
-                         .reportSimUnlocked(mSubId);
-        mCallback.dismiss(true);
-        mShowDefaultMessage = true;
-        reset();
     }
 
     private void showDefaultMessage() {

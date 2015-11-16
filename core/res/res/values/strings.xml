@@ -265,6 +265,8 @@
     <string name="wfc_mode_cellular_preferred_summary">Cellular preferred</string>
     <!-- WFC, summary for Wi-Fi Only -->
     <string name="wfc_mode_wifi_only_summary">Wi-Fi only</string>
+    <!-- Template for showing cellular network operator name while LTE calling is enabled -->
+    <string name="high_definition_tag">%s</string>
 
     <!--
         {0} is one of "bearerServiceCode*"
@@ -4118,4 +4120,8 @@
          for the space allocated to it (two dots). -->
     <string name="ellipsis_two_dots">\u2025</string>
 
+    <!-- Carrier Name -->
+    <string name="China_Mobile">China Mobile</string>
+    <string name="China_Unicom">China Unicom</string>
+    <string name="China_Telecom">China Telecom</string>
 </resources>
