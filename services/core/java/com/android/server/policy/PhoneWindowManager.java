@@ -2132,9 +2132,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.END_BUTTON_BEHAVIOR,
                     Settings.System.END_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
-            mIncallPowerBehavior = CMSettings.Secure.getIntForUser(resolver,
-                    CMSettings.Secure.INCALL_POWER_BUTTON_BEHAVIOR,
-                    CMSettings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT,
+            mIncallPowerBehavior = Settings.Secure.getIntForUser(resolver,
+                    Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR,
+                    Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT,
                     UserHandle.USER_CURRENT);
             mHomeWakeScreen = (CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.HOME_WAKE_SCREEN, 1, UserHandle.USER_CURRENT) == 1) &&
