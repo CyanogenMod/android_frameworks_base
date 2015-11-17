@@ -36,8 +36,10 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.android.internal.util.ArrayUtils;
 import com.android.internal.widget.LockPatternUtils;
 
+import cyanogenmod.providers.CMSettings;
 import libcore.io.IoUtils;
 
 import java.io.BufferedOutputStream;
@@ -846,6 +848,7 @@ public class SettingsBackupAgent extends BackupAgentHelper {
         SettingsHelper settingsHelper = mSettingsHelper;
         ContentResolver cr = getContentResolver();
 
+        boolean foundEntry = false;
         final int whiteListSize = whitelist.length;
         for (int i = 0; i < whiteListSize; i++) {
             String key = whitelist[i];
@@ -862,16 +865,18 @@ public class SettingsBackupAgent extends BackupAgentHelper {
                     pos += INTEGER_BYTE_COUNT;
                     String dataValue = length > 0 ? new String(settings, pos, length) : null;
                     pos += length;
+                    cachedEntries.put(dataKey, dataValue);
                     if (key.equals(dataKey)) {
                         value = dataValue;
                         break;
                     }
-                    cachedEntries.put(dataKey, dataValue);
                 }
             }
 
             if (value == null) {
                 continue;
+            } else {
+                foundEntry = true;
             }
 
             final Uri destination = (movedToGlobal != null && movedToGlobal.contains(key))
@@ -881,6 +886,39 @@ public class SettingsBackupAgent extends BackupAgentHelper {
 
             if (DEBUG) {
                 Log.d(TAG, "Restored setting: " + destination + " : "+ key + "=" + value);
+            }
+        }
+
+        if (!foundEntry) {
+            restoreCMSetting(cachedEntries);
+        }
+    }
+
+    private void restoreCMSetting(Map<String, String> cachedEntries) {
+        ContentValues cmSettingsValues = new ContentValues();
+        ContentResolver cr = getContentResolver();
+        for (String key : cachedEntries.keySet()) {
+            Uri uri = null;
+            if (ArrayUtils.contains(CMSettings.System.LEGACY_SYSTEM_SETTINGS, key)) {
+                uri = CMSettings.System.CONTENT_URI;
+            } else if (ArrayUtils.contains(CMSettings.Secure.LEGACY_SECURE_SETTINGS, key)) {
+                uri = CMSettings.Secure.CONTENT_URI;
+            } else if (ArrayUtils.contains(CMSettings.Global.LEGACY_GLOBAL_SETTINGS, key)) {
+                uri = CMSettings.Global.CONTENT_URI;
+            }
+            if (uri != null) {
+                String value = cachedEntries.get(key);
+                cmSettingsValues.clear();
+                cmSettingsValues.put(Settings.NameValueTable.NAME, key);
+                cmSettingsValues.put(Settings.NameValueTable.VALUE, value);
+                try {
+                    cr.insert(uri, cmSettingsValues);
+                    if (DEBUG) {
+                        Log.d(TAG, "Restored cm setting: " + key + " : " + key + "=" + value);
+                    }
+                } catch (IllegalArgumentException e) {
+                    Log.e(TAG, "Failed to migrate " + key + " due to " + e.toString());
+                }
             }
         }
     }
