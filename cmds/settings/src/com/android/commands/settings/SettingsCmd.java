@@ -29,6 +29,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
@@ -138,6 +139,13 @@ public final class SettingsCmd {
         if (valid) {
             if (mUser < 0) {
                 mUser = UserHandle.USER_OWNER;
+            }
+
+            // Implicitly use CMSettings provider if the setting is a legacy setting
+            if (!mUseCMSettingsProvider && isLegacySetting(mTable, mKey)) {
+                System.err.println("'" + mKey + "' has moved to CMSettings.  Use --cm to avoid " +
+                        "this warning in the future.");
+                mUseCMSettingsProvider = true;
             }
 
             try {
@@ -327,6 +335,19 @@ public final class SettingsCmd {
         System.err.println("\n'namespace' is one of {system, secure, global}, case-insensitive");
         System.err.println("If '--user NUM' is not given, the operations are performed on the owner user.");
         System.err.println("If '--cm' is given, the operations are performed on the CMSettings provider.");
+    }
+
+    private static boolean isLegacySetting(String table, String key) {
+        if (!TextUtils.isEmpty(key)) {
+            if ("system".equals(table)) {
+                return CMSettings.System.isLegacySetting(key);
+            } else if ("secure".equals(table)) {
+                return CMSettings.Secure.isLegacySetting(key);
+            } else if ("global".equals(table)) {
+                return CMSettings.Global.isLegacySetting(key);
+            }
+        }
+        return false;
     }
 
     public static String resolveCallingPackage() {
