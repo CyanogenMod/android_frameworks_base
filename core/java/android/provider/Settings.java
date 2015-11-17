@@ -3439,6 +3439,14 @@ public final class Settings {
          * the setting value. See an example above.
          */
 
+         /**
+         * Whether wifi settings will connect to access point automatically
+         * 0 = automatically
+         * 1 = manually
+         * @hide
+         */
+        public static final String WIFI_AUTO_CONNECT_TYPE = "wifi_auto_connect_type";
+
         /**
           * Volume keys control cursor in text fields (default is 0)
           * 0 - Disabled
