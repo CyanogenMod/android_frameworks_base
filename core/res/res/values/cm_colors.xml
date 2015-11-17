@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="immersive_cling_bg_color">#ff009688</color>
+    <color name="immersive_cling_text_color">@color/primary_text_default_material_light</color>
+    <color name="immersive_cling_button_text_color">@android:color/white</color>
     <color name="notification_mtrl_action_textcolor">@color/secondary_text_material_light</color>
     <color name="notification_mtrl_big_picture_bg">#CCEEEEEE</color>
     <color name="resolver_list_bg">@color/white</color>
