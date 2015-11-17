@@ -30,6 +30,12 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <resources>
 
+    <!-- Used in LocalePicker, default language must be contained -->
+    <string name="locale_codes" translatable="false"></string>
+
+    <!-- If configure to true, always show the country(locale) name in the language lable -->
+    <bool name="config_display_country_for_locale_codes">false</bool>
+
     <!--Fully qualified class name of the plugin which would be
          dynamically loaded by TelephonyPluginDelegate-->
     <java-symbol type="string" name="telephony_plugin_class_name" />
