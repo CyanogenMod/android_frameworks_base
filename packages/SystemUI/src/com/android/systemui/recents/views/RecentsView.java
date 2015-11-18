@@ -116,7 +116,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         // Remove all/extra stack views
         int numTaskStacksToKeep = 0; // Keep no tasks if we are recreating the layout
         if (mConfig.launchedReuseTaskStackViews) {
-            numTaskStacksToKeep = Math.min(childCount, numStacks);
+            numTaskStacksToKeep = Math.min(stackViews.size(), numStacks);
         }
         for (int i = stackViews.size() - 1; i >= numTaskStacksToKeep; i--) {
             removeView(stackViews.get(i));
