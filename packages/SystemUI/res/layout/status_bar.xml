@@ -75,6 +75,20 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"/>
             </com.android.keyguard.AlphaOptimizedLinearLayout>
+
+            <com.android.keyguard.CarrierText
+                android:id="@+id/status_carrier_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/match_parent"
+                android:layout_marginStart="@dimen/keyguard_carrier_text_margin"
+                android:layout_toStartOf="@id/notification_icon_area_inner"
+                android:gravity="center_vertical"
+                android:ellipsize="marquee"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#ffffff"
+                android:singleLine="true"
+                android:visibility="gone"/>
+
         </com.android.systemui.statusbar.AlphaOptimizedFrameLayout>
 
         <com.android.keyguard.AlphaOptimizedLinearLayout android:id="@+id/system_icon_area"

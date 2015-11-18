@@ -290,6 +290,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     StatusBarIconController mIconController;
 
+    private View mCarrierText = null;
+
     // expanded notifications
     NotificationPanelView mNotificationPanel; // the sliding/resizing panel within the notification window
     View mExpandedContents;
@@ -721,6 +723,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // figure out which pixel-format to use for the status bar.
         mPixelFormat = PixelFormat.OPAQUE;
+
+        if (mContext.getResources().getBoolean(R.bool.enable_operator_name)) {
+            mCarrierText = mStatusBarView.findViewById(R.id.status_carrier_text);
+        }
 
         mStackScroller = (NotificationStackScrollLayout) mStatusBarWindow.findViewById(
                 R.id.notification_stack_scroller);
@@ -1461,6 +1467,21 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         updateNotificationShade();
         mIconController.updateNotificationIcons(mNotificationData);
+
+        if (mContext.getResources().getBoolean(R.bool.enable_operator_name)
+                && mCarrierText != null) {
+            if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED) {
+                  mCarrierText.setVisibility(View.GONE);
+            } else {
+                ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
+                final int N = activeNotifications.size();
+                if (N > 0) {
+                    mCarrierText.setVisibility(View.GONE);
+                } else {
+                    mCarrierText.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override
