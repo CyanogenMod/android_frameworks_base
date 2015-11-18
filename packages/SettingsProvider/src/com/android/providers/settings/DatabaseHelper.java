@@ -53,6 +53,7 @@ import com.android.internal.util.XmlUtils;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.LockPatternView;
 
+import cyanogenmod.providers.CMSettings;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -83,7 +84,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 118;
+    private static final int DATABASE_VERSION = 125;
 
     private Context mContext;
     private int mUserHandle;
@@ -1881,9 +1882,34 @@ class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 113;
         }
 
-        // We skipped 114 to handle a merge conflict with the introduction of theater mode.
+        // We skipped 114 to handle a merge conflict with the introduction of theater mode. Except
+        // in CM we didn't, soooooo...
+        if (upgradeVersion < 114) {
+            // Artificially bump our upgrade version to handle
+            // migration path from cm-11.0 to cm-12.0
+            // without this, heads up would never work if
+            // a user did not wipe data
+            /** CM-13, this option was moved to CMSettings, artificially bump, skip default load.**/
+//            upgradeHeadsUpSettingFromNone(db);
+//            upgradeDeviceNameFromNone(db);
+
+            // Removal of back/recents is no longer supported
+            // due to pinned apps
+            db.beginTransaction();
+            try {
+                db.execSQL("DELETE FROM system WHERE name='"
+                        + CMSettings.System.NAV_BUTTONS + "'");
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+
+            upgradeVersion = 114;
+        }
 
         if (upgradeVersion < 115) {
+            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    new String[] { CMSettings.Secure.STATS_COLLECTION }, true);
             if (mUserHandle == UserHandle.USER_OWNER) {
                 db.beginTransaction();
                 SQLiteStatement stmt = null;
@@ -1902,6 +1928,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (upgradeVersion < 116) {
+            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    new String[]{CMSettings.Secure.VOLUME_LINK_NOTIFICATION}, true);
             if (mUserHandle == UserHandle.USER_OWNER) {
                 db.beginTransaction();
                 SQLiteStatement stmt = null;
@@ -1930,10 +1958,44 @@ class DatabaseHelper extends SQLiteOpenHelper {
             } finally {
                 db.endTransaction();
             }
+
+            // CM11 used "holo" as a system default theme. For CM12 and up its been
+            // switched to "system". So change all "holo" references in themeConfig to "system"
+            final String NAME_THEME_CONFIG = "themeConfig";
+            Cursor c = null;
+            try {
+                String[] projection = new String[]{"value"};
+                String selection = "name=?";
+                String[] selectionArgs = new String[] { NAME_THEME_CONFIG };
+                c = db.query(TABLE_SECURE, projection, selection,
+                        selectionArgs, null, null, null);
+                if (c != null && c.moveToFirst()) {
+                    String jsonConfig = c.getString(0);
+                    if (jsonConfig != null) {
+                        jsonConfig = jsonConfig.replace(
+                                "\"holo\"", '"' + ThemeConfig.SYSTEM_DEFAULT + '"');
+
+                        // Now update the entry
+                        SQLiteStatement stmt = db.compileStatement(
+                                "UPDATE " + TABLE_SECURE + " SET value = ? "
+                                        + " WHERE name = ?");
+                        stmt.bindString(1, jsonConfig);
+                        stmt.bindString(2, NAME_THEME_CONFIG);
+                        stmt.execute();
+                    }
+                }
+            } finally {
+                if (c != null) c.close();
+            }
             upgradeVersion = 117;
         }
 
         if (upgradeVersion < 118) {
+            String[] settingsToMove = new String[] {
+                    CMSettings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
+            };
+            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    settingsToMove, true);
             // Reset rotation-lock-for-accessibility on upgrade, since it now hides the display
             // setting.
             db.beginTransaction();
@@ -1949,6 +2011,110 @@ class DatabaseHelper extends SQLiteOpenHelper {
             }
             upgradeVersion = 118;
         }
+
+        /** CM-13 CHANGES -- THIS IS TO SUPPORT LEGACY UPGRADES, DO NOT ADD ANY NEW DEFAULTS HERE
+         * INSTEAD UTILIZE THE CMSETTINGS PROVIDER
+         */
+        if (upgradeVersion == 119) {
+            /** CM-13, this option was moved to CMSettings, artificially bump, skip default load.**/
+//            db.beginTransaction();
+//            SQLiteStatement stmt = null;
+//            try {
+//                stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value) VALUES(?,?);");
+//                loadDefaultThemeSettings(stmt);
+//                db.setTransactionSuccessful();
+//            } finally {
+//                db.endTransaction();
+//                if (stmt != null) stmt.close();
+//            }
+            upgradeVersion = 120;
+        }
+
+        if (upgradeVersion < 121) {
+            String[] settingsToMove = CMSettings.Secure.NAVIGATION_RING_TARGETS;
+
+            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
+                    settingsToMove, true);
+            upgradeVersion = 121;
+        }
+
+        if (upgradeVersion < 122) {
+            /** CM-13, this option was moved to CMSettings, artificially bump, skip default load.**/
+//            db.beginTransaction();
+//            SQLiteStatement stmt = null;
+//            try {
+//                stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
+//                        + " VALUES(?,?);");
+//                loadBooleanSetting(stmt, CMSettings.Secure.ADVANCED_MODE,
+//                        com.android.internal.R.bool.config_advancedSettingsMode);
+//                db.setTransactionSuccessful();
+//            } finally {
+//                db.endTransaction();
+//                if (stmt != null) stmt.close();
+//            }
+            upgradeVersion = 122;
+        }
+
+        if (upgradeVersion < 123) {
+            // only the owner has access to global table, so we need to check that here
+            if (mUserHandle == UserHandle.USER_OWNER) {
+                String[] globalToSecure = new String[] { CMSettings.Secure.POWER_MENU_ACTIONS };
+
+                moveSettingsToNewTable(db, TABLE_GLOBAL, TABLE_SECURE, globalToSecure, true);
+            }
+
+            String[] systemToSecure = new String[] {
+                    CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR,
+                    CMSettings.Secure.KEYBOARD_BRIGHTNESS,
+                    CMSettings.Secure.BUTTON_BRIGHTNESS,
+                    CMSettings.Secure.BUTTON_BACKLIGHT_TIMEOUT
+            };
+            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE, systemToSecure, true);
+
+            upgradeVersion = 123;
+        }
+
+        if (upgradeVersion < 124) {
+            // Migrate from cm-12.0 if there is no entry from cm-11.0
+            /** CM-13, this option was moved to CMSettings, artificially bump, skip default load.**/
+//            db.beginTransaction();
+//            SQLiteStatement stmt = null;
+//            try {
+//                stmt = db.compileStatement("INSERT OR IGNORE INTO secure(name,value)"
+//                        + " VALUES(?,?);");
+//                int quickPulldown = getIntValueFromSystem(db,
+//                        CMSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN,
+//                        R.integer.def_qs_quick_pulldown);
+//                loadSetting(stmt, CMSettings.System.QS_QUICK_PULLDOWN, quickPulldown);
+//                db.setTransactionSuccessful();
+//            } finally {
+//                db.endTransaction();
+//                if (stmt != null) stmt.close();
+//            }
+            upgradeVersion = 124;
+        }
+
+        if (upgradeVersion < 125) {
+            // Force enable advanced settings if the overlay defaults to true
+            /** CM-13, this option was moved to CMSettings, artificially bump, skip default load.**/
+//            if (mContext.getResources().getBoolean(
+//                    com.android.internal.R.bool.config_advancedSettingsMode)) {
+//                db.beginTransaction();
+//                SQLiteStatement stmt = null;
+//                try {
+//                    stmt = db.compileStatement("INSERT OR REPLACE INTO secure(name,value)"
+//                            + " VALUES(?,?);");
+//                    loadBooleanSetting(stmt, CMSettings.Secure.ADVANCED_MODE,
+//                            com.android.internal.R.bool.config_advancedSettingsMode);
+//                    db.setTransactionSuccessful();
+//                } finally {
+//                    db.endTransaction();
+//                    if (stmt != null) stmt.close();
+//                }
+//            }
+            upgradeVersion = 125;
+        }
+        /** END CM-13 CHANGES */
 
         /*
          * IMPORTANT: Do not add any more upgrade steps here as the global,
