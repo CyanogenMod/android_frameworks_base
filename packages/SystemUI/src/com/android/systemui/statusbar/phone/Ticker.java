@@ -24,6 +24,7 @@ import android.service.notification.StatusBarNotification;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageSwitcher;
@@ -182,6 +183,8 @@ public abstract class Ticker {
     public void addEntry(StatusBarNotification n) {
         int initialCount = mSegments.size();
 
+        Log.i("YU-947", "addEntry: notification: " + String.valueOf(n));
+
         // If what's being displayed has the same text and icon, just drop it
         // (which will let the current one finish, this happens when apps do
         // a notification storm).
@@ -216,6 +219,10 @@ public abstract class Ticker {
         if (initialCount == 0 && mSegments.size() > 0) {
             Segment seg = mSegments.get(0);
             seg.first = false;
+
+            Log.i("YU-947", String.format("addEntry: segment: text: %s, current: %s, next: %s, icon: %s, notification: %s",
+                    seg.text, String.valueOf(seg.current), String.valueOf(seg.next),
+                    String.valueOf(seg.icon), String.valueOf(seg.notification)));
 
             mIconSwitcher.setAnimateFirstView(false);
             mIconSwitcher.reset();
