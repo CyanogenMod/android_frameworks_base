@@ -229,7 +229,24 @@ public class DeviceStorageMonitorService extends SystemService {
         }
     }
 
-    void checkMemory(boolean checkCache) {
+    void checkMemory(final boolean checkCache) {
+        // This could be called from uithread handler. We must ensure that there are
+        // no disk/write operations in
+        try {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    checkMemoryOnNonUiThread(checkCache);
+                }
+            });
+            t.start();
+            t.join();
+        } catch (InterruptedException iex) {
+            // ignore
+        }
+    }
+
+    private void checkMemoryOnNonUiThread(boolean checkCache) {
         //if the thread that was started to clear cache is still running do nothing till its
         //finished clearing cache. Ideally this flag could be modified by clearCache
         // and should be accessed via a lock but even if it does this test will fail now and
