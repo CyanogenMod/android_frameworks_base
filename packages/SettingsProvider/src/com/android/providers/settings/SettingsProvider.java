@@ -1856,6 +1856,7 @@ public class SettingsProvider extends ContentProvider {
 
         private final class UpgradeController {
             private static final int SETTINGS_VERSION = 122;
+            private static final int CM_SETTINGS_DB_VERSION = 125;
 
             private final int mUserId;
 
@@ -1869,11 +1870,11 @@ public class SettingsProvider extends ContentProvider {
                         SettingsRegistry.SETTINGS_TYPE_SECURE, mUserId);
 
                 // Try an update from the current state.
-                final int oldVersion = secureSettings.getVersionLocked();
+                final int oldVersion = secureSettings.getVersionLocked(); //125
                 final int newVersion = SETTINGS_VERSION;
 
                 // If up do date - done.
-                if (oldVersion == newVersion) {
+                if ((oldVersion == newVersion || oldVersion == CM_SETTINGS_DB_VERSION)) {
                     return;
                 }
 
