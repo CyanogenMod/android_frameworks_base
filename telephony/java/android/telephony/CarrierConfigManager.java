@@ -512,7 +512,7 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_VOICEMAIL_NOTIFICATION_PERSISTENT_BOOL, false);
         sDefaults.putBoolean(KEY_VOICE_PRIVACY_DISABLE_UI_BOOL, false);
         sDefaults.putBoolean(KEY_WORLD_PHONE_BOOL, false);
-        sDefaults.putBoolean(KEY_REQUIRE_ENTITLEMENT_CHECKS_BOOL, true);
+        sDefaults.putBoolean(KEY_REQUIRE_ENTITLEMENT_CHECKS_BOOL, false);
         sDefaults.putInt(KEY_VOLTE_REPLACEMENT_RAT_INT, 0);
         sDefaults.putString(KEY_DEFAULT_SIM_CALL_MANAGER_STRING, "");
         sDefaults.putString(KEY_VVM_DESTINATION_NUMBER_STRING, "");
