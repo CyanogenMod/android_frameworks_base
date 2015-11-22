@@ -34,6 +34,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.content.pm.UserInfo;
 import android.database.ContentObserver;
 import android.os.Binder;
 import android.os.Handler;
@@ -46,6 +47,7 @@ import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.Log;
@@ -1373,16 +1375,21 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         int callingUser = UserHandle.getCallingUserId();
         int callingUid = Binder.getCallingUid();
         long callingIdentity = Binder.clearCallingIdentity();
+        UserManager um = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
+        UserInfo ui = um.getProfileParent(callingUser);
+        int parentUser = (ui != null) ? ui.id : UserHandle.USER_NULL;
         int callingAppId = UserHandle.getAppId(callingUid);
         boolean valid = false;
         try {
             foregroundUser = ActivityManager.getCurrentUser();
             valid = (callingUser == foregroundUser) ||
+                    parentUser == foregroundUser    ||
                     callingAppId == Process.NFC_UID ||
                     callingAppId == mSystemUiUid;
             if (DBG) {
                 Log.d(TAG, "checkIfCallerIsForegroundUser: valid=" + valid
                     + " callingUser=" + callingUser
+                    + " parentUser=" + parentUser
                     + " foregroundUser=" + foregroundUser);
             }
         } finally {
