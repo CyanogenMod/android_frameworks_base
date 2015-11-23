@@ -1063,7 +1063,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 }
                 boolean modified = false;
                 if (state == TelephonyManager.DATA_CONNECTED) {
-                    if (!mConnectedApns[phoneId].contains(apnType)) {
+                    if (!mConnectedApns[phoneId].contains(apnType)
+                            && !apnType.equals(PhoneConstants.APN_TYPE_IMS)) {
                         mConnectedApns[phoneId].add(apnType);
                         if (mDataConnectionState[phoneId] != state) {
                             mDataConnectionState[phoneId] = state;
