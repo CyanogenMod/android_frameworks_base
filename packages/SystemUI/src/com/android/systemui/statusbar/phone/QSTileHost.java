@@ -258,6 +258,10 @@ public class QSTileHost implements QSTile.Host, Tunable {
                 }
             }
         }
+        //Always wedge in the edit tile
+        if (!newTiles.containsKey("edit")) {
+            newTiles.put("edit", createTile("edit"));
+        }
         mTileSpecs.clear();
         mTileSpecs.addAll(tileSpecs);
         mTiles.clear();
