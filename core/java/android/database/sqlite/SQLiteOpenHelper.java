@@ -357,7 +357,7 @@ public abstract class SQLiteOpenHelper {
      * @param newVersion The new database version.
      */
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        throw new SQLiteException("Can't downgrade database from version " +
+        throw new SQLiteException("Can't downgrade database " + db.getPath() + " from version " +
                 oldVersion + " to " + newVersion);
     }
 
