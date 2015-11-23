@@ -307,6 +307,11 @@ public class QSTileHost implements QSTile.Host, Tunable {
                 tiles.add(tile);
             }
         }
+        if (tiles.size() < 8 && !tiles.contains("edit")) {
+            tiles.add("edit");
+        } else if (tiles.size() > 8 && !tiles.contains("edit")) {
+            tiles.add(7, "edit");
+        }
         return tiles;
     }
 
