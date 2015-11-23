@@ -50,6 +50,7 @@ import com.android.systemui.settings.ToggleSlider;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.tuner.QsTuner;
+import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1417,8 +1418,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     public void reset() {
-        Settings.Secure.putStringForUser(getContext().getContentResolver(),
-                QSTileHost.TILES_SETTING, "default", ActivityManager.getCurrentUser());
+        CMSettings.Secure.putStringForUser(getContext().getContentResolver(),
+                CMSettings.Secure.QS_TILES, "default", ActivityManager.getCurrentUser());
         setEditing(false);
         setTiles(mHost.getTiles());
         requestLayout();
