@@ -61,9 +61,7 @@ public class EditTile extends QSTile<QSTile.BooleanState> {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent edit = new Intent(QSDragPanel.ACTION_EDIT_TILES);
-                                edit.putExtra(QSDragPanel.EXTRA_RESET, true);
-                                mContext.sendBroadcast(edit);
+                                getHost().resetTiles();
                                 refreshState(false);
                             }
                         }).create();

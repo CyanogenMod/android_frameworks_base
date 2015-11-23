@@ -65,10 +65,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     public static final boolean DEBUG_DRAG = true;
 
-    public static final String ACTION_EDIT_TILES = "com.android.systemui.ACTION_EDIT_TILES";
-    public static final String EXTRA_EDIT = "edit";
-    public static final String EXTRA_RESET = "reset";
-
     protected final ArrayList<QSPage> mPages = new ArrayList<>();
 
     protected QSViewPager mViewPager;
@@ -90,16 +86,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     List<TileRecord> mCurrentlyAnimating
             = Collections.synchronizedList(new ArrayList<TileRecord>());
     private Collection<QSTile<?>> mTempTiles = null;
-
-    private BroadcastReceiver mEditReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra(EXTRA_RESET) && intent.getBooleanExtra(EXTRA_RESET, false)) {
-                setEditing(false);
-                setTiles(mHost.getTiles());
-            }
-        }
-    };
 
     public QSDragPanel(Context context) {
         this(context, null);
@@ -235,18 +221,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mQsPanelTop.getDropTarget().setOnDragListener(this);
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        mContext.registerReceiver(mEditReceiver, new IntentFilter(ACTION_EDIT_TILES));
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        mContext.unregisterReceiver(mEditReceiver);
-    }
-
     protected void drawTile(TileRecord r, QSTile.State state) {
         final int visibility = state.visible || mEditing ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
@@ -283,7 +257,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     protected void onStopDrag() {
-        //mDraggingRecord.tileView.setVisibility(View.VISIBLE);
         mDraggingRecord.tileView.setAlpha(1f);
 
         mDraggingRecord = null;
@@ -1111,8 +1084,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             ti.row = tnext.row;
             ti.col = tnext.col;
             ti.destination.x = getLeft(tnext.destinationPage, ti.row, ti.col, desiredColumnCount);
-//            ti.destination.x = getLeft(ti.row, ti.col, desiredColumnCount,
-//                    tnext.destinationPage == 0 && ti.row == 0);
             ti.destination.y = getRowTop(ti.row);
 
             if (ti.destinationPage != tnext.destinationPage) {
@@ -1415,14 +1386,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         List<String> tiles = new ArrayList<>(mHost.getTileSpecs());
         tiles.add(tile);
         mHost.setTiles(tiles);
-    }
-
-    public void reset() {
-        CMSettings.Secure.putStringForUser(getContext().getContentResolver(),
-                CMSettings.Secure.QS_TILES, "default", ActivityManager.getCurrentUser());
-        setEditing(false);
-        setTiles(mHost.getTiles());
-        requestLayout();
     }
 
     public boolean isDragging() {

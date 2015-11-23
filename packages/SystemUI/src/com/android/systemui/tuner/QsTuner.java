@@ -105,7 +105,7 @@ public class QsTuner extends Fragment implements Callback {
                 mQsPanel.setEditing(!mQsPanel.isEditing());
                 break;
             case MENU_RESET:
-                mQsPanel.reset();
+                mTileHost.resetTiles();
                 break;
             case android.R.id.home:
                 getFragmentManager().popBackStack();

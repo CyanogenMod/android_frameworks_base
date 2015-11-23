@@ -331,6 +331,13 @@ public class QSTileHost implements QSTile.Host, Tunable {
                 TextUtils.join(",", tiles), ActivityManager.getCurrentUser());
     }
 
+    @Override
+    public void resetTiles() {
+        setEditing(false);
+        CMSettings.Secure.putStringForUser(getContext().getContentResolver(),
+                CMSettings.Secure.QS_TILES, "default", ActivityManager.getCurrentUser());
+    }
+
     public static int getLabelResource(String spec) {
         if (spec.equals("wifi")) return R.string.quick_settings_wifi_label;
         else if (spec.equals("bt")) return R.string.quick_settings_bluetooth_label;

@@ -337,6 +337,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         KeyguardMonitor getKeyguardMonitor();
         boolean isEditing();
         void setEditing(boolean editing);
+        void resetTiles();
 
         public interface Callback {
             void onTilesChanged();
