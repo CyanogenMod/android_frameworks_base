@@ -445,10 +445,10 @@ public class Toast {
                         mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Toko;
                         break;
                     case 7:
-                        mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_tn;
+                        mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Tn;
                         break;
                     case 8:
-                        mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_honami;
+                        mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_Honami;
                         break;
                     case 9:
                         mParams.windowAnimations = com.android.internal.R.style.Animation_Toast_FastFade;
