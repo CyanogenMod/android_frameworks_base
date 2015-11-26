@@ -1492,7 +1492,11 @@ class MountService extends IMountService.Stub
 
     private void addVolumeLocked(StorageVolume volume) {
         Slog.d(TAG, "addVolumeLocked() " + volume);
-        mVolumes.add(volume);
+        if(volume.isEmulated()) {
+            mVolumes.add(0, volume);
+        } else {
+            mVolumes.add(volume);
+        }
         final StorageVolume existing = mVolumesByPath.put(volume.getPath(), volume);
         if (existing != null) {
             throw new IllegalStateException(
