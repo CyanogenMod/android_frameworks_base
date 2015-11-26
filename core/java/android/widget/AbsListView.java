@@ -72,6 +72,7 @@ import android.view.accessibility.AccessibilityNodeInfo.CollectionInfo;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.CycleInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
@@ -2506,7 +2507,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 anim = new TranslateAnimation(mWidth, 0.0f, 0.0f, 0.0f);
                 break;
             case 11:
-                anim = AnimationUtils.loadAnimation(mContext, android.R.anim.shake);
+                anim = new TranslateAnimation(0.0f, 0.1f, 0.0f, 0.0f);
+                anim.setDuration(1000);
+                anim.setInterpolator(new CycleInterpolator(7f));
                 break;
         }
 
