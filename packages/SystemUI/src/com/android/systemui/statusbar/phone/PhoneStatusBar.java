@@ -1522,15 +1522,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mContext.getResources().getBoolean(R.bool.enable_operator_name)
                 && mCarrierText != null) {
             if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED) {
-                  mCarrierText.setVisibility(View.GONE);
+                mCarrierText.setVisibility(View.GONE);
             } else {
-                ArrayList<Entry> activeNotifications = mNotificationData.getActiveNotifications();
-                final int N = activeNotifications.size();
-                if (N > 0) {
-                    mCarrierText.setVisibility(View.GONE);
-                } else {
-                    mCarrierText.setVisibility(View.VISIBLE);
-                }
+                mCarrierText.setVisibility(View.VISIBLE);
             }
         }
     }

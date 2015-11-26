@@ -322,6 +322,9 @@
     <!-- Duration of the expansion animation in the volume dialog -->
     <item name="volume_expand_animation_duration" type="integer">300</item>
 
+    <!-- Whether or not to show operator name in Keyguard, true by Android original default -->
+    <bool name="config_showOperatorInKeyguard">true</bool>
+
     <!-- Whether or not to show battery level text. -->
     <bool name="config_showBatteryPercentage">false</bool>
 </resources>
