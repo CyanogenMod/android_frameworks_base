@@ -3411,8 +3411,11 @@ public final class Settings {
          * 4 == Alpha
          * 5 == Stack (Top)
          * 6 == Stack (Bottom)
-         * 7 == Translate (Left)
-         * 8 == Translate (Right)
+         * 7 == Unfold
+         * 8 == Fold
+         * 9 == Translate (Left)
+         * 10 == Translate (Right)
+         * 11 == Shake
          * @hide
          */
         public static final String LISTVIEW_ANIMATION = "listview_animation";
