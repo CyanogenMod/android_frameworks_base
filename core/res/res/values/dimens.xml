@@ -418,4 +418,5 @@
 
     <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
     <dimen name="global_actions_avatar_size">40dp</dimen>
+    <dimen name="password_keyboard_height">48.0mm</dimen>
 </resources>
