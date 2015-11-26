@@ -2506,7 +2506,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 anim = new TranslateAnimation(mWidth, 0.0f, 0.0f, 0.0f);
                 break;
             case 11:
-                anim = AnimationUtils.loadAnimation(mContext, R.anim.shake);
+                anim = AnimationUtils.loadAnimation(mContext, android.R.anim.shake);
                 break;
         }
 
