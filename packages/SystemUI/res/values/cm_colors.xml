@@ -65,4 +65,6 @@
     <!-- QS Toast Text color -->
     <color name="quick_settings_toast_color">#ffbe1b</color>
 
+    <!-- SystemUI Tuner Icon Tint Color -->
+    <color name="tuner_icon_tint">#4dffffff</color>
 </resources>

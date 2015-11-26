@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="36dp"
-            android:tint="#4DFFFFFF"
+            android:tint="@color/tuner_icon_tint"
             android:tintMode="src_in"
             android:visibility="invisible"
             android:src="@drawable/tuner" />
