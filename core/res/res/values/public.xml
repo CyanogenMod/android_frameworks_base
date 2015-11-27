@@ -2634,11 +2634,28 @@
     <public type="attr" name="supportsAssist" id="0x010104f0" />
     <public type="attr" name="supportsLaunchVoiceAssistFromKeyguard" id="0x010104f1" />
 
-    <public type="style" name="Widget.Material.Button.Colored" id="0x010302d3" />
-    <public type="style" name="TextAppearance.Material.Widget.Button.Inverse" id="0x010302d4" />
-    <public type="style" name="Theme.Material.Light.LightStatusBar" id="0x010302d5" />
-    <public type="style" name="ThemeOverlay.Material.Dialog" id="0x010302d6" />
-    <public type="style" name="ThemeOverlay.Material.Dialog.Alert" id="0x010302d7" />
+    <public type="style" name="Widget.Material.Button.Colored" />
+    <public type="style" name="Theme.Material.DayNight" />
+    <public type="style" name="Theme.Material.DayNight.DarkActionBar" />
+    <public type="style" name="Theme.Material.DayNight.Dialog" />
+    <public type="style" name="Theme.Material.DayNight.Dialog.Alert" />
+    <public type="style" name="Theme.Material.DayNight.Dialog.MinWidth" />
+    <public type="style" name="Theme.Material.DayNight.Dialog.NoActionBar" />
+    <public type="style" name="Theme.Material.DayNight.Dialog.NoActionBar.MinWidth" />
+    <public type="style" name="Theme.Material.DayNight.Dialog.Presentation" />
+    <public type="style" name="Theme.Material.DayNight.DialogWhenLarge" />
+    <public type="style" name="Theme.Material.DayNight.DialogWhenLarge.NoActionBar" />
+    <public type="style" name="Theme.Material.DayNight.NoActionBar" />
+    <public type="style" name="Theme.Material.DayNight.NoActionBar.Fullscreen" />
+    <public type="style" name="Theme.Material.DayNight.NoActionBar.Overscan" />
+    <public type="style" name="Theme.Material.DayNight.NoActionBar.TranslucentDecor" />
+    <public type="style" name="Theme.Material.DayNight.Panel" />
+    <public type="style" name="Theme.Material.Light.LightStatusBar" />
+    <public type="style" name="ThemeOverlay.Material.Dialog" />
+    <public type="style" name="TextAppearance.Material.Widget.Button.Inverse" />
+    <public type="style" name="ThemeOverlay.Material.Dialog.Alert" />
+    <public type="style" name="Theme.Material.Light.DialogWhenLarge.DarkActionBar" />
+    <public type="style" name="Theme.Material.DayNight.DialogWhenLarge.DarkActionBar" />
 
     <public type="id" name="pasteAsPlainText" id="0x01020031" />
     <public type="id" name="undo" id="0x01020032" />

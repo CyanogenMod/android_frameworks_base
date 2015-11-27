@@ -51,7 +51,7 @@
             android:id="@+id/container_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/material_grey_50"
+            android:background="?android:attr/colorBackground"
             android:elevation="8dp" />
 
     </LinearLayout>
@@ -63,7 +63,7 @@
         android:layout_gravity="start"
         android:orientation="vertical"
         android:elevation="16dp"
-        android:background="@color/drawer_background_color">
+        android:background="?android:attr/colorBackground">
 
         <Toolbar
             android:id="@+id/roots_toolbar"

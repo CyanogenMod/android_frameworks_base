@@ -215,22 +215,22 @@
     <style name="Animation.StatusBar">
     </style>
 
-    <style name="systemui_theme" parent="@android:style/Theme.DeviceDefault">
+    <style name="systemui_theme" parent="@android:style/Theme.Material.DayNight">
         <item name="android:colorPrimary">@color/system_primary_color</item>
         <item name="android:colorControlActivated">@color/system_accent_color</item>
     </style>
 
-    <style name="systemui_theme_light" parent="@android:style/Theme.DeviceDefault.Light">
+    <style name="systemui_theme_light" parent="@android:style/Theme.Material.DayNight">
         <item name="android:colorPrimary">@color/system_primary_color</item>
         <item name="android:colorControlActivated">@color/system_accent_color</item>
     </style>
 
-    <style name="Theme.SystemUI.Dialog" parent="@android:style/Theme.DeviceDefault.Light.Dialog">
+    <style name="Theme.SystemUI.Dialog" parent="@android:style/Theme.Material.DayNight.Dialog">
         <item name="android:colorPrimary">@color/system_primary_color</item>
         <item name="android:colorControlActivated">@color/system_accent_color</item>
     </style>
 
-    <style name="Theme.SystemUI.Dialog.Alert" parent="@*android:style/Theme.DeviceDefault.Light.Dialog.Alert" />
+    <style name="Theme.SystemUI.Dialog.Alert" parent="@*android:style/Theme.Material.DayNight.Dialog.Alert" />
 
     <style name="QSBorderlessButton">
         <item name="android:padding">12dp</item>
@@ -253,7 +253,7 @@
         <item name="numColumns">3</item>
     </style>
 
-    <style name="Theme.AlertDialogHost" parent="android:Theme.DeviceDefault">
+    <style name="Theme.AlertDialogHost" parent="android:Theme.Material.DayNight">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
