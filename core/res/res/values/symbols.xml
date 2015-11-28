@@ -2432,4 +2432,12 @@
   <java-symbol type="array" name="origin_carrier_names" />
   <java-symbol type="array" name="locale_carrier_names" />
 
+  <!-- Package Manager -->
+  <java-symbol type="array" name="config_disabledComponents" />
+  <java-symbol type="array" name="config_forceEnabledComponents" />
+
+  <!-- Doze mode -->
+  <java-symbol type="bool" name="config_doze_enabled_by_default" />
+
+
 </resources>

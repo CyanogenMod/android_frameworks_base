@@ -1667,6 +1667,9 @@
          turned off and the screen off animation has been performed. -->
     <bool name="config_dozeAfterScreenOff">false</bool>
 
+    <!-- Whether or not doze is enabled by default in settings. -->
+    <bool name="config_doze_enabled_by_default">true</bool>
+
     <!-- Power Management: Specifies whether to decouple the auto-suspend state of the
          device from the display on/off state.
 
