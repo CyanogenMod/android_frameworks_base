@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Akkumulátor mód: energiatakarékos.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Akkumulátor mód: kiegyensúlyozott.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Akkumulátor mód: teljesítménycentrikus.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Akkumulátor mód: hatékony mód.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Akkumulátor mód: teljesítmény mód.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Akkumulátor mód energiatakarékosra változtatva.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Akkumulátor mód kiegyensúlyozottra változtatva.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Akkumulátor mód teljesítménycentrikusra változtatva.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Akkumulátor mód átváltva hatékony módra.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Akkumulátor mód átváltva teljesítmény módra.</string>
   <string name="accessibility_quick_settings_profiles_off">Profilok ki.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profilok kikapcsolva.</string>
@@ -94,7 +98,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB megosztás be.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB megosztás kikapcsolva.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB megosztás bekapcsolva.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akkumulátor kímélő ki.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akkumulátor kímélő be.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akkumulátor kímélő kikapcsolva.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akkumulátor kímélő bekapcsolva.</string>
   <string name="accessibility_quick_settings_visualizer">Vizualizáció.</string>
+  <string name="accessibility_quick_settings_volume_panel">Hangerőszabályzás.</string>
   <string name="accessibility_dpad_left">Kurzor balra</string>
   <string name="accessibility_dpad_right">Kurzor jobbra</string>
   <string name="quick_settings_mobile_data_label">Mobilinternet</string>
@@ -115,12 +124,15 @@
   <string name="quick_settings_lockscreen_label_enforced">A képernyő zárolásának kényszerítése</string>
   <string name="quick_settings_network_adb_label">ADB hálózaton keresztül</string>
   <string name="quick_settings_lte_label">LTE</string>
+  <string name="quick_settings_volume_panel_label">Hangerőszabályzás</string>
   <string name="quick_settings_screen_timeout_detail_title">Képernyő időkorlátja</string>
   <string name="quick_settings_usb_tether_label">USB megosztás</string>
   <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
   <string name="quick_settings_ambient_display_label">Környezeti kijelző</string>
   <string name="quick_settings_sync_label">Szinkronizálás</string>
+  <string name="quick_settings_battery_saver_label">Akkumulátor kímélő</string>
   <string name="quick_settings_custom_tile_detail_title">Egyéni csempe</string>
+  <string name="quick_settings_performance_profile_detail_title">Akkumulátor mód</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Csúsztasson jobbra ezért: %1$s</string>
   <string name="right_shortcut_hint">Csúsztasson balra ezért: %1$s</string>
@@ -160,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Kérjük, szkennelje újra</string>
   <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> százalék.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nincs találat</string>
+  <string name="play_queue_extention">Lejátszási lista megjelenítése</string>
 </resources>

@@ -136,6 +136,8 @@
   <string name="perf_profile_pwrsv">ವಿದ್ಯುತ್ ಉಳಿತಾಯ</string>
   <string name="perf_profile_bal">ಸಮತೋಲಿತ</string>
   <string name="perf_profile_perf">ಪರ್ಫಾರ್ಮೆನ್ಸ್</string>
+  <string name="perf_profile_bias_power">ದಕ್ಷತೆ</string>
+  <string name="perf_profile_bias_perf">ತ್ವರಿತ</string>
   <string name="theme_install_error_title">ಥೀಮ್ ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
   <string name="theme_install_error_message">%s ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
   <string name="theme_reset_notification_title">ಥೀಮ್ ಮರುಹೊಂದಿಕೆ</string>

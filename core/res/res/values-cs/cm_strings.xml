@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Úsporný</string>
   <string name="perf_profile_bal">Vyvážený</string>
   <string name="perf_profile_perf">Výkonný</string>
+  <string name="perf_profile_bias_power">Efektivita</string>
+  <string name="perf_profile_bias_perf">Výkon</string>
   <string name="theme_install_error_title">Instalace motivu selhala</string>
   <string name="theme_install_error_message">Instalace „%s“ selhala</string>
   <string name="theme_reset_notification_title">Obnovit motiv</string>

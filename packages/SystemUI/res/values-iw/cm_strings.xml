@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_recents">סגור את כל היישומים האחרונים</string>
+  <string name="clear_recents">סגור הכל</string>
   <string name="screenshot_delete_action">מחק</string>
   <string name="screenshot_delete_confirmation">צילום מסך נמחק.</string>
   <string name="advanced_dev_option_wipe_app">מחק נתוני יישום</string>
