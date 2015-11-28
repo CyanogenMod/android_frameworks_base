@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Batereya rejimi: güc qənaəti rejimi.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Batereya rejimi: tarazlaşdırılmış rejim.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Batereya rejimi: performans rejimi.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Batareya rejimi: səmərəli rejim.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Batereya rejimi: cəld rejim.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batereya rejimi güc qənaəti rejiminə keçdi.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Batereya rejimi tarazlaşdırılmış rejimə keçdi.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Batereya rejimi performans rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Batereya rejimi səmərəli rejimə keçdi.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Batereya rejimi cəld rejiminə keçdi.</string>
   <string name="accessibility_quick_settings_profiles_off">Profillər bağlıdır.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profillər bağlıdır.</string>
@@ -94,7 +98,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB int. payl. açıqdır.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB int. payl. bağlanıldı.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB int. payl. açıldı.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Batereyaya qənaət bağlıdır.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Batereyaya qənaət açıqdır.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Batereyaya qənaət bağlanıldı.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Batereyaya qənaət açıldı.</string>
   <string name="accessibility_quick_settings_visualizer">Əyaniləşdirici.</string>
+  <string name="accessibility_quick_settings_volume_panel">Səs paneli.</string>
   <string name="accessibility_dpad_left">Sol kursor</string>
   <string name="accessibility_dpad_right">Sağ kursor</string>
   <string name="quick_settings_mobile_data_label">Mobil verilənlər</string>
@@ -121,7 +130,9 @@
   <string name="quick_settings_heads_up_label">Açılan başlıqlar</string>
   <string name="quick_settings_ambient_display_label">Bildiriş ekranı</string>
   <string name="quick_settings_sync_label">Eyniləşdirmə</string>
+  <string name="quick_settings_battery_saver_label">Batereyaya qənaət</string>
   <string name="quick_settings_custom_tile_detail_title">Özəl kvadrat</string>
+  <string name="quick_settings_performance_profile_detail_title">Batereya rejimi</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">%1$s üçün sağa sürüşdürün</string>
   <string name="right_shortcut_hint">%1$s üçün sola sürüşdürün</string>
@@ -161,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Zəhmət olmasa yenidən tədqiq edin</string>
   <string name="accessibility_dock_battery_level">Modul batareya faizi <xliff:g id="number">%d</xliff:g>.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Element tapılmadı</string>
+  <string name="play_queue_extention">Oynatma sırasını göstər</string>
 </resources>

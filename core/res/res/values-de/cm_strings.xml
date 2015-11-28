@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Energie sparen</string>
   <string name="perf_profile_bal">Ausgeglichen</string>
   <string name="perf_profile_perf">Mehr Leistung</string>
+  <string name="perf_profile_bias_power">Effizient</string>
+  <string name="perf_profile_bias_perf">Schnell</string>
   <string name="theme_install_error_title">Design konnte nicht intalliert werden</string>
   <string name="theme_install_error_message">%s konnte nicht installiert werden</string>
   <string name="theme_reset_notification_title">Design zurückgesetzt</string>

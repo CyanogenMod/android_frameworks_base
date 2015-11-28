@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de batería: ahorro energía.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Modo de batería: equilibrado.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Modo de batería: rendimiento.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Modo de la batería: modo de eficiencia.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Modo de la batería: modo rápido.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modo de batería cambiado a ahorro de energía.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Modo de batería cambiado a equilibrado.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Modo de batería cambiado a modo rendimiento.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Modo de la batería cambiado a modo de eficiencia.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Modo de la batería cambiado a modo rápido.</string>
   <string name="accessibility_quick_settings_profiles_off">Perfiles desactivado.</string>
   <string name="accessibility_quick_settings_profiles">Perfil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Perfiles desactivado.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Sincronizar</string>
   <string name="quick_settings_battery_saver_label">Modo de ahorro de batería</string>
   <string name="quick_settings_custom_tile_detail_title">Control personalizado</string>
+  <string name="quick_settings_performance_profile_detail_title">Modo de la batería</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Desliza a la derecha para %1$s</string>
   <string name="right_shortcut_hint">Desliza a la izquierda para %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Por favor, escanea otra vez</string>
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g> por ciento.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">No se encontraron elementos</string>
+  <string name="play_queue_extention">Mostrar la cola de reproducción</string>
 </resources>

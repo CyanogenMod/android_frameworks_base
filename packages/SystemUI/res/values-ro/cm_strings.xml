@@ -50,6 +50,7 @@
   <string name="accessibility_quick_settings_nfc_on">NFC pornit.</string>
   <string name="accessibility_quick_settings_nfc_changed_off">NFC oprit.</string>
   <string name="accessibility_quick_settings_nfc_changed_on">NFC pornit.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Mod baterie: mod echilibrat.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil schimbat în <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>

@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Ahorro de energía</string>
   <string name="perf_profile_bal">Equilibrado</string>
   <string name="perf_profile_perf">Alto rendimiento</string>
+  <string name="perf_profile_bias_power">Eficiencia</string>
+  <string name="perf_profile_bias_perf">Rápido</string>
   <string name="theme_install_error_title">Fallo al instalar el tema</string>
   <string name="theme_install_error_message">Fallo al instalar %s</string>
   <string name="theme_reset_notification_title">Tema restablecido</string>

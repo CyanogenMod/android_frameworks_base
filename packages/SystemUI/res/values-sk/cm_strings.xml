@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Režim batérie: režim šetrenia energie.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Režim batérie: vyvážený režim.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Režim batérie: režim výkonu.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Režim batérie: efektívny režim.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Režim batérie: rýchly režim.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Režim batérie sa zmenil na režim šetrenia energie.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Režim batérie sa zmenil na vyvážený režim.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Režim batérie sa zmenil na režim výkonu.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Režim batérie sa zmenil na efektívny režim.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Režim batérie sa zmenil na výkonný režim.</string>
   <string name="accessibility_quick_settings_profiles_off">Profily vyp.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profily vypnuté.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Synchronizácia</string>
   <string name="quick_settings_battery_saver_label">Šetrič batérie</string>
   <string name="quick_settings_custom_tile_detail_title">Vlastná dlaždica</string>
+  <string name="quick_settings_performance_profile_detail_title">Režim batérie</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Potiahnite doprava pre %1$s</string>
   <string name="right_shortcut_hint">Potiahnite doľava pre %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Prosím, nasnímajte znovu</string>
   <string name="accessibility_dock_battery_level">Batéria doku <xliff:g id="number">%d</xliff:g> percent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nenašli sa žiadne položky</string>
+  <string name="play_queue_extention">Zobraziť poradie prehrávania</string>
 </resources>

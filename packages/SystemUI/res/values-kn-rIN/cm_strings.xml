@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">ಬ್ಯಾಟರಿ ಮೋಡ್: ವಿದ್ಯುತ್ ಉಳಿತಾಯ ಮೋಡ್.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">ಬ್ಯಾಟರಿ ಮೋಡ್: ಸಮತೋಲಿತ ಮೋಡ್.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">ಬ್ಯಾಟರಿ ಮೋಡ್: ಪರ್ಫಾರ್ಮೆನ್ಸ್ ಮೋಡ್.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">ಬ್ಯಾಟರಿ ಮೋಡ್: ದಕ್ಷತೆ ಮೋಡ್.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">ಬ್ಯಾಟರಿ ಮೋಡ್: ತ್ವರಿತ ಮೋಡ್.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">ಬ್ಯಾಟರಿ ಮೋಡ್ ವಿದ್ಯುತ್ ಉಳಿತಾಯ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">ಬ್ಯಾಟರಿ ಮೋಡ್ ಸಮತೋಲಿತ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">ಬ್ಯಾಟರಿ ಮೋಡ್ ಪರ್ಫಾರ್ಮೆನ್ಸ್ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">ಬ್ಯಾಟರಿ ಮೋಡ್ ದಕ್ಷತೆ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">ಬ್ಯಾಟರಿ ಮೋಡ್ ತ್ವರಿತ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
   <string name="accessibility_quick_settings_profiles_off">ಪ್ರೊಫೈಲ್ಸ್ ಆಫ್.</string>
   <string name="accessibility_quick_settings_profiles">ಪ್ರೊಫೈಲ್: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">ಪ್ರೊಫೈಲ್ಸ್ ಆಫ್ ಆಗಿದೆ.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">ಸಿಂಕ್</string>
   <string name="quick_settings_battery_saver_label">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ</string>
   <string name="quick_settings_custom_tile_detail_title">ಕಸ್ಟಮ್ ಟೈಲ್</string>
+  <string name="quick_settings_performance_profile_detail_title">ಬ್ಯಾಟರಿ ಮೋಡ್</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">%1$sಗಾಗಿ ಬಲಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ</string>
   <string name="right_shortcut_hint">%1$sಗಾಗಿ ಎಡಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ</string>

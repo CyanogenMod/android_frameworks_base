@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Energiatakarékos</string>
   <string name="perf_profile_bal">Kiegyensúlyozott</string>
   <string name="perf_profile_perf">Teljesítménycentrikus</string>
+  <string name="perf_profile_bias_power">Hatékonyság</string>
+  <string name="perf_profile_bias_perf">Teljesítmény</string>
   <string name="theme_install_error_title">Téma telepítése sikertelen</string>
   <string name="theme_install_error_message">Sikertelen telepítés: %s</string>
   <string name="theme_reset_notification_title">Téma viszaállítása</string>
@@ -207,4 +209,8 @@
   <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse alacsony szintű akkumulátor használatára vonatkozó adatokat.</string>
   <string name="silent_mode_priority">Prioritás</string>
   <string name="silent_mode_none">Nincs</string>
+  <string name="subscription_change_disabled_wifi_ap">Wi\u2011Fi hotspot kikapcsolva a SIM előfizetés módosítása miatt</string>
+  <string name="notify_turn_wifi_off_title">Wi\u2011Fi kikapcsolása</string>
+  <string name="permlab_thirdPartyKeyguard">harmadik fél zárképernyő</string>
+  <string name="permdesc_thirdPartyKeyguard">Lehetővé teszi az alkalmazás számára, hogy egy nem biztonságos zárképernyőként használja.</string>
 </resources>

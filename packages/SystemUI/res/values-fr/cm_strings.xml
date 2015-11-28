@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Mode batterie  : économie d\'énergie.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Mode batterie : équilibré.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Mode batterie : haute performance.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Mode batterie : efficace.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Mode batterie : rapide.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">La batterie est maintenant en mode économie d\'énergie.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">La batterie est maintenant en mode équilibré.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">La batterie est maintenant en mode performances.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Mode batterie changé en mode efficace.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Mode batterie changé en mode rapide.</string>
   <string name="accessibility_quick_settings_profiles_off">Profils désactivés.</string>
   <string name="accessibility_quick_settings_profiles">Profil : <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profils désactivés.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Synchronisation</string>
   <string name="quick_settings_battery_saver_label">Économiseur de batterie</string>
   <string name="quick_settings_custom_tile_detail_title">Personnaliser le raccourci</string>
+  <string name="quick_settings_performance_profile_detail_title">Mode batterie</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Balayer à droite pour %1$s</string>
   <string name="right_shortcut_hint">Balayer à gauche pour %1$s</string>

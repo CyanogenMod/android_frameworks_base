@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Tiết kiệm pin</string>
   <string name="perf_profile_bal">Cân bằng</string>
   <string name="perf_profile_perf">Hiệu suất cao</string>
+  <string name="perf_profile_bias_power">Hiệu quả</string>
+  <string name="perf_profile_bias_perf">Nhanh</string>
   <string name="theme_install_error_title">Không thể cài đặt chủ đề</string>
   <string name="theme_install_error_message">Không thể cài đặt %s</string>
   <string name="theme_reset_notification_title">Đặt lại chủ đề</string>
@@ -207,4 +209,8 @@
   <string name="permdesc_resetBatteryStats">Cho phép ứng dụng thiết lập lại dữ liệu cấp thấp của mức tiêu thụ pin hiện tại.</string>
   <string name="silent_mode_priority">Ưu tiên</string>
   <string name="silent_mode_none">Không có</string>
+  <string name="subscription_change_disabled_wifi_ap">Vô hiệu điểm phát WiFi vì thay đổi đăng ký SIM</string>
+  <string name="notify_turn_wifi_off_title">Tắt WiFi</string>
+  <string name="permlab_thirdPartyKeyguard">màn hình khoá bên thứ ba</string>
+  <string name="permdesc_thirdPartyKeyguard">Cho phép ứng dụng được dùng làm màn hình khoá không an toàn.</string>
 </resources>

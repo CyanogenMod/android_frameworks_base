@@ -205,7 +205,7 @@
   <string name="fingerprint_default_name"><xliff:g id="number">%d</xliff:g>. hatz-marka</string>
   <string name="permlab_accessFingerprintService">atzitu hatz-marka zerbitzua</string>
   <string name="permdesc_accessFingerprintService">Hatz-marka zerbitzua atzitzea ahalbidetzen dio aplikazioari. Aplikazioak hatz-markak gehitu, ezabatu edo izenez aldatu ahal izango ditu eta hauek erabilita identifikatu</string>
-  <string name="permlab_resetBatteryStats">leheneratu bateria estatistikak</string>
+  <string name="permlab_resetBatteryStats">ezabatu bateriaren estatistikak</string>
   <string name="permdesc_resetBatteryStats">Bateriaren maila baxuko erabilera datuak leheneratzea ahalbidetzen dio aplikazioari.</string>
   <string name="silent_mode_priority">Lehentasuna</string>
   <string name="silent_mode_none">Bat ere ez</string>
