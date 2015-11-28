@@ -201,7 +201,7 @@ public class StorageVolume implements Parcelable {
      */
     public int getVolumeId() {
         String id = mFsUuid;
-        if (id == null) {}
+        if (id == null) {
             return -1;
         }
         id = id.replace("-", "");

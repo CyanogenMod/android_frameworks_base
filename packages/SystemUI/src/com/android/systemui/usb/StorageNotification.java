@@ -260,7 +260,7 @@ public class StorageNotification extends SystemUI {
         if (vol.disk.isNonRemovable()) {
             return;
         }
-        
+
         Log.d(TAG, "Notifying about public volume: " + vol.toString());
 
         final Notification notif;

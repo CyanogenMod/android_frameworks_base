@@ -122,6 +122,7 @@ public interface IActivityManager extends IInterface {
     public void activitySlept(IBinder token) throws RemoteException;
     public void activityDestroyed(IBinder token) throws RemoteException;
     public String getCallingPackage(IBinder token) throws RemoteException;
+    public String getCallingPackageForBroadcast(boolean foreground) throws RemoteException;
     public ComponentName getCallingActivity(IBinder token) throws RemoteException;
     public List<IAppTask> getAppTasks(String callingPackage) throws RemoteException;
     public int addAppTask(IBinder activityToken, Intent intent,
@@ -840,6 +841,10 @@ public interface IActivityManager extends IInterface {
     int START_IN_PLACE_ANIMATION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+240;
     int CHECK_PERMISSION_WITH_TOKEN_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+241;
     int REGISTER_TASK_STACK_LISTENER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+242;
+    // 243: Available
+
+    // start of CM transactions
+    int GET_CALLING_PACKAGE_FOR_BROADCAST_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+244;
 
     // Start of M transactions
     int NOTIFY_CLEARTEXT_NETWORK_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+280;
