@@ -1335,7 +1335,7 @@
     </string-array>
 
     <!-- Component name of the combo network location provider. -->
-    <string name="config_comboNetworkLocationProvider" translatable="false">com.qualcomm.location</string>
+    <string name="config_comboNetworkLocationProvider" translatable="false">@null</string>
 
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
     use cases -->
