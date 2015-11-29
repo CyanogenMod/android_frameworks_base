@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +40,22 @@ import com.android.systemui.statusbar.policy.SignalCallbackAdapter;
 
 /** Quick settings tile: Cellular **/
 public class CellularTile extends QSTile<QSTile.SignalState> {
-    private static final Intent CELLULAR_SETTINGS = new Intent().setComponent(new ComponentName(
+
+    private static final Intent DATA_USAGE_SETTINGS = new Intent().setComponent(new ComponentName(
             "com.android.settings", "com.android.settings.Settings$DataUsageSummaryActivity"));
+    private static final Intent MOBILE_NETWORK_SETTINGS = new Intent(Intent.ACTION_MAIN)
+            .setComponent(new ComponentName("com.android.phone",
+                    "com.android.phone.MobileNetworkSettings"));
+    private static final Intent MOBILE_NETWORK_SETTINGS_MSIM = new Intent(Intent.ACTION_MAIN)
+            .setClassName("com.android.phone", "com.android.phone.msim.SelectSubscription")
+            .putExtra("PACKAGE", "com.android.phone")
+            .putExtra("TARGET_CLASS", "com.android.phone.MobileNetworkSettings")
+            .putExtra("TARGET_THEME", "Theme.Material.Settings");
 
     private final NetworkController mController;
     private final MobileDataController mDataController;
     private final CellularDetailAdapter mDetailAdapter;
+    private final TelephonyManager mTelephonyManager;
 
     private final CellSignalCallback mSignalCallback = new CellSignalCallback();
 
@@ -52,6 +64,7 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
         mController = host.getNetworkController();
         mDataController = mController.getMobileDataController();
         mDetailAdapter = new CellularDetailAdapter();
+        mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     @Override
@@ -84,7 +97,16 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
         if (mDataController.isMobileDataSupported()) {
             showDetail(true);
         } else {
-            mHost.startActivityDismissingKeyguard(CELLULAR_SETTINGS);
+            mHost.startActivityDismissingKeyguard(DATA_USAGE_SETTINGS);
+        }
+    }
+
+    @Override
+    protected void handleLongClick() {
+        if (mTelephonyManager.getDefault().getPhoneCount() > 1) {
+            mHost.startActivityDismissingKeyguard(MOBILE_NETWORK_SETTINGS_MSIM);
+        } else {
+            mHost.startActivityDismissingKeyguard(MOBILE_NETWORK_SETTINGS);
         }
     }
 
@@ -230,7 +252,7 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
 
         @Override
         public Intent getSettingsIntent() {
-            return CELLULAR_SETTINGS;
+            return DATA_USAGE_SETTINGS;
         }
 
         @Override

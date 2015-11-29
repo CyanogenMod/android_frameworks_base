@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -118,6 +119,11 @@ public class DndTile extends QSTile<QSTile.BooleanState> {
             mController.setZen(zen, null, TAG);
             showDetail(true);
         }
+    }
+
+    @Override
+    public void handleLongClick() {
+        mHost.startActivityDismissingKeyguard(ZEN_SETTINGS);
     }
 
     @Override
