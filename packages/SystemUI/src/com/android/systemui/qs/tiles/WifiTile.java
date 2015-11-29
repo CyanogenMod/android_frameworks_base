@@ -58,7 +58,7 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
     }
 
     @Override
-    public boolean supportsDualTargets() {
+    public boolean hasDualTargetsDetails() {
         return true;
     }
 
