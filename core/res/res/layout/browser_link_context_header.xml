@@ -17,7 +17,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/title"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textColor="@color/white"
+    android:textColor="@color/browser_link_header_text_color"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:maxLines="2"

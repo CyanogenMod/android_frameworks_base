@@ -2,7 +2,7 @@
 <!--
 /* apps/common/assets/default/default/skins/StatusBar.xml
 **
-** Copyright 2006, The Android Open Source Project
+** Copyright 2015, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
 ** you may not use this file except in compliance with the License. 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/header_battery_margin_keyguard"
-                android:textColor="#ffffff"
+                android:textColor="@color/status_bar_battery_level_text_color"
                 android:textSize="@dimen/battery_level_text_size" />
 
             <com.android.systemui.statusbar.policy.Clock

@@ -2,7 +2,7 @@
 <!--
 /*
 **
-** Copyright (C) 2014 MediaTek Inc.
+** Copyright (C) 2015 MediaTek Inc.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@
             android:layout_alignParentBottom="true"
             android:textSize="12sp"
             android:singleLine="true"
-            android:textColor="@android:color/white"
+            android:textColor="@color/subscription_item_short_number_color"
             android:includeFontPadding="false"/>
     </RelativeLayout>
     <RelativeLayout

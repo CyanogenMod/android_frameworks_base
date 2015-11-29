@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<!-- Copyright (C) 2015 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
     android:paddingBottom="8dip"
     android:gravity="center"
     android:textAppearance="?android:attr/textAppearanceSmallInverse"
-    android:textColor="@android:color/black"
+    android:textColor="@color/edit_action_popup_text_color"
     android:textAllCaps="true"
     android:textStyle="bold"
 />
