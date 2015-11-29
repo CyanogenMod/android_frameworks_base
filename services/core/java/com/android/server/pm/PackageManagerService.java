@@ -2455,7 +2455,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             File frameworkDir = new File(Environment.getRootDirectory(), "framework");
 
             final VersionInfo ver = mSettings.getInternalVersion();
-            mIsUpgrade = !Build.FINGERPRINT.equals(ver.fingerprint);
+            mIsUpgrade = !Build.FINGERPRINT.equals(ver.fingerprint) ||
+                    !Build.DISPLAY.equals(ver.displayversion);
 
             // when upgrading from pre-M, promote system app permissions from install to runtime
             mPromoteSystemApps =
@@ -2845,7 +2846,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             // across OTAs and are used to drive profile verification (post OTA) and
             // profile compilation (without waiting to collect a fresh set of profiles).
             if (mIsUpgrade && !onlyCore) {
-                Slog.i(TAG, "Build fingerprint changed; clearing code caches");
+                Slog.i(TAG, "Build fingerprint or displayversion changed; clearing code caches");
                 for (int i = 0; i < mSettings.mPackages.size(); i++) {
                     final PackageSetting ps = mSettings.mPackages.valueAt(i);
                     if (Objects.equals(StorageManager.UUID_PRIVATE_INTERNAL, ps.volumeUuid)) {
@@ -2856,6 +2857,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
                 ver.fingerprint = Build.FINGERPRINT;
+                ver.displayversion = Build.DISPLAY;
             }
 
             checkDefaultBrowser();
@@ -19460,7 +19462,8 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                     Slog.w(TAG, "Failed to scan " + ps.codePath + ": " + e.getMessage());
                 }
 
-                if (!Build.FINGERPRINT.equals(ver.fingerprint)) {
+                if (!Build.FINGERPRINT.equals(ver.fingerprint) ||
+                        !Build.DISPLAY.equals(ver.displayversion)) {
                     clearAppDataLIF(ps.pkg, UserHandle.USER_ALL,
                             StorageManager.FLAG_STORAGE_DE | StorageManager.FLAG_STORAGE_CE
                                     | Installer.FLAG_CLEAR_CODE_CACHE_ONLY);

@@ -218,6 +218,7 @@ final class Settings {
 
     private static final String ATTR_PACKAGE_NAME = "packageName";
     private static final String ATTR_FINGERPRINT = "fingerprint";
+    private static final String ATTR_DISPLAYVERSION = "displayversion";
     private static final String ATTR_VOLUME_UUID = "volumeUuid";
     private static final String ATTR_SDK_VERSION = "sdkVersion";
     private static final String ATTR_DATABASE_VERSION = "databaseVersion";
@@ -317,6 +318,12 @@ final class Settings {
         String fingerprint;
 
         /**
+         * Last known value of {@link Build#DISPLAY}. Used to determine when
+         * an system update has occurred, meaning we need to clear code caches.
+         */
+        String displayversion;
+
+        /**
          * Force all version information to match current system values,
          * typically after resolving any required upgrade steps.
          */
@@ -324,6 +331,7 @@ final class Settings {
             sdkVersion = Build.VERSION.SDK_INT;
             databaseVersion = CURRENT_DATABASE_VERSION;
             fingerprint = Build.FINGERPRINT;
+            displayversion = Build.DISPLAY;
         }
     }
 
@@ -2333,6 +2341,7 @@ final class Settings {
                 XmlUtils.writeIntAttribute(serializer, ATTR_SDK_VERSION, ver.sdkVersion);
                 XmlUtils.writeIntAttribute(serializer, ATTR_DATABASE_VERSION, ver.databaseVersion);
                 XmlUtils.writeStringAttribute(serializer, ATTR_FINGERPRINT, ver.fingerprint);
+                XmlUtils.writeStringAttribute(serializer, ATTR_DISPLAYVERSION, ver.displayversion);
                 serializer.endTag(null, TAG_VERSION);
             }
 
@@ -2928,6 +2937,8 @@ final class Settings {
                     external.sdkVersion = XmlUtils.readIntAttribute(parser, "external", 0);
                     internal.fingerprint = external.fingerprint =
                             XmlUtils.readStringAttribute(parser, "fingerprint");
+                    internal.displayversion = external.displayversion =
+                            XmlUtils.readStringAttribute(parser, "displayversion");
 
                 } else if (tagName.equals("database-version")) {
                     // Upgrade from older XML schema
@@ -2959,6 +2970,7 @@ final class Settings {
                     ver.sdkVersion = XmlUtils.readIntAttribute(parser, ATTR_SDK_VERSION);
                     ver.databaseVersion = XmlUtils.readIntAttribute(parser, ATTR_SDK_VERSION);
                     ver.fingerprint = XmlUtils.readStringAttribute(parser, ATTR_FINGERPRINT);
+                    ver.displayversion = XmlUtils.readStringAttribute(parser, ATTR_DISPLAYVERSION);
                 } else {
                     Slog.w(PackageManagerService.TAG, "Unknown element under <packages>: "
                             + parser.getName());
@@ -2983,7 +2995,8 @@ final class Settings {
         // on update drop the files before loading them.
         if (PackageManagerService.CLEAR_RUNTIME_PERMISSIONS_ON_UPGRADE) {
             final VersionInfo internal = getInternalVersion();
-            if (!Build.FINGERPRINT.equals(internal.fingerprint)) {
+            if (!Build.FINGERPRINT.equals(internal.fingerprint) ||
+                    !Build.DISPLAY.equals(internal.displayversion)) {
                 for (UserInfo user : users) {
                     mRuntimePermissionsPersistence.deleteUserRuntimePermissionsFile(user.id);
                 }
@@ -4319,6 +4332,7 @@ final class Settings {
             pw.printPair("databaseVersion", ver.databaseVersion);
             pw.println();
             pw.printPair("fingerprint", ver.fingerprint);
+            pw.printPair("displayversion", ver.displayversion);
             pw.println();
             pw.decreaseIndent();
         }
@@ -4962,6 +4976,10 @@ final class Settings {
 
         @GuardedBy("mLock")
         // The mapping keys are user ids.
+        private final SparseArray<String> mDisplayversion = new SparseArray<>();
+
+        @GuardedBy("mLock")
+        // The mapping keys are user ids.
         private final SparseBooleanArray mDefaultPermissionsGranted = new SparseBooleanArray();
 
         public RuntimePermissionPersistence(Object lock) {
@@ -4974,6 +4992,7 @@ final class Settings {
 
         public void onDefaultRuntimePermissionsGrantedLPr(int userId) {
             mFingerprints.put(userId, Build.FINGERPRINT);
+            mDisplayversion.put(userId, Build.DISPLAY);
             writePermissionsForUserAsyncLPr(userId);
         }
 
@@ -5067,6 +5086,11 @@ final class Settings {
                     serializer.attribute(null, ATTR_FINGERPRINT, fingerprint);
                 }
 
+                String displayversion = mDisplayversion.get(userId);
+                if (displayversion != null) {
+                    serializer.attribute(null, ATTR_DISPLAYVERSION, displayversion);
+                }
+
                 final int packageCount = permissionsForPackage.size();
                 for (int i = 0; i < packageCount; i++) {
                     String packageName = permissionsForPackage.keyAt(i);
@@ -5136,7 +5160,8 @@ final class Settings {
                 serializer.endDocument();
                 destination.finishWrite(out);
 
-                if (Build.FINGERPRINT.equals(fingerprint)) {
+                if (Build.FINGERPRINT.equals(fingerprint) ||
+                        Build.DISPLAY.equals(displayversion)) {
                     mDefaultPermissionsGranted.put(userId, true);
                 }
             // Any error while writing is fatal.
@@ -5244,8 +5269,11 @@ final class Settings {
                 switch (parser.getName()) {
                     case TAG_RUNTIME_PERMISSIONS: {
                         String fingerprint = parser.getAttributeValue(null, ATTR_FINGERPRINT);
+                        String displayversion = parser.getAttributeValue(null, ATTR_DISPLAYVERSION);
                         mFingerprints.put(userId, fingerprint);
-                        final boolean defaultsGranted = Build.FINGERPRINT.equals(fingerprint);
+                        mDisplayversion.put(userId, displayversion);
+                        final boolean defaultsGranted = Build.FINGERPRINT.equals(fingerprint) ||
+                                Build.DISPLAY.equals(displayversion);
                         mDefaultPermissionsGranted.put(userId, defaultsGranted);
                     } break;
 
