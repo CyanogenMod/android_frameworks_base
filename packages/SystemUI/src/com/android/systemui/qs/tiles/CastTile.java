@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +39,7 @@ import java.util.Set;
 
 /** Quick settings tile: Cast **/
 public class CastTile extends QSTile<QSTile.BooleanState> {
+
     private static final Intent CAST_SETTINGS =
             new Intent(Settings.ACTION_CAST_SETTINGS);
 
@@ -88,6 +90,11 @@ public class CastTile extends QSTile<QSTile.BooleanState> {
     protected void handleClick() {
         MetricsLogger.action(mContext, getMetricsCategory());
         showDetail(true);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startActivityDismissingKeyguard(CAST_SETTINGS);
     }
 
     @Override

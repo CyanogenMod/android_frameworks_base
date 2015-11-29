@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,8 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.Intent;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
 
 import com.android.internal.logging.MetricsLogger;
@@ -27,6 +30,9 @@ import com.android.systemui.qs.UsageTracker;
 
 /** Quick settings tile: Invert colors **/
 public class ColorInversionTile extends QSTile<QSTile.BooleanState> {
+
+    private static final Intent ACCESSIBILITY_SETTINGS = new Intent(
+            Settings.ACTION_ACCESSIBILITY_SETTINGS);
 
     private final AnimationIcon mEnable
             = new AnimationIcon(R.drawable.ic_invert_colors_enable_animation);
@@ -95,15 +101,18 @@ public class ColorInversionTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleLongClick() {
-        if (mState.value) return;  // don't allow usage reset if inversion is active
-        final String title = mContext.getString(R.string.quick_settings_reset_confirmation_title,
-                mState.label);
-        mUsageTracker.showResetConfirmation(title, new Runnable() {
-            @Override
-            public void run() {
-                refreshState();
-            }
-        });
+        if (mState.value) {
+            mHost.startActivityDismissingKeyguard(ACCESSIBILITY_SETTINGS);
+        } else {
+            final String title = mContext.getString(
+                    R.string.quick_settings_reset_confirmation_title, mState.label);
+            mUsageTracker.showResetConfirmation(title, new Runnable() {
+                @Override
+                public void run() {
+                    refreshState();
+                }
+            });
+        }
     }
 
     @Override

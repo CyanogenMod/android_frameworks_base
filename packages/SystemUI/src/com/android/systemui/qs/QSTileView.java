@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +67,7 @@ public class QSTileView extends ViewGroup {
     private TextView mLabel;
     private QSDualTileLabel mDualLabel;
     private boolean mDual;
+    private boolean mDualDetails;
     private OnClickListener mClickPrimary;
     private OnClickListener mClickSecondary;
     private OnLongClickListener mLongClick;
@@ -145,15 +147,22 @@ public class QSTileView extends ViewGroup {
             mDualLabel = new QSDualTileLabel(mContext);
             mDualLabel.setId(View.generateViewId());
             mDualLabel.setBackgroundResource(R.drawable.btn_borderless_rect);
-            mDualLabel.setFirstLineCaret(mContext.getDrawable(R.drawable.qs_dual_tile_caret));
+            if (mDualDetails) {
+                mDualLabel.setFirstLineCaret(mContext.getDrawable(R.drawable.qs_dual_tile_caret));
+            }
             mDualLabel.setTextColor(mContext.getColor(R.color.qs_tile_text));
             mDualLabel.setPadding(0, mDualTileVerticalPaddingPx, 0, mDualTileVerticalPaddingPx);
             mDualLabel.setTypeface(CONDENSED);
             mDualLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     res.getDimensionPixelSize(R.dimen.qs_tile_text_size));
             mDualLabel.setClickable(true);
-            mDualLabel.setOnClickListener(mClickSecondary);
             mDualLabel.setFocusable(true);
+            if (mDualDetails) {
+                mDualLabel.setOnClickListener(mClickSecondary);
+            } else {
+                mDualLabel.setOnClickListener(mClickPrimary);
+            }
+            mDualLabel.setOnLongClickListener(mLongClick);
             if (labelText != null) {
                 mDualLabel.setText(labelText);
             }
@@ -172,6 +181,7 @@ public class QSTileView extends ViewGroup {
             mLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     res.getDimensionPixelSize(R.dimen.qs_tile_text_size));
             mLabel.setClickable(false);
+            mLabel.setFocusable(false);
             if (labelText != null) {
                 mLabel.setText(labelText);
             }
@@ -183,29 +193,34 @@ public class QSTileView extends ViewGroup {
         return mDual;
     }
 
-    public boolean setDual(boolean dual) {
+    public boolean setDual(boolean dual, boolean dualDetails) {
         final boolean changed = dual != mDual;
         mDual = dual;
+        mDualDetails = dualDetails;
         if (changed) {
             recreateLabel();
         }
 
         if (dual) {
             mTopBackgroundView.setOnClickListener(mClickPrimary);
+            mTopBackgroundView.setOnLongClickListener(mLongClick);
             setOnClickListener(null);
-            setClickable(false);
+            setOnLongClickListener(null);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         } else {
             mTopBackgroundView.setOnClickListener(null);
-            mTopBackgroundView.setClickable(false);
+            mTopBackgroundView.setOnLongClickListener(null);
             setOnClickListener(mClickPrimary);
             setOnLongClickListener(mLongClick);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
         setTileBackground(mTileBackground);
+        mTopBackgroundView.setClickable(dual);
         mTopBackgroundView.setFocusable(dual);
+        setClickable(!dual);
         setFocusable(!dual);
         mDivider.setVisibility(dual ? VISIBLE : GONE);
+        mTopBackgroundView.setVisibility(dual ? VISIBLE : GONE);
         postInvalidate();
         return changed;
     }
@@ -372,15 +387,15 @@ public class QSTileView extends ViewGroup {
     public void setEditing(boolean editing) {
         if (mDual) {
             if (mTopBackgroundView != null) {
+                mTopBackgroundView.setClickable(!editing);
                 mTopBackgroundView.setFocusable(!editing);
             }
             if (mDualLabel != null) {
-                mDualLabel.setFocusable(!editing);
                 mDualLabel.setClickable(!editing);
+                mDualLabel.setFocusable(!editing);
             }
             setClickable(editing);
             setFocusable(editing);
-            setOnLongClickListener(editing ? mLongClick : null);
         } else {
             if (mLabel != null) {
                 mLabel.setFocusable(!editing);

@@ -82,7 +82,7 @@ public class QSPage extends ViewGroup {
             if (record.page != record.destinationPage) continue;
 
             final boolean dual = dualRecord(record);
-            if (record.tileView.setDual(dual)) {
+            if (record.tileView.setDual(dual, record.tile.hasDualTargetsDetails())) {
                 record.tileView.handleStateChanged(record.tile.getState());
             }
             if (record.tileView.getVisibility() == GONE) continue;

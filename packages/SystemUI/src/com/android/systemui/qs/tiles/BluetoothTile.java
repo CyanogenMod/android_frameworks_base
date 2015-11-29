@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +39,9 @@ import java.util.Set;
 
 /** Quick settings tile: Bluetooth **/
 public class BluetoothTile extends QSTile<QSTile.BooleanState>  {
-    private static final Intent BLUETOOTH_SETTINGS = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+
+    private static final Intent BLUETOOTH_SETTINGS = new Intent(
+            Settings.ACTION_BLUETOOTH_SETTINGS);
 
     private final BluetoothController mController;
     private final BluetoothDetailAdapter mDetailAdapter;
@@ -50,7 +53,7 @@ public class BluetoothTile extends QSTile<QSTile.BooleanState>  {
     }
 
     @Override
-    public boolean supportsDualTargets() {
+    public boolean hasDualTargetsDetails() {
         return true;
     }
 
@@ -87,6 +90,11 @@ public class BluetoothTile extends QSTile<QSTile.BooleanState>  {
             mController.setBluetoothEnabled(true);
         }
         showDetail(true);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startActivityDismissingKeyguard(BLUETOOTH_SETTINGS);
     }
 
     @Override
