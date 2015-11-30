@@ -96,6 +96,17 @@
     <java-symbol type="string" name="privacy_guard_dialog_title" />
     <java-symbol type="string" name="privacy_guard_dialog_summary" />
 
+    <!-- app opps always-ask -->
+    <java-symbol type="id" name="permission_text" />
+    <java-symbol type="id" name="permission_remember_layout" />
+    <java-symbol type="id" name="permission_remember_choice_checkbox" />
+    <java-symbol type="id" name="permission_remember_choice_text" />
+    <java-symbol type="string" name="allow" />
+    <java-symbol type="string" name="deny" />
+    <java-symbol type="string" name="permission" />
+    <java-symbol type="layout" name="permission_confirmation_dialog" />
+    <java-symbol type="array" name="app_ops_labels" />
+
     <!-- Blur effects -->
     <java-symbol type="bool" name="config_ui_blur_enabled" />
 
@@ -120,4 +131,10 @@
     <java-symbol type="array" name="live_display_summaries" />
     <java-symbol type="array" name="live_display_values" />
     <java-symbol type="integer" name="config_dayColorTemperature" />
+
+    <java-symbol type="string" name="high_definition_tag" />
+
+    <java-symbol type="string" name="tethered_notification_no_device_message" />
+    <java-symbol type="string" name="tethered_notification_one_device_message" />
+    <java-symbol type="string" name="tethered_notification_multi_device_message" />
 </resources>

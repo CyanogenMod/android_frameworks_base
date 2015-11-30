@@ -265,8 +265,6 @@
     <string name="wfc_mode_cellular_preferred_summary">Cellular preferred</string>
     <!-- WFC, summary for Wi-Fi Only -->
     <string name="wfc_mode_wifi_only_summary">Wi-Fi only</string>
-    <!-- Template for showing cellular network operator name while LTE calling is enabled -->
-    <string name="high_definition_tag">%s</string>
 
     <!--
         {0} is one of "bearerServiceCode*"
@@ -3149,9 +3147,6 @@
     <!-- Shown when the device is tethered -->
     <string name="tethered_notification_title">Tethering or hotspot active</string>
     <string name="tethered_notification_message">Touch to set up.</string>
-    <string name="tethered_notification_no_device_message">No connected device</string>
-    <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connected device</string>
-    <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> connected devices</string>
 
     <!--  Strings for possible PreferenceActivity Back/Next buttons -->
     <string name="back_button_label">Back</string>
