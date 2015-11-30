@@ -1107,7 +1107,6 @@
   <java-symbol type="string" name="lockscreen_transport_pause_description" />
   <java-symbol type="string" name="config_ethernet_tcp_buffers" />
   <java-symbol type="string" name="config_wifi_tcp_buffers" />
-  <java-symbol type="string" name="high_definition_tag" />
 
   <java-symbol type="plurals" name="duration_hours" />
   <java-symbol type="plurals" name="duration_minutes" />
@@ -1814,9 +1813,6 @@
   <java-symbol type="string" name="smv_application" />
   <java-symbol type="string" name="smv_process" />
   <java-symbol type="string" name="tethered_notification_message" />
-  <java-symbol type="string" name="tethered_notification_no_device_message" />
-  <java-symbol type="string" name="tethered_notification_one_device_message" />
-  <java-symbol type="string" name="tethered_notification_multi_device_message" />
   <java-symbol type="string" name="tethered_notification_title" />
   <java-symbol type="string" name="usb_accessory_notification_title" />
   <java-symbol type="string" name="usb_mtp_notification_title" />
