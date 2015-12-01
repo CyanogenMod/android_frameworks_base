@@ -28,7 +28,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -177,7 +176,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
         };
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setCurrentItem(0);
 
         mPageIndicator.setViewPager(mViewPager);
         mPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -212,13 +210,20 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
             }
         });
+        mPageIndicator.setCurrentItem(0);
+        mViewPager.setOverScrollMode(OVER_SCROLL_NEVER);
 
-        setClipChildren(false);
         updateResources();
 
         mViewPager.setOnDragListener(this);
+        mPageIndicator.setOnDragListener(this);
         mQsPanelTop.getBrightnessView().setOnDragListener(this);
         mQsPanelTop.getDropTarget().setOnDragListener(this);
+    }
+
+    @Override
+    public boolean hasOverlappingRendering() {
+        return mClipper.isAnimating();
     }
 
     protected void drawTile(TileRecord r, QSTile.State state) {
@@ -474,7 +479,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mPageIndicator.measure(exactly(width), MeasureSpec.UNSPECIFIED);
         mFooter.getView().measure(exactly(width), MeasureSpec.UNSPECIFIED);
 
-        int h = mQsPanelTop.getMeasuredHeight()
+        int h = mBrightnessPaddingTop
+                + mQsPanelTop.getMeasuredHeight()
                 + mViewPager.getMeasuredHeight()
                 + mPageIndicator.getMeasuredHeight();
         if (mFooter.hasFooter()) {
@@ -502,11 +508,29 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     @Override
+    protected void handleShowDetailTile(TileRecord r, boolean show) {
+        if (r instanceof DragTileRecord) {
+            if ((mDetailRecord != null) == show && mDetailRecord == r) return;
+
+            if (show) {
+                r.detailAdapter = r.tile.getDetailAdapter();
+                if (r.detailAdapter == null) return;
+            }
+            r.tile.setDetailListening(show);
+            int x = (int) ((DragTileRecord) r).destination.x + r.tileView.getWidth() / 2;
+            int y = mViewPager.getTop() + (int) ((DragTileRecord) r).destination.y + r.tileView.getHeight() / 2;
+            handleShowDetailImpl(r, show, x, y);
+        } else {
+            super.handleShowDetailTile(r, show);
+        }
+    }
+
+    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (DEBUG_DRAG) Log.d(TAG, "onLayout()");
         final int w = getWidth();
 
-        int top = 0;
+        int top = mBrightnessPaddingTop;
         mQsPanelTop.layout(0, top, w, top + mQsPanelTop.getMeasuredHeight());
         top += mQsPanelTop.getMeasuredHeight();
 
@@ -517,7 +541,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mPageIndicator.layout(0, top, w, top + mPageIndicator.getMeasuredHeight());
 
         // detail takes up whole height
-        final int dh = Math.max(mDetail.getMeasuredHeight(), mViewPager.getMeasuredHeight());
         mDetail.layout(0, 0, mDetail.getMeasuredWidth(), getMeasuredHeight());
 
         if (mFooter.hasFooter()) {
