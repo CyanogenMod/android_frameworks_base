@@ -109,7 +109,7 @@ public class AccessPoint implements Comparable<AccessPoint> {
 
     private String ssid;
     private int security;
-    private int networkId = WifiConfiguration.INVALID_NETWORK_ID;
+    public int networkId = WifiConfiguration.INVALID_NETWORK_ID;
 
     private int pskType = PSK_UNKNOWN;
 
