@@ -388,8 +388,28 @@ public class LockSettingsService extends ILockSettings.Stub {
         }
     }
 
+    private boolean checkCryptKeeperPermissions() {
+        boolean permission_err = false;
+        try {
+            mContext.enforceCallingOrSelfPermission(
+                       android.Manifest.permission.CRYPT_KEEPER,
+                       "no permission to get the password");
+        } catch (SecurityException e) {
+            permission_err = true;
+        }
+        return permission_err;
+    }
+
     public String getPassword() {
-        return mSavePassword;
+       /** if calling process does't have crypt keeper or admin permissions,
+         * throw the exception.
+         */
+       if (checkCryptKeeperPermissions())
+            mContext.enforceCallingOrSelfPermission(
+                    android.Manifest.permission.MANAGE_DEVICE_ADMINS,
+                    "no crypt_keeper or admin permission to get the password");
+
+       return mSavePassword;
     }
 
     private void setKeystorePassword(String password, int userHandle) {

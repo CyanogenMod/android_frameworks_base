@@ -101,6 +101,7 @@ import com.android.internal.util.Preconditions;
 import com.android.server.NativeDaemonConnector.Command;
 import com.android.server.NativeDaemonConnector.SensitiveArg;
 import com.android.server.pm.PackageManagerService;
+import com.android.internal.widget.ILockSettings;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -2460,13 +2461,24 @@ class MountService extends IMountService.Stub
             Slog.i(TAG, "changing encryption password...");
         }
 
-        LockSettingsService lockSettings = new LockSettingsService(mContext);
-        String currentPassword = lockSettings.getPassword();
+        ILockSettings lockSettings = ILockSettings.Stub.asInterface(
+                    ServiceManager.getService("lock_settings"));
+        String currentPassword="default_password";
+        try {
+            currentPassword = lockSettings.getPassword();
+        } catch (RemoteException e) {
+            Slog.e(TAG, "Couldn't get password" + e);
+        }
 
         try {
             NativeDaemonEvent event = mCryptConnector.execute("cryptfs", "changepw", CRYPTO_TYPES[type],
                         new SensitiveArg(currentPassword), new SensitiveArg(password));
-            lockSettings.sanitizePassword();
+            try {
+                lockSettings.sanitizePassword();
+            } catch (RemoteException e) {
+                Slog.e(TAG, "Couldn't sanitize password" + e);
+            }
+
             return Integer.parseInt(event.getMessage());
         } catch (NativeDaemonConnectorException e) {
             // Encryption failed
