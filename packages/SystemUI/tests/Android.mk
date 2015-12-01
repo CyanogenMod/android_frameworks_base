@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ifdef becauseimbatman
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -42,3 +43,4 @@ LOCAL_CERTIFICATE := platform
 include frameworks/base/packages/SettingsLib/common.mk
 
 include $(BUILD_PACKAGE)
+endif
