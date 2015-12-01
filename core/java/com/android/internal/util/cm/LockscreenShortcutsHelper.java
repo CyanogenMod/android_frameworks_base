@@ -217,8 +217,19 @@ public class LockscreenShortcutsHelper {
         return intent;
     }
 
-    public void saveTargets(ArrayList<String> targets) {
+    public void saveTargets(List<String> targets) {
         Settings.Secure.putListAsDelimitedString(mContext.getContentResolver(),
                 Settings.Secure.LOCKSCREEN_TARGETS, DELIMITER, targets);
+    }
+
+    public void removeTargetsForPackage(String packageName) {
+        packageName = packageName.toLowerCase();
+        for (int i = 0; i < mTargetActivities.size(); i++) {
+            String target = mTargetActivities.get(i);
+            if (target.toLowerCase().contains(packageName)) {
+                mTargetActivities.set(i, DEFAULT);
+            }
+        }
+        saveTargets(mTargetActivities);
     }
 }
