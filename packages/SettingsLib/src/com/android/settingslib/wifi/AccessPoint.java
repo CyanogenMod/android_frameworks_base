@@ -336,6 +336,10 @@ public class AccessPoint implements Comparable<AccessPoint> {
         return str;
     }
 
+    public int getNetworkId() {
+        return networkId;
+    }
+
     public String getConfigName() {
         if (mConfig != null && mConfig.isPasspoint()) {
             return mConfig.providerFriendlyName;
