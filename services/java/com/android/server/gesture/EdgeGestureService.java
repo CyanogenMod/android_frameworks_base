@@ -185,19 +185,21 @@ public class EdgeGestureService extends IEdgeGestureService.Stub {
     public void systemReady() {
         if (DEBUG) Slog.d(TAG, "Starting the edge gesture capture thread ...");
 
-        mHandlerThread.start();
-        mHandler = new H(mHandlerThread.getLooper());
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                android.os.Process.setThreadPriority(
-                        android.os.Process.THREAD_PRIORITY_FOREGROUND);
-                android.os.Process.setCanSelfBackground(false);
-            }
-        });
-        mDisplayObserver = new DisplayObserver(mContext, mHandler);
-        // check if anyone registered during startup
-        mHandler.sendEmptyMessage(MSG_UPDATE_SERVICE);
+        synchronized (mLock) {
+            mHandlerThread.start();
+            mHandler = new H(mHandlerThread.getLooper());
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    android.os.Process.setThreadPriority(
+                            android.os.Process.THREAD_PRIORITY_FOREGROUND);
+                    android.os.Process.setCanSelfBackground(false);
+                }
+            });
+            mDisplayObserver = new DisplayObserver(mContext, mHandler);
+            // check if anyone registered during startup
+            mHandler.sendEmptyMessage(MSG_UPDATE_SERVICE);
+        }
     }
 
 
