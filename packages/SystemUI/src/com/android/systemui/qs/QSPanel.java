@@ -390,7 +390,7 @@ public class QSPanel extends ViewGroup {
         }
     }
 
-    private void handleShowDetailTile(TileRecord r, boolean show) {
+    protected void handleShowDetailTile(TileRecord r, boolean show) {
         if ((mDetailRecord != null) == show && mDetailRecord == r) return;
 
         if (show) {
@@ -403,7 +403,7 @@ public class QSPanel extends ViewGroup {
         handleShowDetailImpl(r, show, x, y);
     }
 
-    private void handleShowDetailImpl(Record r, boolean show, int x, int y) {
+    protected final void handleShowDetailImpl(Record r, boolean show, int x, int y) {
         boolean visibleDiff = (mDetailRecord != null) != show;
         if (!visibleDiff && mDetailRecord == r) return;  // already in right state
         DetailAdapter detailAdapter = null;

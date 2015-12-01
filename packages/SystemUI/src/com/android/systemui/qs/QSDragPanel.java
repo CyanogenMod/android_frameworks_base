@@ -502,6 +502,24 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     @Override
+    protected void handleShowDetailTile(TileRecord r, boolean show) {
+        if (r instanceof DragTileRecord) {
+            if ((mDetailRecord != null) == show && mDetailRecord == r) return;
+
+            if (show) {
+                r.detailAdapter = r.tile.getDetailAdapter();
+                if (r.detailAdapter == null) return;
+            }
+            r.tile.setDetailListening(show);
+            int x = (int) ((DragTileRecord) r).destination.x + r.tileView.getWidth() / 2;
+            int y = mViewPager.getTop() + (int) ((DragTileRecord) r).destination.y + r.tileView.getHeight() / 2;
+            handleShowDetailImpl(r, show, x, y);
+        } else {
+            super.handleShowDetailTile(r, show);
+        }
+    }
+
+    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (DEBUG_DRAG) Log.d(TAG, "onLayout()");
         final int w = getWidth();
