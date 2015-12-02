@@ -19,10 +19,8 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.drawable.RippleDrawable;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -63,12 +61,6 @@ public class SettingsButton extends AlphaOptimizedImageButton {
                 postDelayed(mLongPressCallback, LONG_PRESS_LENGTH);
                 break;
             case MotionEvent.ACTION_UP:
-                if (mUpToSpeed) {
-                    startExitAnimation();
-                } else {
-                    cancelLongClick();
-                }
-                break;
             case MotionEvent.ACTION_CANCEL:
                 cancelLongClick();
                 break;
@@ -164,6 +156,8 @@ public class SettingsButton extends AlphaOptimizedImageButton {
         mAnimator.setDuration(FULL_SPEED_LENGTH);
         mAnimator.setRepeatCount(Animation.INFINITE);
         mAnimator.start();
+
+        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
     }
 
     private final Runnable mLongPressCallback = new Runnable() {
