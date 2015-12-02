@@ -90,5 +90,20 @@
     <declare-styleable name="AlphaOptimizedImageView">
         <attr name="hasOverlappingRendering" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="QuickSettingsRow">
+        <attr name="table" format="enum">
+            <enum name="system" value="0"/>
+            <enum name="global" value="1"/>
+            <enum name="secure" value="2"/>
+
+            <enum name="cm_system" value="3"/>
+            <enum name="cm_global" value="4"/>
+            <enum name="cm_secure" value="5"/>
+        </attr>
+
+        <attr name="android:key"/>
+        <attr name="android:title" />
+    </declare-styleable>
 </resources>
 
