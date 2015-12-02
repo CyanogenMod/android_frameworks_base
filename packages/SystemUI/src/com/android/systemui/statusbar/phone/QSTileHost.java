@@ -269,6 +269,13 @@ public class QSTileHost implements QSTile.Host, Tunable {
         }
     }
 
+    @Override
+    public void goToSettingsPage() {
+        if (mCallback != null) {
+            mCallback.goToSettingsPage();
+        }
+    }
+
     public QSTile<?> createTile(String tileSpec) {
         if (tileSpec.equals("wifi")) return new WifiTile(this);
         else if (tileSpec.equals("bt")) return new BluetoothTile(this);
