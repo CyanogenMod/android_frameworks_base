@@ -61,6 +61,7 @@ import com.android.systemui.BatteryMeterView;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.qs.QSDragPanel;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.BatteryController;
@@ -137,7 +138,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private BatteryController mBatteryController;
     private NextAlarmController mNextAlarmController;
     private WeatherController mWeatherController;
-    private QSPanel mQSPanel;
+    private QSDragPanel mQSPanel;
 
     private final Rect mClipBounds = new Rect();
 
@@ -383,8 +384,6 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mEmergencyCallsOnly.setVisibility(mExpanded && mShowEmergencyCallsOnly ? VISIBLE : GONE);
         mBatteryLevel.setForceShown(mExpanded && mShowBatteryTextExpanded);
         mBatteryLevel.setVisibility(View.VISIBLE);
-        mSettingsContainer.findViewById(R.id.tuner_icon).setVisibility(
-                TunerService.isTunerEnabled(mContext) ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void updateSignalClusterDetachment() {
@@ -555,20 +554,11 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     public void onClick(View v) {
         if (v == mSettingsButton) {
             if (mSettingsButton.isTunerClick()) {
-                if (TunerService.isTunerEnabled(mContext)) {
-                    TunerService.showResetRequest(mContext, new Runnable() {
-                        @Override
-                        public void run() {
-                            // Relaunch settings so that the tuner disappears.
-                            startSettingsActivity();
-                        }
-                    });
-                } else {
-                    Toast.makeText(getContext(), R.string.tuner_toast, Toast.LENGTH_LONG).show();
-                    TunerService.setTunerEnabled(mContext, true);
-                }
+                mSettingsButton.consumeClick();
+                mQSPanel.getHost().setEditing(!mQSPanel.getHost().isEditing());
+            } else {
+                startSettingsActivity();
             }
-            startSettingsActivity();
         } else if (v == mSystemIconsSuperContainer) {
             startBatteryActivity();
         } else if (v == mAlarmStatus && mNextAlarm != null) {
@@ -615,7 +605,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mActivityStarter.startActivity(intent, true /* dismissShade */);
     }
 
-    public void setQSPanel(QSPanel qsp) {
+    public void setQSPanel(QSDragPanel qsp) {
         mQSPanel = qsp;
         if (mQSPanel != null) {
             mQSPanel.setCallback(mQsPanelCallback);
