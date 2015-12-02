@@ -57,7 +57,6 @@ public class QSPanel extends ViewGroup {
     protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
     protected View mDetail;
     protected ViewGroup mDetailContent;
-    protected TextView mDetailRemoveButton;
     protected TextView mDetailSettingsButton;
     protected TextView mDetailDoneButton;
     protected View mBrightnessView;
@@ -95,10 +94,12 @@ public class QSPanel extends ViewGroup {
         setupViews();
     }
 
+    /**
+     * THIS IS OVERRIDDEN in QSDragPanel
+     */
     protected void setupViews() {
         mDetail = LayoutInflater.from(mContext).inflate(R.layout.qs_detail, this, false);
         mDetailContent = (ViewGroup) mDetail.findViewById(android.R.id.content);
-        mDetailRemoveButton = (TextView) mDetail.findViewById(android.R.id.button3);
         mDetailSettingsButton = (TextView) mDetail.findViewById(android.R.id.button2);
         mDetailDoneButton = (TextView) mDetail.findViewById(android.R.id.button1);
         updateDetailText();
@@ -149,7 +150,6 @@ public class QSPanel extends ViewGroup {
     protected void updateDetailText() {
         mDetailDoneButton.setText(R.string.quick_settings_done);
         mDetailSettingsButton.setText(R.string.quick_settings_more_settings);
-        mDetailRemoveButton.setText(R.string.quick_settings_remove);
     }
 
     public void setBrightnessMirror(BrightnessMirrorController c) {
@@ -201,7 +201,6 @@ public class QSPanel extends ViewGroup {
         super.onConfigurationChanged(newConfig);
         FontSizeUtils.updateFontSize(mDetailDoneButton, R.dimen.qs_detail_button_text_size);
         FontSizeUtils.updateFontSize(mDetailSettingsButton, R.dimen.qs_detail_button_text_size);
-        FontSizeUtils.updateFontSize(mDetailRemoveButton, R.dimen.qs_detail_button_text_size);
 
         // We need to poke the detail views as well as they might not be attached to the view
         // hierarchy but reused at a later point.
@@ -408,7 +407,7 @@ public class QSPanel extends ViewGroup {
         handleShowDetailImpl(r, show, x, y);
     }
 
-    protected final void handleShowDetailImpl(Record r, boolean show, int x, int y) {
+    protected void handleShowDetailImpl(Record r, boolean show, int x, int y) {
         boolean visibleDiff = (mDetailRecord != null) != show;
         if (!visibleDiff && mDetailRecord == r) return;  // already in right state
         DetailAdapter detailAdapter = null;
@@ -424,16 +423,6 @@ public class QSPanel extends ViewGroup {
                 @Override
                 public void onClick(View v) {
                     mHost.startActivityDismissingKeyguard(settingsIntent);
-                }
-            });
-
-            final StatusBarPanelCustomTile customTile = detailAdapter.getCustomTile();
-            mDetailRemoveButton.setVisibility(customTile != null ? VISIBLE : GONE);
-            mDetailRemoveButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mHost.collapsePanels();
-                    mHost.removeCustomTile(customTile);
                 }
             });
 
