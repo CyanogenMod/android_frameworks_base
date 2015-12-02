@@ -37,6 +37,7 @@ import com.android.systemui.statusbar.policy.NetworkController.MobileDataControl
 import com.android.systemui.statusbar.policy.NetworkController.MobileDataController.DataUsageInfo;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
 import com.android.systemui.statusbar.policy.SignalCallbackAdapter;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 /** Quick settings tile: Cellular **/
 public class CellularTile extends QSTile<QSTile.SignalState> {
@@ -247,6 +248,10 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
     };
 
     private final class CellularDetailAdapter implements DetailAdapter {
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
+        }
 
         @Override
         public int getTitle() {

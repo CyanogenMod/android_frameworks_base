@@ -85,4 +85,7 @@
 
     <!-- Screen pinning dialog description (for devices without navbar) -->
     <string name="screen_pinning_description_no_navbar">This keeps it in view until you unpin. Touch and hold the Back button to unpin.</string>
+
+    <string name="quick_settings_custom_tile_detail_title">Custom Tile</string>
+    <string name="quick_settings_remove">Remove tile</string>
 </resources>
