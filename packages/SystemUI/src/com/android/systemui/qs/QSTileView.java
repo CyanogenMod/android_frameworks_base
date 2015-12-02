@@ -392,6 +392,7 @@ public class QSTileView extends ViewGroup {
             if (mLabel != null) {
                 mLabel.setFocusable(!editing);
             }
+            mRipple.setVisible(!editing, false);
         }
     }
 
