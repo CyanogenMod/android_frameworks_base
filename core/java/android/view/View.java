@@ -33,6 +33,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -7635,7 +7636,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     @ResolvedLayoutDir
     public int getLayoutDirection() {
         final int targetSdkVersion = getContext().getApplicationInfo().targetSdkVersion;
-        if (targetSdkVersion < JELLY_BEAN_MR1) {
+        if (targetSdkVersion < JELLY_BEAN_MR1 && !isSystemApp()) {
             mPrivateFlags2 |= PFLAG2_LAYOUT_DIRECTION_RESOLVED;
             return LAYOUT_DIRECTION_RESOLVED_DEFAULT;
         }
@@ -14138,7 +14139,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      */
     private boolean isRtlCompatibilityMode() {
         final int targetSdkVersion = getContext().getApplicationInfo().targetSdkVersion;
-        return targetSdkVersion < JELLY_BEAN_MR1 || !hasRtlSupport();
+        return (targetSdkVersion < JELLY_BEAN_MR1 && !isSystemApp()) || !hasRtlSupport();
+    }
+
+    /**
+     * Return true if we are in a system app context.
+     */
+    private boolean isSystemApp() {
+        return ((getContext().getApplicationInfo().flags & ApplicationInfo.FLAG_SYSTEM) != 0);
     }
 
     /**

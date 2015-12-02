@@ -19,8 +19,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/volume_dialog_margin_bottom"
-    android:layout_marginLeft="@dimen/notification_side_padding"
-    android:layout_marginRight="@dimen/notification_side_padding"
+    android:layout_marginStart="@dimen/notification_side_padding"
+    android:layout_marginEnd="@dimen/notification_side_padding"
     android:background="@drawable/volume_dialog_background"
     android:translationZ="4dp" >
 
@@ -29,7 +29,7 @@
         style="@style/VolumeButtons"
         android:layout_width="@dimen/volume_button_size"
         android:layout_height="@dimen/volume_button_size"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:clickable="true"
         android:soundEffectsEnabled="false"
         android:src="@drawable/ic_volume_collapse_animation"
