@@ -338,11 +338,13 @@ public abstract class QSTile<TState extends State> implements Listenable {
         boolean isEditing();
         void setEditing(boolean editing);
         void resetTiles();
+        void goToSettingsPage();
 
         public interface Callback {
             void onTilesChanged();
             void setEditing(boolean editing);
             boolean isEditing();
+            void goToSettingsPage();
         }
     }
 

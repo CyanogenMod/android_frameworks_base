@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
@@ -32,6 +33,7 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,6 +45,7 @@ import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.settings.ToggleSlider;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
+import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.tuner.QsTuner;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -57,7 +60,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     private static final String TAG = "QSDragPanel";
 
-    public static final boolean DEBUG_DRAG = true;
+    public static final boolean DEBUG_DRAG = false;
+    private static final int INITIAL_OFFSCREEN_PAGE_LIMIT = 3;
 
     protected final ArrayList<QSPage> mPages = new ArrayList<>();
 
@@ -92,6 +96,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     @Override
     protected void setupViews() {
+        updateResources();
+
         mDetail = LayoutInflater.from(mContext).inflate(R.layout.qs_detail, this, false);
         mDetailContent = (ViewGroup) mDetail.findViewById(android.R.id.content);
         mDetailSettingsButton = (TextView) mDetail.findViewById(android.R.id.button2);
@@ -100,10 +106,26 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mDetail.setVisibility(GONE);
         mDetail.setClickable(true);
 
-        LayoutInflater.from(mContext).inflate(R.layout.qs_tile_top, this, true);
-        mQsPanelTop = (QSPanelTopView) findViewById(R.id.qs_panel_top);
+        mQsPanelTop = (QSPanelTopView) LayoutInflater.from(mContext).inflate(R.layout.qs_tile_top, this, false);
+
         mBrightnessView = mQsPanelTop.getBrightnessView();
         mFooter = new QSFooter(this, mContext);
+
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                ViewPager.LayoutParams params = new ViewPager.LayoutParams();
+                params.isDecor = true;
+
+                mViewPager.addView(mQsPanelTop, params);
+
+                mQsPanelTop.setOnDragListener(QSDragPanel.this);
+                mPageIndicator.setOnDragListener(QSDragPanel.this);
+                mViewPager.setOnDragListener(QSDragPanel.this);
+            }
+        });
 
         // add target click listener
         mQsPanelTop.findViewById(R.id.add_target).setOnClickListener(
@@ -114,6 +136,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     }
                 });
         mViewPager = new QSViewPager(getContext());
+        mViewPager.setDragPanel(this);
 
         mPageIndicator = new CirclePageIndicator(getContext());
         addView(mDetail);
@@ -143,13 +166,26 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     Log.d(TAG, "instantiateItem() called with "
                             + "container = [" + container + "], position = [" + position + "]");
                 }
-                QSPage page = new QSPage(container.getContext(), QSDragPanel.this, position);
-                LayoutParams params =
-                        new LayoutParams(LayoutParams.MATCH_PARENT,
-                                LayoutParams.FILL_PARENT);
-                container.addView(page, params);
-                mPages.add(page);
-                return page;
+
+                if (mEditing && position == 0) {
+                    QSSettings qss = (QSSettings)
+                            View.inflate(container.getContext(), R.layout.qs_settings, null);
+                    qss.setHost(mHost);
+                    container.addView(qss, 0);
+                    return qss;
+                } else {
+                    QSPage page = new QSPage(container.getContext(),
+                            QSDragPanel.this, mEditing ? position - 1 : position);
+
+                    container.addView(page);
+                    int viewPos = page.getPageIndex();
+                    if (viewPos > mPages.size()) {
+                        mPages.add(page);
+                    } else {
+                        mPages.add(viewPos, page);
+                    }
+                    return page;
+                }
             }
 
             @Override
@@ -160,14 +196,37 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                             + object + "]");
                 }
                 if (object instanceof View) {
-                    mPages.remove(object);
+                    if (object instanceof QSPage) {
+                        mPages.remove(object);
+                    }
                     container.removeView((View) object);
                 }
             }
 
             @Override
+            public int getItemPosition(Object object) {
+                if (object instanceof QSPage) {
+
+                    final int indexOf = ((QSPage) object).getPageIndex();
+                    Log.v(TAG, "getItemPosition() for: " + object + ", returning: " + indexOf);
+                    if (mEditing) return indexOf + 1;
+                    else return indexOf;
+
+                } else if (object instanceof QSSettings) {
+
+                    if (mEditing) return 0;
+                    else return POSITION_NONE;
+
+                }
+                return super.getItemPosition(object);
+            }
+
+            @Override
             public int getCount() {
-                return Math.max(getCurrentMaxPageCount(), 1);
+                final int qsPages = Math.max(getCurrentMaxPageCount(), 1);
+
+                if (mEditing) return qsPages + 1;
+                return qsPages;
             }
 
             @Override
@@ -176,13 +235,31 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
         };
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(INITIAL_OFFSCREEN_PAGE_LIMIT);
 
         mPageIndicator.setViewPager(mViewPager);
         mPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset,
                                        int positionOffsetPixels) {
+                Log.i(TAG, "onPageScrolled() called with " + "position = ["
+                        + position + "], positionOffset = [" + positionOffset
+                        + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
 
+                if (mEditing) {
+                    float targetTranslationX = 0;
+
+                    // targetTranslationX = where it's supposed to be - diff
+                    int homeLocation = mViewPager.getMeasuredWidth();
+
+                    // how far away from homeLocation is the scroll?
+                    if (positionOffsetPixels < homeLocation
+                            && position == 0) {
+                        targetTranslationX = homeLocation - positionOffsetPixels;
+                    }
+                    mQsPanelTop.setTranslationX(targetTranslationX);
+                }
             }
 
             @Override
@@ -207,29 +284,50 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
-        mPageIndicator.setCurrentItem(0);
         mViewPager.setOverScrollMode(OVER_SCROLL_NEVER);
 
-        updateResources();
-
-        mViewPager.setOnDragListener(this);
-        mPageIndicator.setOnDragListener(this);
-        mQsPanelTop.getBrightnessView().setOnDragListener(this);
-        mQsPanelTop.getDropTarget().setOnDragListener(this);
+        setClipChildren(false);
     }
 
     @Override
     public boolean hasOverlappingRendering() {
-        return mClipper.isAnimating();
+        return mClipper.isAnimating() || mEditing;
+    }
+
+    @Override
+    public void setBrightnessMirror(BrightnessMirrorController c) {
+        super.onFinishInflate();
+        ToggleSlider brightnessSlider =
+                (ToggleSlider) mQsPanelTop.findViewById(R.id.brightness_slider);
+        ToggleSlider mirror = (ToggleSlider) c.getMirror().findViewById(R.id.brightness_slider);
+        brightnessSlider.setMirror(mirror);
+        brightnessSlider.setMirrorController(c);
     }
 
     protected void drawTile(TileRecord r, QSTile.State state) {
         final int visibility = state.visible || mEditing ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
         r.tileView.onStateChanged(state);
+    }
+
+    @Override
+    public void setListening(boolean listening) {
+        if (mListening == listening) return;
+        mListening = listening;
+        for (TileRecord r : mRecords) {
+            r.tile.setListening(mListening);
+        }
+        mFooter.setListening(mListening);
+        if (mListening) {
+            refreshAllTiles();
+        }
+        if (isLaidOut() && listening && showBrightnessSlider()) {
+            mBrightnessController.registerCallbacks();
+        } else {
+            mBrightnessController.unregisterCallbacks();
+        }
     }
 
     public void setEditing(boolean editing) {
@@ -245,6 +343,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             mHost.setTiles(newTiles);
 
             refreshAllTiles();
+
+            mQsPanelTop.animate().translationX(0).start();
         }
 
         // clear the record state
@@ -253,6 +353,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             drawTile(record, record.tile.getState());
         }
         mQsPanelTop.setEditing(editing);
+        mPageIndicator.setEditing(editing);
+        mPagerAdapter.notifyDataSetChanged();
+
         ensurePagerState();
         requestLayout();
     }
@@ -460,8 +563,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     public void ensurePagerState() {
-        final boolean pagingEnabled = getVisibleTilePageCount() > 1 || mDragging;
-        mViewPager.setPagingEnabled(pagingEnabled);
+        if (!isShowingDetail()) {
+            final boolean pagingEnabled = getVisibleTilePageCount() > 1 || mDragging || mEditing;
+            mViewPager.setPagingEnabled(pagingEnabled);
+        }
     }
 
     public int getTilesPerPage() {
@@ -470,17 +575,16 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (DEBUG_DRAG) Log.d(TAG, "onMeasure()");
-
         final int width = MeasureSpec.getSize(widthMeasureSpec);
 
-        mQsPanelTop.measure(exactly(width), MeasureSpec.UNSPECIFIED);
+        if (isLaidOut()) {
+            mQsPanelTop.measure(exactly(width), MeasureSpec.UNSPECIFIED);
+        }
         mViewPager.measure(exactly(width), MeasureSpec.UNSPECIFIED);
         mPageIndicator.measure(exactly(width), MeasureSpec.UNSPECIFIED);
         mFooter.getView().measure(exactly(width), MeasureSpec.UNSPECIFIED);
 
         int h = mBrightnessPaddingTop
-                + mQsPanelTop.getMeasuredHeight()
                 + mViewPager.getMeasuredHeight()
                 + mPageIndicator.getMeasuredHeight();
         if (mFooter.hasFooter()) {
@@ -527,12 +631,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if (DEBUG_DRAG) Log.d(TAG, "onLayout()");
         final int w = getWidth();
 
         int top = mBrightnessPaddingTop;
-        mQsPanelTop.layout(0, top, w, top + mQsPanelTop.getMeasuredHeight());
-        top += mQsPanelTop.getMeasuredHeight();
 
         mViewPager.layout(0, top, w, top + mViewPager.getMeasuredHeight());
         top += mViewPager.getMeasuredHeight();
@@ -562,8 +663,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     protected int getRowTop(int row) {
-        if (row <= 0) return 0;
-        return mLargeCellHeight - mDualTileUnderlap + (row - 1) * mCellHeight;
+        int baseHeight = mBrightnessView.getMeasuredHeight() + mBrightnessPaddingTop;
+        if (row <= 0) return baseHeight;
+        return baseHeight + mLargeCellHeight - mDualTileUnderlap + (row - 1) * mCellHeight;
     }
 
     public int getColumnCount() {
@@ -708,13 +810,13 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 mLastTouchLocationX = event.getX();
                 mLastTouchLocationY = event.getY();
 
-                if (v == getDropTarget()) {
+                if (isDropTargetEvent(event, v)) {
                     if (DEBUG_DRAG) {
                         Log.d(TAG, "dropping on delete target!!");
                     }
                     if (mDraggingRecord.tile instanceof EditTile) {
-                        restoreDraggingTilePosition(v);
                         mQsPanelTop.toast(R.string.quick_settings_cannot_delete_edit_tile);
+                        restoreDraggingTilePosition(v);
                         return true;
                     } else {
                         mRestored = true;
@@ -831,6 +933,27 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return false;
     }
 
+    private boolean isDropTargetEvent(DragEvent event, View v) {
+        if (DEBUG_DRAG) {
+            Log.d(TAG, "isDropTargetEvent() called with " + "event = [" + event + "], v = [" + v + "]");
+        }
+        if (v == getDropTarget() || v == mQsPanelTop) {
+            if (DEBUG_DRAG) {
+                Log.d(TAG, "isDropTargetEvent() returns true by view");
+            }
+            return true;
+        }
+
+        if (v == mViewPager && mLastTouchLocationY <= getRowTop(0)) {
+            if (DEBUG_DRAG) {
+                Log.d(TAG, "isDropTargetEvent() returns true by loc");
+            }
+            return true;
+        }
+
+        return false;
+    }
+
     private void restoreDraggingTilePosition(View v) {
         if (mRestored) {
             return;
@@ -854,8 +977,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         originalPage.removeView(mDraggingRecord.tileView);
         addTransientView(mDraggingRecord.tileView, 0);
         mDraggingRecord.tileView.setTransitionVisibility(View.VISIBLE);
-
-        mLastTouchLocationY += mViewPager.getTop(); // we are in the threshold of the viewpager meow
 
         // need to move center of the dragging view to the coords of the event.
         final float touchEventBoxLeft = v.getX()
@@ -884,9 +1005,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
         // setup x destination to animate to
         float destinationX = mDraggingRecord.destination.x;
-        if (mDraggingRecord.destinationPage > mViewPager.getCurrentItem()) {
+        if (mDraggingRecord.destinationPage + 1 > mViewPager.getCurrentItem()) {
             destinationX += getWidth();
-        } else if (mDraggingRecord.destinationPage < mViewPager.getCurrentItem()) {
+        } else if (mDraggingRecord.destinationPage + 1 < mViewPager.getCurrentItem()) {
             destinationX -= getWidth();
         }
 
@@ -1331,6 +1452,31 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
     }
 
+    public void updateResources() {
+        final Resources res = mContext.getResources();
+        final int columns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
+        mCellHeight = res.getDimensionPixelSize(R.dimen.qs_tile_height);
+        mCellWidth = (int) (mCellHeight * TILE_ASPECT);
+        mLargeCellHeight = res.getDimensionPixelSize(R.dimen.qs_dual_tile_height);
+        mLargeCellWidth = (int) (mLargeCellHeight * TILE_ASPECT);
+        mPanelPaddingBottom = res.getDimensionPixelSize(R.dimen.qs_panel_padding_bottom);
+        mDualTileUnderlap = res.getDimensionPixelSize(R.dimen.qs_dual_tile_padding_vertical);
+        mBrightnessPaddingTop = res.getDimensionPixelSize(R.dimen.qs_brightness_padding_top);
+        if (isLaidOut()) {
+            if (mColumns != columns) {
+                mColumns = columns;
+                postInvalidate();
+            }
+            for (TileRecord r : mRecords) {
+                r.tile.clearState();
+            }
+            if (mListening) {
+                refreshAllTiles();
+            }
+            updateDetailText();
+        }
+    }
+
     public boolean isAnimating(TileRecord t) {
         return mCurrentlyAnimating.contains(t);
     }
@@ -1424,6 +1570,12 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     public boolean isDragRecordAttached() {
         return mDragging && mDraggingRecord != null && mRecords.indexOf(mDraggingRecord) >= 0;
+    }
+
+    public void goToSettingsPage() {
+        if (mEditing) {
+            mViewPager.setCurrentItem(0, true);
+        }
     }
 
     public static final class DragTileRecord extends TileRecord {

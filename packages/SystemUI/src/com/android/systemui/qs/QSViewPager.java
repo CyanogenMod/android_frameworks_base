@@ -9,23 +9,37 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
-/**
- * Created by roman on 11/5/15.
- */
 public class QSViewPager extends ViewPager {
 
     private static final String TAG = "QSViewPager";
 
     protected static final float SCROLL_PERCENT = .10f;
     private boolean mPagingEnabled;
+    QSDragPanel mDragPanel;
 
     public QSViewPager(Context context) {
         super(context);
     }
 
+    public void setDragPanel(QSDragPanel p) {
+        mDragPanel = p;
+    }
+
     @Override
     public boolean hasOverlappingRendering() {
-        return false;
+        return mDragPanel.isEditing();
+    }
+
+    @Override
+    public boolean canScrollHorizontally(int direction) {
+        if (direction < 0
+                && mDragPanel.isDragging()
+                && mPagingEnabled
+                && getCurrentItem() == 1) {
+            // can't scroll left while not editing, OR dragging on the first page
+            return false;
+        }
+        return super.canScrollHorizontally(direction);
     }
 
     @Override
@@ -109,9 +123,9 @@ public class QSViewPager extends ViewPager {
     public void setPagingEnabled(boolean enabled) {
         if (mPagingEnabled == enabled) return;
         mPagingEnabled = enabled;
-        Log.i(TAG, "setPagingEnabled() called with " + "enabled = [" + enabled + "]");
+        //Log.i(TAG, "setPagingEnabled() called with " + "enabled = [" + enabled + "]");
         if (getCurrentItem() > 0 && !mPagingEnabled) {
-            Log.w(TAG, "resetting to item 0 because paging is disabled.");
+            //Log.w(TAG, "resetting to item 0 because paging is disabled.");
             setCurrentItem(0, true);
         }
     }

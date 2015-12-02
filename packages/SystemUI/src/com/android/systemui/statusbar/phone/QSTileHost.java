@@ -125,7 +125,10 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     public boolean isEditing() {
-        return mCallback.isEditing();
+        if (mCallback != null) {
+            return mCallback.isEditing();
+        }
+        return false;
     }
 
     public void setEditing(boolean editing) {
@@ -266,6 +269,13 @@ public class QSTileHost implements QSTile.Host, Tunable {
         mTiles.putAll(newTiles);
         if (mCallback != null) {
             mCallback.onTilesChanged();
+        }
+    }
+
+    @Override
+    public void goToSettingsPage() {
+        if (mCallback != null) {
+            mCallback.goToSettingsPage();
         }
     }
 

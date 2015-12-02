@@ -151,6 +151,10 @@ public class QsTuner extends Fragment implements Callback {
         return mTileHost.isEditing();
     }
 
+    @Override
+    public void goToSettingsPage() {
+    }
+
     private static class CustomHost extends QSTileHost {
 
         public CustomHost(Context context) {
