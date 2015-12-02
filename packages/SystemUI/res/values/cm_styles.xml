@@ -37,4 +37,8 @@
         <item name="android:textColor">@color/status_bar_temperature_location_text_color</item>
     </style>
 
+    <style name="TextAppearance.QS.DetailItemSub">
+        <item name="android:textSize">@dimen/qs_detail_item_secondary_text_size</item>
+    </style>
+
 </resources>

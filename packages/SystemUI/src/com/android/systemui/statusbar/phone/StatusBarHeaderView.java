@@ -75,6 +75,7 @@ import com.android.systemui.tuner.TunerService;
 
 import java.text.NumberFormat;
 
+import cyanogenmod.app.StatusBarPanelCustomTile;
 import cyanogenmod.providers.CMSettings;
 
 /**
@@ -748,6 +749,11 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mEditing = editing;
         if (mEditing) {
             mQsPanelCallback.onShowingDetail(new QSTile.DetailAdapter() {
+                @Override
+                public StatusBarPanelCustomTile getCustomTile() {
+                    return null;
+                }
+
                 @Override
                 public int getTitle() {
                     return R.string.quick_settings_edit_label;
