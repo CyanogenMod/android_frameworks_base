@@ -73,10 +73,15 @@
     <string name="led_notification_title">Light settings</string>
     <string name="led_notification_text">LED light enabled by settings</string>
 
-    <string name="qs_tile_edit_header_instruction">Press and hold a tile to edit</string>
-    <string name="quick_settings_edit_label">Edit Tiles</string>
+    <string name="qs_tile_edit_header_instruction">Press and hold tiles to rearrange</string>
+    <string name="quick_settings_edit_label">Edit tiles</string>
     <string name="quick_settings_cannot_delete_edit_tile">Cannot delete the Edit tile</string>
     <string name="qs_tiles_reset_confirmation">Reset quick settings tiles to default configuration?</string>
+    <string name="quick_settings_tile_reset_to_default">Reset to default layout</string>
+    <string name="quick_settings_title_header">Header</string>
+    <string name="quick_settings_title_tiles">Tiles</string>
+    <string name="quick_settings_title_show_weather">Show weather</string>
+    <string name="quick_settings_title_enlarge_first_row">Enlarge first row</string>
 
     <!-- Screen pinning dialog description (for devices without navbar) -->
     <string name="screen_pinning_description_no_navbar">This keeps it in view until you unpin. Touch and hold the Back button to unpin.</string>
