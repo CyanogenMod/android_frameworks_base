@@ -38,6 +38,7 @@ import com.android.systemui.SysUIToast;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.ZenModePanel;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 /** Quick settings tile: Do not disturb **/
 public class DndTile extends QSTile<QSTile.BooleanState> {
@@ -246,6 +247,11 @@ public class DndTile extends QSTile<QSTile.BooleanState> {
         @Override
         public Intent getSettingsIntent() {
             return ZEN_SETTINGS;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
         }
 
         @Override
