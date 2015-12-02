@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
@@ -36,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.internal.logging.MetricsLogger;
+import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.qs.tiles.IntentTile;
@@ -44,7 +46,11 @@ import com.android.systemui.settings.ToggleSlider;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.tuner.QsTuner;
+
 import com.viewpagerindicator.CirclePageIndicator;
+
+import cyanogenmod.app.StatusBarPanelCustomTile;
+import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,6 +72,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     QSPanelTopView mQsPanelTop;
     CirclePageIndicator mPageIndicator;
 
+    private TextView mDetailRemoveButton;
     private DragTileRecord mDraggingRecord;
     private boolean mEditing;
     private boolean mDragging;
@@ -94,6 +101,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     protected void setupViews() {
         mDetail = LayoutInflater.from(mContext).inflate(R.layout.qs_detail, this, false);
         mDetailContent = (ViewGroup) mDetail.findViewById(android.R.id.content);
+        mDetailRemoveButton = (TextView) mDetail.findViewById(android.R.id.button3);
         mDetailSettingsButton = (TextView) mDetail.findViewById(android.R.id.button2);
         mDetailDoneButton = (TextView) mDetail.findViewById(android.R.id.button1);
         updateDetailText();
@@ -298,6 +306,12 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             return getPagesForCount(initialSize + mTempTiles.size());
         }
         return getPagesForCount(initialSize);
+    }
+
+    @Override
+    protected void updateDetailText() {
+        super.updateDetailText();
+        mDetailRemoveButton.setText(R.string.quick_settings_remove);
     }
 
     /**
@@ -1313,12 +1327,34 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
     }
 
+    @Override
+    protected void handleShowDetailImpl(Record r, boolean show, int x, int y) {
+        super.handleShowDetailImpl(r, show, x, y);
+        if (show) {
+            final StatusBarPanelCustomTile customTile = r.detailAdapter.getCustomTile();
+            mDetailRemoveButton.setVisibility(customTile != null ? VISIBLE : GONE);
+            mDetailRemoveButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mHost.collapsePanels();
+                    mHost.removeCustomTile(customTile);
+                }
+            });
+        }
+    }
+
     public int getDesiredColumnCount(int page, int row) {
         if (page == 0 && row == 0) {
             return 2; // TODO change if large tiles are disabled
         } else {
             return mColumns;
         }
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        FontSizeUtils.updateFontSize(mDetailRemoveButton, R.dimen.qs_detail_button_text_size);
     }
 
     @Override
