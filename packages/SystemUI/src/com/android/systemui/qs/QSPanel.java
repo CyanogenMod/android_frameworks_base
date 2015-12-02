@@ -51,7 +51,7 @@ import cyanogenmod.providers.CMSettings;
 
 /** View that represents the quick settings tile panel. **/
 public class QSPanel extends ViewGroup {
-    private static final float TILE_ASPECT = 1.2f;
+    protected static final float TILE_ASPECT = 1.2f;
 
     protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
     protected View mDetail;
