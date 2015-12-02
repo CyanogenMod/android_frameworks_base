@@ -16,16 +16,13 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
-import com.android.systemui.qs.QSDragPanel;
 import com.android.systemui.qs.QSTile;
-import com.android.systemui.statusbar.phone.SystemUIDialog;
 
 public class EditTile extends QSTile<QSTile.BooleanState> {
+
+    private boolean mListening;
 
     public EditTile(Host host) {
         super(host);
@@ -54,19 +51,6 @@ public class EditTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleLongClick() {
-        final AlertDialog d = new AlertDialog.Builder(mContext)
-                .setMessage(R.string.qs_tiles_reset_confirmation)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(com.android.internal.R.string.reset,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getHost().resetTiles();
-                                refreshState(false);
-                            }
-                        }).create();
-        SystemUIDialog.makeSystemUIDialog(d);
-        d.show();
     }
 
     @Override
@@ -95,6 +79,8 @@ public class EditTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public void setListening(boolean listening) {
-        // not interested
+        if (mListening == listening) return;
+        mListening = listening;
+        refreshState();
     }
 }
