@@ -19,6 +19,8 @@ package com.viewpagerindicator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
@@ -62,6 +64,8 @@ public class CirclePageIndicator extends View implements PageIndicator {
     private int mActivePointerId = INVALID_POINTER;
     private boolean mIsDragging;
 
+    private Bitmap mSettingsIcon;
+    private boolean mEditing;
 
     public CirclePageIndicator(Context context) {
         this(context, null);
@@ -110,8 +114,14 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+
+        mSettingsIcon = BitmapFactory.decodeResource(res, R.drawable.ic_mini_settings);
     }
 
+    @Override
+    public boolean hasOverlappingRendering() {
+        return false;
+    }
 
     public void setCentered(boolean centered) {
         mCentered = centered;
@@ -253,7 +263,14 @@ public class CirclePageIndicator extends View implements PageIndicator {
             }
             // Only paint fill if not completely transparent
             if (mPaintPageFill.getAlpha() > 0) {
-                canvas.drawCircle(dX, dY, (float) (pageFillRadius/1.5f), mPaintPageFill);
+                if (mEditing && iLoop == 0) {
+                    canvas.drawBitmap(mSettingsIcon,
+                            (int) (dX - mRadius),
+                            (int) (dY - mRadius),
+                            mPaintPageFill);
+                } else {
+                    canvas.drawCircle(dX, dY, (float) (pageFillRadius / 1.5f), mPaintPageFill);
+                }
             }
 
             // Only paint stroke if a stroke width was non-zero
@@ -501,5 +518,10 @@ public class CirclePageIndicator extends View implements PageIndicator {
             }
         }
         return result;
+    }
+
+    public void setEditing(boolean editing) {
+        mEditing = editing;
+        invalidate();
     }
 }
