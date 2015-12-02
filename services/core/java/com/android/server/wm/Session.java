@@ -429,6 +429,34 @@ final class Session extends IWindowSession.Stub
         }
     }
 
+    /**
+     * @hide
+     */
+    public int getLastWallpaperX() {
+        synchronized(mService.mWindowMap) {
+            long ident = Binder.clearCallingIdentity();
+            try {
+                return mService.getLastWallpaperX();
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public int getLastWallpaperY() {
+        synchronized(mService.mWindowMap) {
+            long ident = Binder.clearCallingIdentity();
+            try {
+                return mService.getLastWallpaperY();
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+    }
+
     public Bundle sendWallpaperCommand(IBinder window, String action, int x, int y,
             int z, Bundle extras, boolean sync) {
         synchronized(mService.mWindowMap) {

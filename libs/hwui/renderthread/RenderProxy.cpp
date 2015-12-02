@@ -147,7 +147,9 @@ bool RenderProxy::initialize(const sp<ANativeWindow>& window) {
     SETUP_TASK(initialize);
     args->context = mContext;
     args->window = window.get();
-    return (bool) postAndWait(task);
+    bool ret = mContext->mCanvas == NULL;
+    post(task);
+    return ret;
 }
 
 CREATE_BRIDGE2(updateSurface, CanvasContext* context, ANativeWindow* window) {

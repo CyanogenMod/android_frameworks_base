@@ -40,8 +40,8 @@
 
 #include <system/audio.h>
 #include <android_runtime/android_view_Surface.h>
-#include <media/AVMediaExtensions.h>
 #include "SeempLog.h"
+
 // ----------------------------------------------------------------------------
 
 using namespace android;
@@ -389,9 +389,16 @@ static void
 android_media_MediaRecorder_start(JNIEnv *env, jobject thiz)
 {
     ALOGV("start");
-    SEEMPLOG_RECORD(86, "");
     sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
     process_media_recorder_call(env, mr->start(), "java/lang/RuntimeException", "start failed.");
+}
+
+static void
+android_media_MediaRecorder_pause(JNIEnv *env, jobject thiz)
+{
+    ALOGV("pause");
+    sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
+    process_media_recorder_call(env, mr->pause(), "java/lang/RuntimeException", "pause failed.");
 }
 
 static void
@@ -465,7 +472,7 @@ android_media_MediaRecorder_native_setup(JNIEnv *env, jobject thiz, jobject weak
 
     ScopedUtfChars opPackageNameStr(env, opPackageName);
 
-    sp<MediaRecorder> mr = AVMediaUtils::get()->createMediaRecorder(String16(opPackageNameStr.c_str()));
+    sp<MediaRecorder> mr = new MediaRecorder(String16(opPackageNameStr.c_str()));
     if (mr == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
         return;
@@ -531,6 +538,7 @@ static JNINativeMethod gMethods[] = {
     {"getSurface",           "()Landroid/view/Surface;",        (void *)android_media_MediaRecorder_getSurface},
     {"getMaxAmplitude",      "()I",                             (void *)android_media_MediaRecorder_native_getMaxAmplitude},
     {"start",                "()V",                             (void *)android_media_MediaRecorder_start},
+    {"pause",                "()V",                             (void *)android_media_MediaRecorder_pause},
     {"stop",                 "()V",                             (void *)android_media_MediaRecorder_stop},
     {"native_reset",         "()V",                             (void *)android_media_MediaRecorder_native_reset},
     {"release",              "()V",                             (void *)android_media_MediaRecorder_release},

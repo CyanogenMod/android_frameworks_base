@@ -18,7 +18,10 @@ package android.os;
 
 import android.annotation.SdkConstant;
 import android.annotation.SystemApi;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -387,7 +390,7 @@ public final class PowerManager {
      * @hide
      */
     public static final String REBOOT_RECOVERY = "recovery";
-    
+
     final Context mContext;
     final IPowerManager mService;
     final Handler mHandler;
@@ -669,6 +672,19 @@ public final class PowerManager {
     public void wakeUp(long time, String reason) {
         try {
             mService.wakeUp(time, reason, mContext.getOpPackageName());
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * Forces the device to wake up from sleep only if
+     * nothing is blocking the proximity sensor
+     * @see #wakeUp
+     * @hide
+     */
+    public void wakeUpWithProximityCheck(long time, String reason) {
+        try {
+            mService.wakeUpWithProximityCheck(time, reason, mContext.getOpPackageName());
         } catch (RemoteException e) {
         }
     }
@@ -1233,6 +1249,70 @@ public final class PowerManager {
                     + Integer.toHexString(System.identityHashCode(this))
                     + " held=" + mHeld + ", refCount=" + mCount + "}";
             }
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public void setKeyboardVisibility(boolean visible)
+    {
+        try {
+            if (mService != null) {
+                mService.setKeyboardVisibility(visible);
+            }
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * sets the keyboard LED state
+     *
+     * @param on boolean state
+     * @param key 1 for caps, 2 for fn
+     *
+     * {@hide}
+     */
+    public void setKeyboardLight(boolean on, int key)
+    {
+        try {
+            mService.setKeyboardLight(on, key);
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
+     * Gets the default button brightness value.
+     * @hide
+     */
+    public int getDefaultButtonBrightness() {
+        return mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_buttonBrightnessSettingDefault);
+    }
+
+    /**
+     * Gets the default keyboard brightness value.
+     * @hide
+     */
+    public int getDefaultKeyboardBrightness() {
+        return mContext.getResources().getInteger(
+                com.android.internal.R.integer.config_keyboardBrightnessSettingDefault);
+    }
+
+    /**
+     * Boost the CPU. Boosts the cpu for the given duration in microseconds.
+     *
+     * @param duration in microseconds to boost the CPU
+     *
+     * @hide
+     */
+    public void cpuBoost(int duration)
+    {
+        try {
+            if (mService != null) {
+                mService.cpuBoost(duration);
+            }
+        } catch (RemoteException e) {
         }
     }
 }

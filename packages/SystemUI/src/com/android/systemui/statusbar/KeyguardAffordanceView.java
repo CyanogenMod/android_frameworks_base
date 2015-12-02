@@ -25,9 +25,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.CanvasProperty;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.DisplayListCanvas;
 import android.view.RenderNodeAnimator;
@@ -36,6 +40,7 @@ import android.view.ViewAnimationUtils;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
+
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.KeyguardAffordanceHelper;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
@@ -44,7 +49,7 @@ import com.android.systemui.statusbar.phone.PhoneStatusBar;
  * An ImageView which does not have overlapping renderings commands and therefore does not need a
  * layer when alpha is changed.
  */
-public class KeyguardAffordanceView extends ImageView {
+public class KeyguardAffordanceView extends ImageView implements Palette.PaletteAsyncListener {
 
     private static final long CIRCLE_APPEAR_DURATION = 80;
     private static final long CIRCLE_DISAPPEAR_MAX_DURATION = 200;
@@ -79,6 +84,8 @@ public class KeyguardAffordanceView extends ImageView {
     private float mRestingAlpha = KeyguardAffordanceHelper.SWIPE_RESTING_ALPHA_AMOUNT;
     private boolean mSupportHardware;
     private boolean mFinishing;
+    private boolean mLaunchingAffordance;
+    private ColorFilter mDefaultFilter;
 
     private CanvasProperty<Float> mHwCircleRadius;
     private CanvasProperty<Float> mHwCenterX;
@@ -152,7 +159,7 @@ public class KeyguardAffordanceView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        mSupportHardware = canvas.isHardwareAccelerated();
+        mSupportHardware = false;//canvas.isHardwareAccelerated();
         drawBackgroundCircle(canvas);
         canvas.save();
         canvas.scale(mImageScale, mImageScale, getWidth() / 2, getHeight() / 2);
@@ -160,23 +167,70 @@ public class KeyguardAffordanceView extends ImageView {
         canvas.restore();
     }
 
-    public void setPreviewView(View v) {
-        mPreviewView = v;
-        if (mPreviewView != null) {
-            mPreviewView.setVisibility(INVISIBLE);
+
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+        super.setImageDrawable(drawable);
+        doPaletteIfNecessary();
+    }
+
+    private void doPaletteIfNecessary() {
+        if (mDefaultFilter != null && getDrawable() instanceof BitmapDrawable) {
+            Palette.generateAsync(((BitmapDrawable) getDrawable()).getBitmap(), this);
         }
     }
 
+
+    public void setPreviewView(View v) {
+        View oldPreviewView = mPreviewView;
+        mPreviewView = v;
+        if (mPreviewView != null) {
+            mPreviewView.setVisibility(mLaunchingAffordance
+                    ? oldPreviewView.getVisibility() : INVISIBLE);
+            mPreviewView.setVisibility(INVISIBLE);
+            addOverlay();
+        }
+    }
+
+    private void addOverlay() {
+        if (mPreviewView != null) {
+            mPreviewView.getOverlay().clear();
+            if (mDefaultFilter != null) {
+                ColorDrawable d = new ColorDrawable(mCircleColor);
+                d.setBounds(0, 0, mPreviewView.getWidth(), mPreviewView.getHeight());
+                mPreviewView.getOverlay().add(d);
+            }
+        }
+    }
+
+    public void setDefaultFilter(ColorFilter filter) {
+        mDefaultFilter = filter;
+        mCircleColor = Color.WHITE;
+        addOverlay();
+        updateIconColor();
+    }
+
     private void updateIconColor() {
+        if (getDrawable() == null) {
+            return;
+        }
         Drawable drawable = getDrawable().mutate();
         float alpha = mCircleRadius / mMinBackgroundRadius;
         alpha = Math.min(1.0f, alpha);
         int color = (int) mColorInterpolator.evaluate(alpha, mNormalColor, mInverseColor);
-        drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        if (mDefaultFilter != null) {
+            if (alpha == 0) {
+                drawable.setColorFilter(mDefaultFilter);
+            } else {
+                drawable.setColorFilter(color, PorterDuff.Mode.DST_IN);
+            }
+        } else {
+            drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        }
     }
 
     private void drawBackgroundCircle(Canvas canvas) {
-        if (mCircleRadius > 0) {
+        if (mCircleRadius > 0 || mFinishing) {
             if (mFinishing && mSupportHardware) {
                 DisplayListCanvas displayListCanvas = (DisplayListCanvas) canvas;
                 displayListCanvas.drawCircle(mHwCenterX, mHwCenterY, mHwCircleRadius,
@@ -207,11 +261,12 @@ public class KeyguardAffordanceView extends ImageView {
         cancelAnimator(mPreviewClipper);
         mFinishing = true;
         mCircleStartRadius = mCircleRadius;
-        float maxCircleSize = getMaxCircleSize();
+        final float maxCircleSize = getMaxCircleSize();
         Animator animatorToRadius;
         if (mSupportHardware) {
             initHwProperties();
             animatorToRadius = getRtAnimatorToRadius(maxCircleSize);
+            startRtAlphaFadeIn();
         } else {
             animatorToRadius = getAnimatorToRadius(maxCircleSize);
         }
@@ -222,6 +277,8 @@ public class KeyguardAffordanceView extends ImageView {
             public void onAnimationEnd(Animator animation) {
                 mAnimationEndRunnable.run();
                 mFinishing = false;
+                mCircleRadius = maxCircleSize;
+                invalidate();
             }
         });
         animatorToRadius.start();
@@ -239,6 +296,36 @@ public class KeyguardAffordanceView extends ImageView {
                 startRtCircleFadeOut(animatorToRadius.getDuration());
             }
         }
+    }
+
+    /**
+     * Fades in the Circle on the RenderThread. It's used when finishing the circle when it had
+     * alpha 0 in the beginning.
+     */
+    private void startRtAlphaFadeIn() {
+        if (mCircleRadius == 0 && mPreviewView == null) {
+            Paint modifiedPaint = new Paint(mCirclePaint);
+            modifiedPaint.setColor(mCircleColor);
+            modifiedPaint.setAlpha(0);
+            mHwCirclePaint = CanvasProperty.createPaint(modifiedPaint);
+            RenderNodeAnimator animator = new RenderNodeAnimator(mHwCirclePaint,
+                    RenderNodeAnimator.PAINT_ALPHA, 255);
+            animator.setTarget(this);
+            animator.setInterpolator(PhoneStatusBar.ALPHA_IN);
+            animator.setDuration(250);
+            animator.start();
+        }
+    }
+
+    public void instantFinishAnimation() {
+        cancelAnimator(mPreviewClipper);
+        if (mPreviewView != null) {
+            mPreviewView.setClipBounds(null);
+            mPreviewView.setVisibility(View.VISIBLE);
+        }
+        mCircleRadius = getMaxCircleSize();
+        setImageAlpha(0, false);
+        invalidate();
     }
 
     private void startRtCircleFadeOut(long duration) {
@@ -443,6 +530,7 @@ public class KeyguardAffordanceView extends ImageView {
     public void setImageAlpha(float alpha, boolean animate, long duration,
             Interpolator interpolator, Runnable runnable) {
         cancelAnimator(mAlphaAnimator);
+        alpha = mLaunchingAffordance ? 0 : alpha;
         int endAlpha = (int) (alpha * 255);
         final Drawable background = getBackground();
         if (!animate) {
@@ -508,5 +596,15 @@ public class KeyguardAffordanceView extends ImageView {
         } else {
             return false;
         }
+    }
+
+    public void setLaunchingAffordance(boolean launchingAffordance) {
+        mLaunchingAffordance = launchingAffordance;
+    }
+
+    @Override
+    public void onGenerated(Palette palette) {
+        mCircleColor = palette.getDarkVibrantColor(Color.WHITE);
+        addOverlay();
     }
 }

@@ -33,12 +33,7 @@ public class SystemUIDialog extends AlertDialog {
         super(context, R.style.Theme_SystemUI_Dialog);
         mContext = context;
 
-        getWindow().setType(WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
-                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        WindowManager.LayoutParams attrs = getWindow().getAttributes();
-        attrs.setTitle(getClass().getSimpleName());
-        getWindow().setAttributes(attrs);
+        makeSystemUIDialog(this);
     }
 
     public void setShowForAllUsers(boolean show) {
@@ -61,5 +56,14 @@ public class SystemUIDialog extends AlertDialog {
 
     public void setNegativeButton(int resId, OnClickListener onClick) {
         setButton(BUTTON_NEGATIVE, mContext.getString(resId), onClick);
+    }
+
+    public static void makeSystemUIDialog(AlertDialog d) {
+        d.getWindow().setType(WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL);
+        d.getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        WindowManager.LayoutParams attrs = d.getWindow().getAttributes();
+        attrs.setTitle(SystemUIDialog.class.getClass().getSimpleName());
+        d.getWindow().setAttributes(attrs);
     }
 }

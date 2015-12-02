@@ -577,6 +577,15 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        case GET_CALLING_PACKAGE_FOR_BROADCAST_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            boolean foreground = data.readInt() == 1 ? true : false;
+            String res = getCallingPackageForBroadcast(foreground);
+            reply.writeNoException();
+            reply.writeString(res);
+            return true;
+        }
+
         case GET_CALLING_ACTIVITY_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             IBinder token = data.readStrongBinder();
@@ -2096,7 +2105,7 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
 
         case KEYGUARD_GOING_AWAY_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
-            keyguardGoingAway(data.readInt() != 0, data.readInt() != 0);
+            keyguardGoingAway(data.readInt() != 0, data.readInt() != 0, data.readInt() != 0);
             reply.writeNoException();
             return true;
         }
@@ -3186,6 +3195,19 @@ class ActivityManagerProxy implements IActivityManager
         data.writeInterfaceToken(IActivityManager.descriptor);
         data.writeStrongBinder(token);
         mRemote.transact(GET_CALLING_PACKAGE_TRANSACTION, data, reply, 0);
+        reply.readException();
+        String res = reply.readString();
+        data.recycle();
+        reply.recycle();
+        return res;
+    }
+    public String getCallingPackageForBroadcast(boolean foreground) throws RemoteException
+    {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(foreground ? 1 : 0);
+        mRemote.transact(GET_CALLING_PACKAGE_FOR_BROADCAST_TRANSACTION, data, reply, 0);
         reply.readException();
         String res = reply.readString();
         data.recycle();
@@ -5263,12 +5285,14 @@ class ActivityManagerProxy implements IActivityManager
     }
 
     public void keyguardGoingAway(boolean disableWindowAnimations,
-            boolean keyguardGoingToNotificationShade) throws RemoteException {
+            boolean keyguardGoingToNotificationShade,
+            boolean keyguardShowingMedia) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken(IActivityManager.descriptor);
         data.writeInt(disableWindowAnimations ? 1 : 0);
         data.writeInt(keyguardGoingToNotificationShade ? 1 : 0);
+        data.writeInt(keyguardShowingMedia ? 1 : 0);
         mRemote.transact(KEYGUARD_GOING_AWAY_TRANSACTION, data, reply, 0);
         reply.readException();
         data.recycle();

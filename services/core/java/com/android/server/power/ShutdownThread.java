@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2013 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +22,11 @@ import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.IActivityManager;
+import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.IBluetoothManager;
+import android.content.pm.ThemeUtils;
 import android.media.AudioAttributes;
 import android.nfc.NfcAdapter;
 import android.nfc.INfcAdapter;
@@ -32,7 +35,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.os.FileUtils;
 import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -44,21 +53,30 @@ import android.os.Vibrator;
 import android.os.SystemVibrator;
 import android.os.storage.IMountService;
 import android.os.storage.IMountShutdownObserver;
+import android.provider.Settings;
 import android.system.ErrnoException;
 import android.system.Os;
+import android.widget.ListView;
 
 import com.android.internal.telephony.ITelephony;
 import com.android.server.pm.PackageManagerService;
-
+import com.android.server.power.PowerManagerService;
 import android.util.Log;
+import android.view.IWindowManager;
 import android.view.WindowManager;
 import java.lang.reflect.Method;
+
+import cyanogenmod.providers.CMSettings;
 import dalvik.system.PathClassLoader;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 
 public final class ShutdownThread extends Thread {
     // constants
@@ -76,6 +94,8 @@ public final class ShutdownThread extends Thread {
     private static final int RADIO_STOP_PERCENT = 18;
     private static final int MOUNT_SERVICE_STOP_PERCENT = 20;
 
+    private static final String SOFT_REBOOT = "soft_reboot";
+
     // length of vibration before shutting down
     private static final int SHUTDOWN_VIBRATE_MS = 500;
 
@@ -87,7 +107,11 @@ public final class ShutdownThread extends Thread {
     private static final String UNCRYPT_STATUS_FILE = "/cache/recovery/uncrypt_status";
     private static final String UNCRYPT_PACKAGE_FILE = "/cache/recovery/uncrypt_file";
 
+    // recovery command
+    private static File RECOVERY_COMMAND_FILE = new File("/cache/recovery/command");
+
     private static boolean mReboot;
+    private static boolean mRebootWipe = false;
     private static boolean mRebootSafeMode;
     private static boolean mRebootUpdate;
     private static String mRebootReason;
@@ -113,10 +137,20 @@ public final class ShutdownThread extends Thread {
     private PowerManager.WakeLock mCpuWakeLock;
     private PowerManager.WakeLock mScreenWakeLock;
     private Handler mHandler;
+    private static MediaPlayer mMediaPlayer;
+    private static final String OEM_BOOTANIMATION_FILE = "/oem/media/shutdownanimation.zip";
+    private static final String SYSTEM_BOOTANIMATION_FILE = "/system/media/shutdownanimation.zip";
+    private static final String SYSTEM_ENCRYPTED_BOOTANIMATION_FILE = "/system/media/shutdownanimation-encrypted.zip";
+
+    private static final String SHUTDOWN_MUSIC_FILE = "/system/media/shutdown.wav";
+    private static final String OEM_SHUTDOWN_MUSIC_FILE = "/oem/media/shutdown.wav";
+
+    private boolean isShutdownMusicPlaying = false;
 
     private static AlertDialog sConfirmDialog;
     private ProgressDialog mProgressDialog;
 
+    private static AudioManager mAudioManager;
     private ShutdownThread() {
     }
 
@@ -129,9 +163,20 @@ public final class ShutdownThread extends Thread {
      * @param confirm true if user confirmation is needed before shutting down.
      */
     public static void shutdown(final Context context, boolean confirm) {
+        final Context uiContext = getUiContext(context);
         mReboot = false;
         mRebootSafeMode = false;
-        shutdownInner(context, confirm);
+        shutdownInner(uiContext, confirm);
+    }
+
+    private static boolean isAdvancedRebootPossible(final Context context) {
+        KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        boolean keyguardLocked = km.inKeyguardRestrictedInputMode() && km.isKeyguardSecure();
+        boolean advancedRebootEnabled = CMSettings.Secure.getInt(context.getContentResolver(),
+                CMSettings.Secure.ADVANCED_REBOOT, 0) == 1;
+        boolean isPrimaryUser = UserHandle.getCallingUserId() == UserHandle.USER_OWNER;
+
+        return advancedRebootEnabled && !keyguardLocked && isPrimaryUser;
     }
 
     static void shutdownInner(final Context context, boolean confirm) {
@@ -144,39 +189,108 @@ public final class ShutdownThread extends Thread {
             }
         }
 
+        boolean showRebootOption = false;
+
+        String[] actionsArray;
+        String actions = CMSettings.Secure.getStringForUser(context.getContentResolver(),
+                CMSettings.Secure.POWER_MENU_ACTIONS, UserHandle.USER_CURRENT);
+        if (actions == null) {
+            actionsArray = context.getResources().getStringArray(
+                    com.android.internal.R.array.config_globalActionsList);
+        } else {
+            actionsArray = actions.split("\\|");
+        }
+
+        for (int i = 0; i < actionsArray.length; i++) {
+            if (actionsArray[i].equals("reboot")) {
+                showRebootOption = true;
+                break;
+            }
+        }
         final int longPressBehavior = context.getResources().getInteger(
                         com.android.internal.R.integer.config_longPressOnPowerBehavior);
-        final int resourceId = mRebootSafeMode
+        int resourceId = mRebootSafeMode
                 ? com.android.internal.R.string.reboot_safemode_confirm
                 : (longPressBehavior == 2
                         ? com.android.internal.R.string.shutdown_confirm_question
                         : com.android.internal.R.string.shutdown_confirm);
+        if (showRebootOption && !mRebootSafeMode) {
+            resourceId = com.android.internal.R.string.reboot_confirm;
+        }
 
         Log.d(TAG, "Notifying thread to start shutdown longPressBehavior=" + longPressBehavior);
 
         if (confirm) {
             final CloseDialogReceiver closer = new CloseDialogReceiver(context);
+            final boolean advancedReboot = isAdvancedRebootPossible(context);
+            final Context uiContext = getUiContext(context);
+
             if (sConfirmDialog != null) {
                 sConfirmDialog.dismiss();
+                sConfirmDialog = null;
             }
-            sConfirmDialog = new AlertDialog.Builder(context)
+            AlertDialog.Builder confirmDialogBuilder = new AlertDialog.Builder(uiContext)
                     .setTitle(mRebootSafeMode
                             ? com.android.internal.R.string.reboot_safemode_title
-                            : com.android.internal.R.string.power_off)
-                    .setMessage(resourceId)
-                    .setPositiveButton(com.android.internal.R.string.yes, new DialogInterface.OnClickListener() {
+                            : showRebootOption
+                                    ? com.android.internal.R.string.reboot_title
+                                    : com.android.internal.R.string.power_off);
+
+            if (!advancedReboot || mRebootSafeMode) {
+                confirmDialogBuilder.setMessage(resourceId);
+            } else {
+                confirmDialogBuilder
+                      .setSingleChoiceItems(com.android.internal.R.array.shutdown_reboot_options,
+                              0, null);
+            }
+
+            confirmDialogBuilder.setPositiveButton(com.android.internal.R.string.yes,
+                    new DialogInterface.OnClickListener() {
+                        @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            if (!mRebootSafeMode && advancedReboot) {
+                                boolean softReboot = false;
+                                ListView reasonsList = ((AlertDialog)dialog).getListView();
+                                int selected = reasonsList.getCheckedItemPosition();
+                                if (selected != ListView.INVALID_POSITION) {
+                                    String actions[] = context.getResources().getStringArray(
+                                            com.android.internal.R.array.shutdown_reboot_actions);
+                                    if (selected >= 0 && selected < actions.length) {
+                                        mRebootReason = actions[selected];
+                                        if (actions[selected].equals(SOFT_REBOOT)) {
+                                            doSoftReboot();
+                                            return;
+                                        }
+                                    }
+                                }
+
+                                mReboot = true;
+                            }
                             beginShutdownSequence(context);
-                        }
-                    })
-                    .setNegativeButton(com.android.internal.R.string.no, null)
-                    .create();
+                      }
+                  });
+
+            confirmDialogBuilder.setNegativeButton(com.android.internal.R.string.no, null);
+            sConfirmDialog = confirmDialogBuilder.create();
+
             closer.dialog = sConfirmDialog;
             sConfirmDialog.setOnDismissListener(closer);
             sConfirmDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
             sConfirmDialog.show();
         } else {
             beginShutdownSequence(context);
+        }
+    }
+
+    private static void doSoftReboot() {
+        try {
+            final IActivityManager am =
+                  ActivityManagerNative.asInterface(ServiceManager.checkService("activity"));
+            if (am != null) {
+                am.restart();
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "failure trying to perform soft reboot", e);
         }
     }
 
@@ -211,13 +325,35 @@ public final class ShutdownThread extends Thread {
      * @param confirm true if user confirmation is needed before shutting down.
      */
     public static void reboot(final Context context, String reason, boolean confirm) {
+        final Context uiContext = getUiContext(context);
         mReboot = true;
         mRebootSafeMode = false;
         mRebootUpdate = false;
         mRebootReason = reason;
-        shutdownInner(context, confirm);
+        shutdownInner(uiContext, confirm);
     }
 
+    private static String getShutdownMusicFilePath() {
+        final String[] fileName = {OEM_SHUTDOWN_MUSIC_FILE, SHUTDOWN_MUSIC_FILE};
+        File checkFile = null;
+        for(String music : fileName) {
+            checkFile = new File(music);
+            if (checkFile.exists()) {
+                return music;
+            }
+        }
+        return null;
+    }
+
+    private static void lockDevice() {
+        IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager
+                .getService(Context.WINDOW_SERVICE));
+        try {
+            wm.updateRotation(false, false);
+        } catch (RemoteException e) {
+            Log.w(TAG, "boot animation can not lock device!");
+        }
+    }
     /**
      * Request a reboot into safe mode.  Must be called from a Looper thread in which its UI
      * is shown.
@@ -264,6 +400,13 @@ public final class ShutdownThread extends Thread {
         //   UI: spinning circle only (no progress bar)
         if (PowerManager.REBOOT_RECOVERY.equals(mRebootReason)) {
             mRebootUpdate = new File(UNCRYPT_PACKAGE_FILE).exists();
+            if (RECOVERY_COMMAND_FILE.exists()) {
+                try {
+                    mRebootWipe = new String(FileUtils.readTextFile(
+                            RECOVERY_COMMAND_FILE, 0, null)).contains("wipe");
+                } catch (IOException e) {
+                }
+            }
             if (mRebootUpdate) {
                 pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_update_title));
                 pd.setMessage(context.getText(
@@ -273,22 +416,41 @@ public final class ShutdownThread extends Thread {
                 pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 pd.setProgress(0);
                 pd.setIndeterminate(false);
-            } else {
+            } else if (mRebootWipe) {
                 // Factory reset path. Set the dialog message accordingly.
                 pd.setTitle(context.getText(com.android.internal.R.string.reboot_to_reset_title));
                 pd.setMessage(context.getText(
                         com.android.internal.R.string.reboot_to_reset_message));
                 pd.setIndeterminate(true);
+            } else {
+                pd.setTitle(context.getText(com.android.internal.R.string.reboot_title));
+                pd.setMessage(context.getText(com.android.internal.R.string.reboot_progress));
+                pd.setIndeterminate(true);
             }
         } else {
-            pd.setTitle(context.getText(com.android.internal.R.string.power_off));
-            pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
+            if (mReboot) {
+                pd.setTitle(context.getText(com.android.internal.R.string.reboot_title));
+                pd.setMessage(context.getText(com.android.internal.R.string.reboot_progress));
+            } else {
+                pd.setTitle(context.getText(com.android.internal.R.string.power_off));
+                pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
+            }
             pd.setIndeterminate(true);
         }
-        pd.setCancelable(false);
-        pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
 
-        pd.show();
+        //acquire audio focus to make the other apps to stop playing muisc
+        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager.requestAudioFocus(null,
+                AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+        if (!checkAnimationFileExist()) {
+            // throw up an indeterminate system dialog to indicate radio is
+            // shutting down.
+            pd.setCancelable(false);
+            pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+
+            pd.show();
+        }
 
         sInstance.mProgressDialog = pd;
         sInstance.mContext = context;
@@ -419,6 +581,40 @@ public final class ShutdownThread extends Thread {
             sInstance.setRebootProgress(PACKAGE_MANAGER_STOP_PERCENT, null);
         }
 
+        String shutDownFile = null;
+
+        //showShutdownAnimation() is called from here to sync
+        //music and animation properly
+        if(checkAnimationFileExist()) {
+            lockDevice();
+            showShutdownAnimation();
+
+            if (!isSilentMode()
+                    && (shutDownFile = getShutdownMusicFilePath()) != null) {
+                isShutdownMusicPlaying = true;
+                shutdownMusicHandler.obtainMessage(0, shutDownFile).sendToTarget();
+            }
+        }
+
+        Log.i(TAG, "wait for shutdown music");
+        final long endTimeForMusic = SystemClock.elapsedRealtime() + MAX_BROADCAST_TIME;
+        synchronized (mActionDoneSync) {
+            while (isShutdownMusicPlaying) {
+                long delay = endTimeForMusic - SystemClock.elapsedRealtime();
+                if (delay <= 0) {
+                    Log.w(TAG, "play shutdown music timeout!");
+                    break;
+                }
+                try {
+                    mActionDoneSync.wait(delay);
+                } catch (InterruptedException e) {
+                }
+            }
+            if (!isShutdownMusicPlaying) {
+                Log.i(TAG, "play shutdown music complete.");
+            }
+        }
+
         // Shutdown radios.
         shutdownRadios(MAX_RADIO_WAIT_TIME);
         if (mRebootUpdate) {
@@ -509,11 +705,10 @@ public final class ShutdownThread extends Thread {
                         ITelephony.Stub.asInterface(ServiceManager.checkService("phone"));
                 final IBluetoothManager bluetooth =
                         IBluetoothManager.Stub.asInterface(ServiceManager.checkService(
-                                BluetoothAdapter.BLUETOOTH_MANAGER_SERVICE));
+                        BluetoothAdapter.BLUETOOTH_MANAGER_SERVICE));
 
                 try {
-                    nfcOff = nfc == null ||
-                             nfc.getState() == NfcAdapter.STATE_OFF;
+                    nfcOff = nfc == null || nfc.getState() == NfcAdapter.STATE_OFF;
                     if (!nfcOff) {
                         Log.w(TAG, "Turning off NFC...");
                         nfc.disable(false); // Don't persist new state
@@ -745,5 +940,70 @@ public final class ShutdownThread extends Thread {
         } catch (Exception e) {
             Log.e(TAG, "Unknown exception while trying to invoke rebootOrShutdown");
         }
+    }
+
+    private static boolean checkAnimationFileExist() {
+        if (new File(OEM_BOOTANIMATION_FILE).exists()
+                || new File(SYSTEM_BOOTANIMATION_FILE).exists()
+                || new File(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE).exists())
+            return true;
+        else
+            return false;
+    }
+
+    private static boolean isSilentMode() {
+        return mAudioManager.isSilentMode();
+    }
+
+    private static void showShutdownAnimation() {
+        /*
+         * When boot completed, "service.bootanim.exit" property is set to 1.
+         * Bootanimation checks this property to stop showing the boot animation.
+         * Since we use the same code for shutdown animation, we
+         * need to reset this property to 0. If this is not set to 0 then shutdown
+         * will stop and exit after displaying the first frame of the animation
+         */
+        SystemProperties.set("service.bootanim.exit", "0");
+
+        SystemProperties.set("ctl.start", "bootanim");
+    }
+
+    private Handler shutdownMusicHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String path = (String) msg.obj;
+            mMediaPlayer = new MediaPlayer();
+            try
+            {
+                mMediaPlayer.reset();
+                mMediaPlayer.setDataSource(path);
+                mMediaPlayer.prepare();
+                mMediaPlayer.start();
+                mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        synchronized (mActionDoneSync) {
+                            isShutdownMusicPlaying = false;
+                            mActionDoneSync.notifyAll();
+                        }
+                    }
+                });
+            } catch (IOException e) {
+                Log.d(TAG, "play shutdown music error:" + e);
+            }
+        }
+    };
+
+    private static Context getUiContext(Context context) {
+        Context uiContext = null;
+        if (context != null) {
+            uiContext = ThemeUtils.createUiContext(context);
+            if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEVISION)) {
+                uiContext.setTheme(com.android.internal.R.style.Theme_Leanback_Dialog_Alert);
+            } else  {
+                uiContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+            }
+        }
+        return uiContext != null ? uiContext : context;
     }
 }

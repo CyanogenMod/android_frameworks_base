@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +22,7 @@ package android.net.wifi;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.annotation.SystemApi;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
@@ -623,6 +627,7 @@ public class WifiManager {
     private static final Object sThreadRefLock = new Object();
     private static int sThreadRefCount;
     private static HandlerThread sHandlerThread;
+    private final AppOpsManager mAppOps;
 
     @GuardedBy("sCM")
     // TODO: Introduce refcounting and make this a per-process static callback, instead of a
@@ -644,6 +649,7 @@ public class WifiManager {
         mService = service;
         mTargetSdkVersion = context.getApplicationInfo().targetSdkVersion;
         init();
+        mAppOps = (AppOpsManager)context.getSystemService(Context.APP_OPS_SERVICE);
     }
 
     /**
@@ -1307,7 +1313,7 @@ public class WifiManager {
      * in order to get valid results.
      */
     public List<ScanResult> getScanResults() {
-        android.util.SeempLog.record(72);
+        android.util.SeempLog.record(55);
         try {
             return mService.getScanResults(mContext.getOpPackageName());
         } catch (RemoteException e) {
@@ -1422,6 +1428,19 @@ public class WifiManager {
     }
 
     /**
+     * Check if the chipset supports IBSS (Adhoc) mode
+     * @return {@code true} if supported, {@code false} otherwise.
+     * @hide
+     */
+    public boolean isIbssSupported() {
+        try {
+            return mService.isIbssSupported();
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+
+    /**
      * Return the DHCP-assigned addresses from the last successful DHCP request,
      * if any.
      * @return the DHCP information
@@ -1441,6 +1460,9 @@ public class WifiManager {
      *         is the same as the requested state).
      */
     public boolean setWifiEnabled(boolean enabled) {
+        if (mAppOps.noteOp(AppOpsManager.OP_WIFI_CHANGE) !=
+                AppOpsManager.MODE_ALLOWED)
+            return false;
         try {
             return mService.setWifiEnabled(enabled);
         } catch (RemoteException e) {

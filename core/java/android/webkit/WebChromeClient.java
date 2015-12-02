@@ -291,7 +291,7 @@ public class WebChromeClient {
      */
     public void onGeolocationPermissionsShowPrompt(String origin,
             GeolocationPermissions.Callback callback) {
-            android.util.SeempLog.record(71);
+            android.util.SeempLog.record(54);
             }
 
     /**

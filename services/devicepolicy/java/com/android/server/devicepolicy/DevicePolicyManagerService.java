@@ -21,6 +21,7 @@ import static android.app.admin.DevicePolicyManager.PASSWORD_QUALITY_COMPLEX;
 import static android.app.admin.DevicePolicyManager.WIPE_EXTERNAL_STORAGE;
 import static android.app.admin.DevicePolicyManager.WIPE_RESET_PROTECTION_DATA;
 import static android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES;
+import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_REQUIRED_AFTER_DPM_LOCK_NOW;
 import static org.xmlpull.v1.XmlPullParser.END_DOCUMENT;
 import static org.xmlpull.v1.XmlPullParser.END_TAG;
 import static org.xmlpull.v1.XmlPullParser.TEXT;
@@ -44,6 +45,7 @@ import android.app.admin.DevicePolicyManagerInternal;
 import android.app.admin.IDevicePolicyManager;
 import android.app.admin.SystemUpdatePolicy;
 import android.app.backup.IBackupManager;
+import android.app.trust.TrustManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -93,6 +95,7 @@ import android.security.IKeyChainAliasCallback;
 import android.security.IKeyChainService;
 import android.security.KeyChain;
 import android.security.KeyChain.KeyChainConnection;
+import android.security.KeyStore;
 import android.service.persistentdata.PersistentDataBlockManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -2957,7 +2960,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
             boolean requireEntry = (flags & DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY) != 0;
             if (requireEntry) {
-                utils.requireCredentialEntry(UserHandle.USER_ALL);
+                utils.requireStrongAuth(STRONG_AUTH_REQUIRED_AFTER_DPM_LOCK_NOW,
+                        UserHandle.USER_ALL);
             }
             synchronized (this) {
                 int newOwner = requireEntry ? callingUid : -1;
@@ -3089,7 +3093,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             mPowerManager.goToSleep(SystemClock.uptimeMillis(),
                     PowerManager.GO_TO_SLEEP_REASON_DEVICE_ADMIN, 0);
             // Ensure the device is locked
-            new LockPatternUtils(mContext).requireCredentialEntry(UserHandle.USER_ALL);
+            new LockPatternUtils(mContext).requireStrongAuth(
+                    STRONG_AUTH_REQUIRED_AFTER_DPM_LOCK_NOW, UserHandle.USER_ALL);
             getWindowManager().lockNow(null);
         } catch (RemoteException e) {
         } finally {
@@ -4194,6 +4199,36 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
     }
 
+    @Override
+    public boolean requireSecureKeyguard(int userHandle) {
+        if (!mHasFeature) {
+            return false;
+        }
+
+        int passwordQuality = getPasswordQuality(null, userHandle);
+        if (passwordQuality > DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
+            return true;
+        }
+
+        int encryptionStatus = getStorageEncryptionStatus(userHandle);
+        if (encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE
+                || encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
+            return true;
+        }
+
+        // Keystore.isEmpty() requires system UID
+        long token = Binder.clearCallingIdentity();
+        try {
+            if (!KeyStore.getInstance().isEmpty()) {
+                return true;
+            }
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+
+        return false;
+    }
+
     // Returns the active device owner or null if there is no device owner.
     private ActiveAdmin getDeviceOwnerAdmin() {
         String deviceOwnerPackageName = getDeviceOwner();
@@ -4232,6 +4267,17 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                 mDeviceOwner.clearDeviceOwner();
                 mDeviceOwner.writeOwnerFile();
                 updateDeviceOwnerLocked();
+                // Restore backup manager.
+                long ident = Binder.clearCallingIdentity();
+                try {
+                    IBackupManager ibm = IBackupManager.Stub.asInterface(
+                            ServiceManager.getService(Context.BACKUP_SERVICE));
+                    ibm.setBackupServiceActive(UserHandle.USER_OWNER, true);
+                } catch (RemoteException e) {
+                    throw new IllegalStateException("Failed activating backup service.", e);
+                } finally {
+                    Binder.restoreCallingIdentity(ident);
+                }
             }
         }
     }

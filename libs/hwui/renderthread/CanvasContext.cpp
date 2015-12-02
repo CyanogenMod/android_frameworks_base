@@ -31,6 +31,7 @@
 #include <strings.h>
 #include <cutils/properties.h>
 #include <private/hwui/DrawGlInfo.h>
+#include <gui/Surface.h>
 
 #define TRIM_MEMORY_COMPLETE 80
 #define TRIM_MEMORY_UI_HIDDEN 20
@@ -115,6 +116,10 @@ bool CanvasContext::initialize(ANativeWindow* window) {
     if (mCanvas) return false;
     mCanvas = new OpenGLRenderer(mRenderThread.renderState());
     mCanvas->initProperties();
+    if (window) {
+        Surface *s = static_cast<Surface*>(window);
+        s->allocateBuffers();
+    }
     return true;
 }
 

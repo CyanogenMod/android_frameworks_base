@@ -34,6 +34,8 @@ public abstract class ExpandableOutlineView extends ExpandableView {
     private final Rect mOutlineRect = new Rect();
     protected final int mRoundedRectCornerRadius;
     private boolean mCustomOutline;
+    private float mRoundCornerRadius = 0;
+    private float mOutlineAlpha = 1f;
 
     public ExpandableOutlineView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,13 +45,14 @@ public abstract class ExpandableOutlineView extends ExpandableView {
             @Override
             public void getOutline(View view, Outline outline) {
                 if (!mCustomOutline) {
-                    outline.setRect(0,
+                    outline.setRoundRect(0,
                             mClipTopAmount,
                             getWidth(),
-                            Math.max(getActualHeight(), mClipTopAmount));
+                            Math.max(getActualHeight(), mClipTopAmount), mRoundCornerRadius);
                 } else {
-                    outline.setRoundRect(mOutlineRect, mRoundedRectCornerRadius);
+                    outline.setRoundRect(mOutlineRect, mRoundCornerRadius);
                 }
+                outline.setAlpha(mOutlineAlpha);
             }
         });
     }
@@ -63,6 +66,11 @@ public abstract class ExpandableOutlineView extends ExpandableView {
     @Override
     public void setClipTopAmount(int clipTopAmount) {
         super.setClipTopAmount(clipTopAmount);
+        invalidateOutline();
+    }
+
+    protected void setOutlineAlpha(float alpha) {
+        mOutlineAlpha = alpha;
         invalidateOutline();
     }
 
@@ -89,4 +97,7 @@ public abstract class ExpandableOutlineView extends ExpandableView {
         invalidateOutline();
     }
 
+    protected void setRoundCornerRadius(float roundRadius) {
+        mRoundCornerRadius = roundRadius;
+    }
 }

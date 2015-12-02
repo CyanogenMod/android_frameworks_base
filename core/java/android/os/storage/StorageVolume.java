@@ -196,15 +196,20 @@ public class StorageVolume implements Parcelable {
     }
 
     /**
-     * Parse and return volume UUID as FAT volume ID, or return -1 if unable to
+     * Parse and return volume UUID as volume ID, or return -1 if unable to
      * parse or UUID is unknown.
      */
-    public int getFatVolumeId() {
-        if (mFsUuid == null || mFsUuid.length() != 9) {
+    public int getVolumeId() {
+        String id = mFsUuid;
+        if (id == null) {
             return -1;
         }
+        id = id.replace("-", "");
+        if (id.length() > 8) {
+            id = id.substring(0, 8);
+        }
         try {
-            return (int) Long.parseLong(mFsUuid.replace("-", ""), 16);
+            return (int) Long.parseLong(id, 16);
         } catch (NumberFormatException e) {
             return -1;
         }

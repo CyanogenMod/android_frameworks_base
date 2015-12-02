@@ -148,11 +148,7 @@ static void nativeSendPowerHint(JNIEnv *env, jclass clazz, jint hintId, jint dat
     int data_param = data;
 
     if (gPowerModule && gPowerModule->powerHint) {
-        if(data)
-            gPowerModule->powerHint(gPowerModule, (power_hint_t)hintId, &data_param);
-        else {
-            gPowerModule->powerHint(gPowerModule, (power_hint_t)hintId, NULL);
-        }
+        gPowerModule->powerHint(gPowerModule, (power_hint_t)hintId, &data_param);
     }
 }
 
@@ -162,6 +158,16 @@ static void nativeSetFeature(JNIEnv *env, jclass clazz, jint featureId, jint dat
     if (gPowerModule && gPowerModule->setFeature) {
         gPowerModule->setFeature(gPowerModule, (feature_t)featureId, data_param);
     }
+}
+
+static jint nativeGetFeature(JNIEnv *env, jclass clazz, jint featureId) {
+    int value = -1;
+
+    if (gPowerModule && gPowerModule->getFeature) {
+        value = gPowerModule->getFeature(gPowerModule, (feature_t)featureId);
+    }
+
+    return (jint)value;
 }
 
 // ----------------------------------------------------------------------------
@@ -182,6 +188,8 @@ static JNINativeMethod gPowerManagerServiceMethods[] = {
             (void*) nativeSendPowerHint },
     { "nativeSetFeature", "(II)V",
             (void*) nativeSetFeature },
+    { "nativeGetFeature", "(I)I",
+            (void*) nativeGetFeature },
 };
 
 #define FIND_CLASS(var, className) \

@@ -53,6 +53,8 @@ import com.android.systemui.statusbar.phone.ScrimController;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.ScrollAdapter;
 
+import cyanogenmod.power.PerformanceManager;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -208,6 +210,9 @@ public class NotificationStackScrollLayout extends ViewGroup
     private boolean mDelegateToScrollView;
     private boolean mDisallowScrollingInThisMotion;
     private long mGoToFullShadeDelay;
+
+    private final PerformanceManager mPerf;
+
     private ViewTreeObserver.OnPreDrawListener mChildrenUpdater
             = new ViewTreeObserver.OnPreDrawListener() {
         @Override
@@ -253,6 +258,8 @@ public class NotificationStackScrollLayout extends ViewGroup
                 minHeight, maxHeight);
         mExpandHelper.setEventSource(this);
         mExpandHelper.setScrollAdapter(this);
+
+        mPerf = PerformanceManager.getInstance(context);
 
         mSwipeHelper = new SwipeHelper(SwipeHelper.X, this, getContext());
         mSwipeHelper.setLongPressListener(mLongPressListener);
@@ -653,7 +660,7 @@ public class NotificationStackScrollLayout extends ViewGroup
 
     @Override
     public float getFalsingThresholdFactor() {
-        return mPhoneStatusBar.isScreenOnComingFromTouch() ? 1.5f : 1.0f;
+        return mPhoneStatusBar.isWakeUpComingFromTouch() ? 1.5f : 1.0f;
     }
 
     public View getChildAtPosition(MotionEvent ev) {
@@ -839,6 +846,11 @@ public class NotificationStackScrollLayout extends ViewGroup
                 && !mOnlyScrollingInThisMotion) {
             horizontalSwipeWantsIt = mSwipeHelper.onTouchEvent(ev);
         }
+
+        if (expandWantsIt && mIsBeingDragged) {
+            mPerf.cpuBoost(200 * 1000);
+        }
+
         return horizontalSwipeWantsIt || scrollerWantsIt || expandWantsIt || super.onTouchEvent(ev);
     }
 
@@ -1915,7 +1927,9 @@ public class NotificationStackScrollLayout extends ViewGroup
             boolean onBottom = false;
             boolean pinnedAndClosed = row.isPinned() && !mIsExpanded;
             if (!mIsExpanded && !isHeadsUp) {
-                type = AnimationEvent.ANIMATION_TYPE_HEADS_UP_DISAPPEAR;
+                type = row.wasJustClicked()
+                        ? AnimationEvent.ANIMATION_TYPE_HEADS_UP_DISAPPEAR_CLICK
+                        : AnimationEvent.ANIMATION_TYPE_HEADS_UP_DISAPPEAR;
             } else {
                 StackViewState viewState = mCurrentStackScrollState.getViewStateForView(row);
                 if (viewState == null) {
@@ -3016,6 +3030,15 @@ public class NotificationStackScrollLayout extends ViewGroup
                         .animateY()
                         .animateZ(),
 
+                // ANIMATION_TYPE_HEADS_UP_DISAPPEAR_CLICK
+                new AnimationFilter()
+                        .animateAlpha()
+                        .animateHeight()
+                        .animateTopInset()
+                        .animateY()
+                        .animateZ()
+                        .hasDelays(),
+
                 // ANIMATION_TYPE_HEADS_UP_OTHER
                 new AnimationFilter()
                         .animateAlpha()
@@ -3087,6 +3110,9 @@ public class NotificationStackScrollLayout extends ViewGroup
                 // ANIMATION_TYPE_HEADS_UP_DISAPPEAR
                 StackStateAnimator.ANIMATION_DURATION_HEADS_UP_DISAPPEAR,
 
+                // ANIMATION_TYPE_HEADS_UP_DISAPPEAR_CLICK
+                StackStateAnimator.ANIMATION_DURATION_HEADS_UP_DISAPPEAR,
+
                 // ANIMATION_TYPE_HEADS_UP_OTHER
                 StackStateAnimator.ANIMATION_DURATION_STANDARD,
 
@@ -3110,8 +3136,9 @@ public class NotificationStackScrollLayout extends ViewGroup
         static final int ANIMATION_TYPE_GROUP_EXPANSION_CHANGED = 13;
         static final int ANIMATION_TYPE_HEADS_UP_APPEAR = 14;
         static final int ANIMATION_TYPE_HEADS_UP_DISAPPEAR = 15;
-        static final int ANIMATION_TYPE_HEADS_UP_OTHER = 16;
-        static final int ANIMATION_TYPE_EVERYTHING = 17;
+        static final int ANIMATION_TYPE_HEADS_UP_DISAPPEAR_CLICK = 16;
+        static final int ANIMATION_TYPE_HEADS_UP_OTHER = 17;
+        static final int ANIMATION_TYPE_EVERYTHING = 18;
 
         static final int DARK_ANIMATION_ORIGIN_INDEX_ABOVE = -1;
         static final int DARK_ANIMATION_ORIGIN_INDEX_BELOW = -2;

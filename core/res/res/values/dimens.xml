@@ -37,7 +37,7 @@
     <!-- Height of the bottom navigation bar in portrait; often the same as @dimen/navigation_bar_height -->
     <dimen name="navigation_bar_height_landscape">48dp</dimen>
     <!-- Width of the navigation bar when it is placed vertically on the screen -->
-    <dimen name="navigation_bar_width">42dp</dimen>
+    <dimen name="navigation_bar_width">48dp</dimen>
     <!-- Height of notification icons in the status bar -->
     <dimen name="status_bar_icon_size">24dip</dimen>
     <!-- Size of the giant number (unread count) in the notifications -->
@@ -405,4 +405,17 @@
 
     <item type="dimen" format="integer" name="time_picker_column_start_material">0</item>
     <item type="dimen" format="integer" name="time_picker_column_end_material">1</item>
+
+    <!-- EdgeGesture service: Distance a swipe must travel to be recognized as swipe. -->
+    <dimen name="edge_gesture_trigger_distance">12dp</dimen>
+
+    <!-- EdgeGesture service: This is the distance a swipe can travel orthogonally to its actual swipe
+         direction to be still recognized as swipe. -->
+    <dimen name="edge_gesture_perpendicular_distance">15dp</dimen>
+
+    <!-- EdgeGesture service: Thickness of the active trigger fields around the screen border -->
+    <dimen name="edge_gesture_trigger_thickness">12dp</dimen>
+
+    <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
+    <dimen name="global_actions_avatar_size">40dp</dimen>
 </resources>

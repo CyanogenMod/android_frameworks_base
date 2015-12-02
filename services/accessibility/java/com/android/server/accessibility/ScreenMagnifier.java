@@ -790,12 +790,7 @@ public final class ScreenMagnifier implements WindowManagerInternal.Magnificatio
             while (mDelayedEventQueue != null) {
                 MotionEventInfo info = mDelayedEventQueue;
                 mDelayedEventQueue = info.mNext;
-                final long offset = SystemClock.uptimeMillis() - info.mCachedTimeMillis;
-                MotionEvent event = obtainEventWithOffsetTimeAndDownTime(info.mEvent, offset);
-                MotionEvent rawEvent = obtainEventWithOffsetTimeAndDownTime(info.mRawEvent, offset);
-                ScreenMagnifier.this.onMotionEvent(event, rawEvent, info.mPolicyFlags);
-                event.recycle();
-                rawEvent.recycle();
+                ScreenMagnifier.this.onMotionEvent(info.mEvent, info.mRawEvent, info.mPolicyFlags);
                 info.recycle();
             }
         }

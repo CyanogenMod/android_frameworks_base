@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Not a Contribution.
+ *
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +21,12 @@ package android.telephony;
 
 import android.annotation.Nullable;
 import android.annotation.SystemApi;
+import android.Manifest;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.ActivityThread;
 import android.content.ContentResolver;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
@@ -31,6 +36,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.telecom.PhoneAccount;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.internal.telecom.ITelecomService;
@@ -45,6 +51,7 @@ import com.android.internal.telephony.TelephonyProperties;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -699,7 +706,6 @@ public class TelephonyManager {
      *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
      */
     public String getDeviceId() {
-        android.util.SeempLog.record(9);
         try {
             ITelephony telephony = getITelephony();
             if (telephony == null)
@@ -722,7 +728,7 @@ public class TelephonyManager {
      * @param slotId of which deviceID is returned
      */
     public String getDeviceId(int slotId) {
-        android.util.SeempLog.record(9);
+        android.util.SeempLog.record_str(8, ""+slotId);
         // FIXME this assumes phoneId == slotId
         try {
             IPhoneSubInfo info = getSubscriberInfo();
@@ -819,7 +825,7 @@ public class TelephonyManager {
      * {@link android.Manifest.permission#ACCESS_COARSE_LOCATION ACCESS_FINE_LOCATION}.
      */
     public CellLocation getCellLocation() {
-        android.util.SeempLog.record(66);
+        android.util.SeempLog.record(49);
         try {
             ITelephony telephony = getITelephony();
             if (telephony == null) {
@@ -917,7 +923,7 @@ public class TelephonyManager {
      */
     @Deprecated
     public List<NeighboringCellInfo> getNeighboringCellInfo() {
-        android.util.SeempLog.record(67);
+        android.util.SeempLog.record(50);
         try {
             ITelephony telephony = getITelephony();
             if (telephony == null)
@@ -1062,22 +1068,22 @@ public class TelephonyManager {
         case RILConstants.NETWORK_MODE_GSM_UMTS:
         case RILConstants.NETWORK_MODE_LTE_GSM_WCDMA:
         case RILConstants.NETWORK_MODE_LTE_WCDMA:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_ONLY:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_WCDMA:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_LTE:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM_LTE:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM_WCDMA:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_WCDMA_LTE:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM_WCDMA_LTE:
+        case RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA:
+        case RILConstants.NETWORK_MODE_TDSCDMA_ONLY:
+        case RILConstants.NETWORK_MODE_TDSCDMA_WCDMA:
+        case RILConstants.NETWORK_MODE_LTE_TDSCDMA:
+        case RILConstants.NETWORK_MODE_TDSCDMA_GSM:
+        case RILConstants.NETWORK_MODE_LTE_TDSCDMA_GSM:
+        case RILConstants.NETWORK_MODE_TDSCDMA_GSM_WCDMA:
+        case RILConstants.NETWORK_MODE_LTE_TDSCDMA_WCDMA:
+        case RILConstants.NETWORK_MODE_LTE_TDSCDMA_GSM_WCDMA:
+        case RILConstants.NETWORK_MODE_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA:
             return PhoneConstants.PHONE_TYPE_GSM;
 
         // Use CDMA Phone for the global mode including CDMA
         case RILConstants.NETWORK_MODE_GLOBAL:
         case RILConstants.NETWORK_MODE_LTE_CDMA_EVDO:
-        case RILConstants.NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_GSM_WCDMA_CDMA_EVDO:
-        case RILConstants.NETWORK_MODE_TD_SCDMA_LTE_CDMA_EVDO_GSM_WCDMA:
+        case RILConstants.NETWORK_MODE_TDSCDMA_CDMA_EVDO_GSM_WCDMA:
             return PhoneConstants.PHONE_TYPE_CDMA;
 
         case RILConstants.NETWORK_MODE_LTE_ONLY:
@@ -1166,6 +1172,15 @@ public class TelephonyManager {
                 " product_type='" + productType +
                 "' lteOnCdmaProductType='" + sLteOnCdmaProductType + "'");
         return retVal;
+    }
+
+    /**
+     * Return if the current radio is LTE on GSM
+     * @hide
+     */
+    public static int getLteOnGsmModeStatic() {
+        return SystemProperties.getInt(TelephonyProperties.PROPERTY_LTE_ON_GSM_DEVICE,
+                    0);
     }
 
     //
@@ -1642,6 +1657,37 @@ public class TelephonyManager {
         }
     }
 
+    /**
+     * convert network class to string base on network type
+     * @param type for which network type is returned
+     * @return the network class type string
+     * @hide
+     */
+    public String networkClassToString(int type) {
+        String ratClassName = "";
+        int networkClass = getNetworkClass(type);
+        Rlog.d(TAG, "networkType = " + type + " networkClass = " + networkClass);
+        if (mContext == null) return null;
+        switch (networkClass) {
+            case TelephonyManager.NETWORK_CLASS_2_G:
+                ratClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_rat_2g);
+                break;
+            case TelephonyManager.NETWORK_CLASS_3_G:
+                ratClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_rat_3g);
+                break;
+            case TelephonyManager.NETWORK_CLASS_4_G:
+               ratClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_rat_4g);
+                break;
+            default:
+                ratClassName = "";
+                break;
+        }
+        return ratClassName;
+    }
+
     //
     //
     // SIM Card
@@ -1929,7 +1975,6 @@ public class TelephonyManager {
      *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
      */
     public String getSimSerialNumber() {
-         android.util.SeempLog.record(10);
          return getSimSerialNumber(getDefaultSubscription());
     }
 
@@ -1943,7 +1988,7 @@ public class TelephonyManager {
      */
     /** {@hide} */
     public String getSimSerialNumber(int subId) {
-        android.util.SeempLog.record(10);
+        android.util.SeempLog.record_str(388, ""+subId);
         try {
             IPhoneSubInfo info = getSubscriberInfo();
             if (info == null)
@@ -2004,6 +2049,21 @@ public class TelephonyManager {
         }
     }
 
+    /**
+     * Return if the current radio is LTE on GSM
+     * @hide
+     */
+    public int getLteOnGsmMode() {
+        try {
+            return getITelephony().getLteOnGsmMode();
+        } catch (RemoteException ex) {
+            return 0;
+        } catch (NullPointerException ex) {
+            // This could happen before phone restarts due to crashing
+            return 0;
+        }
+    }
+
     //
     //
     // Subscriber Info
@@ -2018,7 +2078,6 @@ public class TelephonyManager {
      *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
      */
     public String getSubscriberId() {
-        android.util.SeempLog.record(114);
         return getSubscriberId(getDefaultSubscription());
     }
 
@@ -2034,7 +2093,7 @@ public class TelephonyManager {
      */
     /** {@hide} */
     public String getSubscriberId(int subId) {
-        android.util.SeempLog.record(114);
+        android.util.SeempLog.record_str(389, ""+subId);
         try {
             IPhoneSubInfo info = getSubscriberInfo();
             if (info == null)
@@ -2105,7 +2164,6 @@ public class TelephonyManager {
      * The default SMS app can also use this.
      */
     public String getLine1Number() {
-        android.util.SeempLog.record(11);
         return getLine1NumberForSubscriber(getDefaultSubscription());
     }
 
@@ -2124,6 +2182,7 @@ public class TelephonyManager {
      */
     /** {@hide} */
     public String getLine1NumberForSubscriber(int subId) {
+        android.util.SeempLog.record_str(9, ""+subId);
         String number = null;
         try {
             ITelephony telephony = getITelephony();
@@ -2918,6 +2977,40 @@ public class TelephonyManager {
     }
 
     /**
+     * Allows an application to add a protected sms address if the application has
+     * been granted the permission MODIFY_PROTECTED_SMS_LIST.
+     * @param address
+     * @hide
+     */
+    public void addProtectedSmsAddress(String address) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.MODIFY_PROTECTED_SMS_LIST, null);
+        try {
+            getITelephony().addProtectedSmsAddress(address);
+        } catch (RemoteException ex) {
+        } catch (NullPointerException ex) {
+        }
+    }
+
+    /**
+     * Allows an application to revoke/remove a protected sms address if the application has been
+     * granted the permission MODIFY_PROTECTED_SMS_LIST.
+     * @param address
+     * @return true if address is successfully removed
+     * @hide
+     */
+    public boolean revokeProtectedSmsAddress(String address) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.MODIFY_PROTECTED_SMS_LIST, null);
+        try {
+            return getITelephony().revokeProtectedSmsAddress(address);
+        } catch (RemoteException ex) {
+        } catch (NullPointerException ex) {
+        }
+        return false;
+    }
+
+    /**
      * Returns the MMS user agent.
      */
     public String getMmsUserAgent() {
@@ -3383,13 +3476,7 @@ public class TelephonyManager {
 
     /** @hide */
     public int getSimCount() {
-        // FIXME Need to get it from Telephony Dev Controller when that gets implemented!
-        // and then this method shouldn't be used at all!
-        if(isMultiSimEnabled()) {
-            return 2;
-        } else {
-            return 1;
-        }
+        return getPhoneCount();
     }
 
     /**
@@ -3601,11 +3688,12 @@ public class TelephonyManager {
      *
      * @hide
      */
-    public boolean setNetworkSelectionModeManual(int subId, OperatorInfo operator) {
+    public boolean setNetworkSelectionModeManual(int subId, OperatorInfo operator,
+            boolean persistSelection) {
         try {
             ITelephony telephony = getITelephony();
             if (telephony != null)
-                return telephony.setNetworkSelectionModeManual(subId, operator);
+                return telephony.setNetworkSelectionModeManual(subId, operator, persistSelection);
         } catch (RemoteException ex) {
             Rlog.e(TAG, "setNetworkSelectionModeManual RemoteException", ex);
         } catch (NullPointerException ex) {
@@ -4184,11 +4272,18 @@ public class TelephonyManager {
     public void setDataEnabled(int subId, boolean enable) {
         try {
             Log.d(TAG, "setDataEnabled: enabled=" + enable);
+            AppOpsManager appOps = (AppOpsManager)mContext.getSystemService(Context.APP_OPS_SERVICE);
+            if (enable) {
+                if (appOps.noteOp(AppOpsManager.OP_DATA_CONNECT_CHANGE) != AppOpsManager.MODE_ALLOWED) {
+                    Log.w(TAG, "Permission denied by user.");
+                    return;
+                }
+            }
             ITelephony telephony = getITelephony();
             if (telephony != null)
                 telephony.setDataEnabled(subId, enable);
         } catch (RemoteException e) {
-            Log.e(TAG, "Error calling ITelephony#setDataEnabled", e);
+            Log.e(TAG, "Error calling setDataEnabled", e);
         }
     }
 
@@ -4392,13 +4487,13 @@ public class TelephonyManager {
        }
    }
 
-   /**
-    * Returns the Status of Volte
-    *@hide
-    */
-   public boolean isVolteEnabled() {
+    /**
+     * Returns the Status of Volte
+     * @hide
+     */
+    public boolean isVolteAvailable() {
        try {
-           return getITelephony().isVolteEnabled();
+           return getITelephony().isVolteAvailable();
        } catch (RemoteException ex) {
            return false;
        } catch (NullPointerException ex) {
@@ -4406,13 +4501,27 @@ public class TelephonyManager {
        }
    }
 
-   /**
-    * Returns the Status of Wi-Fi Calling
-    *@hide
-    */
-   public boolean isWifiCallingEnabled() {
+    /**
+     * Returns the Status of video telephony (VT)
+     * @hide
+     */
+    public boolean isVideoTelephonyAvailable() {
+        try {
+            return getITelephony().isVideoTelephonyAvailable();
+        } catch (RemoteException ex) {
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * Returns the Status of Wi-Fi Calling
+     * @hide
+     */
+    public boolean isWifiCallingAvailable() {
        try {
-           return getITelephony().isWifiCallingEnabled();
+           return getITelephony().isWifiCallingAvailable();
        } catch (RemoteException ex) {
            return false;
        } catch (NullPointerException ex) {

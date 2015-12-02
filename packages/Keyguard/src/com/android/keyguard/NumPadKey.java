@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.internal.widget.LockPatternUtils;
+
+import cyanogenmod.providers.CMSettings;
 
 public class NumPadKey extends ViewGroup {
     // list of "ABC", etc per digit, starting with '0'
@@ -73,7 +76,6 @@ public class NumPadKey extends ViewGroup {
     public NumPadKey(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setFocusable(true);
-
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.NumPadKey);
 
         try {
@@ -88,7 +90,6 @@ public class NumPadKey extends ViewGroup {
         setAccessibilityDelegate(new ObscureSpeechDelegate(context));
 
         mEnableHaptics = new LockPatternUtils(context).isTactileFeedbackEnabled();
-
         mPM = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
@@ -98,21 +99,7 @@ public class NumPadKey extends ViewGroup {
         mDigitText.setText(Integer.toString(mDigit));
         mKlondikeText = (TextView) findViewById(R.id.klondike_text);
 
-        if (mDigit >= 0) {
-            if (sKlondike == null) {
-                sKlondike = getResources().getStringArray(R.array.lockscreen_num_pad_klondike);
-            }
-            if (sKlondike != null && sKlondike.length > mDigit) {
-                String klondike = sKlondike[mDigit];
-                final int len = klondike.length();
-                if (len > 0) {
-                    mKlondikeText.setText(klondike);
-                } else {
-                    mKlondikeText.setVisibility(View.INVISIBLE);
-                }
-            }
-        }
-
+        updateText();
         setBackground(mContext.getDrawable(R.drawable.ripple_drawable));
         setContentDescription(mDigitText.getText().toString());
     }
@@ -124,6 +111,32 @@ public class NumPadKey extends ViewGroup {
         // Reset the "announced headset" flag when detached.
         ObscureSpeechDelegate.sAnnouncedHeadset = false;
     }
+
+    public void setDigit(int digit) {
+        mDigit = digit;
+        updateText();
+    }
+
+    private void updateText() {
+        boolean scramblePin = (CMSettings.System.getInt(getContext().getContentResolver(),
+                CMSettings.System.LOCKSCREEN_PIN_SCRAMBLE_LAYOUT, 0) == 1);
+        if (mDigit >= 0) {
+            mDigitText.setText(Integer.toString(mDigit));
+            if (sKlondike == null) {
+                sKlondike = getResources().getStringArray(R.array.lockscreen_num_pad_klondike);
+            }
+            if (sKlondike != null && sKlondike.length > mDigit) {
+                String klondike = sKlondike[mDigit];
+                final int len = klondike.length();
+                if (len > 0  || scramblePin) {
+                    mKlondikeText.setText(klondike);
+                } else {
+                    mKlondikeText.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+    }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

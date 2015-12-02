@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 
 import com.android.internal.logging.MetricsLogger;
@@ -26,6 +28,10 @@ import com.android.systemui.statusbar.policy.RotationLockController.RotationLock
 
 /** Quick settings tile: Rotation **/
 public class RotationLockTile extends QSTile<QSTile.BooleanState> {
+
+    private static final Intent DISPLAY_ROTATION_SETTINGS =
+            new Intent("android.settings.DISPLAY_ROTATION_SETTINGS");
+
     private final AnimationIcon mPortraitToAuto
             = new AnimationIcon(R.drawable.ic_portrait_to_auto_rotate_animation);
     private final AnimationIcon mAutoToPortrait
@@ -64,6 +70,11 @@ public class RotationLockTile extends QSTile<QSTile.BooleanState> {
         final boolean newState = !mState.value;
         mController.setRotationLocked(newState);
         refreshState(newState ? UserBoolean.USER_TRUE : UserBoolean.USER_FALSE);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startActivityDismissingKeyguard(DISPLAY_ROTATION_SETTINGS);
     }
 
     @Override

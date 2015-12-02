@@ -25,7 +25,7 @@
     android:gravity="start|center_vertical"
     android:drawablePadding="8dp"
     android:paddingStart="8dp"
-    android:textColor="@color/secondary_text_material_light"
+    android:textColor="@color/notification_mtrl_action_textcolor"
     android:textSize="13sp"
     android:singleLine="true"
     android:ellipsize="end"

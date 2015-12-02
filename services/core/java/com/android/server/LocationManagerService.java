@@ -64,6 +64,7 @@ import android.location.Geofence;
 import android.location.IGpsGeofenceHardware;
 import android.location.IGpsMeasurementsListener;
 import android.location.IGpsNavigationMessageListener;
+import android.location.GeoFenceParams;
 import android.location.IGpsStatusListener;
 import android.location.IGpsStatusProvider;
 import android.location.ILocationListener;
@@ -89,6 +90,28 @@ import android.os.WorkSource;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Slog;
+
+import com.android.internal.content.PackageMonitor;
+import com.android.internal.location.ProviderProperties;
+import com.android.internal.location.ProviderRequest;
+import com.android.internal.os.BackgroundThread;
+import com.android.server.location.FlpHardwareProvider;
+import com.android.server.location.FusedProxy;
+import com.android.server.location.GeocoderProxy;
+import com.android.server.location.GeofenceProxy;
+import com.android.server.location.GeofenceManager;
+import com.android.server.location.GeoFencerBase;
+import com.android.server.location.GeoFencerProxy;
+import com.android.server.location.GpsLocationProvider;
+import com.android.server.location.LocationBlacklist;
+import com.android.server.location.LocationFudger;
+import com.android.server.location.LocationProviderInterface;
+import com.android.server.location.LocationProviderProxy;
+import com.android.server.location.LocationRequestStatistics;
+import com.android.server.location.LocationRequestStatistics.PackageProviderKey;
+import com.android.server.location.LocationRequestStatistics.PackageStatistics;
+import com.android.server.location.MockProvider;
+import com.android.server.location.PassiveProvider;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -157,6 +180,8 @@ public class LocationManagerService extends ILocationManager.Stub {
     private String mComboNlpPackageName;
     private String mComboNlpReadyMarker;
     private String mComboNlpScreenMarker;
+    private String mGeoFencerPackageName;
+    private GeoFencerBase mGeoFencer;
     private PowerManager mPowerManager;
     private UserManager mUserManager;
     private GeocoderProxy mGeocodeProvider;
@@ -512,6 +537,15 @@ public class LocationManagerService extends ILocationManager.Stub {
             Slog.e(TAG,  "no geocoder provider found");
         }
 
+        mGeoFencerPackageName = resources.getString(
+                com.android.internal.R.string.config_geofenceProvider);
+        if (mGeoFencerPackageName != null &&
+                mPackageManager.resolveService(new Intent(mGeoFencerPackageName), 0) != null){
+            mGeoFencer = GeoFencerProxy.getGeoFencerProxy(mContext, mGeoFencerPackageName);
+        } else {
+            mGeoFencer = null;
+        }
+
         // bind to fused hardware provider if supported
         // in devices without support, requesting an instance of FlpHardwareProvider will raise an
         // exception, so make sure we only do that when supported
@@ -545,22 +579,24 @@ public class LocationManagerService extends ILocationManager.Stub {
             Slog.e(TAG,  "Unable to bind FLP Geofence proxy.");
         }
 
-        // bind to the hardware activity recognition if supported
-        if (ActivityRecognitionHardware.isSupported()) {
-            ActivityRecognitionProxy proxy = ActivityRecognitionProxy.createAndBind(
-                    mContext,
-                    mLocationHandler,
-                    ActivityRecognitionHardware.getInstance(mContext),
-                    com.android.internal.R.bool.config_enableActivityRecognitionHardwareOverlay,
-                    com.android.internal.R.string.config_activityRecognitionHardwarePackageName,
-                    com.android.internal.R.array.config_locationProviderPackageNames);
-
-            if (proxy == null) {
-                Slog.e(TAG, "Unable to bind ActivityRecognitionProxy.");
-            }
-
+        // bind to hardware activity recognition
+        boolean activityRecognitionHardwareIsSupported = ActivityRecognitionHardware.isSupported();
+        ActivityRecognitionHardware activityRecognitionHardware = null;
+        if (activityRecognitionHardwareIsSupported) {
+            activityRecognitionHardware = ActivityRecognitionHardware.getInstance(mContext);
         } else {
             Slog.e(TAG, "Hardware Activity-Recognition not supported.");
+        }
+        ActivityRecognitionProxy proxy = ActivityRecognitionProxy.createAndBind(
+                mContext,
+                mLocationHandler,
+                activityRecognitionHardwareIsSupported,
+                activityRecognitionHardware,
+                com.android.internal.R.bool.config_enableActivityRecognitionHardwareOverlay,
+                com.android.internal.R.string.config_activityRecognitionHardwarePackageName,
+                com.android.internal.R.array.config_locationProviderPackageNames);
+        if (proxy == null) {
+            Slog.e(TAG, "Unable to bind ActivityRecognitionProxy.");
         }
 
         mComboNlpPackageName = resources.getString(
@@ -1622,9 +1658,11 @@ public class LocationManagerService extends ILocationManager.Stub {
             checkLocationAccess(pid, uid, packageName, allowedResolutionLevel);
 
             synchronized (mLock) {
-                Receiver recevier = checkListenerOrIntentLocked(listener, intent, pid, uid,
+                Receiver receiver = checkListenerOrIntentLocked(listener, intent, pid, uid,
                         packageName, workSource, hideFromAppOps);
-                requestLocationUpdatesLocked(sanitizedRequest, recevier, pid, uid, packageName);
+                if (receiver != null) {
+                    requestLocationUpdatesLocked(sanitizedRequest, receiver, pid, uid, packageName);
+                }
             }
         } finally {
             Binder.restoreCallingIdentity(identity);
@@ -1683,7 +1721,9 @@ public class LocationManagerService extends ILocationManager.Stub {
             // providers may use public location API's, need to clear identity
             long identity = Binder.clearCallingIdentity();
             try {
-                removeUpdatesLocked(receiver);
+                if (receiver != null) {
+                    removeUpdatesLocked(receiver);
+                }
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }
@@ -1822,8 +1862,20 @@ public class LocationManagerService extends ILocationManager.Stub {
         }
         long identity = Binder.clearCallingIdentity();
         try {
-            mGeofenceManager.addFence(sanitizedRequest, geofence, intent, allowedResolutionLevel,
-                    uid, packageName);
+            if (mGeoFencer != null) {
+                long expiration;
+                if (sanitizedRequest.getExpireAt() == Long.MAX_VALUE) {
+                    expiration = -1; // -1 means forever
+                } else {
+                    expiration = sanitizedRequest.getExpireAt() - SystemClock.elapsedRealtime();
+                }
+                mGeoFencer.add(new GeoFenceParams(uid, geofence.getLatitude(),
+                                                  geofence.getLongitude(), geofence.getRadius(),
+                                                  expiration, intent, packageName));
+            } else {
+                mGeofenceManager.addFence(sanitizedRequest, geofence, intent,
+                                          allowedResolutionLevel, uid, packageName);
+            }
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
@@ -1839,7 +1891,11 @@ public class LocationManagerService extends ILocationManager.Stub {
         // geo-fence manager uses the public location API, need to clear identity
         long identity = Binder.clearCallingIdentity();
         try {
-            mGeofenceManager.removeFence(geofence, intent);
+            if (mGeoFencer != null) {
+                mGeoFencer.remove(intent);
+            } else {
+                mGeofenceManager.removeFence(geofence, intent);
+            }
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
@@ -2730,6 +2786,10 @@ public class LocationManagerService extends ILocationManager.Stub {
             }
 
             mGeofenceManager.dump(pw);
+
+            if (mGeoFencer != null) {
+                mGeoFencer.dump(pw, "");
+            }
 
             if (mEnabledProviders.size() > 0) {
                 pw.println("  Enabled Providers:");

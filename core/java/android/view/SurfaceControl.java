@@ -58,6 +58,11 @@ public class SurfaceControl {
     private static native void nativeSetWindowCrop(long nativeObject, int l, int t, int r, int b);
     private static native void nativeSetLayerStack(long nativeObject, int layerStack);
 
+    private static native void nativeSetBlur(long nativeObject, float blur);
+    private static native void nativeSetBlurMaskSurface(long nativeObject, long maskLayerNativeObject);
+    private static native void nativeSetBlurMaskSampling(long nativeObject, int blurMaskSampling);
+    private static native void nativeSetBlurMaskAlphaThreshold(long nativeObject, float alpha);
+
     private static native boolean nativeClearContentFrameStats(long nativeObject);
     private static native boolean nativeGetContentFrameStats(long nativeObject, WindowContentFrameStats outStats);
     private static native boolean nativeClearAnimationFrameStats();
@@ -168,6 +173,11 @@ public class SurfaceControl {
      *
      */
     public static final int FX_SURFACE_NORMAL   = 0x00000000;
+
+    /**
+     * Surface creation flag: Creates a blur surface.
+     */
+    public static final int FX_SURFACE_BLUR = 0x00010000;
 
     /**
      * Surface creation flag: Creates a Dim surface.
@@ -384,6 +394,29 @@ public class SurfaceControl {
         nativeSetSize(mNativeObject, w, h);
     }
 
+    public void setBlur(float blur) {
+        checkNotReleased();
+        nativeSetBlur(mNativeObject, blur);
+    }
+
+    public void setBlurMaskSurface(SurfaceControl maskSurface) {
+        checkNotReleased();
+        if (maskSurface != null) {
+            maskSurface.checkNotReleased();
+        }
+        nativeSetBlurMaskSurface(mNativeObject, maskSurface == null ? 0:maskSurface.mNativeObject);
+    }
+
+    public void setBlurMaskSampling(int blurMaskSampling) {
+        checkNotReleased();
+        nativeSetBlurMaskSampling(mNativeObject, blurMaskSampling);
+    }
+
+    public void setBlurMaskAlphaThreshold(float alpha) {
+        checkNotReleased();
+        nativeSetBlurMaskAlphaThreshold(mNativeObject, alpha);
+    }
+
     public void hide() {
         checkNotReleased();
         nativeSetFlags(mNativeObject, SURFACE_HIDDEN, SURFACE_HIDDEN);
@@ -490,6 +523,7 @@ public class SurfaceControl {
         public boolean secure;
         public long appVsyncOffsetNanos;
         public long presentationDeadlineNanos;
+        public int colorTransform;
 
         public PhysicalDisplayInfo() {
         }
@@ -513,7 +547,8 @@ public class SurfaceControl {
                     && yDpi == other.yDpi
                     && secure == other.secure
                     && appVsyncOffsetNanos == other.appVsyncOffsetNanos
-                    && presentationDeadlineNanos == other.presentationDeadlineNanos;
+                    && presentationDeadlineNanos == other.presentationDeadlineNanos
+                    && colorTransform == other.colorTransform;
         }
 
         @Override
@@ -531,6 +566,7 @@ public class SurfaceControl {
             secure = other.secure;
             appVsyncOffsetNanos = other.appVsyncOffsetNanos;
             presentationDeadlineNanos = other.presentationDeadlineNanos;
+            colorTransform = other.colorTransform;
         }
 
         // For debugging purposes
@@ -539,7 +575,8 @@ public class SurfaceControl {
             return "PhysicalDisplayInfo{" + width + " x " + height + ", " + refreshRate + " fps, "
                     + "density " + density + ", " + xDpi + " x " + yDpi + " dpi, secure " + secure
                     + ", appVsyncOffset " + appVsyncOffsetNanos
-                    + ", bufferDeadline " + presentationDeadlineNanos + "}";
+                    + ", bufferDeadline " + presentationDeadlineNanos
+                    + ", colorTransform " + colorTransform + "}";
         }
     }
 

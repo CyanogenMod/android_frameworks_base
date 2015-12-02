@@ -64,6 +64,7 @@ static struct {
     jfieldID secure;
     jfieldID appVsyncOffsetNanos;
     jfieldID presentationDeadlineNanos;
+    jfieldID colorTransform;
 } gPhysicalDisplayInfoClassInfo;
 
 static struct {
@@ -315,6 +316,39 @@ static void nativeSetLayerStack(JNIEnv* env, jclass clazz, jlong nativeObject, j
     }
 }
 
+static void nativeSetBlur(JNIEnv* env, jclass clazz, jlong nativeObject, jfloat blur) {
+    SurfaceControl* const ctrl = reinterpret_cast<SurfaceControl *>(nativeObject);
+    status_t err = ctrl->setBlur(blur);
+    if (err < 0 && err != NO_INIT) {
+        doThrowIAE(env);
+    }
+}
+
+static void nativeSetBlurMaskSurface(JNIEnv* env, jclass clazz, jlong nativeObject, jlong maskLayerNativeObject) {
+    SurfaceControl* const ctrl = reinterpret_cast<SurfaceControl *>(nativeObject);
+    SurfaceControl* const maskLayer = reinterpret_cast<SurfaceControl *>(maskLayerNativeObject);
+    status_t err = ctrl->setBlurMaskSurface(maskLayer);
+    if (err < 0 && err != NO_INIT) {
+        doThrowIAE(env);
+    }
+}
+
+static void nativeSetBlurMaskSampling(JNIEnv* env, jclass clazz, jlong nativeObject, jint blurMaskSampling) {
+    SurfaceControl* const ctrl = reinterpret_cast<SurfaceControl *>(nativeObject);
+    status_t err = ctrl->setBlurMaskSampling(blurMaskSampling);
+    if (err < 0 && err != NO_INIT) {
+        doThrowIAE(env);
+    }
+}
+
+static void nativeSetBlurMaskAlphaThreshold(JNIEnv* env, jclass clazz, jlong nativeObject, jfloat alpha) {
+    SurfaceControl* const ctrl = reinterpret_cast<SurfaceControl *>(nativeObject);
+    status_t err = ctrl->setBlurMaskAlphaThreshold(alpha);
+    if (err < 0 && err != NO_INIT) {
+        doThrowIAE(env);
+    }
+}
+
 static jobject nativeGetBuiltInDisplay(JNIEnv* env, jclass clazz, jint id) {
     sp<IBinder> token(SurfaceComposerClient::getBuiltInDisplay(id));
     return javaObjectForIBinder(env, token);
@@ -401,6 +435,8 @@ static jobjectArray nativeGetDisplayConfigs(JNIEnv* env, jclass clazz,
                 info.appVsyncOffset);
         env->SetLongField(infoObj, gPhysicalDisplayInfoClassInfo.presentationDeadlineNanos,
                 info.presentationDeadline);
+        env->SetIntField(infoObj, gPhysicalDisplayInfoClassInfo.colorTransform,
+                info.colorTransform);
         env->SetObjectArrayElement(configArray, static_cast<jsize>(c), infoObj);
         env->DeleteLocalRef(infoObj);
     }
@@ -611,6 +647,14 @@ static JNINativeMethod sSurfaceControlMethods[] = {
             (void*)nativeSetWindowCrop },
     {"nativeSetLayerStack", "(JI)V",
             (void*)nativeSetLayerStack },
+    {"nativeSetBlur", "(JF)V",
+            (void*)nativeSetBlur },
+    {"nativeSetBlurMaskSurface", "(JJ)V",
+            (void*)nativeSetBlurMaskSurface },
+    {"nativeSetBlurMaskSampling", "(JI)V",
+            (void*)nativeSetBlurMaskSampling },
+    {"nativeSetBlurMaskAlphaThreshold", "(JF)V",
+            (void*)nativeSetBlurMaskAlphaThreshold },
     {"nativeGetBuiltInDisplay", "(I)Landroid/os/IBinder;",
             (void*)nativeGetBuiltInDisplay },
     {"nativeCreateDisplay", "(Ljava/lang/String;Z)Landroid/os/IBinder;",
@@ -663,6 +707,8 @@ int register_android_view_SurfaceControl(JNIEnv* env)
             clazz, "appVsyncOffsetNanos", "J");
     gPhysicalDisplayInfoClassInfo.presentationDeadlineNanos = GetFieldIDOrDie(env,
             clazz, "presentationDeadlineNanos", "J");
+    gPhysicalDisplayInfoClassInfo.colorTransform = GetFieldIDOrDie(env, clazz,
+            "colorTransform", "I");
 
     jclass rectClazz = FindClassOrDie(env, "android/graphics/Rect");
     gRectClassInfo.bottom = GetFieldIDOrDie(env, rectClazz, "bottom", "I");

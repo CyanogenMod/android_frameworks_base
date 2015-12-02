@@ -23,15 +23,27 @@ import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 
 import android.content.Context;
 import android.content.pm.PackageParser;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.SystemProperties;
 import android.test.AndroidTestCase;
+import android.test.mock.MockContext;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.LongSparseArray;
 
 import com.android.internal.os.AtomicFile;
 
 import java.lang.reflect.Constructor;
+
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import com.android.internal.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -160,6 +172,12 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         folder.delete();
     }
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().toString());
+    }
+
     private void writeOldFiles() {
         deleteSystemFolder();
         writePackagesXml();
@@ -269,7 +287,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
         Settings settings = new Settings(getContext().getFilesDir(), new Object());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
         assertNotNull(settings.peekPackageLPr(PACKAGE_NAME_3));
         assertNotNull(settings.peekPackageLPr(PACKAGE_NAME_1));
 
@@ -289,12 +307,12 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         writeOldFiles();
         createUserManagerServiceRef();
         Settings settings = new Settings(getContext().getFilesDir(), new Object());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
         settings.writeLPr();
 
         // Create Settings again to make it read from the new files
         settings = new Settings(getContext().getFilesDir(), new Object());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
 
         PackageSetting ps = settings.peekPackageLPr(PACKAGE_NAME_2);
         assertEquals(COMPONENT_ENABLED_STATE_DISABLED_USER, ps.getEnabled(0));
@@ -305,7 +323,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         // Write the package files and make sure they're parsed properly the first time
         writeOldFiles();
         Settings settings = new Settings(getContext().getFilesDir(), new Object());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
 
         // Enable/Disable a package
         PackageSetting ps = settings.peekPackageLPr(PACKAGE_NAME_1);
@@ -334,5 +352,39 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         assertEquals(1, ps.getEnabledComponents(1).size());
         hasEnabled = ps.getEnabledComponents(0) != null && ps.getEnabledComponents(0).size() > 0;
         assertEquals(false, hasEnabled);
+    }
+
+    // Checks if a package that is locked to a different region is rejected
+    // from being installed
+     public void testPrebundledDifferentRegionReject() {
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        String expectedPackageNeededForRegion = "org.cyanogenmod.restricted.package";
+        Resources resources = Mockito.mock(Resources.class);
+        String[] regionRestrictedPackages = new String[] {
+                expectedPackageNeededForRegion
+        };
+        Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
+                .thenReturn(regionRestrictedPackages);
+        assertFalse(settings.shouldPrebundledPackageBeInstalled(resources,
+                expectedPackageNeededForRegion, resources));
+    }
+
+    // Checks if a package that is locked to the current region is accepted
+    // This also covers the test for a package that needs to be installed on a
+    // non region locked device
+    public void testPrebundledMatchingRegionAccept() {
+        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        String expectedPackageNeededForRegion = "org.cyanogenmod.restricted.package";
+        Resources resources = Mockito.mock(Resources.class);
+        String[] regionLockedPackages = new String[] {
+                expectedPackageNeededForRegion
+        };
+        Mockito.when(resources.getStringArray(R.array.config_region_locked_packages))
+                .thenReturn(regionLockedPackages);
+
+        Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
+                .thenReturn(regionLockedPackages);
+        assertTrue(settings.shouldPrebundledPackageBeInstalled(resources,
+                expectedPackageNeededForRegion, resources));
     }
 }

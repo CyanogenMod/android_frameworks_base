@@ -184,6 +184,16 @@ public class RingtoneManager {
      */
     public static final String EXTRA_RINGTONE_PICKED_URI =
             "android.intent.extra.ringtone.PICKED_URI";
+
+    /**
+     * Set the resource id theme to use for the dialog picker activity.<br/>
+     * The default theme is <code>com.android.internal.R.Theme_Holo_Dialog_Alert</code>.
+     *
+     * @see #ACTION_RINGTONE_PICKER
+     * @hide
+     */
+    public static final String EXTRA_RINGTONE_DIALOG_THEME =
+            "android.intent.extra.ringtone.DIALOG_THEME";
     
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
     

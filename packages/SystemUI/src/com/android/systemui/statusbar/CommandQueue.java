@@ -64,6 +64,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private static final int MSG_APP_TRANSITION_STARTING    = 21 << MSG_SHIFT;
     private static final int MSG_ASSIST_DISCLOSURE          = 22 << MSG_SHIFT;
     private static final int MSG_START_ASSIST               = 23 << MSG_SHIFT;
+    private static final int MSG_CAMERA_LAUNCH_GESTURE      = 24 << MSG_SHIFT;
 
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
@@ -77,6 +78,7 @@ public class CommandQueue extends IStatusBar.Stub {
     private StatusBarIconList mList;
     private Callbacks mCallbacks;
     private Handler mHandler = new H();
+    private boolean mPaused = false;
 
     /**
      * These methods are called back on the main thread.
@@ -109,6 +111,7 @@ public class CommandQueue extends IStatusBar.Stub {
         public void appTransitionStarting(long startTime, long duration);
         public void showAssistDisclosure();
         public void startAssist(Bundle args);
+        public void onCameraLaunchGestureDetected(int source);
     }
 
     public CommandQueue(Callbacks callbacks, StatusBarIconList list) {
@@ -293,8 +296,28 @@ public class CommandQueue extends IStatusBar.Stub {
         }
     }
 
+    public void pause() {
+        mPaused = true;
+    }
+
+    public void resume() {
+        mPaused = false;
+    }
+
+    @Override
+    public void onCameraLaunchGestureDetected(int source) {
+        synchronized (mList) {
+            mHandler.removeMessages(MSG_CAMERA_LAUNCH_GESTURE);
+            mHandler.obtainMessage(MSG_CAMERA_LAUNCH_GESTURE, source, 0).sendToTarget();
+        }
+    }
+
     private final class H extends Handler {
         public void handleMessage(Message msg) {
+            if (mPaused) {
+                this.sendMessageAtFrontOfQueue(Message.obtain(msg));
+                return;
+            }
             final int what = msg.what & MSG_MASK;
             switch (what) {
                 case MSG_ICON: {
@@ -390,6 +413,9 @@ public class CommandQueue extends IStatusBar.Stub {
                     break;
                 case MSG_START_ASSIST:
                     mCallbacks.startAssist((Bundle) msg.obj);
+                    break;
+                case MSG_CAMERA_LAUNCH_GESTURE:
+                    mCallbacks.onCameraLaunchGestureDetected(msg.arg1);
                     break;
             }
         }

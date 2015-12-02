@@ -29,7 +29,6 @@
 #include <gui/SensorEventQueue.h>
 
 #include <poll.h>
-#include "SeempLog.h"
 
 using android::sp;
 using android::Sensor;
@@ -39,10 +38,6 @@ using android::String8;
 using android::String16;
 
 /*****************************************************************************/
-
-android::Mutex android::SensorManager::sLock;
-std::map<String16, SensorManager*> android::SensorManager::sPackageInstances;
-
 ASensorManager* ASensorManager_getInstance()
 {
     return ASensorManager_getInstanceForPackage(NULL);
@@ -112,7 +107,6 @@ int ASensorManager_destroyEventQueue(ASensorManager* manager,
 
 int ASensorEventQueue_enableSensor(ASensorEventQueue* queue, ASensor const* sensor)
 {
-    SEEMPLOG_RECORD(108,"");
     return static_cast<SensorEventQueue*>(queue)->enableSensor(
             static_cast<Sensor const*>(sensor));
 }

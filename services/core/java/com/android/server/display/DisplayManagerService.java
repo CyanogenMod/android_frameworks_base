@@ -287,6 +287,8 @@ public final class DisplayManagerService extends SystemService {
             mOnlyCore = onlyCore;
         }
 
+        mDisplayPowerController.systemReady();
+
         mHandler.sendEmptyMessage(MSG_REGISTER_ADDITIONAL_DISPLAY_ADAPTERS);
     }
 
@@ -537,6 +539,17 @@ public final class DisplayManagerService extends SystemService {
                 return mWifiDisplayAdapter.getWifiDisplayStatusLocked();
             }
             return new WifiDisplayStatus();
+        }
+    }
+
+    private void requestColorTransformInternal(int displayId, int colorTransformId) {
+        synchronized (mSyncRoot) {
+            LogicalDisplay display = mLogicalDisplays.get(displayId);
+            if (display != null &&
+                    display.getRequestedColorTransformIdLocked() != colorTransformId) {
+                display.setRequestedColorTransformIdLocked(colorTransformId);
+                scheduleTraversalLocked(false);
+            }
         }
     }
 
@@ -1334,6 +1347,19 @@ public final class DisplayManagerService extends SystemService {
             final long token = Binder.clearCallingIdentity();
             try {
                 return getWifiDisplayStatusInternal();
+            } finally {
+                Binder.restoreCallingIdentity(token);
+            }
+        }
+
+        @Override // Binder call
+        public void requestColorTransform(int displayId, int colorTransformId) {
+            mContext.enforceCallingOrSelfPermission(
+                    Manifest.permission.CONFIGURE_DISPLAY_COLOR_TRANSFORM,
+                    "Permission required to change the display color transform");
+            final long token = Binder.clearCallingIdentity();
+            try {
+                requestColorTransformInternal(displayId, colorTransformId);
             } finally {
                 Binder.restoreCallingIdentity(token);
             }

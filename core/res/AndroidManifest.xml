@@ -77,6 +77,7 @@
     <protected-broadcast android:name="android.intent.action.USER_FOREGROUND" />
     <protected-broadcast android:name="android.intent.action.USER_SWITCHED" />
     <protected-broadcast android:name="android.intent.action.INTENT_FILTER_NEEDS_VERIFICATION" />
+    <protected-broadcast android:name="android.intent.action.SU_SESSION_CHANGED" />
 
     <protected-broadcast android:name="android.os.action.POWER_SAVE_MODE_CHANGED" />
     <protected-broadcast android:name="android.os.action.POWER_SAVE_MODE_CHANGING" />
@@ -237,6 +238,7 @@
     <protected-broadcast android:name="android.intent.action.PROXY_CHANGE" />
 
     <protected-broadcast android:name="android.os.UpdateLock.UPDATE_LOCK_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.NAVBAR_EDIT" />
 
     <protected-broadcast android:name="android.intent.action.DREAMING_STARTED" />
     <protected-broadcast android:name="android.intent.action.DREAMING_STOPPED" />
@@ -321,6 +323,8 @@
     <protected-broadcast android:name="android.internal.policy.action.BURN_IN_PROTECTION" />
     <protected-broadcast android:name="android.app.action.SYSTEM_UPDATE_POLICY_CHANGED" />
     <protected-broadcast android:name="android.app.action.DEVICE_OWNER_CHANGED" />
+    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
+    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED" />
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->
@@ -1057,6 +1061,11 @@
     <permission android:name="android.permission.CONNECTIVITY_INTERNAL"
         android:protectionLevel="signature|privileged" />
 
+    <!-- Allows a system application to access hardware packet offload capabilities.
+         @hide -->
+    <permission android:name="android.permission.PACKET_KEEPALIVE_OFFLOAD"
+        android:protectionLevel="signature|privileged" />
+
     <!-- @SystemApi
          @hide -->
     <permission android:name="android.permission.RECEIVE_DATA_ACTIVITY_CHANGE"
@@ -1136,6 +1145,15 @@
         android:label="@string/permlab_transmitIr"
         android:description="@string/permdesc_transmitIr"
         android:protectionLevel="normal" />
+
+    <!-- Allows an application to override the power key action
+        @hide -->
+    <permission android:name="android.permission.PREVENT_POWER_KEY"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="signatureOrSystem"
+        android:label="@string/permlab_preventpower"
+        android:description="@string/permdesc_preventpower" />
+
 
     <!-- ==================================================== -->
     <!-- Permissions related to changing audio settings   -->
@@ -1326,7 +1344,7 @@
          <p>Protection level: signature
     -->
     <permission android:name="android.permission.MANAGE_DOCUMENTS"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature|system" />
 
     <!-- ================================== -->
     <!-- Permissions for screenlock         -->
@@ -1381,7 +1399,8 @@
          that removes restrictions on where broadcasts can be sent and allows other
          types of interactions. -->
     <permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"
-        android:protectionLevel="signature|installer" />
+        android:protectionLevel="signature|installer"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- @SystemApi @hide Allows an application to call APIs that allow it to query and manage
          users on the device. This permission is not available to
@@ -1480,6 +1499,14 @@
         android:label="@string/permlab_setWallpaperHints"
         android:description="@string/permdesc_setWallpaperHints"
         android:protectionLevel="normal" />
+
+    <!-- Allows applications to set the keyguard wallpaper
+         @hide -->
+    <permission android:name="android.permission.SET_KEYGUARD_WALLPAPER"
+        android:permissionGroup="android.permission-group.WALLPAPER"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_setKeyguardWallpaper"
+        android:description="@string/permdesc_setKeyguardWallpaper" />
 
     <!-- ============================================ -->
     <!-- Permissions for changing the system clock -->
@@ -1624,7 +1651,8 @@
          {@link android.content.pm.PackageManager#addPackageToPreferred}
          for details. -->
     <permission android:name="android.permission.SET_PREFERRED_APPLICATIONS"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to receive the
          {@link android.content.Intent#ACTION_BOOT_COMPLETED} that is
@@ -1696,7 +1724,7 @@
         android:protectionLevel="signature|privileged" />
 
     <!-- Allows applications to change network connectivity state.
-         <p>Protection level: normal
+         <p>Protection level: signature
     -->
     <permission android:name="android.permission.CHANGE_NETWORK_STATE"
         android:description="@string/permdesc_changeNetworkState"
@@ -2059,6 +2087,12 @@
     <permission android:name="android.permission.SET_KEYBOARD_LAYOUT"
         android:protectionLevel="signature" />
 
+    <!-- Allows an application to monitor changes in tablet mode.
+         <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.TABLET_MODE_LISTENER"
+        android:protectionLevel="signature" />
+
     <!-- Allows an application to request installing packages. Apps
          targeting APIs greater than 22 must hold this permission in
          order to use {@link android.content.Intent#ACTION_INSTALL_PACKAGE}.
@@ -2155,6 +2189,13 @@
     <permission android:name="android.permission.CONTROL_WIFI_DISPLAY"
         android:protectionLevel="signature" />
 
+    <!-- Allows an application to control the color transforms applied to
+         displays system-wide.
+         <p>Not for use by third-party applications.</p>
+         @hide -->
+    <permission android:name="android.permission.CONFIGURE_DISPLAY_COLOR_TRANSFORM"
+        android:protectionLevel="signature" />
+
     <!-- @SystemApi Allows an application to control VPN.
          <p>Not for use by third-party applications.</p>
          @hide -->
@@ -2171,7 +2212,8 @@
          <p>Not for use by third-party applications.</p>
          @hide -->
     <permission android:name="android.permission.CAPTURE_AUDIO_HOTWORD"
-        android:protectionLevel="signature|privileged" />
+        android:protectionLevel="signature|privileged"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- @SystemApi Allows an application to modify audio routing and override policy decisions.
          <p>Not for use by third-party applications.</p>
@@ -2237,6 +2279,24 @@
          <p>Not for use by third-party applications.
     -->
     <permission android:name="android.permission.BROADCAST_PACKAGE_REMOVED"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to add an address to the whitelisted protected sms
+         list
+         @hide -->
+    <permission android:name="android.permission.MODIFY_PROTECTED_SMS_LIST"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_modifyProtectedSmsList"
+        android:description="@string/permdesc_modifyProtectedSmsList"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to receive sms (usually for auth or registration)
+         from whitelisted addresses
+         @hide -->
+    <permission android:name="android.permission.RECEIVE_PROTECTED_SMS"
+        android:permissionGroup="android.permission-group.MESSAGES"
+        android:label="@string/permlab_receiveProtectedSms"
+        android:description="@string/permdesc_receiveProtectedSms"
         android:protectionLevel="signature" />
 
     <!-- Allows an application to broadcast an SMS receipt notification.
@@ -2516,6 +2576,10 @@
     <permission android:name="android.permission.MANAGE_FINGERPRINT"
         android:protectionLevel="system|signature" />
 
+    <!-- Allows an app to reset fingerprint attempt counter. Reserved for the system. @hide -->
+    <permission android:name="android.permission.RESET_FINGERPRINT_LOCKOUT"
+        android:protectionLevel="signature" />
+
     <!-- Allows an application to control keyguard.  Only allowed for system processes.
         @hide -->
     <permission android:name="android.permission.CONTROL_KEYGUARD"
@@ -2656,9 +2720,63 @@
     <permission android:name="android.permission.DISPATCH_NFC_MESSAGE"
                 android:protectionLevel="signature|privileged" />
 
+    <!-- =============================================================== -->
+    <!-- Permissions for accessing security data                         -->
+    <!-- =============================================================== -->
+    <eat-comment />
+
+    <!-- Used for permissions that allow an application to access or configure
+         the device security information.
+         @hide This is not a third-party API (intended for system apps). -->
+    <permission-group android:name="android.permission-group.SECURITY"
+        android:label="@string/permgrouplab_security"
+        android:icon="@drawable/perm_group_security"
+        android:description="@string/permgroupdesc_security"
+        android:priority="400"/>
+
+    <!-- Allows an application to read the phone blacklist data.
+         @hide This is not a third-party API (intended for system apps). -->
+    <permission android:name="android.permission.READ_PHONE_BLACKLIST"
+        android:permissionGroup="android.permission-group.SECURITY"
+        android:protectionLevel="signature|system"
+        android:label="@string/permlab_readPhoneBlacklist"
+        android:description="@string/permdesc_readPhoneBlacklist" />
+
+    <!-- Allows an application to change the phone blacklist data.
+         @hide This is not a third-party API (intended for system apps). -->
+    <permission android:name="android.permission.CHANGE_PHONE_BLACKLIST"
+        android:permissionGroup="android.permission-group.SECURITY"
+        android:protectionLevel="signature|system"
+        android:label="@string/permlab_changePhoneBlacklist"
+        android:description="@string/permdesc_changePhoneBlacklist" />
+
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
+
+    <!-- Allows an application to use the Theme Service
+         @hide -->
+    <permission android:name="android.permission.ACCESS_THEME_MANAGER"
+        android:label="@string/permlab_accessThemeService"
+        android:description="@string/permdesc_accessThemeService"
+        android:protectionLevel="system|signature" />
+
+    <!-- Allows an application to read the current theme configuration and
+         get information about the various themes currently installed
+         @hide -->
+    <permission android:name="android.permission.READ_THEMES"
+        android:label="@string/permlab_readThemes"
+        android:description="@string/permdesc_readThemesDesc"
+        android:protectionLevel="normal" />
+
+    <!-- Allows an application to write the current theme configuration and
+         write information about the various themes currently installed.
+         Changing themes should be done through the service ACCESS_THEME_MANAGER
+         @hide -->
+    <permission android:name="android.permission.WRITE_THEMES"
+        android:label="@string/permlab_writeThemes"
+        android:description="@string/permdesc_writeThemesDesc"
+        android:protectionLevel="system|signature" />
 
     <application android:process="system"
                  android:persistent="true"
@@ -2862,6 +2980,10 @@
                 <category android:name="android.intent.category.MASTER_CLEAR" />
             </intent-filter>
         </receiver>
+
+        <service android:name="com.android.internal.os.storage.ExternalStorageFormatter"
+            android:permission="android.permission.MASTER_CLEAR"
+            android:exported="true" />
 
         <service android:name="android.hardware.location.GeofenceHardwareService"
             android:permission="android.permission.LOCATION_HARDWARE"

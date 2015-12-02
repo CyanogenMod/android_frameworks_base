@@ -28,6 +28,13 @@
     <bool name="def_auto_time">true</bool>
     <bool name="def_auto_time_zone">true</bool>
     <bool name="def_accelerometer_rotation">true</bool>
+    <!-- Bitmask of allowed display rotation angles:
+           ROTATION_0_MODE: 1
+           ROTATION_90_MODE: 2
+           ROTATION_180_MODE: 4
+           ROTATION_270_MODE: 8
+         Default to 0, 90, 270. -->
+    <integer name="def_accelerometer_rotation_angles">11</integer>
     <!-- Default screen brightness, from 0 to 255.  102 is 40%. -->
     <integer name="def_screen_brightness">102</integer>
     <bool name="def_screen_brightness_automatic_mode">false</bool>
@@ -192,6 +199,9 @@
     <!-- Default for Settings.Secure.LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS -->
     <bool name="def_lock_screen_allow_private_notifications">true</bool>
 
+    <!-- Default for Settings.Global.SEND_ACTION_APP_ERROR -->
+    <integer name="def_send_action_app_error">0</integer>
+
     <!-- Default for Settings.Global.HEADS_UP_NOTIFICATIONS_ENABLED, 1==on -->
     <integer name="def_heads_up_enabled">1</integer>
 
@@ -212,4 +222,13 @@
 
     <!-- Default for Settings.Secure.NFC_PAYMENT_COMPONENT -->
     <string name="def_nfc_payment_component"></string>
+
+    <!-- Default for Settings.System.STATUS_BAR_NOTIF_COUNT. -->
+    <integer name="def_notif_count">0</integer>
+
+    <!-- Default protected sms originating address values of Settings.Secure.PROTECTED_SMS_ADDRESSES -->
+    <string-array name="def_protected_sms_list_values"></string-array>
+
+    <!-- Default for Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED -->
+    <integer name="def_captive_portal_detection_enabled" translatable="false">1</integer>
 </resources>

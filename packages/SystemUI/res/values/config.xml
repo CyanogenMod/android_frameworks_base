@@ -119,7 +119,7 @@
 
     <!-- The default tiles to display in QuickSettings -->
     <string name="quick_settings_tiles_default" translatable="false">
-        wifi,bt,inversion,dnd,cell,airplane,rotation,flashlight,location,cast,hotspot
+        wifi,bt,cell,airplane,rotation,flashlight,location,edit,cast,hotspot,inversion,dnd
     </string>
 
     <!-- The tiles to display in QuickSettings -->
@@ -137,6 +137,35 @@
 
     <!-- Should "4G" be shown instead of "LTE" when the network is NETWORK_TYPE_LTE? -->
     <bool name="config_show4GForLTE">true</bool>
+
+    <!-- Whether or not we also show rsrp level for LTE. -->
+    <bool name="config_showRsrpSignalLevelforLTE">false</bool>
+
+    <!-- Whether or not we show carrier label in notification panel. -->
+    <bool name="config_showCarrierLabel">false</bool>
+
+    <!-- Whether or not we also show wifi activity in status bar. -->
+    <bool name="config_showWifiActivity">false</bool>
+
+    <!-- Show indicator for Wifi on but not connected. -->
+    <bool name="config_showWifiIndicatorWhenEnabled">false</bool>
+
+    <!-- style of status bar:
+        0: Default Android style
+        1: Show data activity with data type at the left side of
+           signal icon, and signal icon may be two icons
+           stacked, the upper one is to show 3G, and the lower one
+           is to show 2G.
+        2: Do not show data activity besides signal icon, instead,
+           it shows data activity within signal view.
+        3: Show data activity with data type at the left side
+           of signal icon, and do not show two stacked icon on
+           one slot.
+    -->
+    <integer name="status_bar_style">0</integer>
+
+    <!-- Control whether status bar should fetch mobile signal icons from xml file dynamically -->
+    <bool name="config_read_icons_from_xml">false</bool>
 
     <!-- milliseconds before the heads up notification auto-dismisses. -->
     <integer name="heads_up_notification_decay">5000</integer>
@@ -239,11 +268,14 @@
     <!-- Doze: check proximity sensor before pulsing? -->
     <bool name="doze_proximity_check_before_pulse">true</bool>
 
+    <!-- Doze: check proximity sensor before pulsing from intent? -->
+    <bool name="doze_proximity_check_before_pulse_intent">false</bool>
+
     <!-- Doze: should notifications be used as a pulse signal? -->
     <bool name="doze_pulse_on_notifications">true</bool>
 
     <!-- Doze: when to pulse after a buzzworthy notification arrives -->
-    <string name="doze_pulse_schedule" translatable="false">1s,10s,30s,60s</string>
+    <string name="doze_pulse_schedule" translatable="false">10s,30s,60s</string>
 
     <!-- Doze: maximum number of times the notification pulse schedule can be reset -->
     <integer name="doze_pulse_schedule_resets">2</integer>
@@ -260,11 +292,11 @@
     <!-- Doze: pulse parameter - how long does it take to fade in after a pickup? -->
     <integer name="doze_pulse_duration_in_pickup">300</integer>
 
-    <!-- Doze: pulse parameter - delay to wait for the screen to wake up -->
-    <integer name="doze_pulse_delay_in">200</integer>
+    <!-- Doze: pulse parameter - how long does it take to fade in after an intent? -->
+    <integer name="doze_pulse_duration_in_intent">300</integer>
 
-    <!-- Doze: pulse parameter - delay to wait for the screen to wake up after a pickup -->
-    <integer name="doze_pulse_delay_in_pickup">200</integer>
+    <!-- Doze: pulse parameter - delay to wait for the screen to wake up after an intent -->
+    <integer name="doze_pulse_delay_in_intent">200</integer>
 
     <!-- Doze: pulse parameter - once faded in, how long does it stay visible? -->
     <integer name="doze_pulse_duration_visible">3000</integer>

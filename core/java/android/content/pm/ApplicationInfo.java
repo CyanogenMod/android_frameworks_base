@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -465,13 +466,6 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public int privateFlags;
 
     /**
-     * Boolean indicating whether the resolution of the SurfaceView associated
-     * with this appplication can be overriden.
-     * {@hide}
-     */
-    public int overrideRes = 0;
-
-    /**
      * The required smallest screen width the application can run on.  If 0,
      * nothing has been specified.  Comes from
      * {@link android.R.styleable#AndroidManifestSupportsScreens_requiresSmallestWidthDp
@@ -661,6 +655,19 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      */
     public int installLocation = PackageInfo.INSTALL_LOCATION_UNSPECIFIED;
 
+    /**
+     * When true, indicates that any one component within this application is
+     * protected.
+     * @hide
+     */
+    public boolean protect = false;
+
+    /**
+     * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
+     * @hide
+     */
+    public boolean isThemeable = false;
+
     public void dump(Printer pw, String prefix) {
         super.dumpFront(pw, prefix);
         if (className != null) {
@@ -761,7 +768,6 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         theme = orig.theme;
         flags = orig.flags;
         privateFlags = orig.privateFlags;
-        overrideRes = orig.overrideRes;
         requiresSmallestWidthDp = orig.requiresSmallestWidthDp;
         compatibleWidthLimitDp = orig.compatibleWidthLimitDp;
         largestWidthLimitDp = orig.largestWidthLimitDp;
@@ -793,6 +799,8 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         uiOptions = orig.uiOptions;
         backupAgentName = orig.backupAgentName;
         fullBackupContent = orig.fullBackupContent;
+        protect = orig.protect;
+        isThemeable = orig.isThemeable;
     }
 
 
@@ -815,7 +823,6 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeInt(theme);
         dest.writeInt(flags);
         dest.writeInt(privateFlags);
-        dest.writeInt(overrideRes);
         dest.writeInt(requiresSmallestWidthDp);
         dest.writeInt(compatibleWidthLimitDp);
         dest.writeInt(largestWidthLimitDp);
@@ -847,6 +854,8 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeInt(descriptionRes);
         dest.writeInt(uiOptions);
         dest.writeInt(fullBackupContent);
+        dest.writeInt(protect ? 1 : 0);
+        dest.writeInt(isThemeable ? 1 : 0);
     }
 
     public static final Parcelable.Creator<ApplicationInfo> CREATOR
@@ -868,7 +877,6 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         theme = source.readInt();
         flags = source.readInt();
         privateFlags = source.readInt();
-        overrideRes = source.readInt();
         requiresSmallestWidthDp = source.readInt();
         compatibleWidthLimitDp = source.readInt();
         largestWidthLimitDp = source.readInt();
@@ -900,6 +908,8 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         descriptionRes = source.readInt();
         uiOptions = source.readInt();
         fullBackupContent = source.readInt();
+        protect = source.readInt() != 0;
+        isThemeable = source.readInt() != 0;
     }
 
     /**
@@ -1007,7 +1017,6 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     /** {@hide} */ public void setResourcePath(String resourcePath) { scanPublicSourceDir = resourcePath; }
     /** {@hide} */ public void setBaseResourcePath(String baseResourcePath) { publicSourceDir = baseResourcePath; }
     /** {@hide} */ public void setSplitResourcePaths(String[] splitResourcePaths) { splitPublicSourceDirs = splitResourcePaths; }
-    /** {@hide} */ public void setOverrideRes(int overrideResolution) { overrideRes = overrideResolution; }
 
     /** {@hide} */ public String getCodePath() { return scanSourceDir; }
     /** {@hide} */ public String getBaseCodePath() { return sourceDir; }
@@ -1015,5 +1024,4 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     /** {@hide} */ public String getResourcePath() { return scanPublicSourceDir; }
     /** {@hide} */ public String getBaseResourcePath() { return publicSourceDir; }
     /** {@hide} */ public String[] getSplitResourcePaths() { return splitSourceDirs; }
-    /** {@hide} */ public int canOverrideRes() { return overrideRes; }
 }

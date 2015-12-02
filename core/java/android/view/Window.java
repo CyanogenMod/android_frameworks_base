@@ -199,6 +199,7 @@ public abstract class Window {
 
     private boolean mHaveWindowFormat = false;
     private boolean mHaveDimAmount = false;
+    private boolean mHaveBlurAmount = false;
     private int mDefaultWindowFormat = PixelFormat.OPAQUE;
 
     private boolean mHasSoftInputMode = false;
@@ -578,7 +579,7 @@ public abstract class Window {
     void adjustLayoutParamsForSubWindow(WindowManager.LayoutParams wp) {
         CharSequence curTitle = wp.getTitle();
         if (wp.type >= WindowManager.LayoutParams.FIRST_SUB_WINDOW &&
-            wp.type <= WindowManager.LayoutParams.LAST_SUB_WINDOW) {
+                wp.type <= WindowManager.LayoutParams.LAST_SUB_WINDOW) {
             if (wp.token == null) {
                 View decor = peekDecorView();
                 if (decor != null) {
@@ -588,20 +589,33 @@ public abstract class Window {
             if (curTitle == null || curTitle.length() == 0) {
                 String title;
                 if (wp.type == WindowManager.LayoutParams.TYPE_APPLICATION_MEDIA) {
-                    title="Media";
+                    title = "Media";
                 } else if (wp.type == WindowManager.LayoutParams.TYPE_APPLICATION_MEDIA_OVERLAY) {
-                    title="MediaOvr";
+                    title = "MediaOvr";
                 } else if (wp.type == WindowManager.LayoutParams.TYPE_APPLICATION_PANEL) {
-                    title="Panel";
+                    title = "Panel";
                 } else if (wp.type == WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL) {
-                    title="SubPanel";
+                    title = "SubPanel";
                 } else if (wp.type == WindowManager.LayoutParams.TYPE_APPLICATION_ABOVE_SUB_PANEL) {
-                    title="AboveSubPanel";
+                    title = "AboveSubPanel";
                 } else if (wp.type == WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG) {
-                    title="AtchDlg";
+                    title = "AtchDlg";
                 } else {
-                    title=Integer.toString(wp.type);
+                    title = Integer.toString(wp.type);
                 }
+                if (mAppName != null) {
+                    title += ":" + mAppName;
+                }
+                wp.setTitle(title);
+            }
+        } else if (wp.type >= WindowManager.LayoutParams.FIRST_SYSTEM_WINDOW &&
+                wp.type <= WindowManager.LayoutParams.LAST_SYSTEM_WINDOW) {
+            // We don't set the app token to this system window because the life cycles should be
+            // independent. If an app creates a system window and then the app goes to the stopped
+            // state, the system window should not be affected (can still show and receive input
+            // events).
+            if (curTitle == null || curTitle.length() == 0) {
+                String title = "Sys" + Integer.toString(wp.type);
                 if (mAppName != null) {
                     title += ":" + mAppName;
                 }
@@ -805,6 +819,13 @@ public abstract class Window {
         setPrivateFlags(flags, flags);
     }
 
+    /** @hide */
+    public void setBlurMaskAlphaThreshold(float alpha) {
+        final WindowManager.LayoutParams attrs = getAttributes();
+        attrs.blurMaskAlphaThreshold = alpha;
+        dispatchWindowAttributesChanged(attrs);
+    }
+
     /**
      * Convenience function to clear the flag bits as specified in flags, as
      * per {@link #setFlags}.
@@ -843,6 +864,10 @@ public abstract class Window {
     }
 
     private void setPrivateFlags(int flags, int mask) {
+        if ((flags & mask & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_POWER_KEY) != 0){
+            mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_POWER_KEY",
+                    "No permission to prevent power key");
+        }
         final WindowManager.LayoutParams attrs = getAttributes();
         attrs.privateFlags = (attrs.privateFlags & ~mask) | (flags & mask);
         dispatchWindowAttributesChanged(attrs);
@@ -878,6 +903,19 @@ public abstract class Window {
         final WindowManager.LayoutParams attrs = getAttributes();
         attrs.dimAmount = amount;
         mHaveDimAmount = true;
+        dispatchWindowAttributesChanged(attrs);
+    }
+
+    /**
+     * Set the amount of blur behind the window when using
+     * {@link WindowManager.LayoutParams#FLAG_BLUR_BEHIND}.
+     * This feature may not be supported by all devices.
+     * {@hide}
+     */
+    public void setBlurAmount(float amount) {
+        final WindowManager.LayoutParams attrs = getAttributes();
+        attrs.blurAmount = amount;
+        mHaveBlurAmount = true;
         dispatchWindowAttributesChanged(attrs);
     }
 
@@ -1389,6 +1427,11 @@ public abstract class Window {
     /** @hide */
     protected boolean haveDimAmount() {
         return mHaveDimAmount;
+    }
+
+    /** @hide */
+    protected boolean haveBlurAmount() {
+        return mHaveBlurAmount;
     }
 
     public abstract void setChildDrawable(int featureId, Drawable drawable);

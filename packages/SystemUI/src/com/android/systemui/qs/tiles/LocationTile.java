@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,9 @@
 package com.android.systemui.qs.tiles;
 
 import com.android.internal.logging.MetricsLogger;
+import android.content.Intent;
+import android.provider.Settings;
+
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
@@ -25,6 +29,9 @@ import com.android.systemui.statusbar.policy.LocationController.LocationSettings
 
 /** Quick settings tile: Location **/
 public class LocationTile extends QSTile<QSTile.BooleanState> {
+
+    private static final Intent LOCATION_SETTINGS = new Intent(
+            Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
     private final AnimationIcon mEnable =
             new AnimationIcon(R.drawable.ic_signal_location_enable_animation);
@@ -64,6 +71,11 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
         mController.setLocationEnabled(!wasEnabled);
         mEnable.setAllowAnimation(true);
         mDisable.setAllowAnimation(true);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startActivityDismissingKeyguard(LOCATION_SETTINGS);
     }
 
     @Override

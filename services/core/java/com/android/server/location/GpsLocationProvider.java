@@ -444,7 +444,8 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 checkSmsSuplInit(intent);
             } else if (action.equals(Intents.WAP_PUSH_RECEIVED_ACTION)) {
                 checkWapSuplInit(intent);
-            } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+            } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)
+                    || action.equals(ConnectivityManager.CONNECTIVITY_ACTION_SUPL)) {
                 // retrieve NetworkInfo result for this UID
                 NetworkInfo info =
                         intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
@@ -1995,7 +1996,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
                     type = AGPS_REF_LOCATION_TYPE_GSM_CELLID;
                 }
                 native_agps_set_ref_location_cellid(type, mcc, mnc,
-                        gsm_cell.getLac(), gsm_cell.getCid());
+                        gsm_cell.getLac(), gsm_cell.getCid(), gsm_cell.getPsc());
             } else {
                 Log.e(TAG,"Error getting cell location info.");
             }
@@ -2111,6 +2112,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             intentFilter.addAction(ALARM_WAKEUP);
             intentFilter.addAction(ALARM_TIMEOUT);
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION_SUPL);
             intentFilter.addAction(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED);
             intentFilter.addAction(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED);
             intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -2365,7 +2367,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     // AGPS ril suport
     private native void native_agps_set_ref_location_cellid(int type, int mcc, int mnc,
-            int lac, int cid);
+            int lac, int cid, int psc);
     private native void native_agps_set_id(int type, String setid);
 
     private native void native_update_network_state(boolean connected, int type,

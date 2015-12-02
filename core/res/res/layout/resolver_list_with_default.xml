@@ -30,13 +30,18 @@
         android:layout_height="wrap_content"
         android:layout_alwaysShow="true"
         android:orientation="vertical"
-        android:background="@color/white"
+        android:background="@color/resolver_list_bg"
         android:elevation="8dp" >
 
         <LinearLayout
+            android:id="@+id/filtered_item_container"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:onClick="onButtonClick"
+            android:clickable="true"
+            android:background="?android:selectableItemBackground"
+            >
 
             <ImageView android:id="@+id/icon"
                        android:layout_width="24dp"
@@ -52,6 +57,7 @@
                       android:layout_height="?android:attr/listPreferredItemHeight"
                       android:layout_marginStart="16dp"
                       android:textAppearance="?android:attr/textAppearanceMedium"
+                      android:textColor="?attr/textColorPrimary"
                       android:gravity="start|center_vertical"
                       android:paddingEnd="16dp" />
             <LinearLayout android:id="@+id/profile_button"
@@ -102,8 +108,7 @@
             android:paddingBottom="8dp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:background="@color/white"
-            android:elevation="8dp">
+            android:background="@color/resolver_list_bg">
             <Button android:id="@+id/button_once"
                     android:layout_width="wrap_content"
                     android:layout_gravity="start"
@@ -136,7 +141,7 @@
         android:id="@+id/resolver_list"
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"
-        android:background="@color/white"
+        android:background="@color/resolver_list_bg"
         android:elevation="8dp"
         android:nestedScrollingEnabled="true"
         android:divider="@null"

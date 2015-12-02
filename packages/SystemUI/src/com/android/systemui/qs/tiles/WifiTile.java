@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +59,7 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
     }
 
     @Override
-    public boolean supportsDualTargets() {
+    public boolean hasDualTargetsDetails() {
         return true;
     }
 
@@ -113,6 +114,11 @@ public class WifiTile extends QSTile<QSTile.SignalState> {
             mState.enabled = true;
         }
         showDetail(true);
+    }
+
+    @Override
+    protected void handleLongClick() {
+        mHost.startActivityDismissingKeyguard(WIFI_SETTINGS);
     }
 
     @Override

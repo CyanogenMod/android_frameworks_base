@@ -56,6 +56,7 @@ public final class PdfManipulationService extends Service {
 
     private static final int MILS_PER_INCH = 1000;
     private static final int POINTS_IN_INCH = 72;
+    private final Object mLock = new Object();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -74,8 +75,6 @@ public final class PdfManipulationService extends Service {
     }
 
     private final class PdfRendererImpl extends IPdfRenderer.Stub {
-        private final Object mLock = new Object();
-
         private Bitmap mBitmap;
         private PdfRenderer mRenderer;
 
@@ -209,8 +208,6 @@ public final class PdfManipulationService extends Service {
     }
 
     private final class PdfEditorImpl extends IPdfEditor.Stub {
-        private final Object mLock = new Object();
-
         private PdfEditor mEditor;
 
         @Override

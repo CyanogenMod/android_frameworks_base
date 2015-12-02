@@ -43,6 +43,7 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
     private UserSwitcherController.BaseUserAdapter mUserListener;
 
     final UserManager mUserManager;
+    private ActivityStarter mActivityStarter;
 
     private final int[] mTmpInt2 = new int[2];
 
@@ -101,6 +102,10 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
         }
     }
 
+    public void setActivityStarter(ActivityStarter activityStarter) {
+        mActivityStarter = activityStarter;
+    }
+
     @Override
     public void onClick(View v) {
         if (UserSwitcherController.isUserSwitcherAvailable(mUserManager)) {
@@ -123,7 +128,11 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
             Intent intent = ContactsContract.QuickContact.composeQuickContactsIntent(
                     getContext(), v, ContactsContract.Profile.CONTENT_URI,
                     ContactsContract.QuickContact.MODE_LARGE, null);
-            getContext().startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+            if (mActivityStarter != null) {
+                mActivityStarter.startActivity(intent, true /* dismissShade */);
+            } else {
+                getContext().startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+            }
         }
     }
 

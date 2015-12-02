@@ -77,7 +77,7 @@ public interface RILConstants {
     int SIM_SAP_MSG_SIZE_TOO_SMALL = 34;
     int SIM_SAP_CONNECT_OK_CALL_ONGOING = 35;
     int LCE_NOT_SUPPORTED = 36;               /* Link Capacity Estimation (LCE) not supported */
-
+    int INVALID_PARAMETER = 37;
 
     /* NETWORK_MODE_* See ril.h RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE */
     int NETWORK_MODE_WCDMA_PREF     = 0; /* GSM/WCDMA (WCDMA preferred) */
@@ -96,17 +96,16 @@ public interface RILConstants {
     int NETWORK_MODE_LTE_CDMA_EVDO_GSM_WCDMA = 10; /* LTE, CDMA, EvDo, GSM/WCDMA */
     int NETWORK_MODE_LTE_ONLY       = 11; /* LTE Only mode. */
     int NETWORK_MODE_LTE_WCDMA      = 12; /* LTE/WCDMA */
-    int NETWORK_MODE_TD_SCDMA_ONLY            = 13; /* TD-SCDMA only */
-    int NETWORK_MODE_TD_SCDMA_WCDMA           = 14; /* TD-SCDMA and WCDMA */
-    int NETWORK_MODE_TD_SCDMA_LTE             = 15; /* TD-SCDMA and LTE */
-    int NETWORK_MODE_TD_SCDMA_GSM             = 16; /* TD-SCDMA and GSM */
-    int NETWORK_MODE_TD_SCDMA_GSM_LTE         = 17; /* TD-SCDMA,GSM and LTE */
-    int NETWORK_MODE_TD_SCDMA_GSM_WCDMA       = 18; /* TD-SCDMA, GSM/WCDMA */
-    int NETWORK_MODE_TD_SCDMA_WCDMA_LTE       = 19; /* TD-SCDMA, WCDMA and LTE */
-    int NETWORK_MODE_TD_SCDMA_GSM_WCDMA_LTE   = 20; /* TD-SCDMA, GSM/WCDMA and LTE */
-    int NETWORK_MODE_TD_SCDMA_GSM_WCDMA_CDMA_EVDO  = 21; /*TD-SCDMA,EvDo,CDMA,GSM/WCDMA*/
-    int NETWORK_MODE_TD_SCDMA_LTE_CDMA_EVDO_GSM_WCDMA = 22; /* TD-SCDMA/LTE/GSM/WCDMA, CDMA, and
-                                                               EvDo */
+    int NETWORK_MODE_TDSCDMA_ONLY            = 13; /* TD-SCDMA only */
+    int NETWORK_MODE_TDSCDMA_WCDMA           = 14; /* TD-SCDMA and WCDMA */
+    int NETWORK_MODE_LTE_TDSCDMA             = 15; /* TD-SCDMA and LTE */
+    int NETWORK_MODE_TDSCDMA_GSM             = 16; /* TD-SCDMA and GSM */
+    int NETWORK_MODE_LTE_TDSCDMA_GSM         = 17; /* TD-SCDMA,GSM and LTE */
+    int NETWORK_MODE_TDSCDMA_GSM_WCDMA       = 18; /* TD-SCDMA, GSM/WCDMA */
+    int NETWORK_MODE_LTE_TDSCDMA_WCDMA       = 19; /* TD-SCDMA, WCDMA and LTE */
+    int NETWORK_MODE_LTE_TDSCDMA_GSM_WCDMA   = 20; /* TD-SCDMA, GSM/WCDMA and LTE */
+    int NETWORK_MODE_TDSCDMA_CDMA_EVDO_GSM_WCDMA  = 21; /*TD-SCDMA,EvDo,CDMA,GSM/WCDMA*/
+    int NETWORK_MODE_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA = 22; /* TD-SCDMA/LTE/GSM/WCDMA, CDMA, and EvDo */
     int PREFERRED_NETWORK_MODE      = SystemProperties.getInt("ro.telephony.default_network",
             NETWORK_MODE_WCDMA_PREF);
 
@@ -335,6 +334,7 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_STOP_LCE = 133;
     int RIL_REQUEST_PULL_LCEDATA = 134;
     int RIL_REQUEST_GET_ACTIVITY_INFO = 135;
+    int RIL_REQUEST_SIM_GET_ATR = 136;
 
     // MTK please
     // int RIL_REQUEST_SIM_GET_ATR = 133;
@@ -386,6 +386,8 @@ cat include/telephony/ril.h | \
     int RIL_UNSOL_ON_SS = 1043;
     int RIL_UNSOL_STK_CC_ALPHA_NOTIFY = 1044;
     int RIL_UNSOL_LCEDATA_RECV = 1045;
+
+    int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002; /* Samsung STK */
 
     // MediaTek Custom States
     // oh no

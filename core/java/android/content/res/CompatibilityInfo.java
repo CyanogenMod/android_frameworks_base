@@ -241,8 +241,7 @@ public class CompatibilityInfo implements Parcelable {
         mCompatibilityFlags = compatFlags;
     }
 
-    private CompatibilityInfo(int compFlags,
-            int dens, float scale, float invertedScale) {
+    private CompatibilityInfo(int compFlags, int dens, float scale, float invertedScale) {
         mCompatibilityFlags = compFlags;
         applicationDensity = dens;
         applicationScale = scale;

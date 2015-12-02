@@ -6837,6 +6837,9 @@ i
         <attr name="showDefault" format="boolean" />
         <!-- Whether to show an item for 'Silent'. -->
         <attr name="showSilent" format="boolean" />
+        <!-- The style of the ringtone dialog.
+             @hide -->
+        <attr name="dialogStyle" format="reference" />
     </declare-styleable>
 
     <!-- Base attributes available to VolumePreference. -->

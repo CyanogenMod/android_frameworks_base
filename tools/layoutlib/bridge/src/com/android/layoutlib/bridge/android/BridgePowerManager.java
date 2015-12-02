@@ -155,4 +155,20 @@ public class BridgePowerManager implements IPowerManager {
     public boolean isScreenBrightnessBoosted() throws RemoteException {
         return false;
     }
+
+    @Override
+    public void setKeyboardVisibility(boolean visible) {
+        // pass for now.
+    }
+
+    @Override
+    public void cpuBoost(int duration) throws RemoteException {
+        // pass for now
+    }
+
+    @Override
+    public void setKeyboardLight(boolean on, int key) {
+        // pass for now
+    }
+
 }

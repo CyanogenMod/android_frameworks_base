@@ -25,9 +25,16 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
+import android.content.pm.ThemeUtils;
 import android.content.res.Configuration;
 import android.content.res.Resources.Theme;
+import android.database.ContentObserver;
+import android.database.Cursor;
+import android.content.res.ThemeConfig;
+import android.database.ContentObserver;
 import android.os.Build;
 import android.os.Environment;
 import android.os.FactoryTest;
@@ -40,6 +47,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.storage.IMountService;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Slog;
@@ -61,6 +69,7 @@ import com.android.server.display.DisplayManagerService;
 import com.android.server.dreams.DreamManagerService;
 import com.android.server.fingerprint.FingerprintService;
 import com.android.server.hdmi.HdmiControlService;
+import com.android.server.gesture.GestureService;
 import com.android.server.input.InputManagerService;
 import com.android.server.job.JobSchedulerService;
 import com.android.server.lights.LightsService;
@@ -72,6 +81,7 @@ import com.android.server.net.NetworkStatsService;
 import com.android.server.notification.NotificationManagerService;
 import com.android.server.os.SchedulingPolicyService;
 import com.android.server.pm.BackgroundDexOptService;
+import com.android.server.gesture.EdgeGestureService;
 import com.android.server.pm.Installer;
 import com.android.server.pm.LauncherAppsService;
 import com.android.server.pm.PackageManagerService;
@@ -92,6 +102,7 @@ import com.android.server.wallpaper.WallpaperManagerService;
 import com.android.server.webkit.WebViewUpdateService;
 import com.android.server.wm.WindowManagerService;
 
+import cyanogenmod.providers.CMSettings;
 import dalvik.system.VMRuntime;
 
 import java.io.File;
@@ -171,6 +182,19 @@ public final class SystemServer {
     public SystemServer() {
         // Check for factory test mode.
         mFactoryTestMode = FactoryTest.getMode();
+    }
+
+    private class AdbPortObserver extends ContentObserver {
+        public AdbPortObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            int adbPort = CMSettings.Secure.getInt(mContentResolver,
+                CMSettings.Secure.ADB_PORT, 0);
+            // setting this will control whether ADB runs on TCP/IP or USB
+            SystemProperties.set("service.adb.tcp.port", Integer.toString(adbPort));
+        }
     }
 
     private void run() {
@@ -438,6 +462,8 @@ public final class SystemServer {
         boolean disableNetwork = SystemProperties.getBoolean("config.disable_network", false);
         boolean disableNetworkTime = SystemProperties.getBoolean("config.disable_networktime", false);
         boolean isEmulator = SystemProperties.get("ro.kernel.qemu").equals("1");
+        String[] externalServices = context.getResources()
+                .getStringArray(com.android.internal.R.array.config_externalCMServices);
 
         try {
             Slog.i(TAG, "Reading configuration...");
@@ -499,7 +525,7 @@ public final class SystemServer {
             Slog.i(TAG, "Window Manager");
             wm = WindowManagerService.main(context, inputManager,
                     mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL,
-                    !mFirstBoot, mOnlyCore);
+                    true, mOnlyCore);
             ServiceManager.addService(Context.WINDOW_SERVICE, wm);
             ServiceManager.addService(Context.INPUT_SERVICE, inputManager);
 
@@ -542,6 +568,9 @@ public final class SystemServer {
         LockSettingsService lockSettings = null;
         AssetAtlasService atlas = null;
         MediaRouterService mediaRouter = null;
+        GestureService gestureService = null;
+        EdgeGestureService edgeGestureService = null;
+        ThemeService themeService = null;
 
         // Bring up services needed for UI.
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
@@ -875,6 +904,11 @@ public final class SystemServer {
                 if (mPackageManager.hasSystemFeature(PackageManager.FEATURE_VOICE_RECOGNIZERS)) {
                     mSystemServiceManager.startService(VOICE_RECOGNITION_MANAGER_SERVICE_CLASS);
                 }
+
+                if (GestureLauncherService.isGestureLauncherEnabled(context.getResources())) {
+                    Slog.i(TAG, "Gesture Launcher Service");
+                    mSystemServiceManager.startService(GestureLauncherService.class);
+                }
             }
 
             try {
@@ -942,6 +976,17 @@ public final class SystemServer {
                         new GraphicsStatsService(context));
             }
 
+            if (context.getResources().getBoolean(
+                    com.android.internal.R.bool.config_enableGestureService)) {
+                try {
+                    Slog.i(TAG, "Gesture Sensor Service");
+                    gestureService = new GestureService(context, inputManager);
+                    ServiceManager.addService("gesture", gestureService);
+                } catch (Throwable e) {
+                    Slog.e(TAG, "Failure starting Gesture Sensor Service", e);
+                }
+            }
+
             if (mPackageManager.hasSystemFeature(PackageManager.FEATURE_PRINTING)) {
                 mSystemServiceManager.startService(PRINT_MANAGER_SERVICE_CLASS);
             }
@@ -956,6 +1001,14 @@ public final class SystemServer {
 
             if (mPackageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_TV)) {
                 mSystemServiceManager.startService(TvInputManagerService.class);
+            }
+
+            try {
+                Slog.i(TAG, "Theme Service");
+                themeService = new ThemeService(context);
+                ServiceManager.addService(Context.THEME_SERVICE, themeService);
+            } catch (Throwable e) {
+                reportWtf("starting Theme Service", e);
             }
 
             if (!disableNonCoreServices) {
@@ -981,11 +1034,28 @@ public final class SystemServer {
             }
 
             mSystemServiceManager.startService(LauncherAppsService.class);
+
+            try {
+                Slog.i(TAG, "EdgeGesture service");
+                edgeGestureService = new EdgeGestureService(context, inputManager);
+                ServiceManager.addService("edgegestureservice", edgeGestureService);
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting EdgeGesture service", e);
+            }
         }
 
         if (!disableNonCoreServices) {
             mSystemServiceManager.startService(MediaProjectionManagerService.class);
         }
+
+        // make sure the ADB_ENABLED setting value matches the secure property value
+        CMSettings.Secure.putInt(mContentResolver, CMSettings.Secure.ADB_PORT,
+                Integer.parseInt(SystemProperties.get("service.adb.tcp.port", "-1")));
+
+        // register observer to listen for settings changes
+        mContentResolver.registerContentObserver(
+            CMSettings.Secure.getUriFor(CMSettings.Secure.ADB_PORT),
+            false, new AdbPortObserver());
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
@@ -1001,6 +1071,15 @@ public final class SystemServer {
 
         // MMS service broker
         mmsService = mSystemServiceManager.startService(MmsServiceBroker.class);
+
+        for (String service : externalServices) {
+            try {
+                Slog.i(TAG, service);
+                mSystemServiceManager.startService(service);
+            } catch (Throwable e) {
+                reportWtf("starting " + service , e);
+            }
+        }
 
         // It is now time to start up the app processes...
 
@@ -1062,6 +1141,32 @@ public final class SystemServer {
             reportWtf("making Display Manager Service ready", e);
         }
 
+        if (edgeGestureService != null) {
+            try {
+                edgeGestureService.systemReady();
+            } catch (Throwable e) {
+                reportWtf("making EdgeGesture service ready", e);
+            }
+        }
+
+        if (gestureService != null) {
+            try {
+                gestureService.systemReady();
+            } catch (Throwable e) {
+                reportWtf("making Gesture Sensor Service ready", e);
+            }
+        }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_APP_FAILURE);
+        filter.addAction(Intent.ACTION_APP_FAILURE_RESET);
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addAction(ThemeUtils.ACTION_THEME_CHANGED);
+        filter.addCategory(Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE);
+        filter.addDataScheme("package");
+        context.registerReceiver(new AppsFailureReceiver(), filter);
+
         // These are needed to propagate to the runnable below.
         final NetworkManagementService networkManagementF = networkManagement;
         final NetworkStatsService networkStatsF = networkStats;
@@ -1082,6 +1187,7 @@ public final class SystemServer {
         final MediaRouterService mediaRouterF = mediaRouter;
         final AudioService audioServiceF = audioService;
         final MmsServiceBroker mmsServiceF = mmsService;
+        final ThemeService themeServiceF = themeService;
 
         // We now tell the activity manager it is okay to run third party
         // code.  It will call back into us once it has gotten to the state
@@ -1103,6 +1209,15 @@ public final class SystemServer {
 
                 Slog.i(TAG, "WebViewFactory preparation");
                 WebViewFactory.prepareWebViewInSystemServer();
+
+                // Start Nfc before SystemUi to ensure NfcTile and other apps gets a
+                // valid NfcAdapter from NfcManager
+                try {
+                    startNfcService(context);
+                } catch (Throwable e) {
+                    // Don't crash. Nfc is an optional service. Just annotate that isn't ready
+                    Slog.e(TAG, "Nfc service didn't start. Nfc will not be available.", e);
+                }
 
                 try {
                     startSystemUi(context);
@@ -1211,6 +1326,17 @@ public final class SystemServer {
                 } catch (Throwable e) {
                     reportWtf("Notifying MmsService running", e);
                 }
+
+                try {
+                    // now that the system is up, apply default theme if applicable
+                    if (themeServiceF != null) themeServiceF.systemRunning();
+                    ThemeConfig themeConfig =
+                            ThemeConfig.getBootTheme(context.getContentResolver());
+                    String iconPkg = themeConfig.getIconPackPkgName();
+                    mPackageManagerService.updateIconMapping(iconPkg);
+                } catch (Throwable e) {
+                    reportWtf("Icon Mapping failed", e);
+                }
             }
         });
     }
@@ -1221,5 +1347,24 @@ public final class SystemServer {
                     "com.android.systemui.SystemUIService"));
         //Slog.d(TAG, "Starting service: " + intent);
         context.startServiceAsUser(intent, UserHandle.OWNER);
+    }
+
+    static final void startNfcService(Context context) {
+        IPackageManager pm = ActivityThread.getPackageManager();
+        if (pm == null) {
+            Slog.w(TAG, "Cannot get package manager, assuming no NFC feature");
+            return;
+        }
+        try {
+            if (pm.hasSystemFeature(PackageManager.FEATURE_NFC)) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.android.nfc",
+                            "com.android.nfc.NfcBootstrapService"));
+                context.startServiceAsUser(intent, UserHandle.OWNER);
+            }
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Package manager query failed, assuming no NFC feature", e);
+            return;
+        }
     }
 }

@@ -50,6 +50,7 @@ static void usage(const char* pname)
             "usage: %s [-hp] [-d display-id] [FILENAME]\n"
             "   -h: this message\n"
             "   -p: save the file as a png.\n"
+            "   -j: save the file as a jpeg.\n"
             "   -d: specify the display id to capture, default %d.\n"
             "If FILENAME ends with .png it will be saved as a png.\n"
             "If FILENAME is not given, the results will be printed to stdout.\n",
@@ -112,12 +113,16 @@ int main(int argc, char** argv)
 
     const char* pname = argv[0];
     bool png = false;
+    bool jpeg = false;
     int32_t displayId = DEFAULT_DISPLAY_ID;
     int c;
-    while ((c = getopt(argc, argv, "phd:")) != -1) {
+    while ((c = getopt(argc, argv, "pjhd:")) != -1) {
         switch (c) {
             case 'p':
                 png = true;
+                break;
+            case 'j':
+                jpeg = true;
                 break;
             case 'd':
                 displayId = atoi(optarg);
@@ -143,8 +148,14 @@ int main(int argc, char** argv)
             return 1;
         }
         const int len = strlen(fn);
-        if (len >= 4 && 0 == strcmp(fn+len-4, ".png")) {
-            png = true;
+        if (len >= 4) {
+            if (0 == strcmp(fn+len-4, ".png")) {
+                png = true;
+            } else if (0 == strcmp(fn+len-4, ".jpg")) {
+                jpeg = true;
+            } else if (len > 4 && 0 == strcmp(fn+len-5, ".jpeg")) {
+                jpeg = true;
+            }
         }
     }
     
@@ -220,11 +231,12 @@ int main(int argc, char** argv)
     }
 
     if (base != NULL) {
-        if (png) {
+        if (png || jpeg) {
             const SkImageInfo info = SkImageInfo::Make(w, h, flinger2skia(f),
                                                        kPremul_SkAlphaType);
             SkAutoTUnref<SkData> data(SkImageEncoder::EncodeData(info, base, s*bytesPerPixel(f),
-                    SkImageEncoder::kPNG_Type, SkImageEncoder::kDefaultQuality));
+                    (png ? SkImageEncoder::kPNG_Type : SkImageEncoder::kJPEG_Type),
+                    SkImageEncoder::kDefaultQuality));
             if (data.get()) {
                 write(fd, data->data(), data->size());
             }

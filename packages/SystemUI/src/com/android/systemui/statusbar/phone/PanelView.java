@@ -40,6 +40,8 @@ import com.android.systemui.statusbar.FlingAnimationUtils;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 
+import cyanogenmod.power.PerformanceManager;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
@@ -86,6 +88,8 @@ public abstract class PanelView extends FrameLayout {
     private VelocityTrackerInterface mVelocityTracker;
     private FlingAnimationUtils mFlingAnimationUtils;
 
+    private final PerformanceManager mPerf;
+
     /**
      * Whether an instant expand request is currently pending and we are just waiting for layout.
      */
@@ -119,6 +123,18 @@ public abstract class PanelView extends FrameLayout {
         public void run() {
             mPeekPending = false;
             runPeekAnimation();
+        }
+    };
+
+    private ViewTreeObserver.OnGlobalLayoutListener mInstantExpandLayoutListener =
+            new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            if (mStatusBar.getStatusBarWindow().getHeight() != mStatusBar.getStatusBarHeight()) {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setExpandedFraction(1f);
+                mInstantExpanding = false;
+            }
         }
     };
 
@@ -190,6 +206,8 @@ public abstract class PanelView extends FrameLayout {
         mLinearOutSlowInInterpolator =
                 AnimationUtils.loadInterpolator(context, android.R.interpolator.linear_out_slow_in);
         mBounceInterpolator = new BounceInterpolator();
+
+        mPerf = PerformanceManager.getInstance(context);
     }
 
     protected void loadDimens() {
@@ -382,7 +400,7 @@ public abstract class PanelView extends FrameLayout {
                     || forceCancel;
             DozeLog.traceFling(expand, mTouchAboveFalsingThreshold,
                     mStatusBar.isFalsingThresholdNeeded(),
-                    mStatusBar.isScreenOnComingFromTouch());
+                    mStatusBar.isWakeUpComingFromTouch());
                     // Log collapse gesture if on lock screen.
                     if (!expand && mStatusBar.getBarState() == StatusBarState.KEYGUARD) {
                         float displayDensity = mStatusBar.getDisplayDensity();
@@ -411,7 +429,7 @@ public abstract class PanelView extends FrameLayout {
     }
 
     private int getFalsingThreshold() {
-        float factor = mStatusBar.isScreenOnComingFromTouch() ? 1.5f : 1.0f;
+        float factor = mStatusBar.isWakeUpComingFromTouch() ? 1.5f : 1.0f;
         return (int) (mUnlockFalsingThreshold * factor);
     }
 
@@ -659,6 +677,9 @@ public abstract class PanelView extends FrameLayout {
                                 / collapseSpeedUpFactor));
             }
         }
+
+        mPerf.cpuBoost((int)animator.getDuration() * 1000);
+
         animator.addListener(new AnimatorListenerAdapter() {
             private boolean mCancelled;
 
@@ -725,7 +746,7 @@ public abstract class PanelView extends FrameLayout {
         }
     }
 
-    public void setExpandedHeightInternal(float h) {
+    public synchronized void setExpandedHeightInternal(float h) {
         float fhWithoutOverExpansion = getMaxPanelHeight() - getOverExpansionAmount();
         if (mHeightAnimator == null) {
             float overExpansionPixels = Math.max(0, h - fhWithoutOverExpansion);
@@ -874,18 +895,7 @@ public abstract class PanelView extends FrameLayout {
 
         // Wait for window manager to pickup the change, so we know the maximum height of the panel
         // then.
-        getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if (mStatusBar.getStatusBarWindow().getHeight()
-                                != mStatusBar.getStatusBarHeight()) {
-                            getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            setExpandedFraction(1f);
-                            mInstantExpanding = false;
-                        }
-                    }
-                });
+        getViewTreeObserver().addOnGlobalLayoutListener(mInstantExpandLayoutListener);
 
         // Make sure a layout really happens.
         requestLayout();
@@ -894,6 +904,7 @@ public abstract class PanelView extends FrameLayout {
     public void instantCollapse() {
         abortAnimations();
         setExpandedFraction(0f);
+        getViewTreeObserver().removeOnGlobalLayoutListener(mInstantExpandLayoutListener);
         if (mExpanding) {
             notifyExpandingFinished();
         }

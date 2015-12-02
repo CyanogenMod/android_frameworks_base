@@ -2729,6 +2729,12 @@ public class RemoteViews implements Parcelable, Filter {
 
     /** @hide */
     public View apply(Context context, ViewGroup parent, OnClickHandler handler) {
+        return apply(context, parent, handler, null);
+    }
+
+    /** @hide */
+    public View apply(Context context, ViewGroup parent, OnClickHandler handler,
+            String themePackageName) {
         RemoteViews rvToApply = getRemoteViewsToApply(context);
 
         View result;
@@ -2736,7 +2742,7 @@ public class RemoteViews implements Parcelable, Filter {
         // user. So build a context that loads resources from that user but
         // still returns the current users userId so settings like data / time formats
         // are loaded without requiring cross user persmissions.
-        final Context contextForResources = getContextForResources(context);
+        final Context contextForResources = getContextForResources(context, themePackageName);
         Context inflationContext = new ContextWrapper(context) {
             @Override
             public Resources getResources() {
@@ -2806,14 +2812,14 @@ public class RemoteViews implements Parcelable, Filter {
         }
     }
 
-    private Context getContextForResources(Context context) {
+    private Context getContextForResources(Context context, String themePackageName) {
         if (mApplication != null) {
             if (context.getUserId() == UserHandle.getUserId(mApplication.uid)
                     && context.getPackageName().equals(mApplication.packageName)) {
                 return context;
             }
             try {
-                return context.createApplicationContext(mApplication,
+                return context.createApplicationContext(mApplication, themePackageName,
                         Context.CONTEXT_RESTRICTED);
             } catch (NameNotFoundException e) {
                 Log.e(LOG_TAG, "Package name " + mApplication.packageName + " not found");

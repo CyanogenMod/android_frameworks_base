@@ -35,6 +35,8 @@ services := \
 # The convention is to name each service module 'services.$(module_name)'
 LOCAL_STATIC_JAVA_LIBRARIES := $(addprefix services.,$(services))
 
+LOCAL_JAVA_LIBRARIES += org.cyanogenmod.platform.internal
+
 include $(BUILD_JAVA_LIBRARY)
 
 # native library
@@ -47,6 +49,11 @@ LOCAL_SHARED_LIBRARIES :=
 
 # include all the jni subdirs to collect their sources
 include $(wildcard $(LOCAL_PATH)/*/jni/Android.mk)
+
+LOCAL_C_INCLUDES += \
+        $(TOP)/frameworks/base/services/libtvextensions \
+
+LOCAL_WHOLE_STATIC_LIBRARIES := libTvInputHalExtensions
 
 LOCAL_CFLAGS += -DEGL_EGLEXT_PROTOTYPES -DGL_GLEXT_PROTOTYPES
 

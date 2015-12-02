@@ -249,9 +249,33 @@ public class CamcorderProfile
      */
     public static final int QUALITY_HIGH_SPEED_4KDCI = 10006;
 
+    /**
+     * Quality level corresponding to QHD resolution
+     * @hide
+     */
+    public static final int QUALITY_QHD = 10007;
+
+    /**
+     * Quality level corresponding to 2K resolution
+     * @hide
+     */
+    public static final int QUALITY_2k = 10008;
+
+    /**
+     * Time lapse quality level corresponding to the QHD resolution.
+     * @hide
+     */
+    public static final int QUALITY_TIME_LAPSE_QHD = 10009;
+
+    /**
+     * Time lapse quality level corresponding to the 2K resolution.
+     * @hide
+     */
+    public static final int QUALITY_TIME_LAPSE_2k = 10010;
+
     // Start and end of vendor quality list
     private static final int QUALITY_VENDOR_LIST_START = QUALITY_VGA;
-    private static final int QUALITY_VENDOR_LIST_END = QUALITY_HIGH_SPEED_4KDCI;
+    private static final int QUALITY_VENDOR_LIST_END = QUALITY_TIME_LAPSE_2k;
 
     /**
      * Default recording duration in seconds before the session is terminated.

@@ -29,17 +29,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
 <resources>
-
-    <!--Fully qualified class name of the plugin which would be
-         dynamically loaded by TelephonyPluginDelegate-->
-    <java-symbol type="string" name="telephony_plugin_class_name" />
-    <string name="telephony_plugin_class_name" translatable="false"></string>
-
-    <!--The locatiotion of .jar file which has the extended implementation
-         of telephony base classes.-->
-    <java-symbol type="string" name="telephony_plugin_lib_path" />
-    <string name="telephony_plugin_lib_path" translatable="false"></string>
-
     <!-- Support for disabling to fetch APN from OMH card
          for some cdma carriers -->
     <java-symbol type="bool" name="config_fetch_apn_from_omh_card" />

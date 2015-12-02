@@ -248,6 +248,7 @@ static sp<Visualizer> setVisualizer(JNIEnv* env, jobject thiz,
         v->incStrong((void*)setVisualizer);
     }
     if (old != 0) {
+        old->cancelCaptureCallBack();
         old->decStrong((void*)setVisualizer);
     }
     env->SetLongField(thiz, fields.fidNativeVisualizer, (jlong)v.get());

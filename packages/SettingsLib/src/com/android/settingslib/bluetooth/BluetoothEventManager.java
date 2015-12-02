@@ -196,6 +196,8 @@ public final class BluetoothEventManager {
                 cachedDevice = mDeviceManager.addDevice(mLocalAdapter, mProfileManager, device);
                 Log.d(TAG, "DeviceFoundHandler created new CachedBluetoothDevice: "
                         + cachedDevice);
+                // callback to UI to create Preference for new device
+                dispatchDeviceAdded(cachedDevice);
             }
             cachedDevice.setRssi(rssi);
             cachedDevice.setBtClass(btClass);

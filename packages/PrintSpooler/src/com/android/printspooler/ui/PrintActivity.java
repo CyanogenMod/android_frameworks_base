@@ -371,6 +371,22 @@ public class PrintActivity extends Activity implements RemotePrintDocument.Updat
     }
 
     @Override
+    protected void onDestroy() {
+        if (mState != STATE_INITIALIZING) {
+            mPrintPreviewController.destroy(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            });
+        } else {
+            finish();
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             event.startTracking();

@@ -48,6 +48,8 @@
     <uses-permission android:name="android.permission.SET_PREFERRED_APPLICATIONS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission android:name="cyanogenmod.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="cyanogenmod.permission.WRITE_SECURE_SETTINGS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <!-- Development tool permissions granted to the shell. -->
     <uses-permission android:name="android.permission.SET_DEBUG_APP" />
@@ -98,7 +100,6 @@
     <uses-permission android:name="android.permission.BIND_APPWIDGET" />
     <uses-permission android:name="android.permission.UPDATE_APP_OPS_STATS" />
     <uses-permission android:name="android.permission.MODIFY_APPWIDGET_BIND_PERMISSIONS"/>
-    <uses-permission android:name="android.permission.INSTALL_GRANT_RUNTIME_PERMISSIONS" />
     <uses-permission android:name="android.permission.CHANGE_APP_IDLE_STATE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS" />
@@ -107,6 +108,7 @@
     <uses-permission android:name="android.permission.REGISTER_CONNECTION_MANAGER" />
     <uses-permission android:name="android.permission.REGISTER_SIM_SUBSCRIPTION" />
     <uses-permission android:name="android.permission.GET_APP_OPS_STATS" />
+    <uses-permission android:name="android.permission.ACCESS_THEME_MANAGER" />
 
     <application android:label="@string/app_label">
         <provider
@@ -142,6 +144,7 @@
             android:name=".BugreportReceiver"
             android:permission="android.permission.DUMP">
             <intent-filter>
+                <action android:name="android.intent.action.BUGREPORT_STARTED" />
                 <action android:name="android.intent.action.BUGREPORT_FINISHED" />
             </intent-filter>
         </receiver>

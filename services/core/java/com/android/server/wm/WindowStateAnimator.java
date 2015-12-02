@@ -29,6 +29,7 @@ import static com.android.server.wm.WindowManagerService.SHOW_SURFACE_ALLOC;
 import static com.android.server.wm.WindowManagerService.localLOGV;
 import static com.android.server.wm.WindowManagerService.LayoutFields.SET_ORIENTATION_CHANGE_COMPLETE;
 import static com.android.server.wm.WindowManagerService.LayoutFields.SET_TURN_ON_SCREEN;
+import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
 
 import android.content.Context;
 import android.graphics.Matrix;
@@ -94,6 +95,13 @@ class WindowStateAnimator {
 
     SurfaceControl mSurfaceControl;
     SurfaceControl mPendingDestroySurface;
+    int mLayerStack;
+
+    SurfaceControl mSurfaceControlBlur;
+    SurfaceControl mPendingDestroySurfaceBlur;
+    boolean mSurfaceBlurShown;  // last value
+    boolean mSurfaceBlurScaleNeeded;
+    final static int BLUR_LAYER_OFFSET = WindowManagerService.LAYER_OFFSET_BLUR_WITH_MASKING;
 
     /**
      * Set when we have changed the size of the surface, to know that
@@ -503,6 +511,12 @@ class WindowStateAnimator {
                 } catch (RuntimeException e) {
                     Slog.w(TAG, "Exception hiding surface in " + mWin);
                 }
+                if (mSurfaceControlBlur != null) {
+                    try { mSurfaceControlBlur.hide(); }
+                    catch (RuntimeException e) {
+                        Slog.w(TAG, "Exception hiding surface blur in " + mWin);
+                    }
+                }
             }
         }
     }
@@ -791,6 +805,24 @@ class WindowStateAnimator {
                 flags |= SurfaceControl.SECURE;
             }
 
+            final boolean consumingNavBar =
+                    (attrs.flags & FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS) != 0
+                    && (attrs.systemUiVisibility & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) == 0
+                    && (attrs.systemUiVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+
+            final DisplayContent displayContent = w.getDisplayContent();
+
+            int defaultWidth = 1;
+            int defaultHeight = 1;
+            if (displayContent != null) {
+                final DisplayInfo displayInfo = displayContent.getDisplayInfo();
+                // When we need to expand the window with FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                // set the default width and height of the window to the size of the display
+                // we can use.
+                defaultWidth = consumingNavBar ? displayInfo.logicalWidth : displayInfo.appWidth;
+                defaultHeight = consumingNavBar ? displayInfo.logicalHeight : displayInfo.appHeight;
+            }
+
             int width;
             int height;
             if ((attrs.flags & LayoutParams.FLAG_SCALED) != 0) {
@@ -799,17 +831,17 @@ class WindowStateAnimator {
                 width = w.mRequestedWidth;
                 height = w.mRequestedHeight;
             } else {
-                width = w.mCompatFrame.width();
-                height = w.mCompatFrame.height();
+                width = consumingNavBar ? defaultWidth : w.mCompatFrame.width();
+                height = consumingNavBar ? defaultHeight : w.mCompatFrame.height();
             }
 
             // Something is wrong and SurfaceFlinger will not like this,
             // try to revert to sane values
             if (width <= 0) {
-                width = 1;
+                width = defaultWidth;
             }
             if (height <= 0) {
-                height = 1;
+                height = defaultHeight;
             }
 
             float left = w.mFrame.left + w.mXOffset;
@@ -916,9 +948,9 @@ class WindowStateAnimator {
                 try {
                     mSurfaceControl.setPosition(left, top);
                     mSurfaceLayer = mAnimLayer;
-                    final DisplayContent displayContent = w.getDisplayContent();
                     if (displayContent != null) {
-                        mSurfaceControl.setLayerStack(displayContent.getDisplay().getLayerStack());
+                        mLayerStack = displayContent.getDisplay().getLayerStack();
+                        mSurfaceControl.setLayerStack(mLayerStack);
                     }
                     mSurfaceControl.setLayer(mAnimLayer);
                     mSurfaceControl.setAlpha(0);
@@ -935,6 +967,7 @@ class WindowStateAnimator {
             }
             if (WindowManagerService.localLOGV) Slog.v(
                     TAG, "Created surface " + this);
+            updateBlurWithMaskingState(attrs, false);
         }
         return mSurfaceControl;
     }
@@ -978,6 +1011,13 @@ class WindowStateAnimator {
                         }
                         mPendingDestroySurface = mSurfaceControl;
                     }
+
+                    if (mSurfaceControlBlur != null && mPendingDestroySurfaceBlur != mSurfaceControlBlur) {
+                        if (mPendingDestroySurfaceBlur != null) {
+                            mPendingDestroySurfaceBlur.destroy();
+                        }
+                        mPendingDestroySurfaceBlur = mSurfaceControlBlur;
+                    }
                 } else {
                     if (SHOW_TRANSACTIONS || SHOW_SURFACE_ALLOC) {
                         RuntimeException e = null;
@@ -988,6 +1028,9 @@ class WindowStateAnimator {
                         WindowManagerService.logSurface(mWin, "DESTROY", e);
                     }
                     mSurfaceControl.destroy();
+                    if (mSurfaceControlBlur != null) {
+                        mSurfaceControlBlur.destroy();
+                    }
                 }
                 mService.hideWallpapersLocked(mWin);
             } catch (RuntimeException e) {
@@ -998,6 +1041,7 @@ class WindowStateAnimator {
 
             mSurfaceShown = false;
             mSurfaceControl = null;
+            mSurfaceControlBlur = null;
             mWin.mHasSurface = false;
             mDrawState = NO_SURFACE;
         }
@@ -1015,6 +1059,9 @@ class WindowStateAnimator {
                     WindowManagerService.logSurface(mWin, "DESTROY PENDING", e);
                 }
                 mPendingDestroySurface.destroy();
+                if (mPendingDestroySurfaceBlur != null) {
+                    mPendingDestroySurfaceBlur.destroy();
+                }
                 mService.hideWallpapersLocked(mWin);
             }
         } catch (RuntimeException e) {
@@ -1024,6 +1071,7 @@ class WindowStateAnimator {
         }
         mSurfaceDestroyDeferred = false;
         mPendingDestroySurface = null;
+        mPendingDestroySurfaceBlur = null;
     }
 
     void computeShownFrameLocked() {
@@ -1399,6 +1447,9 @@ class WindowStateAnimator {
                 if (WindowManagerService.SHOW_TRANSACTIONS) WindowManagerService.logSurface(w,
                         "POS " + left + ", " + top, null);
                 mSurfaceControl.setPosition(left, top);
+                if (mSurfaceControlBlur != null) {
+                    mSurfaceControlBlur.setPosition(left, top);
+                }
             } catch (RuntimeException e) {
                 Slog.w(TAG, "Error positioning surface of " + w
                         + " pos=(" + left + "," + top + ")", e);
@@ -1418,6 +1469,9 @@ class WindowStateAnimator {
                 if (WindowManagerService.SHOW_TRANSACTIONS) WindowManagerService.logSurface(w,
                         "SIZE " + width + "x" + height, null);
                 mSurfaceControl.setSize(width, height);
+                if (mSurfaceControlBlur != null) {
+                    mSurfaceControlBlur.setSize(width, height);
+                }
                 mSurfaceControl.setMatrix(
                         mDsDx * w.mHScale, mDtDx * w.mVScale,
                         mDsDy * w.mHScale, mDtDy * w.mVScale);
@@ -1427,6 +1481,12 @@ class WindowStateAnimator {
                     final TaskStack stack = w.getStack();
                     if (stack != null) {
                         stack.startDimmingIfNeeded(this);
+                    }
+                }
+                if ((w.mAttrs.flags & LayoutParams.FLAG_BLUR_BEHIND) != 0) {
+                    final TaskStack stack = w.getStack();
+                    if (stack != null) {
+                        stack.startBlurringIfNeeded(this);
                     }
                 }
             } catch (RuntimeException e) {
@@ -1513,6 +1573,14 @@ class WindowStateAnimator {
                     mSurfaceControl.setMatrix(
                             mDsDx * w.mHScale, mDtDx * w.mVScale,
                             mDsDy * w.mHScale, mDtDy * w.mVScale);
+
+                    if (mSurfaceControlBlur != null) {
+                        mSurfaceControlBlur.setAlpha(mShownAlpha);
+                        mSurfaceControlBlur.setLayer(mAnimLayer-BLUR_LAYER_OFFSET);
+                        mSurfaceControlBlur.setMatrix(
+                            mDsDx*w.mHScale, mDtDx*w.mVScale,
+                            mDsDy*w.mHScale, mDtDy*w.mVScale);
+                    }
 
                     if (mLastHidden && mDrawState == HAS_DRAWN) {
                         if (WindowManagerService.SHOW_TRANSACTIONS) WindowManagerService.logSurface(w,
@@ -1604,6 +1672,9 @@ class WindowStateAnimator {
                 if (WindowManagerService.SHOW_TRANSACTIONS) WindowManagerService.logSurface(mWin,
                         "POS " + left + ", " + top, null);
                 mSurfaceControl.setPosition(mWin.mFrame.left + left, mWin.mFrame.top + top);
+                if (mSurfaceControlBlur != null) {
+                    mSurfaceControlBlur.setPosition(mWin.mFrame.left + left, mWin.mFrame.top + top);
+                }
                 updateSurfaceWindowCrop(false);
             } catch (RuntimeException e) {
                 Slog.w(TAG, "Error positioning surface of " + mWin
@@ -1782,6 +1853,9 @@ class WindowStateAnimator {
             if (mSurfaceControl != null) {
                 mSurfaceShown = true;
                 mSurfaceControl.show();
+                if (mSurfaceControlBlur != null) {
+                    mSurfaceControlBlur.show();
+                }
                 if (mWin.mTurnOnScreen) {
                     if (DEBUG_VISIBILITY) Slog.v(TAG,
                             "Show surface turning screen on: " + mWin);
@@ -1975,5 +2049,67 @@ class WindowStateAnimator {
         sb.append(mWin.mAttrs.getTitle());
         sb.append('}');
         return sb.toString();
+    }
+
+    void updateBlurWithMaskingState(WindowManager.LayoutParams attrs, boolean hideForced) {
+        boolean blurVisible = !hideForced && 0 != (attrs.privateFlags &
+                (WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING |
+                 WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING_SCALED) );
+        boolean blurScaleNeeded = blurVisible && 0 != (attrs.privateFlags &
+                WindowManager.LayoutParams.PRIVATE_FLAG_BLUR_WITH_MASKING_SCALED);
+
+        if (mSurfaceBlurShown == blurVisible && mSurfaceBlurScaleNeeded == blurScaleNeeded) return;
+        mSurfaceBlurShown = blurVisible;
+        mSurfaceBlurScaleNeeded = blurScaleNeeded;
+
+        if (!blurVisible) {
+            // we don't destroy mSurfaceControlBlur
+            if (mSurfaceControlBlur != null) {
+                mSurfaceControlBlur.hide();
+            } else {
+                // nothing to do
+            }
+            return;
+        }
+
+        if (mSurfaceControl == null) return;
+
+        if (blurVisible) {
+            if (null == mSurfaceControlBlur) {
+                int flags = SurfaceControl.HIDDEN | SurfaceControl.FX_SURFACE_BLUR;
+                final boolean isHwAccelerated = (attrs.flags &
+                        WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED) != 0;
+                final int format = isHwAccelerated ? PixelFormat.TRANSLUCENT : attrs.format;
+                if (!PixelFormat.formatHasAlpha(attrs.format)) {
+                    flags |= SurfaceControl.OPAQUE;
+                }
+
+                mSurfaceControlBlur = new SurfaceControl(
+                    mSession.mSurfaceSession,
+                    attrs.getTitle().toString() + " blur",
+                    (int)mSurfaceW, (int)mSurfaceH, format, flags);
+            }
+
+            SurfaceControl.openTransaction();
+            try {
+                mSurfaceControlBlur.setPosition(mSurfaceX, mSurfaceY);
+                mSurfaceControlBlur.setLayerStack(mLayerStack);
+                mSurfaceControlBlur.setLayer(mAnimLayer-BLUR_LAYER_OFFSET);
+                mSurfaceControlBlur.setAlpha(mShownAlpha);
+                mSurfaceControlBlur.setBlur(1.0f);
+                mSurfaceControlBlur.setBlurMaskSurface(mSurfaceControl);
+                final int BLUR_MASKING_SAMPLING = 4;
+                mSurfaceControlBlur.setBlurMaskSampling(blurScaleNeeded ? BLUR_MASKING_SAMPLING : 1);
+                mSurfaceControlBlur.setBlurMaskAlphaThreshold(attrs.blurMaskAlphaThreshold);
+            } catch (RuntimeException e) {
+                Slog.w(TAG, "Error creating blur surface", e);
+            } finally {
+                SurfaceControl.closeTransaction();
+            }
+
+            if (mSurfaceShown) {
+                mSurfaceControlBlur.show();
+            }
+        }
     }
 }

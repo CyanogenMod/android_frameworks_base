@@ -21,6 +21,7 @@ import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+import static android.content.pm.PackageManager.INSTALL_FAILED_UNINSTALLED_PREBUNDLE;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.content.pm.PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS;
 import static android.content.pm.PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_NEVER;
@@ -33,15 +34,20 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.IntentFilterVerificationInfo;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
 import android.os.FileUtils;
+import android.os.IBinder;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PatternMatcher;
 import android.os.Process;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -56,6 +62,8 @@ import android.util.SparseLongArray;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.util.ArrayUtils;
+import com.android.internal.R;
+import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.IndentingPrintWriter;
 import com.android.internal.util.JournaledFile;
@@ -67,6 +75,7 @@ import com.android.server.pm.PermissionsState.PermissionState;
 
 import java.io.FileNotFoundException;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -84,6 +93,7 @@ import android.content.pm.Signature;
 import android.content.pm.UserInfo;
 import android.content.pm.PackageUserState;
 import android.content.pm.VerifierDeviceIdentity;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.Log;
@@ -93,9 +103,13 @@ import android.util.SparseIntArray;
 import android.util.Xml;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -182,6 +196,9 @@ final class Settings {
     private static final String TAG_DEFAULT_BROWSER = "default-browser";
     private static final String TAG_VERSION = "version";
 
+    private static final String TAG_PROTECTED_COMPONENTS = "protected-components";
+    private static final String TAG_VISIBLE_COMPONENTS = "visible-components";
+
     private static final String ATTR_NAME = "name";
     private static final String ATTR_USER = "user";
     private static final String ATTR_CODE = "code";
@@ -214,6 +231,7 @@ final class Settings {
     private final File mPackageListFilename;
     private final File mStoppedPackagesFilename;
     private final File mBackupStoppedPackagesFilename;
+    private final File mPrebundledPackagesFilename;
 
     final ArrayMap<String, PackageSetting> mPackages =
             new ArrayMap<String, PackageSetting>();
@@ -280,6 +298,10 @@ final class Settings {
     // associated with particular intent filters.
     final SparseArray<PersistentPreferredIntentResolver> mPersistentPreferredActivities =
             new SparseArray<PersistentPreferredIntentResolver>();
+
+    // The persistent prebundled packages for a user
+    final SparseArray<HashSet<String>> mPrebundledPackages =
+            new SparseArray<HashSet<String>>();
 
     // For every user, it is used to find to which other users the intent can be forwarded.
     final SparseArray<CrossProfileIntentResolver> mCrossProfileIntentResolvers =
@@ -359,6 +381,7 @@ final class Settings {
         // Deprecated: Needed for migration
         mStoppedPackagesFilename = new File(mSystemDir, "packages-stopped.xml");
         mBackupStoppedPackagesFilename = new File(mSystemDir, "packages-stopped-backup.xml");
+        mPrebundledPackagesFilename = new File(mSystemDir, "prebundled-packages.list");
     }
 
     PackageSetting getPackageLPw(PackageParser.Package pkg, PackageSetting origPackage,
@@ -652,7 +675,10 @@ final class Settings {
                                     false, // hidden
                                     null, null, null,
                                     false, // blockUninstall
-                                    INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED, 0);
+                                    INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED, 0,
+                                    null,
+                                    null
+                                    );
                             writePackageRestrictionsLPr(user.id);
                         }
                     }
@@ -1021,6 +1047,15 @@ final class Settings {
         return pir;
     }
 
+    HashSet<String> editPrebundledPackagesLPw(int userId) {
+        HashSet<String> hashSet = mPrebundledPackages.get(userId);
+        if (hashSet == null) {
+            hashSet = new HashSet<String>();
+            mPrebundledPackages.put(userId, hashSet);
+        }
+        return hashSet;
+    }
+
     PersistentPreferredIntentResolver editPersistentPreferredActivitiesLPw(int userId) {
         PersistentPreferredIntentResolver ppir = mPersistentPreferredActivities.get(userId);
         if (ppir == null) {
@@ -1188,6 +1223,10 @@ final class Settings {
     private File getUserPackagesStateBackupFile(int userId) {
         return new File(Environment.getUserSystemDirectory(userId),
                 "package-restrictions-backup.xml");
+    }
+
+    private File getUserPrebundledStateFile(int userId) {
+        return new File(Environment.getUserSystemDirectory(userId), "prebundled-packages.list");
     }
 
     void writeAllUsersPackageRestrictionsLPr() {
@@ -1414,7 +1453,10 @@ final class Settings {
                                 false,  // hidden
                                 null, null, null,
                                 false, // blockUninstall
-                                INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED, 0);
+                                INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED, 0,
+                                null,
+                                null
+                                );
                     }
                     return;
                 }
@@ -1499,6 +1541,8 @@ final class Settings {
 
                     ArraySet<String> enabledComponents = null;
                     ArraySet<String> disabledComponents = null;
+                    ArraySet<String> protectedComponents = null;
+                    ArraySet<String> visibleComponents = null;
 
                     int packageDepth = parser.getDepth();
                     while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
@@ -1513,12 +1557,17 @@ final class Settings {
                             enabledComponents = readComponentsLPr(parser);
                         } else if (tagName.equals(TAG_DISABLED_COMPONENTS)) {
                             disabledComponents = readComponentsLPr(parser);
+                        } else if (tagName.equals(TAG_PROTECTED_COMPONENTS)) {
+                            protectedComponents = readComponentsLPr(parser);
+                        } else if (tagName.equals(TAG_VISIBLE_COMPONENTS)) {
+                            visibleComponents = readComponentsLPr(parser);
                         }
                     }
 
                     ps.setUserState(userId, enabled, installed, stopped, notLaunched, hidden,
                             enabledCaller, enabledComponents, disabledComponents, blockUninstall,
-                            verifState, linkGeneration);
+                            verifState, linkGeneration,
+                            protectedComponents, visibleComponents);
                 } else if (tagName.equals("preferred-activities")) {
                     readPreferredActivitiesLPw(parser, userId);
                 } else if (tagName.equals(TAG_PERSISTENT_PREFERRED_ACTIVITIES)) {
@@ -1758,7 +1807,11 @@ final class Settings {
                                 && ustate.disabledComponents.size() > 0)
                         || ustate.blockUninstall
                         || (ustate.domainVerificationStatus !=
-                            PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED)) {
+                            PackageManager.INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED)
+                        || (ustate.protectedComponents != null
+                                && ustate.protectedComponents.size() > 0)
+                        || (ustate.visibleComponents != null
+                                && ustate.visibleComponents.size() > 0)) {
                     serializer.startTag(null, TAG_PACKAGE);
                     serializer.attribute(null, ATTR_NAME, pkg.name);
                     if (DEBUG_MU) Log.i(TAG, "  pkg=" + pkg.name + ", state=" + ustate.enabled);
@@ -1815,7 +1868,26 @@ final class Settings {
                         }
                         serializer.endTag(null, TAG_DISABLED_COMPONENTS);
                     }
-
+                    if (ustate.protectedComponents != null
+                            && ustate.protectedComponents.size() > 0) {
+                        serializer.startTag(null, TAG_PROTECTED_COMPONENTS);
+                        for (final String name : ustate.protectedComponents) {
+                            serializer.startTag(null, TAG_ITEM);
+                            serializer.attribute(null, ATTR_NAME, name);
+                            serializer.endTag(null, TAG_ITEM);
+                        }
+                        serializer.endTag(null, TAG_PROTECTED_COMPONENTS);
+                    }
+                    if (ustate.visibleComponents != null
+                            && ustate.visibleComponents.size() > 0) {
+                        serializer.startTag(null, TAG_VISIBLE_COMPONENTS);
+                        for (final String name : ustate.visibleComponents) {
+                            serializer.startTag(null, TAG_ITEM);
+                            serializer.attribute(null, ATTR_NAME, name);
+                            serializer.endTag(null, TAG_ITEM);
+                        }
+                        serializer.endTag(null, TAG_VISIBLE_COMPONENTS);
+                    }
                     serializer.endTag(null, TAG_PACKAGE);
                 }
             }
@@ -2301,6 +2373,165 @@ final class Settings {
         }
     }
 
+    // Migrate from previous prebundled packages file to new one
+    void migratePrebundedPackagesIfNeededLPr(List<UserInfo> users, Installer installer) {
+        if (mPrebundledPackagesFilename.exists()) {
+            // Read old file
+            editPrebundledPackagesLPw(UserHandle.USER_OWNER);
+            readPrebundledPackagesOldLPw();
+            mPrebundledPackagesFilename.delete();
+            // Migrate to new file based on user
+            writePrebundledPackagesLPr(UserHandle.USER_OWNER);
+        } else {
+            if (users == null) {
+                readPrebundledPackagesLPr(UserHandle.USER_OWNER);
+            } else {
+                for (UserInfo user : users) {
+                    editPrebundledPackagesLPw(user.id);
+                    readPrebundledPackagesLPr(user.id);
+                    // mark all existing users as having packages installed from OWNER
+                    try {
+                        markAllAsInstalledForUser(user.id, installer);
+                    } catch (PackageManagerException e) {
+                        Log.d(TAG, e.toString());
+                    }
+                }
+            }
+        }
+    }
+
+    void writePrebundledPackagesLPr(int userId) {
+        editPrebundledPackagesLPw(userId);
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(
+                    new BufferedWriter(new FileWriter(getUserPrebundledStateFile(userId), false)));
+
+            for (String packageName : mPrebundledPackages.get(userId)) {
+                writer.println(packageName);
+            }
+        } catch (IOException e) {
+            Slog.e(PackageManagerService.TAG, "Unable to write prebundled package list", e);
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+    }
+
+    // This is done for an intermediate migration step on upgrade
+    void readPrebundledPackagesOldLPw() {
+        if (!mPrebundledPackagesFilename.exists()) {
+            return;
+        }
+
+        readPrebundledPackagesForUserFromFileLPr(UserHandle.USER_OWNER,
+                mPrebundledPackagesFilename);
+    }
+
+    void readPrebundledPackagesLPr(int userId) {
+        if (!getUserPrebundledStateFile(userId).exists()) {
+            return;
+        }
+        readPrebundledPackagesForUserFromFileLPr(userId, getUserPrebundledStateFile(userId));
+    }
+
+    private void readPrebundledPackagesForUserFromFileLPr(int userId, File file) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String packageName = reader.readLine();
+            while (packageName != null) {
+                if (!TextUtils.isEmpty(packageName)) {
+                    mPrebundledPackages.get(userId).add(packageName);
+                }
+                packageName = reader.readLine();
+            }
+        } catch (IOException e) {
+            Slog.e(PackageManagerService.TAG, "Unable to read prebundled package list", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {}
+            }
+        }
+    }
+
+    private void markAllAsInstalledForUser(int userHandle, Installer installer)
+            throws PackageManagerException {
+        if (mPrebundledPackages.get(userHandle) == null) {
+            throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
+                    "Failure migrating prebundled packages to existing user " + userHandle);
+        }
+
+        // grab all the packages from the user account, move them over
+        for (String s : mPrebundledPackages.get(UserHandle.USER_OWNER)) {
+            mPrebundledPackages.get(userHandle).add(s);
+        }
+
+        for (PackageSetting ps : mPackages.values()) {
+            if (ps.pkg == null || ps.pkg.applicationInfo == null) {
+                continue;
+            }
+            // Mark the app as installed
+            boolean setInstalled =
+                    wasPrebundledPackageInstalledLPr(UserHandle.USER_OWNER, ps.name);
+            ps.setInstalled(setInstalled, userHandle);
+            // Tell the installer to create the user data for the application
+            installer.createUserData(ps.name,
+                    UserHandle.getUid(userHandle, ps.appId), userHandle,
+                    ps.pkg.applicationInfo.seinfo);
+        }
+        // Write the package restrications
+        writePackageRestrictionsLPr(userHandle);
+    }
+
+    void markPrebundledPackageInstalledLPr(int userId, String packageName) {
+        editPrebundledPackagesLPw(userId);
+        mPrebundledPackages.get(userId).add(packageName);
+    }
+
+    boolean wasPrebundledPackageInstalledLPr(int userId, String packageName) {
+        if (mPrebundledPackages.get(userId) == null) {
+            return false;
+        }
+        return mPrebundledPackages.get(userId).contains(packageName);
+    }
+
+    boolean shouldPrebundledPackageBeInstalled(Resources res, String packageName,
+                                            Resources configuredResources) {
+        // Default fallback on lack of bad package
+        if (TextUtils.isEmpty(packageName)) {
+            return false;
+        }
+
+        // Configured resources can be null if the device
+        // is not region locked. In such cases, fall back to
+        // the default resources object
+        Resources resources = configuredResources;
+        if (configuredResources == null) {
+            resources = res;
+        }
+
+        // If the package is compatible with the current region, install it
+        // Note : If a package needs to be installed only if the device is
+        // not provisioned, overlay values/config_region_locked_packages
+        // TODO change config_region_locked_packages to something that is
+        // not confusing inside a non region resource bucket
+        String[] prebundledArray
+                = resources.getStringArray(R.array.config_region_locked_packages);
+        if (ArrayUtils.contains(prebundledArray, packageName)) {
+            return true;
+        }
+
+        // If the package is not compatible with the current region, check if its locked
+        // to any other region before installing it.
+        prebundledArray = resources
+                .getStringArray(R.array.config_restrict_to_region_locked_devices);
+        return !ArrayUtils.contains(prebundledArray, packageName);
+    }
+
     void writeDisabledSysPackageLPr(XmlSerializer serializer, final PackageSetting pkg)
             throws java.io.IOException {
         serializer.startTag(null, "updated-package");
@@ -2487,7 +2718,7 @@ final class Settings {
     }
 
     boolean readLPw(PackageManagerService service, List<UserInfo> users, int sdkVersion,
-            boolean onlyCore) {
+            boolean onlyCore, Installer installer) {
         FileInputStream str = null;
         if (mBackupSettingsFilename.exists()) {
             try {
@@ -2741,6 +2972,8 @@ final class Settings {
             }
         }
 
+        migratePrebundedPackagesIfNeededLPr(users, installer);
+
         /*
          * Make sure all the updated system packages have their shared users
          * associated with them.
@@ -2962,6 +3195,11 @@ final class Settings {
             for (int i=0; i<ri.size(); i++) {
                 ActivityInfo ai = ri.get(i).activityInfo;
                 set[i] = new ComponentName(ai.packageName, ai.name);
+                // We have already discovered the best third party match,
+                // so we only need to finish filling set with all results.
+                if (haveNonSys != null) {
+                    continue;
+                }
                 if ((ai.applicationInfo.flags&ApplicationInfo.FLAG_SYSTEM) == 0) {
                     if (ri.get(i).match >= thirdPartyMatch) {
                         // Keep track of the best match we find of all third
@@ -2970,7 +3208,6 @@ final class Settings {
                         if (PackageManagerService.DEBUG_PREFERRED) Log.d(TAG, "Result "
                                 + ai.packageName + "/" + ai.name + ": non-system!");
                         haveNonSys = set[i];
-                        break;
                     }
                 } else if (cn.getPackageName().equals(ai.packageName)
                         && cn.getClassName().equals(ai.name)) {
@@ -3661,7 +3898,9 @@ final class Settings {
                 continue;
             }
             // Only system apps are initially installed.
-            ps.setInstalled((ps.pkgFlags&ApplicationInfo.FLAG_SYSTEM) != 0, userHandle);
+            boolean setInstalled = ((ps.pkgFlags&ApplicationInfo.FLAG_SYSTEM) != 0) ||
+                    wasPrebundledPackageInstalledLPr(UserHandle.USER_OWNER, ps.name);
+            ps.setInstalled(setInstalled, userHandle);
             // Need to create a data directory for all apps under this user.
             installer.createUserData(ps.volumeUuid, ps.name,
                     UserHandle.getUid(userHandle, ps.appId), userHandle,
@@ -3670,6 +3909,7 @@ final class Settings {
         applyDefaultPreferredAppsLPw(service, userHandle);
         writePackageRestrictionsLPr(userHandle);
         writePackageListLPr(userHandle);
+        writePrebundledPackagesLPr(userHandle);
     }
 
     void removeUserLPw(int userId) {
@@ -3678,9 +3918,12 @@ final class Settings {
             entry.getValue().removeUser(userId);
         }
         mPreferredActivities.remove(userId);
+        mPrebundledPackages.remove(userId);
         File file = getUserPackagesStateFile(userId);
         file.delete();
         file = getUserPackagesStateBackupFile(userId);
+        file.delete();
+        file = getUserPrebundledStateFile(userId);
         file.delete();
         removeCrossProfileIntentFiltersLPw(userId);
 
@@ -3856,7 +4099,7 @@ final class Settings {
             if (pkgSetting.getNotLaunched(userId)) {
                 if (pkgSetting.installerPackageName != null) {
                     yucky.sendPackageBroadcast(Intent.ACTION_PACKAGE_FIRST_LAUNCH,
-                            pkgSetting.name, null,
+                            pkgSetting.name, null, null,
                             pkgSetting.installerPackageName, null, new int[] {userId});
                 }
                 pkgSetting.setNotLaunched(false, userId);
@@ -3864,6 +4107,57 @@ final class Settings {
             return true;
         }
         return false;
+    }
+
+    void removeStalePermissions() {
+        /*
+         * Remove any permission that is not currently declared by any package
+         */
+        List<BasePermission> permissionsToRemove = new ArrayList<>();
+        for (BasePermission basePerm : mPermissions.values()) {
+            // Ignore permissions declared by the system
+            if (basePerm.sourcePackage.equals("android") ||
+                    basePerm.sourcePackage.equals("cyanogenmod.platform")) {
+                continue;
+            }
+            // Ignore permissions other than NORMAL (ignore DYNAMIC and BUILTIN), like the
+            // ones based on permission-trees
+            if (basePerm.type != BasePermission.TYPE_NORMAL) {
+                continue;
+            }
+
+            if (!mPackages.containsKey(basePerm.sourcePackage)) {
+                // Package doesn't exist
+                permissionsToRemove.add(basePerm);
+                continue;
+            }
+            PackageSetting pkgSettings = mPackages.get(basePerm.sourcePackage);
+            if (pkgSettings.pkg == null || pkgSettings.pkg.permissions == null) {
+                // Package doesn't declare permissions
+                permissionsToRemove.add(basePerm);
+                continue;
+            }
+            boolean found = false;
+            for (PackageParser.Permission perm : pkgSettings.pkg.permissions) {
+                if (perm.info.name != null && basePerm.name.equals(perm.info.name)) {
+                    // The original package still declares the permission
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // The original package doesn't currently declare the permission
+                permissionsToRemove.add(basePerm);
+            }
+        }
+        // And now remove all stale permissions
+        for (BasePermission basePerm : permissionsToRemove) {
+            String msg = "Removed stale permission: " + basePerm.name + " originally " +
+                    "assigned to " + basePerm.sourcePackage + "\n";
+            mReadMessages.append(msg);
+            PackageManagerService.reportSettingsProblem(Log.WARN, msg);
+            mPermissions.remove(basePerm.name);
+        }
     }
 
     List<UserInfo> getAllUsers() {

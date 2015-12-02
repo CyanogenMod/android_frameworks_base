@@ -20,8 +20,10 @@ import android.app.Activity;
 import android.app.LoadedApk;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.CaptivePortal;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.Network;
@@ -32,6 +34,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.util.TypedValue;
@@ -57,6 +60,11 @@ import java.util.Random;
 public class CaptivePortalLoginActivity extends Activity {
     private static final String TAG = "CaptivePortalLogin";
     private static final String DEFAULT_SERVER = "connectivitycheck.gstatic.com";
+
+    private static final String EXTRA_STATUS_BAR_COLOR = "status_bar_color";
+    private static final String EXTRA_ACTION_BAR_COLOR = "action_bar_color";
+    private static final String EXTRA_PROGRESS_COLOR = "progress_bar_color";
+
     private static final int SOCKET_TIMEOUT_MS = 10000;
 
     private enum Result { DISMISSED, UNWANTED, WANTED_AS_IS };
@@ -81,10 +89,25 @@ public class CaptivePortalLoginActivity extends Activity {
         } catch (MalformedURLException e) {
             // System misconfigured, bail out in a way that at least provides network access.
             Log.e(TAG, "Invalid captive portal URL, server=" + server);
+            setResult(Activity.RESULT_CANCELED);
             done(Result.WANTED_AS_IS);
         }
         mNetwork = getIntent().getParcelableExtra(ConnectivityManager.EXTRA_NETWORK);
         mCaptivePortal = getIntent().getParcelableExtra(ConnectivityManager.EXTRA_CAPTIVE_PORTAL);
+
+        final Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_STATUS_BAR_COLOR)) {
+            int color = intent.getIntExtra(EXTRA_STATUS_BAR_COLOR, -1);
+            if (color != -1) {
+                getWindow().setStatusBarColor(color);
+            }
+        }
+        if (intent.hasExtra(EXTRA_ACTION_BAR_COLOR)) {
+            int color = intent.getIntExtra(EXTRA_ACTION_BAR_COLOR, -1);
+            if (color != -1) {
+                getActionBar().setBackgroundDrawable(new ColorDrawable(color));
+            }
+        }
 
         // Also initializes proxy system properties.
         mCm.bindProcessToNetwork(mNetwork);
@@ -94,6 +117,14 @@ public class CaptivePortalLoginActivity extends Activity {
         setContentView(R.layout.activity_captive_portal_login);
 
         getActionBar().setDisplayShowHomeEnabled(false);
+
+        ProgressBar myProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        if (intent.hasExtra(EXTRA_PROGRESS_COLOR)) {
+            int color = intent.getIntExtra(EXTRA_PROGRESS_COLOR, -1);
+            if (color != -1) {
+                myProgressBar.setProgressTintList(ColorStateList.valueOf(color));
+            }
+        }
 
         // Exit app if Network disappears.
         final NetworkCapabilities networkCapabilities = mCm.getNetworkCapabilities(mNetwork);
@@ -165,6 +196,7 @@ public class CaptivePortalLoginActivity extends Activity {
                 mCaptivePortal.useNetwork();
                 break;
         }
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
@@ -298,6 +330,11 @@ public class CaptivePortalLoginActivity extends Activity {
             } else if (mPagesLoaded == 2) {
                 // Prevent going back to empty first page.
                 view.clearHistory();
+            } else {
+                if (TextUtils.isEmpty(view.getUrl()) || view.getUrl().contains("text/html")) {
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
             }
             testForCaptivePortal();
         }

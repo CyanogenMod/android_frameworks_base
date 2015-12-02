@@ -84,7 +84,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         mHandler = new H(host.getLooper());
     }
 
-    public boolean supportsDualTargets() {
+    public boolean hasDualTargetsDetails() {
         return false;
     }
 
@@ -335,9 +335,14 @@ public abstract class QSTile<TState extends State> implements Listenable {
         CastController getCastController();
         FlashlightController getFlashlightController();
         KeyguardMonitor getKeyguardMonitor();
+        boolean isEditing();
+        void setEditing(boolean editing);
+        void resetTiles();
 
         public interface Callback {
             void onTilesChanged();
+            void setEditing(boolean editing);
+            boolean isEditing();
         }
     }
 
@@ -402,13 +407,14 @@ public abstract class QSTile<TState extends State> implements Listenable {
         @Override
         public Drawable getDrawable(Context context) {
             // workaround: get a clean state for every new AVD
-            final AnimatedVectorDrawable d = (AnimatedVectorDrawable) context.getDrawable(mResId)
-                    .getConstantState().newDrawable();
-            d.start();
-            if (mAllowAnimation) {
-                mAllowAnimation = false;
-            } else {
-                d.stop(); // skip directly to end state
+            final Drawable d = super.getDrawable(context).getConstantState().newDrawable();
+            if (d instanceof AnimatedVectorDrawable) {
+                ((AnimatedVectorDrawable)d).start();
+                if (mAllowAnimation) {
+                    mAllowAnimation = false;
+                } else {
+                    ((AnimatedVectorDrawable)d).stop(); // skip directly to end state
+                }
             }
             return d;
         }

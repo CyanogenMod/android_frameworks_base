@@ -830,6 +830,51 @@ public abstract class PackageManager {
     public static final int INSTALL_FAILED_ABORTED = -115;
 
     /**
+     * Used by themes
+     * Installation failed return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)}
+     * if the system failed to install the theme because aapt could not compile the app
+     * @hide
+     */
+    public static final int INSTALL_FAILED_THEME_AAPT_ERROR = -400;
+
+    /**
+     * Used by themes
+     * Installation failed return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)}
+     * if the system failed to install the theme because idmap failed
+     * apps.
+     * @hide
+     */
+    public static final int INSTALL_FAILED_THEME_IDMAP_ERROR = -401;
+
+    /**
+     * Used by themes
+     * Installation failed return code: this is passed to the {@link IPackageInstallObserver} by
+     * {@link #installPackage(android.net.Uri, IPackageInstallObserver, int)}
+     * if the system failed to install the theme for an unknown reason
+     * apps.
+     * @hide
+     */
+    public static final int INSTALL_FAILED_THEME_UNKNOWN_ERROR = -402;
+
+    /**
+     * Used for prebundles
+     * Installation failed for a prebundled app because the user previously uninstalled it
+     * and we don't want to bring it back
+     * @hide
+     */
+    public static final int INSTALL_FAILED_UNINSTALLED_PREBUNDLE = -403;
+
+    /**
+     * Used for prebundles
+     * Installation failed for a prebundled app because it wasn't needed in the default
+     * mobile country exported by the hardware
+     * @hide
+     */
+    public static final int INSTALL_FAILED_REGION_LOCKED_PREBUNDLE = -404; //bloat not found
+
+    /**
      * Flag parameter for {@link #deletePackage} to indicate that you don't want to delete the
      * package's data directory.
      *
@@ -1910,6 +1955,20 @@ public abstract class PackageManager {
     @SystemApi
     public static final String EXTRA_REQUEST_PERMISSIONS_RESULTS
             = "android.content.pm.extra.REQUEST_PERMISSIONS_RESULTS";
+
+    /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has set to protected status
+     * @hide
+     */
+    public static final boolean COMPONENT_PROTECTED_STATUS = false;
+
+    /**
+     * Flag for {@link #setComponentProtectedSetting(android.content.ComponentName, boolean)}:
+     * This component or application has been explicitly set to visible status
+     * @hide
+     */
+    public static final boolean COMPONENT_VISIBLE_STATUS = true;
 
     /**
      * String extra for {@link PackageInstallObserver} in the 'extras' Bundle in case of
@@ -3511,6 +3570,18 @@ public abstract class PackageManager {
     public abstract Resources getResourcesForApplicationAsUser(String appPackageName, int userId)
             throws NameNotFoundException;
 
+    /** @hide */
+    public abstract Resources getThemedResourcesForApplication(ApplicationInfo app,
+            String themePkgName) throws NameNotFoundException;
+
+    /** @hide */
+    public abstract Resources getThemedResourcesForApplication(String appPackageName,
+            String themePkgName) throws NameNotFoundException;
+
+    /** @hide */
+    public abstract Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePkgName, int userId) throws NameNotFoundException;
+
     /**
      * Retrieve overall information about an application package defined
      * in a package archive file
@@ -4484,6 +4555,12 @@ public abstract class PackageManager {
     public abstract @NonNull PackageInstaller getPackageInstaller();
 
     /**
+     * Update Component protection state
+     * @hide
+     */
+    public abstract void setComponentProtectedSetting(ComponentName componentName, boolean newState);
+
+    /**
      * Adds a {@link CrossProfileIntentFilter}. After calling this method all intents sent from the
      * user with id sourceUserId can also be be resolved by activities in the user with id
      * targetUserId if they match the specified intent filter.
@@ -4709,4 +4786,22 @@ public abstract class PackageManager {
             }
         }
     }
+
+    /**
+     * Updates the theme icon res id for the new theme
+     * @hide
+     */
+    public abstract void updateIconMaps(String pkgName);
+
+    /**
+     * Used to compile theme resources for a given theme
+     * @param themePkgName
+     * @return A value of 0 indicates success.  Possible errors returned are:
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_AAPT_ERROR},
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_IDMAP_ERROR}, or
+     * {@link android.content.pm.PackageManager#INSTALL_FAILED_THEME_UNKNOWN_ERROR}
+     *
+     * @hide
+     */
+    public abstract int processThemeResources(String themePkgName);
 }

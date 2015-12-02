@@ -2218,10 +2218,10 @@ public class BackupManagerService {
     // fire off a backup agent, blocking until it attaches or times out
     IBackupAgent bindToAgentSynchronous(ApplicationInfo app, int mode) {
         IBackupAgent agent = null;
-        synchronized(mAgentConnectLock) {
-            mConnecting = true;
-            mConnectedAgent = null;
-            try {
+        try {
+            synchronized(mAgentConnectLock) {
+                mConnecting = true;
+                mConnectedAgent = null;
                 if (mActivityManager.bindBackupAgent(app, mode)) {
                     Slog.d(TAG, "awaiting agent for " + app);
 
@@ -2235,7 +2235,6 @@ public class BackupManagerService {
                         } catch (InterruptedException e) {
                             // just bail
                             Slog.w(TAG, "Interrupted: " + e);
-                            mActivityManager.clearPendingBackup();
                             return null;
                         }
                     }
@@ -2243,14 +2242,22 @@ public class BackupManagerService {
                     // if we timed out with no connect, abort and move on
                     if (mConnecting == true) {
                         Slog.w(TAG, "Timeout waiting for agent " + app);
-                        mActivityManager.clearPendingBackup();
                         return null;
                     }
                     if (DEBUG) Slog.i(TAG, "got agent " + mConnectedAgent);
                     agent = mConnectedAgent;
                 }
-            } catch (RemoteException e) {
+            }
+        } catch (RemoteException e) {
                 // can't happen - ActivityManager is local
+        } finally {
+            // failed to bind backup agent, clear pending backup
+            if (agent == null) {
+                try {
+                    mActivityManager.clearPendingBackup();
+                } catch (RemoteException e) {
+                    // can't happen - ActivityManager is local
+                }
             }
         }
         return agent;
@@ -2931,6 +2938,12 @@ public class BackupManagerService {
 
             final String pkgName = mCurrentPackage.packageName;
             final long filepos = mBackupDataName.length();
+            if (mBackupData == null) {
+                failAgent(mAgentBinder, "Backup data was null: " + mBackupDataName);
+                addBackupTrace("backup data was null: " + mBackupDataName);
+                agentErrorCleanup();
+                return;
+            }
             FileDescriptor fd = mBackupData.getFileDescriptor();
             try {
                 // If it's a 3rd party app, see whether they wrote any protected keys
@@ -7935,6 +7948,11 @@ if (MORE_DEBUG) Slog.v(TAG, "   + got " + nRead + "; now wanting " + (size - soF
                             }
                             int toCopy = result;
                             while (toCopy > 0) {
+                                if (!mEngine.isRunning() && RestoreEngine.SUCCESS != mEngine.getResult()) {
+                                    Slog.e(TAG, "RestoreEngine fail");
+                                    // throw IOException to abandon this package's restore
+                                    throw new IOException();
+                                }
                                 int n = transportIn.read(buffer, 0, toCopy);
                                 engineOut.write(buffer, 0, n);
                                 toCopy -= n;

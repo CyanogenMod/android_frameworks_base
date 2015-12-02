@@ -92,12 +92,17 @@ android_media_MediaProfiles_native_get_video_encoder_cap(JNIEnv *env, jobject /*
     int maxFrameWidth = sProfiles->getVideoEncoderParamByName("enc.vid.width.max", encoder);
     int minFrameHeight = sProfiles->getVideoEncoderParamByName("enc.vid.height.min", encoder);
     int maxFrameHeight = sProfiles->getVideoEncoderParamByName("enc.vid.height.max", encoder);
+    int maxHFRFrameWidth = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.width.max", encoder);
+    int maxHFRFrameHeight = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.height.max", encoder);
+    int maxHFRMode = sProfiles->getVideoEncoderParamByName("enc.vid.hfr.mode.max", encoder);
 
     // Check on the values retrieved
     if ((minBitRate == -1 || maxBitRate == -1) ||
         (minFrameRate == -1 || maxFrameRate == -1) ||
         (minFrameWidth == -1 || maxFrameWidth == -1) ||
-        (minFrameHeight == -1 || maxFrameHeight == -1)) {
+        (minFrameHeight == -1 || maxFrameHeight == -1) ||
+        (maxHFRFrameWidth == -1 || maxHFRFrameHeight == -1) ||
+        (maxHFRMode == -1)) {
 
         jniThrowException(env, "java/lang/RuntimeException", "Error retrieving video encoder capability params");
         return NULL;
@@ -105,14 +110,16 @@ android_media_MediaProfiles_native_get_video_encoder_cap(JNIEnv *env, jobject /*
 
     // Construct an instance of the VideoEncoderCap and set its member variables
     jclass videoEncoderCapClazz = env->FindClass("android/media/EncoderCapabilities$VideoEncoderCap");
-    jmethodID videoEncoderCapConstructorMethodID = env->GetMethodID(videoEncoderCapClazz, "<init>", "(IIIIIIIII)V");
+    jmethodID videoEncoderCapConstructorMethodID = env->GetMethodID(videoEncoderCapClazz, "<init>", "(IIIIIIIIIIII)V");
     jobject cap = env->NewObject(videoEncoderCapClazz,
                                  videoEncoderCapConstructorMethodID,
                                  static_cast<int>(encoder),
                                  minBitRate, maxBitRate,
                                  minFrameRate, maxFrameRate,
                                  minFrameWidth, maxFrameWidth,
-                                 minFrameHeight, maxFrameHeight);
+                                 minFrameHeight, maxFrameHeight,
+                                 maxHFRFrameWidth, maxHFRFrameHeight,
+                                 maxHFRMode);
     return cap;
 }
 

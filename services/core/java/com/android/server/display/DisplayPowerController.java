@@ -19,6 +19,7 @@ package com.android.server.display;
 import com.android.internal.app.IBatteryStats;
 import com.android.server.LocalServices;
 import com.android.server.am.BatteryStatsService;
+import com.android.server.lights.LightsManager;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -123,6 +124,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
 
     // Battery stats.
     private final IBatteryStats mBatteryStats;
+
+    // The lights service.
+    private final LightsManager mLights;
 
     // The sensor manager.
     private final SensorManager mSensorManager;
@@ -247,6 +251,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
     // The controller for the automatic brightness level.
     private AutomaticBrightnessController mAutomaticBrightnessController;
 
+    // The controller for LiveDisplay
+    private final LiveDisplayController mLiveDisplayController;
+
     // Animators.
     private ObjectAnimator mColorFadeOnAnimator;
     private ObjectAnimator mColorFadeOffAnimator;
@@ -262,10 +269,13 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         mCallbacks = callbacks;
 
         mBatteryStats = BatteryStatsService.getService();
+        mLights = LocalServices.getService(LightsManager.class);
         mSensorManager = sensorManager;
         mWindowManagerPolicy = LocalServices.getService(WindowManagerPolicy.class);
         mBlanker = blanker;
         mContext = context;
+
+        mLiveDisplayController = new LiveDisplayController(context, handler.getLooper());
 
         final Resources resources = context.getResources();
         final int screenBrightnessSettingMinimum = clampAbsoluteBrightness(resources.getInteger(
@@ -343,12 +353,12 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 if (bottom < screenBrightnessRangeMinimum) {
                     screenBrightnessRangeMinimum = bottom;
                 }
-                mAutomaticBrightnessController = new AutomaticBrightnessController(this,
+                mAutomaticBrightnessController = new AutomaticBrightnessController(mContext, this,
                         handler.getLooper(), sensorManager, screenAutoBrightnessSpline,
                         lightSensorWarmUpTimeConfig, screenBrightnessRangeMinimum,
                         mScreenBrightnessRangeMaximum, dozeScaleFactor, lightSensorRate,
                         brighteningLightDebounce, darkeningLightDebounce,
-                        autoBrightnessResetAmbientLuxAfterWarmUp);
+                        autoBrightnessResetAmbientLuxAfterWarmUp, mLiveDisplayController);
             }
         }
 
@@ -573,6 +583,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             } else {
                 setProximitySensorEnabled(false);
                 mWaitingForNegativeProximity = false;
+                mProximity = PROXIMITY_UNKNOWN;
             }
             if (mScreenOffBecauseOfProximity
                     && mProximity != PROXIMITY_POSITIVE) {
@@ -595,6 +606,14 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         // Use zero brightness when screen is off.
         if (state == Display.STATE_OFF) {
             brightness = PowerManager.BRIGHTNESS_OFF;
+            mLights.getLight(LightsManager.LIGHT_ID_BUTTONS).setBrightness(brightness);
+            mLights.getLight(LightsManager.LIGHT_ID_KEYBOARD).setBrightness(brightness);
+        }
+
+        // Disable button lights when dozing
+        if (state == Display.STATE_DOZE || state == Display.STATE_DOZE_SUSPEND) {
+            mLights.getLight(LightsManager.LIGHT_ID_BUTTONS).setBrightness(PowerManager.BRIGHTNESS_OFF);
+            mLights.getLight(LightsManager.LIGHT_ID_KEYBOARD).setBrightness(PowerManager.BRIGHTNESS_OFF);
         }
 
         // Configure auto-brightness.
@@ -691,6 +710,9 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 animateScreenBrightness(brightness, 0);
             }
         }
+
+        // Update LiveDisplay now
+        mLiveDisplayController.updateLiveDisplay();
 
         // Determine whether the display is ready for use in the newly requested state.
         // Note that we do not wait for the brightness ramp animation to complete before
@@ -1129,6 +1151,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
             mAutomaticBrightnessController.dump(pw);
         }
 
+        mLiveDisplayController.dump(pw);
     }
 
     private static String proximityToString(int state) {
@@ -1188,6 +1211,10 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
 
     private static int clampAbsoluteBrightness(int value) {
         return MathUtils.constrain(value, PowerManager.BRIGHTNESS_OFF, PowerManager.BRIGHTNESS_ON);
+    }
+
+    void systemReady() {
+        mLiveDisplayController.systemReady();
     }
 
     private final class DisplayControllerHandler extends Handler {

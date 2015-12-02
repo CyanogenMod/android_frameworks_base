@@ -22,6 +22,8 @@ import android.hardware.location.IActivityRecognitionHardware;
  * Activity Recognition Hardware watcher. This interface can be used to receive interfaces to
  * implementations of {@link IActivityRecognitionHardware}.
  *
+ * @deprecated use {@link IActivityRecognitionHardwareClient} instead.
+
  * @hide
  */
 interface IActivityRecognitionHardwareWatcher {

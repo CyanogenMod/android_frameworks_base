@@ -22,6 +22,8 @@ import com.android.server.twilight.TwilightListener;
 import com.android.server.twilight.TwilightManager;
 import com.android.server.twilight.TwilightState;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -193,11 +195,18 @@ class AutomaticBrightnessController {
     private int mBrightnessAdjustmentSampleOldBrightness;
     private float mBrightnessAdjustmentSampleOldGamma;
 
-    public AutomaticBrightnessController(Callbacks callbacks, Looper looper,
+    // Night mode color temperature adjustments
+    private final LiveDisplayController mLiveDisplay;
+
+    private final Context mContext;
+
+    public AutomaticBrightnessController(Context context, Callbacks callbacks, Looper looper,
             SensorManager sensorManager, Spline autoBrightnessSpline, int lightSensorWarmUpTime,
             int brightnessMin, int brightnessMax, float dozeScaleFactor,
             int lightSensorRate, long brighteningLightDebounceConfig,
-            long darkeningLightDebounceConfig, boolean resetAmbientLuxAfterWarmUpConfig) {
+            long darkeningLightDebounceConfig, boolean resetAmbientLuxAfterWarmUpConfig,
+            LiveDisplayController ldc) {
+        mContext = context;
         mCallbacks = callbacks;
         mTwilight = LocalServices.getService(TwilightManager.class);
         mSensorManager = sensorManager;
@@ -210,6 +219,7 @@ class AutomaticBrightnessController {
         mBrighteningLightDebounceConfig = brighteningLightDebounceConfig;
         mDarkeningLightDebounceConfig = darkeningLightDebounceConfig;
         mResetAmbientLuxAfterWarmUpConfig = resetAmbientLuxAfterWarmUpConfig;
+        mLiveDisplay = ldc;
 
         mHandler = new AutomaticBrightnessHandler(looper);
         mAmbientLightRingBuffer = new AmbientLightRingBuffer(mLightSensorRate);
@@ -477,6 +487,9 @@ class AutomaticBrightnessController {
                 Slog.d(TAG, "updateAutoBrightness: adjGamma=" + adjGamma);
             }
         }
+
+        // Update LiveDisplay with the current lux
+        mLiveDisplay.updateLiveDisplay(mAmbientLux);
 
         if (USE_TWILIGHT_ADJUSTMENT) {
             TwilightState state = mTwilight.getCurrentState();

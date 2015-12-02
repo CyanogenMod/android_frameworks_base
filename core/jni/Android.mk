@@ -20,6 +20,10 @@ ifneq ($(ENABLE_CPUSETS),)
     LOCAL_CFLAGS += -DENABLE_CPUSETS
 endif
 
+ifneq ($(ENABLE_SCHED_BOOST),)
+    LOCAL_CFLAGS += -DENABLE_SCHED_BOOST
+endif
+
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
 
 LOCAL_CFLAGS += -DU_USING_ICU_NAMESPACE=0
@@ -171,8 +175,7 @@ LOCAL_SRC_FILES:= \
     com_android_internal_net_NetworkStatsFactory.cpp \
     com_android_internal_os_Zygote.cpp \
     com_android_internal_util_VirtualRefBasePtr.cpp \
-    com_android_internal_view_animation_NativeInterpolatorFactoryHelper.cpp \
-    com_android_internal_app_ActivityTrigger.cpp
+    com_android_internal_view_animation_NativeInterpolatorFactoryHelper.cpp
 
 LOCAL_C_INCLUDES += \
     $(JNI_H_INCLUDE) \

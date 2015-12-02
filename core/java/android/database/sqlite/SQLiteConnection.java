@@ -387,6 +387,8 @@ public final class SQLiteConnection implements CancellationSignal.OnCancelListen
             } finally {
                 execute(success ? "COMMIT" : "ROLLBACK", null, null);
             }
+        } catch (SQLiteDatabaseCorruptException ex) {
+            throw ex;
         } catch (RuntimeException ex) {
             throw new SQLiteException("Failed to change locale for db '" + mConfiguration.label
                     + "' to '" + newLocale + "'.", ex);

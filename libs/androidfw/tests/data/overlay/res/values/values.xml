@@ -20,4 +20,8 @@
         <item>10</item>
         <item>11</item>
     </integer-array>
+
+    <dimen name="dimen1">56sp</dimen>
+    <dimen name="dimen2">12dp</dimen>
+
 </resources>

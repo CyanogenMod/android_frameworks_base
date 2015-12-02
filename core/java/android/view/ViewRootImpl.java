@@ -1721,12 +1721,6 @@ public final class ViewRootImpl implements ViewParent,
                             try {
                                 hwInitialized = mAttachInfo.mHardwareRenderer.initialize(
                                         mSurface);
-                                if (hwInitialized && (host.mPrivateFlags
-                                        & View.PFLAG_REQUEST_TRANSPARENT_REGIONS) == 0) {
-                                    // Don't pre-allocate if transparent regions
-                                    // are requested as they may not be needed
-                                    mSurface.allocateBuffers();
-                                }
                             } catch (OutOfResourcesException e) {
                                 handleOutOfResourcesException(e);
                                 return;
@@ -6619,6 +6613,19 @@ public final class ViewRootImpl implements ViewParent,
     @Override
     public boolean onNestedPrePerformAccessibilityAction(View target, int action, Bundle args) {
         return false;
+    }
+
+    /**
+     * Force the window to report its next draw.
+     * <p>
+     * This method is only supposed to be used to speed up the interaction from SystemUI and window
+     * manager when waiting for the first frame to be drawn when turning on the screen. DO NOT USE
+     * unless you fully understand this interaction.
+     * @hide
+     */
+    public void setReportNextDraw() {
+        mReportNextDraw = true;
+        invalidate();
     }
 
     void changeCanvasOpacity(boolean opaque) {

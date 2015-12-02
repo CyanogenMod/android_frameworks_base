@@ -77,34 +77,84 @@ public final class Installer extends SystemService {
 
     public int dexopt(String apkPath, int uid, boolean isPublic,
             String instructionSet, int dexoptNeeded) {
+        return dexopt(apkPath, uid, isPublic, instructionSet, dexoptNeeded, true);
+    }
+
+    public int dexopt(String apkPath, int uid, boolean isPublic,
+            String instructionSet, int dexoptNeeded, boolean bootComplete) {
         if (!isValidInstructionSet(instructionSet)) {
             Slog.e(TAG, "Invalid instruction set: " + instructionSet);
             return -1;
         }
 
-        return mInstaller.dexopt(apkPath, uid, isPublic, instructionSet, dexoptNeeded);
+        return mInstaller.dexopt(apkPath, uid, isPublic, instructionSet, dexoptNeeded,
+                bootComplete);
     }
 
     public int dexopt(String apkPath, int uid, boolean isPublic, String pkgName,
             String instructionSet, int dexoptNeeded, boolean vmSafeMode,
             boolean debuggable, @Nullable String outputPath) {
+        return dexopt(apkPath, uid, isPublic, pkgName, instructionSet, dexoptNeeded, vmSafeMode,
+                debuggable, outputPath, true);
+    }
+
+    public int dexopt(String apkPath, int uid, boolean isPublic, String pkgName,
+            String instructionSet, int dexoptNeeded, boolean vmSafeMode,
+            boolean debuggable, @Nullable String outputPath, boolean bootComplete) {
         if (!isValidInstructionSet(instructionSet)) {
             Slog.e(TAG, "Invalid instruction set: " + instructionSet);
             return -1;
         }
         return mInstaller.dexopt(apkPath, uid, isPublic, pkgName,
                 instructionSet, dexoptNeeded, vmSafeMode,
-                debuggable, outputPath);
+                debuggable, outputPath, bootComplete);
     }
 
-    public int idmap(String targetApkPath, String overlayApkPath, int uid) {
+    public int idmap(String targetApkPath, String overlayApkPath, String cachePath,
+            int uid, int targetHash, int overlayHash) {
         StringBuilder builder = new StringBuilder("idmap");
         builder.append(' ');
         builder.append(targetApkPath);
         builder.append(' ');
         builder.append(overlayApkPath);
         builder.append(' ');
+        builder.append(cachePath);
+        builder.append(' ');
         builder.append(uid);
+        builder.append(' ');
+        builder.append(targetHash);
+        builder.append(' ');
+        builder.append(overlayHash);
+        return mInstaller.execute(builder.toString());
+    }
+
+    public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid,
+                    int pkgId, int minSdkVersion, String commonResourcesPath) {
+
+        StringBuilder builder = new StringBuilder();
+        if (TextUtils.isEmpty(commonResourcesPath)) {
+            builder.append("aapt");
+        } else {
+            builder.append("aapt_with_common");
+        }
+        builder.append(' ');
+        builder.append(themeApkPath);
+        builder.append(' ');
+        builder.append(internalPath);
+        builder.append(' ');
+        builder.append(resTablePath);
+        builder.append(' ');
+        builder.append(uid);
+        builder.append(' ');
+        builder.append(pkgId);
+        builder.append(' ');
+        builder.append(minSdkVersion);
+
+        if (!TextUtils.isEmpty(commonResourcesPath)) {
+            builder.append(' ');
+            builder.append(commonResourcesPath);
+        }
+
         return mInstaller.execute(builder.toString());
     }
 

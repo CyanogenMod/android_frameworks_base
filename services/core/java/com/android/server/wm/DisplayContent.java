@@ -301,6 +301,35 @@ class DisplayContent {
         }
     }
 
+    boolean animateBlurLayers() {
+        boolean result = false;
+        for (int stackNdx = mStacks.size() - 1; stackNdx >= 0; --stackNdx) {
+            result |= mStacks.get(stackNdx).animateBlurLayers();
+        }
+        return result;
+    }
+
+    void resetBlurring() {
+        for (int stackNdx = mStacks.size() - 1; stackNdx >= 0; --stackNdx) {
+            mStacks.get(stackNdx).resetBlurringTag();
+        }
+    }
+
+    boolean isBlurring() {
+        for (int stackNdx = mStacks.size() - 1; stackNdx >= 0; --stackNdx) {
+            if (mStacks.get(stackNdx).isBlurring()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void stopBlurringIfNeeded() {
+        for (int stackNdx = mStacks.size() - 1; stackNdx >= 0; --stackNdx) {
+            mStacks.get(stackNdx).stopBlurringIfNeeded();
+        }
+    }
+
     void close() {
         for (int stackNdx = mStacks.size() - 1; stackNdx >= 0; --stackNdx) {
             mStacks.get(stackNdx).close();

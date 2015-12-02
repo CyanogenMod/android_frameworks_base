@@ -30,6 +30,7 @@
        <item><xliff:g id="id">cast</xliff:g></item>
        <item><xliff:g id="id">hotspot</xliff:g></item>
        <item><xliff:g id="id">location</xliff:g></item>
+       <item><xliff:g id="id">su</xliff:g></item>
        <item><xliff:g id="id">bluetooth</xliff:g></item>
        <item><xliff:g id="id">nfc</xliff:g></item>
        <item><xliff:g id="id">tty</xliff:g></item>
@@ -387,6 +388,13 @@
     <!-- Boolean indicating autojoin will prefer 5GHz and choose 5GHz BSSIDs -->
     <bool translatable="true" name="config_wifi_enable_5GHz_preference">true</bool>
 
+    <!-- Boolean indicating whether or not to revert to default country code when cellular
+         radio is unable to find any MCC information to infer wifi country code from -->
+    <bool translatable="false" name="config_wifi_revert_country_code_on_cellular_loss">false</bool>
+
+    <!-- Boolean indicating whether or not wifi firmware debugging is enabled -->
+    <bool translatable="false" name="config_wifi_enable_wifi_firmware_debugging">false</bool>
+
     <!-- Integer specifying the basic autojoin parameters -->
     <integer translatable="false" name="config_wifi_framework_5GHz_preference_boost_threshold">-65</integer>
     <integer translatable="false" name="config_wifi_framework_5GHz_preference_boost_factor">5</integer>
@@ -512,6 +520,9 @@
     <!-- Operating volatage for wifi radio. 0 by default-->
     <integer translatable="false" name="config_wifi_operating_voltage_mv">0</integer>
 
+    <!-- Wifi framework supports ECBM mode  -->
+    <bool translatable="false" name="config_wifi_ecbm_mode_change">true</bool>
+
     <!-- Flag indicating whether the we should enable the automatic brightness in Settings.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">false</bool>
@@ -619,6 +630,17 @@
         <!-- rotation: 270 (rotate CW)  --> <item>-25</item> <item>65</item>
     </integer-array>
 
+    <!-- Indicate the name of the window orientation sensor type if present. A
+         window orientation sensor produces values to be used in lieu of the
+         typical, accelerometer based sensor. It must only produce integral
+         values between 0 and 3, inclusive, with each one corresponding to a
+         given rotation:
+            0: 0 degrees of rotation (natural)
+            1: 90 degrees of rotation (rotate CCW)
+            2: 180 degrees of rotation (reverse)
+            3: 270 degrees of rotation (rotate CW) -->
+    <string name="config_orientationSensorType" translatable="false">@null</string>
+
     <!-- Lid switch behavior -->
 
     <!-- The number of degrees to rotate the display when the keyboard is open.
@@ -662,6 +684,10 @@
          we rely on gravity to determine the effective orientation. -->
     <bool name="config_deskDockEnablesAccelerometer">true</bool>
 
+    <!-- Control whether a desk dock event should override the default bluetooth
+         audio routing, FORCE_BT_DESK_DOCK, with an analog dock, FORCE_ANALOG_DOCK. -->
+    <bool name="config_forceAnalogDeskDock">false</bool>
+
     <!-- Car dock behavior -->
 
     <!-- The number of degrees to rotate the display when the device is in a car dock.
@@ -679,6 +705,10 @@
          a car dock make the accelerometer more a physical input (like a lid). -->
 
     <bool name="config_carDockEnablesAccelerometer">true</bool>
+
+    <!-- Control whether a car dock event should override the default bluetooth
+         audio routing, FORCE_BT_CAR_DOCK, with an analog dock, FORCE_ANALOG_DOCK. -->
+    <bool name="config_forceAnalogCarDock">false</bool>
 
     <!-- HDMI behavior -->
 
@@ -878,6 +908,21 @@
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">false</bool>
 
+    <!-- Does the notification LED support multiple colors?
+         Used to decide if the user can change the colors -->
+    <bool name="config_multiColorNotificationLed">false</bool>
+
+    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveBatteryLed">false</bool>
+
+    <!-- Does the battery LED support multiple colors?
+         Used to decide if the user can change the colors -->
+    <bool name="config_multiColorBatteryLed">false</bool>
+
+    <!-- Do the battery/notification LEDs support pulsing?
+         Used to decide if we show pulse settings -->
+    <bool name="config_ledCanPulse">true</bool>
+
     <!-- Default value for LED off time when the battery is low on charge in miliseconds -->
     <integer name="config_notificationsBatteryLedOff">2875</integer>
 
@@ -913,20 +958,83 @@
 
     <!-- Control the behavior when the user long presses the home button.
             0 - Nothing
-            1 - Recent apps view in SystemUI
-            2 - Launch assist intent
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
          This needs to match the constants in
          policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
     -->
-    <integer name="config_longPressOnHomeBehavior">0</integer>
+    <integer name="config_longPressOnHomeBehavior">2</integer>
 
     <!-- Control the behavior when the user double-taps the home button.
             0 - Nothing
-            1 - Recent apps view in SystemUI
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
          This needs to match the constants in
          policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
     -->
     <integer name="config_doubleTapOnHomeBehavior">0</integer>
+
+    <!-- Control the behavior when the user long presses the menu button.
+            0 - Nothing
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
+         This needs to match the constants in
+         policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+    -->
+    <integer name="config_longPressOnMenuBehavior">3</integer>
+
+    <!-- Control the behavior when the user long presses the app switch button.
+            0 - Nothing
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
+         This needs to match the constants in
+         services/core/java/com/android/server/policy/policy/impl/PhoneWindowManager.java
+    -->
+    <integer name="config_longPressOnAppSwitchBehavior">0</integer>
+
+    <!-- Hardware keys present on the device, stored as a bit field.
+         This integer should equal the sum of the corresponding value for each
+         of the following keys present:
+             1 - Home
+             2 - Back
+             4 - Menu
+             8 - Assistant (search)
+            16 - App switch
+            32 - Camera
+            64 - Volume rocker
+         For example, a device with Home, Back and Menu keys would set this
+         config to 7. -->
+    <integer name="config_deviceHardwareKeys">79</integer>
+
+    <!-- Hardware keys present on the device with the ability to wake, stored as a bit field.
+         This integer should equal the sum of the corresponding value for each
+         of the following keys present:
+             1 - Home
+             2 - Back
+             4 - Menu
+             8 - Assistant (search)
+            16 - App switch
+            32 - Camera
+            64 - Volume rocker
+         For example, a device with Home, Back and Menu keys would set this
+         config to 7. -->
+    <integer name="config_deviceHardwareWakeKeys">79</integer>
+
+    <!-- Indicates that the device has Single-stage Camera key
+         (without "Focus" state) instead of Dual-stage. -->
+    <bool name="config_singleStageCameraKey">false</bool>
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
@@ -1036,6 +1144,10 @@
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessKeyboardBacklightValues">
     </integer-array>
+
+    <integer name="config_buttonBrightnessSettingDefault">255</integer>
+    <integer name="config_keyboardBrightnessSettingDefault">0</integer>
+    <bool name="config_deviceHasVariableButtonBrightness">false</bool>
 
     <!-- Amount of time it takes for the light sensor to warm up in milliseconds.
          For this time after the screen turns on, the Power Manager
@@ -1176,7 +1288,9 @@
     </string-array>
 
     <!-- Component name of the combo network location provider. -->
-    <string name="config_comboNetworkLocationProvider" translatable="false">com.qualcomm.location</string>
+    <string name="config_comboNetworkLocationProvider" translatable="false">@null</string>
+    <!-- Component name of the service providing geofence API support. -->
+    <string name="config_geofenceProvider" translatable="false">@null</string>
 
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
     use cases -->
@@ -1731,6 +1845,28 @@
     -->
     <bool name="config_enableWifiDisplay">false</bool>
 
+    <!-- The color transform values that correspond to each respective configuration mode for the
+         built-in display, or -1 if the mode is unsupported by the device. The possible
+         configuration modes are:
+            1. Wide-gamut ("Vibrant")
+            2. Adobe RGB ("Natural")
+            3. sRGB ("Standard")
+
+        For example, if a device had Wide-gamut as color transform mode 1, sRGB mode as color
+        transform mode 7, and did not support Adobe RGB at all this would look like:
+
+            <integer-array name="config_colorTransforms">
+                <item>1</item>
+                <item>-1</item>
+                <item>7</item>
+            </integer-array>
+    -->
+    <integer-array name="config_colorTransforms">
+        <item>-1</item>
+        <item>-1</item>
+        <item>-1</item>
+    </integer-array>
+
     <!-- When true use the linux /dev/input/event subsystem to detect the switch changes
          on the headphone/microphone jack. When false use the older uevent framework. -->
     <bool name="config_useDevInputEventForAudioJack">false</bool>
@@ -1800,6 +1936,16 @@
         <item>100</item>
         <item>150</item>
         <item>100</item>
+    </integer-array>
+
+    <!-- Vibrator pattern to be used as for notifications while alerts
+         are disabled (e.g. during phone calls) if enabled by the user.
+     -->
+    <integer-array name="config_notificationNoAlertsVibePattern">
+        <item>0</item>
+        <item>50</item>
+        <item>100</item>
+        <item>50</item>
     </integer-array>
 
     <!-- Flag indicating if the speed up audio on mt call code should be executed -->
@@ -2064,6 +2210,12 @@
 
     <bool name="config_networkSamplingWakesDevice">true</bool>
 
+    <!-- Path to the library that contains a device specific key handler -->
+    <string name="config_deviceKeyHandlerLib" translatable="false"></string>
+
+    <!-- Name of that key handler class -->
+    <string name="config_deviceKeyHandlerClass" translatable="false"></string>
+
     <string-array translatable="false" name="config_cdma_home_system" />
 
     <!--From SmsMessage-->
@@ -2071,8 +2223,12 @@
         string that's stored in 8-bit unpacked format) characters.-->
     <bool translatable="false" name="config_sms_decode_gsm_8bit_data">false</bool>
 
-    <!-- Package name providing WebView implementation. -->
+    <!-- Package name providing default WebView implementation. -->
     <string name="config_webViewPackageName" translatable="false">com.android.webview</string>
+
+    <!-- Package name providing alternate WebView implementation.
+         Fall back to config_webViewPackageName if not available. -->
+    <string name="config_alternateWebViewPackageName" translatable="false">com.google.android.webview</string>
 
     <!-- If EMS is not supported, framework breaks down EMS into single segment SMS
          and adds page info " x/y". This config is used to set which carrier doesn't
@@ -2087,6 +2243,9 @@
     </string-array>
 
     <bool name="config_auto_attach_data_on_creation">true</bool>
+
+    <!-- True if the gesture service should be started at system start -->
+    <bool name="config_enableGestureService">false</bool>
 
     <!-- Values for GPS configuration -->
     <string-array translatable="false" name="config_gpsParameters">
@@ -2276,36 +2435,6 @@
     <string-array name="config_cell_retries_per_error_code">
     </string-array>
 
-    <!-- Whether cpu boost is enabled for AppLaunch -->
-    <bool name="config_enableCpuBoostForAppLaunch">false</bool>
-    <integer name="disablepacking_timeout_param">0</integer>
-    <integer-array name="launchboost_packing_param_value"/>
-    <integer name="launchboost_timeout_param">0</integer>
-    <integer-array name="launchboost_param_value"/>
-
-    <!-- Whether cpu boost is enabled for animation. -->
-    <bool name="config_enablePerfBoostForAnimation">false</bool>
-    <integer name="animationboost_timeout_param">0</integer>
-    <integer-array name="animationboost_param_value"/>
-
-    <!-- Whether cpu boost is enabled for overscroller fling. -->
-    <bool name="config_enableCpuBoostForOverScrollerFling">false</bool>
-    <integer name="flingboost_timeout_param">0</integer>
-    <integer-array name="flingboost_param_value"/>
-
-    <!-- Whether cpu boost is enabled for horizontal scroll. -->
-    <bool name="config_enableCpuBoostForScroller">false</bool>
-    <integer name="scrollboost_timeout_param">0</integer>
-    <integer-array name="scrollboost_param_value"/>
-
-    <!-- Activities list for boost -->
-    <string-array translatable="false" name="boost_activityList">
-    </string-array>
-
-    <!-- Activity scroll boost params -->
-    <integer name="ascrollboost_timeout">0</integer>
-    <integer-array name="ascrollboost_param_value"/>
-
    <!-- Configuration to play sms ringtone during MO/MT call -->
    <bool name="config_sms_ringtone_incall">false</bool>
     <!-- IpReachability monitor enable/Disable -->
@@ -2317,4 +2446,101 @@
     <!-- Configuration that determines if PROTOCOL_ERRORS is to be treated as a
          permanent error -->
     <bool translatable="false" name="config_protocol_errors_perm_failure">true</bool>
+
+    <!-- External CM Services list -->
+    <string-array name="config_externalCMServices"></string-array>
+
+    <!-- Timeout in MS for how long you have to long-press the back key to
+         kill the foreground app. -->
+    <integer name="config_backKillTimeout">2000</integer>
+
+    <!-- Setting to false will disable CM's IME switcher implementation for tablets -->
+    <bool name="config_show_cmIMESwitcher">true</bool>
+
+    <!-- The list of components which should be automatically disabled. -->
+    <string-array name="config_disabledComponents" translatable="false">
+    </string-array>
+
+    <!-- The list of components which should be forced to be enabled. -->
+    <string-array name="config_forceEnabledComponents" translatable="false">
+    </string-array>
+
+    <!-- Boolean to enable stk functionality on Samsung phones -->
+    <bool name="config_samsung_stk">false</bool>
+
+    <!-- If a dock provides a lid switch, that lid can be removed. This
+         setting is used to determine, whether lidOpenRotation has to be
+         applied. -->
+    <bool name="config_hasRemovableLid">false</bool>
+
+    <!-- Boolean to enable Stylus gestures -->
+    <bool name="config_stylusGestures">false</bool>
+
+    <!-- Config to enable installation of region locked packages -->
+    <string-array name="config_region_locked_packages" translatable="false">
+    </string-array>
+
+    <!-- Packages in this list should be a union of all packages defined in values-mccxxx (mcc) -->
+    <string-array name="config_restrict_to_region_locked_devices" translatable="false">
+    </string-array>
+
+    <!-- Set initial MaxRetry value for operators -->
+    <integer name="config_mdc_initial_max_retry">1</integer>
+
+    <!-- The OEM specified sensor type for the gesture to launch the camear app. -->
+    <integer name="config_cameraLaunchGestureSensorType">-1</integer>
+    <!-- The OEM specified sensor string type for the gesture to launch camera app, this value
+         must match the value of config_cameraLaunchGestureSensorType in OEM's HAL -->
+    <string translatable="false" name="config_cameraLaunchGestureSensorStringType"></string>
+
+    <!-- Allow the gesture to double tap the power button twice to start the camera while the device
+         is non-interactive. -->
+    <bool name="config_cameraDoubleTapPowerGestureEnabled">true</bool>
+
+    <!-- Support in Surfaceflinger for blur layers.
+         NOTE: This requires additional hardware-specific code. -->
+    <bool name="config_ui_blur_enabled">false</bool>
+
+    <string-array name="origin_carrier_names">
+        <item>CHINA\u0020\u0020MOBILE</item>
+        <item>CMCC</item>
+        <item>CHN-UNICOM</item>
+        <item>China Mobile</item>
+        <item>China Unicom</item>
+        <item>China Telecom</item>
+        <item>中国移动</item>
+        <item>中国联通</item>
+        <item>中国电信</item>
+        <item>中國移動</item>
+        <item>中國聯通</item>
+        <item>中國電信</item>
+        <item>Searching for Service</item>
+    </string-array>
+
+    <string-array name="locale_carrier_names">
+        <item>China_Mobile</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Telecom</item>
+       <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Telecom</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Telecom</item>
+        <item>roamingTextSearching</item>
+    </string-array>
+
+    <!-- monitor locale change -->
+    <bool name="config_monitor_locale_change">false</bool>
+
+    <!-- display for radio tech -->
+    <bool name="config_display_rat">false</bool>
+
+    <!-- config 2G/3G/4G RAT strings for carriers -->
+    <string name="config_rat_2g" translatable="false">2G</string>
+    <string name="config_rat_3g" translatable="false">3G</string>
+    <string name="config_rat_4g" translatable="false">4G</string>
 </resources>

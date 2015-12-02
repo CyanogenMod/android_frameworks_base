@@ -527,8 +527,10 @@ public class DirectoryFragment extends Fragment {
             for (int i = 0; i < size; i++) {
                 if (checked.valueAt(i)) {
                     final Cursor cursor = mAdapter.getItem(checked.keyAt(i));
-                    final DocumentInfo doc = DocumentInfo.fromDirectoryCursor(cursor);
-                    docs.add(doc);
+                    if (cursor != null) {
+                        final DocumentInfo doc = DocumentInfo.fromDirectoryCursor(cursor);
+                        docs.add(doc);
+                    }
                 }
             }
 

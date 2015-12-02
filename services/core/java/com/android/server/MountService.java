@@ -368,11 +368,17 @@ class MountService extends IMountService.Stub
     private boolean shouldBenchmark() {
         final long benchInterval = Settings.Global.getLong(mContext.getContentResolver(),
                 Settings.Global.STORAGE_BENCHMARK_INTERVAL, DateUtils.WEEK_IN_MILLIS);
+        if (benchInterval == -1) {
+            return false;
+        } else if (benchInterval == 0) {
+            return true;
+        }
+
         synchronized (mLock) {
             for (int i = 0; i < mVolumes.size(); i++) {
                 final VolumeInfo vol = mVolumes.valueAt(i);
                 final VolumeRecord rec = mRecords.get(vol.fsUuid);
-                if (vol.isMountedReadable() && rec != null) {
+                if (vol.isMountedWritable() && rec != null) {
                     final long benchAge = System.currentTimeMillis() - rec.lastBenchMillis;
                     if (benchAge >= benchInterval) {
                         return true;
@@ -1087,8 +1093,10 @@ class MountService extends IMountService.Stub
                 final long destroy = Long.parseLong(cooked[6]);
 
                 final DropBoxManager dropBox = mContext.getSystemService(DropBoxManager.class);
-                dropBox.addText(TAG_STORAGE_BENCHMARK, scrubPath(path)
-                        + " " + ident + " " + create + " " + run + " " + destroy);
+                if (dropBox != null) {
+                    dropBox.addText(TAG_STORAGE_BENCHMARK, scrubPath(path)
+                            + " " + ident + " " + create + " " + run + " " + destroy);
+                }
 
                 final VolumeRecord rec = findRecordForPath(path);
                 if (rec != null) {
@@ -1105,8 +1113,10 @@ class MountService extends IMountService.Stub
                 final long time = Long.parseLong(cooked[3]);
 
                 final DropBoxManager dropBox = mContext.getSystemService(DropBoxManager.class);
-                dropBox.addText(TAG_STORAGE_TRIM, scrubPath(path)
-                        + " " + bytes + " " + time);
+                if (dropBox != null) {
+                    dropBox.addText(TAG_STORAGE_TRIM, scrubPath(path)
+                            + " " + bytes + " " + time);
+                }
 
                 final VolumeRecord rec = findRecordForPath(path);
                 if (rec != null) {
@@ -2598,6 +2608,63 @@ class MountService extends IMountService.Stub
             event = mCryptConnector.execute("cryptfs", "clearpw");
         } catch (NativeDaemonConnectorException e) {
             throw e.rethrowAsParcelableException();
+        }
+    }
+
+    @Override
+    public void createNewUserDir(int userHandle, String path) {
+        if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+            throw new SecurityException("Only SYSTEM_UID can create user directories");
+        }
+
+        waitForReady();
+
+        if (DEBUG_EVENTS) {
+            Slog.i(TAG, "Creating new user dir");
+        }
+
+        try {
+            NativeDaemonEvent event = mCryptConnector.execute(
+                "cryptfs", "createnewuserdir", userHandle, path);
+            if (!"0".equals(event.getMessage())) {
+                String error = "createnewuserdir sent unexpected message: "
+                    + event.getMessage();
+                Slog.e(TAG,  error);
+                // ext4enc:TODO is this the right exception?
+                throw new RuntimeException(error);
+            }
+        } catch (NativeDaemonConnectorException e) {
+            Slog.e(TAG, "createnewuserdir threw exception", e);
+            throw new RuntimeException("createnewuserdir threw exception", e);
+        }
+    }
+
+    // ext4enc:TODO duplication between this and createNewUserDir is nasty
+    @Override
+    public void deleteUserKey(int userHandle) {
+        if (Binder.getCallingUid() != Process.SYSTEM_UID) {
+            throw new SecurityException("Only SYSTEM_UID can delete user keys");
+        }
+
+        waitForReady();
+
+        if (DEBUG_EVENTS) {
+            Slog.i(TAG, "Deleting user key");
+        }
+
+        try {
+            NativeDaemonEvent event = mCryptConnector.execute(
+                "cryptfs", "deleteuserkey", userHandle);
+            if (!"0".equals(event.getMessage())) {
+                String error = "deleteuserkey sent unexpected message: "
+                    + event.getMessage();
+                Slog.e(TAG,  error);
+                // ext4enc:TODO is this the right exception?
+                throw new RuntimeException(error);
+            }
+        } catch (NativeDaemonConnectorException e) {
+            Slog.e(TAG, "deleteuserkey threw exception", e);
+            throw new RuntimeException("deleteuserkey threw exception", e);
         }
     }
 

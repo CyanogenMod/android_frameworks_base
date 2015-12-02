@@ -16,17 +16,13 @@
 
 package com.android.systemui.statusbar;
 
-import com.android.internal.app.IBatteryStats;
-import com.android.keyguard.KeyguardUpdateMonitor;
-import com.android.keyguard.KeyguardUpdateMonitorCallback;
-import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.KeyguardIndicationTextView;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.BatteryManager;
 import android.os.BatteryStats;
 import android.os.Handler;
@@ -39,18 +35,34 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 
+import com.android.internal.app.IBatteryStats;
+import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.keyguard.KeyguardUpdateMonitorCallback;
+import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.KeyguardIndicationTextView;
+import com.android.systemui.statusbar.phone.LockIcon;
+import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
+
 /**
- * Controls the little text indicator on the keyguard.
+ * Controls the indications and error messages shown on the Keyguard
  */
 public class KeyguardIndicationController {
 
     private static final String TAG = "KeyguardIndicationController";
+    private static final boolean DEBUG_CHARGING_CURRENT = false;
 
     private static final int MSG_HIDE_TRANSIENT = 1;
+    private static final int MSG_CLEAR_FP_MSG = 2;
+    private static final long TRANSIENT_FP_ERROR_TIMEOUT = 1300;
 
     private final Context mContext;
     private final KeyguardIndicationTextView mTextView;
     private final IBatteryStats mBatteryInfo;
+
+    private final int mSlowThreshold;
+    private final int mFastThreshold;
+    private final LockIcon mLockIcon;
+    private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
 
     private String mRestingIndication;
     private String mTransientIndication;
@@ -59,10 +71,20 @@ public class KeyguardIndicationController {
 
     private boolean mPowerPluggedIn;
     private boolean mPowerCharged;
+    private int mChargingSpeed;
+    private int mChargingCurrent;
+    private String mMessageToShowOnScreenOn;
 
-    public KeyguardIndicationController(Context context, KeyguardIndicationTextView textView) {
+    public KeyguardIndicationController(Context context, KeyguardIndicationTextView textView,
+                                        LockIcon lockIcon) {
         mContext = context;
         mTextView = textView;
+        mLockIcon = lockIcon;
+
+        Resources res = context.getResources();
+        mSlowThreshold = res.getInteger(R.integer.config_chargingSlowlyThreshold);
+        mFastThreshold = res.getInteger(R.integer.config_chargingFastThreshold);
+
 
         mBatteryInfo = IBatteryStats.Stub.asInterface(
                 ServiceManager.getService(BatteryStats.SERVICE_NAME));
@@ -150,7 +172,11 @@ public class KeyguardIndicationController {
             return mTransientIndication;
         }
         if (mPowerPluggedIn) {
-            return computePowerIndication();
+            String indication = computePowerIndication();
+            if (DEBUG_CHARGING_CURRENT) {
+                indication += ",  " + (mChargingCurrent / 1000) + " mA";
+            }
+            return indication;
         }
         return mRestingIndication;
     }
@@ -161,20 +187,41 @@ public class KeyguardIndicationController {
         }
 
         // Try fetching charging time from battery stats.
+        long chargingTimeRemaining = 0;
         try {
-            long chargingTimeRemaining = mBatteryInfo.computeChargeTimeRemaining();
-            if (chargingTimeRemaining > 0) {
-                String chargingTimeFormatted = Formatter.formatShortElapsedTimeRoundingUpToMinutes(
-                        mContext, chargingTimeRemaining);
-                return mContext.getResources().getString(
-                        R.string.keyguard_indication_charging_time, chargingTimeFormatted);
-            }
+            chargingTimeRemaining = mBatteryInfo.computeChargeTimeRemaining();
+
         } catch (RemoteException e) {
             Log.e(TAG, "Error calling IBatteryStats: ", e);
         }
+        final boolean hasChargingTime = chargingTimeRemaining > 0;
 
-        // Fall back to simple charging label.
-        return mContext.getResources().getString(R.string.keyguard_plugged_in);
+        int chargingId;
+        switch (mChargingSpeed) {
+            case KeyguardUpdateMonitor.BatteryStatus.CHARGING_FAST:
+                chargingId = hasChargingTime
+                        ? R.string.keyguard_indication_charging_time_fast_if_translated
+                        : R.string.keyguard_plugged_in_charging_fast;
+                break;
+            case KeyguardUpdateMonitor.BatteryStatus.CHARGING_SLOWLY:
+                chargingId = hasChargingTime
+                        ? R.string.keyguard_indication_charging_time_slowly_if_translated
+                        : R.string.keyguard_plugged_in_charging_slowly;
+                break;
+            default:
+                chargingId = hasChargingTime
+                        ? R.string.keyguard_indication_charging_time
+                        : R.string.keyguard_plugged_in;
+                break;
+        }
+
+        if (hasChargingTime) {
+            String chargingTimeFormatted = Formatter.formatShortElapsedTimeRoundingUpToMinutes(
+                    mContext, chargingTimeRemaining);
+            return mContext.getResources().getString(chargingId, chargingTimeFormatted);
+        } else {
+            return mContext.getResources().getString(chargingId);
+        }
     }
 
     KeyguardUpdateMonitorCallback mUpdateMonitor = new KeyguardUpdateMonitorCallback() {
@@ -184,7 +231,67 @@ public class KeyguardIndicationController {
                     || status.status == BatteryManager.BATTERY_STATUS_FULL;
             mPowerPluggedIn = status.isPluggedIn() && isChargingOrFull;
             mPowerCharged = status.isCharged();
+            mChargingCurrent = status.maxChargingCurrent;
+            mChargingSpeed = status.getChargingSpeed(mSlowThreshold, mFastThreshold);
             updateIndication();
+        }
+
+        @Override
+        public void onFingerprintHelp(int msgId, String helpString) {
+            KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
+            if (!updateMonitor.isUnlockingWithFingerprintAllowed()) {
+                return;
+            }
+            int errorColor = mContext.getResources().getColor(R.color.system_warning_color, null);
+            if (mStatusBarKeyguardViewManager.isBouncerShowing()) {
+                mStatusBarKeyguardViewManager.showBouncerMessage(helpString, errorColor);
+            } else if (updateMonitor.isDeviceInteractive()) {
+                mLockIcon.setTransientFpError(true);
+                showTransientIndication(helpString, errorColor);
+                mHandler.removeMessages(MSG_CLEAR_FP_MSG);
+                mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_CLEAR_FP_MSG),
+                        TRANSIENT_FP_ERROR_TIMEOUT);
+            }
+        }
+
+        @Override
+        public void onFingerprintError(int msgId, String errString) {
+            KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
+            if (!updateMonitor.isUnlockingWithFingerprintAllowed()
+                    || msgId == FingerprintManager.FINGERPRINT_ERROR_CANCELED) {
+                return;
+            }
+            int errorColor = mContext.getResources().getColor(R.color.system_warning_color, null);
+            if (mStatusBarKeyguardViewManager.isBouncerShowing()) {
+                mStatusBarKeyguardViewManager.showBouncerMessage(errString, errorColor);
+            } else if (updateMonitor.isDeviceInteractive()) {
+                    showTransientIndication(errString, errorColor);
+                    // We want to keep this message around in case the screen was off
+                    mHandler.removeMessages(MSG_HIDE_TRANSIENT);
+                    hideTransientIndicationDelayed(5000);
+             } else {
+                    mMessageToShowOnScreenOn = errString;
+            }
+        }
+
+        @Override
+        public void onScreenTurnedOn() {
+            if (mMessageToShowOnScreenOn != null) {
+                int errorColor = mContext.getResources().getColor(R.color.system_warning_color,
+                        null);
+                showTransientIndication(mMessageToShowOnScreenOn, errorColor);
+                // We want to keep this message around in case the screen was off
+                mHandler.removeMessages(MSG_HIDE_TRANSIENT);
+                hideTransientIndicationDelayed(5000);
+                mMessageToShowOnScreenOn = null;
+            }
+        }
+
+        @Override
+        public void onFingerprintRunningStateChanged(boolean running) {
+            if (running) {
+                mMessageToShowOnScreenOn = null;
+            }
         }
     };
 
@@ -203,7 +310,15 @@ public class KeyguardIndicationController {
             if (msg.what == MSG_HIDE_TRANSIENT && mTransientIndication != null) {
                 mTransientIndication = null;
                 updateIndication();
+            } else if (msg.what == MSG_CLEAR_FP_MSG) {
+                mLockIcon.setTransientFpError(false);
+                hideTransientIndication();
             }
         }
     };
+
+    public void setStatusBarKeyguardViewManager(
+            StatusBarKeyguardViewManager statusBarKeyguardViewManager) {
+        mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
+    }
 }

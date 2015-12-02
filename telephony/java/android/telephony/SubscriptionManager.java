@@ -121,6 +121,39 @@ public class SubscriptionManager {
     public static final int SIM_NOT_INSERTED = -1;
 
     /**
+     * The Network mode of SIM/sub.
+     * <P>Type: INTEGER (int)</P>
+     */
+    /** @hide */
+    public static final String NETWORK_MODE = "network_mode";
+
+    /**
+     * The user configured Network mode of SIM/sub.
+     * <P>Type: INTEGER (int)</P>
+     * {@hide}
+     */
+    public static final String USER_NETWORK_MODE = "user_network_mode";
+
+    /** @hide */
+    public static final int DEFAULT_NW_MODE = -1;
+
+    /**
+     * The activation state of SIM/sub.
+     * <P>Type: INTEGER (int)</P>
+     */
+    /** @hide */
+    public static final String SUB_STATE = "sub_state";
+
+    /** @hide */
+    public static final int INACTIVE = 0;
+
+    /** @hide */
+    public static final int ACTIVE = 1;
+
+    /** @hide */
+    public static final int SUB_CONFIGURATION_IN_PROGRESS = 2;
+
+    /**
      * TelephonyProvider column name for user displayed name.
      * <P>Type: TEXT (String)</P>
      */
@@ -1115,6 +1148,53 @@ public class SubscriptionManager {
     /** @hide */
     public static boolean isValidPhoneId(int phoneId) {
         return phoneId >= 0 && phoneId < TelephonyManager.getDefault().getPhoneCount();
+    }
+
+    /** @hide */
+    public static void activateSubId(int subId) {
+        logd("activateSubId sub id = " + subId);
+        try {
+            getISubInfo().activateSubId(subId);
+        } catch (RemoteException ex) {
+            return;
+        }
+    }
+
+    /** @hide */
+    public static void deactivateSubId(int subId) {
+        logd("deactivateSubId sub id = " + subId);
+        try {
+            getISubInfo().deactivateSubId(subId);
+        } catch (RemoteException ex) {
+            return;
+        }
+    }
+
+    /** @hide */
+    public static int getSubState(int subId) {
+        logd("getSubState sub id = " + subId);
+        try {
+            return getISubInfo().getSubState(subId);
+        } catch (RemoteException ex) {
+            return INACTIVE;
+        }
+    }
+
+    /** @hide */
+    public static int setSubState(int subId, int subState) {
+        logd("setSubState sub id = " + subId + " state = " + subState);
+        try {
+            return getISubInfo().setSubState(subId, subState);
+        } catch (RemoteException ex) {
+            return INACTIVE;
+        }
+    }
+
+   /**
+    @hide
+    */
+    private static ISub getISubInfo() {
+        return ISub.Stub.asInterface(ServiceManager.getService("isub"));
     }
 
     /** @hide */

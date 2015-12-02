@@ -29,6 +29,8 @@ import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
@@ -38,10 +40,12 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.UserInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.ThemeConfig;
 import android.database.ContentObserver;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -87,15 +91,20 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
+import com.android.internal.util.cm.SpamFilter;
+import com.android.internal.util.cm.SpamFilter.SpamContract.NotificationTable;
+import com.android.internal.util.cm.SpamFilter.SpamContract.PackageTable;
 import com.android.internal.util.NotificationColorUtil;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.systemui.DejankUtils;
 import com.android.systemui.R;
 import com.android.systemui.RecentsComponent;
 import com.android.systemui.SwipeHelper;
 import com.android.systemui.SystemUI;
 import com.android.systemui.assist.AssistManager;
 import com.android.systemui.recents.Recents;
+import com.android.systemui.cm.SpamMessageProvider;
 import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.phone.NavigationBarView;
 import com.android.systemui.statusbar.phone.NotificationGroupManager;
@@ -145,6 +154,12 @@ public abstract class BaseStatusBar extends SystemUI implements
     private static final String BANNER_ACTION_SETUP =
             "com.android.systemui.statusbar.banner_action_setup";
 
+    private static final Uri SPAM_MESSAGE_URI = new Uri.Builder()
+           .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority(SpamMessageProvider.AUTHORITY)
+            .appendPath("messages")
+            .build();
+
     protected CommandQueue mCommandQueue;
     protected IStatusBarService mBarService;
     protected H mHandler = createHandler();
@@ -167,13 +182,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     // on-screen navigation buttons
     protected NavigationBarView mNavigationBarView = null;
 
-    protected Boolean mScreenOn;
-
-    // The second field is a bit different from the first one because it only listens to screen on/
-    // screen of events from Keyguard. We need this so we don't have a race condition with the
-    // broadcast. In the future, we should remove the first field altogether and rename the second
-    // field.
-    protected boolean mScreenOnFromKeyguard;
+    protected boolean mDeviceInteractive;
 
     protected boolean mVisible;
 
@@ -920,12 +929,31 @@ public abstract class BaseStatusBar extends SystemUI implements
         final View settingsButton = guts.findViewById(R.id.notification_inspect_item);
         final View appSettingsButton
                 = guts.findViewById(R.id.notification_inspect_app_provided_settings);
+        final View filterButton = guts.findViewById(R.id.notification_inspect_filter_notification);
         if (appUid >= 0) {
             final int appUidF = appUid;
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     MetricsLogger.action(mContext, MetricsLogger.ACTION_NOTE_INFO);
                     startAppNotificationSettingsActivity(pkg, appUidF);
+                }
+            });
+
+            filterButton.setVisibility(View.VISIBLE);
+            filterButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            ContentValues values = new ContentValues();
+                            String message = SpamFilter.getNotificationContent(
+                                    sbn.getNotification());
+                            values.put(NotificationTable.MESSAGE_TEXT, message);
+                            values.put(PackageTable.PACKAGE_NAME, pkg);
+                            mContext.getContentResolver().insert(SPAM_MESSAGE_URI, values);
+                        }
+                    });
+                    removeNotification(sbn.getKey(), null);
                 }
             });
 
@@ -958,6 +986,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         } else {
             settingsButton.setVisibility(View.GONE);
             appSettingsButton.setVisibility(View.GONE);
+            filterButton.setVisibility(View.GONE);
         }
 
     }
@@ -1096,26 +1125,6 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected abstract View getStatusBarView();
-
-    protected View.OnTouchListener mRecentsPreloadOnTouchListener = new View.OnTouchListener() {
-        // additional optimization when we have software system buttons - start loading the recent
-        // tasks on touch down
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            int action = event.getAction() & MotionEvent.ACTION_MASK;
-            if (action == MotionEvent.ACTION_DOWN) {
-                preloadRecents();
-            } else if (action == MotionEvent.ACTION_CANCEL) {
-                cancelPreloadingRecents();
-            } else if (action == MotionEvent.ACTION_UP) {
-                if (!v.isPressed()) {
-                    cancelPreloadingRecents();
-                }
-
-            }
-            return false;
-        }
-    };
 
     /** Proxy for RecentsComponent */
 
@@ -1328,22 +1337,28 @@ public abstract class BaseStatusBar extends SystemUI implements
         View contentViewLocal = null;
         View bigContentViewLocal = null;
         View headsUpContentViewLocal = null;
+        final ThemeConfig themeConfig = mContext.getResources().getConfiguration().themeConfig;
+        String themePackageName = themeConfig != null ?
+                themeConfig.getOverlayPkgNameForApp(mContext.getPackageName()) : null;
         try {
             contentViewLocal = contentView.apply(
                     sbn.getPackageContext(mContext),
                     contentContainer,
-                    mOnClickHandler);
+                    mOnClickHandler,
+                    themePackageName);
             if (bigContentView != null) {
                 bigContentViewLocal = bigContentView.apply(
                         sbn.getPackageContext(mContext),
                         contentContainer,
-                        mOnClickHandler);
+                        mOnClickHandler,
+                        themePackageName);
             }
             if (headsUpContentView != null) {
                 headsUpContentViewLocal = headsUpContentView.apply(
                         sbn.getPackageContext(mContext),
                         contentContainer,
-                        mOnClickHandler);
+                        mOnClickHandler,
+                        themePackageName);
             }
         }
         catch (RuntimeException e) {
@@ -1512,6 +1527,15 @@ public abstract class BaseStatusBar extends SystemUI implements
             final PendingIntent intent = sbn.getNotification().contentIntent;
             final String notificationKey = sbn.getKey();
 
+            // Mark notification for one frame.
+            row.setJustClicked(true);
+            DejankUtils.postAfterTraversal(new Runnable() {
+                @Override
+                public void run() {
+                    row.setJustClicked(false);
+                }
+            });
+
             if (NOTIFICATION_CLICK_DEBUG) {
                 Log.d(TAG, "Clicked on content of " + notificationKey);
             }
@@ -1619,7 +1643,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void updateVisibleToUser() {
         boolean oldVisibleToUser = mVisibleToUser;
-        mVisibleToUser = mVisible && mScreenOnFromKeyguard;
+        mVisibleToUser = mVisible && mDeviceInteractive;
 
         if (oldVisibleToUser != mVisibleToUser) {
             handleVisibleToUserChanged(mVisibleToUser);
@@ -2014,6 +2038,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         // update the contentIntent
         mNotificationClicker.register(entry.row, notification);
 
+        applyColorsAndBackgrounds(notification, entry);
         entry.row.setStatusBarNotification(notification);
         entry.row.notifyContentUpdated();
         entry.row.resetHeight();

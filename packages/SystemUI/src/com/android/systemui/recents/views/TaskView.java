@@ -34,6 +34,7 @@ import com.android.systemui.recents.RecentsConfiguration;
 import com.android.systemui.recents.misc.Utilities;
 import com.android.systemui.recents.model.Task;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
+import cyanogenmod.providers.CMSettings;
 
 /* A task view */
 public class TaskView extends FrameLayout implements Task.TaskCallbacks,
@@ -43,6 +44,7 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
     interface TaskViewCallbacks {
         public void onTaskViewAppIconClicked(TaskView tv);
         public void onTaskViewAppInfoClicked(TaskView tv);
+        public void onTaskViewLongClicked(TaskView tv);
         public void onTaskViewClicked(TaskView tv, Task task, boolean lockToTask);
         public void onTaskViewDismissed(TaskView tv);
         public void onTaskViewClipStateChanged(TaskView tv);
@@ -769,7 +771,14 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
     public boolean onLongClick(View v) {
         if (v == mHeaderView.mApplicationIcon) {
             if (mCb != null) {
-                mCb.onTaskViewAppInfoClicked(this);
+                boolean showDevShortcuts =
+                        CMSettings.Secure.getInt(v.getContext().getContentResolver(),
+                                CMSettings.Secure.DEVELOPMENT_SHORTCUT, 0) != 0;
+                if (showDevShortcuts) {
+                    mCb.onTaskViewLongClicked(this);
+                } else {
+                    mCb.onTaskViewAppInfoClicked(this);
+                }
                 return true;
             }
         }
