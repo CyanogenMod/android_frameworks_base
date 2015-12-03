@@ -1146,15 +1146,6 @@
         android:description="@string/permdesc_transmitIr"
         android:protectionLevel="normal" />
 
-    <!-- Allows an application to override the power key action
-        @hide -->
-    <permission android:name="android.permission.PREVENT_POWER_KEY"
-        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
-        android:protectionLevel="signatureOrSystem"
-        android:label="@string/permlab_preventpower"
-        android:description="@string/permdesc_preventpower" />
-
-
     <!-- ==================================================== -->
     <!-- Permissions related to changing audio settings   -->
     <!-- ==================================================== -->
@@ -1237,6 +1228,12 @@
     <!-- @hide Allows system update service to notify device owner about pending updates.
    <p>Not for use by third-party applications. -->
     <permission android:name="android.permission.NOTIFY_PENDING_SYSTEM_UPDATE"
+        android:protectionLevel="signature|privileged" />
+
+    <!-- Allows an application to override the power key action
+         @hide <p>Not for use by third-party applications.
+    -->
+    <permission android:name="android.permission.PREVENT_POWER_KEY"
         android:protectionLevel="signature|privileged" />
 
     <!-- =========================================== -->
