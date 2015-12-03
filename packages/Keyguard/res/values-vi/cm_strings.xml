@@ -18,4 +18,14 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM đã bị khoá Perso</string>
+  <string name="keyguard_accessibility_status">"Trạng thái"</string>
+  <string name="kg_dismiss">Bỏ qua</string>
+  <string name="kg_slot_name">Khe <xliff:g id="number">%d</xliff:g>: Thẻ SIM mới\u0020</string>
+  <string name="lockscreen_sim_error_message_short">Thẻ sim không hợp lệ.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="other">Nhập mã PIN của SIM, bạn còn <xliff:g id="number">%d</xliff:g> lần nhập trước khi phải liên hệ với nhà mạng để mở khóa thiết bị.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="other">SIM đã bị vô hiệu hóa. Hãy nhập mã PUK để tiếp tục. Bạn có <xliff:g id="number">%d</xliff:g> lần nhập trước khi SIM trở nên vô hiệu hoàn toàn. Liên hệ với nhà mạng để biết thêm chi tiết.</item>
+  </plurals>
 </resources>
