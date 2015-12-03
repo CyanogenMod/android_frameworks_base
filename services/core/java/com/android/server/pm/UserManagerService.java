@@ -1285,7 +1285,7 @@ public class UserManagerService extends IUserManager.Stub {
                         try {
                             final File userDir = Environment.getDataUserDirectory(volumeUuid,
                                     userId);
-                            prepareUserDirectory(userDir);
+                            prepareUserDirectory(mContext, volumeUuid, userId);
                             enforceSerialNumber(userDir, userInfo.serialNumber);
                         } catch (IOException e) {
                             Log.wtf(LOG_TAG, "Failed to create user directory on " + volumeUuid, e);
@@ -1493,6 +1493,8 @@ public class UserManagerService extends IUserManager.Stub {
     }
 
     private void removeUserStateLocked(final int userHandle) {
+        mContext.getSystemService(StorageManager.class)
+            .deleteUserKey(userHandle);
         // Cleanup package manager settings
         mPm.cleanUpUserLILPw(this, userHandle);
 
@@ -1899,16 +1901,10 @@ public class UserManagerService extends IUserManager.Stub {
      * Create new {@code /data/user/[id]} directory and sets default
      * permissions.
      */
-    public static void prepareUserDirectory(File file) throws IOException {
-        if (!file.exists()) {
-            if (!file.mkdir()) {
-                throw new IOException("Failed to create " + file);
-            }
-        }
-        if (FileUtils.setPermissions(file.getAbsolutePath(), 0771, Process.SYSTEM_UID,
-                Process.SYSTEM_UID) != 0) {
-            throw new IOException("Failed to prepare " + file);
-        }
+    public static void prepareUserDirectory(Context context, String volumeUuid, int userId) {
+        final StorageManager storage = context.getSystemService(StorageManager.class);
+        final File userDir = Environment.getDataUserDirectory(volumeUuid, userId);
+        storage.createNewUserDir(userId, userDir);
     }
 
     /**

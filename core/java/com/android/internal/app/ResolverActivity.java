@@ -234,7 +234,9 @@ public class ResolverActivity extends Activity {
 
         mResolverComparator = new ResolverComparator(this, getTargetIntent(), referrerPackage);
 
-        configureContentView(mIntents, initialIntents, rList, alwaysUseOption);
+        if (configureContentView(mIntents, initialIntents, rList, alwaysUseOption)) {
+            return;
+        }
 
         // Prevent the Resolver window from becoming the top fullscreen window and thus from taking
         // control of the system bars.
@@ -794,6 +796,10 @@ public class ResolverActivity extends Activity {
         return false;
     }
 
+    boolean shouldAutoLaunchSingleChoice(TargetInfo target) {
+        return true;
+    }
+
     void showAppDetails(ResolveInfo ri) {
         Intent in = new Intent().setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 .setData(Uri.fromParts("package", ri.activityInfo.packageName, null))
@@ -808,7 +814,10 @@ public class ResolverActivity extends Activity {
                 launchedFromUid, filterLastUsed);
     }
 
-    void configureContentView(List<Intent> payloadIntents, Intent[] initialIntents,
+    /**
+     * Returns true if the activity is finishing and creation should halt
+     */
+    boolean configureContentView(List<Intent> payloadIntents, Intent[] initialIntents,
             List<ResolveInfo> rList, boolean alwaysUseOption) {
         // The last argument of createAdapter is whether to do special handling
         // of the last used choice to highlight it in the list.  We need to always
@@ -828,16 +837,21 @@ public class ResolverActivity extends Activity {
         mAlwaysUseOption = alwaysUseOption;
 
         int count = mAdapter.getUnfilteredCount();
-        if (count > 1 || (count == 1 && mAdapter.getOtherProfile() != null)) {
+        if (count == 1 && mAdapter.getOtherProfile() == null) {
+            // Only one target, so we're a candidate to auto-launch!
+            final TargetInfo target = mAdapter.targetInfoForPosition(0, false);
+            if (shouldAutoLaunchSingleChoice(target)) {
+                safelyStartActivity(target);
+                mPackageMonitor.unregister();
+                mRegistered = false;
+                finish();
+                return true;
+            }
+        }
+        if (count > 0) {
             setContentView(layoutId);
             mAdapterView = (AbsListView) findViewById(R.id.resolver_list);
             onPrepareAdapterView(mAdapterView, mAdapter, alwaysUseOption);
-        } else if (count == 1) {
-            safelyStartActivity(mAdapter.targetInfoForPosition(0, false));
-            mPackageMonitor.unregister();
-            mRegistered = false;
-            finish();
-            return;
         } else {
             setContentView(R.layout.resolver_list);
 
@@ -847,6 +861,7 @@ public class ResolverActivity extends Activity {
             mAdapterView = (AbsListView) findViewById(R.id.resolver_list);
             mAdapterView.setVisibility(View.GONE);
         }
+        return false;
     }
 
     void onPrepareAdapterView(AbsListView adapterView, ResolveListAdapter adapter,
@@ -884,6 +899,7 @@ public class ResolverActivity extends Activity {
         private final ResolveInfo mResolveInfo;
         private final CharSequence mDisplayLabel;
         private Drawable mDisplayIcon;
+        private Drawable mBadge;
         private final CharSequence mExtendedInfo;
         private final Intent mResolvedIntent;
         private final List<Intent> mSourceIntents = new ArrayList<>();
@@ -928,7 +944,25 @@ public class ResolverActivity extends Activity {
         }
 
         public Drawable getBadgeIcon() {
-            return null;
+            // We only expose a badge if we have extended info.
+            // The badge is a higher-priority disambiguation signal
+            // but we don't need one if we wouldn't show extended info at all.
+            if (TextUtils.isEmpty(getExtendedInfo())) {
+                return null;
+            }
+
+            if (mBadge == null && mResolveInfo != null && mResolveInfo.activityInfo != null
+                    && mResolveInfo.activityInfo.applicationInfo != null) {
+                if (mResolveInfo.activityInfo.icon == 0 || mResolveInfo.activityInfo.icon
+                        == mResolveInfo.activityInfo.applicationInfo.icon) {
+                    // Badging an icon with exactly the same icon is silly.
+                    // If the activityInfo icon resid is 0 it will fall back
+                    // to the application's icon, making it a match.
+                    return null;
+                }
+                mBadge = mResolveInfo.activityInfo.applicationInfo.loadIcon(mPm);
+            }
+            return mBadge;
         }
 
         @Override
@@ -1366,8 +1400,8 @@ public class ResolverActivity extends Activity {
             } else {
                 mHasExtendedInfo = true;
                 boolean usePkg = false;
-                CharSequence startApp = ro.getResolveInfoAt(0).activityInfo.applicationInfo
-                        .loadLabel(mPm);
+                final ApplicationInfo ai = ro.getResolveInfoAt(0).activityInfo.applicationInfo;
+                final CharSequence startApp = ai.loadLabel(mPm);
                 if (startApp == null) {
                     usePkg = true;
                 }

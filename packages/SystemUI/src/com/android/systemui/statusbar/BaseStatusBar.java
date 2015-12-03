@@ -90,6 +90,7 @@ import com.android.internal.statusbar.StatusBarIconList;
 import com.android.internal.util.NotificationColorUtil;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.systemui.DejankUtils;
 import com.android.systemui.R;
 import com.android.systemui.RecentsComponent;
 import com.android.systemui.SwipeHelper;
@@ -167,13 +168,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     // on-screen navigation buttons
     protected NavigationBarView mNavigationBarView = null;
 
-    protected Boolean mScreenOn;
-
-    // The second field is a bit different from the first one because it only listens to screen on/
-    // screen of events from Keyguard. We need this so we don't have a race condition with the
-    // broadcast. In the future, we should remove the first field altogether and rename the second
-    // field.
-    protected boolean mScreenOnFromKeyguard;
+    protected boolean mDeviceInteractive;
 
     protected boolean mVisible;
 
@@ -1512,6 +1507,15 @@ public abstract class BaseStatusBar extends SystemUI implements
             final PendingIntent intent = sbn.getNotification().contentIntent;
             final String notificationKey = sbn.getKey();
 
+            // Mark notification for one frame.
+            row.setJustClicked(true);
+            DejankUtils.postAfterTraversal(new Runnable() {
+                @Override
+                public void run() {
+                    row.setJustClicked(false);
+                }
+            });
+
             if (NOTIFICATION_CLICK_DEBUG) {
                 Log.d(TAG, "Clicked on content of " + notificationKey);
             }
@@ -1619,7 +1623,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void updateVisibleToUser() {
         boolean oldVisibleToUser = mVisibleToUser;
-        mVisibleToUser = mVisible && mScreenOnFromKeyguard;
+        mVisibleToUser = mVisible && mDeviceInteractive;
 
         if (oldVisibleToUser != mVisibleToUser) {
             handleVisibleToUserChanged(mVisibleToUser);

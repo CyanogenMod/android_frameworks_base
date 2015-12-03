@@ -153,12 +153,28 @@ public class KeyguardUpdateMonitorCallback {
     public void onStartedWakingUp() { }
 
     /**
+     * Called when the device has started going to sleep.
+     * @param why see {@link #onFinishedGoingToSleep(int)}
+     */
+    public void onStartedGoingToSleep(int why) { }
+
+    /**
      * Called when the device has finished going to sleep.
      * @param why either {@link WindowManagerPolicy#OFF_BECAUSE_OF_ADMIN},
      * {@link WindowManagerPolicy#OFF_BECAUSE_OF_USER}, or
      * {@link WindowManagerPolicy#OFF_BECAUSE_OF_TIMEOUT}.
      */
     public void onFinishedGoingToSleep(int why) { }
+
+    /**
+     * Called when the screen has been turned on.
+     */
+    public void onScreenTurnedOn() { }
+
+    /**
+     * Called when the screen has been turned off.
+     */
+    public void onScreenTurnedOff() { }
 
     /**
      * Called when trust changes for a user.
@@ -176,12 +192,23 @@ public class KeyguardUpdateMonitorCallback {
     public void onTrustGrantedWithFlags(int flags, int userId) { }
 
     /**
+     * Called when a finger has been acquired.
+     * <p>
+     * It is guaranteed that either {@link #onFingerprintAuthenticated} or
+     * {@link #onFingerprintAuthFailed()} is called after this method eventually.
+     */
+    public void onFingerprintAcquired() { }
+
+    /**
+     * Called when a fingerprint couldn't be authenticated.
+     */
+    public void onFingerprintAuthFailed() { }
+
+    /**
      * Called when a fingerprint is recognized.
      * @param userId the user id for which the fingerprint was authenticated
-     * @param wakeAndUnlocking whether the authentication woke the device up and thus we'd like to
-     *                         dismiss the lockscreen before turning on the screen
      */
-    public void onFingerprintAuthenticated(int userId, boolean wakeAndUnlocking) { }
+    public void onFingerprintAuthenticated(int userId) { }
 
     /**
      * Called when fingerprint provides help string (e.g. "Try again")
@@ -207,4 +234,10 @@ public class KeyguardUpdateMonitorCallback {
      * Called when the fingerprint running state changed.
      */
     public void onFingerprintRunningStateChanged(boolean running) { }
+
+    /**
+     * Called when the state that the user hasn't used strong authentication since quite some time
+     * has changed.
+     */
+    public void onStrongAuthStateChanged(int userId) { }
 }

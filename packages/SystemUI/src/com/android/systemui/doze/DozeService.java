@@ -88,6 +88,7 @@ public class DozeService extends DreamService {
     private boolean mPowerSaveActive;
     private boolean mCarMode;
     private long mNotificationPulseTime;
+    private long mLastScheduleResetTime;
     private long mEarliestPulseDueToLight;
     private int mScheduleResetsRemaining;
 
@@ -255,6 +256,11 @@ public class DozeService extends DreamService {
     }
 
     private void continuePulsing(int reason) {
+        if (mHost.isPulsingBlocked()) {
+            mPulsing = false;
+            mWakeLock.release();
+            return;
+        }
         mHost.pulseWhileDozing(new DozeHost.PulseCallback() {
             @Override
             public void onPulseStarted() {
@@ -351,13 +357,21 @@ public class DozeService extends DreamService {
             return;
         }
         final long pulseDuration = mDozeParameters.getPulseDuration(false /*pickup*/);
-        if ((notificationTimeMs - mNotificationPulseTime) < pulseDuration) {
+        boolean pulseImmediately = System.currentTimeMillis() >= notificationTimeMs;
+        if ((notificationTimeMs - mLastScheduleResetTime) >= pulseDuration) {
+            mScheduleResetsRemaining--;
+            mLastScheduleResetTime = notificationTimeMs;
+        } else if (!pulseImmediately){
             if (DEBUG) Log.d(mTag, "Recently updated, not resetting schedule");
             return;
         }
-        mScheduleResetsRemaining--;
         if (DEBUG) Log.d(mTag, "mScheduleResetsRemaining = " + mScheduleResetsRemaining);
         mNotificationPulseTime = notificationTimeMs;
+        if (pulseImmediately) {
+            DozeLog.traceNotificationPulse(0);
+            requestPulse(DozeLog.PULSE_REASON_NOTIFICATION);
+        }
+        // schedule the rest of the pulses
         rescheduleNotificationPulse(true /*predicate*/);
     }
 

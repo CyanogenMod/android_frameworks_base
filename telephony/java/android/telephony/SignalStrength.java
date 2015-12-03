@@ -146,10 +146,11 @@ public class SignalStrength implements Parcelable {
             int cdmaDbm, int cdmaEcio,
             int evdoDbm, int evdoEcio, int evdoSnr,
             int lteSignalStrength, int lteRsrp, int lteRsrq, int lteRssnr, int lteCqi,
-            boolean gsmFlag) {
+            int tdScdmaRscp, boolean gsmFlag) {
         initialize(gsmSignalStrength, gsmBitErrorRate, cdmaDbm, cdmaEcio,
                 evdoDbm, evdoEcio, evdoSnr, lteSignalStrength, lteRsrp,
                 lteRsrq, lteRssnr, lteCqi, gsmFlag);
+        mTdScdmaRscp = tdScdmaRscp;
     }
 
     /**
@@ -161,11 +162,10 @@ public class SignalStrength implements Parcelable {
             int cdmaDbm, int cdmaEcio,
             int evdoDbm, int evdoEcio, int evdoSnr,
             int lteSignalStrength, int lteRsrp, int lteRsrq, int lteRssnr, int lteCqi,
-            int tdScdmaRscp, boolean gsmFlag) {
+            boolean gsmFlag) {
         initialize(gsmSignalStrength, gsmBitErrorRate, cdmaDbm, cdmaEcio,
                 evdoDbm, evdoEcio, evdoSnr, lteSignalStrength, lteRsrp,
                 lteRsrq, lteRssnr, lteCqi, gsmFlag);
-        mTdScdmaRscp = tdScdmaRscp;
     }
 
     /**
@@ -403,7 +403,6 @@ public class SignalStrength implements Parcelable {
 
         mTdScdmaRscp = ((mTdScdmaRscp >= 25) && (mTdScdmaRscp <= 120))
                 ? -mTdScdmaRscp : SignalStrength.INVALID;
-
         // Cqi no change
         if (DBG) log("Signal after validate=" + this);
     }

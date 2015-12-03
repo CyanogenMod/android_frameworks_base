@@ -16,6 +16,7 @@
 
 package com.android.internal.widget;
 
+import android.app.trust.IStrongAuthTracker;
 import com.android.internal.widget.VerifyCredentialResponse;
 
 /** {@hide} */
@@ -36,4 +37,7 @@ interface ILockSettings {
     boolean havePattern(int userId);
     boolean havePassword(int userId);
     void sanitizePassword();
+    void registerStrongAuthTracker(in IStrongAuthTracker tracker);
+    void unregisterStrongAuthTracker(in IStrongAuthTracker tracker);
+    void requireStrongAuth(int strongAuthReason, int userId);
 }

@@ -33,7 +33,7 @@
     <string name="connected_via_wfa" msgid="3805736726317410714">"Wi‑Fiアシスタント経由で接続"</string>
     <string name="connected_via_passpoint" msgid="2826205693803088747">"%1$s経由で接続"</string>
     <string name="available_via_passpoint" msgid="1617440946846329613">"%1$s経由で使用可能"</string>
-    <string name="wifi_connected_no_internet" msgid="3149853966840874992">"接続先はインターネットに接続されていない"</string>
+    <string name="wifi_connected_no_internet" msgid="3149853966840874992">"接続済み、インターネットは利用できません"</string>
     <string name="bluetooth_disconnected" msgid="6557104142667339895">"切断"</string>
     <string name="bluetooth_disconnecting" msgid="8913264760027764974">"切断中..."</string>
     <string name="bluetooth_connecting" msgid="8555009514614320497">"接続中..."</string>
@@ -77,16 +77,10 @@
     <string name="bluetooth_pairing_pin_error_message" msgid="8337234855188925274">"PINまたはパスキーが正しくないため、<xliff:g id="DEVICE_NAME">%1$s</xliff:g>をペアに設定できませんでした。"</string>
     <string name="bluetooth_pairing_device_down_error_message" msgid="7870998403045801381">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g>と通信できません。"</string>
     <string name="bluetooth_pairing_rejected_error_message" msgid="1648157108520832454">"ペア設定が<xliff:g id="DEVICE_NAME">%1$s</xliff:g>に拒否されました。"</string>
-    <!-- no translation found for accessibility_wifi_off (1166761729660614716) -->
-    <skip />
-    <!-- no translation found for accessibility_no_wifi (8834610636137374508) -->
-    <skip />
-    <!-- no translation found for accessibility_wifi_one_bar (4869376278894301820) -->
-    <skip />
-    <!-- no translation found for accessibility_wifi_two_bars (3569851234710034416) -->
-    <skip />
-    <!-- no translation found for accessibility_wifi_three_bars (8134185644861380311) -->
-    <skip />
-    <!-- no translation found for accessibility_wifi_signal_full (7061045677694702) -->
-    <skip />
+    <string name="accessibility_wifi_off" msgid="1166761729660614716">"Wi-FiはOFFです。"</string>
+    <string name="accessibility_no_wifi" msgid="8834610636137374508">"Wi-Fiが切断されました。"</string>
+    <string name="accessibility_wifi_one_bar" msgid="4869376278894301820">"Wi-Fiはレベル1です。"</string>
+    <string name="accessibility_wifi_two_bars" msgid="3569851234710034416">"Wi-Fiはレベル2です。"</string>
+    <string name="accessibility_wifi_three_bars" msgid="8134185644861380311">"Wi-Fiはレベル3です。"</string>
+    <string name="accessibility_wifi_signal_full" msgid="7061045677694702">"Wi-Fiの電波はフルです。"</string>
 </resources>

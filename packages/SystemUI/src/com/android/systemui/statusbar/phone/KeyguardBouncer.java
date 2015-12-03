@@ -17,7 +17,6 @@
 package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
-import android.view.Choreographer;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +26,8 @@ import android.view.accessibility.AccessibilityEvent;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardHostView;
 import com.android.keyguard.KeyguardSecurityView;
+import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.keyguard.R;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.DejankUtils;
@@ -48,6 +49,13 @@ public class KeyguardBouncer {
     private ViewGroup mRoot;
     private boolean mShowingSoon;
     private int mBouncerPromptReason;
+    private KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
+            new KeyguardUpdateMonitorCallback() {
+                @Override
+                public void onStrongAuthStateChanged(int userId) {
+                    mBouncerPromptReason = mCallback.getBouncerPromptReason();
+                }
+            };
 
     public KeyguardBouncer(Context context, ViewMediatorCallback callback,
             LockPatternUtils lockPatternUtils, StatusBarWindowManager windowManager,
@@ -57,6 +65,7 @@ public class KeyguardBouncer {
         mLockPatternUtils = lockPatternUtils;
         mContainer = container;
         mWindowManager = windowManager;
+        KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mUpdateMonitorCallback);
     }
 
     public void show(boolean resetSecuritySelection) {
@@ -101,6 +110,10 @@ public class KeyguardBouncer {
      */
     public void showPromptReason(int reason) {
         mKeyguardView.showPromptReason(reason);
+    }
+
+    public void showMessage(String message, int color) {
+        mKeyguardView.showMessage(message, color);
     }
 
     private void cancelShowRunnable() {
@@ -244,8 +257,8 @@ public class KeyguardBouncer {
         return mKeyguardView.interceptMediaKey(event);
     }
 
-    public void notifyKeyguardAuthenticated() {
+    public void notifyKeyguardAuthenticated(boolean strongAuth) {
         ensureView();
-        mKeyguardView.finish();
+        mKeyguardView.finish(strongAuth);
     }
 }

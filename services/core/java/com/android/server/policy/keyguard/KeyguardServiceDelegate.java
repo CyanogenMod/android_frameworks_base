@@ -23,6 +23,8 @@ import com.android.internal.policy.IKeyguardDrawnCallback;
 import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardService;
 
+import java.io.PrintWriter;
+
 /**
  * A local class that keeps a cache of keyguard state that can be restored in the event
  * keyguard crashes. It currently also allows runtime-selectable
@@ -31,6 +33,14 @@ import com.android.internal.policy.IKeyguardService;
 public class KeyguardServiceDelegate {
     private static final String TAG = "KeyguardServiceDelegate";
     private static final boolean DEBUG = true;
+
+    private static final int SCREEN_STATE_OFF = 0;
+    private static final int SCREEN_STATE_TURNING_ON = 1;
+    private static final int SCREEN_STATE_ON = 2;
+
+    private static final int INTERACTIVE_STATE_SLEEP = 0;
+    private static final int INTERACTIVE_STATE_AWAKE = 1;
+    private static final int INTERACTIVE_STATE_GOING_TO_SLEEP = 2;
 
     protected KeyguardServiceWrapper mKeyguardService;
     private final Context mContext;
@@ -61,6 +71,8 @@ public class KeyguardServiceDelegate {
         public int offReason;
         public int currentUser;
         public boolean bootCompleted;
+        public int screenState;
+        public int interactiveState;
     };
 
     public interface DrawnListener {
@@ -144,10 +156,17 @@ public class KeyguardServiceDelegate {
                 // If the system is ready, it means keyguard crashed and restarted.
                 mKeyguardService.onSystemReady();
                 // This is used to hide the scrim once keyguard displays.
-                mKeyguardService.onStartedWakingUp();
-                mKeyguardService.onScreenTurningOn(
-                        new KeyguardShowDelegate(mDrawnListenerWhenConnect));
-                mKeyguardService.onScreenTurnedOn();
+                if (mKeyguardState.interactiveState == INTERACTIVE_STATE_AWAKE) {
+                    mKeyguardService.onStartedWakingUp();
+                }
+                if (mKeyguardState.screenState == SCREEN_STATE_ON
+                        || mKeyguardState.screenState == SCREEN_STATE_TURNING_ON) {
+                    mKeyguardService.onScreenTurningOn(
+                            new KeyguardShowDelegate(mDrawnListenerWhenConnect));
+                }
+                if (mKeyguardState.screenState == SCREEN_STATE_ON) {
+                    mKeyguardService.onScreenTurnedOn();
+                }
                 mDrawnListenerWhenConnect = null;
             }
             if (mKeyguardState.bootCompleted) {
@@ -231,6 +250,7 @@ public class KeyguardServiceDelegate {
             if (DEBUG) Log.v(TAG, "onStartedWakingUp()");
             mKeyguardService.onStartedWakingUp();
         }
+        mKeyguardState.interactiveState = INTERACTIVE_STATE_AWAKE;
     }
 
     public void onScreenTurnedOff() {
@@ -238,6 +258,7 @@ public class KeyguardServiceDelegate {
             if (DEBUG) Log.v(TAG, "onScreenTurnedOff()");
             mKeyguardService.onScreenTurnedOff();
         }
+        mKeyguardState.screenState = SCREEN_STATE_OFF;
     }
 
     public void onScreenTurningOn(final DrawnListener drawnListener) {
@@ -252,6 +273,7 @@ public class KeyguardServiceDelegate {
             mDrawnListenerWhenConnect = drawnListener;
             showScrim();
         }
+        mKeyguardState.screenState = SCREEN_STATE_TURNING_ON;
     }
 
     public void onScreenTurnedOn() {
@@ -259,6 +281,7 @@ public class KeyguardServiceDelegate {
             if (DEBUG) Log.v(TAG, "onScreenTurnedOn()");
             mKeyguardService.onScreenTurnedOn();
         }
+        mKeyguardState.screenState = SCREEN_STATE_ON;
     }
 
     public void onStartedGoingToSleep(int why) {
@@ -266,12 +289,14 @@ public class KeyguardServiceDelegate {
             mKeyguardService.onStartedGoingToSleep(why);
         }
         mKeyguardState.offReason = why;
+        mKeyguardState.interactiveState = INTERACTIVE_STATE_GOING_TO_SLEEP;
     }
 
     public void onFinishedGoingToSleep(int why) {
         if (mKeyguardService != null) {
             mKeyguardService.onFinishedGoingToSleep(why);
         }
+        mKeyguardState.interactiveState = INTERACTIVE_STATE_SLEEP;
     }
 
     public void setKeyguardEnabled(boolean enabled) {
@@ -368,6 +393,28 @@ public class KeyguardServiceDelegate {
     public void onActivityDrawn() {
         if (mKeyguardService != null) {
             mKeyguardService.onActivityDrawn();
+        }
+    }
+
+    public void dump(String prefix, PrintWriter pw) {
+        pw.println(prefix + TAG);
+        prefix += "  ";
+        pw.println(prefix + "showing=" + mKeyguardState.showing);
+        pw.println(prefix + "showingAndNotOccluded=" + mKeyguardState.showingAndNotOccluded);
+        pw.println(prefix + "inputRestricted=" + mKeyguardState.inputRestricted);
+        pw.println(prefix + "occluded=" + mKeyguardState.occluded);
+        pw.println(prefix + "secure=" + mKeyguardState.secure);
+        pw.println(prefix + "dreaming=" + mKeyguardState.dreaming);
+        pw.println(prefix + "systemIsReady=" + mKeyguardState.systemIsReady);
+        pw.println(prefix + "deviceHasKeyguard=" + mKeyguardState.deviceHasKeyguard);
+        pw.println(prefix + "enabled=" + mKeyguardState.enabled);
+        pw.println(prefix + "offReason=" + mKeyguardState.offReason);
+        pw.println(prefix + "currentUser=" + mKeyguardState.currentUser);
+        pw.println(prefix + "bootCompleted=" + mKeyguardState.bootCompleted);
+        pw.println(prefix + "screenState=" + mKeyguardState.screenState);
+        pw.println(prefix + "interactiveState=" + mKeyguardState.interactiveState);
+        if (mKeyguardService != null) {
+            mKeyguardService.dump(prefix, pw);
         }
     }
 }

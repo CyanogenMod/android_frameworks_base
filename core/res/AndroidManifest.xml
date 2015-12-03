@@ -1056,6 +1056,11 @@
     <permission android:name="android.permission.CONNECTIVITY_INTERNAL"
         android:protectionLevel="signature|privileged" />
 
+    <!-- Allows a system application to access hardware packet offload capabilities.
+         @hide -->
+    <permission android:name="android.permission.PACKET_KEEPALIVE_OFFLOAD"
+        android:protectionLevel="signature|privileged" />
+
     <!-- @SystemApi
          @hide -->
     <permission android:name="android.permission.RECEIVE_DATA_ACTIVITY_CHANGE"
@@ -1694,7 +1699,7 @@
         android:protectionLevel="signature|privileged" />
 
     <!-- Allows applications to change network connectivity state.
-         <p>Protection level: normal
+         <p>Protection level: signature
     -->
     <permission android:name="android.permission.CHANGE_NETWORK_STATE"
         android:description="@string/permdesc_changeNetworkState"
@@ -2054,6 +2059,12 @@
     <permission android:name="android.permission.SET_KEYBOARD_LAYOUT"
         android:protectionLevel="signature" />
 
+    <!-- Allows an application to monitor changes in tablet mode.
+         <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.TABLET_MODE_LISTENER"
+        android:protectionLevel="signature" />
+
     <!-- Allows an application to request installing packages. Apps
          targeting APIs greater than 22 must hold this permission in
          order to use {@link android.content.Intent#ACTION_INSTALL_PACKAGE}.
@@ -2147,6 +2158,13 @@
          by the display manager.
          @hide -->
     <permission android:name="android.permission.CONTROL_WIFI_DISPLAY"
+        android:protectionLevel="signature" />
+
+    <!-- Allows an application to control the color transforms applied to
+         displays system-wide.
+         <p>Not for use by third-party applications.</p>
+         @hide -->
+    <permission android:name="android.permission.CONFIGURE_DISPLAY_COLOR_TRANSFORM"
         android:protectionLevel="signature" />
 
     <!-- @SystemApi Allows an application to control VPN.
@@ -2504,6 +2522,10 @@
     <!-- Allows managing (adding, removing) fingerprint templates. Reserved for the system. @hide -->
     <permission android:name="android.permission.MANAGE_FINGERPRINT"
         android:protectionLevel="system|signature" />
+
+    <!-- Allows an app to reset fingerprint attempt counter. Reserved for the system. @hide -->
+    <permission android:name="android.permission.RESET_FINGERPRINT_LOCKOUT"
+        android:protectionLevel="signature" />
 
     <!-- Allows an application to control keyguard.  Only allowed for system processes.
         @hide -->
