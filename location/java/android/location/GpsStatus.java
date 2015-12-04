@@ -180,17 +180,16 @@ public final class GpsStatus {
             boolean[] ephemerisPresences,
             boolean[] almanacPresences,
             boolean[] usedInFix) {
-        int i;
-
-        for (i = 0; i < mSatellites.length; i++) {
-            mSatellites[i].mValid = false;
-        }
-
-        for (i = 0; i < gnssSvCount; i++) {
+        clearSatellites();
+        for (int i = 0; i < gnssSvCount; i++) {
             int prn = prns[i] - 1;
 
-            if (prn >= 0 && prn < mSatellites.length) {
-                GpsSatellite satellite = mSatellites[prn];
+            if (prn >= 0 && prn < NUM_SATELLITES) {
+                GpsSatellite satellite = mSatellites.get(prn);
+                if (satellite == null) {
+                    satellite = new GpsSatellite(prn);
+                    mSatellites.put(prn, satellite);
+                }
 
                 satellite.mValid = true;
                 satellite.mSnr = snrs[i];

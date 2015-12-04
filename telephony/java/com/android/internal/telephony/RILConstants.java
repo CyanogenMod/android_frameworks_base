@@ -334,10 +334,10 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_STOP_LCE = 133;
     int RIL_REQUEST_PULL_LCEDATA = 134;
     int RIL_REQUEST_GET_ACTIVITY_INFO = 135;
-    int RIL_REQUEST_SIM_GET_ATR = 136;
 
     // MTK please
     // int RIL_REQUEST_SIM_GET_ATR = 133;
+    // int RIL_REQUEST_SIM_GET_ATR = 136;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
