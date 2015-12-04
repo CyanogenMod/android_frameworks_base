@@ -746,7 +746,7 @@ public abstract class PanelView extends FrameLayout {
         }
     }
 
-    public synchronized void setExpandedHeightInternal(float h) {
+    public void setExpandedHeightInternal(float h) {
         float fhWithoutOverExpansion = getMaxPanelHeight() - getOverExpansionAmount();
         if (mHeightAnimator == null) {
             float overExpansionPixels = Math.max(0, h - fhWithoutOverExpansion);

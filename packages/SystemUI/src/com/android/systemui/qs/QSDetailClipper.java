@@ -36,6 +36,10 @@ public class QSDetailClipper {
         mBackground = (TransitionDrawable) detail.getBackground();
     }
 
+    public boolean isAnimating() {
+        return mAnimator != null && mAnimator.isRunning();
+    }
+
     public void animateCircularClip(int x, int y, boolean in, AnimatorListener listener) {
         if (mAnimator != null) {
             mAnimator.cancel();
