@@ -433,4 +433,5 @@
     <string name="enable_bluetooth_title" msgid="5027037706500635269">"要開啟藍牙嗎？"</string>
     <string name="enable_bluetooth_message" msgid="9106595990708985385">"如要將鍵盤連接至平板電腦，請先開啟藍牙。"</string>
     <string name="enable_bluetooth_confirmation_ok" msgid="6258074250948309715">"開啟"</string>
+    <string name="hotspot_apm_message">"飛行模式開啟的情況下不能夠鏈接到移動網絡,請關閉飛行模式後重試。"</string>
 </resources>
