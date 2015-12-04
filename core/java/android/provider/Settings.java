@@ -2389,6 +2389,11 @@ public final class Settings {
             "lock_pattern_tactile_feedback_enabled";
 
         /**
+         * @hide
+         */
+        public static final String SHOW_SU_INDICATOR = "show_su_indicator";
+
+        /**
          * A formatted string of the next alarm that is set, or the empty string
          * if there is no alarm set.
          *
