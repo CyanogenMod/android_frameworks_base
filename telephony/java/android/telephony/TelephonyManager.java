@@ -3069,6 +3069,50 @@ public class TelephonyManager {
     }
 
     /**
+     * Opens a logical channel to the ICC card
+     *
+     * Input parameters equivalent to TS 27.007 AT+CCHO command.
+     *
+     * @param AID application id. See ETSI 102.221 and 101.220.
+     * @param p2  byte P2 parameter
+     * @return an IccOpenLogicalChannelResponse object
+     * @hide
+     */
+    public IccOpenLogicalChannelResponse iccOpenLogicalChannel(String AID, byte p2) {
+        try {
+            ITelephony telephony = getITelephony();
+            if (telephony != null) {
+               return telephony.iccOpenLogicalChannelWithP2(AID, p2);
+            }
+        } catch (RemoteException ex) {
+        } catch (NullPointerException ex) {
+        }
+        return null;
+    }
+
+    /**
+     * Opens a logical channel to the ICC card for the given subId
+     *
+     * @param subId subid to send the command to
+     * @param AID applcation id. See ETSI 102.221 and 101.220.
+     * @param p2 byte P2 parameter
+     * @return an IccOpenLogicalChannelResponse object
+     * @hide
+     */
+    public IccOpenLogicalChannelResponse iccOpenLogicalChannel(int subId,
+                String AID, byte p2) {
+        try {
+            ITelephony telephony = getITelephony();
+            if (telephony != null) {
+                return telephony.iccOpenLogicalChannelUsingSubIdWithP2(subId, AID, p2);
+            }
+        } catch (RemoteException ex) {
+        } catch (NullPointerException ex) {
+        }
+        return null;
+    }
+
+    /**
      * Closes a previously opened logical channel to the ICC card.
      *
      * Input parameters equivalent to TS 27.007 AT+CCHC command.
