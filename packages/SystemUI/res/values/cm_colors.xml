@@ -87,6 +87,7 @@
     <color name="quick_settings_panel_background">#0000</color>
     <color name="lockscreen_middle_button_tint_color">#666666</color>
     <color name="play_button_image_tint_color">#000000</color>
+    <color name="play_button_text_color">#000000</color>
     <color name="zen_ic_close_tint_color">@android:color/white</color>
     <color name="header_debug_info_text_color">#00A040</color>
 </resources>
