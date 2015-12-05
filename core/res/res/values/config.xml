@@ -2148,15 +2148,20 @@
          on the current state of the device.
          Each item must be one of the following strings:
          "power" = Power off
-         "settings" = An action to launch settings
+         "reboot" = Reboot
+         "screenshot" = Take screenshot
+         "screenrecord" = Take screen recording
+         "profile" = Change phone's profile
          "airplane" = Airplane mode toggle
+         "users" = list of users
+         "settings" = An action to launch settings
+         "lockdown" = lock the phone down
          "bugreport" = Take bug report, if available
          "silent" = silent mode
-         "users" = list of users
          -->
     <string-array translatable="false" name="config_globalActionsList">
         <item>power</item>
-        <item>bugreport</item>
+        <item>reboot</item>
         <item>users</item>
     </string-array>
 
