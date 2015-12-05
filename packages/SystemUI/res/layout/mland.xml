@@ -48,7 +48,7 @@
                 android:layout_height="48dp"
                 android:scaleType="fitCenter"
                 android:layout_gravity="center"
-                android:tint="@color/play_button_image_tint_color"
+                android:tint="#000000"
                 android:src="@drawable/play"
                 />
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_gravity="center"
                 android:alpha="0"
                 android:textSize="40dp"
-                android:textColor="@color/play_button_text_color"
+                android:textColor="#000000"
                 />
         </FrameLayout>
     </FrameLayout>

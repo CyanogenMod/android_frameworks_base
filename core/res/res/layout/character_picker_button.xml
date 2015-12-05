@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2015 The Android Open Source Project
+<!-- Copyright (C) 2008 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -21,6 +21,6 @@
     android:focusable="false"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:background="@drawable/btn_keyboard_key_trans"
-    android:textColor="@color/character_picker_button_text_color"
+    android:textColor="#FFFFFFFF"
 />
 

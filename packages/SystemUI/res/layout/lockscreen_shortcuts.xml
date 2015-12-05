@@ -45,7 +45,7 @@
             android:layout_height="@dimen/keyguard_affordance_height" />
         <ImageView
             android:id="@+id/middle_button"
-            android:tint="@color/lockscreen_middle_button_tint_color"
+            android:tint="#666666"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:scaleType="center"

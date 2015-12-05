@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright 2015, The Android Open Source Project
+Copyright 2010, The Android Open Source Project
 
 Licensed under the Apache License, Version 2.0 (the "License"); 
 you may not use this file except in compliance with the License. 
@@ -19,8 +19,8 @@ limitations under the License.
     android:id="@android:id/text1"
     style="?android:attr/dropDownItemStyle"
     android:textAppearance="?android:attr/textAppearanceSearchResultTitle"
-    android:textColor="@color/web_view_dropdown_text_color"
-    android:background="@color/web_view_dropdown_background_color"
+    android:textColor="#ff000000"
+    android:background="#ffffffff"
     android:singleLine="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

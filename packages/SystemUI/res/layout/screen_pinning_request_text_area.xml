@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright (c) 2015, The Android Open Source Project
+ * Copyright (c) 2014, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:text="@string/screen_pinning_positive"
-        android:textColor="@color/screen_pinning_description_text_color"
+        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
     <Button
@@ -74,7 +74,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:text="@string/screen_pinning_negative"
-        android:textColor="@color/screen_pinning_cancel_button_text_color"
+        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
 </RelativeLayout>
