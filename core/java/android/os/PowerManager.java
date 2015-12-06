@@ -899,6 +899,17 @@ public final class PowerManager {
         }
     }
 
+    public String getSeenWakeLocks()
+    {
+	try {
+	    if (mService != null) {
+		return mService.getSeenWakeLocks();
+	    }
+	} catch (RemoteException e) {
+	}
+	return null;
+    }
+
     /**
      * Returns true if the device is currently in idle mode.  This happens when a device
      * has been sitting unused and unmoving for a sufficiently long period of time, so that
