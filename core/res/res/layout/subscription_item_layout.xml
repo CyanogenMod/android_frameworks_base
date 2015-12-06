@@ -40,7 +40,7 @@
             android:layout_alignParentBottom="true"
             android:textSize="12sp"
             android:singleLine="true"
-            android:textColor="@android:color/white"
+            android:textColor="@color/subscription_item_short_number_color"
             android:includeFontPadding="false"/>
     </RelativeLayout>
     <RelativeLayout
