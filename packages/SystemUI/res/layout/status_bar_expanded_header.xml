@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-** Copyright 2012, The Android Open Source Project
+** Copyright 2015, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
 ** you may not use this file except in compliance with the License. 
@@ -229,7 +229,7 @@
         android:fontFamily="sans-serif-condensed"
         android:textSize="11dp"
         android:textStyle="bold"
-        android:textColor="#00A040"
+        android:textColor="@color/header_debug_info_text_color"
         android:padding="2dp"
         />
 
