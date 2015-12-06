@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/restr_pin_error_doesnt_match"
-            android:textColor="#FFFF0000" />
+            android:textColor="@color/pin_error_message_text_color" />
 
     </LinearLayout>
 
