@@ -24,7 +24,7 @@
 
     <View android:layout_height="3dip"
           android:layout_width="match_parent"
-          android:background="#323232"/>
+          android:background="@color/choose_account_type_background_color"/>
 
     <ListView android:id="@android:id/list"
         android:layout_width="match_parent"

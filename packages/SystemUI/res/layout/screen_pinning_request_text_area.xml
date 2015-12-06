@@ -59,7 +59,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:text="@string/screen_pinning_positive"
-        android:textColor="@android:color/white"
+        android:textColor="@color/screen_pinning_description_text_color"
         android:textSize="14sp" />
 
     <Button
@@ -74,7 +74,7 @@
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:text="@string/screen_pinning_negative"
-        android:textColor="@android:color/white"
+        android:textColor="@color/screen_pinning_cancel_button_text_color"
         android:textSize="14sp" />
 
 </RelativeLayout>

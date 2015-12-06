@@ -25,6 +25,6 @@
         android:id="@+id/speedbump_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#6fdddddd"
+        android:background="@color/speedbump_line_divider"
         android:layout_gravity="center_vertical"/>
 </com.android.systemui.statusbar.SpeedBumpView>
