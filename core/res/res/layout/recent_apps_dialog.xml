@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
-** Copyright 2008, The Android Open Source Project
+** Copyright 2015, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@
         android:layout_height="40dip"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#80FFFFFF"
+        android:textColor="@color/recent_apps_dialog_text_color"
         android:textStyle="bold"
         android:singleLine="true"
         android:text="@android:string/recent_tasks_title" />

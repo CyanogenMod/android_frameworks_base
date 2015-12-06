@@ -15,7 +15,7 @@
 
     <TextView
         android:textSize="15sp"
-        android:textColor="#424242"
+        android:textColor="@color/lockscreen_message_text_color"
         android:gravity="center"
         android:layout_below="@id/phone_button"
         android:layout_alignStart="@id/phone_button"
@@ -45,7 +45,7 @@
             android:layout_height="@dimen/keyguard_affordance_height" />
         <ImageView
             android:id="@+id/middle_button"
-            android:tint="#666666"
+            android:tint="@color/lockscreen_middle_button_tint_color"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:scaleType="center"
