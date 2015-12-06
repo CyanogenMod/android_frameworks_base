@@ -21,8 +21,8 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:textSize="16sp"
-    android:textColor="#ffffffff"
+    android:textColor="@color/recents_empty_message_text_color"
     android:text="@string/recents_empty_message"
     android:fontFamily="sans-serif"
-    android:background="#80000000"
+    android:background="@color/recents_empty_background_color"
     android:visibility="gone" />
