@@ -24,7 +24,7 @@
     android:gravity="start|center_vertical"
     android:drawablePadding="8dp"
     android:paddingStart="8dp"
-    android:textColor="#555555"
+    android:textColor="@color/notification_action_tombstone_text_color"
     android:textSize="@dimen/notification_text_size"
     android:singleLine="true"
     android:ellipsize="end"

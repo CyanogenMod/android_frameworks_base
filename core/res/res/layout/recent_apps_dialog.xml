@@ -32,7 +32,7 @@
         android:layout_height="40dip"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#80FFFFFF"
+        android:textColor="@color/recent_apps_dialog_text_color"
         android:textStyle="bold"
         android:singleLine="true"
         android:text="@android:string/recent_tasks_title" />
