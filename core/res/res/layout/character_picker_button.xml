@@ -21,6 +21,6 @@
     android:focusable="false"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:background="@drawable/btn_keyboard_key_trans"
-    android:textColor="#FFFFFFFF"
+    android:textColor="@color/character_picker_button_text_color"
 />
 

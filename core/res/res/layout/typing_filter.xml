@@ -16,8 +16,8 @@
 
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
     android:textSize="36dp"
-    android:textColor="#99FFFFFF"
-    android:background="#BB000000"
+    android:textColor="@color/typing_filter_text_color"
+    android:background="@color/typing_filter_background_color"
     android:minWidth="240dip"
     android:maxWidth="240dip"
     android:padding="10dip"
