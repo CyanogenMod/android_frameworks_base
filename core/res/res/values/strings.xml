@@ -4122,9 +4122,4 @@
     <!-- Used to replace a range of characters in text that is too wide
          for the space allocated to it (two dots). -->
     <string name="ellipsis_two_dots">\u2025</string>
-
-    <!-- Carrier Name -->
-    <string name="China_Mobile">China Mobile</string>
-    <string name="China_Unicom">China Unicom</string>
-    <string name="China_Telecom">China Telecom</string>
 </resources>

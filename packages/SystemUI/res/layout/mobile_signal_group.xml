@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-/*
- * Copyright (c) 2015 The Linux Foundation. All rights reserved.
- * Not a Contribution.
-*/
 /* apps/common/assets/default/default/skins/StatusBar.xml
 **
 ** Copyright 2011, The Android Open Source Project
@@ -21,73 +17,31 @@
 ** limitations under the License.
 */
 -->
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mobile_combo"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
-    <ImageView
-        android:layout_width="wrap_content"
+    <com.android.systemui.statusbar.AnimatedImageView
+        android:theme="@style/DualToneLightTheme"
+        android:id="@+id/mobile_signal"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:id="@+id/data_inout"
-        android:visibility="gone"
+        android:layout_width="wrap_content"
+        systemui:hasOverlappingRendering="false"
         />
-    <FrameLayout
-        android:layout_width="wrap_content"
+    <com.android.systemui.statusbar.AnimatedImageView
+        android:theme="@style/DualToneDarkTheme"
+        android:id="@+id/mobile_signal_dark"
         android:layout_height="wrap_content"
-        >
-        <FrameLayout
-            android:id="@+id/mobile_signal_single"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-            <com.android.systemui.statusbar.AnimatedImageView
-                android:theme="@style/DualToneLightTheme"
-                android:id="@+id/mobile_signal"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                systemui:hasOverlappingRendering="false"
-                />
-            <com.android.systemui.statusbar.AnimatedImageView
-                android:theme="@style/DualToneDarkTheme"
-                android:id="@+id/mobile_signal_dark"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:alpha="0.0"
-                systemui:hasOverlappingRendering="false"
-                />
-            <ImageView
-                android:id="@+id/mobile_type"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                />
-            <ImageView
-                android:id="@+id/mobile_inout"
-                android:layout_height="17dp"
-                android:layout_width="17dp"
-                android:layout_gravity="end|bottom"
-                />
-        </FrameLayout>
-        <LinearLayout
-            android:id="@+id/mobile_signal_stacked"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            >
-            <ImageView
-                android:id="@+id/mobile_signal_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <ImageView
-                android:id="@+id/mobile_signal_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-    </FrameLayout>
-</LinearLayout>
+        android:layout_width="wrap_content"
+        android:alpha="0.0"
+        systemui:hasOverlappingRendering="false"
+        />
+    <ImageView
+        android:id="@+id/mobile_type"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
+</FrameLayout>

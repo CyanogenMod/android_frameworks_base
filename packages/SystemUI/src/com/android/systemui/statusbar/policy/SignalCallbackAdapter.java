@@ -36,9 +36,8 @@ public class SignalCallbackAdapter implements SignalCallback {
 
     @Override
     public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
-            int qsType, boolean activityIn, boolean activityOut, int dataActivity,
-            int mobileActivity, int stackedDataIcon, int stackedVoiceIcon,
-            String typeContentDescription, String description, boolean isWide, int subId) {
+            int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
+            String description, boolean isWide, int subId) {
     }
 
     @Override

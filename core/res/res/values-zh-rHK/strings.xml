@@ -1517,8 +1517,4 @@
       <item quantity="other">已選取 <xliff:g id="COUNT_1">%1$d</xliff:g> 個項目</item>
       <item quantity="one">已選取 <xliff:g id="COUNT_0">%1$d</xliff:g> 個項目</item>
     </plurals>
-    <!-- Carrier Name -->
-    <string name="China_Mobile">中國移動</string>
-    <string name="China_Unicom">中國聯通</string>
-    <string name="China_Telecom">中國電信</string>
 </resources>
