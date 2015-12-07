@@ -136,32 +136,6 @@
     <!-- Whether or not we also show rsrp level for LTE. -->
     <bool name="config_showRsrpSignalLevelforLTE">false</bool>
 
-    <!-- Whether or not we show carrier label in notification panel. -->
-    <bool name="config_showCarrierLabel">false</bool>
-
-    <!-- Whether or not we also show wifi activity in status bar. -->
-    <bool name="config_showWifiActivity">false</bool>
-
-    <!-- Show indicator for Wifi on but not connected. -->
-    <bool name="config_showWifiIndicatorWhenEnabled">false</bool>
-
-    <!-- style of status bar:
-        0: Default Android style
-        1: Show data activity with data type at the left side of
-           signal icon, and signal icon may be two icons
-           stacked, the upper one is to show 3G, and the lower one
-           is to show 2G.
-        2: Do not show data activity besides signal icon, instead,
-           it shows data activity within signal view.
-        3: Show data activity with data type at the left side
-           of signal icon, and do not show two stacked icon on
-           one slot.
-    -->
-    <integer name="status_bar_style">0</integer>
-
-    <!-- Control whether status bar should fetch mobile signal icons from xml file dynamically -->
-    <bool name="config_read_icons_from_xml">false</bool>
-
     <!-- milliseconds before the heads up notification auto-dismisses. -->
     <integer name="heads_up_notification_decay">5000</integer>
 
