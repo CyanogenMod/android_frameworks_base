@@ -48,14 +48,12 @@
             android:textColor="#80cbc4"
             android:text="@string/quick_settings_title_tiles"/>
 
-    <!-- TODO implement!
-        first row large
+    <!-- first row large -->
     <com.android.systemui.qs.QSBooleanSettingRow
             style="@style/SettingRow"
-            android:key="someKey1"
             android:title="@string/quick_settings_title_enlarge_first_row"
-            systemui:table="system"
-    />-->
+            android:key="sysui_qs_main_tiles"
+            systemui:table="cm_secure" />
 
     <LinearLayout
             android:id="@+id/reset_tiles"
