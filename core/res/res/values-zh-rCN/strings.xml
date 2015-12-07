@@ -1520,8 +1520,4 @@
       <item quantity="other">已选择 <xliff:g id="COUNT_1">%1$d</xliff:g> 项</item>
       <item quantity="one">已选择 <xliff:g id="COUNT_0">%1$d</xliff:g> 项</item>
     </plurals>
-    <!-- Carrier Name -->
-    <string name="China_Mobile">中国移动</string>
-    <string name="China_Unicom">中国联通</string>
-    <string name="China_Telecom">中国电信</string>
 </resources>
