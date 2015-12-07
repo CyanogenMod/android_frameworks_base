@@ -93,11 +93,10 @@ public class QSBooleanSettingRow extends LinearLayout implements View.OnClickLis
             mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    applyChange(isChecked);
-                    // TODO update table with new value
-                    Log.d(TAG, "onCheckedChanged() called with "
+                    if (false) Log.d(TAG, "onCheckedChanged() called with "
                             + "buttonView = [" + buttonView + "], isChecked = [" + isChecked
                             + "] and table: " + mWhichTable + ", and key: " + mKey);
+                    applyChange(isChecked);
                 }
             });
         }

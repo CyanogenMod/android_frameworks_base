@@ -1623,7 +1623,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             ContentResolver resolver = mContext.getContentResolver();
             int currentUserId = ActivityManager.getCurrentUser();
             boolean firstRowLarge = CMSettings.Secure.getIntForUser(resolver,
-                    CMSettings.Secure.QS_USE_MAIN_TILES, 1, currentUserId) != 1;
+                    CMSettings.Secure.QS_USE_MAIN_TILES, 1, currentUserId) == 1;
             if (firstRowLarge != mFirstRowLarge) {
                 mFirstRowLarge = firstRowLarge;
                 for (TileRecord record : mRecords) {
