@@ -63,7 +63,7 @@ public class QSPage extends ViewGroup {
                 if (record.page != mPage) continue;
                 if (record.tileView.getVisibility() == GONE) continue;
 
-                if (mPage == 0 && r == 0 && c == 1) {
+                if (mPage == 0 && r == 0 && c == 1 && mPanel.mFirstRowLarge) {
                     r = 1;
                     c = 0;
                 } else if (r == -1 || c == (mPanel.getColumnCount() - 1)) {
@@ -138,7 +138,7 @@ public class QSPage extends ViewGroup {
     }
 
     public boolean dualRecord(QSPanel.TileRecord record) {
-        return record.row == 0 && mPage == 0;
+        return mPanel.mFirstRowLarge && record.row == 0 && mPage == 0;
     }
 
     private static int exactly(int size) {
