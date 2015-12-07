@@ -6009,6 +6009,12 @@ public final class Settings {
         public static final String ASSISTANT = "assistant";
 
         /**
+         * Whether a notification should be shown if privacy guard is enabled
+         * @hide
+         */
+        public static final String PRIVACY_GUARD_NOTIFICATION = "privacy_guard_notification";
+
+        /**
          * Default theme to use.  If empty, use system.
          * @hide
          */
@@ -6087,7 +6093,8 @@ public final class Settings {
             MOUNT_UMS_NOTIFY_ENABLED,
             SLEEP_TIMEOUT,
             DOUBLE_TAP_TO_WAKE,
-            CAMERA_GESTURE_DISABLED
+            CAMERA_GESTURE_DISABLED,
+            PRIVACY_GUARD_NOTIFICATION
         };
 
         /**
