@@ -587,6 +587,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     public int getTilesPerPage() {
+        if (!mFirstRowLarge) {
+            return QSTileHost.TILES_PER_PAGE + 1;
+        }
         return QSTileHost.TILES_PER_PAGE;
     }
 
@@ -1626,12 +1629,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     CMSettings.Secure.QS_USE_MAIN_TILES, 1, currentUserId) == 1;
             if (firstRowLarge != mFirstRowLarge) {
                 mFirstRowLarge = firstRowLarge;
-                for (TileRecord record : mRecords) {
-                    DragTileRecord dr = (DragTileRecord) record;
-                    final boolean dual = getPage(dr.destinationPage).dualRecord(dr);
-                    record.tileView.setDual(dual, record.tile.hasDualTargetsDetails());
-                }
-                requestLayout();
+                setTiles(mHost.getTiles());
             }
         }
     }
