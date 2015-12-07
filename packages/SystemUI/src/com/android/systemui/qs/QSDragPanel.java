@@ -18,13 +18,17 @@ package com.android.systemui.qs;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -39,6 +43,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.settings.BrightnessController;
@@ -48,6 +53,7 @@ import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.tuner.QsTuner;
 import com.viewpagerindicator.CirclePageIndicator;
+import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,6 +87,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     private boolean mRestoring;
     // whether the current view we are dragging in has shifted tiles
     private boolean mMovedByLocation = false;
+
+    protected boolean mFirstRowLarge = true;
+    private SettingsObserver mSettingsObserver;
 
     List<TileRecord> mCurrentlyAnimating
             = Collections.synchronizedList(new ArrayList<TileRecord>());
@@ -289,6 +298,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mViewPager.setOverScrollMode(OVER_SCROLL_NEVER);
 
         setClipChildren(false);
+
+        mSettingsObserver = new SettingsObserver(new Handler());
     }
 
     @Override
@@ -323,6 +334,12 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         if (mListening) {
             refreshAllTiles();
         }
+        if (mListening) {
+            mSettingsObserver.observe();
+        } else {
+            mSettingsObserver.unobserve();
+        }
+
         if (isLaidOut() && listening && showBrightnessSlider()) {
             mBrightnessController.registerCallbacks();
         } else {
@@ -712,14 +729,14 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     public int getLeft(int page, int row, int col) {
-        final boolean firstRow = page == 0 && row == 0;
-        int cols = firstRow ? 2 : mColumns;
-        return getLeft(row, col, cols, firstRow);
+        final boolean firstRowLarge = mFirstRowLarge && page == 0 && row == 0;
+        int cols = firstRowLarge ? 2 : mColumns;
+        return getLeft(row, col, cols, firstRowLarge);
     }
 
     public int getLeft(int page, int row, int col, int cols) {
-        final boolean firstRow = page == 0 && row == 0;
-        return getLeft(row, col, cols, firstRow);
+        final boolean firstRowLarge = mFirstRowLarge && page == 0 && row == 0;
+        return getLeft(row, col, cols, firstRowLarge);
     }
 
     public int getLeft(int row, int col, int cols, boolean firstRowLarge) {
@@ -1575,6 +1592,47 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     public void goToSettingsPage() {
         if (mEditing) {
             mViewPager.setCurrentItem(0, true);
+        }
+    }
+
+    class SettingsObserver extends UserContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void observe() {
+            super.observe();
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.QS_USE_MAIN_TILES), false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
+
+        @Override
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            int currentUserId = ActivityManager.getCurrentUser();
+            boolean firstRowLarge = CMSettings.Secure.getIntForUser(resolver,
+                    CMSettings.Secure.QS_USE_MAIN_TILES, 1, currentUserId) != 1;
+            if (firstRowLarge != mFirstRowLarge) {
+                mFirstRowLarge = firstRowLarge;
+                for (TileRecord record : mRecords) {
+                    DragTileRecord dr = (DragTileRecord) record;
+                    final boolean dual = getPage(dr.destinationPage).dualRecord(dr);
+                    record.tileView.setDual(dual, record.tile.hasDualTargetsDetails());
+                }
+                requestLayout();
+            }
         }
     }
 
