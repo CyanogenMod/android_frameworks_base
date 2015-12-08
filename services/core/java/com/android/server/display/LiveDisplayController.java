@@ -87,6 +87,8 @@ public class LiveDisplayController {
     private boolean mUseColorEnhancement;
     private boolean mUseLowPower;
 
+    private boolean mOutdoorModeIsSelfManaged;
+
     private final float[] mColorAdjustment = new float[] { 1.0f, 1.0f, 1.0f };
     private final float[] mRGB = new float[] { 0.0f, 0.0f, 0.0f };
 
@@ -140,6 +142,8 @@ public class LiveDisplayController {
 
         mUseOutdoorMode =
                 mHardware.isSupported(CMHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
+        mOutdoorModeIsSelfManaged = mUseOutdoorMode ?
+                mHardware.isSunlightEnhancementSelfManaged() : false;
 
         mUseLowPower =
                 mHardware.isSupported(CMHardwareManager.FEATURE_ADAPTIVE_BACKLIGHT);
@@ -359,11 +363,16 @@ public class LiveDisplayController {
                 1,
                 UserHandle.USER_CURRENT) == 1;
 
-        boolean enabled = !mLowPerformance &&
+        boolean enabled;
+        if (mOutdoorModeIsSelfManaged) {
+            enabled = value;
+        } else {
+            enabled = !mLowPerformance &&
                 ((mMode == MODE_OUTDOOR) ||
                  (value && mMode == MODE_AUTO &&
                   twilight != null && !twilight.isNight() &&
                   mCurrentLux > mDefaultOutdoorLux));
+        }
 
         if (enabled == mOutdoorMode) {
             return;
