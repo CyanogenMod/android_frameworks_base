@@ -303,6 +303,18 @@ public class NotificationPanelView extends PanelView implements
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mSettingsObserver.observe();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mSettingsObserver.unobserve();
+    }
+
+    @Override
     protected void loadDimens() {
         super.loadDimens();
         mNotificationTopPadding = getResources().getDimensionPixelSize(
