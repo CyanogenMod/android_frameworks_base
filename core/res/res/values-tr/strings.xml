@@ -1005,14 +1005,14 @@
     <string name="sms_short_code_confirm_never_allow" msgid="446992765774269673">"Asla İzin Verme"</string>
     <string name="sim_removed_title" msgid="6227712319223226185">"SIM kart çıkarıldı"</string>
     <string name="sim_removed_message" msgid="5450336489923274918">"Hücresel ağ, geçerli bir SIM kart takıp cihazınızı yeniden başlatıncaya kadar kullanılamayacak."</string>
-    <string name="sim_done_button" msgid="827949989369963775">"Tamamlandı"</string>
+    <string name="sim_done_button" msgid="827949989369963775">"Bitti"</string>
     <string name="sim_added_title" msgid="3719670512889674693">"SIM kart eklendi"</string>
     <string name="sim_added_message" msgid="7797975656153714319">"Hücresel ağa erişmek için cihazınızı yeniden başlatın."</string>
     <string name="sim_restart_button" msgid="4722407842815232347">"Yeniden başlat"</string>
     <string name="time_picker_dialog_title" msgid="8349362623068819295">"Saati ayarlayın"</string>
     <string name="date_picker_dialog_title" msgid="5879450659453782278">"Tarihi ayarlayın"</string>
     <string name="date_time_set" msgid="5777075614321087758">"Ayarla"</string>
-    <string name="date_time_done" msgid="2507683751759308828">"Tamamlandı"</string>
+    <string name="date_time_done" msgid="2507683751759308828">"Bitti"</string>
     <string name="perms_new_perm_prefix" msgid="8257740710754301407"><font size="12" fgcolor="#ff33b5e5">"YENİ: "</font></string>
     <string name="perms_description_app" msgid="5139836143293299417">"Sağlayan: <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
     <string name="no_permissions" msgid="7283357728219338112">"İzin gerektirmez"</string>
@@ -1488,6 +1488,7 @@
       <item quantity="one">1 saat için</item>
     </plurals>
     <string name="zen_mode_until" msgid="7336308492289875088">"Şu saate kadar: <xliff:g id="FORMATTEDTIME">%1$s</xliff:g>"</string>
+    <string name="zen_mode_alarm" msgid="9128205721301330797">"<xliff:g id="FORMATTEDTIME">%1$s</xliff:g> (sonraki alarma) saatine kadar"</string>
     <string name="zen_mode_forever" msgid="7420011936770086993">"Siz bunu kapatana kadar"</string>
     <string name="zen_mode_forever_dnd" msgid="3792132696572189081">"Rahatsız Etmeyin ayarını kapatana kadar"</string>
     <string name="zen_mode_rule_name_combination" msgid="191109939968076477">"<xliff:g id="FIRST">%1$s</xliff:g> / <xliff:g id="REST">%2$s</xliff:g>"</string>

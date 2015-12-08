@@ -1047,7 +1047,7 @@
     <string name="adb_active_notification_message" msgid="1016654627626476142">"タップしてUSBデバッグを無効化"</string>
     <string name="select_input_method" msgid="8547250819326693584">"キーボードの変更"</string>
     <string name="configure_input_methods" msgid="4769971288371946846">"キーボードの選択"</string>
-    <string name="show_ime" msgid="9157568568695230830">"入力方法を表示する"</string>
+    <string name="show_ime" msgid="9157568568695230830">"スクリーンキーボードを表示する"</string>
     <string name="hardware" msgid="7517821086888990278">"ハードウェア"</string>
     <string name="select_keyboard_layout_notification_title" msgid="1407367017263030773">"キーボードレイアウトの選択"</string>
     <string name="select_keyboard_layout_notification_message" msgid="4465907700449257063">"タップしてキーボードレイアウトを選択してください。"</string>
@@ -1488,6 +1488,7 @@
       <item quantity="one">1時間</item>
     </plurals>
     <string name="zen_mode_until" msgid="7336308492289875088">"<xliff:g id="FORMATTEDTIME">%1$s</xliff:g>まで"</string>
+    <string name="zen_mode_alarm" msgid="9128205721301330797">"<xliff:g id="FORMATTEDTIME">%1$s</xliff:g>（次のアラーム）まで"</string>
     <string name="zen_mode_forever" msgid="7420011936770086993">"ユーザーがOFFにするまで"</string>
     <string name="zen_mode_forever_dnd" msgid="3792132696572189081">"[通知を非表示]をOFFにするまで"</string>
     <string name="zen_mode_rule_name_combination" msgid="191109939968076477">"<xliff:g id="FIRST">%1$s</xliff:g>/<xliff:g id="REST">%2$s</xliff:g>"</string>

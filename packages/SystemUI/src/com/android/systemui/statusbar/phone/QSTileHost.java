@@ -16,8 +16,12 @@
 
 package com.android.systemui.statusbar.phone;
 
+<<<<<<< HEAD
 import android.app.ActivityManager;
 import android.content.ComponentName;
+=======
+import android.app.PendingIntent;
+>>>>>>> 888ef59df9262e1308d383fb56b8d077fb4170d7
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -182,11 +186,16 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     @Override
+<<<<<<< HEAD
     public void removeCustomTile(StatusBarPanelCustomTile customTile) {
         if (mCustomTileListenerService != null) {
             mCustomTileListenerService.removeCustomTile(customTile.getPackage(),
                     customTile.getTag(), customTile.getId());
         }
+=======
+    public void startActivityDismissingKeyguard(PendingIntent intent) {
+        mStatusBar.postStartActivityDismissingKeyguard(intent);
+>>>>>>> 888ef59df9262e1308d383fb56b8d077fb4170d7
     }
 
     @Override

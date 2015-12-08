@@ -159,7 +159,7 @@
     <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Se obţine GPS."</string>
     <string name="accessibility_tty_enabled" msgid="4613200365379426561">"TeleTypewriter activat."</string>
     <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"Vibrare sonerie."</string>
-    <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Sonerie silenţioasă."</string>
+    <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Sonerie silențioasă."</string>
     <!-- no translation found for accessibility_casting (6887382141726543668) -->
     <skip />
     <string name="accessibility_recents_item_will_be_dismissed" msgid="395770242498031481">"Închideți <xliff:g id="APP">%s</xliff:g>."</string>
@@ -255,7 +255,7 @@
     <string name="quick_settings_location_off_label" msgid="7464544086507331459">"Localizarea este dezactivată"</string>
     <string name="quick_settings_media_device_label" msgid="1302906836372603762">"Dispozitiv media"</string>
     <string name="quick_settings_rssi_label" msgid="7725671335550695589">"RSSI"</string>
-    <string name="quick_settings_rssi_emergency_only" msgid="2713774041672886750">"Numai apeluri de urgenţă"</string>
+    <string name="quick_settings_rssi_emergency_only" msgid="2713774041672886750">"Numai apeluri de urgență"</string>
     <string name="quick_settings_settings_label" msgid="5326556592578065401">"Setări"</string>
     <string name="quick_settings_time_label" msgid="4635969182239736408">"Ora"</string>
     <string name="quick_settings_user_label" msgid="5238995632130897840">"Eu"</string>
@@ -429,4 +429,7 @@
     <string name="tuner_toast" msgid="603429811084428439">"Felicitări! System UI Tuner a fost adăugat în Setări"</string>
     <string name="remove_from_settings" msgid="8389591916603406378">"Eliminați din Setări"</string>
     <string name="remove_from_settings_prompt" msgid="6069085993355887748">"Eliminați System UI Tuner din Setări și încetați utilizarea tuturor funcțiilor sale?"</string>
+    <string name="enable_bluetooth_title" msgid="5027037706500635269">"Activați Bluetooth?"</string>
+    <string name="enable_bluetooth_message" msgid="9106595990708985385">"Pentru a conecta tastatura la tabletă, mai întâi trebuie să activați Bluetooth."</string>
+    <string name="enable_bluetooth_confirmation_ok" msgid="6258074250948309715">"Activați"</string>
 </resources>
