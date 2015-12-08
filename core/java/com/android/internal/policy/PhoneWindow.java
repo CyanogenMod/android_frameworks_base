@@ -2279,14 +2279,12 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         private final ColorViewState mStatusColorViewState = new ColorViewState(
                 SYSTEM_UI_FLAG_FULLSCREEN, FLAG_TRANSLUCENT_STATUS,
                 Gravity.TOP,
-                Gravity.LEFT,
                 STATUS_BAR_BACKGROUND_TRANSITION_NAME,
                 com.android.internal.R.id.statusBarBackground,
                 FLAG_FULLSCREEN);
         private final ColorViewState mNavigationColorViewState = new ColorViewState(
                 SYSTEM_UI_FLAG_HIDE_NAVIGATION, FLAG_TRANSLUCENT_NAVIGATION,
                 Gravity.BOTTOM,
-                Gravity.RIGHT,
                 NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME,
                 com.android.internal.R.id.navigationBarBackground,
                 0 /* hideWindowFlag */);
@@ -2302,7 +2300,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         private int mLastRightInset = 0;
         private boolean mLastHasTopStableInset = false;
         private boolean mLastHasBottomStableInset = false;
-        private boolean mLastHasRightStableInset = false;
         private int mLastWindowFlags = 0;
 
         private int mRootScrollY = 0;
@@ -3157,10 +3154,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     boolean hasBottomStableInset = insets.getStableInsetBottom() != 0;
                     disallowAnimate |= (hasBottomStableInset != mLastHasBottomStableInset);
                     mLastHasBottomStableInset = hasBottomStableInset;
-
-                    boolean hasRightStableInset = insets.getStableInsetRight() != 0;
-                    disallowAnimate |= (hasRightStableInset != mLastHasRightStableInset);
-                    mLastHasRightStableInset = hasRightStableInset;
                 }
 
                 boolean navBarToRightEdge = mLastBottomInset == 0 && mLastRightInset > 0;
@@ -3175,6 +3168,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 updateColorViewInt(mStatusColorViewState, sysUiVisibility, mStatusBarColor,
                         mLastTopInset, false /* matchVertical */, statusBarRightInset,
                         animate && !disallowAnimate);
+
             }
 
             // When we expand the window with FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS, we still need
@@ -3231,8 +3225,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
          * @param animate if true, the change will be animated.
          */
         private void updateColorViewInt(final ColorViewState state, int sysUiVis, int color,
-                int size, boolean verticalBar, int rightMargin, boolean animate) {
-            state.present = size > 0 && (sysUiVis & state.systemUiHideFlag) == 0
+                int height, boolean verticalBar, int rightMargin, boolean animate) {
+            state.present = height > 0 && (sysUiVis & state.systemUiHideFlag) == 0
                     && (getAttributes().flags & state.hideWindowFlag) == 0
                     && (getAttributes().flags & FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS) != 0;
             boolean show = state.present
@@ -3241,10 +3235,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
             boolean visibilityChanged = false;
             View view = state.view;
-
-            int resolvedHeight = verticalBar ? LayoutParams.MATCH_PARENT : size;
-            int resolvedWidth = verticalBar ? size : LayoutParams.MATCH_PARENT;
-            int resolvedGravity = verticalBar ? state.horizontalGravity : state.verticalGravity;
 
             if (view == null) {
                 if (show) {
@@ -3256,26 +3246,23 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     view.setVisibility(INVISIBLE);
                     state.targetVisibility = VISIBLE;
 
-                    LayoutParams lp = new LayoutParams(resolvedWidth, resolvedHeight,
-                            resolvedGravity);
+                    LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, height,
+                            Gravity.START | state.verticalGravity);
                     lp.rightMargin = rightMargin;
                     addView(view, lp);
+
                     updateColorViewTranslations();
                 }
             } else {
                 int vis = show ? VISIBLE : INVISIBLE;
                 visibilityChanged = state.targetVisibility != vis;
                 state.targetVisibility = vis;
-                LayoutParams lp = (LayoutParams) view.getLayoutParams();
-                if (lp.height != resolvedHeight || lp.width != resolvedWidth
-                        || lp.gravity != resolvedGravity || lp.rightMargin != rightMargin) {
-                    lp.height = resolvedHeight;
-                    lp.width = resolvedWidth;
-                    lp.gravity = resolvedGravity;
-                    lp.rightMargin = rightMargin;
-                    view.setLayoutParams(lp);
-                }
                 if (show) {
+                    LayoutParams lp = (LayoutParams) view.getLayoutParams();
+                    if (lp.height != height) {
+                        lp.height = height;
+                        view.setLayoutParams(lp);
+                    }
                     view.setBackgroundColor(color);
                 }
             }
@@ -5299,18 +5286,16 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         final int systemUiHideFlag;
         final int translucentFlag;
         final int verticalGravity;
-        final int horizontalGravity;
         final String transitionName;
         final int hideWindowFlag;
 
         ColorViewState(int systemUiHideFlag,
-                int translucentFlag, int verticalGravity, int horizontalGravity,
+                int translucentFlag, int verticalGravity,
                 String transitionName, int id, int hideWindowFlag) {
             this.id = id;
             this.systemUiHideFlag = systemUiHideFlag;
             this.translucentFlag = translucentFlag;
             this.verticalGravity = verticalGravity;
-            this.horizontalGravity = horizontalGravity;
             this.transitionName = transitionName;
             this.hideWindowFlag = hideWindowFlag;
         }
