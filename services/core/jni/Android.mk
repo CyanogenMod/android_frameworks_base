@@ -79,3 +79,6 @@ $(shell mkdir -p $(OUT)/obj/SHARED_LIBRARIES/libtime_genoff_intermediates/)
 $(shell touch $(OUT)/obj/SHARED_LIBRARIES/libtime_genoff_intermediates/export_includes)
 endif
 
+ifeq ($(BOARD_HAVE_TIMERFD_POWEROFF_ALARM),true)
+LOCAL_CFLAGS += -DWITH_TIMERFD_POWEROFF_ALARM
+endif
