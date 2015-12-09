@@ -59,7 +59,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:layout_weight="1"
-                android:textColor="@android:color/white"
+                android:textColor="@color/qs_edit_header_instruction_text_color"
                 android:text="@string/qs_tile_edit_header_instruction"
                 android:contentDescription="@null"/>
 
