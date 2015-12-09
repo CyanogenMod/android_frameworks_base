@@ -23,9 +23,9 @@
     android:gravity="center_horizontal|center_vertical"
 
     android:text="@string/loading"
-    android:textColor="#60FFFFFF"
+    android:textColor="@color/loading_view_text_color"
     android:textSize="18sp"
-    android:shadowColor="#FF000000"
+    android:shadowColor="@color/loading_view_text_shadow_color"
     android:shadowDx="0.0"
     android:shadowDy="1.0"
     android:shadowRadius="1.0" />
