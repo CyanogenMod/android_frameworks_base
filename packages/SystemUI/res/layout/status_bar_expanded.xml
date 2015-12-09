@@ -39,7 +39,7 @@
         android:singleLine="true"
         android:visibility="invisible"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#999999" />
+        android:textColor="@color/carrier_label_text_color" />
 
     <include
         layout="@layout/keyguard_status_view"

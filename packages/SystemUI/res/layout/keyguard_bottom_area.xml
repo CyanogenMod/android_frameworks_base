@@ -32,7 +32,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:gravity="center_horizontal"
         android:textStyle="italic"
-        android:textColor="#ffffff"
+        android:textColor="@color/keyguard_indication_text_color"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:accessibilityLiveRegion="polite" />
 

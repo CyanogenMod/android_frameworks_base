@@ -24,7 +24,7 @@
 
     <com.android.systemui.qs.QSDragPanel
             android:id="@+id/quick_settings_panel"
-            android:background="#0000"
+            android:background="@color/quick_settings_panel_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 </com.android.systemui.qs.QSContainer>
