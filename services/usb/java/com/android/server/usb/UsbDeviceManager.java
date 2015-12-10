@@ -923,11 +923,6 @@ public class UsbDeviceManager {
             final int userId = UserHandle.myUserId();
             long token = Binder.clearCallingIdentity();
             try {
-                if (!QSUtils.isQSTileEnabledForUser(
-                        mContext, QSConstants.DYNAMIC_TILE_ADB, userId)) {
-                    return;
-                }
-
                 final UserHandle user = new UserHandle(userId);
                 final int icon = QSUtils.getDynamicQSTileResIconId(mContext, userId,
                         QSConstants.DYNAMIC_TILE_ADB);
@@ -997,9 +992,7 @@ public class UsbDeviceManager {
                     || CMSettings.Secure.getInt(mContext.getContentResolver(),
                             CMSettings.Secure.ADB_NOTIFY, 1) == 1;
             boolean isActive = notifEnabled && (usbAdbActive || netAdbActive);
-            final boolean isEnabledForUser = QSUtils.isQSTileEnabledForUser(mContext,
-                    QSConstants.DYNAMIC_TILE_ADB, userId);
-            boolean enabled = (userId == UserHandle.USER_OWNER) && isEnabledForUser && isActive;
+            boolean enabled = (userId == UserHandle.USER_OWNER) && isActive;
             if (enabled) {
                 publishAdbCustomTile();
             } else {
