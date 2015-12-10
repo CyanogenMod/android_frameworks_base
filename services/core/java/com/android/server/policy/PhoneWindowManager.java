@@ -425,6 +425,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mNavigationBarLeftInLandscape = false; // Navigation bar left handed?
 
     boolean mBootMessageNeedsHiding;
+
+    WindowState mKeyguardPanel;
+
+
     KeyguardServiceDelegate mKeyguardDelegate;
     final Runnable mWindowManagerDrawCallback = new Runnable() {
         @Override
@@ -2479,6 +2483,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 permission = android.Manifest.permission.SYSTEM_ALERT_WINDOW;
                 outAppOp[0] = AppOpsManager.OP_SYSTEM_ALERT_WINDOW;
                 break;
+            case TYPE_KEYGUARD_PANEL:
+                permission =
+                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD;
+                break;
             default:
                 permission = android.Manifest.permission.INTERNAL_SYSTEM_WINDOW;
         }
@@ -2572,6 +2580,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case TYPE_VOLUME_OVERLAY:
             case TYPE_PRIVATE_PRESENTATION:
             case TYPE_DOCK_DIVIDER:
+            case TYPE_KEYGUARD_PANEL:
                 break;
         }
 
@@ -2761,6 +2770,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // the safety window that shows behind keyguard while keyguard is starting
             return 14;
         case TYPE_STATUS_BAR_SUB_PANEL:
+        case TYPE_KEYGUARD_PANEL:
             return 15;
         case TYPE_STATUS_BAR:
             return 16;
@@ -3128,6 +3138,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         android.Manifest.permission.STATUS_BAR_SERVICE,
                         "PhoneWindowManager");
                 break;
+            case TYPE_KEYGUARD_PANEL:
+                mContext.enforceCallingOrSelfPermission(
+                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD,
+                        "PhoneWindowManager");
+                if (mKeyguardPanel != null) {
+                    return WindowManagerGlobal.ADD_MULTIPLE_SINGLETON;
+                }
+                mKeyguardPanel = win;
+                break;
             case TYPE_KEYGUARD_SCRIM:
                 if (mKeyguardScrim != null) {
                     return WindowManagerGlobal.ADD_MULTIPLE_SINGLETON;
@@ -3148,9 +3167,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } else if (mKeyguardScrim == win) {
             Log.v(TAG, "Removing keyguard scrim");
             mKeyguardScrim = null;
-        } if (mNavigationBar == win) {
+        } else if (mNavigationBar == win) {
             mNavigationBar = null;
             mNavigationBarController.setWindow(null);
+        } else if (mKeyguardPanel == win) {
+            mKeyguardPanel = null;
         }
     }
 
@@ -5117,7 +5138,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // gets everything, period.
                 if (attrs.type == TYPE_STATUS_BAR_PANEL
                         || attrs.type == TYPE_STATUS_BAR_SUB_PANEL
-                        || attrs.type == TYPE_VOLUME_OVERLAY) {
+                        || attrs.type == TYPE_VOLUME_OVERLAY
+                        || attrs.type == TYPE_KEYGUARD_PANEL) {
                     pf.left = df.left = of.left = cf.left = hasNavBar
                             ? mDockLeft : mUnrestrictedScreenLeft;
                     pf.top = df.top = of.top = cf.top = mUnrestrictedScreenTop;

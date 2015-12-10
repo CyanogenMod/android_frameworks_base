@@ -239,6 +239,7 @@ public interface WindowManager extends ViewManager {
          * @see #TYPE_SYSTEM_ERROR
          * @see #TYPE_INPUT_METHOD
          * @see #TYPE_INPUT_METHOD_DIALOG
+         * @see #TYPE_KEYGUARD_PANEL
          */
         @ViewDebug.ExportedProperty(mapping = {
             @ViewDebug.IntToString(from = TYPE_BASE_APPLICATION, to = "TYPE_BASE_APPLICATION"),
@@ -281,7 +282,8 @@ public interface WindowManager extends ViewManager {
             @ViewDebug.IntToString(from = TYPE_VOICE_INTERACTION_STARTING, to = "TYPE_VOICE_INTERACTION_STARTING"),
             @ViewDebug.IntToString(from = TYPE_DOCK_DIVIDER, to = "TYPE_DOCK_DIVIDER"),
             @ViewDebug.IntToString(from = TYPE_QS_DIALOG, to = "TYPE_QS_DIALOG"),
-            @ViewDebug.IntToString(from = TYPE_SCREENSHOT, to = "TYPE_SCREENSHOT")
+            @ViewDebug.IntToString(from = TYPE_SCREENSHOT, to = "TYPE_SCREENSHOT"),
+            @ViewDebug.IntToString(from = TYPE_KEYGUARD_PANEL, to = "TYPE_KEYGUARD_PANEL"),
         })
         public int type;
 
@@ -640,6 +642,13 @@ public interface WindowManager extends ViewManager {
          * @hide
          */
         public static final int TYPE_SCREENSHOT = FIRST_SYSTEM_WINDOW + 36;
+
+        /**
+         * Window type: Windows that are layered within the keyguard
+         * This type is LAST_SYSTEM_WINDOW-1 to avoid future conflicts with AOSP
+         * @hide
+         */
+        public static final int TYPE_KEYGUARD_PANEL = FIRST_SYSTEM_WINDOW+998;
 
         /**
          * End of types of system windows.
