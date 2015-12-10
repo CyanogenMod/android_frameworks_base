@@ -139,7 +139,6 @@ public abstract class PanelView extends FrameLayout {
     };
 
     protected void onExpandingFinished() {
-        endClosing();
         mBar.onExpandingFinished();
     }
 
@@ -154,6 +153,7 @@ public abstract class PanelView extends FrameLayout {
     }
 
     protected final void notifyExpandingFinished() {
+        endClosing();
         if (mExpanding) {
             mExpanding = false;
             onExpandingFinished();

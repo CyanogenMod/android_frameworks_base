@@ -926,6 +926,7 @@ public class PackageParser {
             }
 
             pkg.volumeUuid = volumeUuid;
+            pkg.applicationInfo.volumeUuid = volumeUuid;
             pkg.baseCodePath = apkPath;
             pkg.mSignatures = null;
 

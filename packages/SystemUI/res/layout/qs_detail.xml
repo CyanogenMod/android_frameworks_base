@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/qs_detail_background"
-        android:paddingBottom="8dp"
+        android:paddingBottom="@dimen/detail_exterior_padding"
         android:orientation="vertical">
 
     <FrameLayout
@@ -40,6 +40,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:minWidth="132dp"
+                android:textAppearance="@style/TextAppearance.QS.DetailButton"
+                android:focusable="true" />
+
+        <TextView
+                android:id="@android:id/button3"
+                style="@style/QSBorderlessButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:minWidth="88dp"
                 android:textAppearance="@style/TextAppearance.QS.DetailButton"
                 android:focusable="true" />
 

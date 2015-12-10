@@ -38,6 +38,7 @@ import com.android.systemui.SysUIToast;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.ZenModePanel;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 /** Quick settings tile: Do not disturb **/
 public class DndTile extends QSTile<QSTile.BooleanState> {
@@ -140,7 +141,7 @@ public class DndTile extends QSTile<QSTile.BooleanState> {
         state.visible = isVisible(mContext);
         switch (zen) {
             case Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS:
-                state.icon = ResourceIcon.get(R.drawable.ic_qs_dnd_on);
+                state.icon = ResourceIcon.get(R.drawable.ic_qs_dnd_on_priority);
                 state.label = mContext.getString(R.string.quick_settings_dnd_priority_label);
                 state.contentDescription = mContext.getString(
                         R.string.accessibility_quick_settings_dnd_priority_on);
@@ -246,6 +247,11 @@ public class DndTile extends QSTile<QSTile.BooleanState> {
         @Override
         public Intent getSettingsIntent() {
             return ZEN_SETTINGS;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
         }
 
         @Override

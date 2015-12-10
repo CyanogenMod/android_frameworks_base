@@ -185,7 +185,7 @@ class AlarmManagerService extends SystemService {
         private static final long DEFAULT_MIN_FUTURITY = 5 * 1000;
         private static final long DEFAULT_MIN_INTERVAL = 60 * 1000;
         private static final long DEFAULT_ALLOW_WHILE_IDLE_SHORT_TIME = DEFAULT_MIN_FUTURITY;
-        private static final long DEFAULT_ALLOW_WHILE_IDLE_LONG_TIME = 15*60*1000;
+        private static final long DEFAULT_ALLOW_WHILE_IDLE_LONG_TIME = 9*60*1000;
         private static final long DEFAULT_ALLOW_WHILE_IDLE_WHITELIST_DURATION = 10*1000;
 
         // Minimum futurity of a new alarm
@@ -1000,8 +1000,8 @@ class AlarmManagerService extends SystemService {
             // This is a special alarm that will put the system into idle until it goes off.
             // The caller has given the time they want this to happen at, however we need
             // to pull that earlier if there are existing alarms that have requested to
-            // bring us out of idle.
-            if (mNextWakeFromIdle != null) {
+            // bring us out of idle at an earlier time.
+            if (mNextWakeFromIdle != null && a.whenElapsed > mNextWakeFromIdle.whenElapsed) {
                 a.when = a.whenElapsed = a.maxWhenElapsed = mNextWakeFromIdle.whenElapsed;
             }
             // Add fuzz to make the alarm go off some time before the actual desired time.
@@ -1318,7 +1318,7 @@ class AlarmManagerService extends SystemService {
                 pw.print("      Idling until: ");
                 if (mPendingIdleUntil != null) {
                     pw.println(mPendingIdleUntil);
-                    mPendingIdleUntil.dump(pw, "    ", nowRTC, nowELAPSED, sdf);
+                    mPendingIdleUntil.dump(pw, "        ", nowRTC, nowELAPSED, sdf);
                 } else {
                     pw.println("null");
                 }
@@ -2090,7 +2090,7 @@ class AlarmManagerService extends SystemService {
             workSource = _ws;
             flags = _flags;
             alarmClock = _info;
-            uid = _uid;
+            uid = operation.getCreatorUid();
             pid = Binder.getCallingPid();
         }
 
@@ -2245,6 +2245,12 @@ class AlarmManagerService extends SystemService {
                 mInFlight.add(inflight);
                 mBroadcastRefCount++;
                 mTriggeredUids.add(new Integer(alarm.uid));
+                if (checkReleaseWakeLock()) {
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                        if (localLOGV) Slog.v(TAG, "AM WakeLock Released Internally deliverAlarms");
+                    }
+                }
 
                 if (allowWhileIdle) {
                     // Record the last time this uid handled an ALLOW_WHILE_IDLE alarm.
@@ -2713,8 +2719,12 @@ class AlarmManagerService extends SystemService {
                     }
                 } else {
                     // the next of our alarms is now in flight.  reattribute the wakelock.
+                    InFlight inFlight = null;
                     if (mInFlight.size() > 0) {
-                        InFlight inFlight = mInFlight.get(0);
+                        for(int index = 0; index < mInFlight.size(); index++){
+                            inFlight = mInFlight.get(index);
+                            if(!mBlockedUids.contains(inFlight.mUid)) break;
+                        }
                         setWakelockWorkSource(inFlight.mPendingIntent, inFlight.mWorkSource,
                                 inFlight.mAlarmType, inFlight.mTag, false);
                     } else {

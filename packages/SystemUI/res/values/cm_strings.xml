@@ -68,16 +68,45 @@
 
     <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_notification_brightness">Light brightness</string>
+    <string name="quick_settings_compass_value" translatable="false"><xliff:g id="degrees">%1$.0f</xliff:g>\u00b0 <xliff:g id="direction">%2$s</xliff:g></string>
+    <string name="quick_settings_compass_off">Compass off</string>
+    <string name="quick_settings_compass_init">Initializing\u2026</string>
 
     <!-- Lights settings, LED notification -->
     <string name="led_notification_title">Light settings</string>
     <string name="led_notification_text">LED light enabled by settings</string>
 
-    <string name="qs_tile_edit_header_instruction">Press and hold a tile to edit</string>
-    <string name="quick_settings_edit_label">Edit Tiles</string>
+    <string name="qs_tile_edit_header_instruction">Press and hold tiles to rearrange</string>
+    <string name="quick_settings_edit_label">Edit tiles</string>
     <string name="quick_settings_cannot_delete_edit_tile">Cannot delete the Edit tile</string>
     <string name="qs_tiles_reset_confirmation">Reset quick settings tiles to default configuration?</string>
+    <string name="quick_settings_tile_reset_to_default">Reset to default layout</string>
+    <string name="quick_settings_title_header">Header</string>
+    <string name="quick_settings_title_tiles">Tiles</string>
+    <string name="quick_settings_title_show_weather">Show weather</string>
+    <string name="quick_settings_title_enlarge_first_row">Enlarge first row</string>
 
     <!-- Screen pinning dialog description (for devices without navbar) -->
     <string name="screen_pinning_description_no_navbar">This keeps it in view until you unpin. Touch and hold the Back button to unpin.</string>
+
+    <string name="quick_settings_custom_tile_detail_title">Custom Tile</string>
+    <string name="quick_settings_remove">Remove tile</string>
+    <string name="quick_settings_network_adb_enabled_label">Enabled</string>
+    <string name="quick_settings_network_adb_disabled_label">Disabled</string>
+    <string name="qs_tile_adb_over_network">ADB over network</string>
+    <string name="qs_tile_compass">Compass</string>
+    <string name="quick_settings_nfc">NFC</string>
+    <string name="quick_settings_nfc_off">NFC off</string>
+
+    <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_off">Sync off.</string>
+    <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_on">Sync on.</string>
+
+    <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_changed_off">Sync turned off.</string>
+    <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_sync_changed_on">Sync turned on.</string>
+    <string name="quick_settings_sync_label">Sync</string>
+    <string name="quick_settings_volume_panel_label">Volume panel</string>
 </resources>

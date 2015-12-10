@@ -16,10 +16,13 @@
 
 package com.android.systemui.qs;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,6 +32,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.RemoteViews;
 import com.android.systemui.qs.QSTile.State;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.CastController;
@@ -40,6 +44,7 @@ import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.RotationLockController;
 import com.android.systemui.statusbar.policy.ZenModeController;
+import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -105,6 +110,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
         Boolean getToggleState();
         View createDetailView(Context context, View convertView, ViewGroup parent);
         Intent getSettingsIntent();
+        StatusBarPanelCustomTile getCustomTile();
         void setToggleState(boolean state);
         int getMetricsCategory();
     }
@@ -319,9 +325,12 @@ public abstract class QSTile<TState extends State> implements Listenable {
     }
 
     public interface Host {
+        void removeCustomTile(StatusBarPanelCustomTile customTile);
         void startActivityDismissingKeyguard(Intent intent);
+        void startActivityDismissingKeyguard(PendingIntent intent);
         void warn(String message, Throwable t);
         void collapsePanels();
+        RemoteViews.OnClickHandler getOnClickHandler();
         Looper getLooper();
         Context getContext();
         Collection<QSTile<?>> getTiles();
@@ -338,11 +347,13 @@ public abstract class QSTile<TState extends State> implements Listenable {
         boolean isEditing();
         void setEditing(boolean editing);
         void resetTiles();
+        void goToSettingsPage();
 
         public interface Callback {
             void onTilesChanged();
             void setEditing(boolean editing);
             boolean isEditing();
+            void goToSettingsPage();
         }
     }
 
@@ -352,6 +363,42 @@ public abstract class QSTile<TState extends State> implements Listenable {
         @Override
         public int hashCode() {
             return Icon.class.hashCode();
+        }
+    }
+
+    protected class ExternalIcon extends AnimationIcon {
+        private Context mPackageContext;
+        private String mPkg;
+        private int mResId;
+
+        public ExternalIcon(String pkg, int resId) {
+            super(resId);
+            mPkg = pkg;
+            mResId = resId;
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            // Get the drawable from the package context
+            Drawable d = null;
+            try {
+                d = super.getDrawable(getPackageContext());
+            } catch (Throwable t) {
+                Log.w(TAG, "Error creating package context" + mPkg + " id=" + mResId, t);
+            }
+            return d;
+        }
+
+        private Context getPackageContext() {
+            if (mPackageContext == null) {
+                try {
+                    mPackageContext = mContext.createPackageContext(mPkg, 0);
+                } catch (Throwable t) {
+                    Log.w(TAG, "Error creating package context" + mPkg, t);
+                    return null;
+                }
+            }
+            return mPackageContext;
         }
     }
 
@@ -390,6 +437,21 @@ public abstract class QSTile<TState extends State> implements Listenable {
         @Override
         public String toString() {
             return String.format("ResourceIcon[resId=0x%08x]", mResId);
+        }
+    }
+
+    protected class ExternalBitmapIcon extends Icon {
+        private Bitmap mBitmap;
+
+        public ExternalBitmapIcon(Bitmap bitmap) {
+            mBitmap = bitmap;
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            // This is gross
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), mBitmap);
+            return bitmapDrawable;
         }
     }
 

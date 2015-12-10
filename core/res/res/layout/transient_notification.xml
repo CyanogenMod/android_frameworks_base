@@ -31,7 +31,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-16dp"
         android:layout_marginStart="-16dp"
-        android:layout_toRightOf="@android:id/icon"
+        android:layout_toEndOf="@android:id/icon"
         android:layout_below="@android:id/icon"
         android:textAppearance="@style/TextAppearance.Toast"
         android:textColor="@color/bright_foreground_dark"

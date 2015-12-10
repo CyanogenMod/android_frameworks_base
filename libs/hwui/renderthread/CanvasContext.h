@@ -117,7 +117,6 @@ private:
     // TODO: Replace with something better for layer & other GL object
     // lifecycle tracking
     friend class android::uirenderer::RenderState;
-    friend class RenderProxy;
 
     void setSurface(ANativeWindow* window);
     void swapBuffers(const SkRect& dirty, EGLint width, EGLint height);

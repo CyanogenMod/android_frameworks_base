@@ -45,4 +45,8 @@
     <dimen name="phone_bottom_padding">40dp</dimen>
     <dimen name="phone_width">320dp</dimen>
     <dimen name="phone_height">420dp</dimen>
+
+    <dimen name="qs_detail_item_height_twoline">72dp</dimen>
+
+    <dimen name="detail_exterior_padding">8dp</dimen>
 </resources>
