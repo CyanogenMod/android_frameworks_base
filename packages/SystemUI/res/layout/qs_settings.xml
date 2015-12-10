@@ -36,6 +36,7 @@
             style="@style/SettingRow"
             android:key="status_bar_show_weather"
             android:title="@string/quick_settings_title_show_weather"
+            systemui:defaultValue="1"
             systemui:table="cm_system"
     />
 
@@ -53,6 +54,7 @@
             style="@style/SettingRow"
             android:title="@string/quick_settings_title_enlarge_first_row"
             android:key="sysui_qs_main_tiles"
+            systemui:defaultValue="1"
             systemui:table="cm_secure" />
 
     <LinearLayout
