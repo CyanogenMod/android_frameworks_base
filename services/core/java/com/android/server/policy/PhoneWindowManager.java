@@ -2359,6 +2359,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 permission = android.Manifest.permission.SYSTEM_ALERT_WINDOW;
                 outAppOp[0] = AppOpsManager.OP_SYSTEM_ALERT_WINDOW;
                 break;
+            case TYPE_STATUS_BAR_SUB_PANEL:
+                permission =
+                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD;
+                break;
             default:
                 permission = android.Manifest.permission.INTERNAL_SYSTEM_WINDOW;
         }
@@ -2912,10 +2916,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 break;
             case TYPE_NAVIGATION_BAR_PANEL:
             case TYPE_STATUS_BAR_PANEL:
-            case TYPE_STATUS_BAR_SUB_PANEL:
             case TYPE_VOICE_INTERACTION_STARTING:
                 mContext.enforceCallingOrSelfPermission(
                         android.Manifest.permission.STATUS_BAR_SERVICE,
+                        "PhoneWindowManager");
+                break;
+            case TYPE_STATUS_BAR_SUB_PANEL:
+                mContext.enforceCallingOrSelfPermission(
+                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD,
                         "PhoneWindowManager");
                 break;
             case TYPE_KEYGUARD_SCRIM:
