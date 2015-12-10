@@ -226,6 +226,7 @@ public interface WindowManager extends ViewManager {
             @ViewDebug.IntToString(from = TYPE_PRIVATE_PRESENTATION, to = "TYPE_PRIVATE_PRESENTATION"),
             @ViewDebug.IntToString(from = TYPE_VOICE_INTERACTION, to = "TYPE_VOICE_INTERACTION"),
             @ViewDebug.IntToString(from = TYPE_VOICE_INTERACTION_STARTING, to = "TYPE_VOICE_INTERACTION_STARTING"),
+            @ViewDebug.IntToString(from = TYPE_KEYGUARD_PANEL, to = "TYPE_KEYGUARD_PANEL"),
         })
         public int type;
 
@@ -563,6 +564,12 @@ public interface WindowManager extends ViewManager {
          * @hide
          */
         public static final int TYPE_VOICE_INTERACTION_STARTING = FIRST_SYSTEM_WINDOW+33;
+
+        /**
+         * Window type: Windows that are layered within the keyguard
+         * @hide
+         */
+        public static final int TYPE_KEYGUARD_PANEL = FIRST_SYSTEM_WINDOW+34;
 
         /**
          * End of types of system windows.
