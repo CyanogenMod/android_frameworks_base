@@ -1561,8 +1561,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
 
         // Add broadcast tile
-        availableTilesLabel.add(getContext().getString(R.string.broadcast_tile));
-        availableTilesSpec.add(BROADCAST_TILE_SPEC_PLACEHOLDER);
+        if (!availableTilesSpec.contains(BROADCAST_TILE_SPEC_PLACEHOLDER)) {
+            availableTilesLabel.add(getContext().getString(R.string.broadcast_tile));
+            availableTilesSpec.add(BROADCAST_TILE_SPEC_PLACEHOLDER);
+        }
 
         String[] items = new String[availableTilesLabel.size()];
         availableTilesLabel.toArray(items);
