@@ -36,6 +36,7 @@ import android.util.SparseArray;
 import android.util.TimeUtils;
 import android.view.Display;
 import android.view.SurfaceControl;
+import android.view.WindowManager;
 import android.view.WindowManagerPolicy;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -209,6 +210,8 @@ public class WindowAnimator {
         allowWhenLocked |= (win.mIsImWindow || imeTarget == win) && showImeOverKeyguard;
         // Show SHOW_WHEN_LOCKED windows that turn on the screen
         allowWhenLocked |= (win.mAttrs.flags & FLAG_SHOW_WHEN_LOCKED) != 0 && win.mTurnOnScreen;
+        // Show windows that use TYPE_STATUS_BAR_SUB_PANEL when locked
+        allowWhenLocked |= win.mAttrs.type == WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL;
 
         if (appShowWhenLocked != null) {
             allowWhenLocked |= appShowWhenLocked == win.mAppToken
