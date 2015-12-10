@@ -1080,7 +1080,7 @@ class AlarmManagerService extends SystemService {
         if (a.alarmClock != null) {
             mNextAlarmClockMayChange = true;
             //Publish as system user
-            publishNextAlarmCustomTile(Process.SYSTEM_UID);
+            publishNextAlarmCustomTile(UserHandle.myUserId());
         }
 
         boolean needRebatch = false;
@@ -2691,11 +2691,6 @@ class AlarmManagerService extends SystemService {
         long token = Binder.clearCallingIdentity();
         try {
             final UserHandle user = new UserHandle(userId);
-            if (!QSUtils.isQSTileEnabledForUser(
-                    getContext(), QSConstants.DYNAMIC_TILE_NEXT_ALARM, user.getUserId(userId))) {
-                return;
-            }
-
             final int icon = QSUtils.getDynamicQSTileResIconId(getContext(), userId,
                     QSConstants.DYNAMIC_TILE_NEXT_ALARM);
             final String contentDesc = QSUtils.getDynamicQSTileLabel(getContext(), userId,
@@ -2714,7 +2709,8 @@ class AlarmManagerService extends SystemService {
                 final String pkg = alarm.operation.getCreatorPackage();
                 CustomTile.ExpandedListItem item = new CustomTile.ExpandedListItem();
                 item.setExpandedListItemDrawable(icon);
-                item.setExpandedListItemTitle(formatNextAlarm(getContext(), alarm.alarmClock, userId));
+                item.setExpandedListItemTitle(formatNextAlarm(getContext(), alarm.alarmClock,
+                        userId));
                 item.setExpandedListItemSummary(getAlarmApkLabel(pkg));
                 item.setExpandedListItemOnClickIntent(getCustomTilePendingIntent(user, pkg));
                 items.add(item);
@@ -2790,13 +2786,7 @@ class AlarmManagerService extends SystemService {
             int count = mNextAlarmClockForUser.size();
             for (int i = 0; i < count; i++) {
                 int userId = mNextAlarmClockForUser.keyAt(i);
-                boolean enabled = QSUtils.isQSTileEnabledForUser(
-                        getContext(), QSConstants.DYNAMIC_TILE_NEXT_ALARM, userId);
-                if (enabled) {
-                    publishNextAlarmCustomTile(userId);
-                } else {
-                    unpublishNextAlarmCustomTile(userId);
-                }
+                publishNextAlarmCustomTile(userId);
             }
         }
     }
