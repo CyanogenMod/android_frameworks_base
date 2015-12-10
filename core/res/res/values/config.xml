@@ -2381,6 +2381,10 @@
          is non-interactive. -->
     <bool name="config_cameraDoubleTapPowerGestureEnabled">true</bool>
 
+    <!-- The BT name of the keyboard packaged with the device. If this is defined, SystemUI will
+         automatically try to pair with it when the device exits tablet mode. -->
+    <string translatable="false" name="config_packagedKeyboardName"></string>
+
     <string-array name="origin_carrier_names">
         <item>CHINA\u0020\u0020MOBILE</item>
         <item>CMCC</item>
