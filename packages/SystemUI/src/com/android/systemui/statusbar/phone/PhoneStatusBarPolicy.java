@@ -513,11 +513,6 @@ public class PhoneStatusBarPolicy implements Callback {
         final int userId = UserHandle.myUserId();
         long token = Binder.clearCallingIdentity();
         try {
-            if (!QSUtils.isQSTileEnabledForUser(
-                    mContext, QSConstants.DYNAMIC_TILE_SU, userId)) {
-                return;
-            }
-
             final UserHandle user = new UserHandle(userId);
             final int icon = QSUtils.getDynamicQSTileResIconId(mContext, userId,
                     QSConstants.DYNAMIC_TILE_SU);
@@ -608,9 +603,7 @@ public class PhoneStatusBarPolicy implements Callback {
 
     private boolean isSuEnabledForUser(int userId) {
         final boolean hasSuAccess = mSuController.hasActiveSessions();
-        final boolean isEnabledForUser = QSUtils.isQSTileEnabledForUser(mContext,
-                QSConstants.DYNAMIC_TILE_SU, userId);
-        return  (userId == UserHandle.USER_OWNER) && isEnabledForUser && hasSuAccess;
+        return  (userId == UserHandle.USER_OWNER) && hasSuAccess;
     }
 
     private void processQSChangedLocked() {

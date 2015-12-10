@@ -3582,11 +3582,6 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         final int userId = UserHandle.myUserId();
         long token = Binder.clearCallingIdentity();
         try {
-            if (!QSUtils.isQSTileEnabledForUser(
-                    mContext, QSConstants.DYNAMIC_TILE_IME_SELECTOR, userId)) {
-                return;
-            }
-
             final UserHandle user = new UserHandle(userId);
             final int icon = QSUtils.getDynamicQSTileResIconId(mContext, userId,
                     QSConstants.DYNAMIC_TILE_IME_SELECTOR);
@@ -3639,9 +3634,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             }
         }
         final boolean hasInputMethod = isIMEVisible && imi != null && mCurrentSubtype != null;
-        final boolean isEnabledForUser = QSUtils.isQSTileEnabledForUser(mContext,
-                QSConstants.DYNAMIC_TILE_NEXT_ALARM, userId);
-        boolean enabled = isEnabledForUser && hasInputMethod;
+        boolean enabled = hasInputMethod;
         if (enabled) {
             publishImeSelectorCustomTile(imi);
         } else {
