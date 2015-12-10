@@ -289,7 +289,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
         }
         if (DEBUG) Log.d(TAG, "Recreating tiles");
         final List<String> tileSpecs = loadTileSpecs(newValue);
-        removeUnusedDynamicTiles(tileSpecs);
         if (tileSpecs.equals(mTileSpecs)) return;
         for (Map.Entry<String, QSTile<?>> tile : mTiles.entrySet()) {
             if (!tileSpecs.contains(tile.getKey())) {
@@ -304,7 +303,12 @@ public class QSTileHost implements QSTile.Host, Tunable {
             } else {
                 if (DEBUG) Log.d(TAG, "Creating tile: " + tileSpec);
                 try {
-                    newTiles.put(tileSpec, createTile(tileSpec));
+                    if (mCustomTileData.get(tileSpec) != null) {
+                        newTiles.put(tileSpec, new CustomQSTile(this,
+                                mCustomTileData.get(tileSpec).sbc));
+                    } else {
+                        newTiles.put(tileSpec, createTile(tileSpec));
+                    }
                 } catch (Throwable t) {
                     Log.w(TAG, "Error creating tile for spec: " + tileSpec, t);
                 }
@@ -316,23 +320,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
         mTiles.putAll(newTiles);
         if (mCallback != null) {
             mCallback.onTilesChanged();
-        }
-    }
-
-    private void removeUnusedDynamicTiles(List<String> tileSpecs) {
-        List<CustomTileData.Entry> tilesToRemove = new ArrayList<>();
-        for (CustomTileData.Entry entry : mCustomTileData.getEntries().values()) {
-            if (entry.sbc.getPackage().equals(mContext.getPackageName())
-                    || entry.sbc.getUid() == Process.SYSTEM_UID) {
-                if (!tileSpecs.contains(entry.sbc.getTag())) {
-                    tilesToRemove.add(entry);
-                }
-            }
-        }
-
-        for (CustomTileData.Entry entry : tilesToRemove) {
-            mCustomTileData.remove(entry.key);
-            removeCustomTile(entry.sbc);
         }
     }
 
@@ -461,6 +448,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     void addCustomTile(StatusBarPanelCustomTile sbc) {
         synchronized (mTiles) {
             mCustomTileData.add(new CustomTileData.Entry(sbc));
+            mTileSpecs.add(sbc.getKey());
             mTiles.put(sbc.getKey(), new CustomQSTile(this, sbc));
             if (mCallback != null) {
                 mCallback.onTilesChanged();
@@ -471,6 +459,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     void removeCustomTileSysUi(String key) {
         synchronized (mTiles) {
             if (mTiles.containsKey(key)) {
+                mTileSpecs.remove(key);
                 mTiles.remove(key);
                 mCustomTileData.remove(key);
                 if (mCallback != null) {
