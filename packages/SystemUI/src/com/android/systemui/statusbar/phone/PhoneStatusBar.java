@@ -3626,6 +3626,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mQSPanel.getHost().setCustomTileListenerService(null);
+        mNotificationPanel.requestLayout();
 
         mStatusBarWindow.requestLayout();
         mStatusBarWindow.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -4419,10 +4420,20 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void showBouncer() {
+        showBouncer(mNotificationPanel.isShowingThirdPartyKeyguardComponent());
+    }
+
+    void showBouncer(boolean focusThirdPartyKeyguard) {
         if (!mRecreating &&
                 (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
             mWaitingForKeyguardExit = mStatusBarKeyguardViewManager.isShowing();
-            mStatusBarKeyguardViewManager.dismiss();
+            mStatusBarKeyguardViewManager.dismiss(
+                    focusThirdPartyKeyguard);
+            if (focusThirdPartyKeyguard) {
+                mStatusBarView.collapseAllPanels(/*animate=*/ false, false /* delayed*/,
+                        1.0f /* speedUpFactor */);
+                setBarState(StatusBarState.SHADE);
+            }
         }
     }
 
@@ -4506,6 +4517,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (!expand && !mUnlockMethodCache.canSkipBouncer()) {
                 showBouncer();
             }
+        } else if (expand && mStatusBarWindowManager.isShowingExternalKeyguardView()) {
+            mStatusBarWindowManager.setShowingExternalKeyguardview(false);
+            setBarState(StatusBarState.KEYGUARD);
         }
     }
 

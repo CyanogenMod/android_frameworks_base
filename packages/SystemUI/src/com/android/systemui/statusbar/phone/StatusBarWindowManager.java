@@ -23,6 +23,7 @@ import android.graphics.Point;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.SystemProperties;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Display;
 import android.view.SurfaceSession;
@@ -215,6 +216,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     }
 
     private void apply(State state) {
+        Log.d("CLARK", "apply(" + state.toString() + ")");
         applyKeyguardFlags(state);
         applyForceStatusBarVisibleFlag(state);
         applyFocusableFlag(state);
@@ -226,6 +228,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         applyModalFlag(state);
         applyBrightness(state);
         if (mLp.copyFrom(mLpChanged) != 0) {
+            Log.d("CLARK", "state changed: mLp=" + mLp.toString());
             mWindowManager.updateViewLayout(mStatusBarView, mLp);
         }
     }
@@ -339,6 +342,13 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         applyKeyguardBlurShow();
     }
 
+    public void setShowingExternalKeyguardview(boolean showingExternalKeyguardview) {
+        mCurrentState.keyguardShowingExternalView = showingExternalKeyguardview;
+        // make the keyguard occluded so the external view gets full focus
+        setKeyguardOccluded(showingExternalKeyguardview);
+        apply(mCurrentState);
+    }
+
     /**
      * @param state The {@link StatusBarState} of the status bar.
      */
@@ -386,6 +396,10 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         pw.println(mCurrentState);
     }
 
+    public boolean isShowingExternalKeyguardView() {
+        return mCurrentState.keyguardShowingExternalView;
+    }
+
     private static class State {
         boolean keyguardShowing;
         boolean keyguardOccluded;
@@ -400,6 +414,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         boolean forceStatusBarVisible;
         boolean forceCollapsed;
         boolean forceDozeBrightness;
+        boolean keyguardShowingExternalView;
 
         /**
          * The {@link BaseStatusBar} state from the status bar.
