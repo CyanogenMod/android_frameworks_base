@@ -4459,7 +4459,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (!mRecreating &&
                 (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
             mWaitingForKeyguardExit = mStatusBarKeyguardViewManager.isShowing();
-            mStatusBarKeyguardViewManager.dismiss();
+            mStatusBarKeyguardViewManager.dismiss(
+                    mNotificationPanel.isShowingThirdPartyKeyguardComponent());
+            if (mNotificationPanel.isShowingThirdPartyKeyguardComponent()) {
+                mStatusBarView.collapseAllPanels(/*animate=*/ false, false /* delayed*/,
+                        1.0f /* speedUpFactor */);
+                setBarState(StatusBarState.SHADE);
+            }
         }
     }
 
@@ -4543,6 +4549,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             if (!expand && !mUnlockMethodCache.canSkipBouncer()) {
                 showBouncer();
             }
+        } else if (expand && mStatusBarWindowManager.isShowingExternalKeyguardView()) {
+            mStatusBarWindowManager.setShowingExternalKeyguardview(false);
+            setBarState(StatusBarState.KEYGUARD);
         }
     }
 
