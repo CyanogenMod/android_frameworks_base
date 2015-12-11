@@ -4459,7 +4459,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (!mRecreating &&
                 (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
             mWaitingForKeyguardExit = mStatusBarKeyguardViewManager.isShowing();
-            mStatusBarKeyguardViewManager.dismiss();
+            mStatusBarKeyguardViewManager.dismiss(
+                    mNotificationPanel.isShowingThirdPartyKeyguardComponent());
         }
     }
 

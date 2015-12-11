@@ -370,7 +370,11 @@ public class StatusBarKeyguardViewManager {
      * Dismisses the keyguard by going to the next screen or making it gone.
      */
     public void dismiss() {
-        if (mDeviceInteractive || mDeviceWillWakeUp) {
+        dismiss(false);
+    }
+
+    public void dismiss(boolean isShowingThirdPartyKeyguardView) {
+        if ((mDeviceInteractive || mDeviceWillWakeUp) && !isShowingThirdPartyKeyguardView) {
             showBouncer();
         }
     }
