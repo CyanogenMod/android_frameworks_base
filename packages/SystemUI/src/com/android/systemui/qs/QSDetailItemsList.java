@@ -113,8 +113,6 @@ public class QSDetailItemsList extends LinearLayout {
             LinearLayout view = (LinearLayout) inflater.inflate(
                     R.layout.qs_detail_item, parent, false);
 
-            view.setClickable(false); // let list view handle this
-
             final CustomTile.ExpandedItem item = getItem(position);
             Drawable d = null;
             if (item.itemDrawableResourceId != 0 && item.itemBitmapResource == null) {
