@@ -28,7 +28,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#80cbc4"
+            android:textColor="@color/qs_title_text_color"
             android:text="@string/quick_settings_title_header"/>
 
     <!-- show weather -->
@@ -46,7 +46,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:gravity="center_vertical"
-            android:textColor="#80cbc4"
+            android:textColor="@color/qs_title_text_color"
             android:text="@string/quick_settings_title_tiles"/>
 
     <!-- first row large -->
@@ -74,7 +74,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:id="@+id/title"
-                android:textColor="@android:color/white"
+                android:textColor="@color/qs_tile_reset_to_default_text_color"
                 android:text="@string/quick_settings_tile_reset_to_default"
                 android:contentDescription="@null"/>
 
