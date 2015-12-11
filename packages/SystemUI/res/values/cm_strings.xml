@@ -129,4 +129,28 @@
 
     <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_screen_timeout_changed">Screen timeout changed to <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+    <string name="qs_tile_performance">Battery mode</string>
+
+    <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_pwrsv">Battery mode: power save mode.</string>
+    <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_bal">Battery mode: balanced mode.</string>
+    <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_perf">Battery mode: performance mode.</string>
+    <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_bias_power">Battery mode: efficiency mode.</string>
+    <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_bias_perf">Battery mode: quick mode.</string>
+
+    <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Battery mode changed to power save mode.</string>
+    <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_changed_bal">Battery mode changed to balanced mode.</string>
+    <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_changed_perf">Battery mode changed to performance mode.</string>
+    <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Battery mode changed to efficiency mode.</string>
+    <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Battery mode changed to quick mode.</string>
+    <string name="quick_settings_performance_profile_detail_title">Battery mode</string>
 </resources>

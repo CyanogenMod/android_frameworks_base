@@ -36,4 +36,22 @@
         <item>W</item>  <!-- West -->
         <item>NW</item> <!-- North west -->
     </string-array>
+
+    <!-- Performance profiles description-->
+    <string-array name="perf_profile_description" translatable="false">
+        <item>@string/accessibility_quick_settings_perf_profile_pwrsv</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bias_power</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bal</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bias_perf</item>
+        <item>@string/accessibility_quick_settings_perf_profile_perf</item>
+    </string-array>
+
+    <!-- Performance profiles announcement-->
+    <string-array name="perf_profile_announcement" translatable="false">
+        <item>@string/accessibility_quick_settings_perf_profile_changed_pwrsv</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bias_power</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bal</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bias_perf</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_perf</item>
+    </string-array>
 </resources>
