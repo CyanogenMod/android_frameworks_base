@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.app.ActivityManager;
 import android.app.StatusBarManager;
@@ -31,6 +32,7 @@ import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Handler;
@@ -39,11 +41,14 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
@@ -70,11 +75,14 @@ import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
+
+import cyanogenmod.externalviews.KeyguardExternalView;
 import cyanogenmod.providers.CMSettings;
 
 import java.util.List;
 
 import cyanogenmod.providers.CMSettings;
+import org.cyanogenmod.internal.widget.CmLockPatternUtils;
 
 public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener, ObservableScrollView.Listener,
@@ -99,6 +107,12 @@ public class NotificationPanelView extends PanelView implements
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
     public static final long DOZE_ANIMATION_DURATION = 700;
+
+
+    // Layout params for external keyguard view
+    private static final FrameLayout.LayoutParams EXTERNAL_KEYGUARD_VIEW_PARAMS =
+            new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
 
     private KeyguardAffordanceHelper mAfforanceHelper;
     private StatusBarHeaderView mHeader;
@@ -215,6 +229,9 @@ public class NotificationPanelView extends PanelView implements
     private boolean mLaunchingAffordance;
     private String mLastCameraLaunchSource = KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE;
 
+    private ComponentName mThirdPartyKeyguardViewComponent;
+    private KeyguardExternalView mExternalKeyguardView;
+
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
         public void run() {
@@ -300,6 +317,11 @@ public class NotificationPanelView extends PanelView implements
                 }
             }
         });
+
+        CmLockPatternUtils lockPatternUtils = new CmLockPatternUtils(getContext());
+        if (lockPatternUtils.isThirdPartyKeyguardEnabled()) {
+            mThirdPartyKeyguardViewComponent = lockPatternUtils.getThirdPartyKeyguardComponent();
+        }
     }
 
     @Override
@@ -1069,6 +1091,23 @@ public class NotificationPanelView extends PanelView implements
         }
         if (keyguardShowing) {
             updateDozingVisibilities(false /* animate */);
+            if (mThirdPartyKeyguardViewComponent != null) {
+                if (mExternalKeyguardView == null) {
+                    mExternalKeyguardView =
+                            getExternalKeyguardView(mThirdPartyKeyguardViewComponent);
+                } else {
+                    mExternalKeyguardView.onActivityResumed(null);
+                }
+                if (mExternalKeyguardView != null && indexOfChild(mExternalKeyguardView) == -1) {
+                    addView(mExternalKeyguardView, 0, EXTERNAL_KEYGUARD_VIEW_PARAMS);
+                }
+            }
+        } else {
+            if (mExternalKeyguardView != null && indexOfChild(mExternalKeyguardView) >= 0) {
+                removeView(mExternalKeyguardView);
+                // destroy current external view now that we are done with it
+                mExternalKeyguardView.onActivityPaused(null);
+            }
         }
         resetVerticalPanelPosition();
         updateQsState();
@@ -1250,7 +1289,7 @@ public class NotificationPanelView extends PanelView implements
                 mKeyguardBottomArea.setVisibility(View.VISIBLE);
             }
             mKeyguardBottomArea.setAlpha(1f);
-        } else {
+        } else if (!isShowingThirdPartyKeyguardComponent()){
             mKeyguardBottomArea.animate().cancel();
             mKeyguardBottomArea.setVisibility(View.GONE);
             mKeyguardBottomArea.setAlpha(1f);
@@ -1796,7 +1835,8 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private void updateKeyguardBottomAreaAlpha() {
-        float alpha = Math.min(getKeyguardContentsAlpha(), 1 - getQsExpansionFraction());
+        float alpha = isShowingThirdPartyKeyguardComponent() ? 1f :
+                Math.min(getKeyguardContentsAlpha(), 1 - getQsExpansionFraction());
         mKeyguardBottomArea.setAlpha(alpha);
         mKeyguardBottomArea.setImportantForAccessibility(alpha == 0f
                 ? IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
@@ -1891,8 +1931,9 @@ public class NotificationPanelView extends PanelView implements
         if (mQsFullyExpanded) {
             mQsExpandImmediate = true;
         }
-        if (mStatusBar.getBarState() == StatusBarState.KEYGUARD
-                || mStatusBar.getBarState() == StatusBarState.SHADE_LOCKED) {
+        if ((mStatusBar.getBarState() == StatusBarState.KEYGUARD
+                || mStatusBar.getBarState() == StatusBarState.SHADE_LOCKED) &&
+                !isShowingThirdPartyKeyguardComponent()) {
             mAfforanceHelper.animateHideLeftRightIcon();
         }
         mNotificationStackScroller.onPanelTrackingStarted();
@@ -2544,5 +2585,37 @@ public class NotificationPanelView extends PanelView implements
         ActivityManager am = getContext().getSystemService(ActivityManager.class);
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         return !tasks.isEmpty() && pkgName.equals(tasks.get(0).topActivity.getPackageName());
+    }
+
+    public boolean isShowingThirdPartyKeyguardComponent() {
+        return mExternalKeyguardView != null && indexOfChild(mExternalKeyguardView) >= 0;
+    }
+
+    private KeyguardExternalView getExternalKeyguardView(ComponentName componentName) {
+        try {
+            return new KeyguardExternalView(getContext(), null, componentName);
+        } catch (Exception e) {
+            // just return null below and move on
+        }
+        return null;
+    }
+
+    private void moveBottomAreaToWindow() {
+        if (mKeyguardBottomArea == null) return;
+        removeView(mKeyguardBottomArea);
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                PixelFormat.TRANSLUCENT);
+        lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        lp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        lp.setTitle("KeyguardBottomArea");
+        lp.packageName = mContext.getPackageName();
+        lp.height = 160;
+        wm.addView(mKeyguardBottomArea, lp);
     }
 }
