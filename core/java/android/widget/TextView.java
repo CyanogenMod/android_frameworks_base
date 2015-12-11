@@ -8610,6 +8610,11 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                     return onTextContextMenuItem(ID_PASTE);
                 }
                 break;
+            case KeyEvent.KEYCODE_I:
+                if(canInsight()) {
+                    return onTextContextMenuItem(ID_INSIGHT);
+                }
+                break;
             }
         } else if (event.hasModifiers(KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON)) {
             // Handle Ctrl-Shift shortcuts.
@@ -9070,6 +9075,13 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                     }
                 }
             } return false;
+            case AccessibilityNodeInfo.ACTION_INSIGHT: {
+                if (isFocused() && canInsight()) {
+                    if (onTextContextMenuItem(ID_INSIGHT)) {
+                        return true;
+                    }
+                }
+            } return false;
             default: {
                 return super.performAccessibilityActionInternal(action, arguments);
             }
@@ -9134,6 +9146,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     static final int ID_COPY = android.R.id.copy;
     static final int ID_PASTE = android.R.id.paste;
     static final int ID_SHARE = android.R.id.shareText;
+    static final int ID_INSIGHT = com.android.internal.R.id.insight;
+
     static final int ID_PASTE_AS_PLAIN_TEXT = android.R.id.pasteAsPlainText;
     static final int ID_REPLACE = android.R.id.replaceText;
 
@@ -9199,6 +9213,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             case ID_COPY:
                 setPrimaryClip(ClipData.newPlainText(null, getTransformedText(min, max)));
                 stopTextActionMode();
+                return true;
+
+            case ID_INSIGHT:
+                getInsightForSelectedText(min,max);
                 return true;
 
             case ID_REPLACE:
@@ -9377,6 +9395,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         return mEditor != null && mEditor.canRedo();
     }
 
+    boolean canInsight() {
+        return canCopy();
+    }
+
     boolean canCut() {
         if (hasPasswordTransformationMethod()) {
             return false;
@@ -9491,6 +9513,20 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             sharingIntent.removeExtra(android.content.Intent.EXTRA_TEXT);
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, selectedText);
             getContext().startActivity(Intent.createChooser(sharingIntent, null));
+            stopTextActionMode();
+        }
+    }
+
+    private void getInsightForSelectedText(int selStart, int selEnd) {
+        String selectedText = getSelectedText();
+        if(selectedText != null && !selectedText.isEmpty()) {
+            Intent insightIntent = new Intent("cyanogenmod.intent.action.INSIGHT");
+            insightIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            insightIntent.putExtra("cyanogenmon.intent.extra.EXTRA_INSIGHT_SELECTED_TEXT", selectedText);
+            insightIntent.putExtra("cyanogenmod.content.Intent.EXTRA_INSIGHT_ALL_TEXT",getText());
+            insightIntent.putExtra("cyanogenmod.intent.action.EXTRA_INSIGHT_SELECTION_START", selStart);
+            insightIntent.putExtra("cyanogenmod.intent.action.EXTRA_INSIGHT_SELECTION_END", selEnd);
+            getContext().startActivity(insightIntent, null);
             stopTextActionMode();
         }
     }

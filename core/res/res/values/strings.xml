@@ -123,6 +123,8 @@
     <string name="badPuk">The PUK you typed isn\'t correct.</string>
     <!-- Displayed when SIM PIN passwords are entered inconsistently. -->
     <string name="mismatchPin">The PINs you typed don\'t match.</string>
+    <!-- Displayed in context menu when user long presses on EditText/TextView/Webview text -->
+    <string name="insight">Insight</string>
     <!-- Displayed when a SIM PIN password is too long or too short. -->
     <string name="invalidPin">Type a PIN that is 4 to 8 numbers.</string>
     <!-- Displayed when a SIM PUK password is too short. -->
