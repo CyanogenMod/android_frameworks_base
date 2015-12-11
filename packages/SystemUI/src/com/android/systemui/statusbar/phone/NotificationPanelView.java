@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.app.ActivityManager;
 import android.app.StatusBarManager;
@@ -42,6 +43,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityEvent;
@@ -70,11 +72,13 @@ import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
+import cyanogenmod.externalviews.LiveLockExternalView;
 import cyanogenmod.providers.CMSettings;
 
 import java.util.List;
 
 import cyanogenmod.providers.CMSettings;
+import org.cyanogenmod.internal.widget.CmLockPatternUtils;
 
 public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener, ObservableScrollView.Listener,
@@ -99,6 +103,12 @@ public class NotificationPanelView extends PanelView implements
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
     public static final long DOZE_ANIMATION_DURATION = 700;
+
+
+    // Layout params for external keyguard view
+    private static final FrameLayout.LayoutParams EXTERNAL_KEYGUARD_VIEW_PARAMS =
+            new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
 
     private KeyguardAffordanceHelper mAfforanceHelper;
     private StatusBarHeaderView mHeader;
@@ -215,6 +225,9 @@ public class NotificationPanelView extends PanelView implements
     private boolean mLaunchingAffordance;
     private String mLastCameraLaunchSource = KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE;
 
+    private ComponentName mThirdPartyKeyguardViewComponent;
+    private LiveLockExternalView mExternalKeyguardView;
+
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
         public void run() {
@@ -300,6 +313,11 @@ public class NotificationPanelView extends PanelView implements
                 }
             }
         });
+
+        CmLockPatternUtils lockPatternUtils = new CmLockPatternUtils(getContext());
+        if (lockPatternUtils.isThirdPartyKeyguardEnabled()) {
+            mThirdPartyKeyguardViewComponent = lockPatternUtils.getThirdPartyKeyguardComponent();
+        }
     }
 
     @Override
@@ -1069,6 +1087,25 @@ public class NotificationPanelView extends PanelView implements
         }
         if (keyguardShowing) {
             updateDozingVisibilities(false /* animate */);
+            if (mThirdPartyKeyguardViewComponent != null) {
+                if (mExternalKeyguardView != null && indexOfChild(mExternalKeyguardView) >= 0) {
+                    removeView(mExternalKeyguardView);
+                    // destroy the current external view
+                    mExternalKeyguardView.onActivityDestroyed(null);
+                }
+                // Create the external view and add it
+                mExternalKeyguardView = new LiveLockExternalView(getContext(), null,
+                        mThirdPartyKeyguardViewComponent);
+                addView(mExternalKeyguardView, EXTERNAL_KEYGUARD_VIEW_PARAMS);
+            }
+        } else {
+            if (mExternalKeyguardView != null && indexOfChild(mExternalKeyguardView) >= 0) {
+                removeView(mExternalKeyguardView);
+                // destroy current external view now that we are done with it
+                mExternalKeyguardView.onActivityStopped(null);
+                mExternalKeyguardView.onActivityDestroyed(null);
+                mExternalKeyguardView = null;
+            }
         }
         resetVerticalPanelPosition();
         updateQsState();
@@ -2544,5 +2581,9 @@ public class NotificationPanelView extends PanelView implements
         ActivityManager am = getContext().getSystemService(ActivityManager.class);
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         return !tasks.isEmpty() && pkgName.equals(tasks.get(0).topActivity.getPackageName());
+    }
+
+    public boolean isShowingThirdPartyKeyguardComponent() {
+        return mExternalKeyguardView != null && indexOfChild(mExternalKeyguardView) >= 0;
     }
 }
