@@ -18,17 +18,21 @@ package com.android.systemui.statusbar.phone;
 
 import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Trace;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewRootImpl;
+import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
+import com.android.keyguard.R;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.statusbar.CommandQueue;
 
@@ -78,6 +82,8 @@ public class StatusBarKeyguardViewManager {
     private OnDismissAction mAfterKeyguardGoneAction;
     private boolean mDeviceWillWakeUp;
     private boolean mDeferScrimFadeOut;
+
+    private View mUnlockFab;
 
     public StatusBarKeyguardViewManager(Context context, ViewMediatorCallback callback,
             LockPatternUtils lockPatternUtils) {
@@ -235,6 +241,9 @@ public class StatusBarKeyguardViewManager {
         mOccluded = occluded;
         mStatusBarWindowManager.setKeyguardOccluded(occluded);
         mPhoneStatusBar.getVisualizer().setOccluded(occluded);
+        if (mUnlockFab != null && mUnlockFab.isAttachedToWindow() && !occluded) {
+            hideUnlockFab();
+        }
         reset();
     }
 
@@ -371,8 +380,16 @@ public class StatusBarKeyguardViewManager {
      * Dismisses the keyguard by going to the next screen or making it gone.
      */
     public void dismiss() {
-        if (mDeviceInteractive || mDeviceWillWakeUp) {
+        dismiss(false);
+    }
+
+    public void dismiss(boolean focusKeyguardExternalView) {
+        if ((mDeviceInteractive || mDeviceWillWakeUp) && !focusKeyguardExternalView) {
             showBouncer();
+            hideUnlockFab();
+        } else if (focusKeyguardExternalView) {
+            showUnlockFab();
+            mStatusBarWindowManager.setKeyguardExternalViewFocus(true);
         }
     }
 
@@ -549,4 +566,52 @@ public class StatusBarKeyguardViewManager {
     public boolean isKeyguardShowingMedia() {
         return mPhoneStatusBar.isKeyguardShowingMedia();
     }
+
+    public void setKeyguardExternalViewFocus(boolean hasFocus) {
+        if (hasFocus) {
+            showUnlockFab();
+        } else {
+            hideUnlockFab();
+        }
+        mStatusBarWindowManager.setKeyguardExternalViewFocus(hasFocus);
+    }
+
+    private void showUnlockFab() {
+        if (mUnlockFab == null) {
+            mUnlockFab = View.inflate(mContext, R.layout.unlock_fab, null);
+        }
+        if (!mUnlockFab.isAttachedToWindow()) {
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                            | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                    PixelFormat.TRANSLUCENT);
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+            lp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+            lp.setTitle("UnlockFab");
+            lp.packageName = mContext.getPackageName();
+            lp.width = lp.height =
+                    mContext.getResources().getDimensionPixelSize(R.dimen.unlock_fab_size);
+            WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+            wm.addView(mUnlockFab, lp);
+            mUnlockFab.setOnClickListener(mUnlockFabClickListener);
+        }
+    }
+
+    private void hideUnlockFab() {
+        if (mUnlockFab != null && mUnlockFab.isAttachedToWindow()) {
+            WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+            wm.removeViewImmediate(mUnlockFab);
+        }
+    }
+
+    private View.OnClickListener mUnlockFabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mStatusBarWindowManager.setKeyguardExternalViewFocus(false);
+            dismiss(false);
+        }
+    };
 }
