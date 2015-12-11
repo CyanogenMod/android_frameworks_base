@@ -49,4 +49,8 @@
     <dimen name="qs_detail_item_height_twoline">72dp</dimen>
 
     <dimen name="detail_exterior_padding">8dp</dimen>
+
+    <!-- Size of unlock FAB used when showing external keyguard views -->
+    <dimen name="unlock_fab_size">48dp</dimen>
+
 </resources>
