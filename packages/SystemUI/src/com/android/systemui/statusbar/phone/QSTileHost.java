@@ -343,6 +343,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("cast")) return new CastTile(this);
         else if (tileSpec.equals("hotspot")) return new HotspotTile(this);
         else if (tileSpec.equals("edit")) return new EditTile(this);
+        else if (tileSpec.equals("adb_network")) return new AdbOverNetworkTile(this);
         else if (tileSpec.equals("compass")) return new CompassTile(this);
         else if (tileSpec.equals("nfc")) return new NfcTile(this);
         else if (tileSpec.equals("profiles")) return new ProfilesTile(this);
