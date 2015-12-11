@@ -19,8 +19,6 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/qs_detail_item_height"
     android:background="@drawable/btn_borderless_rect"
-    android:clickable="true"
-    android:focusable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal" >
 
