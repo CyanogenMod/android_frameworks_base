@@ -67,4 +67,10 @@
 
     <!-- SystemUI Tuner Icon Tint Color -->
     <color name="tuner_icon_tint">#4dffffff</color>
+
+    <!-- QS Settings Text Colors -->
+    <color name="qs_tile_reset_to_default_text_color">@android:color/white</color>
+    <color name="qs_title_text_color">#80cbc4</color>
+    <color name="qs_edit_header_instruction_text_color">@android:color/white</color>
+    <color name="qs_row_text_color">@android:color/white</color>
 </resources>
