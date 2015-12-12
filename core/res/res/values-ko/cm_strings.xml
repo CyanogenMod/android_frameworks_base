@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">전원 절약</string>
   <string name="perf_profile_bal">균형</string>
   <string name="perf_profile_perf">성능</string>
+  <string name="perf_profile_bias_power">효율</string>
+  <string name="perf_profile_bias_perf">성능</string>
   <string name="theme_install_error_title">테마 설치 실패</string>
   <string name="theme_install_error_message">%s을(를) 설치하지 못했습니다</string>
   <string name="theme_reset_notification_title">테마 초기화</string>

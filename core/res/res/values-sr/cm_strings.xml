@@ -57,8 +57,8 @@
   <string name="reboot_confirm" product="default">Tелефон ће се рестартовати.</string>
   <string name="reboot_progress">Рестартовање\u2026</string>
   <string name="app_killed_message">Апликација је затворена</string>
-  <string name="adb_net_active_notification_title">ADB преко мреже омогућено</string>
-  <string name="adb_both_active_notification_title">ADB преко USB &amp; мреже омогућено</string>
+  <string name="adb_net_active_notification_title">ADB преко мреже омогућен</string>
+  <string name="adb_both_active_notification_title">ADB преко USB &amp; мреже омогућен</string>
   <string name="adb_active_generic_notification_message">Додирни да онемогућиш отклањање грешака.</string>
   <string name="usb_choose_notification_title">Додирни да изабереш USB опције.</string>
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
