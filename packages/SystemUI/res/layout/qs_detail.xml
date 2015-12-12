@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/qs_detail_background"
+        android:paddingTop="@dimen/detail_exterior_padding"
         android:paddingBottom="@dimen/detail_exterior_padding"
         android:orientation="vertical">
 

@@ -124,6 +124,8 @@
     <string name="quick_settings_volume_panel_label">Volume panel</string>
     <string name="quick_settings_usb_tether_label">USB tethering</string>
     <string name="quick_settings_screen_timeout_detail_title">Screen timeout</string>
+    <string name="quick_settings_lockscreen_label">Lock screen</string>
+    <string name="quick_settings_lockscreen_label_enforced">Lock screen enforced</string>
     <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_screen_timeout">Screen timeout: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
 
@@ -153,6 +155,16 @@
     <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Battery mode changed to quick mode.</string>
     <string name="quick_settings_performance_profile_detail_title">Battery mode</string>
+
+    <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_lock_screen_off">Lock screen off.</string>
+    <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_lock_screen_on">Lock screen on.</string>
+
+    <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_lock_screen_changed_off">Lock screen turned off.</string>
+    <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_lock_screen_changed_on">Lock screen turned on.</string>
 
     <!-- Dynamic tiles -->
     <string name="quick_settings_dynamic_tile_detail_title">Dynamic tile</string>

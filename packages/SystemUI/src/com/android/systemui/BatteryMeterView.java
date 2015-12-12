@@ -928,22 +928,24 @@ public class BatteryMeterView extends View implements DemoMode,
             if (!tracker.shouldIndicateCharging()
                     || tracker.status == BatteryManager.BATTERY_STATUS_FULL
                     || tracker.level == 0) {
-                if (mIsAnimating) {
-                    mIsAnimating = false;
-                    mAnimOffset = 0;
-                }
-                return;
+                mIsAnimating = false;
+            } else {
+                mIsAnimating = true;
             }
-
-            mIsAnimating = true;
 
             if (mAnimOffset > 360) {
                 mAnimOffset = 0;
-            } else {
+            }
+
+            boolean continueAnimation = mIsAnimating || mAnimOffset != 0;
+
+            if (continueAnimation) {
                 mAnimOffset += 3;
             }
 
-            postInvalidateDelayed(50);
+            if (continueAnimation) {
+                postInvalidateDelayed(50);
+            }
         }
 
         /**
