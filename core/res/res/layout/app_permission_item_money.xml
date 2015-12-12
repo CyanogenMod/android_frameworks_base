@@ -64,7 +64,7 @@
             android:id="@+id/perm_money_label"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="16sp"
-            android:textColor="@color/perms_costs_money"
+            android:textColor="@color/perms_costs_money_text_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/perm_money_icon"

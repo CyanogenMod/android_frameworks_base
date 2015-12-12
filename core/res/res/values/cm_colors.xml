@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Exposed Hard coded colors -->
+    <color name="edit_side_paste_window_text_color">@android:color/black</color>
+    <color name="edit_paste_window_text_color">@android:color/black</color>
+    <color name="edit_action_popup_text_color">@android:color/black</color>
+    <color name="web_view_dropdown_text_color">#ff000000</color>
+    <color name="web_view_dropdown_background_color">#ffffffff</color>
+    <color name="perms_costs_money_text_color">@color/perms_costs_money</color>
+    <color name="loading_view_text_color">#60FFFFFF</color>
+    <color name="loading_view_text_shadow_color">#FF000000</color>
+    <color name="notification_action_tombstone_text_color">#555555</color>
+    <color name="character_picker_button_text_color">#FFFFFFFF</color>
+    <color name="activity_list_divider_color">@android:color/holo_blue_light</color>
+    <color name="dialog_divider_color">@android:color/holo_blue_light</color>
+    <color name="typing_filter_text_color">#99FFFFFF</color>
+    <color name="typing_filter_background_color">#BB000000</color>
+    <color name="status_bar_latest_event_content_bg_color">#FFFF00FF</color>
+    <color name="media_controller_background_color">#CC000000</color>
     <color name="immersive_cling_bg_color">#ff009688</color>
     <color name="immersive_cling_text_color">@color/primary_text_default_material_light</color>
     <color name="immersive_cling_button_text_color">@android:color/white</color>

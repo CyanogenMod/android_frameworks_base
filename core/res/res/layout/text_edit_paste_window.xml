@@ -28,7 +28,7 @@
         android:drawablePadding="8dip"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMediumInverse"
-        android:textColor="@android:color/black"
+        android:textColor="@color/edit_paste_window_text_color"
         android:background="@android:drawable/text_edit_paste_window"
         android:text="@android:string/paste"
         android:layout_marginBottom="12dip"
