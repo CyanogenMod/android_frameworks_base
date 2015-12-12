@@ -20,7 +20,7 @@
     android:id="@+id/status_bar_latest_event_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFF00FF"
+    android:background="@color/status_bar_latest_event_content_bg_color"
     >
     <include layout="@layout/notification_template_material_base"
         android:layout_width="match_parent"
