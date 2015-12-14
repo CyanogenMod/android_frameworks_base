@@ -47,7 +47,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     private final String[] mEntries;
     private final String[] mDescriptionEntries;
     private final String[] mAnnouncementEntries;
-    private final String[] mPerfProfileValues;
+    private final int[] mPerfProfileValues;
     private final Icon mIcon;
 
     private final PowerManager mPm;
@@ -64,7 +64,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
         Resources res = mContext.getResources();
 
-        mPerfProfileValues = res.getStringArray(org.cyanogenmod.platform.internal.R.array.perf_profile_values);
+        mPerfProfileValues = res.getIntArray(org.cyanogenmod.platform.internal.R.array.perf_profile_values);
 
         mEntries = res.getStringArray(org.cyanogenmod.platform.internal.R.array.perf_profile_entries);
         mDescriptionEntries = res.getStringArray(R.array.perf_profile_description);
@@ -145,11 +145,22 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     }
 
     private int getCurrentProfileIndex() {
-        return mPerformanceManager.getPowerProfile();
+        int index = 0;
+        int perfProfile = mPerformanceManager.getPowerProfile();
+
+        int count = mPerfProfileValues.length;
+        for (int i = 0; i < count; i++) {
+            if (mPerfProfileValues[i] == perfProfile) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
     }
 
     private void changeToProfile(int profileIndex) {
-        mPerformanceManager.setPowerProfile(profileIndex); // content observer will notify
+        mPerformanceManager.setPowerProfile(mPerfProfileValues[profileIndex]); // content observer will notify
     }
 
     public static class ProfileState extends QSTile.State {
