@@ -233,11 +233,11 @@
     <string name="permgrouplab_contacts" msgid="3657758145679177612">"通讯录"</string>
     <string name="permgroupdesc_contacts" msgid="6951499528303668046">"使用您的通讯录"</string>
     <string name="permgrouplab_location" msgid="7275582855722310164">"位置信息"</string>
-    <string name="permgroupdesc_location" msgid="1346617465127855033">"使用此设备的位置信息"</string>
+    <string name="permgroupdesc_location" msgid="1346617465127855033">"获得设备所在位置信息"</string>
     <string name="permgrouplab_calendar" msgid="5863508437783683902">"日历"</string>
     <string name="permgroupdesc_calendar" msgid="3889615280211184106">"访问您的日历"</string>
     <string name="permgrouplab_sms" msgid="228308803364967808">"短信"</string>
-    <string name="permgroupdesc_sms" msgid="4656988620100940350">"发送和查看短信"</string>
+    <string name="permgroupdesc_sms" msgid="4656988620100940350">"短信"</string>
     <string name="permgrouplab_storage" msgid="1971118770546336966">"存储空间"</string>
     <string name="permgroupdesc_storage" msgid="637758554581589203">"访问您设备上的照片、媒体内容和文件"</string>
     <string name="permgrouplab_microphone" msgid="171539900250043464">"麦克风"</string>
@@ -245,7 +245,7 @@
     <string name="permgrouplab_camera" msgid="4820372495894586615">"相机"</string>
     <string name="permgroupdesc_camera" msgid="3250611594678347720">"拍摄照片和录制视频"</string>
     <string name="permgrouplab_phone" msgid="5229115638567440675">"电话"</string>
-    <string name="permgroupdesc_phone" msgid="6234224354060641055">"拨打电话和管理通话"</string>
+    <string name="permgroupdesc_phone" msgid="6234224354060641055">"电话"</string>
     <string name="permgrouplab_sensors" msgid="416037179223226722">"身体传感器"</string>
     <string name="permgroupdesc_sensors" msgid="7147968539346634043">"访问与您的生命体征相关的传感器数据"</string>
     <string name="capability_title_canRetrieveWindowContent" msgid="3901717936930170320">"检索窗口内容"</string>
@@ -276,7 +276,7 @@
     <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"允许应用读取您的设备收到的小区广播消息。小区广播消息是在某些地区发送的、用于发布紧急情况警告的提醒信息。恶意应用可能会在您收到小区紧急广播时干扰您设备的性能或操作。"</string>
     <string name="permlab_subscribedFeedsRead" msgid="4756609637053353318">"读取订阅的供稿"</string>
     <string name="permdesc_subscribedFeedsRead" msgid="5557058907906144505">"允许应用获取有关当前同步的 Feed 的详情。"</string>
-    <string name="permlab_sendSms" msgid="7544599214260982981">"发送和查看短信"</string>
+    <string name="permlab_sendSms" msgid="7544599214260982981">"发送短信"</string>
     <string name="permdesc_sendSms" msgid="7094729298204937667">"允许该应用发送短信。此权限可能会导致意外收费。恶意应用可能会未经您的确认而发送短信，由此产生相关费用。"</string>
     <string name="permlab_readSms" msgid="8745086572213270480">"读取您的讯息（短信或彩信）"</string>
     <string name="permdesc_readSms" product="tablet" msgid="2467981548684735522">"允许该应用读取您平板电脑或SIM卡上存储的短信。此权限可让该应用读取所有短信，而不考虑短信内容或机密性。"</string>
@@ -316,7 +316,7 @@
     <string name="permdesc_readContacts" product="tablet" msgid="5294866856941149639">"允许该应用读取您平板电脑上存储的联系人的相关数据，包括您通过打电话、发送电子邮件或以其他方式与特定个人通信的频率。此权限可让应用保存您的联系人数据，而恶意应用可能会在您不知情的情况下分享联系人数据。"</string>
     <string name="permdesc_readContacts" product="tv" msgid="1839238344654834087">"允许应用读取您的电视上存储的联系人相关数据，包括您与特定联系人通话、发送电子邮件或通过其他方式进行通信的频率。此权限可让应用保存您的联系人数据，而且恶意应用可能会在您不知情的情况下分享联系人数据。"</string>
     <string name="permdesc_readContacts" product="default" msgid="8440654152457300662">"允许该应用读取您手机上存储的联系人的相关数据，包括您通过打电话、发送电子邮件或以其他方式与特定个人通信的频率。此权限可让应用保存您的联系人数据，而恶意应用可能会在您不知情的情况下分享联系人数据。"</string>
-    <string name="permlab_writeContacts" msgid="5107492086416793544">"修改您的通讯录"</string>
+    <string name="permlab_writeContacts" msgid="5107492086416793544">"修改/删除您的通讯录"</string>
     <string name="permdesc_writeContacts" product="tablet" msgid="897243932521953602">"允许该应用修改您平板电脑上存储的联系人的相关数据，包括您通过打电话、发送电子邮件或以其他方式与特定联系人通信的频率。此权限可让应用删除联系人数据。"</string>
     <string name="permdesc_writeContacts" product="tv" msgid="5438230957000018959">"允许应用修改您的电视上存储的联系人相关数据，包括您与特定联系人通话、发送电子邮件或通过其他方式进行通信的频率。此权限可让应用删除联系人数据。"</string>
     <string name="permdesc_writeContacts" product="default" msgid="589869224625163558">"允许该应用修改您手机上存储的联系人的相关数据，包括您通过打电话、发送电子邮件或以其他方式与特定联系人通信的频率。此权限可让应用删除联系人数据。"</string>
@@ -324,7 +324,7 @@
     <string name="permdesc_readCallLog" product="tablet" msgid="3700645184870760285">"允许该应用读取平板电脑的通话记录，包括有关来电和外拨电话的数据。此权限可让应用保存您的通话记录数据，而恶意应用可能会在您不知情的情况下分享通话记录数据。"</string>
     <string name="permdesc_readCallLog" product="tv" msgid="5611770887047387926">"允许应用读取您的电视的通话记录，包括有关来电和外拨电话的数据。此权限可让应用保存您的通话记录数据，而恶意应用可能会在您不知情的情况下分享通话记录数据。"</string>
     <string name="permdesc_readCallLog" product="default" msgid="5777725796813217244">"允许该应用读取手机的通话记录，包括有关来电和外拨电话的数据。此权限可让应用保存您的通话记录数据，而恶意应用可能会在您不知情的情况下分享通话记录数据。"</string>
-    <string name="permlab_writeCallLog" msgid="8552045664743499354">"写入通话记录"</string>
+    <string name="permlab_writeCallLog" msgid="8552045664743499354">"修改/删除通话记录"</string>
     <string name="permdesc_writeCallLog" product="tablet" msgid="6661806062274119245">"允许该应用修改平板电脑的通话记录，包括有关来电和外拨电话的数据。恶意应用可能会借此清除或修改您的通话记录。"</string>
     <string name="permdesc_writeCallLog" product="tv" msgid="4225034892248398019">"允许应用修改电视的通话记录，包括有关来电和外拨电话的数据。恶意应用可能会借此清除或修改您的通话记录。"</string>
     <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"允许该应用修改手机的通话记录，包括有关来电和外拨电话的数据。恶意应用可能会借此清除或修改您的通话记录。"</string>
@@ -356,7 +356,7 @@
     <string name="permdesc_vibrate" msgid="6284989245902300945">"允许应用控制振动器。"</string>
     <string name="permlab_flashlight" msgid="2155920810121984215">"控制闪光灯"</string>
     <string name="permdesc_flashlight" msgid="6522284794568368310">"允许应用控制闪光灯。"</string>
-    <string name="permlab_callPhone" msgid="3925836347681847954">"直接拨打电话号码"</string>
+    <string name="permlab_callPhone" msgid="3925836347681847954">"拨打电话"</string>
     <string name="permdesc_callPhone" msgid="3740797576113760827">"允许该应用在您未执行操作的情况下拨打电话号码。此权限可能会导致意外收费或呼叫。请注意，此权限不允许该应用拨打紧急电话号码。恶意应用可通过拨打电话产生相关费用，而无需您的确认。"</string>
     <string name="permlab_accessImsCallService" msgid="3574943847181793918">"使用即时通讯通话服务"</string>
     <string name="permdesc_accessImsCallService" msgid="8992884015198298775">"允许应用自行使用即时通讯服务拨打电话。"</string>
@@ -394,13 +394,13 @@
     <string name="permdesc_changeTetherState" msgid="1524441344412319780">"允许应用更改绑定网络连接的状态。"</string>
     <string name="permlab_accessWifiState" msgid="5202012949247040011">"查看WLAN连接"</string>
     <string name="permdesc_accessWifiState" msgid="5002798077387803726">"允许该应用查看WLAN网络的相关信息，例如是否启用了WLAN以及连接的WLAN设备的名称。"</string>
-    <string name="permlab_changeWifiState" msgid="6550641188749128035">"连接WLAN网络和断开连接"</string>
+    <string name="permlab_changeWifiState" msgid="6550641188749128035">"打开WLAN"</string>
     <string name="permdesc_changeWifiState" msgid="7137950297386127533">"允许该应用与WLAN接入点建立和断开连接，以及更改WLAN网络的设备配置。"</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收WLAN多播"</string>
     <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"允许该应用使用多播地址接收发送到WLAN网络上所有设备（而不仅仅是您的平板电脑）的数据包。该操作的耗电量比非多播模式要大。"</string>
     <string name="permdesc_changeWifiMulticastState" product="tv" msgid="9031975661145014160">"允许应用使用多播地址接收发送到 WLAN 网络中所有设备（而不仅仅是您的电视）的数据包。该操作的耗电量比非多播模式要大。"</string>
     <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"允许该应用使用多播地址接收发送到WLAN网络上所有设备（而不仅仅是您的手机）的数据包。该操作的耗电量比非多播模式要大。"</string>
-    <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"访问蓝牙设置"</string>
+    <string name="permlab_bluetoothAdmin" msgid="6006967373935926659">"打开蓝牙"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="6921177471748882137">"允许应用配置本地蓝牙平板电脑，并允许其查找远程设备且与之配对。"</string>
     <string name="permdesc_bluetoothAdmin" product="tv" msgid="3373125682645601429">"允许应用配置本地蓝牙电视，并允许其查找远程设备且与之配对。"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"允许应用配置本地蓝牙手机，并允许其查找远程设备且与之配对。"</string>
@@ -445,13 +445,13 @@
     <string name="permdesc_writeSyncSettings" msgid="8956262591306369868">"允许该应用修改某个帐户的同步设置。例如，此权限可用于在“联系人”应用与某个帐户之间启用同步。"</string>
     <string name="permlab_readSyncStats" msgid="7396577451360202448">"读取同步统计信息"</string>
     <string name="permdesc_readSyncStats" msgid="1510143761757606156">"允许该应用读取某个帐户的同步统计信息，包括同步活动历史记录和同步数据量。"</string>
-    <string name="permlab_sdcardRead" product="nosdcard" msgid="367275095159405468">"读取您的USB存储设备中的内容"</string>
+    <string name="permlab_sdcardRead" product="nosdcard" msgid="367275095159405468">"读取内部存储"</string>
     <string name="permlab_sdcardRead" product="default" msgid="2188156462934977940">"读取您的SD卡中的内容"</string>
-    <string name="permdesc_sdcardRead" product="nosdcard" msgid="3446988712598386079">"允许应用读取您USB存储设备中的内容。"</string>
+    <string name="permdesc_sdcardRead" product="nosdcard" msgid="3446988712598386079">"允许应用读取存储设备。"</string>
     <string name="permdesc_sdcardRead" product="default" msgid="2607362473654975411">"允许应用读取您SD卡的内容。"</string>
-    <string name="permlab_sdcardWrite" product="nosdcard" msgid="8485979062254666748">"修改或删除您的USB存储设备中的内容"</string>
+    <string name="permlab_sdcardWrite" product="nosdcard" msgid="8485979062254666748">"修改或删除内部存储"</string>
     <string name="permlab_sdcardWrite" product="default" msgid="8805693630050458763">"修改或删除您的SD卡中的内容"</string>
-    <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6175406299445710888">"允许应用写入USB存储设备。"</string>
+    <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6175406299445710888">"允许应用写入存储设备。"</string>
     <string name="permdesc_sdcardWrite" product="default" msgid="4337417790936632090">"允许应用写入SD卡。"</string>
     <string name="permlab_use_sip" msgid="2052499390128979920">"拨打/接听SIP电话"</string>
     <string name="permdesc_use_sip" msgid="2297804849860225257">"允许该应用拨打和接听SIP电话。"</string>
@@ -1528,4 +1528,9 @@
     <string name="China_Mobile">中国移动</string>
     <string name="China_Unicom">中国联通</string>
     <string name="China_Telecom">中国电信</string>
+    <string name="other_permissions">其他权限</string>
+    <string name="permission_remember_choice">永远记住</string>
+    <string name="permission_title">权限</string>
+    <string name="allow_button">允许</string>
+    <string name="deny_button">拒绝</string>
 </resources>
