@@ -35,6 +35,8 @@
     <!-- Publish dynamic tiles -->
     <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE" />
 
+    <uses-permission android:name="cyanogenmod.permission.HARDWARE_ABSTRACTION_ACCESS" />
+
     <application>
         <provider android:name=".cm.SpamMessageProvider"
                   android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
