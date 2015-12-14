@@ -138,6 +138,7 @@ public class Editor {
     private static final int MENU_ITEM_ORDER_SHARE = 4;
     private static final int MENU_ITEM_ORDER_SELECT_ALL = 5;
     private static final int MENU_ITEM_ORDER_REPLACE = 6;
+    private static final int MENU_ITEM_ORDER_INSIGHT = 7;
     private static final int MENU_ITEM_ORDER_PROCESS_TEXT_INTENT_ACTIONS_START = 10;
 
     // Each Editor manages its own undo stack.
@@ -3194,8 +3195,19 @@ public class Editor {
                 menu.add(Menu.NONE, TextView.ID_SHARE, MENU_ITEM_ORDER_SHARE,
                         com.android.internal.R.string.share).
                     setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            } if (mTextView.canCopy()) {
+                menu.add(Menu.NONE, TextView.ID_COPY, MENU_ITEM_ORDER_COPY,
+                        com.android.internal.R.string.copy).
+                        setAlphabeticShortcut('c').
+                        setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
             }
 
+            if (mTextView.canInsight()) {
+                menu.add(Menu.NONE, TextView.ID_INSIGHT, MENU_ITEM_ORDER_COPY,
+                        com.android.internal.R.string.insight).
+                        setAlphabeticShortcut('i').
+                        setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+            }
             updateSelectAllItem(menu);
             updateReplaceItem(menu);
         }

@@ -253,6 +253,11 @@ public class AccessibilityNodeInfo implements Parcelable {
     public static final int ACTION_COPY = 0x00004000;
 
     /**
+     * Action to get an insight into the selection
+     */
+    public static final int ACTION_INSIGHT = 0x00006000;
+
+    /**
      * Action to paste the current clipboard content.
      */
     public static final int ACTION_PASTE = 0x00008000;

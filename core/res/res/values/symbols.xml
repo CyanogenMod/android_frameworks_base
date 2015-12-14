@@ -82,6 +82,7 @@
   <java-symbol type="id" name="icon" />
   <java-symbol type="id" name="image" />
   <java-symbol type="id" name="increment" />
+  <java-symbol type="id" name="insight" />
   <java-symbol type="id" name="internalEmpty" />
   <java-symbol type="id" name="info" />
   <java-symbol type="id" name="inputExtractAccessories" />
@@ -456,6 +457,7 @@
   <java-symbol type="string" name="delete" />
   <java-symbol type="string" name="deleteText" />
   <java-symbol type="string" name="grant_permissions_header_text" />
+  <java-symbol type="string" name="insight" />
   <java-symbol type="string" name="list_delimeter" />
   <java-symbol type="string" name="menu_delete_shortcut_label" />
   <java-symbol type="string" name="menu_enter_shortcut_label" />
