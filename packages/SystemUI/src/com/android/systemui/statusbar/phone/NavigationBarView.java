@@ -202,6 +202,7 @@ public class NavigationBarView extends LinearLayout {
                             "*** Invalid layout in navigation bar (%s this=%dx%d cur=%dx%d)",
                             how, w, h, vw, vh));
                         if (WORKAROUND_INVALID_LAYOUT) {
+                            reorient();
                             requestLayout();
                         }
                     }
