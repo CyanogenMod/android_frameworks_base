@@ -15,7 +15,7 @@
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <solid android:color="@color/system_primary_color" />
+    <solid android:color="@color/volume_panel_background_color" />
 
     <corners android:radius="@dimen/notification_material_rounded_rect_radius" />
 
