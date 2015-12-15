@@ -41,7 +41,7 @@
     <color name="visualizer_fill_color">#96FFFFFF</color>
 
     <!-- Background of the volume panel. See also: volume_dialog_background -->
-    <color name="volume_panel_background_color">@color/system_secondary_color</color>
+    <color name="volume_panel_background_color">@color/system_primary_color</color>
 
     <!-- Battery base color -->
     <color name="batterymeter_base_color">#FFFFFFFF</color>
