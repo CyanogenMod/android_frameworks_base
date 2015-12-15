@@ -66,7 +66,7 @@ import java.util.ArrayList;
 import cyanogenmod.providers.CMSettings;
 
 public class NavigationBarView extends LinearLayout {
-    final static boolean DEBUG = false;
+    final static boolean DEBUG = true;
     final static String TAG = "PhoneStatusBar/NavigationBarView";
 
     // slippery nav bar when everything is disabled, e.g. during setup
@@ -590,6 +590,7 @@ public class NavigationBarView extends LinearLayout {
 
     public void reorient() {
         int orientation = getResources().getConfiguration().orientation;
+        if (DEBUG) Log.d(TAG, "reorient() orientation=" + orientation);
         mRotatedViews[Configuration.ORIENTATION_PORTRAIT].setVisibility(View.GONE);
         mRotatedViews[Configuration.ORIENTATION_LANDSCAPE].setVisibility(View.GONE);
         mCurrentView = mRotatedViews[orientation];
@@ -597,8 +598,11 @@ public class NavigationBarView extends LinearLayout {
 
         updateLayoutTransitionsEnabled();
 
+        if (DEBUG) Log.d(TAG, "reorient() isPhone=" + NavbarEditor.isDevicePhone(getContext()));
+
         if (NavbarEditor.isDevicePhone(getContext())) {
             int rotation = mDisplay.getRotation();
+            if (DEBUG) Log.d(TAG, "reorient() rotation=" + rotation);
             mVertical = rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270;
         } else {
             mVertical = getWidth() > 0 && getHeight() > getWidth();
