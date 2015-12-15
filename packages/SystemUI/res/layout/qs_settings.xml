@@ -57,6 +57,13 @@
             systemui:defaultValue="1"
             systemui:table="cm_secure" />
 
+    <com.android.systemui.qs.QSBooleanSettingRow
+            style="@style/SettingRow"
+            android:title="@string/quick_settings_title_advanced_location"
+            android:key="qs_location_advanced"
+            systemui:defaultValue="0"
+            systemui:table="cm_secure" />
+
     <LinearLayout
             android:id="@+id/reset_tiles"
             style="@style/SettingRow">
