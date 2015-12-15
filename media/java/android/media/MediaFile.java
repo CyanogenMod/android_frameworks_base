@@ -108,8 +108,9 @@ public class MediaFile {
 
     // Drm file types
     public static final int FILE_TYPE_FL      = 51;
+    public static final int FILE_TYPE_SD      = 52;
     private static final int FIRST_DRM_FILE_TYPE = FILE_TYPE_FL;
-    private static final int LAST_DRM_FILE_TYPE = FILE_TYPE_FL;
+    private static final int LAST_DRM_FILE_TYPE = FILE_TYPE_SD;
 
     // Other popular file types
     public static final int FILE_TYPE_TEXT          = 100;
@@ -243,6 +244,7 @@ public class MediaFile {
         addFileType("M3U8", FILE_TYPE_HTTPLIVE, "audio/x-mpegurl");
 
         addFileType("FL", FILE_TYPE_FL, "application/x-android-drm-fl");
+        addFileType("DCF", FILE_TYPE_SD, "application/vnd.oma.drm.content");
 
         addFileType("TXT", FILE_TYPE_TEXT, "text/plain", MtpConstants.FORMAT_TEXT);
         addFileType("HTM", FILE_TYPE_HTML, "text/html", MtpConstants.FORMAT_HTML);
