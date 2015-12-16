@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Tryb baterii: tryb oszczędzania baterii.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Tryb baterii: tryb zrównoważony.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Tryb baterii: tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Tryb baterii: tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Tryb baterii: tryb szybki.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Tryb baterii zmienił się na tryb oszczędzania energii.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Tryb baterii zmienił się na tryb zrównoważony.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Tryb baterii zmienił się na tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Tryb baterii zmieniony na tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Tryb baterii zmieniony na tryb szybki.</string>
   <string name="accessibility_quick_settings_profiles_off">Profile wyłączone.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profile zostały wyłączone.</string>

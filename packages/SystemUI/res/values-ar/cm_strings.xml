@@ -16,20 +16,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="clear_recents">أغلاق جميع التطبيقات المفتوحه</string>
-  <string name="screenshot_delete_action">حذف</string>
-  <string name="screenshot_delete_confirmation">حذف صورة الشاشة.</string>
-  <string name="advanced_dev_option_wipe_app">مسح بيانات التطبيق</string>
-  <string name="advanced_dev_option_force_stop">إيقاف إجباري</string>
-  <string name="advanced_dev_option_uninstall">إلغاء التثبيت</string>
-  <string name="accessibility_quick_settings_data_off">إيقاف بيانات الهاتف</string>
-  <string name="accessibility_quick_settings_data_on">تشغيل بيانات الهاتف</string>
-  <string name="accessibility_quick_settings_roaming_off">إيقاف خدمة التجوال</string>
-  <string name="accessibility_quick_settings_roaming_on">تمكن خدمة التجوال</string>
-  <string name="accessibility_quick_settings_network_adb_off">ADB عبر الشبكة لا يعمل</string>
-  <string name="accessibility_quick_settings_network_adb_on">يعمل ADB عبر الشبكة</string>
-  <string name="accessibility_quick_settings_network_adb_changed_off">أيقاف تشغيل ADB عبر الشبكة</string>
-  <string name="accessibility_quick_settings_network_adb_changed_on">تشغيل ADB عبر الشبكة</string>
   <string name="accessibility_quick_settings_ambient_display_off">تعطيل العرض المحيط.</string>
   <string name="accessibility_quick_settings_ambient_display_on">تشغيل العرض المحيط.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">تم تعطيل العرض المحيط.</string>
@@ -70,18 +56,13 @@
   <string name="accessibility_quick_settings_lte_on">LTE يعمل.</string>
   <string name="accessibility_quick_settings_lte_changed_off">تم تعطيل LTE.</string>
   <string name="accessibility_quick_settings_lte_changed_on">تم تشغيل LTE.</string>
-  <string name="accessibility_quick_settings_nfc_off">NFC مغلق.</string>
   <string name="accessibility_quick_settings_nfc_on">NFC يعمل.</string>
   <string name="accessibility_quick_settings_nfc_changed_off">تم تعطيل NFC.</string>
   <string name="accessibility_quick_settings_nfc_changed_on">تم تشغيل NFC.</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">وضع البطارية: وضع توفير الطاقة.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">وضع البطارية: وضع متوازن.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">وضع البطارية: وضع الأداء.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">تغيير وضع البطارية إلى وضع توفير الطاقة.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">تم تغيير وضع البطارية إلى الوضع المتوازن.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_perf">تغيير وضع البطارية إلى وضع الأداء.</string>
-  <string name="accessibility_quick_settings_profiles_off">أيقاف ملف التعريف</string>
-  <string name="accessibility_quick_settings_profiles">ملف التعريف</string>
   <string name="accessibility_quick_settings_profiles_changed_off">تعطيل ملفات التعريف. </string>
   <string name="accessibility_quick_settings_profiles_changed">تم تغيير ملف التعريف إلى <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout">مهلة الشاشة: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
@@ -95,8 +76,6 @@
   <string name="accessibility_quick_settings_usb_tether_changed_off">تم تعطيل الربط عبر USB.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">تم تشغيل الربط عبر USB.</string>
   <string name="accessibility_quick_settings_visualizer">المصور المرئي.</string>
-  <string name="accessibility_dpad_left">المؤشر إلى اليسار</string>
-  <string name="accessibility_dpad_right">المؤشر الى اليمين</string>
   <string name="quick_settings_mobile_data_label">بيانات الجوال</string>
   <string name="quick_settings_roaming_label">التجوال</string>
   <string name="quick_settings_apn_switch_label">مفتاح APN</string>
@@ -110,12 +89,10 @@
   <string name="quick_settings_profiles_detail_title">ملفات تعريف النظام</string>
   <string name="quick_settings_profiles_disabled">تعطيل ملفات التعريف</string>
   <string name="quick_settings_compass_label">بوصلة</string>
-  <string name="quick_settings_compass_init">بدأ\u2026</string>
   <string name="quick_settings_lockscreen_label">شاشة القفل</string>
   <string name="quick_settings_lockscreen_label_enforced">إعمال قفل الشاشة</string>
   <string name="quick_settings_network_adb_label">ADB عبر الشبكة</string>
   <string name="quick_settings_lte_label">LTE</string>
-  <string name="quick_settings_volume_panel_label">لوحة الصوت</string>
   <string name="quick_settings_screen_timeout_detail_title">مهلة الشاشة</string>
   <string name="quick_settings_usb_tether_label">الربط عبر USB
 </string>
@@ -126,15 +103,7 @@
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">تحريك إلى اليمين من أجل %1$s</string>
   <string name="right_shortcut_hint">تحريك إلى اليسار من أجل %1$s</string>
-  <string name="navbar_dialog_title">اختر الإجراء لتعيين</string>
-  <string name="navbar_home_button">زر الصفحة الرئيسية</string>
-  <string name="navbar_recent_button">زر الأخيرة</string>
-  <string name="navbar_search_button">زر البحث</string>
-  <string name="navbar_back_button">زر الخلف</string>
   <string name="navbar_empty_button">زر خالٍ</string>
-  <string name="navbar_menu_conditional_button">زر القائمة (الإخفاء التلقائي)</string>
-  <string name="navbar_menu_always_button">زر القائمة (يظهر دائماً)</string>
-  <string name="navbar_menu_big_button">زر القائمة</string>
   <string name="navigation_ring_title">اختصارات شريط التشغيل السريع</string>
   <string name="navring_target_reset_message">حذف كل اختصارات شريط التنقل التي أنشأها المستخدم واستعادتها إلى الافتراضي؟</string>
   <string name="navring_target_reset">إعادة تعيين اختصارات شريط التنقل إلى الوضع الافتراضي</string>
@@ -161,5 +130,4 @@
   <string name="dynamic_qs_tile_su_label">الوصول إلى root</string>
   <string name="fingerprint_try_again_hint">الرجاء إجراء المسح مرة أخرى</string>
   <string name="accessibility_dock_battery_level">بطارية الإرساء <xliff:g id="number">%d</xliff:g>في المائة.</string>
-  <string name="quick_settings_custom_qs_detail_empty_text">لم يُعثر على عناص</string>
 </resources>
