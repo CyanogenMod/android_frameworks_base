@@ -833,6 +833,8 @@ public class DeviceIdleController extends SystemService
         final PackageManager pm = getContext().getPackageManager();
 
         synchronized (this) {
+            // Note: we later automatically enable if a
+            // significant motion sensor is found.
             mEnabled = getContext().getResources().getBoolean(
                     com.android.internal.R.bool.config_enableAutoPowerModes);
             SystemConfig sysConfig = SystemConfig.getInstance();
@@ -934,6 +936,14 @@ public class DeviceIdleController extends SystemService
                 mLocalPowerManager.setDeviceIdleWhitelist(mPowerSaveWhitelistAllAppIdArray);
 
                 mDisplayManager.registerDisplayListener(mDisplayListener, null);
+
+                // Automatically enable if significant motion sensor was found
+                if (!mEnabled && mSigMotionSensor != null) {
+                    mEnabled = true;
+                    Slog.i(TAG, "Found significant motion sensor, "
+                            +"device idle capability automatically enabled");
+                }
+
                 updateDisplayLocked();
             }
         }
