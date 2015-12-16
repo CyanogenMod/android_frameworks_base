@@ -505,6 +505,9 @@ public abstract class Connection extends Conferenceable {
         mConnectionProperties |= property;
     }
 
+    /**
+     * @hide
+     */
     public static String propertiesToString(int properties) {
         StringBuilder builder = new StringBuilder();
         builder.append("[Properties:");
