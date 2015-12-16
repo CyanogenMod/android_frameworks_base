@@ -467,11 +467,16 @@ interface ISms {
      */
     String getImsSmsFormatForSubscriber(int subId);
 
-    /*
+    /**
      * Get SMS prompt property,  enabled or not
      * @return true if enabled, false otherwise
      */
     boolean isSMSPromptEnabled();
+
+    /**
+     * Set SMS prompt property,  enabled or not
+     */
+    void setSMSPromptEnabled(boolean bool);
 
     /**
      * Send a system stored text message.
