@@ -22,6 +22,11 @@
   <string name="kg_dismiss">Atcelt</string>
   <string name="kg_slot_name">Slots <xliff:g id="number">%d </xliff:g>: jauna SIM karte\u0020</string>
   <string name="lockscreen_sim_error_message_short">Nepareiza karte.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="zero">Ievadiet SIM kartes PIN kodu, jums ir atlicis <xliff:g id="number">%d </xliff:g> mēģinājumi.</item>
+    <item quantity="one">Ievadiet SIM kartes PIN kodu, jums ir atlicis <xliff:g id="number">%d </xliff:g> mēģinājums.</item>
+    <item quantity="other">Ievadiet SIM kartes PIN kodu, jums ir atlikuši <xliff:g id="number">%d </xliff:g> mēģinājumi.</item>
+  </plurals>
   <plurals name="kg_password_default_puk_message">
     <item quantity="zero">SIM karte ir atslēgta. Ievadiet PUK kodu lai turpinātu. Jums ir atlicis <xliff:g id="number">%d</xliff:g> mēģinājums pirms SIM karte kļūs nelietojama. Kontaktējieties ar sakaru sniedzēju papildu informācijai.</item>
     <item quantity="one">SIM karte ir atslēgta. Ievadiet PUK kodu lai turpinātu.  Jums ir atlicis <xliff:g id="number">%d</xliff:g> mēģinājums pirms SIM karte kļūs nelietojama. Kontaktējieties ar sakaru sniedzēju papildu informācijai.</item>
