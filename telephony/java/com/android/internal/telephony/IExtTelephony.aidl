@@ -123,4 +123,42 @@ interface IExtTelephony {
     * @return true or false
     */
     boolean isFdnEnabled();
+
+    /**
+    * Get application count from card.
+    * @param - slotId user preferred slotId
+    * @return application count
+    */
+    int getUiccApplicationCount(int slotId);
+
+    /**
+    * Get application type by index.
+    * @param - slotId user preferred slotId
+    *        - appIndex application index
+    * @return application type as Integer, below are
+    *     supported return values:
+    *     '0' - APPTYPE_UNKNOWN
+    *     '1' - APPTYPE_SIM
+    *     '2' - APPTYPE_USIM
+    *     '3  - APPTYPE_RUIM
+    *     '4' - APPTYPE_CSIM
+    *     '5' - APPTYPE_ISIM
+    */
+    int getUiccApplicationType(int slotId, int appIndex);
+
+    /**
+    * Get application state by index.
+    * @param - slotId user preferred slotId
+    *        - appIndex application index
+    * @return application state as Integer, below are
+    *     supported return values:
+    *     '0' - APPSTATE_UNKNOWN
+    *     '1' - APPSTATE_DETECTED
+    *     '2' - APPSTATE_PIN
+    *     '3  - APPSTATE_PUK
+    *     '4' - APPSTATE_SUBSCRIPTION_PERSO
+    *     '5' - APPSTATE_READY
+    */
+    int getUiccApplicationState(int slotId, int appIndex);
+
 }
