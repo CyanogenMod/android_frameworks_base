@@ -201,13 +201,17 @@ public class KeyguardBouncer {
     public int needsFullscreenBouncer() {
         if (mKeyguardView != null) {
             SecurityMode mode = mKeyguardView.getSecurityMode();
-            if (mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk)
+            if (mode == SecurityMode.SimPin || mode == SecurityMode.SimPuk) {
                 return UNLOCK_SEQUENCE_FORCE_BOUNCER;
-            // "Bouncer first" mode currently only available to some security methods.
-            else if ((mode == SecurityMode.Pattern || mode == SecurityMode.Password
-                    || mode == SecurityMode.PIN) && (mLockPatternUtils != null &&
-                    mLockPatternUtils.shouldPassToSecurityView()))
+            } else if ((mode == SecurityMode.Pattern || mode == SecurityMode.Password
+                    || mode == SecurityMode.PIN) && (mLockPatternUtils != null
+                    && mLockPatternUtils.shouldPassToSecurityView()
+                    && !UnlockMethodCache.getInstance(mContext).isCurrentlyInsecure())) {
+                // "Bouncer first" mode currently only available to some security methods, and
+                // only when the lock screen method is secure. Otherwise if we are in a 'trusted'
+                // mode or insecure, bypassing the bouncer is the same as disabling the keyguard.
                 return UNLOCK_SEQUENCE_BOUNCER_FIRST;
+            }
         }
         return UNLOCK_SEQUENCE_DEFAULT;
     }
@@ -224,7 +228,8 @@ public class KeyguardBouncer {
             // "Bouncer first" mode currently only available to some security methods.
             else if ((mode == SecurityMode.Pattern || mode == SecurityMode.Password
                     || mode == SecurityMode.PIN) && (mLockPatternUtils != null &&
-                    mLockPatternUtils.shouldPassToSecurityView()))
+                    mLockPatternUtils.shouldPassToSecurityView() &&
+                    !UnlockMethodCache.getInstance(mContext).isCurrentlyInsecure()))
                 return UNLOCK_SEQUENCE_BOUNCER_FIRST;
         }
         return UNLOCK_SEQUENCE_DEFAULT;
