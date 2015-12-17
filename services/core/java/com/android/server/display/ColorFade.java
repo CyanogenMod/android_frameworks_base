@@ -44,6 +44,7 @@ import android.view.Surface.OutOfResourcesException;
 import android.view.Surface;
 import android.view.SurfaceControl;
 import android.view.SurfaceSession;
+import android.os.SystemProperties;
 
 import libcore.io.Streams;
 
@@ -734,24 +735,49 @@ final class ColorFade {
                 }
 
                 DisplayInfo displayInfo = mDisplayManagerInternal.getDisplayInfo(mDisplayId);
-                switch (displayInfo.rotation) {
-                    case Surface.ROTATION_0:
-                        mSurfaceControl.setPosition(0, 0);
-                        mSurfaceControl.setMatrix(1, 0, 0, 1);
-                        break;
-                    case Surface.ROTATION_90:
-                        mSurfaceControl.setPosition(0, displayInfo.logicalHeight);
-                        mSurfaceControl.setMatrix(0, -1, 1, 0);
-                        break;
-                    case Surface.ROTATION_180:
-                        mSurfaceControl.setPosition(displayInfo.logicalWidth,
-                                displayInfo.logicalHeight);
-                        mSurfaceControl.setMatrix(-1, 0, 0, -1);
-                        break;
-                    case Surface.ROTATION_270:
-                        mSurfaceControl.setPosition(displayInfo.logicalWidth, 0);
-                        mSurfaceControl.setMatrix(0, 1, -1, 0);
-                        break;
+                
+                if ((SystemProperties.getInt("ro.sf.hwrotation", 0) == 270) ||
+                    (SystemProperties.getInt("ro.sf.hwrotation", 0) == 90)) {
+                    switch (displayInfo.rotation) {
+                        case Surface.ROTATION_0:
+                            mSurfaceControl.setPosition(0, 0);
+                            mSurfaceControl.setMatrix(0, 1, -1, 0);
+                            break;
+                        case Surface.ROTATION_90:
+                            mSurfaceControl.setPosition(displayInfo.logicalWidth, 0);
+                            mSurfaceControl.setMatrix(1, 0, 0, 1);
+                            break;
+                        case Surface.ROTATION_180:
+                            mSurfaceControl.setPosition(displayInfo.logicalWidth,
+                                    displayInfo.logicalHeight);
+                            mSurfaceControl.setMatrix(0, -1, 1, 0);
+                            break;
+                        case Surface.ROTATION_270:
+                            mSurfaceControl.setPosition(displayInfo.logicalWidth, 0);
+                            mSurfaceControl.setMatrix(-1, 0, 0, -1);
+                            break;
+                    }
+                }
+                else {
+                    switch (displayInfo.rotation) {
+                        case Surface.ROTATION_0:
+                            mSurfaceControl.setPosition(0, 0);
+                            mSurfaceControl.setMatrix(1, 0, 0, 1);
+                            break;
+                        case Surface.ROTATION_90:
+                            mSurfaceControl.setPosition(0, displayInfo.logicalHeight);
+                            mSurfaceControl.setMatrix(0, -1, 1, 0);
+                            break;
+                        case Surface.ROTATION_180:
+                            mSurfaceControl.setPosition(displayInfo.logicalWidth,
+                                    displayInfo.logicalHeight);
+                            mSurfaceControl.setMatrix(-1, 0, 0, -1);
+                            break;
+                        case Surface.ROTATION_270:
+                            mSurfaceControl.setPosition(displayInfo.logicalWidth, 0);
+                            mSurfaceControl.setMatrix(0, 1, -1, 0);
+                            break;
+                    }
                 }
             }
         }
