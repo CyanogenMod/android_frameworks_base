@@ -62,7 +62,6 @@ import org.cyanogenmod.internal.util.QSUtils;
 import cyanogenmod.providers.CMSettings;
 
 import cyanogenmod.app.StatusBarPanelCustomTile;
-import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +75,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     private static final String TAG = "QSDragPanel";
 
     public static final boolean DEBUG_DRAG = false;
+
+    private static final int MAX_ROW_COUNT = 3;
     private static final int INITIAL_OFFSCREEN_PAGE_LIMIT = 3;
     private static final String BROADCAST_TILE_SPEC_PLACEHOLDER = "broadcast_placeholder";
 
@@ -229,7 +230,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 if (object instanceof QSPage) {
 
                     final int indexOf = ((QSPage) object).getPageIndex();
-                    Log.v(TAG, "getItemPosition() for: " + object + ", returning: " + indexOf);
                     if (mEditing) return indexOf + 1;
                     else return indexOf;
 
@@ -264,9 +264,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             @Override
             public void onPageScrolled(int position, float positionOffset,
                                        int positionOffsetPixels) {
-                Log.i(TAG, "onPageScrolled() called with " + "position = ["
-                        + position + "], positionOffset = [" + positionOffset
-                        + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
+                if (DEBUG_DRAG) {
+                    Log.i(TAG, "onPageScrolled() called with " + "position = ["
+                            + position + "], positionOffset = [" + positionOffset
+                            + "], positionOffsetPixels = [" + positionOffsetPixels + "]");
+                }
 
                 if (mEditing) {
                     float targetTranslationX = 0;
@@ -287,7 +289,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             public void onPageSelected(int position) {
                 if (mDragging && position != mDraggingRecord.page
                         && !mViewPager.isFakeDragging() && !mRestoring) {
-                    Log.w(TAG, "moving drag record to page: " + position);
+                    if (DEBUG_DRAG) {
+                        Log.w(TAG, "moving drag record to page: " + position);
+                    }
 
                     // remove it from the previous page and add it here
                     final QSPage sourceP = getPage(mDraggingRecord.page);
@@ -406,6 +410,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mQsPanelTop.onStopDrag();
 
         requestLayout();
+        ensurePagerState();
     }
 
     protected View getDropTarget() {
@@ -741,7 +746,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return cols;
     }
 
-    public int getMaxRows() {
+    public int getCurrentMaxRow() {
         int max = 0;
         for (TileRecord record : mRecords) {
             if (record.row > max) {
@@ -1113,9 +1118,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
         }
 
-        int maxRows = getMaxRows();
+        // clamp this value to the max count we want.
+        int maxRows = Math.min(MAX_ROW_COUNT - 1 /* we are 0 based */, getCurrentMaxRow());
 
-        if (tile.row >= maxRows) {
+        if (tile.row > maxRows) {
             tile.destinationPage = tile.destinationPage + 1;
             tile.row = 0;
             tile.col = 0;
@@ -1136,7 +1142,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 Log.w(TAG, "column count adjusted to: " + columnCount);
             }
         }
-        boolean firstRowLarge = tile.row == 0 && tile.destinationPage == 0;
+        boolean firstRowLarge = mFirstRowLarge && tile.row == 0 && tile.destinationPage == 0;
 
         tile.destination.x = getLeft(tile.row, tile.col, columnCount, firstRowLarge);
         tile.destination.y = getRowTop(tile.row);
