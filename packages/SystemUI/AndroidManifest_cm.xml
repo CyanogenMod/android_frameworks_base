@@ -53,7 +53,14 @@
             android:label="@string/lockscreen_targets_message"
             android:theme="@android:style/Theme.Material.Settings"
             android:process=":cmsettings"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
+
+        <activity android:name=".tuner.TunerActivity$DemoModeActivity"
+          android:icon="@drawable/tuner"
+          android:theme="@android:style/Theme.Material.Settings"
+          android:label="@string/demo_mode"
+          android:process=":tuner"
+          android:exported="true"
+          android:permission="android.permission.STATUS_BAR" />
     </application>
 </manifest>
