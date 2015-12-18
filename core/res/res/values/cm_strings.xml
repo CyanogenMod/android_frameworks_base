@@ -28,7 +28,7 @@
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_modifyProtectedSmsList">modify protected SMS list</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_modifyProtectedSmsList">Allows the app to modify the protected sms address list.</string>
+    <string name="permdesc_modifyProtectedSmsList">Allows the app to modify the protected SMS address list.</string>
 
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_security">Security</string>
@@ -82,7 +82,7 @@
     <string name="reboot_progress">Rebooting\u2026</string>
 
     <!-- Long-press back kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message">App killed</string>
 
     <!-- ADB over network notification -->
     <string name="adb_net_active_notification_title">ADB over network enabled</string>
@@ -92,8 +92,8 @@
     <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
 
     <!-- ADB custom tile -->
-    <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="Usb">%1$s</xliff:g></string>
-    <string name="adb_active_custom_tile_both">Both</string>
+    <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+    <string name="adb_active_custom_tile_both">USB &amp; network</string>
     <string name="adb_active_custom_tile_usb">USB</string>
     <string name="adb_active_custom_tile_net">Network</string>
 
@@ -147,8 +147,7 @@
     <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> would like to <xliff:g id="op">%2$s</xliff:g>.</string>
 
     <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
-    <string name="permission_remember_choice">Remember</string>
-    <string name="permission">Permission</string>
+    <string name="permission_remember_choice">Remember my choice</string>
 
     <!-- App ops requests -->
     <string name="app_ops_access_camera">access the camera</string>
@@ -188,7 +187,7 @@
     <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
     <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
     <string name="app_ops_toggle_nfc">toggle NFC</string>
-    <string name="app_ops_toggle_wifi">toggle WiFi</string>
+    <string name="app_ops_toggle_wifi">toggle Wi-Fi</string>
     <string name="app_ops_use_alarm_volume">control alarm volume</string>
     <string name="app_ops_use_audio_focus">control the audio focus</string>
     <string name="app_ops_use_bluetooth_volume">control the Bluetooth volume</string>
@@ -204,7 +203,7 @@
     <string name="app_ops_use_fingerprint">use fingerprint</string>
     <string name="app_ops_add_voicemail">add a voicemail</string>
     <string name="app_ops_read_phone_state">access phone state</string>
-    <string name="app_ops_scan_wifi">Scan WiFi Networks</string>
+    <string name="app_ops_scan_wifi">scan Wi-Fi networks</string>
     <string name="app_ops_change_wallpaper">change the wallpaper</string>
     <string name="app_ops_assist_structure">use assist structure</string>
     <string name="app_ops_assist_screenshot">take a screenshot</string>
@@ -215,8 +214,8 @@
     <string name="app_ops_write_external_storage">write external storage</string>
     <string name="app_ops_turn_on_screen">turn the screen on</string>
     <string name="app_ops_get_accounts">get device accounts</string>
-    <string name="app_ops_wifi_change">change WiFI state</string>
-    <string name="app_ops_su">get Superuser access</string>
+    <string name="app_ops_wifi_change">change Wi-Fi state</string>
+    <string name="app_ops_su">get root access</string>
 
     <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
     <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>

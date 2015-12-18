@@ -103,7 +103,6 @@
     <java-symbol type="id" name="permission_remember_choice_text" />
     <java-symbol type="string" name="allow" />
     <java-symbol type="string" name="deny" />
-    <java-symbol type="string" name="permission" />
     <java-symbol type="layout" name="permission_confirmation_dialog" />
     <java-symbol type="array" name="app_ops_labels" />
 
