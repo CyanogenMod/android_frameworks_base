@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Energijos tausojimas</string>
   <string name="perf_profile_bal">Subalansuotas</string>
   <string name="perf_profile_perf">Našumas</string>
+  <string name="perf_profile_bias_power">Efektyvus</string>
+  <string name="perf_profile_bias_perf">Spartus</string>
   <string name="theme_install_error_title">Nepavyko įdiegti temos</string>
   <string name="theme_install_error_message">%s nepavyko įdiegti</string>
   <string name="theme_reset_notification_title">Nustatyti iš naujo temą</string>
@@ -207,4 +209,8 @@
   <string name="permdesc_resetBatteryStats">Leidžia programai nustatyti iš naujo dabartinio žemo lygio akumuliatoriaus naudojimo duomenis.</string>
   <string name="silent_mode_priority">Prioritetas</string>
   <string name="silent_mode_none">Joks</string>
+  <string name="subscription_change_disabled_wifi_ap">Wi-Fi saitvietė išjungta dėl SIM prenumeratos kaitos</string>
+  <string name="notify_turn_wifi_off_title">Išjunkite „Wi-Fi“</string>
+  <string name="permlab_thirdPartyKeyguard">trečiosios šalies ekrano užraktas</string>
+  <string name="permdesc_thirdPartyKeyguard">Leidžia programai būti naudojamai kaip nesaugiu ekrano užraktu.</string>
 </resources>

@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Bespaar krag</string>
   <string name="perf_profile_bal">Gebalanseerd</string>
   <string name="perf_profile_perf">Werkverrigting</string>
+  <string name="perf_profile_bias_power">Doeltreffendheid</string>
+  <string name="perf_profile_bias_perf">Vinnige</string>
   <string name="theme_install_error_title">Kon nie tema installeer</string>
   <string name="theme_install_error_message">%s kon nie geïnstalleer word nie</string>
   <string name="theme_reset_notification_title">Tema herstel</string>
