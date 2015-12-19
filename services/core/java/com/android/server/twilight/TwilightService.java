@@ -309,6 +309,13 @@ public final class TwilightService extends SystemService {
                         }
                         sendEmptyMessageDelayed(MSG_ENABLE_LOCATION_UPDATES, mLastUpdateInterval);
                     }
+
+                    if (!networkLocationEnabled && mLocation == null) {
+                        if (DEBUG) {
+                            Slog.d(TAG, "Network location unavailable");
+                        }
+                        retrieveLocation();
+                    }
                     break;
 
                 case MSG_DO_TWILIGHT_UPDATE:
