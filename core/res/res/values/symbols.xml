@@ -2664,6 +2664,7 @@
   <!-- SIM contact batch operation -->
   <java-symbol type="bool" name="config_sim_phonebook_batch_operation" />
   <!-- config 2G/3G/4G RAT strings for carriers -->
+  <java-symbol type="string" name="config_rat_unknown" />
   <java-symbol type="string" name="config_rat_2g" />
   <java-symbol type="string" name="config_rat_3g" />
   <java-symbol type="string" name="config_rat_4g" />
