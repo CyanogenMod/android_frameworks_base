@@ -1492,8 +1492,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             mDetailRemoveButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mHost.collapsePanels();
                     mHost.removeCustomTile(customTile);
+                    closeDetail();
                 }
             });
         }
