@@ -570,9 +570,11 @@ public class NavigationBarView extends LinearLayout {
 
     @Override
     public void onFinishInflate() {
-        mRotatedViews[Configuration.ORIENTATION_PORTRAIT] = findViewById(R.id.rot0);
-        mRotatedViews[Configuration.ORIENTATION_LANDSCAPE] = findViewById(R.id.rot90);
-        mCurrentView = mRotatedViews[getResources().getConfiguration().orientation];
+        mRotatedViews[Surface.ROTATION_0] =
+                mRotatedViews[Surface.ROTATION_180] = findViewById(R.id.rot0);
+        mRotatedViews[Surface.ROTATION_90] = findViewById(R.id.rot90);
+        mRotatedViews[Surface.ROTATION_270] = mRotatedViews[Surface.ROTATION_90];
+        mCurrentView = mRotatedViews[Surface.ROTATION_0];
 
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
 
@@ -589,10 +591,11 @@ public class NavigationBarView extends LinearLayout {
     }
 
     public void reorient() {
-        int orientation = getResources().getConfiguration().orientation;
-        mRotatedViews[Configuration.ORIENTATION_PORTRAIT].setVisibility(View.GONE);
-        mRotatedViews[Configuration.ORIENTATION_LANDSCAPE].setVisibility(View.GONE);
-        mCurrentView = mRotatedViews[orientation];
+        final int rot = mDisplay.getRotation();
+        for (int i=0; i<4; i++) {
+            mRotatedViews[i].setVisibility(View.GONE);
+        }
+        mCurrentView = mRotatedViews[rot];
         mCurrentView.setVisibility(View.VISIBLE);
 
         updateLayoutTransitionsEnabled();
