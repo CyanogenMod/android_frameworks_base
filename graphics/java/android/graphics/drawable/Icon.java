@@ -585,6 +585,13 @@ public final class Icon implements Parcelable {
     }
 
     /**
+     * @hide
+     */
+    public ColorStateList getTintList() {
+        return mTintList;
+    }
+
+    /**
      * Store a blending mode to use whenever this Icon is drawn.
      *
      * @param mode a blending mode, as in {@link Drawable#setTintMode(PorterDuff.Mode)}, may be null
@@ -593,6 +600,13 @@ public final class Icon implements Parcelable {
     public Icon setTintMode(PorterDuff.Mode mode) {
         mTintMode = mode;
         return this;
+    }
+
+    /**
+     * @hide
+     */
+    public PorterDuff.Mode getTintMode() {
+        return mTintMode;
     }
 
     /**
