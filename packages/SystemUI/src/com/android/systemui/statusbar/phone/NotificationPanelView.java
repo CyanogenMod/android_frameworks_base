@@ -1090,9 +1090,6 @@ public class NotificationPanelView extends PanelView implements
                 if (mKeyguardExternalView == null) {
                     mKeyguardExternalView =
                             getExternalKeyguardView(mThirdPartyKeyguardViewComponent);
-                } else {
-                    // resume the external view
-                    mKeyguardExternalView.onActivityResumed(null);
                 }
                 if (mKeyguardExternalView != null && !mKeyguardExternalView.isAttachedToWindow()) {
                     addView(mKeyguardExternalView, 0, EXTERNAL_KEYGUARD_VIEW_PARAMS);
@@ -1101,8 +1098,6 @@ public class NotificationPanelView extends PanelView implements
         } else {
             if (mKeyguardExternalView != null && mKeyguardExternalView.isAttachedToWindow()) {
                 removeView(mKeyguardExternalView);
-                // pause the external view since we are no longer showing the keyguard
-                mKeyguardExternalView.onActivityPaused(null);
             }
         }
         resetVerticalPanelPosition();
@@ -2584,6 +2579,10 @@ public class NotificationPanelView extends PanelView implements
 
     public boolean hasExternalKeyguardView() {
         return mKeyguardExternalView != null && mKeyguardExternalView.isAttachedToWindow();
+    }
+
+    public KeyguardExternalView getExternalKeyguardView() {
+        return mKeyguardExternalView;
     }
 
     private KeyguardExternalView getExternalKeyguardView(ComponentName componentName) {
