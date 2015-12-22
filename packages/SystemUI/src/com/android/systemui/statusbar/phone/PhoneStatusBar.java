@@ -4458,7 +4458,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return false;
     }
 
-    private void showBouncer() {
+    protected void showBouncer() {
         if (!mRecreating &&
                 (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
             mWaitingForKeyguardExit = mStatusBarKeyguardViewManager.isShowing();
@@ -4466,15 +4466,20 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
-    private void showBouncerOrFocusKeyguardExternalView() {
-        if (mNotificationPanel.hasExternalKeyguardView() && !isKeyguardShowingMedia()) {
-            mStatusBarView.collapseAllPanels(/*animate=*/ false, false /* delayed*/,
-                    1.0f /* speedUpFactor */);
-            mStatusBarKeyguardViewManager.setKeyguardExternalViewFocus(true);
-            setBarState(StatusBarState.SHADE);
+    protected void showBouncerOrFocusKeyguardExternalView() {
+        if (mNotificationPanel.hasExternalKeyguardView() && !isKeyguardShowingMedia() &&
+                mNotificationPanel.isExternalKeyguardViewInteractive()) {
+            focusKeyguardExternalView();
         } else {
             showBouncer();
         }
+    }
+
+    protected void focusKeyguardExternalView() {
+        mStatusBarView.collapseAllPanels(/*animate=*/ false, false /* delayed*/,
+                1.0f /* speedUpFactor */);
+        mStatusBarKeyguardViewManager.setKeyguardExternalViewFocus(true);
+        setBarState(StatusBarState.SHADE);
     }
 
     private void instantExpandNotificationsPanel() {

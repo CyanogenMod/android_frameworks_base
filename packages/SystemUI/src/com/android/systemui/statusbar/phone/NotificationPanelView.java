@@ -26,6 +26,7 @@ import android.content.ContentResolver;
 import android.app.ActivityManager;
 import android.app.StatusBarManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
@@ -1090,6 +1091,10 @@ public class NotificationPanelView extends PanelView implements
                 if (mKeyguardExternalView == null) {
                     mKeyguardExternalView =
                             getExternalKeyguardView(mThirdPartyKeyguardViewComponent);
+                    if (mKeyguardExternalView != null) {
+                        mKeyguardExternalView.registerKeyguardExternalViewCallback(
+                                mExternalKeyguardViewCallbacks);
+                    }
                 }
                 if (mKeyguardExternalView != null && !mKeyguardExternalView.isAttachedToWindow()) {
                     addView(mKeyguardExternalView, 0, EXTERNAL_KEYGUARD_VIEW_PARAMS);
@@ -1173,6 +1178,39 @@ public class NotificationPanelView extends PanelView implements
             mQsContainerAnimator.start();
             mQsContainer.addOnLayoutChangeListener(mQsContainerAnimatorUpdater);
             return true;
+        }
+    };
+
+    private KeyguardExternalView.KeyguardExternalViewCallbacks mExternalKeyguardViewCallbacks =
+            new KeyguardExternalView.KeyguardExternalViewCallbacks() {
+        @Override
+        public void dismiss() {
+            if (hasExternalKeyguardView()) {
+                mStatusBar.setBarState(StatusBarState.KEYGUARD);
+                mStatusBar.showBouncer();
+            }
+        }
+
+        @Override
+        public void dismissAndStartActivity(Intent intent) {
+            if (hasExternalKeyguardView()) {
+                mStatusBar.setBarState(StatusBarState.KEYGUARD);
+                mStatusBar.startActivity(intent, true);
+            }
+        }
+
+        @Override
+        public void collapseNotificationPanel() {
+            if (mStatusBar.getBarState() == StatusBarState.KEYGUARD && hasExternalKeyguardView()) {
+                mStatusBar.focusKeyguardExternalView();
+            }
+        }
+
+        @Override
+        public void providerDied() {
+            mKeyguardExternalView.unregisterKeyguardExternalViewCallback(
+                    mExternalKeyguardViewCallbacks);
+            mKeyguardExternalView = null;
         }
     };
 
@@ -2579,6 +2617,10 @@ public class NotificationPanelView extends PanelView implements
 
     public boolean hasExternalKeyguardView() {
         return mKeyguardExternalView != null && mKeyguardExternalView.isAttachedToWindow();
+    }
+
+    public boolean isExternalKeyguardViewInteractive() {
+        return mKeyguardExternalView != null && mKeyguardExternalView.isInteractive();
     }
 
     public KeyguardExternalView getExternalKeyguardView() {
