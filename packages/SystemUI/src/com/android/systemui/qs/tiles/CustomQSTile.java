@@ -119,6 +119,10 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         }
     }
 
+    public StatusBarPanelCustomTile getTile() {
+        return mTile;
+    }
+
     @Override
     protected void handleUpdateState(State state, Object arg) {
         if (arg instanceof StatusBarPanelCustomTile) {

@@ -747,46 +747,6 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
 
     public void setEditing(boolean editing) {
         mEditing = editing;
-        if (mEditing) {
-            mQsPanelCallback.onShowingDetail(new QSTile.DetailAdapter() {
-                @Override
-                public StatusBarPanelCustomTile getCustomTile() {
-                    return null;
-                }
-
-                @Override
-                public int getTitle() {
-                    return R.string.quick_settings_edit_label;
-                }
-
-                @Override
-                public Boolean getToggleState() {
-                    return null;
-                }
-
-                @Override
-                public View createDetailView(Context context, View convertView, ViewGroup parent) {
-                    return null;
-                }
-
-                @Override
-                public Intent getSettingsIntent() {
-                    return null;
-                }
-
-                @Override
-                public void setToggleState(boolean state) {
-
-                }
-
-                @Override
-                public int getMetricsCategory() {
-                    return MetricsConstants.DONT_TRACK_ME_BRO;
-                }
-            });
-        } else {
-            mQsPanelCallback.onShowingDetail(null);
-        }
     }
 
     /**

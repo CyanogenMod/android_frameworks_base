@@ -23,33 +23,43 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.ArrayMap;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.qs.tiles.CustomQSTile;
 import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.settings.ToggleSlider;
+import com.android.systemui.statusbar.CustomTileData;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
@@ -57,11 +67,10 @@ import com.android.systemui.tuner.QsTuner;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
-import org.cyanogenmod.internal.util.QSUtils;
-
 import cyanogenmod.providers.CMSettings;
 
 import cyanogenmod.app.StatusBarPanelCustomTile;
+import org.cyanogenmod.internal.util.QSUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -426,7 +435,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     protected int getPagesForCount(int tileCount) {
-        tileCount -=  getTilesPerPage(true);
+        tileCount -= getTilesPerPage(true);
         // first page + rest of tiles
         return 1 + (int) Math.ceil(tileCount / (double) getTilesPerPage(false));
     }
@@ -612,7 +621,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     public int getTilesPerPage(boolean firstPage) {
-        if ((!mFirstRowLarge && firstPage)|| !firstPage) {
+        if ((!mFirstRowLarge && firstPage) || !firstPage) {
             return QSTileHost.TILES_PER_PAGE + 1;
         }
         return QSTileHost.TILES_PER_PAGE;
@@ -1552,46 +1561,198 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return mCurrentlyAnimating.contains(t);
     }
 
-    // todo implement proper add tile ui
-    protected void showAddDialog() {
-        List<String> currentTileSpec = mHost.getTileSpecs();
-        final List<String> availableTilesSpec = QSUtils.getAvailableTiles(getContext());
+    public static class TilesListAdapter extends BaseExpandableListAdapter
+            implements QSTile.DetailAdapter, AdapterView.OnItemClickListener {
 
-        // Remove tiles already used
-        availableTilesSpec.removeAll(currentTileSpec);
+        public static final String PACKAGE_ANDROID = "android";
 
-        // Populate labels
-        List<String> availableTilesLabel = new ArrayList<String>();
-        for (String tileSpec : availableTilesSpec) {
-            int resource = QSTileHost.getLabelResource(tileSpec);
-            if (resource != 0) {
-                availableTilesLabel.add(getContext().getString(resource));
-            } else {
-                availableTilesLabel.add(tileSpec);
+        Context mContext;
+        QSTileHost mHost;
+        private CustomTileData mCustomTiles;
+
+        // maps package:tilelist
+        ArrayMap<String, List<QSTile<?>>> mPackageTileMap = new ArrayMap<>();
+
+        public TilesListAdapter(Context context, QSTileHost host) {
+            mContext = context;
+            mHost = host;
+
+            // add custom tiles
+            mCustomTiles = host.getCustomTileData();
+            final Collection<QSTile<?>> tiles = mHost.getTiles();
+            final Iterator<QSTile<?>> i = tiles.iterator();
+            while (i.hasNext()) {
+                final QSTile<?> tile = i.next();
+                if (tile instanceof CustomQSTile) {
+                    String tilePackage = ((CustomQSTile) tile).getTile().getPackage();
+                    List<QSTile<?>> packageList = mPackageTileMap.get(tilePackage);
+                    if (packageList == null) {
+                        mPackageTileMap.put(tilePackage, packageList = new ArrayList<>());
+                    }
+                    packageList.add(tile);
+                } else {
+                    List<QSTile<?>> packageList = mPackageTileMap.get(PACKAGE_ANDROID);
+                    if (packageList == null) {
+                        mPackageTileMap.put(PACKAGE_ANDROID, packageList = new ArrayList<>());
+                    }
+                    packageList.add(tile);
+                }
             }
         }
 
-        // Add broadcast tile
-        availableTilesLabel.add(getContext().getString(R.string.broadcast_tile));
-        availableTilesSpec.add(BROADCAST_TILE_SPEC_PLACEHOLDER);
+        @Override
+        public int getGroupCount() {
+            return mPackageTileMap.keySet().size();
+        }
 
-        String[] items = new String[availableTilesLabel.size()];
-        availableTilesLabel.toArray(items);
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return mPackageTileMap.valueAt(groupPosition).size();
+        }
 
-        final AlertDialog d = new AlertDialog.Builder(getContext(), R.style.Theme_SystemUI_Dialog)
-                .setTitle(R.string.add_tile)
-                .setItems(items, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String tileSpec = availableTilesSpec.get(which);
-                        if (tileSpec.equals(BROADCAST_TILE_SPEC_PLACEHOLDER)) {
-                            showBroadcastTileDialog();
-                        } else {
-                            add(tileSpec);
-                        }
+        @Override
+        public String getGroup(int groupPosition) {
+            return mPackageTileMap.keyAt(groupPosition);
+        }
+
+        @Override
+        public QSTile<?> getChild(int groupPosition, int childPosition) {
+            return mPackageTileMap.valueAt(groupPosition).get(childPosition);
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return mPackageTileMap.valueAt(groupPosition).get(childPosition).hashCode();
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
+                                 ViewGroup parent) {
+            TextView row = (TextView) convertView;
+            if (row == null) {
+                row = (TextView) LayoutInflater.from(mContext).inflate(
+                        com.android.internal.R.layout.simple_expandable_list_item_1, parent, false);
+            }
+            row.setTypeface(Typeface.DEFAULT_BOLD);
+            String group = getGroup(groupPosition);
+            if (group.equals(PACKAGE_ANDROID)) {
+                group = mContext.getText(R.string.quick_settings_tiles_category_system).toString();
+            }
+            row.setText(group);
+            return row;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+                                 View convertView, ViewGroup parent) {
+            TextView child = (TextView) convertView;
+            if (child == null) {
+                child = (TextView) LayoutInflater.from(mContext).inflate(
+                        com.android.internal.R.layout.simple_expandable_list_item_1, parent, false);
+            }
+            QSTile<?> qsTile = getChild(groupPosition, childPosition);
+            String spec = mHost.getSpec(qsTile);
+            int resource = QSTileHost.getLabelResource(spec);
+            String label;
+            if (qsTile instanceof CustomQSTile) {
+                String tilePackage = ((CustomQSTile) qsTile).getTile().getPackage();
+                label = getPackageLabel(tilePackage);
+            } else {
+                label = mContext.getText(resource).toString();
+            }
+            child.setText(label);
+            return child;
+        }
+
+        private String getPackageLabel(String packageName) {
+            try {
+                return mContext.getPackageManager().getApplicationLabel(
+                        mContext.getPackageManager().getApplicationInfo(packageName, 0)).toString();
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
+
+        @Override
+        public int getTitle() {
+            return R.string.quick_settings_edit_label;
+        }
+
+        @Override
+        public Boolean getToggleState() {
+            return null;
+        }
+
+        @Override
+        public View createDetailView(Context context, View convertView, ViewGroup parent) {
+            ExpandableListView lv = (ExpandableListView) convertView;
+            if (lv == null) {
+                lv = new ExpandableListView(parent.getContext());
+                lv.setOnTouchListener(new OnTouchListener() {
+                    // Setting on Touch Listener for handling the touch inside ScrollView
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        // Disallow the touch request for parent scroll on touch of child view
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        return false;
                     }
-                }).create();
-        SystemUIDialog.makeSystemUIDialog(d);
-        d.show();
+                });
+            }
+            lv.setAdapter(this);
+            lv.expandGroup(mPackageTileMap.indexOfKey(PACKAGE_ANDROID));
+            return lv;
+        }
+
+        @Override
+        public Intent getSettingsIntent() {
+            return null;
+        }
+
+        @Override
+        public StatusBarPanelCustomTile getCustomTile() {
+            return null;
+        }
+
+        @Override
+        public void setToggleState(boolean state) {
+
+        }
+
+        @Override
+        public int getMetricsCategory() {
+            return MetricsLogger.DONT_TRACK_ME_BRO;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(TAG, "onItemClick() called with " + "parent = [" + parent + "], view = ["
+                    + view + "], position = [" + position + "], id = [" + id + "]");
+        }
+    }
+
+    protected void showAddDialog() {
+        TilesListAdapter adapter = new TilesListAdapter(mContext, mHost);
+        showDetailAdapter(true, adapter, mQsPanelTop.getLocationOnScreen()); // TODO proper location
+        // TODO add broadcast tile manually to adapter
+//        // Add broadcast tile
+//        availableTilesLabel.add(getContext().getString(R.string.broadcast_tile));
+//        availableTilesSpec.add(BROADCAST_TILE_SPEC_PLACEHOLDER);
     }
 
     public void showBroadcastTileDialog() {

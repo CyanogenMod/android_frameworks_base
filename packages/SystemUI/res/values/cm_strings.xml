@@ -211,4 +211,6 @@
     <string name="accessibility_quick_settings_location_changed_gps_only">Location reporting changed to sensors only mode.</string>
     <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_location_changed_high_accuracy">Location reporting changed to high accuracy mode.</string>
+
+    <string name="quick_settings_tiles_category_system">System tiles</string>
 </resources>
