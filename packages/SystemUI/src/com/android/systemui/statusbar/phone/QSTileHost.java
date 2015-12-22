@@ -30,6 +30,7 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.internal.logging.MetricsLogger;
@@ -91,7 +92,7 @@ import java.util.Map;
 /** Platform implementation of the quick settings tile host **/
 public class QSTileHost implements QSTile.Host, Tunable {
     private static final String TAG = "QSTileHost";
-    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DEBUG = true || Log.isLoggable(TAG, Log.DEBUG);
 
     public static final int TILES_PER_PAGE = 8;
 
@@ -294,7 +295,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         final List<String> tileSpecs = loadTileSpecs(newValue);
         if (tileSpecs.equals(mTileSpecs)) return;
         for (Map.Entry<String, QSTile<?>> tile : mTiles.entrySet()) {
-            if (!tileSpecs.contains(tile.getKey())) {
+            if (!tileSpecs.contains(tile.getKey()) && mCustomTileData.get(tile.getKey()) == null) {
                 if (DEBUG) Log.d(TAG, "Destroying tile: " + tile.getKey());
                 tile.getValue().destroy();
             }
@@ -363,6 +364,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     protected List<String> loadTileSpecs(String tileList) {
+        Log.i(TAG, "loadTileSpecs() called with " + "tileList = [" + tileList + "]");
         final Resources res = mContext.getResources();
         final String defaultTileList = res.getString(org.cyanogenmod.platform.internal.
                 R.string.config_defaultQuickSettingsTiles);
@@ -403,6 +405,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     public void setTiles(List<String> tiles) {
+        Log.i(TAG, "setTiles() called with " + "tiles = [" + tiles + "]");
         CMSettings.Secure.putStringForUser(getContext().getContentResolver(),
                 CMSettings.Secure.QS_TILES,
                 TextUtils.join(",", tiles), ActivityManager.getCurrentUser());
@@ -444,6 +447,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     void updateCustomTile(StatusBarPanelCustomTile sbc) {
+        Log.i(TAG, "updateCustomTile() called with " + "sbc = [" + sbc.getKey() + "]");
         synchronized (mTiles) {
             if (mTiles.containsKey(sbc.getKey())) {
                 QSTile<?> tile = mTiles.get(sbc.getKey());
@@ -456,6 +460,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     void addCustomTile(StatusBarPanelCustomTile sbc) {
+        Log.i(TAG, "addCustomTile() called with " + "sbc = [" + sbc.getKey() + "]");
         synchronized (mTiles) {
             mCustomTileData.add(new CustomTileData.Entry(sbc));
             mTileSpecs.add(sbc.getKey());
@@ -467,6 +472,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     }
 
     void removeCustomTileSysUi(String key) {
+        Log.i(TAG, "removeCustomTileSysUi() called with " + "key = [" + key + "]");
         synchronized (mTiles) {
             if (mTiles.containsKey(key)) {
                 mTileSpecs.remove(key);
@@ -479,7 +485,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         }
     }
 
-    CustomTileData getCustomTileData() {
+    public CustomTileData getCustomTileData() {
         return mCustomTileData;
     }
 }

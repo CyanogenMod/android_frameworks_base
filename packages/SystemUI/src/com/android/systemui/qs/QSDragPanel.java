@@ -32,6 +32,8 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.ArrayMap;
+import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
@@ -39,6 +41,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +53,7 @@ import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.settings.ToggleSlider;
+import com.android.systemui.statusbar.CustomTileData;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
@@ -57,6 +61,7 @@ import com.android.systemui.tuner.QsTuner;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
+import cyanogenmod.app.CMStatusBarManager;
 import org.cyanogenmod.internal.util.QSUtils;
 
 import cyanogenmod.providers.CMSettings;
@@ -69,6 +74,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class QSDragPanel extends QSPanel implements View.OnDragListener, View.OnLongClickListener {
 
@@ -1552,6 +1559,81 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return mCurrentlyAnimating.contains(t);
     }
 
+    public static class TilesListAdapter extends BaseExpandableListAdapter {
+
+        Context mContext;
+        QSTileHost mHost;
+        private CustomTileData mCustomTiles;
+
+        // maps package:tilelist
+        ArrayMap<String, List<CustomTileData.Entry>> packageMap = new ArrayMap<>();
+
+        public TilesListAdapter(Context context, QSTileHost host) {
+            mContext = context;
+            mHost = host;
+
+            mCustomTiles = host.getCustomTileData();
+            for (int i = 0; i < mCustomTiles.size(); i++) {
+                final CustomTileData.Entry entry = mCustomTiles.get(i);
+                List<CustomTileData.Entry> packageList = packageMap.get(entry.sbc.getPackage());
+                if (packageList == null) {
+                    packageMap.put(entry.sbc.getPackage(),
+                            packageList = new ArrayList<CustomTileData.Entry>());
+                }
+                packageList.add(entry);
+            }
+        }
+
+        @Override
+        public int getGroupCount() {
+            return packageMap.keySet().size();
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return packageMap.valueAt(groupPosition).size();
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return packageMap.valueAt(groupPosition);
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return packageMap.valueAt(groupPosition).get(childPosition);
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return packageMap.valueAt(groupPosition).get(childPosition).sbc.getId();
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            return null;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            return null;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return false;
+        }
+    }
     // todo implement proper add tile ui
     protected void showAddDialog() {
         List<String> currentTileSpec = mHost.getTileSpecs();
