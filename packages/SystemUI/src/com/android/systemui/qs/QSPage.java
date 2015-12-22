@@ -52,6 +52,13 @@ public class QSPage extends ViewGroup {
     }
 
     @Override
+    public void requestLayout() {
+        if (mPanel == null || !mPanel.mSettingTiles) {
+            super.requestLayout();
+        }
+    }
+
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int width = MeasureSpec.getSize(widthMeasureSpec);
         if (mPanel.mCurrentlyAnimating.isEmpty() && !mPanel.isDragging()) {
