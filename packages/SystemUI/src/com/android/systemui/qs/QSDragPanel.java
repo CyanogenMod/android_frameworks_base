@@ -75,6 +75,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class QSDragPanel extends QSPanel implements View.OnDragListener, View.OnLongClickListener {
 
@@ -112,7 +113,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     List<TileRecord> mCurrentlyAnimating
             = Collections.synchronizedList(new ArrayList<TileRecord>());
     private Collection<QSTile<?>> mTempTiles = null;
-    protected boolean mSettingTiles;
 
     public QSDragPanel(Context context) {
         this(context, null);
@@ -343,7 +343,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     protected void drawTile(TileRecord r, QSTile.State state) {
-        final int visibility = state.visible || mEditing ? VISIBLE : GONE;
+        if (mEditing) {
+            state.visible = true;
+        }
+        final int visibility = state.visible ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
         r.tileView.onStateChanged(state);
     }
@@ -398,6 +401,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mPageIndicator.setEditing(editing);
         mPagerAdapter.notifyDataSetChanged();
 
+        requestLayout();
         ensurePagerState();
     }
 
@@ -408,7 +412,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     protected void onStopDrag() {
         mDraggingRecord.tileView.setAlpha(1f);
 
-        mDraggingRecord = null;
         mDragging = false;
         mRestored = false;
 
@@ -416,6 +419,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mLastRightShift = -1;
 
         mQsPanelTop.onStopDrag();
+        requestLayout();
         ensurePagerState();
     }
 
@@ -481,26 +485,92 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return pages;
     }
 
-    public void setTiles(Collection<QSTile<?>> tiles) {
-        mSettingTiles = true;
-        if (DEBUG_DRAG) {
-            Log.i(TAG, "setTiles() called with " + "tiles = ["
-                    + tiles + "], mTempTiles: " + mTempTiles);
-            if (mTempTiles != null) {
-                Log.e(TAG, "temp tiles being overridden... : " +
-                        Arrays.toString(mTempTiles.toArray()));
-            }
-        }
-        for (Record record : mRecords) {
-            if (record instanceof DragTileRecord) {
-                DragTileRecord dr = (DragTileRecord) record;
-                mPages.get(dr.page).removeView(dr.tileView);
-            }
-        }
-        mRecords.clear();
+    public void setTiles(final Collection<QSTile<?>> tilesCollection) {
+        final List<QSTile<?>> tiles = new ArrayList<>(tilesCollection);
         if (isLaidOut()) {
-            for (QSTile<?> tile : tiles) {
-                addTile(tile);
+            if (DEBUG_DRAG) {
+                Log.i(TAG, "setTiles() called with " + "tiles = ["
+                        + tiles + "], mTempTiles: " + mTempTiles);
+                if (mTempTiles != null) {
+                    Log.e(TAG, "temp tiles being overridden... : " +
+                            Arrays.toString(mTempTiles.toArray()));
+                }
+            }
+
+            if (mDraggingRecord != null && mRecords.indexOf(mDraggingRecord) == -1) {
+                // the last removed record might be stored in mDraggingRecord if we just shifted
+                // re-add it to the list so we'll clean it up below
+                mRecords.add(mDraggingRecord);
+                mDraggingRecord = null;
+            }
+
+            Map<QSTile<?>, DragTileRecord> recordMap = new ArrayMap<>();
+            Iterator<TileRecord> iterator = mRecords.iterator();
+
+            // cleanup current records
+            while (iterator.hasNext()) {
+                DragTileRecord dr = (DragTileRecord) iterator.next();
+
+                if (tiles.contains(dr.tile)) {
+                    if (DEBUG_DRAG) {
+                        Log.i(TAG, "caching tile: " + dr.tile);
+                    }
+                    recordMap.put(dr.tile, dr);
+                } else {
+                    if (DEBUG_DRAG) {
+                        Log.i(TAG, "removing tile: " + dr.tile);
+                    }
+                    // clean up view
+                    mPages.get(dr.page).removeView(dr.tileView);
+
+                    // remove record
+                    iterator.remove();
+                }
+            }
+
+
+            // at this point recordMap should have all retained tiles, no new or old tiles
+            int delta = tiles.size() - recordMap.size();
+            if (DEBUG_DRAG) {
+                Log.i(TAG, "record map delta: " + delta);
+            }
+            mRecords.ensureCapacity(mRecords.size() + delta);
+            mPagerAdapter.notifyDataSetChanged();
+
+            // add new tiles
+            for (int i = 0; i < tiles.size(); i++) {
+                QSTile<?> tile = tiles.get(i);
+                final int tileDestPage = getPagesForCount(i) - 1;
+
+                if (DEBUG_DRAG) {
+                    Log.d(TAG, "tile at : " + i + ": " + tile);
+                }
+                if (!recordMap.containsKey(tile)) {
+                    DragTileRecord record = makeRecord(tile, tileDestPage);
+                    recordMap.put(tile, record);
+                    mRecords.add(i, record);
+
+                    // add the view
+                    mPages.get(record.destinationPage).addView(record.tileView);
+                    record.page = record.destinationPage;
+                    if (DEBUG_DRAG) {
+                        Log.d(TAG, "added new record " + record);
+                    }
+                } else {
+                    DragTileRecord record = recordMap.get(tile);
+                    int indexOf = mRecords.indexOf(record);
+                    if (indexOf != i) {
+                        if (DEBUG_DRAG) {
+                            Log.w(TAG, "moving index of " + record + " from "
+                                    + indexOf + " to " + i);
+                        }
+                        mRecords.remove(record);
+                        mRecords.add(i, record);
+
+                        record.destinationPage = tileDestPage;
+                        ensureDestinationPage(record);
+                    }
+                }
             }
             if (isShowingDetail()) {
                 mDetail.bringToFront();
@@ -512,35 +582,30 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             mTempTiles = Collections.synchronizedCollection(new ArrayList<QSTile<?>>(tiles));
         }
         mPagerAdapter.notifyDataSetChanged();
-        ensurePagerState();
 
-        mSettingTiles = false;
+        refreshAllTiles();
         requestLayout();
     }
 
-    @Override
-    public void requestLayout() {
-        if (!mSettingTiles) {
-            super.requestLayout();
+    private void ensureDestinationPage(DragTileRecord record) {
+        if (record.destinationPage != record.page) {
+            getPage(record.page).removeView(record.tileView);
+            getPage(record.destinationPage).addView(record.tileView);
+            record.page = record.destinationPage;
         }
     }
 
-    protected void addTile(final QSTile<?> tile) {
+    private DragTileRecord makeRecord(final QSTile<?> tile, int index) {
         if (DEBUG_DRAG) {
-            Log.d(TAG, "+++ addTile() called with " + "tile = [" + tile + "]");
+            Log.d(TAG, "+++ makeRecord() called with " + "tile = [" + tile + "], index = [" + index + "]");
         }
         final DragTileRecord r = new DragTileRecord();
 
-        mRecords.add(r);
-        mPagerAdapter.notifyDataSetChanged();
-
-        int potentialPageIdx = getPagesForCount(mRecords.size()) - 1;
 
         r.tile = tile;
-        r.page = potentialPageIdx;
-        r.destinationPage = r.page;
+        r.page = -1;
+        r.destinationPage = index;
         r.tileView = tile.createTileView(mContext);
-        r.tileView.setVisibility(View.GONE);
         final QSTile.Callback callback = new QSTile.Callback() {
             @Override
             public void onStateChanged(QSTile.State state) {
@@ -605,15 +670,35 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         r.tileView.init(click, clickSecondary, longClick);
         r.tile.setListening(mListening);
         r.tile.refreshState();
-        if (mEditing) {
-            // force it to be visible, we'll refresh its state once editing is done
-            r.tile.getState().visible = true;
-        }
-        callback.onStateChanged(r.tile.getState());
+        r.tileView.setVisibility(mEditing ? View.VISIBLE : View.GONE);
 
-        mPages.get(r.page).addView(r.tileView);
+        QSTile.State state = r.tile.getState();
+        if (mEditing) {
+            state.visible = true;
+        }
+        callback.onStateChanged(state);
+
+        if (DEBUG_DRAG) {
+            Log.d(TAG, "+++ makeRecord() called with " + "tile = [" + tile + "], index = [" + index + "]");
+        }
+        return r;
+    }
+
+    protected void addTile(final QSTile<?> tile) {
+        if (DEBUG_DRAG) {
+            Log.d(TAG, "+++ addTile() called with " + "tile = [" + tile + "]");
+        }
+        int potentialPageIdx = getPagesForCount(mRecords.size() + 1) - 1;
+        DragTileRecord r = makeRecord(tile, potentialPageIdx);
+        mRecords.add(r);
+        mPagerAdapter.notifyDataSetChanged();
+
+        mPages.get(r.destinationPage).addView(r.tileView);
+        r.page = r.destinationPage;
+        drawTile(r, r.tile.getState());
 
         ensurePagerState();
+        requestLayout();
 
         if (DEBUG_DRAG) {
             Log.d(TAG, "--- addTile() called with " + "tile = [" + tile + "]");
@@ -733,7 +818,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return mColumns;
     }
 
-    public int getColumnCount(int page, int row) {
+    public int getColumnCount(int page, int row, boolean smart) {
         int cols = 0;
         for (Record record : mRecords) {
             if (record instanceof DragTileRecord) {
@@ -744,7 +829,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
         }
 
-        if (isEditing() && (isDragging() || mRestoring) && !isDragRecordAttached()) {
+        if (smart && isEditing() && (isDragging() || mRestoring) && !isDragRecordAttached()) {
             // if shifting tiles back, and one moved from previous page
 
             // if it's the very last row on the last page, we should add an extra column to account
@@ -760,6 +845,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
         }
         return cols;
+    }
+
+    public int getColumnCount(int page, int row) {
+        return getColumnCount(page, row, true);
     }
 
     public int getCurrentMaxRow() {
@@ -1145,12 +1234,13 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 Log.w(TAG, "tile's destination page moved to: " + tile.destinationPage);
             }
         }
-        int columnCount = Math.max(1, getColumnCount(tile.destinationPage, tile.row));
+        int columnCount = Math.max(1, getColumnCount(tile.destinationPage, tile.row,
+                mLastLeftShift == -1));
         if (DEBUG_DRAG) {
             Log.w(TAG, "columCount initially at: " + columnCount);
         }
 
-        if (!mRecords.contains(tile) && tile != mDraggingRecord) {
+        if (!mRecords.contains(tile)) {
             // increase column count for the destination location to account for this tile being added
             columnCount++;
             if (DEBUG_DRAG) {
@@ -1662,7 +1752,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             expansionIndicator.setImageResource(isExpanded ? R.drawable.ic_qs_tile_contract
                     : R.drawable.ic_qs_tile_expand);
             // hide indicator when there's only 1 group
-            expansionIndicator.setVisibility(getGroupCount() == 1 ? View.GONE : View.VISIBLE);
+            boolean singleGroupMode = getGroupCount() == 1;
+            expansionIndicator.setVisibility(singleGroupMode ? View.GONE : View.VISIBLE);
+            row.setFocusable(!singleGroupMode);
+            row.setClickable(!singleGroupMode);
 
             String group = getGroup(groupPosition);
             if (group.equals(PACKAGE_ANDROID)) {
