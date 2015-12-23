@@ -44,13 +44,6 @@ public class QSViewPager extends ViewPager {
     }
 
     @Override
-    public void requestLayout() {
-        if (mDragPanel == null || !mDragPanel.mSettingTiles) {
-            super.requestLayout();
-        }
-    }
-
-    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height = mLastHeight;
         for (int i = 0; i < getChildCount(); i++) {
