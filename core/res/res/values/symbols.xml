@@ -2405,7 +2405,6 @@
   <java-symbol type="integer" name="wifi_hotspot_security_type" />
   <java-symbol type="string" name="def_wifi_wifihotspot_pass" />
   <java-symbol type="string" name="def_wifi_direct_name" />
-  <java-symbol type="string" name="def_custom_bt_defname" />
   <!-- config 2G/3G/4G RAT strings for carriers -->
   <java-symbol type="string" name="config_rat_unknown" />
   <java-symbol type="string" name="config_rat_2g" />

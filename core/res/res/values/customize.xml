@@ -59,8 +59,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
     <!-- Default wi-fi direct name -->
     <string name="def_wifi_direct_name" translatable="false"></string>
-    <!-- Setting customize default bluetooth name -->
-    <string name="def_custom_bt_defname"></string>
     <!-- custom date format or not  -->
     <bool name="config_dateformat">false</bool>
 </resources>
