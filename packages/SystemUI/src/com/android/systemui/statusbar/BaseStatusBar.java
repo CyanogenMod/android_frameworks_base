@@ -2037,6 +2037,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         final Notification publicNotification = n.publicVersion;
         final RemoteViews publicContentView = publicNotification != null
                 ? publicNotification.contentView : null;
+        final Integer oldColor = oldNotification.getNotification().color;
+        final Integer color = n.color;
+        final Integer oldIcon = oldNotification.getNotification().icon;
+        final Integer icon = n.icon;
         boolean contentsUnchanged = entry.getContentView() != null
                 && contentView.getPackage() != null
                 && oldContentView.getPackage() != null
@@ -2064,8 +2068,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                         && oldPublicContentView.getPackage() != null
                         && oldPublicContentView.getPackage().equals(publicContentView.getPackage())
                         && oldPublicContentView.getLayoutId() == publicContentView.getLayoutId());
+        boolean colorUnchanged = oldColor.equals(color);
+        boolean iconUnchanged = oldIcon.equals(icon);
         return contentsUnchanged && bigContentsUnchanged && headsUpContentsUnchanged
-                && publicUnchanged;
+                && publicUnchanged && colorUnchanged && iconUnchanged;
     }
 
     private void updateNotificationViews(Entry entry, StatusBarNotification notification) {
