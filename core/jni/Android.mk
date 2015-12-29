@@ -16,6 +16,10 @@ else
     LOCAL_CFLAGS += -DPACKED=""
 endif
 
+ifeq ($(TARGET_ARCH), x86)
+    LOCAL_CFLAGS += -DPICK_SUPPORTED_ABI_WITH_MAX_LIBS
+endif
+
 ifneq ($(ENABLE_CPUSETS),)
     LOCAL_CFLAGS += -DENABLE_CPUSETS
 endif

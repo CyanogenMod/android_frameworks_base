@@ -457,6 +457,10 @@ iterateOverNativeFiles(JNIEnv *env, jlong apkHandle, jstring javaCpuAbi,
 static int findSupportedAbi(JNIEnv *env, jlong apkHandle, jobjectArray supportedAbisArray) {
     const int numAbis = env->GetArrayLength(supportedAbisArray);
     Vector<ScopedUtfChars*> supportedAbis;
+#ifdef PICK_SUPPORTED_ABI_WITH_MAX_LIBS
+    int numLibs[numAbis+1] = {0};     // +1 to avoid 0 sized array
+    int maxLibs = 0;
+#endif
 
     for (int i = 0; i < numAbis; ++i) {
         supportedAbis.add(new ScopedUtfChars(env,
@@ -492,10 +496,20 @@ static int findSupportedAbi(JNIEnv *env, jlong apkHandle, jobjectArray supported
         for (int i = 0; i < numAbis; i++) {
             const ScopedUtfChars* abi = supportedAbis[i];
             if (abi->size() == abiSize && !strncmp(abiOffset, abi->c_str(), abiSize)) {
-                // The entry that comes in first (i.e. with a lower index) has the higher priority.
-                if (((i < status) && (status >= 0)) || (status < 0) ) {
+#ifdef PICK_SUPPORTED_ABI_WITH_MAX_LIBS
+                numLibs[i]++;
+                if (numLibs[i] > maxLibs) {
+                    maxLibs = numLibs[i];
                     status = i;
+                } else if (numLibs[i] == maxLibs) {
+#endif
+                    // The entry that comes in first (i.e. with a lower index) has the higher priority.
+                    if (((i < status) && (status >= 0)) || (status < 0) ) {
+                        status = i;
+                    }
+#ifdef PICK_SUPPORTED_ABI_WITH_MAX_LIBS
                 }
+#endif
             }
         }
     }
