@@ -594,6 +594,12 @@ public class MockPackageManager extends PackageManager {
 
     /** {@hide} */
     @Override
+    public List<VolumeInfo> getPackageCandidateVolumesForceable(ApplicationInfo app) {
+        throw new UnsupportedOperationException();
+    }
+
+    /** {@hide} */
+    @Override
     public int movePrimaryStorage(VolumeInfo vol) {
         throw new UnsupportedOperationException();
     }
