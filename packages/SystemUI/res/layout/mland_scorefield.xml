@@ -22,7 +22,7 @@
         android:textStyle="bold"
         android:textSize="22sp"
         android:gravity="center"
-        android:textColor="#FFAAAAAA"
+        android:textColor="@color/mland_scorefield_text_color"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:paddingTop="4dp"
