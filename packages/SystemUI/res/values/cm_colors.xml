@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2014 The CyanogenMod Project
+     Copyright (C) 2015 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -73,4 +73,28 @@
     <color name="qs_title_text_color">#80cbc4</color>
     <color name="qs_edit_header_instruction_text_color">@android:color/white</color>
     <color name="qs_row_text_color">@android:color/white</color>
+
+    <!-- More exposed hard coded colors -->
+    <color name="toggle_slider_text_color">#666666</color>
+    <color name="no_recent_apps_text_color">@android:color/holo_blue_light</color>
+    <color name="no_notifications_text_color">#ffffff</color>
+    <color name="keyguard_overflow_number_text_color">#ff686868</color>
+    <color name="keyguard_carrier_text_color">#ffffff</color>
+    <color name="screen_pinning_description_text_color">@android:color/white</color>
+    <color name="screen_pinning_cancel_button_text_color">@android:color/white</color>
+    <color name="recents_empty_message_text_color">#ffffffff</color>
+    <color name="task_view_header_text_color">#ffffffff</color>
+    <color name="recents_search_bar_label_text_color">#99ffffff</color>
+    <color name="recents_empty_background_color">#80000000</color>
+    <color name="qs_tile_edit_header_instruction_text_color">@android:color/white</color>
+    <color name="mland_scorefield_text_color">#FFAAAAAA</color>
+    <color name="keyguard_indication_text_color">#ffffff</color>
+    <color name="speedbump_line_divider">#6fdddddd</color>
+    <color name="quick_settings_panel_background">#0000</color>
+    <color name="lockscreen_message_text_color">#424242</color>
+    <color name="lockscreen_middle_button_tint_color">#666666</color>
+    <color name="play_button_image_tint_color">#000000</color>
+    <color name="play_button_text_color">#000000</color>
+    <color name="zen_ic_close_tint_color">@android:color/white</color>
+    <color name="header_debug_info_text_color">#00A040</color>
 </resources>

@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/recents_search_bar_label"
-        android:textColor="#99ffffff"
+        android:textColor="@color/recents_search_bar_label_text_color"
         android:textSize="18sp"
         android:textAllCaps="true" />
 </FrameLayout>
