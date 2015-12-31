@@ -287,7 +287,7 @@ static void android_os_Parcel_writeString(JNIEnv* env, jclass clazz, jlong nativ
                 env->ReleaseStringCritical(val, str);
             }
         } else {
-            err = parcel->writeString16(NULL, 0);
+            err = parcel->writeString16((char16_t*)NULL, 0);
         }
         if (err != NO_ERROR) {
             signalExceptionForError(env, clazz, err);
