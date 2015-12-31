@@ -81,6 +81,7 @@ public class RequestThreadManager {
 
     private static final int PREVIEW_FRAME_TIMEOUT = 1000; // ms
     private static final int JPEG_FRAME_TIMEOUT = 4000; // ms (same as CTS for API2)
+    private static final int HDR_TIMEOUT = 20000; //ms
     private static final int REQUEST_COMPLETE_TIMEOUT = JPEG_FRAME_TIMEOUT;
 
     private static final float ASPECT_RATIO_TOLERANCE = 0.01f;
@@ -825,7 +826,9 @@ public class RequestThreadManager {
 
                             if (holder.hasJpegTargets()) {
                                 doJpegCapture(holder);
-                                if (!mReceivedJpeg.block(JPEG_FRAME_TIMEOUT)) {
+                                if (!mReceivedJpeg.block(
+                                        mParams.getSceneMode().equals(mParams.SCENE_MODE_HDR)
+                                        ? HDR_TIMEOUT : JPEG_FRAME_TIMEOUT)) {
                                     Log.e(TAG, "Hit timeout for jpeg callback!");
                                     mCaptureCollector.failNextJpeg();
                                 }
