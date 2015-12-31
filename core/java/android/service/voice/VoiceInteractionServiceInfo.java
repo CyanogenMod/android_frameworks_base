@@ -58,6 +58,11 @@ public class VoiceInteractionServiceInfo {
     }
 
     public VoiceInteractionServiceInfo(PackageManager pm, ServiceInfo si) {
+        if (si == null) {
+			mParseError = "Service is null !";
+			return;
+		}
+        
         if (!Manifest.permission.BIND_VOICE_INTERACTION.equals(si.permission)) {
             mParseError = "Service does not require permission "
                     + Manifest.permission.BIND_VOICE_INTERACTION;
