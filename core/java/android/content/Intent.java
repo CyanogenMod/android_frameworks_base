@@ -7965,8 +7965,14 @@ public class Intent implements Parcelable, Cloneable {
         if (N > 0) {
             mCategories = new ArraySet<String>();
             int i;
+            String readStr;
             for (i=0; i<N; i++) {
-                mCategories.add(in.readString().intern());
+                readStr = in.readString();
+                if (readStr != null) {
+                    mCategories.add(readStr.intern());
+                } else {
+                    Log.e("Intent", "readFromParcel: unknown parcel string");
+                }
             }
         } else {
             mCategories = null;
