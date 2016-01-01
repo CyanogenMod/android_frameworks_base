@@ -21,11 +21,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 
 import com.android.systemui.R;
+import com.android.systemui.tuner.TunerService;
 
 public class QSSettings extends LinearLayout {
     private QSTileHost mHost;
