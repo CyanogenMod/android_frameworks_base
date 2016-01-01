@@ -21,11 +21,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 
 import com.android.systemui.R;
+import com.android.systemui.tuner.TunerService;
 
 public class QSSettings extends LinearLayout {
     private QSTileHost mHost;
@@ -46,6 +50,18 @@ public class QSSettings extends LinearLayout {
             @Override
             public void onClick(View v) {
                 initiateTileReset();
+            }
+        });
+
+        LinearLayout tunerSwitchRow = (LinearLayout) findViewById(R.id.tuner_switch_row);
+        TextView title = (TextView) tunerSwitchRow.findViewById(R.id.title);
+        Switch tunerEnabled = (Switch) tunerSwitchRow.findViewById(R.id.switcher);
+        title.setText(R.string.system_ui_tuner);
+        tunerEnabled.setChecked(TunerService.isTunerEnabled(mContext));
+        tunerEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                TunerService.setTunerEnabled(buttonView.getContext(), isChecked);
             }
         });
     }

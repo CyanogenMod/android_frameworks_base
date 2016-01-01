@@ -80,5 +80,12 @@
 
     </LinearLayout>
 
+    <!-- tuner -->
+    <LinearLayout
+            android:id="@+id/tuner_switch_row"
+            style="@style/SettingRow">
+        <include layout="@layout/qs_settings_row"/>
+    </LinearLayout>
+
 </com.android.systemui.qs.QSSettings>
 
