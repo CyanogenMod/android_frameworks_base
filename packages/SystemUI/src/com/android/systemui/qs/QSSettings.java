@@ -20,18 +20,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
-
-import com.android.systemui.R;
 import com.android.systemui.tuner.TunerService;
 
-public class QSSettings extends LinearLayout {
+public class QSSettings extends FrameLayout {
     private QSTileHost mHost;
 
     public QSSettings(Context context) {
@@ -55,15 +56,27 @@ public class QSSettings extends LinearLayout {
 
         LinearLayout tunerSwitchRow = (LinearLayout) findViewById(R.id.tuner_switch_row);
         TextView title = (TextView) tunerSwitchRow.findViewById(R.id.title);
-        Switch tunerEnabled = (Switch) tunerSwitchRow.findViewById(R.id.switcher);
+        final Switch tunerEnabled = (Switch) tunerSwitchRow.findViewById(R.id.switcher);
         title.setText(R.string.system_ui_tuner);
         tunerEnabled.setChecked(TunerService.isTunerEnabled(mContext));
+        tunerSwitchRow.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tunerEnabled.setChecked(!tunerEnabled.isChecked());
+            }
+        });
         tunerEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 TunerService.setTunerEnabled(buttonView.getContext(), isChecked);
             }
         });
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        getParent().requestDisallowInterceptTouchEvent(true);
+        return super.onInterceptTouchEvent(ev);
     }
 
     private void initiateTileReset() {

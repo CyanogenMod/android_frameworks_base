@@ -49,7 +49,8 @@ public class QSViewPager extends ViewPager {
             View child = getChildAt(i);
             child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
             int h = child.getMeasuredHeight();
-            if (h > height) height = h;
+            // qs settings page shouldn't influence the height
+            if (h > height && !(child instanceof QSSettings)) height = h;
         }
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
