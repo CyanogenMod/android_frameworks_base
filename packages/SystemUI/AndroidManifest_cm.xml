@@ -62,5 +62,13 @@
           android:process=":tuner"
           android:exported="true"
           android:permission="android.permission.STATUS_BAR" />
+
+        <activity android:name=".tuner.TunerActivity$StatusBarIconActivity"
+          android:icon="@drawable/tuner"
+          android:theme="@android:style/Theme.Material.Settings"
+          android:label="@string/status_bar"
+          android:process=":tuner"
+          android:exported="true"
+          android:permission="android.permission.STATUS_BAR" />
     </application>
 </manifest>
