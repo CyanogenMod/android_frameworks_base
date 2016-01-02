@@ -180,8 +180,6 @@ classes.
 starting with Android 5.0 (API level 21).
       <ul>
       <li>{@link android.opengl.GLES30}</li>
-      <li>{@link android.opengl.GLES31} </li>
-      <li>{@link android.opengl.GLES31Ext} (<a href="#aep">Android Extension Pack</a>)</li>
       </ul>
     </ul>
   </li>
