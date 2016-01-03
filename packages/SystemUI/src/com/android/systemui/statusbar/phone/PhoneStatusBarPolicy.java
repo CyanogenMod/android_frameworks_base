@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2014, The Linux Foundation. All rights reserved.
  * Not a Contribution.
  *
