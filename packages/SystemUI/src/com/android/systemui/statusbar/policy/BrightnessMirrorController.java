@@ -21,8 +21,13 @@ import com.android.systemui.statusbar.ScrimView;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.StatusBarWindowView;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.widget.ImageView;
 import android.widget.FrameLayout;
 
 /**
@@ -37,14 +42,21 @@ public class BrightnessMirrorController {
     private final View mBrightnessMirror;
     private final View mPanelHolder;
     private final int[] mInt2Cache = new int[2];
+    private final ImageView mIcon;
+    private Context mContext;
 
-    public BrightnessMirrorController(View statusBarWindow) {
+    public BrightnessMirrorController(Context context, View statusBarWindow) {
+        mContext = context;
         mScrimBehind = (ScrimView) statusBarWindow.findViewById(R.id.scrim_behind);
         mBrightnessMirror = statusBarWindow.findViewById(R.id.brightness_mirror);
         mPanelHolder = statusBarWindow.findViewById(R.id.panel_holder);
+        mIcon = (ImageView) statusBarWindow.findViewById(R.id.brightness_icon);
+        // enable the brightness icon
+        mIcon.setVisibility(View.VISIBLE);
     }
 
     public void showMirror() {
+        updateIcon();
         mBrightnessMirror.setVisibility(View.VISIBLE);
         mScrimBehind.animateViewAlpha(0.0f, TRANSITION_DURATION_OUT, PhoneStatusBar.ALPHA_OUT);
         outAnimation(mPanelHolder.animate())
@@ -108,5 +120,17 @@ public class BrightnessMirrorController {
                 R.dimen.notification_side_padding);
         mBrightnessMirror.setPadding(padding, mBrightnessMirror.getPaddingTop(),
                 padding, mBrightnessMirror.getPaddingBottom());
+    }
+
+    private void updateIcon() {
+        if (mIcon != null) {
+            boolean automatic = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL,
+                    UserHandle.USER_CURRENT) != Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
+            mIcon.setImageResource(automatic ?
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_on :
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_off);
+        }
     }
 }
