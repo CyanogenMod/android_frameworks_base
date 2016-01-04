@@ -50,6 +50,7 @@ import java.io.OutputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.jar.StrictJarFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,7 @@ public class ThemeUtils {
     public static final String COMMON_RES_SUFFIX = ".common";
     public static final String COMMON_RES_TARGET = "common";
     public static final String ICON_HASH_FILENAME = "hash";
+    private static final String MANIFEST_NAME = "META-INF/MANIFEST.MF";
 
     // path to external theme resources, i.e. bootanimation.zip
     public static final String SYSTEM_THEME_PATH = "/data/system/theme";
@@ -772,8 +774,23 @@ public class ThemeUtils {
      * @param pkg
      * @return
      */
-    public static int getPackageHashCode(PackageParser.Package pkg) {
+    public static int getPackageHashCode(PackageParser.Package pkg, StrictJarFile jarFile) {
         int hash = pkg.manifestDigest != null ? pkg.manifestDigest.hashCode() : 0;
+        final ZipEntry je = jarFile.findEntry(MANIFEST_NAME);
+        if (je != null) {
+            try {
+                try {
+                    ManifestDigest digest = ManifestDigest.fromInputStream(jarFile.getInputStream(je));
+                    if (digest != null) {
+                        hash += digest.hashCode();
+                    }
+                } finally {
+                    jarFile.close();
+                }
+            } catch (IOException | RuntimeException e) {
+                // Failed to generate digest from resources.arsc
+            }
+        }
         hash = 31 * hash + IDMAP_HASH_VERSION;
         return hash;
     }
