@@ -749,6 +749,9 @@ class MountService extends IMountService.Stub
     }
 
     private void updatePublicVolumeState(StorageVolume volume, String state) {
+        if (null == volume) {
+            return;
+        }
         final String path = volume.getPath();
         final String oldState;
         synchronized (mVolumesLock) {
@@ -1002,7 +1005,7 @@ class MountService extends IMountService.Stub
             }
 
             if (code == VoldResponseCode.VolumeDiskInserted) {
-                if(!(isUsbMassStorageConnected() && volume.allowMassStorage()))
+                if(!(isUsbMassStorageConnected() && (null != volume) && volume.allowMassStorage()))
                     new Thread("MountService#VolumeDiskInserted") {
                         @Override
                         public void run() {
@@ -1090,7 +1093,7 @@ class MountService extends IMountService.Stub
                 updatePublicVolumeState(volume, Environment.MEDIA_UNMOUNTED);
                 action = Intent.ACTION_MEDIA_UNMOUNTED;
             }
-            if(isUsbMassStorageConnected() && volume.allowMassStorage())
+            if(isUsbMassStorageConnected() && (null != volume) && volume.allowMassStorage())
                 doShareUnshareVolume(path, "ums", true);
         } else if (newState == VolumeState.Pending) {
         } else if (newState == VolumeState.Checking) {
@@ -1105,7 +1108,9 @@ class MountService extends IMountService.Stub
             action = Intent.ACTION_MEDIA_EJECT;
         } else if (newState == VolumeState.Formatting) {
             synchronized (mVolumesLock) {
-                volume.setIsFormatting(true);
+                if (null != volume) {
+                    volume.setIsFormatting(true);
+                }
             }
         } else if (newState == VolumeState.Shared) {
             if (DEBUG_EVENTS) Slog.i(TAG, "Updating volume state media mounted");
@@ -1135,6 +1140,9 @@ class MountService extends IMountService.Stub
         final StorageVolume volume;
         synchronized (mVolumesLock) {
             volume = mVolumesByPath.get(path);
+            if (null == volume) {
+                return StorageResultCode.OperationFailedNoMedia;
+            }
             if (volume.getIsFormatting()) {
                 return StorageResultCode.OperationFailedStorageBusy;
             }
