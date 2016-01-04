@@ -800,11 +800,13 @@ public class Resources {
     }
 
     /** @hide */
-    public Drawable getDrawable(int id, @Nullable Theme theme, boolean supportComposedIcons)
+    public Drawable getDrawable(final int resId, @Nullable Theme theme, boolean supportComposedIcons)
             throws NotFoundException {
+        int id = resId;
         //Check if an icon is themed
         PackageItemInfo info = mIcons != null ? mIcons.get(id) : null;
-        if (info != null && info.themedIcon != 0) {
+        boolean hasThemedIcon = info != null && info.themedIcon != 0;
+        if (hasThemedIcon) {
             id = info.themedIcon;
         }
 
@@ -821,7 +823,18 @@ public class Resources {
         Drawable res = null;
         try {
             res = loadDrawable(value, id, theme);
+            if (res == null && hasThemedIcon) {
+                throw new NotFoundException(
+                    "Resource ID #0x" + Integer.toHexString(id) +
+                    " in icon pack is not valid");
+            }
         } catch (NotFoundException e) {
+            // We failed to load this themedIcon
+            if (hasThemedIcon) {
+                mIcons.remove(resId);
+                return getDrawable(resId, theme, supportComposedIcons);
+            }
+
             // The below statement will be true if we were trying to load a composed icon.
             // Since we received a NotFoundException, try to load the original if this
             // condition is true, otherwise throw the original exception.
@@ -898,7 +911,8 @@ public class Resources {
             boolean supportComposedIcons) {
         //Check if an icon was themed
         PackageItemInfo info = mIcons != null ? mIcons.get(id) : null;
-        if (info != null && info.themedIcon != 0) {
+        boolean hasThemedIcon = info != null && info.themedIcon != 0;
+        if (hasThemedIcon) {
             id = info.themedIcon;
         }
 
@@ -925,6 +939,34 @@ public class Resources {
                 } else {
                     value.density = (value.density * mMetrics.densityDpi) / density;
                 }
+            }
+        }
+
+        Drawable res = null;
+        try {
+            res = loadDrawable(value, id, theme);
+            if (res == null && hasThemedIcon) {
+                throw new NotFoundException(
+                    "Resource ID #0x" + Integer.toHexString(id) +
+                    " in icon pack not valid");
+            }
+        } catch (NotFoundException e) {
+            // We failed to load this themedIcon
+            if (hasThemedIcon) {
+                mIcons.remove(resId);
+                return getDrawable(resId, theme, supportComposedIcons);
+            }
+
+            // The below statement will be true if we were trying to load a composed icon.
+            // Since we received a NotFoundException, try to load the original if this
+            // condition is true, otherwise throw the original exception.
+            if (supportComposedIcons && mComposedIconInfo != null && info != null &&
+                    info.themedIcon == 0) {
+                Log.e(TAG, "Failed to retrieve composed icon.", e);
+                getValue(id, value, true, false);
+                res = loadDrawable(value, id, theme);
+            } else {
+                throw e;
             }
         }
 
