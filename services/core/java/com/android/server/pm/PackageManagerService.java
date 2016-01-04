@@ -6978,6 +6978,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             dataInput = new DataInputStream(in);
             int storedHashCode = dataInput.readInt();
             int actualHashCode = pkg.manifestHashCode;
+            System.out.println("Stored " + storedHashCode + " vs actual " + actualHashCode);
             return storedHashCode != actualHashCode;
         } catch(IOException e) {
             // all is good enough for government work here,
@@ -14746,6 +14747,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     @Override
     public int processThemeResources(String themePkgName) {
+        System.out.println("processThemeResources");
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.ACCESS_THEME_MANAGER, null);
         PackageParser.Package pkg = mPackages.get(themePkgName);
@@ -14754,6 +14756,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             return 0;
         }
 
+System.out.println("processThemeResources " + isIconCompileNeeded(pkg));
         // Process icons
         if (isIconCompileNeeded(pkg)) {
             try {
