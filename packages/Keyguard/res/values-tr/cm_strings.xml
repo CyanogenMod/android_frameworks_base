@@ -20,7 +20,7 @@
   <string name="keyguard_perso_locked_message">SIM/RUIM Özel kilitli</string>
   <string name="keyguard_accessibility_status">"Durum"</string>
   <string name="kg_dismiss">Vazgeç</string>
-  <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Yeni SIM kart\u0020</string>
+  <string name="kg_slot_name">Yuva <xliff:g id="number">%d</xliff:g>: Yeni SIM kart\u0020</string>
   <string name="lockscreen_sim_error_message_short">Geçersiz kart.</string>
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">SIM PIN kodunuzu girin, <xliff:g id="number">%d</xliff:g> deneme hakkınız kaldı, yoksa cihazınızın kilidini açabilmek için operatörünüz ile iletişim kurmak zorunda kalacaksınız.</item>

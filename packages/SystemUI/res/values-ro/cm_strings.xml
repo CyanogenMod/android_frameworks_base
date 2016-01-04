@@ -57,6 +57,7 @@
   <string name="accessibility_quick_settings_sync_on">Sincronizare pornită.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Sincronizare pornită.</string>
+  <string name="accessibility_quick_settings_volume_panel">Panou volum.</string>
   <string name="accessibility_dpad_left">Cursor stânga</string>
   <string name="accessibility_dpad_right">Cursor dreapta</string>
   <string name="quick_settings_mobile_data_label">Date mobile</string>
@@ -77,12 +78,13 @@
   <string name="quick_settings_lockscreen_label_enforced">Blocare ecran impusă</string>
   <string name="quick_settings_network_adb_label">ADB prin rețea</string>
   <string name="quick_settings_lte_label">4G</string>
+  <string name="quick_settings_volume_panel_label">Panou volum</string>
   <string name="quick_settings_screen_timeout_detail_title">Timpul de expirare ecran</string>
   <string name="quick_settings_usb_tether_label">Tethering USB</string>
   <string name="quick_settings_heads_up_label">Atenționare</string>
   <string name="quick_settings_ambient_display_label">Afișare ambientală</string>
   <string name="quick_settings_sync_label">Sincronizare</string>
-  <string name="quick_settings_custom_tile_detail_title">Card personalizat</string>
+  <string name="quick_settings_custom_tile_detail_title">Plăcuță personalizată</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Glisați dreapta pentru %1$s</string>
   <string name="right_shortcut_hint">Glisați stânga pentru %1$s</string>
@@ -113,8 +115,8 @@
   <string name="lockscreen_target_empty">Gol</string>
   <string name="interruption_level_silent">Silențios</string>
   <string name="zen_silent_with_warning">Fără întreruperi, exceptând alarme.</string>
-  <string name="quick_settings_remove">Elimină card</string>
-  <string name="quick_settings_dynamic_tile_detail_title">Card dinamic</string>
+  <string name="quick_settings_remove">Eliminare plăcuță</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Plăcuță dinamică</string>
   <string name="dynamic_qs_tile_next_alarm_label">Următoarea alarmă</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
   <string name="dynamic_qs_tile_su_label">Acces root</string>

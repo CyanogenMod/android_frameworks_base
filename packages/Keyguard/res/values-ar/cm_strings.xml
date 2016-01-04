@@ -17,6 +17,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">SIM/RUIM নিজস্বকরণ বন্ধ আছে</string>
-  <string name="lockscreen_sim_error_message_short">অবৈধ কার্ড।</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM مؤمن للإعدادات المخصصة</string>
+  <string name="keyguard_accessibility_status">"الحالة"</string>
+  <string name="kg_dismiss">استبعاد</string>
+  <string name="kg_slot_name">فتحة <xliff:g id="number">%d</xliff:g>: بطاقة SIM جديدة \u0020</string>
+  <string name="lockscreen_sim_error_message_short">بطاقة غير صالحة.</string>
 </resources>

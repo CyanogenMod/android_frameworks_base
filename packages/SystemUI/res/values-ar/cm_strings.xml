@@ -16,6 +16,20 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">إغلاق كل الإشعارات الأخيرة</string>
+  <string name="screenshot_delete_action">حذف</string>
+  <string name="screenshot_delete_confirmation">تم حذف لقطة الشاشة.</string>
+  <string name="advanced_dev_option_wipe_app">مسح بيانات التطبيق</string>
+  <string name="advanced_dev_option_force_stop">إيقاف إجباري</string>
+  <string name="advanced_dev_option_uninstall">إلغاء التثبيت</string>
+  <string name="accessibility_quick_settings_data_off">إيقاف البيانات النقالة.</string>
+  <string name="accessibility_quick_settings_data_on">تشغيل بيانات شبكة الجوّال.</string>
+  <string name="accessibility_quick_settings_roaming_off">إيقاف التجوال.</string>
+  <string name="accessibility_quick_settings_roaming_on">تفعيل التجوال.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ايقاف ADB عبر الشبكة.</string>
+  <string name="accessibility_quick_settings_network_adb_on">تشغيل ADB عبر الشبكة.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">تم ايقاف ADB عبر الشبكة.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">تم تشغيل ADB عبر الشبكة.</string>
   <string name="accessibility_quick_settings_ambient_display_off">تعطيل العرض المحيط.</string>
   <string name="accessibility_quick_settings_ambient_display_on">تشغيل العرض المحيط.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">تم تعطيل العرض المحيط.</string>

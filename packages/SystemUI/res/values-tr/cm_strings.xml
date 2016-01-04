@@ -24,7 +24,7 @@
   <string name="advanced_dev_option_uninstall">Kaldır</string>
   <string name="accessibility_quick_settings_data_off">Mobil veri kapalı.</string>
   <string name="accessibility_quick_settings_data_on">Mobil veri açık.</string>
-  <string name="accessibility_quick_settings_roaming_off">Dolaşım kapalı.</string>
+  <string name="accessibility_quick_settings_roaming_off">Uluslararası dolaşım kapalı.</string>
   <string name="accessibility_quick_settings_roaming_on">Dolaşım açık.</string>
   <string name="accessibility_quick_settings_network_adb_off">Ağ üzerinden ADB kapalı.</string>
   <string name="accessibility_quick_settings_network_adb_on">Ağ üzerinden ADB açık.</string>
@@ -47,7 +47,7 @@
   <string name="accessibility_quick_settings_hotspot_off">Mobil bağlantı noktası kapalı.</string>
   <string name="accessibility_quick_settings_hotspot_on">Mobil bağlantı noktası açık.</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay kapalı.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: otomatik.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: otomatik mod.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: gündüz modu.</string>
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: gece modu.</string>
   <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: açık hava modu.</string>
@@ -63,11 +63,9 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">Konum bildirimi sadece sensörler moduna geçti.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Konum bildirimi yüksek hassasiyet moduna geçti.</string>
   <string name="accessibility_quick_settings_lock_screen_off">Kilit ekranı kapalı.</string>
-  <string name="accessibility_quick_settings_lock_screen_on">Kilit ekranı kapalı.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Kilit ekranı açık.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Kilit ekranı kapatıldı.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_on">Kilit ekranı açıldı.</string>
-  <string name="accessibility_quick_settings_lte_off">LTE kapalı.</string>
-  <string name="accessibility_quick_settings_lte_on">LTE açık.</string>
   <string name="accessibility_quick_settings_lte_changed_off">LTE kapatıldı.</string>
   <string name="accessibility_quick_settings_lte_changed_on">LTE açıldı.</string>
   <string name="accessibility_quick_settings_nfc_off">NFC kapalı.</string>
@@ -83,9 +81,6 @@
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Pil modu dengeli moda geçti.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Pil modu performans moduna geçti.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Pil modu verimlilik moduna geçti.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Pil modu hızlı moda geçti.</string>
-  <string name="accessibility_quick_settings_profiles_off">Profiller kapalı.</string>
-  <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiller kapatıldı.</string>
   <string name="accessibility_quick_settings_profiles_changed"><xliff:g id="profile" example="Default">%s</xliff:g> profiline geçildi.</string>
   <string name="accessibility_quick_settings_screen_timeout">Ekran zaman aşımı : <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
@@ -103,9 +98,6 @@
   <string name="accessibility_quick_settings_battery_saver_changed_off">Pil tasarrufu kapatıldı.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_on">Pil tasarrufu açıldı.</string>
   <string name="accessibility_quick_settings_visualizer">Görselleştirici.</string>
-  <string name="accessibility_quick_settings_volume_panel">Ses paneli.</string>
-  <string name="accessibility_dpad_left">Sol imleç</string>
-  <string name="accessibility_dpad_right">Sağ imleç</string>
   <string name="quick_settings_mobile_data_label">Mobil veri</string>
   <string name="quick_settings_roaming_label">Dolaşım</string>
   <string name="quick_settings_apn_switch_label">APN anahtarı</string>
@@ -114,40 +106,20 @@
   <string name="quick_settings_location_detail_title">Konum modu</string>
   <string name="quick_settings_location_battery_saving_label">Pil tasarrufu</string>
   <string name="quick_settings_location_gps_only_label">Sadece cihaz</string>
-  <string name="quick_settings_location_high_accuracy_label">Yüksek doğruluk</string>
-  <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles_detail_title">Sistem profilleri</string>
   <string name="quick_settings_profiles_disabled">Profiller devre dışı</string>
   <string name="quick_settings_compass_label">Pusula</string>
-  <string name="quick_settings_compass_init">Başlatılıyor\u2026</string>
   <string name="quick_settings_lockscreen_label">Kilit ekranı</string>
   <string name="quick_settings_lockscreen_label_enforced">Kilit ekranı zorunlu</string>
   <string name="quick_settings_network_adb_label">Ağ üzerinden ADB</string>
-  <string name="quick_settings_lte_label">LTE</string>
-  <string name="quick_settings_volume_panel_label">Ses Paneli</string>
+  <string name="quick_settings_volume_panel_label">Ses paneli</string>
   <string name="quick_settings_screen_timeout_detail_title">Ekran zaman aşımı</string>
   <string name="quick_settings_usb_tether_label">USB İnternet Paylaşımı</string>
-  <string name="quick_settings_heads_up_label">Bildirim pencereleri</string>
-  <string name="quick_settings_ambient_display_label">Bildirim ekranı</string>
   <string name="quick_settings_sync_label">Eşitleme</string>
   <string name="quick_settings_battery_saver_label">Pil tasarrufu</string>
-  <string name="quick_settings_custom_tile_detail_title">Özel kareler</string>
-  <string name="quick_settings_performance_profile_detail_title">Pil modu</string>
-  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="quick_settings_custom_tile_detail_title">Özel kare</string>
   <string name="left_shortcut_hint">%1$s için sağa kaydırın</string>
-  <string name="right_shortcut_hint">%1$s için sola kaydırın</string>
   <string name="navbar_dialog_title">Atamak için işlev seçin</string>
-  <string name="navbar_home_button">Ana ekran tuşu</string>
-  <string name="navbar_recent_button">Son uyg. tuşu</string>
-  <string name="navbar_search_button">Arama tuşu</string>
-  <string name="navbar_back_button">Geri tuşu</string>
-  <string name="navbar_empty_button">Boş tuş</string>
-  <string name="navbar_menu_conditional_button">Menü (otoGizle) tuşu</string>
-  <string name="navbar_menu_always_button">Menü (hepGöster) tuşu</string>
-  <string name="navbar_menu_big_button">Menü tuşu</string>
-  <string name="navigation_ring_title">Hızlı başlat kısayolları</string>
-  <string name="navring_target_reset_message">Kullanıcı dolaşım kısayolları silinip varsayılana dönülsün mü?</string>
-  <string name="navring_target_reset">Dolaşım kısayolları varsayılanlara ayarlandı</string>
   <string name="navring_action_open_ime_switcher">IME Değiştiriciyi aç</string>
   <string name="navring_action_kill_app">Uygulamayı sonlandır</string>
   <string name="navring_action_none">Yok</string>
@@ -159,18 +131,6 @@
   <string name="navring_action_torch">El fenerini aç/kapat</string>
   <string name="navring_action_google_now">Google Now</string>
   <string name="navring_choose_action_title">Eylem seçin</string>
-  <string name="select_application">Uygulama seçin</string>
-  <string name="lockscreen_target_empty">Boş</string>
-  <string name="screen_pinning_description_no_navbar">Ekrandan kaldırana kadar görünümde tutar. Kaldırmak için Geri tuşuna dokunun ve tutun.</string>
   <string name="interruption_level_silent">Sessiz</string>
   <string name="zen_silent_with_warning">Alarmlar dışında rahatsız etme.</string>
-  <string name="quick_settings_remove">Kareyi kaldır</string>
-  <string name="quick_settings_dynamic_tile_detail_title">Dinamik kare</string>
-  <string name="dynamic_qs_tile_next_alarm_label">Sonraki alarm</string>
-  <string name="dynamic_qs_tile_ime_selector_label">IME seçici</string>
-  <string name="dynamic_qs_tile_su_label">Root erişimi</string>
-  <string name="fingerprint_try_again_hint">Lütfen tekrar tarayın</string>
-  <string name="accessibility_dock_battery_level">Ünite pili yüzde <xliff:g id="number">%d</xliff:g>.</string>
-  <string name="quick_settings_custom_qs_detail_empty_text">Öge bulunamadı</string>
-  <string name="play_queue_extention">Oynatma kuyruğunu göster</string>
 </resources>
