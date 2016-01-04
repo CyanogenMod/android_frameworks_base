@@ -63,6 +63,10 @@
   <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
   <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
   <string name="usb_choose_notification_title">Touch to choose USB options.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; network</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Network</string>
   <string name="permlab_interceptPackageLaunch">intercept app launch</string>
   <string name="permdesc_interceptPackageLaunch">Allows an app to intercept launch of other apps</string>
   <string name="app_ops_access_camera">access the camera</string>
@@ -132,6 +136,8 @@
   <string name="perf_profile_pwrsv">Power save</string>
   <string name="perf_profile_bal">Balanced</string>
   <string name="perf_profile_perf">Performance</string>
+  <string name="perf_profile_bias_power">Efficiency</string>
+  <string name="perf_profile_bias_perf">Quick</string>
   <string name="theme_install_error_title">Failed to install theme</string>
   <string name="theme_install_error_message">%s failed to install</string>
   <string name="theme_reset_notification_title">Theme reset</string>
@@ -194,4 +200,19 @@
   <string name="live_display_outdoor">Outdoor (bright sun)</string>
   <string name="live_display_outdoor_summary">Use outdoor settings only</string>
   <string name="live_display_hint">LiveDisplay can help reduce eyestrain and help you sleep at night. Click here to try it out!</string>
+  <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Flashlight is on</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tap to turn off</string>
+  <string name="storage_sd_dock_card">Dock SD card</string>
+  <string name="fingerprint_default_name">Fingerprint <xliff:g id="number">%d</xliff:g></string>
+  <string name="permlab_accessFingerprintService">access fingerprint service</string>
+  <string name="permdesc_accessFingerprintService">Allows an app to access the fingerprint service. The app can add, delete, rename and authenticate against fingerprints</string>
+  <string name="permlab_resetBatteryStats">reset battery statistics</string>
+  <string name="permdesc_resetBatteryStats">Allows an application to reset the current low-level battery use data.</string>
+  <string name="silent_mode_priority">Priority</string>
+  <string name="silent_mode_none">None</string>
+  <string name="subscription_change_disabled_wifi_ap">Disabled Wi-Fi hotspot due to SIM subscription change</string>
+  <string name="notify_turn_wifi_off_title">Turn Wi-Fi off</string>
+  <string name="permlab_thirdPartyKeyguard">third party lock screen</string>
+  <string name="permdesc_thirdPartyKeyguard">Allows an app to be used as an insecure lock screen.</string>
 </resources>

@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Batterimodus: strømsparing.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Batterimodus: balansert.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Batterimodus: ytelse.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Batterimodus: effektivitet modus.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Batterimodus: hurtigmodus.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batterimodus er endret til strømsparingsmodus.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Batterimodus er endret til balansert modus.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Batterimodus er endret til ytelsesmodus.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Batterimodus endret til effektivitet modus.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Batterimodus endret til hurtigmodus.</string>
   <string name="accessibility_quick_settings_profiles_off">Profiler av.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s </xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiler deaktivert.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Synkronisering</string>
   <string name="quick_settings_battery_saver_label">Batterisparing</string>
   <string name="quick_settings_custom_tile_detail_title">Egendefinerte fliser</string>
+  <string name="quick_settings_performance_profile_detail_title">Batterimodus</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Sveip til høyre for %1$s</string>
   <string name="right_shortcut_hint">Sveip til venstre for %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Skann på nytt</string>
   <string name="accessibility_dock_battery_level">Dokkingstasjonens batteri <xliff:g id="number"> %d</xliff:g> prosent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Ingen elementer funnet</string>
+  <string name="play_queue_extention">Vis avspillingskø</string>
 </resources>
