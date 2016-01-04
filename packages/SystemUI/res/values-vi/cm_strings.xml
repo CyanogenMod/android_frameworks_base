@@ -16,6 +16,20 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="clear_recents">Đóng tất cả thông báo gần đây</string>
+  <string name="screenshot_delete_action">Xoá</string>
+  <string name="screenshot_delete_confirmation">Đã xoá ảnh chụp màn hình.</string>
+  <string name="advanced_dev_option_wipe_app">Xoá dữ liệu ứng dụng</string>
+  <string name="advanced_dev_option_force_stop">Buộc dừng</string>
+  <string name="advanced_dev_option_uninstall">Gỡ cài đặt</string>
+  <string name="accessibility_quick_settings_data_off">Dữ liệu di động: tắt.</string>
+  <string name="accessibility_quick_settings_data_on">Dữ liệu di động: bật.</string>
+  <string name="accessibility_quick_settings_roaming_off">Chuyển vùng: tắt.</string>
+  <string name="accessibility_quick_settings_roaming_on">Chuyển vùng: bật.</string>
+  <string name="accessibility_quick_settings_network_adb_off">ADB qua mạng: tắt.</string>
+  <string name="accessibility_quick_settings_network_adb_on">ADB qua mạng: bật.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_off">Đã tắt ADB qua mạng.</string>
+  <string name="accessibility_quick_settings_network_adb_changed_on">Đã bật ADB qua mạng.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Tắt hiển thị môi trường xung quanh.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Hiển thị môi trường xung quanh bật.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Hiển thị môi trường xung quanh đã tắt.</string>
@@ -42,6 +56,9 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay đã đổi sang chế độ ban ngày.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay đã đổi sang chế độ ban đêm.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay đã đổi sang chế độ ngoài trời.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Báo cáo vị trí: chế độ tiết kiệm pin.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Báo cáo vị trí: chế độ chỉ cám biến.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Báo cáo vị trí: chế độ chính xác cao.</string>
   <string name="accessibility_quick_settings_location_changed_battery_saving">Báo cáo vị trí đã đổi sang chế độ tiết kiệm pin.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Báo cáo vị trí đã đổi sang chế độ chỉ cảm biến.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Báo cáo vị trí đã đổi sang chế độ chính xác cao.</string>
@@ -60,25 +77,62 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Chế độ pin: chế độ tiết kiệm năng lượng.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Chế độ pin: chế độ cân bằng.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Pin chế độ: chế độ hiệu suất.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Chế độ pin: chế độ hiệu quả.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Chế độ pin: chế độ nhanh.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Chế độ pin đã đổi sang chế độ tiết kiệm năng lượng.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Chế độ pin đã đổi sang chế độ cân bằng.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Chế độ pin đã đổi sang chế độ hiệu suất.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Chế độ pin được chuyển sang hiệu quả.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Chế độ pin được chuyển sang nhanh.</string>
   <string name="accessibility_quick_settings_profiles_off">Hồ sơ tắt.</string>
   <string name="accessibility_quick_settings_profiles">Hồ sơ: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Hồ sơ đã tắt.</string>
   <string name="accessibility_quick_settings_profiles_changed">Hồ sơ đã đổi thành <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout">Thời gian chờ của màn hình: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Thời gian chờ của màn hình đã đổi thành <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_sync_off">Tắt đồng bộ.</string>
+  <string name="accessibility_quick_settings_sync_on">Bật đồng bộ.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Đã tắt đồng bộ.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Đã bật đồng bộ.</string>
   <string name="accessibility_quick_settings_usb_tether_off">Chia sẻ kết nối qua USB tắt.</string>
   <string name="accessibility_quick_settings_usb_tether_on">Chia sẻ kết nối qua USB bật.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">Chia sẻ kết nối qua USB đã tắt.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">Chia sẻ kết nối qua USB đã bật.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Trình tiết kiệm pin: Tắt.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Trình tiết kiệm pin: Bật.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Đã tắt Trinh tiết kiệm pin.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Đã bật Trình tiết kiệm pin.</string>
   <string name="accessibility_quick_settings_visualizer">Trình hiển thị trực quan.</string>
+  <string name="accessibility_quick_settings_volume_panel">Bảng điều khiển âm lượng.</string>
+  <string name="accessibility_dpad_left">Trỏ trái</string>
+  <string name="accessibility_dpad_right">Trỏ phải</string>
+  <string name="quick_settings_mobile_data_label">Dữ liệu di động</string>
+  <string name="quick_settings_roaming_label">Chuyển vùng</string>
+  <string name="quick_settings_apn_switch_label">Chuyển đổi APN</string>
   <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> dữ liệu di động</string>
+  <string name="quick_settings_data_off">Tắt dữ liệu di động</string>
+  <string name="quick_settings_location_detail_title">Chế độ vị trí</string>
+  <string name="quick_settings_location_battery_saving_label">Tiết kiệm pin</string>
+  <string name="quick_settings_location_gps_only_label">Chỉ thiết bị</string>
+  <string name="quick_settings_location_high_accuracy_label">Chính xác cao</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles_detail_title">Cấu hình hệ thống</string>
+  <string name="quick_settings_profiles_disabled">Cấu hình bị vô hiệu hóa</string>
+  <string name="quick_settings_compass_label">La bàn</string>
+  <string name="quick_settings_compass_init">Đang khởi tạo\u2026</string>
+  <string name="quick_settings_lockscreen_label">Màn hình khoá</string>
+  <string name="quick_settings_lockscreen_label_enforced">Buộc khoá màn hình</string>
+  <string name="quick_settings_network_adb_label">ADB qua mạng</string>
+  <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_volume_panel_label">Bảng điều khiển âm lượng</string>
+  <string name="quick_settings_screen_timeout_detail_title">Thời gian sáng màn hình</string>
+  <string name="quick_settings_usb_tether_label">Kết nối mạng qua USB</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_ambient_display_label">Hiển thị môi trường xung quanh</string>
+  <string name="quick_settings_sync_label">Đồng bộ</string>
+  <string name="quick_settings_battery_saver_label">Trình tiết kiệm pin</string>
   <string name="quick_settings_custom_tile_detail_title">Kiểu xếp cạnh nhau tùy chỉnh</string>
+  <string name="quick_settings_performance_profile_detail_title">Chế độ pin</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Vuốt sang phải cho %1$s</string>
   <string name="right_shortcut_hint">Vuốt sang trái cho %1$s</string>
@@ -118,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Vui lòng quét một lần nữa</string>
   <string name="accessibility_dock_battery_level">Thanh pin <xliff:g id="number">%d</xliff:g> phần trăm.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Không tìm thấy mục nào</string>
+  <string name="play_queue_extention">Hiện danh sách chờ phát</string>
 </resources>

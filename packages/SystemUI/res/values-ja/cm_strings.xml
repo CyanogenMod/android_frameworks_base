@@ -136,7 +136,7 @@
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">右にスワイプして%1$s</string>
   <string name="right_shortcut_hint">左にスワイプして%1$s</string>
-  <string name="navbar_dialog_title">割り当てる動作を選択</string>
+  <string name="navbar_dialog_title">設定する動作を選択</string>
   <string name="navbar_home_button">ホームボタン</string>
   <string name="navbar_recent_button">最近使ったアプリボタン</string>
   <string name="navbar_search_button">検索ボタン</string>

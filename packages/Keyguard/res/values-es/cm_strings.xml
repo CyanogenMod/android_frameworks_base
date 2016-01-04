@@ -20,14 +20,14 @@
   <string name="keyguard_perso_locked_message">SIM/RUIM con bloqueo personal</string>
   <string name="keyguard_accessibility_status">"Estado"</string>
   <string name="kg_dismiss">Descartar</string>
-  <string name="kg_slot_name">Ranura <xliff:g id="number">%d </xliff:g>: Nueva tarjeta SIM\u0020</string>
+  <string name="kg_slot_name">Ranura <xliff:g id="number">%d</xliff:g>: Nueva tarjeta SIM\u0020</string>
   <string name="lockscreen_sim_error_message_short">Tarjeta no válida.</string>
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Introduce el código PIN. Tienes <xliff:g id="number">%d</xliff:g> intento restante antes de tener que comunicarte con tu operadora para desbloquear el dispositivo.</item>
     <item quantity="other">Introduce el código PIN. Tienes <xliff:g id="number">%d</xliff:g> intentos restantes.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">SIM deshabilitada. Introduce el código PUK para continuar. Tienes <xliff:g id="number">%d</xliff:g> intento restante antes de inutilizar la tarjeta SIM permanentemente. Para obtener más información, ponte en contacto con tu operadora.</item>
-    <item quantity="other">SIM deshabilitada. Introduce el código PUK para continuar. Tienes <xliff:g id="number">%d</xliff:g> intentos restantes antes de inutilizar la tarjeta SIM permanentemente. Para obtener más información, ponte en contacto con tu operadora.</item>
+    <item quantity="one">SIM desactivada. Introduce el código PUK para continuar. Tienes <xliff:g id="number">%d</xliff:g> intento restante antes de inutilizar la tarjeta SIM permanentemente. Para obtener más información, ponte en contacto con tu operadora.</item>
+    <item quantity="other">La tarjeta SIM está desactivada. Introduce el código PUK para continuar. Tienes <xliff:g id="number">%d</xliff:g> intentos restantes antes de inutilizar la tarjeta SIM permanentemente. Para obtener más información, ponte en contacto con tu operadora.</item>
   </plurals>
 </resources>

@@ -195,7 +195,7 @@
   <string name="live_display_day_summary">Alleen instellingen voor overdag gebruiken</string>
   <string name="live_display_night">\'s Nachts</string>
   <string name="live_display_night_summary">Alleen instellingen voor \'s nachts gebruiken</string>
-  <string name="live_display_outdoor">Buitenshuis (heldere zon)</string>
+  <string name="live_display_outdoor">Buitenshuis (felle zon)</string>
   <string name="live_display_outdoor_summary">Alleen instellingen voor buitenshuis gebruiken</string>
   <string name="live_display_hint">LiveDisplay kan oogvermoeidheid verminderen en helpt u om \'s nachts te slapen. Tik hier om het uit te proberen</string>
   <string name="lock_to_app_toast_no_navbar">Blijf de Terug-knop aanraken om dit scherm los te maken.</string>

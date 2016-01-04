@@ -60,6 +60,7 @@
   <string name="app_ops_access_location">আপনার অবস্থানে প্রবেশাধিকার</string>
   <string name="app_ops_access_notifications">আপনার নোটিফিকেশানস প্রবেশাধিকার</string>
   <string name="app_ops_alarm_wakeup">ডিভাইস জেগে ওঠা</string>
+  <string name="app_ops_get_usage_stats">অ্যাপের সংস্থান তথ্যাদি পান</string>
   <string name="app_ops_keep_device_awake">আপনার ডিভাইস জাগ্রত রাখা</string>
   <string name="app_ops_make_phone_call">একটি ফোন কল করুন</string>
   <string name="app_ops_modify_calendar">আপনার পঞ্জিকা হালনাগাদ করুন</string>
@@ -104,4 +105,17 @@
   <string name="theme_install_error_title">থিম ইনস্টল করতে ব্যর্থ হয়েছে</string>
   <string name="theme_install_error_message">%s ইনস্টল করতে ব্যর্থ হয়েছে</string>
   <string name="permlab_interceptSmsSent">বহির্গামী এসএমএস বিছিন্ন</string>
+  <string name="usb_media_removed">ইউএসবি সংগ্রহশালা অপসারণ করা হয়েছে।</string>
+  <string name="usb_media_shared">ইউএসবি সংগ্রহস্থল বর্তমানে একটি কম্পিউটার দ্বারা ব্যবহৃত হচ্ছে।</string>
+  <string name="usb_ext_media_safe_unmount_notification_title">ইউএসবি সংগ্রহশালা অপসারণের জন্যে নিরাপদ</string>
+  <string name="live_display_auto">স্বয়ংক্রিয়</string>
+  <string name="live_display_off">বন্ধ</string>
+  <string name="live_display_off_summary">সব সামঞ্জস্যগুলি অক্ষম করুন</string>
+  <string name="live_display_day_summary">শুধু দিবা রূপান্তর নির্ধারণ ব্যবহার করুন</string>
+  <string name="live_display_night_summary">কেবল রাতের রূপান্তর নির্ধারণ ব্যবহার করুন</string>
+  <string name="live_display_outdoor">বহিরঙ্গন (উজ্জ্বল সূর্যালোক)</string>
+  <string name="live_display_outdoor_summary">শুধুমাত্র বহিরঙ্গন রূপান্তর নির্ধারণ ব্যবহার করুন</string>
+  <string name="permlab_resetBatteryStats">ব্যাটারির পরিসংখ্যান পুনঃবিন্যাস করুন</string>
+  <string name="silent_mode_priority">অগ্রাধিকার</string>
+  <string name="notify_turn_wifi_off_title">ওয়াইফাই বন্ধ করুন</string>
 </resources>

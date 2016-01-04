@@ -72,7 +72,7 @@
   <string name="app_ops_access_notifications">citește notificările</string>
   <string name="app_ops_activate_vpn">activați un VPN</string>
   <string name="app_ops_alarm_wakeup">trezește dispozitivul</string>
-  <string name="app_ops_su">obține acces root</string>
+  <string name="app_ops_su">obțină acces root</string>
   <string name="app_ops_auto_start">lansează la pornire</string>
   <string name="app_ops_delete_call_log">șterge lista de apeluri</string>
   <string name="app_ops_delete_contacts">șterge lista de contacte</string>
