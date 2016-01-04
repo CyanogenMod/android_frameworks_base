@@ -20,7 +20,7 @@
   <string name="profile_picker_title">Perfis</string>
   <string name="global_action_choose_profile">Perfil</string>
   <string name="profile_none">Nenhum</string>
-  <string name="global_action_screenshot">Capturar ecrã</string>
+  <string name="global_action_screenshot">Captura de ecrã</string>
   <string name="permlab_receiveProtectedSms">receber SMS protegida</string>
   <string name="permdesc_receiveProtectedSms">Permite que a aplicação receba uma SMS protegida.</string>
   <string name="permlab_modifyProtectedSmsList">modificar a lista de SMS protegidas</string>
@@ -30,9 +30,9 @@
   <string name="permlab_accessThemeService">Aceder ao serviço de temas</string>
   <string name="permdesc_accessThemeService">Permite a uma aplicação aceder ao serviço de temas. Nunca deverá ser necessário para aplicações normais.</string>
   <string name="permlab_readThemes">ler a informação do tema</string>
-  <string name="permdesc_readThemesDesc">Permite a uma aplicação ler os seus temas e determinar qual o tema que têm aplicado.</string>
+  <string name="permdesc_readThemesDesc">Permite a uma aplicação ler os seus temas e determinar qual o tema que tem aplicado.</string>
   <string name="permlab_writeThemes">modificar os seus temas</string>
-  <string name="permdesc_writeThemesDesc">Permite a uma aplicação inserir novos temas e modificar o tema que têm aplicado.</string>
+  <string name="permdesc_writeThemesDesc">Permite a uma aplicação inserir novos temas e modificar o tema que tem aplicado.</string>
   <string name="permlab_readPhoneBlacklist">Ler a lista negra do telefone</string>
   <string name="permdesc_readPhoneBlacklist">Permite a uma aplicação ler informações sobre números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
   <string name="permlab_changePhoneBlacklist">Alterar a lista negra do telefone</string>
@@ -57,12 +57,12 @@
   <string name="reboot_confirm" product="default">O seu telemóvel irá reiniciar.</string>
   <string name="reboot_progress">A reiniciar\u2026</string>
   <string name="app_killed_message">Aplicação terminada</string>
-  <string name="adb_net_active_notification_title">ADB sobre rede ativado</string>
-  <string name="adb_both_active_notification_title">ABD sobre USB e rede ativado</string>
+  <string name="adb_net_active_notification_title">ADB através da rede ativado</string>
+  <string name="adb_both_active_notification_title">ABD através de USB e da rede ativado</string>
   <string name="adb_active_generic_notification_message">Toque para desativar a depuração.</string>
   <string name="usb_choose_notification_title">Toque para escolher as opções USB.</string>
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
-  <string name="adb_active_custom_tile_both">USB &amp; rede</string>
+  <string name="adb_active_custom_tile_both">USB e rede</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rede</string>
   <string name="permlab_interceptPackageLaunch">Intercetar a inicialização de uma aplicação</string>

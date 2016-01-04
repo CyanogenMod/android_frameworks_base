@@ -17,6 +17,54 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="profile_picker_title">الملفات التعريفية</string>
+  <string name="global_action_choose_profile">ملف تعريف</string>
+  <string name="profile_none">بلا</string>
+  <string name="global_action_screenshot">لقطة شاشة</string>
+  <string name="permlab_receiveProtectedSms">استلام رسالة نصية قصيرة محمية</string>
+  <string name="permdesc_receiveProtectedSms">يسمح للتطبيق باستلام رسالة نصية قصيرة محمية واردة.</string>
+  <string name="permlab_modifyProtectedSmsList">تعديل قائمة الرسائل النصية القصيرة المحمية</string>
+  <string name="permdesc_modifyProtectedSmsList">السماح للتطبيق بتعديل قائمة عناوين الرسائل النصية القصيرة المحمية.</string>
+  <string name="permgrouplab_security">الأمان</string>
+  <string name="permgroupdesc_security">أذونات متعلقة بمعلومات حماية الجهاز.</string>
+  <string name="permlab_accessThemeService">الوصول إلى خدمة السمة</string>
+  <string name="permdesc_accessThemeService">يسمح للتطبيق بالوصول إلى خدمة السمة. ينبغي أن لا تكون ضرورية ابدأ للتطبيقات العادية.</string>
+  <string name="permlab_readThemes">قراءة معلومات السمة لديك</string>
+  <string name="permdesc_readThemesDesc">يسمح للتطبيق بقراءة السمات الخاصة بك وتحديد السمة التي قمت بتطبيقها.</string>
+  <string name="permlab_writeThemes">تعديل السمات الخاصة بك</string>
+  <string name="permdesc_writeThemesDesc">السماح للتطبيق بإدخال سمات جديدة
+وتعديل السمة التي قمت بتطبيقها.</string>
+  <string name="permlab_readPhoneBlacklist">قراءة القائمة السوداء للهاتف</string>
+  <string name="permdesc_readPhoneBlacklist">السماح للتطبيق بقراءة المعلومات الخاصة بأرقام الهاتف المحظورة بالنبسة للمكالمات أو الرسائل الواردة.</string>
+  <string name="permlab_changePhoneBlacklist">تغيير القائمة السوداء للهاتف</string>
+  <string name="permdesc_changePhoneBlacklist">السماح للتطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
+  <string name="permlab_changePrivacyGuardState">تمكين أو تعطيل حارس الخصوصية</string>
+  <string name="permdesc_changePrivacyGuardState">يسمح للتطبيق بتغيير ما إذا كان تطبيق آخر يعمل مع \"حارس الخصوصية\". عندما يتم تشغيل تطبيق مع \"حارس الخصوصية\"، فلن يُسمح بالوصول إلى البيانات الشخصية كجهات الاتصال أو سجلات المكالمات أو الرسائل.</string>
+  <string name="privacy_guard_notification">حارس الخصوصية نشط</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> لن تكون قادراً على الوصول إلى البيانات الشخصية</string>
+  <string name="permlab_setKeyguardWallpaper">تعيين خلفية شاشة الحارس الرئيسي</string>
+  <string name="permdesc_setKeyguardWallpaper">السماج للتطبيق بتغيير خلفية شاشة التأمين.</string>
+  <string name="privacy_guard_dialog_title">حارس الخصوصية</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> يرغب في <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="global_action_reboot">إعادة تمهيد</string>
+  <string name="global_action_current_user">الحالي</string>
+  <string name="reboot_reboot">إعادة التمهيد</string>
+  <string name="reboot_recovery">استرداد</string>
+  <string name="reboot_bootloader">محمل التمهيد</string>
+  <string name="reboot_download">التنزيل</string>
+  <string name="reboot_soft">إعادة تمهيد سريعة</string>
+  <string name="reboot_title">إعادة التمهيد</string>
+  <string name="reboot_progress">إعادة التمهيد\u2026</string>
+  <string name="app_killed_message">تم إنهاء التطبيق</string>
+  <string name="adb_net_active_notification_title">تمكين ADB عبر الشبكة</string>
+  <string name="adb_both_active_notification_title">ADB عبر USB &amp; تمكين الشبكة</string>
+  <string name="adb_active_generic_notification_message">انقر لتعطيل تصحيح الأخطاء.</string>
+  <string name="usb_choose_notification_title">المس لاظهار خيارات USB.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="permlab_interceptPackageLaunch">مقاطعة تشغيل التطبيق</string>
+  <string name="permdesc_interceptPackageLaunch">السماح للتطبيق بمقاطعة تشغيل تطبيقات أخرى</string>
+  <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
+  <string name="app_ops_access_location">الوصول إلى موقعك</string>
   <string name="app_ops_access_notifications">قراءة إشعاراتك</string>
   <string name="app_ops_su">الحصول على صلاحيات الجذر</string>
   <string name="fingerprint_default_name">بصمة الإصبع <xliff:g id="number">%d </xliff:g></string>
