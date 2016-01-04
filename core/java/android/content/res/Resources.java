@@ -800,8 +800,9 @@ public class Resources {
     }
 
     /** @hide */
-    public Drawable getDrawable(int id, @Nullable Theme theme, boolean supportComposedIcons)
+    public Drawable getDrawable(final int resId, @Nullable Theme theme, boolean supportComposedIcons)
             throws NotFoundException {
+        int id = resId;
         //Check if an icon is themed
         PackageItemInfo info = mIcons != null ? mIcons.get(id) : null;
         if (info != null && info.themedIcon != 0) {
@@ -822,6 +823,12 @@ public class Resources {
         try {
             res = loadDrawable(value, id, theme);
         } catch (NotFoundException e) {
+            // We failed to load this themedIcon
+            if (info != null && info.themedIcon != 0) {
+                mIcons.remove(resId);
+                return getDrawable(resId, theme, supportComposedIcons);
+            }
+
             // The below statement will be true if we were trying to load a composed icon.
             // Since we received a NotFoundException, try to load the original if this
             // condition is true, otherwise throw the original exception.
