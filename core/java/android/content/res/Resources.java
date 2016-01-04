@@ -800,11 +800,12 @@ public class Resources {
     }
 
     /** @hide */
-    public Drawable getDrawable(int id, @Nullable Theme theme, boolean supportComposedIcons)
+    public Drawable getDrawable(final int resId, @Nullable Theme theme, boolean supportComposedIcons)
             throws NotFoundException {
+        int id = resId;
         //Check if an icon is themed
         PackageItemInfo info = mIcons != null ? mIcons.get(id) : null;
-        if (info != null && info.themedIcon != 0) {
+        if (info != null && info.themedIcon != 0 && supportComposedIcons) {
             id = info.themedIcon;
         }
 
@@ -826,10 +827,10 @@ public class Resources {
             // Since we received a NotFoundException, try to load the original if this
             // condition is true, otherwise throw the original exception.
             if (supportComposedIcons && mComposedIconInfo != null && info != null &&
-                    info.themedIcon == 0) {
+                    info.themedIcon != 0) {
                 Log.e(TAG, "Failed to retrieve composed icon.", e);
-                getValue(id, value, true, false);
-                res = loadDrawable(value, id, theme);
+                getValue(resId, value, true, false);
+                res = loadDrawable(value, resId, theme);
             } else {
                 throw e;
             }
@@ -1324,11 +1325,12 @@ public class Resources {
     }
 
     /** @hide */
-    public void getValue(int id, TypedValue outValue, boolean resolveRefs,
+    public void getValue(final int resId, TypedValue outValue, boolean resolveRefs,
             boolean supportComposedIcons) throws NotFoundException {
+        int id = resId;
         //Check if an icon was themed
         PackageItemInfo info = mIcons != null ? mIcons.get(id) : null;
-        if (info != null && info.themedIcon != 0) {
+        if (info != null && info.themedIcon != 0 && supportComposedIcons) {
             id = info.themedIcon;
         }
         boolean found = mAssets.getResourceValue(id, 0, outValue, resolveRefs);

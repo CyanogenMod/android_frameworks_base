@@ -226,8 +226,8 @@ public class StatusBarIconView extends AnimatedImageView {
             return r.getDrawable(icon.iconId);
         } catch (RuntimeException e) {
             Log.w(TAG, "Icon not found in "
-                  + (icon.iconPackage != null ? icon.iconId : "<system>")
-                  + ": " + Integer.toHexString(icon.iconId));
+                  + (icon.iconPackage != null ? icon.iconPackage : "<system>")
+                  + ": " + Integer.toHexString(icon.iconId), e);
         }
 
         return null;
