@@ -561,6 +561,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     record.destinationPage = tileDestPage;
                     recordMap.put(tile, record);
                     mRecords.add(i, record);
+                    mPagerAdapter.notifyDataSetChanged();
 
                     // add the view
                     mPages.get(record.destinationPage).addView(record.tileView);
