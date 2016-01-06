@@ -154,7 +154,7 @@ public class BrightnessController implements ToggleSlider.Listener {
                 com.android.internal.R.bool.config_automatic_brightness_available);
         mPower = IPowerManager.Stub.asInterface(ServiceManager.getService("power"));
 
-	if (mIcon != null) {
+        if (mIcon != null) {
             if (mAutomaticAvailable) {
                 mIcon.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -276,7 +276,7 @@ public class BrightnessController implements ToggleSlider.Listener {
 
     private void updateIcon(boolean automatic) {
         if (mIcon != null) {
-		mIcon.setImageResource(automatic ?
+            mIcon.setImageResource(automatic ?
                     com.android.systemui.R.drawable.ic_qs_brightness_auto_on :
                     com.android.systemui.R.drawable.ic_qs_brightness_auto_off);
         }

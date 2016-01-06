@@ -26,7 +26,7 @@
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_qs_brightness_auto_off"
         android:contentDescription="@null"
-	android:paddingLeft="8dp"
+        android:paddingLeft="8dp"
         android:visibility="gone" />
 
     <com.android.systemui.settings.ToggleSlider
