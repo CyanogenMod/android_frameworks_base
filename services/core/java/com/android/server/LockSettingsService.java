@@ -78,7 +78,7 @@ public class LockSettingsService extends ILockSettings.Stub {
     private final Context mContext;
 
     private final LockSettingsStorage mStorage;
-    private final LockSettingsStrongAuth mStrongAuth = new LockSettingsStrongAuth();
+    private final LockSettingsStrongAuth mStrongAuth;
 
     private LockPatternUtils mLockPatternUtils;
     private boolean mFirstCallToVold;
@@ -94,6 +94,7 @@ public class LockSettingsService extends ILockSettings.Stub {
 
     public LockSettingsService(Context context) {
         mContext = context;
+        mStrongAuth = new LockSettingsStrongAuth();
         // Open the database
 
         mLockPatternUtils = new LockPatternUtils(context);
