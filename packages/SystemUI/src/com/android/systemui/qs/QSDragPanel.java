@@ -1838,11 +1838,14 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             title.setText(group);
 
             if (isExpanded) {
-                expansionIndicator.setColorFilter(0xFF80cbc4, PorterDuff.Mode.SRC_ATOP);
-                systemOrAppIcon.setColorFilter(0xFF80cbc4, PorterDuff.Mode.SRC_ATOP);
-                title.setTextColor(0xFF80cbc4);
+                expansionIndicator.setColorFilter(
+                  context.getColor(
+                    R.color.qs_detailed_expansion_indicator_color), PorterDuff.Mode.SRC_ATOP);
+                systemOrAppIcon.setColorFilter(
+                  context.getColor(R.color.qs_detailed_icon_tint_color), PorterDuff.Mode.SRC_ATOP);
+                title.setTextColor(context.getColor(R.color.qs_detailed_title_text_color));
             } else {
-                title.setTextColor(Color.WHITE);
+                title.setTextColor(context.getColor(R.color.qs_detailed_default_text_color);
                 systemOrAppIcon.setColorFilter(null);
                 expansionIndicator.setColorFilter(null);
             }
