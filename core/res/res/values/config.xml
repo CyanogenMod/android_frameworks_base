@@ -504,6 +504,12 @@
     <!-- Integer indicating RSSI boost given to current network -->
     <integer translatable="false" name="config_wifi_framework_current_network_boost">25</integer>
 
+    <!-- Integer indicating the number of selective channel scan when Wifi turn on -->
+    <integer translatable="false" name="config_max_initial_scans_on_selective_channels">2</integer>
+
+    <!-- Integer indicating the interval for selective channel scan when Wifi turn on -->
+    <integer translatable="false" name="config_initial_saved_channel_scan_interval">2000</integer>
+
     <!-- Integer indicating how to handle beacons with uninitialized RSSI value of 0 -->
     <integer translatable="false" name="config_wifi_framework_scan_result_rssi_level_patchup_value">-85</integer>
 
