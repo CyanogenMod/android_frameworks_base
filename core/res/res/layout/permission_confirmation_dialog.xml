@@ -42,6 +42,7 @@
         android:shrinkColumns="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:paddingLeft="16dip"
         android:paddingRight="16dip">
 
@@ -50,17 +51,14 @@
             android:layout_height="wrap_content" >
             <RelativeLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="12dip"
                 android:paddingLeft="8dip" >
             <CheckBox android:id="@+id/permission_remember_choice_checkbox"
-                android:paddingTop="11dip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             </RelativeLayout>
             <TextView android:id="@+id/permission_remember_choice_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="18dip"
                 android:text="@string/permission_remember_choice" />
         </TableRow>
 
