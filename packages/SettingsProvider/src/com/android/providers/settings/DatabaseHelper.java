@@ -2742,11 +2742,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
              */
 
             //LEGACY CAF CHANGES
-            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_input_method))) {
-                loadStringSetting(stmt, Settings.Secure.DEFAULT_INPUT_METHOD,
-                        R.string.def_input_method);
-            }
-
             if (!TextUtils.isEmpty(mContext.getResources().getString(
                     R.string.def_enable_input_methods))) {
                 loadStringSetting(stmt, Settings.Secure.ENABLED_INPUT_METHODS,
