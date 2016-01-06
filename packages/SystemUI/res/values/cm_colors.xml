@@ -97,4 +97,10 @@
     <color name="play_button_text_color">#000000</color>
     <color name="zen_ic_close_tint_color">@android:color/white</color>
     <color name="header_debug_info_text_color">#00A040</color>
+
+    <!-- QS Detailed View Text and Icon Colors -->
+    <color name="qs_detailed_default_text_color">@android:color/white</color>
+    <color name="qs_detailed_expansion_indicator_color">@color/qs_title_text_color</color>
+    <color name="qs_detailed_title_text_color">@color/qs_title_text_color</color>
+    <color name="qs_detailed_icon_tint_color">@color/qs_title_text_color</color>
 </resources>
