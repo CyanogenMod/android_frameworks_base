@@ -1184,19 +1184,23 @@ public class NotificationPanelView extends PanelView implements
     private KeyguardExternalView.KeyguardExternalViewCallbacks mExternalKeyguardViewCallbacks =
             new KeyguardExternalView.KeyguardExternalViewCallbacks() {
         @Override
-        public void dismiss() {
+        public boolean requestDismiss() {
             if (hasExternalKeyguardView()) {
                 mStatusBar.setBarState(StatusBarState.KEYGUARD);
                 mStatusBar.showBouncer();
+                return true;
             }
+            return false;
         }
 
         @Override
-        public void dismissAndStartActivity(Intent intent) {
+        public boolean requestDismissAndStartActivity(Intent intent) {
             if (hasExternalKeyguardView()) {
                 mStatusBar.setBarState(StatusBarState.KEYGUARD);
                 mStatusBar.startActivity(intent, true);
+                return true;
             }
+            return false;
         }
 
         @Override
