@@ -1812,6 +1812,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
                                  ViewGroup parent) {
             LinearLayout row = (LinearLayout) convertView;
+            Resources res = getContext().getResources();
             if (row == null) {
                 row = (LinearLayout) LayoutInflater.from(mContext)
                         .inflate(R.layout.qs_tile_category_row, parent, false);
@@ -1838,11 +1839,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             title.setText(group);
 
             if (isExpanded) {
-                expansionIndicator.setColorFilter(0xFF80cbc4, PorterDuff.Mode.SRC_ATOP);
-                systemOrAppIcon.setColorFilter(0xFF80cbc4, PorterDuff.Mode.SRC_ATOP);
-                title.setTextColor(0xFF80cbc4);
+                expansionIndicator.setColorFilter(res.getColor(R.color.qs_detailed_title_text_color), PorterDuff.Mode.SRC_ATOP);
+                systemOrAppIcon.setColorFilter(res.getColor(R.color.qs_detailed_icon_tint_color), PorterDuff.Mode.SRC_ATOP);
+                title.setTextColor(res.getColor(R.color.qs_detailed_title_text_color));
             } else {
-                title.setTextColor(Color.WHITE);
+                title.setTextColor(res.getColor(R.color.qs_detailed_default_text_color);
                 systemOrAppIcon.setColorFilter(null);
                 expansionIndicator.setColorFilter(null);
             }
