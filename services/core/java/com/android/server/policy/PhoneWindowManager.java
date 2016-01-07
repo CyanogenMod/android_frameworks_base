@@ -372,6 +372,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int[] mNavigationBarHeightForRotation = new int[4];
     int[] mNavigationBarWidthForRotation = new int[4];
 
+    WindowState mKeyguardPanel;
+
     KeyguardServiceDelegate mKeyguardDelegate;
     final Runnable mWindowManagerDrawCallback = new Runnable() {
         @Override
@@ -1462,7 +1464,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     Runnable mBackLongPress = new Runnable() {
         public void run() {
-            if (ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
+            if (!unpinActivity(false) && ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
                 performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
                 Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
             }
@@ -2359,6 +2361,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 permission = android.Manifest.permission.SYSTEM_ALERT_WINDOW;
                 outAppOp[0] = AppOpsManager.OP_SYSTEM_ALERT_WINDOW;
                 break;
+            case TYPE_KEYGUARD_PANEL:
+                permission =
+                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD;
+                break;
             default:
                 permission = android.Manifest.permission.INTERNAL_SYSTEM_WINDOW;
         }
@@ -2440,6 +2446,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case TYPE_SYSTEM_DIALOG:
             case TYPE_VOLUME_OVERLAY:
             case TYPE_PRIVATE_PRESENTATION:
+            case TYPE_KEYGUARD_PANEL:
                 break;
         }
 
@@ -2578,6 +2585,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // the safety window that shows behind keyguard while keyguard is starting
             return 14;
         case TYPE_STATUS_BAR_SUB_PANEL:
+        case TYPE_KEYGUARD_PANEL:
             return 15;
         case TYPE_STATUS_BAR:
             return 16;
@@ -2918,6 +2926,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         android.Manifest.permission.STATUS_BAR_SERVICE,
                         "PhoneWindowManager");
                 break;
+            case TYPE_KEYGUARD_PANEL:
+                mContext.enforceCallingOrSelfPermission(
+                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD,
+                        "PhoneWindowManager");
+                if (mKeyguardPanel != null) {
+                    return WindowManagerGlobal.ADD_MULTIPLE_SINGLETON;
+                }
+                mKeyguardPanel = win;
+                break;
             case TYPE_KEYGUARD_SCRIM:
                 if (mKeyguardScrim != null) {
                     return WindowManagerGlobal.ADD_MULTIPLE_SINGLETON;
@@ -2938,9 +2955,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         } else if (mKeyguardScrim == win) {
             Log.v(TAG, "Removing keyguard scrim");
             mKeyguardScrim = null;
-        } if (mNavigationBar == win) {
+        } else if (mNavigationBar == win) {
             mNavigationBar = null;
             mNavigationBarController.setWindow(null);
+        } else if (mKeyguardPanel == win) {
+            mKeyguardPanel = null;
         }
     }
 
@@ -3488,7 +3507,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             return -1;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (CMSettings.Secure.getInt(mContext.getContentResolver(),
+            if (unpinActivity(true) || CMSettings.Secure.getInt(mContext.getContentResolver(),
                     CMSettings.Secure.KILL_APP_LONGPRESS_BACK, 0) == 1) {
                 if (down && repeatCount == 0) {
                     mHandler.postDelayed(mBackLongPress, mBackKillTimeout);
@@ -3567,7 +3586,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // Display task switcher for ALT-TAB.
         if (down && repeatCount == 0 && keyCode == KeyEvent.KEYCODE_TAB) {
-            if (mRecentAppsHeldModifiers == 0 && !keyguardOn) {
+            if (mRecentAppsHeldModifiers == 0 && !keyguardOn && isUserSetupComplete()) {
                 final int shiftlessModifiers = event.getModifiers() & ~KeyEvent.META_SHIFT_MASK;
                 if (KeyEvent.metaStateHasModifiers(shiftlessModifiers, KeyEvent.META_ALT_ON)) {
                     mRecentAppsHeldModifiers = shiftlessModifiers;
@@ -3621,6 +3640,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // Let the application handle the key.
         return 0;
+    }
+
+    private boolean unpinActivity(boolean checkOnly) {
+        if (!hasNavigationBar()) {
+            try {
+                if (ActivityManagerNative.getDefault().isInLockTaskMode()) {
+                    if (!checkOnly) {
+                        ActivityManagerNative.getDefault().stopLockTaskModeOnCurrent();
+                    }
+                    return true;
+                }
+            } catch (RemoteException e) {
+                // ignore
+            }
+        }
+        return false;
     }
 
     /** {@inheritDoc} */
@@ -4727,7 +4762,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // gets everything, period.
                 if (attrs.type == TYPE_STATUS_BAR_PANEL
                         || attrs.type == TYPE_STATUS_BAR_SUB_PANEL
-                        || attrs.type == TYPE_VOLUME_OVERLAY) {
+                        || attrs.type == TYPE_VOLUME_OVERLAY
+                        || attrs.type == TYPE_KEYGUARD_PANEL) {
                     pf.left = df.left = of.left = cf.left = hasNavBar
                             ? mDockLeft : mUnrestrictedScreenLeft;
                     pf.top = df.top = of.top = cf.top = mUnrestrictedScreenTop;
@@ -5997,6 +6033,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_CAMERA:
             case KeyEvent.KEYCODE_FOCUS:
                 return mCameraWakeScreen;
+            case KeyEvent.KEYCODE_HOME:
+                return mHomeWakeScreen;
         }
         return true;
     }
@@ -6042,6 +6080,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_CAMERA:
             case KeyEvent.KEYCODE_FOCUS:
                 return mCameraWakeScreen;
+            case KeyEvent.KEYCODE_HOME:
+                return mHomeWakeScreen;
         }
         return true;
     }

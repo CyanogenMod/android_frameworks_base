@@ -67,7 +67,7 @@ public:
     // Won't take effect until next EGLSurface creation
     void setSwapBehavior(SwapBehavior swapBehavior);
 
-    bool initialize(ANativeWindow* window);
+    void initialize(ANativeWindow* window);
     void updateSurface(ANativeWindow* window);
     bool pauseSurface(ANativeWindow* window);
     bool hasSurface() { return mNativeWindow.get(); }
@@ -117,7 +117,6 @@ private:
     // TODO: Replace with something better for layer & other GL object
     // lifecycle tracking
     friend class android::uirenderer::RenderState;
-    friend class RenderProxy;
 
     void setSurface(ANativeWindow* window);
     void swapBuffers(const SkRect& dirty, EGLint width, EGLint height);

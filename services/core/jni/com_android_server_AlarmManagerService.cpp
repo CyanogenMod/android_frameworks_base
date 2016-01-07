@@ -48,16 +48,18 @@ extern "C" {
 
 namespace android {
 
-static const size_t N_ANDROID_TIMERFDS = ANDROID_ALARM_TYPE_COUNT + 1;
-static const clockid_t android_alarm_to_clockid[N_ANDROID_TIMERFDS] = {
+static const clockid_t android_alarm_to_clockid[] = {
     CLOCK_REALTIME_ALARM,
     CLOCK_REALTIME,
     CLOCK_BOOTTIME_ALARM,
     CLOCK_BOOTTIME,
     CLOCK_MONOTONIC,
+#ifdef WITH_TIMERFD_POWEROFF_ALARM
     CLOCK_POWEROFF_ALARM,
+#endif
     CLOCK_REALTIME,
 };
+static const size_t N_ANDROID_TIMERFDS = sizeof(android_alarm_to_clockid)/sizeof(clockid_t);
 /* to match the legacy alarm driver implementation, we need an extra
    CLOCK_REALTIME fd which exists specifically to be canceled on RTC changes */
 
@@ -180,7 +182,7 @@ AlarmImplTimerFd::~AlarmImplTimerFd()
 
 int AlarmImplTimerFd::set(int type, struct timespec *ts)
 {
-    if (type > ANDROID_ALARM_TYPE_COUNT) {
+    if (type >= static_cast<int>(N_ANDROID_TIMERFDS)) {
         errno = EINVAL;
         return -1;
     }
@@ -200,7 +202,7 @@ int AlarmImplTimerFd::set(int type, struct timespec *ts)
 
 int AlarmImplTimerFd::clear(int type, struct timespec *ts)
 {
-    if (type > ANDROID_ALARM_TYPE_COUNT) {
+    if (type >= static_cast<int>(N_ANDROID_TIMERFDS)) {
         errno = EINVAL;
         return -1;
     }
@@ -281,7 +283,7 @@ int AlarmImplTimerFd::waitForAlarm()
         uint64_t unused;
         ssize_t err = read(fds[alarm_idx], &unused, sizeof(unused));
         if (err < 0) {
-            if (alarm_idx == ANDROID_ALARM_TYPE_COUNT && errno == ECANCELED) {
+            if (alarm_idx == (N_ANDROID_TIMERFDS - 1) && errno == ECANCELED) {
                 result |= ANDROID_ALARM_TIME_CHANGE_MASK;
             } else {
                 return err;
@@ -453,7 +455,7 @@ static jlong init_timerfd()
     /* 0 = disarmed; the timerfd doesn't need to be armed to get
        RTC change notifications, just set up as cancelable */
 
-    int err = timerfd_settime(fds[ANDROID_ALARM_TYPE_COUNT],
+    int err = timerfd_settime(fds[N_ANDROID_TIMERFDS - 1],
             TFD_TIMER_ABSTIME | TFD_TIMER_CANCEL_ON_SET, &spec, NULL);
     if (err < 0) {
         ALOGV("timerfd_settime() failed: %s", strerror(errno));

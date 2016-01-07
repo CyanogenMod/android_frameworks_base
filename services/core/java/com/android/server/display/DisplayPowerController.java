@@ -321,6 +321,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 com.android.internal.R.integer.config_autoBrightnessDarkeningLightDebounce);
         boolean autoBrightnessResetAmbientLuxAfterWarmUp = resources.getBoolean(
                 com.android.internal.R.bool.config_autoBrightnessResetAmbientLuxAfterWarmUp);
+        int ambientLightHorizon = resources.getInteger(
+                com.android.internal.R.integer.config_autoBrightnessAmbientLightHorizon);
 
         if (mUseSoftwareAutoBrightnessConfig) {
             int[] lux = resources.getIntArray(
@@ -358,7 +360,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                         lightSensorWarmUpTimeConfig, screenBrightnessRangeMinimum,
                         mScreenBrightnessRangeMaximum, dozeScaleFactor, lightSensorRate,
                         brighteningLightDebounce, darkeningLightDebounce,
-                        autoBrightnessResetAmbientLuxAfterWarmUp, mLiveDisplayController);
+                        autoBrightnessResetAmbientLuxAfterWarmUp, ambientLightHorizon,
+                        mLiveDisplayController);
             }
         }
 
@@ -859,6 +862,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         if (mPendingScreenOff && target != Display.STATE_OFF) {
             setScreenState(Display.STATE_OFF);
             mPendingScreenOff = false;
+            mPowerState.dismissColorFadeResources();
         }
 
         if (target == Display.STATE_ON) {
@@ -932,6 +936,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
                 // A black surface is already hiding the contents of the screen.
                 setScreenState(Display.STATE_OFF);
                 mPendingScreenOff = false;
+                mPowerState.dismissColorFadeResources();
             } else if (performScreenOffTransition
                     && mPowerState.prepareColorFade(mContext,
                             mColorFadeFadesConfig ?

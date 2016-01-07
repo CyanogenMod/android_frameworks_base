@@ -53,6 +53,7 @@ public class SignalStrength implements Parcelable {
     public static final int INVALID = 0x7FFFFFFF;
 
     private static final int RSRP_THRESH_TYPE_STRICT = 0;
+    private static final int RSRP_THRESH_TYPE_CUSTOM = 2;
     private static final int[] RSRP_THRESH_STRICT = new int[] {-140, -115, -105, -95, -85, -44};
     private static final int[] RSRP_THRESH_LENIENT = new int[] {-140, -128, -118, -108, -98, -44};
 
@@ -811,6 +812,9 @@ public class SignalStrength implements Parcelable {
         int[] threshRsrp;
         if (rsrpThreshType == RSRP_THRESH_TYPE_STRICT) {
             threshRsrp = RSRP_THRESH_STRICT;
+        } else if (rsrpThreshType == RSRP_THRESH_TYPE_CUSTOM) {
+            threshRsrp = Resources.getSystem().getIntArray(com.android.internal.R.array.
+                    config_LTE_RSRP_custom_levels);
         } else {
             threshRsrp = RSRP_THRESH_LENIENT;
         }
@@ -926,7 +930,7 @@ public class SignalStrength implements Parcelable {
         else if (tdScdmaDbm >= -49) level = SIGNAL_STRENGTH_GREAT;
         else if (tdScdmaDbm >= -73) level = SIGNAL_STRENGTH_GOOD;
         else if (tdScdmaDbm >= -97) level = SIGNAL_STRENGTH_MODERATE;
-        else if (tdScdmaDbm >= -120) level = SIGNAL_STRENGTH_POOR;
+        else if (tdScdmaDbm >= -110) level = SIGNAL_STRENGTH_POOR;
         else level = SIGNAL_STRENGTH_NONE_OR_UNKNOWN;
 
         if (DBG) log("getTdScdmaLevel = " + level);

@@ -44,7 +44,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioAttributes;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -310,12 +309,12 @@ public class AppOpsService extends IAppOpsService.Stub {
                 Iterator<Ops> it = pkgs.values().iterator();
                 while (it.hasNext()) {
                     Ops ops = it.next();
-                    int curUid;
+                    int curUid = -1;
                     try {
-                        curUid = mContext.getPackageManager().getPackageUid(ops.packageName,
+                        curUid = AppGlobals.getPackageManager().getPackageUidEtc(ops.packageName,
+                                PackageManager.GET_UNINSTALLED_PACKAGES,
                                 UserHandle.getUserId(ops.uidState.uid));
-                    } catch (NameNotFoundException e) {
-                        curUid = -1;
+                    } catch (RemoteException ignored) {
                     }
                     if (curUid != ops.uidState.uid) {
                         Slog.i(TAG, "Pruning old package " + ops.packageName
@@ -561,33 +560,35 @@ public class AppOpsService extends IAppOpsService.Stub {
         String[] uidPackageNames = getPackagesForUid(uid);
         ArrayMap<Callback, ArraySet<String>> callbackSpecs = null;
 
-        ArrayList<Callback> callbacks = mOpModeWatchers.get(code);
-        if (callbacks != null) {
-            final int callbackCount = callbacks.size();
-            for (int i = 0; i < callbackCount; i++) {
-                Callback callback = callbacks.get(i);
-                ArraySet<String> changedPackages = new ArraySet<>();
-                Collections.addAll(changedPackages, uidPackageNames);
-                callbackSpecs = new ArrayMap<>();
-                callbackSpecs.put(callback, changedPackages);
-            }
-        }
-
-        for (String uidPackageName : uidPackageNames) {
-            callbacks = mPackageModeWatchers.get(uidPackageName);
+        synchronized (this) {
+            ArrayList<Callback> callbacks = mOpModeWatchers.get(code);
             if (callbacks != null) {
-                if (callbackSpecs == null) {
-                    callbackSpecs = new ArrayMap<>();
-                }
                 final int callbackCount = callbacks.size();
                 for (int i = 0; i < callbackCount; i++) {
                     Callback callback = callbacks.get(i);
-                    ArraySet<String> changedPackages = callbackSpecs.get(callback);
-                    if (changedPackages == null) {
-                        changedPackages = new ArraySet<>();
-                        callbackSpecs.put(callback, changedPackages);
+                    ArraySet<String> changedPackages = new ArraySet<>();
+                    Collections.addAll(changedPackages, uidPackageNames);
+                    callbackSpecs = new ArrayMap<>();
+                    callbackSpecs.put(callback, changedPackages);
+                }
+            }
+
+            for (String uidPackageName : uidPackageNames) {
+                callbacks = mPackageModeWatchers.get(uidPackageName);
+                if (callbacks != null) {
+                    if (callbackSpecs == null) {
+                        callbackSpecs = new ArrayMap<>();
                     }
-                    changedPackages.add(uidPackageName);
+                    final int callbackCount = callbacks.size();
+                    for (int i = 0; i < callbackCount; i++) {
+                        Callback callback = callbacks.get(i);
+                        ArraySet<String> changedPackages = callbackSpecs.get(callback);
+                        if (changedPackages == null) {
+                            changedPackages = new ArraySet<>();
+                            callbackSpecs.put(callback, changedPackages);
+                        }
+                        changedPackages.add(uidPackageName);
+                    }
                 }
             }
         }

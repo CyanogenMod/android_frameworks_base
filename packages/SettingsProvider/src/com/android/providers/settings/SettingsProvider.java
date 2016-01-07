@@ -22,6 +22,7 @@ import android.app.AppOpsManager;
 import android.app.backup.BackupManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -72,7 +73,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.android.providers.settings.SettingsState.BaseSetting;
 import com.android.providers.settings.SettingsState.Setting;
+import cyanogenmod.providers.CMSettings;
 
 /**
  * <p>
@@ -226,17 +229,17 @@ public class SettingsProvider extends ContentProvider {
         final int requestingUserId = getRequestingUserId(args);
         switch (method) {
             case Settings.CALL_METHOD_GET_GLOBAL: {
-                Setting setting = getGlobalSetting(name);
+                BaseSetting setting = getGlobalSetting(name);
                 return packageValueForCallResult(setting);
             }
 
             case Settings.CALL_METHOD_GET_SECURE: {
-                Setting setting = getSecureSetting(name, requestingUserId);
+                BaseSetting setting = getSecureSetting(name, requestingUserId);
                 return packageValueForCallResult(setting);
             }
 
             case Settings.CALL_METHOD_GET_SYSTEM: {
-                Setting setting = getSystemSetting(name, requestingUserId);
+                BaseSetting setting = getSystemSetting(name, requestingUserId);
                 return packageValueForCallResult(setting);
             }
 
@@ -294,7 +297,10 @@ public class SettingsProvider extends ContentProvider {
         switch (args.table) {
             case TABLE_GLOBAL: {
                 if (args.name != null) {
-                    Setting setting = getGlobalSetting(args.name);
+                    BaseSetting setting = getGlobalSetting(args.name);
+                    if (CMSettings.Global.shouldInterceptSystemProvider(args.name)) {
+                        return forwardedQuery(setting, normalizedProjection, args.table);
+                    }
                     return packageSettingForQuery(setting, normalizedProjection);
                 } else {
                     return getAllGlobalSettings(projection);
@@ -304,7 +310,10 @@ public class SettingsProvider extends ContentProvider {
             case TABLE_SECURE: {
                 final int userId = UserHandle.getCallingUserId();
                 if (args.name != null) {
-                    Setting setting = getSecureSetting(args.name, userId);
+                    BaseSetting setting = getSecureSetting(args.name, userId);
+                    if (CMSettings.Secure.shouldInterceptSystemProvider(args.name)) {
+                        return forwardedQuery(setting, normalizedProjection, args.table);
+                    }
                     return packageSettingForQuery(setting, normalizedProjection);
                 } else {
                     return getAllSecureSettings(userId, projection);
@@ -314,7 +323,10 @@ public class SettingsProvider extends ContentProvider {
             case TABLE_SYSTEM: {
                 final int userId = UserHandle.getCallingUserId();
                 if (args.name != null) {
-                    Setting setting = getSystemSetting(args.name, userId);
+                    BaseSetting setting = getSystemSetting(args.name, userId);
+                    if (CMSettings.System.shouldInterceptSystemProvider(args.name)) {
+                        return forwardedQuery(setting, normalizedProjection, args.table);
+                    }
                     return packageSettingForQuery(setting, normalizedProjection);
                 } else {
                     return getAllSystemSettings(userId, projection);
@@ -604,16 +616,32 @@ public class SettingsProvider extends ContentProvider {
         }
     }
 
-    private Setting getGlobalSetting(String name) {
+    private BaseSetting getGlobalSetting(String name) {
         if (DEBUG) {
             Slog.v(LOG_TAG, "getGlobalSetting(" + name + ")");
         }
 
         // Get the value.
+        BaseSetting setting;
         synchronized (mLock) {
-            return mSettingsRegistry.getSettingLocked(SettingsRegistry.SETTINGS_TYPE_GLOBAL,
+            setting = mSettingsRegistry.getSettingLocked(SettingsRegistry.SETTINGS_TYPE_GLOBAL,
                     UserHandle.USER_OWNER, name);
         }
+
+        // If CMSettingsProvider owns this key, override the value
+        if (CMSettings.Global.shouldInterceptSystemProvider(name)) {
+            final ContentResolver cr = getContext().getContentResolver();
+            final String value = CMSettings.Global.
+                    getStringForUser(cr, name, UserHandle.USER_OWNER);
+
+            if (setting == null) {
+                setting = new BaseSetting(name, value, null);
+            } else {
+                setting.update(value, null);
+            }
+        }
+
+        return setting;
     }
 
     private boolean updateGlobalSetting(String name, String value, int requestingUserId) {
@@ -648,6 +676,20 @@ public class SettingsProvider extends ContentProvider {
         // If this is a setting that is currently restricted for this user, done.
         if (isGlobalOrSecureSettingRestrictedForUser(name, callingUserId)) {
             return false;
+        }
+
+        // If CMSettingsProvider wants to own this key, let it.
+        if (CMSettings.Global.shouldInterceptSystemProvider(name)) {
+            switch (operation) {
+                case MUTATION_OPERATION_INSERT:
+                case MUTATION_OPERATION_UPDATE:
+                    final ContentResolver cr = getContext().getContentResolver();
+                    return CMSettings.Global.putStringForUser(cr, name, value,
+                            UserHandle.USER_OWNER);
+                case MUTATION_OPERATION_DELETE:
+                    // unsupported
+                    return false;
+            }
         }
 
         // Perform the mutation.
@@ -713,7 +755,7 @@ public class SettingsProvider extends ContentProvider {
         }
     }
 
-    private Setting getSecureSetting(String name, int requestingUserId) {
+    private BaseSetting getSecureSetting(String name, int requestingUserId) {
         if (DEBUG) {
             Slog.v(LOG_TAG, "getSecureSetting(" + name + ", " + requestingUserId + ")");
         }
@@ -730,10 +772,25 @@ public class SettingsProvider extends ContentProvider {
         }
 
         // Get the value.
+        BaseSetting setting;
         synchronized (mLock) {
-            return mSettingsRegistry.getSettingLocked(SettingsRegistry.SETTINGS_TYPE_SECURE,
+            setting = mSettingsRegistry.getSettingLocked(SettingsRegistry.SETTINGS_TYPE_SECURE,
                     owningUserId, name);
         }
+
+        // If CMSettingsProvider owns this key, override the value
+        if (CMSettings.Secure.shouldInterceptSystemProvider(name)) {
+            final ContentResolver cr = getContext().getContentResolver();
+            final String value = CMSettings.Secure.getStringForUser(cr, name, owningUserId);
+
+            if (setting == null) {
+                setting = new BaseSetting(name, value, null);
+            } else {
+                setting.update(value, null);
+            }
+        }
+
+        return setting;
     }
 
     private boolean insertSecureSetting(String name, String value, int requestingUserId) {
@@ -786,6 +843,19 @@ public class SettingsProvider extends ContentProvider {
         // Special cases for location providers (sigh).
         if (Settings.Secure.LOCATION_PROVIDERS_ALLOWED.equals(name)) {
             return updateLocationProvidersAllowedLocked(value, owningUserId);
+        }
+
+        // If CMSettingsProvider wants to own this key, let it.
+        if (CMSettings.Secure.shouldInterceptSystemProvider(name)) {
+            switch (operation) {
+                case MUTATION_OPERATION_INSERT:
+                case MUTATION_OPERATION_UPDATE:
+                    final ContentResolver cr = getContext().getContentResolver();
+                    return CMSettings.Secure.putStringForUser(cr, name, value, owningUserId);
+                case MUTATION_OPERATION_DELETE:
+                    // unsupported
+                    return false;
+            }
         }
 
         // Mutate the value.
@@ -847,7 +917,7 @@ public class SettingsProvider extends ContentProvider {
         }
     }
 
-    private Setting getSystemSetting(String name, int requestingUserId) {
+    private BaseSetting getSystemSetting(String name, int requestingUserId) {
         if (DEBUG) {
             Slog.v(LOG_TAG, "getSystemSetting(" + name + ", " + requestingUserId + ")");
         }
@@ -859,10 +929,25 @@ public class SettingsProvider extends ContentProvider {
         final int owningUserId = resolveOwningUserIdForSystemSettingLocked(callingUserId, name);
 
         // Get the value.
+        BaseSetting setting;
         synchronized (mLock) {
-            return mSettingsRegistry.getSettingLocked(SettingsRegistry.SETTINGS_TYPE_SYSTEM,
+            setting = mSettingsRegistry.getSettingLocked(SettingsRegistry.SETTINGS_TYPE_SYSTEM,
                     owningUserId, name);
         }
+
+        // If CMSettingsProvider owns this key, override the value
+        if (CMSettings.System.shouldInterceptSystemProvider(name)) {
+            final ContentResolver cr = getContext().getContentResolver();
+            final String value = CMSettings.System.getStringForUser(cr, name, owningUserId);
+
+            if (setting == null) {
+                setting = new BaseSetting(name, value, null);
+            } else {
+                setting.update(value, null);
+            }
+        }
+
+        return setting;
     }
 
     private boolean insertSystemSetting(String name, String value, int requestingUserId) {
@@ -914,6 +999,19 @@ public class SettingsProvider extends ContentProvider {
         // Only the owning user id can change the setting.
         if (owningUserId != callingUserId) {
             return false;
+        }
+
+        // If CMSettingsProvider wants to own this key, let it.
+        if (CMSettings.System.shouldInterceptSystemProvider(name)) {
+            switch (operation) {
+                case MUTATION_OPERATION_INSERT:
+                case MUTATION_OPERATION_UPDATE:
+                    final ContentResolver cr = getContext().getContentResolver();
+                    return CMSettings.System.putStringForUser(cr, name, value, owningUserId);
+                case MUTATION_OPERATION_DELETE:
+                    // unsupported
+                    return false;
+            }
         }
 
         // Mutate the value.
@@ -1007,6 +1105,11 @@ public class SettingsProvider extends ContentProvider {
         if (callingUid == android.os.Process.SYSTEM_UID
                 || callingUid == Process.SHELL_UID
                 || callingUid == Process.ROOT_UID) {
+            return;
+        }
+
+        if (CMSettings.System.shouldInterceptSystemProvider(name)) {
+            // this setting will be forwarded to CMSettingsProvider
             return;
         }
 
@@ -1107,7 +1210,7 @@ public class SettingsProvider extends ContentProvider {
         // skip prefix
         value = value.substring(1);
 
-        Setting settingValue = getSecureSetting(
+        BaseSetting settingValue = getSecureSetting(
                 Settings.Secure.LOCATION_PROVIDERS_ALLOWED, owningUserId);
 
         String oldProviders = (settingValue != null) ? settingValue.getValue() : "";
@@ -1187,7 +1290,7 @@ public class SettingsProvider extends ContentProvider {
                 "get/set setting for user", null);
     }
 
-    private static Bundle packageValueForCallResult(Setting setting) {
+    private static Bundle packageValueForCallResult(BaseSetting setting) {
         if (setting == null) {
             return NULL_SETTING;
         }
@@ -1215,7 +1318,31 @@ public class SettingsProvider extends ContentProvider {
         throw new IllegalArgumentException("Invalid URI:" + uri);
     }
 
-    private static MatrixCursor packageSettingForQuery(Setting setting, String[] projection) {
+    private MatrixCursor forwardedQuery(BaseSetting setting, String[] projection, String table) {
+        if (setting == null) {
+            return new MatrixCursor(projection, 0);
+        }
+        MatrixCursor cursor = new MatrixCursor(projection, 1);
+        switch (table) {
+            case TABLE_SYSTEM:
+                setting.update(CMSettings.System.getString(getContext().getContentResolver(),
+                                setting.getName()), setting.getPackageName());
+                break;
+            case TABLE_GLOBAL:
+                setting.update(CMSettings.Global.getString(getContext().getContentResolver(),
+                        setting.getName()), setting.getPackageName());
+                break;
+            case TABLE_SECURE:
+                setting.update(CMSettings.Secure.getString(getContext().getContentResolver(),
+                        setting.getName()), setting.getPackageName());
+                break;
+
+        }
+        appendSettingToCursor(cursor, setting);
+        return cursor;
+    }
+
+    private static MatrixCursor packageSettingForQuery(BaseSetting setting, String[] projection) {
         if (setting == null) {
             return new MatrixCursor(projection, 0);
         }
@@ -1240,7 +1367,7 @@ public class SettingsProvider extends ContentProvider {
         return projection;
     }
 
-    private static void appendSettingToCursor(MatrixCursor cursor, Setting setting) {
+    private static void appendSettingToCursor(MatrixCursor cursor, BaseSetting setting) {
         final int columnCount = cursor.getColumnCount();
 
         String[] values =  new String[columnCount];

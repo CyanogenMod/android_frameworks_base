@@ -2496,8 +2496,13 @@ public final class ActivityStackSupervisor implements DisplayListener {
     final void doPendingActivityLaunchesLocked(boolean doResume) {
         while (!mPendingActivityLaunches.isEmpty()) {
             PendingActivityLaunch pal = mPendingActivityLaunches.remove(0);
-            startActivityUncheckedLocked(pal.r, pal.sourceRecord, null, null, pal.startFlags,
-                    doResume && mPendingActivityLaunches.isEmpty(), null, null);
+
+            try {
+                startActivityUncheckedLocked(pal.r, pal.sourceRecord, null, null, pal.startFlags,
+                                             doResume && mPendingActivityLaunches.isEmpty(), null, null);
+            } catch (Exception e) {
+                Slog.w(TAG, "Exception during pending activity launch pal=" + pal, e);
+            }
         }
     }
 
@@ -3959,7 +3964,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
         mLockTaskModeTasks.add(task);
 
         if (task.mLockTaskUid == -1) {
-            task.mLockTaskUid = task.mCallingUid;
+            task.mLockTaskUid = task.effectiveUid;
         }
 
         if (andResume) {

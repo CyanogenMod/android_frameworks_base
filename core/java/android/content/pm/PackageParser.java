@@ -926,6 +926,7 @@ public class PackageParser {
             }
 
             pkg.volumeUuid = volumeUuid;
+            pkg.applicationInfo.volumeUuid = volumeUuid;
             pkg.baseCodePath = apkPath;
             pkg.mSignatures = null;
 
@@ -1132,6 +1133,7 @@ public class PackageParser {
      */
     public void collectManifestDigest(Package pkg) throws PackageParserException {
         pkg.manifestDigest = null;
+        pkg.manifestHashCode = 0;
 
         // TODO: extend to gather digest for split APKs
         try {
@@ -1140,7 +1142,7 @@ public class PackageParser {
                 final ZipEntry je = jarFile.findEntry(ANDROID_MANIFEST_FILENAME);
                 if (je != null) {
                     pkg.manifestDigest = ManifestDigest.fromInputStream(jarFile.getInputStream(je));
-                    pkg.manifestHashCode = ThemeUtils.getPackageHashCode(pkg);
+                    pkg.manifestHashCode = ThemeUtils.getPackageHashCode(pkg, jarFile);
                 }
             } finally {
                 jarFile.close();

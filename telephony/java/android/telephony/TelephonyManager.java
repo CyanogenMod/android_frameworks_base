@@ -651,6 +651,11 @@ public class TelephonyManager {
      */
     public static final String VVM_TYPE_CVVM = "vvm_type_cvvm";
 
+    /**
+     * @hide
+     */
+    public static final String EXTRA_IS_FORWARDED = "is_forwarded";
+
     //
     //
     // Device Info
@@ -1655,37 +1660,6 @@ public class TelephonyManager {
             default:
                 return "UNKNOWN";
         }
-    }
-
-    /**
-     * convert network class to string base on network type
-     * @param type for which network type is returned
-     * @return the network class type string
-     * @hide
-     */
-    public String networkClassToString(int type) {
-        String ratClassName = "";
-        int networkClass = getNetworkClass(type);
-        Rlog.d(TAG, "networkType = " + type + " networkClass = " + networkClass);
-        if (mContext == null) return null;
-        switch (networkClass) {
-            case TelephonyManager.NETWORK_CLASS_2_G:
-                ratClassName = mContext.getResources().getString(
-                        com.android.internal.R.string.config_rat_2g);
-                break;
-            case TelephonyManager.NETWORK_CLASS_3_G:
-                ratClassName = mContext.getResources().getString(
-                        com.android.internal.R.string.config_rat_3g);
-                break;
-            case TelephonyManager.NETWORK_CLASS_4_G:
-               ratClassName = mContext.getResources().getString(
-                        com.android.internal.R.string.config_rat_4g);
-                break;
-            default:
-                ratClassName = "";
-                break;
-        }
-        return ratClassName;
     }
 
     //
@@ -2923,7 +2897,7 @@ public class TelephonyManager {
     /**
      * Returns all observed cell information from all radios on the
      * device including the primary and neighboring cells. This does
-     * not cause or change the rate of PhoneStateListner#onCellInfoChanged.
+     * not cause or change the rate of PhoneStateListener#onCellInfoChanged.
      *<p>
      * The list can include one or more of {@link android.telephony.CellInfoGsm CellInfoGsm},
      * {@link android.telephony.CellInfoCdma CellInfoCdma},
@@ -2936,6 +2910,9 @@ public class TelephonyManager {
      * This is preferred over using getCellLocation although for older
      * devices this may return null in which case getCellLocation should
      * be called.
+     *<p>
+     * This API will return valid data for registered cells on devices with
+     * {@link android.content.pm.PackageManager#FEATURE_TELEPHONY}
      *<p>
      * @return List of CellInfo or null if info unavailable.
      *

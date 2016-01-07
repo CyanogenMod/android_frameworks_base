@@ -257,9 +257,9 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
                             }
                             resetPasswordText(true /* animate */);
                             if (result == PhoneConstants.PIN_RESULT_SUCCESS) {
+                                mRemainingAttempts = -1;
                                 KeyguardUpdateMonitor.getInstance(getContext())
                                         .reportSimUnlocked(mSubId);
-                                mRemainingAttempts = -1;
                                 if (mCallback != null) {
                                     mCallback.dismiss(true);
                                 }
@@ -315,6 +315,8 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
             mSecurityMessageDisplay.setMessage(getPinPasswordErrorMessage(
                     mRemainingAttempts, true), true);
             return;
+        } else {
+            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
         }
 
         int count = TelephonyManager.getDefault().getSimCount();
@@ -334,17 +336,6 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
         mSecurityMessageDisplay.setMessage(msg, true);
         mSimImageView.setImageTintList(ColorStateList.valueOf(color));
 
-        new CheckSimPin("", mSubId) {
-            void onSimCheckResponse(final int result, final int attemptsRemaining) {
-                Log.d(LOG_TAG, "onSimCheckResponse " + " dummy One result" + result +
-                        " attemptsRemaining=" + attemptsRemaining);
-                if (attemptsRemaining >= 0) {
-                    mRemainingAttempts = attemptsRemaining;
-                    mSecurityMessageDisplay.setMessage(
-                            getPinPasswordErrorMessage(attemptsRemaining, true), true);
-                }
-            }
-        }.start();
     }
 }
 

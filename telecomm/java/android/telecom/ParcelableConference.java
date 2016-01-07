@@ -34,6 +34,7 @@ public final class ParcelableConference implements Parcelable {
     private PhoneAccountHandle mPhoneAccount;
     private int mState;
     private int mConnectionCapabilities;
+    private int mConnectionProperties;
     private List<String> mConnectionIds;
     private long mConnectTimeMillis = Conference.CONNECT_TIME_NOT_SPECIFIED;
     private final IVideoProvider mVideoProvider;
@@ -45,6 +46,7 @@ public final class ParcelableConference implements Parcelable {
             PhoneAccountHandle phoneAccount,
             int state,
             int connectionCapabilities,
+            int connectionProperties,
             List<String> connectionIds,
             IVideoProvider videoProvider,
             int videoState,
@@ -54,6 +56,7 @@ public final class ParcelableConference implements Parcelable {
         mPhoneAccount = phoneAccount;
         mState = state;
         mConnectionCapabilities = connectionCapabilities;
+        mConnectionProperties = connectionProperties;
         mConnectionIds = connectionIds;
         mConnectTimeMillis = Conference.CONNECT_TIME_NOT_SPECIFIED;
         mVideoProvider = videoProvider;
@@ -72,6 +75,8 @@ public final class ParcelableConference implements Parcelable {
                 .append(Connection.stateToString(mState))
                 .append(", capabilities: ")
                 .append(Connection.capabilitiesToString(mConnectionCapabilities))
+                .append(", properties: ")
+                .append(Connection.propertiesToString(mConnectionProperties))
                 .append(", connectTime: ")
                 .append(mConnectTimeMillis)
                 .append(", children: ")
@@ -93,6 +98,10 @@ public final class ParcelableConference implements Parcelable {
 
     public int getConnectionCapabilities() {
         return mConnectionCapabilities;
+    }
+
+    public int getConnectionProperties() {
+        return mConnectionProperties;
     }
 
     public List<String> getConnectionIds() {
@@ -126,6 +135,7 @@ public final class ParcelableConference implements Parcelable {
             PhoneAccountHandle phoneAccount = source.readParcelable(classLoader);
             int state = source.readInt();
             int capabilities = source.readInt();
+            int properties = source.readInt();
             List<String> connectionIds = new ArrayList<>(2);
             source.readList(connectionIds, classLoader);
             long connectTimeMillis = source.readLong();
@@ -135,8 +145,9 @@ public final class ParcelableConference implements Parcelable {
             StatusHints statusHints = source.readParcelable(classLoader);
             Bundle extras = source.readBundle(classLoader);
 
-            return new ParcelableConference(phoneAccount, state, capabilities, connectionIds,
-                    videoCallProvider, videoState, connectTimeMillis, statusHints, extras);
+            return new ParcelableConference(phoneAccount, state, capabilities, properties,
+                    connectionIds, videoCallProvider, videoState,
+                    connectTimeMillis, statusHints, extras);
         }
 
         @Override
@@ -157,6 +168,7 @@ public final class ParcelableConference implements Parcelable {
         destination.writeParcelable(mPhoneAccount, 0);
         destination.writeInt(mState);
         destination.writeInt(mConnectionCapabilities);
+        destination.writeInt(mConnectionProperties);
         destination.writeList(mConnectionIds);
         destination.writeLong(mConnectTimeMillis);
         destination.writeStrongBinder(

@@ -284,6 +284,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
     };
 
+    public RemoteViews.OnClickHandler getOnClickHandler() {
+        return mOnClickHandler;
+    }
+
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
         @Override
         public boolean onClickHandler(
@@ -1423,49 +1427,12 @@ public abstract class BaseStatusBar extends SystemUI implements
                 title.setText(entry.notification.getPackageName());
             }
 
-            final ImageView icon = (ImageView) publicViewLocal.findViewById(R.id.icon);
-            final ImageView profileBadge = (ImageView) publicViewLocal.findViewById(
-                    R.id.profile_badge_line3);
-
-            final StatusBarIcon ic = new StatusBarIcon(
-                    entry.notification.getUser(),
-                    entry.notification.getPackageName(),
-                    entry.notification.getNotification().getSmallIcon(),
-                    entry.notification.getNotification().iconLevel,
-                    entry.notification.getNotification().number,
-                    entry.notification.getNotification().tickerText);
-
-            Drawable iconDrawable = StatusBarIconView.getIcon(mContext, ic);
-            icon.setImageDrawable(iconDrawable);
-            if (entry.targetSdk >= Build.VERSION_CODES.LOLLIPOP
-                    || mNotificationColorUtil.isGrayscaleIcon(iconDrawable)) {
-                icon.setBackgroundResource(
-                        com.android.internal.R.drawable.notification_icon_legacy_bg);
-                int padding = mContext.getResources().getDimensionPixelSize(
-                        com.android.internal.R.dimen.notification_large_icon_circle_padding);
-                icon.setPadding(padding, padding, padding, padding);
-                if (sbn.getNotification().color != Notification.COLOR_DEFAULT) {
-                    icon.getBackground().setColorFilter(
-                            sbn.getNotification().color, PorterDuff.Mode.SRC_ATOP);
-                }
-            }
-
-            if (profileBadge != null) {
-                Drawable profileDrawable = mContext.getPackageManager().getUserBadgeForDensity(
-                        entry.notification.getUser(), 0);
-                if (profileDrawable != null) {
-                    profileBadge.setImageDrawable(profileDrawable);
-                    profileBadge.setVisibility(View.VISIBLE);
-                } else {
-                    profileBadge.setVisibility(View.GONE);
-                }
-            }
+            updatePublicViewProperties(publicViewLocal, entry);
 
             final View privateTime = contentViewLocal.findViewById(com.android.internal.R.id.time);
             final DateTimeView time = (DateTimeView) publicViewLocal.findViewById(R.id.time);
             if (privateTime != null && privateTime.getVisibility() == View.VISIBLE) {
                 time.setVisibility(View.VISIBLE);
-                time.setTime(entry.notification.getNotification().when);
             }
 
             final TextView text = (TextView) publicViewLocal.findViewById(R.id.text);
@@ -1508,6 +1475,59 @@ public abstract class BaseStatusBar extends SystemUI implements
         row.setStatusBarNotification(entry.notification);
 
         return true;
+    }
+
+    public void startPendingIntentDismissingKeyguard(final PendingIntent intent) {
+        if (!isDeviceProvisioned()) return;
+
+        final boolean keyguardShowing = mStatusBarKeyguardViewManager.isShowing();
+        final boolean afterKeyguardGone = intent.isActivity()
+                && PreviewInflater.wouldLaunchResolverActivity(mContext, intent.getIntent(),
+                mCurrentUserId);
+        dismissKeyguardThenExecute(new OnDismissAction() {
+            public boolean onDismiss() {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (keyguardShowing && !afterKeyguardGone) {
+                                ActivityManagerNative.getDefault()
+                                        .keyguardWaitingForActivityDrawn();
+                            }
+
+                            // The intent we are sending is for the application, which
+                            // won't have permission to immediately start an activity after
+                            // the user switches to home.  We know it is safe to do at this
+                            // point, so make sure new activity switches are now allowed.
+                            ActivityManagerNative.getDefault().resumeAppSwitches();
+                        } catch (RemoteException e) {
+                        }
+
+                        try {
+                            intent.send();
+                        } catch (PendingIntent.CanceledException e) {
+                            // the stack trace isn't very helpful here.
+                            // Just log the exception message.
+                            Log.w(TAG, "Sending intent failed: " + e);
+
+                            // TODO: Dismiss Keyguard.
+                        }
+                        if (intent.isActivity()) {
+                            mAssistManager.hideAssist();
+                            overrideActivityPendingAppTransition(keyguardShowing
+                                    && !afterKeyguardGone);
+                        }
+                    }
+                }.start();
+
+                // close the shade if it was open
+                animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL,
+                        true /* force */, true /* delayed */);
+                visibilityChanged(false);
+
+                return true;
+            }
+        }, afterKeyguardGone);
     }
 
     private final class NotificationClicker implements View.OnClickListener {
@@ -2018,6 +2038,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         final Notification publicVersion = notification.getNotification().publicVersion;
         final RemoteViews publicContentView = publicVersion != null ? publicVersion.contentView
                 : null;
+        final View publicLocalView = entry.getPublicContentView();
 
         // Reapply the RemoteViews
         contentView.reapply(mContext, entry.getContentView(), mOnClickHandler);
@@ -2031,9 +2052,13 @@ public abstract class BaseStatusBar extends SystemUI implements
             headsUpContentView.reapply(notification.getPackageContext(mContext),
                     headsUpChild, mOnClickHandler);
         }
-        if (publicContentView != null && entry.getPublicContentView() != null) {
-            publicContentView.reapply(notification.getPackageContext(mContext),
-                    entry.getPublicContentView(), mOnClickHandler);
+        if (publicLocalView != null) {
+            if (publicContentView != null) {
+                publicContentView.reapply(notification.getPackageContext(mContext),
+                        publicLocalView, mOnClickHandler);
+            } else {
+                updatePublicViewProperties(publicLocalView, entry);
+            }
         }
         // update the contentIntent
         mNotificationClicker.register(entry.row, notification);
@@ -2046,6 +2071,55 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected void notifyHeadsUpScreenOff() {
         maybeEscalateHeadsUp();
+    }
+
+    private void updatePublicViewProperties(View publicView, Entry entry) {
+        final StatusBarNotification n = entry.notification;
+        final ImageView icon = (ImageView) publicView.findViewById(R.id.icon);
+        final ImageView profileBadge =
+                (ImageView) publicView.findViewById(R.id.profile_badge_line3);
+        final DateTimeView time = (DateTimeView) publicView.findViewById(R.id.time);
+
+        if (icon != null) {
+            final StatusBarIcon ic = new StatusBarIcon(
+                    n.getUser(), n.getPackageName(),
+                    n.getNotification().getSmallIcon(),
+                    n.getNotification().iconLevel,
+                    n.getNotification().number,
+                    n.getNotification().tickerText);
+
+            Drawable iconDrawable = StatusBarIconView.getIcon(mContext, ic);
+            icon.setImageDrawable(iconDrawable);
+            if (entry.targetSdk >= Build.VERSION_CODES.LOLLIPOP
+                    || mNotificationColorUtil.isGrayscaleIcon(iconDrawable)) {
+                icon.setBackgroundResource(
+                        com.android.internal.R.drawable.notification_icon_legacy_bg);
+                int padding = mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.notification_large_icon_circle_padding);
+                icon.setPadding(padding, padding, padding, padding);
+                if (n.getNotification().color != Notification.COLOR_DEFAULT) {
+                    icon.getBackground().setColorFilter(
+                            n.getNotification().color, PorterDuff.Mode.SRC_ATOP);
+                }
+            } else {
+                icon.setBackgroundDrawable(null);
+            }
+         }
+
+        if (time != null) {
+            time.setTime(entry.notification.getNotification().when);
+        }
+
+        if (profileBadge != null) {
+            Drawable profileDrawable = mContext.getPackageManager().getUserBadgeForDensity(
+                    n.getUser(), 0);
+            if (profileDrawable != null) {
+                profileBadge.setImageDrawable(profileDrawable);
+                profileBadge.setVisibility(View.VISIBLE);
+            } else {
+                profileBadge.setVisibility(View.GONE);
+            }
+        }
     }
 
     private boolean alertAgain(Entry oldEntry, Notification newNotification) {

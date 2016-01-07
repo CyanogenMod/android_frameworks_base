@@ -23,7 +23,7 @@
     android:paddingBottom="8dip"
     android:gravity="center"
     android:textAppearance="?android:attr/textAppearanceSmallInverse"
-    android:textColor="@android:color/black"
+    android:textColor="@color/edit_action_popup_text_color"
     android:textAllCaps="true"
     android:textStyle="bold"
 />

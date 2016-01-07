@@ -31,7 +31,6 @@
 #include <strings.h>
 #include <cutils/properties.h>
 #include <private/hwui/DrawGlInfo.h>
-#include <gui/Surface.h>
 
 #define TRIM_MEMORY_COMPLETE 80
 #define TRIM_MEMORY_UI_HIDDEN 20
@@ -111,16 +110,11 @@ void CanvasContext::setSwapBehavior(SwapBehavior swapBehavior) {
     mSwapBehavior = swapBehavior;
 }
 
-bool CanvasContext::initialize(ANativeWindow* window) {
+void CanvasContext::initialize(ANativeWindow* window) {
     setSurface(window);
-    if (mCanvas) return false;
+    if (mCanvas) return;
     mCanvas = new OpenGLRenderer(mRenderThread.renderState());
     mCanvas->initProperties();
-    if (window) {
-        Surface *s = static_cast<Surface*>(window);
-        s->allocateBuffers();
-    }
-    return true;
 }
 
 void CanvasContext::updateSurface(ANativeWindow* window) {

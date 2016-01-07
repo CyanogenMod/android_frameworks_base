@@ -115,7 +115,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/clock_collapsed_bottom_margin"
-        android:background="@drawable/ripple_drawable"
         android:layout_alignParentBottom="true">
         <com.android.systemui.statusbar.policy.DateView android:id="@+id/date_collapsed"
             android:layout_width="wrap_content"
@@ -123,6 +122,7 @@
             android:layout_marginStart="16dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+            android:background="@drawable/ripple_drawable"
             android:layout_below="@id/clock"
             systemui:datePattern="@string/abbrev_wday_month_day_no_year_alarm"
             />
@@ -133,6 +133,7 @@
             android:layout_marginStart="16dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+            android:background="@drawable/ripple_drawable"
             android:layout_below="@id/clock"
             systemui:datePattern="eeeeMMMMd"
             />
@@ -229,7 +230,7 @@
         android:fontFamily="sans-serif-condensed"
         android:textSize="11dp"
         android:textStyle="bold"
-        android:textColor="#00A040"
+        android:textColor="@color/header_debug_info_text_color"
         android:padding="2dp"
         />
 

@@ -21,6 +21,25 @@
 
     <uses-permission android:name="cyanogenmod.permission.WRITE_SETTINGS" />
     <uses-permission android:name="cyanogenmod.permission.WRITE_SECURE_SETTINGS" />
+    <!-- Quick Settings Tile Listener -->
+    <uses-permission android:name="cyanogenmod.permission.BIND_CUSTOM_TILE_LISTENER_SERVICE"/>
+
+    <!-- Development shortcut -->
+    <uses-permission android:name="android.permission.CLEAR_APP_USER_DATA" />
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
+
+    <!-- Sync tile -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+    <!-- Publish dynamic tiles -->
+    <uses-permission android:name="cyanogenmod.permission.PUBLISH_CUSTOM_TILE" />
+
+    <uses-permission android:name="cyanogenmod.permission.HARDWARE_ABSTRACTION_ACCESS" />
+
+    <!-- Visualizer -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application>
         <provider android:name=".cm.SpamMessageProvider"
@@ -34,7 +53,22 @@
             android:label="@string/lockscreen_targets_message"
             android:theme="@android:style/Theme.Material.Settings"
             android:process=":cmsettings"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
+
+        <activity android:name=".tuner.TunerActivity$DemoModeActivity"
+          android:icon="@drawable/tuner"
+          android:theme="@android:style/Theme.Material.Settings"
+          android:label="@string/demo_mode"
+          android:process=":tuner"
+          android:exported="true"
+          android:permission="android.permission.STATUS_BAR" />
+
+        <activity android:name=".tuner.TunerActivity$StatusBarIconActivity"
+          android:icon="@drawable/tuner"
+          android:theme="@android:style/Theme.Material.Settings"
+          android:label="@string/status_bar"
+          android:process=":tuner"
+          android:exported="true"
+          android:permission="android.permission.STATUS_BAR" />
     </application>
 </manifest>

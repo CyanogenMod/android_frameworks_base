@@ -552,22 +552,21 @@ final class SettingsState {
         }
     }
 
-    public final class Setting {
-        private String name;
-        private String value;
-        private String packageName;
-        private String id;
+    public static class BaseSetting {
+        protected String name;
+        protected String value;
+        protected String packageName;
+        protected String id;
 
-        public Setting(String name, String value, String packageName) {
-            init(name, value, packageName, String.valueOf(mNextId++));
+        protected BaseSetting() {
+            // for sub classes
         }
 
-        public Setting(String name, String value, String packageName, String id) {
-            mNextId = Math.max(mNextId, Long.valueOf(id) + 1);
-            init(name, value, packageName, id);
+        public BaseSetting(String name, String value, String packageName) {
+            init(name, value, packageName, null);
         }
 
-        private void init(String name, String value, String packageName, String id) {
+        protected void init(String name, String value, String packageName, String id) {
             this.name = name;
             this.value = value;
             this.packageName = packageName;
@@ -590,6 +589,33 @@ final class SettingsState {
             return id;
         }
 
+        public boolean update(String value, String packageName) {
+            if (Objects.equal(value, this.value)) {
+                return false;
+            }
+            this.value = value;
+            this.packageName = packageName;
+            return true;
+        }
+    }
+
+    public final class Setting extends BaseSetting {
+
+        public Setting(String name, String value, String packageName) {
+            init(name, value, packageName, String.valueOf(mNextId++));
+        }
+
+        public Setting(String name, String value, String packageName, String id) {
+            mNextId = Math.max(mNextId, Long.valueOf(id) + 1);
+            init(name, value, packageName, id);
+        }
+
+        @Override
+        public String getId() {
+            return id;
+        }
+
+        @Override
         public boolean update(String value, String packageName) {
             if (Objects.equal(value, this.value)) {
                 return false;

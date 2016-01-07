@@ -140,16 +140,19 @@ void RenderProxy::setName(const char* name) {
 }
 
 CREATE_BRIDGE2(initialize, CanvasContext* context, ANativeWindow* window) {
-    return (void*) args->context->initialize(args->window);
+    args->context->initialize(args->window);
+    return nullptr;
 }
 
-bool RenderProxy::initialize(const sp<ANativeWindow>& window) {
+void RenderProxy::initialize(const sp<ANativeWindow>& window) {
     SETUP_TASK(initialize);
     args->context = mContext;
     args->window = window.get();
-    bool ret = mContext->mCanvas == NULL;
+#ifdef REQUIRES_SYNCHRONOUS_SETSURFACE
+    postAndWait(task);
+#else
     post(task);
-    return ret;
+#endif
 }
 
 CREATE_BRIDGE2(updateSurface, CanvasContext* context, ANativeWindow* window) {

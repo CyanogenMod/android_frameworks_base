@@ -36,10 +36,14 @@ import com.android.server.pm.UserManagerService;
 import com.android.server.statusbar.StatusBarManagerService;
 import com.android.server.wm.WindowManagerService;
 
+import cyanogenmod.app.CMStatusBarManager;
+import cyanogenmod.app.CustomTile;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.annotation.Nullable;
 import android.app.ActivityManagerNative;
 import android.app.AppGlobals;
 import android.app.AlertDialog;
@@ -141,6 +145,9 @@ import java.util.Locale;
 
 import cyanogenmod.providers.CMSettings;
 
+import org.cyanogenmod.internal.util.QSUtils;
+import org.cyanogenmod.internal.util.QSUtils.OnQSChanged;
+import org.cyanogenmod.internal.util.QSConstants;
 /**
  * This class provides a system service that manages input methods.
  */
@@ -197,6 +204,13 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     private final AppOpsManager mAppOpsManager;
 
     final InputBindResult mNoBinding = new InputBindResult(null, null, null, -1, -1);
+
+    private final OnQSChanged mQSListener = new OnQSChanged() {
+        @Override
+        public void onQSChanged() {
+            processQSChangedLocked();
+        }
+    };
 
     // All known input methods.  mMethodMap also serves as the global
     // lock for this class.
@@ -289,8 +303,19 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     boolean mSystemReady;
 
     /**
-     * Id of the currently selected input method.
+     * Id obtained with {@link InputMethodInfo#getId()} for the currently selected input method.
+     * method.  This is to be synchronized with the secure settings keyed with
+     * {@link Settings.Secure#DEFAULT_INPUT_METHOD}.
+     *
+     * <p>This can be transiently {@code null} when the system is re-initializing input method
+     * settings, e.g., the system locale is just changed.</p>
+     *
+     * <p>Note that {@link #mCurId} is used to track which IME is being connected to
+     * {@link InputMethodManagerService}.</p>
+     *
+     * @see #mCurId
      */
+    @Nullable
     String mCurMethodId;
 
     /**
@@ -320,9 +345,14 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     EditorInfo mCurAttribute;
 
     /**
-     * The input method ID of the input method service that we are currently
+     * Id obtained with {@link InputMethodInfo#getId()} for the input method that we are currently
      * connected to or in the process of connecting to.
+     *
+     * <p>This can be {@code null} when no input method is connected.</p>
+     *
+     * @see #mCurMethodId
      */
+    @Nullable
     String mCurId;
 
     /**
@@ -932,6 +962,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     }
                 }, filter);
         LocalServices.addService(InputMethodManagerInternal.class, new LocalServiceImpl(mHandler));
+        QSUtils.registerObserverForQSChanges(mContext, mQSListener);
     }
 
     private void resetDefaultImeLocked(Context context) {
@@ -978,7 +1009,6 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 || (newLocale != null && !newLocale.equals(mLastSystemLocale))) {
             if (!updateOnlyWhenLocaleChanged) {
                 hideCurrentInputLocked(0, null);
-                mCurMethodId = null;
                 unbindCurrentMethodLocked(true, false);
             }
             if (DEBUG) {
@@ -1532,7 +1562,11 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         channel.dispose();
     }
 
-    void unbindCurrentMethodLocked(boolean reportToClient, boolean savePosition) {
+    void unbindCurrentMethodLocked(boolean resetCurrentMethodAndClient, boolean savePosition) {
+        if (resetCurrentMethodAndClient) {
+            mCurMethodId = null;
+        }
+
         if (mVisibleBound) {
             mContext.unbindService(mVisibleConnection);
             mVisibleBound = false;
@@ -1559,9 +1593,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         mCurId = null;
         clearCurMethodLocked();
 
-        if (reportToClient && mCurClient != null) {
-            executeOrSendMessage(mCurClient.client, mCaller.obtainMessageIO(
-                    MSG_UNBIND_METHOD, mCurSeq, mCurClient.client));
+        if (resetCurrentMethodAndClient) {
+            unbindCurrentClientLocked();
         }
     }
 
@@ -1803,6 +1836,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                             com.android.internal.R.string.select_input_method,
                             mImeSwitcherNotification.build(), UserHandle.ALL);
                     mNotificationShown = true;
+                    publishImeSelectorCustomTile(imi);
                 }
             } else {
                 if (mNotificationShown && mNotificationManager != null) {
@@ -1812,6 +1846,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     mNotificationManager.cancelAsUser(null,
                             com.android.internal.R.string.select_input_method, UserHandle.ALL);
                     mNotificationShown = false;
+                    unpublishImeSelectorCustomTile();
                 }
             }
         } finally {
@@ -1912,13 +1947,11 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 setInputMethodLocked(id, mSettings.getSelectedInputMethodSubtypeId(id));
             } catch (IllegalArgumentException e) {
                 Slog.w(TAG, "Unknown input method from prefs: " + id, e);
-                mCurMethodId = null;
                 unbindCurrentMethodLocked(true, false);
             }
             mShortcutInputMethodsAndSubtypes.clear();
         } else {
             // There is no longer an input method set, so stop any current one.
-            mCurMethodId = null;
             unbindCurrentMethodLocked(true, false);
         }
         // code to disable the CM Phone IME switcher with config_show_cmIMESwitcher set = false
@@ -3541,6 +3574,71 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 }
             }
             return false;
+        }
+    }
+
+    private void publishImeSelectorCustomTile(InputMethodInfo imi) {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            final UserHandle user = new UserHandle(userId);
+            final int icon = QSUtils.getDynamicQSTileResIconId(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_IME_SELECTOR);
+            final String contentDesc = QSUtils.getDynamicQSTileLabel(mContext, userId,
+                    QSConstants.DYNAMIC_TILE_IME_SELECTOR);
+            final Context resourceContext = QSUtils.getQSTileContext(mContext, userId);
+            CharSequence inputMethodName = null;
+            if (mCurrentSubtype != null) {
+                inputMethodName = mCurrentSubtype.getDisplayName(mContext,
+                        imi.getPackageName(), imi.getServiceInfo().applicationInfo);
+            }
+            final CharSequence label = inputMethodName == null ? contentDesc : inputMethodName;
+
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            CustomTile tile = new CustomTile.Builder(resourceContext)
+                    .setLabel(label.toString())
+                    .setContentDescription(contentDesc)
+                    .setIcon(icon)
+                    .setOnClickIntent(mImeSwitchPendingIntent)
+                    .build();
+            statusBarManager.publishTileAsUser(QSConstants.DYNAMIC_TILE_IME_SELECTOR,
+                    InputMethodManagerService.class.hashCode(), tile, user);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private void unpublishImeSelectorCustomTile() {
+        // This action should be performed as system
+        final int userId = UserHandle.myUserId();
+        long token = Binder.clearCallingIdentity();
+        try {
+            CMStatusBarManager statusBarManager = CMStatusBarManager.getInstance(mContext);
+            statusBarManager.removeTileAsUser(QSConstants.DYNAMIC_TILE_IME_SELECTOR,
+                    InputMethodManagerService.class.hashCode(), new UserHandle(userId));
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
+    }
+
+    private void processQSChangedLocked() {
+        final int userId = UserHandle.myUserId();
+        final boolean isIMEVisible = ((mImeWindowVis & (InputMethodService.IME_ACTIVE)) != 0)
+                && (mWindowManagerService.isHardKeyboardAvailable()
+                        || (mImeWindowVis & (InputMethodService.IME_VISIBLE)) != 0);
+        InputMethodInfo imi = null;
+        synchronized (mMethodMap) {
+            if (mCurMethodId != null) {
+                imi = mMethodMap.get(mCurMethodId);
+            }
+        }
+        final boolean hasInputMethod = isIMEVisible && imi != null && mCurrentSubtype != null;
+        boolean enabled = hasInputMethod;
+        if (enabled) {
+            publishImeSelectorCustomTile(imi);
+        } else {
+            unpublishImeSelectorCustomTile();
         }
     }
 

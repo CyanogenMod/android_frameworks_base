@@ -660,19 +660,14 @@ public class ThemeService extends IThemeService.Stub {
         boolean success;
         success = setCustomLockScreenWallpaper(pkgName);
 
-        // TODO: uncomment once Keyguard wallpaper is re-implemented
-        /*
         if (success) {
             mContext.sendBroadcastAsUser(new Intent(Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED),
                     UserHandle.ALL);
         }
-        */
         return success;
     }
 
     private boolean setCustomLockScreenWallpaper(String pkgName) {
-        // TODO: uncomment once Keyguard wallpaper is re-implemented
-        /*
         WallpaperManager wm = WallpaperManager.getInstance(mContext);
         try {
             if (SYSTEM_DEFAULT.equals(pkgName) || TextUtils.isEmpty(pkgName)) {
@@ -688,7 +683,6 @@ public class ThemeService extends IThemeService.Stub {
             Log.e(TAG, "There was an error setting lockscreen wp for pkg " + pkgName, e);
             return false;
         }
-        */
         return true;
     }
 

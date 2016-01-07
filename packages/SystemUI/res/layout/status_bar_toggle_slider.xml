@@ -55,7 +55,7 @@
         android:layout_centerVertical="true"
         android:gravity="center"
         android:paddingTop="26dp"
-        android:textColor="#666666"
+        android:textColor="@color/toggle_slider_text_color"
         android:textSize="12sp"
         android:visibility="gone"
         />

@@ -265,8 +265,6 @@
     <string name="wfc_mode_cellular_preferred_summary">Cellular preferred</string>
     <!-- WFC, summary for Wi-Fi Only -->
     <string name="wfc_mode_wifi_only_summary">Wi-Fi only</string>
-    <!-- Template for showing cellular network operator name while LTE calling is enabled -->
-    <string name="high_definition_tag">%s</string>
 
     <!--
         {0} is one of "bearerServiceCode*"
@@ -3149,9 +3147,6 @@
     <!-- Shown when the device is tethered -->
     <string name="tethered_notification_title">Tethering or hotspot active</string>
     <string name="tethered_notification_message">Touch to set up.</string>
-    <string name="tethered_notification_no_device_message">No connected device</string>
-    <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connected device</string>
-    <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> connected devices</string>
 
     <!--  Strings for possible PreferenceActivity Back/Next buttons -->
     <string name="back_button_label">Back</string>
@@ -4041,6 +4036,9 @@
     <!-- Zen mode condition - line two: ending time. [CHAR LIMIT=NONE] -->
     <string name="zen_mode_until">Until <xliff:g id="formattedTime" example="10:00 PM">%1$s</xliff:g></string>
 
+    <!-- Zen mode condition - line one: Until next alarm. [CHAR LIMIT=NONE] -->
+    <string name="zen_mode_alarm">Until <xliff:g id="formattedTime" example="10:00 PM">%1$s</xliff:g> (next alarm)</string>
+
     <!-- Zen mode condition: no exit criteria. [CHAR LIMIT=NONE] -->
     <string name="zen_mode_forever">Until you turn this off</string>
 
@@ -4119,9 +4117,4 @@
     <!-- Used to replace a range of characters in text that is too wide
          for the space allocated to it (two dots). -->
     <string name="ellipsis_two_dots">\u2025</string>
-
-    <!-- Carrier Name -->
-    <string name="China_Mobile">China Mobile</string>
-    <string name="China_Unicom">China Unicom</string>
-    <string name="China_Telecom">China Telecom</string>
 </resources>

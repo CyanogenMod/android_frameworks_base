@@ -36,7 +36,7 @@
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
         android:textSize="16sp"
-        android:textColor="#ffffffff"
+        android:textColor="@color/task_view_header_text_color"
         android:text="@string/recents_empty_message"
         android:fontFamily="sans-serif-medium"
         android:singleLine="true"

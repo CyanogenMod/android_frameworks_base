@@ -222,6 +222,8 @@ public class ConnectivityService extends IConnectivityManager.Stub
     private INetworkPolicyManager mPolicyManager;
 
     private String mCurrentTcpBufferSizes;
+    private int mCurrentTcpDelayedAckSegments;
+    private int mCurrentTcpUserCfg;
 
     private static final int ENABLED  = 1;
     private static final int DISABLED = 0;
@@ -953,13 +955,13 @@ public class ConnectivityService extends IConnectivityManager.Stub
             uidRules = mUidRules.get(uid, RULE_ALLOW_ALL);
         }
 
-        if ((uidRules & RULE_REJECT_ALL) != 0
-                || (networkCostly && (uidRules & RULE_REJECT_METERED) != 0)) {
+        if (uidRules == RULE_REJECT_ALL) {
             return true;
+        } else if ((uidRules == RULE_REJECT_METERED) && networkCostly) {
+            return true;
+        } else {
+            return false;
         }
-
-        // no restrictive rules; network is visible
-        return false;
     }
 
     /**
@@ -1454,10 +1456,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
     }
 
     private void enforceChangePermission() {
-        int uid = Binder.getCallingUid();
-        Settings.checkAndNoteChangeNetworkStateOperation(mContext, uid, Settings
-                .getPackageNameForUid(mContext, uid), true);
-
+        ConnectivityManager.enforceChangePermission(mContext);
     }
 
     private void enforceTetherAccessPermission() {
@@ -1738,6 +1737,34 @@ public class ConnectivityService extends IConnectivityManager.Stub
         }
     }
 
+    private void updateTcpDelayedAck(NetworkAgentInfo nai) {
+        if (isDefaultNetwork(nai) == false) {
+            return;
+        }
+
+        int segments = nai.linkProperties.getTcpDelayedAckSegments();
+        int usercfg = nai.linkProperties.getTcpUserCfg();
+
+        if (segments != mCurrentTcpDelayedAckSegments) {
+            try {
+                FileUtils.stringToFile("/sys/kernel/ipv4/tcp_delack_seg",
+                        String.valueOf(segments));
+                mCurrentTcpDelayedAckSegments = segments;
+            } catch (IOException e) {
+                // optional
+            }
+        }
+
+        if (usercfg != mCurrentTcpUserCfg) {
+            try {
+                FileUtils.stringToFile("/sys/kernel/ipv4/tcp_use_usercfg",
+                        String.valueOf(usercfg));
+                mCurrentTcpUserCfg = usercfg;
+            } catch (IOException e) {
+                // optional
+            }
+        }
+    }
     private void flushVmDnsCache() {
         /*
          * Tell the VMs to toss their DNS caches
@@ -3227,6 +3254,11 @@ public class ConnectivityService extends IConnectivityManager.Stub
             final String profileName = new String(mKeyStore.get(Credentials.LOCKDOWN_VPN));
             final VpnProfile profile = VpnProfile.decode(
                     profileName, mKeyStore.get(Credentials.VPN + profileName));
+            if (profile == null) {
+                Slog.e(TAG, "Lockdown VPN configured invalid profile " + profileName);
+                setLockdownTracker(null);
+                return true;
+            }
             int user = UserHandle.getUserId(Binder.getCallingUid());
             synchronized(mVpns) {
                 setLockdownTracker(new LockdownVpnTracker(mContext, mNetd, this, mVpns.get(user),
@@ -3373,7 +3405,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
                     .setPriority(highPriority ?
                             Notification.PRIORITY_HIGH :
                             Notification.PRIORITY_DEFAULT)
-                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setDefaults(highPriority ? Notification.DEFAULT_ALL : 0)
                     .setOnlyAlertOnce(true)
                     .build();
 
@@ -3739,7 +3771,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
             synchronized(mRulesLock) {
                 uidRules = mUidRules.get(uid, RULE_ALLOW_ALL);
             }
-            if ((uidRules & (RULE_REJECT_METERED | RULE_REJECT_ALL)) != 0) {
+            if (uidRules != RULE_ALLOW_ALL) {
                 // we could silently fail or we can filter the available nets to only give
                 // them those they have access to.  Chose the more useful
                 networkCapabilities.addCapability(NET_CAPABILITY_NOT_METERED);
@@ -3959,6 +3991,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
 //            updateMtu(lp, null);
 //        }
         updateTcpBufferSizes(networkAgent);
+        updateTcpDelayedAck(networkAgent);
 
         // TODO: deprecate and remove mDefaultDns when we can do so safely. See http://b/18327075
         // In L, we used it only when the network had Internet access but provided no DNS servers.
@@ -4283,6 +4316,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
         notifyLockdownVpn(newNetwork);
         handleApplyDefaultProxy(newNetwork.linkProperties.getHttpProxy());
         updateTcpBufferSizes(newNetwork);
+        updateTcpDelayedAck(newNetwork);
         setDefaultDnsSystemProperties(newNetwork.linkProperties.getDnsServers());
     }
 

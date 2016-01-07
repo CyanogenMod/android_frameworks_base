@@ -1721,6 +1721,12 @@ public final class ViewRootImpl implements ViewParent,
                             try {
                                 hwInitialized = mAttachInfo.mHardwareRenderer.initialize(
                                         mSurface);
+                                if (hwInitialized && (host.mPrivateFlags
+                                        & View.PFLAG_REQUEST_TRANSPARENT_REGIONS) == 0) {
+                                    // Don't pre-allocate if transparent regions
+                                    // are requested as they may not be needed
+                                    mSurface.allocateBuffers();
+                                }
                             } catch (OutOfResourcesException e) {
                                 handleOutOfResourcesException(e);
                                 return;

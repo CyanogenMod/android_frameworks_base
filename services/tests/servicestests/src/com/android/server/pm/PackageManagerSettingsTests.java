@@ -263,7 +263,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         writeOldFiles();
         createUserManagerServiceRef();
         Settings settings = new Settings(getContext().getFilesDir(), new Object());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
         verifyKeySetMetaData(settings);
     }
 
@@ -275,11 +275,11 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         writeOldFiles();
         createUserManagerServiceRef();
         Settings settings = new Settings(getContext().getFilesDir(), new Object());
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
 
         /* write out, read back in and verify the same */
         settings.writeLPr();
-        assertEquals(true, settings.readLPw(null, null, 0, false));
+        assertEquals(true, settings.readLPw(null, null, 0, false, null));
         verifyKeySetMetaData(settings);
     }
 
@@ -357,7 +357,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
     // Checks if a package that is locked to a different region is rejected
     // from being installed
      public void testPrebundledDifferentRegionReject() {
-        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        Settings settings = new Settings(getContext().getFilesDir());
         String expectedPackageNeededForRegion = "org.cyanogenmod.restricted.package";
         Resources resources = Mockito.mock(Resources.class);
         String[] regionRestrictedPackages = new String[] {
@@ -373,7 +373,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
     // This also covers the test for a package that needs to be installed on a
     // non region locked device
     public void testPrebundledMatchingRegionAccept() {
-        Settings settings = new Settings(getContext(), getContext().getFilesDir());
+        Settings settings = new Settings(getContext().getFilesDir());
         String expectedPackageNeededForRegion = "org.cyanogenmod.restricted.package";
         Resources resources = Mockito.mock(Resources.class);
         String[] regionLockedPackages = new String[] {

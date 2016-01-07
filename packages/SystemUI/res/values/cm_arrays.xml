@@ -24,4 +24,81 @@
         <item>369</item><item>157</item>
         <item>369</item><item>0</item>
     </array>
+
+    <!-- Cardinal directions for the compass tile -->
+    <string-array name="cardinal_directions">
+        <item>N</item>  <!-- North -->
+        <item>NE</item> <!-- North east -->
+        <item>E</item>  <!-- East -->
+        <item>SE</item> <!-- South east -->
+        <item>S</item>  <!-- South -->
+        <item>SW</item> <!-- South west -->
+        <item>W</item>  <!-- West -->
+        <item>NW</item> <!-- North west -->
+    </string-array>
+
+    <!-- Performance profiles description-->
+    <string-array name="perf_profile_description" translatable="false">
+        <item>@string/accessibility_quick_settings_perf_profile_pwrsv</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bias_power</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bal</item>
+        <item>@string/accessibility_quick_settings_perf_profile_bias_perf</item>
+        <item>@string/accessibility_quick_settings_perf_profile_perf</item>
+    </string-array>
+
+    <!-- Performance profiles announcement-->
+    <string-array name="perf_profile_announcement" translatable="false">
+        <item>@string/accessibility_quick_settings_perf_profile_changed_pwrsv</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bias_power</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bal</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_bias_perf</item>
+        <item>@string/accessibility_quick_settings_perf_profile_changed_perf</item>
+    </string-array>
+
+    <!-- Dynamic tiles -->
+    <string-array name="dynamic_qs_tiles_labels" translatable="false">
+        <item>@string/dynamic_qs_tile_next_alarm_label</item>
+        <item>@string/dynamic_qs_tile_ime_selector_label</item>
+        <item>@string/dynamic_qs_tile_su_label</item>
+        <item>@string/dynamic_qs_tile_adb_label</item>
+    </string-array>
+    <string-array name="dynamic_qs_tiles_icons_resources_ids" translatable="false">
+        <item>ic_dynamic_qs_next_alarm</item>
+        <item>ic_dynamic_qs_ime_selector</item>
+        <item>ic_dynamic_qs_su</item>
+        <item>ic_dynamic_qs_adb</item>
+    </string-array>
+    <string-array name="dynamic_qs_tiles_values" translatable="false">
+        <item>next_alarm</item>
+        <item>ime_selector</item>
+        <item>su</item>
+        <item>adb</item>
+    </string-array>
+
+    <!-- LiveDisplay drawables -->
+    <string-array name="live_display_drawables" translatable="false">
+        <item>@drawable/ic_livedisplay_auto</item>
+        <item>@drawable/ic_livedisplay_off</item>
+        <item>@drawable/ic_livedisplay_day</item>
+        <item>@drawable/ic_livedisplay_night</item>
+        <item>@drawable/ic_livedisplay_outdoor</item>
+    </string-array>
+
+    <!-- LiveDisplay description-->
+    <string-array name="live_display_description" translatable="false">
+        <item>@string/accessibility_quick_settings_live_display_auto</item>
+        <item>@string/accessibility_quick_settings_live_display_off</item>
+        <item>@string/accessibility_quick_settings_live_display_day</item>
+        <item>@string/accessibility_quick_settings_live_display_night</item>
+        <item>@string/accessibility_quick_settings_live_display_outdoor</item>
+    </string-array>
+
+    <!-- LiveDisplay announcement-->
+    <string-array name="live_display_announcement" translatable="false">
+        <item>@string/accessibility_quick_settings_live_display_changed_auto</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_off</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_day</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_night</item>
+        <item>@string/accessibility_quick_settings_live_display_changed_outdoor</item>
+    </string-array>
 </resources>

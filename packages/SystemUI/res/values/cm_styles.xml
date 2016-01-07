@@ -16,6 +16,15 @@
 -->
 <resources>
 
+    <style name="SettingRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+    </style>
+
     <style name="TextAppearance.StatusBar.Expanded.WeatherTemp">
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">normal</item>
@@ -26,6 +35,10 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/status_bar_temperature_location_text_color</item>
+    </style>
+
+    <style name="TextAppearance.QS.DetailItemSub">
+        <item name="android:textSize">@dimen/qs_detail_item_secondary_text_size</item>
     </style>
 
 </resources>
