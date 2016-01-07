@@ -252,7 +252,6 @@ public class DisplayMetrics {
         ydpi = inDensity;
 
         DENSITY_DEVICE = inDensity;
-        Bitmap.setDefaultDensity(inDensity);
     }
 
     public DisplayMetrics() {
