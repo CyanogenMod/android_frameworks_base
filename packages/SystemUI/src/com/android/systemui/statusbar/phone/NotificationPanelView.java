@@ -1193,18 +1193,30 @@ public class NotificationPanelView extends PanelView implements
         @Override
         public boolean requestDismiss() {
             if (hasExternalKeyguardView()) {
-                mStatusBar.setBarState(StatusBarState.KEYGUARD);
-                mStatusBar.showBouncer();
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mStatusBar.showKeyguard();
+                        mStatusBar.showBouncer();
+                    }
+                });
                 return true;
             }
             return false;
         }
 
         @Override
-        public boolean requestDismissAndStartActivity(Intent intent) {
+        public boolean requestDismissAndStartActivity(final Intent intent) {
             if (hasExternalKeyguardView()) {
-                mStatusBar.setBarState(StatusBarState.KEYGUARD);
-                mStatusBar.startActivity(intent, true);
+                if (hasExternalKeyguardView()) {
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mStatusBar.showKeyguard();
+                            mStatusBar.startActivity(intent, true);
+                        }
+                    });
+                }
                 return true;
             }
             return false;
