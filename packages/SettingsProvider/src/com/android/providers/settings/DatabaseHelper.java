@@ -2509,6 +2509,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_PULSE,
                     R.bool.def_notification_pulse);
 
+            loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE,
+                    R.bool.def_notification_pulse_custom_enable);
+
+            if (mContext.getResources().getBoolean(R.bool.def_notification_pulse_custom_enable)) {
+                loadStringSetting(stmt,Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES,
+                        R.string.def_notification_pulse_custom_value);
+            }
+
             loadUISoundEffectsSettings(stmt);
 
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
