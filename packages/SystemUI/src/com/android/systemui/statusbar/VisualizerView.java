@@ -156,6 +156,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private void updateViewVisibility() {
         setVisibility(mKeyguardMonitor != null && mKeyguardMonitor.isShowing()
                 && mVisualizerEnabled ? View.VISIBLE : View.GONE);
+        checkStateChanged();
     }
 
     @Override
