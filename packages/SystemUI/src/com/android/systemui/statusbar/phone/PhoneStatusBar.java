@@ -2063,7 +2063,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         // apply user lockscreen image
-        if (mMediaMetadata == null && backdropBitmap == null) {
+        if (backdropBitmap == null) {
             backdropBitmap = mKeyguardWallpaper;
         }
 
@@ -2076,10 +2076,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     && mMediaController.getPlaybackState() != null
                     && mMediaController.getPlaybackState().getState()
                             == PlaybackState.STATE_PLAYING);
-        }
-
-        if (backdropBitmap == null && mMediaMetadata == null) {
-            backdropBitmap = mKeyguardWallpaper;
         }
 
         if (keyguardVisible) {
