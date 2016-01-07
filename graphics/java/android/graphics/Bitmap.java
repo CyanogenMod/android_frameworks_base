@@ -96,9 +96,7 @@ public final class Bitmap implements Parcelable {
         if (sDefaultDensity >= 0) {
             return sDefaultDensity;
         }
-        //noinspection deprecation
-        sDefaultDensity = DisplayMetrics.DENSITY_DEVICE;
-        return sDefaultDensity;
+        return DisplayMetrics.DENSITY_DEVICE;
     }
 
     /**
