@@ -39,6 +39,8 @@ import java.util.Arrays;
 public class VisualizerView extends View implements Palette.PaletteAsyncListener,
         KeyguardMonitor.Callback {
 
+    private final Object mLock = new Object();
+
     private Paint mPaint;
     private Visualizer mVisualizer;
     private ObjectAnimator mVisualizerColorAnimator;
@@ -53,6 +55,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private boolean mDisplaying = false; // the state we're animating to
     private boolean mDozing = false;
     private boolean mOccluded = false;
+    private boolean mCurrentlyEnabled = false;
 
     private int mColor;
     private Bitmap mCurrentBitmap;
@@ -90,27 +93,38 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         @Override
         public void run() {
             try {
-                mVisualizer = new Visualizer(0);
+                synchronized (mLock) {
+                    mVisualizer = new Visualizer(0);
+                    mCurrentlyEnabled = true;
+                }
             } catch (Exception e) {
                 return;
             }
 
-            mVisualizer.setEnabled(false);
-            mVisualizer.setCaptureSize(66);
-            mVisualizer.setDataCaptureListener(mVisualizerListener,Visualizer.getMaxCaptureRate(),
-                    false, true);
-            mVisualizer.setEnabled(true);
-
+            synchronized (mLock) {
+                if (mCurrentlyEnabled)
+                    mVisualizer.setEnabled(false);
+                mVisualizer.setCaptureSize(66);
+                mVisualizer.setDataCaptureListener(mVisualizerListener,Visualizer.getMaxCaptureRate(),
+                        false, true);
+                if (mCurrentlyEnabled)
+                    mVisualizer.setEnabled(true);
+            }
         }
     };
 
     private final Runnable mUnlinkVisualizer = new Runnable() {
         @Override
         public void run() {
-            if (mVisualizer != null) {
-                mVisualizer.setEnabled(false);
-                mVisualizer.release();
-                mVisualizer = null;
+            synchronized (mLock) {
+                if (mVisualizer != null) {
+                    if (mCurrentlyEnabled) {
+                        mVisualizer.setEnabled(false);
+                        mCurrentlyEnabled = false;
+                    }
+                    mVisualizer.release();
+                    mVisualizer = null;
+                }
             }
         }
     };
@@ -154,8 +168,23 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     }
 
     private void updateViewVisibility() {
-        setVisibility(mKeyguardMonitor != null && mKeyguardMonitor.isShowing()
-                && mVisualizerEnabled ? View.VISIBLE : View.GONE);
+        synchronized (mLock) {
+            boolean show = mKeyguardMonitor != null && mKeyguardMonitor.isShowing()
+                    && mVisualizerEnabled;
+
+            setVisibility(show ? View.VISIBLE : View.GONE);
+
+            if (mVisualizer == null)
+                return;
+
+            if (!show && mCurrentlyEnabled) {
+                mVisualizer.setEnabled(false);
+                mCurrentlyEnabled = false;
+            } else if (show && !mCurrentlyEnabled) {
+                mVisualizer.setEnabled(true);
+                mCurrentlyEnabled = true;
+            }
+        }
     }
 
     @Override
@@ -213,8 +242,10 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mVisualizer != null) {
-            canvas.drawLines(mFFTPoints, mPaint);
+        synchronized (mLock) {
+            if (mVisualizer != null) {
+                canvas.drawLines(mFFTPoints, mPaint);
+            }
         }
     }
 
