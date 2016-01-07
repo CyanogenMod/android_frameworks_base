@@ -20,6 +20,7 @@ import android.annotation.AttrRes;
 import android.annotation.ColorInt;
 import android.annotation.StyleRes;
 import android.annotation.StyleableRes;
+import android.graphics.Bitmap;
 import com.android.internal.util.GrowingArrayUtils;
 import android.app.ComposedIconInfo;
 import android.app.IconPackHelper;
@@ -2121,12 +2122,15 @@ public class Resources {
                 mConfiguration.setLayoutDirection(mConfiguration.locale);
             }
             if (mConfiguration.densityDpi != Configuration.DENSITY_DPI_UNDEFINED) {
-                if (DisplayMetrics.DENSITY_DEVICE_DEFAULT == mCompatibilityInfo.applicationDensity
-                        && (config != null
-                        && config.densityDpi == DisplayMetrics.DENSITY_DEVICE_DEFAULT)) {
-                    mMetrics.setDensity(DisplayMetrics.DENSITY_PREFERRED);
+                mMetrics.setDensity(mConfiguration.densityDpi);
+                if (mConfiguration.densityDpi == DisplayMetrics.DENSITY_DEVICE
+                        && mConfiguration.densityDpi != DisplayMetrics.DENSITY_DEVICE_DEFAULT
+                        && !mCompatibilityInfo.isScalingRequired()) {
+                    // force bitmap density to be the same bucket as the original device dpi,
+                    // otherwise it may get scaled incorrectly.
+                    Bitmap.setDefaultDensity(DisplayMetrics.DENSITY_DEVICE_DEFAULT);
                 } else {
-                    mMetrics.setDensity(mConfiguration.densityDpi);
+                    Bitmap.setDefaultDensity(mConfiguration.densityDpi);
                 }
             }
             mMetrics.scaledDensity = mMetrics.density * mConfiguration.fontScale;
