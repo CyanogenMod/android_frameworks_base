@@ -30,7 +30,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.UserInfo;
+import android.database.ContentObserver;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -57,6 +59,7 @@ import android.view.WindowManagerPolicy;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.tiles.LockscreenToggleTile;
 import cyanogenmod.app.Profile;
 import cyanogenmod.app.ProfileManager;
@@ -78,6 +81,7 @@ import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.ScrimController;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
 import com.android.systemui.statusbar.phone.StatusBarWindowManager;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -342,6 +346,50 @@ public class KeyguardViewMediator extends SystemUI {
 
     private boolean mWakeAndUnlocking;
     private IKeyguardDrawnCallback mDrawnCallback;
+
+    private LockscreenEnabledSettingsObserver mSettingsObserver;
+    public static class LockscreenEnabledSettingsObserver extends UserContentObserver {
+
+        private static final String KEY_ENABLED = "lockscreen_enabled";
+
+        private boolean mObserving;
+        private SharedPreferences mPrefs;
+        private Context mContext;
+
+        public LockscreenEnabledSettingsObserver(Context context, Handler handler) {
+            super(handler);
+            mContext = context;
+            mPrefs = mContext.getSharedPreferences("quicksettings", Context.MODE_PRIVATE);
+        }
+
+        public boolean getPersistedDefaultOldSetting() {
+            return mPrefs.getBoolean(KEY_ENABLED, true);
+        }
+
+        @Override
+        public void observe() {
+            if (mObserving) {
+                return;
+            }
+            mObserving = true;
+            mContext.getContentResolver().registerContentObserver(CMSettings.Secure.getUriFor(
+                    CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED), false, this,
+                    UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        public void unobserve() {
+            if (mObserving) {
+                mObserving = false;
+                mContext.getContentResolver().unregisterContentObserver(this);
+            }
+        }
+
+        @Override
+        public void update() {
+        }
+    }
 
     KeyguardUpdateMonitorCallback mUpdateCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -634,6 +682,20 @@ public class KeyguardViewMediator extends SystemUI {
 
         mHideAnimation = AnimationUtils.loadAnimation(mContext,
                 com.android.internal.R.anim.lock_screen_behind_enter);
+
+        mSettingsObserver = new LockscreenEnabledSettingsObserver(mContext, new Handler()) {
+            @Override
+            public void update() {
+                boolean newDisabledState = CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                        CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED,
+                        getPersistedDefaultOldSetting() ? 1 : 0,
+                        UserHandle.USER_CURRENT) == 0;
+                if (newDisabledState != mInternallyDisabled && mKeyguardBound) {
+                    // it was updated,
+                    setKeyguardEnabledInternal(!newDisabledState);
+                }
+            }
+        };
     }
 
     @Override
@@ -1298,9 +1360,11 @@ public class KeyguardViewMediator extends SystemUI {
                 }
             } else if (KEYGUARD_SERVICE_ACTION_STATE_CHANGE.equals(intent.getAction())) {
                 mKeyguardBound = intent.getBooleanExtra(KEYGUARD_SERVICE_EXTRA_ACTIVE, false);
-                context.sendBroadcast(new Intent(
-                        LockscreenToggleTile.ACTION_APPLY_LOCKSCREEN_STATE)
-                        .setPackage(context.getPackageName()));
+                if (mKeyguardBound) {
+                    mSettingsObserver.observe();
+                } else {
+                    mSettingsObserver.unobserve();
+                }
             }
         }
     };
