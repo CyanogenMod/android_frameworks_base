@@ -363,6 +363,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         }
         if (error) {
             onFingerprintAttemptFailed(true, fingerprintIdOrError);
+            return;
         } else if (fingerprintIdOrError == 0) {
             // not a valid fingerprint
             onFingerprintAttemptFailed(false, 0);
