@@ -134,6 +134,8 @@
   <string name="perf_profile_pwrsv">Strømsparing</string>
   <string name="perf_profile_bal">Balansert</string>
   <string name="perf_profile_perf">Ytelse</string>
+  <string name="perf_profile_bias_power">Effektivitet</string>
+  <string name="perf_profile_bias_perf">Rask</string>
   <string name="theme_install_error_title">Kan ikke installere tema</string>
   <string name="theme_install_error_message">%s ble ikke installert</string>
   <string name="theme_reset_notification_title">Reset tema</string>
@@ -209,4 +211,5 @@
   <string name="silent_mode_none">Ingen</string>
   <string name="subscription_change_disabled_wifi_ap">Deaktivert Wi-Fi hotspot på grunn av endring i SIM-abbonement</string>
   <string name="notify_turn_wifi_off_title">Deaktiver Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">tredjeparts låseskjerm</string>
 </resources>

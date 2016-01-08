@@ -131,7 +131,7 @@
   <string name="quick_settings_ambient_display_label">Visualização de ambiente</string>
   <string name="quick_settings_sync_label">Sincronização</string>
   <string name="quick_settings_battery_saver_label">Economizador de bateria</string>
-  <string name="quick_settings_custom_tile_detail_title">Botões personalizados</string>
+  <string name="quick_settings_custom_tile_detail_title">Mosaicos personalizados</string>
   <string name="quick_settings_performance_profile_detail_title">Modo de bateria</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>
@@ -164,8 +164,8 @@
   <string name="screen_pinning_description_no_navbar">Isto mantém visível até soltar. Toque e segure o botão Voltar até soltar.</string>
   <string name="interruption_level_silent">Silêncio</string>
   <string name="zen_silent_with_warning">Sem interrupções, exceto os alarmes.</string>
-  <string name="quick_settings_remove">Remover botão</string>
-  <string name="quick_settings_dynamic_tile_detail_title">Botões dinâmicos</string>
+  <string name="quick_settings_remove">Remover mosaico</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Mosaicos dinâmicos</string>
   <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seletor de IME</string>
   <string name="dynamic_qs_tile_su_label">Acesso root</string>

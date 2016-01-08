@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Tryb baterii: tryb oszczędzania baterii.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Tryb baterii: tryb zrównoważony.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Tryb baterii: tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Tryb baterii: tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Tryb baterii: tryb szybki.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Tryb baterii zmienił się na tryb oszczędzania energii.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Tryb baterii zmienił się na tryb zrównoważony.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Tryb baterii zmienił się na tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Tryb baterii zmieniony na tryb wydajności.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Tryb baterii zmieniony na tryb szybki.</string>
   <string name="accessibility_quick_settings_profiles_off">Profile wyłączone.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profile zostały wyłączone.</string>
@@ -128,6 +132,7 @@
   <string name="quick_settings_sync_label">Synchronizacja</string>
   <string name="quick_settings_battery_saver_label">Oszczędzanie baterii</string>
   <string name="quick_settings_custom_tile_detail_title">Kafelek niestandardowy</string>
+  <string name="quick_settings_performance_profile_detail_title">Tryb baterii</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Przesuń palcem w prawo do %1$s</string>
   <string name="right_shortcut_hint">Przesuń palcem w lewo do %1$s</string>
@@ -167,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Przyłóż palec ponownie</string>
   <string name="accessibility_dock_battery_level">Bateria stacji dokującej <xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nic nie znaleziono</string>
+  <string name="play_queue_extention">Pokaż kolejkę odtwarzania</string>
 </resources>
