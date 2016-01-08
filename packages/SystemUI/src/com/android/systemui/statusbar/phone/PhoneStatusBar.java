@@ -954,8 +954,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             // no window manager? good luck with that
         }
 
-        if (mRecreating) {
-        } else {
             addAppCircleSidebar();
         }
 
