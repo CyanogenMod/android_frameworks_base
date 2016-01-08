@@ -45,6 +45,7 @@ import static android.net.NetworkPolicyManager.FIREWALL_RULE_DENY;
 import static android.net.NetworkPolicyManager.POLICY_ALLOW_BACKGROUND_BATTERY_SAVE;
 import static android.net.NetworkPolicyManager.POLICY_NONE;
 import static android.net.NetworkPolicyManager.POLICY_REJECT_METERED_BACKGROUND;
+import static android.net.NetworkPolicyManager.POLICY_REJECT_APP_METERED_USAGE;
 import static android.net.NetworkPolicyManager.RULE_ALLOW_ALL;
 import static android.net.NetworkPolicyManager.RULE_REJECT_ALL;
 import static android.net.NetworkPolicyManager.RULE_REJECT_METERED;
@@ -2267,8 +2268,13 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         // Derive active rules based on policy and active state
         int appId = UserHandle.getAppId(uid);
         int uidRules = RULE_ALLOW_ALL;
-        if (!uidForeground && (uidPolicy & POLICY_REJECT_METERED_BACKGROUND) != 0) {
-            // uid in background, and policy says to block metered data
+        if ( (uidPolicy & POLICY_REJECT_APP_METERED_USAGE) != 0) {
+            // Policy says to block all metered data for this uid
+            uidRules = RULE_REJECT_METERED;
+        } else if (!uidForeground &&
+                    (uidPolicy & POLICY_REJECT_METERED_BACKGROUND) != 0) {
+            /* uid is in background and policy says to block background metered
+               data */
             uidRules = RULE_REJECT_METERED;
         } else if (mRestrictBackground) {
             if (!uidForeground) {
@@ -2633,6 +2639,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             for (int uid : getUidsWithPolicy(POLICY_REJECT_METERED_BACKGROUND)) {
                 setUidPolicy(uid, POLICY_NONE);
             }
+            // Remove app's "restrict metered data" flag
+            for (int uid : getUidsWithPolicy(POLICY_REJECT_APP_METERED_USAGE)) {
+                setUidPolicy(uid, POLICY_NONE);
+            }
+
         }
     }
 }
