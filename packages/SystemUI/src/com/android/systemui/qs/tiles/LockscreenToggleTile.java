@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 
+import android.os.UserHandle;
 import android.widget.Toast;
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
@@ -30,6 +31,7 @@ import com.android.systemui.SystemUIApplication;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
+import cyanogenmod.providers.CMSettings;
 
 public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
         implements KeyguardMonitor.Callback {
@@ -160,11 +162,16 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
     }
 
     private boolean getPersistedState() {
-        return mPrefs.getBoolean(KEY_ENABLED, true);
+        return CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED,
+                mPrefs.getBoolean(KEY_ENABLED, true) ? 1 : 0 /* default to old preference */,
+                UserHandle.USER_OWNER) != 0;
     }
 
     private void setPersistedState(boolean enabled) {
-        mPrefs.edit().putBoolean(KEY_ENABLED, enabled).apply();
+        CMSettings.Secure.putIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED,
+                enabled ? 1 : 0, UserHandle.USER_OWNER);
         mPersistedState = enabled;
     }
 }
