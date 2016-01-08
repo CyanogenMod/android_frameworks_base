@@ -141,7 +141,7 @@ public class KeyguardViewMediator extends SystemUI {
     final static boolean DEBUG = false;
     private static final boolean DEBUG_SIM_STATES = KeyguardConstants.DEBUG_SIM_STATES;
     private final static boolean DBG_WAKE = false;
-    private final static boolean DBG_FINGERPRINT = false;
+    private final static boolean DBG_FINGERPRINT = true;
 
     private final static String TAG = "KeyguardViewMediator";
 
@@ -583,9 +583,10 @@ public class KeyguardViewMediator extends SystemUI {
                             // service may not be available.
                             setupFingerprint(screenOn);
                             return;
+                        case FingerprintManager.FINGERPRINT_ERROR_CANCELED:
+                            Log.w(TAG, "fingerprint error: cancelled.");
                         default:
                             Log.e(TAG, "FingerprintManager reported unhandled error: " + errorCode);
-                            return;
                     }
                 }
 
