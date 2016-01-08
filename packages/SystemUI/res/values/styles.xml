@@ -300,4 +300,15 @@
         <item name="android:background">@drawable/btn_borderless_rect</item>
     </style>
 
+    <style name="ListTheme" parent="@*android:style/Theme.Holo">
+        <item name="android:windowBackground">@*android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:listSelector">@*android:color/transparent</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:overScrollMode">never</item>
+        <item name="android:divider">@null</item>
+    </style>
+
 </resources>

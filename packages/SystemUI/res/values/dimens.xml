@@ -587,4 +587,11 @@
 
     <!-- Thickness of the shadows of the assist disclosure beams -->
     <dimen name="assist_disclosure_shadow_thickness">1.5dp</dimen>
+
+    <!-- App circle sidebar -->
+    <dimen name="app_sidebar_trigger_width">12dip</dimen>
+    <dimen name="app_sidebar_listview_width">160dp</dimen>
+    <dimen name="app_sidebar_icon_width">72dp</dimen>
+    <dimen name="app_sidebar_icon_height">72dp</dimen>
+
 </resources>
