@@ -582,11 +582,15 @@ public class KeyguardViewMediator extends SystemUI {
                         case FingerprintManager.FINGERPRINT_ERROR_HW_UNAVAILABLE:
                             // service may not be available.
                             setupFingerprint(screenOn);
-                            return;
+                            break;
+                        case FingerprintManager.FINGERPRINT_ERROR_CANCELED:
+                            Log.w(TAG, "fingerprint error: cancelled.");
+                            break;
                         default:
                             Log.e(TAG, "FingerprintManager reported unhandled error: " + errorCode);
-                            return;
+                            break;
                     }
+                    return;
                 }
 
                 if (!screenOn) { // mScreenOn isn't as reliable
