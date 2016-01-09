@@ -171,9 +171,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     protected NotificationGroupManager mGroupManager = new NotificationGroupManager();
 
-    // app circle sidebar
-    protected AppCircleSidebar mAppCircleSidebar;
-
     // for heads up notifications
     protected HeadsUpManager mHeadsUpManager;
 
