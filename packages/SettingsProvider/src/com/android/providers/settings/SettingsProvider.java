@@ -1982,8 +1982,8 @@ public class SettingsProvider extends ContentProvider {
         }
 
         private final class UpgradeController {
-            private static final int SETTINGS_VERSION = 122;
-            private static final int CM_SETTINGS_DB_VERSION = 125;
+            private static final int SETTINGS_VERSION = 123;
+            private static final int CM_SETTINGS_DB_VERSION = 126;
 
             private final int mUserId;
 
@@ -2134,6 +2134,24 @@ public class SettingsProvider extends ContentProvider {
                                 SettingsState.SYSTEM_PACKAGE_NAME);
                     }
                     currentVersion = 122;
+                }
+
+                if (currentVersion == 122) {
+                    if (userId == UserHandle.USER_OWNER) {
+                        final SettingsState globalSettings = getGlobalSettingsLocked();
+                        Setting currentSetting = globalSettings.getSettingLocked(
+                                Settings.Global.WIFI_IDLE_MS);
+                        int defaultComponent = getContext().getResources().getInteger(
+                                R.integer.default_wifi_idle_ms);
+                        System.out.println("Current setting " + currentSetting);
+                        System.out.println("Default value " + defaultComponent);
+                        if (currentSetting == null) {
+                            globalSettings.insertSettingLocked(Settings.Global.WIFI_IDLE_MS,
+                                    Integer.toString(defaultComponent),
+                                    SettingsState.SYSTEM_PACKAGE_NAME);
+                        }
+                    }
+                    currentVersion = 123;
                 }
                 // vXXX: Add new settings above this point.
 
