@@ -120,7 +120,7 @@
   <string name="app_ops_use_voice_volume">controlează volumul apelului de voce</string>
   <string name="app_ops_write_mms">scrie un mesaj MMS</string>
   <string name="app_ops_write_sms">scrie un mesaj SMS</string>
-  <string name="app_ops_su">obține acces root</string>
+  <string name="app_ops_su">obțină acces root</string>
   <string name="lock_to_app_toast_no_navbar">Pentru a anula fixarea acestui ecran, atingeți și țineți apăsat butonul Înapoi.</string>
   <string name="live_display_auto">Automat</string>
   <string name="live_display_auto_summary">Reglează automat temperatura de culoare de pe ecran după apus și răsărit</string>

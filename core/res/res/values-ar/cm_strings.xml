@@ -17,6 +17,126 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="global_action_screenshot">لقطة شاشة</string>
+  <string name="permlab_receiveProtectedSms">استلام رسالة نصية قصيرة محمية</string>
+  <string name="permdesc_receiveProtectedSms">يسمح للتطبيق باستلام رسالة نصية قصيرة محمية واردة.</string>
+  <string name="permlab_modifyProtectedSmsList">تعديل قائمة الرسائل النصية القصيرة المحمية</string>
+  <string name="permdesc_modifyProtectedSmsList">السماح للتطبيق بتعديل قائمة عناوين الرسائل النصية القصيرة المحمية.</string>
+  <string name="permgrouplab_security">الأمان</string>
+  <string name="permgroupdesc_security">أذونات متعلقة بمعلومات حماية الجهاز.</string>
+  <string name="permlab_readPhoneBlacklist">قراءة القائمة السوداء للهاتف</string>
+  <string name="permdesc_readPhoneBlacklist">السماح للتطبيق بقراءة المعلومات الخاصة بأرقام الهاتف المحظورة بالنبسة للمكالمات أو الرسائل الواردة.</string>
+  <string name="permlab_changePhoneBlacklist">تغيير القائمة السوداء للهاتف</string>
+  <string name="permdesc_changePhoneBlacklist">السماح للتطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
+  <string name="global_action_choose_profile">ملف تعريف</string>
+  <string name="permlab_setKeyguardWallpaper">تعيين خلفية شاشة الحارس الرئيسي</string>
+  <string name="permdesc_setKeyguardWallpaper">السماج للتطبيق بتغيير خلفية شاشة التأمين.</string>
+  <string name="global_action_reboot">إعادة تمهيد</string>
+  <string name="global_action_current_user">الحالي</string>
+  <string name="reboot_reboot">إعادة التمهيد</string>
+  <string name="reboot_recovery">استرداد</string>
+  <string name="reboot_bootloader">محمل التمهيد</string>
+  <string name="reboot_download">التنزيل</string>
+  <string name="reboot_soft">إعادة تمهيد سريعة</string>
+  <string name="reboot_title">إعادة التمهيد</string>
+  <string name="reboot_confirm" product="tablet">ستتم إعادة تمهيد جهازك اللوحي.</string>
+  <string name="reboot_confirm" product="default">ستتم إعادة تمهيد هاتفك.</string>
+  <string name="reboot_progress">إعادة التمهيد\u2026</string>
+  <string name="app_killed_message">تم إنهاء التطبيق</string>
+  <string name="adb_net_active_notification_title">تمكين ADB عبر الشبكة</string>
+  <string name="adb_both_active_notification_title">ADB عبر USB &amp; تمكين الشبكة</string>
+  <string name="adb_active_generic_notification_message">انقر لتعطيل تصحيح الأخطاء.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">⁯USB &amp; الشبكة</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">الشبكة</string>
+  <string name="permlab_accessThemeService">الوصول إلى خدمة السمة</string>
+  <string name="permlab_interceptPackageLaunch">مقاطعة تشغيل التطبيق</string>
+  <string name="permdesc_accessThemeService">يسمح للتطبيق بالوصول إلى خدمة السمة. ينبغي أن لا تكون ضرورية ابدأ للتطبيقات العادية.</string>
+  <string name="permlab_readThemes">قراءة معلومات السمة لديك</string>
+  <string name="permdesc_readThemesDesc">يسمح للتطبيق بقراءة السمات الخاصة بك وتحديد السمة التي قمت بتطبيقها.</string>
+  <string name="permlab_writeThemes">تعديل السمات الخاصة بك</string>
+  <string name="permdesc_writeThemesDesc">السماح للتطبيق بإدخال سمات جديدة
+وتعديل السمة التي قمت بتطبيقها.</string>
+  <string name="theme_install_error_title">فشل تثبيت السمة</string>
+  <string name="theme_install_error_message">فشل تثبيت %s</string>
+  <string name="stylus_app_not_installed">%s لم يتم تثبيته</string>
+  <string name="theme_reset_notification_title">إعادة تعيين السمة</string>
+  <string name="theme_reset_notification_body">تم استرداد سمة النظام بسبب عمليات تعطيل متعددة للتطبيق.</string>
+  <string name="silent_mode_priority">الأولوية</string>
+  <string name="silent_mode_none">بلا</string>
+  <string name="subscription_change_disabled_wifi_ap">ايقاف بث تقنية واي فاي بسبب تغيير اشتراك SIM</string>
+  <string name="notify_turn_wifi_off_title">إيقاف Wi-Fi</string>
+  <string name="permlab_changePrivacyGuardState">تمكين أو تعطيل حارس الخصوصية</string>
+  <string name="permdesc_changePrivacyGuardState">يسمح للتطبيق بتغيير ما إذا كان تطبيق آخر يعمل مع \"حارس الخصوصية\". عندما يتم تشغيل تطبيق مع \"حارس الخصوصية\"، فلن يُسمح بالوصول إلى البيانات الشخصية كجهات الاتصال أو سجلات المكالمات أو الرسائل.</string>
+  <string name="privacy_guard_notification">حارس الخصوصية نشط</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> لن تكون قادراً على الوصول إلى البيانات الشخصية</string>
+  <string name="privacy_guard_dialog_title">حارس الخصوصية</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> يرغب في <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="permission_remember_choice">تذكر خياري</string>
+  <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
+  <string name="app_ops_access_location">الوصول إلى موقعك</string>
   <string name="app_ops_access_notifications">قراءة إشعاراتك</string>
+  <string name="app_ops_activate_vpn">تفعيل شبكة افتراضية خاصة (VPN)</string>
+  <string name="app_ops_auto_start">البدء عند تشغيل الجهاز</string>
+  <string name="app_ops_delete_call_log">حذف سجل مكالماتك</string>
+  <string name="app_ops_delete_contacts">حذف جهات الاتصال الخاصة بك</string>
+  <string name="app_ops_delete_mms">حذف رسائل MMS</string>
+  <string name="app_ops_delete_sms">حذف الرسائل النصية القصيرة (SMS)</string>
+  <string name="app_ops_draw_on_top">رسم نوافذ فوق الجزء العلوي</string>
+  <string name="app_ops_get_usage_stats">الحصول على إحصائيات باستخدام التطبيقات</string>
+  <string name="app_ops_keep_device_awake">إبقاء الجهاز في حالة تنبيه</string>
+  <string name="app_ops_make_phone_call">إجراء اتصال هاتفي</string>
+  <string name="app_ops_modify_calendar">تحديث تقويمك</string>
+  <string name="app_ops_modify_call_log">تحديث سجل المكالمات</string>
+  <string name="app_ops_modify_clipboard">تعديل الحافظة</string>
+  <string name="app_ops_modify_contacts">تحديث جهات الاتصال الخاصة بك</string>
+  <string name="app_ops_modify_settings">تحديث إعدادات النظام</string>
+  <string name="app_ops_mute_unmute_microphone">كتم/إلغاء كتم الميكروفون</string>
+  <string name="app_ops_play_audio">تشغيل الصوت</string>
+  <string name="app_ops_post_notification">آخر إشعار</string>
+  <string name="app_ops_project_media">وسائط المشروع</string>
+  <string name="app_ops_read_calendar">قراءة التقويم الخاص بك</string>
+  <string name="app_ops_read_call_log">قراءة سجل المكالمات</string>
+  <string name="app_ops_read_clipboard">قراءة الحافظة</string>
+  <string name="app_ops_read_contacts">قراءة جهات الاتصال الخاصة بك</string>
+  <string name="app_ops_read_mms">قراءة رسائل MMS الخاصة بك</string>
+  <string name="app_ops_read_sms">قراءة الرسائل النصية القصيرة الخاصة بك</string>
+  <string name="app_ops_receive_sms">استلام رسالة نصية قصيرة</string>
+  <string name="app_ops_record_audio">تسجيل الصوت</string>
+  <string name="app_ops_send_mms">إرسال رسالة نصية قصيرة</string>
+  <string name="app_ops_send_sms">إرسال رسالة نصية قصيرة</string>
+  <string name="app_ops_start_at_bootup">البدء في التشغيل</string>
+  <string name="app_ops_toast_window">عرض الإعلامات المنبثقة</string>
+  <string name="app_ops_toggle_bluetooth">تبديل بلوتوث</string>
+  <string name="app_ops_toggle_mobile_data">تبديل البيانات المتنقلة</string>
+  <string name="app_ops_toggle_nfc">تبديل NFC</string>
+  <string name="app_ops_use_alarm_volume">التحكم في مستوى صوت الإنذار</string>
+  <string name="app_ops_use_audio_focus">التحكم في تركيز الصوت</string>
+  <string name="app_ops_use_bluetooth_volume">التحكم في مستوى صوت بلوتوث</string>
+  <string name="app_ops_use_master_volume">التحكم في مستوى الصوت الرئيسي</string>
+  <string name="app_ops_use_media_buttons">استخدم أزرار الوسائط</string>
+  <string name="app_ops_use_media_volume">التحكم في مستوى صوت الوسائط</string>
+  <string name="app_ops_use_notification_volume">التحكم في مستوى صوت الإشعار</string>
+  <string name="app_ops_use_ring_volume">التحكم في مستوى صوت نغمة الرنين</string>
+  <string name="app_ops_use_vibrate">إستخدام نتائج اللمس</string>
+  <string name="app_ops_use_voice_volume">التحكم في مستوى صوت المكالمة الصوتية</string>
+  <string name="app_ops_write_mms">كتابة رسالة MMS</string>
+  <string name="app_ops_write_sms">كتابة رسالة نصية قصيرة</string>
   <string name="app_ops_su">الحصول على صلاحيات الجذر</string>
+  <string name="lock_to_app_toast_no_navbar">لإلغاء تثبيت هذه الشاشة، المس واستمر في ضغط زر الرجوع.</string>
+  <string name="live_display_auto">تلقائي</string>
+  <string name="live_display_auto_summary">ضبط درجة حرارة لون للشاشة تلقائياً بعد غروب الشمس وشروق الشمس</string>
+  <string name="live_display_off">إيقاف</string>
+  <string name="live_display_off_summary">تعطيل جميع التعديلات</string>
+  <string name="live_display_day">النهار</string>
+  <string name="live_display_day_summary">استخدام إعدادات النهار فقط</string>
+  <string name="live_display_night">الليل</string>
+  <string name="live_display_night_summary">استخدام إعدادات الليل فقط</string>
+  <string name="live_display_outdoor">خارج المنزل ( شمس ساطعة)</string>
+  <string name="live_display_outdoor_summary">استخدم إعدادات خارج المنزل  فقط</string>
+  <string name="live_display_hint">ميزة LiveDisplay يمكن أن تساعد في تقليل إجهاد العين والمساعدة على النوم في الليل. انقر هنا لتجربته!</string>
+  <string name="tethered_notification_no_device_message">لا يوجد جهاز متصل</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> جهاز متصل</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> أجهزة متصلة</string>
 </resources>

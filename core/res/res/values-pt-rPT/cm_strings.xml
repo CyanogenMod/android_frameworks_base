@@ -107,13 +107,13 @@
   <string name="app_ops_send_sms">Enviar uma mensagem SMS</string>
   <string name="app_ops_start_at_bootup">iniciar no arranque</string>
   <string name="app_ops_toast_window">exibir avisos no ecrã</string>
-  <string name="app_ops_toggle_bluetooth">alternar Bluetooth</string>
+  <string name="app_ops_toggle_bluetooth">alternar bluetooth</string>
   <string name="app_ops_toggle_mobile_data">alternar dados móveis</string>
   <string name="app_ops_toggle_nfc">alternar NFC</string>
   <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar volume do alarme</string>
   <string name="app_ops_use_audio_focus">controlar o foco de áudio</string>
-  <string name="app_ops_use_bluetooth_volume">controlar o volume de Bluetooth</string>
+  <string name="app_ops_use_bluetooth_volume">controlar o volume do bluetooth</string>
   <string name="app_ops_use_master_volume">controlar o volume principal</string>
   <string name="app_ops_use_media_buttons">usar os botões multimédia</string>
   <string name="app_ops_use_media_volume">controlar o volume multimédia</string>

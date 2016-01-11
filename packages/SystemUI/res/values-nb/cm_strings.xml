@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Sveip til høyre for %1$s</string>
   <string name="right_shortcut_hint">Sveip til venstre for %1$s</string>
+  <string name="lockscreen_message">Trykk på ikonet på venstre eller høyre for å tilordne en låseskjermsnarvei.</string>
+  <string name="lockscreen_default_target">Standard</string>
   <string name="select_application">Velg applikasjon</string>
   <string name="lockscreen_choose_action_title">Velg handling</string>
   <string name="lockscreen_none_target">Ingen</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Slett appdata</string>
   <string name="advanced_dev_option_force_stop">Tving avslutning</string>
   <string name="advanced_dev_option_uninstall">Avinstaller</string>
+  <string name="accessibility_notification_brightness">Lys lysstyrke</string>
   <string name="accessibility_quick_settings_profiles_off">Profiler av.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s </xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiler deaktivert.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil endret til <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Initialiserer\u2026</string>
+  <string name="led_notification_title">Lys innstillinger</string>
+  <string name="led_notification_text">LED lyset aktiveres av innstillingene</string>
+  <string name="qs_tile_edit_header_instruction">Trykk og hold fliser for å omorganisere</string>
+  <string name="quick_settings_edit_label">Rediger fliser</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Kan ikke slette Rediger-flisen</string>
+  <string name="qs_tiles_reset_confirmation">Tilbakestill innstillinger for innstillingsflisene til standardkonfigurasjonen?</string>
+  <string name="quick_settings_tile_reset_to_default">Tilbakestille til standard oppsett</string>
+  <string name="quick_settings_title_header">Topptekst</string>
+  <string name="quick_settings_title_tiles">Fliser</string>
+  <string name="quick_settings_title_show_weather">Vis været</string>
+  <string name="quick_settings_title_enlarge_first_row">Forstørr første rad</string>
   <string name="screen_pinning_description_no_navbar">Dette holder den i syne inntill du løsner den. Trykk og hold på tilbake knappen for å løsne.</string>
   <string name="quick_settings_custom_tile_detail_title">Egendefinerte fliser</string>
   <string name="quick_settings_remove">Fjern flis</string>

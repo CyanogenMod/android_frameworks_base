@@ -71,7 +71,7 @@
   <string name="accessibility_quick_settings_sync_changed_on">Sincronização foi ligada.</string>
   <string name="quick_settings_sync_label">Sincronização</string>
   <string name="quick_settings_volume_panel_label">Painel de volume</string>
-  <string name="quick_settings_usb_tether_label">Associação USB</string>
+  <string name="quick_settings_usb_tether_label">Partilha de internet por USB</string>
   <string name="quick_settings_screen_timeout_detail_title">Tempo limite do ecrã</string>
   <string name="quick_settings_lockscreen_label">Ecrã de bloqueio</string>
   <string name="quick_settings_ambient_display_label">Visualização de ambiente</string>

@@ -16,5 +16,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">SIM/RUIM이 Perso lock되어 있습니다.</string>
   <string name="lockscreen_sim_error_message_short">올바르지 않은 카드입니다.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="other">SIM PIN을 입력하십시오. <xliff:g id="number">%d</xliff:g>회 후에는 이동통신사에 연락하여 기기를 잠금 해제해야 합니다.</item>
+  </plurals>
 </resources>

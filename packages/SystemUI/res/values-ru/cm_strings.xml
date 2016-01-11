@@ -47,9 +47,9 @@
   <string name="accessibility_quick_settings_profiles_changed">Профиль изменён на <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Включение\u2026</string>
   <string name="led_notification_title">Индикатор событий</string>
-  <string name="led_notification_text">Светодиод включен параметрами</string>
-  <string name="qs_tile_edit_header_instruction">Нажмите и удерживайте плитку для изменения</string>
-  <string name="quick_settings_edit_label">Редактировать плитки</string>
+  <string name="led_notification_text">Светодиод включен в настройках</string>
+  <string name="qs_tile_edit_header_instruction">Нажмите и удерживайте плитку для её перемещения</string>
+  <string name="quick_settings_edit_label">Изменить плитки</string>
   <string name="quick_settings_cannot_delete_edit_tile">Невозможно удалить кнопку редактирования</string>
   <string name="qs_tiles_reset_confirmation">Восстановить набор плиток по умолчанию?</string>
   <string name="quick_settings_tile_reset_to_default">Восстановить стандартные</string>

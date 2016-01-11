@@ -36,7 +36,7 @@
   <string name="reboot_reboot">Yeniden başlat</string>
   <string name="reboot_recovery">Kurtarma modu (Recovery)</string>
   <string name="reboot_bootloader">Ön yükleyici (Bootloader)</string>
-  <string name="reboot_download">İndirme Kipi</string>
+  <string name="reboot_download">İndir</string>
   <string name="reboot_soft">Yazılımsal yeniden başlatma</string>
   <string name="reboot_title">Yeniden Başlat</string>
   <string name="reboot_confirm" product="tablet">Tabletiniz yeniden başlatılacak.</string>
@@ -56,7 +56,7 @@
   <string name="permlab_readThemes">tema bilgisini oku</string>
   <string name="permdesc_readThemesDesc">Uygulamanın temalarınızı okumasına ve hangi
 temayı uyguladığınızı belirlemesine izin verir.</string>
-  <string name="permlab_writeThemes">temaları değiştir</string>
+  <string name="permlab_writeThemes">temalarınızı değiştirin</string>
   <string name="permdesc_writeThemesDesc">Uygulamanın yeni temalar eklemesine ve
 uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="theme_install_error_title">Tema yüklenemedi</string>
@@ -82,7 +82,7 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="app_ops_auto_start">açılışta başla</string>
   <string name="app_ops_delete_call_log">arama kaydını sil</string>
   <string name="app_ops_delete_contacts">kişileri sil</string>
-  <string name="app_ops_delete_mms">MMS mesajlarını sil</string>
+  <string name="app_ops_delete_mms">MMS mesajlarınızı silin</string>
   <string name="app_ops_delete_sms">SMS\'leri sil</string>
   <string name="app_ops_draw_on_top">pencereleri üstte göster</string>
   <string name="app_ops_get_usage_stats">uyg. kullanım istatistiklerini al</string>
@@ -101,7 +101,7 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="app_ops_read_call_log">arama kaydını oku</string>
   <string name="app_ops_read_clipboard">panoyu oku</string>
   <string name="app_ops_read_contacts">kişileri oku</string>
-  <string name="app_ops_read_mms">MMS mesajları oku</string>
+  <string name="app_ops_read_mms">MMS mesajlarınızı okuyun</string>
   <string name="app_ops_read_sms">SMS mesajlarını oku</string>
   <string name="app_ops_receive_sms">SMS mesajı al</string>
   <string name="app_ops_record_audio">ses kaydet</string>
@@ -155,5 +155,5 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="live_display_hint">LiveDisplay göz yorgunluğunuzu azaltıp geceleri uyumanıza yardımcı olabilir. Denemek için buraya tıklayın!</string>
   <string name="tethered_notification_no_device_message">Bağlı cihaz yok</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> cihaz bağlı</string>
-  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> cihaz bağlı</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> cihaz bağlı</string>
 </resources>

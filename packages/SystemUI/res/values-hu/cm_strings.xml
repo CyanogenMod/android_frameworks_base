@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Csúsztasson jobbra ezért: %1$s</string>
   <string name="right_shortcut_hint">Csúsztasson balra ezért: %1$s</string>
+  <string name="lockscreen_message">Érintsen meg egy ikont jobb vagy bal oldalt a zárképernyő hivatkozások ismételt hozzárendeléséhez.</string>
+  <string name="lockscreen_default_target">Alapértelmezett</string>
   <string name="select_application">Válasszon alkalmazást</string>
   <string name="lockscreen_choose_action_title">Válasszon eseményt</string>
   <string name="lockscreen_none_target">Nincs</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Alkalmazások adatok törlése</string>
   <string name="advanced_dev_option_force_stop">Kényszerített leállítás</string>
   <string name="advanced_dev_option_uninstall">Eltávolítás</string>
+  <string name="accessibility_notification_brightness">LED fényereje</string>
   <string name="accessibility_quick_settings_profiles_off">Profilok ki.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profilok kikapcsolva.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil megváltoztatva: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inicializálás\u2026</string>
+  <string name="led_notification_title">LED beállítások</string>
+  <string name="led_notification_text">LED fény engedélyezve</string>
+  <string name="qs_tile_edit_header_instruction">Nyomja meg és tartsa nyomva a csempéket az átrendezéséhez</string>
+  <string name="quick_settings_edit_label">Csempék szerkesztése</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Szerkesztési csempe nem távolítható el</string>
+  <string name="qs_tiles_reset_confirmation">Gyors beállítások csempéinek visszaállítása alapértelmezett konfigurációra?</string>
+  <string name="quick_settings_tile_reset_to_default">Visszaállítás az alapértelmezett elrendezésre</string>
+  <string name="quick_settings_title_header">Fejléc</string>
+  <string name="quick_settings_title_tiles">Csempék</string>
+  <string name="quick_settings_title_show_weather">Időjárás megjelenítése</string>
+  <string name="quick_settings_title_enlarge_first_row">Első sor nagyítása</string>
   <string name="screen_pinning_description_no_navbar">Ez a nézetben tartja, amíg a rögzítést fel nem oldja. Érintse meg és tartsa nyomva a Vissza gombot a rögzítés feloldásához.</string>
   <string name="quick_settings_custom_tile_detail_title">Egyéni csempe</string>
   <string name="quick_settings_remove">Csempe eltávolítása</string>
@@ -96,6 +112,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay nappali módra változtatva.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay éjszakai módra változtatva.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay szabadtéri módra változtatva.</string>
+  <string name="quick_settings_title_advanced_location">Bővített helymeghatározás</string>
   <string name="accessibility_quick_settings_location_battery_saving">Helymeghatározás jelentése: energiatakarékos.</string>
   <string name="accessibility_quick_settings_location_gps_only">Helymeghatározás jelentése: csak GPS.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Helymeghatározás jelentése: nagyon pontos.</string>

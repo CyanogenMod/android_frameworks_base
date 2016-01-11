@@ -18,6 +18,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenshot">Snimak zaslona</string>
+  <string name="permlab_receiveProtectedSms">Primanje zaštićenih SMS poruka</string>
+  <string name="permdesc_receiveProtectedSms">Dopušta aplikaciji primanje dolaznih zaštićenih SMS poruka.</string>
+  <string name="permlab_modifyProtectedSmsList">Izmjena popisa zaštićenih SMS poruka</string>
+  <string name="permdesc_modifyProtectedSmsList">Dozvoljava aplikaciji izmjenu popisa adresa zaštićenih SMS poruka.</string>
   <string name="permgrouplab_security">Sigurnost</string>
   <string name="permgroupdesc_security">Dopuštenja vezana za sigurnosne informacije uređaja.</string>
   <string name="permlab_readPhoneBlacklist">čitati listu blokiranih poziva</string>
@@ -28,31 +32,58 @@
   <string name="permlab_setKeyguardWallpaper">postaviti pozadinu zaslona zaključavanja</string>
   <string name="permdesc_setKeyguardWallpaper">Dozvoljava aplikaciji promjenu pozadine zaslona zaključavanja.</string>
   <string name="global_action_reboot">Ponovno pokreni</string>
+  <string name="global_action_current_user">Trenutna</string>
   <string name="reboot_reboot">Ponovno pokreni</string>
   <string name="reboot_recovery">Način oporavka</string>
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">Download</string>
+  <string name="reboot_soft">Brzo ponovno pokretanje</string>
+  <string name="reboot_title">Ponovno pokretanje</string>
   <string name="reboot_confirm" product="tablet">Tablet će ponovno biti pokrenut.</string>
   <string name="reboot_confirm" product="default">Telefon će ponovno biti pokrenut.</string>
   <string name="reboot_progress">Ponovno pokretanje\u2026</string>
+  <string name="app_killed_message">Aplikacija prisilno zaustavljena</string>
   <string name="adb_net_active_notification_title">Mrežni ADB omogućen</string>
   <string name="adb_both_active_notification_title">ADB preko USB &amp; mreže omogućen</string>
   <string name="adb_active_generic_notification_message">Dodirnite za onemogućavanje ispravljanja pogrešaka.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s </xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB i mrežni</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Mreža</string>
   <string name="permlab_accessThemeService">pristupiti servisu tema</string>
+  <string name="permlab_interceptPackageLaunch">Presresti pokretanje aplikacija</string>
   <string name="permdesc_accessThemeService">Dopušta aplikaciji pristup servisu tema. Za obične aplikacije nikada ne bi trebao biti potreban.</string>
   <string name="permlab_readThemes">pročitati informacije vaše teme</string>
   <string name="permdesc_readThemesDesc">Dopušta aplikaciji čitanje vaših tema i određivanje teme koju koristite.</string>
   <string name="permlab_writeThemes">urediti vaše teme</string>
   <string name="permdesc_writeThemesDesc">Dopušta aplikaciji dodavati nove teme i urediti temu koju ste primjenili.</string>
+  <string name="theme_install_error_title">Instalacija teme nije uspjela</string>
+  <string name="theme_install_error_message">%s Instalacija nije uspjela</string>
+  <string name="stylus_app_not_installed">%s nije instalirano</string>
+  <string name="theme_reset_notification_title">Vraćanje početne teme</string>
+  <string name="theme_reset_notification_body">Tema sustava je vraćana na početnu zbog višestrukih rušenja aplikacija.</string>
+  <string name="silent_mode_priority">Prioritet</string>
+  <string name="silent_mode_none">Ništa</string>
+  <string name="subscription_change_disabled_wifi_ap">Wi- Fi Hotspot onemogućen zbog SIM promjene</string>
+  <string name="notify_turn_wifi_off_title">Isključite Wi-Fi</string>
   <string name="permlab_changePrivacyGuardState">omogućiti ili onemogućiti Zaštitu privatnosti</string>
   <string name="permdesc_changePrivacyGuardState">Dopušta aplikaciji odrediti hoće li druga aplikacija biti pokrenuta pod Nadzorom Privatnosti. Kada ja aplikacija pod Nadzorom Privatnosti, neće imati pristup osobnim podacima kao što su kontakti, zapisi poziva ili poruke.</string>
   <string name="privacy_guard_notification">Nadzor privatnosti aktivan</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> neće moći pristupiti osobnim podacima</string>
   <string name="privacy_guard_dialog_title">Nadzor privatnosti</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> želi <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="permission_remember_choice">Zapamti moj odabir</string>
   <string name="app_ops_access_camera">pristupiti kameri</string>
   <string name="app_ops_access_location">pristupiti vašoj lokaciji</string>
   <string name="app_ops_access_notifications">čitati vaše obavijesti</string>
+  <string name="app_ops_activate_vpn">Aktiviraj VPN</string>
+  <string name="app_ops_auto_start">Pokrenuti pri podizanju sustava</string>
+  <string name="app_ops_delete_call_log">Obriši popis poziva</string>
+  <string name="app_ops_delete_contacts">Obriši kontakte</string>
+  <string name="app_ops_delete_mms">Obriši MMS poruke</string>
+  <string name="app_ops_delete_sms">Obriši SMS poruke</string>
+  <string name="app_ops_draw_on_top">Iscrtaj prozore na vrhu</string>
+  <string name="app_ops_get_usage_stats">Statistika korištenja aplikacija</string>
   <string name="app_ops_keep_device_awake">održavati uređaj budnim</string>
   <string name="app_ops_make_phone_call">uspostaviti poziv</string>
   <string name="app_ops_modify_calendar">ažurirati kalendar</string>
@@ -60,8 +91,10 @@
   <string name="app_ops_modify_clipboard">urediti clipboard</string>
   <string name="app_ops_modify_contacts">ažurirati kontakte</string>
   <string name="app_ops_modify_settings">ažurirati postavke sistema</string>
+  <string name="app_ops_mute_unmute_microphone">Isključiti/uključiti mikrofon</string>
   <string name="app_ops_play_audio">producirati zvuk</string>
   <string name="app_ops_post_notification">obavijestiti</string>
+  <string name="app_ops_project_media">Pokrenuti multimediju</string>
   <string name="app_ops_read_calendar">čitati vaš kalendar</string>
   <string name="app_ops_read_call_log">čitati zapisnik poziva</string>
   <string name="app_ops_read_clipboard">čitati Clipboard</string>
@@ -73,8 +106,11 @@
   <string name="app_ops_send_mms">poslati MMS poruku</string>
   <string name="app_ops_send_sms">poslati SMS poruku</string>
   <string name="app_ops_start_at_bootup">se pokrenuti pri pokretanju sistema</string>
+  <string name="app_ops_toast_window">Prikazivati toast poruke</string>
   <string name="app_ops_toggle_bluetooth">upravljati Bluetooth-om</string>
   <string name="app_ops_toggle_mobile_data">upravljati mobilnim podacima</string>
+  <string name="app_ops_toggle_nfc">Uključi/isključi NFC</string>
+  <string name="app_ops_toggle_wifi">upravljati WiFi-em</string>
   <string name="app_ops_use_alarm_volume">kontrolirati glasnoću alarma</string>
   <string name="app_ops_use_audio_focus">kontrolirati fokus zvuka</string>
   <string name="app_ops_use_bluetooth_volume">kontrolirati glasnoću Bluetooth-a</string>
@@ -87,4 +123,33 @@
   <string name="app_ops_use_voice_volume">kontrolirati glasnoću glasovnog poziva</string>
   <string name="app_ops_write_mms">napisati MMS poruku</string>
   <string name="app_ops_write_sms">napisati SMS poruku</string>
+  <string name="app_ops_use_fingerprint">koristite otisak prsta</string>
+  <string name="app_ops_add_voicemail">dodajte glasovnu poruku</string>
+  <string name="app_ops_read_phone_state">pristup stanju telefona</string>
+  <string name="app_ops_scan_wifi">skeniraj Wi-Fi mreže</string>
+  <string name="app_ops_change_wallpaper">promjeni pozadinsku sliku</string>
+  <string name="app_ops_assist_structure">koristi pomoćne strukture</string>
+  <string name="app_ops_assist_screenshot">snimak zaslona</string>
+  <string name="app_ops_use_body_sensors">koristi senzore</string>
+  <string name="app_ops_read_external_storage">čitaj vanjsku pohranu</string>
+  <string name="app_ops_write_external_storage">piši na vanjsku pohranu</string>
+  <string name="app_ops_turn_on_screen">uključite zaslon</string>
+  <string name="app_ops_get_accounts">dobavi račune uređaja</string>
+  <string name="app_ops_wifi_change">promjeni Wi-Fi stanje</string>
+  <string name="app_ops_su">Zatraži root pristup</string>
+  <string name="lock_to_app_toast_no_navbar">Za otkvačiti ovaj zaslon dodirnite i držite tipku za natrag</string>
+  <string name="live_display_auto">Automatski</string>
+  <string name="live_display_auto_summary">Automatski prilagodi temperaturu boje zaslona nakon zalaska i izlaska sunca</string>
+  <string name="live_display_off">Isključeno</string>
+  <string name="live_display_off_summary">Onemogući sva prilagođavanja</string>
+  <string name="live_display_day">Dan</string>
+  <string name="live_display_day_summary">Koristi samo postavke za dan</string>
+  <string name="live_display_night">Noć</string>
+  <string name="live_display_night_summary">Koristi samo postavke za noć</string>
+  <string name="live_display_outdoor">Vani (jako sunce)</string>
+  <string name="live_display_outdoor_summary">Koristi samo postavke za van</string>
+  <string name="live_display_hint">LiveDisplay može smanjiti naprezanje očiju i poboljšati san. Dodirnite ovdje ako ga želite isprobati!</string>
+  <string name="tethered_notification_no_device_message">Uređaj nije spojen</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezan uređaj</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> povezanih uređaja</string>
 </resources>

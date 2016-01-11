@@ -123,4 +123,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Η αναφορά τοποθεσίας άλλαξε σε λειτουργία εξοικονόμησης μπαταρίας.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Η αναφορά τοποθεσίας άλλαξε σε λειτουργία μόνο αισθητήρων.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Η αναφορά τοποθεσίας άλλαξε σε λειτουργία υψηλής ακρίβειας.</string>
+  <string name="quick_settings_tiles_category_system">Πλακίδια συστήματος</string>
+  <string name="quick_settings_tiles_add_tiles">Προσθήκη πλακιδίου</string>
 </resources>

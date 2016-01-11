@@ -16,5 +16,10 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">SIM/RUIM er Person låst</string>
   <string name="lockscreen_sim_error_message_short">Ugyldig kort.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Angi SIM PIN, du har <xliff:g id="number">%d</xliff:g> forsøk igjen før må du kontakte operatøren for å låse opp enheten.</item>
+    <item quantity="other">Angi SIM PIN, du har <xliff:g id="number">%d</xliff:g> gjenstående forsøk.</item>
+  </plurals>
 </resources>

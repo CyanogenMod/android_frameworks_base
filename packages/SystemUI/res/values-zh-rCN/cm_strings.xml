@@ -50,7 +50,7 @@
   <string name="led_notification_text">LED 灯由设置启用</string>
   <string name="qs_tile_edit_header_instruction">长按瓷块来重新排列</string>
   <string name="quick_settings_edit_label">编辑瓷块</string>
-  <string name="quick_settings_cannot_delete_edit_tile">无法删除编辑的瓷块</string>
+  <string name="quick_settings_cannot_delete_edit_tile">不能删除“编辑”瓷块</string>
   <string name="qs_tiles_reset_confirmation">重置快速设置瓷块位置为默认配置？</string>
   <string name="quick_settings_tile_reset_to_default">重置为默认布局</string>
   <string name="quick_settings_title_header">标题</string>
@@ -123,4 +123,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">地理位置报告已修改为节能模式。</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">位置报告已修改为仅使用传感器模式。</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">位置报告已修改为准确度高模式。</string>
+  <string name="quick_settings_tiles_category_system">系统磁块</string>
+  <string name="quick_settings_tiles_add_tiles">添加磁块</string>
 </resources>
