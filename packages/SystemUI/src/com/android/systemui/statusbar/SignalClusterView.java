@@ -217,7 +217,7 @@ public class SignalClusterView
     @Override
     public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
             int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
-            String description, boolean isWide, int subId) {
+            String description, boolean isWide, boolean showRoamingIndicator, int subId) {
         PhoneState state = getState(subId);
         if (state == null) {
             return;
@@ -228,6 +228,7 @@ public class SignalClusterView
         state.mMobileDescription = statusIcon.contentDescription;
         state.mMobileTypeDescription = typeContentDescription;
         state.mIsMobileTypeIconWide = statusType != 0 && isWide;
+        state.mShowRoamingIndicator = showRoamingIndicator;
 
         apply();
     }
@@ -478,9 +479,11 @@ public class SignalClusterView
         private int mMobileStrengthId = 0, mMobileTypeId = 0;
         private boolean mIsMobileTypeIconWide;
         private String mMobileDescription, mMobileTypeDescription;
+        private boolean mShowRoamingIndicator;
 
         private ViewGroup mMobileGroup;
         private ImageView mMobile, mMobileDark, mMobileType;
+        private ImageView mMobileRoaming;
 
         public PhoneState(int subId, Context context) {
             ViewGroup root = (ViewGroup) LayoutInflater.from(context)
@@ -494,6 +497,7 @@ public class SignalClusterView
             mMobile         = (ImageView) root.findViewById(R.id.mobile_signal);
             mMobileDark     = (ImageView) root.findViewById(R.id.mobile_signal_dark);
             mMobileType     = (ImageView) root.findViewById(R.id.mobile_type);
+            mMobileRoaming  = (ImageView) root.findViewById(R.id.mobile_roaming);
         }
 
         public boolean apply(boolean isSecondaryIcon) {
@@ -520,6 +524,7 @@ public class SignalClusterView
                 mMobileGroup.setContentDescription(mMobileTypeDescription
                         + " " + mMobileDescription);
                 mMobileGroup.setVisibility(View.VISIBLE);
+                mMobileRoaming.setVisibility(mShowRoamingIndicator ? View.VISIBLE : View.GONE);
             } else {
                 mMobileGroup.setVisibility(View.GONE);
             }
