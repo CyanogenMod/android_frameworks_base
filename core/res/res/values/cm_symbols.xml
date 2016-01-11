@@ -136,4 +136,7 @@
     <java-symbol type="string" name="tethered_notification_no_device_message" />
     <java-symbol type="string" name="tethered_notification_one_device_message" />
     <java-symbol type="string" name="tethered_notification_multi_device_message" />
+
+    <!-- Wifi idle time default -->
+    <java-symbol type="integer" name="def_wifi_idle_ms" />
 </resources>
