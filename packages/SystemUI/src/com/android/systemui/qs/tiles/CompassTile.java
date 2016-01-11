@@ -23,10 +23,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.ImageView;
 
-import com.android.internal.logging.MetricsConstants;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.QSTileView;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 public class CompassTile extends QSTile<QSTile.BooleanState> implements SensorEventListener {
     private final static float ALPHA = 0.97f;
@@ -121,7 +121,7 @@ public class CompassTile extends QSTile<QSTile.BooleanState> implements SensorEv
 
     @Override
     public int getMetricsCategory() {
-        return MetricsConstants.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_COMPASS;
     }
 
     @Override

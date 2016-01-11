@@ -21,9 +21,9 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.provider.Settings;
 
-import com.android.internal.logging.MetricsConstants;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 public class VolumeTile extends QSTile<QSTile.BooleanState> {
 
@@ -53,7 +53,7 @@ public class VolumeTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsConstants.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_VOLUME;
     }
 
     @Override

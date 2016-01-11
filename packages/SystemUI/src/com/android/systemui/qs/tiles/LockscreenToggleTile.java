@@ -24,12 +24,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 
 import android.widget.Toast;
-import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
 import com.android.systemui.SystemUIApplication;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
         implements KeyguardMonitor.Callback {
@@ -125,7 +125,7 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
 
     @Override
     public int getMetricsCategory() {
-        return MetricsLogger.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_LOCKSCREEN_TOGGLE;
     }
 
     @Override

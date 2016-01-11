@@ -16,9 +16,9 @@
 
 package com.android.systemui.qs.tiles;
 
-import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 public class EditTile extends QSTile<QSTile.BooleanState> {
 
@@ -66,7 +66,7 @@ public class EditTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsLogger.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_EDIT;
     }
 
     @Override
