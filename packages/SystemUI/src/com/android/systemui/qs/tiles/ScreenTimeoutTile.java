@@ -31,11 +31,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.android.internal.logging.MetricsConstants;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
 import cyanogenmod.app.StatusBarPanelCustomTile;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -247,7 +247,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsConstants.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_SCREEN_TIME_OUT;
     }
 
     @Override
@@ -309,7 +309,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
 
         @Override
         public int getMetricsCategory() {
-            return MetricsConstants.DONT_TRACK_ME_BRO;
+            return CMMetricsLogger.TILE_SCREEN_TIME_OUT_DETAIL;
         }
 
         @Override

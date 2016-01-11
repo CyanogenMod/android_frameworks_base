@@ -47,6 +47,7 @@ import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 import java.util.Arrays;
 
@@ -150,7 +151,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsLogger.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_CUSTOM_QS;
     }
 
     private boolean isDynamicTile() {
@@ -195,7 +196,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
         @Override
         public int getMetricsCategory() {
-            return MetricsLogger.DONT_TRACK_ME_BRO;
+            return CMMetricsLogger.TILE_CUSTOM_QS_DETAIL;
         }
 
         @Override

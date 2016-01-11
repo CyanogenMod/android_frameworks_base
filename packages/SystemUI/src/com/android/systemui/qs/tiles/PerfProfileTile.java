@@ -29,11 +29,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.android.internal.logging.MetricsConstants;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
 
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 import org.cyanogenmod.internal.util.QSUtils;
 
 import cyanogenmod.app.StatusBarPanelCustomTile;
@@ -104,7 +104,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsConstants.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_PERF_PROFILE;
     }
 
     @Override
@@ -212,7 +212,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
         @Override
         public int getMetricsCategory() {
-            return MetricsConstants.DONT_TRACK_ME_BRO;
+            return CMMetricsLogger.TILE_PERF_PROFILE_DETAIL;
         }
 
         @Override
