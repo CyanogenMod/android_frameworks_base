@@ -110,7 +110,7 @@
   <string name="app_ops_toggle_bluetooth">开启蓝牙</string>
   <string name="app_ops_toggle_mobile_data">开启移动数据</string>
   <string name="app_ops_toggle_nfc">切换 NFC</string>
-  <string name="app_ops_toggle_wifi">切换 Wi-Fi</string>
+  <string name="app_ops_toggle_wifi">开关 Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">控制闹铃音量</string>
   <string name="app_ops_use_audio_focus">控制音频焦点</string>
   <string name="app_ops_use_bluetooth_volume">控制蓝牙音量</string>

@@ -50,6 +50,8 @@
   <string name="permdesc_writeThemesDesc">অ্যাপটিকে নতুন থীমের সন্নিবেশ করার এবং আপনি যে থীমটি প্রয়োগ করেছেন তার কিছুটা রূপান্তর করার অনুমতি প্রদান করুন।</string>
   <string name="theme_install_error_title">থিম ইনস্টল করতে ব্যর্থ হয়েছে</string>
   <string name="theme_install_error_message">%s ইনস্টল করতে ব্যর্থ হয়েছে</string>
+  <string name="silent_mode_priority">অগ্রাধিকার</string>
+  <string name="notify_turn_wifi_off_title">ওয়াইফাই বন্ধ করুন</string>
   <string name="permlab_changePrivacyGuardState">গোপনীয়তা রক্ষাকারী সক্রিয় বা নিস্ক্রিয় করুন</string>
   <string name="permdesc_changePrivacyGuardState">অ্যাপটি কে অন্য অ্যাপ পরিবর্তন করার অনুমতি দিন যা গোপনীয়তা রক্ষাকারী সঙ্গে চলমান। যখন একটি অ্যাপ গোপনীয়তা রক্ষাকারী সঙ্গে চলমান থাকে তখন এটি ব্যক্তিগত তথ্য ব্যাবহার করতে পারবে না, যেমন যোগাযোগ, কল লগ, বা বার্তা।</string>
   <string name="privacy_guard_notification">গোপনীয়তা রক্ষাকারী সক্রিয়</string>
@@ -59,6 +61,7 @@
   <string name="app_ops_access_camera">ক্যামেরায় প্রবেশাধিকার</string>
   <string name="app_ops_access_location">আপনার অবস্থানে প্রবেশাধিকার</string>
   <string name="app_ops_access_notifications">আপনার নোটিফিকেশানস প্রবেশাধিকার</string>
+  <string name="app_ops_get_usage_stats">অ্যাপের সংস্থান তথ্যাদি পান</string>
   <string name="app_ops_keep_device_awake">আপনার ডিভাইস জাগ্রত রাখা</string>
   <string name="app_ops_make_phone_call">একটি ফোন কল করুন</string>
   <string name="app_ops_modify_calendar">আপনার পঞ্জিকা হালনাগাদ করুন</string>
@@ -94,4 +97,11 @@
   <string name="app_ops_use_voice_volume">ভয়েস কলের ভলিউম নিয়ন্ত্রণ</string>
   <string name="app_ops_write_mms">এমএমএস বার্তা লিখুন</string>
   <string name="app_ops_write_sms">এসএমএস বার্তা লিখুন</string>
+  <string name="live_display_auto">স্বয়ংক্রিয়</string>
+  <string name="live_display_off">বন্ধ</string>
+  <string name="live_display_off_summary">সব সামঞ্জস্যগুলি অক্ষম করুন</string>
+  <string name="live_display_day_summary">শুধু দিবা রূপান্তর নির্ধারণ ব্যবহার করুন</string>
+  <string name="live_display_night_summary">কেবল রাতের রূপান্তর নির্ধারণ ব্যবহার করুন</string>
+  <string name="live_display_outdoor">বহিরঙ্গন (উজ্জ্বল সূর্যালোক)</string>
+  <string name="live_display_outdoor_summary">শুধুমাত্র বহিরঙ্গন রূপান্তর নির্ধারণ ব্যবহার করুন</string>
 </resources>

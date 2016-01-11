@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Veeg naar rechts voor %1$s</string>
   <string name="right_shortcut_hint">Veeg naar links voor %1$s</string>
+  <string name="lockscreen_message">Tik links of rechts op een pictogram om de snelkoppeling opnieuw toe te wijzen.</string>
+  <string name="lockscreen_default_target">Standaard</string>
   <string name="select_application">App selecteren</string>
   <string name="lockscreen_choose_action_title">Actie selecteren</string>
   <string name="lockscreen_none_target">Geen</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">App-gegevens wissen</string>
   <string name="advanced_dev_option_force_stop">Nu stoppen</string>
   <string name="advanced_dev_option_uninstall">Verwijderen</string>
+  <string name="accessibility_notification_brightness">Verlichtingshelderheid</string>
   <string name="accessibility_quick_settings_profiles_off">Profielen uit.</string>
   <string name="accessibility_quick_settings_profiles">Profiel: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profielen uitgeschakeld.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profiel gewijzigd naar <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Initialiseren\u2026</string>
+  <string name="led_notification_title">Verlichtingsinstellingen</string>
+  <string name="led_notification_text">LED-verlichting ingeschakeld door instellingen</string>
+  <string name="qs_tile_edit_header_instruction">Tegels ingedrukt houden om te verplaatsen</string>
+  <string name="quick_settings_edit_label">Tegels bewerken</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Kan de bewerk-tegel niet verwijderen</string>
+  <string name="qs_tiles_reset_confirmation">Tegels snelle instellingen naar standaardwaarden herstellen?</string>
+  <string name="quick_settings_tile_reset_to_default">Standaardindeling herstellen</string>
+  <string name="quick_settings_title_header">Koptekst</string>
+  <string name="quick_settings_title_tiles">Tegels</string>
+  <string name="quick_settings_title_show_weather">Weer weergeven</string>
+  <string name="quick_settings_title_enlarge_first_row">Eerst rij vergroten</string>
   <string name="screen_pinning_description_no_navbar">Met scherm vastzetten wordt het beeldscherm vergrendeld op één weergave.\n\nBlijf de Terug-knop aanraken om het scherm los te maken.</string>
   <string name="quick_settings_custom_tile_detail_title">Aangepaste tegel</string>
   <string name="quick_settings_remove">Tegel verwijderen</string>
@@ -96,6 +112,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay gewijzigd naar dagstand.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay gewijzigd naar nachtstand.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay gewijzigd naar buitenstand.</string>
+  <string name="quick_settings_title_advanced_location">Locatie met 3 standen</string>
   <string name="accessibility_quick_settings_location_battery_saving">Locatiemelding: accubesparing.</string>
   <string name="accessibility_quick_settings_location_gps_only">Locatiemelding: alleen apparaat.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Locatiemelding: grote nauwkeurigheid.</string>

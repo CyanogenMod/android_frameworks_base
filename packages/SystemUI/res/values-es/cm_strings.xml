@@ -18,24 +18,66 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_data_connection_hspap">HSPA+</string>
   <string name="accessibility_data_connection_4g_plus">4G+</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="left_shortcut_hint">Desliza a la derecha para %1$s</string>
+  <string name="right_shortcut_hint">Desliza a la izquierda para %1$s</string>
   <string name="lockscreen_message">Toca un icono a la izquierda o derecha para volver a asignar un atajo a la pantalla de bloqueo.</string>
   <string name="lockscreen_default_target">Por defecto</string>
+  <string name="select_application">Selecciona una aplicación</string>
+  <string name="lockscreen_choose_action_title">Elegir acción</string>
+  <string name="lockscreen_none_target">Ninguno</string>
+  <string name="navbar_dialog_title">Elegir acción a asignar</string>
+  <string name="navbar_home_button">Botón Inicio</string>
+  <string name="navbar_recent_button">Botón reciente</string>
+  <string name="navbar_search_button">Botón de búsqueda</string>
+  <string name="navbar_back_button">Botón Atrás</string>
+  <string name="navbar_empty_button">Botón vacío</string>
+  <string name="navbar_menu_conditional_button">Botón de menú (auto-ocultar)</string>
+  <string name="navbar_menu_always_button">Botón de menú (siempre visible)</string>
+  <string name="navbar_menu_big_button">Botón de menú</string>
+  <string name="accessibility_dpad_left">Cursor izquierdo</string>
+  <string name="accessibility_dpad_right">Cursor derecho</string>
   <string name="advanced_dev_option_wipe_app">Borrar datos de la aplicación</string>
+  <string name="advanced_dev_option_force_stop">Forzar detención</string>
   <string name="advanced_dev_option_uninstall">Desinstalar</string>
   <string name="accessibility_notification_brightness">Brillo ligero</string>
-  <string name="accessibility_quick_settings_profiles_off">Perfiles desactivado.</string>
+  <string name="accessibility_quick_settings_profiles_off">Perfiles desactivados.</string>
+  <string name="accessibility_quick_settings_profiles">Perfil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Perfiles desactivado.</string>
-  <string name="led_notification_title">Configuracion de luz</string>
+  <string name="accessibility_quick_settings_profiles_changed">Perfil cambiado a <xliff:g id="profile" example="Default">%s </xliff:g>.</string>
+  <string name="quick_settings_compass_init">Inicializando\u2026</string>
+  <string name="led_notification_title">Ajustes de luz</string>
   <string name="led_notification_text">Luz LED activada por ajustes</string>
+  <string name="qs_tile_edit_header_instruction">Toca y deja presionados los controles para reorganizarlos</string>
+  <string name="quick_settings_edit_label">Editar controles</string>
+  <string name="quick_settings_cannot_delete_edit_tile">No se puede eliminar el control de \"Editar\"</string>
+  <string name="qs_tiles_reset_confirmation">¿Restaurar los controles de ajustes rápidos a su configuración predeterminada?</string>
   <string name="quick_settings_tile_reset_to_default">Restaurar disposición por defecto</string>
+  <string name="quick_settings_title_header">Encabezado</string>
+  <string name="quick_settings_title_tiles">Controles</string>
   <string name="quick_settings_title_show_weather">Mostrar el clima</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar la primera fila</string>
+  <string name="screen_pinning_description_no_navbar">Esto fija la pantalla en esta vista hasta que es liberada. Mantén pulsado el botón Atrás para liberarla.</string>
+  <string name="quick_settings_custom_tile_detail_title">Control personalizado</string>
+  <string name="quick_settings_remove">Eliminar control</string>
+  <string name="quick_settings_network_adb_label">ADB sobre red</string>
+  <string name="quick_settings_compass_label">Brújula</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles">Perfiles del sistema</string>
+  <string name="quick_settings_profiles_off">Perfiles desactivados</string>
   <string name="accessibility_quick_settings_sync_off">Sincronización desactivada.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronización activada.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronización desactivada.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Sincronización activada.</string>
   <string name="quick_settings_sync_label">Sincronizar</string>
+  <string name="quick_settings_volume_panel_label">Panel de volumen</string>
+  <string name="quick_settings_usb_tether_label">Anclaje de red por USB</string>
+  <string name="quick_settings_screen_timeout_detail_title">Tiempo de espera de pantalla</string>
+  <string name="quick_settings_lockscreen_label">Pantalla de bloqueo</string>
   <string name="quick_settings_ambient_display_label">Pantalla ambiente</string>
+  <string name="quick_settings_lockscreen_label_enforced">Pantalla de bloqueo forzada</string>
+  <string name="accessibility_quick_settings_screen_timeout">Tiempo de espera de pantalla: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Tiempo de espera de pantalla cambiado a <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Modo de la batería</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de batería: ahorro de energía.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Modo de batería: equilibrado.</string>
@@ -56,6 +98,9 @@
   <string name="accessibility_quick_settings_ambient_display_on">Pantalla ambiente activada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Pantalla ambiente desactivada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Pantalla ambiente activada.</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Control dinámico</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Próxima alarma</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
   <string name="dynamic_qs_tile_su_label">Acceso administrativo</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay desactivado.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: modo automático.</string>
@@ -67,9 +112,15 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ha cambiado a modo diurno.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ha cambiado a modo nocturno.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay cambiado a modo aire libre.</string>
+  <string name="quick_settings_title_advanced_location">Ubicación por triangulación</string>
   <string name="accessibility_quick_settings_location_battery_saving">Informes de ubicación: modo de ahorro de batería.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Informes de ubicación: modo de solo sensores.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Informes de ubicación: modo de alta precisión.</string>
+  <string name="quick_settings_location_detail_title">Modo de ubicación</string>
   <string name="quick_settings_location_battery_saving_label">Ahorro de batería</string>
+  <string name="quick_settings_location_gps_only_label">Solo en dispositivo</string>
+  <string name="quick_settings_location_high_accuracy_label">Alta precisión</string>
   <string name="accessibility_quick_settings_location_changed_battery_saving">Informes de ubicación cambiados a modo de ahorro de batería.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Informes de ubicación cambiados a modo solo dispositivo.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informes de ubicación cambiados a modo de gran precisión.</string>
 </resources>

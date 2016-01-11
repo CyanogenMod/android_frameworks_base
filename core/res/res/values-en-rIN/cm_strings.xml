@@ -46,6 +46,10 @@
   <string name="adb_net_active_notification_title">ADB over network enabled</string>
   <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
   <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; network</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Network</string>
   <string name="permlab_accessThemeService">access theme service</string>
   <string name="permlab_interceptPackageLaunch">intercept app launch</string>
   <string name="permdesc_accessThemeService">Allows an app to access the theme service. Should never be needed for normal apps.</string>
@@ -60,6 +64,10 @@
   <string name="stylus_app_not_installed">%s is not installed</string>
   <string name="theme_reset_notification_title">Theme reset</string>
   <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
+  <string name="silent_mode_priority">Priority</string>
+  <string name="silent_mode_none">None</string>
+  <string name="subscription_change_disabled_wifi_ap">Disabled Wi-Fi hotspot due to SIM subscription change</string>
+  <string name="notify_turn_wifi_off_title">Turn Wi-Fi off</string>
   <string name="permlab_changePrivacyGuardState">enable or disable Privacy Guard</string>
   <string name="permdesc_changePrivacyGuardState">Allows the app to change whether another app runs with Privacy Guard. When an app is running with Privacy Guard, it will not have access to personal data such as contacts, call logs, or messages.</string>
   <string name="privacy_guard_notification">Privacy Guard active</string>
@@ -104,6 +112,7 @@
   <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
   <string name="app_ops_toggle_nfc">toggle NFC</string>
+  <string name="app_ops_toggle_wifi">toggle Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">control alarm volume</string>
   <string name="app_ops_use_audio_focus">control the audio focus</string>
   <string name="app_ops_use_bluetooth_volume">control the Bluetooth volume</string>
@@ -116,7 +125,23 @@
   <string name="app_ops_use_voice_volume">control the voice call volume</string>
   <string name="app_ops_write_mms">write an MMS message</string>
   <string name="app_ops_write_sms">write an SMS message</string>
+  <string name="app_ops_use_fingerprint">use fingerprint</string>
+  <string name="app_ops_add_voicemail">add a voicemail</string>
+  <string name="app_ops_read_phone_state">access phone state</string>
+  <string name="app_ops_scan_wifi">scan Wi-Fi networks</string>
+  <string name="app_ops_change_wallpaper">change the wallpaper</string>
+  <string name="app_ops_assist_structure">use assist structure</string>
+  <string name="app_ops_assist_screenshot">take a screenshot</string>
+  <string name="app_ops_use_body_sensors">use body sensors</string>
+  <string name="app_ops_read_cell_broadcasts">read cell broadcasts</string>
+  <string name="app_ops_mock_location">mock your location</string>
+  <string name="app_ops_read_external_storage">read external storage</string>
+  <string name="app_ops_write_external_storage">write external storage</string>
+  <string name="app_ops_turn_on_screen">turn the screen on</string>
+  <string name="app_ops_get_accounts">get device accounts</string>
+  <string name="app_ops_wifi_change">change Wi-Fi state</string>
   <string name="app_ops_su">get root access</string>
+  <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>
   <string name="live_display_auto">Automatic</string>
   <string name="live_display_auto_summary">Automatically adjust color temperature of screen after sunset and sunrise</string>
   <string name="live_display_off">Off</string>

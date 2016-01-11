@@ -21,6 +21,8 @@
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Przesuń palcem w prawo do %1$s</string>
   <string name="right_shortcut_hint">Przesuń palcem w lewo do %1$s</string>
+  <string name="lockscreen_message">Dotknij ikony po lewej lub prawej, aby przypisać skrót ekranu blokady.</string>
+  <string name="lockscreen_default_target">Domyślna</string>
   <string name="select_application">Wybierz aplikację</string>
   <string name="lockscreen_choose_action_title">Wybierz akcję</string>
   <string name="lockscreen_none_target">Brak</string>
@@ -38,16 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Usuń dane aplikacji</string>
   <string name="advanced_dev_option_force_stop">Wymuś zamknięcie</string>
   <string name="advanced_dev_option_uninstall">Odinstaluj</string>
+  <string name="accessibility_notification_brightness">Jasność światła</string>
   <string name="accessibility_quick_settings_profiles_off">Profile wyłączone.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profile zostały wyłączone.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil zmieniony na <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inicjalizowanie\u2026</string>
+  <string name="led_notification_title">Ustawienia diody</string>
+  <string name="led_notification_text">Diody LED włączone przez ustawienia</string>
   <string name="qs_tile_edit_header_instruction">Naciśnij i przytrzymaj kafelki, aby zmienić kolejność</string>
+  <string name="quick_settings_edit_label">Edycja kafelków</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Nie można usunąć kafelka edycji</string>
+  <string name="qs_tiles_reset_confirmation">Zresetować ustawienia kafelków szybkiego dostępu do domyślnej konfiguracji?</string>
   <string name="quick_settings_tile_reset_to_default">Przywróć domyślny układ</string>
   <string name="quick_settings_title_header">Nagłówek</string>
   <string name="quick_settings_title_tiles">Kafelki</string>
   <string name="quick_settings_title_show_weather">Pokaż pogodę</string>
+  <string name="quick_settings_title_enlarge_first_row">Powiększenie pierwszego rzędu</string>
   <string name="screen_pinning_description_no_navbar">Zostaje na widoku do czasu odpięcia. Dotknij i przytrzymaj przycisk Wstecz, aby odpiąć.</string>
   <string name="quick_settings_custom_tile_detail_title">Kafelek niestandardowy</string>
   <string name="quick_settings_remove">Usuń kafelek</string>
@@ -103,6 +112,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay zmieniony na tryb dzienny.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay zmieniony na tryb nocny.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay zmieniony na tryb zewnętrzny.</string>
+  <string name="quick_settings_title_advanced_location">Trójstanowa lokalizacja</string>
   <string name="accessibility_quick_settings_location_battery_saving">Raportowanie lokalizacji: tryb oszczędzania baterii.</string>
   <string name="accessibility_quick_settings_location_gps_only">Raportowanie lokalizacji: tylko czujniki.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Raportowanie lokalizacji: wysoka dokładność.</string>

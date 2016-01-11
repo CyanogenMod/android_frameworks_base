@@ -16,5 +16,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">Kartica SIM je zaklenjena v načinu Perso</string>
   <string name="lockscreen_sim_error_message_short">Neveljavna kartica.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostali poskus, preden boste morali stopiti v stik s svojim ponudnikom, da vam odklene napravo.</item>
+    <item quantity="two">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostala poskusa.</item>
+    <item quantity="few">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostale poskuse.</item>
+    <item quantity="other">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostalih poskusov.</item>
+  </plurals>
 </resources>

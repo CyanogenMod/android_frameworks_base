@@ -48,7 +48,11 @@
   <string name="quick_settings_compass_init">מאתחל\u2026</string>
   <string name="led_notification_title">הגדרות נורית</string>
   <string name="led_notification_text">נורית LED מופעלת בידי ההגדרות</string>
+  <string name="qs_tile_edit_header_instruction">יש לגעת ולהחזיק את האריחים לסידור מחדש</string>
   <string name="quick_settings_edit_label">ערוך אריחים</string>
+  <string name="quick_settings_cannot_delete_edit_tile">לא ניתן למחוק את אריח העריכה</string>
+  <string name="qs_tiles_reset_confirmation">האם לאפס את אריחי ההגדרות המהירות לברירת המחדל?</string>
+  <string name="quick_settings_tile_reset_to_default">איפוס לפריסת ברירת המחדל</string>
   <string name="quick_settings_title_header">כותרת</string>
   <string name="quick_settings_title_tiles">אריחים</string>
   <string name="quick_settings_title_show_weather">הצג מזג אוויר</string>
@@ -108,6 +112,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay שונה למצב יום.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay שונה למצב לילה.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay שונה למצב חוץ.</string>
+  <string name="quick_settings_title_advanced_location">שלושה מצבי מיקום</string>
   <string name="accessibility_quick_settings_location_battery_saving">דיווח מיקום: מצב חיסכון בסוללה.</string>
   <string name="accessibility_quick_settings_location_gps_only">דיווח מיקום: מצב חיישנים בלבד.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">דיווח מיקום: מצב רמת דיוק גבוהה.</string>

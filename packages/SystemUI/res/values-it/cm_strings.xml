@@ -123,4 +123,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Segnalatore posizione cambiato in modalità risparmio batteria.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Segnalatore posizione cambiato in modalità solo sensori.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Segnalatore posizione cambiato in modalità alta precisione.</string>
+  <string name="quick_settings_tiles_category_system">Tile di sistema</string>
+  <string name="quick_settings_tiles_add_tiles">Aggiungi tile</string>
 </resources>

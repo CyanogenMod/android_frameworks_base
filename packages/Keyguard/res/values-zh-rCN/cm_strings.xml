@@ -19,6 +19,6 @@
   <string name="keyguard_perso_locked_message">SIM 卡已被锁定</string>
   <string name="lockscreen_sim_error_message_short">无效的 SIM 卡。</string>
   <plurals name="kg_password_default_pin_message">
-    <item quantity="other">输入 SIM 卡 PIN ，您还有 <xliff:g id="number">%d</xliff:g> 次机会解锁，否则必须联系您的运营商以解锁您的设备。</item>
+    <item quantity="other">输入 SIM 卡 PIN。您还有 <xliff:g id="number">%d</xliff:g> 次尝试机会；若超出此次数，则必须联系运营商以解锁 SIM 卡。</item>
   </plurals>
 </resources>

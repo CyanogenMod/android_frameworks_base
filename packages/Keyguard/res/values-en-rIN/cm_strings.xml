@@ -16,5 +16,10 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">SIM/RUIM is Perso locked</string>
   <string name="lockscreen_sim_error_message_short">Invalid card.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Enter SIM PIN, you have <xliff:g id="number">%d</xliff:g> remaining attempt before you must contact your carrier to unlock your device.</item>
+    <item quantity="other">Enter SIM PIN, you have <xliff:g id="number">%d</xliff:g> remaining attempts.</item>
+  </plurals>
 </resources>

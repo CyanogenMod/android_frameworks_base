@@ -58,7 +58,7 @@
   <string name="quick_settings_title_show_weather">Hava durumunu göster</string>
   <string name="quick_settings_title_enlarge_first_row">İlk satırı büyüt</string>
   <string name="screen_pinning_description_no_navbar">Ekrandan kaldırana kadar görünümde tutar. Kaldırmak için Geri tuşuna dokunun ve tutun.</string>
-  <string name="quick_settings_custom_tile_detail_title">Özel kareler</string>
+  <string name="quick_settings_custom_tile_detail_title">Özel kare</string>
   <string name="quick_settings_remove">Kareyi kaldır</string>
   <string name="quick_settings_network_adb_label">Ağ üzerinden ADB</string>
   <string name="quick_settings_compass_label">Pusula</string>
@@ -91,7 +91,7 @@
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Pil modu hızlı moda geçti.</string>
   <string name="quick_settings_performance_profile_detail_title">Pil modu</string>
   <string name="accessibility_quick_settings_lock_screen_off">Kilit ekranı kapalı.</string>
-  <string name="accessibility_quick_settings_lock_screen_on">Kilit ekranı kapalı.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Kilit ekranı açık.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Kilit ekranı kapatıldı.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_on">Kilit ekranı açıldı.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Bildirim ekranı kapalı.</string>
@@ -103,7 +103,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">IME seçici</string>
   <string name="dynamic_qs_tile_su_label">Root erişimi</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay kapalı.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: otomatik.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: otomatik mod.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: gündüz modu.</string>
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: gece modu.</string>
   <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: açık hava modu.</string>

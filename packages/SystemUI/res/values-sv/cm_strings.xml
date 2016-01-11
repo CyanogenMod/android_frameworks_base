@@ -16,9 +16,12 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Svep höger för %1$s</string>
   <string name="right_shortcut_hint">Svep vänster för %1$s</string>
+  <string name="lockscreen_default_target">Standard</string>
   <string name="select_application">Välj app</string>
   <string name="lockscreen_choose_action_title">Välj åtgärd</string>
   <string name="lockscreen_none_target">Ingen</string>

@@ -31,23 +31,49 @@
   <string name="navbar_menu_conditional_button">Phím trình đơn (tự ẩn)</string>
   <string name="navbar_menu_always_button">Nút trình đơn (luôn hiện)</string>
   <string name="navbar_menu_big_button">Nút trình đơn</string>
+  <string name="accessibility_dpad_left">Trỏ trái</string>
+  <string name="accessibility_dpad_right">Trỏ phải</string>
+  <string name="advanced_dev_option_wipe_app">Xoá dữ liệu ứng dụng</string>
+  <string name="advanced_dev_option_force_stop">Buộc dừng</string>
+  <string name="advanced_dev_option_uninstall">Gỡ cài đặt</string>
   <string name="accessibility_quick_settings_profiles_off">Hồ sơ tắt.</string>
   <string name="accessibility_quick_settings_profiles">Hồ sơ: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Hồ sơ đã tắt.</string>
   <string name="accessibility_quick_settings_profiles_changed">Hồ sơ đã đổi thành <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="quick_settings_compass_init">Đang khởi tạo\u2026</string>
   <string name="screen_pinning_description_no_navbar">Điều này sẽ giúp nó hiển thị cho đến khi bạn bỏ ghim. Chạm và giữ nút Quay lại để bỏ ghim.</string>
   <string name="quick_settings_custom_tile_detail_title">Kiểu xếp cạnh nhau tùy chỉnh</string>
   <string name="quick_settings_remove">Gỡ kiểu xếp cạnh nhau</string>
+  <string name="quick_settings_network_adb_label">ADB qua mạng</string>
+  <string name="quick_settings_compass_label">La bàn</string>
+  <string name="quick_settings_nfc_label">NFC</string>
+  <string name="quick_settings_profiles">Cấu hình hệ thống</string>
+  <string name="quick_settings_profiles_off">Cấu hình bị vô hiệu hóa</string>
+  <string name="accessibility_quick_settings_sync_off">Tắt đồng bộ.</string>
+  <string name="accessibility_quick_settings_sync_on">Bật đồng bộ.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Đã tắt đồng bộ.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Đã bật đồng bộ.</string>
+  <string name="quick_settings_sync_label">Đồng bộ</string>
   <string name="quick_settings_volume_panel_label">Bảng điều khiển âm lượng</string>
+  <string name="quick_settings_usb_tether_label">Kết nối mạng qua USB</string>
+  <string name="quick_settings_screen_timeout_detail_title">Thời gian sáng màn hình</string>
+  <string name="quick_settings_lockscreen_label">Màn hình khoá</string>
   <string name="quick_settings_ambient_display_label">Hiển thị môi trường xung quanh</string>
+  <string name="quick_settings_lockscreen_label_enforced">Buộc khoá màn hình</string>
   <string name="accessibility_quick_settings_screen_timeout">Thời gian chờ của màn hình: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Thời gian chờ của màn hình đã đổi thành <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="qs_tile_performance">Chế độ pin</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Chế độ pin: chế độ tiết kiệm năng lượng.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Chế độ pin: chế độ cân bằng.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Pin chế độ: chế độ hiệu suất.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Chế độ pin: chế độ hiệu quả.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Chế độ pin: chế độ nhanh.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Chế độ pin đã đổi sang chế độ tiết kiệm năng lượng.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Chế độ pin đã đổi sang chế độ cân bằng.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Chế độ pin đã đổi sang chế độ hiệu suất.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Chế độ pin được chuyển sang hiệu quả.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Chế độ pin được chuyển sang nhanh.</string>
+  <string name="quick_settings_performance_profile_detail_title">Chế độ pin</string>
   <string name="accessibility_quick_settings_lock_screen_off">Màn hình khóa tắt.</string>
   <string name="accessibility_quick_settings_lock_screen_on">Màn hình khóa bật.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Màn hình khóa đã tắt.</string>
@@ -70,6 +96,13 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay đã đổi sang chế độ ban ngày.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay đã đổi sang chế độ ban đêm.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay đã đổi sang chế độ ngoài trời.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Báo cáo vị trí: chế độ tiết kiệm pin.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Báo cáo vị trí: chế độ chỉ cám biến.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Báo cáo vị trí: chế độ chính xác cao.</string>
+  <string name="quick_settings_location_detail_title">Chế độ vị trí</string>
+  <string name="quick_settings_location_battery_saving_label">Tiết kiệm pin</string>
+  <string name="quick_settings_location_gps_only_label">Chỉ thiết bị</string>
+  <string name="quick_settings_location_high_accuracy_label">Chính xác cao</string>
   <string name="accessibility_quick_settings_location_changed_battery_saving">Báo cáo vị trí đã đổi sang chế độ tiết kiệm pin.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Báo cáo vị trí đã đổi sang chế độ chỉ cảm biến.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Báo cáo vị trí đã đổi sang chế độ chính xác cao.</string>

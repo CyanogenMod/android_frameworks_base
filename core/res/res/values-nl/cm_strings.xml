@@ -110,6 +110,7 @@
   <string name="app_ops_toggle_bluetooth">Bluetooth aan-/uitzetten</string>
   <string name="app_ops_toggle_mobile_data">mobiele gegevens aan-/uitzetten</string>
   <string name="app_ops_toggle_nfc">NFC aan-/uitzetten</string>
+  <string name="app_ops_toggle_wifi">wifi aan-/uitzetten</string>
   <string name="app_ops_use_alarm_volume">alarmvolume beheren</string>
   <string name="app_ops_use_audio_focus">audiofocus beheren</string>
   <string name="app_ops_use_bluetooth_volume">Bluetooth-volume beheren</string>
@@ -122,6 +123,20 @@
   <string name="app_ops_use_voice_volume">stemvolume beheren</string>
   <string name="app_ops_write_mms">mms-bericht schrijven</string>
   <string name="app_ops_write_sms">sms-bericht schrijven</string>
+  <string name="app_ops_use_fingerprint">vingerafdruk gebruiken</string>
+  <string name="app_ops_add_voicemail">voicemail toevoegen</string>
+  <string name="app_ops_read_phone_state">toegang tot telefoonstatus</string>
+  <string name="app_ops_scan_wifi">wifi-netwerken scannen</string>
+  <string name="app_ops_change_wallpaper">achtergrond aanpassen</string>
+  <string name="app_ops_assist_screenshot">screenshot maken</string>
+  <string name="app_ops_use_body_sensors">lichaamssensoren gebruiken</string>
+  <string name="app_ops_read_cell_broadcasts">nooduitzendingen lezen</string>
+  <string name="app_ops_mock_location">neplocatie gebruiken</string>
+  <string name="app_ops_read_external_storage">externe opslag lezen</string>
+  <string name="app_ops_write_external_storage">naar externe opslag schrijven</string>
+  <string name="app_ops_turn_on_screen">scherm aanzetten</string>
+  <string name="app_ops_get_accounts">apparaataccounts opvragen</string>
+  <string name="app_ops_wifi_change">wifi-status aanpassen</string>
   <string name="app_ops_su">root-toegang krijgen</string>
   <string name="lock_to_app_toast_no_navbar">Blijf de Terug-knop aanraken om dit scherm los te maken.</string>
   <string name="live_display_auto">Automatisch</string>
@@ -132,7 +147,7 @@
   <string name="live_display_day_summary">Alleen instellingen voor overdag gebruiken</string>
   <string name="live_display_night">\'s Nachts</string>
   <string name="live_display_night_summary">Alleen instellingen voor \'s nachts gebruiken</string>
-  <string name="live_display_outdoor">Buitenshuis (heldere zon)</string>
+  <string name="live_display_outdoor">Buitenshuis (felle zon)</string>
   <string name="live_display_outdoor_summary">Alleen instellingen voor buitenshuis gebruiken</string>
   <string name="live_display_hint">LiveDisplay kan oogvermoeidheid verminderen en helpt u om \'s nachts te slapen. Tik hier om het uit te proberen</string>
   <string name="tethered_notification_no_device_message">Geen aangesloten apparaat</string>

@@ -123,4 +123,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">位置情報レポートがバッテリー節約モードに変更されました。</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">位置情報レポートが端末のみモードに変更されました。</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">位置情報レポートが高精度モードに変更されました。</string>
+  <string name="quick_settings_tiles_category_system">システムのタイル</string>
+  <string name="quick_settings_tiles_add_tiles">タイルを追加</string>
 </resources>

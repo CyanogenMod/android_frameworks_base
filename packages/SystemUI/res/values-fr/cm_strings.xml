@@ -21,6 +21,8 @@
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Balayer à droite pour %1$s</string>
   <string name="right_shortcut_hint">Balayer à gauche pour %1$s</string>
+  <string name="lockscreen_message">Appuyez sur une icône à gauche ou à droite pour réattribuer un raccourci sur l\'écran de verrouillage.</string>
+  <string name="lockscreen_default_target">Par défaut</string>
   <string name="select_application">Sélectionner une application</string>
   <string name="lockscreen_choose_action_title">Choisir une action</string>
   <string name="lockscreen_none_target">Aucun</string>
@@ -38,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Effacer les données</string>
   <string name="advanced_dev_option_force_stop">Forcer l\'arrêt</string>
   <string name="advanced_dev_option_uninstall">Désinstaller</string>
+  <string name="accessibility_notification_brightness">Luminosité</string>
   <string name="accessibility_quick_settings_profiles_off">Profils désactivés.</string>
   <string name="accessibility_quick_settings_profiles">Profil : <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profils désactivés.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil changé  en <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Initialisation\u2026</string>
+  <string name="led_notification_title">Paramètres de la DEL</string>
+  <string name="led_notification_text">DEL activée par les paramètres</string>
+  <string name="qs_tile_edit_header_instruction">Appuyez et maintenez les raccourcis pour les réorganiser</string>
+  <string name="quick_settings_edit_label">Modifier les raccourcis</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Impossible de supprimer le raccourci modifié</string>
+  <string name="qs_tiles_reset_confirmation">Réinitialiser les raccourcis à la configuration par défaut ?</string>
+  <string name="quick_settings_tile_reset_to_default">Réinitialiser à la disposition par défaut</string>
+  <string name="quick_settings_title_header">En-tête</string>
+  <string name="quick_settings_title_tiles">Raccourcis</string>
+  <string name="quick_settings_title_show_weather">Afficher la météo</string>
+  <string name="quick_settings_title_enlarge_first_row">Agrandir la première ligne</string>
   <string name="screen_pinning_description_no_navbar">Cela le laisse en vue jusqu\'à ce que vous le détachiez. Appuyez et maintenez le bouton retour pour détacher.</string>
   <string name="quick_settings_custom_tile_detail_title">Personnaliser le raccourci</string>
   <string name="quick_settings_remove">Supprimer le raccourci</string>
@@ -98,6 +112,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay changé en mode jour.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay changé en mode nuit.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay changé en mode plein air.</string>
+  <string name="quick_settings_title_advanced_location">Localisation par triangulation</string>
   <string name="accessibility_quick_settings_location_battery_saving">Localisation : mode économie de batterie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Localisation : mode appareil uniquement.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Localisation : mode haute précision.</string>
@@ -108,4 +123,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Localisation changée en mode économie de batterie.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Localisation changée en mode appareil uniquement.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Localisation changée en mode haute précision.</string>
+  <string name="quick_settings_tiles_category_system">Raccourcis système</string>
+  <string name="quick_settings_tiles_add_tiles">Ajouter un raccourci</string>
 </resources>
