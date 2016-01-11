@@ -283,4 +283,6 @@
     <!-- Default for Settings.System.SYSTEM_PROFILES_ENABLED -->
     <bool name="def_system_profiles_enabled">true</bool>
 
+    <!-- Default for Settings.Global.WIFI_IDLE_MS (15 minutes) -->
+    <integer name="default_wifi_idle_ms">900000</integer>
 </resources>

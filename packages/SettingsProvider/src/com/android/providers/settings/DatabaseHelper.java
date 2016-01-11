@@ -81,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 125;
+    private static final int DATABASE_VERSION = 126;
 
     private Context mContext;
     private int mUserHandle;
@@ -2023,6 +2023,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 125;
         }
 
+        if (upgradeVersion < 126) {
+            if (mUserHandle == UserHandle.USER_OWNER) {
+                db.beginTransaction();
+                SQLiteStatement stmt = null;
+                try {
+                    stmt = db.compileStatement("INSERT OR IGNORE INTO global(name,value)"
+                            + " VALUES(?,?);");
+                    loadIntegerSetting(stmt, Global.WIFI_IDLE_MS,
+                            R.integer.default_wifi_idle_ms);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                    if (stmt != null) stmt.close();
+                }
+            }
+            upgradeVersion = 126;
+        }
+
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -2959,6 +2977,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadDefaultAnimationSettings(stmt);
             // --- New global settings start here
+
+            loadSetting(stmt, Settings.Global.WIFI_IDLE_MS,
+                R.integer.default_wifi_idle_ms);
         } finally {
             if (stmt != null) stmt.close();
         }
