@@ -234,4 +234,7 @@
 
     <!-- Default for Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED -->
     <integer name="def_captive_portal_detection_enabled" translatable="false">1</integer>
+
+    <!-- Default for Settings.Global.WIFI_IDLE_MS (15 minutes) -->
+    <integer name="default_wifi_idle_ms">900000</integer>
 </resources>
