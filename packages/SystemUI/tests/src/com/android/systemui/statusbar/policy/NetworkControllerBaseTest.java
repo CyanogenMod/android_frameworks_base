@@ -279,6 +279,7 @@ public class NetworkControllerBaseTest extends SysuiTestCase {
                     ArgumentCaptor.forClass(String.class).capture(),
                     ArgumentCaptor.forClass(String.class).capture(),
                     ArgumentCaptor.forClass(Boolean.class).capture(),
+                    ArgumentCaptor.forClass(Boolean.class).capture(),
                     ArgumentCaptor.forClass(Integer.class).capture());
         IconState iconState = iconArg.getValue();
         assertEquals("Visibility in, quick settings", visible, iconState.visible);
@@ -304,6 +305,7 @@ public class NetworkControllerBaseTest extends SysuiTestCase {
                 ArgumentCaptor.forClass(Boolean.class).capture(),
                 ArgumentCaptor.forClass(String.class).capture(),
                 ArgumentCaptor.forClass(String.class).capture(),
+                ArgumentCaptor.forClass(Boolean.class).capture(),
                 ArgumentCaptor.forClass(Boolean.class).capture(),
                 ArgumentCaptor.forClass(Integer.class).capture());
         IconState iconState = iconArg.getValue();
