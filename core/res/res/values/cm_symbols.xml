@@ -142,4 +142,8 @@
 
     <!-- Wifi idle time default -->
     <java-symbol type="integer" name="def_wifi_idle_ms" />
+
+    <!-- KeyGuard -->
+    <java-symbol type="string" name="kg_sub_separator" />
+
 </resources>
