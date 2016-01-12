@@ -272,8 +272,14 @@ public abstract class Connection extends Conferenceable {
       */
     public static final int CAPABILITY_SUPPORTS_DOWNGRADE_TO_VOICE_REMOTE = 0x01000000;
 
+    /**
+     * Remote device supports call transfers.
+     * @hide
+     */
+    public static final int CAPABILITY_SUPPORTS_TRANSFER = 0x04000000;
+
     //**********************************************************************************************
-    // Next CAPABILITY value: 0x04000000
+    // Next CAPABILITY value: 0x08000000
     //**********************************************************************************************
 
     /**
@@ -1943,6 +1949,12 @@ public abstract class Connection extends Conferenceable {
      * a request to reject.
      */
     public void onReject() {}
+
+    /**
+     * Transfers the current call.
+     * @hide
+     */
+    public void onTransfer() { }
 
     /**
      * Notifies this Connection whether the user wishes to proceed with the post-dial DTMF codes.

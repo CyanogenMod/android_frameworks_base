@@ -230,8 +230,14 @@ public final class Call {
          */
         public static final int CAPABILITY_ADD_PARTICIPANT = 0x02000000;
 
+        /**
+         * Remote device supports call transfers.
+         * @hide
+         */
+        public static final int CAPABILITY_SUPPORTS_TRANSFER = 0x04000000;
+
         //******************************************************************************************
-        // Next CAPABILITY value: 0x04000000
+        // Next CAPABILITY value: 0x08000000
         //******************************************************************************************
 
         /**
@@ -399,6 +405,9 @@ public final class Call {
             }
             if (can(capabilities, CAPABILITY_ADD_PARTICIPANT)) {
                 builder.append(" CAPABILITY_ADD_PARTICIPANT");
+            }
+            if (can(capabilities, CAPABILITY_SUPPORTS_TRANSFER)) {
+                builder.append(" CAPABILITY_SUPPORTS_TRANSFER");
             }
             builder.append("]");
             return builder.toString();
@@ -925,6 +934,15 @@ public final class Call {
      */
     public void mergeConference() {
         mInCallAdapter.mergeConference(mTelecomCallId);
+    }
+
+    /**
+     * Instructs this {@code Call} to connect the current active call and the call on hold.
+     * The current call will then disconnect.  See {@link Details#CAPABILITY_SUPPORTS_TRANSFER}.
+     * @hide
+     */
+    public void transferCall() {
+        mInCallAdapter.transferCall(mTelecomCallId);
     }
 
     /**
