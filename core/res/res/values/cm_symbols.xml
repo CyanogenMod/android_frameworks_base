@@ -145,4 +145,8 @@
 
     <!-- Carrier Apps -->
     <java-symbol type="array" name="config_enabledPreinstalledCarrierApps" />
+
+    <!-- KeyGuard -->
+    <java-symbol type="string" name="kg_sub_separator" />
+
 </resources>

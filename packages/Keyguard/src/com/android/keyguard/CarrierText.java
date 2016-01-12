@@ -46,6 +46,7 @@ public class CarrierText extends TextView {
     private static final String TAG = "CarrierText";
 
     private static CharSequence mSeparator;
+    private static CharSequence mSubSeparator;
 
     private final boolean mIsEmergencyCallCapable;
 
@@ -168,7 +169,7 @@ public class CarrierText extends TextView {
             }
             if (carrierTextForSimState != null) {
                 allSimsMissing = false;
-                displayText = concatenate(displayText, carrierTextForSimState);
+                displayText = concatenate(displayText, carrierTextForSimState, mSubSeparator);
             }
             if (simState == IccCardConstants.State.READY) {
                 ServiceState ss = mKeyguardUpdateMonitor.mServiceStates.get(subId);
@@ -242,6 +243,8 @@ public class CarrierText extends TextView {
         super.onFinishInflate();
         mSeparator = getResources().getString(
                 com.android.internal.R.string.kg_text_message_separator);
+        mSubSeparator = getResources().getString(
+                com.android.internal.R.string.kg_sub_separator);
         boolean shouldMarquee = KeyguardUpdateMonitor.getInstance(mContext).isDeviceInteractive();
         setSelected(shouldMarquee); // Allow marquee to work.
     }
@@ -381,10 +384,15 @@ public class CarrierText extends TextView {
     }
 
     private static CharSequence concatenate(CharSequence plmn, CharSequence spn) {
+        return concatenate(plmn, spn, mSeparator);
+    }
+
+    private static CharSequence concatenate(CharSequence plmn, CharSequence spn,
+            CharSequence separator) {
         final boolean plmnValid = !TextUtils.isEmpty(plmn);
         final boolean spnValid = !TextUtils.isEmpty(spn);
         if (plmnValid && spnValid) {
-            return new StringBuilder().append(plmn).append(mSeparator).append(spn).toString();
+            return new StringBuilder().append(plmn).append(separator).append(spn).toString();
         } else if (plmnValid) {
             return plmn;
         } else if (spnValid) {
