@@ -22,4 +22,20 @@
   <string name="kg_dismiss">استبعاد</string>
   <string name="kg_slot_name">فتحة <xliff:g id="number">%d</xliff:g>: بطاقة SIM جديدة \u0020</string>
   <string name="lockscreen_sim_error_message_short">بطاقة غير صالحة.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="zero">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
+    <item quantity="one">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> محاولة متبقية قبل أن يجب عليك الاتصال بشركة الجوال لإلغاء تأمين جهازك.</item>
+    <item quantity="two">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> من المحاولات المتبقية.</item>
+    <item quantity="few">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
+    <item quantity="many">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> من المحاولات المتبقية.</item>
+    <item quantity="other">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
+  </plurals>
+  <plurals name="kg_password_default_puk_message">
+    <item quantity="zero">بطاقة الشريحة غير ممكنة. أدخل رمز PUK للاستمرار. تبقي لديك <xliff:g id="number">%d</xliff:g> من المحاولات قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>
+    <item quantity="one">بطاقة الشريحة غير ممكنة. أدخل رمز PUK للاستمرار. لديك <xliff:g id="number">%d</xliff:g> محاولة متبقية قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>
+    <item quantity="two">بطاقة الشريحة غير ممكنة الآن. أدخل رمز PUK للاستمرار. لديك <xliff:g id="number">%d</xliff:g> من المحاولات المتبقية قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>
+    <item quantity="few">بطاقة الشريحة غير ممكنة الآن. أدخل رمز PUK للاستمرار. لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>
+    <item quantity="many">بطاقة الشريحة غير ممكنة الآن. أدخل رمز PUK للاستمرار. لديك <xliff:g id="number">%d</xliff:g> من المحاولات المتبقية قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>
+    <item quantity="other">بطاقة الشريحة غير ممكنة الآن. أدخل رمز PUK للاستمرار. لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>
+  </plurals>
 </resources>
