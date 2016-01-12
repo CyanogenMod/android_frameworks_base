@@ -131,6 +131,9 @@ public class KeyguardIndicationController {
         if (!TextUtils.isEmpty(mTransientIndication)) {
             return mTransientIndication;
         }
+        if (KeyguardUpdateMonitor.getInstance(mContext).isMaxFingerprintAttemptsReached()) {
+            return mContext.getString(R.string.fingerprint_try_again_hint_too_many);
+        }
         if (mPowerPluggedIn) {
             return computePowerIndication();
         }
@@ -166,6 +169,11 @@ public class KeyguardIndicationController {
                     || status.status == BatteryManager.BATTERY_STATUS_FULL;
             mPowerPluggedIn = status.isPluggedIn() && isChargingOrFull;
             mPowerCharged = status.isCharged();
+            updateIndication();
+        }
+
+        @Override
+        public void onScreenTurnedOn() {
             updateIndication();
         }
     };
