@@ -113,4 +113,7 @@
 
     <!-- Quick tile text color when the tile is disabled -->
     <color name="qs_tile_text_disabled">#ff747474</color>
+
+    <!-- Active color for volume slider -->
+    <color name="volume_slider_active">@color/system_accent_color</color>
 </resources>
