@@ -240,6 +240,13 @@ public final class InCallAdapter {
         }
     }
 
+    public void transferCall(String callId) {
+        try {
+            mAdapter.transferCall(callId);
+        } catch (RemoteException ignored) {
+        }
+    }
+
     /**
      * Instructs Telecom to swap the child calls of the specified conference call.
      */
