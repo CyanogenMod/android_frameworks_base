@@ -327,6 +327,7 @@
 
    <!-- Fingerprint -->
    <string name="fingerprint_try_again_hint">Please scan again</string>
+   <string name="fingerprint_try_again_hint_too_many">Too many fingerprint attempts. Try again later.</string>
 
     <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_dock_battery_level">Dock battery <xliff:g id="number">%d</xliff:g> percent.</string>
