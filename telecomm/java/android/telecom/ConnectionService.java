@@ -102,6 +102,7 @@ public abstract class ConnectionService extends Service {
     private static final int MSG_MERGE_CONFERENCE = 18;
     private static final int MSG_SWAP_CONFERENCE = 19;
     private static final int MSG_SET_LOCAL_HOLD = 20;
+    private static final int MSG_EXPLICIT_TRANSFER = 21;
     //Proprietary values starts after this.
     private static final int MSG_ADD_PARTICIPANT_WITH_CONFERENCE = 30;
 
@@ -246,6 +247,11 @@ public abstract class ConnectionService extends Service {
             args.arg1 = callId;
             args.argi1 = proceed ? 1 : 0;
             mHandler.obtainMessage(MSG_ON_POST_DIAL_CONTINUE, args).sendToTarget();
+        }
+
+        @Override
+        public void explicitTransfer(String callId) {
+            mHandler.obtainMessage(MSG_EXPLICIT_TRANSFER, callId).sendToTarget();
         }
     };
 
@@ -394,6 +400,9 @@ public abstract class ConnectionService extends Service {
                     }
                     break;
                 }
+                case MSG_EXPLICIT_TRANSFER:
+                    transfer((String) msg.obj);
+                    break;
                 default:
                     break;
             }
@@ -764,6 +773,11 @@ public abstract class ConnectionService extends Service {
         } else {
             findConferenceForAction(callId, "hold").onHold();
         }
+    }
+
+    private void transfer(String callId) {
+        Log.d(this, "transfer %s", callId);
+        findConnectionForAction(callId, "transfer").onTransfer();
     }
 
     private void unhold(String callId) {

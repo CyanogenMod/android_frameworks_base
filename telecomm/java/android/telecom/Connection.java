@@ -1945,6 +1945,11 @@ public abstract class Connection extends Conferenceable {
     public void onReject() {}
 
     /**
+     * Transfers the current call.
+     */
+    public void onTransfer() { }
+
+    /**
      * Notifies this Connection whether the user wishes to proceed with the post-dial DTMF codes.
      */
     public void onPostDialContinue(boolean proceed) {}
