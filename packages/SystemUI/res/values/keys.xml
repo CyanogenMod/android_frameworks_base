@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- For PackageAdapter View.setTag(int key, Object obj) purposes. -->
+
+    <item name="key_parent" type="id"/>
+    <item name="key_position" type="id"/>
+</resources>
