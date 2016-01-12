@@ -42,7 +42,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <string name="def_input_method" translatable="false"></string>
 
     <!-- Default for Settings.Global.DATA_ROAMING -->
-    <bool name="def_enable_data_roaming">true</bool>
+    <bool name="def_enable_data_roaming">false</bool>
 
     <!-- Default for Settings.Global.MOBILE_DATA -->
     <bool name="def_enable_mobile_data">true</bool>
