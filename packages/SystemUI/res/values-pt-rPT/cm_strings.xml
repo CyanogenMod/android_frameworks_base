@@ -94,10 +94,10 @@
   <string name="accessibility_quick_settings_sync_on">Sincronização ligada.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronização foi desligada.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Sincronização foi ligada.</string>
-  <string name="accessibility_quick_settings_usb_tether_off">Associação USB desligada.</string>
-  <string name="accessibility_quick_settings_usb_tether_on">Associação USB ligada.</string>
-  <string name="accessibility_quick_settings_usb_tether_changed_off">Associação USB foi desligada.</string>
-  <string name="accessibility_quick_settings_usb_tether_changed_on">Associação USB foi ligada.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">Partilha de internet por USB desligada.</string>
+  <string name="accessibility_quick_settings_usb_tether_on">Partilha de internet por USB ligada.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_off">A partilha de internet por USB foi desligada.</string>
+  <string name="accessibility_quick_settings_usb_tether_changed_on">A partilha de internet por USB foi ligada.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Economizador de bateria desligado.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Economizador de bateria ligado.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador de bateria desligou.</string>
@@ -126,7 +126,7 @@
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_volume_panel_label">Painel de volume</string>
   <string name="quick_settings_screen_timeout_detail_title">Tempo limite do ecrã</string>
-  <string name="quick_settings_usb_tether_label">Associação USB</string>
+  <string name="quick_settings_usb_tether_label">Partilha de internet por USB</string>
   <string name="quick_settings_heads_up_label">Notificações pop-up</string>
   <string name="quick_settings_ambient_display_label">Visualização de ambiente</string>
   <string name="quick_settings_sync_label">Sincronização</string>
