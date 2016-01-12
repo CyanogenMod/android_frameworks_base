@@ -103,4 +103,7 @@
     <color name="qs_detailed_expansion_indicator_color">@color/qs_title_text_color</color>
     <color name="qs_detailed_title_text_color">@color/qs_title_text_color</color>
     <color name="qs_detailed_icon_tint_color">@color/qs_title_text_color</color>
+
+    <!-- Active color for volume slider -->
+    <color name="volume_slider_active">@color/system_accent_color</color>
 </resources>
