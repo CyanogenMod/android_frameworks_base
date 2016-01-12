@@ -4798,7 +4798,7 @@ public class TelephonyManager {
        } catch (NullPointerException ex) {
            return false;
        }
-   }
+    }
 
     /**
      * Returns the Status of video telephony (VT)
@@ -4827,6 +4827,37 @@ public class TelephonyManager {
            return false;
        }
    }
+
+    /**
+     * Returns the Status of VOWIFI calling
+     * using subId
+     * @hide
+     */
+    public boolean isVoWifiCallingAvailableForSubscriber(int subId) {
+       try {
+           return getITelephony().isVoWifiCallingAvailableForSubscriber(subId);
+       } catch (RemoteException ex) {
+           return false;
+       } catch (NullPointerException ex) {
+           return false;
+       }
+    }
+
+    /**
+     * Returns the Status of Video telephony wifi calling
+     * using subId
+     * @hide
+     */
+    public boolean isVideoTelephonyWifiCallingAvailableForSubscriber(int subId) {
+       try {
+           return getITelephony()
+                       .isVideoTelephonyWifiCallingAvailableForSubscriber(subId);
+       } catch (RemoteException ex) {
+           return false;
+       } catch (NullPointerException ex) {
+           return false;
+       }
+    }
 
    /**
     * Set TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC for the default phone.
