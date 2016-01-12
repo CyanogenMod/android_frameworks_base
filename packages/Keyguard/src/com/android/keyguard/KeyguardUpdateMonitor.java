@@ -87,7 +87,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final boolean DEBUG_SIM_STATES = DEBUG || false;
     private static final int FAILED_BIOMETRIC_UNLOCK_ATTEMPTS_BEFORE_BACKUP = 3;
-    private static final int FAILED_FINGERPRINT_UNLOCK_ATTEMPTS_BEFORE_BACKUP = 3;
+    private static final int FAILED_FINGERPRINT_UNLOCK_ATTEMPTS_BEFORE_BACKUP = 5;
     private static final int LOW_BATTERY_THRESHOLD = 20;
 
     private static final String ACTION_FACE_UNLOCK_STARTED
@@ -386,6 +386,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private void onFingerprintAttemptFailed(boolean error, int errorCode) {
+        if (isMaxFingerprintAttemptsReached() && !error) {
+            Log.d(TAG, "maximum fingerprint attempts reached.");
+            return;
+        }
         if (!error) mFailedFingerprintAttempts++;
         for (int i = 0; i < mCallbacks.size(); i++) {
             KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
@@ -1321,7 +1325,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         mFailedAttempts = 0;
         mFailedBiometricUnlockAttempts = 0;
         if (clearFingers) {
-            mFailedFingerprintAttempts = 0;
+            clearFailedFingerprintAttempts();
         }
     }
 
@@ -1359,6 +1363,10 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
 
     public boolean isOnLastFingerprintAttempt() {
         return mFailedFingerprintAttempts == FAILED_FINGERPRINT_UNLOCK_ATTEMPTS_BEFORE_BACKUP;
+    }
+
+    public void clearFailedFingerprintAttempts() {
+        mFailedFingerprintAttempts = 0;
     }
 
     public boolean isAlternateUnlockEnabled() {
