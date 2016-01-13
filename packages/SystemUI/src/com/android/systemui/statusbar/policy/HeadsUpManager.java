@@ -160,6 +160,10 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         mListeners.add(listener);
     }
 
+    public void removeListener(OnHeadsUpChangedListener listener) {
+        mListeners.remove(listener);
+    }
+
     public PhoneStatusBar getBar() {
         return mBar;
     }
