@@ -83,6 +83,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     private static final String TAG = "QSDragPanel";
 
+    public static final boolean DEBUG_TILES = false;
     public static final boolean DEBUG_DRAG = false;
 
     private static final int MAX_ROW_COUNT = 3;
@@ -114,7 +115,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     List<TileRecord> mCurrentlyAnimating
             = Collections.synchronizedList(new ArrayList<TileRecord>());
-    private Collection<QSTile<?>> mTempTiles = null;
 
     private Point mDisplaySize;
     private int[] mTmpLoc;
@@ -454,9 +454,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     protected int getCurrentMaxPageCount() {
         int initialSize = mRecords.size();
-        if (mTempTiles != null) {
-            return getPagesForCount(initialSize + mTempTiles.size());
-        }
         return getPagesForCount(initialSize);
     }
 
@@ -498,102 +495,100 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     public void setTiles(final Collection<QSTile<?>> tilesCollection) {
         final List<QSTile<?>> tiles = new ArrayList<>(tilesCollection);
-        if (isLaidOut()) {
-            if (DEBUG_DRAG) {
-                Log.i(TAG, "setTiles() called with " + "tiles = ["
-                        + tiles + "], mTempTiles: " + mTempTiles);
-                if (mTempTiles != null) {
-                    Log.e(TAG, "temp tiles being overridden... : " +
-                            Arrays.toString(mTempTiles.toArray()));
+        if (DEBUG_TILES) {
+            Log.i(TAG, "setTiles() called with " + "tiles = ["
+                    + tiles + "]");
+        }
+
+        if (mLastDragRecord != null && mRecords.indexOf(mLastDragRecord) == -1) {
+            // the last removed record might be stored in mLastDragRecord if we just shifted
+            // re-add it to the list so we'll clean it up below
+            mRecords.add(mLastDragRecord);
+            mLastDragRecord = null;
+        }
+
+        Map<QSTile<?>, DragTileRecord> recordMap = new ArrayMap<>();
+        Iterator<TileRecord> iterator = mRecords.iterator();
+
+        int recordsRemoved = 0;
+        // cleanup current records
+        while (iterator.hasNext()) {
+            DragTileRecord dr = (DragTileRecord) iterator.next();
+
+            if (tiles.contains(dr.tile)) {
+                if (DEBUG_TILES) {
+                    Log.i(TAG, "caching tile: " + dr.tile);
                 }
+                recordMap.put(dr.tile, dr);
+            } else {
+                if (DEBUG_TILES) {
+                    Log.i(TAG, "removing tile: " + dr.tile);
+                }
+                // clean up view
+                mPages.get(dr.page).removeView(dr.tileView);
+
+                // remove record
+                iterator.remove();
+                recordsRemoved++;
             }
+        }
 
-            if (mLastDragRecord != null && mRecords.indexOf(mLastDragRecord) == -1) {
-                // the last removed record might be stored in mLastDragRecord if we just shifted
-                // re-add it to the list so we'll clean it up below
-                mRecords.add(mLastDragRecord);
-                mLastDragRecord = null;
+
+        // at this point recordMap should have all retained tiles, no new or old tiles
+        int delta = tiles.size() - recordMap.size() - recordsRemoved;
+        if (DEBUG_TILES) {
+            Log.i(TAG, "record map delta: " + delta);
+        }
+        mRecords.ensureCapacity(tiles.size());
+        mPagerAdapter.notifyDataSetChanged();
+
+        // add new tiles
+        for (int i = 0; i < tiles.size(); i++) {
+            QSTile<?> tile = tiles.get(i);
+            final int tileDestPage = getPagesForCount(i + 1) - 1;
+
+            if (DEBUG_TILES) {
+                Log.d(TAG, "tile at : " + i + ": " + tile + " to dest page: " + tileDestPage);
             }
-
-            Map<QSTile<?>, DragTileRecord> recordMap = new ArrayMap<>();
-            Iterator<TileRecord> iterator = mRecords.iterator();
-
-            int recordsRemoved = 0;
-            // cleanup current records
-            while (iterator.hasNext()) {
-                DragTileRecord dr = (DragTileRecord) iterator.next();
-
-                if (tiles.contains(dr.tile)) {
-                    if (DEBUG_DRAG) {
-                        Log.i(TAG, "caching tile: " + dr.tile);
+            DragTileRecord record;
+            if (!recordMap.containsKey(tile)) {
+                if (DEBUG_TILES) {
+                    Log.d(TAG, "tile at: " + i + " not cached, adding it to records");
+                }
+                record = makeRecord(tile);
+                record.destinationPage = tileDestPage;
+                recordMap.put(tile, record);
+                mRecords.add(i, record);
+                mPagerAdapter.notifyDataSetChanged();
+            } else {
+                record = recordMap.get(tile);
+                if (DEBUG_TILES) {
+                    Log.d(TAG, "tile at : " + i + ": cached, restoring: " + record);
+                }
+                int indexOf = mRecords.indexOf(record);
+                if (indexOf != i) {
+                    if (DEBUG_TILES) {
+                        Log.w(TAG, "moving index of " + record + " from "
+                                + indexOf + " to " + i);
                     }
-                    recordMap.put(dr.tile, dr);
-                } else {
-                    if (DEBUG_DRAG) {
-                        Log.i(TAG, "removing tile: " + dr.tile);
-                    }
-                    // clean up view
-                    mPages.get(dr.page).removeView(dr.tileView);
+                    Collections.swap(mRecords, indexOf, i);
 
-                    // remove record
-                    iterator.remove();
-                    recordsRemoved++;
-                }
-            }
-
-
-            // at this point recordMap should have all retained tiles, no new or old tiles
-            int delta = tiles.size() - recordMap.size() - recordsRemoved;
-            if (DEBUG_DRAG) {
-                Log.i(TAG, "record map delta: " + delta);
-            }
-            mRecords.ensureCapacity(tiles.size());
-            mPagerAdapter.notifyDataSetChanged();
-
-            // add new tiles
-            for (int i = 0; i < tiles.size(); i++) {
-                QSTile<?> tile = tiles.get(i);
-                final int tileDestPage = getPagesForCount(i + 1) - 1;
-
-                if (DEBUG_DRAG) {
-                    Log.d(TAG, "tile at : " + i + ": " + tile + " to dest page: " + tileDestPage);
-                }
-                if (!recordMap.containsKey(tile)) {
-                    DragTileRecord record = makeRecord(tile);
                     record.destinationPage = tileDestPage;
-                    recordMap.put(tile, record);
-                    mRecords.add(i, record);
-                    mPagerAdapter.notifyDataSetChanged();
+                    ensureDestinationPage(record);
+                }
 
-                    // add the view
-                    mPages.get(record.destinationPage).addView(record.tileView);
-                    record.page = record.destinationPage;
-                    if (DEBUG_DRAG) {
-                        Log.d(TAG, "added new record " + record);
-                    }
-                } else {
-                    DragTileRecord record = recordMap.get(tile);
-                    int indexOf = mRecords.indexOf(record);
-                    if (indexOf != i) {
-                        if (DEBUG_DRAG) {
-                            Log.w(TAG, "moving index of " + record + " from "
-                                    + indexOf + " to " + i);
-                        }
-                        Collections.swap(mRecords, indexOf, i);
-
-                        record.destinationPage = tileDestPage;
-                        ensureDestinationPage(record);
-                    }
+            }
+            if (record.page == -1) {
+                // add the view
+                mPages.get(record.destinationPage).addView(record.tileView);
+                record.page = record.destinationPage;
+                if (DEBUG_TILES) {
+                    Log.d(TAG, "added view " + record);
                 }
             }
-            if (isShowingDetail()) {
-                mDetail.bringToFront();
-            }
-        } else if (!isLaidOut()) {
-            if (DEBUG_DRAG) {
-                Log.w(TAG, "setting temporary tiles to layout");
-            }
-            mTempTiles = Collections.synchronizedCollection(new ArrayList<QSTile<?>>(tiles));
+        }
+        if (isShowingDetail()) {
+            mDetail.bringToFront();
         }
         mPagerAdapter.notifyDataSetChanged();
 
@@ -612,7 +607,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     private DragTileRecord makeRecord(final QSTile<?> tile) {
-        if (DEBUG_DRAG) {
+        if (DEBUG_TILES) {
             Log.d(TAG, "+++ makeRecord() called with " + "tile = [" + tile + "]");
         }
         final DragTileRecord r = new DragTileRecord();
@@ -689,35 +684,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         r.tileView.setVisibility(mEditing ? View.VISIBLE : View.GONE);
         callback.onStateChanged(r.tile.getState());
 
-        if (DEBUG_DRAG) {
+        if (DEBUG_TILES) {
             Log.d(TAG, "--- makeRecord() called with " + "tile = [" + tile + "]");
         }
         return r;
-    }
-
-    private void addTile(final QSTile<?> tile) {
-        if (DEBUG_DRAG) {
-            Log.d(TAG, "+++ addTile() called with " + "tile = [" + tile + "]");
-        }
-        DragTileRecord r = makeRecord(tile);
-        mRecords.add(r);
-        mPagerAdapter.notifyDataSetChanged();
-
-        r.destinationPage = getPagesForCount(mRecords.size()) - 1;
-
-        if (DEBUG_DRAG) {
-            Log.d(TAG, "destinationPage: " + r.destinationPage);
-        }
-
-        mPages.get(r.destinationPage).addView(r.tileView);
-        r.page = r.destinationPage;
-        drawTile(r, r.tile.getState());
-
-        ensurePagerState();
-
-        if (DEBUG_DRAG) {
-            Log.d(TAG, "--- addTile() called with " + "tile = [" + tile + "]");
-        }
     }
 
     public void ensurePagerState() {
@@ -841,16 +811,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     footer.getMeasuredWidth(), getMeasuredHeight());
         }
 
-        if (mTempTiles != null) {
-            final Iterator<QSTile<?>> iterator = mTempTiles.iterator();
-            while (iterator.hasNext()) {
-                addTile(iterator.next());
-                iterator.remove();
-            }
-            mTempTiles = null;
-            mPagerAdapter.notifyDataSetChanged();
-            requestLayout();
-        }
         ensurePagerState();
     }
 
