@@ -2000,13 +2000,18 @@ public class SettingsProvider extends ContentProvider {
                 final int oldVersion = secureSettings.getVersionLocked(); //125
                 final int newVersion = SETTINGS_VERSION;
 
+                boolean fromCM = false;
                 // If up do date - done.
                 if ((oldVersion == newVersion || oldVersion == CM_SETTINGS_DB_VERSION)) {
+                    if (oldVersion == CM_SETTINGS_DB_VERSION) {
+                        fromCM = true;
+                        onUpgradeLocked(mUserId, oldVersion, newVersion, fromCM);
+                    }
                     return;
                 }
 
                 // Try to upgrade.
-                final int curVersion = onUpgradeLocked(mUserId, oldVersion, newVersion);
+                final int curVersion = onUpgradeLocked(mUserId, oldVersion, newVersion, fromCM);
 
                 // If upgrade failed start from scratch and upgrade.
                 if (curVersion != newVersion) {
@@ -2022,7 +2027,7 @@ public class SettingsProvider extends ContentProvider {
                     migrateLegacySettingsForUserLocked(dbHelper, database, mUserId);
 
                     // Now upgrade should work fine.
-                    onUpgradeLocked(mUserId, oldVersion, newVersion);
+                    onUpgradeLocked(mUserId, oldVersion, newVersion, fromCM);
                 }
 
                 // Set the global settings version if owner.
@@ -2078,7 +2083,8 @@ public class SettingsProvider extends ContentProvider {
              *     currentVersion = 119;
              * }
              */
-            private int onUpgradeLocked(int userId, int oldVersion, int newVersion) {
+            private int onUpgradeLocked(int userId, int oldVersion, int newVersion,
+                    boolean fromCM) {
                 if (DEBUG) {
                     Slog.w(LOG_TAG, "Upgrading settings for user: " + userId + " from version: "
                             + oldVersion + " to version: " + newVersion);
@@ -2087,7 +2093,7 @@ public class SettingsProvider extends ContentProvider {
                 int currentVersion = oldVersion;
 
                 // v119: Reset zen + ringer mode.
-                if (currentVersion == 118) {
+                if (currentVersion == 118 || fromCM) {
                     if (userId == UserHandle.USER_OWNER) {
                         final SettingsState globalSettings = getGlobalSettingsLocked();
                         globalSettings.updateSettingLocked(Settings.Global.ZEN_MODE,
@@ -2097,27 +2103,33 @@ public class SettingsProvider extends ContentProvider {
                                 Integer.toString(AudioManager.RINGER_MODE_NORMAL),
                                 SettingsState.SYSTEM_PACKAGE_NAME);
                     }
-                    currentVersion = 119;
+                    if (!fromCM) {
+                        currentVersion = 119;
+                    }
                 }
 
                 // v120: Add double tap to wake setting.
-                if (currentVersion == 119) {
+                if (currentVersion == 119 || fromCM) {
                     SettingsState secureSettings = getSecureSettingsLocked(userId);
                     secureSettings.insertSettingLocked(Settings.Secure.DOUBLE_TAP_TO_WAKE,
                             getContext().getResources().getBoolean(
                                     R.bool.def_double_tap_to_wake) ? "1" : "0",
                             SettingsState.SYSTEM_PACKAGE_NAME);
 
-                    currentVersion = 120;
+                    if (!fromCM) {
+                        currentVersion = 120;
+                    }
                 }
 
-                if (currentVersion == 120) {
+                if (currentVersion == 120 || fromCM) {
                     // Before 121, we used a different string encoding logic.  We just bump the
                     // version here; SettingsState knows how to handle pre-version 120 files.
-                    currentVersion = 121;
+                    if (!fromCM) {
+                        currentVersion = 121;
+                    }
                 }
 
-                if (currentVersion == 121) {
+                if (currentVersion == 121 || fromCM) {
                     // Version 122: allow OEMs to set a default payment component in resources.
                     // Note that we only write the default if no default has been set;
                     // if there is, we just leave the default at whatever it currently is.
@@ -2133,7 +2145,9 @@ public class SettingsProvider extends ContentProvider {
                                 defaultComponent,
                                 SettingsState.SYSTEM_PACKAGE_NAME);
                     }
-                    currentVersion = 122;
+                    if (!fromCM) {
+                        currentVersion = 122;
+                    }
                 }
                 // vXXX: Add new settings above this point.
 
