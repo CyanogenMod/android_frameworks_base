@@ -52,6 +52,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
     private CheckSimPin mCheckSimPinThread;
     private boolean mShowDefaultMessage = true;
     private int mRemainingAttempts = -1;
+    private int mResult = PhoneConstants.PIN_PASSWORD_INCORRECT;
     private AlertDialog mRemainingAttemptsDialog;
     private int mSubId;
     private int mSlotId;
@@ -258,6 +259,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
                         @Override
                         public void run() {
                             mRemainingAttempts = attemptsRemaining;
+                            mResult = result;
                             if (mSimUnlockProgressDialog != null) {
                                 mSimUnlockProgressDialog.hide();
                             }
@@ -266,6 +268,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
                             if (result == PhoneConstants.PIN_RESULT_SUCCESS) {
                                 KeyguardUpdateMonitor.getInstance(getContext())
                                         .reportSimUnlocked(mSubId);
+                                mResult = PhoneConstants.PIN_PASSWORD_INCORRECT;
                                 mRemainingAttempts = -1;
                                 mShowDefaultMessage = true;
                                 if (mCallback != null) {
@@ -320,8 +323,10 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
             return;
         }
         if (mRemainingAttempts >= 0) {
-            mSecurityMessageDisplay.setMessage(getPinPasswordErrorMessage(
-                    mRemainingAttempts, true), true);
+            if (mResult != PhoneConstants.PIN_RESULT_SUCCESS)
+                mSecurityMessageDisplay.setMessage(
+                        getPinPasswordErrorMessage(mRemainingAttempts, true),
+                        true);
             return;
         }
 
@@ -349,6 +354,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
                         " attemptsRemaining=" + attemptsRemaining);
                 if (attemptsRemaining >= 0) {
                     mRemainingAttempts = attemptsRemaining;
+                    mResult = result;
                     mSecurityMessageDisplay.setMessage(
                             getPinPasswordErrorMessage(attemptsRemaining, true), true);
                 }
