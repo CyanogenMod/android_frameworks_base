@@ -34,7 +34,6 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
 
     private KeyguardViewMediator mKeyguardViewMediator;
     private KeyguardMonitor mKeyguard;
-    private boolean mPersistedState;
     private boolean mListening;
 
     private KeyguardViewMediator.LockscreenEnabledSettingsObserver mSettingsObserver;
@@ -52,15 +51,12 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
 
             @Override
             public void update() {
-                boolean newEnabledState = CMSettings.Secure.getIntForUser(
+                boolean newState = CMSettings.Secure.getIntForUser(
                         mContext.getContentResolver(),
                         CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED,
                         getPersistedDefaultOldSetting() ? 1 : 0,
                         UserHandle.USER_CURRENT) != 0;
-                if (newEnabledState != mPersistedState) {
-                    mPersistedState = newEnabledState;
-                    refreshState();
-                }
+                refreshState(newState);
             }
         };
 
@@ -89,8 +85,9 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
 
     @Override
     protected void handleClick() {
-        setPersistedState(!mPersistedState);
-        refreshState();
+        final boolean newState = !getState().value;
+        setPersistedState(newState);
+        refreshState(newState);
     }
 
     @Override
@@ -101,9 +98,8 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         final boolean lockscreenEnforced = mKeyguardViewMediator.lockscreenEnforcedByDevicePolicy();
-        final boolean lockscreenEnabled = lockscreenEnforced
-                || mPersistedState
-                || mKeyguardViewMediator.getKeyguardEnabledInternal();
+        final boolean lockscreenEnabled = lockscreenEnforced ||
+                arg != null ? (Boolean) arg : mKeyguardViewMediator.getKeyguardEnabledInternal();
 
         state.value = lockscreenEnabled;
         state.visible = mKeyguardViewMediator.isKeyguardBound();
@@ -147,6 +143,5 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
         CMSettings.Secure.putIntForUser(mContext.getContentResolver(),
                 CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED,
                 enabled ? 1 : 0, UserHandle.USER_CURRENT);
-        mPersistedState = enabled;
     }
 }
