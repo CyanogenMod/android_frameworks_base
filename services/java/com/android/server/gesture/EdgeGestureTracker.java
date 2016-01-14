@@ -33,7 +33,7 @@ public class EdgeGestureTracker {
     public final static String TAG = "EdgeGestureTracker";
     public final static boolean DEBUG = false;
 
-    public final static long TRIGGER_TIME_MS = 140;
+    public final static long TRIGGER_TIME_MS = 500;
     public final static int PIXEL_SWIPE_OFFTAKE_SLOP = 2;
 
     private final int mBaseThickness;
