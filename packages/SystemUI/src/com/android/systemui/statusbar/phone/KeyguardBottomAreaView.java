@@ -809,4 +809,13 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     public void onChange() {
         updateCustomShortcuts();
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mAccessibilityController.removeStateChangedCallback(this);
+        mContext.unregisterReceiver(mDevicePolicyReceiver);
+        mShortcutHelper.cleanup();
+        mUnlockMethodCache.removeListener(this);
+    }
 }

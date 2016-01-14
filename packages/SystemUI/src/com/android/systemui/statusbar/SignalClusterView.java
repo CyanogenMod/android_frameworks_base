@@ -136,9 +136,14 @@ public class SignalClusterView
 
     public void setSecurityController(SecurityController sc) {
         if (DEBUG) Log.d(TAG, "SecurityController=" + sc);
+        if (sc == null && mSC != null) {
+            mSC.removeCallback(this);
+        }
         mSC = sc;
-        mSC.addCallback(this);
-        mVpnVisible = mSC.isVpnEnabled();
+        if (mSC != null) {
+            mSC.addCallback(this);
+            mVpnVisible = mSC.isVpnEnabled();
+        }
     }
 
     @Override
