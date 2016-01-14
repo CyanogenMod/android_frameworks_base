@@ -2002,6 +2002,9 @@ public class SettingsProvider extends ContentProvider {
 
                 // If up do date - done.
                 if ((oldVersion == newVersion || oldVersion == CM_SETTINGS_DB_VERSION)) {
+                    if (oldVersion == CM_SETTINGS_DB_VERSION) {
+                        forceReplayAOSPDefaults(mUserId);
+                    }
                     return;
                 }
 
@@ -2140,6 +2143,41 @@ public class SettingsProvider extends ContentProvider {
                 // Return the current version.
                 return currentVersion;
             }
+
+            private void forceReplayAOSPDefaults(int userId) {
+                // v119: Reset zen + ringer mode.
+                if (userId == UserHandle.USER_OWNER) {
+                    final SettingsState globalSettings = getGlobalSettingsLocked();
+                    globalSettings.updateSettingLocked(Settings.Global.ZEN_MODE,
+                            Integer.toString(Settings.Global.ZEN_MODE_OFF),
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                    globalSettings.updateSettingLocked(Settings.Global.MODE_RINGER,
+                            Integer.toString(AudioManager.RINGER_MODE_NORMAL),
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                }
+
+                // v120: Add double tap to wake setting.
+                SettingsState secureSettings = getSecureSettingsLocked(userId);
+                secureSettings.insertSettingLocked(Settings.Secure.DOUBLE_TAP_TO_WAKE,
+                        getContext().getResources().getBoolean(
+                                R.bool.def_double_tap_to_wake) ? "1" : "0",
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                // Version 122: allow OEMs to set a default payment component in resources.
+                // Note that we only write the default if no default has been set;
+                // if there is, we just leave the default at whatever it currently is.
+                String defaultComponent = (getContext().getResources().getString(
+                        R.string.def_nfc_payment_component));
+                Setting currentSetting = secureSettings.getSettingLocked(
+                        Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT);
+                if (defaultComponent != null && !defaultComponent.isEmpty() &&
+                        currentSetting == null) {
+                    secureSettings.insertSettingLocked(
+                            Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT,
+                            defaultComponent,
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+            }
+
         }
     }
 }
