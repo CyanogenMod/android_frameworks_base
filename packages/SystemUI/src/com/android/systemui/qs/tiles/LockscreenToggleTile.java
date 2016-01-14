@@ -52,15 +52,12 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
 
             @Override
             public void update() {
-                boolean newEnabledState = CMSettings.Secure.getIntForUser(
+                mPersistedState = CMSettings.Secure.getIntForUser(
                         mContext.getContentResolver(),
                         CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED,
                         getPersistedDefaultOldSetting() ? 1 : 0,
                         UserHandle.USER_CURRENT) != 0;
-                if (newEnabledState != mPersistedState) {
-                    mPersistedState = newEnabledState;
-                    refreshState();
-                }
+                refreshState();
             }
         };
 
