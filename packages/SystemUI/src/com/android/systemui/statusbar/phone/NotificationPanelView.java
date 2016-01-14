@@ -80,6 +80,7 @@ import cyanogenmod.externalviews.KeyguardExternalView;
 import cyanogenmod.providers.CMSettings;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.cyanogenmod.internal.util.CmLockPatternUtils;
 
@@ -2688,9 +2689,7 @@ public class NotificationPanelView extends PanelView implements
     private void updateExternalKeyguardView() {
         ComponentName cn = mLockPatternUtils.getThirdPartyKeyguardComponent();
         // If mThirdPartyKeyguardViewComponent differs from cn, go ahead and update
-        if ((cn == null && mThirdPartyKeyguardViewComponent != null) ||
-                (cn != null && mThirdPartyKeyguardViewComponent == null) ||
-                !mThirdPartyKeyguardViewComponent.equals(cn)) {
+        if (!Objects.equals(mThirdPartyKeyguardViewComponent, cn)) {
             mThirdPartyKeyguardViewComponent = cn;
             if (mKeyguardExternalView != null) {
                 if (indexOfChild(mKeyguardExternalView) >= 0) {
