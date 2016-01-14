@@ -649,7 +649,7 @@ public class Tethering extends BaseNetworkObserver {
         }
 
         if (mLastNotificationId != 0) {
-            if (mLastNotificationId == icon) {
+            if (mLastNotificationId == icon && icon != com.android.internal.R.drawable.stat_sys_tether_wifi) {
                 return;
             }
             notificationManager.cancelAsUser(null, mLastNotificationId,
