@@ -2001,7 +2001,22 @@ public class SettingsProvider extends ContentProvider {
                 final int newVersion = SETTINGS_VERSION;
 
                 // If up do date - done.
+                //
+                // CYANOGENMOD
+                // We moved our settings out to another settings provider (CMSettingsProvider)
+                // however, we still have a problem of being a few versions ahead of AOSP.
+                // We could approach this in the manner we have previously, and bump the version
+                // to replay the defaults for specific os upgrade changes and have that maintenance
+                // overhead forever OR we can take the approach below:
+                //
+                // Logic as follows:
+                //       Until version 125 of this "DATABASE"
+                //       force replay AOSP defaults as they get introduced
+                //       once 125 is hit, we never have to maintain this again.
                 if ((oldVersion == newVersion || oldVersion == CM_SETTINGS_DB_VERSION)) {
+                    if (oldVersion == CM_SETTINGS_DB_VERSION) {
+                        forceReplayAOSPDefaults(mUserId);
+                    }
                     return;
                 }
 
@@ -2140,6 +2155,42 @@ public class SettingsProvider extends ContentProvider {
                 // Return the current version.
                 return currentVersion;
             }
+
+            private void forceReplayAOSPDefaults(int userId) {
+                // v119: Reset zen + ringer mode.
+                if (userId == UserHandle.USER_OWNER) {
+                    final SettingsState globalSettings = getGlobalSettingsLocked();
+                    globalSettings.updateSettingLocked(Settings.Global.ZEN_MODE,
+                            Integer.toString(Settings.Global.ZEN_MODE_OFF),
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                    globalSettings.updateSettingLocked(Settings.Global.MODE_RINGER,
+                            Integer.toString(AudioManager.RINGER_MODE_NORMAL),
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                }
+
+                // v120: Add double tap to wake setting.
+                SettingsState secureSettings = getSecureSettingsLocked(userId);
+                secureSettings.insertSettingLocked(Settings.Secure.DOUBLE_TAP_TO_WAKE,
+                        getContext().getResources().getBoolean(
+                                R.bool.def_double_tap_to_wake) ? "1" : "0",
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                // Version 122: allow OEMs to set a default payment component in resources.
+                // Note that we only write the default if no default has been set;
+                // if there is, we just leave the default at whatever it currently is.
+                String defaultComponent = (getContext().getResources().getString(
+                        R.string.def_nfc_payment_component));
+                Setting currentSetting = secureSettings.getSettingLocked(
+                        Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT);
+                if (defaultComponent != null && !defaultComponent.isEmpty() &&
+                        currentSetting == null) {
+                    secureSettings.insertSettingLocked(
+                            Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT,
+                            defaultComponent,
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                }
+            }
+
         }
     }
 }
