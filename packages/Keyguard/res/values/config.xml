@@ -31,4 +31,7 @@
 
     <!-- Guide user to wipe data after fail to unlock for the max times -->
     <integer name="config_max_unlock_countdown_times">0</integer>
+
+    <!-- config for showing AM/PM on lock screen in 12hour format -->
+    <bool name="config_showAmpm">true</bool>
 </resources>
