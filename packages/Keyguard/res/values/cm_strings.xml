@@ -26,4 +26,7 @@
         <item quantity="one">Enter SIM PIN, you have <xliff:g id="number">%d</xliff:g> remaining attempt before you must contact your carrier to unlock your device.</item>
         <item quantity="other">Enter SIM PIN, you have <xliff:g id="number">%d</xliff:g> remaining attempts.</item>
     </plurals>
+
+    <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
+    <string name="kg_invalid_sim_length">Error: Input shorter than minimum length</string>
 </resources>
