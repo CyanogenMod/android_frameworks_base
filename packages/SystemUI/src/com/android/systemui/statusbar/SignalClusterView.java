@@ -333,7 +333,7 @@ public class SignalClusterView
             mWifiSignalSpacer.setVisibility(View.GONE);
         }
 
-        mNoSims.setVisibility(mNoSimsVisible ? View.VISIBLE : View.GONE);
+        mNoSims.setVisibility(mNoSimsVisible && !mIsAirplaneMode ? View.VISIBLE : View.GONE);
     }
 
     private class PhoneState {
