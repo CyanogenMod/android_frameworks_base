@@ -238,7 +238,7 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
 
         if (entry.length() < 4) {
             // otherwise, display a message to the user, and don't submit.
-            mSecurityMessageDisplay.setMessage(R.string.kg_invalid_sim_pin_hint, true);
+            mSecurityMessageDisplay.setMessage(R.string.kg_invalid_sim_length, true);
             resetPasswordText(true);
             mCallback.userActivity();
             return;
