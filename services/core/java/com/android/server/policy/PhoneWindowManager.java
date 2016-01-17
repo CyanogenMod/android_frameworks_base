@@ -69,6 +69,9 @@ import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.hardware.hdmi.HdmiControlManager;
 import android.hardware.hdmi.HdmiPlaybackClient;
 import android.hardware.hdmi.HdmiPlaybackClient.OneTouchPlayCallback;
@@ -840,6 +843,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mClearedBecauseOfForceShow;
     private boolean mTopWindowIsKeyguard;
 
+    private CameraManager mCameraManager;
+    private String mRearFlashCameraId = null;
+    private boolean mTorchLongPressPowerEnabled;
+    private boolean mIsTorchActive;
+    private boolean mWasTorchActive;
+
     private class PolicyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1036,6 +1045,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(CMSettings.System.getUriFor(
                     CMSettings.System.NAVBAR_LEFT_IN_LANDSCAPE), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.TORCH_LONG_PRESS_POWER_GESTURE), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -1273,9 +1285,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             ViewConfiguration.get(mContext).getDeviceGlobalActionKeyTimeout());
                 }
             } else {
-                wakeUpFromPowerKey(event.getDownTime());
-
-                if (mSupportLongPressPowerWhenNonInteractive && hasLongPressOnPowerBehavior()) {
+                if (!mTorchLongPressPowerEnabled || mDisplay.getState() == Display.STATE_DOZE) {
+                    wakeUpFromPowerKey(event.getDownTime());
+                }
+                if (mTorchLongPressPowerEnabled && mIsTorchActive) {
+                    mWasTorchActive = true;
+                    try {
+                        mCameraManager.setTorchMode(getRearFlashCameraId(), false);
+                    } catch (CameraAccessException e) {
+                        mWasTorchActive = false;
+                    }
+                    mIsTorchActive = false;
+                } else if ((mSupportLongPressPowerWhenNonInteractive
+                        && hasLongPressOnPowerBehavior()) || mTorchLongPressPowerEnabled) {
                     Message msg = mHandler.obtainMessage(MSG_POWER_LONG_PRESS);
                     msg.setAsynchronous(true);
                     mHandler.sendMessageDelayed(msg,
@@ -1336,6 +1358,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (!mPowerKeyHandled) {
             mPowerKeyHandled = true;
             mHandler.removeMessages(MSG_POWER_LONG_PRESS);
+            if (mTorchLongPressPowerEnabled && !isScreenOn()) {
+                if (mWasTorchActive) {
+                    mWasTorchActive = false;
+                } else {
+                    wakeUpFromPowerKey(SystemClock.uptimeMillis());
+                }
+            }
         }
     }
 
@@ -1432,6 +1461,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private void powerLongPress() {
+        if (mTorchLongPressPowerEnabled && !isScreenOn()) {
+            try {
+                mCameraManager.setTorchMode(getRearFlashCameraId(), true);
+            } catch (CameraAccessException e) {
+            }
+            mWasTorchActive = false;
+            mIsTorchActive = true;
+            mPowerKeyHandled = true;
+            return;
+        }
+
         final int behavior = getResolvedLongPressOnPowerBehavior();
         switch (behavior) {
         case LONG_PRESS_POWER_NOTHING:
@@ -1753,6 +1793,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mDreamManagerInternal = LocalServices.getService(DreamManagerInternal.class);
         mPowerManagerInternal = LocalServices.getService(PowerManagerInternal.class);
         mAppOpsManager = (AppOpsManager) mContext.getSystemService(Context.APP_OPS_SERVICE);
+        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
         mHasFeatureWatch = mContext.getPackageManager().hasSystemFeature(FEATURE_WATCH);
 
         // Init display burn-in protection
@@ -2348,6 +2389,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mImmersiveModeConfirmation != null) {
                 mImmersiveModeConfirmation.loadSetting(mCurrentUserId);
             }
+
+            mTorchLongPressPowerEnabled = (CMSettings.System.getIntForUser(
+                    resolver, CMSettings.System.TORCH_LONG_PRESS_POWER_GESTURE, 0,
+                    UserHandle.USER_CURRENT) == 1);
         }
         synchronized (mWindowManagerFuncs.getWindowManagerLock()) {
             WindowManagerPolicyControl.reloadFromSetting(mContext);
@@ -8818,5 +8863,18 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (mKeyguardDelegate != null) {
             mKeyguardDelegate.dump(prefix, pw);
         }
+    }
+
+    private String getRearFlashCameraId() throws CameraAccessException {
+        if (mRearFlashCameraId != null) return mRearFlashCameraId;
+        for (final String id : mCameraManager.getCameraIdList()) {
+            CameraCharacteristics c = mCameraManager.getCameraCharacteristics(id);
+            boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+            int lensDirection = c.get(CameraCharacteristics.LENS_FACING);
+            if (flashAvailable && lensDirection == CameraCharacteristics.LENS_FACING_BACK) {
+                mRearFlashCameraId = id;
+            }
+        }
+        return mRearFlashCameraId;
     }
 }
