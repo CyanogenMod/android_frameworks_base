@@ -149,7 +149,7 @@ public class LockscreenShortcutsActivity extends Activity implements View.OnClic
                 drawable = mShortcutHelper.getDrawableForTarget(shortcut);
                 if (drawable == null) {
                     drawable = getResources().getDrawable(shortcut == Shortcuts.LEFT_SHORTCUT
-                            ? R.drawable.ic_phone_24dp : R.drawable.ic_camera_alt_24dp);
+                            ? R.drawable.ic_mic_26dp : R.drawable.ic_camera_alt_24dp);
                     v.setImageTintList(mDefaultTintList);
                 } else {
                     v.setColorFilter(mFilter);
