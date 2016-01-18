@@ -43,7 +43,7 @@ public class VolumeDialogComponent implements VolumeComponent {
     private final Context mContext;
     private final VolumeDialogController mController;
     private final ZenModeController mZenModeController;
-    private final VolumeDialog mDialog;
+    private VolumeDialog mDialog;
     private final VolumePolicy mVolumePolicy = new VolumePolicy(
             true,  // volumeDownToEnterSilent
             true,  // volumeUpToExitSilent
@@ -138,4 +138,11 @@ public class VolumeDialogComponent implements VolumeComponent {
         }
     };
 
+    public void recreateDialog() {
+        if (mDialog != null) mDialog.cleanup();
+
+        mDialog = new VolumeDialog(mContext, WindowManager.LayoutParams.TYPE_VOLUME_OVERLAY,
+                mController, mZenModeController, mVolumeDialogCallback);
+        applyConfiguration();
+    }
 }
