@@ -1034,8 +1034,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // set the inital view visibility
         setAreThereNotifications();
 
+        ViewGroup statusIcons = (ViewGroup) mHeader.findViewById(R.id.overFlowContainer);
         mIconController = new StatusBarIconController(
-                mContext, mStatusBarView, mKeyguardStatusBar, this);
+                mContext, mStatusBarView, mKeyguardStatusBar, this, statusIcons);
 
         // Background thread for any controllers that need it.
         mHandlerThread = new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);
@@ -3755,6 +3756,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             Pair<String, StatusBarNotification> notifData = notifications.get(i);
             addNotificationViews(createNotificationViews(notifData.second), rankingMap);
         }
+
+        // recreate system icons
+        mIconController.recreateStatusIcons();
+
         mNotificationData.filterAndSort();
 
         setAreThereNotifications();
