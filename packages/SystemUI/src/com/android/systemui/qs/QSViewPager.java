@@ -38,6 +38,15 @@ public class QSViewPager extends ViewPager {
                 && getCurrentItem() == 1) {
             // can't scroll left while not editing, OR dragging on the first page
             return false;
+        } else if (direction > 0) {
+            final int indexOfLastPage = (mDragPanel.getCurrentMaxPageCount() - 1) + (mDragPanel.isEditing() ? 1 : 0);
+
+            Log.d(TAG, "right scroll: current item : " + getCurrentItem() + ", index of last page : " + indexOfLastPage);
+
+            if (mPagingEnabled && getCurrentItem() >= indexOfLastPage) {
+                // can't scroll right if we're on the last page
+                return false;
+            }
         }
         return super.canScrollHorizontally(direction);
     }

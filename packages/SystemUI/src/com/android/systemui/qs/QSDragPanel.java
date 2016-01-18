@@ -82,7 +82,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     private static final String TAG = "QSDragPanel";
 
-    public static final boolean DEBUG_TILES = false;
+    public static final boolean DEBUG_TILES = true;
     public static final boolean DEBUG_DRAG = false;
 
     private static final int MAX_ROW_COUNT = 3;
@@ -156,8 +156,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     @Override
                     public void onClick(View v) {
                         TilesListAdapter adapter = new TilesListAdapter(mContext, QSDragPanel.this);
-                        showDetailAdapter(true, adapter,
-                                v.getLocationOnScreen());
+                        showDetailAdapter(true, adapter, v.getLocationOnScreen());
+                        mDetail.bringToFront();
                     }
                 });
         mViewPager = new QSViewPager(getContext());
@@ -188,7 +188,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mPagerAdapter = new PagerAdapter() {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                if (DEBUG_DRAG) {
+                if (DEBUG_TILES || true) {
                     Log.d(TAG, "instantiateItem() called with "
                             + "container = [" + container + "], position = [" + position + "]");
                 }
@@ -216,7 +216,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
             @Override
             public void destroyItem(ViewGroup container, int position, Object object) {
-                if (DEBUG_DRAG) {
+                if (DEBUG_TILES || true) {
                     Log.d(TAG, "destroyItem() called with " + "container = ["
                             + container + "], position = [" + position + "], object = ["
                             + object + "]");
@@ -260,7 +260,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
         };
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setOffscreenPageLimit(INITIAL_OFFSCREEN_PAGE_LIMIT);
 
         mPageIndicator.setViewPager(mViewPager);
         mPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -403,7 +402,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mPagerAdapter.notifyDataSetChanged();
 
         requestLayout();
-        ensurePagerState();
     }
 
     protected void onStartDrag() {
@@ -423,7 +421,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
         mQsPanelTop.onStopDrag();
         requestLayout();
-        ensurePagerState();
     }
 
     protected View getDropTarget() {
@@ -525,15 +522,34 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 // remove record
                 iterator.remove();
                 recordsRemoved++;
+
+                if (dr.page > getCurrentMaxPageCount()) {
+                    final int childCount = mPages.get(dr.page).getChildCount();
+                    Log.i(TAG, "setTiles() childCount: " + childCount);
+
+                    // TODO remove page if its empty
+                    if (childCount == 0) {
+
+                    }
+                    // if current page is the current max page COUNT (off by 1) then move back
+                    final int currentIndex = mViewPager.getCurrentItem();
+                    if (currentIndex == (getCurrentMaxPageCount()) + (mEditing ? 1 : 0)) {
+                        Log.w(TAG, "current page empty, going back!");
+//                        mViewPager.setCurrentItem(currentIndex - 1, true);
+//                        mPagerAdapter.startUpdate(mViewPager);
+//                        mPagerAdapter.destroyItem(mViewPager, currentIndex, mPages.get(currentIndex - 1));
+//                        mPagerAdapter.finishUpdate(mViewPager);
+                    }
+                }
             }
         }
-
 
         // at this point recordMap should have all retained tiles, no new or old tiles
         int delta = tiles.size() - recordMap.size() - recordsRemoved;
         if (DEBUG_TILES) {
             Log.i(TAG, "record map delta: " + delta);
         }
+        mViewPager.setOffscreenPageLimit(getPagesForCount(tiles.size()));
         mRecords.ensureCapacity(tiles.size());
         mPagerAdapter.notifyDataSetChanged();
 
@@ -582,6 +598,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 }
             }
         }
+
         if (isShowingDetail()) {
             mDetail.bringToFront();
         }
@@ -685,11 +702,28 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return r;
     }
 
+    private void removeDraggingRecord() {
+        // what spec is this tile?
+        String spec = mHost.getSpec(mDraggingRecord.tile);
+        if (DEBUG_DRAG) {
+            Log.w(TAG, "removing tile: " + mDraggingRecord + " with spec: " + spec);
+        }
+        onStopDrag();
+        mHost.remove(spec);
+    }
+
     public void ensurePagerState() {
+        Log.i(TAG, "+++   ensurePagerState()");
         if (!isShowingDetail()) {
             final boolean pagingEnabled = getVisibleTilePageCount() > 1 || mDragging || mEditing;
             mViewPager.setPagingEnabled(pagingEnabled);
+
+            int currentPage = mViewPager.getCurrentItem();
+            Log.d(TAG, "currentPage: " + currentPage);
+            Log.d(TAG, "currentMaxPageCount: " + getCurrentMaxPageCount());
+            Log.d(TAG, "mEditing: " + mEditing);
         }
+        Log.i(TAG, "---   ensurePagerState()");
     }
 
     public int getTilesPerPage(boolean firstPage) {
@@ -807,7 +841,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     footer.getMeasuredWidth(), getMeasuredHeight());
         }
 
-        mQsPanelTop.bringToFront();
+        if (!isShowingDetail() && !isClosingDetail()) {
+            mQsPanelTop.bringToFront();
+        }
 
         ensurePagerState();
     }
@@ -998,13 +1034,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                         break;
                     } else {
                         mRestored = true;
-                        // what spec is this tile?
-                        String spec = mHost.getSpec(mDraggingRecord.tile);
-                        if (DEBUG_DRAG) {
-                            Log.w(TAG, "removing tile: " + mDraggingRecord + " with spec: " + spec);
-                        }
-                        onStopDrag();
-                        mHost.remove(spec);
+                        removeDraggingRecord();
                     }
                 } else {
                     restoreDraggingTilePosition(v);
@@ -1688,6 +1718,22 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
     }
 
+    @Override
+    protected void setGridContentVisibility(boolean visible) {
+        int newVis = visible ? VISIBLE : INVISIBLE;
+        for (int i = 0; i < mRecords.size(); i++) {
+            TileRecord tileRecord = mRecords.get(i);
+            if (tileRecord.tileView.getVisibility() != GONE) {
+                tileRecord.tileView.setVisibility(newVis);
+            }
+        }
+        mQsPanelTop.setVisibility(showBrightnessSlider() ? newVis : GONE);
+        if (mGridContentVisible != visible) {
+            MetricsLogger.visibility(mContext, MetricsLogger.QS_PANEL, newVis);
+        }
+        mGridContentVisible = visible;
+    }
+
     public void updateResources() {
         final Resources res = mContext.getResources();
         final int columns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
@@ -1759,6 +1805,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
             // add broadcast tile
             mPackageTileMap.get(PACKAGE_ANDROID).add(BROADCAST_TILE_SPEC_PLACEHOLDER);
+
+            final List<String> systemTiles = mPackageTileMap.get(PACKAGE_ANDROID);
+            Collections.sort(systemTiles);
         }
 
         private String getCustomTilePackage(String spec) {
