@@ -415,7 +415,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
 
     @Override
     public void resetTiles() {
-        setEditing(false);
         CMSettings.Secure.putStringForUser(getContext().getContentResolver(),
                 CMSettings.Secure.QS_TILES, "default", ActivityManager.getCurrentUser());
     }
