@@ -23,6 +23,8 @@ public class QSPage extends ViewGroup {
 
     private int mPage;
 
+    public boolean mAdapterEditingState;
+
     public QSPage(Context context, QSDragPanel panel, int page) {
         super(context);
         mPanel = panel;

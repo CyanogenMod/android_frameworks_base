@@ -3690,6 +3690,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
 
+        if (mCustomTileListenerService != null) {
+            try {
+                mCustomTileListenerService.unregisterAsSystemService();
+            } catch (RemoteException e) {
+                Log.e(TAG, "Unable to unregister custom tile listener", e);
+            }
+        }
+
+        mQSPanel.getHost().setCustomTileListenerService(null);
+
         makeStatusBarView();
         repositionNavigationBar();
 
@@ -3716,16 +3726,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // Stop the command queue until the new status bar container settles and has a layout pass
         mCommandQueue.pause();
 
-        if (mCustomTileListenerService != null) {
-            try {
-                mCustomTileListenerService.unregisterAsSystemService();
-            } catch (RemoteException e) {
-                Log.e(TAG, "Unable to unregister custom tile listener", e);
-            }
-        }
-
-        mQSPanel.getHost().setCustomTileListenerService(null);
-
         // fix notification panel being shifted to the left by calling
         // instantCollapseNotificationPanel()
         instantCollapseNotificationPanel();
@@ -3736,6 +3736,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             @Override
             public void onGlobalLayout() {
                 mStatusBarWindow.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mQSPanel.setTiles(mQSTileHost.getTiles());
                 mCommandQueue.resume();
                 mRecreating = false;
             }

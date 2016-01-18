@@ -29,6 +29,8 @@ import com.android.systemui.statusbar.phone.SystemUIDialog;
 public class QSSettings extends LinearLayout {
     private QSTileHost mHost;
 
+    public boolean mAdapterEditingState;
+
     public QSSettings(Context context) {
         super(context);
     }
