@@ -1036,6 +1036,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mIconController = new StatusBarIconController(
                 mContext, mStatusBarView, mKeyguardStatusBar, this);
+        ViewGroup statusIcons = (ViewGroup) mHeader.findViewById(R.id.overFlowContainer);
+        mIconController.setOverflowIconContainer(statusIcons);
 
         // Background thread for any controllers that need it.
         mHandlerThread = new HandlerThread(TAG, Process.THREAD_PRIORITY_BACKGROUND);

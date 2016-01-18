@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.view.View;
@@ -33,18 +32,15 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.util.NotificationColorUtil;
 import com.android.systemui.BatteryLevelTextView;
 import com.android.systemui.BatteryMeterView;
-import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
-import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
 
@@ -61,6 +57,7 @@ public class StatusBarIconController implements Tunable {
     public static final long DEFAULT_TINT_ANIMATION_DURATION = 120;
 
     public static final String ICON_BLACKLIST = "icon_blacklist";
+    private static final int OVERFLOW_ICONS_COUNT = 5;
 
     private Context mContext;
     private PhoneStatusBar mPhoneStatusBar;
@@ -80,6 +77,7 @@ public class StatusBarIconController implements Tunable {
     private BatteryMeterView mBatteryMeterView;
     private ClockController mClockController;
     private View mCenterClockLayout;
+    private ViewGroup mOverflowIconContainer;
 
     private int mIconSize;
     private int mIconHPadding;
@@ -132,7 +130,7 @@ public class StatusBarIconController implements Tunable {
         mDarkModeIconColorSingleTone = context.getColor(R.color.dark_mode_icon_color_single_tone);
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
         mHandler = new Handler();
-        mClockController = new ClockController(statusBar, mNotificationIcons, mHandler);
+        mClockController = new ClockController(statusBar, mNotificationIcons, mHandler, this);
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
         updateResources();
 
@@ -146,6 +144,10 @@ public class StatusBarIconController implements Tunable {
         }
         mIconBlacklist.clear();
         mIconBlacklist.addAll(getIconBlacklist(newValue));
+        recreateStatusIcons();
+    };
+
+    void recreateStatusIcons() {
         ArrayList<StatusBarIconView> views = new ArrayList<StatusBarIconView>();
         // Get all the current views.
         for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
@@ -175,8 +177,25 @@ public class StatusBarIconController implements Tunable {
         view.set(icon);
         mStatusIcons.addView(view, viewIndex, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, mIconSize));
+        if (viewIndex > OVERFLOW_ICONS_COUNT && mClockController.isClockCenter()) {
+            if (view.getVisibility() == View.VISIBLE) {
+                view.setVisibility(View.GONE);
+            }
+        }
+
+        if (viewIndex <= OVERFLOW_ICONS_COUNT || !mClockController.isClockCenter()) {
+            view = new StatusBarIconView(mContext, slot, null, blocked);
+            view.set(icon);
+            mOverflowIconContainer.addView(view, viewIndex - OVERFLOW_ICONS_COUNT,
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, mIconSize));
+            if (view.getVisibility() == View.VISIBLE) {
+                view.setVisibility(View.GONE);
+            }
+        }
+
         view = new StatusBarIconView(mContext, slot, null, blocked);
         view.set(icon);
+
         mStatusIconsKeyguard.addView(view, viewIndex, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, mIconSize));
         applyIconTint();
@@ -186,14 +205,34 @@ public class StatusBarIconController implements Tunable {
             StatusBarIcon old, StatusBarIcon icon) {
         StatusBarIconView view = (StatusBarIconView) mStatusIcons.getChildAt(viewIndex);
         view.set(icon);
+        if (viewIndex > OVERFLOW_ICONS_COUNT && mClockController.isClockCenter()) {
+            if (view.getVisibility() == View.VISIBLE) {
+                view.setVisibility(View.GONE);
+            }
+        }
+
+        if (viewIndex <= OVERFLOW_ICONS_COUNT || !mClockController.isClockCenter()) {
+            view = (StatusBarIconView) mOverflowIconContainer.getChildAt(viewIndex - OVERFLOW_ICONS_COUNT);
+            if (view != null) {
+                view.set(icon);
+                if (view.getVisibility() == View.VISIBLE) {
+                    view.setVisibility(View.GONE);
+                }
+            }
+        }
+
         view = (StatusBarIconView) mStatusIconsKeyguard.getChildAt(viewIndex);
         view.set(icon);
+
         applyIconTint();
     }
 
     public void removeSystemIcon(String slot, int index, int viewIndex) {
         mStatusIcons.removeViewAt(viewIndex);
         mStatusIconsKeyguard.removeViewAt(viewIndex);
+        if (viewIndex > OVERFLOW_ICONS_COUNT) {
+            mOverflowIconContainer.removeViewAt(viewIndex - OVERFLOW_ICONS_COUNT);
+        }
     }
 
     public void updateNotificationIcons(NotificationData notificationData) {
@@ -502,5 +541,9 @@ public class StatusBarIconController implements Tunable {
                 ((StatusBarIconView) child).updateDrawable();
             }
         }
+    }
+
+    public void setOverflowIconContainer(ViewGroup overflowIconContainer) {
+        mOverflowIconContainer = overflowIconContainer;
     }
 }
