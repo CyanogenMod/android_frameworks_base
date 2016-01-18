@@ -3097,6 +3097,18 @@ public class AudioService extends IAudioService.Stub {
         boolean success =
             handleDeviceConnection(connected, outDevice, address, btDeviceName) &&
             handleDeviceConnection(connected, inDevice, address, btDeviceName);
+
+        /* When one BT headset is disconnected while there is SCO with another BT
+         * headset, ignore the BT headset disconncting/disconnected intents.
+         */
+        if ((state == BluetoothProfile.STATE_DISCONNECTED ||
+            state == BluetoothProfile.STATE_DISCONNECTING) &&
+            mBluetoothHeadset != null &&
+            mBluetoothHeadset.getAudioState(btDevice) == BluetoothHeadset.STATE_AUDIO_CONNECTED) {
+            Log.w(TAG, "SCO is there with another device, returning");
+            return;
+        }
+
         if (success) {
             synchronized (mScoClients) {
                 if (connected) {
@@ -5250,7 +5262,7 @@ public class AudioService extends IAudioService.Stub {
                 state = intent.getIntExtra(BluetoothProfile.EXTRA_STATE,
                                                BluetoothProfile.STATE_DISCONNECTED);
                 BluetoothDevice btDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
+                Log.d(TAG, "Bt device " + btDevice.getAddress() + "disconnection intent received");
                 setBtScoDeviceConnectionState(btDevice, state);
             } else if (action.equals(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED)) {
                 boolean broadcast = false;
