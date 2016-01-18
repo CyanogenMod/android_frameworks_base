@@ -95,7 +95,7 @@ public class QSPage extends ViewGroup {
             record.tileView.measure(exactly(cw), exactly(ch));
             previousView = record.tileView.updateAccessibilityOrder(previousView);
         }
-        setMeasuredDimension(width, mGridHeight);
+        setMeasuredDimension(width, exactly(mGridHeight));
     }
 
     @Override
