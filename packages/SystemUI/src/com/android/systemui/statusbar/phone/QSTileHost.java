@@ -480,7 +480,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("ambient_display")) return R.drawable.ic_qs_ambientdisplay_on;
         else if (spec.equals("live_display")) return R.drawable.ic_livedisplay_auto;
         else if (spec.equals("heads_up")) return R.drawable.ic_qs_heads_up_on;
-        else if (spec.equals("heads_up")) return R.drawable.ic_qs_battery_saver_on;
+        else if (spec.equals("battery_saver")) return R.drawable.ic_qs_battery_saver_on;
         return 0;
     }
 
