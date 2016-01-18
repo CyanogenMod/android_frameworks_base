@@ -29,6 +29,8 @@ import com.android.systemui.statusbar.phone.SystemUIDialog;
 public class QSSettings extends LinearLayout {
     private QSTileHost mHost;
 
+    private boolean mAdapterEditingState;
+
     public QSSettings(Context context) {
         super(context);
     }
@@ -57,7 +59,7 @@ public class QSSettings extends LinearLayout {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mHost.resetTiles();
+                                mHost.initiateReset();
                             }
                         }).create();
         SystemUIDialog.makeSystemUIDialog(d);
@@ -66,5 +68,13 @@ public class QSSettings extends LinearLayout {
 
     public void setHost(QSTileHost host) {
         mHost = host;
+    }
+
+    public boolean getAdapterEditingState() {
+        return mAdapterEditingState;
+    }
+
+    public void setAdapterEditingState(boolean editing) {
+        this.mAdapterEditingState = editing;
     }
 }
