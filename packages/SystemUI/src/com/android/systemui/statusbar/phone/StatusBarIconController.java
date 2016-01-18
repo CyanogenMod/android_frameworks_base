@@ -24,27 +24,24 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.util.NotificationColorUtil;
 import com.android.systemui.BatteryLevelTextView;
 import com.android.systemui.BatteryMeterView;
-import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
-import com.android.systemui.statusbar.policy.Clock;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
 
@@ -61,6 +58,8 @@ public class StatusBarIconController implements Tunable {
     public static final long DEFAULT_TINT_ANIMATION_DURATION = 120;
 
     public static final String ICON_BLACKLIST = "icon_blacklist";
+    private final OverflowIconTracker mOverflowIconTracker;
+    private final ViewGroup mOverflowIconContainer;
 
     private Context mContext;
     private PhoneStatusBar mPhoneStatusBar;
@@ -80,6 +79,7 @@ public class StatusBarIconController implements Tunable {
     private BatteryMeterView mBatteryMeterView;
     private ClockController mClockController;
     private View mCenterClockLayout;
+    private View mCenterClock;
 
     private int mIconSize;
     private int mIconHPadding;
@@ -99,6 +99,7 @@ public class StatusBarIconController implements Tunable {
     private boolean mTransitionDeferring;
     private long mTransitionDeferringStartTime;
     private long mTransitionDeferringDuration;
+    private int mSignalClusterWidth, mCenterClockWidth, mBatteryTextWidth;
 
     private final ArraySet<String> mIconBlacklist = new ArraySet<>();
 
@@ -110,7 +111,7 @@ public class StatusBarIconController implements Tunable {
     };
 
     public StatusBarIconController(Context context, View statusBar, View keyguardStatusBar,
-            PhoneStatusBar phoneStatusBar) {
+            PhoneStatusBar phoneStatusBar, ViewGroup overflowIcons) {
         mContext = context;
         mPhoneStatusBar = phoneStatusBar;
         mNotificationColorUtil = NotificationColorUtil.getInstance(context);
@@ -132,9 +133,15 @@ public class StatusBarIconController implements Tunable {
         mDarkModeIconColorSingleTone = context.getColor(R.color.dark_mode_icon_color_single_tone);
         mLightModeIconColorSingleTone = context.getColor(R.color.light_mode_icon_color_single_tone);
         mHandler = new Handler();
-        mClockController = new ClockController(statusBar, mNotificationIcons, mHandler);
+        mClockController = new ClockController(statusBar, mNotificationIcons, mHandler, this);
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
+        mCenterClock = mCenterClockLayout.findViewById(R.id.center_clock);
         updateResources();
+
+        mOverflowIconContainer = overflowIcons;
+        mOverflowIconTracker = new OverflowIconTracker(mSystemIconArea, mStatusIcons, overflowIcons);
+        ViewTreeObserver observer = mPhoneStatusBar.getStatusBarView().getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(mClockLayoutListener);
 
         TunerService.get(mContext).addTunable(this, ICON_BLACKLIST);
     }
@@ -146,6 +153,10 @@ public class StatusBarIconController implements Tunable {
         }
         mIconBlacklist.clear();
         mIconBlacklist.addAll(getIconBlacklist(newValue));
+        recreateStatusIcons();
+    }
+
+    public void recreateStatusIcons() {
         ArrayList<StatusBarIconView> views = new ArrayList<StatusBarIconView>();
         // Get all the current views.
         for (int i = 0; i < mStatusIcons.getChildCount(); i++) {
@@ -173,8 +184,19 @@ public class StatusBarIconController implements Tunable {
         boolean blocked = mIconBlacklist.contains(slot);
         StatusBarIconView view = new StatusBarIconView(mContext, slot, null, blocked);
         view.set(icon);
+        view.setTag(slot);
         mStatusIcons.addView(view, viewIndex, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, mIconSize));
+
+        if (mClockController.isClockCenter()) {
+            view = new StatusBarIconView(mContext, slot, null, blocked);
+            view.set(icon, true);
+            view.setTag(slot);
+            mOverflowIconContainer.addView(view,
+                    new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, mIconSize));
+            mOverflowIconTracker.updateIcon(slot, view);
+        }
+
         view = new StatusBarIconView(mContext, slot, null, blocked);
         view.set(icon);
         mStatusIconsKeyguard.addView(view, viewIndex, new LinearLayout.LayoutParams(
@@ -189,11 +211,24 @@ public class StatusBarIconController implements Tunable {
         view = (StatusBarIconView) mStatusIconsKeyguard.getChildAt(viewIndex);
         view.set(icon);
         applyIconTint();
+
+        if (mClockController.isClockCenter()) {
+            view = (StatusBarIconView) mOverflowIconContainer.findViewWithTag(slot);
+            if (view != null) {
+                view.set(icon, true);
+                mOverflowIconTracker.updateIcon(slot, view);
+            }
+        }
     }
 
     public void removeSystemIcon(String slot, int index, int viewIndex) {
         mStatusIcons.removeViewAt(viewIndex);
         mStatusIconsKeyguard.removeViewAt(viewIndex);
+        View v = mOverflowIconContainer.findViewWithTag(slot);
+        if (v != null) {
+            mOverflowIconContainer.removeView(v);
+            mOverflowIconTracker.removeIcon(slot);
+        }
     }
 
     public void updateNotificationIcons(NotificationData notificationData) {
@@ -492,6 +527,8 @@ public class StatusBarIconController implements Tunable {
         if (mSignalCluster != null) {
             mSignalCluster.setSecurityController(null);
         }
+        ViewTreeObserver observer = mPhoneStatusBar.getStatusBarView().getViewTreeObserver();
+        observer.removeOnGlobalLayoutListener(mClockLayoutListener);
     }
 
     private void refreshAllIconsForLayout(LinearLayout ll) {
@@ -503,4 +540,28 @@ public class StatusBarIconController implements Tunable {
             }
         }
     }
+
+    private ViewTreeObserver.OnGlobalLayoutListener mClockLayoutListener = new ViewTreeObserver
+            .OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            if (!mClockController.isClockCenter()) {
+                return;
+            }
+            int clockWidth = mCenterClock.getMeasuredWidth();
+            int signalClusterWidth = mSignalCluster.getMeasuredWidth();
+            int batteryTextWidth = mBatteryLevelTextView.getWidth();
+            if (mSignalClusterWidth == signalClusterWidth
+                    && mCenterClockWidth == clockWidth
+                    && mBatteryTextWidth == batteryTextWidth) {
+                return;
+            }
+            mCenterClockWidth = clockWidth;
+            mSignalClusterWidth = signalClusterWidth;
+            mBatteryTextWidth = batteryTextWidth;
+            int screenWidth = mCenterClock.getResources().getDisplayMetrics().widthPixels;
+            mOverflowIconTracker.setMaxWidth((screenWidth - clockWidth) / 2);
+            mOverflowIconTracker.updateSlots();
+        }
+    };
 }
