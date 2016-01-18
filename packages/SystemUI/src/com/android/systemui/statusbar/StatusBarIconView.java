@@ -137,7 +137,7 @@ public class StatusBarIconView extends AnimatedImageView {
         return set(icon, false);
     }
 
-    private boolean set(StatusBarIcon icon, boolean force) {
+    public boolean set(StatusBarIcon icon, boolean force) {
         final boolean iconEquals = mIcon != null && equalIcons(mIcon.icon, icon.icon);
         final boolean levelEquals = iconEquals
                 && mIcon.iconLevel == icon.iconLevel;

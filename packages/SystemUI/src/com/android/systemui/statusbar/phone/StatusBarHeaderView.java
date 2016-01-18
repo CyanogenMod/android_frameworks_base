@@ -163,6 +163,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     private boolean mEditing;
 
     private UserInfoController mUserInfoController;
+    private View mStatusIcons;
 
     public StatusBarHeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -171,6 +172,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        mStatusIcons = findViewById(R.id.statusIcons);
         mSystemIconsSuperContainer = findViewById(R.id.system_icons_super_container);
         mSystemIconsContainer = (ViewGroup) findViewById(R.id.system_icons_container);
         mSystemIconsSuperContainer.setOnClickListener(this);
@@ -205,6 +207,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mWeatherLine2 = (TextView) findViewById(R.id.weather_line_2);
         mEditTileDoneText = (TextView) findViewById(R.id.done);
         mSettingsObserver = new SettingsObserver(new Handler());
+        addOverflowIconContainer();
         loadDimens();
         updateVisibilities();
         updateClockScale();
@@ -245,6 +248,10 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         if (d instanceof RippleDrawable) {
             ((RippleDrawable) d).setForceSoftware(true);
         }
+    }
+
+    private void addOverflowIconContainer() {
+        View.inflate(mContext, R.layout.system_icons_overflow, (ViewGroup) mStatusIcons);
     }
 
     @Override
@@ -447,7 +454,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         boolean detached = mExpanded;
         if (detached != mSignalClusterDetached) {
             if (detached) {
-                getOverlay().add(mSignalCluster);
+                getOverlay().add(mStatusIcons);
             } else {
                 reattachSignalCluster();
             }
@@ -456,8 +463,8 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
     }
 
     private void reattachSignalCluster() {
-        getOverlay().remove(mSignalCluster);
-        mSystemIcons.addView(mSignalCluster, 1);
+        getOverlay().remove(mStatusIcons);
+        mSystemIcons.addView(mStatusIcons, 0);
     }
 
     private void updateSystemIconsLayoutParams() {
@@ -762,20 +769,20 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             mSystemIconsSuperContainer.setX(values.batteryX - mSystemIconsContainer.getLeft());
         }
         mSystemIconsSuperContainer.setY(values.batteryY - mSystemIconsContainer.getTop());
-        if (mSignalCluster != null && mExpanded) {
+        if (mStatusIcons != null && mExpanded) {
             if (getLayoutDirection() == LAYOUT_DIRECTION_LTR) {
-                mSignalCluster.setX(mSystemIconsSuperContainer.getX()
-                        - mSignalCluster.getWidth());
+                mStatusIcons.setX(mSystemIconsSuperContainer.getX()
+                        - mStatusIcons.getWidth());
             } else {
-                mSignalCluster.setX(mSystemIconsSuperContainer.getX()
-                        + mSystemIconsSuperContainer.getWidth());
+                mStatusIcons.setX(mSystemIconsSuperContainer.getX()
+                        + mStatusIcons.getWidth());
             }
-            mSignalCluster.setY(
+            mStatusIcons.setY(
                     mSystemIconsSuperContainer.getY() + mSystemIconsSuperContainer.getHeight()/2
-                            - mSignalCluster.getHeight()/2);
-        } else if (mSignalCluster != null) {
-            mSignalCluster.setTranslationX(0f);
-            mSignalCluster.setTranslationY(0f);
+                            - mStatusIcons.getHeight()/2);
+        } else if (mStatusIcons != null) {
+            mStatusIcons.setTranslationX(0f);
+            mStatusIcons.setTranslationY(0f);
         }
         if (!mSettingsButton.isAnimating()) {
             mSettingsContainer.setTranslationY(mSystemIconsSuperContainer.getTranslationY());
@@ -796,7 +803,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         applyAlpha(mSettingsContainer, values.settingsAlpha);
         applyAlpha(mWeatherLine1, values.settingsAlpha);
         applyAlpha(mWeatherLine2, values.settingsAlpha);
-        applyAlpha(mSignalCluster, values.signalClusterAlpha);
+        applyAlpha(mStatusIcons, values.signalClusterAlpha);
         if (!mExpanded) {
             mTime.setScaleX(1f);
             mTime.setScaleY(1f);
@@ -1061,8 +1068,19 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
             int currentUserId = ActivityManager.getCurrentUser();
             int batteryStyle = CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.STATUS_BAR_BATTERY_STYLE, 0, currentUserId);
-            boolean showExpandedBatteryPercentage = CMSettings.System.getIntForUser(resolver,
-                    CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0, currentUserId) == 0;
+            int percentageStyle = CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0, currentUserId);
+            boolean showExpandedBatteryPercentage = true;
+
+            switch (percentageStyle) {
+                case 2: //Next to icon
+                case 0: //Hidden
+                    showExpandedBatteryPercentage = true;
+                    break;
+                case 1: //Inside icon
+                    showExpandedBatteryPercentage = false;
+                    break;
+            }
 
             switch (batteryStyle) {
                 case 4: //BATTERY_METER_GONE
