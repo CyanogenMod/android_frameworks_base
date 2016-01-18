@@ -35,6 +35,7 @@ public class BatteryLevelTextView extends TextView implements
     private int mRequestedVisibility;
     private int mStyle;
     private int mPercentMode;
+    private boolean mForceHide;
 
     public BatteryLevelTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,6 +44,11 @@ public class BatteryLevelTextView extends TextView implements
 
     public void setForceShown(boolean forceShow) {
         mForceShow = forceShow;
+        updateVisibility();
+    }
+
+    public void setForceHidden(boolean forceHide) {
+        mForceHide = forceHide;
         updateVisibility();
     }
 
@@ -120,7 +126,7 @@ public class BatteryLevelTextView extends TextView implements
             showNextPercent = true;
         }
 
-        if (showNextPercent || mForceShow) {
+        if ((showNextPercent && !mForceHide) || mForceShow) {
             super.setVisibility(mRequestedVisibility);
         } else {
             super.setVisibility(GONE);
