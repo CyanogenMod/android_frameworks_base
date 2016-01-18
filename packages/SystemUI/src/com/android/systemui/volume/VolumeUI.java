@@ -97,9 +97,8 @@ public class VolumeUI extends SystemUI {
         getVolumeComponent().onConfigurationChanged(newConfig);
 
         if (isThemeChange(newConfig)) {
-            // TODO: implement initPanel() if needed
-            //initPanel();
             mContext.recreateTheme();
+            mVolumeComponent.recreateDialog();
         }
         mConfiguration.setTo(newConfig);
     }
