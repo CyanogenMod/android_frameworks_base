@@ -956,6 +956,11 @@ public class VolumeDialog {
         }
     };
 
+    public void cleanup() {
+        mController.removeCallback(mControllerCallbackH);
+        mZenFooter.cleanup();
+    }
+
     private final class H extends Handler {
         private static final int SHOW = 1;
         private static final int DISMISS = 2;
