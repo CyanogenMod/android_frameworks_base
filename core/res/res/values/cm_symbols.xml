@@ -58,4 +58,7 @@
 
     <!-- Usb drive persistent notification -->
     <java-symbol type="bool" name="config_persistUsbDriveNotification" />
+
+    <!-- Carrier Apps -->
+    <java-symbol type="array" name="config_enabledPreinstalledCarrierApps" />
 </resources>
