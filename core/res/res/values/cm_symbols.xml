@@ -142,4 +142,7 @@
 
     <!-- Wifi idle time default -->
     <java-symbol type="integer" name="def_wifi_idle_ms" />
+
+    <!-- Carrier Apps -->
+    <java-symbol type="array" name="config_enabledPreinstalledCarrierApps" />
 </resources>
