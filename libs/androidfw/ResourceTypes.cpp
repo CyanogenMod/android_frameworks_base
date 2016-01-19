@@ -5290,6 +5290,13 @@ bool ResTable::stringToValue(Res_value* outValue, String16* outString,
             identifierForName(name.string(), name.size(),
                               type.string(), type.size(),
                               package.string(), package.size(), &specFlags);
+// HACK
+// This allows themes to reference attributes that are app specific and
+// normally private.  Only applies to aapt running on device not host
+// build systems.
+#ifdef HAVE_ANDROID_OS
+        enforcePrivate = false;
+#endif
         if (rid != 0) {
             if (enforcePrivate) {
                 if ((specFlags&ResTable_typeSpec::SPEC_PUBLIC) == 0) {
