@@ -1019,6 +1019,9 @@ public abstract class PanelView extends FrameLayout {
     }
 
     protected void notifyBarPanelExpansionChanged() {
+        if (mBar == null) {
+            return;
+        }
         mBar.panelExpansionChanged(this, mExpandedFraction, mExpandedFraction > 0f || mPeekPending
                 || mPeekAnimator != null || mInstantExpanding || isPanelVisibleBecauseOfHeadsUp()
                 || mTracking || mHeightAnimator != null);
