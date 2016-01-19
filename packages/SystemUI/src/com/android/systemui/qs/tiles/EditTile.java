@@ -18,10 +18,9 @@ package com.android.systemui.qs.tiles;
 
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
-import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
-public class EditTile extends QSTile<QSTile.BooleanState> implements KeyguardMonitor.Callback {
+public class EditTile extends QSTile<QSTile.BooleanState> {
 
     private boolean mListening;
 
@@ -54,10 +53,7 @@ public class EditTile extends QSTile<QSTile.BooleanState> implements KeyguardMon
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final boolean showing = getHost().getKeyguardMonitor().isShowing();
-        final boolean secure = getHost().getKeyguardMonitor().isSecure();
-        state.visible = !showing || !secure;
-        state.enabled = true;
+        state.visible = !getHost().getKeyguardMonitor().isShowing();
         state.label = mContext.getString(R.string.quick_settings_edit_label);
 
         if (arg instanceof Boolean) {
@@ -83,16 +79,6 @@ public class EditTile extends QSTile<QSTile.BooleanState> implements KeyguardMon
     public void setListening(boolean listening) {
         if (mListening == listening) return;
         mListening = listening;
-        if (mListening) {
-            mHost.getKeyguardMonitor().addCallback(this);
-        } else {
-            mHost.getKeyguardMonitor().removeCallback(this);
-        }
-        refreshState();
-    }
-
-    @Override
-    public void onKeyguardChanged() {
         refreshState();
     }
 }
