@@ -129,7 +129,7 @@ public final class Installer extends SystemService {
     }
 
     public int aapt(String themeApkPath, String internalPath, String resTablePath, int uid,
-                    int pkgId, int minSdkVersion, String commonResourcesPath) {
+            int pkgId, int minSdkVersion, String appResourcesPath, String commonResourcesPath) {
 
         StringBuilder builder = new StringBuilder();
         if (TextUtils.isEmpty(commonResourcesPath)) {
@@ -149,6 +149,8 @@ public final class Installer extends SystemService {
         builder.append(pkgId);
         builder.append(' ');
         builder.append(minSdkVersion);
+        builder.append(' ');
+        builder.append(appResourcesPath);
 
         if (!TextUtils.isEmpty(commonResourcesPath)) {
             builder.append(' ');

@@ -8265,8 +8265,12 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         boolean hasCommonResources = (hasCommonResources(pkg) && !COMMON_OVERLAY.equals(target));
+        PackageParser.Package targetPkg = mPackages.get(target);
+        String appPath = targetPkg != null ? targetPkg.baseCodePath : "";
+
         if (mInstaller.aapt(pkg.baseCodePath, internalPath, resPath, sharedGid, pkgId,
                 pkg.applicationInfo.targetSdkVersion,
+                appPath,
                 hasCommonResources ? ThemeUtils.getTargetCacheDir(COMMON_OVERLAY, pkg)
                         + File.separator + "resources.apk" : "") != 0) {
             throw new AaptException("Failed to run aapt");
@@ -8280,7 +8284,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (mInstaller.aapt(pkg.baseCodePath, APK_PATH_TO_ICONS, resPath, sharedGid,
                 Resources.THEME_ICON_PKG_ID,
                 pkg.applicationInfo.targetSdkVersion,
-                "") != 0) {
+                "", "") != 0) {
             throw new AaptException("Failed to run aapt");
         }
     }
