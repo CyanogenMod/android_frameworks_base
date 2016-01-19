@@ -520,9 +520,9 @@ public class GsmAlphabet {
                     if (gsmVal == GSM_EXTENDED_ESCAPE) {
                         ret.append(' ');    // display ' ' for reserved double escape sequence
                     } else {
-                        char c = shiftTableToChar.charAt(gsmVal);
+                        char c = languageTableToChar.charAt(gsmVal);
                         if (c == ' ') {
-                            ret.append(languageTableToChar.charAt(gsmVal));
+                            ret.append(shiftTableToChar.charAt(gsmVal));
                         } else {
                             ret.append(c);
                         }
