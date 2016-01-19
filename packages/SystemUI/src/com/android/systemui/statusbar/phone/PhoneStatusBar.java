@@ -3693,6 +3693,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         makeStatusBarView();
         repositionNavigationBar();
 
+        mQSPanel.setTiles(mQSTileHost.getTiles());
+
         // re-add status icons
         for (int i = 0; i < nIcons; i++) {
             StatusBarIcon icon = icons.get(i);
