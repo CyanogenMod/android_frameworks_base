@@ -17191,6 +17191,42 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     @Override
+    public boolean isComponentProtected(String callingPackage,
+            ComponentName componentName, int userId) {
+        enforceCrossUserPermission(Binder.getCallingUid(), userId, false, false, "set protected");
+
+        //Allow managers full access
+        List<String> protectedComponentManagers =
+                CMSettings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
+                        CMSettings.Secure.PROTECTED_COMPONENT_MANAGERS, "|");
+        if (protectedComponentManagers.contains(callingPackage)) {
+            return false;
+        }
+
+        String packageName = componentName.getPackageName();
+        String className = componentName.getClassName();
+
+        PackageSetting pkgSetting;
+        ArraySet<String> components;
+
+        synchronized (mPackages) {
+            pkgSetting = mSettings.mPackages.get(packageName);
+
+            if (pkgSetting == null) {
+                if (className == null) {
+                    throw new IllegalArgumentException(
+                            "Unknown package: " + packageName);
+                }
+                throw new IllegalArgumentException(
+                        "Unknown component: " + packageName
+                                + "/" + className);
+            }
+            components = pkgSetting.getProtectedComponents(userId);
+            return components.contains(className);
+        }
+    }
+
+    @Override
     public boolean isStorageLow() {
         final long token = Binder.clearCallingIdentity();
         try {

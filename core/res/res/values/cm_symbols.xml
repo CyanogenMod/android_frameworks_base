@@ -149,4 +149,8 @@
     <!-- KeyGuard -->
     <java-symbol type="string" name="kg_sub_separator" />
 
+    <!-- Protected Apps -->
+    <java-symbol type="drawable" name="stat_notify_protected" />
+    <java-symbol type="string" name="notify_package_component_protected_title" />
+    <java-symbol type="string" name="notify_package_component_protected_text" />
 </resources>
