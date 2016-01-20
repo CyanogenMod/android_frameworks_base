@@ -29,7 +29,7 @@
     <LinearLayout
             android:id="@+id/delete_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:orientation="horizontal">
@@ -48,7 +48,7 @@
     <LinearLayout
             android:id="@+id/edit_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:orientation="horizontal">
@@ -73,7 +73,7 @@
 
     <TextView
             android:id="@+id/qs_toast"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:gravity="center_vertical"
