@@ -2143,6 +2143,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     CMSettings.Secure.QS_USE_MAIN_TILES, 1, currentUserId) == 1;
             if (firstRowLarge != mFirstRowLarge) {
                 mFirstRowLarge = firstRowLarge;
+                setTiles(new ArrayList<QSTile<?>>()); // clear out states
                 setTiles(mHost.getTiles());
             }
         }
