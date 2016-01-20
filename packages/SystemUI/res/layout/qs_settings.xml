@@ -18,8 +18,7 @@
         xmlns:systemui="http://schemas.android.com/apk/res-auto"
         android:id="@+id/quick_settings_settings_recursion_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
     <TextView
@@ -38,6 +37,15 @@
             android:title="@string/quick_settings_title_show_weather"
             systemui:defaultValue="1"
             systemui:table="cm_system"
+    />
+
+    <!-- brightness slider -->
+    <com.android.systemui.qs.QSBooleanSettingRow
+        style="@style/SettingRow"
+        android:key="qs_show_brightness_slider"
+        android:title="@string/quick_settings_title_show_brightness_slider"
+        systemui:defaultValue="1"
+        systemui:table="cm_system"
     />
 
     <TextView
