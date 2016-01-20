@@ -1399,6 +1399,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int CONTENT_PROVIDER_PUBLISH_TIMEOUT_MSG = 59;
     static final int POST_PRIVACY_NOTIFICATION_MSG = 60;
     static final int CANCEL_PRIVACY_NOTIFICATION_MSG = 61;
+    static final int POST_COMPONENT_PROTECTED_MSG = 62;
 
     static final int FIRST_ACTIVITY_STACK_MSG = 100;
     static final int FIRST_BROADCAST_QUEUE_MSG = 200;
@@ -2165,6 +2166,69 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Slog.w(ActivityManagerService.TAG,
                             "Error canceling notification for service", e);
                 } catch (RemoteException e) {
+                }
+            } break;
+            case POST_COMPONENT_PROTECTED_MSG: {
+                INotificationManager inm = NotificationManager.getService();
+                if (inm == null) {
+                    return;
+                }
+
+                Intent targetIntent = (Intent) msg.obj;
+                if (targetIntent == null) {
+                    return;
+                }
+
+                int targetUserId = targetIntent.getIntExtra(
+                        "com.android.settings.PROTECTED_APPS_USER_ID", mCurrentUserId);
+                // Resolve for labels and whatnot
+                ActivityInfo root = resolveActivityInfo(targetIntent, targetIntent.getFlags(),
+                        targetUserId);
+
+                try {
+                    Intent protectedAppIntent = new Intent();
+                    protectedAppIntent.setComponent(
+                            new ComponentName("com.android.settings",
+                                    "com.android.settings.applications.ProtectedAppsActivity"));
+                    protectedAppIntent.putExtra(
+                            "com.android.settings.PROTECTED_APP_TARGET_INTENT",
+                            targetIntent);
+                    Context context = mContext.createPackageContext("com.android.settings", 0);
+                    String title = mContext.getString(
+                            com.android.internal.R.string
+                                    .notify_package_component_protected_title);
+                    String text = mContext.getString(
+                            com.android.internal.R.string
+                                    .notify_package_component_protected_text,
+                            root.applicationInfo.loadLabel(mContext.getPackageManager()));
+                    Notification notification = new Notification.Builder(context)
+                            .setSmallIcon(com.android.internal.R.drawable.stat_notify_protected)
+                            .setWhen(0)
+                            .setTicker(title)
+                            .setColor(mContext.getColor(
+                                    com.android.internal.R.color
+                                            .system_notification_accent_color))
+                            .setContentTitle(title)
+                            .setContentText(text)
+                            .setDefaults(Notification.DEFAULT_VIBRATE)
+                            .setPriority(Notification.PRIORITY_MAX)
+                            .setStyle(new Notification.BigTextStyle().bigText(text))
+                            .setContentIntent(PendingIntent.getActivityAsUser(mContext, 0,
+                                    protectedAppIntent, PendingIntent.FLAG_CANCEL_CURRENT, null,
+                                    new UserHandle(mCurrentUserId)))
+                            .build();
+                    try {
+                        int[] outId = new int[1];
+                        inm.enqueueNotificationWithTag("android", "android", null,
+                                R.string.notify_package_component_protected_title,
+                                notification, outId, mCurrentUserId);
+                    } catch (RuntimeException e) {
+                        Slog.w(ActivityManagerService.TAG,
+                                "Error showing notification for protected app component", e);
+                    } catch (RemoteException e) {
+                    }
+                } catch (NameNotFoundException e) {
+                    Slog.w(TAG, "Unable to create context for protected app notification", e);
                 }
             } break;
             }
