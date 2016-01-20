@@ -414,6 +414,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             setupRecord(record);
             drawTile(record, record.tile.getState());
         }
+        mQsPanelTop.mHasBrightnessSliderToDisplay = showBrightnessSlider();
         mQsPanelTop.setEditing(editing);
         mPageIndicator.setEditing(editing);
         mPagerAdapter.notifyDataSetChanged();
@@ -859,7 +860,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     protected int getRowTop(int row) {
-        int baseHeight = mBrightnessView.getMeasuredHeight();
+        int baseHeight = mQsPanelTop.getMeasuredHeight();
         if (row <= 0) return baseHeight;
         return baseHeight + mLargeCellHeight - mDualTileUnderlap + (row - 1) * mCellHeight;
     }
@@ -1726,22 +1727,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 mHost.setEditing(false);
             }
         }
-    }
-
-    @Override
-    protected void setGridContentVisibility(boolean visible) {
-        int newVis = visible ? VISIBLE : INVISIBLE;
-        for (int i = 0; i < mRecords.size(); i++) {
-            TileRecord tileRecord = mRecords.get(i);
-            if (tileRecord.tileView.getVisibility() != GONE) {
-                tileRecord.tileView.setVisibility(newVis);
-            }
-        }
-        mQsPanelTop.setVisibility(showBrightnessSlider() ? newVis : GONE);
-        if (mGridContentVisible != visible) {
-            MetricsLogger.visibility(mContext, MetricsLogger.QS_PANEL, newVis);
-        }
-        mGridContentVisible = visible;
     }
 
     public void updateResources() {
