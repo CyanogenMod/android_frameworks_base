@@ -17191,6 +17191,58 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     @Override
+    public boolean isComponentProtected(String callingPackage,
+            ComponentName componentName, int userId) {
+        enforceCrossUserPermission(Binder.getCallingUid(), userId, false, false, "set protected");
+
+        //Allow managers full access
+        List<String> protectedComponentManagers =
+                CMSettings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
+                        CMSettings.Secure.PROTECTED_COMPONENT_MANAGERS, "|");
+        if (protectedComponentManagers.contains(callingPackage)) {
+            return false;
+        }
+
+        String packageName = componentName.getPackageName();
+        String className = componentName.getClassName();
+
+        //If this component is launched from the same package, allow it.
+        if (TextUtils.equals(packageName, callingPackage)) {
+            return false;
+        }
+
+        PackageSetting pkgSetting;
+        ArrayList<String> components = new ArrayList<String>();
+
+        synchronized (mPackages) {
+            pkgSetting = mSettings.mPackages.get(packageName);
+
+            if (pkgSetting == null) {
+                if (className == null) {
+                    throw new IllegalArgumentException(
+                            "Unknown package: " + packageName);
+                }
+                throw new IllegalArgumentException(
+                        "Unknown component: " + packageName
+                                + "/" + className);
+            }
+            // Get all the protected components
+            pkgSetting.getProtectedComponents(userId).retainAll(components);
+            for (int i = 0; i < components.size(); i++) {
+                // Unflatten to component name
+                ComponentName storedComponent =
+                        ComponentName.unflattenFromString(components.get(i));
+                // If the stored components package is the same as the target component
+                // consider it protected.
+                if (TextUtils.equals(storedComponent.getPackageName(), packageName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    @Override
     public boolean isStorageLow() {
         final long token = Binder.clearCallingIdentity();
         try {
