@@ -4561,6 +4561,13 @@ public abstract class PackageManager {
     public abstract void setComponentProtectedSetting(ComponentName componentName, boolean newState);
 
     /**
+     * Return whether or not a specific component is protected
+     * @hide
+     */
+    public abstract boolean isComponentProtected(String callingPackage,
+            ComponentName componentName);
+
+    /**
      * Adds a {@link CrossProfileIntentFilter}. After calling this method all intents sent from the
      * user with id sourceUserId can also be be resolved by activities in the user with id
      * targetUserId if they match the specified intent filter.
