@@ -971,6 +971,20 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 // Cannot start a child activity if the parent is not resumed.
                 return ActivityManager.START_CANCELED;
             }
+
+            try {
+                //TODO: This needs to be a flushed out API in the future.
+                if (AppGlobals.getPackageManager()
+                        .isComponentProtected(callingPackage, intent.getComponent(), userId)) {
+                    Message msg = mService.mHandler.obtainMessage(
+                            ActivityManagerService.POST_COMPONENT_PROTECTED_MSG);
+                    msg.obj = aInfo;
+                    mService.mHandler.sendMessage(msg);
+                    return ActivityManager.START_NOT_CURRENT_USER_ACTIVITY;
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             final int realCallingPid = Binder.getCallingPid();
             final int realCallingUid = Binder.getCallingUid();
             int callingPid;
