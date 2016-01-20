@@ -18,67 +18,79 @@
         xmlns:systemui="http://schemas.android.com/apk/res-auto"
         android:id="@+id/quick_settings_settings_recursion_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/qs_title_text_color"
-            android:text="@string/quick_settings_title_header"/>
-
-    <!-- show weather -->
-    <com.android.systemui.qs.QSBooleanSettingRow
-            style="@style/SettingRow"
-            android:key="status_bar_show_weather"
-            android:title="@string/quick_settings_title_show_weather"
-            systemui:defaultValue="1"
-            systemui:table="cm_system"
-    />
-
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/qs_title_text_color"
-            android:text="@string/quick_settings_title_tiles"/>
-
-    <!-- first row large -->
-    <com.android.systemui.qs.QSBooleanSettingRow
-            style="@style/SettingRow"
-            android:title="@string/quick_settings_title_enlarge_first_row"
-            android:key="sysui_qs_main_tiles"
-            systemui:defaultValue="1"
-            systemui:table="cm_secure" />
-
-    <com.android.systemui.qs.QSBooleanSettingRow
-            style="@style/SettingRow"
-            android:title="@string/quick_settings_title_advanced_location"
-            android:key="qs_location_advanced"
-            systemui:defaultValue="0"
-            systemui:table="cm_secure" />
-
     <LinearLayout
-            android:id="@+id/reset_tiles"
-            style="@style/SettingRow">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
         <TextView
-                android:layout_width="0dp"
-                android:layout_height="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:gravity="center_vertical"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:id="@+id/title"
-                android:textColor="@color/qs_tile_reset_to_default_text_color"
-                android:text="@string/quick_settings_tile_reset_to_default"
-                android:contentDescription="@null"/>
+                android:textColor="@color/qs_title_text_color"
+                android:text="@string/quick_settings_title_header"/>
+
+        <!-- show weather -->
+        <com.android.systemui.qs.QSBooleanSettingRow
+                style="@style/SettingRow"
+                android:key="status_bar_show_weather"
+                android:title="@string/quick_settings_title_show_weather"
+                systemui:defaultValue="1"
+                systemui:table="cm_system"/>
+
+        <!-- brightness slider -->
+        <com.android.systemui.qs.QSBooleanSettingRow
+                style="@style/SettingRow"
+                android:key="qs_show_brightness_slider"
+                android:title="@string/quick_settings_title_show_brightness_slider"
+                systemui:defaultValue="1"
+                systemui:table="cm_system"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/qs_title_text_color"
+                android:text="@string/quick_settings_title_tiles"/>
+
+        <!-- first row large -->
+        <com.android.systemui.qs.QSBooleanSettingRow
+                style="@style/SettingRow"
+                android:title="@string/quick_settings_title_enlarge_first_row"
+                android:key="sysui_qs_main_tiles"
+                systemui:defaultValue="1"
+                systemui:table="cm_secure"/>
+
+        <com.android.systemui.qs.QSBooleanSettingRow
+                style="@style/SettingRow"
+                android:title="@string/quick_settings_title_advanced_location"
+                android:key="qs_location_advanced"
+                systemui:defaultValue="0"
+                systemui:table="cm_secure"/>
+
+        <LinearLayout
+                android:id="@+id/reset_tiles"
+                style="@style/SettingRow">
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:id="@+id/title"
+                    android:textColor="@color/qs_tile_reset_to_default_text_color"
+                    android:text="@string/quick_settings_tile_reset_to_default"
+                    android:contentDescription="@null"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
 </com.android.systemui.qs.QSSettings>
 
