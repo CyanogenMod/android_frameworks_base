@@ -149,4 +149,7 @@
     <!-- KeyGuard -->
     <java-symbol type="string" name="kg_sub_separator" />
 
+    <!-- Restricted fingerprint config -->
+    <java-symbol type="bool" name="config_fingerprintRestrectedToSystem" />
+
 </resources>

@@ -40,6 +40,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.IRemoteCallback;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.ServiceManager;
@@ -580,6 +581,11 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
         }
         if (foregroundOnly && !isForegroundActivity(uid, pid)) {
             Slog.w(TAG, "Rejecting " + opPackageName + " ; not in foreground");
+            return false;
+        }
+        if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_fingerprintRestrectedToSystem)
+                && uid != Process.SYSTEM_UID) {
+            Slog.w(TAG, "Rejecting " + opPackageName + "(uid: " + uid + ") ; fingerprint restricted to system apps.");
             return false;
         }
         return true;
