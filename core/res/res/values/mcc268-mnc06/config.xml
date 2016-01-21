@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+** Copyright 2013, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You my obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+
+<!-- These resources are around just to allow their values to be customized
+     for different hardware and product builds. -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- String containing the apn value for tethering.  May be overriden by secure settings
+         TETHER_DUN_APN.  Value is a comma separated series of strings:
+         "name,apn,proxy,port,username,password,server,mmsc,mmsproxy,mmsport,mcc,mnc,auth,type",
+         Or string format of ApnSettingV3.
+         note that empty fields can be ommitted: "name,apn,,,,,,,,,310,260,,DUN" -->
+    <string-array translatable="false" name="config_tether_apndata">
+        <item>Conexión Compartida,movistar.es,,,MOVISTAR,MOVISTAR,,,,,214,07,1,DUN</item>
+        <item>[ApnSettingV3]Jazztel Internet,jazzinternet,,,,,,,,,214,07,,DUN,,,true,0,,,,,,,spn,JAZZTEL</item>
+    </string-array>
+
+    <!-- National Language Identifier codes for the following two config items.
+         (from 3GPP TS 23.038 V9.1.1 Table 6.2.1.2.4.1):
+          0  - reserved
+          1  - Turkish
+          2  - Spanish (single shift table only)
+          3  - Portuguese
+          4  - Bengali
+          5  - Gujarati
+          6  - Hindi
+          7  - Kannada
+          8  - Malayalam
+          9  - Oriya
+         10  - Punjabi
+         11  - Tamil
+         12  - Telugu
+         13  - Urdu
+         14+ - reserved -->
+
+    <!-- National language single shift tables to enable for SMS encoding.
+         Decoding is always enabled. 3GPP TS 23.038 states that this feature
+         should not be enabled until a formal request is issued by the relevant
+         national regulatory body. Array elements are codes from the table above.
+         Example 1: devices sold in Turkey must include table 1 to conform with
+           By-Law Number 27230. (http://www.btk.gov.tr/eng/pdf/2009/BY-LAW_SMS.pdf)
+         Example 2: devices sold in India should include tables 4 through 13
+           to enable use of the new Release 9 tables for Indic languages. -->
+    <integer-array name="config_sms_enabled_single_shift_tables"><item>2</item></integer-array>
+
+    <!-- If true, when a match for a character is found in a current
+         supported single shift table (config_sms_enabled_single_shift_tables),
+         use the mapping in the default character table and keep the message 7bit -->
+    <bool name="config_sms_use_default_for_single_shift">true</bool>
+
+</resources>
