@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
+import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
 
 /**
@@ -37,11 +38,16 @@ import com.android.systemui.statusbar.policy.UserSwitcherController;
  */
 public class MultiUserSwitch extends FrameLayout implements View.OnClickListener {
 
+    public static final String INTENT_EXTRA_NEW_LOCAL_PROFILE = "newLocalProfile";
+
     private QSPanel mQsPanel;
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
     private boolean mKeyguardMode;
     final UserManager mUserManager;
     private ActivityStarter mActivityStarter;
+
+
+    private UserInfoController mUserInfoController;
 
     public MultiUserSwitch(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -87,9 +93,15 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
                 }
             }
         } else {
-            Intent intent = ContactsContract.QuickContact.composeQuickContactsIntent(
-                    getContext(), v, ContactsContract.Profile.CONTENT_URI,
-                    ContactsContract.QuickContact.MODE_LARGE, null);
+            Intent intent;
+            if (mUserInfoController == null || mUserInfoController.isProfileSetup()) {
+                intent = ContactsContract.QuickContact.composeQuickContactsIntent(
+                        getContext(), v, ContactsContract.Profile.CONTENT_URI,
+                        ContactsContract.QuickContact.MODE_LARGE, null);
+            } else {
+                intent = new Intent(Intent.ACTION_INSERT, ContactsContract.Contacts.CONTENT_URI);
+                intent.putExtra(INTENT_EXTRA_NEW_LOCAL_PROFILE, true);
+            }
             if (mActivityStarter != null) {
                 mActivityStarter.startActivity(intent, true /* dismissShade */);
             } else {
@@ -135,4 +147,7 @@ public class MultiUserSwitch extends FrameLayout implements View.OnClickListener
         return false;
     }
 
+    public void setUserInfoController(UserInfoController userInfoController) {
+        mUserInfoController = userInfoController;
+    }
 }
