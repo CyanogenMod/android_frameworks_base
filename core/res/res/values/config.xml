@@ -1436,7 +1436,7 @@
            By-Law Number 27230. (http://www.btk.gov.tr/eng/pdf/2009/BY-LAW_SMS.pdf)
          Example 2: devices sold in India should include tables 4 through 13
            to enable use of the new Release 9 tables for Indic languages. -->
-    <integer-array name="config_sms_enabled_single_shift_tables"></integer-array>
+    <integer-array name="config_sms_enabled_single_shift_tables"><item>2</item></integer-array>
 
     <!-- National language locking shift tables to enable for SMS encoding.
          Decoding is always enabled. 3GPP TS 23.038 states that this feature
