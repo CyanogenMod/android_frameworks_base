@@ -782,11 +782,18 @@ public final class BatteryService extends SystemService {
         }
 
         private boolean isHvdcpPresent() {
-            File mChargerTypeFile = new File("/sys/class/power_supply/usb/type");
+            File mChargerTypeFile;
             FileReader fileReader;
             BufferedReader br;
             String type;
             boolean ret;
+
+            try {
+                mChargerTypeFile = new File("/sys/class/power_supply/usb/type");
+            } catch (FileNotFoundException e) {
+                // Device does not support HVDCP
+                ret = false;
+            }
 
             try {
                 fileReader = new FileReader(mChargerTypeFile);
