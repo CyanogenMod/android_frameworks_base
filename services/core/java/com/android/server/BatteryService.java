@@ -53,7 +53,6 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.EventLog;
 import android.util.Slog;
-import cyanogenmod.providers.CMSettings;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -62,7 +61,6 @@ import java.io.FileReader;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -974,7 +972,12 @@ public final class BatteryService extends SystemService {
             FileReader fileReader;
             BufferedReader br;
             String type;
-            boolean ret;
+            boolean ret = false;
+
+            if (!mChargerTypeFile.exists()) {
+                // Device does not support HVDCP
+                return ret;
+            }
 
             try {
                 fileReader = new FileReader(mChargerTypeFile);
@@ -982,15 +985,9 @@ public final class BatteryService extends SystemService {
                 type =  br.readLine();
                 if (type.regionMatches(true, 0, "USB_HVDCP", 0, 9))
                     ret = true;
-                else
-                    ret = false;
                 br.close();
                 fileReader.close();
-            } catch (FileNotFoundException e) {
-                ret = false;
-                Slog.e(TAG, "Failure in reading charger type", e);
             } catch (IOException e) {
-                ret = false;
                 Slog.e(TAG, "Failure in reading charger type", e);
             }
 
