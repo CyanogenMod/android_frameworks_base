@@ -21,5 +21,5 @@
 
     <!-- Whether safe headphone volume is enabled or not (country specific). -->
     <bool name="config_safe_media_volume_enabled">false</bool>
-
+<integer-array name="config_sms_enabled_single_shift_tables"><item>2</item></integer-array>
 </resources>
