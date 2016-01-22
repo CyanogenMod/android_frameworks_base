@@ -782,11 +782,18 @@ public final class BatteryService extends SystemService {
         }
 
         private boolean isHvdcpPresent() {
-            File mChargerTypeFile = new File("/sys/class/power_supply/usb/type");
+            File mChargerTypeFile;
             FileReader fileReader;
             BufferedReader br;
             String type;
-            boolean ret;
+            boolean ret = false;
+
+            try {
+                mChargerTypeFile = new File("/sys/class/power_supply/usb/type");
+            } catch (FileNotFoundException e) {
+                // Device does not support HVDCP
+                return ret;
+            }
 
             try {
                 fileReader = new FileReader(mChargerTypeFile);
@@ -794,15 +801,9 @@ public final class BatteryService extends SystemService {
                 type =  br.readLine();
                 if (type.regionMatches(true, 0, "USB_HVDCP", 0, 9))
                     ret = true;
-                else
-                    ret = false;
                 br.close();
                 fileReader.close();
-            } catch (FileNotFoundException e) {
-                ret = false;
-                Slog.e(TAG, "Failure in reading charger type", e);
-            } catch (IOException e) {
-                ret = false;
+            } catch (FileNotFoundException | IOException e) {
                 Slog.e(TAG, "Failure in reading charger type", e);
             }
 
