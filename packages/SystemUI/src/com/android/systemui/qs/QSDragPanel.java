@@ -752,7 +752,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mPageIndicator.measure(exactly(width), atMost(mPageIndicatorHeight));
         mFooter.getView().measure(exactly(width), MeasureSpec.UNSPECIFIED);
 
-        int h = mViewPager.getMeasuredHeight() + mPageIndicatorHeight;
+        int h = getRowTop(getCurrentMaxRow() + 1) + mPanelPaddingBottom;
+
         if (mFooter.hasFooter()) {
             h += mFooter.getView().getMeasuredHeight();
         }
@@ -1730,11 +1731,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mDualTileUnderlap = res.getDimensionPixelSize(R.dimen.qs_dual_tile_padding_vertical);
         mBrightnessPaddingTop = res.getDimensionPixelSize(R.dimen.qs_brightness_padding_top);
         mPageIndicatorHeight = res.getDimensionPixelSize(R.dimen.qs_panel_page_indicator_height);
+        if (mColumns != columns) {
+            mColumns = columns;
+            if (isLaidOut()) postInvalidate();
+        }
         if (isLaidOut()) {
-            if (mColumns != columns) {
-                mColumns = columns;
-                postInvalidate();
-            }
             for (TileRecord r : mRecords) {
                 r.tile.clearState();
             }
