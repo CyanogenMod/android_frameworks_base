@@ -237,4 +237,7 @@
     <string name="quick_settings_tiles_category_system">System tiles</string>
     <!-- detail header when adding a tile -->
     <string name="quick_settings_tiles_add_tiles">Add a tile</string>
+
+    <!-- Hotspot dialog message -->
+    <string name="hotspot_apm_message">Unable to connect to mobile networks while Airplane mode is enabled. Disable Airplane mode and try again.</string>
 </resources>
