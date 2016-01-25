@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Cấu hình hệ thống</string>
   <string name="quick_settings_profiles_off">Cấu hình bị vô hiệu hóa</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_battery_saver_label">Trình tiết kiệm pin</string>
   <string name="accessibility_quick_settings_sync_off">Tắt đồng bộ.</string>
   <string name="accessibility_quick_settings_sync_on">Bật đồng bộ.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Đã tắt đồng bộ.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Hiển thị môi trường xung quanh bật.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Hiển thị môi trường xung quanh đã tắt.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Hiển thị môi trường xung quanh đã bật.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up tắt.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up bật.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up đã tắt.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up đã bật.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Trình tiết kiệm pin: Tắt.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Trình tiết kiệm pin: Bật.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Đã tắt Trinh tiết kiệm pin.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Đã bật Trình tiết kiệm pin.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Kiểu xếp cạnh nhau động</string>
   <string name="dynamic_qs_tile_next_alarm_label">Báo thức tiếp theo</string>
   <string name="dynamic_qs_tile_ime_selector_label">Trình chọn IME</string>

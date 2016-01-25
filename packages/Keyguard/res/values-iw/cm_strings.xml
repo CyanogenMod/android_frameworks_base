@@ -22,4 +22,5 @@
     <item quantity="one">הזן את קוד ה-PIN של כרטיס ה-SIM, נותר לך ניסיון <xliff:g id="number">%d</xliff:g> לפני שתיאלץ לפנות לספק הסלולרי שלך על מנת לבטל את נעילת המכשיר.</item>
     <item quantity="other">הזן את קוד ה-PIN של כרטיס ה-SIM, נותרו לך <xliff:g id="number">%d</xliff:g> ניסיונות.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">שגיאה: הקלט קצר יותר מהאורך המינימלי</string>
 </resources>

@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Sistem profilleri</string>
   <string name="quick_settings_profiles_off">Profiller devre dışı</string>
+  <string name="quick_settings_heads_up_label">Bildirim pencereleri</string>
+  <string name="quick_settings_battery_saver_label">Pil tasarrufu</string>
   <string name="accessibility_quick_settings_sync_off">Eşitleme kapalı.</string>
   <string name="accessibility_quick_settings_sync_on">Eşitleme açık.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Eşitleme kapatıldı.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Bildirim ekranı açık.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Bildirim ekranı kapatıldı.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Bildirim ekranı açıldı.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Bildirim pencereleri kapalı.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Bildirim pencereleri açık.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Bildirim pencereleri kapatıldı.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Bildirim pencereleri açıldı.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Pil tasarrufu kapalı.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Pil tasarrufu açık.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Pil tasarrufu kapatıldı.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Pil tasarrufu açıldı.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dinamik kare</string>
   <string name="dynamic_qs_tile_next_alarm_label">Sonraki alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME seçici</string>

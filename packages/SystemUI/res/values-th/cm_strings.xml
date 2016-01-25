@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">โปรไฟล์ระบบ</string>
   <string name="quick_settings_profiles_off">โปรไฟล์ถูกปิดอยู่</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_battery_saver_label">ประหยัดแบตเตอรี่</string>
   <string name="accessibility_quick_settings_sync_off">ปิดการซิงค์</string>
   <string name="accessibility_quick_settings_sync_on">การซิงค์เปิดอยู่</string>
   <string name="accessibility_quick_settings_sync_changed_off">การซิงค์ปิดอยู่</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">เปิดหน้าจอแวดล้อม</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">หน้าจอแวดล้อมปิดอยู่</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">หน้าจอแวดล้อมเปิดอยู่</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up ปิดอยู่</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up เปิดอยู่</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up ปิดอยู่</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up เปิดอยู่</string>
+  <string name="accessibility_quick_settings_battery_saver_off">ตัวประหยัดแบตเตอรี่ปิดอยู่</string>
+  <string name="accessibility_quick_settings_battery_saver_on">ตัวประหยัดแบตเตอรี่เปิดอยู่</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">ตัวประหยัดแบตเตอรีถูกปิด</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">ตัวประหยัดแบตเตอรีถูกเปิด</string>
   <string name="quick_settings_dynamic_tile_detail_title">ไทล์แบบไดนามิก</string>
   <string name="dynamic_qs_tile_next_alarm_label">การปลุกครั้งต่อไป</string>
   <string name="dynamic_qs_tile_ime_selector_label">ตัวเลือก IME</string>

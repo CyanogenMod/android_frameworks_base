@@ -21,6 +21,7 @@
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Glisați dreapta pentru %1$s</string>
   <string name="right_shortcut_hint">Glisați stânga pentru %1$s</string>
+  <string name="lockscreen_default_target">Implicit</string>
   <string name="select_application">Selectați aplicația</string>
   <string name="lockscreen_choose_action_title">Alege acțiunea</string>
   <string name="lockscreen_none_target">Nimic</string>
@@ -53,6 +54,7 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profile de sistem</string>
   <string name="quick_settings_profiles_off">Profilele sunt dezactivate</string>
+  <string name="quick_settings_heads_up_label">Atenționare</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizare pornită.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizare oprită.</string>

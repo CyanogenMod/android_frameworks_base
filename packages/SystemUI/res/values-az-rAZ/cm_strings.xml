@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Sistem profilləri</string>
   <string name="quick_settings_profiles_off">Profillər ləğv edildi</string>
+  <string name="quick_settings_heads_up_label">Açılan başlıqlar</string>
+  <string name="quick_settings_battery_saver_label">Batereyaya qənaət</string>
   <string name="accessibility_quick_settings_sync_off">Eyniləşdirmə bağlıdır.</string>
   <string name="accessibility_quick_settings_sync_on">Eyniləşdirmə açıqdır.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Eyniləşdirmə bağlanıldı.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Bildiriş ekranı açıqdır.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Bildiriş ekranı bağlanıldı.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Bildiriş ekranı açıldı.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Açılan başlıq bildirişi bağlıdır.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Açılan başlıq bildişi açıqdır.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Açılan başlıq bildirişi bağlanıldı.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Açılan başlıq bildirişi açıldı.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Batereyaya qənaət bağlıdır.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Batereyaya qənaət açıqdır.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Batereyaya qənaət bağlanıldı.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Batereyaya qənaət açıldı.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dinamik kvadrat</string>
   <string name="dynamic_qs_tile_next_alarm_label">Növbəti zəngli saat</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME seçici</string>

@@ -23,4 +23,5 @@
     <item quantity="few">Унеси SIM PIN, имаш <xliff:g id="number">%d</xliff:g> преостала покушаја пре него што мораш контактирати свог оператора да откључаш уређај.</item>
     <item quantity="other">Унеси SIM PIN, имаш <xliff:g id="number">%d</xliff:g> преостала покушаја пре него што мораш контактирати свог оператора да откључаш уређај.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Грешка: Унос је краћи од минималне дужине</string>
 </resources>

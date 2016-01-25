@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">System profiler</string>
   <string name="quick_settings_profiles_off">Profiler deaktivert</string>
+  <string name="quick_settings_heads_up_label">Flytende notifikasjoner</string>
+  <string name="quick_settings_battery_saver_label">Batterisparing</string>
   <string name="accessibility_quick_settings_sync_off">Synkronisering av.</string>
   <string name="accessibility_quick_settings_sync_on">Synkronisering på.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synkronisering avskrudd.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient visning på.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient visning er skrudd av.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient visning er skrudd på.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up notifikasjoner er av.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up notifikasjoner er på.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads-up ble deaktivert.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ble aktivert.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Batterisparing av.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Batterisparing på.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Batterisparing slått av.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Batterisparing slått på.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamisk flis</string>
   <string name="dynamic_qs_tile_next_alarm_label">Neste alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME-velger</string>
@@ -112,6 +122,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">Direkteskjerm endret til dagsmodus.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">Direkteskjerm endret til nattmodus.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">Direkteskjerm endret til utendørs.</string>
+  <string name="quick_settings_title_advanced_location">Tre nivåer stedsangivelse</string>
   <string name="accessibility_quick_settings_location_battery_saving">Lokasjonsmodus: strømsparemodus.</string>
   <string name="accessibility_quick_settings_location_gps_only">Lokasjonsmodus: kun sensorer.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Lokasjonsmodus: høy nøyaktighet.</string>
@@ -122,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Lokasjonsmodus endret til batterisparing.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Lokasjonsmodus endret til bare sensorer.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Lokasjonsmodus endret til høy nøyaktighet.</string>
+  <string name="quick_settings_tiles_category_system">Systemet fliser</string>
+  <string name="quick_settings_tiles_add_tiles">Legge til en flis</string>
 </resources>

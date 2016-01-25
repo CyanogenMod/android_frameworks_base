@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">System profiles</string>
   <string name="quick_settings_profiles_off">Profiles disabled</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_battery_saver_label">Battery saver</string>
   <string name="accessibility_quick_settings_sync_off">Sync off.</string>
   <string name="accessibility_quick_settings_sync_on">Sync on.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sync turned off.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display on.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display turned off.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display turned on.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up off.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up on.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up turned off.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up turned on.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Battery saver off.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Battery saver on.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Battery saver turned off.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Battery saver turned on.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamic tile</string>
   <string name="dynamic_qs_tile_next_alarm_label">Next alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME selector</string>
@@ -123,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Location reporting changed to battery saving mode.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Location reporting changed to sensors only mode.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Location reporting changed to high accuracy mode.</string>
+  <string name="quick_settings_tiles_category_system">System tiles</string>
+  <string name="quick_settings_tiles_add_tiles">Add a tile</string>
 </resources>

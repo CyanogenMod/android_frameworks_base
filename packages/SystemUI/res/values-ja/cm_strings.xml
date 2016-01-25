@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">システムプロファイル</string>
   <string name="quick_settings_profiles_off">プロファイル無効</string>
+  <string name="quick_settings_heads_up_label">ヘッドアップ</string>
+  <string name="quick_settings_battery_saver_label">バッテリーセーバー</string>
   <string name="accessibility_quick_settings_sync_off">同期はOFFです。</string>
   <string name="accessibility_quick_settings_sync_on">同期はONです。</string>
   <string name="accessibility_quick_settings_sync_changed_off">同期がOFFになりました。</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">アンビエント表示はONです。</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">アンビエント表示がOFFになりました。</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">アンビエント表示がONになりました。</string>
+  <string name="accessibility_quick_settings_heads_up_off">ヘッドアップはOFFです。</string>
+  <string name="accessibility_quick_settings_heads_up_on">ヘッドアップはONです。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">ヘッドアップがOFFになりました。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">ヘッドアップがONになりました。</string>
+  <string name="accessibility_quick_settings_battery_saver_off">バッテリーセーバーはOFFです。</string>
+  <string name="accessibility_quick_settings_battery_saver_on">バッテリーセーバーはONです。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">バッテリーセーバーがOFFになりました。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">バッテリーセーバーがONになりました。</string>
   <string name="quick_settings_dynamic_tile_detail_title">自動タイル</string>
   <string name="dynamic_qs_tile_next_alarm_label">次のアラーム</string>
   <string name="dynamic_qs_tile_ime_selector_label">入力方法の選択</string>

@@ -154,4 +154,6 @@
   <string name="tethered_notification_no_device_message">Нема повезаног уређаја</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> конектован уређај</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> конектовани уређаји</string>
+  <string name="notify_package_component_protected_title">Блокирана активност покретања</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> је заштићена од покретања. Додирни да потврдиш и покрени апликацију.</string>
 </resources>

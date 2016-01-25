@@ -64,6 +64,7 @@
   <string name="theme_reset_notification_body">Tema de sistem este restaurată datorită unor multiple erori.</string>
   <string name="silent_mode_priority">Prioritate</string>
   <string name="silent_mode_none">Nimic</string>
+  <string name="notify_turn_wifi_off_title">Oprește Wi-Fi</string>
   <string name="permlab_changePrivacyGuardState">activează sau dezactivează Privacy Guard</string>
   <string name="permdesc_changePrivacyGuardState">Permite aplicației să stabilească dacă o altă aplicație rulează cu garda de confidențialitate. Când o aplicație rulează cu garda de confidențialitate, nu va avea acces la date personale, cum ar fi contacte, jurnalul de apeluri sau mesaje.</string>
   <string name="privacy_guard_notification">Protejarea datelor activată</string>
@@ -108,6 +109,7 @@
   <string name="app_ops_toggle_bluetooth">comută Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">comută date mobile</string>
   <string name="app_ops_toggle_nfc">Comutare NFC</string>
+  <string name="app_ops_toggle_wifi">comută Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlează volumul alarmei</string>
   <string name="app_ops_use_audio_focus">controlează focalizarea audio</string>
   <string name="app_ops_use_bluetooth_volume">controlează volumul Bluetooth</string>
@@ -120,6 +122,14 @@
   <string name="app_ops_use_voice_volume">controlează volumul apelului de voce</string>
   <string name="app_ops_write_mms">scrie un mesaj MMS</string>
   <string name="app_ops_write_sms">scrie un mesaj SMS</string>
+  <string name="app_ops_read_phone_state">citește starea telefonului</string>
+  <string name="app_ops_scan_wifi">scanează rețelele Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">schimbă imaginea de fundal</string>
+  <string name="app_ops_read_external_storage">citește stocare externă</string>
+  <string name="app_ops_write_external_storage">scrie stocare externă</string>
+  <string name="app_ops_turn_on_screen">pornește ecranul</string>
+  <string name="app_ops_get_accounts">obține conturile dispozitivului</string>
+  <string name="app_ops_wifi_change">schimbă starea Wi-Fi</string>
   <string name="app_ops_su">obțină acces root</string>
   <string name="lock_to_app_toast_no_navbar">Pentru a anula fixarea acestui ecran, atingeți și țineți apăsat butonul Înapoi.</string>
   <string name="live_display_auto">Automat</string>
