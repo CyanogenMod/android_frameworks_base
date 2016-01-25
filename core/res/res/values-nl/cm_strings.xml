@@ -83,7 +83,7 @@
   <string name="app_ops_delete_mms">mms-berichten verwijderen</string>
   <string name="app_ops_delete_sms">sms-berichten verwijderen</string>
   <string name="app_ops_draw_on_top">bovenop tekenen</string>
-  <string name="app_ops_get_usage_stats">app-gebruiksstatistieken verkrijgen</string>
+  <string name="app_ops_get_usage_stats">app-gebruiksstatistieken opvragen</string>
   <string name="app_ops_keep_device_awake">apparaat wakker houden</string>
   <string name="app_ops_make_phone_call">telefoongesprek starten</string>
   <string name="app_ops_modify_calendar">agenda vernieuwen</string>

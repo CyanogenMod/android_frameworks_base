@@ -65,6 +65,7 @@ modifiera det tema som du har tillämpat.</string>
   <string name="theme_reset_notification_title">Återställning av tema</string>
   <string name="theme_reset_notification_body">Systemtemat kommer återställas på grund av att appen kraschat flera gånger.</string>
   <string name="silent_mode_priority">Prioritet</string>
+  <string name="silent_mode_none">Ingen</string>
   <string name="permlab_changePrivacyGuardState">aktivera eller inaktivera integritetsskydd</string>
   <string name="permdesc_changePrivacyGuardState">Tillåter appen att ändra huruvida en annan app körs med integritetsskydd. När en app körs med integritetsskydd har den ingen tillgång till personlig data som kontakter, samtalslistor och meddelanden.</string>
   <string name="privacy_guard_notification">Integritetsskydd aktivt</string>

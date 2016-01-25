@@ -66,6 +66,8 @@
   <string name="theme_reset_notification_body">Через системні збої встановлена системна тема.</string>
   <string name="silent_mode_priority">Пріоритет</string>
   <string name="silent_mode_none">Немає</string>
+  <string name="subscription_change_disabled_wifi_ap">Точку доступу Wi-Fi вимкнено через зміну SIM-картки</string>
+  <string name="notify_turn_wifi_off_title">Вимкнути Wi-Fi</string>
   <string name="permlab_changePrivacyGuardState">увімк. або вимк. Сторожа Приватності</string>
   <string name="permdesc_changePrivacyGuardState">Програма може вибрати, чи буде друга програма працювати в захищеному режимі. Коли програму запущено в захищеному режимі, вона не отримає доступ до персональних даних, таких як контакти, повідомлення чи журнал дзвінків.</string>
   <string name="privacy_guard_notification">Сторож Приватності активний</string>
@@ -110,6 +112,7 @@
   <string name="app_ops_toggle_bluetooth">увімк. або вимк. Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">увімк. або вимк. мобільних даних</string>
   <string name="app_ops_toggle_nfc">увімк. вимк. NFC</string>
+  <string name="app_ops_toggle_wifi">Переключити Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">керування гучністю будильника</string>
   <string name="app_ops_use_audio_focus">керування аудіо-фокусом</string>
   <string name="app_ops_use_bluetooth_volume">керування гучністю Bluetooth</string>
@@ -122,6 +125,19 @@
   <string name="app_ops_use_voice_volume">отримати управління гучністю при розмові</string>
   <string name="app_ops_write_mms">створити MMS-повідомлення</string>
   <string name="app_ops_write_sms">створити SMS-повідомлення</string>
+  <string name="app_ops_use_fingerprint">використовувати відбитки пальців</string>
+  <string name="app_ops_add_voicemail">Додати голосове повідомлення</string>
+  <string name="app_ops_read_phone_state">Доступ до стану телефону</string>
+  <string name="app_ops_scan_wifi">Сканувати Wi-Fi мережі</string>
+  <string name="app_ops_change_wallpaper">зміна шпалер</string>
+  <string name="app_ops_assist_structure">Використовувати допоміжну структуру</string>
+  <string name="app_ops_assist_screenshot">Скріншот</string>
+  <string name="app_ops_mock_location">Фіктивне місцезнаходження</string>
+  <string name="app_ops_read_external_storage">Зчитати дані з карти пам\'яті</string>
+  <string name="app_ops_write_external_storage">Записати дані на карту пам\'яті</string>
+  <string name="app_ops_turn_on_screen">Увімкнути екран</string>
+  <string name="app_ops_get_accounts">Отримати інформацію про акаунти</string>
+  <string name="app_ops_wifi_change">Змінити стан Wi-Fi</string>
   <string name="app_ops_su">отримати root-доступ</string>
   <string name="lock_to_app_toast_no_navbar">Щоб відкріпити цей екран, торкніться й утримуйте кнопку назад.</string>
   <string name="live_display_auto">Автоматично</string>

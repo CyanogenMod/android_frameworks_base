@@ -154,4 +154,6 @@
   <string name="tethered_notification_no_device_message">Nessun dispositivo connesso</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivo connesso</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivi connessi</string>
+  <string name="notify_package_component_protected_title">Lancio dell\'app bloccato</string>
+  <string name="notify_package_component_protected_text">L\'app <xliff:g id="app_name">%1$s</xliff:g> è protetta. Tocca qui per autenticarti e aprire l\'app.</string>
 </resources>

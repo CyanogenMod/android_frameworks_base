@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profile systemowe</string>
   <string name="quick_settings_profiles_off">Profile wyłączone</string>
+  <string name="quick_settings_heads_up_label">Wyskakujące powiadomienia</string>
+  <string name="quick_settings_battery_saver_label">Oszczędzanie baterii</string>
   <string name="accessibility_quick_settings_sync_off">Synchronizacja wyłączona.</string>
   <string name="accessibility_quick_settings_sync_on">Synchronizacja włączona.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronizacja została wyłączona.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Aktywny wyświetlacz włączony.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Aktywny wyświetlacz został wyłączony.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Aktywny wyświetlacz został włączony.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Wyskakujące powiadomienia wyłączone.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Wyskakujące powiadomienia włączone.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Wyskakujące powiadomienia zostały wyłączone.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Wyskakujące powiadomienia zostały włączone.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Oszczędzanie baterii wył.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Oszczędzanie baterii wł.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Oszczędzanie baterii zostało wył.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Oszczędzanie baterii zostało wł.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamiczne przełączniki</string>
   <string name="dynamic_qs_tile_next_alarm_label">Następny alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Przełącznik klawiatury</string>
@@ -123,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Zgłaszanie lokalizacji przeszło w tryb oszczędzania energii.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Zgłaszanie lokalizacji przeszło w tryb \"tylko czujniki\".</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Zgłaszanie lokalizacji przeszło w tryb wysokiej dokładności.</string>
+  <string name="quick_settings_tiles_category_system">Kafelki systemowe</string>
+  <string name="quick_settings_tiles_add_tiles">Dodaj kafelek</string>
 </resources>

@@ -18,14 +18,14 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="accessibility_data_connection_hspap">HSPA+</string>
   <string name="accessibility_data_connection_4g_plus">4G+</string>
-  <string name="status_bar_expanded_header_weather_format">%1$s - %2$s</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Kliznite desno za %1$s</string>
   <string name="right_shortcut_hint">Kliznite lijevo za %1$s</string>
-  <string name="lockscreen_message">Dodirnite ikonu na lijevo ili desno kako bi preraspodijelili prečac zaključanog zaslona .</string>
+  <string name="lockscreen_message">Dodirnite ikonu na lijevo ili desno kako bi preraspodijelili prečac zaključanog zaslona.</string>
   <string name="lockscreen_default_target">Zadano</string>
   <string name="select_application">Odaberite aplikaciju</string>
   <string name="lockscreen_choose_action_title">Odaberite radnju</string>
-  <string name="lockscreen_none_target">Ništa</string>
+  <string name="lockscreen_none_target">Nijedan</string>
   <string name="navbar_dialog_title">Odaberi radnju</string>
   <string name="navbar_home_button">Home tipka</string>
   <string name="navbar_recent_button">Tipka nedavno</string>
@@ -51,11 +51,11 @@
   <string name="qs_tile_edit_header_instruction">Pritisnite i držite pločicu za uređivanje</string>
   <string name="quick_settings_edit_label">Uredi pločice</string>
   <string name="quick_settings_cannot_delete_edit_tile">Nije moguće obrisati Uredi pločice</string>
-  <string name="qs_tiles_reset_confirmation">Resetirati pločice brzih postavki na zadano?</string>
+  <string name="qs_tiles_reset_confirmation">Vratiti pločice brzih postavki na zadano?</string>
   <string name="quick_settings_tile_reset_to_default">Vraćanje na zadani izgled</string>
   <string name="quick_settings_title_header">Zaglavlje</string>
   <string name="quick_settings_title_tiles">Pločice</string>
-  <string name="quick_settings_title_show_weather">Pokaži vrijeme</string>
+  <string name="quick_settings_title_show_weather">Pokaži prognozu</string>
   <string name="quick_settings_title_enlarge_first_row">Povećaj prvi red</string>
   <string name="screen_pinning_description_no_navbar">Ovo drži u pogledu dok ne otkvačite. Dodirnite i držite gumb natrag da bi otkvačili.</string>
   <string name="quick_settings_custom_tile_detail_title">Prilagodljive pločice</string>
@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profili sustava</string>
   <string name="quick_settings_profiles_off">Profili onemogućeni</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_battery_saver_label">Ušteda baterije</string>
   <string name="accessibility_quick_settings_sync_off">Sinkronizacija isključena.</string>
   <string name="accessibility_quick_settings_sync_on">Sinkronizacija uključena.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinkronizacija je isključena.</string>
@@ -98,8 +100,16 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambijentni zaslon uključen.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambijentni zaslon je isključen.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambijentni zaslon je uključen.</string>
-  <string name="quick_settings_dynamic_tile_detail_title">Dinamičke pločice</string>
-  <string name="dynamic_qs_tile_next_alarm_label">Slijedeći alarm</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up isključen.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up uključen.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up je isključen.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up je uključen.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Ušteda baterije isključena.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Ušteda baterije uključena.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Ušteda baterije je isključena.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Ušteda baterije je uključena.</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dinamične pločice</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Sljedeći alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME za odabir</string>
   <string name="dynamic_qs_tile_su_label">Root pristup</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay isključen.</string>
@@ -107,7 +117,7 @@
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dnevni način.</string>
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: noćni način.</string>
   <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: vanjski način.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay isključeno.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay isključen.</string>
   <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay promijenjen u auto.</string>
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay promijenjen u dnevni način.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay promijenjen u noćni način rada.</string>
@@ -120,7 +130,7 @@
   <string name="quick_settings_location_battery_saving_label">Štednja baterije</string>
   <string name="quick_settings_location_gps_only_label">Samo uređaj</string>
   <string name="quick_settings_location_high_accuracy_label">Visoka preciznost</string>
-  <string name="accessibility_quick_settings_location_changed_battery_saving">Prijavljivanje lokacije promijenjeno u način uštednje baterije.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Prijavljivanje lokacije promijenjeno u način uštede baterije.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Prijavljivanje lokacije promijenjeno u samo senzori.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Prijavljivanje lokacije promijenjeno u način visoke preciznosti.</string>
   <string name="quick_settings_tiles_category_system">Sistemske pločice</string>

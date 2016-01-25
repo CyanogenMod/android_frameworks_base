@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Rendszer profilok</string>
   <string name="quick_settings_profiles_off">Profilok letiltva</string>
+  <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
+  <string name="quick_settings_battery_saver_label">Akkumulátor kímélő</string>
   <string name="accessibility_quick_settings_sync_off">Szinkronizálás ki.</string>
   <string name="accessibility_quick_settings_sync_on">Szinkronizálás be.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Szinkronizálás kikapcsolva.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Környezeti kijelző be.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Környezeti kijelző kikapcsolva.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Környezeti kijelző bekapcsolva.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Lebegő értesítés ki.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Lebegő értesítés be.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Lebegő értesítés kikapcsolva.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Lebegő értesítés bekapcsolva.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akkumulátor kímélő ki.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akkumulátor kímélő be.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akkumulátor kímélő kikapcsolva.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akkumulátor kímélő bekapcsolva.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dinamikus csempe</string>
   <string name="dynamic_qs_tile_next_alarm_label">Következő riasztás</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME választó</string>
@@ -123,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Helymeghatározás jelentése energiatakarékosra változtatva.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Helymeghatározás jelentése csak GPS-re változtatva.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Helymeghatározás jelentése nagyon pontosra változtatva.</string>
+  <string name="quick_settings_tiles_category_system">Rendszer csempék</string>
+  <string name="quick_settings_tiles_add_tiles">Csempe hozzáadása</string>
 </resources>

@@ -18,8 +18,8 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenshot">Snimak zaslona</string>
-  <string name="permlab_receiveProtectedSms">Primanje zaštićenih SMS poruka</string>
-  <string name="permdesc_receiveProtectedSms">Dopušta aplikaciji primanje dolaznih zaštićenih SMS poruka.</string>
+  <string name="permlab_receiveProtectedSms">primaj zaštićeni SMS</string>
+  <string name="permdesc_receiveProtectedSms">Dopušta aplikaciji da prima dolazeći zaštićeni SMS.</string>
   <string name="permlab_modifyProtectedSmsList">Izmjena popisa zaštićenih SMS poruka</string>
   <string name="permdesc_modifyProtectedSmsList">Dozvoljava aplikaciji izmjenu popisa adresa zaštićenih SMS poruka.</string>
   <string name="permgrouplab_security">Sigurnost</string>
@@ -110,7 +110,7 @@
   <string name="app_ops_toggle_bluetooth">upravljati Bluetooth-om</string>
   <string name="app_ops_toggle_mobile_data">upravljati mobilnim podacima</string>
   <string name="app_ops_toggle_nfc">Uključi/isključi NFC</string>
-  <string name="app_ops_toggle_wifi">upravljati WiFi-em</string>
+  <string name="app_ops_toggle_wifi">upravljati Wi-Fi-em</string>
   <string name="app_ops_use_alarm_volume">kontrolirati glasnoću alarma</string>
   <string name="app_ops_use_audio_focus">kontrolirati fokus zvuka</string>
   <string name="app_ops_use_bluetooth_volume">kontrolirati glasnoću Bluetooth-a</string>
@@ -131,6 +131,8 @@
   <string name="app_ops_assist_structure">koristi pomoćne strukture</string>
   <string name="app_ops_assist_screenshot">snimak zaslona</string>
   <string name="app_ops_use_body_sensors">koristi senzore</string>
+  <string name="app_ops_read_cell_broadcasts">pročitati signal odašiljača</string>
+  <string name="app_ops_mock_location">prikazivanje lažne lokacije</string>
   <string name="app_ops_read_external_storage">čitaj vanjsku pohranu</string>
   <string name="app_ops_write_external_storage">piši na vanjsku pohranu</string>
   <string name="app_ops_turn_on_screen">uključite zaslon</string>
@@ -152,4 +154,5 @@
   <string name="tethered_notification_no_device_message">Uređaj nije spojen</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezan uređaj</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> povezanih uređaja</string>
+  <string name="notify_package_component_protected_title">Blokirana aktivnost pokretanja</string>
 </resources>

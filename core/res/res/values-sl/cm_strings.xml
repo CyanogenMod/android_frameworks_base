@@ -19,18 +19,18 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenshot">Zaslonska slika</string>
   <string name="permlab_receiveProtectedSms">prejemanje zaščitenih SMS-ov</string>
-  <string name="permdesc_receiveProtectedSms">Dovoli programu prejemanje zaščitenih dohodnih SMS-ov.</string>
+  <string name="permdesc_receiveProtectedSms">Dovoli aplikaciji prejemanje zaščitenih dohodnih SMS-ov.</string>
   <string name="permlab_modifyProtectedSmsList">spreminjanje seznama zaščitenih SMS-ov</string>
-  <string name="permdesc_modifyProtectedSmsList">Dovoli programu spreminjanje seznama naslovov zaščitenih SMS-ov.</string>
+  <string name="permdesc_modifyProtectedSmsList">Dovoli aplikaciji spreminjanje seznama naslovov zaščitenih SMS-ov.</string>
   <string name="permgrouplab_security">Varnost</string>
   <string name="permgroupdesc_security">Dovoljenja, ki so povezana z varnostnimi podatki naprave.</string>
   <string name="permlab_readPhoneBlacklist">branje črnega seznama telefona</string>
-  <string name="permdesc_readPhoneBlacklist">Dovoli programu branje podatkov o blokiranih telefonskih številkah za dohodne klice in sporočila.</string>
+  <string name="permdesc_readPhoneBlacklist">Dovoli aplikaciji branje podatkov o blokiranih telefonskih številkah za dohodne klice in sporočila.</string>
   <string name="permlab_changePhoneBlacklist">spreminjanje črnega seznama telefona</string>
-  <string name="permdesc_changePhoneBlacklist">Dovoli programu spreminjanje blokiranih telefonskih številk za dohodne klice in sporočila.</string>
+  <string name="permdesc_changePhoneBlacklist">Dovoli aplikaciji spreminjanje blokiranih telefonskih številk za dohodne klice in sporočila.</string>
   <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">nastavitev slike ozadja keyguard</string>
-  <string name="permdesc_setKeyguardWallpaper">Dovoli programu spreminjanje slike ozadja zaslona za zaklepanje.</string>
+  <string name="permdesc_setKeyguardWallpaper">Dovoli aplikaciji spreminjanje slike ozadja zaslona za zaklepanje.</string>
   <string name="global_action_reboot">Ponovno zaženi</string>
   <string name="global_action_current_user">Trenutni</string>
   <string name="reboot_reboot">Ponovno zaženi</string>
@@ -42,7 +42,7 @@
   <string name="reboot_confirm" product="tablet">Tablica se bo ponovno zagnala.</string>
   <string name="reboot_confirm" product="default">Telefon se bo ponovno zagnal.</string>
   <string name="reboot_progress">Ponovno zaganjanje \u2026</string>
-  <string name="app_killed_message">Program uničen</string>
+  <string name="app_killed_message">Aplikacija uničena</string>
   <string name="adb_net_active_notification_title">ADB preko omrežja omogočen</string>
   <string name="adb_both_active_notification_title">ADB preko USB-ja in omrežja omogočen</string>
   <string name="adb_active_generic_notification_message">Dotaknite se, da onemogočite razhroščevanje.</string>
@@ -51,25 +51,25 @@
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Omrežje</string>
   <string name="permlab_accessThemeService">dostop do storitev tem</string>
-  <string name="permlab_interceptPackageLaunch">prestrezanje zagona programa</string>
-  <string name="permdesc_accessThemeService">Dovoli programu dostop do storitve tem. Navadno ni potrebno za običajne programe.</string>
+  <string name="permlab_interceptPackageLaunch">prestrezanje zagona aplikacije</string>
+  <string name="permdesc_accessThemeService">Dovoli aplikaciji dostop do storitve tem. Navadno ni potrebno za običajne aplikacije.</string>
   <string name="permlab_readThemes">branje podatkov o vaši temi</string>
-  <string name="permdesc_readThemesDesc">Dovoli programu branje vaših tem in
+  <string name="permdesc_readThemesDesc">Dovoli aplikaciji branje vaših tem in
        določanje, katero temo uporabljate.</string>
   <string name="permlab_writeThemes">spreminjanje tem</string>
-  <string name="permdesc_writeThemesDesc">Dovoli programu vstavljanje novih tem in
+  <string name="permdesc_writeThemesDesc">Dovoli aplikaciji vstavljanje novih tem in
        spreminjanje uporabljene teme.</string>
   <string name="theme_install_error_title">Namestitev teme je spodletela</string>
   <string name="theme_install_error_message">Namestitev %s je spodletela</string>
   <string name="stylus_app_not_installed">%s ni nameščen</string>
   <string name="theme_reset_notification_title">Ponastavitev theme</string>
-  <string name="theme_reset_notification_body">Sistemska tema obnovljena zaradi večkratnih sesutij programa.</string>
+  <string name="theme_reset_notification_body">Sistemska tema obnovljena zaradi večkratnih sesutij aplikacije.</string>
   <string name="silent_mode_priority">Prednost</string>
   <string name="silent_mode_none">Brez</string>
   <string name="subscription_change_disabled_wifi_ap">Dostopna točka Wi-Fi je bila onemogočena zaradi spremembe naročnine SIM</string>
   <string name="notify_turn_wifi_off_title">Izklopi Wi-Fi</string>
   <string name="permlab_changePrivacyGuardState">omogočanje ali onemogočanje Privacy Guarda</string>
-  <string name="permdesc_changePrivacyGuardState">Dovoli programu spreminjanje, ali se drug program izvaja s Privacy Guardom. Kadar se program izvaja s Privacy Guardom, ne bo imel dostopa do osebnih podatkov, kot so stiki, dnevniki klicev ali sporočila.</string>
+  <string name="permdesc_changePrivacyGuardState">Dovoli aplikaciji spreminjanje, ali se druga aplikacija izvaja s Privacy Guardom. Kadar se aplikacija izvaja s Privacy Guardom, ne bo imela dostopa do osebnih podatkov, kot so stiki, dnevniki klicev ali sporočila.</string>
   <string name="privacy_guard_notification">Privacy Guard dejaven</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne bo imel dostopa do osebnih podatkov</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
@@ -85,7 +85,7 @@
   <string name="app_ops_delete_mms">brisanje vaših sporočil MMS</string>
   <string name="app_ops_delete_sms">brisanje vaših sporočil SMS</string>
   <string name="app_ops_draw_on_top">risanje oken v ospredju</string>
-  <string name="app_ops_get_usage_stats">pridobivanje uporabniške statistike programa</string>
+  <string name="app_ops_get_usage_stats">pridobivanje uporabniške statistike aplikacije</string>
   <string name="app_ops_keep_device_awake">ohranjanje budnosti naprave</string>
   <string name="app_ops_make_phone_call">opravljanje klicev</string>
   <string name="app_ops_modify_calendar">posodabljanje koledarja</string>
@@ -156,4 +156,6 @@
   <string name="tethered_notification_no_device_message">Nobene naprave ni povezane</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezana naprava</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> povezanih naprav</string>
+  <string name="notify_package_component_protected_title">Zagon dejavnosti blokiran</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> je zaščiten pred zagonom. Kliknite za overitev in zaženite aplikacijo.</string>
 </resources>

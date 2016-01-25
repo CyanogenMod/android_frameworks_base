@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">시스템 프로필</string>
   <string name="quick_settings_profiles_off">프로필 사용 안 함</string>
+  <string name="quick_settings_heads_up_label">헤드업 알림</string>
+  <string name="quick_settings_battery_saver_label">배터리 절약</string>
   <string name="accessibility_quick_settings_sync_off">동기화 꺼짐</string>
   <string name="accessibility_quick_settings_sync_on">동기화 켜짐</string>
   <string name="accessibility_quick_settings_sync_changed_off">동기화가 해제되었습니다.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">절전 모드 자동 해제가 켜짐.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">절전 모드 자동 해제가 꺼졌습니다.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">절전 모드 자동 해제가 켜졌습니다.</string>
+  <string name="accessibility_quick_settings_heads_up_off">헤드업 알림이 꺼짐.</string>
+  <string name="accessibility_quick_settings_heads_up_on">헤드업 알림이 켜짐.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">헤드업 알림이 꺼졌습니다.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">헤드업 알림이 켜졌습니다.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">배터리 절약 끔.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">배터리 절약 킴.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">배터리 절약이 꺼졌습니다.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">배터리 절약이 켜졌습니다.</string>
   <string name="quick_settings_dynamic_tile_detail_title">동적 타일</string>
   <string name="dynamic_qs_tile_next_alarm_label">다음 알람</string>
   <string name="dynamic_qs_tile_ime_selector_label">입력 방법 선택</string>
@@ -123,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">위치 보고가 배터리 절약 모드로 바뀜.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">위치 보고가 기기 전용 모드로 바뀜.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">위치 보고가 높은 정확도 모드로 바뀜.</string>
+  <string name="quick_settings_tiles_category_system">시스템 타일</string>
+  <string name="quick_settings_tiles_add_tiles">타일 추가</string>
 </resources>

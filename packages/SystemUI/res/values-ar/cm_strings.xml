@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">ملفات تعريف النظام</string>
   <string name="quick_settings_profiles_off">تعطيل ملفات التعريف</string>
+  <string name="quick_settings_heads_up_label">إنذار مسبق</string>
+  <string name="quick_settings_battery_saver_label">موفر البطارية</string>
   <string name="accessibility_quick_settings_sync_off">تعطيل المزامنة. </string>
   <string name="accessibility_quick_settings_sync_on">تشغيل المزامنة.</string>
   <string name="accessibility_quick_settings_sync_changed_off">تم تعطيل المزامنة.</string>
@@ -83,6 +85,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">تشغيل العرض المحيط.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">تم تعطيل العرض المحيط.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">تم تشغيل العرض المحيط.</string>
+  <string name="accessibility_quick_settings_heads_up_off">تعطيل الإنذار المسبق.</string>
+  <string name="accessibility_quick_settings_heads_up_on">تشغيل الإنذار المسبق.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">تم تعطيل الإنذار المسبق.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">تم تشغيل الإنذار المسبق.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">إيقاف موفر البطارية.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">تشغيل موفر البطارية.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">تم ايقاف موفر البطارية.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">تشغيل موفر البطارية.</string>
   <string name="quick_settings_dynamic_tile_detail_title">مربع ديناميكي</string>
   <string name="dynamic_qs_tile_next_alarm_label">التنبيه المقبل</string>
   <string name="dynamic_qs_tile_ime_selector_label">محدد IME</string>

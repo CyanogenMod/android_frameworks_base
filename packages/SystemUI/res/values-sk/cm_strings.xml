@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Systémové profily</string>
   <string name="quick_settings_profiles_off">Profily zakázané</string>
+  <string name="quick_settings_heads_up_label">Plávajúce oznámenia</string>
+  <string name="quick_settings_battery_saver_label">Šetrič batérie</string>
   <string name="accessibility_quick_settings_sync_off">Synch. vyp.</string>
   <string name="accessibility_quick_settings_sync_on">Synch. zap.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronizácia vypnutá.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambientné zobrazenie zakázané.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambientné zobrazenie povolené.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambientné zobrazenie zakázané.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Plávajúce oznámenia zakázané.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Plávajúce oznámenia povolené.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Plávajúce oznámenia zakázané.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Plávajúce oznámenia povolené.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Šetrič batérie vypnutý.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Šetrič batérie zapnutý.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Šetrič batérie vypnutý.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Šetrič batérie zapnutý.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamické dlaždice</string>
   <string name="dynamic_qs_tile_next_alarm_label">Ďalší budík</string>
   <string name="dynamic_qs_tile_ime_selector_label">Výber IME</string>

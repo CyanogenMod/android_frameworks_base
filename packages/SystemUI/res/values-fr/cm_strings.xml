@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profils système</string>
   <string name="quick_settings_profiles_off">Profils désactivés</string>
+  <string name="quick_settings_heads_up_label">Notifications flottantes</string>
+  <string name="quick_settings_battery_saver_label">Économiseur de batterie</string>
   <string name="accessibility_quick_settings_sync_off">Synchronisation désactivée.</string>
   <string name="accessibility_quick_settings_sync_on">Synchronisation activée.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronisation désactivée.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Affichage ambiant activé.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Affichage ambiant désactivé.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Affichage ambiant activé.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Notifications flottantes désactivées.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notifications flottantes activées.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Notifications flottantes désactivées.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Notifications flottantes activées.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Économiseur de batterie désactivé.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Économiseur de batterie activé.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">L\'économiseur de batterie a été désactivé.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">L\'économiseur de batterie a été activé.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Raccourcis dynamiques</string>
   <string name="dynamic_qs_tile_next_alarm_label">Prochaine alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Mode de saisie</string>

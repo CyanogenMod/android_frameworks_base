@@ -22,4 +22,5 @@
     <item quantity="one">Digite o código PIN do cartão SIM. Tem mais <xliff:g id="number">%d</xliff:g> tentativa antes de ter de contactar a sua operadora para desbloquear o dispositivo.</item>
     <item quantity="other">Digite o código PIN do cartão SIM. Tem mais <xliff:g id="number">%d</xliff:g> tentativas.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Erro: o tamanho é menor que o requerido</string>
 </resources>

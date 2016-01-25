@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Stelsel profiele</string>
   <string name="quick_settings_profiles_off">Profiele is afgeskakel</string>
+  <string name="quick_settings_heads_up_label">Loer boodskap</string>
+  <string name="quick_settings_battery_saver_label">Battery bespaarder</string>
   <string name="accessibility_quick_settings_sync_off">Sinchronisering af.</string>
   <string name="accessibility_quick_settings_sync_on">Sinchronisering aan.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinchronisering afgeskakel.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Omgewingstemperatuur vertoning aan.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Omgewingstemperatuur skerm vertoning is afgeskakel.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Omgewingstemperatuur skerm vertoning is aangeskakel.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Loer boodskap af.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Loer boodskap aan.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Loer boodskap is afgeskakel.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Loer boodskap is aangeskakel.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Battery bespaarder af.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Battery bespaarder aan.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Battery bespaarder afgeskakel.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Battery bespaarder aangeskakel.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dinamiese teëls</string>
   <string name="dynamic_qs_tile_next_alarm_label">Volgende alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Kies IME</string>

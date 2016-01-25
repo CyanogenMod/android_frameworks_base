@@ -110,6 +110,7 @@
   <string name="app_ops_toggle_bluetooth">přepnout Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">přepnout mobilní data</string>
   <string name="app_ops_toggle_nfc">přepnout NFC</string>
+  <string name="app_ops_toggle_wifi">přepnout Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">ovládat hlasitost budíku</string>
   <string name="app_ops_use_audio_focus">ovládat zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládat hlasitost Bluetooth</string>
@@ -122,6 +123,21 @@
   <string name="app_ops_use_voice_volume">ovládat hlasitost hovoru</string>
   <string name="app_ops_write_mms">zapsat zprávu MMS</string>
   <string name="app_ops_write_sms">zapsat zprávu SMS</string>
+  <string name="app_ops_use_fingerprint">použít otisk prstu</string>
+  <string name="app_ops_add_voicemail">přidat hlasovou zprávu</string>
+  <string name="app_ops_read_phone_state">přístup ke stavu telefonu</string>
+  <string name="app_ops_scan_wifi">prohledávání Wi-Fi sítí</string>
+  <string name="app_ops_change_wallpaper">změnit tapetu</string>
+  <string name="app_ops_assist_structure">použít asistenční strukturu</string>
+  <string name="app_ops_assist_screenshot">sejmout obrazovku</string>
+  <string name="app_ops_use_body_sensors">použít senzory těla</string>
+  <string name="app_ops_read_cell_broadcasts">přečíst zprávy buněk GSM</string>
+  <string name="app_ops_mock_location">zfalšovat polohu</string>
+  <string name="app_ops_read_external_storage">přečíst externí úložiště</string>
+  <string name="app_ops_write_external_storage">zapsat na externí úložiště</string>
+  <string name="app_ops_turn_on_screen">zapnout obrazovku</string>
+  <string name="app_ops_get_accounts">získat účty zařízení</string>
+  <string name="app_ops_wifi_change">změna stavu Wi-Fi</string>
   <string name="app_ops_su">získat root přístup</string>
   <string name="lock_to_app_toast_no_navbar">Chcete-li odebrat tuto obrazovku, podržte tlačítko Zpět.</string>
   <string name="live_display_auto">Automaticky</string>
@@ -138,4 +154,6 @@
   <string name="tethered_notification_no_device_message">Žádné připojené zařízení</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> připojené zařízení</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> připojená zařízení</string>
+  <string name="notify_package_component_protected_title">Spuštění aktivity zablokováno</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> je chráněna před spuštěním. Dotykem autorizovat spuštění aplikace.</string>
 </resources>

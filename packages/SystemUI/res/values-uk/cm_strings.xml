@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Проведіть вправо для %1$s</string>
   <string name="right_shortcut_hint">Проведіть вліво для %1$s</string>
+  <string name="lockscreen_message">Натисніть на іконку ліворуч або праворуч для зміни ярлика екрану блокування.</string>
+  <string name="lockscreen_default_target">За замовчуванням</string>
   <string name="select_application">Вибрати програму</string>
   <string name="lockscreen_choose_action_title">Виберіть дію</string>
   <string name="lockscreen_none_target">НІчого</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Стерти дані програм</string>
   <string name="advanced_dev_option_force_stop">Примусово зупинити</string>
   <string name="advanced_dev_option_uninstall">Деінсталювати</string>
+  <string name="accessibility_notification_brightness">Яскравість</string>
   <string name="accessibility_quick_settings_profiles_off">Профілі вимкнено.</string>
   <string name="accessibility_quick_settings_profiles">Профіль: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Профілі вимкнено.</string>
   <string name="accessibility_quick_settings_profiles_changed">Профіль змінено на <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Ініціалізація\u2026</string>
+  <string name="led_notification_title">Індикатор подій</string>
+  <string name="led_notification_text">Світлодіод увімкнено параметрами</string>
+  <string name="qs_tile_edit_header_instruction">Натисніть і утримуйте плитку, щоб змінити</string>
+  <string name="quick_settings_edit_label">Редагувати плитки</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Не вдалося видалити кнопку редагування</string>
+  <string name="qs_tiles_reset_confirmation">Відновити налаштування плиток за замовчуванням?</string>
+  <string name="quick_settings_tile_reset_to_default">Відновити за замовчуванням</string>
+  <string name="quick_settings_title_header">Заголовок</string>
+  <string name="quick_settings_title_tiles">Плитки</string>
+  <string name="quick_settings_title_show_weather">Показати погоду</string>
+  <string name="quick_settings_title_enlarge_first_row">Збільшити перший рядок</string>
   <string name="screen_pinning_description_no_navbar">Триматиме це перед Вами, доки не відкріпите. Торкніться й утримуйте кнопку «Назад», щоб відкріпити.</string>
   <string name="quick_settings_custom_tile_detail_title">Власна плитка</string>
   <string name="quick_settings_remove">Видалити плитку</string>
@@ -49,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Системні профілі</string>
   <string name="quick_settings_profiles_off">Профілі вимкнуто</string>
+  <string name="quick_settings_heads_up_label">Спливаючі сповіщення</string>
+  <string name="quick_settings_battery_saver_label">Енергозбереження</string>
   <string name="accessibility_quick_settings_sync_off">Синхронізацію вимкнено.</string>
   <string name="accessibility_quick_settings_sync_on">Синхронізацію увімкнено.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Синхронізацію вимкнено.</string>
@@ -62,12 +80,18 @@
   <string name="quick_settings_lockscreen_label_enforced">Блокування екрану ввімкнено</string>
   <string name="accessibility_quick_settings_screen_timeout">Вимкнення екрана через: <xliff:g id="timeout" example="30 seconds">%s</xliff:g> секунд.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Вимкнення екрана відбувається через <xliff:g id="timeout" example="30 seconds">%s</xliff:g> секунд бездіяльності.</string>
+  <string name="qs_tile_performance">Енергоспоживання</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим батареї: збереження енергії.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Режим батареї: збалансований режим.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Режим батареї: висока продуктивність.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Енергоспоживання: енергоефективне.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Енергоспоживання: продуктивне.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Акумулятор тепер в режимі економії енергії.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим акумулятора змінено на збалансований.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим акумулятора змінено для високої продуктивності.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Енергоспоживання змінено на ефективне.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Енергоспоживання змінено на продуктивне.</string>
+  <string name="quick_settings_performance_profile_detail_title">Енергоспоживання</string>
   <string name="accessibility_quick_settings_lock_screen_off">Блокування екрана вимкнено.</string>
   <string name="accessibility_quick_settings_lock_screen_on">Блокування екрана увімкнено.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Блокування екрана вимкнено.</string>
@@ -76,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display увімкнено.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient дисплей вимкнено.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display увімкнено.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Спливаючі сповіщення вимкнено.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Спливаючі сповіщення увімкнено.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Спливаючі сповіщення вимкнено.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Спливаючі сповіщення увімкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Енергозбереження вимкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Енергозбереження увімкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Енергозбереження вимкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Енергозбереження увімкнено.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Динамічні плитки</string>
   <string name="dynamic_qs_tile_next_alarm_label">Наступний сигнал</string>
   <string name="dynamic_qs_tile_ime_selector_label">Вибір способу вводу</string>
@@ -90,6 +122,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay у денному режимі.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay у нічному режимі.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay у режимі «На вулиці».</string>
+  <string name="quick_settings_title_advanced_location">Параметри відправки геоданих</string>
   <string name="accessibility_quick_settings_location_battery_saving">Надсилання місця розташування: економія батареї.</string>
   <string name="accessibility_quick_settings_location_gps_only">Надсилання місця розташування: тільки датчики.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Надсилання місця розташування: висока точність.</string>
@@ -100,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Визначення місцезнаходження у режимі економії батареї.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Визначення місцезнаходження тепер використовує лише датчики пристрою.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Визначення місцезнаходження у режимі високої точності.</string>
+  <string name="quick_settings_tiles_category_system">Системні плитки</string>
+  <string name="quick_settings_tiles_add_tiles">Додати плитку</string>
 </resources>

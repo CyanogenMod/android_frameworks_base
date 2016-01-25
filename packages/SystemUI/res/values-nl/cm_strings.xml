@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Systeemprofielen</string>
   <string name="quick_settings_profiles_off">Profielen uitgeschakeld</string>
+  <string name="quick_settings_heads_up_label">Heads-up</string>
+  <string name="quick_settings_battery_saver_label">Accubesparing</string>
   <string name="accessibility_quick_settings_sync_off">Synchr. uit.</string>
   <string name="accessibility_quick_settings_sync_on">Synchr. aan.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchr. uitgeschakeld.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Omgevingsdisplay aan.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Omgevingsdisplay uitgeschakeld.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Omgevingsdisplay ingeschakeld.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads-up uit.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads-up aan.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads-up uitgeschakeld.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ingeschakeld.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Accubesparing uit.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Accubesparing aan.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Accubesparing uitgeschakeld.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Accubesparing ingeschakeld.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamische tegel</string>
   <string name="dynamic_qs_tile_next_alarm_label">Volgend alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Invoermethode</string>
@@ -123,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Locatiemelding gewijzigd naar accubesparing.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Locatiemelding gewijzigd naar alleen apparaat.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Locatiemelding gewijzigd naar grote nauwkeurigheid.</string>
+  <string name="quick_settings_tiles_category_system">Systeemtegels</string>
+  <string name="quick_settings_tiles_add_tiles">Tegel toevoegen</string>
 </resources>

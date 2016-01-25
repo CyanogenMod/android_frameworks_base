@@ -22,4 +22,5 @@
     <item quantity="one">Introdueix el PIN de la SIM, tens <xliff:g id="number">%d</xliff:g> intent restant abans que hagis de contactar amb el teu operador per desbloquejar el teu dispositiu.</item>
     <item quantity="other">Introdueix el PIN de la SIM, tens <xliff:g id="number">%d</xliff:g> intents restants.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Error: L\'entrada és més curta que la longitud mínima</string>
 </resources>

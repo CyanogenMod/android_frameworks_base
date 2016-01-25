@@ -22,4 +22,5 @@
     <item quantity="one">Adja meg a SIM-kártya PIN-kódját. <xliff:g id="number">%d</xliff:g> kísérlete maradt mielőtt fel kell vennie a kapcsolatot a mobilszolgáltatójával a készülék feloldásához.</item>
     <item quantity="other">Adja meg a SIM-kártya PIN-kódját. <xliff:g id="number">%d</xliff:g> kísérlete maradt.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Hiba: A bemeneti adat rövidebb, mint a minimális hossz</string>
 </resources>

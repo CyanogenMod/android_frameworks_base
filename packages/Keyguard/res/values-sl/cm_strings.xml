@@ -24,4 +24,5 @@
     <item quantity="few">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostale poskuse.</item>
     <item quantity="other">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostalih poskusov.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Napaka: Vnos je krajši od minimalne zahtevane dolžine</string>
 </resources>

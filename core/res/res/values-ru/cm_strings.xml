@@ -154,4 +154,5 @@
   <string name="tethered_notification_no_device_message">Нет подключенных устройств</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> подключенное устройство</string>
   <string name="tethered_notification_multi_device_message">Подключено устройств: <xliff:g id="count">%1$s</xliff:g></string>
+  <string name="notify_package_component_protected_title">Запуск приложения запрещён</string>
 </resources>

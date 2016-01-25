@@ -21,4 +21,5 @@
   <plurals name="kg_password_default_pin_message">
     <item quantity="other">输入 SIM 卡 PIN。您还有 <xliff:g id="number">%d</xliff:g> 次尝试机会；若超出此次数，则必须联系运营商以解锁 SIM 卡。</item>
   </plurals>
+  <string name="kg_invalid_sim_length">错误：输入长度小于最小长度</string>
 </resources>

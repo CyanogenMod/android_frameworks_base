@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Perfís do sistema</string>
   <string name="quick_settings_profiles_off">Perfís desactivados</string>
+  <string name="quick_settings_heads_up_label">Notificacións emerxentes</string>
+  <string name="quick_settings_battery_saver_label">Economizador da bateria</string>
   <string name="accessibility_quick_settings_sync_off">Sincronización apagada.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronización acesa.</string>
   <string name="accessibility_quick_settings_sync_changed_off">A sincronización foi apagada.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Visualización de ambiente activada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">A visualización de ambiente foi desactivada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">A visualización de ambiente foi activada.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Notificacións emerxentes desactivadas.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notificacións emerxentes activadas.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">As notificacións emerxentes foron desactivadas.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">As notificacións emerxentes foron activadas.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Economizador da batería apagado.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Economizador da bateria aceso.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador da batería foi apagado.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador da batería foi acendido.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Botón dinámico</string>
   <string name="dynamic_qs_tile_next_alarm_label">Próxima alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>

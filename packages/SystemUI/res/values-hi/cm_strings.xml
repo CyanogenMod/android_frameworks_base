@@ -49,6 +49,7 @@
   <string name="quick_settings_nfc_label">एनएफसी</string>
   <string name="quick_settings_profiles">सिस्टम प्रोफ़ाइलें</string>
   <string name="quick_settings_profiles_off">प्रोफ़ाइलें अक्षम हैं</string>
+  <string name="quick_settings_heads_up_label">हेड्स अप।</string>
   <string name="accessibility_quick_settings_sync_off">संकालन बंद है।</string>
   <string name="accessibility_quick_settings_sync_on">संकालन चालू है।</string>
   <string name="accessibility_quick_settings_sync_changed_off">संकालन को बंद किया गया है।</string>
@@ -75,6 +76,10 @@
   <string name="accessibility_quick_settings_ambient_display_on">परिवेशी प्रदर्शन चालू है।</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">परिवेशी प्रदर्शन को बंद किया गया है।</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">परिवेशी प्रदर्शन को चालू किया गया।</string>
+  <string name="accessibility_quick_settings_heads_up_off">हेड्स अप बंद है।</string>
+  <string name="accessibility_quick_settings_heads_up_on">हेड्स अप चालू है।</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">हेड्स अप को बंद किया गया है।</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">हेड्स अप को चालू किया गया।</string>
   <string name="quick_settings_dynamic_tile_detail_title">गतिशील टाइल</string>
   <string name="dynamic_qs_tile_next_alarm_label">अलगा अलार्म</string>
   <string name="dynamic_qs_tile_ime_selector_label">आईएमई चयनक</string>

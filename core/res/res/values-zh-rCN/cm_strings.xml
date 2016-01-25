@@ -154,4 +154,5 @@
   <string name="tethered_notification_no_device_message">没有已连接设备</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> 个已连接的设备</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> 个已连接的设备</string>
+  <string name="notify_package_component_protected_title">已阻止活动启动</string>
 </resources>

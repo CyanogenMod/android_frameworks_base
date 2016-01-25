@@ -154,4 +154,5 @@
   <string name="tethered_notification_no_device_message">Brak podłączonego urządzenia</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> podłączone urządzenie</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> podłączone urządzenia</string>
+  <string name="notify_package_component_protected_title">Aktywność uruchamiania zablokowana</string>
 </resources>

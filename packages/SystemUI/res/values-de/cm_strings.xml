@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Systemprofile</string>
   <string name="quick_settings_profiles_off">Profile deaktiviert</string>
+  <string name="quick_settings_heads_up_label">Pop-up</string>
+  <string name="quick_settings_battery_saver_label">Akku-Sparmodus</string>
   <string name="accessibility_quick_settings_sync_off">Sync aus.</string>
   <string name="accessibility_quick_settings_sync_on">Sync an.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sync ausgeschaltet.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Inaktivitätsdisplay an.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Inaktivitätsdisplay ausgeschaltet.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Inaktivitätsdisplay eingeschaltet.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Pop-up aus.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Pop-up an.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Pop-up ausgeschaltet.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Pop-up eingeschaltet.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akku-Sparmodus aus.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akku-Sparmodus an.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akku-Sparmodus ausgeschaltet.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akku-Sparmodus eingeschaltet.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamische Kachel</string>
   <string name="dynamic_qs_tile_next_alarm_label">Nächster Alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Eingabemethode</string>

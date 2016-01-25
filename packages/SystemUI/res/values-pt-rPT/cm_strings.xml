@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Perfis de sistema</string>
   <string name="quick_settings_profiles_off">Perfis desativados</string>
+  <string name="quick_settings_heads_up_label">Notificações pop-up</string>
+  <string name="quick_settings_battery_saver_label">Economizador de bateria</string>
   <string name="accessibility_quick_settings_sync_off">Sincronização desligada.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronização ligada.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronização foi desligada.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Visualização de ambiente ligada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Visualização de ambiente desligou.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Visualização de ambiente ligou.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Notificações pop-up desligadas.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notificações pop-up ligadas.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Notificações pop-up desligaram.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Notificações pop-up ligaram.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Economizador de bateria desligado.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Economizador de bateria ligado.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador de bateria desligou.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador de bateria ligou.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Mosaicos dinâmicos</string>
   <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seletor de IME</string>
@@ -123,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Modo de localização alterado para poupança de bateria.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Modo de localização alterado para apenas no dispositivo.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Modo de localização alterado para alta precisão.</string>
+  <string name="quick_settings_tiles_category_system">Mosaicos do sistema</string>
+  <string name="quick_settings_tiles_add_tiles">Adicionar um mosaico</string>
 </resources>

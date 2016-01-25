@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Přejeďte doprava pro %1$s</string>
   <string name="right_shortcut_hint">Přejeďte doleva pro %1$s</string>
+  <string name="lockscreen_message">Dotykem na ikonu na levé nebo pravé straně zamykací obrazovky změňte zástupce.</string>
+  <string name="lockscreen_default_target">Výchozí</string>
   <string name="select_application">Vybrat aplikaci</string>
   <string name="lockscreen_choose_action_title">Zvolit akci</string>
   <string name="lockscreen_none_target">Žádný</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Vymazat data aplikací</string>
   <string name="advanced_dev_option_force_stop">Vynutit ukončení</string>
   <string name="advanced_dev_option_uninstall">Odinstalovat</string>
+  <string name="accessibility_notification_brightness">Jas podsvícení</string>
   <string name="accessibility_quick_settings_profiles_off">Profily vyp.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profily vypnuty.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil změněn na <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inicializace\u2026</string>
+  <string name="led_notification_title">Nastavení jasu</string>
+  <string name="led_notification_text">LED světlo povoleno v nastavení</string>
+  <string name="qs_tile_edit_header_instruction">Stiskněte a podržte tlačítko dlaždice pro přeskupení</string>
+  <string name="quick_settings_edit_label">Úprava dlaždic</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Dlaždici „Úprava dlaždic“ nelze odstranit</string>
+  <string name="qs_tiles_reset_confirmation">Obnovit výchozí dlaždice rychlého nastavení?</string>
+  <string name="quick_settings_tile_reset_to_default">Obnovit výchozí rozložení</string>
+  <string name="quick_settings_title_header">Záhlaví</string>
+  <string name="quick_settings_title_tiles">Dlaždice</string>
+  <string name="quick_settings_title_show_weather">Zobrazit počasí</string>
+  <string name="quick_settings_title_enlarge_first_row">Zvětšit první řádek</string>
   <string name="screen_pinning_description_no_navbar">Zůstává zobrazeno, dokud není uvolněn. Dotykem a podržením tlačítka Zpět bude provedeno uvolnění.</string>
   <string name="quick_settings_custom_tile_detail_title">Vlastní dlaždice</string>
   <string name="quick_settings_remove">Odebrat dlaždici</string>
@@ -49,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Systémové profily</string>
   <string name="quick_settings_profiles_off">Profily zakázány</string>
+  <string name="quick_settings_heads_up_label">Plovoucí upozornění</string>
+  <string name="quick_settings_battery_saver_label">Spořič baterie</string>
   <string name="accessibility_quick_settings_sync_off">Synch. vyp.</string>
   <string name="accessibility_quick_settings_sync_on">Synch. zap.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronizace vypnuta.</string>
@@ -82,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambientní zobrazení zapnuto.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambientní zobrazení vypnuto.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambientní zobrazení zapnuto.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Plovoucí upozorněn vyp.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Plovoucí upozornění zap.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Plovoucí upozorněn vyp.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Plovoucí upozornění zap.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Spořič baterie vyp.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Spořič baterie zap.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Spořič baterie vypnut.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Spořič baterie zapnut.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamické dlaždice</string>
   <string name="dynamic_qs_tile_next_alarm_label">Další budík</string>
   <string name="dynamic_qs_tile_ime_selector_label">Výběr IME</string>
@@ -96,6 +122,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay změněn na režim ve dne.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay změněn na režim v noci.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay změněn na režim venku.</string>
+  <string name="quick_settings_title_advanced_location">Třístavové nastavení určení polohy</string>
   <string name="accessibility_quick_settings_location_battery_saving">Zjištění polohy: úsporný režim.</string>
   <string name="accessibility_quick_settings_location_gps_only">Zjištění polohy: pouze GPS.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Zjištění polohy: vysoká přesnost.</string>
@@ -106,4 +133,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Zjištění polohy změněno na úsporu baterie.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Zjištění polohy změněno na pouze GPS.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Zjištění polohy změněno na vysokou přesnost.</string>
+  <string name="quick_settings_tiles_category_system">Systémové dlaždice</string>
+  <string name="quick_settings_tiles_add_tiles">Přidat dlaždici</string>
+  <string name="hotspot_apm_message">Nelze se připojit k mobilním sítím při zapnutém režimu „V letadle“. Vypněte prosím tento režim a zkuste to znovu.</string>
 </resources>
