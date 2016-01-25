@@ -38,6 +38,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -582,8 +583,8 @@ public class ThemeUtils {
     }
 
     public static String getDefaultThemePackageName(Context context) {
-        final String defaultThemePkg = Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.DEFAULT_THEME_PACKAGE);
+        final String defaultThemePkg = CMSettings.Secure.getString(context.getContentResolver(),
+                CMSettings.Secure.DEFAULT_THEME_PACKAGE);
         if (!TextUtils.isEmpty(defaultThemePkg)) {
             PackageManager pm = context.getPackageManager();
             try {
