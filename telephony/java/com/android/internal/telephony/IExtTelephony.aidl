@@ -161,4 +161,11 @@ interface IExtTelephony {
     */
     int getUiccApplicationState(int slotId, int appIndex);
 
+    /**
+    * Get primary stack phone id.
+    * @param - void
+    * @return phone id
+    */
+    int getPrimaryStackPhoneId();
+
 }
