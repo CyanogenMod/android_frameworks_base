@@ -129,14 +129,14 @@
   <string name="app_ops_scan_wifi">סריקת רשתות Wi-Fi</string>
   <string name="app_ops_change_wallpaper">החלפת טפט</string>
   <string name="app_ops_assist_structure">שימוש במבנה סיוע</string>
-  <string name="app_ops_assist_screenshot">לקיחת צילום מסך</string>
+  <string name="app_ops_assist_screenshot">צילום המסך</string>
   <string name="app_ops_use_body_sensors">שימוש בחיישני גוף</string>
   <string name="app_ops_read_cell_broadcasts">קריאת שידורי סלולר</string>
-  <string name="app_ops_mock_location">הסוואת מיקומך</string>
+  <string name="app_ops_mock_location">הסוואת מיקום</string>
   <string name="app_ops_read_external_storage">קריאת אחסון חיצוני</string>
   <string name="app_ops_write_external_storage">כתיבה לאחסון חיצוני</string>
   <string name="app_ops_turn_on_screen">הפעלת המסך</string>
-  <string name="app_ops_get_accounts">קבלת חשבונות ההתקן</string>
+  <string name="app_ops_get_accounts">קבלת חשבונות המכשיר</string>
   <string name="app_ops_wifi_change">שינוי מצב Wi-Fi</string>
   <string name="app_ops_su">קבלת גישת שורש (Root)</string>
   <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, לחץ על כפתור \"חזור\" והחזק אותו.</string>
@@ -154,4 +154,6 @@
   <string name="tethered_notification_no_device_message">אין מכשירים מחוברים</string>
   <string name="tethered_notification_one_device_message">מכשיר <xliff:g id="count">%1$s</xliff:g> מחובר</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> מכשירים מחוברים</string>
+  <string name="notify_package_component_protected_title">הפעלת הפעולה נחסמה</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> מוגן מפני הפעלה. לחץ כדי להזדהות ולהפעיל את היישום.</string>
 </resources>

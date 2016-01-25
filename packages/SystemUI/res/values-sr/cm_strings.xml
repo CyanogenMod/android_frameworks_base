@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Профили система</string>
   <string name="quick_settings_profiles_off">Профили онемогућени</string>
+  <string name="quick_settings_heads_up_label">Искачуће поруке</string>
+  <string name="quick_settings_battery_saver_label">Уштеда батерије</string>
   <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
   <string name="accessibility_quick_settings_sync_on">Синхрон. укључено.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Синхронизација је искључена.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Амбијент приказ укључен.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Амбијент приказ ће бити искључен.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Амбијент приказ ће бити укључен.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Искачуће поруке искључене.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Искачуће поруке укључене.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Искачуће поруке ће бити искључене.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Искачуће поруке ће бити укључене.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Уштеда батерије искључена.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Уштеда батерије укључена.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Уштеда батерије је искључена.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Уштеда батерије је укључена.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Динамичне плочице</string>
   <string name="dynamic_qs_tile_next_alarm_label">Следећи аларм</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME бирач</string>
@@ -123,4 +133,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Извештај о локацији промењен у режим уштеде батерије.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Извештај о локацији промењен у режим само сензора.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Извештај о локацији промењен у режим високе прецизности.</string>
+  <string name="quick_settings_tiles_category_system">Плочице система</string>
+  <string name="quick_settings_tiles_add_tiles">Додај плочицу</string>
+  <string name="hotspot_apm_message">Није се могуће конектовати на мобилне мреже док је режим авиона омогућен. Онемогући режим авиона и пробај поново.</string>
 </resources>

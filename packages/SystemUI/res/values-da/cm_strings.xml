@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Systemprofiler</string>
   <string name="quick_settings_profiles_off">Profiler deaktiveret</string>
+  <string name="quick_settings_heads_up_label">Svævende meddelelser</string>
+  <string name="quick_settings_battery_saver_label">Strømsparetilstand</string>
   <string name="accessibility_quick_settings_sync_off">Synkr. fra.</string>
   <string name="accessibility_quick_settings_sync_on">Synkr. til.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synkr. er slået fra.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Inaktivitetsvisning til.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Inaktivitetsvisning er slået fra.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Inaktivitetsvisning er slået til.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Svævende meddelelser fra.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Svævende meddelelser til.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Svævende meddelelser er slået fra.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Svævende meddelelser er slået til.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Strømsparetilstand fra.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Strømsparetilstand til.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Strømsparetilstand er slået fra.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Strømsparetilstand er slået til.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamisk flise</string>
   <string name="dynamic_qs_tile_next_alarm_label">Næste alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME-vælger</string>

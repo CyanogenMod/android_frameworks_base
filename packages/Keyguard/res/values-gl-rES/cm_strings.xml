@@ -16,5 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">A SIM/RUIM personalizada está bloqueada</string>
   <string name="lockscreen_sim_error_message_short">Esta tarxeta non é válida.</string>
+  <string name="kg_invalid_sim_length">Erro: O dato introducido é máis curto có mínimo esixido</string>
 </resources>

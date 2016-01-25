@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profili di sistema</string>
   <string name="quick_settings_profiles_off">Profili disattivati</string>
+  <string name="quick_settings_heads_up_label">Heads Up</string>
+  <string name="quick_settings_battery_saver_label">Risparmio batteria</string>
   <string name="accessibility_quick_settings_sync_off">Sincronia OFF</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizzazione attiva.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizzazione spenta.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display attivato.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display disattivato.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display attivato.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads Up disattivo.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads Up attivo.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads Up disattivato.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads Up attivato.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Risparmio batteria OFF.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Risparmio batteria ON.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Risparmio batteria disattivato.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Risparmio batteria attivato.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Tile dinamici</string>
   <string name="dynamic_qs_tile_next_alarm_label">Prossima sveglia</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selettore IME</string>
@@ -125,4 +135,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Segnalatore posizione cambiato in modalità alta precisione.</string>
   <string name="quick_settings_tiles_category_system">Tile di sistema</string>
   <string name="quick_settings_tiles_add_tiles">Aggiungi tile</string>
+  <string name="hotspot_apm_message">Impossibile connettersi alle reti mobili quando la modalità aereo è attiva. Disattiva la modalità aereo e riprova.</string>
 </resources>

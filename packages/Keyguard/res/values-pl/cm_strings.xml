@@ -23,4 +23,5 @@
     <item quantity="few">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałe próby.</item>
     <item quantity="other">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałych prób.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Błąd: Podany kod jest za krótki</string>
 </resources>

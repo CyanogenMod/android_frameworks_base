@@ -22,4 +22,5 @@
     <item quantity="one">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuch übrig, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
     <item quantity="other">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuche übrig, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Fehler: Eingabe ist kürzer als die Mindestlänge</string>
 </resources>

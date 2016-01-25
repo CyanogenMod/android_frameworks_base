@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">ان‌اف‌سی</string>
   <string name="quick_settings_profiles">پروفایل‌ها</string>
   <string name="quick_settings_profiles_off">پروفایل‌ها غیرفعالند</string>
+  <string name="quick_settings_heads_up_label">اعلان فوری</string>
+  <string name="quick_settings_battery_saver_label">بهینه‌ساز باتری</string>
   <string name="accessibility_quick_settings_sync_off">همگام‌سازی خاموش.</string>
   <string name="accessibility_quick_settings_sync_on">همگام‌سازی روشن.</string>
   <string name="accessibility_quick_settings_sync_changed_off">همگام‌سازی خاموش شد.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">نمایش حساس به محیط روشن.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">نمایش حساس به محیط خاموش شد.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">نمایش حساس به محیط روشن شد.</string>
+  <string name="accessibility_quick_settings_heads_up_off">اعلان فوری خاموش.</string>
+  <string name="accessibility_quick_settings_heads_up_on">اعلان فوری روشن.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">اعلان فوری خاموش شد.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">اعلان فوری روشن شد.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">بهینه‌ساز باتری خاموش.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">بهینه‌ساز باتری روشن.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">بهینه‌ساز باتری خاموش شد.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">بهینه‌ساز باتری روشن شد.</string>
   <string name="quick_settings_dynamic_tile_detail_title">کاشی پویا</string>
   <string name="dynamic_qs_tile_next_alarm_label">هشدار بعدی</string>
   <string name="dynamic_qs_tile_ime_selector_label">انتخابگر تغییر روش ورودی</string>

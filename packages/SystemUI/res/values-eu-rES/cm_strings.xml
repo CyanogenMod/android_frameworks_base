@@ -65,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Sistema profilak</string>
   <string name="quick_settings_profiles_off">Profilak ezgaituta</string>
+  <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>
+  <string name="quick_settings_battery_saver_label">Bateria aurrezlea</string>
   <string name="accessibility_quick_settings_sync_off">Sinkronizazioa ezgaituta.</string>
   <string name="accessibility_quick_settings_sync_on">Sinkronizazioa gaituta.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinkronizazioa ezgaituta.</string>
@@ -98,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display piztuta.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display itzalita.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display piztuta.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Jakinarazpen flotatzaileak ezgaituta.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Jakinarazpen flotatzaileak gaituta.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Jakinarazpen flotatzaileak ezgaituta.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Jakinarazpen flotatzaileak gaituta.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Bateria aurrezlea piztuta.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Bateria aurrezlea piztuta.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Lauza dinamikoa</string>
   <string name="dynamic_qs_tile_next_alarm_label">Hurrengo alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME hautatzailea</string>
@@ -123,4 +133,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Kokaleku txostena bateria aurrezteko modura aldatu da.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Kokaleku txostena sentsoreak besterik ez modura aldatu da.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Kokaleku txostena zehaztasun handiko modura aldatu da.</string>
+  <string name="quick_settings_tiles_category_system">Sistemaren lauzak</string>
+  <string name="quick_settings_tiles_add_tiles">Gehitu lauza bat</string>
+  <string name="hotspot_apm_message">Ezin da sare mugikorretara konektatu hegaldi modua gaituta dagoenean. Desgaitu hegaldi modua eta saiatu berriro.</string>
 </resources>

@@ -22,4 +22,5 @@
     <item quantity="one">Inserisci il PIN della SIM, hai ancora <xliff:g id="number">%d</xliff:g> tentativo rimanente prima di dover contattare l\'operatore per sbloccare il dispositivo.</item>
     <item quantity="other">Inserisci il PIN della SIM, hai ancora <xliff:g id="number">%d</xliff:g> tentativi rimanenti.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Errore: input non sufficientemente lungo</string>
 </resources>

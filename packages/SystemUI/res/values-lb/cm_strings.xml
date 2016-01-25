@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">No riets wësche fir %1$s</string>
   <string name="right_shortcut_hint">No lénks wësche fir %1$s</string>
+  <string name="lockscreen_message">Dréck e Symbol op der lénkser oder rietser Säit fir d\'Spärschierm-Ofkierzungen nei ze definéieren.</string>
+  <string name="lockscreen_default_target">Standard</string>
   <string name="select_application">App auswielen</string>
   <string name="lockscreen_choose_action_title">Aktioun auswielen</string>
   <string name="lockscreen_none_target">Keen</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Applikatiounsdate läschen</string>
   <string name="advanced_dev_option_force_stop">Zoumaachen zwéngen</string>
   <string name="advanced_dev_option_uninstall">Desinstalléieren</string>
+  <string name="accessibility_notification_brightness">Hellegkeet</string>
   <string name="accessibility_quick_settings_profiles_off">Profiller aus.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiller ausgeschalt.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil op <xliff:g id="profile" example="Default">%s</xliff:g> geännert.</string>
   <string name="quick_settings_compass_init">Initialiséieren\u2026</string>
+  <string name="led_notification_title">Hellegkeetsastellungen</string>
+  <string name="led_notification_text">Notifikatiounsluucht duerch Astellungen aktivéieren</string>
+  <string name="qs_tile_edit_header_instruction">Dréck an haalt d\'Kachelen, fir se nei zouzeuerdnen</string>
+  <string name="quick_settings_edit_label">Kachelen änneren</string>
+  <string name="quick_settings_cannot_delete_edit_tile">\"Kachelen änneren\" kann net geläscht ginn</string>
+  <string name="qs_tiles_reset_confirmation">Kachele vun de Séieren Astellungen op de Standardlayout zrécksetzen?</string>
+  <string name="quick_settings_tile_reset_to_default">Zréck op den Standardlayout setzen</string>
+  <string name="quick_settings_title_header">Entête</string>
+  <string name="quick_settings_title_tiles">Kachelen</string>
+  <string name="quick_settings_title_show_weather">Wieder uweisen</string>
+  <string name="quick_settings_title_enlarge_first_row">Éischt Rei vergréisseren</string>
   <string name="screen_pinning_description_no_navbar">Doduerch bleift d\'App visibel bis se lassgeléist gëtt. Dréck den Zréck-Knäppchen an hal e gedréckt fir d\'App lasszeléisen.</string>
   <string name="quick_settings_custom_tile_detail_title">Eege Kachel</string>
   <string name="quick_settings_remove">Kachel läschen</string>
@@ -49,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Systemprofiller</string>
   <string name="quick_settings_profiles_off">Profiller desaktivéiert</string>
+  <string name="quick_settings_heads_up_label">Pop-Up-Notifikatiounen</string>
+  <string name="quick_settings_battery_saver_label">Akkuschouner</string>
   <string name="accessibility_quick_settings_sync_off">Synchronisatioun aus.</string>
   <string name="accessibility_quick_settings_sync_on">Synchronisatioun un.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronisatioun ausgeschalt.</string>
@@ -82,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambiente Schierm un.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambiente Schierm ausgeschalt.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambiente Schierm ugeschalt.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Pop-Up-Notifikatiounen aus.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Pop-Up-Notifikatiounen un.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Pop-Up-Notifikatiounen ausgeschalt.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Pop-Up-Notifikatiounen ugeschalt.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akkuschouner aus.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akkuschouner un.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akkuschouner ausgeschalt.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akkuschouner ugeschalt.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamesch Kachelen</string>
   <string name="dynamic_qs_tile_next_alarm_label">Nächste Wecker</string>
   <string name="dynamic_qs_tile_ime_selector_label">Method fir anzeginn</string>
@@ -96,6 +122,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay-Modus op \"Dag\" geännert.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay-Modus op \"Nuecht\" geännert.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay-Modus op \"Dobaussen\" geännert.</string>
+  <string name="quick_settings_title_advanced_location">Standuert mat dräi Zoustänn</string>
   <string name="accessibility_quick_settings_location_battery_saving">Standuertbericht: Akku spueren.</string>
   <string name="accessibility_quick_settings_location_gps_only">Standuertbericht: Just Sensoren.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Standuertbericht: Héich Genauegkeet.</string>
@@ -106,4 +133,6 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Standuertbericht op \"Akku spueren\" geännert.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Standuertbericht op \"Just Sensoren\" geännert.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Standuertbericht op \"Héich Genauegkeet\" geännert.</string>
+  <string name="quick_settings_tiles_category_system">System-Kachelen</string>
+  <string name="quick_settings_tiles_add_tiles">Kachelen dobäisetzen</string>
 </resources>

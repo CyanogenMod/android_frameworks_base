@@ -22,4 +22,5 @@
     <item quantity="one">Sartu SIM txartelaren PIN kodea, saiakera  <xliff:g id="number">%d</xliff:g> geratzen zaizu gailua desblokeatzeko zure operadorearekin kontaktuan jarri behar aurretik.</item>
     <item quantity="other">Sartu SIM txartelaren PIN kodea, <xliff:g id="number">%d</xliff:g> saiakera geratzen zaizkizu.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Errorea: Sarrera gutxieneko luzera baino laburragoa da</string>
 </resources>
