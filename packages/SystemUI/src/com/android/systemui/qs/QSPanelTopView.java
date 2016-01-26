@@ -317,12 +317,17 @@ public class QSPanelTopView extends FrameLayout {
             boolean showSlider = CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.QS_SHOW_BRIGHTNESS_SLIDER, 1, currentUserId) == 1;
             if (showSlider != mHasBrightnessSliderToDisplay) {
+                if (mAnimator != null) {
+                    mAnimator.cancel(); // cancel everything we're animating
+                    mAnimator = null;
+                }
                 mHasBrightnessSliderToDisplay = showSlider;
-                if (mAnimator == null && mBrightnessView != null) {
+                if (mBrightnessView != null) {
                     // no animations, set the visibility manually
                     mBrightnessView.setVisibility(showSlider ? View.VISIBLE : View.GONE);
                 }
                 requestLayout();
+                getParent().requestLayout();
                 animateToState();
             }
         }
