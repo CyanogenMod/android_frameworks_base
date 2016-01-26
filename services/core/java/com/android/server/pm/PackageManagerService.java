@@ -10282,8 +10282,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         Bundle extras = new Bundle(1);
         extras.putInt(Intent.EXTRA_UID, UserHandle.getUid(userId, pkgSetting.appId));
 
-        sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, null,
-                packageName, extras, null, null, new int[] {userId});
+        sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, packageName,
+                null, extras, null, null, new int[] {userId});
         try {
             IActivityManager am = ActivityManagerNative.getDefault();
             final boolean isSystem =
