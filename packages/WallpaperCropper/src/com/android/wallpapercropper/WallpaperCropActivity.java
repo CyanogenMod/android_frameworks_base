@@ -101,6 +101,10 @@ public class WallpaperCropActivity extends Activity {
             finish();
             return;
         }
+		
+	getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+		| View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         // Action bar
         // Show the custom action bar view
