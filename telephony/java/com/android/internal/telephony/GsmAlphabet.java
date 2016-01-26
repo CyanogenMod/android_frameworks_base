@@ -196,6 +196,7 @@ public class GsmAlphabet {
 
         ret = sCharsToShiftTables[0].get(c, -1);
 
+        System.out.println("charToGsmExtended " + c + " " + ret);
         if (ret == -1) {
             return sCharsToGsmTables[0].get(' ', ' ');
         }
@@ -489,7 +490,7 @@ public class GsmAlphabet {
             boolean prevCharWasEscape = false;
             String languageTableToChar = sLanguageTables[languageTable];
             String shiftTableToChar = sLanguageShiftTables[shiftTable];
-
+System.out.println("gsm7BitPackedToString 0 : " + shiftTableToChar);
             if (languageTableToChar.isEmpty()) {
                 Rlog.w(TAG, "no language table for code " + languageTable + ", using default");
                 languageTableToChar = sLanguageTables[0];
@@ -521,6 +522,7 @@ public class GsmAlphabet {
                         ret.append(' ');    // display ' ' for reserved double escape sequence
                     } else {
                         char c = shiftTableToChar.charAt(gsmVal);
+                        System.out.println("gsm7BitPackedToString 1 : " + gsmVal + " " + c);
                         if (c == ' ') {
                             ret.append(languageTableToChar.charAt(gsmVal));
                         } else {
@@ -531,6 +533,7 @@ public class GsmAlphabet {
                 } else if (gsmVal == GSM_EXTENDED_ESCAPE) {
                     prevCharWasEscape = true;
                 } else {
+                    System.out.println("gsm7BitPackedToString 2 : " + gsmVal + " " + languageTableToChar.charAt(gsmVal));
                     ret.append(languageTableToChar.charAt(gsmVal));
                 }
             }
@@ -863,6 +866,7 @@ public class GsmAlphabet {
             }
         }
 
+        System.out.println("Max single shift code " + maxSingleShiftCode);
         int sz = s.length();
         // calculate septet count for each valid table / shift table pair
         for (int i = 0; i < sz && !lpcList.isEmpty(); i++) {
@@ -874,11 +878,14 @@ public class GsmAlphabet {
             // iterate through enabled locking shift tables
             for (LanguagePairCount lpc : lpcList) {
                 int tableIndex = sCharsToGsmTables[lpc.languageCode].get(c, -1);
+                System.out.println("Table index " + tableIndex + " for " + lpc.languageCode + " " + c);
                 if (tableIndex == -1) {
                     // iterate through single shift tables for this locking table
                     for (int table = 0; table <= maxSingleShiftCode; table++) {
                         if (lpc.septetCounts[table] != -1) {
                             int shiftTableIndex = sCharsToShiftTables[table].get(c, -1);
+
+                            System.out.println("Shift table index " + shiftTableIndex + " for " + table + " " + c);
                             if (shiftTableIndex == -1) {
                                 if (use7bitOnly) {
                                     // can't encode char, use space instead
@@ -1065,6 +1072,7 @@ public class GsmAlphabet {
         Resources r = Resources.getSystem();
         // See comments in frameworks/base/core/res/res/values/config.xml for allowed values
         sEnabledSingleShiftTables = r.getIntArray(R.array.config_sms_enabled_single_shift_tables);
+
         sEnabledLockingShiftTables = r.getIntArray(R.array.config_sms_enabled_locking_shift_tables);
 
         if (sEnabledSingleShiftTables.length > 0) {
