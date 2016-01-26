@@ -34,6 +34,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.settings.ToggleSlider;
+
 import cyanogenmod.providers.CMSettings;
 
 public class QSPanelTopView extends FrameLayout {
@@ -317,12 +319,22 @@ public class QSPanelTopView extends FrameLayout {
             boolean showSlider = CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.QS_SHOW_BRIGHTNESS_SLIDER, 1, currentUserId) == 1;
             if (showSlider != mHasBrightnessSliderToDisplay) {
-                mHasBrightnessSliderToDisplay = showSlider;
-                if (mAnimator == null && mBrightnessView != null) {
-                    // no animations, set the visibility manually
-                    mBrightnessView.setVisibility(showSlider ? View.VISIBLE : View.GONE);
+                if (mAnimator != null) {
+                    mAnimator.cancel(); // cancel everything we're animating
+                    mAnimator = null;
                 }
-                requestLayout();
+                mHasBrightnessSliderToDisplay = showSlider;
+                if (mBrightnessView != null) {
+                    mBrightnessView.setVisibility(showSlider ? View.VISIBLE : View.GONE);
+
+                    // as per showBrightnessSlider() in QSPanel.java, we look it up on-the-go
+                    ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);
+                    if (brightnessSlider != null) {
+                        brightnessSlider.setVisibility(showSlider ? View.VISIBLE : View.GONE);
+                    }
+
+                }
+                getParent().requestLayout();
                 animateToState();
             }
         }
