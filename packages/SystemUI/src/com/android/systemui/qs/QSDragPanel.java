@@ -32,6 +32,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -142,10 +143,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
         mQsPanelTop = (QSPanelTopView) LayoutInflater.from(mContext).inflate(R.layout.qs_tile_top,
                 this, false);
-
-        // tint trash can to default color
-        final int color = mContext.getColor(R.color.qs_tile_trash);
-        DrawableCompat.setTint(mQsPanelTop.getDropTargetIcon().getDrawable(), color);
 
         mBrightnessView = mQsPanelTop.getBrightnessView();
         mFooter = new QSFooter(this, mContext);
@@ -965,6 +962,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                         Log.v(TAG, "ACTION_DRAG_STARTED on target view.");
                     }
                     mRestored = false;
+                    mQsPanelTop.setDropIcon(R.drawable.ic_qs_tile_delete_disable, R.color.qs_tile_trash_normal_tint);
                 }
 
                 break;
@@ -981,16 +979,17 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 mMovedByLocation = false;
 
                 if (v == mQsPanelTop) {
-                    int color;
+                    int icon, color;
                     if (mDraggingRecord.tile instanceof EditTile) {
                         // use a different warning, user can't erase this one
-                        color = mContext.getColor(R.color.qs_tile_trash_delete_tint_warning);
+                        icon = R.drawable.ic_qs_tile_delete_disable_avd;
+                        color = R.color.qs_tile_trash_delete_tint_warning;
                     } else {
-                        color = mContext.getColor(R.color.qs_tile_trash_delete_tint);
+                        icon = R.drawable.ic_qs_tile_delete_disable;
+                        color = R.color.qs_tile_trash_delete_tint;
                     }
 
-                    DrawableCompat.setTint(mQsPanelTop.getDropTargetIcon().getDrawable(), color);
-                    mQsPanelTop.getDropTargetIcon().invalidate();
+                    mQsPanelTop.setDropIcon(icon, color);
                 }
 
                 if (!originatingTileEvent && v != getDropTarget() && targetTile != null) {
@@ -1057,9 +1056,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 }
 
                 if (v == mQsPanelTop) {
-                    final int color = mContext.getColor(R.color.qs_tile_trash);
-                    DrawableCompat.setTint(mQsPanelTop.getDropTargetIcon().getDrawable(), color);
-                    mQsPanelTop.getDropTargetIcon().invalidate();
+                    mQsPanelTop.setDropIcon(R.drawable.ic_qs_tile_delete_disable, R.color.qs_tile_trash_normal_tint);
                 }
 
                 if (originatingTileEvent
