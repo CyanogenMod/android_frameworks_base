@@ -75,11 +75,12 @@
     <color name="qs_row_text_color">@android:color/white</color>
 
     <!-- natural color of the trash can -->
-    <color name="qs_tile_trash">#FFFFFF</color>
+    <color name="qs_tile_trash_normal_tint">@android:color/transparent</color>
     <!-- tint to color trash can when tile is hovering over it -->
-    <color name="qs_tile_trash_delete_tint">#FF0000</color>
-    <!-- tint to color trash can when hovering edit tile, user cannot delete it -->
-    <color name="qs_tile_trash_delete_tint_warning">#FF9C00</color>
+    <color name="qs_tile_trash_delete_tint">#EF5350</color>
+    <!-- Tint to color trash can when hovering edit tile, user cannot delete it.
+         Transparent because we have an animation by default. -->
+    <color name="qs_tile_trash_delete_tint_warning">@android:color/transparent</color>
 
     <!-- More exposed hard coded colors -->
     <color name="toggle_slider_text_color">#666666</color>

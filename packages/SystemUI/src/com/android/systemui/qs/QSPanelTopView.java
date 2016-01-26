@@ -23,8 +23,12 @@ import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.UserHandle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -158,6 +162,18 @@ public class QSPanelTopView extends FrameLayout {
     public void onStartDrag() {
         mDisplayingTrash = true;
         animateToState();
+    }
+
+    public void setDropIcon(int resourceId, int colorResourceId) {
+        mDropTargetIcon.setImageResource(resourceId);
+        final Drawable drawable = mDropTargetIcon.getDrawable();
+
+        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_ATOP);
+        DrawableCompat.setTint(drawable, mContext.getColor(colorResourceId));
+
+        if (drawable instanceof Animatable) {
+            ((Animatable) drawable).start();
+        }
     }
 
     public void toast(int textStrResId) {
