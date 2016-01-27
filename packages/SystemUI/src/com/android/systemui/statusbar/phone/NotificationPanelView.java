@@ -628,7 +628,7 @@ public class NotificationPanelView extends PanelView implements
             MetricsLogger.count(mContext, COUNTER_PANEL_OPEN_PEEK, 1);
             return true;
         }
-        if (mQsPanel.isOnSettingsPage() && isInQsArea(event.getX(), event.getY())
+        if (mQsPanel.isOnSettingsPage() && isInQsArea(event.getX(), event.getY(), false)
                 && mQsExpanded) {
             mIntercepting = false;
             // we explicitly do not intercept the touch event here to let the qs settings page
@@ -869,9 +869,14 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private boolean isInQsArea(float x, float y) {
+        return isInQsArea(x, y, true);
+    }
+
+    private boolean isInQsArea(float x, float y, boolean includeNotifications) {
         return (x >= mScrollView.getX() && x <= mScrollView.getX() + mScrollView.getWidth()) &&
-                (y <= mNotificationStackScroller.getBottomMostNotificationBottom()
-                || y <= mQsContainer.getY() + mQsContainer.getHeight());
+                ((includeNotifications
+                        && y <= mNotificationStackScroller.getBottomMostNotificationBottom())
+                        || y <= mQsContainer.getY() + mQsContainer.getHeight());
     }
 
     private boolean isOpenQsEvent(MotionEvent event) {
