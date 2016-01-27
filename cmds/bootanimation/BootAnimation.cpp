@@ -736,10 +736,6 @@ bool BootAnimation::movie()
     pthread_mutex_init(&mp_lock, NULL);
     pthread_cond_init(&mp_cond, NULL);
 
-    property_get("persist.sys.silent", value, "null");
-    if (strncmp(value, "1", 1) != 0) {
-        playBackgroundMusic();
-    }
     for (size_t i=0 ; i<pcount ; i++) {
         const Animation::Part& part(animation.parts[i]);
         const size_t fcount = part.frames.size();
@@ -860,6 +856,12 @@ bool BootAnimation::movie()
             glDeleteTextures(1, &mTextureid);
         }
 
+    }
+
+    property_get("persist.sys.silent", value, "null");
+    if (strncmp(value, "1", 1) != 0) {
+       ALOGD("playing boot audio here");
+       playBackgroundMusic();
     }
 
     if (isMPlayerPrepared) {
