@@ -388,8 +388,6 @@ public class Tethering extends BaseNetworkObserver {
         Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
 
         mContext.sendStickyBroadcastAsUser(broadcast, UserHandle.ALL);
-
-        showTetheredNotification(com.android.internal.R.drawable.stat_sys_tether_wifi);
     }
 
     private boolean readDeviceInfoFromDnsmasq(WifiDevice device) {
@@ -671,24 +669,8 @@ public class Tethering extends BaseNetworkObserver {
 
         Resources r = Resources.getSystem();
         CharSequence title = r.getText(com.android.internal.R.string.tethered_notification_title);
-
-        CharSequence message;
-        int size = mConnectedDeviceMap.size();
-
-        if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_softap_extention)
-            && icon == com.android.internal.R.drawable.stat_sys_tether_wifi) {
-            if (size == 0) {
-                message = r.getText(com.android.internal.R.string.tethered_notification_no_device_message);
-            } else if (size == 1) {
-                message = String.format((r.getText(com.android.internal.R.string.tethered_notification_one_device_message)).toString(),
-                        size);
-            } else {
-                message = String.format((r.getText(com.android.internal.R.string.tethered_notification_multi_device_message)).toString(),
-                        size);
-            }
-        } else {
-            message = r.getText(com.android.internal.R.string.tethered_notification_message);
-        }
+        CharSequence message = r.getText(com.android.internal.R.string.
+                tethered_notification_message);
 
         if (mTetheredNotificationBuilder == null) {
             mTetheredNotificationBuilder = new Notification.Builder(mContext);
@@ -703,18 +685,10 @@ public class Tethering extends BaseNetworkObserver {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setContentIntent(pi);
-        if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_softap_extention)
-            && icon == com.android.internal.R.drawable.stat_sys_tether_wifi
-            && size > 0) {
-            mTetheredNotificationBuilder.setContentText(message);
-        } else {
-            mTetheredNotificationBuilder.setContentTitle(title);
-        }
         mLastNotificationId = icon;
 
         notificationManager.notifyAsUser(null, mLastNotificationId,
                 mTetheredNotificationBuilder.build(), UserHandle.ALL);
-
     }
 
     private void clearTetheredNotification() {
