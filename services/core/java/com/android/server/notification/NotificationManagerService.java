@@ -2086,13 +2086,16 @@ public class NotificationManagerService extends SystemService {
     };
 
     private String disableNotificationEffects(NotificationRecord record) {
+        boolean smsRingtone = getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_sms_ringtone_incall);
         if (mDisableNotificationEffects) {
             return "booleanState";
         }
         if ((mListenerHints & HINT_HOST_DISABLE_EFFECTS) != 0) {
             return "listenerHints";
         }
-        if (mCallState != TelephonyManager.CALL_STATE_IDLE && !mZenModeHelper.isCall(record)) {
+        if (mCallState != TelephonyManager.CALL_STATE_IDLE && !mZenModeHelper.isCall(record)
+                && !smsRingtone) {
             return "callState";
         }
         return null;
@@ -2648,9 +2651,8 @@ public class NotificationManagerService extends SystemService {
         if (disableEffects != null) {
             ZenLog.traceDisableEffects(record, disableEffects);
         }
-        boolean smsRingtone = getContext().getResources().getBoolean(
-                com.android.internal.R.bool.config_sms_ringtone_incall);
-        if ((disableEffects == null || (smsRingtone && mInCall))
+
+        if ((disableEffects == null)
                 && (!(record.isUpdate
                     && (notification.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0 ))
                 && (record.getUserId() == UserHandle.USER_ALL ||
