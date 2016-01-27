@@ -2515,6 +2515,12 @@
     <integer name="ascrollboost_timeout">0</integer>
     <integer-array name="ascrollboost_param_value"/>
 
+    <!-- SSDOU scroll boost optimization -->
+    <bool name="config_debugBoost">false</bool>
+    <string-array  translatable="false" name="debugBoost_activityList"></string-array>
+    <integer name="debugBoost_timeout">0</integer>
+    <integer-array name="debugBoost_param_value"/>
+
     <!-- cpu boost for PanelView fling -->
     <bool name="config_enableCpuBoostForPanelViewFling">false</bool>
     <integer-array name="panelview_flingboost_param_value" />

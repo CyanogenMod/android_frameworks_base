@@ -36,6 +36,8 @@ import java.lang.reflect.Method;
 import java.lang.System;
 import android.view.MotionEvent;
 import android.util.DisplayMetrics;
+import android.os.SystemProperties;
+import android.content.Context;
 
 /** @hide */
 public class BoostFramework {
@@ -52,6 +54,11 @@ public class BoostFramework {
     private static Method mIOPStart = null;
     private static Method mIOPStop  = null;
     private static Constructor<Class> mConstructor = null;
+    private static int mLockDuration = -1;
+    private static int mParamVal[];
+    private static String mBoostActivityList[];
+    private static long mStartTime;
+    private static final int mDebugBoost = getDebugBoostProperty();
 
 /** @hide */
     private Object mPerf = null;
@@ -142,6 +149,67 @@ public class BoostFramework {
         }
         return ret;
     }
+
+/** @hide Reads system property
+     * @return 1 if property is set
+     */
+    public static int getDebugBoostProperty() {
+       return SystemProperties.getInt("persist.debugboost.enable", 0);
+    }
+
+/** @hide Acquires debug boost perflock
+     * @param ev Touch Screen event
+     */
+    public void enableDebugBoost(Context context, MotionEvent ev, DisplayMetrics metrics) {
+
+       final int NANO_TO_MILLI = 1000000;
+       long elapsedMillis;
+       boolean mDebugBoostPossible = false;
+
+       /* extract the XML params */
+       if (mLockDuration == -1 || mParamVal == null || mBoostActivityList == null) {
+          mLockDuration = context.getResources().getInteger(
+             com.android.internal.R.integer.debugBoost_timeout);
+          mParamVal = context.getResources().getIntArray(
+             com.android.internal.R.array.debugBoost_param_value);
+          mBoostActivityList = context.getResources().getStringArray(
+             com.android.internal.R.array.debugBoost_activityList);
+       }
+
+       String currentActivity = context.getPackageName();
+
+       /* search for the current activity in list */
+       for (String match : mBoostActivityList) {
+          if (currentActivity.indexOf(match) != -1) {
+             /* break if found */
+             mDebugBoostPossible = true;
+             break;
+          }
+       }
+
+       elapsedMillis = (System.nanoTime() - mStartTime)/NANO_TO_MILLI;
+
+       /* elapsed should be atleast greater than lock duration */
+       if (mDebugBoostPossible == true && elapsedMillis > mLockDuration) {
+          perfLockAcquireTouch(ev, metrics, mLockDuration, mParamVal);
+          mStartTime = System.nanoTime();
+          Log.i(TAG, "dBoost: activity = " + currentActivity + " " + "elapsed = " + elapsedMillis);
+       }
+    }
+
+/** @hide sets debug boost if property is set
+    */
+    public boolean boostOverride(Context context, MotionEvent ev, DisplayMetrics metrics) {
+       /* Enable debug boost if property is set and
+        * current actiivity is present in list
+        */
+       if (mDebugBoost == 1) {
+          enableDebugBoost(context, ev, metrics);
+          return true;
+       }
+       return false;
+    }
+
 /** @hide */
     public int perfLockAcquireTouch(MotionEvent ev, DisplayMetrics metrics,
                                    int duration, int... list) {

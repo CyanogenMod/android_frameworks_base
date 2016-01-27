@@ -3074,7 +3074,14 @@ public class Activity extends ContextThemeWrapper
                 }
             }
         }
-        if (mDragBoostPossible == 1) {
+
+       Context context = getApplicationContext();
+       if (mPerf == null){
+           mPerf = new BoostFramework();
+       }
+       boolean override = mPerf.boostOverride(context, ev, getResources().getDisplayMetrics());
+
+       if (mDragBoostPossible == 1 && override != true) {
             if (mPerf == null){
                 mPerf = new BoostFramework();
             }
