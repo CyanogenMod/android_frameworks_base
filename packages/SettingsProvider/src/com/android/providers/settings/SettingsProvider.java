@@ -27,6 +27,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -51,6 +52,7 @@ import android.os.Process;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -126,6 +128,8 @@ public class SettingsProvider extends ContentProvider {
     private static final String TABLE_BLUETOOTH_DEVICES = "bluetooth_devices";
     private static final String TABLE_BOOKMARKS = "bookmarks";
     private static final String TABLE_ANDROID_METADATA = "android_metadata";
+
+    private static final String HAS_REPLAYED_DEFAULTS_FROM_L = "has_replayed_defaults_from_L";
 
     // The set of removed legacy tables.
     private static final Set<String> REMOVED_LEGACY_TABLES = new ArraySet<>();
@@ -1983,6 +1987,9 @@ public class SettingsProvider extends ContentProvider {
 
         private final class UpgradeController {
             private static final int SETTINGS_VERSION = 122;
+            /**
+             * This is the 12.1 database version (DO NOT INCREMENT)
+             */
             private static final int CM_SETTINGS_DB_VERSION = 125;
 
             private final int mUserId;
@@ -2014,8 +2021,9 @@ public class SettingsProvider extends ContentProvider {
                 //       force replay AOSP defaults as they get introduced
                 //       once 125 is hit, we never have to maintain this again.
                 if ((oldVersion == newVersion || oldVersion == CM_SETTINGS_DB_VERSION)) {
-                    if (oldVersion == CM_SETTINGS_DB_VERSION) {
+                    if (oldVersion == CM_SETTINGS_DB_VERSION && !hasReplayedDefaultsFromL()) {
                         forceReplayAOSPDefaults(mUserId);
+                        setDefaultsReplayedFromLFlag();
                     }
                     return;
                 }
@@ -2054,6 +2062,18 @@ public class SettingsProvider extends ContentProvider {
                 SettingsState systemSettings = getSettingsLocked(
                         SettingsRegistry.SETTINGS_TYPE_SYSTEM, mUserId);
                 systemSettings.setVersionLocked(newVersion);
+            }
+
+            private boolean hasReplayedDefaultsFromL() {
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(getContext());
+                return sharedPreferences.getBoolean(HAS_REPLAYED_DEFAULTS_FROM_L, false);
+            }
+
+            private void setDefaultsReplayedFromLFlag() {
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(getContext());
+                sharedPreferences.edit().putBoolean(HAS_REPLAYED_DEFAULTS_FROM_L, true).apply();
             }
 
             private SettingsState getGlobalSettingsLocked() {
