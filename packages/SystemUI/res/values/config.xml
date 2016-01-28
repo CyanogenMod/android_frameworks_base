@@ -286,4 +286,7 @@
 
     <bool name="config_show4gForIWlan">false</bool>
     <bool name="config_showSignalForIWlan">false</bool>
+
+    <!-- Allow Flashlight service to use wakelock -->
+    <bool name="flashlight_use_wakelock">false</bool>
 </resources>
