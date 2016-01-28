@@ -132,34 +132,34 @@ public class QSTileView extends ViewGroup {
     private void recreateLabel() {
         CharSequence labelText = null;
         CharSequence labelDescription = null;
-        if (mLabel != null) {
+        if (mLabel != null && mLabel.isAttachedToWindow()) {
             labelText = mLabel.getText();
             removeView(mLabel);
-            mLabel = null;
         }
-        if (mDualLabel != null) {
+        if (mDualLabel != null && mDualLabel.isAttachedToWindow()) {
             labelText = mDualLabel.getText();
             labelDescription = mDualLabel.getContentDescription();
             removeView(mDualLabel);
-            mDualLabel = null;
         }
         final Resources res = mContext.getResources();
         if (mDual) {
-            mDualLabel = new QSDualTileLabel(mContext);
-            mDualLabel.setId(View.generateViewId());
-            mDualLabel.setBackgroundResource(R.drawable.btn_borderless_rect);
-            if (mDualDetails) {
-                mDualLabel.setFirstLineCaret(mContext.getDrawable(R.drawable.qs_dual_tile_caret));
+            if (mDualLabel == null) {
+                mDualLabel = new QSDualTileLabel(mContext);
+                mDualLabel.setId(View.generateViewId());
+                mDualLabel.setBackgroundResource(R.drawable.btn_borderless_rect);
+                if (mDualDetails) {
+                    mDualLabel.setFirstLineCaret(mContext.getDrawable(R.drawable.qs_dual_tile_caret));
+                }
+                mDualLabel.setTextColor(mContext.getColor(R.color.qs_tile_text));
+                mDualLabel.setPadding(0, mDualTileVerticalPaddingPx, 0, mDualTileVerticalPaddingPx);
+                mDualLabel.setTypeface(CONDENSED);
+                mDualLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        res.getDimensionPixelSize(R.dimen.qs_tile_text_size));
+                mDualLabel.setClickable(true);
+                mDualLabel.setFocusable(true);
+                mDualLabel.setOnClickListener(mDualDetails ? mClickSecondary : mClickPrimary);
+                mDualLabel.setOnLongClickListener(mLongClick);
             }
-            mDualLabel.setTextColor(mContext.getColor(R.color.qs_tile_text));
-            mDualLabel.setPadding(0, mDualTileVerticalPaddingPx, 0, mDualTileVerticalPaddingPx);
-            mDualLabel.setTypeface(CONDENSED);
-            mDualLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    res.getDimensionPixelSize(R.dimen.qs_tile_text_size));
-            mDualLabel.setClickable(true);
-            mDualLabel.setFocusable(true);
-            mDualLabel.setOnClickListener(mDualDetails ? mClickSecondary : mClickPrimary);
-            mDualLabel.setOnLongClickListener(mLongClick);
             if (labelText != null) {
                 mDualLabel.setText(labelText);
             }
@@ -169,16 +169,18 @@ public class QSTileView extends ViewGroup {
             addView(mDualLabel);
             mDualLabel.setAccessibilityTraversalAfter(mTopBackgroundView.getId());
         } else {
-            mLabel = new TextView(mContext);
-            mLabel.setTextColor(mContext.getColor(R.color.qs_tile_text));
-            mLabel.setGravity(Gravity.CENTER_HORIZONTAL);
-            mLabel.setMinLines(2);
-            mLabel.setPadding(0, 0, 0, 0);
-            mLabel.setTypeface(CONDENSED);
-            mLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                    res.getDimensionPixelSize(R.dimen.qs_tile_text_size));
-            mLabel.setClickable(false);
-            mLabel.setFocusable(false);
+            if (mLabel == null) {
+                mLabel = new TextView(mContext);
+                mLabel.setTextColor(mContext.getColor(R.color.qs_tile_text));
+                mLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+                mLabel.setMinLines(2);
+                mLabel.setPadding(0, 0, 0, 0);
+                mLabel.setTypeface(CONDENSED);
+                mLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        res.getDimensionPixelSize(R.dimen.qs_tile_text_size));
+                mLabel.setClickable(false);
+                mLabel.setFocusable(false);
+            }
             if (labelText != null) {
                 mLabel.setText(labelText);
             }
@@ -218,6 +220,10 @@ public class QSTileView extends ViewGroup {
         setFocusable(!dual);
         mDivider.setVisibility(dual ? VISIBLE : GONE);
         mTopBackgroundView.setVisibility(dual ? VISIBLE : GONE);
+
+        if (changed) {
+            getParent().requestLayout();
+        }
         postInvalidate();
         return changed;
     }
@@ -414,6 +420,15 @@ public class QSTileView extends ViewGroup {
             }
             if (mRipple != null) {
                 mRipple.setVisible(!editing, false);
+            }
+        }
+
+        // clean up extra label view if needed
+        if (!editing) {
+            if (mDual && mLabel != null) {
+                mLabel = null;
+            } else if (!mDual && mDualLabel != null) {
+                mDualLabel = null;
             }
         }
     }
