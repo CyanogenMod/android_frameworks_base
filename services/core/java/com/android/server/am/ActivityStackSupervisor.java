@@ -974,7 +974,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
             try {
                 //TODO: This needs to be a flushed out API in the future.
-                if (AppGlobals.getPackageManager()
+                if (intent.getComponent() != null && AppGlobals.getPackageManager()
                         .isComponentProtected(callingPackage, intent.getComponent(), userId)) {
                     Message msg = mService.mHandler.obtainMessage(
                             ActivityManagerService.POST_COMPONENT_PROTECTED_MSG);
