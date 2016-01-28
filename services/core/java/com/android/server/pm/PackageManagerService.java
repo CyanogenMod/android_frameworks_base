@@ -15386,6 +15386,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         int[] grantPermissionsUserIds = EMPTY_INT_ARRAY;
 
         synchronized (mPackages) {
+            // process applied themes so their resources are up to date and ready use
+            processAppliedThemes();
+
             // Verify that all of the preferred activity components actually
             // exist.  It is possible for applications to be updated and at
             // that point remove a previously declared activity component that
@@ -17746,6 +17749,44 @@ public class PackageManagerService extends IPackageManager.Stub {
                 (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
         if (tm != null) {
             tm.processThemeResources(pkgName);
+        }
+    }
+
+    /**
+     * Makes sure resources and idmaps for themes that are applied are up to date.  This should only
+     * impact boots when something on /system has changed.
+     */
+    private void processAppliedThemes() {
+        ThemeConfig themeConfig = ThemeConfig.getBootTheme(mContext.getContentResolver());
+        if (themeConfig == null) return;
+
+        // gather up all the themes applied and then process them
+        Set<String> themesToProcess = new ArraySet<String>();
+        // process theme set for icons
+        if (themeConfig.getIconPackPkgName() != null) {
+            themesToProcess.add(themeConfig.getIconPackPkgName());
+        }
+        // process theme set for non-app specific overlays
+        if (themeConfig.getOverlayPkgName() != null) {
+            themesToProcess.add(themeConfig.getOverlayPkgName());
+        }
+        // process theme set for status bar
+        if (themeConfig.getOverlayForStatusBar() != null) {
+            themesToProcess.add(themeConfig.getOverlayForStatusBar());
+        }
+        // process theme set for navigation bar
+        if (themeConfig.getOverlayForNavBar() != null) {
+            themesToProcess.add(themeConfig.getOverlayForNavBar());
+        }
+        // process themes set for specific apps
+        Map<String, ThemeConfig.AppTheme> appThemesMap = themeConfig.getAppThemes();
+        for (String themePkgName : appThemesMap.keySet()) {
+            themesToProcess.add(themePkgName);
+        }
+
+        // now start the processing
+        for (String themePkgName : themesToProcess) {
+            processThemeResources(themePkgName);
         }
     }
 
