@@ -54,6 +54,8 @@ typedef struct dlLibHandler {
     void *dlhandle;
     void (*startActivity)(const char *, int *);
     void (*resumeActivity)(const char *);
+    void (*pauseActivity)(const char *);
+    void (*stopActivity)(const char *);
     void (*init)(void);
     void (*deinit)(void);
     void (*startProcessActivity)(const char *, int);
@@ -65,12 +67,13 @@ typedef struct dlLibHandler {
  * library -both handlers for Start and Resume events.
  */
 static dlLibHandler mDlLibHandlers[] = {
-    {NULL, NULL, NULL, NULL, NULL, NULL,
+    {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
      "ro.vendor.at_library"},
-    {NULL, NULL, NULL, NULL, NULL, NULL,
-     "ro.vendor.gt_library"}
+    {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+     "ro.vendor.gt_library"},
 };
 
+static size_t gTotalNumLibs = 0;
 // ----------------------------------------------------------------------------
 
 static void
@@ -81,7 +84,7 @@ com_android_internal_app_ActivityTrigger_native_at_init()
     bool errored = false;
     size_t numlibs = 0;
 
-    numlibs = sizeof (mDlLibHandlers) / sizeof (*mDlLibHandlers);
+    gTotalNumLibs = numlibs = sizeof (mDlLibHandlers) / sizeof (*mDlLibHandlers);
 
     for(size_t i = 0; i < numlibs; i++) {
         errored = false;
@@ -116,6 +119,18 @@ com_android_internal_app_ActivityTrigger_native_at_init()
             }
         }
         if (!errored) {
+            *(void **) (&mDlLibHandlers[i].pauseActivity) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_pause");
+            if ((rc = dlerror()) != NULL) {
+                errored = true;
+            }
+        }
+        if (!errored) {
+            *(void **) (&mDlLibHandlers[i].stopActivity) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_stop");
+            if ((rc = dlerror()) != NULL) {
+                errored = true;
+            }
+        }
+        if (!errored) {
             *(void **) (&mDlLibHandlers[i].init) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_init");
             if ((rc = dlerror()) != NULL) {
                 errored = true;
@@ -131,11 +146,14 @@ com_android_internal_app_ActivityTrigger_native_at_init()
         if (errored) {
             mDlLibHandlers[i].startActivity  = NULL;
             mDlLibHandlers[i].resumeActivity = NULL;
+            mDlLibHandlers[i].pauseActivity  = NULL;
+            mDlLibHandlers[i].stopActivity = NULL;
             mDlLibHandlers[i].startProcessActivity = NULL;
             if (mDlLibHandlers[i].dlhandle) {
                 dlclose(mDlLibHandlers[i].dlhandle);
                 mDlLibHandlers[i].dlhandle = NULL;
             }
+            gTotalNumLibs = 0;
         } else {
             (*mDlLibHandlers[i].init)();
         }
@@ -151,6 +169,8 @@ com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject c
         if (mDlLibHandlers[i].dlhandle) {
             mDlLibHandlers[i].startActivity  = NULL;
             mDlLibHandlers[i].resumeActivity = NULL;
+            mDlLibHandlers[i].pauseActivity  = NULL;
+            mDlLibHandlers[i].stopActivity = NULL;
             mDlLibHandlers[i].startProcessActivity = NULL;
 
             *(void **) (&mDlLibHandlers[i].deinit) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_deinit");
@@ -162,6 +182,7 @@ com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject c
             mDlLibHandlers[i].dlhandle = NULL;
         }
     }
+    gTotalNumLibs = 0;
 }
 
 static void
@@ -210,11 +231,40 @@ com_android_internal_app_ActivityTrigger_native_at_resumeActivity(JNIEnv *env, j
     }
 }
 
+static void
+com_android_internal_app_ActivityTrigger_native_at_pauseActivity(JNIEnv *env, jobject clazz, jstring activity)
+{
+    for(size_t i = 0; i < gTotalNumLibs; i++){
+        if(mDlLibHandlers[i].pauseActivity && activity) {
+            const char *actStr = env->GetStringUTFChars(activity, NULL);
+            if ( NULL != actStr) {
+                (*mDlLibHandlers[i].pauseActivity)(actStr);
+                env->ReleaseStringUTFChars(activity, actStr);
+            }
+        }
+    }
+}
+
+static void
+com_android_internal_app_ActivityTrigger_native_at_stopActivity(JNIEnv *env, jobject clazz, jstring activity)
+{
+    for(size_t i = 0; i < gTotalNumLibs; i++){
+        if(mDlLibHandlers[i].stopActivity && activity) {
+            const char *actStr = env->GetStringUTFChars(activity, NULL);
+            if (NULL != actStr) {
+                (*mDlLibHandlers[i].stopActivity)(actStr);
+                env->ReleaseStringUTFChars(activity, actStr);
+            }
+        }
+    }
+}
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
     {"native_at_startActivity",  "(Ljava/lang/String;I)I", (void *)com_android_internal_app_ActivityTrigger_native_at_startActivity},
     {"native_at_resumeActivity", "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_resumeActivity},
+    {"native_at_pauseActivity", "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_pauseActivity},
+    {"native_at_stopActivity", "(Ljava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_stopActivity},
     {"native_at_deinit",         "()V",                   (void *)com_android_internal_app_ActivityTrigger_native_at_deinit},
     {"native_at_startProcessActivity", "(Ljava/lang/String;I)V", (void *)com_android_internal_app_ActivityTrigger_native_at_startProcessActivity},
 };

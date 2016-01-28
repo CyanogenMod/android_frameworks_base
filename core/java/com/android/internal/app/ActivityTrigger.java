@@ -88,8 +88,28 @@ public class ActivityTrigger
         native_at_resumeActivity(activity);
     }
 
+    public void activityPauseTrigger(Intent intent, ActivityInfo acInfo, ApplicationInfo appInfo) {
+        ComponentName cn = intent.getComponent();
+        String activity = null;
+        Log.d(TAG, "ActivityTrigger activityPauseTrigger ");
+        if (null != cn && null != appInfo)
+            activity = cn.flattenToString() + "/" + appInfo.versionCode;
+        native_at_pauseActivity(activity);
+    }
+
+    public void activityStopTrigger(Intent intent, ActivityInfo acInfo, ApplicationInfo appInfo) {
+        ComponentName cn = intent.getComponent();
+        String activity = null;
+        Log.d(TAG, "ActivityTrigger activityStopTrigger ");
+        if (null != cn && null != appInfo)
+            activity = cn.flattenToString() + "/" + appInfo.versionCode;
+        native_at_stopActivity(activity);
+    }
+
     private native int native_at_startActivity(String activity, int flags);
     private native void native_at_resumeActivity(String activity);
+    private native void native_at_pauseActivity(String activity);
+    private native void native_at_stopActivity(String activity);
     private native void native_at_deinit();
     private native void native_at_startProcessActivity(String process, int pid);
 }

@@ -1105,6 +1105,9 @@ final class ActivityStack {
 
         if (DEBUG_STATES) Slog.v(TAG_STATES, "Moving to PAUSING: " + prev);
         else if (DEBUG_PAUSE) Slog.v(TAG_PAUSE, "Start pausing: " + prev);
+
+        mActivityTrigger.activityPauseTrigger(prev.intent, prev.info, prev.appInfo);
+
         mResumedActivity = null;
         mPausingActivity = prev;
         mLastPausedActivity = prev;
@@ -3246,11 +3249,15 @@ final class ActivityStack {
             r.resumeKeyDispatchingLocked();
             try {
                 r.stopped = false;
+
                 if (DEBUG_STATES) Slog.v(TAG_STATES,
                         "Moving to STOPPING: " + r + " (stop requested)");
                 r.state = ActivityState.STOPPING;
                 if (DEBUG_VISIBILITY) Slog.v(TAG_VISIBILITY,
                         "Stopping visible=" + r.visible + " for " + r);
+
+                mActivityTrigger.activityStopTrigger(r.intent, r.info, r.appInfo);
+
                 if (!r.visible) {
                     mWindowManager.setAppVisibility(r.appToken, false);
                 }
