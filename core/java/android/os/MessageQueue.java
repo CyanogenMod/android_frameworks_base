@@ -338,6 +338,7 @@ public final class MessageQueue {
                     if (now < msg.when) {
                         // Next message is not ready.  Set a timeout to wake up when it is ready.
                         nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE);
+						msg = null;
                     } else {
                         // Got a message.
                         mBlocked = false;
@@ -364,9 +365,8 @@ public final class MessageQueue {
 
                 // If first time idle, then get the number of idlers to run.
                 // Idle handles only run if the queue is empty or if the first message
-                // in the queue (possibly a barrier) is due to be handled in the future.
-                if (pendingIdleHandlerCount < 0
-                        && (mMessages == null || now < mMessages.when)) {
+                // in the queue is due to be handled in the future.
+                if (pendingIdleHandlerCount < 0 && msg == null) {
                     pendingIdleHandlerCount = mIdleHandlers.size();
                 }
                 if (pendingIdleHandlerCount <= 0) {
