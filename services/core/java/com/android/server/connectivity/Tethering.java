@@ -36,8 +36,11 @@ import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.NetworkUtils;
 import android.net.RouteInfo;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiDevice;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.INetworkManagementService;
 import android.os.Looper;
 import android.os.Message;
@@ -164,12 +167,16 @@ public class Tethering extends BaseNetworkObserver {
     private static final int DNSMASQ_POLLING_INTERVAL = 1000;
     private static final int DNSMASQ_POLLING_MAX_TIMES = 10;
 
+    private long mWiFiApInactivityTimeout;
+    private final Handler mHandler;
+
     public Tethering(Context context, INetworkManagementService nmService,
             INetworkStatsService statsService, Looper looper) {
         mContext = context;
         mNMService = nmService;
         mStatsService = statsService;
         mLooper = looper;
+        mHandler = new Handler(mLooper);
 
         mPublicSync = new Object();
 
@@ -269,6 +276,18 @@ public class Tethering extends BaseNetworkObserver {
                     sm = new TetherInterfaceSM(iface, mLooper, usb);
                     mIfaces.put(iface, sm);
                     sm.start();
+                    if (isWifi(iface)) {
+                        // check if the user has specified an inactivity timeout for wifi AP and
+                        // if so schedule the timeout
+                        final WifiManager wm =
+                                (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+                        final WifiConfiguration apConfig = wm.getWifiApConfiguration();
+                        mWiFiApInactivityTimeout =
+                                apConfig != null ? apConfig.wifiApInactivityTimeout : 0;
+                        if (mWiFiApInactivityTimeout > 0 && mL2ConnectedDeviceMap.size() == 0) {
+                            scheduleInactivityTimeout();
+                        }
+                    }
                 }
             } else {
                 if (isUsb(iface)) {
@@ -278,6 +297,9 @@ public class Tethering extends BaseNetworkObserver {
                 } else if (sm != null) {
                     sm.sendMessage(TetherInterfaceSM.CMD_INTERFACE_DOWN);
                     mIfaces.remove(iface);
+                    if (isWifi(iface)) {
+                        cancelInactivityTimeout();
+                    }
                 }
             }
         }
@@ -428,6 +450,29 @@ public class Tethering extends BaseNetworkObserver {
         return result;
     }
 
+    private final Runnable mDisableWifiApRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (VDBG) Log.d(TAG, "Turning off hotpost due to inactivity");
+            final WifiManager wifiManager =
+                    (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            wifiManager.setWifiApEnabled(null, false);
+        }
+    };
+
+    private void scheduleInactivityTimeout() {
+        if (mWiFiApInactivityTimeout > 0) {
+            if (VDBG) Log.d(TAG, "scheduleInactivityTimeout: " + mWiFiApInactivityTimeout);
+            mHandler.removeCallbacks(mDisableWifiApRunnable);
+            mHandler.postDelayed(mDisableWifiApRunnable, mWiFiApInactivityTimeout);
+        }
+    }
+
+    private void cancelInactivityTimeout() {
+        if (VDBG) Log.d(TAG, "cancelInactivityTimeout");
+        mHandler.removeCallbacks(mDisableWifiApRunnable);
+    }
+
     /*
      * DnsmasqThread is used to read the Device info from dnsmasq.
      */
@@ -511,10 +556,15 @@ public class Tethering extends BaseNetworkObserver {
                     new DnsmasqThread(this, device,
                         DNSMASQ_POLLING_INTERVAL, DNSMASQ_POLLING_MAX_TIMES).start();
                 }
+                cancelInactivityTimeout();
             } else if (device.deviceState == WifiDevice.DISCONNECTED) {
                 mL2ConnectedDeviceMap.remove(device.deviceAddress);
                 mConnectedDeviceMap.remove(device.deviceAddress);
                 sendTetherConnectStateChangedBroadcast();
+                // schedule inactivity timeout if non-zero and no more devices are connected
+                if (mWiFiApInactivityTimeout > 0 && mL2ConnectedDeviceMap.size() == 0) {
+                    scheduleInactivityTimeout();
+                }
             }
         } catch (IllegalArgumentException ex) {
             Log.e(TAG, "WifiDevice IllegalArgument: " + ex);
