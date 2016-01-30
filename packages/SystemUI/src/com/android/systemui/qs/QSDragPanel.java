@@ -199,7 +199,9 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 } else {
                     final int adjustedPosition = mEditing ? position - 1 : position;
                     QSPage page = mPages.get(adjustedPosition);
-                    container.addView(page);
+                    if (!page.isAttachedToWindow()) {
+                        container.addView(page);
+                    }
                     return page;
                 }
             }
