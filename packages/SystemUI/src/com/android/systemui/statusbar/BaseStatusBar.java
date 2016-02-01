@@ -1942,7 +1942,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                 null /* admin */, mCurrentUserId);
         final boolean allowedByDpm = (dpmFlags
                 & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_NOTIFICATIONS) == 0;
-        setShowLockscreenNotifications(show && allowedByDpm);
+        final LockPatternUtils lockPatternUtils = new LockPatternUtils(mContext);
+        final boolean secure = lockPatternUtils.isSecure();
+        setShowLockscreenNotifications((show || !secure) && allowedByDpm);
     }
 
     protected abstract void haltTicker();
