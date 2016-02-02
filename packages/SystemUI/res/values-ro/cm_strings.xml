@@ -45,8 +45,11 @@
   <string name="led_notification_title">Setări de lumină</string>
   <string name="qs_tile_edit_header_instruction">Apăsați și țineți apăsate plăcuțele pentru a rearanja</string>
   <string name="quick_settings_edit_label">Editare plăcuțe</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Nu se poate șterge plăcuța Editare</string>
   <string name="quick_settings_title_header">Antet</string>
   <string name="quick_settings_title_tiles">Plăcuțe</string>
+  <string name="quick_settings_title_show_weather">Arată vremea</string>
+  <string name="quick_settings_title_show_brightness_slider">Arată glisorul de luminozitate</string>
   <string name="quick_settings_custom_tile_detail_title">Plăcuță personalizată</string>
   <string name="quick_settings_remove">Eliminare plăcuță</string>
   <string name="quick_settings_network_adb_label">ADB prin rețea</string>
@@ -83,4 +86,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Raportarea locației modificată în modul economisire baterie.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Raportarea locației modificată în modul doar senzori.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Raportarea locației modificată în modul precizie ridicată.</string>
+  <string name="quick_settings_tiles_category_system">Plăcuțe sistem</string>
+  <string name="quick_settings_tiles_add_tiles">Adaugă o plăcuță</string>
+  <string name="hotspot_apm_message">Nu se poate conecta la rețele mobile în timp ce modul Avion este activat. Dezactivați modul Avion și încercați din nou.</string>
 </resources>

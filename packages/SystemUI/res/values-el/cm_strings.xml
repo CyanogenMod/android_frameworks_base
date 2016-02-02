@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Επικεφαλίδα</string>
   <string name="quick_settings_title_tiles">Πλακίδια</string>
   <string name="quick_settings_title_show_weather">Εμφάνιση καιρού</string>
+  <string name="quick_settings_title_show_brightness_slider">Εμφάνιση ρυθμιστικού φωτεινότητας</string>
   <string name="quick_settings_title_enlarge_first_row">Μεγέθυνση της πρώτης γραμμής</string>
   <string name="screen_pinning_description_no_navbar">Αυτό κλειδώνει την συγκεκριμένη οθόνη μέχρι να την ξεκαρφιτσώσετε. Αγγίξτε και κρατήστε πατημένο το πλήκτρο Πίσω για ξεκαρφίτσωμα.</string>
   <string name="quick_settings_custom_tile_detail_title">Προσαρμοσμένο πλακίδιο</string>

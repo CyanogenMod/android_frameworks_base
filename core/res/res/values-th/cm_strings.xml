@@ -154,4 +154,6 @@
   <string name="tethered_notification_no_device_message">ไม่มีอุปกรณ์เชื่อมต่อ</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
+  <string name="notify_package_component_protected_title">การเปิดกิจจรรมถูกบล็อก</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> ถูกป้องกันจากการเปิด แตะเพื่อยืนยันและเปิดแอป</string>
 </resources>

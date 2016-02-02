@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">헤더</string>
   <string name="quick_settings_title_tiles">타일</string>
   <string name="quick_settings_title_show_weather">날씨 표시</string>
+  <string name="quick_settings_title_show_brightness_slider">화면 밝기 조정 표시</string>
   <string name="quick_settings_title_enlarge_first_row">첫번째 타일을 크게</string>
   <string name="screen_pinning_description_no_navbar">고정을 해제할 때까지 계속 표시합니다. 뒤로 버튼을 계속 눌러 고정을 해제하세요.</string>
   <string name="quick_settings_custom_tile_detail_title">개인설정 타일</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">위치 보고가 높은 정확도 모드로 바뀜.</string>
   <string name="quick_settings_tiles_category_system">시스템 타일</string>
   <string name="quick_settings_tiles_add_tiles">타일 추가</string>
+  <string name="hotspot_apm_message">비행기 모드가 활성화되어 있어 모바일 네트워크에 연결할 수 없습니다. 비행기 모드를 해제하고 다시 시도하세요.</string>
 </resources>

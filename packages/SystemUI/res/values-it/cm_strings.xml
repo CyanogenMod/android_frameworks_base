@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Intestazione</string>
   <string name="quick_settings_title_tiles">Tile</string>
   <string name="quick_settings_title_show_weather">Mostra meteo</string>
+  <string name="quick_settings_title_show_brightness_slider">Visualizza selettore luminosità</string>
   <string name="quick_settings_title_enlarge_first_row">Allarga la prima riga</string>
   <string name="screen_pinning_description_no_navbar">Tienilo in vista fino a quando non sblocchi. Tieni premuto il tasto Indietro per sbloccare.</string>
   <string name="quick_settings_custom_tile_detail_title">Tile personalizzato</string>

@@ -135,4 +135,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Modo de localização alterado para GPS, Wi-Fi e redes móveis.</string>
   <string name="quick_settings_tiles_category_system">Botões de sistema</string>
   <string name="quick_settings_tiles_add_tiles">Adicionar um botão</string>
+  <string name="hotspot_apm_message">Não é possível se conectar a redes móveis enquanto o Modo Avião estiver ativado. Desative o modo avião e tente novamente.</string>
 </resources>

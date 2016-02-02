@@ -122,6 +122,7 @@
   <string name="app_ops_use_voice_volume">controlează volumul apelului de voce</string>
   <string name="app_ops_write_mms">scrie un mesaj MMS</string>
   <string name="app_ops_write_sms">scrie un mesaj SMS</string>
+  <string name="app_ops_add_voicemail">adaugă un mesaj vocal</string>
   <string name="app_ops_read_phone_state">citește starea telefonului</string>
   <string name="app_ops_scan_wifi">scanează rețelele Wi-Fi</string>
   <string name="app_ops_change_wallpaper">schimbă imaginea de fundal</string>

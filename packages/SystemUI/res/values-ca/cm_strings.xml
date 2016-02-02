@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Capçalera</string>
   <string name="quick_settings_title_tiles">Cel·les</string>
   <string name="quick_settings_title_show_weather">Mostra el temps</string>
+  <string name="quick_settings_title_show_brightness_slider">Mostra la barra liscant de brillantor</string>
   <string name="quick_settings_title_enlarge_first_row">Engrandeix la primera fila</string>
   <string name="screen_pinning_description_no_navbar">Això ho manté a la vista fins que el desancoris. Toca i aguanta el botó Enrera per desancorar.</string>
   <string name="quick_settings_custom_tile_detail_title">Cel·la personalitzada</string>

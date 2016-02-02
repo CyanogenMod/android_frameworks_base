@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Ylärivi</string>
   <string name="quick_settings_title_tiles">Tiilet</string>
   <string name="quick_settings_title_show_weather">Näytä sää</string>
+  <string name="quick_settings_title_show_brightness_slider">Näytä kirkkauden liukusäädin</string>
   <string name="quick_settings_title_enlarge_first_row">Pienennä ensimmäinen rivi</string>
   <string name="screen_pinning_description_no_navbar">Tämä pitää sen näkyvissä, kunnes poistat kiinnityksen. Paina ja pidä Takasin-näppäintä pohjassa irrottaaksesi.</string>
   <string name="quick_settings_custom_tile_detail_title">Mukautettu tiili</string>
@@ -133,4 +134,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Sijaintitila asetettu virransäästötilaan.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Sijaintitila asetettu vain laite-tilaan.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Sijaintitila asetettu korkean tarkkuuden tilaan.</string>
+  <string name="quick_settings_tiles_category_system">Järjestelmätiilet</string>
+  <string name="quick_settings_tiles_add_tiles">Lisää tiili</string>
+  <string name="hotspot_apm_message">Yhteyden muodostaminen mobiiliverkkoihin lentokonetilan aikana ei onnistu. Poista lentokonetila käytöstä ja yritä uudelleen.</string>
 </resources>
