@@ -66,6 +66,7 @@ modifiera det tema som du har tillämpat.</string>
   <string name="theme_reset_notification_body">Systemtemat kommer återställas på grund av att appen kraschat flera gånger.</string>
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ingen</string>
+  <string name="notify_turn_wifi_off_title">Inaktivera Wi\u2011Fi</string>
   <string name="permlab_changePrivacyGuardState">aktivera eller inaktivera integritetsskydd</string>
   <string name="permdesc_changePrivacyGuardState">Tillåter appen att ändra huruvida en annan app körs med integritetsskydd. När en app körs med integritetsskydd har den ingen tillgång till personlig data som kontakter, samtalslistor och meddelanden.</string>
   <string name="privacy_guard_notification">Integritetsskydd aktivt</string>
@@ -110,6 +111,7 @@ modifiera det tema som du har tillämpat.</string>
   <string name="app_ops_toggle_bluetooth">växla Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">växla mobildata</string>
   <string name="app_ops_toggle_nfc">växla NFC</string>
+  <string name="app_ops_toggle_wifi">växla Wi\u2011Fi</string>
   <string name="app_ops_use_alarm_volume">kontrollera alarmvolym</string>
   <string name="app_ops_use_audio_focus">kontrollera ljudfokus</string>
   <string name="app_ops_use_bluetooth_volume">kontrollera Bluetoothvolymen</string>
@@ -122,6 +124,17 @@ modifiera det tema som du har tillämpat.</string>
   <string name="app_ops_use_voice_volume">kontrollera samtalsvolymen</string>
   <string name="app_ops_write_mms">skriva ett MMS</string>
   <string name="app_ops_write_sms">skriva ett SMS</string>
+  <string name="app_ops_add_voicemail">lägg till ett röstmeddelande</string>
+  <string name="app_ops_change_wallpaper">ändra bakgrund</string>
+  <string name="app_ops_assist_screenshot">ta en skärmdump</string>
+  <string name="app_ops_use_body_sensors">använd kroppssensorer</string>
+  <string name="app_ops_read_cell_broadcasts">läs mobila sändningar</string>
+  <string name="app_ops_mock_location">ange skenplats</string>
+  <string name="app_ops_read_external_storage">läs extern lagring</string>
+  <string name="app_ops_write_external_storage">skriv extern lagring</string>
+  <string name="app_ops_turn_on_screen">aktivera skärmen</string>
+  <string name="app_ops_get_accounts">hämta enhetskonton</string>
+  <string name="app_ops_wifi_change">ändra Wi\u2011Fi status</string>
   <string name="app_ops_su">få root-åtkomst</string>
   <string name="lock_to_app_toast_no_navbar">För att frigöra denna skärm, tryck och håll nere Bakåt-knappen.</string>
   <string name="live_display_auto">Automatisk</string>

@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">ヘッダー</string>
   <string name="quick_settings_title_tiles">タイル</string>
   <string name="quick_settings_title_show_weather">天気を表示</string>
+  <string name="quick_settings_title_show_brightness_slider">明るさスライダーを表示</string>
   <string name="quick_settings_title_enlarge_first_row">1行目を拡大</string>
   <string name="screen_pinning_description_no_navbar">固定を解除するまで表示し続けます。固定を解除するには戻るボタンを押し続けます。</string>
   <string name="quick_settings_custom_tile_detail_title">カスタムタイル</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">位置情報レポートが高精度モードに変更されました。</string>
   <string name="quick_settings_tiles_category_system">システムのタイル</string>
   <string name="quick_settings_tiles_add_tiles">タイルを追加</string>
+  <string name="hotspot_apm_message">機内モードが有効になっている間はモバイルネットワークに接続することはできません。機内モードを無効にしてから再試行してください。</string>
 </resources>

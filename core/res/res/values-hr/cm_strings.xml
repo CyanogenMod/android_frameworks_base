@@ -155,4 +155,5 @@
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezan uređaj</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> povezanih uređaja</string>
   <string name="notify_package_component_protected_title">Blokirana aktivnost pokretanja</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> je zaštićena od pokretanja. Dodirnite za potvrdu i pokrenite aplikaciju.</string>
 </resources>

@@ -110,6 +110,7 @@
   <string name="app_ops_toggle_bluetooth">tænde/slukke Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">tænde/slukke mobildata</string>
   <string name="app_ops_toggle_nfc">NFC til/fra</string>
+  <string name="app_ops_toggle_wifi">Wi-Fi til/fra</string>
   <string name="app_ops_use_alarm_volume">kontrollere lydstyrken for alarmer</string>
   <string name="app_ops_use_audio_focus">kontrollere lydfokus</string>
   <string name="app_ops_use_bluetooth_volume">kontrollere lydstyrken for Bluetooth</string>
@@ -122,6 +123,10 @@
   <string name="app_ops_use_voice_volume">styre lydstyrken for stemmeopkald</string>
   <string name="app_ops_write_mms">skrive en MMS-besked</string>
   <string name="app_ops_write_sms">skrive en SMS-besked</string>
+  <string name="app_ops_use_fingerprint">brug fingeraftryk</string>
+  <string name="app_ops_add_voicemail">tilføj en voicemail</string>
+  <string name="app_ops_scan_wifi">skan Wi-Fi-netværk</string>
+  <string name="app_ops_change_wallpaper">skift baggrund</string>
   <string name="app_ops_su">få root-adgang</string>
   <string name="lock_to_app_toast_no_navbar">For at frigøre denne skærm, tryk og hold Tilbage-knappen nede.</string>
   <string name="live_display_auto">Automatisk</string>

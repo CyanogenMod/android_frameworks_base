@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Заглавље</string>
   <string name="quick_settings_title_tiles">Плочице</string>
   <string name="quick_settings_title_show_weather">Покажи време</string>
+  <string name="quick_settings_title_show_brightness_slider">Прикажи клизач оветљености</string>
   <string name="quick_settings_title_enlarge_first_row">Увећајте први ред</string>
   <string name="screen_pinning_description_no_navbar">Ово задржава преглед док га не уклониш. Додирни и држи дугме за назад да уклониш.</string>
   <string name="quick_settings_custom_tile_detail_title">Промени назив</string>

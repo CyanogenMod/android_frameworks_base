@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">标题</string>
   <string name="quick_settings_title_tiles">瓷块</string>
   <string name="quick_settings_title_show_weather">显示天气</string>
+  <string name="quick_settings_title_show_brightness_slider">显示亮度滑块</string>
   <string name="quick_settings_title_enlarge_first_row">扩大第一行</string>
   <string name="screen_pinning_description_no_navbar">这将会固定显示此屏幕，直到您取消固定为止。触摸并按住返回键即可取消固定。</string>
   <string name="quick_settings_custom_tile_detail_title">自定义瓷片</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">位置报告已修改为准确度高模式。</string>
   <string name="quick_settings_tiles_category_system">系统磁块</string>
   <string name="quick_settings_tiles_add_tiles">添加磁块</string>
+  <string name="hotspot_apm_message">飞行模式启用时无法连接到移动网络。请禁用飞行模式然后再试一次。</string>
 </resources>

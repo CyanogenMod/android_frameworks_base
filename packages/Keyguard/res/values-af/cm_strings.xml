@@ -16,5 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">SIM/RUIM Perso gesluit</string>
   <string name="lockscreen_sim_error_message_short">Ongeldige kaart.</string>
+  <string name="kg_invalid_sim_length">Fout: Invoer is korter as die minimum lengte</string>
 </resources>

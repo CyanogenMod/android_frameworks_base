@@ -135,4 +135,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Zgłaszanie lokalizacji przeszło w tryb wysokiej dokładności.</string>
   <string name="quick_settings_tiles_category_system">Kafelki systemowe</string>
   <string name="quick_settings_tiles_add_tiles">Dodaj kafelek</string>
+  <string name="hotspot_apm_message">Sieć komórkowa jest niedostępna, podczas gdy włączony jest Tryb samolotowy. Wyłącz Tryb samolotowy i spróbuj ponownie.</string>
 </resources>
