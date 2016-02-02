@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">בורר שיטות קלט</string>
   <string name="dynamic_qs_tile_su_label">גישת שורש</string>
   <string name="fingerprint_try_again_hint">אנא סרוק שנית</string>
+  <string name="fingerprint_try_again_hint_too_many">יותר מדי ניסיונות לקריאת טביעת אצבע. נסו שוב מאוחר יותר.</string>
   <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">לא נמצאו פריטים</string>
   <string name="play_queue_extention">הצג תור השמעה</string>

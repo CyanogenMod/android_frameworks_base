@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">Выбор метода ввода</string>
   <string name="dynamic_qs_tile_su_label">Суперпользователь</string>
   <string name="fingerprint_try_again_hint">Повторите сканирование</string>
+  <string name="fingerprint_try_again_hint_too_many">Слишком много попыток разблокировки по отпечатку пальца. Повторите попытку позднее.</string>
   <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Элементы не найдены</string>
   <string name="play_queue_extention">Показать очередь воспроизведения</string>

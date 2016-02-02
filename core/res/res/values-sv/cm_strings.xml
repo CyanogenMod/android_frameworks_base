@@ -136,6 +136,8 @@ modifiera det tema som du har tillämpat.</string>
   <string name="perf_profile_pwrsv">Energisparläge</string>
   <string name="perf_profile_bal">Balanserad</string>
   <string name="perf_profile_perf">Hög prestanda</string>
+  <string name="perf_profile_bias_power">Effektivitet</string>
+  <string name="perf_profile_bias_perf">Snabb</string>
   <string name="theme_install_error_title">Kunde inte installera tema</string>
   <string name="theme_install_error_message">%s kunde inte installeras</string>
   <string name="theme_reset_notification_title">Återställning av tema</string>
@@ -208,4 +210,7 @@ modifiera det tema som du har tillämpat.</string>
   <string name="permlab_resetBatteryStats">återställa batteristatistik</string>
   <string name="permdesc_resetBatteryStats">Tillåter en app att återställa nuvarande lågnivådata för batterianvändning.</string>
   <string name="silent_mode_priority">Prioritet</string>
+  <string name="silent_mode_none">Ingen</string>
+  <string name="notify_turn_wifi_off_title">Inaktivera Wi\u2011Fi</string>
+  <string name="permlab_thirdPartyKeyguard">tredjepartslåsskärm</string>
 </resources>

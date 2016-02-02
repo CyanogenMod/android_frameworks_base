@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">输入法选择器</string>
   <string name="dynamic_qs_tile_su_label">Root 授权</string>
   <string name="fingerprint_try_again_hint">请再次扫描</string>
+  <string name="fingerprint_try_again_hint_too_many">太多次指纹尝试。请稍后再试。</string>
   <string name="accessibility_dock_battery_level">底座电池百分之 <xliff:g id="number">%d</xliff:g>。</string>
   <string name="quick_settings_custom_qs_detail_empty_text">未找到项目</string>
   <string name="play_queue_extention">显示播放队列</string>

@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим батареї: збереження енергії.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Режим батареї: збалансований режим.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Режим батареї: висока продуктивність.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Енергоспоживання: енергоефективне.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Енергоспоживання: продуктивне.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Акумулятор тепер в режимі економії енергії.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим акумулятора змінено на збалансований.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим акумулятора змінено для високої продуктивності.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Енергоспоживання змінено на ефективне.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Енергоспоживання змінено на продуктивне.</string>
   <string name="accessibility_quick_settings_profiles_off">Профілі вимкнено.</string>
   <string name="accessibility_quick_settings_profiles">Профіль: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Профілі вимкнено.</string>
@@ -94,7 +98,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">Прив’язку USB увімкнено.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-модем вимкнено.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-модем увімкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Енергозбереження вимкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Енергозбереження увімкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Енергозбереження вимкнено.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Енергозбереження увімкнено.</string>
   <string name="accessibility_quick_settings_visualizer">Візуалізація.</string>
+  <string name="accessibility_quick_settings_volume_panel">Панель гучності.</string>
   <string name="accessibility_dpad_left">Курсор ліворуч</string>
   <string name="accessibility_dpad_right">Курсор праворуч</string>
   <string name="quick_settings_mobile_data_label">Мобільні дані</string>
@@ -121,7 +130,9 @@
   <string name="quick_settings_heads_up_label">Спливаючі сповіщення</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_sync_label">Синхронізація</string>
+  <string name="quick_settings_battery_saver_label">Енергозбереження</string>
   <string name="quick_settings_custom_tile_detail_title">Власна плитка</string>
+  <string name="quick_settings_performance_profile_detail_title">Енергоспоживання</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Проведіть вправо для %1$s</string>
   <string name="right_shortcut_hint">Проведіть вліво для %1$s</string>
@@ -161,4 +172,5 @@
   <string name="fingerprint_try_again_hint">Будь-ласка, спробуйте зняти відбиток пальця ще раз</string>
   <string name="accessibility_dock_battery_level">Заряд батареї док-станції <xliff:g id="number">%d</xliff:g> процентів.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Елементів не знайдено</string>
+  <string name="play_queue_extention">Показати чергу відтворення</string>
 </resources>
