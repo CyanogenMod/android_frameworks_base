@@ -88,7 +88,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     public static final boolean DEBUG_DRAG = false;
 
     private static final int MAX_ROW_COUNT = 3;
-    private static final String BROADCAST_TILE_SPEC_PLACEHOLDER = "broadcast_placeholder";
 
     protected final ArrayList<QSPage> mPages = new ArrayList<>();
 
@@ -1796,9 +1795,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 }
             }
 
-            // add broadcast tile
-            mPackageTileMap.get(PACKAGE_ANDROID).add(BROADCAST_TILE_SPEC_PLACEHOLDER);
-
             final List<String> systemTiles = mPackageTileMap.get(PACKAGE_ANDROID);
             Collections.sort(systemTiles);
         }
@@ -1907,9 +1903,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
 
         private String getQSTileLabel(String spec) {
-            if (spec.equals(BROADCAST_TILE_SPEC_PLACEHOLDER)) {
-                return mContext.getText(R.string.broadcast_tile).toString();
-            } else if (QSUtils.isStaticQsTile(spec)) {
+            if (QSUtils.isStaticQsTile(spec)) {
                 int resource = QSTileHost.getLabelResource(spec);
                 return mContext.getText(resource).toString();
             } else if (QSUtils.isDynamicQsTile(spec)) {
@@ -1935,9 +1929,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     if (state != null && state.icon != null) {
                         return state.icon.getDrawable(mContext);
                     }
-                }
-                if (spec.equals(BROADCAST_TILE_SPEC_PLACEHOLDER)) {
-                    return getPackageDrawable(PACKAGE_ANDROID);
                 }
                 return getPackageDrawable(getCustomTilePackage(spec));
             }
@@ -2002,12 +1993,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
                     String spec = getChild(groupPosition, childPosition);
-                    if (spec.equals(BROADCAST_TILE_SPEC_PLACEHOLDER)) {
-                        showBroadcastTileDialog();
-                    } else {
-                        mPanel.add(spec);
-                        mPanel.closeDetail();
-                    }
+                    mPanel.add(spec);
+                    mPanel.closeDetail();
                     return true;
                 }
             });
@@ -2043,25 +2030,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         @Override
         public int getMetricsCategory() {
             return CMMetricsLogger.DONT_LOG;
-        }
-
-        public void showBroadcastTileDialog() {
-            final EditText editText = new EditText(mContext);
-            final AlertDialog d = new AlertDialog.Builder(mContext)
-                    .setTitle(R.string.broadcast_tile)
-                    .setView(editText)
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            String action = editText.getText().toString();
-                            if (isValid(action)) {
-                                mPanel.add(IntentTile.PREFIX + action + ')');
-                                mPanel.closeDetail();
-                            }
-                        }
-                    }).create();
-            SystemUIDialog.makeSystemUIDialog(d);
-            d.show();
         }
 
         private boolean isValid(String action) {
