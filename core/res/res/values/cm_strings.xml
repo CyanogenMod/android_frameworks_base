@@ -160,4 +160,8 @@
 
     <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
     <string name="lock_to_app_toast_no_navbar">To unpin this screen, touch and hold the Back button.</string>
+
+    <!-- Battery fully charged notification -->
+    <string name="notify_battery_fully_charged_title">Battery fully charged</string>
+    <string name="notify_battery_fully_charged_text">Disconnect your device from the charger to improve battery longevity.</string>
 </resources>
