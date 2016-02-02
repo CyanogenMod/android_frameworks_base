@@ -212,7 +212,7 @@ public class RingtonePreference extends Preference implements
         if (mShowDefault) {
             if (getRingtoneType() == RingtoneManager.TYPE_RINGTONE) {
                 ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                    RingtoneManager.getDefaultRingtoneUriBySubId(getSubId()));
+                    RingtoneManager.getActualRingtoneUriBySubId(getContext(), getSubId()));
             } else {
                 ringtonePickerIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                     RingtoneManager.getDefaultUri(getRingtoneType()));
