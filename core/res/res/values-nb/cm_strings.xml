@@ -212,4 +212,5 @@
   <string name="subscription_change_disabled_wifi_ap">Deaktivert Wi-Fi hotspot på grunn av endring i SIM-abbonement</string>
   <string name="notify_turn_wifi_off_title">Deaktiver Wi-Fi</string>
   <string name="permlab_thirdPartyKeyguard">tredjeparts låseskjerm</string>
+  <string name="permdesc_thirdPartyKeyguard">Tillater appen som en usikker låseskjerm.</string>
 </resources>

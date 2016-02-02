@@ -119,7 +119,7 @@
   <string name="quick_settings_profiles_detail_title">Perfils de sistema</string>
   <string name="quick_settings_profiles_disabled">Perfils desactivats</string>
   <string name="quick_settings_compass_label">Brúixola</string>
-  <string name="quick_settings_compass_init">Inicialitzant\u2026</string>
+  <string name="quick_settings_compass_init">S\'està inicialitzant\u2026</string>
   <string name="quick_settings_lockscreen_label">Pantalla de bloqueig</string>
   <string name="quick_settings_lockscreen_label_enforced">Pantalla de bloqueig aplicada</string>
   <string name="quick_settings_network_adb_label">ADB sobre xarxa</string>
@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">Selector de l\'IME</string>
   <string name="dynamic_qs_tile_su_label">Accés Superusuari</string>
   <string name="fingerprint_try_again_hint">Si us plau escanneja una altra vegada</string>
+  <string name="fingerprint_try_again_hint_too_many">Massa intents d\'empremta digital. Intenta-ho més tard.</string>
   <string name="accessibility_dock_battery_level">Acoblament bateria <xliff:g id="number">%d</xliff:g> percent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">No s\'han trobat elements</string>
   <string name="play_queue_extention">Mostra la cua de reproducció</string>

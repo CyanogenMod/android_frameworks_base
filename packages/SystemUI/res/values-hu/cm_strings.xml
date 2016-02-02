@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">IME választó</string>
   <string name="dynamic_qs_tile_su_label">Rendszergazda hozzáférés</string>
   <string name="fingerprint_try_again_hint">Kérjük, szkennelje újra</string>
+  <string name="fingerprint_try_again_hint_too_many">Túl sok ujjlenyomat kísérlet. Próbálja meg később.</string>
   <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> százalék.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nincs találat</string>
   <string name="play_queue_extention">Lejátszási lista megjelenítése</string>

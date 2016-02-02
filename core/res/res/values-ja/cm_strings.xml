@@ -33,10 +33,10 @@
   <string name="permdesc_readThemesDesc">テーマの読み取りや適用しているテーマの特定をアプリに許可します。</string>
   <string name="permlab_writeThemes">テーマの変更</string>
   <string name="permdesc_writeThemesDesc">新しいテーマの挿入や適用しているテーマの変更をアプリに許可します。</string>
-  <string name="permlab_readPhoneBlacklist">携帯電話のブラックリストの読み取り</string>
-  <string name="permdesc_readPhoneBlacklist">着信やメッセージをブロックしている電話番号に関する情報の読み取りをアプリに許可します。</string>
-  <string name="permlab_changePhoneBlacklist">携帯電話のブラックリストの変更</string>
-  <string name="permdesc_changePhoneBlacklist">着信やメッセージをブロックしている電話番号の変更をアプリに許可します。</string>
+  <string name="permlab_readPhoneBlacklist">携帯電話の着信拒否リストの読み取り</string>
+  <string name="permdesc_readPhoneBlacklist">着信やメッセージを拒否している電話番号に関する情報の読み取りをアプリに許可します。</string>
+  <string name="permlab_changePhoneBlacklist">携帯電話の着信拒否リストの変更</string>
+  <string name="permdesc_changePhoneBlacklist">着信やメッセージを拒否している電話番号の変更をアプリに許可します。</string>
   <string name="permlab_changePrivacyGuardState">プライバシーガードを有効/無効にする</string>
   <string name="permdesc_changePrivacyGuardState">他のアプリでプライバシーガードを有効にするかどうかの変更をアプリに許可します。プライバシーガードを有効にしてアプリを実行すると、そのアプリは連絡先、通話履歴、メッセージなどの個人データにアクセスできなくなります。</string>
   <string name="privacy_guard_notification">プライバシーガードが有効です</string>

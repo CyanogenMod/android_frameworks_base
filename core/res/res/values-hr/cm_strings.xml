@@ -21,8 +21,8 @@
   <string name="global_action_choose_profile">Profil</string>
   <string name="profile_none">Ništa</string>
   <string name="global_action_screenshot">Snimak zaslona</string>
-  <string name="permlab_receiveProtectedSms">Primanje zaštićenih SMS poruka</string>
-  <string name="permdesc_receiveProtectedSms">Dopušta aplikaciji primanje dolaznih zaštićenih SMS poruka.</string>
+  <string name="permlab_receiveProtectedSms">primaj zaštićeni SMS</string>
+  <string name="permdesc_receiveProtectedSms">Dopušta aplikaciji da prima dolazeći zaštićeni SMS.</string>
   <string name="permlab_modifyProtectedSmsList">Izmjena popisa zaštićenih SMS poruka</string>
   <string name="permdesc_modifyProtectedSmsList">Dozvoljava aplikaciji izmjenu popisa adresa zaštićenih SMS poruka.</string>
   <string name="permgrouplab_security">Sigurnost</string>

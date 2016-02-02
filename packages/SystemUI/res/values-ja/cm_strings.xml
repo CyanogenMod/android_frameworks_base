@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">入力方法の選択</string>
   <string name="dynamic_qs_tile_su_label">ルートアクセス</string>
   <string name="fingerprint_try_again_hint">もう一度スキャンしてください</string>
+  <string name="fingerprint_try_again_hint_too_many">指紋認証の試行が多すぎます。後で再試行してください。</string>
   <string name="accessibility_dock_battery_level">ホルダーの電池は<xliff:g id="number">%d</xliff:g>パーセントです。</string>
   <string name="quick_settings_custom_qs_detail_empty_text">アイテムが見つかりませんでした</string>
   <string name="play_queue_extention">再生キューを表示</string>

@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">Selettore IME</string>
   <string name="dynamic_qs_tile_su_label">Accesso root</string>
   <string name="fingerprint_try_again_hint">Ripeti la scansione</string>
+  <string name="fingerprint_try_again_hint_too_many">Troppi tentativi d\'impronte effettuati. Riprova più tardi.</string>
   <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nessun elemento trovato</string>
   <string name="play_queue_extention">Visualizza coda di riproduzione</string>

@@ -136,6 +136,8 @@
   <string name="perf_profile_pwrsv">Енергозбереження</string>
   <string name="perf_profile_bal">Баланс</string>
   <string name="perf_profile_perf">Продуктивність</string>
+  <string name="perf_profile_bias_power">Продуктивність</string>
+  <string name="perf_profile_bias_perf">Швидко</string>
   <string name="theme_install_error_title">Не вдалося інсталювати тему</string>
   <string name="theme_install_error_message">не вдалося інсталювати %s</string>
   <string name="theme_reset_notification_title">Тема відключена</string>
@@ -209,4 +211,7 @@
   <string name="permdesc_resetBatteryStats">Дозволити програмі скидати дані про використання акумулятора.</string>
   <string name="silent_mode_priority">Пріоритет</string>
   <string name="silent_mode_none">Немає</string>
+  <string name="subscription_change_disabled_wifi_ap">Точку доступу Wi-Fi вимкнено через зміну SIM-картки</string>
+  <string name="notify_turn_wifi_off_title">Вимкнути Wi-Fi</string>
+  <string name="permlab_thirdPartyKeyguard">Сторонній екран блокування</string>
 </resources>
