@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Fejléc</string>
   <string name="quick_settings_title_tiles">Csempék</string>
   <string name="quick_settings_title_show_weather">Időjárás megjelenítése</string>
+  <string name="quick_settings_title_show_brightness_slider">Fényerő csúszka megjelenítése</string>
   <string name="quick_settings_title_enlarge_first_row">Első sor nagyítása</string>
   <string name="screen_pinning_description_no_navbar">Ez a nézetben tartja, amíg a rögzítést fel nem oldja. Érintse meg és tartsa nyomva a Vissza gombot a rögzítés feloldásához.</string>
   <string name="quick_settings_custom_tile_detail_title">Egyéni csempe</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Helymeghatározás jelentése nagyon pontosra változtatva.</string>
   <string name="quick_settings_tiles_category_system">Rendszer csempék</string>
   <string name="quick_settings_tiles_add_tiles">Csempe hozzáadása</string>
+  <string name="hotspot_apm_message">Nem lehet csatlakozni a mobil hálózatokra, míg a repülőgép üzemmód engedélyezve van. Tiltsa le a repülőgép üzemmódot és próbálja újra.</string>
 </resources>

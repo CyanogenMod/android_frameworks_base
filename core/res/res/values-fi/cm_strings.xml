@@ -154,4 +154,6 @@
   <string name="tethered_notification_no_device_message">Ei kytkettyä laitetta</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> yhdistetty laite</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> yhdistettyä laitetta</string>
+  <string name="notify_package_component_protected_title">Toiminnan käynnistäminen estetty</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> on suojattu sovellus. Napauta todentaaksesi ja käynnistääksesi sovelluksen.</string>
 </resources>

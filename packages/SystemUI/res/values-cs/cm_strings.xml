@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Záhlaví</string>
   <string name="quick_settings_title_tiles">Dlaždice</string>
   <string name="quick_settings_title_show_weather">Zobrazit počasí</string>
+  <string name="quick_settings_title_show_brightness_slider">Zobrazit posuvník jasu</string>
   <string name="quick_settings_title_enlarge_first_row">Zvětšit první řádek</string>
   <string name="screen_pinning_description_no_navbar">Zůstává zobrazeno, dokud není uvolněn. Dotykem a podržením tlačítka Zpět bude provedeno uvolnění.</string>
   <string name="quick_settings_custom_tile_detail_title">Vlastní dlaždice</string>

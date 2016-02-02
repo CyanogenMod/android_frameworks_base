@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">כותרת</string>
   <string name="quick_settings_title_tiles">אריחים</string>
   <string name="quick_settings_title_show_weather">הצג מזג אוויר</string>
+  <string name="quick_settings_title_show_brightness_slider">הצג מד בהירות</string>
   <string name="quick_settings_title_enlarge_first_row">הגדל את השורה הראשונה</string>
   <string name="screen_pinning_description_no_navbar">פעולה זאת תשמור אותו מוצג עד שתבטל את ההצמדה. לחץ והחזק את כפתור \"הקודם\" כדי לבטל את ההצמדה.</string>
   <string name="quick_settings_custom_tile_detail_title">אריח מותאם אישית</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">דיווח מיקום השתנה למצב דיוק גבוה.</string>
   <string name="quick_settings_tiles_category_system">אריחי מערכת</string>
   <string name="quick_settings_tiles_add_tiles">הוסף אריח</string>
+  <string name="hotspot_apm_message">לא ניתן להתחבר לרשתות ניידות כאשר מצב טיסה פעיל. בטל את מצב הטיסה ונסה שנית.</string>
 </resources>

@@ -21,4 +21,5 @@
   <plurals name="kg_password_default_pin_message">
     <item quantity="other">SIM PIN을 입력하십시오. <xliff:g id="number">%d</xliff:g>회 후에는 이동통신사에 연락하여 기기를 잠금 해제해야 합니다.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">오류: 입력한 값이 최소 길이보다 짧음</string>
 </resources>

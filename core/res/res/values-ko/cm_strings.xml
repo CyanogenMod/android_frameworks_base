@@ -154,4 +154,6 @@
   <string name="tethered_notification_no_device_message">연결된 기기 없음</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g>대의 기기가 연결되어 있습니다</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g>대의 기기가 연결되어 있습니다</string>
+  <string name="notify_package_component_protected_title">액티비티 실행 제한됨</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g>은(는) 실행이 제한되어 있습니다. 탭하여 제한을 해제하고 애플리케이션을 실행하세요.</string>
 </resources>

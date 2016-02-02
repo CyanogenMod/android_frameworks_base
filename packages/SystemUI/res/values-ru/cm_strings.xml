@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Заголовок</string>
   <string name="quick_settings_title_tiles">Плитки</string>
   <string name="quick_settings_title_show_weather">Сведения о погоде</string>
+  <string name="quick_settings_title_show_brightness_slider">Показывать регулятор яркости</string>
   <string name="quick_settings_title_enlarge_first_row">Увеличить первый ряд</string>
   <string name="screen_pinning_description_no_navbar">Это приложение останется активным, пока вы не отмените блокировку долгим нажатием кнопки «Назад».</string>
   <string name="quick_settings_custom_tile_detail_title">Пользовательская плитка</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Служба отправки местоположения переключена в режим высокой точности.</string>
   <string name="quick_settings_tiles_category_system">Системные плитки</string>
   <string name="quick_settings_tiles_add_tiles">Добавление плитки</string>
+  <string name="hotspot_apm_message">Подключение к мобильной сети невозможно, пока включён режим полёта. Отключите его, а затем повторите попытку.</string>
 </resources>

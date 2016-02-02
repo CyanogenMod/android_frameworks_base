@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Cabeçalho</string>
   <string name="quick_settings_title_tiles">Mosaicos</string>
   <string name="quick_settings_title_show_weather">Mostrar o tempo</string>
+  <string name="quick_settings_title_show_brightness_slider">Mostrar o controlo deslizante de brilho</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar a primeira linha</string>
   <string name="screen_pinning_description_no_navbar">Isto mantém visível até soltar. Toque e segure o botão Voltar até soltar.</string>
   <string name="quick_settings_custom_tile_detail_title">Mosaicos personalizados</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Modo de localização alterado para alta precisão.</string>
   <string name="quick_settings_tiles_category_system">Mosaicos do sistema</string>
   <string name="quick_settings_tiles_add_tiles">Adicionar um mosaico</string>
+  <string name="hotspot_apm_message">Não é possível ligar-se à rede móvel enquanto o modo de avião estiver ativo. Desative o modo de avião e tente novamente.</string>
 </resources>

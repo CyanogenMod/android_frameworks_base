@@ -154,4 +154,6 @@
   <string name="tethered_notification_no_device_message">Nincs csatlakoztatott készülék</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> csatlakoztatott eszköz</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> csatlakoztatott eszköz</string>
+  <string name="notify_package_component_protected_title">Tevékenység elindítás blokkolva</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> védve van az indításra. Kattintson a hitelesítésére és indítsa el az alkalmazást.</string>
 </resources>

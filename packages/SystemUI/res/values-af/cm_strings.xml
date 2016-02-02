@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Swiep regs vir %1$s</string>
   <string name="right_shortcut_hint">Swiep links vir %1$s</string>
+  <string name="lockscreen_message">Tik \'n ikoon op die linker of regter kant om \'n slot skerm kortpad toe te wys.</string>
+  <string name="lockscreen_default_target">Standaard</string>
   <string name="select_application">Kies program</string>
   <string name="lockscreen_choose_action_title">Kies aksie</string>
   <string name="lockscreen_none_target">Geen</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Vee program data uit</string>
   <string name="advanced_dev_option_force_stop">Dwing stop</string>
   <string name="advanced_dev_option_uninstall">Deïnstalleer</string>
+  <string name="accessibility_notification_brightness">Ligte herdelheidsvlak</string>
   <string name="accessibility_quick_settings_profiles_off">Profiele af.</string>
   <string name="accessibility_quick_settings_profiles">Profiel: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiele afgeskakel.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profiel verander na <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inisialiseer\u2026</string>
+  <string name="led_notification_title">Ligte instellings</string>
+  <string name="led_notification_text">LED liggie word deur instellings gaktiveer</string>
+  <string name="qs_tile_edit_header_instruction">Druk en hou teëls om te herrangskik</string>
+  <string name="quick_settings_edit_label">Redigeer teëls</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Kan nie die redigeerde teël verwyder nie</string>
+  <string name="qs_tiles_reset_confirmation">Herstel vinnige instelling teëls na standaard konfigurasie?</string>
+  <string name="quick_settings_tile_reset_to_default">Herstel na standaard uitleg</string>
+  <string name="quick_settings_title_header">Hoof</string>
+  <string name="quick_settings_title_tiles">Teëls</string>
+  <string name="quick_settings_title_show_weather">Wys weer</string>
+  <string name="quick_settings_title_enlarge_first_row">Vergroot eerste ry</string>
   <string name="screen_pinning_description_no_navbar">Dit hou dit binne sig totdat jy dit ontspeld. Raak en hou die knoppie Terug om te ontspeld.</string>
   <string name="quick_settings_custom_tile_detail_title">Pasgemaakte teël</string>
   <string name="quick_settings_remove">Verwyder teël</string>
@@ -106,6 +122,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay verander na dag modus.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay verander na dag modus.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay verander na buitelug modus.</string>
+  <string name="quick_settings_title_advanced_location">Drie-staat ligging</string>
   <string name="accessibility_quick_settings_location_battery_saving">Liggingverslaggewing: battery besparing.</string>
   <string name="accessibility_quick_settings_location_gps_only">Liggingverslaggewing: sensors alleenlik.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Liggingverslaggewing: hoë akkuraatheid modus.</string>
@@ -116,4 +133,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Plek verslagdoening verander na battery sparing modus.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Plek verslagdoening verander na sensors alleenlik modus.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Plek verslagdoening verander na hoë akkuraatheid modus.</string>
+  <string name="quick_settings_tiles_category_system">Stelsel teëls</string>
+  <string name="quick_settings_tiles_add_tiles">Voeg \'n teël by</string>
+  <string name="hotspot_apm_message">Kan nie aan mobiele netwerke koppel terwyl vliegtuig modus aan is nie. Skakel vliegtuig modus af en probeer weer.</string>
 </resources>

@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Zaglavlje</string>
   <string name="quick_settings_title_tiles">Pločice</string>
   <string name="quick_settings_title_show_weather">Pokaži prognozu</string>
+  <string name="quick_settings_title_show_brightness_slider">Pokaži klizač osvjetljenja</string>
   <string name="quick_settings_title_enlarge_first_row">Povećaj prvi red</string>
   <string name="screen_pinning_description_no_navbar">Ovo drži u pogledu dok ne otkvačite. Dodirnite i držite gumb natrag da bi otkvačili.</string>
   <string name="quick_settings_custom_tile_detail_title">Prilagodljive pločice</string>
@@ -135,4 +136,5 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Prijavljivanje lokacije promijenjeno u način visoke preciznosti.</string>
   <string name="quick_settings_tiles_category_system">Sistemske pločice</string>
   <string name="quick_settings_tiles_add_tiles">Dodaj pločicu</string>
+  <string name="hotspot_apm_message">Nije moguće povezivanje s mobilnim mrežama dok je omogućen način rada u zrakoplovu. Onemogućite način rada u zrakoplovu i pokušajte ponovno.</string>
 </resources>

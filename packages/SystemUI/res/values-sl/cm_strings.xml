@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Glava</string>
   <string name="quick_settings_title_tiles">Ploščice</string>
   <string name="quick_settings_title_show_weather">Prikaži vreme</string>
+  <string name="quick_settings_title_show_brightness_slider">Prikaži drsnik za svetlost</string>
   <string name="quick_settings_title_enlarge_first_row">Povečaj prvo vrstico</string>
   <string name="screen_pinning_description_no_navbar">To jo ohrani prikazano, dokler je ne odpnete. Tapnite in pridržite gumb Nazaj, da jo odpnete.</string>
   <string name="quick_settings_custom_tile_detail_title">Ploščica po meri</string>

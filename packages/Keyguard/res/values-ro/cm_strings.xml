@@ -17,4 +17,5 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="lockscreen_sim_error_message_short">Cartelă SIM incorectă.</string>
+  <string name="kg_invalid_sim_length">Eroare: Introducere mai scurtă decât lungimea minimă</string>
 </resources>

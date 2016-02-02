@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Goiburua</string>
   <string name="quick_settings_title_tiles">Lauzak</string>
   <string name="quick_settings_title_show_weather">Bistaratu eguraldia</string>
+  <string name="quick_settings_title_show_brightness_slider">Bistaratu distira graduatzailea</string>
   <string name="quick_settings_title_enlarge_first_row">Handitu lehen lerroa</string>
   <string name="screen_pinning_description_no_navbar">Honek bistan mantenduko du desiltzatzen duzun arte. Sakatu eta mantendu atzera botoia desiltzatzeko.</string>
   <string name="quick_settings_custom_tile_detail_title">Lauza pertsonalizatua</string>
