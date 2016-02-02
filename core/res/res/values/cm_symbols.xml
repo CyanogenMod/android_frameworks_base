@@ -157,4 +157,9 @@
     <!-- Restricted fingerprint config -->
     <java-symbol type="bool" name="config_fingerprintRestrictedToSystemAndOwner" />
 
+    <!-- Show battery fully charged notification -->
+    <java-symbol type="bool" name="config_showBatteryFullyChargedNotification" />
+    <java-symbol type="string" name="notify_battery_fully_charged_title" />
+    <java-symbol type="string" name="notify_battery_fully_charged_text" />
+
 </resources>
