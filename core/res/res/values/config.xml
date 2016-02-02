@@ -2524,4 +2524,7 @@
          automatically try to pair with it when the device exits tablet mode. -->
     <string translatable="false" name="config_packagedKeyboardName"></string>
     <integer name="config_dayColorTemperature">6500</integer>
+
+    <!-- Show battery fully charged notification -->
+    <bool name="config_showBatteryFullyChargedNotification">false</bool>
 </resources>
