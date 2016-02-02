@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">Výběr IME</string>
   <string name="dynamic_qs_tile_su_label">Root přístup</string>
   <string name="fingerprint_try_again_hint">Prosím nasnímat znovu</string>
+  <string name="fingerprint_try_again_hint_too_many">Příliš mnoho pokusů o otisk prstu. Opakujte akci později.</string>
   <string name="accessibility_dock_battery_level">Baterie doku: <xliff:g id="number">%d</xliff:g>\u0025.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nebyly nalezeny žádné položky</string>
   <string name="play_queue_extention">Zobrazit frontu přehrávání</string>

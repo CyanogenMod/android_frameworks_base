@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">IME-vælger</string>
   <string name="dynamic_qs_tile_su_label">Root-adgang</string>
   <string name="fingerprint_try_again_hint">Scan venligst igen</string>
+  <string name="fingerprint_try_again_hint_too_many">For mange fingeraftryksforsøg. Prøv igen senere.</string>
   <string name="accessibility_dock_battery_level">Dockingstations batteri <xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Ingen emner fundet</string>
   <string name="play_queue_extention">Vis afspillingskø</string>

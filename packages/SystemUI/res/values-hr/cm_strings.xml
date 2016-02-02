@@ -36,7 +36,7 @@
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambijentni zaslon je uključen.</string>
   <string name="accessibility_quick_settings_color_inversion_off">Inverzija boja isključena.</string>
   <string name="accessibility_quick_settings_color_inversion_on">Inverzija boja uključena.</string>
-  <string name="accessibility_quick_settings_compass_off">Kompas ugašen.</string>
+  <string name="accessibility_quick_settings_compass_off">Kompas isključen.</string>
   <string name="accessibility_quick_settings_compass_on">Kompas uključen.</string>
   <string name="accessibility_quick_settings_compass_changed_off">Kompas je isključen.</string>
   <string name="accessibility_quick_settings_compass_changed_on">Kompas je uključen.</string>
@@ -44,14 +44,14 @@
   <string name="accessibility_quick_settings_heads_up_on">Heads up uključen.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up je isključen.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up je uključen.</string>
-  <string name="accessibility_quick_settings_hotspot_off">Wi Fi hotspot je isključen.</string>
-  <string name="accessibility_quick_settings_hotspot_on">Wi Fi hotspot je uključen.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Mobilni hotspot je isključen.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Mobilni hotspot je uključen.</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay isključen.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: auto.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dnevni način.</string>
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: noćni način.</string>
   <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: vanjski način.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay isključeno.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay isključen.</string>
   <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay promijenjen u auto.</string>
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay promijenjen u dnevni način.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay promijenjen u noćni način rada.</string>
@@ -59,7 +59,7 @@
   <string name="accessibility_quick_settings_location_battery_saving">Prijavljivanje lokacije: štednja baterije.</string>
   <string name="accessibility_quick_settings_location_gps_only">Prijavljivanje lokacije: samo senzori.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Prijavljivanje lokacije: visoka preciznost.</string>
-  <string name="accessibility_quick_settings_location_changed_battery_saving">Prijavljivanje lokacije promijenjeno u način uštednje baterije.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Prijavljivanje lokacije promijenjeno u način uštede baterije.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Prijavljivanje lokacije promijenjeno u samo senzori.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Prijavljivanje lokacije promijenjeno u način visoke preciznosti.</string>
   <string name="accessibility_quick_settings_lock_screen_off">Zaključani zaslon isključen.</string>
@@ -133,7 +133,7 @@
   <string name="quick_settings_battery_saver_label">Ušteda baterije</string>
   <string name="quick_settings_custom_tile_detail_title">Prilagodljive pločice</string>
   <string name="quick_settings_performance_profile_detail_title">Način rada baterije</string>
-  <string name="status_bar_expanded_header_weather_format">%1$s - %2$s</string>
+  <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Kliznite desno za %1$s</string>
   <string name="right_shortcut_hint">Kliznite lijevo za %1$s</string>
   <string name="navbar_dialog_title">Odaberi radnju</string>
@@ -149,8 +149,8 @@
   <string name="navring_target_reset_message">Obrisati sve korisnički kreirane prečace navigacijske trake i vratiti na zadane postavke?</string>
   <string name="navring_target_reset">Prečaci navigacijske trake resetirani na zadane postavke</string>
   <string name="navring_action_open_ime_switcher">Otvori prebacivač metode unosa</string>
-  <string name="navring_action_kill_app">Ugasi aplikaciju</string>
-  <string name="navring_action_none">Ništa</string>
+  <string name="navring_action_kill_app">Zatvori aplikaciju</string>
+  <string name="navring_action_none">Nijedan</string>
   <string name="navring_action_take_screenshot">Snimi zaslon</string>
   <string name="navring_action_ring_vibrate">Zvonjenje/Vibracija</string>
   <string name="navring_action_ring_silent">Zvonjenje/Bešumno</string>
@@ -162,14 +162,15 @@
   <string name="select_application">Odaberite aplikaciju</string>
   <string name="lockscreen_target_empty">Prazno</string>
   <string name="screen_pinning_description_no_navbar">Ovo drži u pogledu dok ne otkvačite. Dodirnite i držite gumb natrag da bi otkvačili.</string>
-  <string name="interruption_level_silent">Bešumno</string>
+  <string name="interruption_level_silent">Tiho</string>
   <string name="zen_silent_with_warning">Bez prekidanja, osim alarma.</string>
   <string name="quick_settings_remove">Uklanjanje pločice</string>
-  <string name="quick_settings_dynamic_tile_detail_title">Dinamičke pločice</string>
-  <string name="dynamic_qs_tile_next_alarm_label">Slijedeći alarm</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Dinamične pločice</string>
+  <string name="dynamic_qs_tile_next_alarm_label">Sljedeći alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME za odabir</string>
   <string name="dynamic_qs_tile_su_label">Root pristup</string>
   <string name="fingerprint_try_again_hint">Molim skenirajte ponovo</string>
+  <string name="fingerprint_try_again_hint_too_many">Previše pokušaja otiska prsta. Pokušajte ponovno kasnije.</string>
   <string name="accessibility_dock_battery_level">Dock baterija <xliff:g id="number">%d</xliff:g> postotak.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nije pronađena nijedna stavka</string>
   <string name="play_queue_extention">Prikaži listu za reprodukciju</string>
