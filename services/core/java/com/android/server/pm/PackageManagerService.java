@@ -17209,7 +17209,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         List<String> protectedComponentManagers =
                 CMSettings.Secure.getDelimitedStringAsList(mContext.getContentResolver(),
                         CMSettings.Secure.PROTECTED_COMPONENT_MANAGERS, "|");
-        if (protectedComponentManagers.contains(callingPackage)) {
+        if (callingPackage == null || protectedComponentManagers.contains(callingPackage)) {
             if (DEBUG_PROTECTED) Log.d(TAG, "Calling package is a protected manager, allow");
             return false;
         }
