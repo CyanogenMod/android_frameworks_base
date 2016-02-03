@@ -563,7 +563,8 @@ public class LiveDisplayController {
                     .setStyle(new Notification.BigTextStyle().bigText(mContext.getResources()
                              .getString(
                                      org.cyanogenmod.platform.internal.R.string.live_display_hint)))
-                    .setContentIntent(result);
+                    .setContentIntent(result)
+                    .setAutoCancel(true);
 
             NotificationManager nm =
                     (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
