@@ -2617,6 +2617,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
                             SystemProperties.get("ro.com.android.dataroaming",
                                     "false")) ? 1 : 0);
 
+            int phoneCount = TelephonyManager.getDefault().getPhoneCount();
+            for (int phoneId = 0; phoneId < phoneCount; phoneId++) {
+                loadSetting(stmt, Settings.Global.DATA_ROAMING + phoneId,
+                        "true".equalsIgnoreCase(SystemProperties.get(
+                        "ro.com.android.dataroaming", "true")) ? 1 : 0);
+            }
+
             loadBooleanSetting(stmt, Settings.Global.DEVICE_PROVISIONED,
                     R.bool.def_device_provisioned);
 
@@ -2639,6 +2646,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     "true".equalsIgnoreCase(
                             SystemProperties.get("ro.com.android.mobiledata",
                                     "true")) ? 1 : 0);
+
+            // SUB specific flags for Multisim devices
+            for (int phoneId = 0; phoneId < phoneCount; phoneId++) {
+                // Mobile Data default, based on build
+                loadSetting(stmt, Settings.Global.MOBILE_DATA + phoneId,
+                        "true".equalsIgnoreCase(SystemProperties.get(
+                        "ro.com.android.mobiledata", "true")) ? 1 : 0);
+            }
 
             loadBooleanSetting(stmt, Settings.Global.NETSTATS_ENABLED,
                     R.bool.def_netstats_enabled);
@@ -2690,7 +2705,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
             // Set the preferred network mode to target desired value or Default
             // value defined in system property
-            int phoneCount = TelephonyManager.getDefault().getPhoneCount();
             String val = "";
             String mode = "";
             for (int phoneId = 0; phoneId < phoneCount; phoneId++) {
