@@ -157,4 +157,8 @@
     <!-- Restricted fingerprint config -->
     <java-symbol type="bool" name="config_fingerprintRestrictedToSystemAndOwner" />
 
+    <!-- If true, when a match for a character is found in a current
+         supported single shift table (config_sms_enabled_single_shift_tables),
+         use the mapping in the default character table and keep the message 7bit -->
+    <java-symbol type="bool" name="config_sms_use_default_for_single_shift" />
 </resources>

@@ -22,4 +22,9 @@
     <!-- Whether safe headphone volume is enabled or not (country specific). -->
     <bool name="config_safe_media_volume_enabled">false</bool>
 
+    <!-- If true, when a match for a character is found in a current
+         supported single shift table (config_sms_enabled_single_shift_tables),
+         use the mapping in the default character table and keep the message 7bit -->
+    <bool name="config_sms_use_default_for_single_shift">true</bool>
+<integer-array name="config_sms_enabled_single_shift_tables"><item>2</item></integer-array>
 </resources>
