@@ -175,7 +175,7 @@ public class GsmAlphabet {
                 } else {
                     return sCharsToGsmTables[0].get(' ', ' ');
                 }
-            } else {
+            } else if (!sUseDefaultTableForSingleShift) {
                 return GSM_EXTENDED_ESCAPE;
             }
         }
@@ -407,7 +407,7 @@ public class GsmAlphabet {
                     } else {
                         v = charToLanguageTable.get(' ', ' ');   // should return ASCII space
                     }
-                } else {
+                } else if (!sUseDefaultTableForSingleShift) {
                     packSmsChar(ret, bitOffset, GSM_EXTENDED_ESCAPE);
                     bitOffset += 7;
                     septets++;
@@ -743,7 +743,11 @@ public class GsmAlphabet {
         }
 
         if (sCharsToShiftTables[0].get(c, -1) != -1) {
-            return 2;
+            if (sUseDefaultTableForSingleShift) {
+                return 1;
+            } else {
+                return 2;
+            }
         }
 
         if (throwsException) {
@@ -794,7 +798,11 @@ public class GsmAlphabet {
             if (charToLanguageTable.get(c, -1) != -1) {
                 count++;
             } else if (charToShiftTable.get(c, -1) != -1) {
-                count += 2; // escape + shift table index
+                if (sUseDefaultTableForSingleShift) {
+                    count++;
+                } else {
+                    count += 2; // escape + shift table index
+                }
             } else if (use7bitOnly) {
                 count++;    // encode as space
             } else {
@@ -889,8 +897,12 @@ public class GsmAlphabet {
                                     lpc.septetCounts[table] = -1;
                                 }
                             } else {
-                                // encode as Escape + index into shift table
-                                lpc.septetCounts[table] += 2;
+                                if (sUseDefaultTableForSingleShift) {
+                                    lpc.septetCounts[table]++;
+                                } else {
+                                    // encode as Escape + index into shift table
+                                    lpc.septetCounts[table] += 2;
+                                }
                             }
                         }
                     }
@@ -992,6 +1004,8 @@ public class GsmAlphabet {
                 if (encodedSeptet == -1) {
                     // char not found, assume we're replacing with space
                     accumulator++;
+                } else if (sUseDefaultTableForSingleShift) {
+                    accumulator++;
                 } else {
                     accumulator += 2;  // escape character + shift table index
                 }
@@ -1066,6 +1080,8 @@ public class GsmAlphabet {
         // See comments in frameworks/base/core/res/res/values/config.xml for allowed values
         sEnabledSingleShiftTables = r.getIntArray(R.array.config_sms_enabled_single_shift_tables);
         sEnabledLockingShiftTables = r.getIntArray(R.array.config_sms_enabled_locking_shift_tables);
+        sUseDefaultTableForSingleShift = r.getBoolean(
+                R.bool.config_sms_use_default_for_single_shift);
 
         if (sEnabledSingleShiftTables.length > 0) {
             sHighestEnabledSingleShiftCode =
@@ -1092,6 +1108,9 @@ public class GsmAlphabet {
 
     /** Flag to bypass check for country-specific overlays (for test cases only). */
     private static boolean sDisableCountryEncodingCheck = false;
+
+    /** Flag to use default alphabet table for single shift table matches */
+    private static boolean sUseDefaultTableForSingleShift = false;
 
     /**
      * Septet counter for a specific locking shift table and all of
