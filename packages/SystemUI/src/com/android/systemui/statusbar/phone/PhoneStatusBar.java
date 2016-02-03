@@ -1189,8 +1189,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mQSPanel.setEditing(editing);
                             mHeader.setEditing(editing);
+                            mQSPanel.setEditing(editing);
                         }
                     });
                 }
