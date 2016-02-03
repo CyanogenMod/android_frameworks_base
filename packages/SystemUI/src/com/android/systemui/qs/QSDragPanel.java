@@ -390,34 +390,42 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
     }
 
+    private void persistRecords() {
+        // persist the new config.
+        List<String> newTiles = new ArrayList<>();
+        for (TileRecord record : mRecords) {
+            newTiles.add(mHost.getSpec(record.tile));
+        }
+        mHost.setTiles(newTiles);
+    }
+
     public void setEditing(boolean editing) {
         if (mEditing == editing) return;
-        mEditing = editing;
+        final boolean isOnSettings = isOnSettingsPage();
 
+        mQsPanelTop.setEditing(editing, isOnSettings);
         if (!editing) {
-            // persist the new config.
-            List<String> newTiles = new ArrayList<>();
-            for (TileRecord record : mRecords) {
-                newTiles.add(mHost.getSpec(record.tile));
-            }
-            mHost.setTiles(newTiles);
+            persistRecords();
 
             refreshAllTiles();
 
-            mQsPanelTop.animate().translationX(0).start();
+            mQsPanelTop.setTranslationX(0);
+            if (isOnSettings) {
+                mViewPager.setCurrentItem(1, true);
+            }
         }
+        mEditing = editing;
+        mPagerAdapter.notifyDataSetChanged();
+
+        mPageIndicator.setEditing(editing);
+        mViewPager.setOffscreenPageLimit(mEditing ? getCurrentMaxPageCount() + 1 : 1);
+        mPagerAdapter.notifyDataSetChanged();
 
         // clear the record state
         for (TileRecord record : mRecords) {
             setupRecord(record);
             drawTile(record, record.tile.getState());
         }
-        mQsPanelTop.setEditing(editing);
-        mPageIndicator.setEditing(editing);
-        mPagerAdapter.notifyDataSetChanged();
-
-        mViewPager.setOffscreenPageLimit(mEditing ? getCurrentMaxPageCount() + 1 : 1);
-        mPagerAdapter.notifyDataSetChanged();
 
         requestLayout();
     }
@@ -2110,8 +2118,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     CMSettings.Secure.QS_USE_MAIN_TILES, 1, currentUserId) == 1;
             if (firstRowLarge != mFirstRowLarge) {
                 mFirstRowLarge = firstRowLarge;
-                setTiles(new ArrayList<QSTile<?>>()); // clear out states
                 setTiles(mHost.getTiles());
+                mPagerAdapter.notifyDataSetChanged();
             }
         }
     }
