@@ -729,12 +729,6 @@ public class ToneGenerator
      */
     public static final int TONE_CDMA_SIGNAL_OFF = 98;
     /**
-     * SUPERVISORY_CH - 440Hz
-     *
-     * @hide #ToneGenerator(int, int)
-     */
-    public static final int TONE_SUPERVISORY_CH = 100;
-    /**
      * HOLD_RECALL - 440Hz
      *
      * @hide #ToneGenerator(int, int)
