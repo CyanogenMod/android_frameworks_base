@@ -1952,6 +1952,7 @@ public abstract class Connection extends Conferenceable {
 
     /**
      * Transfers the current call.
+     * @hide
      */
     public void onTransfer() { }
 
