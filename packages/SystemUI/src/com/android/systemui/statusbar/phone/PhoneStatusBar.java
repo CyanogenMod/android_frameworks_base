@@ -26,6 +26,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
 import android.app.IActivityManager;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.StatusBarManager;
@@ -4510,7 +4511,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public void updateStackScrollerState(boolean goingToFullShade) {
         if (mStackScroller == null) return;
         boolean onKeyguard = mState == StatusBarState.KEYGUARD;
-        mStackScroller.setHideSensitive(isLockscreenPublicMode(), goingToFullShade);
+        final KeyguardManager keyguardManager = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        mStackScroller.setHideSensitive(keyguardManager.inKeyguardRestrictedInputMode(), goingToFullShade);
         mStackScroller.setDimmed(onKeyguard, false /* animate */);
         mStackScroller.setExpandingEnabled(!onKeyguard);
         ActivatableNotificationView activatedChild = mStackScroller.getActivatedChild();
