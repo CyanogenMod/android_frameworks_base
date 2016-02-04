@@ -104,6 +104,7 @@
     <string name="quick_settings_profiles_off">Profiles disabled</string>
     <string name="quick_settings_heads_up_label">Heads up</string>
     <string name="quick_settings_battery_saver_label">Battery saver</string>
+    <string name="quick_settings_caffeine_label">Caffeine</string>
 
     <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_sync_off">Sync off.</string>
@@ -181,6 +182,11 @@
     <string name="accessibility_quick_settings_heads_up_changed_off">Heads up turned off.</string>
     <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_heads_up_changed_on">Heads up turned on.</string>
+
+    <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_caffeine_off">Caffeine off.</string>
+    <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_caffeine_on">Caffeine on.</string>
 
     <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_battery_saver_off">Battery saver off.</string>
