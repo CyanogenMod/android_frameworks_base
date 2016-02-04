@@ -45,9 +45,6 @@
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changePhoneBlacklist">Allows an app to change the phone numbers that are blocked for incoming calls or messages.</string>
 
-    <!-- label for item that opens the profile choosing dialog -->
-    <string name="global_action_choose_profile">Profile</string>
-
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
