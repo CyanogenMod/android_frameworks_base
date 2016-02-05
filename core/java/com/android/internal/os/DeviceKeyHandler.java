@@ -20,7 +20,15 @@ public interface DeviceKeyHandler {
      * this special keys prior to pass the key to the active app.
      *
      * @param event The key event to be handled
+     * @param callback callback into the gesture launcher to route common actions
      * @return If the event is consume
      */
-    public boolean handleKeyEvent(KeyEvent event);
+    public boolean handleKeyEvent(KeyEvent event, DeviceHandlerCallback callback);
+
+    interface DeviceHandlerCallback {
+        /**
+         * Let the gesture launcher service know that the device wants the camera launched
+         */
+        void onScreenCameraGesture();
+    }
 }
