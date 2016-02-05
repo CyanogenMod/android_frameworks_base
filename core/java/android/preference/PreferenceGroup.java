@@ -189,8 +189,11 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
 
     private boolean removePreferenceInt(Preference preference) {
         synchronized(this) {
-            preference.onPrepareForRemoval();
-            return mPreferenceList.remove(preference);
+            if (preference != null) {
+                    preference.onPrepareForRemoval();
+                    return mPreferenceList.remove(preference);
+            }
+            return true;
         }
     }
     
