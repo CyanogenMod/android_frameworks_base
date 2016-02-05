@@ -20,6 +20,7 @@ import android.app.ActivityManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
@@ -38,7 +39,12 @@ import android.util.Slog;
 import android.view.KeyEvent;
 
 import com.android.internal.logging.MetricsLogger;
+import com.android.internal.os.DeviceKeyHandler;
 import com.android.server.statusbar.StatusBarManagerInternal;
+
+import dalvik.system.DexClassLoader;
+
+import java.lang.reflect.Constructor;
 
 /**
  * The service that listens for gestures detected in sensor firmware and starts the intent
@@ -47,7 +53,8 @@ import com.android.server.statusbar.StatusBarManagerInternal;
  * added.</p>
  * @hide
  */
-public class GestureLauncherService extends SystemService {
+public class GestureLauncherService extends SystemService
+        implements DeviceKeyHandler.DeviceHandlerCallback {
     private static final boolean DBG = false;
     private static final String TAG = "GestureLauncherService";
 
@@ -105,6 +112,8 @@ public class GestureLauncherService extends SystemService {
     private boolean mCameraDoubleTapPowerEnabled;
     private long mLastPowerDown;
 
+    private DeviceKeyHandler mDeviceKeyHandler;
+
     public GestureLauncherService(Context context) {
         super(context);
         mContext = context;
@@ -132,6 +141,30 @@ public class GestureLauncherService extends SystemService {
             mUserId = ActivityManager.getCurrentUser();
             mContext.registerReceiver(mUserReceiver, new IntentFilter(Intent.ACTION_USER_SWITCHED));
             registerContentObservers();
+
+            String deviceKeyHandlerLib = mContext.getResources().getString(
+                    com.android.internal.R.string.config_deviceKeyHandlerLib);
+
+            String deviceKeyHandlerClass = mContext.getResources().getString(
+                    com.android.internal.R.string.config_deviceKeyHandlerClass);
+
+            if (!deviceKeyHandlerLib.isEmpty() && !deviceKeyHandlerClass.isEmpty()) {
+                DexClassLoader loader =  new DexClassLoader(deviceKeyHandlerLib,
+                        new ContextWrapper(mContext).getCacheDir().getAbsolutePath(),
+                        null,
+                        ClassLoader.getSystemClassLoader());
+                try {
+                    Class<?> klass = loader.loadClass(deviceKeyHandlerClass);
+                    Constructor<?> constructor = klass.getConstructor(Context.class);
+                    mDeviceKeyHandler = (DeviceKeyHandler) constructor.newInstance(
+                            mContext);
+                    if(DBG) Slog.d(TAG, "Device key handler loaded");
+                } catch (Exception e) {
+                    Slog.w(TAG, "Could not instantiate device key handler "
+                            + deviceKeyHandlerClass + " from class "
+                            + deviceKeyHandlerLib, e);
+                }
+            }
         }
     }
 
@@ -243,11 +276,19 @@ public class GestureLauncherService extends SystemService {
                 com.android.internal.R.bool.config_cameraDoubleTapPowerGestureEnabled);
     }
 
+    public static boolean isKeyHandlerPresent(Resources resources) {
+        return !resources.getString(com.android.internal.R.string.config_deviceKeyHandlerLib)
+                .isEmpty()
+                && !resources.getString(com.android.internal.R.string.config_deviceKeyHandlerClass)
+                .isEmpty();
+    }
+
     /**
      * Whether GestureLauncherService should be enabled according to system properties.
      */
     public static boolean isGestureLauncherEnabled(Resources resources) {
-        return isCameraLaunchEnabled(resources) || isCameraDoubleTapPowerEnabled(resources);
+        return isCameraLaunchEnabled(resources) || isCameraDoubleTapPowerEnabled(resources)
+                || isKeyHandlerPresent(resources);
     }
 
     public boolean interceptPowerKeyDown(KeyEvent event, boolean interactive) {
@@ -325,6 +366,18 @@ public class GestureLauncherService extends SystemService {
             }
         }
     };
+
+    public boolean deviceKeyHandlerEvent(KeyEvent event) {
+        if (mDeviceKeyHandler != null) {
+            return mDeviceKeyHandler.handleKeyEvent(event, this);
+        }
+        return false;
+    }
+
+    @Override
+    public void onScreenCameraGesture() {
+        handleCameraLaunchGesture(true, StatusBarManager.CAMERA_LAUNCH_SOURCE_SCREEN_GESTURE);
+    }
 
     private final class GestureEventListener implements SensorEventListener {
         @Override
