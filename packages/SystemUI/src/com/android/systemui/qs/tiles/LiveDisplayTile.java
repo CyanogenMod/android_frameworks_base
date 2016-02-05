@@ -16,14 +16,12 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.provider.Settings;
 
 import com.android.internal.util.ArrayUtils;
 import com.android.systemui.R;
@@ -38,10 +36,10 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
             new Intent("android.settings.LIVEDISPLAY_SETTINGS");
 
     private final LiveDisplayObserver mObserver;
-    private final String[] mEntries;
-    private final String[] mDescriptionEntries;
-    private final String[] mAnnouncementEntries;
-    private final String[] mValues;
+    private String[] mEntries;
+    private String[] mDescriptionEntries;
+    private String[] mAnnouncementEntries;
+    private String[] mValues;
     private final int[] mEntryIconRes;
 
     private boolean mListening;
@@ -67,10 +65,7 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
         }
         typedArray.recycle();
 
-        mEntries = res.getStringArray(com.android.internal.R.array.live_display_entries);
-        mDescriptionEntries = res.getStringArray(R.array.live_display_description);
-        mAnnouncementEntries = res.getStringArray(R.array.live_display_announcement);
-        mValues = res.getStringArray(com.android.internal.R.array.live_display_values);
+        updateEntries();
 
         mOutdoorModeAvailable =
                 CMHardwareManager.getInstance(mContext)
@@ -82,6 +77,14 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
 
         mObserver = new LiveDisplayObserver(mHandler);
         mObserver.startObserving();
+    }
+
+    private void updateEntries() {
+        Resources res = mContext.getResources();
+        mEntries = res.getStringArray(com.android.internal.R.array.live_display_entries);
+        mDescriptionEntries = res.getStringArray(R.array.live_display_description);
+        mAnnouncementEntries = res.getStringArray(R.array.live_display_announcement);
+        mValues = res.getStringArray(com.android.internal.R.array.live_display_values);
     }
 
     @Override
@@ -113,6 +116,7 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
 
     @Override
     protected void handleUpdateState(LiveDisplayState state, Object arg) {
+        updateEntries();
         state.visible = true;
         state.mode = arg == null ? getCurrentModeIndex() : (Integer) arg;
         state.label = mEntries[state.mode];
