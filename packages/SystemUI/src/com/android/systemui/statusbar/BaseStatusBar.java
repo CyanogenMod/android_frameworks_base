@@ -1345,27 +1345,50 @@ public abstract class BaseStatusBar extends SystemUI implements
         View contentViewLocal = null;
         View bigContentViewLocal = null;
         View headsUpContentViewLocal = null;
-        String themePackageName = mCurrentTheme != null ?
-                mCurrentTheme.getOverlayForStatusBar() : null;
+        String themePackageName = mCurrentTheme != null
+                ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName()) : null;
+        String statusBarThemePackageName = mCurrentTheme != null
+                ? mCurrentTheme.getOverlayForStatusBar() : null;
+
         try {
             contentViewLocal = contentView.apply(
                     sbn.getPackageContext(mContext),
                     contentContainer,
                     mOnClickHandler,
-                    themePackageName);
+                    statusBarThemePackageName);
+
+            final int platformTemplateRootViewId =
+                    com.android.internal.R.id.status_bar_latest_event_content;
+            final String inflationThemePackageName;
+            if (themePackageName != null
+                    && !TextUtils.equals(themePackageName, statusBarThemePackageName)
+                    && contentViewLocal.getId() != platformTemplateRootViewId) {
+                // This notification uses custom RemoteViews, and its app uses a different
+                // theme than the status bar. Re-inflate the views using the app's theme,
+                // as the RemoteViews likely will contain resources of the app, not the platform
+                inflationThemePackageName = themePackageName;
+                contentViewLocal = contentView.apply(
+                        sbn.getPackageContext(mContext),
+                        contentContainer,
+                        mOnClickHandler,
+                        inflationThemePackageName);
+            } else {
+                inflationThemePackageName = statusBarThemePackageName;
+            }
+
             if (bigContentView != null) {
                 bigContentViewLocal = bigContentView.apply(
                         sbn.getPackageContext(mContext),
                         contentContainer,
                         mOnClickHandler,
-                        themePackageName);
+                        inflationThemePackageName);
             }
             if (headsUpContentView != null) {
                 headsUpContentViewLocal = headsUpContentView.apply(
                         sbn.getPackageContext(mContext),
                         contentContainer,
                         mOnClickHandler,
-                        themePackageName);
+                        inflationThemePackageName);
             }
         }
         catch (RuntimeException e) {
