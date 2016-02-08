@@ -463,6 +463,10 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private static final long COMMON_RESOURCE_EXPIRATION = 3*60*1000; // 3 minutes
 
+    private static final ComponentName PROTECTED_APPS_TARGET_VALIDATION_COMPONENT =
+            new ComponentName("com.android.settings",
+                    "com.android.settings.applications.ProtectedAppsActivity");
+
     /**
      * The offset in bytes to the beginning of the hashes in an idmap
      */
@@ -17220,6 +17224,10 @@ public class PackageManagerService extends IPackageManager.Stub {
         //If this component is launched from the same package, allow it.
         if (TextUtils.equals(packageName, callingPackage)) {
             if (DEBUG_PROTECTED) Log.d(TAG, "Calling package is same as target, allow");
+            return false;
+        }
+
+        if (PROTECTED_APPS_TARGET_VALIDATION_COMPONENT.equals(componentName)) {
             return false;
         }
 
