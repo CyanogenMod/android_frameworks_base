@@ -234,6 +234,7 @@ public class NotificationManagerService extends SystemService {
     private final HandlerThread mRankingThread = new HandlerThread("ranker",
             Process.THREAD_PRIORITY_BACKGROUND);
 
+    private Light mColortoneLight;
     private Light mNotificationLight;
     Light mAttentionLight;
     private int mDefaultNotificationColor;
@@ -290,6 +291,9 @@ public class NotificationManagerService extends SystemService {
 
     // for checking lockscreen status
     private KeyguardManager mKeyguardManager;
+
+    // For Samsung Colortone
+    private int mColortoneMode = Settings.System.SCREEN_COLORTONE_AUTO;
 
     // used as a mutex for access to all active notifications & listeners
     final ArrayList<NotificationRecord> mNotificationList =
@@ -969,6 +973,8 @@ public class NotificationManagerService extends SystemService {
                 = Settings.System.getUriFor(Settings.System.NOTIFICATION_LIGHT_PULSE);
         private final Uri ENABLED_NOTIFICATION_LISTENERS_URI
                 = Settings.Secure.getUriFor(Settings.Secure.ENABLED_NOTIFICATION_LISTENERS);
+        private final Uri SCREEN_COLORTONE_URI
+                = Settings.System.getUriFor(Settings.System.SCREEN_COLORTONE);
 
         SettingsObserver(Handler handler) {
             super(handler);
@@ -978,6 +984,8 @@ public class NotificationManagerService extends SystemService {
             ContentResolver resolver = getContext().getContentResolver();
             resolver.registerContentObserver(
                     NOTIFICATION_LIGHT_PULSE_URI, false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(SCREEN_COLORTONE_URI,
+                    false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(
                     ENABLED_NOTIFICATION_LISTENERS_URI, false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(CMSettings.System.getUriFor(
@@ -1062,6 +1070,16 @@ public class NotificationManagerService extends SystemService {
                 mMultipleLedsEnabledSetting = (CMSettings.System.getIntForUser(resolver,
                         CMSettings.System.NOTIFICATION_LIGHT_MULTIPLE_LEDS_ENABLE,
                         mMultipleNotificationLeds ? 1 : 0, UserHandle.USER_CURRENT) != 0);
+            }
+
+            if (uri == null || SCREEN_COLORTONE_URI.equals(uri)) {
+                int colortone = Settings.System.getInt(resolver,
+                            Settings.System.SCREEN_COLORTONE, Settings.System.SCREEN_COLORTONE_AUTO);
+
+                if (mColortoneMode != colortone) {
+                    mColortoneMode = colortone;
+                    mColortoneLight.setBrightness(mColortoneMode);
+                }
             }
 
             // Notification lights with screen on
@@ -1173,6 +1191,7 @@ public class NotificationManagerService extends SystemService {
         mStatusBar.setNotificationDelegate(mNotificationDelegate);
 
         final LightsManager lights = getLocalService(LightsManager.class);
+        mColortoneLight = lights.getLight(LightsManager.LIGHT_ID_COLORTONE);
         mNotificationLight = lights.getLight(LightsManager.LIGHT_ID_NOTIFICATIONS);
         mAttentionLight = lights.getLight(LightsManager.LIGHT_ID_ATTENTION);
 
@@ -1292,6 +1311,8 @@ public class NotificationManagerService extends SystemService {
         if (phase == SystemService.PHASE_SYSTEM_SERVICES_READY) {
             // no beeping until we're basically done booting
             mSystemReady = true;
+
+            mColortoneLight.setBrightness(mColortoneMode);
 
             // Grab our optional AudioService
             mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
@@ -2178,6 +2199,7 @@ public class NotificationManagerService extends SystemService {
                     }
                     pw.println("  mUseAttentionLight=" + mUseAttentionLight);
                     pw.println("  mNotificationPulseEnabled=" + mNotificationPulseEnabled);
+                    pw.println("  mColortoneMode=" + mColortoneMode);
                     pw.println("  mSoundNotificationKey=" + mSoundNotificationKey);
                     pw.println("  mVibrateNotificationKey=" + mVibrateNotificationKey);
                     pw.println("  mDisableNotificationEffects=" + mDisableNotificationEffects);

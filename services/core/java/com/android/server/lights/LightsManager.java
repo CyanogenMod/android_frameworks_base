@@ -25,9 +25,11 @@ public abstract class LightsManager {
     public static final int LIGHT_ID_ATTENTION = 5;
     public static final int LIGHT_ID_BLUETOOTH = 6;
     public static final int LIGHT_ID_WIFI = 7;
-    public static final int LIGHT_ID_CAPS = 8;
-    public static final int LIGHT_ID_FUNC = 9;
-    public static final int LIGHT_ID_COUNT = 10;
+    public static final int LIGHT_ID_COLORTONE = 8;
+    public static final int LIGHT_ID_CAPS = 9;
+    public static final int LIGHT_ID_FUNC = 10;
+    public static final int LIGHT_ID_COUNT = 11;
+
 
     public abstract Light getLight(int id);
 }
