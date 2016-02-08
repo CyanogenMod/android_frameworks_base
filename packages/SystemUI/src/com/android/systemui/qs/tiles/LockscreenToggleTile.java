@@ -23,6 +23,9 @@ import com.android.systemui.SystemUIApplication;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
+
+import cyanogenmod.app.Profile;
+import cyanogenmod.app.ProfileManager;
 import cyanogenmod.providers.CMSettings;
 import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
@@ -32,7 +35,6 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
     private static final Intent LOCK_SCREEN_SETTINGS =
             new Intent("android.settings.LOCK_SCREEN_SETTINGS");
 
-    private KeyguardViewMediator mKeyguardViewMediator;
     private KeyguardMonitor mKeyguard;
     private boolean mListening;
 
@@ -42,21 +44,13 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
         super(host);
 
         mKeyguard = host.getKeyguardMonitor();
-        mKeyguardViewMediator =
-                ((SystemUIApplication)
-                        mContext.getApplicationContext()).getComponent(KeyguardViewMediator.class);
 
         mSettingsObserver = new KeyguardViewMediator.LockscreenEnabledSettingsObserver(mContext,
                 mUiHandler) {
 
             @Override
             public void update() {
-                boolean newState = CMSettings.Secure.getIntForUser(
-                        mContext.getContentResolver(),
-                        CMSettings.Secure.LOCKSCREEN_INTERNALLY_ENABLED,
-                        getPersistedDefaultOldSetting() ? 1 : 0,
-                        UserHandle.USER_CURRENT) != 0;
-                refreshState(newState);
+                refreshState();
             }
         };
 
@@ -97,24 +91,43 @@ public class LockscreenToggleTile extends QSTile<QSTile.BooleanState>
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final boolean lockscreenEnforced = mKeyguardViewMediator.lockscreenEnforcedByDevicePolicy();
-        final boolean lockscreenEnabled = lockscreenEnforced ||
-                arg != null ? (Boolean) arg : mKeyguardViewMediator.getKeyguardEnabledInternal();
+        KeyguardViewMediator mediator = ((SystemUIApplication)
+                        mContext.getApplicationContext()).getComponent(KeyguardViewMediator.class);
 
-        state.value = lockscreenEnabled;
-        state.visible = mKeyguardViewMediator.isKeyguardBound();
-        state.enabled = !mKeyguard.isShowing() || !mKeyguard.isSecure();
-        state.label = mContext.getString(lockscreenEnforced
-                ? R.string.quick_settings_lockscreen_label_enforced
-                : R.string.quick_settings_lockscreen_label);
-        if (lockscreenEnabled) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_lock_screen_on);
-            state.contentDescription = mContext.getString(
-                    R.string.accessibility_quick_settings_lock_screen_on);
+        if (mediator == null) {
+            state.visible = false;
+            state.value = false;
+            state.enabled = false;
         } else {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_lock_screen_off);
-            state.contentDescription = mContext.getString(
-                    R.string.accessibility_quick_settings_lock_screen_off);
+            final boolean lockscreenEnforced = mediator.lockscreenEnforcedByDevicePolicy();
+            final boolean lockscreenEnabled = lockscreenEnforced ||
+                    arg != null ? (Boolean) arg : mediator.getKeyguardEnabledInternal();
+
+            state.visible = mediator.isKeyguardBound();
+
+            if (mediator.isProfileDisablingKeyguard()) {
+                state.label = mContext.getString(
+                        R.string.quick_settings_lockscreen_label_locked_by_profile);
+                state.value = false;
+                state.enabled = false;
+            } else {
+                state.value = lockscreenEnabled;
+                state.enabled = !mKeyguard.isShowing() || !mKeyguard.isSecure();
+
+                state.label = mContext.getString(lockscreenEnforced
+                        ? R.string.quick_settings_lockscreen_label_enforced
+                        : R.string.quick_settings_lockscreen_label);
+            }
+            // update icon
+            if (lockscreenEnabled) {
+                state.icon = ResourceIcon.get(R.drawable.ic_qs_lock_screen_on);
+                state.contentDescription = mContext.getString(
+                        R.string.accessibility_quick_settings_lock_screen_on);
+            } else {
+                state.icon = ResourceIcon.get(R.drawable.ic_qs_lock_screen_off);
+                state.contentDescription = mContext.getString(
+                        R.string.accessibility_quick_settings_lock_screen_off);
+            }
         }
     }
 
