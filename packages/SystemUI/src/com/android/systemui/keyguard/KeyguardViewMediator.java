@@ -1249,15 +1249,7 @@ public class KeyguardViewMediator extends SystemUI {
         DevicePolicyManager dpm = (DevicePolicyManager)
                 mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
         if (dpm != null) {
-            int passwordQuality = dpm.getPasswordQuality(null);
-            switch (passwordQuality) {
-                case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
-                case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
-                    return true;
-            }
+            return dpm.requireSecureKeyguard();
         }
         return false;
     }
