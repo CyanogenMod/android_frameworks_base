@@ -2144,11 +2144,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }
 
-        // apply user lockscreen image
-        if (mMediaMetadata == null && backdropBitmap == null) {
-            backdropBitmap = mKeyguardWallpaper;
-        }
-
         boolean keyguardVisible = (mState != StatusBarState.SHADE);
 
         if (!mKeyguardFadingAway && keyguardVisible && backdropBitmap != null && mScreenOn) {
@@ -2160,7 +2155,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             == PlaybackState.STATE_PLAYING);
         }
 
-        if (backdropBitmap == null && mMediaMetadata == null) {
+        // apply user lockscreen image
+        if (backdropBitmap == null && mMediaMetadata == null &&
+                !mNotificationPanel.hasExternalKeyguardView()) {
             backdropBitmap = mKeyguardWallpaper;
         }
 
