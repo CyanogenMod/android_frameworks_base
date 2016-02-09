@@ -516,7 +516,9 @@ public class KeyguardViewMediator extends SystemUI {
                     break;
                 case READY:
                     synchronized (this) {
-                        if (mInternallyDisabled && !mUpdateMonitor.isSimPinSecure()) {
+                        if ((mInternallyDisabled || isProfileDisablingKeyguard())
+                                && !mUpdateMonitor.isSimPinSecure()) {
+                            // disabled by ourselves, or by a profile, and all sim cards are unlocked!
                             hideLocked();
                         } else if (mShowing) {
                             resetStateLocked();
