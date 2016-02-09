@@ -4215,15 +4215,11 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
                 || encryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVATING) {
             return true;
         }
-
-        // Keystore.isEmpty() requires system UID
-        long token = Binder.clearCallingIdentity();
-        try {
-            if (!KeyStore.getInstance().isEmpty()) {
-                return true;
-            }
-        } finally {
-            Binder.restoreCallingIdentity(token);
+        final int keyguardDisabledFeatures = getKeyguardDisabledFeatures(null, userHandle);
+        final boolean disableTrustAgents =
+                (keyguardDisabledFeatures & DevicePolicyManager.KEYGUARD_DISABLE_TRUST_AGENTS) != 0;
+        if (disableTrustAgents) {
+            return true;
         }
 
         return false;
