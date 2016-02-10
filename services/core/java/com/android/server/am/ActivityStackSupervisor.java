@@ -1369,8 +1369,11 @@ public final class ActivityStackSupervisor implements DisplayListener {
         }
 
         /* Block starting of browser or mail app while opening/closing the smart cover */
-        if (err == ActivityManager.START_SUCCESS && callingUid == 1000 && (intent.getComponent().flattenToShortString().contains(browserPackageName) || intent.getComponent().flattenToShortString().contains(mailPackageName))) {
-            err = ActivityManager.START_PERMISSION_DENIED;           
+        if (err == ActivityManager.START_SUCCESS && callingUid == 1000) {
+            if ((mailPackageName != null && intent.getComponent().flattenToShortString().contains(mailPackageName)) ||
+                    (browserPackageName != null && intent.getComponent().flattenToShortString().contains(browserPackageName))) {
+                err = ActivityManager.START_PERMISSION_DENIED;
+            }
         }
 
         if (err == ActivityManager.START_SUCCESS) {
