@@ -25,7 +25,6 @@
   <string name="gigabyteShort">ГБ</string>
   <string name="terabyteShort">TБ</string>
   <string name="petabyteShort">ПБ</string>
-  <string name="emptyPhoneNumber">(Няма нумару тэлефону)</string>
   <string name="passwordIncorrect">Памылковы пароль.</string>
   <string name="mmiComplete">Запыт MMI завершаны.</string>
   <string name="badPuk">Уведзены памылковы PUK-код.</string>
@@ -45,6 +44,26 @@
   <string name="permlab_transmitIr">выкарыстанне інфрачырвонай перадачы</string>
   <string name="permdesc_transmitIr" product="tablet">Дазваляе праграме выкарыстоўваць інфрачырвоны перадатчык планшэту.</string>
   <string name="permdesc_transmitIr" product="default">Дазваляе праграме выкарыстоўваць інфрачырвоны перадатчык тэлефону.</string>
+  <plurals name="num_seconds_ago">
+    <item quantity="one">1 секунду таму</item>
+    <item quantity="few"><xliff:g id="Count">%d</xliff:g> секунды таму</item>
+    <item quantity="other"><xliff:g id="Count">%d</xliff:g> секундаў таму</item>
+  </plurals>
+  <plurals name="num_minutes_ago">
+    <item quantity="one">1 хвіліну таму</item>
+    <item quantity="few"><xliff:g id="Count">%d</xliff:g> хвіліны таму</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> хвілінаў таму</item>
+  </plurals>
+  <plurals name="num_hours_ago">
+    <item quantity="one">1 гадзіну таму</item>
+    <item quantity="few"><xliff:g id="Count">%d</xliff:g> гадзіны таму</item>
+    <item quantity="other"><xliff:g id="Count">%d</xliff:g> гадзінаў таму</item>
+  </plurals>
+  <plurals name="last_num_days">
+    <item quantity="one">праз <xliff:g id="Count">%d</xliff:g> дзень</item>
+    <item quantity="few">праз <xliff:g id="Count">%d</xliff:g> дні</item>
+    <item quantity="other">праз <xliff:g id="Count">%d</xliff:g> дзён</item>
+  </plurals>
   <string name="cancel">Скасаваць</string>
   <string name="no">Скасаваць</string>
   <string name="capital_on">УКЛ</string>

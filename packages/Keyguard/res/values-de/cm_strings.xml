@@ -17,17 +17,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">SIM-Karte ist gesperrt</string>
+  <string name="keyguard_perso_locked_message">SIM/RUIM-Karte ist gesperrt</string>
   <string name="keyguard_accessibility_status">"Status"</string>
   <string name="kg_dismiss">Verwerfen</string>
   <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Neue SIM-Karte\u0020</string>
   <string name="lockscreen_sim_error_message_short">Ungültige SIM-Karte.</string>
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuch übrig bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
-    <item quantity="other">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuche übrig bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
+    <item quantity="one">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuch, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
+    <item quantity="other">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuche, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">SIM-Karte wurde deaktiviert. PUK eingeben, um fortzufahren. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuch bevor die SIM-Karte permanent deaktiviert wird. Kontaktieren Sie den Netzbetreiber für weitere Infos.</item>
-    <item quantity="other">SIM-Karte wurde deaktiviert. PUK eingeben, um fortzufahren. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuche bevor die SIM-Karte permanent deaktiviert wird. Kontaktieren Sie den Netzbetreiber für weitere Infos.</item>
+    <item quantity="one">SIM-Karte wurde deaktiviert. PUK eingeben, um fortzufahren. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuch, bevor die SIM-Karte permanent deaktiviert wird. Kontaktieren Sie den Netzbetreiber für weitere Infos.</item>
+    <item quantity="other">SIM-Karte wurde deaktiviert. PUK eingeben, um fortzufahren. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuche, bevor die SIM-Karte permanent deaktiviert wird. Kontaktieren Sie den Netzbetreiber für weitere Infos.</item>
   </plurals>
 </resources>

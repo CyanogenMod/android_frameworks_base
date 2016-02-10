@@ -131,7 +131,7 @@
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
   <string name="permission_remember_choice">Seçimimi yadda saxla</string>
-  <string name="perf_profile_pwrsv">Gücə qənaət</string>
+  <string name="perf_profile_pwrsv">Enerjiyə qənaət</string>
   <string name="perf_profile_bal">Tarazlı</string>
   <string name="perf_profile_perf">Performans</string>
   <string name="theme_install_error_title">Tema yüklənə bilmədi</string>

@@ -44,8 +44,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Всплывающие уведомления включены.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Всплывающие уведомления отключены.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Всплывающие уведомления включены.</string>
-  <string name="accessibility_quick_settings_hotspot_off">Точка доступа выключена.</string>
-  <string name="accessibility_quick_settings_hotspot_on">Точка доступа включена.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Мобильная точка доступа выключена.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Мобильная точка доступа включена.</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay выключен.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay работает в автоматическом режиме.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay работает в дневном режиме.</string>
@@ -85,9 +85,9 @@
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Режим энергопотребления изменён на энергоэффективный.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Режим энергопотребления изменён на режим оптимальной производительности.</string>
   <string name="accessibility_quick_settings_profiles_off">Профили выключены.</string>
-  <string name="accessibility_quick_settings_profiles">Профиль: <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles">Профиль: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Профили выключены.</string>
-  <string name="accessibility_quick_settings_profiles_changed">Профиль изменён на <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Профиль изменён на <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout">Время до выключения экрана: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Время до выключения экрана изменено на <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Синхронизация отключена.</string>
@@ -146,7 +146,7 @@
   <string name="navbar_menu_always_button">Меню (всегда)</string>
   <string name="navbar_menu_big_button">Меню</string>
   <string name="navigation_ring_title">Ярлыки быстрого запуска</string>
-  <string name="navring_target_reset_message">Удалить пользовательские настройки ярлыков панели навигации и восстановить стандартные?</string>
+  <string name="navring_target_reset_message">Удалить пользовательские ярлыки панели навигации и восстановить стандартные?</string>
   <string name="navring_target_reset">Восстановлены стандартные ярлыки панели навигации</string>
   <string name="navring_action_open_ime_switcher">Выбор способа ввода</string>
   <string name="navring_action_kill_app">Закрыть приложение</string>
@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">Выбор метода ввода</string>
   <string name="dynamic_qs_tile_su_label">Суперпользователь</string>
   <string name="fingerprint_try_again_hint">Повторите сканирование</string>
+  <string name="fingerprint_try_again_hint_too_many">Слишком много попыток разблокировки по отпечатку пальца. Повторите попытку позже.</string>
   <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Элементы не найдены</string>
   <string name="play_queue_extention">Показать очередь воспроизведения</string>

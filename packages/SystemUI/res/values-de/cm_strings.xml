@@ -88,12 +88,12 @@
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profile ausgeschaltet.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil auf <xliff:g id="profile" example="Default">%s</xliff:g> geändert.</string>
-  <string name="accessibility_quick_settings_screen_timeout">Ruhezustand nach <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
-  <string name="accessibility_quick_settings_screen_timeout_changed">Zeit bis zum Ruhezustand auf <xliff:g id="timeout" example="30 seconds">%s</xliff:g> geändert.</string>
-  <string name="accessibility_quick_settings_sync_off">Sync aus.</string>
-  <string name="accessibility_quick_settings_sync_on">Sync an.</string>
-  <string name="accessibility_quick_settings_sync_changed_off">Sync ausgeschaltet.</string>
-  <string name="accessibility_quick_settings_sync_changed_on">Sync eingeschaltet.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Bildschirm-Timeout nach <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Bildschirm-Timeout auf <xliff:g id="timeout" example="30 seconds">%s</xliff:g> geändert.</string>
+  <string name="accessibility_quick_settings_sync_off">Synchronisierung aus.</string>
+  <string name="accessibility_quick_settings_sync_on">Synchronisierung an.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synchronisierung ist ausgeschaltet.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synchronisierung ist eingeschaltet.</string>
   <string name="accessibility_quick_settings_usb_tether_off">USB-Tethering aus.</string>
   <string name="accessibility_quick_settings_usb_tether_on">USB-Tethering an.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-Tethering ausgeschaltet.</string>
@@ -119,7 +119,7 @@
   <string name="quick_settings_profiles_detail_title">Systemprofile</string>
   <string name="quick_settings_profiles_disabled">Profile deaktiviert</string>
   <string name="quick_settings_compass_label">Kompass</string>
-  <string name="quick_settings_compass_init">Initialisiere\u2026</string>
+  <string name="quick_settings_compass_init">Initialisierung\u2026</string>
   <string name="quick_settings_lockscreen_label">Bildschirmsperre</string>
   <string name="quick_settings_lockscreen_label_enforced">Sperrbildschirm aktivieren</string>
   <string name="quick_settings_network_adb_label">ADB über Netzwerk</string>
@@ -129,13 +129,13 @@
   <string name="quick_settings_usb_tether_label">USB-Tethering</string>
   <string name="quick_settings_heads_up_label">Pop-up</string>
   <string name="quick_settings_ambient_display_label">Inaktivitätsdisplay</string>
-  <string name="quick_settings_sync_label">Sync</string>
+  <string name="quick_settings_sync_label">Synchronisierung</string>
   <string name="quick_settings_battery_saver_label">Akku-Sparmodus</string>
   <string name="quick_settings_custom_tile_detail_title">Benutzerdefinierte Kachel</string>
   <string name="quick_settings_performance_profile_detail_title">Akkumodus</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> – <xliff:g id="condition">%2$s</xliff:g></string>
-  <string name="left_shortcut_hint">Nach Rechts wischen für %1$s</string>
-  <string name="right_shortcut_hint">Nach Links wischen für %1$s</string>
+  <string name="left_shortcut_hint">Nach rechts wischen für %1$s</string>
+  <string name="right_shortcut_hint">Nach links wischen für %1$s</string>
   <string name="navbar_dialog_title">Funktion zuweisen</string>
   <string name="navbar_home_button">Home</string>
   <string name="navbar_recent_button">Anwendungsverlauf</string>
@@ -163,14 +163,15 @@
   <string name="lockscreen_target_empty">Nicht zugewiesen</string>
   <string name="screen_pinning_description_no_navbar">Dies fixiert die aktuelle Ansicht. Zum Lösen die Zurück-Taste drücken und halten.</string>
   <string name="interruption_level_silent">Lautlos</string>
-  <string name="zen_silent_with_warning">Keine Unterbrechungen, außer Alarme.</string>
+  <string name="zen_silent_with_warning">Unterbrechungen nur bei Alarmen.</string>
   <string name="quick_settings_remove">Kachel entfernen</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamische Kachel</string>
   <string name="dynamic_qs_tile_next_alarm_label">Nächster Alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Eingabemethode</string>
   <string name="dynamic_qs_tile_su_label">Root-Zugriff</string>
   <string name="fingerprint_try_again_hint">Bitte erneut scannen</string>
+  <string name="fingerprint_try_again_hint_too_many">Zu viele falsche Fingerabdrücke. Versuchen Sie es später erneut.</string>
   <string name="accessibility_dock_battery_level">Dock-Akku <xliff:g id="number">%d</xliff:g> Prozent.</string>
-  <string name="quick_settings_custom_qs_detail_empty_text">Kein Inhalt gefunden</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Keinen Inhalt gefunden</string>
   <string name="play_queue_extention">Warteschlange anzeigen</string>
 </resources>

@@ -77,9 +77,13 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Aku režiim: energiasäästmise režiim.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Aku režiim: tasakaalustatud režiim.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Aku režiim: jõudlus režiim.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Aku režiim: energiatõhususe režiimis.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Aku režiim: kiirrežiim.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Aku režiim muudeti energiasäästu režiimiks.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Aku režiim muudeti tasakaalustatud režiimiks.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Aku režiim muudeti jõudluse režiimiks.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Aku režiimi muudeti tõhususe režiimiks.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Aku režiimi muudeti kiirrežiimiks.</string>
   <string name="accessibility_quick_settings_profiles_off">Profiilid väljas.</string>
   <string name="accessibility_quick_settings_profiles">Profiil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiilid välja lülitatud.</string>
@@ -94,7 +98,12 @@
   <string name="accessibility_quick_settings_usb_tether_on">USB-lõastamine sees.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-lõastamine väljalülitatud.</string>
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-lõastamine sisselülitatud.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akusäästja väljas.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akusäästja sees.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akusäästja on välja lülitatud.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akusäästja on sisse lülitatud.</string>
   <string name="accessibility_quick_settings_visualizer">Visualiseerija.</string>
+  <string name="accessibility_quick_settings_volume_panel">Helipaneel.</string>
   <string name="accessibility_dpad_left">Kursor vasakule</string>
   <string name="accessibility_dpad_right">Kursor paremale</string>
   <string name="quick_settings_mobile_data_label">Mobiilandmeside</string>
@@ -121,7 +130,9 @@
   <string name="quick_settings_heads_up_label">Etteteavitus</string>
   <string name="quick_settings_ambient_display_label">Ambient kuva</string>
   <string name="quick_settings_sync_label">Sünk</string>
+  <string name="quick_settings_battery_saver_label">Akusäästja</string>
   <string name="quick_settings_custom_tile_detail_title">Kohandatud plaat</string>
+  <string name="quick_settings_performance_profile_detail_title">Aku režiim</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Libista paremale et käivitada %1$s</string>
   <string name="right_shortcut_hint">Libista vasakule et käivitada %1$s</string>
@@ -159,6 +170,8 @@
   <string name="dynamic_qs_tile_ime_selector_label">IME valija</string>
   <string name="dynamic_qs_tile_su_label">Root ligipääs</string>
   <string name="fingerprint_try_again_hint">Palun skanneeri uuesti</string>
+  <string name="fingerprint_try_again_hint_too_many">Liiga palju sõrmejälje katseid. Proovige hiljem uuesti.</string>
   <string name="accessibility_dock_battery_level">Doki aku <xliff:g id="number">%d</xliff:g> protsenti.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Üksusi pole</string>
+  <string name="play_queue_extention">Näita esitamise järjekorda</string>
 </resources>
