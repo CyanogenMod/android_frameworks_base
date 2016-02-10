@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">Przełącznik klawiatury</string>
   <string name="dynamic_qs_tile_su_label">Dostęp do roota</string>
   <string name="fingerprint_try_again_hint">Przyłóż palec ponownie</string>
+  <string name="fingerprint_try_again_hint_too_many">Zbyt wiele prób użycia czujnika linii papilarnych. Spróbuj ponownie później.</string>
   <string name="accessibility_dock_battery_level">Bateria stacji dokującej <xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nic nie znaleziono</string>
   <string name="play_queue_extention">Pokaż kolejkę odtwarzania</string>

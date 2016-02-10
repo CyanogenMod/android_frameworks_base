@@ -15,5 +15,10 @@
      limitations under the License.
 -->
 <resources>
+  <string name="app_label">Абалонка</string>
+  <string name="bugreport_finished_title">Справаздача пра збой захавана</string>
+  <string name="bugreport_finished_text" product="watch">Правядзіце пальцам налева, каб падзяліцца сваёй справаздачай пра збой</string>
+  <string name="bugreport_finished_text" product="default">Націсніце, каб падзяліцца сваёй справаздачай пра збой</string>
   <string name="bugreport_confirm">Справаздача пра памылку ўтрымлівае дадзеныя з файлаў сістэмнай гiсторыi, у тым ліку персанальную і прыватную інфармацыю. Дзялiцеся справаздачамi пра памылкі толькi з праверанымi карыстальнiкамi i праграмамі.</string>
+  <string name="bugreport_confirm_repeat"> Паказваць гэта паведамленне у наступны раз</string>
 </resources>

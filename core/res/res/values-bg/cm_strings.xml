@@ -49,7 +49,7 @@
   <string name="global_action_current_user">Текущ</string>
   <string name="reboot_reboot">Рестартиране</string>
   <string name="reboot_recovery">Възстановяване</string>
-  <string name="reboot_bootloader">Bootloader</string>
+  <string name="reboot_bootloader">Буутлоудър</string>
   <string name="reboot_download">Изтегляне</string>
   <string name="reboot_soft">Бързо рестартиране</string>
   <string name="reboot_title">Рестартиране</string>
@@ -197,7 +197,7 @@
   <string name="live_display_night_summary">Използва само нощните настройки</string>
   <string name="live_display_outdoor">На открито (ярко слънце)</string>
   <string name="live_display_outdoor_summary">Използвай само настройките за открито</string>
-  <string name="live_display_hint">LiveDisplay може да помогне за намаляване на умората в очите ви през нощта. Докоснете тук, за да го изпробвате!</string>
+  <string name="live_display_hint">Използването на Адаптивен екран може да помогне за намаляване умората в очите през нощта. Докоснете тук, за да го изпробвате!</string>
   <string name="lock_to_app_toast_no_navbar">За да освободите този екран, докоснете и задръжте бутона назад.</string>
   <string name="quick_settings_tile_flashlight_not_title">Фенерчето е включено</string>
   <string name="quick_settings_tile_flashlight_not_summary">Натиснете, за изключване</string>
@@ -209,7 +209,7 @@
   <string name="permdesc_resetBatteryStats">Позволява заявление да рестартирате текущите данни за използването на ниско ниво на батерията.</string>
   <string name="silent_mode_priority">Приоритет</string>
   <string name="silent_mode_none">Без</string>
-  <string name="subscription_change_disabled_wifi_ap">Изключена Wi-Fi точка за достъп, поради промяна в абонаментна на SIM</string>
+  <string name="subscription_change_disabled_wifi_ap">Изключена Wi-Fi точка за достъп, поради промяна в абонаментна на СИМ</string>
   <string name="notify_turn_wifi_off_title">Изключете Wi-Fi</string>
   <string name="permlab_thirdPartyKeyguard">Защитен екран от друг автор</string>
   <string name="permdesc_thirdPartyKeyguard">Разрешава на приложението да се използва като несигурно за заключване на екрана.</string>
