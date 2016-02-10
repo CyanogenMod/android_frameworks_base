@@ -135,6 +135,7 @@
   <string name="perf_profile_bal">Echilibrat</string>
   <string name="perf_profile_perf">Performanță</string>
   <string name="perf_profile_bias_power">Eficiență</string>
+  <string name="perf_profile_bias_perf">Rapid</string>
   <string name="theme_install_error_title">Instalarea temei a eșuat</string>
   <string name="theme_install_error_message">%s au eșuat să fie instalate</string>
   <string name="theme_reset_notification_title">Resetare temă</string>

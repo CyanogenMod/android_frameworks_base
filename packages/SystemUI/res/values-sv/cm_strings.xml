@@ -170,6 +170,8 @@
   <string name="dynamic_qs_tile_ime_selector_label">IME-väljare</string>
   <string name="dynamic_qs_tile_su_label">Root-åtkomst</string>
   <string name="fingerprint_try_again_hint">Vänligen skanna igen</string>
+  <string name="fingerprint_try_again_hint_too_many">För många fingeravtrycksförsök. Försök igen senare.</string>
   <string name="accessibility_dock_battery_level">Dockningsstationens batteri<xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Inga objekt hittades</string>
+  <string name="play_queue_extention">Visa uppspelningskö</string>
 </resources>

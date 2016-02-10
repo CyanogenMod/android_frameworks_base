@@ -74,12 +74,12 @@
   <string name="accessibility_quick_settings_nfc_on">NFC açıqdır.</string>
   <string name="accessibility_quick_settings_nfc_changed_off">NFC bağlanıldı.</string>
   <string name="accessibility_quick_settings_nfc_changed_on">NFC açıldı.</string>
-  <string name="accessibility_quick_settings_perf_profile_pwrsv">Batereya rejimi: güc qənaəti rejimi.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Batereya rejimi: enerjiyə qənaəti rejimi.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Batereya rejimi: tarazlaşdırılmış rejim.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Batereya rejimi: performans rejimi.</string>
   <string name="accessibility_quick_settings_perf_profile_bias_power">Batareya rejimi: səmərəli rejim.</string>
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Batereya rejimi: cəld rejim.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batereya rejimi güc qənaəti rejiminə keçdi.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batereya rejimi enerjiyə qənaət rejiminə keçdi.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Batereya rejimi tarazlaşdırılmış rejimə keçdi.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Batereya rejimi performans rejiminə keçdi.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Batereya rejimi səmərəli rejimə keçdi.</string>

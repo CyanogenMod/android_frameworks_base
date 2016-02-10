@@ -19,7 +19,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM/RUIM заблокирована оператором</string>
   <string name="keyguard_accessibility_status">"Статус"</string>
-  <string name="kg_dismiss">Пропустить</string>
+  <string name="kg_dismiss">Отменить</string>
   <string name="kg_slot_name">Слот <xliff:g id="number">%d</xliff:g>: новая SIM-карта\u0020</string>
   <string name="lockscreen_sim_error_message_short">Ошибка карты.</string>
   <plurals name="kg_password_default_pin_message">
@@ -28,8 +28,8 @@
     <item quantity="other">Введите PIN-код. У вас осталось <xliff:g id="number">%d</xliff:g> попыток.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">SIM-карта заблокирована. Введите PUK-код для продолжения. У вас есть <xliff:g id="number">%d</xliff:g> попытка перед тем, как SIM-карта будет заблокирована навсегда. Обратитесь к своему оператору для получения дополнительных сведений.</item>
-    <item quantity="few">SIM-карта заблокирована. Введите PUK-код для продолжения. У вас есть <xliff:g id="number">%d</xliff:g> попытки перед тем, как SIM-карта будет заблокирована навсегда. Обратитесь к своему оператору для получения дополнительных сведений.</item>
-    <item quantity="other">SIM-карта заблокирована. Введите PUK-код для продолжения. У вас есть <xliff:g id="number">%d</xliff:g> попыток перед тем, как SIM-карта будет заблокирована навсегда. Обратитесь к своему оператору для получения дополнительных сведений.</item>
+    <item quantity="one">SIM-карта заблокирована. Введите PUK-код, чтобы продолжить. У вас есть <xliff:g id="number">%d</xliff:g> попытка перед тем, как SIM-карта будет заблокирована навсегда. Обратитесь к своему оператору для получения дополнительных сведений.</item>
+    <item quantity="few">SIM-карта заблокирована. Введите PUK-код, чтобы продолжить. У вас есть <xliff:g id="number">%d</xliff:g> попытки перед тем, как SIM-карта будет заблокирована навсегда. Обратитесь к своему оператору для получения дополнительных сведений.</item>
+    <item quantity="other">SIM-карта заблокирована. Введите PUK-код, чтобы продолжить. У вас есть <xliff:g id="number">%d</xliff:g> попыток перед тем, как SIM-карта будет заблокирована навсегда. Обратитесь к своему оператору для получения дополнительных сведений.</item>
   </plurals>
 </resources>
