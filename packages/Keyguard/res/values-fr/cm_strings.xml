@@ -18,7 +18,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">La carte SIM/RUIM possède un verrouillage personnel</string>
-  <string name="keyguard_accessibility_status">"Statut"</string>
+  <string name="keyguard_accessibility_status">"État"</string>
   <string name="kg_dismiss">Masquer</string>
   <string name="kg_slot_name">Emplacement <xliff:g id="number">%d</xliff:g> : Nouvelle carte SIM\u0020</string>
   <string name="lockscreen_sim_error_message_short">Carte SIM incorrecte.</string>
