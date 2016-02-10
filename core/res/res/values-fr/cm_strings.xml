@@ -26,18 +26,19 @@
   <string name="permlab_modifyProtectedSmsList">modifier la liste des SMS protégés</string>
   <string name="permdesc_modifyProtectedSmsList">Permet à l\'application de modifier la liste des adresses des SMS protégés.</string>
   <string name="permgrouplab_security">Sécurité</string>
-  <string name="permgroupdesc_security">Autorisations liées à des informations de sécurité de l\'appareil.</string>
-  <string name="permlab_accessThemeService">accéder au service de thème</string>
-  <string name="permdesc_accessThemeService">Permet à l\'application d\'accéder au service de thème. Une application normale ne devrait pas en avoir besoin.</string>
+  <string name="permgroupdesc_security">Autorisations relatives aux informations de sécurité de l\'appareil.</string>
+  <string name="permlab_accessThemeService">accéder au service de thèmes</string>
+  <string name="permdesc_accessThemeService">Permet à l\'application d\'accéder au service de thèmes. Une application normale ne devrait pas en avoir besoin.</string>
   <string name="permlab_readThemes">lire les informations de votre thème</string>
-  <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
+  <string name="permdesc_readThemesDesc">Permet à une application de lire et
+       déterminer quel thème vous avez appliqué.</string>
   <string name="permlab_writeThemes">modifier vos thèmes</string>
   <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et modifier le thème que vous avez appliqué.</string>
   <string name="permlab_readPhoneBlacklist">lire la liste noire du téléphone</string>
   <string name="permdesc_readPhoneBlacklist">Permet à l\'application de lire les informations sur les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
   <string name="permlab_changePhoneBlacklist">modifier la liste noire du téléphone</string>
   <string name="permdesc_changePhoneBlacklist">Permet à l\'application de modifier les numéros de téléphone qui sont bloqués pour les appels ou les messages entrants.</string>
-  <string name="permlab_changePrivacyGuardState">active ou désactive la protection des données</string>
+  <string name="permlab_changePrivacyGuardState">activer ou désactiver la protection des données</string>
   <string name="permdesc_changePrivacyGuardState">Permet à l\'application d\'en exécuter une autre avec la protection des données. Lorsqu\'une application est exécutée avec la protection des données, elle n\'aura pas accès aux données personnelles telles que les contacts, les journaux d\'appels ou les messages.</string>
   <string name="privacy_guard_notification">Protection des données activée</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne sera pas en mesure d\'accéder aux données personnelles</string>
@@ -48,7 +49,7 @@
   <string name="global_action_reboot">Redémarrer</string>
   <string name="global_action_current_user">Actuel</string>
   <string name="reboot_reboot">Redémarrer</string>
-  <string name="reboot_recovery">Recovery</string>
+  <string name="reboot_recovery">Récupération</string>
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">Download</string>
   <string name="reboot_soft">Redémarrage logiciel</string>

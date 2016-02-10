@@ -32,8 +32,8 @@
   <string name="accessibility_quick_settings_network_adb_changed_on">ADB através da rede foi ligada.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Visualização de ambiente desligada.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Visualização de ambiente ligada.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Visualização de ambiente desligou.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Visualização de ambiente ligou.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">A visualização de ambiente foi desligada.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">A visualização de ambiente foi ligada.</string>
   <string name="accessibility_quick_settings_color_inversion_off">Inversão de cor desligada.</string>
   <string name="accessibility_quick_settings_color_inversion_on">Inversão de cor ligada.</string>
   <string name="accessibility_quick_settings_compass_off">Bússola desligada.</string>
@@ -50,12 +50,12 @@
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: modo automático.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: modo dia.</string>
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: modo noite.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modo ao ar livre.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modo exterior.</string>
   <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay foi desligado.</string>
   <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay alterado para modo automático.</string>
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay alterado para modo dia.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay alterado para modo noite.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay alterado para modo ao ar livre.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay alterado para modo exterior.</string>
   <string name="accessibility_quick_settings_location_battery_saving">Localização: poupança de bateria.</string>
   <string name="accessibility_quick_settings_location_gps_only">Localização: apenas no dispositivo.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Localização: alta precisão.</string>

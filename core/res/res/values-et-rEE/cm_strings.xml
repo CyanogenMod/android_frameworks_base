@@ -136,6 +136,8 @@ muuta juba olemasolevaid.</string>
   <string name="perf_profile_pwrsv">Energiasäästmine</string>
   <string name="perf_profile_bal">Tasakaalustatud</string>
   <string name="perf_profile_perf">Jõudlus</string>
+  <string name="perf_profile_bias_power">Efektiivne</string>
+  <string name="perf_profile_bias_perf">Kiire</string>
   <string name="theme_install_error_title">Ei saanud paigaldada teemat</string>
   <string name="theme_install_error_message">%s paigaldamine nurjus</string>
   <string name="theme_reset_notification_title">Teema lähtestus</string>
@@ -209,4 +211,8 @@ muuta juba olemasolevaid.</string>
   <string name="permdesc_resetBatteryStats">Lubab rakendusel nullida aku praeguse madala-tasemelise kasutuse andmed.</string>
   <string name="silent_mode_priority">Prioriteet</string>
   <string name="silent_mode_none">Puudub</string>
+  <string name="subscription_change_disabled_wifi_ap">WiFi hotspot lülitati välja kuna muutus SIM kaardi teenused</string>
+  <string name="notify_turn_wifi_off_title">Lülita WiFi välja</string>
+  <string name="permlab_thirdPartyKeyguard">kolmanda isiku lukustusekraan</string>
+  <string name="permdesc_thirdPartyKeyguard">Lubab rakendust kasutada ebakindla lukustusekraanina.</string>
 </resources>

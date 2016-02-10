@@ -214,4 +214,5 @@
   <string name="subscription_change_disabled_wifi_ap">Точку доступу Wi-Fi вимкнено через зміну SIM-картки</string>
   <string name="notify_turn_wifi_off_title">Вимкнути Wi-Fi</string>
   <string name="permlab_thirdPartyKeyguard">Сторонній екран блокування</string>
+  <string name="permdesc_thirdPartyKeyguard">Дозволяє використати програму як незахищене блокування екрану.</string>
 </resources>

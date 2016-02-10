@@ -106,7 +106,7 @@
   <string name="app_ops_toggle_bluetooth">přepnout Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">přepnout mobilní data</string>
   <string name="app_ops_toggle_nfc">přepnout NFC</string>
-  <string name="app_ops_toggle_wifi">přepnout Wi-Fi</string>
+  <string name="app_ops_toggle_wifi">přepnout Wi\u2011Fi</string>
   <string name="app_ops_use_alarm_volume">ovládat hlasitost budíku</string>
   <string name="app_ops_use_audio_focus">ovládat zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládat hlasitost Bluetooth</string>
@@ -209,8 +209,8 @@
   <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žádný</string>
-  <string name="subscription_change_disabled_wifi_ap">Vypnutý hotspot Wi-Fi kvůli změně připojení SIM</string>
-  <string name="notify_turn_wifi_off_title">Vypnout Wi-Fi</string>
+  <string name="subscription_change_disabled_wifi_ap">Hotspot Wi\u2011Fi byl kvůli změně připojení SIM vypnut</string>
+  <string name="notify_turn_wifi_off_title">Vypnout Wi\u2011Fi</string>
   <string name="permlab_thirdPartyKeyguard">zámek obrazovky třetí strany</string>
   <string name="permdesc_thirdPartyKeyguard">Umožňuje být použit jako ne zcela bezpečný zámek obrazovky.</string>
 </resources>
