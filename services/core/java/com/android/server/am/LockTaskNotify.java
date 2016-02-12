@@ -21,13 +21,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
-import android.view.IWindowManager;
+import android.os.UserHandle;
 import android.view.WindowManager;
-import android.view.WindowManagerGlobal;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.android.internal.R;
+import cyanogenmod.providers.CMSettings;
 
 /**
  *  Helper to manage showing/hiding a image to notify them that they are entering
@@ -40,23 +40,19 @@ public class LockTaskNotify {
     private final H mHandler;
     private AccessibilityManager mAccessibilityManager;
     private Toast mLastToast;
-    private final IWindowManager mWindowManagerService;
 
     public LockTaskNotify(Context context) {
         mContext = context;
         mAccessibilityManager = (AccessibilityManager)
                 mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
         mHandler = new H();
-        mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
     }
 
     private boolean hasNavigationBar() {
-        try {
-            return mWindowManagerService.hasNavigationBar();
-        } catch (RemoteException e) {
-            //ignore
-        }
-        return false;
+        return mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar)
+                || CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                        CMSettings.Secure.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
     }
 
     public void showToast(int lockTaskModeState) {
