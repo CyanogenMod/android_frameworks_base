@@ -237,6 +237,7 @@ public class SwipeHelper {
             duration = DEFAULT_ESCAPE_ANIMATION_DURATION;
         }
 
+        mCallback.onChildDismissing(view);
         ValueAnimator anim = createTranslationAnimation(view, newPos);
         anim.setInterpolator(sLinearInterpolator);
         anim.setDuration(duration);
@@ -383,6 +384,8 @@ public class SwipeHelper {
         void onBeginDrag(View v);
 
         void onSwipeChanged(View v, float delta);
+
+        void onChildDismissing(View v);
 
         void onChildDismissed(View v);
 

@@ -70,6 +70,7 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
     boolean mFocusAnimationsEnabled;
     boolean mClipViewInStack;
     AnimateableViewBounds mViewBounds;
+    boolean mPendingRemoval;
 
     View mContent;
     TaskViewThumbnail mThumbnailView;
@@ -783,5 +784,13 @@ public class TaskView extends FrameLayout implements Task.TaskCallbacks,
             }
         }
         return false;
+    }
+
+    public void setPendingRemoval(boolean pendingRemoval) {
+        mPendingRemoval = pendingRemoval;
+    }
+
+    public boolean isPendingRemoval() {
+        return mPendingRemoval;
     }
 }

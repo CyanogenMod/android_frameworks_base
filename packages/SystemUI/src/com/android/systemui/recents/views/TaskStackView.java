@@ -901,11 +901,19 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
             return;
         }
 
-        if (mStack.getTaskCount() > 0) {
+        List<TaskView> taskViews = getTaskViews();
+        int taskViewCount = taskViews.size();
+        boolean taskViewsPendingRemoval = true;
+        for (int i = taskViewCount - 1; i >= 0; i--) {
+            if (!taskViews.get(i).isPendingRemoval()) {
+                taskViewsPendingRemoval = false;
+                break;
+            }
+        }
+
+        if (taskViewsPendingRemoval && mStack.getTaskCount() > 0) {
             // Find the launch target task
             Task launchTargetTask = null;
-            List<TaskView> taskViews = getTaskViews();
-            int taskViewCount = taskViews.size();
             for (int i = taskViewCount - 1; i >= 0; i--) {
                 TaskView tv = taskViews.get(i);
                 Task task = tv.getTask();
@@ -1482,6 +1490,7 @@ public class TaskStackView extends FrameLayout implements TaskStack.TaskStackCal
                 tv.getTask().activityLabel));
         // Remove the task from the view
         mStack.removeTask(task);
+        tv.setPendingRemoval(false);
         // If the dismissed task was focused, then we should focus the new task in the same index
         if (taskWasFocused) {
             ArrayList<Task> tasks = mStack.getTasks();

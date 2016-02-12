@@ -31,6 +31,7 @@ import com.android.server.lights.Light;
 import com.android.server.lights.LightsManager;
 import com.android.server.Watchdog;
 
+import cyanogenmod.power.PerformanceManager;
 import cyanogenmod.power.PerformanceManagerInternal;
 
 import android.Manifest;
@@ -847,6 +848,7 @@ public final class PowerManagerService extends SystemService
             Settings.Global.putInt(mContext.getContentResolver(),
                     Settings.Global.LOW_POWER_MODE, 0);
             // update performance profile
+            mPerf.setPowerProfile(PerformanceManager.PROFILE_BALANCED);
             mLowPowerModeSetting = false;
         }
         final boolean autoLowPowerModeEnabled = !mIsPowered && mAutoLowPowerModeConfigured
@@ -3525,7 +3527,13 @@ public final class PowerManagerService extends SystemService
                     android.Manifest.permission.DEVICE_POWER, null);
             final long ident = Binder.clearCallingIdentity();
             try {
-                return setLowPowerModeInternal(mode);
+                boolean changed = setLowPowerModeInternal(mode);
+                if (changed) {
+                    mPerf.setPowerProfile(mLowPowerModeEnabled ?
+                            PerformanceManager.PROFILE_POWER_SAVE :
+                            PerformanceManager.PROFILE_BALANCED);
+                }
+                return changed;
             } finally {
                 Binder.restoreCallingIdentity(ident);
             }

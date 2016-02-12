@@ -467,6 +467,12 @@ class TaskStackViewTouchHandler implements SwipeHelper.Callback {
     }
 
     @Override
+    public void onChildDismissing(View v) {
+        TaskView tv = (TaskView) v;
+        tv.setPendingRemoval(true);
+    }
+
+    @Override
     public void onChildDismissed(View v) {
         TaskView tv = (TaskView) v;
         // Re-enable clipping with the stack (we will reuse this view)
