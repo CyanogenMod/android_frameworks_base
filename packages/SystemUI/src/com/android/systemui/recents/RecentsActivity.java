@@ -208,9 +208,7 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
 
         ArrayList<TaskStack> stacks = plan.getAllTaskStacks();
         mConfig.launchedWithNoRecentTasks = !plan.hasTasks();
-        if (!mConfig.launchedWithNoRecentTasks) {
-            mRecentsView.setTaskStacks(stacks);
-        }
+        mRecentsView.setTaskStacks(stacks);
 
         // Create the home intent runnable
         Intent homeIntent = new Intent(Intent.ACTION_MAIN, null);
