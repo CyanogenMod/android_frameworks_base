@@ -493,9 +493,9 @@ public class VolumeDialog implements TunerService.Tunable {
         if (mAccessibility.mFeedbackEnabled) return 20000;
         if (mHovering) return 16000;
         if (mSafetyWarning != null) return 5000;
-        if (mExpanded || mExpandButtonAnimationRunning) return 5000;
+        if (mExpanded || mExpandButtonAnimationRunning) return 1500;
         if (mActiveStream == AudioManager.STREAM_MUSIC) return 1500;
-        return 3000;
+        return 1500;
     }
 
     protected void dismissH(int reason) {
