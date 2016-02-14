@@ -136,5 +136,4 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Helymeghatározás jelentése nagyon pontosra változtatva.</string>
   <string name="quick_settings_tiles_category_system">Rendszer csempék</string>
   <string name="quick_settings_tiles_add_tiles">Csempe hozzáadása</string>
-  <string name="hotspot_apm_message">Nem lehet csatlakozni a mobil hálózatokra, míg a repülőgép üzemmód engedélyezve van. Tiltsa le a repülőgép üzemmódot és próbálja újra.</string>
 </resources>

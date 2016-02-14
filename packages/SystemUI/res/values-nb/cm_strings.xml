@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Topptekst</string>
   <string name="quick_settings_title_tiles">Fliser</string>
   <string name="quick_settings_title_show_weather">Vis været</string>
+  <string name="quick_settings_title_show_brightness_slider">Vis lysstyrkeendrer</string>
   <string name="quick_settings_title_enlarge_first_row">Forstørr første rad</string>
   <string name="screen_pinning_description_no_navbar">Dette holder den i syne inntill du løsner den. Trykk og hold på tilbake knappen for å løsne.</string>
   <string name="quick_settings_custom_tile_detail_title">Egendefinerte fliser</string>

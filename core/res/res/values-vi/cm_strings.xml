@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Cho phép ứng dụng đọc thông tin về các số điện thoại bị chặn cuộc gọi hoặc tin nhắn đến.</string>
   <string name="permlab_changePhoneBlacklist">thay đổi danh sách đen của điện thoại</string>
   <string name="permdesc_changePhoneBlacklist">Cho phép ứng dụng thay đổi số điện thoại bị chặn cuộc gọi hoặc tin nhắn đến.</string>
-  <string name="global_action_choose_profile">Cấu hình</string>
   <string name="permlab_setKeyguardWallpaper">thiết lập hình nền bảo vệ phím</string>
   <string name="permdesc_setKeyguardWallpaper">Cho phép ứng dụng thay đổi hình nền màn hình khoá.</string>
   <string name="global_action_reboot">Khởi động lại</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">chạy lúc khởi động</string>
   <string name="app_ops_toast_window">hiện thông báo nhanh</string>
   <string name="app_ops_toggle_bluetooth">bật/tắt Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">bật/tắt dữ liệu di động</string>
   <string name="app_ops_toggle_nfc">bật/tắt NFC</string>
   <string name="app_ops_use_alarm_volume">điều khiển âm lượng báo thức</string>
   <string name="app_ops_use_audio_focus">điều khiển trọng tâm âm thanh</string>

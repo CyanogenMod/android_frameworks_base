@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Umožňuje čtení informací o telefonních číslech, která jsou blokována pro příjem hovorů nebo zpráv.</string>
   <string name="permlab_changePhoneBlacklist">změnit černou listinu telefonu</string>
   <string name="permdesc_changePhoneBlacklist">Umožňuje změnit telefonní čísla, která jsou blokována pro příjem hovorů nebo zpráv.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">nastavit tapetu zámku kláves</string>
   <string name="permdesc_setKeyguardWallpaper">Umožní změnit tapetu zámku obrazovky.</string>
   <string name="global_action_reboot">Restartovat</string>
@@ -64,8 +63,8 @@
   <string name="theme_reset_notification_body">Kvůli pádům aplikací byl obnoven výchozí systémový motiv.</string>
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žádný</string>
-  <string name="subscription_change_disabled_wifi_ap">Vypnutý hotspot Wi-Fi kvůli změně připojení SIM</string>
-  <string name="notify_turn_wifi_off_title">Vypnout Wi-Fi</string>
+  <string name="subscription_change_disabled_wifi_ap">Hotspot Wi\u2011Fi byl kvůli změně připojení SIM vypnut</string>
+  <string name="notify_turn_wifi_off_title">Vypnout Wi\u2011Fi</string>
   <string name="permlab_changePrivacyGuardState">povolit či zakázat Ochranu soukromí</string>
   <string name="permdesc_changePrivacyGuardState">Umožní změnit pravidla, zda bude některá aplikace spuštěna v režimu Ochrany soukromí. Pokud je aplikace spuštěna v režimu Ochrany soukromí, tato aplikace nemá umožněn přístup k osobním datům jako jsou kontakty, historie volání nebo zprávy.</string>
   <string name="privacy_guard_notification">Ochrana soukromí aktivní</string>
@@ -108,9 +107,9 @@
   <string name="app_ops_start_at_bootup">spustit při startu</string>
   <string name="app_ops_toast_window">zobrazovat vyskakovací upozornění</string>
   <string name="app_ops_toggle_bluetooth">přepnout Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">přepnout mobilní data</string>
+  <string name="app_ops_toggle_mobile_data">vypnout/zapnout mobilní data</string>
   <string name="app_ops_toggle_nfc">přepnout NFC</string>
-  <string name="app_ops_toggle_wifi">přepnout Wi-Fi</string>
+  <string name="app_ops_toggle_wifi">přepnout Wi\u2011Fi</string>
   <string name="app_ops_use_alarm_volume">ovládat hlasitost budíku</string>
   <string name="app_ops_use_audio_focus">ovládat zvukové zdroje</string>
   <string name="app_ops_use_bluetooth_volume">ovládat hlasitost Bluetooth</string>
@@ -126,7 +125,7 @@
   <string name="app_ops_use_fingerprint">použít otisk prstu</string>
   <string name="app_ops_add_voicemail">přidat hlasovou zprávu</string>
   <string name="app_ops_read_phone_state">přístup ke stavu telefonu</string>
-  <string name="app_ops_scan_wifi">prohledávání Wi-Fi sítí</string>
+  <string name="app_ops_scan_wifi">prohledávání Wi\u2011Fi sítí</string>
   <string name="app_ops_change_wallpaper">změnit tapetu</string>
   <string name="app_ops_assist_structure">použít asistenční strukturu</string>
   <string name="app_ops_assist_screenshot">sejmout obrazovku</string>
@@ -137,7 +136,7 @@
   <string name="app_ops_write_external_storage">zapsat na externí úložiště</string>
   <string name="app_ops_turn_on_screen">zapnout obrazovku</string>
   <string name="app_ops_get_accounts">získat účty zařízení</string>
-  <string name="app_ops_wifi_change">změna stavu Wi-Fi</string>
+  <string name="app_ops_wifi_change">změna stavu Wi\u2011Fi</string>
   <string name="app_ops_su">získat root přístup</string>
   <string name="lock_to_app_toast_no_navbar">Chcete-li odebrat tuto obrazovku, podržte tlačítko Zpět.</string>
   <string name="live_display_auto">Automaticky</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> připojená zařízení</string>
   <string name="notify_package_component_protected_title">Spuštění aktivity zablokováno</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> je chráněna před spuštěním. Dotykem autorizovat spuštění aplikace.</string>
+  <string name="notify_battery_fully_charged_title">Baterie je nabitá</string>
+  <string name="notify_battery_fully_charged_text">Pro zlepšení životnosti baterie odpojte zařízení od nabíječky.</string>
 </resources>

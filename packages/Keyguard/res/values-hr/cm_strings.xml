@@ -17,7 +17,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM kartica je Perso zaključana</string>
-  <string name="lockscreen_sim_error_message_short">Nevažeća kartica.</string>
+  <string name="lockscreen_sim_error_message_short">Kartica nije valjana.</string>
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Upišite SIM PIN, preostao vam je <xliff:g id="number">%d</xliff:g> pokušaj nakon čega ćete morati kontaktirati svog pružatelja usluga da otključa vaš uređaj.</item>
     <item quantity="few">Upišite SIM PIN, preostalo vam je <xliff:g id="number">%d</xliff:g> pokušaja.</item>

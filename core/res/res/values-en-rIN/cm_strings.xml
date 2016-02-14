@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Allows an app to read information about phone numbers that are blocked for incoming calls or messages.</string>
   <string name="permlab_changePhoneBlacklist">change phone blacklist</string>
   <string name="permdesc_changePhoneBlacklist">Allows an app to change the phone numbers that are blocked for incoming calls or messages.</string>
-  <string name="global_action_choose_profile">Profile</string>
   <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
   <string name="permdesc_setKeyguardWallpaper">Allows an app to change the lock screen wallpaper.</string>
   <string name="global_action_reboot">Reboot</string>
@@ -110,7 +109,6 @@
   <string name="app_ops_start_at_bootup">start at power up</string>
   <string name="app_ops_toast_window">display toast messages</string>
   <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
   <string name="app_ops_toggle_nfc">toggle NFC</string>
   <string name="app_ops_toggle_wifi">toggle Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">control alarm volume</string>

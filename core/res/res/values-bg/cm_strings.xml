@@ -24,18 +24,17 @@
   <string name="permdesc_modifyProtectedSmsList">Разрешава на приложението да модифицира списъка с контакти на защитените SMS.</string>
   <string name="permgrouplab_security">Сигурност</string>
   <string name="permgroupdesc_security">Разрешения, свързани с информацията за защита на устройството.</string>
-  <string name="permlab_readPhoneBlacklist">Прочетете телефонния черен списък</string>
+  <string name="permlab_readPhoneBlacklist">Прочетете списъка с блокирани контакти</string>
   <string name="permdesc_readPhoneBlacklist">Разрешава на приложението да прочетете информацията за телефонни номера, които са блокирани за входящи повиквания или съобщения.</string>
-  <string name="permlab_changePhoneBlacklist">промяна на телефонния черен списък</string>
+  <string name="permlab_changePhoneBlacklist">Промяна на списъка с блокирани контакти</string>
   <string name="permdesc_changePhoneBlacklist">Разрешава на приложението да промени телефонните номера, които са блокирани за входящи повиквания или съобщения.</string>
-  <string name="global_action_choose_profile">Профил</string>
   <string name="permlab_setKeyguardWallpaper">Задаване на тапет за заключен екран</string>
   <string name="permdesc_setKeyguardWallpaper">Разрешава на едно приложение да променя тапета на заключения екран.</string>
   <string name="global_action_reboot">Рестартиране</string>
   <string name="global_action_current_user">Текущ</string>
   <string name="reboot_reboot">Рестартиране</string>
   <string name="reboot_recovery">Възстановяване</string>
-  <string name="reboot_bootloader">Bootloader</string>
+  <string name="reboot_bootloader">Буутлоудър</string>
   <string name="reboot_download">Изтегляне</string>
   <string name="reboot_soft">Бързо рестартиране</string>
   <string name="reboot_title">Рестартиране</string>
@@ -64,7 +63,7 @@
   <string name="theme_reset_notification_body">Стандартната тема е възстановена поради множество грешки.</string>
   <string name="silent_mode_priority">Приоритет</string>
   <string name="silent_mode_none">Без</string>
-  <string name="subscription_change_disabled_wifi_ap">Изключена Wi-Fi точка за достъп, поради промяна в абонаментна на SIM</string>
+  <string name="subscription_change_disabled_wifi_ap">Изключена Wi-Fi точка за достъп, поради промяна в абонаментна на СИМ</string>
   <string name="notify_turn_wifi_off_title">Изключете Wi-Fi</string>
   <string name="permlab_changePrivacyGuardState">Активира или деактивира Защитен режим</string>
   <string name="permdesc_changePrivacyGuardState">Разрешава на приложението да променя статута на поверителност на друго приложение. Когато едно приложение се използва с защита на поверителността, не може да има достъп до персонални данни, като контакти, регистри с повиквания или съобщения.</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">изпълнение при включване</string>
   <string name="app_ops_toast_window">показвай изкачащи уведомления</string>
   <string name="app_ops_toggle_bluetooth">активиране/деактивиране Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">активиране/деактивиране мобилен интернет</string>
+  <string name="app_ops_toggle_mobile_data">Превключване клетъчен данни</string>
   <string name="app_ops_toggle_nfc">активиране/деактивиране NFC</string>
   <string name="app_ops_toggle_wifi">активирай/деактивирай Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">контрол на силата на алармата</string>
@@ -150,10 +149,12 @@
   <string name="live_display_night_summary">Използва само нощните настройки</string>
   <string name="live_display_outdoor">На открито (ярко слънце)</string>
   <string name="live_display_outdoor_summary">Използвай само настройките за открито</string>
-  <string name="live_display_hint">LiveDisplay може да помогне за намаляване на умората в очите ви през нощта. Докоснете тук, за да го изпробвате!</string>
+  <string name="live_display_hint">Използването на Адаптивен екран може да помогне за намаляване умората в очите през нощта. Докоснете тук, за да го изпробвате!</string>
   <string name="tethered_notification_no_device_message">Няма свързано устройство</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> устройството е свързано</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> устройствата са свързани</string>
   <string name="notify_package_component_protected_title">Старта на приложението блокиран</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> е блокиран. Докосни за да потвърдиш старта на приложението.</string>
+  <string name="notify_battery_fully_charged_title">Батерията е напълно заредена</string>
+  <string name="notify_battery_fully_charged_text">Изключете зарядното устройството за да удължите живота на батерията.</string>
 </resources>

@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">プロファイル無効</string>
   <string name="quick_settings_heads_up_label">ヘッドアップ</string>
   <string name="quick_settings_battery_saver_label">バッテリーセーバー</string>
+  <string name="quick_settings_caffeine_label">カフェイン</string>
   <string name="accessibility_quick_settings_sync_off">同期はOFFです。</string>
   <string name="accessibility_quick_settings_sync_on">同期はONです。</string>
   <string name="accessibility_quick_settings_sync_changed_off">同期がOFFになりました。</string>
@@ -79,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">ロック画面</string>
   <string name="quick_settings_ambient_display_label">常時オンディスプレイ</string>
   <string name="quick_settings_lockscreen_label_enforced">ロック画面強制</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">プロファイルによって無効になっています</string>
   <string name="accessibility_quick_settings_screen_timeout">画面のタイムアウト: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>です。</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">画面のタイムアウトが<xliff:g id="timeout" example="30 seconds">%s</xliff:g>に変更されました。</string>
   <string name="qs_tile_performance">バッテリーモード</string>
@@ -105,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">ヘッドアップはONです。</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">ヘッドアップがOFFになりました。</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">ヘッドアップがONになりました。</string>
+  <string name="accessibility_quick_settings_caffeine_off">カフェインはOFFです。</string>
+  <string name="accessibility_quick_settings_caffeine_on">カフェインはONです。</string>
   <string name="accessibility_quick_settings_battery_saver_off">バッテリーセーバーはOFFです。</string>
   <string name="accessibility_quick_settings_battery_saver_on">バッテリーセーバーはONです。</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">バッテリーセーバーがOFFになりました。</string>
@@ -137,4 +141,6 @@
   <string name="quick_settings_tiles_category_system">システムのタイル</string>
   <string name="quick_settings_tiles_add_tiles">タイルを追加</string>
   <string name="hotspot_apm_message">機内モードが有効になっている間はモバイルネットワークに接続することはできません。機内モードを無効にしてから再試行してください。</string>
+  <string name="quick_settings_tile_flashlight_not_title">フラッシュライトが点灯しています</string>
+  <string name="quick_settings_tile_flashlight_not_summary">タップして消灯する</string>
 </resources>

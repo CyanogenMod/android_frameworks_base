@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Umožňuje aplikácii čítať informácie o telefónnych číslach, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
   <string name="permlab_changePhoneBlacklist">zmeniť čiernu listinu telefónu</string>
   <string name="permdesc_changePhoneBlacklist">Umožňuje aplikácii zmeniť telefónne čísla, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu obrazovky uzamknutia</string>
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu obrazovky uzamknutia.</string>
   <string name="global_action_reboot">Reštartovať</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">spustiť pri štaťte</string>
   <string name="app_ops_toast_window">zobraziť vyskakovacie oznámenia</string>
   <string name="app_ops_toggle_bluetooth">prepnúť bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">prepnúť mobilné dáta</string>
   <string name="app_ops_toggle_nfc">prepnúť NFC</string>
   <string name="app_ops_use_alarm_volume">ovládať hlasitosť budíka</string>
   <string name="app_ops_use_audio_focus">ovládať zvukové zdroje</string>

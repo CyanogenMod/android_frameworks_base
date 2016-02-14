@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">向右滑動即可%1$s</string>
   <string name="right_shortcut_hint">向左滑動即可%1$s</string>
+  <string name="lockscreen_message">輕觸左側或右側的圖示以設定鎖定畫面捷徑</string>
+  <string name="lockscreen_default_target">預設</string>
   <string name="select_application">選取應用程式</string>
   <string name="lockscreen_choose_action_title">選取操作</string>
   <string name="lockscreen_none_target">無</string>
@@ -36,7 +40,20 @@
   <string name="advanced_dev_option_wipe_app">清除應用程式資料</string>
   <string name="advanced_dev_option_force_stop">強制停止</string>
   <string name="advanced_dev_option_uninstall">解除安裝</string>
+  <string name="accessibility_notification_brightness">亮度</string>
   <string name="quick_settings_compass_init">正在初始化\u2026</string>
+  <string name="led_notification_title">指示燈設定</string>
+  <string name="led_notification_text">已透過設定啟用 LED 指示燈</string>
+  <string name="qs_tile_edit_header_instruction">按住瓷磚以重新排列</string>
+  <string name="quick_settings_edit_label">編輯瓷磚</string>
+  <string name="quick_settings_cannot_delete_edit_tile">無法刪除編輯瓷磚</string>
+  <string name="qs_tiles_reset_confirmation">將快速設定瓷磚還原至預設配置？</string>
+  <string name="quick_settings_tile_reset_to_default">還原至預設布局</string>
+  <string name="quick_settings_title_header">標題</string>
+  <string name="quick_settings_title_tiles">瓷磚</string>
+  <string name="quick_settings_title_show_weather">顯示天氣資訊</string>
+  <string name="quick_settings_title_show_brightness_slider">顯示亮度滑桿</string>
+  <string name="quick_settings_title_enlarge_first_row">擴大首行</string>
   <string name="quick_settings_custom_tile_detail_title">自訂瓷磚</string>
   <string name="quick_settings_remove">移除瓷磚</string>
   <string name="quick_settings_network_adb_label">網路 ADB</string>
@@ -67,6 +84,7 @@
   <string name="dynamic_qs_tile_next_alarm_label">下一個鬧鐘</string>
   <string name="dynamic_qs_tile_ime_selector_label">輸入法選擇器</string>
   <string name="dynamic_qs_tile_su_label">Root 權限</string>
+  <string name="quick_settings_title_advanced_location">定位模式</string>
   <string name="accessibility_quick_settings_location_battery_saving">位置回報：節約耗電量</string>
   <string name="accessibility_quick_settings_location_gps_only">位置回報：僅限裝置</string>
   <string name="accessibility_quick_settings_location_high_accuracy">位置回報：高精確度</string>
@@ -74,4 +92,6 @@
   <string name="quick_settings_location_battery_saving_label">節約耗電量</string>
   <string name="quick_settings_location_gps_only_label">僅限裝置</string>
   <string name="quick_settings_location_high_accuracy_label">高精確度</string>
+  <string name="quick_settings_tiles_category_system">系統瓷磚</string>
+  <string name="quick_settings_tiles_add_tiles">新增瓷磚</string>
 </resources>

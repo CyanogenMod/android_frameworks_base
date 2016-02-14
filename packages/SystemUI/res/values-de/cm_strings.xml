@@ -19,8 +19,8 @@
   <string name="accessibility_data_connection_hspap">HSPA+</string>
   <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> – <xliff:g id="condition">%2$s</xliff:g></string>
-  <string name="left_shortcut_hint">Nach Rechts wischen für %1$s</string>
-  <string name="right_shortcut_hint">Nach Links wischen für %1$s</string>
+  <string name="left_shortcut_hint">Nach rechts wischen für %1$s</string>
+  <string name="right_shortcut_hint">Nach links wischen für %1$s</string>
   <string name="lockscreen_message">Berühren Sie das linke oder rechte Symbol, um eine Sperrbildschirm-Verknüpfung festzulegen.</string>
   <string name="lockscreen_default_target">Standard</string>
   <string name="select_application">App wählen</string>
@@ -45,7 +45,7 @@
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profile ausgeschaltet.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil auf <xliff:g id="profile" example="Default">%s</xliff:g> geändert.</string>
-  <string name="quick_settings_compass_init">Initialisiere\u2026</string>
+  <string name="quick_settings_compass_init">Initialisierung\u2026</string>
   <string name="led_notification_title">LED-Einstellungen</string>
   <string name="led_notification_text">Benachrichtigungslicht durch Einstellungen aktiviert</string>
   <string name="qs_tile_edit_header_instruction">Drücken und halten Sie die Kacheln, um sie neu anzuordnen</string>
@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Kopfzeile</string>
   <string name="quick_settings_title_tiles">Kacheln</string>
   <string name="quick_settings_title_show_weather">Wetter anzeigen</string>
+  <string name="quick_settings_title_show_brightness_slider">Helligkeitsregler anzeigen</string>
   <string name="quick_settings_title_enlarge_first_row">Erste Zeile vergrößern</string>
   <string name="screen_pinning_description_no_navbar">Dies fixiert die aktuelle Ansicht. Zum Lösen die Zurück-Taste drücken und halten.</string>
   <string name="quick_settings_custom_tile_detail_title">Benutzerdefinierte Kachel</string>
@@ -67,19 +68,19 @@
   <string name="quick_settings_profiles_off">Profile deaktiviert</string>
   <string name="quick_settings_heads_up_label">Pop-up</string>
   <string name="quick_settings_battery_saver_label">Akku-Sparmodus</string>
-  <string name="accessibility_quick_settings_sync_off">Sync aus.</string>
-  <string name="accessibility_quick_settings_sync_on">Sync an.</string>
-  <string name="accessibility_quick_settings_sync_changed_off">Sync ausgeschaltet.</string>
-  <string name="accessibility_quick_settings_sync_changed_on">Sync eingeschaltet.</string>
-  <string name="quick_settings_sync_label">Sync</string>
+  <string name="accessibility_quick_settings_sync_off">Synchronisierung aus.</string>
+  <string name="accessibility_quick_settings_sync_on">Synchronisierung an.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Synchronisierung ist ausgeschaltet.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Synchronisierung ist eingeschaltet.</string>
+  <string name="quick_settings_sync_label">Synchronisierung</string>
   <string name="quick_settings_volume_panel_label">Lautstärke</string>
   <string name="quick_settings_usb_tether_label">USB-Tethering</string>
   <string name="quick_settings_screen_timeout_detail_title">Bildschirm-Timeout</string>
   <string name="quick_settings_lockscreen_label">Bildschirmsperre</string>
   <string name="quick_settings_ambient_display_label">Inaktivitätsdisplay</string>
   <string name="quick_settings_lockscreen_label_enforced">Sperrbildschirm aktivieren</string>
-  <string name="accessibility_quick_settings_screen_timeout">Ruhezustand nach <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
-  <string name="accessibility_quick_settings_screen_timeout_changed">Zeit bis zum Ruhezustand auf <xliff:g id="timeout" example="30 seconds">%s</xliff:g> geändert.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Bildschirm-Timeout nach <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Bildschirm-Timeout auf <xliff:g id="timeout" example="30 seconds">%s</xliff:g> geändert.</string>
   <string name="qs_tile_performance">Akkumodus</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Akkumodus: Energie sparen.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Akkumodus: Ausgeglichen.</string>
@@ -135,4 +136,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Standortmodus auf \"Hohe Genauigkeit\" geändert.</string>
   <string name="quick_settings_tiles_category_system">System-Kacheln</string>
   <string name="quick_settings_tiles_add_tiles">Kachel hinzufügen</string>
+  <string name="hotspot_apm_message">Im Flugmodus ist keine Verbindung zum Mobilfunknetz möglich. Deaktivieren Sie den Flugmodus und versuchen Sie es erneut.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Taschenlampe ist eingeschaltet</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Zum Ausschalten tippen</string>
 </resources>

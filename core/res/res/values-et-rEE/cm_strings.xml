@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Lubab rakendusel lugeda teavet telefoninumbrite kohta, mis on sissetulevate kõnede ja sõnumite jaoks blokeeritud.</string>
   <string name="permlab_changePhoneBlacklist">muuta telefoni musta nimekirja</string>
   <string name="permdesc_changePhoneBlacklist">Annab rakendusele õiguse muuta sissetulevate kõnede ja sõnumite jaoks blokeeritud numbreid.</string>
-  <string name="global_action_choose_profile">Profiil</string>
   <string name="permlab_setKeyguardWallpaper">muuta lukuekraani pilti</string>
   <string name="permdesc_setKeyguardWallpaper">Lubab rakendusel muuta lukustusekraani taustapilti.</string>
   <string name="global_action_reboot">Taaskäivitamine</string>
@@ -66,6 +65,8 @@ muuta juba olemasolevaid.</string>
   <string name="theme_reset_notification_body">Süsteemi teema taastati paljude rakenduste kokkujooksmise tõttu.</string>
   <string name="silent_mode_priority">Prioriteet</string>
   <string name="silent_mode_none">Puudub</string>
+  <string name="subscription_change_disabled_wifi_ap">WiFi hotspot lülitati välja kuna muutus SIM kaardi teenused</string>
+  <string name="notify_turn_wifi_off_title">Lülita WiFi välja</string>
   <string name="permlab_changePrivacyGuardState">lubada või keelata privaatsuskaitset</string>
   <string name="permdesc_changePrivacyGuardState">Sellega lubate muuta mõne muu rakenduse käivitumist Privaatsuskaitsega. Kui rakendus töötab sisselülitatud Privaatsuskaitsega, puudub rakendusel ligipääs isiklikele andmetele nagu kontaktid, kõnelogid või sõnumid.</string>
   <string name="privacy_guard_notification">Privaatsuskaitse aktiveeritud</string>
@@ -108,7 +109,6 @@ muuta juba olemasolevaid.</string>
   <string name="app_ops_start_at_bootup">käivitada sisselülitamisel</string>
   <string name="app_ops_toast_window">näidata lühisõnumeid</string>
   <string name="app_ops_toggle_bluetooth">lülitada Bluetooth\'i</string>
-  <string name="app_ops_toggle_mobile_data">lülitada andmesidet</string>
   <string name="app_ops_toggle_nfc">lülitada NFC</string>
   <string name="app_ops_use_alarm_volume">muuta alarmi helitugevust</string>
   <string name="app_ops_use_audio_focus">muuta audio fookust</string>

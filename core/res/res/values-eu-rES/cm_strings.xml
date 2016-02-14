@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Sarrera dei edo SMS mezuak blokeatuta dituzten telefono zenbakien informazioa irakurtzea ahalbidetzen dio aplikazioari.</string>
   <string name="permlab_changePhoneBlacklist">aldatu telefonoen zerrenda beltza</string>
   <string name="permdesc_changePhoneBlacklist">Sarrera deiak eta SMS mezuak blokeatuta dituzten zenbakien zerrenda aldatzea ahalbidetzen dio aplikazioari.</string>
-  <string name="global_action_choose_profile">Profila</string>
   <string name="permlab_setKeyguardWallpaper">Ezarri blokeo-pantailarako horma-papera</string>
   <string name="permdesc_setKeyguardWallpaper">Blokeo-pantailarako horma-papera aldatzea ahalbidetzen dio aplikazioari.</string>
   <string name="global_action_reboot">Berrabiarazi</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">exekutatu abioan</string>
   <string name="app_ops_toast_window">laster-leihoa mezuak bistaratu</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth txandakatu</string>
-  <string name="app_ops_toggle_mobile_data">datu mugikorrak txandakatu</string>
+  <string name="app_ops_toggle_mobile_data">txandakatu datu mugikorrak</string>
   <string name="app_ops_toggle_nfc">NFC txandakatu</string>
   <string name="app_ops_toggle_wifi">Wi-Fia txandakatu</string>
   <string name="app_ops_use_alarm_volume">alarmen bolumena kontrolatu</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> gailu konektatuta</string>
   <string name="notify_package_component_protected_title">Aktibitatea abiatzea blokeatu da</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> abiatzeko babestuta dago. Sakatu nortasuna egiaztatzeko eta aplikazioa abiatzeko.</string>
+  <string name="notify_battery_fully_charged_title">Bateria erabat kargatuta</string>
+  <string name="notify_battery_fully_charged_text">Deskonektatu zure gailua kargagailutik bateriaren bizitza luzatzeko.</string>
 </resources>

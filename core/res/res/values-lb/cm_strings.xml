@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Erlaabt der App, Informatiounen iwwer blockéiert Telefonsnummere fir erakommend Uriff oder Messagen ze liesen.</string>
   <string name="permlab_changePhoneBlacklist">Schwaarz Lëscht änneren</string>
   <string name="permdesc_changePhoneBlacklist">Erlaabt der App, d\'blockéiert Telefonsnummere fir erakommend Uriff oder Messagen z\'änneren.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">Hannergrondbild vum Spärschierm setzen</string>
   <string name="permdesc_setKeyguardWallpaper">Erlaabt der App, d\'Hannergrondbild vum Spärschierm z\'änneren.</string>
   <string name="global_action_reboot">Nei starten</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">automatesch starten</string>
   <string name="app_ops_toast_window">Kuerzzäit-Notifikatiounen uweisen</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth un-/ausschalten</string>
-  <string name="app_ops_toggle_mobile_data">mobil Daten un-/ausschalten</string>
   <string name="app_ops_toggle_nfc">NFC un-/ausschalten</string>
   <string name="app_ops_toggle_wifi">WLAN un-/ausschalten</string>
   <string name="app_ops_use_alarm_volume">d\'Lautstäerkt vum Wecker änneren</string>

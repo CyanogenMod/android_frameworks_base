@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">SIM/RUIM је лично закључан</string>
+  <string name="keyguard_perso_locked_message">SIM картица је лично закључана</string>
   <string name="lockscreen_sim_error_message_short">Неважећа картица.</string>
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Унеси SIM PIN, имаш <xliff:g id="number">%d</xliff:g> преостали покушај пре него што мораш контактирати свог оператора да откључаш уређај.</item>

@@ -19,9 +19,9 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profile_applist_title">Приложения</string>
-  <string name="picker_activities">Дейности</string>
-  <string name="select_custom_app_title">Изберете приложение</string>
-  <string name="select_custom_activity_title">Изберете потребителска дейност</string>
-  <string name="lockscreen_targets_message">Преки пътища на заключен екран</string>
+  <string name="profile_applist_title">應用程式</string>
+  <string name="picker_activities">活動</string>
+  <string name="select_custom_app_title">選取自訂應用程式</string>
+  <string name="select_custom_activity_title">選取自訂活動</string>
+  <string name="lockscreen_targets_message">鎖定畫面捷徑</string>
 </resources>

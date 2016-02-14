@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">允许应用读取有关被阻止来电或信息的电话号码的信息。</string>
   <string name="permlab_changePhoneBlacklist">更改手机黑名单</string>
   <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
-  <string name="global_action_choose_profile">情景模式</string>
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
   <string name="global_action_reboot">重启</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">开机自启动</string>
   <string name="app_ops_toast_window">显示提示信息</string>
   <string name="app_ops_toggle_bluetooth">开启蓝牙</string>
-  <string name="app_ops_toggle_mobile_data">开启移动数据</string>
+  <string name="app_ops_toggle_mobile_data">切换移动数据</string>
   <string name="app_ops_toggle_nfc">切换 NFC</string>
   <string name="app_ops_toggle_wifi">开关 Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">控制闹铃音量</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> 个已连接的设备</string>
   <string name="notify_package_component_protected_title">已阻止活动启动</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> 正被保护防止启动。点击以认证并启动应用。</string>
+  <string name="notify_battery_fully_charged_title">电池已完全充满</string>
+  <string name="notify_battery_fully_charged_text">请将您的设备从充电器断开，以便获得更长的电池寿命。</string>
 </resources>

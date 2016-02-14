@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Laat \'n program toe om inligting oor telefoonnommers wat geblokkeer is van inkomende oproepe of boodskappe te lees.</string>
   <string name="permlab_changePhoneBlacklist">Verander selfoon swartlys</string>
   <string name="permdesc_changePhoneBlacklist">Laat \'n program toe om van die telefoonnommers wat geblokkeer is vir inkomende oproepe of boodskappe te verander.</string>
-  <string name="global_action_choose_profile">Profiel</string>
   <string name="permlab_setKeyguardWallpaper">Stel slotskerm agtergrond in</string>
   <string name="permdesc_setKeyguardWallpaper">Laat \'n program toe om die slotskerm agtergrond te verander.</string>
   <string name="global_action_reboot">Herlaai</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">begin by aanskakeling</string>
   <string name="app_ops_toast_window">vertoon uitspring boodskappe</string>
   <string name="app_ops_toggle_bluetooth">wissel Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">wissel mobiele data</string>
+  <string name="app_ops_toggle_mobile_data">skakel sellulêre data aan/af</string>
   <string name="app_ops_toggle_nfc">wissel NFC</string>
   <string name="app_ops_toggle_wifi">wissel Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">beheer alarmstelsel volume</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> gekoppelde toestelle</string>
   <string name="notify_package_component_protected_title">Aktiwiteit begin geblokkeer</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> is beskerm om uitgevoer te word. Raak om toestemming te gee en die toepassing te begin.</string>
+  <string name="notify_battery_fully_charged_title">Battery vol gelaai</string>
+  <string name="notify_battery_fully_charged_text">Diskonnekteer jou toestel van die laaier om die battery lewe te verleng.</string>
 </resources>

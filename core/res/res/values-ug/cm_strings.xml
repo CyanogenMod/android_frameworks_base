@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">ئەپنىڭ كەلگەن تېلېفون ياكى ئۇچۇرلارنىڭ چەكلەنگەن تېلېفون نومۇر ئۇچۇرلىرىنى ئوقۇشىغا يول قويىدۇ.</string>
   <string name="permlab_changePhoneBlacklist">تېلېفون قارا تىزىمىنى ئۆزگەرتىدۇ</string>
   <string name="permdesc_changePhoneBlacklist">كەلگەن تېلېفون ياكى ئۇچۇرنىڭ چەكلەنگەن نومۇر ئۇچۇرلىرىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
-  <string name="global_action_choose_profile">سەپلىمە ھۆججەت</string>
   <string name="permlab_setKeyguardWallpaper">قۇلۇپ ئېكران تام قەغىزىنى تەڭشەيدۇ</string>
   <string name="permdesc_setKeyguardWallpaper">ئەپنىڭ قۇلۇپ ئېكران تام قەغىزىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
   <string name="global_action_reboot">قايتا قوزغات</string>
@@ -100,7 +99,6 @@
   <string name="app_ops_start_at_bootup">قوزغالغاندا باشلايدۇ</string>
   <string name="app_ops_toast_window">قاڭقىش ئۇچۇرىنى كۆرسىتىدۇ</string>
   <string name="app_ops_toggle_bluetooth">كۆكچىشنى ئاچ تاقا</string>
-  <string name="app_ops_toggle_mobile_data">كۆچمە سانلىق مەلۇماتنى ئاچ تاقا</string>
   <string name="app_ops_toggle_nfc">NFC ئاچ تاقا</string>
   <string name="app_ops_use_alarm_volume">قوڭغۇراق ئاۋازىنى تىزگىنلەيدۇ</string>
   <string name="app_ops_use_audio_focus">ئاۋاز فوكۇسىنى تىزگىنلەيدۇ</string>

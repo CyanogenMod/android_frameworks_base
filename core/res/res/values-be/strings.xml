@@ -25,14 +25,26 @@
   <string name="gigabyteShort">ГБ</string>
   <string name="terabyteShort">TБ</string>
   <string name="petabyteShort">ПБ</string>
-  <string name="emptyPhoneNumber">(Няма нумару тэлефону)</string>
+  <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
   <string name="passwordIncorrect">Памылковы пароль.</string>
   <string name="mmiComplete">Запыт MMI завершаны.</string>
   <string name="badPuk">Уведзены памылковы PUK-код.</string>
   <string name="invalidPin">Увядзіце PIN-код (ад 4 да 8 лічбаў).</string>
   <string name="invalidPuk">Увядзіце PUK-код з 8 лічбаў ці больш.</string>
   <string name="needPuk2">Для разблакавання SIM-карткі увядзіце код PUK2.</string>
+  <plurals name="pinpuk_attempts">
+    <item quantity="one">У вас засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як SIM-картка будзе заблакавана.</item>
+    <item quantity="few">У вас засталася <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
+    <item quantity="other">У вас засталася <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
+  </plurals>
   <string name="BaMmi">Забарона выклікаў</string>
+  <string name="wfcRegErrorTitle">Wi-Fi выклік</string>
+  <string name="wfcSpnFormat">%s</string>
+  <string name="wfcDataSpnFormat">%s</string>
+  <string name="wifi_calling_off_summary">Адключана</string>
+  <string name="wfc_mode_wifi_preferred_summary">Wi-Fi пераважна</string>
+  <string name="wfc_mode_cellular_preferred_summary">Сотавы пераважна</string>
+  <string name="wfc_mode_wifi_only_summary">толькі Wi-Fi</string>
   <string name="global_action_lockdown">Блакаваць зараз</string>
   <string name="permdesc_sim_communication">Дазваляе праграме дасылаць каманды да SIM-карткі. Гэта вельмі небяспечна.</string>
   <string name="permlab_transmitIr">выкарыстанне інфрачырвонай перадачы</string>

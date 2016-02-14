@@ -79,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Blokeo-pantaila</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_lockscreen_label_enforced">Blokeo-pantaila behartuta</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Profilak desgaituta</string>
   <string name="accessibility_quick_settings_screen_timeout">Pantailaren denbora-muga: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Pantailaren denbora-muga aldatu da: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Bateria modua</string>
@@ -137,4 +138,6 @@
   <string name="quick_settings_tiles_category_system">Sistemaren lauzak</string>
   <string name="quick_settings_tiles_add_tiles">Gehitu lauza bat</string>
   <string name="hotspot_apm_message">Ezin da sare mugikorretara konektatu hegaldi modua gaituta dagoenean. Desgaitu hegaldi modua eta saiatu berriro.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Linterna piztuta dago</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Sakatu itzaltzeko</string>
 </resources>

@@ -18,5 +18,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="keyguard_perso_locked_message">SIM-kortet är personligt låst</string>
   <string name="lockscreen_sim_error_message_short">Ogiltigt SIM.</string>
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Ange SIM-kortets PIN-kod, du har <xliff:g id="number">%d</xliff:g> försök kvar innan du behöver kontakta din operatör för att låsa upp din enhet.</item>
+    <item quantity="other">Ange SIM-kortets PIN-kod, du har <xliff:g id="number">%d</xliff:g> försök kvar innan du behöver kontakta din operatör för att låsa upp din enhet.</item>
+  </plurals>
   <string name="kg_invalid_sim_length">Fel: Input kortare än minsta längd</string>
 </resources>

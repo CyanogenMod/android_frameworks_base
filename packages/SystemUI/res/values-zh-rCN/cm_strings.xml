@@ -79,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">锁屏</string>
   <string name="quick_settings_ambient_display_label">环境显示</string>
   <string name="quick_settings_lockscreen_label_enforced">强制锁屏</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">已在情景模式中禁用</string>
   <string name="accessibility_quick_settings_screen_timeout">屏幕超时：<xliff:g id="timeout" example="30 seconds">%s</xliff:g>。</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">屏幕超时已修改为<xliff:g id="timeout" example="30 seconds">%s</xliff:g>。</string>
   <string name="qs_tile_performance">电池模式</string>
@@ -136,5 +137,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">位置报告已修改为准确度高模式。</string>
   <string name="quick_settings_tiles_category_system">系统磁块</string>
   <string name="quick_settings_tiles_add_tiles">添加磁块</string>
-  <string name="hotspot_apm_message">飞行模式启用时无法连接到移动网络。请禁用飞行模式然后再试一次。</string>
+  <string name="hotspot_apm_message">飞行模式启用时无法连接到移动网络。请禁用飞行模式并重试。</string>
+  <string name="quick_settings_tile_flashlight_not_title">手电筒已开</string>
+  <string name="quick_settings_tile_flashlight_not_summary">轻按以关闭</string>
 </resources>

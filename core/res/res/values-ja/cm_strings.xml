@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">着信やメッセージを拒否している電話番号に関する情報の読み取りをアプリに許可します。</string>
   <string name="permlab_changePhoneBlacklist">携帯電話の着信拒否リストの変更</string>
   <string name="permdesc_changePhoneBlacklist">着信やメッセージを拒否している電話番号の変更をアプリに許可します。</string>
-  <string name="global_action_choose_profile">プロファイル</string>
   <string name="permlab_setKeyguardWallpaper">キーガードの壁紙の設定</string>
   <string name="permdesc_setKeyguardWallpaper">ロック画面の壁紙の変更をアプリに許可します。</string>
   <string name="global_action_reboot">再起動</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g>台のデバイスが接続しています</string>
   <string name="notify_package_component_protected_title">アクティビティの起動がブロックされました</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g>は起動できないように保護されています。タップして認証後にアプリケーションを起動してください。</string>
+  <string name="notify_battery_fully_charged_title">電池の充電が完了しました</string>
+  <string name="notify_battery_fully_charged_text">電池寿命を延ばすために端末を充電器から取り外してください。</string>
 </resources>

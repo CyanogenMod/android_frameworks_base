@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Permite a una aplicación lleer información sobre los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
   <string name="permlab_changePhoneBlacklist">camudar la llista prieta del teléfonu</string>
   <string name="permdesc_changePhoneBlacklist">Permite qu\'una aplicación camude los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
-  <string name="global_action_choose_profile">Perfil</string>
   <string name="permlab_setKeyguardWallpaper">Afita\'l fondu de pantalla de bloquéu</string>
   <string name="permdesc_setKeyguardWallpaper">Permite que l\'aplicación afite\'l fondu de la pantalla de bloquéu.</string>
   <string name="global_action_reboot">Reaniciar</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">executase al aniciu</string>
   <string name="app_ops_toast_window">notificaciones emerxentes</string>
   <string name="app_ops_toggle_bluetooth">cambiar Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">cambiar datos móviles</string>
   <string name="app_ops_toggle_nfc">cambiar NFC</string>
   <string name="app_ops_use_alarm_volume">remanar volume de l\'alarma</string>
   <string name="app_ops_use_audio_focus">remanar el volume de soníu</string>

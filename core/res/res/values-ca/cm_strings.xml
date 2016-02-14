@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Permet a una aplicació llegir informació sobre números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
   <string name="permlab_changePhoneBlacklist">canvia la llista negra del telèfon</string>
   <string name="permdesc_changePhoneBlacklist">Permet a una aplicació canviar els números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
-  <string name="global_action_choose_profile">Perfil</string>
   <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
   <string name="permdesc_setKeyguardWallpaper">Permet que una aplicació estableixi el fons de la pantalla de bloqueig.</string>
   <string name="global_action_reboot">Reinicia</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">iniciar-se a l\'engegar</string>
   <string name="app_ops_toast_window">mostra missatges emergents</string>
   <string name="app_ops_toggle_bluetooth">canviar el Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">canviar les dades mòbils</string>
+  <string name="app_ops_toggle_mobile_data">commuta les dades mòbils</string>
   <string name="app_ops_toggle_nfc">canviar NFC</string>
   <string name="app_ops_toggle_wifi">canviar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar el volum de l\'alarma</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositius connectats</string>
   <string name="notify_package_component_protected_title">Execució de l\'activitat bloquejada</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> està protegit de ser executada. Clica per autentificar i executar l\'aplicació.</string>
+  <string name="notify_battery_fully_charged_title">Bateria completament carregada</string>
+  <string name="notify_battery_fully_charged_text">Desconnecta el teu dispositiu del carregador per millorar la longevitat de la bateria.</string>
 </resources>

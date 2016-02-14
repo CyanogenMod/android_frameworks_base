@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Memungkinkan aplikasi untuk membaca informasi tentang nomor telepon yang diblokir untuk panggilan atau pesan.</string>
   <string name="permlab_changePhoneBlacklist">ubah blacklist telepon</string>
   <string name="permdesc_changePhoneBlacklist">Memungkinkan aplikasi untuk mengubah nomor telepon yang diblokir untuk panggilan atau pesan.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
   <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah wallpaper layar kunci.</string>
   <string name="global_action_reboot">Reboot</string>
@@ -106,7 +105,6 @@
   <string name="app_ops_start_at_bootup">mulai pada saat dinyalakan</string>
   <string name="app_ops_toast_window">tampilkan pesan toast</string>
   <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">toggle data mobile</string>
   <string name="app_ops_toggle_nfc">toggle NFC</string>
   <string name="app_ops_use_alarm_volume">mengatur volume alarm</string>
   <string name="app_ops_use_audio_focus">mengatur fokus audio</string>

@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">允許應用程式讀取關於被封鎖來電或訊息的電話號碼的資訊。</string>
   <string name="permlab_changePhoneBlacklist">變更手機黑名單</string>
   <string name="permdesc_changePhoneBlacklist">允許應用程式變更被封鎖來電或訊息的電話號碼。</string>
-  <string name="global_action_choose_profile">設定檔</string>
   <string name="permlab_setKeyguardWallpaper">設定鎖定畫面桌布</string>
   <string name="permdesc_setKeyguardWallpaper">允許應用程式變更鎖定畫面桌布。</string>
   <string name="global_action_reboot">重新啟動</string>
@@ -106,8 +105,8 @@
   <string name="app_ops_start_at_bootup">開機時啟動</string>
   <string name="app_ops_toast_window">顯示彈出信息</string>
   <string name="app_ops_toggle_bluetooth">開關藍牙</string>
-  <string name="app_ops_toggle_mobile_data">開關行動數據</string>
   <string name="app_ops_toggle_nfc">開關 NFC</string>
+  <string name="app_ops_toggle_wifi">切換 Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">控制鬧鐘音量</string>
   <string name="app_ops_use_audio_focus">控制音訊焦點</string>
   <string name="app_ops_use_bluetooth_volume">控制藍牙音量</string>
@@ -120,6 +119,21 @@
   <string name="app_ops_use_voice_volume">控制語音通話音量</string>
   <string name="app_ops_write_mms">撰寫多媒體訊息</string>
   <string name="app_ops_write_sms">撰寫簡訊</string>
+  <string name="app_ops_use_fingerprint">使用指紋</string>
+  <string name="app_ops_add_voicemail">新增語音訊息</string>
+  <string name="app_ops_read_phone_state">存取電話狀態</string>
+  <string name="app_ops_scan_wifi">掃描 Wi-Fi 網路</string>
+  <string name="app_ops_change_wallpaper">變更桌布</string>
+  <string name="app_ops_assist_structure">使用協助工具</string>
+  <string name="app_ops_assist_screenshot">擷取螢幕畫面</string>
+  <string name="app_ops_use_body_sensors">使用人體感應器</string>
+  <string name="app_ops_read_cell_broadcasts">讀取區域廣播</string>
+  <string name="app_ops_mock_location">模擬所在位置</string>
+  <string name="app_ops_read_external_storage">讀取外部儲存空間</string>
+  <string name="app_ops_write_external_storage">寫入外部儲存空間</string>
+  <string name="app_ops_turn_on_screen">開啟螢幕</string>
+  <string name="app_ops_get_accounts">取得裝置帳號</string>
+  <string name="app_ops_wifi_change">變更 Wi-Fi 狀態</string>
   <string name="app_ops_su">取得 Root 權限</string>
   <string name="lock_to_app_toast_no_navbar">要解鎖此螢幕，觸摸並按住返回鍵。</string>
   <string name="live_display_auto">自動</string>
@@ -136,4 +150,6 @@
   <string name="tethered_notification_no_device_message">沒有已連接的裝置</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> 個已連接裝置</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> 個已連接裝置</string>
+  <string name="notify_package_component_protected_title">已阻止啟動活動</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s </xliff:g> 正被防止啟動。按一下以進行身份驗證並啟動應用程式。</string>
 </resources>

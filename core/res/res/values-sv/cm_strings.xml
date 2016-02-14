@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Tillåter en app att läsa information kring telefonnummer som är blockerade för inkommande samtal eller meddelanden.</string>
   <string name="permlab_changePhoneBlacklist">ändra telefonens svartlista</string>
   <string name="permdesc_changePhoneBlacklist">Tillåter en app att ändra de telefonnummer som är blockerade för inkommande samtal eller meddelanden.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">ställa in bakgrundsbild på låsskärm</string>
   <string name="permdesc_setKeyguardWallpaper">Tillåter en app att ändra låsskärmens bakgrundsbild.</string>
   <string name="global_action_reboot">Omstart</string>
@@ -66,6 +65,7 @@ modifiera det tema som du har tillämpat.</string>
   <string name="theme_reset_notification_body">Systemtemat kommer återställas på grund av att appen kraschat flera gånger.</string>
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ingen</string>
+  <string name="subscription_change_disabled_wifi_ap">Wi\u2011Fi hotspot avaktiverad på grund av ändrat SIM-abonnemang</string>
   <string name="notify_turn_wifi_off_title">Inaktivera Wi\u2011Fi</string>
   <string name="permlab_changePrivacyGuardState">aktivera eller inaktivera integritetsskydd</string>
   <string name="permdesc_changePrivacyGuardState">Tillåter appen att ändra huruvida en annan app körs med integritetsskydd. När en app körs med integritetsskydd har den ingen tillgång till personlig data som kontakter, samtalslistor och meddelanden.</string>
@@ -124,8 +124,12 @@ modifiera det tema som du har tillämpat.</string>
   <string name="app_ops_use_voice_volume">kontrollera samtalsvolymen</string>
   <string name="app_ops_write_mms">skriva ett MMS</string>
   <string name="app_ops_write_sms">skriva ett SMS</string>
+  <string name="app_ops_use_fingerprint">använd fingeravtryck</string>
   <string name="app_ops_add_voicemail">lägg till ett röstmeddelande</string>
+  <string name="app_ops_read_phone_state">läs telefonstatus</string>
+  <string name="app_ops_scan_wifi">skanna Wi\u2011Fi-nätverk</string>
   <string name="app_ops_change_wallpaper">ändra bakgrund</string>
+  <string name="app_ops_assist_structure">använd assistansstruktur</string>
   <string name="app_ops_assist_screenshot">ta en skärmdump</string>
   <string name="app_ops_use_body_sensors">använd kroppssensorer</string>
   <string name="app_ops_read_cell_broadcasts">läs mobila sändningar</string>
@@ -151,4 +155,8 @@ modifiera det tema som du har tillämpat.</string>
   <string name="tethered_notification_no_device_message">Ingen ansluten enhet</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ansluten enhet</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> anslutna enheter</string>
+  <string name="notify_package_component_protected_title">Aktivitetsstart blockerad</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> är skyddad från att startas. Tryck för att autentisera och starta programmet.</string>
+  <string name="notify_battery_fully_charged_title">Batteriet fulladdat</string>
+  <string name="notify_battery_fully_charged_text">Koppla bort enheten från laddaren för att förbättra batteriets livslängd.</string>
 </resources>

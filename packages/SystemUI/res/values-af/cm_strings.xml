@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Hoof</string>
   <string name="quick_settings_title_tiles">Teëls</string>
   <string name="quick_settings_title_show_weather">Wys weer</string>
+  <string name="quick_settings_title_show_brightness_slider">Wys helderheid skuiwer</string>
   <string name="quick_settings_title_enlarge_first_row">Vergroot eerste ry</string>
   <string name="screen_pinning_description_no_navbar">Dit hou dit binne sig totdat jy dit ontspeld. Raak en hou die knoppie Terug om te ontspeld.</string>
   <string name="quick_settings_custom_tile_detail_title">Pasgemaakte teël</string>
@@ -78,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Slotskerm</string>
   <string name="quick_settings_ambient_display_label">Omgewingstemperatuur skerm</string>
   <string name="quick_settings_lockscreen_label_enforced">Slotskerm afgedwing</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Afgeskakel deur profiel</string>
   <string name="accessibility_quick_settings_screen_timeout">Skerm slaap: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Skerm slaap verander na <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Battery modus</string>
@@ -136,4 +138,6 @@
   <string name="quick_settings_tiles_category_system">Stelsel teëls</string>
   <string name="quick_settings_tiles_add_tiles">Voeg \'n teël by</string>
   <string name="hotspot_apm_message">Kan nie aan mobiele netwerke koppel terwyl vliegtuig modus aan is nie. Skakel vliegtuig modus af en probeer weer.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Flitslig is aan</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Raak om af te skakel</string>
 </resources>

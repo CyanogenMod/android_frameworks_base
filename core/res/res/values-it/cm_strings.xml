@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Consente all\'app di leggere le informazioni sui numeri di telefono che vengono bloccati per messaggi o chiamate in arrivo.</string>
   <string name="permlab_changePhoneBlacklist">modifica la blacklist del telefono</string>
   <string name="permdesc_changePhoneBlacklist">Consente all\'app di modificare i numeri di telefono che vengono bloccati per messaggi o chiamate in arrivo.</string>
-  <string name="global_action_choose_profile">Profilo</string>
   <string name="permlab_setKeyguardWallpaper">imposta sfondo sblocco schermo</string>
   <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo della schermata di sblocco.</string>
   <string name="global_action_reboot">Riavvia</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">avviarsi all\'accensione</string>
   <string name="app_ops_toast_window">mostra messaggi di nofifica</string>
   <string name="app_ops_toggle_bluetooth">cambiare stato del Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">cambiare stato dei dati mobili</string>
+  <string name="app_ops_toggle_mobile_data">modifica dati mobili</string>
   <string name="app_ops_toggle_nfc">cambiare stato dell\'NFC</string>
   <string name="app_ops_toggle_wifi">modifica Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controllare il volume sveglia</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivi connessi</string>
   <string name="notify_package_component_protected_title">Lancio dell\'app bloccato</string>
   <string name="notify_package_component_protected_text">L\'app <xliff:g id="app_name">%1$s</xliff:g> è protetta. Tocca qui per autenticarti e aprire l\'app.</string>
+  <string name="notify_battery_fully_charged_title">Batteria completamente carica</string>
+  <string name="notify_battery_fully_charged_text">Disconnetti il dispositivo dal caricatore per preservare la longevità della batteria.</string>
 </resources>

@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Dopušta aplikaciji čitanje informacija o telefonskim brojevima čije su dolazne poruke ili pozivi blokirani.</string>
   <string name="permlab_changePhoneBlacklist">promjeniti popis blokiranih poziva</string>
   <string name="permdesc_changePhoneBlacklist">Dopušta aplikaciji promjenu telefonskih brojeva čije su dolazne poruke ili pozivi blokirani.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">postaviti pozadinu zaslona zaključavanja</string>
   <string name="permdesc_setKeyguardWallpaper">Dozvoljava aplikaciji promjenu pozadine zaslona zaključavanja.</string>
   <string name="global_action_reboot">Ponovno pokreni</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">se pokrenuti pri pokretanju sistema</string>
   <string name="app_ops_toast_window">Prikazivati toast poruke</string>
   <string name="app_ops_toggle_bluetooth">upravljati Bluetooth-om</string>
-  <string name="app_ops_toggle_mobile_data">upravljati mobilnim podacima</string>
+  <string name="app_ops_toggle_mobile_data">uključi/isključi mobilne podatke</string>
   <string name="app_ops_toggle_nfc">Uključi/isključi NFC</string>
   <string name="app_ops_toggle_wifi">upravljati Wi-Fi-em</string>
   <string name="app_ops_use_alarm_volume">kontrolirati glasnoću alarma</string>
@@ -152,8 +151,10 @@
   <string name="live_display_outdoor_summary">Koristi samo postavke za van</string>
   <string name="live_display_hint">LiveDisplay može smanjiti naprezanje očiju i poboljšati san. Dodirnite ovdje ako ga želite isprobati!</string>
   <string name="tethered_notification_no_device_message">Uređaj nije spojen</string>
-  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezan uređaj</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezani uređaj</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> povezanih uređaja</string>
   <string name="notify_package_component_protected_title">Blokirana aktivnost pokretanja</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> je zaštićena od pokretanja. Dodirnite za potvrdu i pokrenite aplikaciju.</string>
+  <string name="notify_battery_fully_charged_title">Baterija puna</string>
+  <string name="notify_battery_fully_charged_text">Odspojite punjač s uređaja da bi poboljšali trajnost baterije.</string>
 </resources>

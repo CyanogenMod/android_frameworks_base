@@ -79,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Ecrã de bloqueio</string>
   <string name="quick_settings_ambient_display_label">Visualização de ambiente</string>
   <string name="quick_settings_lockscreen_label_enforced">Ecrã de bloqueio forçado</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Desativado pelo perfil</string>
   <string name="accessibility_quick_settings_screen_timeout">Tempo limite do ecrã: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Tempo limite do ecrã alterado para <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Modo de bateria</string>
@@ -99,8 +100,8 @@
   <string name="accessibility_quick_settings_lock_screen_changed_on">Ecrã de bloqueio foi ligado.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Visualização de ambiente desligada.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Visualização de ambiente ligada.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Visualização de ambiente desligou.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Visualização de ambiente ligou.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">A visualização de ambiente foi desligada.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">A visualização de ambiente foi ligada.</string>
   <string name="accessibility_quick_settings_heads_up_off">Notificações pop-up desligadas.</string>
   <string name="accessibility_quick_settings_heads_up_on">Notificações pop-up ligadas.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Notificações pop-up desligaram.</string>
@@ -111,30 +112,32 @@
   <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador de bateria ligou.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Mosaicos dinâmicos</string>
   <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
-  <string name="dynamic_qs_tile_ime_selector_label">Seletor de IME</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Seletor de método de entrada</string>
   <string name="dynamic_qs_tile_su_label">Acesso root</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay desligado.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: modo automático.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: modo dia.</string>
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: modo noite.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modo ao ar livre.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modo exterior.</string>
   <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay foi desligado.</string>
   <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay alterado para modo automático.</string>
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay alterado para modo dia.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay alterado para modo noite.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay alterado para modo ao ar livre.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay alterado para modo exterior.</string>
   <string name="quick_settings_title_advanced_location">Localização com 3 estados</string>
   <string name="accessibility_quick_settings_location_battery_saving">Localização: poupança de bateria.</string>
-  <string name="accessibility_quick_settings_location_gps_only">Localização: apenas no dispositivo.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Localização: apenas dispositivo.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Localização: alta precisão.</string>
   <string name="quick_settings_location_detail_title">Modos de localização</string>
   <string name="quick_settings_location_battery_saving_label">Poupança de bateria</string>
   <string name="quick_settings_location_gps_only_label">Apenas dispositivo</string>
   <string name="quick_settings_location_high_accuracy_label">Alta precisão</string>
   <string name="accessibility_quick_settings_location_changed_battery_saving">Modo de localização alterado para poupança de bateria.</string>
-  <string name="accessibility_quick_settings_location_changed_gps_only">Modo de localização alterado para apenas no dispositivo.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Modo de localização alterado para apenas dispositivo.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Modo de localização alterado para alta precisão.</string>
   <string name="quick_settings_tiles_category_system">Mosaicos do sistema</string>
   <string name="quick_settings_tiles_add_tiles">Adicionar um mosaico</string>
-  <string name="hotspot_apm_message">Não é possível ligar-se à rede móvel enquanto o modo de avião estiver ativo. Desative o modo de avião e tente novamente.</string>
+  <string name="hotspot_apm_message">Não é possível ligar-se a redes móveis enquanto o modo de avião estiver ativo. Desative o modo de avião e tente novamente.</string>
+  <string name="quick_settings_tile_flashlight_not_title">A lanterna está ligada</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Toque para desligar</string>
 </resources>

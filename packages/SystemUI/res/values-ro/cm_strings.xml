@@ -39,7 +39,9 @@
   <string name="advanced_dev_option_wipe_app">Șterge datele aplicației</string>
   <string name="advanced_dev_option_force_stop">Oprire forțată</string>
   <string name="advanced_dev_option_uninstall">Dezinstalați</string>
+  <string name="accessibility_quick_settings_profiles_off">Profiluri oprit.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed_off">Profiluri este activat.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil schimbat în <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inițializare\u2026</string>
   <string name="led_notification_title">Setări de lumină</string>
@@ -55,9 +57,10 @@
   <string name="quick_settings_network_adb_label">ADB prin rețea</string>
   <string name="quick_settings_compass_label">Busolă</string>
   <string name="quick_settings_nfc_label">NFC</string>
-  <string name="quick_settings_profiles">Profile de sistem</string>
-  <string name="quick_settings_profiles_off">Profilele sunt dezactivate</string>
+  <string name="quick_settings_profiles">Profiluri de sistem</string>
+  <string name="quick_settings_profiles_off">Profilurile sunt dezactivate</string>
   <string name="quick_settings_heads_up_label">Atenționare</string>
+  <string name="quick_settings_battery_saver_label">Economizor baterie</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizare pornită.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizare oprită.</string>
@@ -69,9 +72,25 @@
   <string name="quick_settings_lockscreen_label">Ecran de blocare</string>
   <string name="quick_settings_ambient_display_label">Afișare ambientală</string>
   <string name="quick_settings_lockscreen_label_enforced">Blocare ecran impusă</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Dezactivat de profil</string>
+  <string name="qs_tile_performance">Mod baterie</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Mod baterie: mod de salvare energie.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Mod baterie: mod echilibrat.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Mod baterie: mod performanță.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Mod baterie: mod eficiență.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Mod baterie: mod rapid.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modul bateriei a fost schimbat în modul de salvare energie.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Modul bateriei a fost schimbat în mod echilibrat.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Modul bateriei schimbat în modul de performanță.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Modul bateriei a fost schimbat în modul de eficiență.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Modul bateriei a fost schimbat în modul rapid.</string>
+  <string name="quick_settings_performance_profile_detail_title">Mod baterie</string>
   <string name="accessibility_quick_settings_ambient_display_off">Afișare ambientală oprită.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Afișare ambientală pornită.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Economisire baterie oprită.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Economisire baterie pornită.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Economisire baterie este dezactivată.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Economisire baterie este activată.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Plăcuță dinamică</string>
   <string name="dynamic_qs_tile_next_alarm_label">Următoarea alarmă</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
@@ -89,4 +108,6 @@
   <string name="quick_settings_tiles_category_system">Plăcuțe sistem</string>
   <string name="quick_settings_tiles_add_tiles">Adaugă o plăcuță</string>
   <string name="hotspot_apm_message">Nu se poate conecta la rețele mobile în timp ce modul Avion este activat. Dezactivați modul Avion și încercați din nou.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Lanterna este pornită</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Atingeți pentru a dezactiva</string>
 </resources>

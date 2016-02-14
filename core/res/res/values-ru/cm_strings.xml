@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Приложение сможет считывать информацию о списке абонентов, от которых заблокированы входящие звонки или сообщения.</string>
   <string name="permlab_changePhoneBlacklist">Изменение чёрного списка</string>
   <string name="permdesc_changePhoneBlacklist">Приложение сможет изменять список абонентов, от которых заблокированы входящие звонки или сообщения.</string>
-  <string name="global_action_choose_profile">Профиль</string>
   <string name="permlab_setKeyguardWallpaper">Установка обоев экрана блокировки</string>
   <string name="permdesc_setKeyguardWallpaper">Приложение сможет изменять обои экрана блокировки устройства.</string>
   <string name="global_action_reboot">Перезагрузить</string>
@@ -83,7 +82,7 @@
   <string name="app_ops_delete_mms">удалить MMS-сообщения</string>
   <string name="app_ops_delete_sms">удалить SMS-сообщения</string>
   <string name="app_ops_draw_on_top">отображать элементы интерфейса поверх других окон</string>
-  <string name="app_ops_get_usage_stats">получить статистику использования приложений</string>
+  <string name="app_ops_get_usage_stats">получать статистику использования приложений</string>
   <string name="app_ops_keep_device_awake">запретить устройству переход в спящий режим</string>
   <string name="app_ops_make_phone_call">выполнить телефонный звонок</string>
   <string name="app_ops_modify_calendar">изменить данные календаря</string>
@@ -102,13 +101,13 @@
   <string name="app_ops_read_mms">считать MMS-сообщения</string>
   <string name="app_ops_read_sms">считать SMS-сообщения</string>
   <string name="app_ops_receive_sms">получить SMS-сообщение</string>
-  <string name="app_ops_record_audio">запись аудио</string>
+  <string name="app_ops_record_audio">записать аудио</string>
   <string name="app_ops_send_mms">отправить MMS-сообщение</string>
   <string name="app_ops_send_sms">отправить SMS-сообщение</string>
   <string name="app_ops_start_at_bootup">назначить запуск при включении устройства</string>
   <string name="app_ops_toast_window">отображать всплывающие уведомления</string>
   <string name="app_ops_toggle_bluetooth">переключить состояние Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">переключить состояние Мобильного интернета</string>
+  <string name="app_ops_toggle_mobile_data">переключить состояние мобильного интернета</string>
   <string name="app_ops_toggle_nfc">переключить состояние модуля NFC</string>
   <string name="app_ops_toggle_wifi">включить или выключить Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">получить управление громкостью будильника</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message">Подключено устройств: <xliff:g id="count">%1$s</xliff:g></string>
   <string name="notify_package_component_protected_title">Запуск приложения запрещён</string>
   <string name="notify_package_component_protected_text">Приложение «<xliff:g id="app_name">%1$s</xliff:g>» заблокировано. Нажмите, чтобы ввести пароль и запустить приложение.</string>
+  <string name="notify_battery_fully_charged_title">Аккумулятор полностью заряжен</string>
+  <string name="notify_battery_fully_charged_text">Отключите устройство от сети для продления срока службы батареи.</string>
 </resources>

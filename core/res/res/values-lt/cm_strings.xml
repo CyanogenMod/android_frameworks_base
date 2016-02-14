@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Leidžia programai skaityti informaciją apie telefono numerius kurie yra užblokuoti dėl įeinančių skambučių ar pranešimų.</string>
   <string name="permlab_changePhoneBlacklist">pakeisti telefono juodąjį sąrašą</string>
   <string name="permdesc_changePhoneBlacklist">Leidžia programai keisti telefono numerius kurie yra užblokuoti dėl įeinančių skambučių ar pranešimų.</string>
-  <string name="global_action_choose_profile">Profilis</string>
   <string name="permlab_setKeyguardWallpaper">nustatyti klaviatūros apsaugos foną</string>
   <string name="permdesc_setKeyguardWallpaper">Leidžia programai pakeisti ekrano užrakto foną.</string>
   <string name="global_action_reboot">Paleisti iš naujo</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">paleisti įsijungiant</string>
   <string name="app_ops_toast_window">Rodyti informacinius pranešimus</string>
   <string name="app_ops_toggle_bluetooth">įjungti „Bluetooth“</string>
-  <string name="app_ops_toggle_mobile_data">įjungti mobiliuosius duomenis</string>
   <string name="app_ops_toggle_nfc">Įjungti / išjungti NFC</string>
   <string name="app_ops_use_alarm_volume">valdyti signalo garsumą</string>
   <string name="app_ops_use_audio_focus">valdyti garso sutelktį</string>

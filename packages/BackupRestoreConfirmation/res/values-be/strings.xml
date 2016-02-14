@@ -15,5 +15,24 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="backup_confirm_title">Поўнае рэзервовае капіяванне</string>
+  <string name="restore_confirm_title">Поўнае аднаўленне</string>
+  <string name="backup_confirm_text">Было прапанавана поўнае рэзервовае капіяванне ўсіх дадзеных на падлучаным настольным кампутары. Дазволіць гэта?\n\nКалі вы самі не запытвалі рэзервовае капiяванне, спынiце аперацыю.</string>
+  <string name="allow_backup_button_label">Рэзервовае капіяванне дадзеных</string>
+  <string name="deny_backup_button_label">Не ствараць рэзервовыя копіі</string>
+  <string name="restore_confirm_text">Запытана поўнае аднаўленне ўсіх дадзеных з падлучанага настольнага кампутара. Дазволіць гэта?\n\nКалі вы самі не запытвалі аднаўленне, не дазваляйце працягваць аперацыю. Гэта прывядзе да замены якіх-небудзь дадзеных, якія зараз знаходзяцца на прыладзе!</string>
+  <string name="allow_restore_button_label">Аднавіць мае дадзеныя</string>
+  <string name="deny_restore_button_label">Не аднаўляць</string>
+  <string name="current_password_text">Увядзіце ваш бягучы пароль рэзервовага капіявання ніжэй:</string>
+  <string name="device_encryption_restore_text">Увядзіце нiжэй пароль для расшыфравання прылады.</string>
+  <string name="device_encryption_backup_text">Увядзіце пароль для расшыфравання прылады. Ён таксама будзе выкарыстоўвацца для расшыфравання рэзервовай копіі.</string>
+  <string name="backup_enc_password_text">Увядзіце пароль, які выкарыстоўваецца для шыфравання ўсіх дадзеных рэзервовага капіявання. Калі гэтае поле пакінуць пустым, будзе выкарыстоўвацца бягучы пароль рэзервовага капіявання:</string>
+  <string name="backup_enc_password_optional">Калі вы жадаеце зашыфраваць усе дадзеныя рэзервовага капіявання, увядзіце пароль ніжэй:</string>
   <string name="backup_enc_password_required">У сувязі з тым, што ваша прылада зашыфраваная, трэба таксама зашыфраваць і рэзервовую копію. Калі ласка, увядзіце пароль:</string>
+  <string name="restore_enc_password_text">Калі дадзеныя для аднаўлення зашыфраваныя, увядзіце пароль ніжэй:</string>
+  <string name="toast_backup_started">Рэзервовае капіяванне...</string>
+  <string name="toast_backup_ended">Рэзервовае капіяванне скончылася</string>
+  <string name="toast_restore_started">Пачынаецца аднаўленне...</string>
+  <string name="toast_restore_ended">Аднаўленне скончылася</string>
+  <string name="toast_timeout">Тайм-аўт аперацыі</string>
 </resources>

@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Дозволяє програмі читати інформацію про список абонентів, від яких заблоковані вхідні дзвінки або повідомлення.</string>
   <string name="permlab_changePhoneBlacklist">зміна чорного списку</string>
   <string name="permdesc_changePhoneBlacklist">Дозволяє програмі змінювати список абонентів, від яких заблоковані вхідні дзвінки або повідомлення.</string>
-  <string name="global_action_choose_profile">Профіль</string>
   <string name="permlab_setKeyguardWallpaper">встановлення шпалер екрану блокування</string>
   <string name="permdesc_setKeyguardWallpaper">Дозволяє програмі міняти шпалери екрану блокування.</string>
   <string name="global_action_reboot">Перезавантаження</string>
@@ -110,7 +109,7 @@
   <string name="app_ops_start_at_bootup">запуск при включені пристрою</string>
   <string name="app_ops_toast_window">показувати спливаючі сповіщення</string>
   <string name="app_ops_toggle_bluetooth">увімк. або вимк. Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">увімк. або вимк. мобільних даних</string>
+  <string name="app_ops_toggle_mobile_data">Мобільні дані</string>
   <string name="app_ops_toggle_nfc">увімк. вимк. NFC</string>
   <string name="app_ops_toggle_wifi">Переключити Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">керування гучністю будильника</string>
@@ -132,6 +131,8 @@
   <string name="app_ops_change_wallpaper">зміна шпалер</string>
   <string name="app_ops_assist_structure">Використовувати допоміжну структуру</string>
   <string name="app_ops_assist_screenshot">Скріншот</string>
+  <string name="app_ops_use_body_sensors">Використовувати датчики</string>
+  <string name="app_ops_read_cell_broadcasts">Широкомовні повідомлення</string>
   <string name="app_ops_mock_location">Фіктивне місцезнаходження</string>
   <string name="app_ops_read_external_storage">Зчитати дані з карти пам\'яті</string>
   <string name="app_ops_write_external_storage">Записати дані на карту пам\'яті</string>
@@ -154,4 +155,8 @@
   <string name="tethered_notification_no_device_message">Немає під\'єднаного пристрою</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> підключений пристрій</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> підключених пристроїв</string>
+  <string name="notify_package_component_protected_title">Запуск програми заборонений</string>
+  <string name="notify_package_component_protected_text">Запуск <xliff:g id="app_name">%1$s</xliff:g> заблоковано. Натисніть, щоб ввести пароль і запустити програму.</string>
+  <string name="notify_battery_fully_charged_title">Батарея повністю заряджена</string>
+  <string name="notify_battery_fully_charged_text">Від’єднайте зарядку задля покращення витривалості батареї.</string>
 </resources>
