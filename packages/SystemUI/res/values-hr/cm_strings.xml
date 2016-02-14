@@ -79,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Zaključani zaslon</string>
   <string name="quick_settings_ambient_display_label">Ambijentni zaslon</string>
   <string name="quick_settings_lockscreen_label_enforced">Provođenje zaključavanja zaslona</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Onemogućeno od strane profila</string>
   <string name="accessibility_quick_settings_screen_timeout">Isključivanje zaslona: <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Isključivanje zaslona promijenjeno u <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
   <string name="qs_tile_performance">Način rada baterije</string>
@@ -137,4 +138,6 @@
   <string name="quick_settings_tiles_category_system">Sistemske pločice</string>
   <string name="quick_settings_tiles_add_tiles">Dodaj pločicu</string>
   <string name="hotspot_apm_message">Nije moguće povezivanje s mobilnim mrežama dok je omogućen način rada u zrakoplovu. Onemogućite način rada u zrakoplovu i pokušajte ponovno.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Svjetiljka je uključena</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Dodirnite za isključivanje</string>
 </resources>

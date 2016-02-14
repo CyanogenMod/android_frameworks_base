@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Ļauj lietotnei lasīt informāciju  par bloķētajiem ienākošo zvanu un ziņu telefona numuriem.</string>
   <string name="permlab_changePhoneBlacklist">mainīt telefona melno sarakstu</string>
   <string name="permdesc_changePhoneBlacklist">Ļauj lietotnei mainīt bloķēto saņemto zvanu vai īsziņu telefona numurus.</string>
-  <string name="global_action_choose_profile">Profils</string>
   <string name="permlab_setKeyguardWallpaper">iestatīt taustiņslēga tapeti</string>
   <string name="permdesc_setKeyguardWallpaper">Ļauj lietotnei manīt slēgekrāna tapeti.</string>
   <string name="global_action_reboot">Pārsāknēt</string>
@@ -96,7 +95,6 @@
   <string name="app_ops_send_sms">sūtīt īsziņu</string>
   <string name="app_ops_start_at_bootup">palaist pēc ieslēgšanas</string>
   <string name="app_ops_toggle_bluetooth">ieslēgt Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">pārslēgt mobilos datus</string>
   <string name="app_ops_toggle_nfc">pārslēgt NFC</string>
   <string name="app_ops_use_alarm_volume">regulēt trauksmes skaļumu</string>
   <string name="app_ops_use_audio_focus">regulēt audio fokusu</string>

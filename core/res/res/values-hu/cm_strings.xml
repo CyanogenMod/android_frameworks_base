@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Lehetővé teszi az alkalmazás számára, hogy olvassa azokat a számokat, melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
   <string name="permlab_changePhoneBlacklist">tiltólista módosítása</string>
   <string name="permdesc_changePhoneBlacklist">Lehetővé teszi az alkalmazás számára, hogy szerkessze azokat a telefonszámokat melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">billentyűzár háttérképének beállítása</string>
   <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára, hogy módosítsa a képernyőzár hátterét.</string>
   <string name="global_action_reboot">Újraindítás</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">bekapcsoláskor elindul</string>
   <string name="app_ops_toast_window">buborékszöveg üzenetek megjelenítése</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth kapcsolása</string>
-  <string name="app_ops_toggle_mobile_data">mobilinternet kapcsolása</string>
   <string name="app_ops_toggle_nfc">NFC kapcsolása</string>
   <string name="app_ops_toggle_wifi">Wi-Fi kapcsolása</string>
   <string name="app_ops_use_alarm_volume">ébresztőhang vezérlése</string>

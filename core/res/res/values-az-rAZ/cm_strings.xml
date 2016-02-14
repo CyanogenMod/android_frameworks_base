@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələri haqqında məlumat oxumasına icazə verər.</string>
   <string name="permlab_changePhoneBlacklist">telefon qara siyahısını dəyişdir</string>
   <string name="permdesc_changePhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələrini dəyişdirməsinə icazə verər.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">klaviatura divar kağızını tənzimlə</string>
   <string name="permdesc_setKeyguardWallpaper">Tətbiqetmənin kilit ekranı divar kağızını dəyişdirməsinə icazə verər.</string>
   <string name="global_action_reboot">Yenidən başlat</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">açılanda başla</string>
   <string name="app_ops_toast_window">bildiriş mesajlarını göstər</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth açıb bağla</string>
-  <string name="app_ops_toggle_mobile_data">mobil verilənləri açıb bağla</string>
   <string name="app_ops_toggle_nfc">NFC aç bağla</string>
   <string name="app_ops_use_alarm_volume">zəngli saat səsinin idarəsi</string>
   <string name="app_ops_use_audio_focus">səs fokunusuna nəzarət</string>

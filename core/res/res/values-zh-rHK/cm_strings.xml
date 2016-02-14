@@ -27,7 +27,6 @@
   <string name="permdesc_readPhoneBlacklist">允許應用程式讀取關於被封鎖來電或訊息的電話號碼的資訊。</string>
   <string name="permlab_changePhoneBlacklist">更改手機黑名單</string>
   <string name="permdesc_changePhoneBlacklist">允許應用程式更改被封鎖來電或訊息的電話號碼。</string>
-  <string name="global_action_choose_profile">設定檔</string>
   <string name="permlab_setKeyguardWallpaper">設定鎖定畫面牆紙</string>
   <string name="permdesc_setKeyguardWallpaper">允許應用程式更改鎖定畫面牆紙。</string>
   <string name="global_action_reboot">重新啟動</string>
@@ -90,7 +89,6 @@
   <string name="app_ops_start_at_bootup">開機時啟動</string>
   <string name="app_ops_toast_window">顯示彈出訊息</string>
   <string name="app_ops_toggle_bluetooth">切換藍牙</string>
-  <string name="app_ops_toggle_mobile_data">切換流動數據</string>
   <string name="app_ops_toggle_nfc">切換 NFC</string>
   <string name="app_ops_use_alarm_volume">控制鬧鐘音量</string>
   <string name="app_ops_use_audio_focus">控制音訊焦點</string>

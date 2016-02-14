@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Tillader en app at læse informationer om telefonnumre, som er blokerede for indgående opkald eller beskeder.</string>
   <string name="permlab_changePhoneBlacklist">ændre telefonens sortliste</string>
   <string name="permdesc_changePhoneBlacklist">Tillader en app at ændre telefonnumre, som er blokerede for indgående opkald eller beskeder.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">angive baggrund til keyguard</string>
   <string name="permdesc_setKeyguardWallpaper">Tillader en app at ændre baggrund for skærmlåsen.</string>
   <string name="global_action_reboot">Genstart</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">starte ved opstart</string>
   <string name="app_ops_toast_window">vis toast beskeder</string>
   <string name="app_ops_toggle_bluetooth">tænde/slukke Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">tænde/slukke mobildata</string>
   <string name="app_ops_toggle_nfc">NFC til/fra</string>
   <string name="app_ops_toggle_wifi">Wi-Fi til/fra</string>
   <string name="app_ops_use_alarm_volume">kontrollere lydstyrken for alarmer</string>

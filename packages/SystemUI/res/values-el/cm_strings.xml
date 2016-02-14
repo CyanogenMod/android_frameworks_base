@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Προφίλ απενεργοποιημένα</string>
   <string name="quick_settings_heads_up_label">Αναδυόμενες ειδοποιήσεις</string>
   <string name="quick_settings_battery_saver_label">Εξοικονόμηση μπαταρίας</string>
+  <string name="quick_settings_caffeine_label">Καφεΐνη</string>
   <string name="accessibility_quick_settings_sync_off">Ανενεργός συγχρονισμός.</string>
   <string name="accessibility_quick_settings_sync_on">Ενεργός συγχρονισμός.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Ο συγχρονισμός απενεργοποιήθηκε.</string>
@@ -79,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Οθόνη κλειδώματος</string>
   <string name="quick_settings_ambient_display_label">Οθόνη ambient</string>
   <string name="quick_settings_lockscreen_label_enforced">Επιβαλλόμενη οθόνη κλειδώματος</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Απενεργοποιήθηκε από προφίλ</string>
   <string name="accessibility_quick_settings_screen_timeout">Χρονικό όριο οθόνης: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Το χρονικό όριο οθόνης άλλαξε σε: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Λειτουργία μπαταρίας</string>
@@ -105,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Ενεργές αναδυόμενες ειδοποιήσεις.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Οι αναδυόμενες ειδοποιήσεις απενεργοποιήθηκαν.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Οι αναδυόμενες ειδοποιήσεις ενεργοποιήθηκαν.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Καφεΐνη ανενεργή.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Καφεΐνη ενεργή.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Ανενεργή εξοικονόμηση μπαταρίας.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Ενεργή εξοικονόμηση μπαταρίας.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Η εξοικονόμηση μπαταρίας απενεργοποιήθηκε.</string>
@@ -137,4 +141,6 @@
   <string name="quick_settings_tiles_category_system">Πλακίδια συστήματος</string>
   <string name="quick_settings_tiles_add_tiles">Προσθήκη πλακιδίου</string>
   <string name="hotspot_apm_message">Δεν είναι δυνατή η σύνδεση με δίκτυα κινητής τηλεφωνίας ενώ είναι ενεργοποιημένη η λειτουργία πτήσης. Απενεργοποιήστε τη λειτουργία πτήσης και προσπαθήστε ξανά.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Ο φακός είναι ενεργοποιημένος</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Πιέστε για απενεργοποίηση</string>
 </resources>

@@ -79,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Закључан екран</string>
   <string name="quick_settings_ambient_display_label">Амбијент приказ</string>
   <string name="quick_settings_lockscreen_label_enforced">Присилно закључани екран</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Онемогућено профилом</string>
   <string name="accessibility_quick_settings_screen_timeout">Време искључења екрана: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Време искључења екрана промењено у <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Режим батерије</string>
@@ -137,4 +138,6 @@
   <string name="quick_settings_tiles_category_system">Плочице система</string>
   <string name="quick_settings_tiles_add_tiles">Додај плочицу</string>
   <string name="hotspot_apm_message">Није се могуће конектовати на мобилне мреже док је режим авиона омогућен. Онемогући режим авиона и пробај поново.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Блиц је укључен</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Додирни да угасиш</string>
 </resources>

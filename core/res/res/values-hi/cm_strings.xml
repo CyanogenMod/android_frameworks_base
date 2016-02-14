@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">ऐप को आवक कॉलों या संदेशों के लिए जिन फ़ोन नंबरों को अवरुद्ध किया गया है, उनसे संबंधित जानकारी पढ़ने देता है।</string>
   <string name="permlab_changePhoneBlacklist">फ़ोन काली सूची को परिवर्तित करें</string>
   <string name="permdesc_changePhoneBlacklist">ऐप को आवक कॉलों या संदेशों के लिए जिन फ़ोन नंबरों को अवरुद्ध किया गया है, उन्हें परिवर्तित करने देता है।</string>
-  <string name="global_action_choose_profile">प्रोफ़ाइल</string>
   <string name="permlab_setKeyguardWallpaper">कुंजीकवच वॉलपेपर सेट करें</string>
   <string name="permdesc_setKeyguardWallpaper">ऐप को स्क्रीन वॉलपेपर लॉक को बदलने देता है।</string>
   <string name="global_action_reboot">रीबूट करें</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">पावर अप पर चालू करें</string>
   <string name="app_ops_toast_window">टोस्ट संदेश प्रदर्शित करें</string>
   <string name="app_ops_toggle_bluetooth">ब्लूटूथ को बंद-चालू करें</string>
-  <string name="app_ops_toggle_mobile_data">मोबाइल डेटा को बंद-चालू करें</string>
   <string name="app_ops_toggle_nfc">एनएफसी को बंद-चालू करें</string>
   <string name="app_ops_use_alarm_volume">अलार्म वोल्यूम को नियंत्रित करें</string>
   <string name="app_ops_use_audio_focus">ऑडियो फ़ोकस को नियंत्रित करें</string>

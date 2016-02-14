@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Permite unei aplicații să citească informații despre numerele de telefon care sunt blocate pentru primirea de apeluri sau de mesaje.</string>
   <string name="permlab_changePhoneBlacklist">schimbă lista neagră a telefonului</string>
   <string name="permdesc_changePhoneBlacklist">Permite unei aplicații să schimbe numere de telefon care sunt blocate pentru primirea de apeluri sau mesaje.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">setare fundal ecran de blocare</string>
   <string name="permdesc_setKeyguardWallpaper">Permite unei aplicații să schimbe imaginea de fundal a ecranului de blocare.</string>
   <string name="global_action_reboot">Repornire</string>
@@ -107,7 +106,7 @@
   <string name="app_ops_start_at_bootup">începe la pornire</string>
   <string name="app_ops_toast_window">afișează mesajele temporare</string>
   <string name="app_ops_toggle_bluetooth">comută Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">comută date mobile</string>
+  <string name="app_ops_toggle_mobile_data">comutare date mobile</string>
   <string name="app_ops_toggle_nfc">Comutare NFC</string>
   <string name="app_ops_toggle_wifi">comută Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlează volumul alarmei</string>
@@ -122,10 +121,14 @@
   <string name="app_ops_use_voice_volume">controlează volumul apelului de voce</string>
   <string name="app_ops_write_mms">scrie un mesaj MMS</string>
   <string name="app_ops_write_sms">scrie un mesaj SMS</string>
+  <string name="app_ops_use_fingerprint">utilizează amprentă digitală</string>
   <string name="app_ops_add_voicemail">adaugă un mesaj vocal</string>
   <string name="app_ops_read_phone_state">citește starea telefonului</string>
   <string name="app_ops_scan_wifi">scanează rețelele Wi-Fi</string>
   <string name="app_ops_change_wallpaper">schimbă imaginea de fundal</string>
+  <string name="app_ops_use_body_sensors">utilizează senzorii corporali</string>
+  <string name="app_ops_read_cell_broadcasts">citește trasmisiunile din rețea</string>
+  <string name="app_ops_mock_location">simulează locația dvs.</string>
   <string name="app_ops_read_external_storage">citește stocare externă</string>
   <string name="app_ops_write_external_storage">scrie stocare externă</string>
   <string name="app_ops_turn_on_screen">pornește ecranul</string>
@@ -147,4 +150,7 @@
   <string name="tethered_notification_no_device_message">Niciun dispozitiv conectat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitiv conectat</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitive conectate</string>
+  <string name="notify_package_component_protected_title">Lansarea activității blocată</string>
+  <string name="notify_battery_fully_charged_title">Acumulator încărcat complet</string>
+  <string name="notify_battery_fully_charged_text">Deconectați aparatul de la încărcător pentru a îmbunătăți longevitatea bateriei.</string>
 </resources>

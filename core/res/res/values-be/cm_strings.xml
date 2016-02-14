@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Дазваляе праграме праглядаць звесткі пра нумары тэлефонаў, ад якіх заблакаваны тэлефанаванні ці паведамленні.</string>
   <string name="permlab_changePhoneBlacklist">мадыфікацыя чорнага спісу</string>
   <string name="permdesc_changePhoneBlacklist">Дазваляе праграме ўносіць змены ў спіс нумароў тэлефонаў, ад якіх заблакаваны тэлефанаванні ці паведамленні.</string>
-  <string name="global_action_choose_profile">Профіль</string>
   <string name="permlab_setKeyguardWallpaper">усталёўка шпалераў экрану блакавання</string>
   <string name="permdesc_setKeyguardWallpaper">Дазваляе праграме змяняць шпалеры экрану блакавання.</string>
   <string name="global_action_reboot">Перазагрузіць</string>
@@ -110,7 +109,6 @@
   <string name="app_ops_start_at_bootup">прызначыць запуск пры ўлучэнні прылады</string>
   <string name="app_ops_toast_window">адлюстроўваць усплывальныя паведамленні</string>
   <string name="app_ops_toggle_bluetooth">пераключыць стан Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">пераключыць стан мабільнага інтэрнэту</string>
   <string name="app_ops_toggle_nfc">пераключыць стан модуля NFC</string>
   <string name="app_ops_toggle_wifi">пераключыць стан Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">атрымаць кіраванне гучнасцю будзільніка</string>

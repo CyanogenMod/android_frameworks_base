@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Επιτρέπει σε μια εφαρμογή την ανάγνωση πληροφοριών σχετικά με τους αριθμούς τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
   <string name="permlab_changePhoneBlacklist">αλλαγή της μαύρης λίστας τηλεφώνου</string>
   <string name="permdesc_changePhoneBlacklist">Επιτρέπει σε μια εφαρμογή την αλλαγή των αριθμών τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
-  <string name="global_action_choose_profile">Προφίλ</string>
   <string name="permlab_setKeyguardWallpaper">ορισμός ταπετσαρίας οθόνης κλειδώματος</string>
   <string name="permdesc_setKeyguardWallpaper">Επιτρέπει σε μια εφαρμογή την αλλαγή της ταπετσαρίας της οθόνης κλειδώματος.</string>
   <string name="global_action_reboot">Επανεκκίνηση</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">άνοιγμα κατά την εκκίνηση</string>
   <string name="app_ops_toast_window">εμφάνιση αναδυόμενων μηνυμάτων</string>
   <string name="app_ops_toggle_bluetooth">εναλλαγή Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">εναλλαγή δεδομένων</string>
+  <string name="app_ops_toggle_mobile_data">εναλλαγή δεδομένων κινητής τηλεφωνίας</string>
   <string name="app_ops_toggle_nfc">εναλλαγή NFC</string>
   <string name="app_ops_toggle_wifi">εναλλαγή Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">έλεγχο έντασης ξυπνητηριού</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> συνδεδεμένες συσκευές</string>
   <string name="notify_package_component_protected_title">Η εκκίνηση της δραστηριότητας αποκλείστηκε</string>
   <string name="notify_package_component_protected_text">Η εφαρμογή <xliff:g id="app_name">%1$s</xliff:g> είναι προστατευμένη. Πιέστε για έλεγχο ταυτότητας και εκκίνηση της εφαρμογής.</string>
+  <string name="notify_battery_fully_charged_title">Μπαταρία πλήρως φορτισμένη</string>
+  <string name="notify_battery_fully_charged_text">Αποσυνδέστε τη συσκευή από το φορτιστή για να βελτιώσετε τη μακροζωία της μπαταρίας.</string>
 </resources>

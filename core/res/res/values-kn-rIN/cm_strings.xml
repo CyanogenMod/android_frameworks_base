@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆಗಳನ್ನು ಅಥವಾ ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ದೂರವಾಣಿ ಸಂಖ್ಯೆಗಳ ಬಗ್ಗೆ ಮಾಹಿತಿಯನ್ನು ಓದಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="permlab_changePhoneBlacklist">ಫೋನ್ ಬ್ಲಾಕ್‍ಪಟ್ಟಿ ಬದಲಾವಣೆ</string>
   <string name="permdesc_changePhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆ ಮತ್ತು ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ಸಂಖ್ಯೆಗಳನ್ನು ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
-  <string name="global_action_choose_profile">ಪ್ರೊಫೈಲ್</string>
   <string name="permlab_setKeyguardWallpaper">ಕೀಗಾರ್ಡ್ ವಾಲ್‍ಪೇಪರ್ ಹೊಂದಿಕೆ</string>
   <string name="permdesc_setKeyguardWallpaper">ಒಂದು ಆಪ್‍ಗೆ ಲಾಕ್ ಪರದೆಯ ವಾಲ್‍ಪೇಪರ್ ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="global_action_reboot">ರಿಬೂಟ್</string>
@@ -110,7 +109,6 @@
   <string name="app_ops_start_at_bootup">ಪವರ್ ಅಪ್ ವೇಳೆ ಆರಂಭವಾಗು</string>
   <string name="app_ops_toast_window">ಟೋಸ್ಟ್ ಸಂದೇಶಗಳನ್ನು ಪ್ರದರ್ಶಿಸು</string>
   <string name="app_ops_toggle_bluetooth">ಟಾಗಲ್ ಬ್ಲೂಟೂತ್</string>
-  <string name="app_ops_toggle_mobile_data">ಟಾಗಲ್ ಮೊಬೈಲ್ ಡೇಟಾ</string>
   <string name="app_ops_toggle_nfc">ಟಾಗಲ್ NFC</string>
   <string name="app_ops_use_alarm_volume">ಅಲಾರಂ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_audio_focus">ಆಡಿಯೋ ಫೋಕಸ್ ನಿಯಂತ್ರಿಸು</string>

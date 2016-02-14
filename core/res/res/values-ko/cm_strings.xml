@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">앱이 전화 또는 메시지 수신이 차단된 전화번호들의 정보를 읽을 수 있도록 허용합니다.</string>
   <string name="permlab_changePhoneBlacklist">전화 블랙리스트 수정</string>
   <string name="permdesc_changePhoneBlacklist">앱이 어떤 전화번호들의 전화 또는 메시지를 차단할 것인지를 변경할 수 있도록 허용합니다.</string>
-  <string name="global_action_choose_profile">프로필</string>
   <string name="permlab_setKeyguardWallpaper">잠금화면 배경 설정</string>
   <string name="permdesc_setKeyguardWallpaper">앱이 잠금화면 배경을 바꿀 수 있도록 허용합니다.</string>
   <string name="global_action_reboot">다시 시작</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">전원을 켤 때 실행</string>
   <string name="app_ops_toast_window">팝업 메시지 표시</string>
   <string name="app_ops_toggle_bluetooth">블루투스 켜기/끄기</string>
-  <string name="app_ops_toggle_mobile_data">모바일 데이터 켜기/끄기</string>
+  <string name="app_ops_toggle_mobile_data">셀룰러 데이터 켜기/끄기</string>
   <string name="app_ops_toggle_nfc">NFC 켜기/끄기</string>
   <string name="app_ops_toggle_wifi">Wi-Fi 켜기/끄기</string>
   <string name="app_ops_use_alarm_volume">알람 볼륨 제어</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g>대의 기기가 연결되어 있습니다</string>
   <string name="notify_package_component_protected_title">액티비티 실행 제한됨</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g>은(는) 실행이 제한되어 있습니다. 탭하여 제한을 해제하고 애플리케이션을 실행하세요.</string>
+  <string name="notify_battery_fully_charged_title">배터리가 완전히 충전됨</string>
+  <string name="notify_battery_fully_charged_text">배터리 수명을 향상시키기 위해 기기를 충전기에서 분리하세요.</string>
 </resources>

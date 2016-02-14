@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Nagłówek</string>
   <string name="quick_settings_title_tiles">Kafelki</string>
   <string name="quick_settings_title_show_weather">Pokaż pogodę</string>
+  <string name="quick_settings_title_show_brightness_slider">Pokaż suwak jasności</string>
   <string name="quick_settings_title_enlarge_first_row">Powiększenie pierwszego rzędu</string>
   <string name="screen_pinning_description_no_navbar">Zostaje na widoku do czasu odpięcia. Dotknij i przytrzymaj przycisk Wstecz, aby odpiąć.</string>
   <string name="quick_settings_custom_tile_detail_title">Kafelek niestandardowy</string>
@@ -78,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Ekran blokady</string>
   <string name="quick_settings_ambient_display_label">Aktywny wyświetlacz</string>
   <string name="quick_settings_lockscreen_label_enforced">Blokada ekranu wymuszona</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Wyłączone przez profil</string>
   <string name="accessibility_quick_settings_screen_timeout">Wygaszanie ekranu: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Wygaszanie ekranu zmieniono na <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Tryb baterii</string>
@@ -135,5 +137,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Zgłaszanie lokalizacji przeszło w tryb wysokiej dokładności.</string>
   <string name="quick_settings_tiles_category_system">Kafelki systemowe</string>
   <string name="quick_settings_tiles_add_tiles">Dodaj kafelek</string>
-  <string name="hotspot_apm_message">Sieć komórkowa jest niedostępna, podczas gdy włączony jest Tryb samolotowy. Wyłącz Tryb samolotowy i spróbuj ponownie.</string>
+  <string name="hotspot_apm_message">Sieć komórkowa jest niedostępna w Trybie samolotowym. Wyłącz go i spróbuj ponownie.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Latarka jest włączona</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Dotknij, aby wyłączyć</string>
 </resources>

@@ -25,7 +25,7 @@
   <string name="lockscreen_default_target">Par défaut</string>
   <string name="select_application">Sélectionner une application</string>
   <string name="lockscreen_choose_action_title">Choisir une action</string>
-  <string name="lockscreen_none_target">Aucun</string>
+  <string name="lockscreen_none_target">Aucune</string>
   <string name="navbar_dialog_title">Choisir l\'action à assigner</string>
   <string name="navbar_home_button">Bouton d\'accueil</string>
   <string name="navbar_recent_button">Bouton d\'applications récentes</string>
@@ -37,7 +37,7 @@
   <string name="navbar_menu_big_button">Bouton menu</string>
   <string name="accessibility_dpad_left">Curseur gauche</string>
   <string name="accessibility_dpad_right">Curseur droit</string>
-  <string name="advanced_dev_option_wipe_app">Effacer les données</string>
+  <string name="advanced_dev_option_wipe_app">Effacer les données de l\'application</string>
   <string name="advanced_dev_option_force_stop">Forcer l\'arrêt</string>
   <string name="advanced_dev_option_uninstall">Désinstaller</string>
   <string name="accessibility_notification_brightness">Luminosité</string>
@@ -60,7 +60,7 @@
   <string name="screen_pinning_description_no_navbar">Cela le laisse en vue jusqu\'à ce que vous le détachiez. Appuyez et maintenez le bouton retour pour détacher.</string>
   <string name="quick_settings_custom_tile_detail_title">Personnaliser le raccourci</string>
   <string name="quick_settings_remove">Supprimer le raccourci</string>
-  <string name="quick_settings_network_adb_label">ADB réseau</string>
+  <string name="quick_settings_network_adb_label">ADB par réseau</string>
   <string name="quick_settings_compass_label">Boussole</string>
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profils système</string>
@@ -71,12 +71,11 @@
   <string name="accessibility_quick_settings_sync_on">Synchronisation activée.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronisation désactivée.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Synchronisation activée.</string>
-  <string name="quick_settings_sync_label">Synchronisation</string>
-  <string name="quick_settings_volume_panel_label">Volume</string>
+  <string name="quick_settings_sync_label">Synchroniser</string>
+  <string name="quick_settings_volume_panel_label">Panneau de volume</string>
   <string name="quick_settings_usb_tether_label">Modem USB</string>
   <string name="quick_settings_screen_timeout_detail_title">Veille de l\'écran</string>
   <string name="quick_settings_lockscreen_label">Écran de verrouillage</string>
-  <string name="quick_settings_ambient_display_label">Affichage ambiant</string>
   <string name="quick_settings_lockscreen_label_enforced">Écran de verrouillage forcé</string>
   <string name="accessibility_quick_settings_screen_timeout">Veille de l\'écran : <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Veille de l\'écran changée à <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
@@ -96,10 +95,8 @@
   <string name="accessibility_quick_settings_lock_screen_on">Écran de verrouillage activé.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Verrouillage d\'écran désactivé.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_on">Verrouillage d\'écran activé.</string>
-  <string name="accessibility_quick_settings_ambient_display_off">Affichage ambiant désactivé.</string>
-  <string name="accessibility_quick_settings_ambient_display_on">Affichage ambiant activé.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Affichage ambiant désactivé.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Affichage ambiant activé.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Affichage en mode veille activé.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Affichage en mode veille activé.</string>
   <string name="accessibility_quick_settings_heads_up_off">Notifications flottantes désactivées.</string>
   <string name="accessibility_quick_settings_heads_up_on">Notifications flottantes activées.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Notifications flottantes désactivées.</string>
@@ -110,7 +107,7 @@
   <string name="accessibility_quick_settings_battery_saver_changed_on">L\'économiseur de batterie a été activé.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Raccourcis dynamiques</string>
   <string name="dynamic_qs_tile_next_alarm_label">Prochaine alarme</string>
-  <string name="dynamic_qs_tile_ime_selector_label">Mode de saisie</string>
+  <string name="dynamic_qs_tile_ime_selector_label">Sélecteur de mode de saisie</string>
   <string name="dynamic_qs_tile_su_label">Accès root</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay désactivé.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay : mode automatique.</string>

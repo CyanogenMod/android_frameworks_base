@@ -48,7 +48,7 @@
   <string name="quick_settings_compass_init">Стартиране на\u2026</string>
   <string name="led_notification_title">Настройки на светлината</string>
   <string name="led_notification_text">LED светлини, разрешени в настройките</string>
-  <string name="qs_tile_edit_header_instruction">Натиснете и задръжте плочки за да пренаредите</string>
+  <string name="qs_tile_edit_header_instruction">Натиснете и задръжте плочка за да я пренаредите</string>
   <string name="quick_settings_edit_label">Редактиране на плочки</string>
   <string name="quick_settings_cannot_delete_edit_tile">Не може да изтрие редактираната на плочка</string>
   <string name="qs_tiles_reset_confirmation">Нулиране бързи настройки на плочки и връщане на конфигурацията по подразбиране?</string>
@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Деактивирани профили</string>
   <string name="quick_settings_heads_up_label">Изскачащи съобщения</string>
   <string name="quick_settings_battery_saver_label">Пестене на батерия</string>
+  <string name="quick_settings_caffeine_label">Кофеин</string>
   <string name="accessibility_quick_settings_sync_off">Изключена синхронизация.</string>
   <string name="accessibility_quick_settings_sync_on">Включена синхронизация.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Синхронизацията е изключена.</string>
@@ -75,10 +76,11 @@
   <string name="quick_settings_sync_label">Синхронизация</string>
   <string name="quick_settings_volume_panel_label">Панел на звука</string>
   <string name="quick_settings_usb_tether_label">Тетъринг през USB</string>
-  <string name="quick_settings_screen_timeout_detail_title">Време на изчакване на екрана</string>
+  <string name="quick_settings_screen_timeout_detail_title">Изключване на дисплея</string>
   <string name="quick_settings_lockscreen_label">Заключен екран</string>
   <string name="quick_settings_ambient_display_label">Атмосферен екран</string>
   <string name="quick_settings_lockscreen_label_enforced">Принудително заключен екран</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Деактивирано от профила</string>
   <string name="accessibility_quick_settings_screen_timeout">Изключване на екрана след: <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Изключване на екрана е променен на <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
   <string name="qs_tile_performance">Режим на батерията</string>
@@ -105,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Включи Изскачащи съобщения.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Изскачащите съобщения са изключени.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Изскачащите съобщения са включени.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Кофеин изключен.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Кофеин включен.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Режим за пестене на батерията изключен.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Режим за запазване на батерията нключен.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Режим за пестене на батерията е изключен.</string>
@@ -113,16 +117,16 @@
   <string name="dynamic_qs_tile_next_alarm_label">Следваща аларма</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME селектор</string>
   <string name="dynamic_qs_tile_su_label">Root достъп</string>
-  <string name="accessibility_quick_settings_live_display_off">Изключи LiveDisplay.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: автоматичен режим.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: дневен режим.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: нощен режим.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: външен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay е изключен.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay променен на автоматичен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay променен на дневен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay променен на нощен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay променен на външен режим.</string>
+  <string name="accessibility_quick_settings_live_display_off">Изключи Адаптивен екран.</string>
+  <string name="accessibility_quick_settings_live_display_auto">Адаптивен екран: автоматичен режим.</string>
+  <string name="accessibility_quick_settings_live_display_day">Адаптивен екран: дневен режим.</string>
+  <string name="accessibility_quick_settings_live_display_night">Адаптивен екран: нощен режим.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">Адаптивен екран: външен режим.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">Адаптивен екран е изключен.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">Адаптивен екран е променен на автоматичен режим.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">Адаптивен екран е променен на дневен режим.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">Адаптивен екран е променен на нощен режим.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">Адаптивен екран е променен на външен режим.</string>
   <string name="quick_settings_title_advanced_location">Три-посочно местоположение</string>
   <string name="accessibility_quick_settings_location_battery_saving">Настройка на местоположение: икономичен режим на батерията.</string>
   <string name="accessibility_quick_settings_location_gps_only">Доклад на местоположение: само по GPS.</string>
@@ -136,5 +140,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Доклад на местоположение променен в прецизен режим.</string>
   <string name="quick_settings_tiles_category_system">Системни плочки</string>
   <string name="quick_settings_tiles_add_tiles">Добавяне на плочка</string>
-  <string name="hotspot_apm_message">Свързването към мобилна мрежа не е възможно, докато сте Самолетен режим. Изключете го и след това опитайте отново.</string>
+  <string name="hotspot_apm_message">Свързването към мобилна мрежа не е възможно, докато сте в Самолетен режим. Изключете го и след това опитайте отново.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Фенерчето е включено</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Натиснете, за изключване</string>
 </resources>

@@ -18,7 +18,6 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenshot">திரைப்பிடிப்பு</string>
-  <string name="global_action_choose_profile">சுயவிவரம்</string>
   <string name="global_action_reboot">மறுதொடக்கம்</string>
   <string name="reboot_reboot">மறுதொடக்கம்</string>
   <string name="reboot_recovery">மீட்பு (ரெகவரி)</string>
@@ -56,7 +55,6 @@
   <string name="app_ops_send_sms">ஒரு குறுந்தகவல் செய்தி அனுப்ப</string>
   <string name="app_ops_start_at_bootup">மின்சக்தி தொடக்கத்தில் ஆரம்பிக்க</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth நிலைமாற்று</string>
-  <string name="app_ops_toggle_mobile_data">மொபைல் தரவு நிலைமாற்று</string>
   <string name="app_ops_use_alarm_volume">அலார ஒலி கட்டுப்படுத்த</string>
   <string name="app_ops_use_audio_focus">ஒலி கவனத்தை கட்டுப்படுத்த</string>
   <string name="app_ops_use_bluetooth_volume">Bluetooth ஒலியளவு கட்டுப்படுத்த</string>

@@ -22,4 +22,5 @@
     <item quantity="one">Angi SIM PIN, du har <xliff:g id="number">%d</xliff:g> forsøk igjen før må du kontakte operatøren for å låse opp enheten.</item>
     <item quantity="other">Angi SIM PIN, du har <xliff:g id="number">%d</xliff:g> gjenstående forsøk.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Feil: Input kortere enn minimumslengden</string>
 </resources>

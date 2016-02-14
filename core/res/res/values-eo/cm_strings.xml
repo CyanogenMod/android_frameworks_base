@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Permesas al aplikaĵo lefi informon pri telefon-numeroj, kiuj estas blokitaj por alvenantaj alvokoj aŭ mesaĝoj.</string>
   <string name="permlab_changePhoneBlacklist">ŝanĝi telefonan nigran liston</string>
   <string name="permdesc_changePhoneBlacklist">Permesas al aplikaĵo ŝanĝi telefon-numerojn, kiuj estas blokitaj por alvenintaj alvokoj aŭ mesaĝoj.</string>
-  <string name="global_action_choose_profile">Profilo</string>
   <string name="permlab_setKeyguardWallpaper">difini la ŝlosan ekranfonon</string>
   <string name="permdesc_setKeyguardWallpaper">Permesas al aplikaĵo ŝanĝi la ŝlosan fonekranon.</string>
   <string name="global_action_reboot">Relanĉi</string>
@@ -104,7 +103,6 @@
   <string name="app_ops_start_at_bootup">lanĉiĝi dum sistema ŝaltado</string>
   <string name="app_ops_toast_window">afiŝi atentigojn</string>
   <string name="app_ops_toggle_bluetooth">(mal)ŝalti Bludenton</string>
-  <string name="app_ops_toggle_mobile_data">(mal)ŝalti projekton medion</string>
   <string name="app_ops_toggle_nfc">(mal)ŝalti NFC</string>
   <string name="app_ops_use_alarm_volume">kontroli laŭtecon de alarmoj</string>
   <string name="app_ops_use_audio_focus">kontroli sonan fokuson</string>

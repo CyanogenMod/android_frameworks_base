@@ -136,5 +136,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">위치 보고가 높은 정확도 모드로 바뀜.</string>
   <string name="quick_settings_tiles_category_system">시스템 타일</string>
   <string name="quick_settings_tiles_add_tiles">타일 추가</string>
-  <string name="hotspot_apm_message">비행기 모드가 활성화되어 있어 모바일 네트워크에 연결할 수 없습니다. 비행기 모드를 해제하고 다시 시도하세요.</string>
+  <string name="hotspot_apm_message">비행기 모드가 활성화되어 있어 셀룰러 네트워크에 연결할 수 없습니다. 비행기 모드를 해제하고 다시 시도하세요.</string>
+  <string name="quick_settings_tile_flashlight_not_title">손전등 켜짐</string>
+  <string name="quick_settings_tile_flashlight_not_summary">탭하여 끄기</string>
 </resources>

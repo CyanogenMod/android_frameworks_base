@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">السماح للتطبيق بقراءة المعلومات الخاصة بأرقام الهاتف المحظورة بالنبسة للمكالمات أو الرسائل الواردة.</string>
   <string name="permlab_changePhoneBlacklist">تغيير القائمة السوداء للهاتف</string>
   <string name="permdesc_changePhoneBlacklist">السماح للتطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
-  <string name="global_action_choose_profile">ملف تعريف</string>
   <string name="permlab_setKeyguardWallpaper">تعيين خلفية شاشة الحارس الرئيسي</string>
   <string name="permdesc_setKeyguardWallpaper">السماج للتطبيق بتغيير خلفية شاشة التأمين.</string>
   <string name="global_action_reboot">إعادة تمهيد</string>
@@ -109,7 +108,6 @@
   <string name="app_ops_start_at_bootup">البدء في التشغيل</string>
   <string name="app_ops_toast_window">عرض الإعلامات المنبثقة</string>
   <string name="app_ops_toggle_bluetooth">تبديل بلوتوث</string>
-  <string name="app_ops_toggle_mobile_data">تبديل البيانات المتنقلة</string>
   <string name="app_ops_toggle_nfc">تبديل NFC</string>
   <string name="app_ops_use_alarm_volume">التحكم في مستوى صوت الإنذار</string>
   <string name="app_ops_use_audio_focus">التحكم في تركيز الصوت</string>

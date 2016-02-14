@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">ڕێگەدان: بە بەرنامەیەک بۆ خوێندنەوەی زانیاریەکان دەربارەی ژمارەی تەلەفۆنەکە کە بلۆک کراوە بۆ نامەو تەلەفۆنکردنی هاتوو.</string>
   <string name="permlab_changePhoneBlacklist">گۆڕنی تەلەفۆن لە لیستی ڕەش</string>
   <string name="permdesc_changePhoneBlacklist">ڕێگەدان بە بەرنامەکە بۆ ئەو ژمارانەی بلۆک کراون بۆ نامەو تەلەفۆن.</string>
-  <string name="global_action_choose_profile">زانیاری تایبەتی</string>
   <string name="permlab_setKeyguardWallpaper">دانانی کلیلە پارێز بۆ دیوارپۆش</string>
   <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی ڕوونمای دیوارپۆش.</string>
   <string name="global_action_reboot">دوبارە خستنەگەڕ</string>
@@ -99,7 +98,6 @@
   <string name="app_ops_start_at_bootup">دەستپێکردنی چالاککردنی هێز</string>
   <string name="app_ops_toast_window">پیشاندانی تێبینی تازە</string>
   <string name="app_ops_toggle_bluetooth">گۆڕینی بلوتوس</string>
-  <string name="app_ops_toggle_mobile_data">گۆڕینی داتای مۆبایل</string>
   <string name="app_ops_toggle_nfc">گۆڕینی دۆخی NFC</string>
   <string name="app_ops_use_alarm_volume">کۆنترۆڵی دەنگی زەنگ</string>
   <string name="app_ops_use_audio_focus">کۆنترۆڵی تیشکۆی دەنگ</string>

@@ -50,6 +50,7 @@
   <string name="quick_settings_profiles">Süsteemi profiilid</string>
   <string name="quick_settings_profiles_off">Profiilid välja lülitatud</string>
   <string name="quick_settings_heads_up_label">Etteteavitus</string>
+  <string name="quick_settings_battery_saver_label">Akusäästja</string>
   <string name="accessibility_quick_settings_sync_off">Sünk väljas.</string>
   <string name="accessibility_quick_settings_sync_on">Sünk sees.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sünk välja lülitatud.</string>
@@ -63,12 +64,18 @@
   <string name="quick_settings_lockscreen_label_enforced">Lukustusekraan sunnitud</string>
   <string name="accessibility_quick_settings_screen_timeout">Ekraani ajalõpp: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Ekraani ajalõpp muudetud <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="qs_tile_performance">Aku režiim</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Aku režiim: energiasäästmise režiim.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Aku režiim: tasakaalustatud režiim.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Aku režiim: jõudlus režiim.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Aku režiim: energiatõhususe režiimis.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Aku režiim: kiirrežiim.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Aku režiim muudeti energiasäästu režiimiks.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Aku režiim muudeti tasakaalustatud režiimiks.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Aku režiim muudeti jõudluse režiimiks.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Aku režiimi muudeti tõhususe režiimiks.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Aku režiimi muudeti kiirrežiimiks.</string>
+  <string name="quick_settings_performance_profile_detail_title">Aku režiim</string>
   <string name="accessibility_quick_settings_lock_screen_off">Lukustusekraan väljas.</string>
   <string name="accessibility_quick_settings_lock_screen_on">Lukustusekraan sees.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Lukustusekraan välja lülitatud.</string>
@@ -81,6 +88,10 @@
   <string name="accessibility_quick_settings_heads_up_on">Etteteavitus sees.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Etteteavitus on väljalülitatud.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Etteteavitus on sisselülitatud.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akusäästja väljas.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akusäästja sees.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akusäästja on välja lülitatud.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akusäästja on sisse lülitatud.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dünaamiline plaat</string>
   <string name="dynamic_qs_tile_next_alarm_label">Järgmine alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME valija</string>

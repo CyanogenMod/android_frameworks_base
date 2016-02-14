@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Bir uygulamanın gelen çağrıları ya da mesajları engellenmiş telefon numaralarını okumasına izin verir.</string>
   <string name="permlab_changePhoneBlacklist">telefon kara listesini değiştir</string>
   <string name="permdesc_changePhoneBlacklist">Bir uygulamanın gelen çağrıları ya da mesajları engellenmiş telefon numaralarını değiştirmesine izin verir.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">tuş kilidi duvar kağıdını ayarla</string>
   <string name="permdesc_setKeyguardWallpaper">Bir uygulamanın kilit ekranı duvar kağıdını değiştirmesine izin verir.</string>
   <string name="global_action_reboot">Yeniden başlat</string>
@@ -110,7 +109,6 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <string name="app_ops_start_at_bootup">açılışta başla</string>
   <string name="app_ops_toast_window">bildirim mesajları göster</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth\'u açıp kapat</string>
-  <string name="app_ops_toggle_mobile_data">mobil veriyi açıp kapat</string>
   <string name="app_ops_toggle_nfc">NFC\'yi aç kapa</string>
   <string name="app_ops_toggle_wifi">Wi-Fi aç kapa</string>
   <string name="app_ops_use_alarm_volume">alarm sesini kontrol et</string>

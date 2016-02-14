@@ -136,5 +136,4 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Служба адпраўкі месцазнаходжання пераключана ў рэжым высокай дакладнасці.</string>
   <string name="quick_settings_tiles_category_system">Сістэмны пліткі</string>
   <string name="quick_settings_tiles_add_tiles">Дадаць плітку</string>
-  <string name="hotspot_apm_message">Не атрымаяцца далучыцца да мабільнай сеткі пакуль улучаны рэжым лёту. Адлучы рэжым лёту і паспрабуй нанава.</string>
 </resources>

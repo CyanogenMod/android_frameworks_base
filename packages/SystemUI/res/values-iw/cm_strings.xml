@@ -136,5 +136,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">דיווח מיקום השתנה למצב דיוק גבוה.</string>
   <string name="quick_settings_tiles_category_system">אריחי מערכת</string>
   <string name="quick_settings_tiles_add_tiles">הוסף אריח</string>
-  <string name="hotspot_apm_message">לא ניתן להתחבר לרשתות ניידות כאשר מצב טיסה פעיל. בטל את מצב הטיסה ונסה שנית.</string>
+  <string name="hotspot_apm_message">לא ניתן להתחבר לרשתות סלולריות כאשר מצב טיסה פעיל. בטל את מצב הטיסה ונסה שנית.</string>
+  <string name="quick_settings_tile_flashlight_not_title">פנס מופעל</string>
+  <string name="quick_settings_tile_flashlight_not_summary">לחץ לכיבוי</string>
 </resources>

@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Permite que um aplicativo leia informações sobre números de telefone bloqueados para efetuar chamadas ou enviar mensagens.</string>
   <string name="permlab_changePhoneBlacklist">alterar a lista negra do telefone</string>
   <string name="permdesc_changePhoneBlacklist">Permite que um aplicativo altere os números de telefone bloqueados para efetuar chamadas ou enviar mensagens.</string>
-  <string name="global_action_choose_profile">Perfil</string>
   <string name="permlab_setKeyguardWallpaper">definir papel de parede da tela de bloqueio</string>
   <string name="permdesc_setKeyguardWallpaper">Permite um aplicativo a trocar o papel de parede da tela de bloqueio.</string>
   <string name="global_action_reboot">Reiniciar</string>
@@ -108,7 +107,7 @@
   <string name="app_ops_start_at_bootup">iniciar na inicialização</string>
   <string name="app_ops_toast_window">exibir mensagens flutuantes na tela</string>
   <string name="app_ops_toggle_bluetooth">alternar Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">alternar dados móveis</string>
+  <string name="app_ops_toggle_mobile_data">alternar dados de celular</string>
   <string name="app_ops_toggle_nfc">alternar NFC</string>
   <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar volume do alarme</string>
@@ -156,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivos conectados</string>
   <string name="notify_package_component_protected_title">Início de atividade foi bloqueado</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> está protegido de ser iniciado. Toque para autenticar e iniciar o aplicativo.</string>
+  <string name="notify_battery_fully_charged_title">Bateria totalmente carregada</string>
+  <string name="notify_battery_fully_charged_text">Desconecte seu dispositivo do carregador para aumentar a vida útil da bateria.</string>
 </resources>

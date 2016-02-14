@@ -79,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Lukitusnäyttö</string>
   <string name="quick_settings_ambient_display_label">Ambient-näyttö</string>
   <string name="quick_settings_lockscreen_label_enforced">Lukitusnäyttö pakotettu</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Profiili poistanut käytöstä</string>
   <string name="accessibility_quick_settings_screen_timeout">Näytön aikakatkaisu: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Näytön aikakatkaisu asettiin aikaan <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Akkutila</string>
@@ -137,4 +138,6 @@
   <string name="quick_settings_tiles_category_system">Järjestelmätiilet</string>
   <string name="quick_settings_tiles_add_tiles">Lisää tiili</string>
   <string name="hotspot_apm_message">Yhteyden muodostaminen mobiiliverkkoihin lentokonetilan aikana ei onnistu. Poista lentokonetila käytöstä ja yritä uudelleen.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Taskulamppu on päällä</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Paina sammuttaaksesi</string>
 </resources>

@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Hiermee kan de app informatie lezen over telefoonnummers waarvan inkomende oproepen of berichten zijn geblokkeerd.</string>
   <string name="permlab_changePhoneBlacklist">zwarte lijst aanpassen</string>
   <string name="permdesc_changePhoneBlacklist">Hiermee kan de app telefoonnummers aanpassen waarvan inkomende oproepen of berichten zijn geblokkeerd.</string>
-  <string name="global_action_choose_profile">Profiel</string>
   <string name="permlab_setKeyguardWallpaper">achtergrond van vergrendelingsscherm instellen</string>
   <string name="permdesc_setKeyguardWallpaper">Hiermee kan de app de achtergrond van het vergrendelingsscherm aanpassen.</string>
   <string name="global_action_reboot">Herstarten</string>
@@ -128,6 +127,7 @@
   <string name="app_ops_read_phone_state">toegang tot telefoonstatus</string>
   <string name="app_ops_scan_wifi">wifi-netwerken scannen</string>
   <string name="app_ops_change_wallpaper">achtergrond aanpassen</string>
+  <string name="app_ops_assist_structure">structuur voor ondersteuning gebruiken</string>
   <string name="app_ops_assist_screenshot">screenshot maken</string>
   <string name="app_ops_use_body_sensors">lichaamssensoren gebruiken</string>
   <string name="app_ops_read_cell_broadcasts">nooduitzendingen lezen</string>
@@ -153,4 +153,7 @@
   <string name="tethered_notification_no_device_message">Geen aangesloten apparaat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> aangesloten apparaat</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> aangesloten apparaten</string>
+  <string name="notify_package_component_protected_title">Starten van activiteit geblokkeerd</string>
+  <string name="notify_battery_fully_charged_title">Accu volledig opgeladen</string>
+  <string name="notify_battery_fully_charged_text">Ontkoppel uw apparaat van de oplader om de levensduur van de accu te verlengen.</string>
 </resources>

@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">به برنامه اجازه می‌دهد اطلاعات مربوط به شماره تلفن‌های مسدود را برای پیام‌ها یا تماس‌های ورودی بخواند.</string>
   <string name="permlab_changePhoneBlacklist">تغییر لیست سیاه گوشی</string>
   <string name="permdesc_changePhoneBlacklist">به برنامه اجازه می‌دهد شماره تلفن‌های مسدود را برای پیام‌ها یا تماس‌های ورودی تغییر دهد.</string>
-  <string name="global_action_choose_profile">پروفایل</string>
   <string name="permlab_setKeyguardWallpaper">تنظیم کاغذدیواری قفل صفحه</string>
   <string name="permdesc_setKeyguardWallpaper">به برنامه اجازه می‌دهد کاغذدیواری قفل صفحه را تغییر دهد.</string>
   <string name="global_action_reboot">راه‌اندازی مجدد</string>
@@ -110,7 +109,6 @@
   <string name="app_ops_start_at_bootup">اجرا هنگام روشن شدن</string>
   <string name="app_ops_toast_window">نمایش متن‌های کوچک</string>
   <string name="app_ops_toggle_bluetooth">روشن و خاموش کردن بلوتوث</string>
-  <string name="app_ops_toggle_mobile_data">روشن و خاموش کردن داده همراه</string>
   <string name="app_ops_toggle_nfc">روشن و خاموش کردن ان‌اف‌سی</string>
   <string name="app_ops_use_alarm_volume">کنترل صدای هشدار</string>
   <string name="app_ops_use_audio_focus">کنترل کانون صدا</string>

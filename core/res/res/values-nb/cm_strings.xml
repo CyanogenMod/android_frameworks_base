@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Tillater en app å lese informasjon om telefonnummer som er blokkert for innkommende samtaler eller meldinger.</string>
   <string name="permlab_changePhoneBlacklist">endre telefonens svarteliste</string>
   <string name="permdesc_changePhoneBlacklist">Tillater en app å endre telefonnummer som er blokkert for innkommende samtaler eller meldinger.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">Angi tastaturbakgrunn</string>
   <string name="permdesc_setKeyguardWallpaper">Tillat en app å endre låseskjermsbakgrunn.</string>
   <string name="global_action_reboot">Start på nytt</string>
@@ -108,7 +107,6 @@
   <string name="app_ops_start_at_bootup">starte under oppstart</string>
   <string name="app_ops_toast_window">vis toast meldinger</string>
   <string name="app_ops_toggle_bluetooth">aktivere/deaktivere bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">aktivere/deaktivere mobildata</string>
   <string name="app_ops_toggle_nfc">NFC av/på</string>
   <string name="app_ops_toggle_wifi">veksle Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">styre alarmvolum</string>
@@ -154,4 +152,6 @@
   <string name="tethered_notification_no_device_message">Ingen tilkoblede enheter</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> tilkoblet enhet</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> tilkoblede enheter</string>
+  <string name="notify_package_component_protected_title">Aktivitets oppstart blokkert</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> er beskyttet mot oppstart. Trykk for å godkjenne og starte programmet.</string>
 </resources>

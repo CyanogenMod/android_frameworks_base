@@ -21,6 +21,7 @@
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Svep höger för %1$s</string>
   <string name="right_shortcut_hint">Svep vänster för %1$s</string>
+  <string name="lockscreen_message">Tryck på en ikon till vänster eller höger för att tilldela en låsskärmgenväg.</string>
   <string name="lockscreen_default_target">Standard</string>
   <string name="select_application">Välj app</string>
   <string name="lockscreen_choose_action_title">Välj åtgärd</string>
@@ -51,6 +52,7 @@
   <string name="quick_settings_cannot_delete_edit_tile">Kan inte radera Redigera-brickan</string>
   <string name="qs_tiles_reset_confirmation">Återställ snabbinställningsbrickor till standardkonfiguration?</string>
   <string name="quick_settings_tile_reset_to_default">Återställ till standardlayout</string>
+  <string name="quick_settings_title_header">Huvud</string>
   <string name="quick_settings_title_tiles">Brickor</string>
   <string name="quick_settings_title_show_weather">Visa väder</string>
   <string name="quick_settings_title_show_brightness_slider">Visa Ljusstyrkereglaget</string>
@@ -120,6 +122,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ändrad till dagläge.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ändrad till nattläge.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ändrad till utomhusläge.</string>
+  <string name="quick_settings_title_advanced_location">Tri-state placering</string>
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
   <string name="accessibility_quick_settings_location_gps_only">Platsrapportering: endast sensorläge.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Platsrapportering: högt precisionsläge.</string>
@@ -132,4 +135,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Platsrapportering ändrad till hög noggrannhet.</string>
   <string name="quick_settings_tiles_category_system">Systembrickor</string>
   <string name="quick_settings_tiles_add_tiles">Lägg till en bricka</string>
+  <string name="hotspot_apm_message">Det går inte att ansluta till mobila nät när flygplansläge är aktiverat. Inaktivera flygplansläge och försök igen.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Ficklampan är på</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tryck för att stänga av</string>
 </resources>

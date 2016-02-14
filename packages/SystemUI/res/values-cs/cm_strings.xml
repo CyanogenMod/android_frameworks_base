@@ -136,5 +136,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Zjištění polohy změněno na vysokou přesnost.</string>
   <string name="quick_settings_tiles_category_system">Systémové dlaždice</string>
   <string name="quick_settings_tiles_add_tiles">Přidat dlaždici</string>
-  <string name="hotspot_apm_message">Nelze se připojit k mobilním sítím při zapnutém režimu „V letadle“. Vypněte prosím tento režim a zkuste to znovu.</string>
+  <string name="hotspot_apm_message">Nelze se připojit k mobilním datům při zapnutém režimu „Letadlo“. Vypněte tento režim a zkuste to znovu.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Svítilna zapnuta</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Dotykem vypněte</string>
 </resources>

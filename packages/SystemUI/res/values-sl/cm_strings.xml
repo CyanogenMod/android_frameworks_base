@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profili onemogočeni</string>
   <string name="quick_settings_heads_up_label">Obvestila na zaslonu</string>
   <string name="quick_settings_battery_saver_label">Ohranjevalnik baterije</string>
+  <string name="quick_settings_caffeine_label">Kofein</string>
   <string name="accessibility_quick_settings_sync_off">Sinhronizacija izklopljena.</string>
   <string name="accessibility_quick_settings_sync_on">Sinhronizacija vklopljena.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinhronizacija izklopljena.</string>
@@ -79,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Zakleni zaslon</string>
   <string name="quick_settings_ambient_display_label">Okoliški zaslon</string>
   <string name="quick_settings_lockscreen_label_enforced">Vsiljen zaslon za zaklepanje</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Onemogočeno s profilom</string>
   <string name="accessibility_quick_settings_screen_timeout">Časovna omejitev zaslona: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Časovna omejitev zaslona spremenjena na <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Način varčevanja energije</string>
@@ -105,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Obvestila na zas. vkl.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Obvestila na zaslonu izklopljena.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Obvestila na zaslonu vklopljena.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kofein izklopljen.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kofein vklopljen.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Ohranjevalnik baterije izklopljen.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Ohranjevalnik baterije vklopljen.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Ohranjevalnik baterije izklopljen.</string>
@@ -137,4 +141,6 @@
   <string name="quick_settings_tiles_category_system">Sistemske ploščice</string>
   <string name="quick_settings_tiles_add_tiles">Dodaj ploščico</string>
   <string name="hotspot_apm_message">Povezava z mobilnimi omrežji ni možna v načinu za letalo. Onemogočite način za letalo in poskusite znova.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Svetilka je vklopljena</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tapnite, če želite izklopiti</string>
 </resources>

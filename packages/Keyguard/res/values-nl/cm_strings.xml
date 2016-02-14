@@ -22,4 +22,5 @@
     <item quantity="one">SIM-PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat u contact moet opnemen met uw provider om uw apparaat te ontgrendelen.</item>
     <item quantity="other">SIM-PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Fout: Invoer is korter dan minimumlengte</string>
 </resources>

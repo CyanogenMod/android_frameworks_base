@@ -27,7 +27,6 @@
   <string name="permdesc_readPhoneBlacklist">පැමිණෙන ඇමතුම් හෝ පණිවිඩ සඳහා අවහිර කර ඇති ඇමතුම් අංක පිලිබඳ තොරතුරු කියවීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="permlab_changePhoneBlacklist">දුරකථන අපලේඛණය වෙනස් කරන්න</string>
   <string name="permdesc_changePhoneBlacklist">පැමිණෙන ඇමතුම් හෝ පණිවිඩ සඳහා අවහිර කර ඇති ඇමතුම් අංක වෙනස් කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
-  <string name="global_action_choose_profile">පැතිකඩ</string>
   <string name="permlab_setKeyguardWallpaper">යතුරු රැක්මේ වෝල්පේපරය සකසන්න</string>
   <string name="permdesc_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය වෙනස්කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
   <string name="global_action_reboot">යළි පණගන්වන්න</string>
@@ -80,7 +79,6 @@
   <string name="app_ops_send_sms">කෙටි පනිවිඩයක් යැවීම</string>
   <string name="app_ops_start_at_bootup">පණගැන්වීමේදී ධාවනය</string>
   <string name="app_ops_toggle_bluetooth">බ්ලූටූත් ටොගලනය</string>
-  <string name="app_ops_toggle_mobile_data">ජංගම දත්ත ටොගලනය</string>
   <string name="app_ops_toggle_nfc">NFC ටොගලනය</string>
   <string name="app_ops_use_alarm_volume">ඇඟවීම් හඬ පරිමා පාලනය</string>
   <string name="app_ops_use_audio_focus">ශ්‍රව්‍ය කේන්ද්‍රනය පාලනය</string>
