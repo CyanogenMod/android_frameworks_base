@@ -43,6 +43,7 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
     private volatile boolean mIsShowing = true;
     private volatile boolean mSimSecure = true;
     private volatile boolean mInputRestricted = true;
+    private volatile boolean mBlurEnabled = false;
 
     private int mCurrentUserId;
 
@@ -70,9 +71,14 @@ public class KeyguardStateMonitor extends IKeyguardStateCallback.Stub {
         return mInputRestricted;
     }
 
+    public boolean isBlurEnabled() {
+        return mBlurEnabled;
+    }
+
     @Override // Binder interface
-    public void onShowingStateChanged(boolean showing) {
+    public void onShowingStateChanged(boolean showing, boolean blurEnabled) {
         mIsShowing = showing;
+        mBlurEnabled = blurEnabled;
     }
 
     @Override // Binder interface

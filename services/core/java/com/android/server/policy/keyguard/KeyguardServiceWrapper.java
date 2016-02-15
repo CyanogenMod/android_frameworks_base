@@ -230,6 +230,15 @@ public class KeyguardServiceWrapper implements IKeyguardService {
         return mService.asBinder();
     }
 
+    @Override
+    public void setBlurEnabled(boolean blurEnabled) {
+        try {
+            mService.setBlurEnabled(blurEnabled);
+        } catch (RemoteException e) {
+            Slog.w(TAG, "Remote Exception", e);
+        }
+    }
+
     public boolean isShowing() {
         return mKeyguardStateMonitor.isShowing();
     }
@@ -240,6 +249,10 @@ public class KeyguardServiceWrapper implements IKeyguardService {
 
     public boolean isInputRestricted() {
         return mKeyguardStateMonitor.isInputRestricted();
+    }
+
+    public boolean isBlurEnabled() {
+        return mKeyguardStateMonitor.isBlurEnabled();
     }
 
     public void dump(String prefix, PrintWriter pw) {

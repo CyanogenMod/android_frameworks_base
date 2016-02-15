@@ -77,6 +77,7 @@ public class KeyguardServiceDelegate {
         public boolean bootCompleted;
         public int screenState;
         public int interactiveState;
+        public boolean blurEanbled;
     };
 
     public interface DrawnListener {
@@ -187,6 +188,9 @@ public class KeyguardServiceDelegate {
             if (mKeyguardState.occluded) {
                 mKeyguardService.setOccluded(mKeyguardState.occluded);
             }
+            if (mKeyguardState.blurEanbled) {
+                mKeyguardService.setBlurEnabled(mKeyguardState.blurEanbled);
+            }
         }
 
         @Override
@@ -210,6 +214,13 @@ public class KeyguardServiceDelegate {
             mKeyguardState.inputRestricted = mKeyguardService.isInputRestricted();
         }
         return mKeyguardState.inputRestricted;
+    }
+
+    public boolean isBlurEnabled() {
+        if (mKeyguardService != null) {
+            mKeyguardState.blurEanbled = mKeyguardService.isBlurEnabled();
+        }
+        return mKeyguardState.blurEanbled;
     }
 
     public void verifyUnlock(final OnKeyguardExitResult onKeyguardExitResult) {
@@ -407,6 +418,12 @@ public class KeyguardServiceDelegate {
     public void onActivityDrawn() {
         if (mKeyguardService != null) {
             mKeyguardService.onActivityDrawn();
+        }
+    }
+
+    public void setBlurEnabled(boolean blurEnabled) {
+        if (mKeyguardService != null) {
+            mKeyguardService.setBlurEnabled(blurEnabled);
         }
     }
 

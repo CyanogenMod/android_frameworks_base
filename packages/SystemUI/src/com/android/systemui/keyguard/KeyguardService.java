@@ -185,6 +185,12 @@ public class KeyguardService extends Service {
             checkPermission();
             mKeyguardViewMediator.onActivityDrawn();
         }
+
+        @Override
+        public void setBlurEnabled(boolean blurEnabled) {
+            checkPermission();
+            mKeyguardViewMediator.setBlurEnabled(blurEnabled);
+        }
     };
 }
 

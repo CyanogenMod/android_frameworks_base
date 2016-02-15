@@ -346,6 +346,9 @@ public class KeyguardViewMediator extends SystemUI {
     private boolean mWakeAndUnlocking;
     private IKeyguardDrawnCallback mDrawnCallback;
 
+    private boolean mSupportsBlur;
+    private boolean mBlurEnabled;
+
     private LockscreenEnabledSettingsObserver mSettingsObserver;
     public static class LockscreenEnabledSettingsObserver extends UserContentObserver {
 
@@ -641,6 +644,10 @@ public class KeyguardViewMediator extends SystemUI {
 
         mLockPatternUtils = new LockPatternUtils(mContext);
         KeyguardUpdateMonitor.setCurrentUser(ActivityManager.getCurrentUser());
+
+        // Assume mBlurEnabled == mSupportsBlur until we know for sure
+        mBlurEnabled = mSupportsBlur = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_ui_blur_enabled);
 
         // Assume keyguard is showing (unless it's disabled) until we know for sure...
         setShowingLocked(!shouldWaitForProvisioning() && !mLockPatternUtils.isLockScreenDisabled(
@@ -1895,7 +1902,7 @@ public class KeyguardViewMediator extends SystemUI {
             int size = mKeyguardStateCallbacks.size();
             for (int i = size - 1; i >= 0; i--) {
                 try {
-                    mKeyguardStateCallbacks.get(i).onShowingStateChanged(showing);
+                    mKeyguardStateCallbacks.get(i).onShowingStateChanged(showing, mBlurEnabled);
                 } catch (RemoteException e) {
                     Slog.w(TAG, "Failed to call onShowingStateChanged", e);
                     if (e instanceof DeadObjectException) {
@@ -1913,11 +1920,15 @@ public class KeyguardViewMediator extends SystemUI {
             mKeyguardStateCallbacks.add(callback);
             try {
                 callback.onSimSecureStateChanged(mUpdateMonitor.isSimPinSecure());
-                callback.onShowingStateChanged(mShowing);
+                callback.onShowingStateChanged(mShowing, mBlurEnabled);
                 callback.onInputRestrictedStateChanged(mInputRestricted);
             } catch (RemoteException e) {
                 Slog.w(TAG, "Failed to call onShowingStateChanged or onSimSecureStateChanged or onInputRestrictedStateChanged", e);
             }
         }
+    }
+
+    public void setBlurEnabled(boolean blurEnabled) {
+        mBlurEnabled = blurEnabled;
     }
 }

@@ -6664,6 +6664,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
+    @Override
+    public void setKeyguardBlurEnabled(boolean blurEnabled) {
+        if (mKeyguardDelegate != null) {
+            mKeyguardDelegate.setBlurEnabled(blurEnabled);
+        }
+    }
+
+    @Override
+    public boolean isKeyguardBlurEnabled() {
+        if (mKeyguardDelegate != null) {
+            return mKeyguardDelegate.isBlurEnabled();
+        }
+        return false;
+    }
+
     void sendCloseSystemWindows() {
         PhoneWindow.sendCloseSystemWindows(mContext, null);
     }

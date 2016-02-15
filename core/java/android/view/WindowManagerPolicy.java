@@ -1320,4 +1320,17 @@ public interface WindowManagerPolicy {
      * @param fadeoutDuration the duration of the exit animation, in milliseconds
      */
     public void startKeyguardExitAnimation(long startTime, long fadeoutDuration);
+
+    /**
+     * Sets whether the keyguard has a blur layer enabled.
+     *
+     * @param blurEnabled
+     */
+    public void setKeyguardBlurEnabled(boolean blurEnabled);
+
+    /**
+     * Returns whether the keyguard is using blurring to obfuscate foreground app contents
+     * @return
+     */
+    public boolean isKeyguardBlurEnabled();
 }
