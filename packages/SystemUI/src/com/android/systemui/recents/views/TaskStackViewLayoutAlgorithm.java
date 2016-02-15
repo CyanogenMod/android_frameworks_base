@@ -142,9 +142,11 @@ public class TaskStackViewLayoutAlgorithm {
 
             if (i < (taskCount - 1)) {
                 // Increment the peek height
-                float pPeek = task.group.isFrontMostTask(task) ?
-                        pBetweenAffiliateOffset : pWithinAffiliateOffset;
-                pAtFrontMostCardTop += pPeek;
+                if (task.group != null) {
+                    float pPeek = task.group.isFrontMostTask(task) ?
+                            pBetweenAffiliateOffset : pWithinAffiliateOffset;
+                    pAtFrontMostCardTop += pPeek;
+                }
             }
         }
 
