@@ -247,6 +247,9 @@ public final class DreamManagerService extends SystemService {
 
     private void setLidStateInternal(int state) {
         synchronized (mLock) {
+            if (mLidState == state) {
+                return;
+            }
             mLidState = state;
         }
         switch (state) {
