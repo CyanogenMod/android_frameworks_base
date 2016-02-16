@@ -387,6 +387,7 @@ public class StatusBarKeyguardViewManager {
 
     private void executeAfterKeyguardGoneAction() {
         if (mAfterKeyguardGoneAction != null) {
+            dismiss();
             mAfterKeyguardGoneAction.onDismiss();
             mAfterKeyguardGoneAction = null;
         }
