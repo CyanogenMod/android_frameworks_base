@@ -22,24 +22,30 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 
+import android.nfc.NfcManager;
+import android.util.Log;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import org.cyanogenmod.internal.logging.CMMetricsLogger;
+import org.cyanogenmod.internal.util.QSUtils;
 
 public class NfcTile extends QSTile<QSTile.BooleanState> {
-    private NfcAdapter mNfcAdapter;
+
     private boolean mListening;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            refreshState();
+            boolean newState = getInternalState(intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE,
+                    NfcAdapter.STATE_OFF));
+            refreshState(newState);
         }
     };
+    private final boolean mSupportsNfc;
 
     public NfcTile(Host host) {
         super(host);
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
+        mSupportsNfc = QSUtils.deviceSupportsNfc(mContext);
     }
 
     @Override
@@ -49,7 +55,9 @@ public class NfcTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleClick() {
-        toggleState();
+        boolean newState = !getState().value;
+        setState(newState);
+        refreshState(newState);
     }
 
     @Override
@@ -57,44 +65,68 @@ public class NfcTile extends QSTile<QSTile.BooleanState> {
         mHost.startActivityDismissingKeyguard(new Intent("android.settings.NFC_SETTINGS"));
     }
 
-    protected void toggleState() {
-        int state = getNfcState();
-        switch (state) {
-            case NfcAdapter.STATE_TURNING_ON:
-            case NfcAdapter.STATE_ON:
-                mNfcAdapter.disable();
-                break;
-            case NfcAdapter.STATE_TURNING_OFF:
-            case NfcAdapter.STATE_OFF:
-                mNfcAdapter.enable();
-                break;
-        }
-    }
-
-    private boolean isEnabled() {
-        int state = getNfcState();
-        switch (state) {
+    private boolean getInternalState(int nfcState) {
+        switch (nfcState) {
             case NfcAdapter.STATE_TURNING_ON:
             case NfcAdapter.STATE_ON:
                 return true;
+            default:
             case NfcAdapter.STATE_TURNING_OFF:
             case NfcAdapter.STATE_OFF:
-            default:
                 return false;
         }
     }
 
-    private int getNfcState() {
-        return mNfcAdapter.getAdapterState();
+    private void setState(boolean on) {
+        try {
+            NfcAdapter nfcAdapter = NfcAdapter.getNfcAdapter(mContext);
+            if (nfcAdapter == null) {
+                Log.e(TAG, "tried to set NFC state, but no NFC adapter was found");
+                return;
+            }
+            if (on) {
+                nfcAdapter.enable();
+            } else {
+                nfcAdapter.disable();
+            }
+        } catch (UnsupportedOperationException e) {
+            // ignore
+        }
+    }
+
+    private boolean isEnabled() {
+        try {
+            NfcAdapter nfcAdapter = NfcAdapter.getNfcAdapter(mContext);
+            if (nfcAdapter == null) {
+                Log.e(TAG, "tried to get NFC state, but no NFC adapter was found");
+                return false;
+            }
+            int state = nfcAdapter.getAdapterState();
+            switch (state) {
+                case NfcAdapter.STATE_TURNING_ON:
+                case NfcAdapter.STATE_ON:
+                    return true;
+                case NfcAdapter.STATE_TURNING_OFF:
+                case NfcAdapter.STATE_OFF:
+                default:
+                    return false;
+            }
+        } catch (UnsupportedOperationException e) {
+            // ignore
+            return false;
+        }
     }
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        if (mNfcAdapter == null) {
-            mNfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
+        state.visible = mSupportsNfc;
+
+        if (arg instanceof Boolean) {
+            state.value = (boolean) arg;
+        } else {
+            state.value = mSupportsNfc && isEnabled();
         }
-        state.visible = mNfcAdapter != null;
-        state.value = mNfcAdapter != null && isEnabled();
+
         state.icon = ResourceIcon.get(state.value ?
                 R.drawable.ic_qs_nfc_on : R.drawable.ic_qs_nfc_off);
         state.label = mContext.getString(R.string.quick_settings_nfc_label);
@@ -110,12 +142,9 @@ public class NfcTile extends QSTile<QSTile.BooleanState> {
         if (mListening == listening) return;
         mListening = listening;
         if (listening) {
-            if (mNfcAdapter == null) {
-                mNfcAdapter = NfcAdapter.getDefaultAdapter(mContext);
-                refreshState();
-            }
             mContext.registerReceiver(mReceiver,
                     new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED));
+            refreshState();
         } else {
             mContext.unregisterReceiver(mReceiver);
         }

@@ -41,6 +41,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- NFC Tile -->
+    <uses-permission android:name="android.permission.NFC" />
+
     <application>
         <provider android:name=".cm.SpamMessageProvider"
                   android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
