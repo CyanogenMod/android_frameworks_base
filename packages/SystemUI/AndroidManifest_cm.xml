@@ -44,6 +44,9 @@
     <!-- Performance Manager -->
     <uses-permission android:name="cyanogenmod.permission.PERFORMANCE_ACCESS" />
 
+    <!-- NFC Tile -->
+    <uses-permission android:name="android.permission.NFC" />
+
     <application>
         <provider android:name=".cm.SpamMessageProvider"
                   android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
