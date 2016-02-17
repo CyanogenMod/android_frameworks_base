@@ -17,10 +17,12 @@
 
 package com.android.systemui.qs.tiles;
 
+import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.UserHandle;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,11 +49,8 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
     private static final Intent MOBILE_NETWORK_SETTINGS = new Intent(Intent.ACTION_MAIN)
             .setComponent(new ComponentName("com.android.phone",
                     "com.android.phone.MobileNetworkSettings"));
-    private static final Intent MOBILE_NETWORK_SETTINGS_MSIM = new Intent(Intent.ACTION_MAIN)
-            .setClassName("com.android.phone", "com.android.phone.msim.SelectSubscription")
-            .putExtra("PACKAGE", "com.android.phone")
-            .putExtra("TARGET_CLASS", "com.android.phone.MobileNetworkSettings")
-            .putExtra("TARGET_THEME", "Theme.Material.Settings");
+    private static final Intent MOBILE_NETWORK_SETTINGS_MSIM
+            = new Intent("com.android.settings.sim.SIM_SUB_INFO_SETTINGS");
 
     private final NetworkController mController;
     private final MobileDataController mDataController;
@@ -93,6 +92,13 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
     }
 
     @Override
+    protected void handleUserSwitch(int newUserId) {
+        if (newUserId != UserHandle.USER_OWNER) {
+            refreshState();
+        }
+    }
+
+    @Override
     protected void handleClick() {
         MetricsLogger.action(mContext, getMetricsCategory());
         if (mDataController.isMobileDataSupported()) {
@@ -118,7 +124,8 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
 
     @Override
     protected void handleUpdateState(SignalState state, Object arg) {
-        state.visible = mController.hasMobileDataFeature();
+        state.visible = mController.hasMobileDataFeature()
+                && (ActivityManager.getCurrentUser() == UserHandle.USER_OWNER);
         if (!state.visible) return;
         CallbackInfo cb = (CallbackInfo) arg;
         if (cb == null) {
