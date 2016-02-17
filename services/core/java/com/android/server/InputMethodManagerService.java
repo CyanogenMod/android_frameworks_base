@@ -1836,8 +1836,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                             com.android.internal.R.string.select_input_method,
                             mImeSwitcherNotification.build(), UserHandle.ALL);
                     mNotificationShown = true;
-                    publishImeSelectorCustomTile(imi);
                 }
+                publishImeSelectorCustomTile(imi);
             } else {
                 if (mNotificationShown && mNotificationManager != null) {
                     if (DEBUG) {
@@ -1846,8 +1846,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     mNotificationManager.cancelAsUser(null,
                             com.android.internal.R.string.select_input_method, UserHandle.ALL);
                     mNotificationShown = false;
-                    unpublishImeSelectorCustomTile();
                 }
+                unpublishImeSelectorCustomTile();
             }
         } finally {
             Binder.restoreCallingIdentity(ident);
@@ -3633,9 +3633,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 imi = mMethodMap.get(mCurMethodId);
             }
         }
-        final boolean hasInputMethod = isIMEVisible && imi != null && mCurrentSubtype != null;
-        boolean enabled = hasInputMethod;
-        if (enabled) {
+        if (shouldShowImeSwitcherLocked(isIMEVisible ? 1 : 0)) {
             publishImeSelectorCustomTile(imi);
         } else {
             unpublishImeSelectorCustomTile();
