@@ -221,6 +221,13 @@ public class WindowManagerPolicyControl {
                 value.append(":");
             }
             writeFilter(NAME_IMMERSIVE_NAVIGATION, sImmersiveNavigationFilter, value);
+            needSemicolon = true;
+        }
+        if (sImmersivePreconfirmationsFilter != null) {
+            if (needSemicolon) {
+                value.append(":");
+            }
+            writeFilter(NAME_IMMERSIVE_PRECONFIRMATIONS, sImmersivePreconfirmationsFilter, value);
         }
 
         Settings.Global.putString(context.getContentResolver(), key, value.toString());
@@ -230,6 +237,17 @@ public class WindowManagerPolicyControl {
         Settings.Global.putInt(context.getContentResolver(),
                 Settings.Global.POLICY_CONTROL_STYLE, value);
         sDefaultImmersiveStyle = value;
+    }
+
+    public static void addToPreconfirmWhiteList(String packageName) {
+        if (sImmersivePreconfirmationsFilter == null) {
+            sImmersivePreconfirmationsFilter =
+                    new Filter(new ArraySet<String>(), new ArraySet<String>());
+        }
+
+        if (!sImmersivePreconfirmationsFilter.mWhitelist.contains(packageName)) {
+            sImmersivePreconfirmationsFilter.mWhitelist.add(packageName);
+        }
     }
 
     public static void addToStatusWhiteList(String packageName) {
