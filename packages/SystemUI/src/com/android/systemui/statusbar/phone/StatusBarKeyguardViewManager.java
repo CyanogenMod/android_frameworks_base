@@ -35,6 +35,7 @@ import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.R;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.statusbar.CommandQueue;
+import org.cyanogenmod.internal.util.CmLockPatternUtils;
 
 import static com.android.keyguard.KeyguardHostView.OnDismissAction;
 
@@ -564,7 +565,10 @@ public class StatusBarKeyguardViewManager {
     public void animateCollapsePanels(float speedUpFactor) {
         mPhoneStatusBar.animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE, true /* force */,
                 false /* delayed */, speedUpFactor);
-        dismiss(false);
+        if (mStatusBarWindowManager.keyguardExternalViewHasFocus()) {
+            mStatusBarWindowManager.setKeyguardExternalViewFocus(false);
+            dismiss(false);
+        }
     }
 
     /**
