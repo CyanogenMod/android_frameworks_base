@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.XmlResourceParser;
 import android.os.*;
+import android.os.storage.StorageManager;
 import android.os.Process;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -230,6 +231,9 @@ public class FullBackup {
                     } else {
                         return null;
                     }
+                } else if (domainToken.startsWith(FullBackup.SHARED_STORAGE_TOKEN)) {
+                    File dir = new File(domainToken);
+                    return dir.getCanonicalPath();
                 } else if (domainToken.equals(FullBackup.NO_BACKUP_TREE_TOKEN)) {
                     return NOBACKUP_DIR.getCanonicalPath();
                 }
