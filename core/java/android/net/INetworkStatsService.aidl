@@ -54,6 +54,8 @@ interface INetworkStatsService {
     /** Force update of statistics. */
     void forceUpdate();
 
+    void resetDataUsageHistoryForAllUid(in NetworkTemplate template);
+
     /** Advise persistance threshold; may be overridden internally. */
     void advisePersistThreshold(long thresholdBytes);
 

@@ -491,6 +491,21 @@ public class NetworkStatsCollection implements FileRotator.Reader {
         }
     }
 
+    /**
+     * Replace data usage history for each matching identity in the template with empty values
+     */
+    public void resetDataUsage(NetworkTemplate template) {
+        final ArrayList<Key> knownKeys = Lists.newArrayList();
+        knownKeys.addAll(mStats.keySet());
+
+        for (Key key : knownKeys) {
+            if (templateMatches(template, key.ident)) {
+                mStats.put(key, new NetworkStatsHistory(mBucketDuration, 10));
+                mDirty = true;
+            }
+        }
+    }
+
     private void noteRecordedHistory(long startMillis, long endMillis, long totalBytes) {
         if (startMillis < mStartMillis) mStartMillis = startMillis;
         if (endMillis > mEndMillis) mEndMillis = endMillis;
