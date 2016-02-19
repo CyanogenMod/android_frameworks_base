@@ -22,7 +22,7 @@
   <string name="profile_none">Ingen</string>
   <string name="global_action_screenshot">Skärmdump</string>
   <string name="permlab_receiveProtectedSms">ta emot skyddade SMS</string>
-  <string name="permdesc_receiveProtectedSms">Tillåter att appen få ett inkommande skyddat SMS.</string>
+  <string name="permdesc_receiveProtectedSms">Tillåter att appen tar emot ett inkommande skyddat SMS.</string>
   <string name="permlab_modifyProtectedSmsList">ändra lista över skyddade SMS</string>
   <string name="permdesc_modifyProtectedSmsList">Tillåter att appen ändrar listan över skyddade SMS.</string>
   <string name="permgrouplab_security">Säkerhet</string>
