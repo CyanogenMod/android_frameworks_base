@@ -21,6 +21,8 @@ import android.content.pm.PackageManager;
 import android.content.res.XmlResourceParser;
 import android.os.*;
 import android.os.Process;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.text.TextUtils;
@@ -207,6 +209,8 @@ public class FullBackup {
 
         final int mFullBackupContent;
         final PackageManager mPackageManager;
+        final StorageManager mStorageManager;
+        final StorageVolume[] mVolumes;
         final String mPackageName;
 
         /**
@@ -229,6 +233,15 @@ public class FullBackup {
                         return EXTERNAL_DIR.getCanonicalPath();
                     } else {
                         return null;
+                    }
+                } else if (domainToken.startsWith(FullBackup.SHARED_PREFIX)) {
+                    int slash = domainToken.indexOf('/');
+                    int i = Integer.parseInt(domainToken.substring(slash + 1));
+
+                    if (i < mVolumes.length) {
+                        return mVolumes[i].getPath();
+                    } else {
+                        Log.e(TAG, "Could not find volume for " + domainToken);
                     }
                 } else if (domainToken.equals(FullBackup.NO_BACKUP_TREE_TOKEN)) {
                     return NOBACKUP_DIR.getCanonicalPath();
@@ -263,6 +276,8 @@ public class FullBackup {
             SHAREDPREF_DIR = context.getSharedPrefsFile("foo").getParentFile();
             CACHE_DIR = context.getCacheDir();
             NOBACKUP_DIR = context.getNoBackupFilesDir();
+            mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+            mVolumes = mStorageManager.getVolumeList();
             if (android.os.Process.myUid() != Process.SYSTEM_UID) {
                 EXTERNAL_DIR = context.getExternalFilesDir(null);
             } else {
