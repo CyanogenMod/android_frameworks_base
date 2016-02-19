@@ -204,6 +204,7 @@ public class FullBackup {
         private final File EXTERNAL_DIR;
         private final File CACHE_DIR;
         private final File NOBACKUP_DIR;
+        private final File SHAREDSTORAGE_DIR;
 
         final int mFullBackupContent;
         final PackageManager mPackageManager;
@@ -230,6 +231,8 @@ public class FullBackup {
                     } else {
                         return null;
                     }
+                } else if (domainToken.startsWith(FullBackup.SHARED_STORAGE_TOKEN)) {
+                    return SHAREDSTORAGE_DIR.getCanonicalPath();
                 } else if (domainToken.equals(FullBackup.NO_BACKUP_TREE_TOKEN)) {
                     return NOBACKUP_DIR.getCanonicalPath();
                 }
@@ -261,6 +264,7 @@ public class FullBackup {
             DATABASE_DIR = context.getDatabasePath("foo").getParentFile();
             ROOT_DIR = new File(context.getApplicationInfo().dataDir);
             SHAREDPREF_DIR = context.getSharedPrefsFile("foo").getParentFile();
+            SHAREDSTORAGE_DIR = context.getExternalFilesDir(null);
             CACHE_DIR = context.getCacheDir();
             NOBACKUP_DIR = context.getNoBackupFilesDir();
             if (android.os.Process.myUid() != Process.SYSTEM_UID) {
