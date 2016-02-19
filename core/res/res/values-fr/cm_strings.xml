@@ -30,8 +30,7 @@
   <string name="permlab_accessThemeService">accéder au service de thèmes</string>
   <string name="permdesc_accessThemeService">Permet à l\'application d\'accéder au service de thèmes. Une application normale ne devrait pas en avoir besoin.</string>
   <string name="permlab_readThemes">lire les informations de votre thème</string>
-  <string name="permdesc_readThemesDesc">Permet à une application de lire et
-       déterminer quel thème vous avez appliqué.</string>
+  <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
   <string name="permlab_writeThemes">modifier vos thèmes</string>
   <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et modifier le thème que vous avez appliqué.</string>
   <string name="permlab_readPhoneBlacklist">lire la liste noire du téléphone</string>
@@ -63,13 +62,13 @@
   <string name="adb_active_generic_notification_message">Appuyez pour désactiver le débogage.</string>
   <string name="usb_choose_notification_title">Appuyez pour choisir les options USB.</string>
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
-  <string name="adb_active_custom_tile_both">Réseau USB &amp;</string>
+  <string name="adb_active_custom_tile_both">USB et réseau</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Réseau</string>
   <string name="permlab_interceptPackageLaunch">intercepter le lancement d\'application</string>
   <string name="permdesc_interceptPackageLaunch">Permet à une application d\'intercepter le lancement d\'autres applications</string>
   <string name="app_ops_access_camera">accéder à l\'appareil photo</string>
-  <string name="app_ops_access_location">accéder à votre localisation</string>
+  <string name="app_ops_access_location">accéder à votre position</string>
   <string name="app_ops_access_notifications">lire vos notifications</string>
   <string name="app_ops_activate_vpn">activer un VPN</string>
   <string name="app_ops_alarm_wakeup">réveiller l\'appareil</string>
@@ -77,8 +76,8 @@
   <string name="app_ops_auto_start">démarrer avec le système</string>
   <string name="app_ops_delete_call_log">supprimer votre journal d\'appels</string>
   <string name="app_ops_delete_contacts">supprimer vos contacts</string>
-  <string name="app_ops_delete_mms">supprimer vos MMS</string>
-  <string name="app_ops_delete_sms">supprimer vos SMS</string>
+  <string name="app_ops_delete_mms">supprimer vos messages MMS</string>
+  <string name="app_ops_delete_sms">supprimer vos messages SMS</string>
   <string name="app_ops_draw_on_top">déplacer au dessus</string>
   <string name="app_ops_get_usage_stats">obtenir les statistiques d\'utilisation de l\'application</string>
   <string name="app_ops_keep_device_awake">garder votre appareil allumé</string>
@@ -89,15 +88,15 @@
   <string name="app_ops_modify_contacts">mettre à jour vos contacts</string>
   <string name="app_ops_modify_settings">mettre à jour les paramètres du système</string>
   <string name="app_ops_mute_unmute_microphone">activer/désactiver le microphone</string>
-  <string name="app_ops_play_audio">lire des sons</string>
+  <string name="app_ops_play_audio">lecture audio</string>
   <string name="app_ops_post_notification">afficher une notification</string>
   <string name="app_ops_project_media">projet média</string>
   <string name="app_ops_read_calendar">lire votre agenda</string>
   <string name="app_ops_read_call_log">lire le journal d\'appels</string>
   <string name="app_ops_read_clipboard">lire le presse-papiers</string>
   <string name="app_ops_read_contacts">lire vos contacts</string>
-  <string name="app_ops_read_mms">lire vos MMS</string>
-  <string name="app_ops_read_sms">lire vos SMS</string>
+  <string name="app_ops_read_mms">lire vos messages MMS</string>
+  <string name="app_ops_read_sms">lire vos messages SMS</string>
   <string name="app_ops_receive_sms">recevoir un SMS</string>
   <string name="app_ops_record_audio">enregistrer un son</string>
   <string name="app_ops_send_mms">envoyer un MMS</string>
@@ -111,7 +110,7 @@
   <string name="app_ops_use_alarm_volume">contrôler le volume des alarmes</string>
   <string name="app_ops_use_audio_focus">contrôler le focus audio</string>
   <string name="app_ops_use_bluetooth_volume">contrôler le volume du Bluetooth</string>
-  <string name="app_ops_use_master_volume">contrôler le volume du haut-parleur</string>
+  <string name="app_ops_use_master_volume">contrôler le volume principal</string>
   <string name="app_ops_use_media_buttons">utiliser les boutons de médias</string>
   <string name="app_ops_use_media_volume">contrôler le volume des médias</string>
   <string name="app_ops_use_notification_volume">contrôler le volume des notifications</string>
@@ -140,10 +139,10 @@
   <string name="theme_install_error_title">Impossible d\'installer le thème</string>
   <string name="theme_install_error_message">Impossible d\'installer %s</string>
   <string name="theme_reset_notification_title">Réinitialisation du thème</string>
-  <string name="theme_reset_notification_body">Thème système restauré en raison de multiples problèmes d\'application.</string>
+  <string name="theme_reset_notification_body">Thème système restauré en raison de multiples problèmes sur l\'application.</string>
   <string name="stylus_app_not_installed">%s n\'est pas installé</string>
   <string name="permlab_interceptSmsSent">intercepter les SMS sortants</string>
-  <string name="permdesc_interceptSmsSent">Permet à l\'application d\'intercepter les SMS sortants. Des applications malveillantes peuvent utiliser cela pour empêcher l\'envoi de SMS.</string>
+  <string name="permdesc_interceptSmsSent">Permet à l\'application d\'intercepter un SMS sortant. Des applications malveillantes peuvent utiliser cela pour empêcher l\'envoi de SMS.</string>
   <string name="permlab_accessTorchService">accéder au service de la lampe</string>
   <string name="permdesc_accessTorchService">Permet à l\'application d\'accéder au service de la lampe. Une application normale ne devrait pas en avoir besoin.</string>
   <string name="permlab_preventpower">outrepasser le bouton marche/arrêt</string>
@@ -157,13 +156,13 @@
   <string name="sd_media_checking">Vérification de la carte SD en cours.</string>
   <string name="sd_media_removed">La carte SD a été retirée.</string>
   <string name="sd_media_shared">La carte SD est en cours d\'utilisation par l\'ordinateur.</string>
-  <string name="usb_progress_unmounting">Démontage de la mémoire de stockage USB en cours\u2026</string>
-  <string name="usb_progress_erasing">Effacement de la mémoire de stockage USB en cours\u2026</string>
-  <string name="usb_format_error">Impossible d\'effacer la mémoire de stockage USB.</string>
+  <string name="usb_progress_unmounting">Démontage du stockage USB en cours\u2026</string>
+  <string name="usb_progress_erasing">Effacement du stockage USB en cours\u2026</string>
+  <string name="usb_format_error">Impossible d\'effacer le stockage USB.</string>
   <string name="usb_media_bad_removal">La mémoire de stockage USB a été retirée sans avoir été démontée.</string>
-  <string name="usb_media_checking">Vérification du stockage USB.</string>
-  <string name="usb_media_removed">La mémoire de stockage USB a été retirée.</string>
-  <string name="usb_media_shared">La mémoire de stockage USB est en cours d\'utilisation par l\'ordinateur.</string>
+  <string name="usb_media_checking">Vérification du stockage USB en cours.</string>
+  <string name="usb_media_removed">Le stockage USB a été retiré.</string>
+  <string name="usb_media_shared">Le stockage USB est en cours d\'utilisation par l\'ordinateur.</string>
   <string name="sd_ext_media_checking_notification_title">Préparation de la carte SD</string>
   <string name="sd_ext_media_checking_notification_message">Vérification des erreurs sur la carte SD.</string>
   <string name="sd_ext_media_nofs_notification_title">Carte SD vide</string>
@@ -187,7 +186,7 @@
   <string name="usb_ext_media_safe_unmount_notification_title">Le stockage USB peut être retiré en toute sécurité</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Vous pouvez retirer le stockage USB en toute sécurité.</string>
   <string name="usb_ext_media_nomedia_notification_title">Stockage USB retiré</string>
-  <string name="usb_ext_media_nomedia_notification_message">Stockage USB retiré. Insérez un nouveau média.</string>
+  <string name="usb_ext_media_nomedia_notification_message">Stockage USB retiré. Insérez un nouveau support.</string>
   <string name="live_display_auto">Automatique</string>
   <string name="live_display_auto_summary">Ajuster automatiquement la température des couleurs de l\'écran après le coucher et le lever du soleil</string>
   <string name="live_display_off">Désactivé</string>
@@ -200,9 +199,9 @@
   <string name="live_display_outdoor_summary">Utiliser uniquement les paramètres extérieurs</string>
   <string name="live_display_hint">LiveDisplay peut aider à réduire la fatigue oculaire et vous aider à dormir la nuit. Appuyez ici pour l\'essayer !</string>
   <string name="lock_to_app_toast_no_navbar">Pour déverrouiller l\'écran, appuyez et maintenez le bouton Retour.</string>
-  <string name="quick_settings_tile_flashlight_not_title">Lampe de poche allumé</string>
+  <string name="quick_settings_tile_flashlight_not_title">Lampe de poche allumée</string>
   <string name="quick_settings_tile_flashlight_not_summary">Appuyez pour éteindre</string>
-  <string name="storage_sd_dock_card">Dock carte SD</string>
+  <string name="storage_sd_dock_card">Carte SD du dock</string>
   <string name="fingerprint_default_name">Empreinte digitale <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">Service d\'accès par empreinte digitale</string>
   <string name="permdesc_accessFingerprintService">Permet à une application d\'accéder au service d\'empreintes digitales. L\'application peut ajouter, supprimer, renommer et authentifier des empreintes digitales</string>
@@ -210,7 +209,7 @@
   <string name="permdesc_resetBatteryStats">Permet à une application de réinitialiser les données actuelles d\'utilisation de la batterie à faible niveau.</string>
   <string name="silent_mode_priority">Priorité</string>
   <string name="silent_mode_none">Aucun</string>
-  <string name="subscription_change_disabled_wifi_ap">Point d\'accès Wi\u2011Fi désactivé en raison d\'un changement d\'abonnement SIM</string>
+  <string name="subscription_change_disabled_wifi_ap">Point d\'accès Wi-Fi désactivé en raison d\'un changement d\'abonnement SIM</string>
   <string name="notify_turn_wifi_off_title">Désactiver le Wi-Fi</string>
   <string name="permlab_thirdPartyKeyguard">écran de verrouillage alternatif</string>
   <string name="permdesc_thirdPartyKeyguard">Permet à l\'application d\'être utilisée comme un écran de verrouillage non sécurisé.</string>

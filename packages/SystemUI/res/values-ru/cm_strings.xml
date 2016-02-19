@@ -44,8 +44,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Всплывающие уведомления включены.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Всплывающие уведомления отключены.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Всплывающие уведомления включены.</string>
-  <string name="accessibility_quick_settings_hotspot_off">Мобильная точка доступа выключена.</string>
-  <string name="accessibility_quick_settings_hotspot_on">Мобильная точка доступа включена.</string>
+  <string name="accessibility_quick_settings_hotspot_off">Точка доступа выключена.</string>
+  <string name="accessibility_quick_settings_hotspot_on">Точка доступа включена.</string>
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay выключен.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay работает в автоматическом режиме.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay работает в дневном режиме.</string>

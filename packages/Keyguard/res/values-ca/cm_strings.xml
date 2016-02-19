@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">La SIM/RUIM està Perso bloquejada</string>
+  <string name="keyguard_perso_locked_message">La SIM/RUIM té un bloqueig Personal</string>
   <string name="keyguard_accessibility_status">"Estat"</string>
   <string name="kg_dismiss">Omet</string>
   <string name="kg_slot_name">Ranura <xliff:g id="number">%d</xliff:g>: Nova targeta SIM\u0020</string>

@@ -27,7 +27,7 @@
   <string name="permdesc_modifyProtectedSmsList">Ermöglicht der App, die Adressliste der geschützten SMS zu ändern.</string>
   <string name="permgrouplab_security">Sicherheit</string>
   <string name="permgroupdesc_security">Berechtigungen im Zusammenhang mit der Gerätesicherheit.</string>
-  <string name="permlab_accessThemeService">Zugriff auf den Design-Dienst</string>
+  <string name="permlab_accessThemeService">auf den Design-Dienst zugreifen</string>
   <string name="permdesc_accessThemeService">Ermöglicht der App, auf den Design-Dienst zuzugreifen. Wird für normale Apps nicht benötigt.</string>
   <string name="permlab_readThemes">Design-Informationen lesen</string>
   <string name="permdesc_readThemesDesc">Ermöglicht der App, auszulesen, welche Designs Sie installiert und aktiviert haben.</string>
@@ -52,7 +52,7 @@
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">Download</string>
   <string name="reboot_soft">Warmstart</string>
-  <string name="reboot_title">Neustart</string>
+  <string name="reboot_title">Neu starten</string>
   <string name="reboot_confirm" product="tablet">Ihr Tablet wird neu gestartet.</string>
   <string name="reboot_confirm" product="default">Ihr Telefon wird neu gestartet.</string>
   <string name="reboot_progress">Neustart wird durchgeführt\u2026</string>
@@ -62,11 +62,11 @@
   <string name="adb_active_generic_notification_message">Berühren, um Debugging zu deaktivieren.</string>
   <string name="usb_choose_notification_title">Berühren, um eine USB-Option auszuwählen.</string>
   <string name="adb_active_custom_tile">ADB: <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
-  <string name="adb_active_custom_tile_both">USB &amp; Netzwerk</string>
+  <string name="adb_active_custom_tile_both">USB und Netzwerk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netzwerk</string>
   <string name="permlab_interceptPackageLaunch">App-Start verhindern</string>
-  <string name="permdesc_interceptPackageLaunch">Ermöglicht der App, den Start anderer Apps zu zu verhindern</string>
+  <string name="permdesc_interceptPackageLaunch">Ermöglicht der App, den Start anderer Apps zu zu verhindern.</string>
   <string name="app_ops_access_camera">auf die Kamera zuzugreifen</string>
   <string name="app_ops_access_location">den Standort abzurufen</string>
   <string name="app_ops_access_notifications">auf Benachrichtigungen zuzugreifen</string>
@@ -79,7 +79,7 @@
   <string name="app_ops_delete_mms">Ihre MMS-Nachrichten zu löschen</string>
   <string name="app_ops_delete_sms">Ihre SMS zu löschen</string>
   <string name="app_ops_draw_on_top">sich im Vordergrund einzublenden</string>
-  <string name="app_ops_get_usage_stats">Nutzungsstatistiken von Apps zu erhalten</string>
+  <string name="app_ops_get_usage_stats">Nutzungsstatistiken von Apps abrufen</string>
   <string name="app_ops_keep_device_awake">den Ruhezustand zu deaktivieren</string>
   <string name="app_ops_make_phone_call">Anrufe zu tätigen</string>
   <string name="app_ops_modify_calendar">Ihren Kalender zu aktualisieren</string>
@@ -98,7 +98,7 @@
   <string name="app_ops_read_mms">MMS zu lesen</string>
   <string name="app_ops_read_sms">Ihre SMS zu lesen</string>
   <string name="app_ops_receive_sms">eine SMS zu empfangen</string>
-  <string name="app_ops_record_audio">Audio aufzunehmen</string>
+  <string name="app_ops_record_audio">Audio aufzuzeichnen</string>
   <string name="app_ops_send_mms">eine MMS zu senden</string>
   <string name="app_ops_send_sms">eine SMS zu senden</string>
   <string name="app_ops_start_at_bootup">beim Einschalten zu starten</string>
@@ -121,7 +121,7 @@
   <string name="app_ops_write_sms">eine SMS zu schreiben</string>
   <string name="lockscreen_sim_error_message_short">Ungültige Karte.</string>
   <string name="lockscreen_airplane_mode_on">Flugmodus</string>
-  <string name="usb_charging_notification_title">Verbunden im Lademodus</string>
+  <string name="usb_charging_notification_title">Im Lademodus verbunden</string>
   <string name="tethered_notification_no_device_message">Kein verbundenes Gerät</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> verbundenes Gerät</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> verbundene Geräte</string>
@@ -136,20 +136,20 @@
   <string name="perf_profile_perf">Mehr Leistung</string>
   <string name="perf_profile_bias_power">Effizient</string>
   <string name="perf_profile_bias_perf">Schnell</string>
-  <string name="theme_install_error_title">Design konnte nicht intalliert werden</string>
+  <string name="theme_install_error_title">Design konnte nicht installiert werden</string>
   <string name="theme_install_error_message">%s konnte nicht installiert werden</string>
   <string name="theme_reset_notification_title">Design zurückgesetzt</string>
   <string name="theme_reset_notification_body">Das Systemdesign wurde aufgrund mehrer App-Abstürze wiederhergestellt.</string>
   <string name="stylus_app_not_installed">%s ist nicht installiert</string>
   <string name="permlab_interceptSmsSent">ausgehende SMS abfangen</string>
   <string name="permdesc_interceptSmsSent">Ermöglicht der App, ausgehende SMS abzufangen. Schädliche Apps könnten so das Versenden von SMS-Nachrichten verhindern.</string>
-  <string name="permlab_accessTorchService">auf die Taschenlampe zuzugreifen</string>
+  <string name="permlab_accessTorchService">auf die Taschenlampe zugreifen</string>
   <string name="permdesc_accessTorchService">Ermöglicht der App, auf die Taschenlampe zuzugreifen. Wird für normale Apps nicht benötigt.</string>
   <string name="permlab_preventpower">Ein/Aus-Taste überschreiben</string>
   <string name="permdesc_preventpower">Ermöglicht der App, der Ein/Aus-Taste eine andere Funktion zuzuweisen.</string>
   <string name="usb_extmedia_format_message">Alle auf Ihrem USB-Speicher im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
   <string name="sd_extmedia_format_message">Alle auf Ihrer SD-Karte im Pfad \"%1$s\" abgelegten Dateien werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!</string>
-  <string name="sd_progress_unmounting">Die SD-Karte wird ausgeworfen\u2026</string>
+  <string name="sd_progress_unmounting">SD-Karte wird ausgeworfen\u2026</string>
   <string name="sd_progress_erasing">Die SD-Karte wird gelöscht\u2026</string>
   <string name="sd_format_error">Die SD-Karte konnte nicht gelöscht werden.</string>
   <string name="sd_media_bad_removal">Die SD-Karte wurde entfernt, bevor sie ausgeworfen werden konnte.</string>
@@ -163,26 +163,26 @@
   <string name="usb_media_checking">Der USB-Speicher wird gerade geprüft.</string>
   <string name="usb_media_removed">Der USB-Speicher wurde entfernt.</string>
   <string name="usb_media_shared">Der USB-Speicher wird momentan von einem Computer verwendet.</string>
-  <string name="sd_ext_media_checking_notification_title">Die SD-Karte wird vorbereitet</string>
+  <string name="sd_ext_media_checking_notification_title">SD-Karte wird vorbereitet</string>
   <string name="sd_ext_media_checking_notification_message">Die SD-Karte wird auf Fehler überprüft.</string>
   <string name="sd_ext_media_nofs_notification_title">Leere SD-Karte</string>
   <string name="sd_ext_media_nofs_notification_message">Die SD-Karte ist leer oder hat ein nicht unterstütztes Dateisystem.</string>
   <string name="sd_ext_media_unmountable_notification_title">Die SD-Karte ist beschädigt.</string>
   <string name="sd_ext_media_unmountable_notification_message">Die SD-Karte ist beschädigt. Versuchen Sie, sie erneut zu formatieren.</string>
   <string name="sd_ext_media_badremoval_notification_title">Die SD-Karte wurde unerwartet entfernt.</string>
-  <string name="sd_ext_media_badremoval_notification_message">Werfen Sie vor dem Entfernen die SD-Karte aus, um Datenverluste zu vermeiden.</string>
+  <string name="sd_ext_media_badremoval_notification_message">Werfen Sie die SD-Karte vor dem Entfernen aus, um Datenverluste zu vermeiden.</string>
   <string name="sd_ext_media_safe_unmount_notification_title">Die SD-Karte kann sicher entfernt werden.</string>
-  <string name="sd_ext_media_safe_unmount_notification_message">Die SD-Karte kann jetzt sicher entfernt werden.</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Sie können die SD-Karte jetzt sicher entfernen.</string>
   <string name="sd_ext_media_nomedia_notification_title">Die SD-Karte wurde entfernt.</string>
   <string name="sd_ext_media_nomedia_notification_message">SD-Karte entfernt. Legen Sie eine neue ein.</string>
-  <string name="usb_ext_media_checking_notification_title">Der USB-Speicher wird vorbereitet.</string>
+  <string name="usb_ext_media_checking_notification_title">USB-Speicher wird vorbereitet</string>
   <string name="usb_ext_media_checking_notification_message">Der USB-Speicher wird auf Fehler überprüft.</string>
   <string name="usb_ext_media_nofs_notification_title">Unformatierter USB-Speicher</string>
   <string name="usb_ext_media_nofs_notification_message">Der USB-Speicher ist leer oder hat ein nicht unterstütztes Dateisystem.</string>
-  <string name="usb_ext_media_unmountable_notification_title">Der USB-Speicher ist beschädigt</string>
+  <string name="usb_ext_media_unmountable_notification_title">Der USB-Speicher ist beschädigt.</string>
   <string name="usb_ext_media_unmountable_notification_message">Der USB-Speicher ist beschädigt. Versuchen Sie, ihn erneut zu formatieren.</string>
   <string name="usb_ext_media_badremoval_notification_title">Der USB-Speicher wurde unerwartet entfernt.</string>
-  <string name="usb_ext_media_badremoval_notification_message">Den USB-Speicher vor dem Entfernen auswerfen, um Datenverluste zu vermeiden.</string>
+  <string name="usb_ext_media_badremoval_notification_message">Werfen Sie den USB-Speicher vor dem Entfernen aus, um Datenverluste zu vermeiden.</string>
   <string name="usb_ext_media_safe_unmount_notification_title">Der USB-Speicher kann sicher entfernt werden.</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Sie können den USB-Speicher jetzt sicher entfernen.</string>
   <string name="usb_ext_media_nomedia_notification_title">Der USB-Speicher wurde entfernt.</string>
@@ -199,7 +199,7 @@
   <string name="live_display_outdoor_summary">Nur Außen-Modus verwenden</string>
   <string name="live_display_hint">LiveDisplay kann gegen eine Überanstrengung der Augen und beim Schlafen in der Nacht helfen. Klicken Sie hier, um es auszuprobieren!</string>
   <string name="lock_to_app_toast_no_navbar">Zum Lösen dieser Ansicht drücken und halten Sie die Zurück-Taste.</string>
-  <string name="quick_settings_tile_flashlight_not_title">Die Taschenlampe ist an.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Taschenlampe ist eingeschaltet</string>
   <string name="quick_settings_tile_flashlight_not_summary">Zum Ausschalten tippen</string>
   <string name="storage_sd_dock_card">SD-Karte des Docks</string>
   <string name="fingerprint_default_name">Fingerabdruck <xliff:g id="number">%d</xliff:g></string>
@@ -212,5 +212,5 @@
   <string name="subscription_change_disabled_wifi_ap">Der WLAN-Hotspot wurde aufgrund einer SIM-Abonnementänderung deaktiviert.</string>
   <string name="notify_turn_wifi_off_title">WLAN ausschalten</string>
   <string name="permlab_thirdPartyKeyguard">Drittanbieter-Sperrbildschirm</string>
-  <string name="permdesc_thirdPartyKeyguard">Lässt die Nutzung einer App als unsicheren Sperrbildschirm zu.</string>
+  <string name="permdesc_thirdPartyKeyguard">Ermöglicht der App, als unsicherer Sperrbildschirm genutzt zu werden.</string>
 </resources>

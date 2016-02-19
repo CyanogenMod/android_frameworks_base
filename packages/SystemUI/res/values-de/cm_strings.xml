@@ -103,7 +103,7 @@
   <string name="accessibility_quick_settings_battery_saver_changed_off">Akku-Sparmodus ausgeschaltet.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_on">Akku-Sparmodus eingeschaltet.</string>
   <string name="accessibility_quick_settings_visualizer">Musikvisualisierung.</string>
-  <string name="accessibility_quick_settings_volume_panel">Lautstärkebedienung.</string>
+  <string name="accessibility_quick_settings_volume_panel">Lautstärke.</string>
   <string name="accessibility_dpad_left">Pfeiltaste links</string>
   <string name="accessibility_dpad_right">Pfeiltaste rechts</string>
   <string name="quick_settings_mobile_data_label">Mobile Daten</string>
@@ -112,7 +112,7 @@
   <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> mobile Daten</string>
   <string name="quick_settings_data_off">Mobile Daten Aus</string>
   <string name="quick_settings_location_detail_title">Standortmodus</string>
-  <string name="quick_settings_location_battery_saving_label">Energiesparmodus</string>
+  <string name="quick_settings_location_battery_saving_label">Akku-Sparmodus</string>
   <string name="quick_settings_location_gps_only_label">Nur Gerät</string>
   <string name="quick_settings_location_high_accuracy_label">Hohe Genauigkeit</string>
   <string name="quick_settings_nfc_label">NFC</string>
@@ -121,7 +121,7 @@
   <string name="quick_settings_compass_label">Kompass</string>
   <string name="quick_settings_compass_init">Initialisierung\u2026</string>
   <string name="quick_settings_lockscreen_label">Bildschirmsperre</string>
-  <string name="quick_settings_lockscreen_label_enforced">Sperrbildschirm aktivieren</string>
+  <string name="quick_settings_lockscreen_label_enforced">Bildschirmsperre aktiviert</string>
   <string name="quick_settings_network_adb_label">ADB über Netzwerk</string>
   <string name="quick_settings_lte_label">LTE</string>
   <string name="quick_settings_volume_panel_label">Lautstärke</string>
@@ -138,18 +138,18 @@
   <string name="right_shortcut_hint">Nach links wischen für %1$s</string>
   <string name="navbar_dialog_title">Funktion zuweisen</string>
   <string name="navbar_home_button">Home</string>
-  <string name="navbar_recent_button">Anwendungsverlauf</string>
-  <string name="navbar_search_button">Suche</string>
-  <string name="navbar_back_button">Zurück</string>
+  <string name="navbar_recent_button">Anwendungsverlauf-Taste</string>
+  <string name="navbar_search_button">Suche-Taste</string>
+  <string name="navbar_back_button">Zurück-Taste</string>
   <string name="navbar_empty_button">Nicht belegt</string>
   <string name="navbar_menu_conditional_button">Menü (automatisch ausblenden)</string>
   <string name="navbar_menu_always_button">Menü (immer sichtbar)</string>
-  <string name="navbar_menu_big_button">Menü</string>
+  <string name="navbar_menu_big_button">Menüschaltfläche</string>
   <string name="navigation_ring_title">Schnellstart-Verknüpfungen</string>
-  <string name="navring_target_reset_message">Alle selbst erstellten Navigationsleisten-Verknüpfungen löschen und auf Standardeinstellungen zurücksetzen?</string>
+  <string name="navring_target_reset_message">Alle benutzerdefinierten Navigationsleisten-Verknüpfungen löschen und auf Standardeinstellungen zurücksetzen?</string>
   <string name="navring_target_reset">Schnellstart-Verknüpfungen auf Standardeinstellungen zurücksetzen</string>
   <string name="navring_action_open_ime_switcher">Eingabemethoden-Auswahl öffnen</string>
-  <string name="navring_action_kill_app">App schließen</string>
+  <string name="navring_action_kill_app">App beenden</string>
   <string name="navring_action_none">Keine</string>
   <string name="navring_action_take_screenshot">Bildschirmfoto aufnehmen</string>
   <string name="navring_action_ring_vibrate">Klingeln/Vibrieren</string>
@@ -158,7 +158,7 @@
   <string name="navring_action_screen_off">Bildschirm aus</string>
   <string name="navring_action_torch">Taschenlampe</string>
   <string name="navring_action_google_now">Google Now</string>
-  <string name="navring_choose_action_title">Aktion wählen</string>
+  <string name="navring_choose_action_title">Aktion auswählen</string>
   <string name="select_application">App wählen</string>
   <string name="lockscreen_target_empty">Nicht zugewiesen</string>
   <string name="screen_pinning_description_no_navbar">Dies fixiert die aktuelle Ansicht. Zum Lösen die Zurück-Taste drücken und halten.</string>

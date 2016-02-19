@@ -145,8 +145,8 @@
   <string name="permdesc_interceptSmsSent">Permite à aplicação intercetar uma SMS a ser enviada. Aplicações maliciosas podem usar isto para evitar o envio de SMS.</string>
   <string name="permlab_accessTorchService">Aceder ao serviço da lanterna</string>
   <string name="permdesc_accessTorchService">Permite a uma aplicação aceder ao serviço da lanterna. Nunca deverá ser necessário para aplicações normais.</string>
-  <string name="permlab_preventpower">substituir o botão de ligar/desligar</string>
-  <string name="permdesc_preventpower">Permite à aplicação sobrescrever o botão de ligar/desligar.</string>
+  <string name="permlab_preventpower">substituir o botão ligar/desligar</string>
+  <string name="permdesc_preventpower">Permite à aplicação sobrescrever o botão ligar/desligar.</string>
   <string name="usb_extmedia_format_message">Todos os dados do teu armazenamento USB (na diretoria \'%1$s\') vão ser eliminados. Esta ação não é reversível!</string>
   <string name="sd_extmedia_format_message">Todos os dados do teu cartão de memória (na diretoria \'%1$s\') vão ser eliminados. Esta ação não é reversível!</string>
   <string name="sd_progress_unmounting">A desmontar o cartão SD\u2026</string>

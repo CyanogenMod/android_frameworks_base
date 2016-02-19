@@ -42,8 +42,8 @@
   <string name="accessibility_quick_settings_compass_changed_on">Компас включен.</string>
   <string name="accessibility_quick_settings_heads_up_off">Изключи Изскачащи съобщения.</string>
   <string name="accessibility_quick_settings_heads_up_on">Включи Изскачащи съобщения.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_off">Изскачащите съобщения са изключени.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_on">Изскачащите съобщения са включени.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Изскачащите известия са изключени.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Изскачащите известия са включени.</string>
   <string name="accessibility_quick_settings_hotspot_off">Точката за достъп е изключена.</string>
   <string name="accessibility_quick_settings_hotspot_on">Точката за достъп е включена.</string>
   <string name="accessibility_quick_settings_live_display_off">Изключи Адаптивен екран.</string>
@@ -109,7 +109,7 @@
   <string name="quick_settings_mobile_data_label">Мобилни данни</string>
   <string name="quick_settings_roaming_label">Роуминг</string>
   <string name="quick_settings_apn_switch_label">Активирай/деактивирай APN</string>
-  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> мобилни данни</string>
+  <string name="quick_settings_dds_sub">СИМ карта <xliff:g id="number">%d</xliff:g> мобилни данни</string>
   <string name="quick_settings_data_off">Мобилен интернет изключен</string>
   <string name="quick_settings_location_detail_title">Режим за местоположение</string>
   <string name="quick_settings_location_battery_saving_label">Пестене на батерия</string>
@@ -127,7 +127,7 @@
   <string name="quick_settings_volume_panel_label">Панел на звука</string>
   <string name="quick_settings_screen_timeout_detail_title">Изключване на дисплея</string>
   <string name="quick_settings_usb_tether_label">Тетъринг през USB</string>
-  <string name="quick_settings_heads_up_label">Изскачащи съобщения</string>
+  <string name="quick_settings_heads_up_label">Изскачащи известия</string>
   <string name="quick_settings_ambient_display_label">Атмосферен екран</string>
   <string name="quick_settings_sync_label">Синхронизация</string>
   <string name="quick_settings_battery_saver_label">Пестене на батерия</string>
@@ -142,9 +142,9 @@
   <string name="navbar_search_button">Бутон за търсене</string>
   <string name="navbar_back_button">Бутон \"назад\"</string>
   <string name="navbar_empty_button">Празен бутон</string>
-  <string name="navbar_menu_conditional_button">Бутон за меню (Автоскриване)</string>
-  <string name="navbar_menu_always_button">Бутон за меню (Видим)</string>
-  <string name="navbar_menu_big_button">Бутон за меню</string>
+  <string name="navbar_menu_conditional_button">Меню бутон (Автоскриване)</string>
+  <string name="navbar_menu_always_button">Меню бутон (Видим)</string>
+  <string name="navbar_menu_big_button">Меню бутон</string>
   <string name="navigation_ring_title">Преки пътища</string>
   <string name="navring_target_reset_message">Изтриване на всички преки пътища създадени от потребителя и възстанови по подразбиране?</string>
   <string name="navring_target_reset">Възстанови по подразбиране клавишните комбинации за бърза навигация</string>

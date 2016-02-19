@@ -170,6 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">Invoermethode</string>
   <string name="dynamic_qs_tile_su_label">Root-toegang</string>
   <string name="fingerprint_try_again_hint">Opnieuw scannen a.u.b.</string>
+  <string name="fingerprint_try_again_hint_too_many">Te veel vingerafdrukpogingen. Probeer het later opnieuw.</string>
   <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Geen items gevonden</string>
   <string name="play_queue_extention">Wachtrij weergeven</string>
