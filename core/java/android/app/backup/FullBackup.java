@@ -230,6 +230,8 @@ public class FullBackup {
                     } else {
                         return null;
                     }
+                } else if (domainToken.startsWith(FullBackup.SHARED_STORAGE_TOKEN)) {
+                    return "";
                 } else if (domainToken.equals(FullBackup.NO_BACKUP_TREE_TOKEN)) {
                     return NOBACKUP_DIR.getCanonicalPath();
                 }
