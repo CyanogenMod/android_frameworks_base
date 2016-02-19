@@ -21,6 +21,9 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiDevice;
 import android.provider.Settings;
 
 import com.android.internal.logging.MetricsLogger;
@@ -30,6 +33,8 @@ import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.UsageTracker;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.HotspotController;
+
+import java.util.List;
 
 /** Quick settings tile: Hotspot **/
 public class HotspotTile extends QSTile<QSTile.BooleanState> {
@@ -44,12 +49,15 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
     private final HotspotController mController;
     private final Callback mCallback = new Callback();
     private final UsageTracker mUsageTracker;
+    private final ConnectivityManager mConnectivityManager;
+    private boolean mListening;
 
     public HotspotTile(Host host) {
         super(host);
         mController = host.getHotspotController();
         mUsageTracker = newUsageTracker(host.getContext());
         mUsageTracker.setListening(true);
+        mConnectivityManager = host.getContext().getSystemService(ConnectivityManager.class);
     }
 
     @Override
@@ -65,11 +73,16 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public void setListening(boolean listening) {
+        if (mListening == listening) return;
         if (listening) {
             mController.addCallback(mCallback);
+            mContext.registerReceiver(mTetherConnectStateChangedReceiver,
+                    new IntentFilter(ConnectivityManager.TETHER_CONNECT_STATE_CHANGED));
         } else {
             mController.removeCallback(mCallback);
+            mContext.unregisterReceiver(mTetherConnectStateChangedReceiver);
         }
+        mListening = listening;
     }
 
     @Override
@@ -111,12 +124,19 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.visible = mController.isHotspotSupported() && mUsageTracker.isRecentlyUsed();
-        state.label = mContext.getString(R.string.quick_settings_hotspot_label);
 
         if (arg instanceof Boolean) {
             state.value = (boolean) arg;
         } else {
             state.value = mController.isHotspotEnabled();
+        }
+        if (state.visible && state.value) {
+            final List<WifiDevice> clients = mConnectivityManager.getTetherConnectedSta();
+            final int count = clients != null ? clients.size() : 0;
+            state.label = mContext.getResources().getQuantityString(
+                    R.plurals.wifi_hotspot_connected_clients_label, count, count);
+        } else {
+            state.label = mContext.getString(R.string.quick_settings_hotspot_label);
         }
         state.icon = state.visible && state.value ? mEnable : mDisable;
     }
@@ -139,6 +159,13 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
         return new UsageTracker(context, Prefs.Key.HOTSPOT_TILE_LAST_USED, HotspotTile.class,
                 R.integer.days_to_show_hotspot_tile);
     }
+
+    private BroadcastReceiver mTetherConnectStateChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshState();
+        }
+    };
 
     private final class Callback implements HotspotController.Callback {
         @Override
