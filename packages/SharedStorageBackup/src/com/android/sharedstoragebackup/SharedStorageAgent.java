@@ -77,7 +77,7 @@ public class SharedStorageAgent extends FullBackupAgent {
             try {
                 int i = Integer.parseInt(relpath.substring(0, slash));
                 if (i <= mVolumes.length) {
-                    outFile = new File(mVolumes[i].getPath(), relpath.substring(slash + 1));
+                    outFile = new File(relpath.substring(slash + 1));
                     if (DEBUG) Slog.i(TAG, " => " + outFile.getAbsolutePath());
                 } else {
                     Slog.w(TAG, "Cannot restore data for unavailable volume " + i);
