@@ -205,6 +205,7 @@
   <string name="fingerprint_default_name">Amprentă digitală <xliff:g id="number">%d</xliff:g></string>
   <string name="permlab_accessFingerprintService">accesează serviciul amprentă digitală</string>
   <string name="permlab_resetBatteryStats">resetează statisticile bateriei</string>
+  <string name="permdesc_resetBatteryStats">Permite unei aplicații să reseteze datele curente de utilizare a bateriei.</string>
   <string name="silent_mode_priority">Prioritate</string>
   <string name="silent_mode_none">Nimic</string>
   <string name="notify_turn_wifi_off_title">Oprește Wi-Fi</string>

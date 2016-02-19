@@ -23,11 +23,11 @@
   <string name="kg_slot_name">Ranhura <xliff:g id="number">%d</xliff:g>: Novo cartão sim\u0020</string>
   <string name="lockscreen_sim_error_message_short">Cartão inválido.</string>
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">Digite o código PIN do cartão SIM, tem mais <xliff:g id="number">%d</xliff:g> tentativa antes de ter que contactar a sua operadora para desbloquear o dispositivo.</item>
-    <item quantity="other">Digite o código PIN do cartão SIM, tem mais <xliff:g id="number">%d</xliff:g> tentativas.</item>
+    <item quantity="one">Introduza o código PIN do cartão SIM. Tem mais <xliff:g id="number">%d</xliff:g> tentativa antes de ter de contactar a sua operadora para desbloquear o dispositivo.</item>
+    <item quantity="other">Introduza o código PIN do cartão SIM. Tem mais <xliff:g id="number">%d</xliff:g> tentativas antes de ter de contactar a sua operadora para desbloquear o dispositivo.</item>
   </plurals>
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">O cartão SIM está desativado. Digite o código PUK para continuar. Tem mais <xliff:g id="number">%d</xliff:g> tentativa antes do cartão SIM se tornar permanentemente inutilizável. Entre em contacto com a operadora para mais detalhes.</item>
-    <item quantity="other">O cartão SIM está desativado. Digite o código PUK para continuar. Tem mais <xliff:g id="number">%d</xliff:g> tentativas antes do cartão SIM se tornar permanentemente inutilizável. Entre em contacto com a operadora para mais detalhes.</item>
+    <item quantity="one">O cartão SIM está desativado. Introduza o código PUK para continuar. Tem mais <xliff:g id="number">%d</xliff:g> tentativa antes do cartão SIM se tornar permanentemente inutilizável. Entre em contacto com a operadora para mais detalhes.</item>
+    <item quantity="other">O cartão SIM está desativado. Introduza o código PUK para continuar. Tem mais <xliff:g id="number">%d</xliff:g> tentativas antes do cartão SIM se tornar permanentemente inutilizável. Entre em contacto com a operadora para mais detalhes.</item>
   </plurals>
 </resources>

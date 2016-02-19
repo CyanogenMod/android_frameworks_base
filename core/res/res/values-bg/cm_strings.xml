@@ -33,9 +33,9 @@
   <string name="permdesc_readThemesDesc">Разрешава на приложението да чете вашите теми и да определя коя тема сте приложили.</string>
   <string name="permlab_writeThemes">Модифициране на темите</string>
   <string name="permdesc_writeThemesDesc">Разрешава на приложението да вмъкне нови теми и да модифицира темата, която сте приложили.</string>
-  <string name="permlab_readPhoneBlacklist">Прочетете телефонния черен списък</string>
+  <string name="permlab_readPhoneBlacklist">Прочетете списъка с блокирани контакти</string>
   <string name="permdesc_readPhoneBlacklist">Разрешава на приложението да прочетете информацията за телефонни номера, които са блокирани за входящи повиквания или съобщения.</string>
-  <string name="permlab_changePhoneBlacklist">промяна на телефонния черен списък</string>
+  <string name="permlab_changePhoneBlacklist">Промяна на списъка с блокирани контакти</string>
   <string name="permdesc_changePhoneBlacklist">Разрешава на приложението да промени телефонните номера, които са блокирани за входящи повиквания или съобщения.</string>
   <string name="permlab_changePrivacyGuardState">Активира или деактивира Защитен режим</string>
   <string name="permdesc_changePrivacyGuardState">Разрешава на приложението да променя статута на поверителност на друго приложение. Когато едно приложение се използва с защита на поверителността, не може да има достъп до персонални данни, като контакти, регистри с повиквания или съобщения.</string>
@@ -212,5 +212,5 @@
   <string name="subscription_change_disabled_wifi_ap">Изключена Wi-Fi точка за достъп, поради промяна в абонаментна на СИМ</string>
   <string name="notify_turn_wifi_off_title">Изключете Wi-Fi</string>
   <string name="permlab_thirdPartyKeyguard">Защитен екран от друг автор</string>
-  <string name="permdesc_thirdPartyKeyguard">Разрешава на приложението да се използва като несигурно за заключване на екрана.</string>
+  <string name="permdesc_thirdPartyKeyguard">Позволява приложението да бъде ползвано като незаключен защитен екран.</string>
 </resources>
