@@ -170,7 +170,7 @@
   <string name="dynamic_qs_tile_ime_selector_label">IME za odabir</string>
   <string name="dynamic_qs_tile_su_label">Root pristup</string>
   <string name="fingerprint_try_again_hint">Molim skenirajte ponovo</string>
-  <string name="fingerprint_try_again_hint_too_many">Previše pokušaja otiska prsta. Pokušajte ponovno kasnije.</string>
+  <string name="fingerprint_try_again_hint_too_many">Previše pokušaja otiska prsta. Pokušajte ponovo kasnije.</string>
   <string name="accessibility_dock_battery_level">Dock baterija <xliff:g id="number">%d</xliff:g> postotak.</string>
   <string name="quick_settings_custom_qs_detail_empty_text">Nije pronađena nijedna stavka</string>
   <string name="play_queue_extention">Prikaži listu za reprodukciju</string>

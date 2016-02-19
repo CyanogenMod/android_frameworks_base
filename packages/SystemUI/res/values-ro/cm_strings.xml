@@ -44,6 +44,8 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Raportarea locației modificată în modul economisire baterie.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Raportarea locației modificată în modul doar senzori.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Raportarea locației modificată în modul precizie ridicată.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Blocare ecran oprit.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Blocare ecran pornit.</string>
   <string name="accessibility_quick_settings_lte_off">4G oprit.</string>
   <string name="accessibility_quick_settings_lte_on">4G pornit.</string>
   <string name="accessibility_quick_settings_lte_changed_off">LTE oprit.</string>
@@ -55,9 +57,9 @@
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Mod baterie: mod de salvare energie.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Mod baterie: mod echilibrat.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Mod baterie: mod performanță.</string>
-  <string name="accessibility_quick_settings_perf_profile_bias_power">Modul bateriei: modul de eficiență.</string>
-  <string name="accessibility_quick_settings_perf_profile_bias_perf">Modul bateriei: modul rapid.</string>
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modul bateriei schimbat în modul de salvare energie.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Mod baterie: mod eficiență.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Mod baterie: mod rapid.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modul bateriei a fost schimbat în modul de salvare energie.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Modul bateriei a fost schimbat în mod echilibrat.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Modul bateriei a fost schimbat în modul de performanță.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Modul bateriei a fost schimbat în modul de eficiență.</string>
@@ -66,10 +68,17 @@
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiluri este activat.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil schimbat în <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Timp expirare ecran: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Timp expirare ecran a fost schimbat la <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizare pornită.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Sincronizare pornită.</string>
+  <string name="accessibility_quick_settings_usb_tether_off">Tethering USB dezactivat.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Economisire baterie oprită.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Economisire baterie pornită.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Economisire baterie este dezactivată.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Economisire baterie este activată.</string>
   <string name="accessibility_quick_settings_volume_panel">Panou volum.</string>
   <string name="accessibility_dpad_left">Cursor stânga</string>
   <string name="accessibility_dpad_right">Cursor dreapta</string>
@@ -97,7 +106,8 @@
   <string name="quick_settings_heads_up_label">Atenționare</string>
   <string name="quick_settings_ambient_display_label">Afișare ambientală</string>
   <string name="quick_settings_sync_label">Sincronizare</string>
-  <string name="quick_settings_custom_tile_detail_title">Plăcuță personalizată</string>
+  <string name="quick_settings_battery_saver_label">Economizor baterie</string>
+  <string name="quick_settings_custom_tile_detail_title">Chenar personalizat</string>
   <string name="quick_settings_performance_profile_detail_title">Mod baterie</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Glisați dreapta pentru %1$s</string>
@@ -129,10 +139,11 @@
   <string name="lockscreen_target_empty">Gol</string>
   <string name="interruption_level_silent">Silențios</string>
   <string name="zen_silent_with_warning">Fără întreruperi, exceptând alarme.</string>
-  <string name="quick_settings_remove">Eliminare plăcuță</string>
-  <string name="quick_settings_dynamic_tile_detail_title">Plăcuță dinamică</string>
+  <string name="quick_settings_remove">Eliminare chenar</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Chenar dinamic</string>
   <string name="dynamic_qs_tile_next_alarm_label">Următoarea alarmă</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
   <string name="dynamic_qs_tile_su_label">Acces root</string>
   <string name="fingerprint_try_again_hint">Vă rugăm să scanați din nou</string>
+  <string name="quick_settings_custom_qs_detail_empty_text">Niciun articol găsit</string>
 </resources>
