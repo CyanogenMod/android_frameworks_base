@@ -61,21 +61,25 @@ public class CaptivePortalLoginActivity extends Activity {
     private static final String TAG = "CaptivePortalLogin";
     private static final String DEFAULT_SERVER = "connectivitycheck.gstatic.com";
 
+    private static final String ACTION_CAPTIVE_PORTAL_LOGGED_IN =
+            "android.net.netmon.captive_portal_logged_in";
+    private static final String LOGGED_IN_RESULT = "result";
     private static final String EXTRA_STATUS_BAR_COLOR = "status_bar_color";
     private static final String EXTRA_ACTION_BAR_COLOR = "action_bar_color";
     private static final String EXTRA_PROGRESS_COLOR = "progress_bar_color";
-
+    private static final String RESPONSE_TOKEN = "response_token";
     private static final int SOCKET_TIMEOUT_MS = 10000;
 
     private enum Result { DISMISSED, UNWANTED, WANTED_AS_IS };
 
     private URL mURL;
     private Network mNetwork;
-    private CaptivePortal mCaptivePortal;
     private NetworkCallback mNetworkCallback;
     private ConnectivityManager mCm;
     private boolean mLaunchBrowser = false;
     private MyWebViewClient mWebViewClient;
+    private int mNetId;
+    private String mResponseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,15 +90,18 @@ public class CaptivePortalLoginActivity extends Activity {
         mCm = ConnectivityManager.from(this);
         try {
             mURL = new URL("http", server, "/generate_204");
+            final Uri dataUri = getIntent().getData();
+            if (dataUri == null || !dataUri.getScheme().equals("netid")) {
+                throw new MalformedURLException();
+            }
+            mNetId = Integer.parseInt(dataUri.getSchemeSpecificPart());
+            mResponseToken = dataUri.getFragment();
         } catch (MalformedURLException e) {
             // System misconfigured, bail out in a way that at least provides network access.
             Log.e(TAG, "Invalid captive portal URL, server=" + server);
             setResult(Activity.RESULT_CANCELED);
             done(Result.WANTED_AS_IS);
         }
-        mNetwork = getIntent().getParcelableExtra(ConnectivityManager.EXTRA_NETWORK);
-        mCaptivePortal = getIntent().getParcelableExtra(ConnectivityManager.EXTRA_CAPTIVE_PORTAL);
-
         final Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_STATUS_BAR_COLOR)) {
             int color = intent.getIntExtra(EXTRA_STATUS_BAR_COLOR, -1);
@@ -108,9 +115,8 @@ public class CaptivePortalLoginActivity extends Activity {
                 getActionBar().setBackgroundDrawable(new ColorDrawable(color));
             }
         }
-
-        // Also initializes proxy system properties.
-        mCm.bindProcessToNetwork(mNetwork);
+        mNetwork = new Network(mNetId);
+        mCm.setProcessDefaultNetwork(mNetwork);
 
         // Proxy system properties must be initialized before setContentView is called because
         // setContentView initializes the WebView logic which in turn reads the system properties.
@@ -143,7 +149,6 @@ public class CaptivePortalLoginActivity extends Activity {
             builder.addTransportType(transportType);
         }
         mCm.registerNetworkCallback(builder.build(), mNetworkCallback);
-
         final WebView myWebView = (WebView) findViewById(R.id.webview);
         myWebView.clearCache(true);
         WebSettings webSettings = myWebView.getSettings();
@@ -185,17 +190,11 @@ public class CaptivePortalLoginActivity extends Activity {
             mCm.unregisterNetworkCallback(mNetworkCallback);
             mNetworkCallback = null;
         }
-        switch (result) {
-            case DISMISSED:
-                mCaptivePortal.reportCaptivePortalDismissed();
-                break;
-            case UNWANTED:
-                mCaptivePortal.ignoreNetwork();
-                break;
-            case WANTED_AS_IS:
-                mCaptivePortal.useNetwork();
-                break;
-        }
+        Intent intent = new Intent(ACTION_CAPTIVE_PORTAL_LOGGED_IN);
+        intent.putExtra(Intent.EXTRA_TEXT, String.valueOf(mNetId));
+        intent.putExtra(LOGGED_IN_RESULT, String.valueOf(result));
+        intent.putExtra(RESPONSE_TOKEN, mResponseToken);
+        sendBroadcast(intent);
         setResult(Activity.RESULT_OK);
         finish();
     }
