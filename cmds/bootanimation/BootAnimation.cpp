@@ -645,11 +645,16 @@ bool BootAnimation::movie()
         char path[ANIM_ENTRY_NAME_MAX];
         char color[7] = "000000"; // default to black if unspecified
 
+        char value[PROPERTY_VALUE_MAX];
         char pathType;
+
+        property_get("persist.bootanimation.scale", value, "1");
+        double bas = atof(value);
+
         if (sscanf(l, "%d %d %d", &width, &height, &fps) == 3) {
             // ALOGD("> w=%d, h=%d, fps=%d", width, height, fps);
-            animation.width = width;
-            animation.height = height;
+            animation.width = width * bas;
+            animation.height = height * bas;
             animation.fps = fps;
         }
         else if (sscanf(l, " %c %d %d %s #%6s", &pathType, &count, &pause, path, color) >= 4) {
