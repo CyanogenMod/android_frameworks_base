@@ -194,7 +194,7 @@ public class VolumeDialog {
                 });
 
         addRow(AudioManager.STREAM_RING,
-                R.drawable.ic_ringer_audible, R.drawable.ic_volume_ringer_mute, true);
+                R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true);
         addRow(AudioManager.STREAM_MUSIC,
                 R.drawable.ic_volume_media, R.drawable.ic_volume_media_mute, true);
         addRow(AudioManager.STREAM_ALARM,
@@ -652,9 +652,9 @@ public class VolumeDialog {
                 removeRow(notificationRow);
             }
         } else if (!mState.linkedNotification) {
-            // TODO get icon for mute state
             addRow(AudioManager.STREAM_NOTIFICATION,
-                    R.drawable.ic_notification_audible, R.drawable.ic_notification_audible, true);
+                    R.drawable.ic_volume_notification, R.drawable.ic_volume_notification_mute,
+                    true);
         }
     }
 
