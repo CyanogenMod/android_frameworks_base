@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">已禁用情景模式</string>
   <string name="quick_settings_heads_up_label">浮动通知</string>
   <string name="quick_settings_battery_saver_label">省电模式</string>
+  <string name="quick_settings_caffeine_label">咖啡因</string>
   <string name="accessibility_quick_settings_sync_off">同步关闭。</string>
   <string name="accessibility_quick_settings_sync_on">同步开启。</string>
   <string name="accessibility_quick_settings_sync_changed_off">同步已关闭。</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">浮动通知开。</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">浮动通知已关闭。</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">浮动通知已开启。</string>
+  <string name="accessibility_quick_settings_caffeine_off">咖啡因模式关闭</string>
+  <string name="accessibility_quick_settings_caffeine_on">咖啡因模式开启</string>
   <string name="accessibility_quick_settings_battery_saver_off">省电模式关闭。</string>
   <string name="accessibility_quick_settings_battery_saver_on">省电模式开启。</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">已关闭省电模式。</string>

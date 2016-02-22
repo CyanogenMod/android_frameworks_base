@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">פרופילים מושבתים</string>
   <string name="quick_settings_heads_up_label">התראות קופצת</string>
   <string name="quick_settings_battery_saver_label">שומר סוללה</string>
+  <string name="quick_settings_caffeine_label">קפאין</string>
   <string name="accessibility_quick_settings_sync_off">סנכרון כבוי.</string>
   <string name="accessibility_quick_settings_sync_on">סנכרון פעיל.</string>
   <string name="accessibility_quick_settings_sync_changed_off">סנכרון כובה.</string>
@@ -79,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">מסך נעילה</string>
   <string name="quick_settings_ambient_display_label">התראות ברקע</string>
   <string name="quick_settings_lockscreen_label_enforced">מסך הנעילה נאכף</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">מושבת על ידי הפרופיל</string>
   <string name="accessibility_quick_settings_screen_timeout">משך זמן מסך: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">משך זמן מסך השתנה ל-<xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">מצב סוללה</string>
@@ -105,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">התראות קופצות פעילות.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">התראות קופצות כובו.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">התראות קופצות הופעלו.</string>
+  <string name="accessibility_quick_settings_caffeine_off">קפאין כבוי.</string>
+  <string name="accessibility_quick_settings_caffeine_on">קפאין פועל.</string>
   <string name="accessibility_quick_settings_battery_saver_off">שומר סוללה כבוי.</string>
   <string name="accessibility_quick_settings_battery_saver_on">שומר סוללה פעיל.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">שומר סוללה כובה.</string>

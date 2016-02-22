@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Профили онемогућени</string>
   <string name="quick_settings_heads_up_label">Искачуће поруке</string>
   <string name="quick_settings_battery_saver_label">Уштеда батерије</string>
+  <string name="quick_settings_caffeine_label">Кофеин</string>
   <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
   <string name="accessibility_quick_settings_sync_on">Синхрон. укључено.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Синхронизација је искључена.</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Искачуће поруке укључене.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Искачуће поруке ће бити искључене.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Искачуће поруке ће бити укључене.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Кофеин је искључен.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Кофеин је укључен.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Уштеда батерије искључена.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Уштеда батерије укључена.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Уштеда батерије је искључена.</string>

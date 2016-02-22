@@ -45,15 +45,17 @@
   <string name="accessibility_quick_settings_profiles_changed">Profil schimbat în <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inițializare\u2026</string>
   <string name="led_notification_title">Setări de lumină</string>
-  <string name="qs_tile_edit_header_instruction">Apăsați și țineți apăsate plăcuțele pentru a rearanja</string>
-  <string name="quick_settings_edit_label">Editare plăcuțe</string>
-  <string name="quick_settings_cannot_delete_edit_tile">Nu se poate șterge plăcuța Editare</string>
+  <string name="qs_tile_edit_header_instruction">Apăsați și țineți apăsate chenarele pentru a rearanja</string>
+  <string name="quick_settings_edit_label">Editare chenare</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Nu se poate șterge chenarul Editare</string>
+  <string name="qs_tiles_reset_confirmation">Resetați chenarele cu setări rapide la configurația implicită?</string>
+  <string name="quick_settings_tile_reset_to_default">Resetare la aspectul implicit</string>
   <string name="quick_settings_title_header">Antet</string>
-  <string name="quick_settings_title_tiles">Plăcuțe</string>
+  <string name="quick_settings_title_tiles">Chenare</string>
   <string name="quick_settings_title_show_weather">Arată vremea</string>
   <string name="quick_settings_title_show_brightness_slider">Arată glisorul de luminozitate</string>
-  <string name="quick_settings_custom_tile_detail_title">Plăcuță personalizată</string>
-  <string name="quick_settings_remove">Eliminare plăcuță</string>
+  <string name="quick_settings_custom_tile_detail_title">Chenar personalizat</string>
+  <string name="quick_settings_remove">Eliminare chenar</string>
   <string name="quick_settings_network_adb_label">ADB prin rețea</string>
   <string name="quick_settings_compass_label">Busolă</string>
   <string name="quick_settings_nfc_label">NFC</string>
@@ -61,6 +63,7 @@
   <string name="quick_settings_profiles_off">Profilurile sunt dezactivate</string>
   <string name="quick_settings_heads_up_label">Atenționare</string>
   <string name="quick_settings_battery_saver_label">Economizor baterie</string>
+  <string name="quick_settings_caffeine_label">Cofeină</string>
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronizare pornită.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizare oprită.</string>
@@ -73,6 +76,8 @@
   <string name="quick_settings_ambient_display_label">Afișare ambientală</string>
   <string name="quick_settings_lockscreen_label_enforced">Blocare ecran impusă</string>
   <string name="quick_settings_lockscreen_label_locked_by_profile">Dezactivat de profil</string>
+  <string name="accessibility_quick_settings_screen_timeout">Timp expirare ecran: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Timp expirare ecran a fost schimbat la <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Mod baterie</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Mod baterie: mod de salvare energie.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Mod baterie: mod echilibrat.</string>
@@ -85,16 +90,21 @@
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Modul bateriei a fost schimbat în modul de eficiență.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Modul bateriei a fost schimbat în modul rapid.</string>
   <string name="quick_settings_performance_profile_detail_title">Mod baterie</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Blocare ecran oprit.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Blocare ecran pornit.</string>
   <string name="accessibility_quick_settings_ambient_display_off">Afișare ambientală oprită.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Afișare ambientală pornită.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Cofeină oprit.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Cofeină pornit.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Economisire baterie oprită.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Economisire baterie pornită.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Economisire baterie este dezactivată.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_on">Economisire baterie este activată.</string>
-  <string name="quick_settings_dynamic_tile_detail_title">Plăcuță dinamică</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Chenar dinamic</string>
   <string name="dynamic_qs_tile_next_alarm_label">Următoarea alarmă</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
   <string name="dynamic_qs_tile_su_label">Acces root</string>
+  <string name="quick_settings_title_advanced_location">Starea celor 3 moduri de locație</string>
   <string name="accessibility_quick_settings_location_battery_saving">Raportarea locației: mod economisire baterie.</string>
   <string name="accessibility_quick_settings_location_gps_only">Raportarea locației: doar senzori.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Raportarea locației: precizie ridicată.</string>
@@ -105,8 +115,8 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Raportarea locației modificată în modul economisire baterie.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Raportarea locației modificată în modul doar senzori.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Raportarea locației modificată în modul precizie ridicată.</string>
-  <string name="quick_settings_tiles_category_system">Plăcuțe sistem</string>
-  <string name="quick_settings_tiles_add_tiles">Adaugă o plăcuță</string>
+  <string name="quick_settings_tiles_category_system">Chenar sistem</string>
+  <string name="quick_settings_tiles_add_tiles">Adaugă un chenar</string>
   <string name="hotspot_apm_message">Nu se poate conecta la rețele mobile în timp ce modul Avion este activat. Dezactivați modul Avion și încercați din nou.</string>
   <string name="quick_settings_tile_flashlight_not_title">Lanterna este pornită</string>
   <string name="quick_settings_tile_flashlight_not_summary">Atingeți pentru a dezactiva</string>

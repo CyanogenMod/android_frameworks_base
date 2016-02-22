@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profili onemogućeni</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Ušteda baterije</string>
+  <string name="quick_settings_caffeine_label">Kofein</string>
   <string name="accessibility_quick_settings_sync_off">Sinkronizacija isključena.</string>
   <string name="accessibility_quick_settings_sync_on">Sinkronizacija uključena.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinkronizacija je isključena.</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Heads up uključen.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up je isključen.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up je uključen.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kofein isključen.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kofein uključen.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Ušteda baterije isključena.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Ušteda baterije uključena.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Ušteda baterije je isključena.</string>

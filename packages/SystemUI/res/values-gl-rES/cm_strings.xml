@@ -133,4 +133,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Informe de localización cambiado a modo aforro de batería.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Informe de localización cambiado a modo sensores.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informe de localización cambiado a modo alta precisión.</string>
+  <string name="hotspot_apm_message">Non é posíbel conectar a rede móbil mentres o modo Avión está activado. Desactívao e téntao de novo.</string>
+  <string name="quick_settings_tile_flashlight_not_title">A lanterna está acesa</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Toca para apagala</string>
 </resources>

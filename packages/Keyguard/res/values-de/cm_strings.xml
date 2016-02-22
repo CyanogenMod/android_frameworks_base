@@ -19,8 +19,8 @@
   <string name="keyguard_perso_locked_message">SIM-Karte ist gesperrt</string>
   <string name="lockscreen_sim_error_message_short">Ungültige SIM-Karte.</string>
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuch übrig, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
-    <item quantity="other">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuche übrig, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
+    <item quantity="one">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuch, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
+    <item quantity="other">SIM-PIN eingeben. Sie haben noch <xliff:g id="number">%d</xliff:g> Versuche, bevor Sie den Netzbetreiber zum Entsperren des Gerätes kontaktieren müssen.</item>
   </plurals>
-  <string name="kg_invalid_sim_length">Fehler: Eingabe ist kürzer als die Mindestlänge</string>
+  <string name="kg_invalid_sim_length">Fehler: Eingabe ist kürzer als die Mindestlänge.</string>
 </resources>

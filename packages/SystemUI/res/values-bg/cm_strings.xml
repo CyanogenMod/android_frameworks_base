@@ -32,9 +32,9 @@
   <string name="navbar_search_button">Бутон за търсене</string>
   <string name="navbar_back_button">Бутон \"назад\"</string>
   <string name="navbar_empty_button">Празен бутон</string>
-  <string name="navbar_menu_conditional_button">Бутон за меню (Автоскриване)</string>
-  <string name="navbar_menu_always_button">Бутон за меню (Видим)</string>
-  <string name="navbar_menu_big_button">Бутон за меню</string>
+  <string name="navbar_menu_conditional_button">Меню бутон (Автоскриване)</string>
+  <string name="navbar_menu_always_button">Меню бутон (Видим)</string>
+  <string name="navbar_menu_big_button">Меню бутон</string>
   <string name="accessibility_dpad_left">Курсора наляво</string>
   <string name="accessibility_dpad_right">Курсора надясно</string>
   <string name="advanced_dev_option_wipe_app">Изтриване данни на приложението</string>
@@ -48,7 +48,7 @@
   <string name="quick_settings_compass_init">Стартиране на\u2026</string>
   <string name="led_notification_title">Настройки на светлината</string>
   <string name="led_notification_text">LED светлини, разрешени в настройките</string>
-  <string name="qs_tile_edit_header_instruction">Натиснете и задръжте плочка за да я пренаредите</string>
+  <string name="qs_tile_edit_header_instruction">Натиснете и задръжте плочка за да я пренаредите или премахнете</string>
   <string name="quick_settings_edit_label">Редактиране на плочки</string>
   <string name="quick_settings_cannot_delete_edit_tile">Не може да изтрие редактираната на плочка</string>
   <string name="qs_tiles_reset_confirmation">Нулиране бързи настройки на плочки и връщане на конфигурацията по подразбиране?</string>
@@ -66,7 +66,7 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Системни профили</string>
   <string name="quick_settings_profiles_off">Деактивирани профили</string>
-  <string name="quick_settings_heads_up_label">Изскачащи съобщения</string>
+  <string name="quick_settings_heads_up_label">Изскачащи известия</string>
   <string name="quick_settings_battery_saver_label">Пестене на батерия</string>
   <string name="quick_settings_caffeine_label">Кофеин</string>
   <string name="accessibility_quick_settings_sync_off">Изключена синхронизация.</string>
@@ -105,8 +105,8 @@
   <string name="accessibility_quick_settings_ambient_display_changed_on">Атмосферен екран е включен.</string>
   <string name="accessibility_quick_settings_heads_up_off">Изключи Изскачащи съобщения.</string>
   <string name="accessibility_quick_settings_heads_up_on">Включи Изскачащи съобщения.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_off">Изскачащите съобщения са изключени.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_on">Изскачащите съобщения са включени.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Изскачащите известия са изключени.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Изскачащите известия са включени.</string>
   <string name="accessibility_quick_settings_caffeine_off">Кофеин изключен.</string>
   <string name="accessibility_quick_settings_caffeine_on">Кофеин включен.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Режим за пестене на батерията изключен.</string>
