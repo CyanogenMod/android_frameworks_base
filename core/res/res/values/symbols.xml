@@ -2735,6 +2735,7 @@
   <java-symbol type="bool" name="config_usb_data_unlock" />
   <java-symbol type="bool" name="config_volte_preferred" />
 
+<<<<<<< HEAD
   <!-- Last app switch animations -->
   <java-symbol type="anim" name="last_app_in" />
   <java-symbol type="anim" name="last_app_out" />
@@ -2784,5 +2785,7 @@
   <java-symbol type="array" name="config_defaultFirstUserRestrictions" />
 
   <java-symbol type="drawable" name="ic_restart" />
-
+  
+  <!-- config softap extention feature -->
+  <java-symbol type="bool" name="config_softap_extention" />
 </resources>
