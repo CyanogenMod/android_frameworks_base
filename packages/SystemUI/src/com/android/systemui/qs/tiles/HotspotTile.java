@@ -51,6 +51,7 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
     private final UsageTracker mUsageTracker;
     private final ConnectivityManager mConnectivityManager;
     private boolean mListening;
+    private int mNumConnectedClients = 0;
 
     public HotspotTile(Host host) {
         super(host);
@@ -131,10 +132,9 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
             state.value = mController.isHotspotEnabled();
         }
         if (state.visible && state.value) {
-            final List<WifiDevice> clients = mConnectivityManager.getTetherConnectedSta();
-            final int count = clients != null ? clients.size() : 0;
             state.label = mContext.getResources().getQuantityString(
-                    R.plurals.wifi_hotspot_connected_clients_label, count, count);
+                    R.plurals.wifi_hotspot_connected_clients_label, mNumConnectedClients,
+                    mNumConnectedClients);
         } else {
             state.label = mContext.getString(R.string.quick_settings_hotspot_label);
         }
@@ -163,6 +163,8 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
     private BroadcastReceiver mTetherConnectStateChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            final List<WifiDevice> clients = mConnectivityManager.getTetherConnectedSta();
+            mNumConnectedClients = clients != null ? clients.size() : 0;
             refreshState();
         }
     };
