@@ -19,11 +19,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="global_action_screenshot">Skärmdump</string>
   <string name="permlab_receiveProtectedSms">ta emot skyddade SMS</string>
-  <string name="permdesc_receiveProtectedSms">Tillåter att appen få ett inkommande skyddat SMS.</string>
+  <string name="permdesc_receiveProtectedSms">Tillåter att appen tar emot ett inkommande skyddat SMS.</string>
   <string name="permlab_modifyProtectedSmsList">ändra lista över skyddade SMS</string>
   <string name="permdesc_modifyProtectedSmsList">Tillåter att appen ändrar listan över skyddade SMS.</string>
   <string name="permgrouplab_security">Säkerhet</string>
-  <string name="permgroupdesc_security">Tillstånd relaterade till information för enhetssäkerhet.</string>
+  <string name="permgroupdesc_security">Behörigheter relaterade till enhetssäkerhet.</string>
   <string name="permlab_readPhoneBlacklist">läsa telefonens svartlista</string>
   <string name="permdesc_readPhoneBlacklist">Tillåter en app att läsa information kring telefonnummer som är blockerade för inkommande samtal eller meddelanden.</string>
   <string name="permlab_changePhoneBlacklist">ändra telefonens svartlista</string>

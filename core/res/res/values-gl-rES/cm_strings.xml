@@ -122,6 +122,11 @@
   <string name="app_ops_use_voice_volume">controlar o volume das chamadas de voz</string>
   <string name="app_ops_write_mms">escribir unha mensaxe MMS</string>
   <string name="app_ops_write_sms">escribir unha mensaxe SMS</string>
+  <string name="app_ops_read_phone_state">acceder ao estado do móbil</string>
+  <string name="app_ops_assist_structure">usar a estrutura de asistencia</string>
+  <string name="app_ops_assist_screenshot">realizar captura de pantalla</string>
+  <string name="app_ops_turn_on_screen">acender a pantalla</string>
+  <string name="app_ops_get_accounts">obter as contas do dispositivo</string>
   <string name="app_ops_su">Obter acceso como superusuario</string>
   <string name="lock_to_app_toast_no_navbar">Para deixar de fixar esta pantalla, mantén tocado o botón Atrás.</string>
   <string name="live_display_auto">Automático</string>

@@ -68,7 +68,6 @@
   <string name="quick_settings_profiles_off">Profili onemogočeni</string>
   <string name="quick_settings_heads_up_label">Obvestila na zaslonu</string>
   <string name="quick_settings_battery_saver_label">Ohranjevalnik baterije</string>
-  <string name="quick_settings_caffeine_label">Kofein</string>
   <string name="accessibility_quick_settings_sync_off">Sinhronizacija izklopljena.</string>
   <string name="accessibility_quick_settings_sync_on">Sinhronizacija vklopljena.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinhronizacija izklopljena.</string>
@@ -107,8 +106,6 @@
   <string name="accessibility_quick_settings_heads_up_on">Obvestila na zas. vkl.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Obvestila na zaslonu izklopljena.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Obvestila na zaslonu vklopljena.</string>
-  <string name="accessibility_quick_settings_caffeine_off">Kofein izklopljen.</string>
-  <string name="accessibility_quick_settings_caffeine_on">Kofein vklopljen.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Ohranjevalnik baterije izklopljen.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Ohranjevalnik baterije vklopljen.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Ohranjevalnik baterije izklopljen.</string>

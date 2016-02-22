@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">СИМ картата е Perso заключена</string>
+  <string name="keyguard_perso_locked_message">СИМ картата е блокирана от оператора</string>
   <string name="lockscreen_sim_error_message_short">Невалидна карта.</string>
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Въведете ПИН кода на СИМ картата, имате още <xliff:g id="number">%d </xliff:g> останал опит, преди да трябва да се свържете с вашия оператор за отключване на устройството.</item>
