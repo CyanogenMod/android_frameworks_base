@@ -26,6 +26,7 @@ import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.widget.Switch;
 import android.os.UserManager;
 
@@ -54,6 +55,7 @@ public class HotspotTile extends QSTile<QSTile.AirplaneBooleanState> {
     private final ConnectivityManager mConnectivityManager;
     private final GlobalSetting mAirplaneMode;
     private boolean mListening;
+    private int mNumConnectedClients = 0;
 
     public HotspotTile(Host host) {
         super(host);
@@ -86,19 +88,19 @@ public class HotspotTile extends QSTile<QSTile.AirplaneBooleanState> {
     @Override
     public void setListening(boolean listening) {
         if (mListening == listening) return;
-        mListening = listening;
         if (listening) {
             mController.addCallback(mCallback);
-            final IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-            refreshState();
             mContext.registerReceiver(mTetherConnectStateChangedReceiver,
                     new IntentFilter(ConnectivityManager.TETHER_CONNECT_STATE_CHANGED));
+            final IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+            //refreshState();
         } else {
             mController.removeCallback(mCallback);
             mContext.unregisterReceiver(mTetherConnectStateChangedReceiver);
         }
-        mAirplaneMode.setListening(listening);
+        mListening = listening;
+        //mAirplaneMode.setListening(listening);
     }
 
     @Override
@@ -123,7 +125,7 @@ public class HotspotTile extends QSTile<QSTile.AirplaneBooleanState> {
 
     @Override
     protected void handleUpdateState(AirplaneBooleanState state, Object arg) {
-        state.disabledByPolicy = mController.isHotspotEnabled();
+        state.visible = mController.isHotspotEnabled();
         state.label = mContext.getString(R.string.quick_settings_hotspot_label);
         checkIfRestrictionEnforcedByAdminOnly(state, UserManager.DISALLOW_CONFIG_TETHERING);
         if (arg instanceof Boolean) {
@@ -131,7 +133,7 @@ public class HotspotTile extends QSTile<QSTile.AirplaneBooleanState> {
         } else {
             state.value = mController.isHotspotEnabled();
         }
-        state.icon = state.disabledByPolicy && state.value ? mEnable : mDisable;
+        state.icon = state.value ? mEnable : mDisable;
         boolean wasAirplane = state.isAirplaneMode;
         state.isAirplaneMode = mAirplaneMode.getValue() != 0;
         if (state.isAirplaneMode) {
@@ -146,14 +148,14 @@ public class HotspotTile extends QSTile<QSTile.AirplaneBooleanState> {
         state.minimalAccessibilityClassName = state.expandedAccessibilityClassName
                 = Switch.class.getName();
         state.contentDescription = state.label;
-        if (state.disabledByPolicy && state.value) {
-            final List<WifiDevice> clients = mConnectivityManager.getTetherConnectedSta();
-            final int count = clients != null ? clients.size() : 0;
+        if (state.visible && state.value) {
             state.label = mContext.getResources().getQuantityString(
-                    R.plurals.wifi_hotspot_connected_clients_label, count, count);
+                    R.plurals.wifi_hotspot_connected_clients_label, mNumConnectedClients,
+                    mNumConnectedClients);
         } else {
             state.label = mContext.getString(R.string.quick_settings_hotspot_label);
         }
+        state.icon = state.visible && state.value ? mEnable : mDisable;
 
     }
 
@@ -174,6 +176,8 @@ public class HotspotTile extends QSTile<QSTile.AirplaneBooleanState> {
     private BroadcastReceiver mTetherConnectStateChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            final List<WifiDevice> clients = mConnectivityManager.getTetherConnectedSta();
+            mNumConnectedClients = clients != null ? clients.size() : 0;
             refreshState();
         }
     };
