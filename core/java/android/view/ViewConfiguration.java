@@ -39,12 +39,12 @@ public class ViewConfiguration {
     /**
      * Duration of the fade when scrollbars fade away in milliseconds
      */
-    private static final int SCROLL_BAR_FADE_DURATION = 250;
+    private static final int SCROLL_BAR_FADE_DURATION = 230;
 
     /**
      * Default delay before the scrollbars fade in milliseconds
      */
-    private static final int SCROLL_BAR_DEFAULT_DELAY = 300;
+    private static final int SCROLL_BAR_DEFAULT_DELAY = 270;
 
     /**
      * Defines the length of the fading edges in dips
