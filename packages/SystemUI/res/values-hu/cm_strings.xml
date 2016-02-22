@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profilok letiltva</string>
   <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
   <string name="quick_settings_battery_saver_label">Akkumulátor kímélő</string>
+  <string name="quick_settings_caffeine_label">Caffeine</string>
   <string name="accessibility_quick_settings_sync_off">Szinkronizálás ki.</string>
   <string name="accessibility_quick_settings_sync_on">Szinkronizálás be.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Szinkronizálás kikapcsolva.</string>
@@ -79,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Képernyő zárolás</string>
   <string name="quick_settings_ambient_display_label">Környezeti kijelző</string>
   <string name="quick_settings_lockscreen_label_enforced">A képernyő zárolásának kényszerítése</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Profil által letiltva</string>
   <string name="accessibility_quick_settings_screen_timeout">Képernyő időkorlát: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Képernyő időkorlátja megváltoztatva: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Akkumulátor mód</string>
@@ -105,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Lebegő értesítés be.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Lebegő értesítés kikapcsolva.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Lebegő értesítés bekapcsolva.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Caffeine ki.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Caffeine be.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Akkumulátor kímélő ki.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Akkumulátor kímélő be.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Akkumulátor kímélő kikapcsolva.</string>
@@ -136,4 +140,7 @@
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Helymeghatározás jelentése nagyon pontosra változtatva.</string>
   <string name="quick_settings_tiles_category_system">Rendszer csempék</string>
   <string name="quick_settings_tiles_add_tiles">Csempe hozzáadása</string>
+  <string name="hotspot_apm_message">Nem lehet csatlakozni a mobil hálózatokra, míg a repülőgép üzemmód engedélyezve van. Tiltsa le a repülőgép üzemmódot és próbálja újra.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Zseblámpa bekapcsolva</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Kikapcsoláshoz érintse meg</string>
 </resources>

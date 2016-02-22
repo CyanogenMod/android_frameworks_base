@@ -37,7 +37,7 @@
   <string name="reboot_bootloader">Bootloader</string>
   <string name="reboot_download">Download</string>
   <string name="reboot_soft">Warmstart</string>
-  <string name="reboot_title">Neustart</string>
+  <string name="reboot_title">Neu starten</string>
   <string name="reboot_confirm" product="tablet">Ihr Tablet wird neu gestartet.</string>
   <string name="reboot_confirm" product="default">Ihr Telefon wird neu gestartet.</string>
   <string name="reboot_progress">Neustart wird durchgeführt\u2026</string>
@@ -46,17 +46,17 @@
   <string name="adb_both_active_notification_title">ADB über USB &amp; Netzwerk aktiviert</string>
   <string name="adb_active_generic_notification_message">Berühren, um Debugging zu deaktivieren.</string>
   <string name="adb_active_custom_tile">ADB: <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
-  <string name="adb_active_custom_tile_both">USB &amp; Netzwerk</string>
+  <string name="adb_active_custom_tile_both">USB und Netzwerk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netzwerk</string>
-  <string name="permlab_accessThemeService">Zugriff auf den Design-Dienst</string>
+  <string name="permlab_accessThemeService">auf den Design-Dienst zugreifen</string>
   <string name="permlab_interceptPackageLaunch">App-Start verhindern</string>
   <string name="permdesc_accessThemeService">Ermöglicht der App, auf den Design-Dienst zuzugreifen. Wird für normale Apps nicht benötigt.</string>
   <string name="permlab_readThemes">Design-Informationen lesen</string>
   <string name="permdesc_readThemesDesc">Ermöglicht der App, auszulesen, welche Designs Sie installiert und aktiviert haben.</string>
   <string name="permlab_writeThemes">aktive Designs ändern</string>
   <string name="permdesc_writeThemesDesc">Ermöglicht der App, neue Designs zu installieren und das aktive Design zu wählen.</string>
-  <string name="theme_install_error_title">Design konnte nicht intalliert werden</string>
+  <string name="theme_install_error_title">Design konnte nicht installiert werden</string>
   <string name="theme_install_error_message">%s konnte nicht installiert werden</string>
   <string name="stylus_app_not_installed">%s ist nicht installiert</string>
   <string name="theme_reset_notification_title">Design zurückgesetzt</string>
@@ -82,7 +82,7 @@
   <string name="app_ops_delete_mms">Ihre MMS-Nachrichten zu löschen</string>
   <string name="app_ops_delete_sms">Ihre SMS zu löschen</string>
   <string name="app_ops_draw_on_top">sich im Vordergrund einzublenden</string>
-  <string name="app_ops_get_usage_stats">Nutzungsstatistiken von Apps zu erhalten</string>
+  <string name="app_ops_get_usage_stats">Nutzungsstatistiken von Apps abrufen</string>
   <string name="app_ops_keep_device_awake">den Ruhezustand zu deaktivieren</string>
   <string name="app_ops_make_phone_call">Anrufe zu tätigen</string>
   <string name="app_ops_modify_calendar">Ihren Kalender zu aktualisieren</string>
@@ -101,14 +101,14 @@
   <string name="app_ops_read_mms">MMS zu lesen</string>
   <string name="app_ops_read_sms">Ihre SMS zu lesen</string>
   <string name="app_ops_receive_sms">eine SMS zu empfangen</string>
-  <string name="app_ops_record_audio">Audio aufzunehmen</string>
+  <string name="app_ops_record_audio">Audio aufzuzeichnen</string>
   <string name="app_ops_send_mms">eine MMS zu senden</string>
   <string name="app_ops_send_sms">eine SMS zu senden</string>
   <string name="app_ops_start_at_bootup">beim Einschalten zu starten</string>
   <string name="app_ops_toast_window">Toast-Nachrichten anzuzeigen</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth ein-/auszuschalten</string>
   <string name="app_ops_toggle_mobile_data">Mobile Daten ein-/ausschalten</string>
-  <string name="app_ops_toggle_nfc">NFC an-/auszuschalten</string>
+  <string name="app_ops_toggle_nfc">NFC ein-/auszuschalten</string>
   <string name="app_ops_toggle_wifi">WLAN ein-/auszuschalten</string>
   <string name="app_ops_use_alarm_volume">die Weckerlautstärke zu ändern</string>
   <string name="app_ops_use_audio_focus">den Audiofokus zu ändern</string>
@@ -128,13 +128,13 @@
   <string name="app_ops_scan_wifi">WLAN-Netzwerke zu scannen</string>
   <string name="app_ops_change_wallpaper">Hintergrundbild zu ändern</string>
   <string name="app_ops_assist_structure">Unterstützungsstruktur zu verwenden</string>
-  <string name="app_ops_assist_screenshot">Bildschirmfoto zu erstellen</string>
+  <string name="app_ops_assist_screenshot">Bildschirmfoto aufzunehmen</string>
   <string name="app_ops_use_body_sensors">Körpersensoren zu verwenden</string>
   <string name="app_ops_read_cell_broadcasts">Cell-Broadcasts zu lesen</string>
   <string name="app_ops_mock_location">Ihren Standort zu simulieren</string>
   <string name="app_ops_read_external_storage">externen Speicher zu lesen</string>
   <string name="app_ops_write_external_storage">externen Speicher zu beschreiben</string>
-  <string name="app_ops_turn_on_screen">das Display einzuschalten</string>
+  <string name="app_ops_turn_on_screen">den Bildschirm einzuschalten</string>
   <string name="app_ops_get_accounts">Geräte-Konten abzurufen</string>
   <string name="app_ops_wifi_change">WLAN-Status zu ändern</string>
   <string name="app_ops_su">Root-Zugriff zu erhalten</string>

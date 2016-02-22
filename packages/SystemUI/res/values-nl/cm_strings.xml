@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profielen uitgeschakeld</string>
   <string name="quick_settings_heads_up_label">Heads-up</string>
   <string name="quick_settings_battery_saver_label">Accubesparing</string>
+  <string name="quick_settings_caffeine_label">Cafeïne</string>
   <string name="accessibility_quick_settings_sync_off">Synchr. uit.</string>
   <string name="accessibility_quick_settings_sync_on">Synchr. aan.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchr. uitgeschakeld.</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Heads-up aan.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads-up uitgeschakeld.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ingeschakeld.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Cafeïne uit.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Cafeïne aan.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Accubesparing uit.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Accubesparing aan.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Accubesparing uitgeschakeld.</string>

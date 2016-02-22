@@ -126,6 +126,8 @@
   <string name="app_ops_read_phone_state">citește starea telefonului</string>
   <string name="app_ops_scan_wifi">scanează rețelele Wi-Fi</string>
   <string name="app_ops_change_wallpaper">schimbă imaginea de fundal</string>
+  <string name="app_ops_assist_structure">folosește structura de asistență</string>
+  <string name="app_ops_assist_screenshot">face o captură de ecran</string>
   <string name="app_ops_use_body_sensors">utilizează senzorii corporali</string>
   <string name="app_ops_read_cell_broadcasts">citește trasmisiunile din rețea</string>
   <string name="app_ops_mock_location">simulează locația dvs.</string>

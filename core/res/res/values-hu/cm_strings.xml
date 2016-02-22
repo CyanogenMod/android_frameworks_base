@@ -107,6 +107,7 @@
   <string name="app_ops_start_at_bootup">bekapcsoláskor elindul</string>
   <string name="app_ops_toast_window">buborékszöveg üzenetek megjelenítése</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth kapcsolása</string>
+  <string name="app_ops_toggle_mobile_data">mobilnet váltása</string>
   <string name="app_ops_toggle_nfc">NFC kapcsolása</string>
   <string name="app_ops_toggle_wifi">Wi-Fi kapcsolása</string>
   <string name="app_ops_use_alarm_volume">ébresztőhang vezérlése</string>
@@ -154,4 +155,6 @@
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> csatlakoztatott eszköz</string>
   <string name="notify_package_component_protected_title">Tevékenység elindítás blokkolva</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> védve van az indításra. Kattintson a hitelesítésére és indítsa el az alkalmazást.</string>
+  <string name="notify_battery_fully_charged_title">Akkumulátor teljesen feltöltve</string>
+  <string name="notify_battery_fully_charged_text">A készüléket vegye le a töltőről, hogy javítsa az akkumulátor élettartamát.</string>
 </resources>

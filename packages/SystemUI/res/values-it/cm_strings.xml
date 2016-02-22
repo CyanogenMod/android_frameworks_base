@@ -68,8 +68,9 @@
   <string name="quick_settings_profiles_off">Profili disattivati</string>
   <string name="quick_settings_heads_up_label">Heads Up</string>
   <string name="quick_settings_battery_saver_label">Risparmio batteria</string>
+  <string name="quick_settings_caffeine_label">Caffeina</string>
   <string name="accessibility_quick_settings_sync_off">Sincronia OFF</string>
-  <string name="accessibility_quick_settings_sync_on">Sincronizzazione attiva.</string>
+  <string name="accessibility_quick_settings_sync_on">Sincronia ON.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronizzazione spenta.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Sincronizzazione attivata.</string>
   <string name="quick_settings_sync_label">Sincronizzazione</string>
@@ -79,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Schermata di blocco</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_lockscreen_label_enforced">Schermata di blocco forzata</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Disattivato da profilo</string>
   <string name="accessibility_quick_settings_screen_timeout">Sospensione schermo: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Sospensione schermo cambiato in <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Modalità batteria</string>
@@ -101,10 +103,12 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display attivato.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display disattivato.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display attivato.</string>
-  <string name="accessibility_quick_settings_heads_up_off">Heads Up disattivo.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads Up disattivato.</string>
   <string name="accessibility_quick_settings_heads_up_on">Heads Up attivo.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads Up disattivato.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads Up attivato.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Caffeina off.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Caffeina on.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Risparmio batteria OFF.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Risparmio batteria ON.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Risparmio batteria disattivato.</string>

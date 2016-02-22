@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Perfis desativados</string>
   <string name="quick_settings_heads_up_label">Notificações pop-up</string>
   <string name="quick_settings_battery_saver_label">Economizador de bateria</string>
+  <string name="quick_settings_caffeine_label">Cafeína</string>
   <string name="accessibility_quick_settings_sync_off">Sincronização desligada.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronização ligada.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sincronização foi desligada.</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Notificações pop-up ligadas.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Notificações pop-up desligaram.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Notificações pop-up ligaram.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Cafeína desligada.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Cafeína ligada.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Economizador de bateria desligado.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Economizador de bateria ligado.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador de bateria desligou.</string>

@@ -60,13 +60,13 @@
   <string name="theme_install_error_message">%s no s\'ha pogut instal·lar</string>
   <string name="stylus_app_not_installed">%s no està instal·lat</string>
   <string name="theme_reset_notification_title">Reinici de tema</string>
-  <string name="theme_reset_notification_body">El tema del sistema s\'ha restaurat degut a múltiples fallades d\'app.</string>
+  <string name="theme_reset_notification_body">El tema del sistema s\'ha restaurat degut a múltiples fallades d\'aplicacions.</string>
   <string name="silent_mode_priority">Prioritat</string>
   <string name="silent_mode_none">Cap</string>
   <string name="subscription_change_disabled_wifi_ap">S\'ha deshabilitat el punt d\'accés Wi-Fi degut a un canvi en la subscripció de la SIM</string>
   <string name="notify_turn_wifi_off_title">Apaga el Wi-Fi</string>
   <string name="permlab_changePrivacyGuardState">activa o desactiva el guarda de privacitat</string>
-  <string name="permdesc_changePrivacyGuardState">Permet a l\'app si una altra app s\'executa amb el guarda de privacitat. Quan una app s\'executa amb el guarda de privacitat, no tindrà accés a les dades personals com els contactes, registres de trucades, o missatges.</string>
+  <string name="permdesc_changePrivacyGuardState">Permet a l\'aplicació fer el canvi d\'estat de privacitat d\'una altra aplicació. Quan una aplicació s\'executa amb el guarda de privacitat, no tindrà accés a les dades personals com els contactes, registres de trucades, o missatges.</string>
   <string name="privacy_guard_notification">Guarda de privacitat actiu</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no tindrà accés a dades personals</string>
   <string name="privacy_guard_dialog_title">Guarda de privacitat</string>

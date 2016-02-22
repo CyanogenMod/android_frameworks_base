@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profiele is afgeskakel</string>
   <string name="quick_settings_heads_up_label">Loer boodskap</string>
   <string name="quick_settings_battery_saver_label">Battery bespaarder</string>
+  <string name="quick_settings_caffeine_label">Kafeïen</string>
   <string name="accessibility_quick_settings_sync_off">Sinchronisering af.</string>
   <string name="accessibility_quick_settings_sync_on">Sinchronisering aan.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinchronisering afgeskakel.</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Loer boodskap aan.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Loer boodskap is afgeskakel.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Loer boodskap is aangeskakel.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kafeïen af.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kafeïen aan.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Battery bespaarder af.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Battery bespaarder aan.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Battery bespaarder afgeskakel.</string>

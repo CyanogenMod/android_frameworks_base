@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profily zakázány</string>
   <string name="quick_settings_heads_up_label">Plovoucí upozornění</string>
   <string name="quick_settings_battery_saver_label">Spořič baterie</string>
+  <string name="quick_settings_caffeine_label">Kofein</string>
   <string name="accessibility_quick_settings_sync_off">Synch. vyp.</string>
   <string name="accessibility_quick_settings_sync_on">Synch. zap.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synchronizace vypnuta.</string>
@@ -79,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Zamykací obrazovka</string>
   <string name="quick_settings_ambient_display_label">Ambientní zobrazení</string>
   <string name="quick_settings_lockscreen_label_enforced">Vynucení zámku obrazovky</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Potlačen profilem</string>
   <string name="accessibility_quick_settings_screen_timeout">Limit vypnutí obrazovky: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Limit vypnutí obrazovky změněn na <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Režim baterie</string>
@@ -105,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Plovoucí upozornění zap.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Plovoucí upozorněn vyp.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Plovoucí upozornění zap.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kofein vyp.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kofein zap.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Spořič baterie vyp.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Spořič baterie zap.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Spořič baterie vypnut.</string>

@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profiilit pois käytöstä</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Virransäästö</string>
+  <string name="quick_settings_caffeine_label">Kofeiini</string>
   <string name="accessibility_quick_settings_sync_off">Synkronointi pois.</string>
   <string name="accessibility_quick_settings_sync_on">Synkronointi päällä.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synkronointi pois päältä.</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Heads up päällä.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up pois päältä.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up päällä.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kofeiini pois.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kofeiini päällä.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Virransäästö pois.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Virransäästö päällä.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Virransäästö pois käytöstä.</string>

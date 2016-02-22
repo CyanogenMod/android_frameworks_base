@@ -68,6 +68,7 @@
   <string name="quick_settings_profiles_off">Profilak ezgaituta</string>
   <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>
   <string name="quick_settings_battery_saver_label">Bateria aurrezlea</string>
+  <string name="quick_settings_caffeine_label">Kafeina</string>
   <string name="accessibility_quick_settings_sync_off">Sinkronizazioa ezgaituta.</string>
   <string name="accessibility_quick_settings_sync_on">Sinkronizazioa gaituta.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinkronizazioa ezgaituta.</string>
@@ -106,6 +107,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Jakinarazpen flotatzaileak gaituta.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Jakinarazpen flotatzaileak ezgaituta.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Jakinarazpen flotatzaileak gaituta.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kafeina ez.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kafeina bai.</string>
   <string name="accessibility_quick_settings_battery_saver_off">Bateria aurrezlea itzalita.</string>
   <string name="accessibility_quick_settings_battery_saver_on">Bateria aurrezlea piztuta.</string>
   <string name="accessibility_quick_settings_battery_saver_changed_off">Bateria aurrezlea itzalita.</string>
