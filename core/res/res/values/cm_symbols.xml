@@ -75,4 +75,7 @@
     <java-symbol type="string" name="global_action_current_user" />
     <java-symbol type="dimen" name="global_actions_avatar_size" />
 
+    <!-- config softap extention feature -->
+    <java-symbol type="bool" name="config_softap_extention" />
+
 </resources>
