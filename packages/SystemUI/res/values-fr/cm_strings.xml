@@ -58,7 +58,7 @@
   <string name="quick_settings_title_show_weather">Afficher la météo</string>
   <string name="quick_settings_title_enlarge_first_row">Agrandir la première ligne</string>
   <string name="screen_pinning_description_no_navbar">Cela le laisse en vue jusqu\'à ce que vous le détachiez. Appuyez et maintenez le bouton retour pour détacher.</string>
-  <string name="quick_settings_custom_tile_detail_title">Personnaliser le raccourci</string>
+  <string name="quick_settings_custom_tile_detail_title">Raccourci personnalisé</string>
   <string name="quick_settings_remove">Supprimer le raccourci</string>
   <string name="quick_settings_network_adb_label">ADB par réseau</string>
   <string name="quick_settings_compass_label">Boussole</string>
@@ -76,6 +76,7 @@
   <string name="quick_settings_usb_tether_label">Modem USB</string>
   <string name="quick_settings_screen_timeout_detail_title">Veille de l\'écran</string>
   <string name="quick_settings_lockscreen_label">Écran de verrouillage</string>
+  <string name="quick_settings_ambient_display_label">Affichage en mode veille</string>
   <string name="quick_settings_lockscreen_label_enforced">Écran de verrouillage forcé</string>
   <string name="accessibility_quick_settings_screen_timeout">Veille de l\'écran : <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Veille de l\'écran changée à <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
@@ -95,7 +96,9 @@
   <string name="accessibility_quick_settings_lock_screen_on">Écran de verrouillage activé.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Verrouillage d\'écran désactivé.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_on">Verrouillage d\'écran activé.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Affichage en mode veille désactivé.</string>
   <string name="accessibility_quick_settings_ambient_display_on">Affichage en mode veille activé.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Affichage en mode veille désactivé.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Affichage en mode veille activé.</string>
   <string name="accessibility_quick_settings_heads_up_off">Notifications flottantes désactivées.</string>
   <string name="accessibility_quick_settings_heads_up_on">Notifications flottantes activées.</string>

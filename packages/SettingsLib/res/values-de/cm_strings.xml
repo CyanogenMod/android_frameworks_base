@@ -21,7 +21,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="profile_applist_title">Apps</string>
   <string name="picker_activities">Aktivitäten</string>
-  <string name="select_custom_app_title">Anwendung wählen</string>
-  <string name="select_custom_activity_title">Aktivität wählen</string>
+  <string name="select_custom_app_title">Benutzerdefinierte Anwendung auswählen</string>
+  <string name="select_custom_activity_title">Benutzerdefinierte Aktivität auswählen</string>
   <string name="lockscreen_targets_message">Sperrbildschirm-Verknüpfungen</string>
 </resources>

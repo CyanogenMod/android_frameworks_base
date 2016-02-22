@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="keyguard_perso_locked_message">La targeta SIM està Perso bloquejada</string>
+  <string name="keyguard_perso_locked_message">La targeta SIM té un bloqueig Personal</string>
   <string name="lockscreen_sim_error_message_short">Targeta invàlida.</string>
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Introdueix el PIN de la SIM, tens <xliff:g id="number">%d</xliff:g> intent restant abans que hagis de contactar amb el teu operador per desbloquejar el teu dispositiu.</item>
