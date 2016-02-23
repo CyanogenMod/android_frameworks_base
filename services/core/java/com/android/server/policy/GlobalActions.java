@@ -37,7 +37,6 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ThemeUtils;
 import android.content.pm.UserInfo;
 import android.content.ServiceConnection;
 import android.database.ContentObserver;
@@ -101,6 +100,8 @@ import cyanogenmod.providers.CMSettings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.cyanogenmod.internal.util.ThemeUtils;
 
 import static com.android.internal.util.cm.PowerMenuConstants.*;
 

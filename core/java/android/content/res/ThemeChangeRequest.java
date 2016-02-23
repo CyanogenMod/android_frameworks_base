@@ -23,15 +23,25 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import static android.provider.ThemesContract.ThemesColumns.*;
-
 /** @hide */
 public final class ThemeChangeRequest implements Parcelable {
     public static final int DEFAULT_WALLPAPER_ID = -1;
 
-    private final Map<String, String> mThemeComponents = new HashMap<String, String>();
-    private final Map<String, String> mPerAppOverlays = new HashMap<String, String>();
+    private static final String MODIFIES_LAUNCHER = "mods_homescreen";
+    private static final String MODIFIES_LOCKSCREEN = "mods_lockscreen";
+    private static final String MODIFIES_ICONS = "mods_icons";
+    private static final String MODIFIES_FONTS = "mods_fonts";
+    private static final String MODIFIES_BOOT_ANIM = "mods_bootanim";
+    private static final String MODIFIES_NOTIFICATIONS = "mods_notifications";
+    private static final String MODIFIES_ALARMS = "mods_alarms";
+    private static final String MODIFIES_RINGTONES = "mods_ringtones";
+    private static final String MODIFIES_OVERLAYS = "mods_overlays";
+    private static final String MODIFIES_STATUS_BAR = "mods_status_bar";
+    private static final String MODIFIES_NAVIGATION_BAR = "mods_navigation_bar";
+    private static final String MODIFIES_LIVE_LOCK_SCREEN = "mods_live_lock_screen";
+
+    private final Map<String, String> mThemeComponents = new HashMap<>();
+    private final Map<String, String> mPerAppOverlays = new HashMap<>();
     private RequestType mRequestType;
     private long mWallpaperId = -1;
 
@@ -180,8 +190,8 @@ public final class ThemeChangeRequest implements Parcelable {
     }
 
     public static class Builder {
-        Map<String, String> mThemeComponents = new HashMap<String, String>();
-        Map<String, String> mPerAppOverlays = new HashMap<String, String>();
+        Map<String, String> mThemeComponents = new HashMap<>();
+        Map<String, String> mPerAppOverlays = new HashMap<>();
         RequestType mRequestType = RequestType.USER_REQUEST;
         long mWallpaperId;
 
