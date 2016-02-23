@@ -233,7 +233,8 @@ public class RecentsResizeTaskDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle args) {
         final Context context = this.getActivity();
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
+                com.android.internal.R.style. Theme_DeviceDefault_Dialog_Alert);
         createResizeTaskDialog(context, inflater, builder);
         return builder.create();
     }
