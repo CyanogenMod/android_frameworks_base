@@ -45,20 +45,8 @@
   <string name="adb_net_active_notification_title">ADB over network enabled</string>
   <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
   <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
-  <string name="permlab_accessThemeService">access theme service</string>
   <string name="permlab_interceptPackageLaunch">intercept app launch</string>
-  <string name="permdesc_accessThemeService">Allows an app to access the theme service. Should never be needed for normal apps.</string>
-  <string name="permlab_readThemes">read your theme info</string>
-  <string name="permdesc_readThemesDesc">Allows the app to read your themes and
-       determine which theme you have applied.</string>
-  <string name="permlab_writeThemes">modify your themes</string>
-  <string name="permdesc_writeThemesDesc">Allows the app to insert new themes and
-       modify which theme you have applied.</string>
-  <string name="theme_install_error_title">Failed to install theme</string>
-  <string name="theme_install_error_message">%s failed to install</string>
   <string name="stylus_app_not_installed">%s is not installed</string>
-  <string name="theme_reset_notification_title">Theme reset</string>
-  <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
   <string name="permlab_changePrivacyGuardState">enable or disable Privacy Guard</string>
   <string name="permdesc_changePrivacyGuardState">Allows the app to change whether another app runs with Privacy Guard. When an app is running with Privacy Guard, it will not have access to personal data such as contacts, call logs, or messages.</string>
   <string name="privacy_guard_notification">Privacy Guard active</string>

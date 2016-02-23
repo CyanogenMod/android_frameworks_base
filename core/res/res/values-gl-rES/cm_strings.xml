@@ -49,20 +49,8 @@
   <string name="adb_active_custom_tile_both">USB e rede</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rede</string>
-  <string name="permlab_accessThemeService">acceder aos temas</string>
   <string name="permlab_interceptPackageLaunch">Interromper o inicio de aplicacións</string>
-  <string name="permdesc_accessThemeService">Permitir que unha aplicación acceda aos temas. Non debería ser necesario para aplicacións normais.</string>
-  <string name="permlab_readThemes">ler a información do seu tema</string>
-  <string name="permdesc_readThemesDesc">Permitir que a aplicación lea os seus temas e 
-       determine cal deles está en uso.</string>
-  <string name="permlab_writeThemes">modificar os seus temas</string>
-  <string name="permdesc_writeThemesDesc">Permitir que a aplicación insira novos temas e
-       modifique o que estea en uso.</string>
-  <string name="theme_install_error_title">Non se puido instalar o tema</string>
-  <string name="theme_install_error_message">Non se puido instalar %s</string>
   <string name="stylus_app_not_installed">%s non está instalada</string>
-  <string name="theme_reset_notification_title">Restabelecer o tema</string>
-  <string name="theme_reset_notification_body">Restableceuse o tema debido a varios fallos da aplicación.</string>
   <string name="silent_mode_priority">Prioridade</string>
   <string name="silent_mode_none">Ningún</string>
   <string name="subscription_change_disabled_wifi_ap">Hotspot Wi-Fi desactivado debido ao cambio da subscrición da SIM</string>

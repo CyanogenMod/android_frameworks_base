@@ -41,17 +41,7 @@
   <string name="adb_net_active_notification_title">網絡 ADB 偵錯</string>
   <string name="adb_both_active_notification_title">USB &amp; 網絡 ADB 偵錯</string>
   <string name="adb_active_generic_notification_message">觸碰以停用調試。</string>
-  <string name="permlab_accessThemeService">存取主題服務</string>
-  <string name="permdesc_accessThemeService">允許應用程式存取主題服務。一般應用程式並不建議。</string>
-  <string name="permlab_readThemes">讀取你的主題資料</string>
-  <string name="permdesc_readThemesDesc">允許應用程式讀取您的主題，並判斷您已套用的主題。</string>
-  <string name="permlab_writeThemes">修改你的主題</string>
-  <string name="permdesc_writeThemesDesc">允許應用程式來插入新的主題，並修改您已應用的主題。</string>
-  <string name="theme_install_error_title">安裝主題失敗</string>
-  <string name="theme_install_error_message">%s 安裝失敗</string>
   <string name="stylus_app_not_installed">未安裝 %s</string>
-  <string name="theme_reset_notification_title">重設主題</string>
-  <string name="theme_reset_notification_body">基於多個應用程式衝突，已還原至預設主題。</string>
   <string name="silent_mode_priority">優先級</string>
   <string name="silent_mode_none">無</string>
   <string name="permlab_changePrivacyGuardState">啟用或停用私隱守衛</string>

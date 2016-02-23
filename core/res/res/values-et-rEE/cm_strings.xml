@@ -49,20 +49,8 @@
   <string name="adb_active_custom_tile_both">USB &amp; võrk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Võrk</string>
-  <string name="permlab_accessThemeService">pääseda ligi teema teenusele</string>
   <string name="permlab_interceptPackageLaunch">rakenduse käivitamise katkestamine</string>
-  <string name="permdesc_accessThemeService">Annab rakendusele ligipääsu teema teenusele. Tavarakenduste puhul ei peaks kunagi vaja minema.</string>
-  <string name="permlab_readThemes">lugeda teavet teema kohta</string>
-  <string name="permdesc_readThemesDesc">Lubab rakendusel lugeda teemasid ja
-kindlaks teha, millise teema sa oled lubanud.</string>
-  <string name="permlab_writeThemes">muuta teie teemasid</string>
-  <string name="permdesc_writeThemesDesc">Lubab rakendusel lisada uusi teemasid ja
-muuta juba olemasolevaid.</string>
-  <string name="theme_install_error_title">Ei saanud paigaldada teemat</string>
-  <string name="theme_install_error_message">%s paigaldamine nurjus</string>
   <string name="stylus_app_not_installed">%s ei ole installitud</string>
-  <string name="theme_reset_notification_title">Teema lähtestus</string>
-  <string name="theme_reset_notification_body">Süsteemi teema taastati paljude rakenduste kokkujooksmise tõttu.</string>
   <string name="silent_mode_priority">Prioriteet</string>
   <string name="silent_mode_none">Puudub</string>
   <string name="subscription_change_disabled_wifi_ap">WiFi hotspot lülitati välja kuna muutus SIM kaardi teenused</string>
