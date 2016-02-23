@@ -56,11 +56,7 @@
   <string name="permdesc_readThemesDesc">Dopušta aplikaciji čitanje vaših tema i određivanje teme koju koristite.</string>
   <string name="permlab_writeThemes">urediti vaše teme</string>
   <string name="permdesc_writeThemesDesc">Dopušta aplikaciji dodavati nove teme i urediti temu koju ste primjenili.</string>
-  <string name="theme_install_error_title">Instalacija teme nije uspjela</string>
-  <string name="theme_install_error_message">%s Instalacija nije uspjela</string>
   <string name="stylus_app_not_installed">%s nije instalirano</string>
-  <string name="theme_reset_notification_title">Vraćanje početne teme</string>
-  <string name="theme_reset_notification_body">Tema sustava je vraćana na početnu zbog višestrukih rušenja aplikacija.</string>
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ništa</string>
   <string name="subscription_change_disabled_wifi_ap">Wi- Fi Hotspot onemogućen zbog SIM promjene</string>

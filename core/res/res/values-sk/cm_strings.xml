@@ -56,11 +56,7 @@
   <string name="permdesc_readThemesDesc">Umožňuje aplikácii čítať vaše témy a určiť, ktorú tému ste použili.</string>
   <string name="permlab_writeThemes">upraviť vaše témy</string>
   <string name="permdesc_writeThemesDesc">Umožňuje aplikácii vkladať nové témy a upraviť tému, ktorú ste použili.</string>
-  <string name="theme_install_error_title">Inštalácia témy zlyhala</string>
-  <string name="theme_install_error_message">Nepodarilo sa nainštalovať tému %s</string>
   <string name="stylus_app_not_installed">Aplikácia %s nie je nainštalovaná</string>
-  <string name="theme_reset_notification_title">Obnoviť tému</string>
-  <string name="theme_reset_notification_body">Systémová téma sa obnovila z dôvodu viacerých pádov aplikácií.</string>
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žiadna</string>
   <string name="subscription_change_disabled_wifi_ap">Wi-Fi hotspot bol zakázaný kvôli prepnutiu karty SIM</string>

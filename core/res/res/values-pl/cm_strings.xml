@@ -56,11 +56,7 @@
   <string name="permdesc_readThemesDesc">Zezwala aplikacji na dostęp do twoich motywów i decydowanie, który z nich ma zostać użyty.</string>
   <string name="permlab_writeThemes">modyfikowanie Twoich motywów</string>
   <string name="permdesc_writeThemesDesc">Zezwala aplikacji na dodawanie nowych motywów i modyfikowanie tego, którego używasz.</string>
-  <string name="theme_install_error_title">Nie udało się zainstalować motywu</string>
-  <string name="theme_install_error_message">%s nie udało się zainstalować</string>
   <string name="stylus_app_not_installed">Nie zainstalowano aplikacji %s</string>
-  <string name="theme_reset_notification_title">Reset motywu</string>
-  <string name="theme_reset_notification_body">Domyślny motyw przywrócony z powodu wielu awarii aplikacji.</string>
   <string name="silent_mode_priority">Priorytet</string>
   <string name="silent_mode_none">Brak</string>
   <string name="subscription_change_disabled_wifi_ap">Wyłączono hotspot WiFi z powodu zmiany karty SIM</string>

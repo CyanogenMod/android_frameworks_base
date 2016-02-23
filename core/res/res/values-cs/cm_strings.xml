@@ -56,11 +56,7 @@
   <string name="permdesc_readThemesDesc">Umožňuje načíst motivy a určit, který motiv je použit.</string>
   <string name="permlab_writeThemes">změnit motiv</string>
   <string name="permdesc_writeThemesDesc">Umožňuje vložit nový motiv a změnit informaci o tom, který motiv je použit.</string>
-  <string name="theme_install_error_title">Instalace motivu selhala</string>
-  <string name="theme_install_error_message">Instalace „%s“ selhala</string>
   <string name="stylus_app_not_installed">Aplikace %s není nainstalována</string>
-  <string name="theme_reset_notification_title">Obnovit motiv</string>
-  <string name="theme_reset_notification_body">Kvůli pádům aplikací byl obnoven výchozí systémový motiv.</string>
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žádný</string>
   <string name="subscription_change_disabled_wifi_ap">Hotspot Wi\u2011Fi byl kvůli změně připojení SIM vypnut</string>
