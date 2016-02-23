@@ -21,8 +21,6 @@ package com.android.commands.tm;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.ParceledListSlice;
-import android.content.pm.ThemeUtils;
-import android.content.res.IThemeService;
 import android.content.res.ThemeChangeRequest;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -30,8 +28,11 @@ import android.os.UserHandle;
 import android.util.AndroidException;
 import com.android.internal.os.BaseCommand;
 
+import cyanogenmod.themes.IThemeService;
+
+import org.cyanogenmod.internal.util.ThemeUtils;
+
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
