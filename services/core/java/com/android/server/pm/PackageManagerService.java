@@ -17,7 +17,6 @@
 
 package com.android.server.pm;
 
-import static android.Manifest.permission.ACCESS_THEME_MANAGER;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_MEDIA_STORAGE;
@@ -92,6 +91,7 @@ import android.content.res.Configuration;
 
 import android.Manifest;
 
+import cyanogenmod.app.CMContextConstants;
 import cyanogenmod.app.suggest.AppSuggestManager;
 
 import android.app.ActivityManager;
@@ -156,14 +156,12 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
 import android.content.pm.UserInfo;
 import android.content.pm.ManifestDigest;
-import android.content.pm.ThemeUtils;
 import android.content.pm.VerificationParams;
 import android.content.pm.VerifierDeviceIdentity;
 import android.content.pm.VerifierInfo;
 import android.content.res.Resources;
 import android.content.res.AssetManager;
 import android.content.res.ThemeConfig;
-import android.content.res.ThemeManager;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Debug;
@@ -222,6 +220,8 @@ import android.util.Xml;
 import android.view.Display;
 
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.themes.IThemeService;
+
 import dalvik.system.DexFile;
 import dalvik.system.VMRuntime;
 
@@ -254,6 +254,7 @@ import com.android.server.pm.Settings.DatabaseVersion;
 import com.android.server.pm.Settings.VersionInfo;
 import com.android.server.storage.DeviceStorageMonitorInternal;
 
+import org.cyanogenmod.internal.util.ThemeUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -303,8 +304,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  * Keep track of all those .apks everywhere.
@@ -17753,10 +17752,16 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     private void processThemeResourcesInThemeService(String pkgName) {
-        ThemeManager tm =
-                (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
-        if (tm != null) {
-            tm.processThemeResources(pkgName);
+        IThemeService ts = IThemeService.Stub.asInterface(ServiceManager.getService(
+                CMContextConstants.CM_THEME_SERVICE));
+        if (ts == null) {
+            Slog.e(TAG, "Theme service not available");
+            return;
+        }
+        try {
+            ts.processThemeResources(pkgName);
+        } catch (RemoteException e) {
+            /* ignore */
         }
     }
 
