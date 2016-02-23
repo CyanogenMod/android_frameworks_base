@@ -424,6 +424,10 @@ static jlong init_timerfd()
 
     for (size_t i = 0; i < N_ANDROID_TIMERFDS; i++) {
         fds[i] = timerfd_create(android_alarm_to_clockid[i], 0);
+        if ((fds[i] < 0) && (android_alarm_to_clockid[i] == CLOCK_POWEROFF_ALARM)) {
+            ALOGV("timerfd does not support CLOCK_POWEROFF_ALARM, using CLOCK_REALTIME_ALARM instead");
+            fds[i] = timerfd_create(CLOCK_REALTIME_ALARM, 0);
+        }
         if (fds[i] < 0) {
             ALOGV("timerfd_create(%u) failed: %s",  android_alarm_to_clockid[i],
                     strerror(errno));
