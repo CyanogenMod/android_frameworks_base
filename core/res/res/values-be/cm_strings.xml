@@ -49,20 +49,8 @@
   <string name="adb_active_custom_tile_both">па сетцы &amp; USB</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Па сетцы</string>
-  <string name="permlab_accessThemeService">Доступ да службы тэм</string>
   <string name="permlab_interceptPackageLaunch">Перахоп запуску дадаткаў</string>
-  <string name="permdesc_accessThemeService">Дадатак зможа атрымваць доступ да службы тым. Гэты дазвол не выкарыстоўваецца звычайнымі дадаткамі.</string>
-  <string name="permlab_readThemes">Чытанне інфармацыі пра тэму</string>
-  <string name="permdesc_readThemesDesc">Дадатак зможа счытваць тэмы афармлення і
-       вызначаць, якая тэма цяпер выкарыстоўваецца.</string>
-  <string name="permlab_writeThemes">Змена тэм</string>
-  <string name="permdesc_writeThemesDesc">Дадатак зможа ўжыццяўляць усталёўку новых тэм афармлення і 
-       змяняць бягучую тэму.</string>
-  <string name="theme_install_error_title">Не атрымалася ўсталяваць тэму</string>
-  <string name="theme_install_error_message">Збой пры ўсталёўцы %s</string>
   <string name="stylus_app_not_installed">%s не ўсталявана</string>
-  <string name="theme_reset_notification_title">Тэма адключаная</string>
-  <string name="theme_reset_notification_body">З-за збояў дадаткаў адноўлена стандартная тэма.</string>
   <string name="silent_mode_priority">Важныя</string>
   <string name="silent_mode_none">Не</string>
   <string name="subscription_change_disabled_wifi_ap">Выключаныя Wi-Fi кропкі доступу ў сувязі са зменай падпіскі SIM</string>

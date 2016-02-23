@@ -41,14 +41,6 @@
   <string name="adb_net_active_notification_title">নেটওয়ার্কের উপর এডিবি সক্রিয়</string>
   <string name="adb_both_active_notification_title">এডিবির উপর ইউএসবি &amp; নেটওয়ার্ক সক্রিয়</string>
   <string name="adb_active_generic_notification_message">ডিবাগ নিষ্ক্রিয় করতে স্পর্শ করুন।</string>
-  <string name="permlab_accessThemeService">থীম সেবায় প্রবেশাধিকার</string>
-  <string name="permdesc_accessThemeService">একটি অ্যাপকে থীম সেবায় প্রবেশাধিকাররে অনুমতি দিন। স্বাভাবিক অ্যাপগুলির জন্য কখনো প্রয়োজন হবে না।</string>
-  <string name="permlab_readThemes">আপনার থীমের তথ্য নির্ণয়</string>
-  <string name="permdesc_readThemesDesc">একটি অ্যাপকে আপনার থীম নির্ণয়ের এবং আপনি কোন থীম প্রয়োগ করেছেন তা নির্ধারণের অনুমতি দিন।</string>
-  <string name="permlab_writeThemes">আপনার থীমের কিছুটা রূপান্তর</string>
-  <string name="permdesc_writeThemesDesc">অ্যাপটিকে নতুন থীমের সন্নিবেশ করার এবং আপনি যে থীমটি প্রয়োগ করেছেন তার কিছুটা রূপান্তর করার অনুমতি প্রদান করুন।</string>
-  <string name="theme_install_error_title">থিম ইনস্টল করতে ব্যর্থ হয়েছে</string>
-  <string name="theme_install_error_message">%s ইনস্টল করতে ব্যর্থ হয়েছে</string>
   <string name="silent_mode_priority">অগ্রাধিকার</string>
   <string name="notify_turn_wifi_off_title">ওয়াইফাই বন্ধ করুন</string>
   <string name="permlab_changePrivacyGuardState">গোপনীয়তা রক্ষাকারী সক্রিয় বা নিস্ক্রিয় করুন</string>

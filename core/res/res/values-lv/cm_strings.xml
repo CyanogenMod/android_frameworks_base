@@ -44,16 +44,6 @@
   <string name="adb_net_active_notification_title">ADB pa tīklu ieslēgts</string>
   <string name="adb_both_active_notification_title">ADB pa USB &amp; tīklu ieslēgts</string>
   <string name="adb_active_generic_notification_message">Pieskarieties, lai atslēgtu atkļūdošanu.</string>
-  <string name="permlab_accessThemeService">piekļūt tēmas servisam</string>
-  <string name="permdesc_accessThemeService">Ļauj  lietotnei piekļūt tēmu servisam. Normālām lietotnēm to nekad nevajadzētu izmantot.</string>
-  <string name="permlab_readThemes">lasīt jūsu tēmas informāciju</string>
-  <string name="permdesc_readThemesDesc">Ļauj lietotnei lasīt jūsu tēmas un noteikt, kuru no tām jūs izmantojat.</string>
-  <string name="permlab_writeThemes">mainīt jūsu tēmas</string>
-  <string name="permdesc_writeThemesDesc">Ļauj lietotnei izveidot jaunas tēmas un mainīt jūsu pielietotās tēmas.</string>
-  <string name="theme_install_error_title">Neizdevās uzstādīt tēmu</string>
-  <string name="theme_install_error_message">%s neizdevās uzstādīt</string>
-  <string name="theme_reset_notification_title">Atstatīt tēmu</string>
-  <string name="theme_reset_notification_body">Sakarā ar vairākām lietotņu kļūdām, atjaunota sistēmas tēma.</string>
   <string name="permlab_changePrivacyGuardState">Ieslēgt vai atslēgt Privātuma sargu</string>
   <string name="permdesc_changePrivacyGuardState">Ļauj lietotnei mainīties pat ja cita lietotne lieto Privātuma Sargu. Kad lietotne darbojas ar privātuma sargu, tai nebūs pieejas personīgajiem datiem, kā kontakti, zvanu saraksts, vai īsziņas.</string>
   <string name="privacy_guard_notification">Privātuma Sargs ir aktīvs</string>
