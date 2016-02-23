@@ -56,11 +56,7 @@
   <string name="permdesc_readThemesDesc">Приложение сможет считывать темы оформления и определять, какая тема сейчас применена.</string>
   <string name="permlab_writeThemes">Изменение тем</string>
   <string name="permdesc_writeThemesDesc">Приложение сможет осуществлять установку новых тем оформления и изменять текущую тему.</string>
-  <string name="theme_install_error_title">Не удалось установить тему</string>
-  <string name="theme_install_error_message">Сбой при установке «%s»</string>
   <string name="stylus_app_not_installed">«%s» не установлено</string>
-  <string name="theme_reset_notification_title">Тема отключена</string>
-  <string name="theme_reset_notification_body">Из-за сбоев приложений восстановлена стандартная тема.</string>
   <string name="silent_mode_priority">Важные</string>
   <string name="silent_mode_none">Нет</string>
   <string name="subscription_change_disabled_wifi_ap">Точка доступа Wi-Fi отключена из-за переключения SIM-карты</string>

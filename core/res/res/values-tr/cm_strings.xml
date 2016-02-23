@@ -58,11 +58,7 @@ temayı uyguladığınızı belirlemesine izin verir.</string>
   <string name="permlab_writeThemes">temalarınızı değiştirin</string>
   <string name="permdesc_writeThemesDesc">Uygulamanın yeni temalar eklemesine ve
 uyguladığınız temayı değiştirmesine izin verir.</string>
-  <string name="theme_install_error_title">Tema yüklenemedi</string>
-  <string name="theme_install_error_message">%s yüklenemedi</string>
   <string name="stylus_app_not_installed">%s yüklü değil</string>
-  <string name="theme_reset_notification_title">Tema sıfırlandı</string>
-  <string name="theme_reset_notification_body">Uygulama çökmelerinden dolayı sistem temasına geri dönüldü.</string>
   <string name="silent_mode_priority">Öncelik</string>
   <string name="silent_mode_none">Yok</string>
   <string name="subscription_change_disabled_wifi_ap">SIM abonelik değişikliği nedeniyle Wi-Fi internet paylaşımı devre dışı bırakıldı</string>

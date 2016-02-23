@@ -42,7 +42,6 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.content.res.ThemeChangeRequest.RequestType;
 import android.content.res.ThemeConfig;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -188,6 +187,7 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout.OnChil
 import com.android.systemui.statusbar.stack.StackStateAnimator;
 import com.android.systemui.statusbar.stack.StackViewState;
 import com.android.systemui.volume.VolumeComponent;
+import cyanogenmod.app.CMContextConstants;
 import cyanogenmod.app.CustomTileListenerService;
 import cyanogenmod.app.StatusBarPanelCustomTile;
 
@@ -216,6 +216,7 @@ import static com.android.systemui.statusbar.phone.BarTransitions.MODE_TRANSPARE
 import static com.android.systemui.statusbar.phone.BarTransitions.MODE_WARNING;
 
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.themes.IThemeService;
 
 public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         DragDownHelper.DragDownCallback, ActivityStarter, OnUnlockMethodChangedListener,
@@ -418,6 +419,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private int mNavigationIconHints = 0;
     private HandlerThread mHandlerThread;
+
+    private IThemeService mThemeService;
+    private long mLastThemeChangeTime = 0;
 
     Runnable mLongPressBrightnessChange = new Runnable() {
         @Override
@@ -860,6 +864,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mScreenPinningRequest = new ScreenPinningRequest(mContext);
 
         updateCustomRecentsLongPressHandler(true);
+
+        mThemeService = IThemeService.Stub.asInterface(ServiceManager.getService(
+                CMContextConstants.CM_THEME_SERVICE));
     }
 
     // ================================================================================
@@ -3794,6 +3801,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             // this will make sure the keyguard is showing
             showKeyguard();
         }
+
+        // update mLastThemeChangeTime
+        try {
+            mLastThemeChangeTime = mThemeService.getLastThemeChangeTime();
+        } catch (RemoteException e) {
+            /* ignore */
+        }
     }
 
     private void removeAllViews(ViewGroup parent) {
@@ -3847,8 +3861,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     /**
      * Determines if we need to recreate the status bar due to a theme change.  We currently
-     * check if the overlay for the status bar, fonts, or icons, or forced update count have
-     * changed.
+     * check if the overlay for the status bar, fonts, or icons, or last theme change time is
+     * greater than mLastThemeChangeTime
      *
      * @param oldTheme
      * @param newTheme
@@ -3861,17 +3875,24 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         final String overlay = newTheme.getOverlayForStatusBar();
         final String icons = newTheme.getIconPackPkgName();
         final String fonts = newTheme.getFontPkgName();
+        boolean isNewThemeChange = false;
+        try {
+            isNewThemeChange = mLastThemeChangeTime < mThemeService.getLastThemeChangeTime();
+        } catch (RemoteException e) {
+            /* ignore */
+        }
 
         return oldTheme == null ||
                 (overlay != null && !overlay.equals(oldTheme.getOverlayForStatusBar()) ||
                 (fonts != null && !fonts.equals(oldTheme.getFontPkgName())) ||
                 (icons != null && !icons.equals(oldTheme.getIconPackPkgName())) ||
-                newTheme.getLastThemeChangeRequestType() == RequestType.THEME_UPDATED);
+                isNewThemeChange);
     }
 
     /**
      * Determines if we need to update the navbar resources due to a theme change.  We currently
-     * check if the overlay for the navbar, or request type is {@link RequestType.THEME_UPDATED}.
+     * check if the overlay for the navbar, or last theme change time is greater than
+     * mLastThemeChangeTime
      *
      * @param oldTheme
      * @param newTheme
@@ -3882,10 +3903,16 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (newTheme == null) return false;
 
         final String overlay = newTheme.getOverlayForNavBar();
+        boolean isNewThemeChange = false;
+        try {
+            isNewThemeChange = mLastThemeChangeTime < mThemeService.getLastThemeChangeTime();
+        } catch (RemoteException e) {
+            /* ignore */
+        }
 
         return oldTheme == null ||
                 (overlay != null && !overlay.equals(oldTheme.getOverlayForNavBar()) ||
-                        newTheme.getLastThemeChangeRequestType() == RequestType.THEME_UPDATED);
+                        isNewThemeChange);
     }
 
     protected void loadDimens() {

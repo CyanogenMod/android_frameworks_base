@@ -58,11 +58,7 @@
   <string name="permlab_writeThemes">modify your themes</string>
   <string name="permdesc_writeThemesDesc">Allows the app to insert new themes and
        modify which theme you have applied.</string>
-  <string name="theme_install_error_title">Failed to install theme</string>
-  <string name="theme_install_error_message">%s failed to install</string>
   <string name="stylus_app_not_installed">%s is not installed</string>
-  <string name="theme_reset_notification_title">Theme reset</string>
-  <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
   <string name="silent_mode_priority">Priority</string>
   <string name="silent_mode_none">None</string>
   <string name="subscription_change_disabled_wifi_ap">Disabled Wi-Fi hotspot due to SIM subscription change</string>

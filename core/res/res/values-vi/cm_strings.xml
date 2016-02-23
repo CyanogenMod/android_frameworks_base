@@ -56,11 +56,7 @@
   <string name="permdesc_readThemesDesc">Cho phép ứng dụng đọc và xác định chủ đề nào bạn đã áp dụng.</string>
   <string name="permlab_writeThemes">sửa đổi chủ đề của bạn</string>
   <string name="permdesc_writeThemesDesc">Cho phép ứng dụng chèn các chủ đề mới và sửa đổi chủ đề bạn đã áp dụng.</string>
-  <string name="theme_install_error_title">Không thể cài đặt chủ đề</string>
-  <string name="theme_install_error_message">Không thể cài đặt %s</string>
   <string name="stylus_app_not_installed">%s chưa được cài đặt</string>
-  <string name="theme_reset_notification_title">Đặt lại chủ đề</string>
-  <string name="theme_reset_notification_body">Đã khôi phục chủ đề hệ thống vì nhiều ứng dụng bị lỗi.</string>
   <string name="silent_mode_priority">Ưu tiên</string>
   <string name="silent_mode_none">Không có</string>
   <string name="subscription_change_disabled_wifi_ap">Đã vô hiệu hóa điểm truy cập WiFi vì thay đổi đăng ký SIM</string>

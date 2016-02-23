@@ -57,11 +57,7 @@
   <string name="permlab_writeThemes">تعديل السمات الخاصة بك</string>
   <string name="permdesc_writeThemesDesc">السماح للتطبيق بإدخال سمات جديدة
 وتعديل السمة التي قمت بتطبيقها.</string>
-  <string name="theme_install_error_title">فشل تثبيت السمة</string>
-  <string name="theme_install_error_message">فشل تثبيت %s</string>
   <string name="stylus_app_not_installed">%s لم يتم تثبيته</string>
-  <string name="theme_reset_notification_title">إعادة تعيين السمة</string>
-  <string name="theme_reset_notification_body">تم استرداد سمة النظام بسبب عمليات تعطيل متعددة للتطبيق.</string>
   <string name="silent_mode_priority">الأولوية</string>
   <string name="silent_mode_none">بلا</string>
   <string name="subscription_change_disabled_wifi_ap">ايقاف بث تقنية واي فاي بسبب تغيير اشتراك SIM</string>

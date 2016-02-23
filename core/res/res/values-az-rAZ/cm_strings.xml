@@ -56,11 +56,7 @@
   <string name="permdesc_readThemesDesc">Tətbiqetmənin temalarınızı oxumasına və hansı temanı tətbiq etdiyinizi müəyyən etməyə icazə verər.</string>
   <string name="permlab_writeThemes">temaları dəyişin</string>
   <string name="permdesc_writeThemesDesc">Tətbiqetmənin yeni temalar əlavə etməsinə və tətbiq etdiyiniz temanı dəyişdirməsinə icazə verər.</string>
-  <string name="theme_install_error_title">Tema yüklənə bilmədi</string>
-  <string name="theme_install_error_message">%s yüklənə bilmədi</string>
   <string name="stylus_app_not_installed">%s quraşdırılmayıb</string>
-  <string name="theme_reset_notification_title">Tema sıfırlandı</string>
-  <string name="theme_reset_notification_body">Tətbiqetmə çökmələrinə görə sistem teması bərpa edildi.</string>
   <string name="silent_mode_priority">Üstünlük</string>
   <string name="silent_mode_none">Yoxdur</string>
   <string name="subscription_change_disabled_wifi_ap">SIM abunəliyini dəyişmə ilə əlaqədar Wi-Fi internet paylaşma ləğv edildi</string>

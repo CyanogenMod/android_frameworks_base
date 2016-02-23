@@ -115,15 +115,8 @@
     <string name="permdesc_writeThemesDesc">Allows the app to insert new themes and
        modify which theme you have applied.</string>
 
-    <!-- Theme installation error notification -->
-    <string name="theme_install_error_title">Failed to install theme</string>
-    <string name="theme_install_error_message">%s failed to install</string>
-
     <!-- stylus gestures support -->
     <string name="stylus_app_not_installed">%s is not installed</string>
-
-    <string name="theme_reset_notification_title">Theme reset</string>
-    <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
 
     <!-- Zen mode buttons -->
     <string name="silent_mode_priority">Priority</string>
