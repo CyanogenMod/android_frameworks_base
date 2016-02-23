@@ -94,36 +94,11 @@
     <string name="adb_active_custom_tile_usb">USB</string>
     <string name="adb_active_custom_tile_net">Network</string>
 
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessThemeService">access theme service</string>
-
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_interceptPackageLaunch">intercept app launch</string>
 
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessThemeService">Allows an app to access the theme service. Should never be needed for normal apps.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_readThemes">read your theme info</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_readThemesDesc">Allows the app to read your themes and
-       determine which theme you have applied.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_writeThemes">modify your themes</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_writeThemesDesc">Allows the app to insert new themes and
-       modify which theme you have applied.</string>
-
-    <!-- Theme installation error notification -->
-    <string name="theme_install_error_title">Failed to install theme</string>
-    <string name="theme_install_error_message">%s failed to install</string>
-
     <!-- stylus gestures support -->
     <string name="stylus_app_not_installed">%s is not installed</string>
-
-    <string name="theme_reset_notification_title">Theme reset</string>
-    <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
 
     <!-- Zen mode buttons -->
     <string name="silent_mode_priority">Priority</string>

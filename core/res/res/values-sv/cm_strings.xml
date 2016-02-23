@@ -49,20 +49,8 @@
   <string name="adb_active_custom_tile_both">USB &amp; nätverk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Nätverk</string>
-  <string name="permlab_accessThemeService">få tillgång till tematjänst</string>
   <string name="permlab_interceptPackageLaunch">avbryt app-start</string>
-  <string name="permdesc_accessThemeService">Tillåter en app att få tillgång till tematjänsten. Bör aldrig vara nödvändigt för vanliga appar.</string>
-  <string name="permlab_readThemes">läsa information om ditt tema</string>
-  <string name="permdesc_readThemesDesc">Tillåter appen att läsa dina teman och
-avgöra vilket tema som du har tillämpat.</string>
-  <string name="permlab_writeThemes">modifiera dina teman</string>
-  <string name="permdesc_writeThemesDesc">Tillåter appen att lägga till nya teman och
-modifiera det tema som du har tillämpat.</string>
-  <string name="theme_install_error_title">Kunde inte installera tema</string>
-  <string name="theme_install_error_message">%s kunde inte installeras</string>
   <string name="stylus_app_not_installed">%s är inte installerad</string>
-  <string name="theme_reset_notification_title">Återställning av tema</string>
-  <string name="theme_reset_notification_body">Systemtemat kommer återställas på grund av att appen kraschat flera gånger.</string>
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ingen</string>
   <string name="subscription_change_disabled_wifi_ap">Wi\u2011Fi hotspot avaktiverad på grund av ändrat SIM-abonnemang</string>

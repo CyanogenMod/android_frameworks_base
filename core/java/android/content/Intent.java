@@ -2881,21 +2881,6 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.QUICK_CLOCK";
 
     /**
-     * Broadcast Action: Indicate that unrecoverable error happened during app launch.
-     * Could indicate that curently applied theme is malicious.
-     * @hide
-     */
-    public static final String ACTION_APP_FAILURE =
-            "com.tmobile.intent.action.APP_FAILURE";
-
-    /**
-     * Broadcast Action: Request to reset the unrecoverable errors count to 0.
-     * @hide
-     */
-    public static final String ACTION_APP_FAILURE_RESET =
-            "com.tmobile.intent.action.APP_FAILURE_RESET";
-
-    /**
      * Activity Action: Shows the brightness setting dialog.
      * @hide
      */
@@ -3281,14 +3266,6 @@ public class Intent implements Parcelable, Cloneable {
      */
     @SdkConstant(SdkConstantType.INTENT_CATEGORY)
     public static final String CATEGORY_CAR_MODE = "android.intent.category.CAR_MODE";
-
-    /**
-     * Used to indicate that a theme package has been installed or un-installed.
-     *
-     * @hide
-     */
-    public static final String CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE =
-            "com.tmobile.intent.category.THEME_PACKAGE_INSTALL_STATE_CHANGE";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

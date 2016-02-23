@@ -49,20 +49,8 @@
   <string name="adb_active_custom_tile_both">USB та мережі</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Мережа</string>
-  <string name="permlab_accessThemeService">доступ до служби тем</string>
   <string name="permlab_interceptPackageLaunch">Перехоплення запуску додатку</string>
-  <string name="permdesc_accessThemeService">Дозволяє програмі отримувати доступ до служби тем. Цей дозвіл не використовується звичайними програмами.</string>
-  <string name="permlab_readThemes">читати дані про вашу тему</string>
-  <string name="permdesc_readThemesDesc">Дозволяє програмам читати дані про теми і
-       виявляти яку тему ви застосували.</string>
-  <string name="permlab_writeThemes">змінювати ваші теми</string>
-  <string name="permdesc_writeThemesDesc">Дозволяє програмам додавати та 
-       модифікувати теми які ви застосовуєте.</string>
-  <string name="theme_install_error_title">Не вдалося інсталювати тему</string>
-  <string name="theme_install_error_message">не вдалося інсталювати %s</string>
   <string name="stylus_app_not_installed">%s не встановлено</string>
-  <string name="theme_reset_notification_title">Тема відключена</string>
-  <string name="theme_reset_notification_body">Через системні збої встановлена системна тема.</string>
   <string name="silent_mode_priority">Пріоритет</string>
   <string name="silent_mode_none">Немає</string>
   <string name="subscription_change_disabled_wifi_ap">Точку доступу Wi-Fi вимкнено через зміну SIM-картки</string>
