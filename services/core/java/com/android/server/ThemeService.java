@@ -33,7 +33,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
-import android.content.pm.ThemeUtils;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.IThemeProcessingListener;
@@ -55,17 +54,12 @@ import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.UserHandle;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
-import android.provider.ThemesContract;
-import android.provider.ThemesContract.MixnMatchColumns;
-import android.provider.ThemesContract.ThemesColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.internal.R;
-import com.android.internal.util.cm.ImageUtils;
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.providers.ThemesContract.MixnMatchColumns;
+import cyanogenmod.providers.ThemesContract.ThemesColumns;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -81,8 +75,13 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static android.content.pm.ThemeUtils.SYSTEM_THEME_PATH;
-import static android.content.pm.ThemeUtils.THEME_BOOTANIMATION_PATH;
+import libcore.io.IoUtils;
+
+import org.cyanogenmod.internal.util.ImageUtils;
+import org.cyanogenmod.internal.util.ThemeUtils;
+
+import static org.cyanogenmod.internal.util.ThemeUtils.SYSTEM_THEME_PATH;
+import static org.cyanogenmod.internal.util.ThemeUtils.THEME_BOOTANIMATION_PATH;
 import static android.content.res.ThemeConfig.SYSTEM_DEFAULT;
 
 import java.util.List;
@@ -118,12 +117,12 @@ public class ThemeService extends IThemeService.Stub {
     private boolean mIsThemeApplying = false;
 
     private final RemoteCallbackList<IThemeChangeListener> mClients =
-            new RemoteCallbackList<IThemeChangeListener>();
+            new RemoteCallbackList<>();
 
     private final RemoteCallbackList<IThemeProcessingListener> mProcessingListeners =
-            new RemoteCallbackList<IThemeProcessingListener>();
+            new RemoteCallbackList<>();
 
-    final private ArrayList<String> mThemesToProcessQueue = new ArrayList<String>(0);
+    final private ArrayList<String> mThemesToProcessQueue = new ArrayList<>(0);
 
     private class ThemeWorkerHandler extends Handler {
         private static final int MESSAGE_CHANGE_THEME = 1;
@@ -487,8 +486,8 @@ public class ThemeService extends IThemeService.Stub {
         values.put(MixnMatchColumns.COL_UPDATE_TIME, updateTime);
         Map<String, String> componentMap = request.getThemeComponentsMap();
         for (String component : componentMap.keySet()) {
-            values.put(ThemesContract.MixnMatchColumns.COL_VALUE, componentMap.get(component));
-            String where = ThemesContract.MixnMatchColumns.COL_KEY + "=?";
+            values.put(MixnMatchColumns.COL_VALUE, componentMap.get(component));
+            String where = MixnMatchColumns.COL_KEY + "=?";
             String[] selectionArgs = { MixnMatchColumns.componentToMixNMatchKey(component) };
             if (selectionArgs[0] == null) {
                 continue; // No equivalence between mixnmatch and theme
@@ -555,8 +554,8 @@ public class ThemeService extends IThemeService.Stub {
                     Log.e(TAG, "There was an error installing the new fonts for pkg " + pkgName, e);
                     return false;
                 } finally {
-                    ThemeUtils.closeQuietly(is);
-                    ThemeUtils.closeQuietly(os);
+                    IoUtils.closeQuietly(is);
+                    IoUtils.closeQuietly(os);
                 }
             }
         }
@@ -651,8 +650,8 @@ public class ThemeService extends IThemeService.Stub {
             Log.e(TAG, "There was an error installing the new audio file for pkg " + pkgName, e);
             return false;
         } finally {
-            ThemeUtils.closeQuietly(is);
-            ThemeUtils.closeQuietly(os);
+            IoUtils.closeQuietly(is);
+            IoUtils.closeQuietly(os);
         }
         return true;
     }
@@ -677,7 +676,7 @@ public class ThemeService extends IThemeService.Stub {
                 InputStream in = ImageUtils.getCroppedKeyguardStream(pkgName, mContext);
                 if (in != null) {
                     wm.setKeyguardStream(in);
-                    ThemeUtils.closeQuietly(in);
+                    IoUtils.closeQuietly(in);
                 }
             }
         } catch (Exception e) {
@@ -710,7 +709,7 @@ public class ThemeService extends IThemeService.Stub {
             } catch (Exception e) {
                 return false;
             } finally {
-                ThemeUtils.closeQuietly(in);
+                IoUtils.closeQuietly(in);
             }
         }
         return true;
@@ -1228,10 +1227,9 @@ public class ThemeService extends IThemeService.Stub {
                 .setAutoCancel(true)
                 .setOngoing(false)
                 .setContentTitle(
-                        mContext.getString(R.string.theme_install_error_title))
+                        mContext.getString(com.android.internal.R.string.theme_install_error_title))
                 .setContentText(String.format(mContext.getString(
-                                R.string.theme_install_error_message),
-                                name))
+                        com.android.internal.R.string.theme_install_error_message), name))
                 .setSmallIcon(android.R.drawable.stat_notify_error)
                 .setWhen(System.currentTimeMillis())
                 .build();

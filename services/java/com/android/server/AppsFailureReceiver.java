@@ -21,7 +21,6 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ThemeUtils;
 import android.content.res.ThemeChangeRequest;
 import android.content.res.ThemeChangeRequest.RequestType;
 import android.content.res.ThemeConfig;
@@ -29,6 +28,8 @@ import android.content.res.ThemeManager;
 import android.os.SystemClock;
 
 import com.android.internal.R;
+
+import org.cyanogenmod.internal.util.ThemeUtils;
 
 public class AppsFailureReceiver extends BroadcastReceiver {
 
@@ -50,7 +51,6 @@ public class AppsFailureReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (action.equals(Intent.ACTION_APP_FAILURE)) {
             long currentTime = SystemClock.uptimeMillis();
-            String pkgName = intent.getStringExtra("package");
             if (currentTime - mStartTime > EXPIRATION_TIME_IN_MILLISECONDS) {
                 // reset both the count and the timer
                 mStartTime = currentTime;

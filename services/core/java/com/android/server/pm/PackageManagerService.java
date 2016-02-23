@@ -156,7 +156,6 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
 import android.content.pm.UserInfo;
 import android.content.pm.ManifestDigest;
-import android.content.pm.ThemeUtils;
 import android.content.pm.VerificationParams;
 import android.content.pm.VerifierDeviceIdentity;
 import android.content.pm.VerifierInfo;
@@ -254,6 +253,7 @@ import com.android.server.pm.Settings.DatabaseVersion;
 import com.android.server.pm.Settings.VersionInfo;
 import com.android.server.storage.DeviceStorageMonitorInternal;
 
+import org.cyanogenmod.internal.util.ThemeUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;

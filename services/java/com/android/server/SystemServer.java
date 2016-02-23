@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
-import android.content.pm.ThemeUtils;
 import android.content.res.Configuration;
 import android.content.res.Resources.Theme;
 import android.database.ContentObserver;
@@ -109,6 +108,8 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.cyanogenmod.internal.util.ThemeUtils;
 
 public final class SystemServer {
     private static final String TAG = "SystemServer";

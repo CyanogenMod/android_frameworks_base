@@ -103,6 +103,10 @@ public class IconPackHelper {
     private static final float DEFAULT_SCALE = 1.0f;
     private static final int COMPOSED_ICON_COOKIE = 128;
 
+    public static final String SYSTEM_THEME_PATH = "/data/system/theme";
+    public static final String SYSTEM_THEME_ICON_CACHE_DIR = SYSTEM_THEME_PATH
+            + File.separator + "icons";
+
     private final Context mContext;
     private Map<ComponentName, String> mIconPackResourceMap;
     private String mLoadedIconPackName;
@@ -410,15 +414,12 @@ public class IconPackHelper {
 
         String prefixPath;
         String iconApkPath;
-        String iconResPath;
         if (info.isLegacyIconPackApk) {
-            iconResPath = "";
             iconApkPath = "";
             prefixPath = "";
         } else {
             prefixPath = ThemeUtils.ICONS_PATH; //path inside APK
             iconApkPath = ThemeUtils.getIconPackApkPath(packageName);
-            iconResPath = ThemeUtils.getIconPackResPath(packageName);
         }
 
         AssetManager assets = new AssetManager();
@@ -811,7 +812,7 @@ public class IconPackHelper {
         }
 
         private static String getCachedIconPath(String pkgName, int resId, int density) {
-            return String.format("%s/%s", ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR,
+            return String.format("%s/%s", SYSTEM_THEME_ICON_CACHE_DIR,
                     getCachedIconName(pkgName, resId, density));
         }
 
