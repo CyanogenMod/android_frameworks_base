@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Leidžia programai skaityti jūsų temas ir nustatyti kurią temą pritaikėte.</string>
   <string name="permlab_writeThemes">pakeisti jūsų temas</string>
   <string name="permdesc_writeThemesDesc">Leidžia programai įdiegti naujas temas ir keisti temą, kurią pritaikėte.</string>
-  <string name="theme_install_error_title">Nepavyko įdiegti temos</string>
-  <string name="theme_install_error_message">%s nepavyko įdiegti</string>
   <string name="stylus_app_not_installed">%s neįdiegta</string>
   <string name="theme_reset_notification_title">Nustatyti iš naujo temą</string>
   <string name="theme_reset_notification_body">Sistemos tema atkurta dėl pasikartojančių programos klaidų.</string>

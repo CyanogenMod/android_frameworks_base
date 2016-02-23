@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Επιτρέπει στην εφαρμογή να διαβάζει τα θέματα σας και να προσδιορίσει ποιο θέμα έχετε εφαρμόσει.</string>
   <string name="permlab_writeThemes">τροποποίηση των θεμάτων σας</string>
   <string name="permdesc_writeThemesDesc">Επιτρέπει στην εφαρμογή να εισάγει νέα θέματα και να τροποποιήσει το θέμα που έχετε εφαρμόσει.</string>
-  <string name="theme_install_error_title">Αποτυχία εγκατάστασης του θέματος</string>
-  <string name="theme_install_error_message">Αποτυχία εγκατάστασης του %s</string>
   <string name="stylus_app_not_installed">Το %s δεν είναι εγκατεστημένο</string>
   <string name="theme_reset_notification_title">Επαναφορά θέματος</string>
   <string name="theme_reset_notification_body">Έγινε επαναφορά του θέματος συστήματος λόγω πολλαπλών σφαλμάτων εφαρμογών.</string>

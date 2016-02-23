@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">テーマの読み取りや適用しているテーマの特定をアプリに許可します。</string>
   <string name="permlab_writeThemes">テーマの変更</string>
   <string name="permdesc_writeThemesDesc">新しいテーマの挿入や適用しているテーマの変更をアプリに許可します。</string>
-  <string name="theme_install_error_title">テーマをインストールできませんでした</string>
-  <string name="theme_install_error_message">%sをインストールできませんでした</string>
   <string name="stylus_app_not_installed">%sはインストールされていません</string>
   <string name="theme_reset_notification_title">テーマのリセット</string>
   <string name="theme_reset_notification_body">複数のアプリのクラッシュによりシステムのテーマが復元されました。</string>

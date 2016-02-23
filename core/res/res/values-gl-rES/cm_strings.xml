@@ -58,8 +58,6 @@
   <string name="permlab_writeThemes">modificar os seus temas</string>
   <string name="permdesc_writeThemesDesc">Permitir que a aplicación insira novos temas e
        modifique o que estea en uso.</string>
-  <string name="theme_install_error_title">Non se puido instalar o tema</string>
-  <string name="theme_install_error_message">Non se puido instalar %s</string>
   <string name="stylus_app_not_installed">%s non está instalada</string>
   <string name="theme_reset_notification_title">Restabelecer o tema</string>
   <string name="theme_reset_notification_body">Restableceuse o tema debido a varios fallos da aplicación.</string>

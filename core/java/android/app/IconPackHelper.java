@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Random;
 
 import android.content.pm.PackageInfo;
-import android.content.res.IThemeService;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -44,7 +43,10 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 import android.util.TypedValue;
+
 import com.android.internal.util.cm.palette.Palette;
+
+import org.cyanogenmod.internal.themes.IIconCacheManager;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -102,6 +104,12 @@ public class IconPackHelper {
 
     private static final float DEFAULT_SCALE = 1.0f;
     private static final int COMPOSED_ICON_COOKIE = 128;
+
+    private static final String ICON_CACHE_SERVICE = "cmiconcache";
+
+    public static final String SYSTEM_THEME_PATH = "/data/system/theme";
+    public static final String SYSTEM_THEME_ICON_CACHE_DIR = SYSTEM_THEME_PATH
+            + File.separator + "icons";
 
     private final Context mContext;
     private Map<ComponentName, String> mIconPackResourceMap;
@@ -410,15 +418,12 @@ public class IconPackHelper {
 
         String prefixPath;
         String iconApkPath;
-        String iconResPath;
         if (info.isLegacyIconPackApk) {
-            iconResPath = "";
             iconApkPath = "";
             prefixPath = "";
         } else {
             prefixPath = ThemeUtils.ICONS_PATH; //path inside APK
             iconApkPath = ThemeUtils.getIconPackApkPath(packageName);
-            iconResPath = ThemeUtils.getIconPackResPath(packageName);
         }
 
         AssetManager assets = new AssetManager();
@@ -587,11 +592,11 @@ public class IconPackHelper {
 
     public static class IconCustomizer {
         private static final Random sRandom = new Random();
-        private static final IThemeService sThemeService;
+        private static final IIconCacheManager sIconCacheManager;
 
         static {
-            sThemeService = IThemeService.Stub.asInterface(
-                    ServiceManager.getService(Context.THEME_SERVICE));
+            sIconCacheManager = IIconCacheManager.Stub.asInterface(
+                    ServiceManager.getService(ICON_CACHE_SERVICE));
         }
 
         public static Drawable getComposedIconDrawable(Drawable icon, Context context,
@@ -802,7 +807,7 @@ public class IconPackHelper {
 
         private static boolean cacheComposedIcon(Bitmap bmp, String path) {
             try {
-                return sThemeService.cacheComposedIcon(bmp, path);
+                return sIconCacheManager.cacheComposedIcon(bmp, path);
             } catch (RemoteException e) {
                 Log.e(TAG, "Unable to cache icon.", e);
             }
@@ -811,7 +816,7 @@ public class IconPackHelper {
         }
 
         private static String getCachedIconPath(String pkgName, int resId, int density) {
-            return String.format("%s/%s", ThemeUtils.SYSTEM_THEME_ICON_CACHE_DIR,
+            return String.format("%s/%s", SYSTEM_THEME_ICON_CACHE_DIR,
                     getCachedIconName(pkgName, resId, density));
         }
 
