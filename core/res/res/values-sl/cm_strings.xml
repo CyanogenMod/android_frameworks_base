@@ -49,20 +49,8 @@
   <string name="adb_active_custom_tile_both">USB in omrežje</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Omrežje</string>
-  <string name="permlab_accessThemeService">dostop do storitev tem</string>
   <string name="permlab_interceptPackageLaunch">prestrezanje zagona aplikacije</string>
-  <string name="permdesc_accessThemeService">Dovoli aplikaciji dostop do storitve tem. Navadno ni potrebno za običajne aplikacije.</string>
-  <string name="permlab_readThemes">branje podatkov o vaši temi</string>
-  <string name="permdesc_readThemesDesc">Dovoli aplikaciji branje vaših tem in
-       določanje, katero temo uporabljate.</string>
-  <string name="permlab_writeThemes">spreminjanje tem</string>
-  <string name="permdesc_writeThemesDesc">Dovoli aplikaciji vstavljanje novih tem in
-       spreminjanje uporabljene teme.</string>
-  <string name="theme_install_error_title">Namestitev teme je spodletela</string>
-  <string name="theme_install_error_message">Namestitev %s je spodletela</string>
   <string name="stylus_app_not_installed">%s ni nameščen</string>
-  <string name="theme_reset_notification_title">Ponastavitev theme</string>
-  <string name="theme_reset_notification_body">Sistemska tema obnovljena zaradi večkratnih sesutij aplikacije.</string>
   <string name="silent_mode_priority">Prednost</string>
   <string name="silent_mode_none">Brez</string>
   <string name="subscription_change_disabled_wifi_ap">Dostopna točka Wi-Fi je bila onemogočena zaradi spremembe naročnine SIM</string>

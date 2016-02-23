@@ -49,20 +49,8 @@
   <string name="adb_active_custom_tile_both">यूएसबी और नेटवर्क</string>
   <string name="adb_active_custom_tile_usb">यूएसबी</string>
   <string name="adb_active_custom_tile_net">नेटवर्क</string>
-  <string name="permlab_accessThemeService">थीम सेवा में पहुँचें</string>
   <string name="permlab_interceptPackageLaunch">ऐप लॉन्च का अंतररोधन करें</string>
-  <string name="permdesc_accessThemeService">ऐप को थीम सेवा में पहुँचने दाता है। सामान्य ऐपों के लिए इसकी कभी भी आवश्यकता नहीं होनी चाहिए।</string>
-  <string name="permlab_readThemes">अपनी थीम जानकारी पढ़ें</string>
-  <string name="permdesc_readThemesDesc">ऐप को आपके थीमों को पढ़ने और
-       यह निर्धारित करने देता है कि आपने किस थीम को लागू किया है।</string>
-  <string name="permlab_writeThemes">अपने थीमों को संशोधित करें</string>
-  <string name="permdesc_writeThemesDesc">ऐप को नए थीम डालने और आपने
-       जिस थीम को लागू किया है, उसे संशोधित करने देता है।</string>
-  <string name="theme_install_error_title">थीम स्थापित नहीं कर सके</string>
-  <string name="theme_install_error_message">%s स्थापन विफल हुआ</string>
   <string name="stylus_app_not_installed">%s स्थापित नहीं है</string>
-  <string name="theme_reset_notification_title">थीम रीसेट</string>
-  <string name="theme_reset_notification_body">अनेक ऐप बैठ जाने के कारण सिस्टम थीम को बहाल किया गया।</string>
   <string name="silent_mode_priority">वरीयता</string>
   <string name="silent_mode_none">कुछ नहीं</string>
   <string name="permlab_changePrivacyGuardState">गोपनीयता रक्षक को सक्षम या अक्षम करें</string>

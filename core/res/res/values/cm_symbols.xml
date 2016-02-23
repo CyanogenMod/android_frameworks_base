@@ -52,17 +52,9 @@
     <java-symbol type="string" name="global_action_current_user" />
     <java-symbol type="dimen" name="global_actions_avatar_size" />
 
-    <!-- Theme install failure notification -->
-    <java-symbol type="string" name="theme_install_error_title" />
-    <java-symbol type="string" name="theme_install_error_message" />
-
     <!-- Stylus gestures -->
     <java-symbol type="bool" name="config_stylusGestures" />
     <java-symbol type="string" name="stylus_app_not_installed" />
-
-    <!-- Theme reset notification -->
-    <java-symbol type="string" name="theme_reset_notification_title" />
-    <java-symbol type="string" name="theme_reset_notification_body" />
 
     <!-- global actions (zen mode buttons) -->
     <java-symbol type="id" name="option4" />

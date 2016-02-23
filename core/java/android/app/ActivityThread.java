@@ -2456,16 +2456,6 @@ public final class ActivityThread {
         return activity;
     }
 
-    private void sendAppLaunchFailureBroadcast(ActivityClientRecord r) {
-        String pkg = null;
-        if (r.packageInfo != null && !TextUtils.isEmpty(r.packageInfo.getPackageName())) {
-            pkg = r.packageInfo.getPackageName();
-        }
-        Intent intent = new Intent(Intent.ACTION_APP_FAILURE,
-                (pkg != null)? Uri.fromParts("package", pkg, null) : null);
-        getSystemContext().sendBroadcast(intent);
-    }
-
     private Context createBaseContextForActivity(ActivityClientRecord r, final Activity activity) {
         int displayId = Display.DEFAULT_DISPLAY;
         try {

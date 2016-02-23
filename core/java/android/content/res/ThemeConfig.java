@@ -1,12 +1,12 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2016 The CyanogenMod Project
  * Portions copyright (C) 2014, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,12 +17,13 @@
 package android.content.res;
 
 import android.content.ContentResolver;
-import android.content.res.ThemeChangeRequest.RequestType;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.ArrayMap;
+import android.util.ArraySet;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
@@ -34,8 +35,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -61,9 +60,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     private static final SystemAppTheme mSystemAppTheme = new SystemAppTheme();
 
     // Maps pkgname to theme (ex com.angry.birds -> red theme)
-    protected final Map<String, AppTheme> mThemes = new HashMap<String, AppTheme>();
-
-    private RequestType mLastThemeChangeRequestType = RequestType.USER_REQUEST;
+    protected final Map<String, AppTheme> mThemes = new ArrayMap<>();
 
     public ThemeConfig(Map<String, AppTheme> appThemes) {
         mThemes.putAll(appThemes);
@@ -111,10 +108,6 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         return Collections.unmodifiableMap(mThemes);
     }
 
-    public RequestType getLastThemeChangeRequestType() {
-        return mLastThemeChangeRequestType;
-    }
-
     private AppTheme getThemeFor(String pkgName) {
         AppTheme theme = mThemes.get(pkgName);
         if (theme == null) theme = getDefaultTheme();
@@ -136,12 +129,11 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
             ThemeConfig o = (ThemeConfig) object;
 
             Map<String, AppTheme> currThemes = (mThemes == null) ?
-                    new HashMap<String, AppTheme>() : mThemes;
+                    new ArrayMap<String, AppTheme>() : mThemes;
             Map<String, AppTheme> newThemes = (o.mThemes == null) ?
-                    new HashMap<String, AppTheme>() : o.mThemes;
+                    new ArrayMap<String, AppTheme>() : o.mThemes;
 
-            return (currThemes.equals(newThemes) &&
-                    mLastThemeChangeRequestType == o.mLastThemeChangeRequestType);
+            return currThemes.equals(newThemes);
         }
         return false;
     }
@@ -160,8 +152,6 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public int hashCode() {
         int hash = 17;
         hash = 31 * hash + mThemes.hashCode();
-        hash = 31 * hash + (mLastThemeChangeRequestType == null ? 0 :
-               mLastThemeChangeRequestType.ordinal());
         return hash;
     }
 
@@ -227,7 +217,6 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
     public void writeToParcel(Parcel dest, int flags) {
         String json = JsonSerializer.toJson(this);
         dest.writeString(json);
-        dest.writeInt(mLastThemeChangeRequestType.ordinal());
     }
 
     public static final Parcelable.Creator<ThemeConfig> CREATOR =
@@ -235,7 +224,6 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
         public ThemeConfig createFromParcel(Parcel source) {
             String json = source.readString();
             ThemeConfig themeConfig = JsonSerializer.fromJson(json);
-            themeConfig.mLastThemeChangeRequestType = RequestType.values()[source.readInt()];
             return themeConfig;
         }
 
@@ -351,10 +339,9 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
 
 
     public static class Builder {
-        private HashMap<String, String> mOverlays = new HashMap<String, String>();
-        private HashMap<String, String> mIcons = new HashMap<String, String>();
-        private HashMap<String, String> mFonts = new HashMap<String, String>();
-        private RequestType mLastThemeChangeRequestType = RequestType.USER_REQUEST;
+        private Map<String, String> mOverlays = new ArrayMap<>();
+        private Map<String, String> mIcons = new ArrayMap<>();
+        private Map<String, String> mFonts = new ArrayMap<>();
 
         public Builder() {}
 
@@ -366,7 +353,6 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 mIcons.put(key, appTheme.getIconPackPkgName());
                 mOverlays.put(key, appTheme.getOverlayPkgName());
             }
-            mLastThemeChangeRequestType = theme.mLastThemeChangeRequestType;
         }
 
         /**
@@ -427,18 +413,13 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
             return this;
         }
 
-        public Builder setLastThemeChangeRequestType(RequestType requestType) {
-            mLastThemeChangeRequestType = requestType;
-            return this;
-        }
-
         public ThemeConfig build() {
-            HashSet<String> appPkgSet = new HashSet<String>();
+            ArraySet<String> appPkgSet = new ArraySet<>();
             appPkgSet.addAll(mOverlays.keySet());
             appPkgSet.addAll(mIcons.keySet());
             appPkgSet.addAll(mFonts.keySet());
 
-            HashMap<String, AppTheme> appThemes = new HashMap<String, AppTheme>();
+            Map<String, AppTheme> appThemes = new ArrayMap<>();
             for(String appPkgName : appPkgSet) {
                 String icon = mIcons.get(appPkgName);
                 String overlay = mOverlays.get(appPkgName);
@@ -455,7 +436,6 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
                 }
             }
             ThemeConfig themeConfig = new ThemeConfig(appThemes);
-            themeConfig.mLastThemeChangeRequestType = mLastThemeChangeRequestType;
             return themeConfig;
         }
     }
@@ -506,7 +486,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
 
         public static ThemeConfig fromJson(String json) {
             if (json == null) return null;
-            HashMap<String, AppTheme> map = new HashMap<String, AppTheme>();
+            Map<String, AppTheme> map = new ArrayMap<>();
             StringReader reader = null;
             JsonReader jsonReader = null;
             try {
@@ -582,7 +562,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
 
     public static class SystemConfig extends ThemeConfig {
         public SystemConfig() {
-            super(new HashMap<String, AppTheme>());
+            super(new ArrayMap<String, AppTheme>());
         }
     }
 
@@ -593,7 +573,7 @@ public class ThemeConfig implements Cloneable, Parcelable, Comparable<ThemeConfi
 
         @Override
         public String toString() {
-            return "No Theme Applied (Holo)";
+            return "No Theme Applied (System)";
         }
     }
 }
