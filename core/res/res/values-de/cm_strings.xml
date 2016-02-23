@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Ermöglicht der App, auszulesen, welche Designs Sie installiert und aktiviert haben.</string>
   <string name="permlab_writeThemes">aktive Designs ändern</string>
   <string name="permdesc_writeThemesDesc">Ermöglicht der App, neue Designs zu installieren und das aktive Design zu wählen.</string>
-  <string name="theme_install_error_title">Design konnte nicht installiert werden</string>
-  <string name="theme_install_error_message">%s konnte nicht installiert werden</string>
   <string name="stylus_app_not_installed">%s ist nicht installiert</string>
   <string name="theme_reset_notification_title">Design zurückgesetzt</string>
   <string name="theme_reset_notification_body">Das Systemdesign wurde aufgrund mehrer App-Abstürze wiederhergestellt.</string>

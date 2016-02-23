@@ -50,8 +50,6 @@
   <string name="permdesc_readThemesDesc">Ļauj lietotnei lasīt jūsu tēmas un noteikt, kuru no tām jūs izmantojat.</string>
   <string name="permlab_writeThemes">mainīt jūsu tēmas</string>
   <string name="permdesc_writeThemesDesc">Ļauj lietotnei izveidot jaunas tēmas un mainīt jūsu pielietotās tēmas.</string>
-  <string name="theme_install_error_title">Neizdevās uzstādīt tēmu</string>
-  <string name="theme_install_error_message">%s neizdevās uzstādīt</string>
   <string name="theme_reset_notification_title">Atstatīt tēmu</string>
   <string name="theme_reset_notification_body">Sakarā ar vairākām lietotņu kļūdām, atjaunota sistēmas tēma.</string>
   <string name="permlab_changePrivacyGuardState">Ieslēgt vai atslēgt Privātuma sargu</string>

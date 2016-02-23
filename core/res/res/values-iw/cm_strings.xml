@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">מאפשר ליישום להיות מודע לערכות העיצוב הקיימות, ולקבוע איזו ערכה החלת.</string>
   <string name="permlab_writeThemes">שינוי ערכות העיצוב שלך</string>
   <string name="permdesc_writeThemesDesc">מאפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות את הערכה המוחלת.</string>
-  <string name="theme_install_error_title">התקנת ערכת העיצוב נכשלה</string>
-  <string name="theme_install_error_message">התקנת %s נכשלה</string>
   <string name="stylus_app_not_installed">%s לא מותקן</string>
   <string name="theme_reset_notification_title">אפס ערכת עיצוב</string>
   <string name="theme_reset_notification_body">ערכת העיצוב של המערכת שוחזרה עקב קריסות תהליכים מרובות.</string>

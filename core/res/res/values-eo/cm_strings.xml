@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Permesas al la aplikaĵo legi viajn etosojn kaj eltrovi kiun etoson vi aplikis.</string>
   <string name="permlab_writeThemes">ŝanĝi viajn etosojn</string>
   <string name="permdesc_writeThemesDesc">Permesas al la aplikaĵo enmeti novajn etosojn kaj ŝanĝi kiun etoson vi aplikis.</string>
-  <string name="theme_install_error_title">Instalado de etoso fiaskis</string>
-  <string name="theme_install_error_message">instalado de %s fiaskis</string>
   <string name="stylus_app_not_installed">%s ne estas instalita</string>
   <string name="theme_reset_notification_title">Restartigi etoson</string>
   <string name="theme_reset_notification_body">La sistema etoso estis restarigita pro multaj kolapsoj de la aplikaĵo.</string>

@@ -58,8 +58,6 @@ kindlaks teha, millise teema sa oled lubanud.</string>
   <string name="permlab_writeThemes">muuta teie teemasid</string>
   <string name="permdesc_writeThemesDesc">Lubab rakendusel lisada uusi teemasid ja
 muuta juba olemasolevaid.</string>
-  <string name="theme_install_error_title">Ei saanud paigaldada teemat</string>
-  <string name="theme_install_error_message">%s paigaldamine nurjus</string>
   <string name="stylus_app_not_installed">%s ei ole installitud</string>
   <string name="theme_reset_notification_title">Teema lähtestus</string>
   <string name="theme_reset_notification_body">Süsteemi teema taastati paljude rakenduste kokkujooksmise tõttu.</string>

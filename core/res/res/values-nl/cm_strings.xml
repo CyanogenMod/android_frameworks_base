@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Hiermee kan de app informatie lezen over uw thema\'s en bepalen welk thema u hebt toegepast.</string>
   <string name="permlab_writeThemes">uw thema\'s aanpassen</string>
   <string name="permdesc_writeThemesDesc">Hiermee kan de app nieuwe thema\'s invoegen en wijzigen welk thema u hebt toegepast.</string>
-  <string name="theme_install_error_title">Thema installeren mislukt</string>
-  <string name="theme_install_error_message">%s kan niet worden geïnstalleerd</string>
   <string name="stylus_app_not_installed">%s is niet geïnstalleerd</string>
   <string name="theme_reset_notification_title">Thema opnieuw instellen</string>
   <string name="theme_reset_notification_body">Systeemthema hersteld als gevolg van meerdere gecrashte apps.</string>

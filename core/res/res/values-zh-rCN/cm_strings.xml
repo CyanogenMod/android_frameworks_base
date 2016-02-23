@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">允许应用读取您的主题并确定已应用的主题。</string>
   <string name="permlab_writeThemes">修改您的主题</string>
   <string name="permdesc_writeThemesDesc">允许应用插入新的主题和修改已应用的主题。</string>
-  <string name="theme_install_error_title">安装主题失败</string>
-  <string name="theme_install_error_message">%s 安装失败</string>
   <string name="stylus_app_not_installed">%s 尚未被安装</string>
   <string name="theme_reset_notification_title">重置主题</string>
   <string name="theme_reset_notification_body">由于多个应用崩溃，系统主题已恢复。</string>

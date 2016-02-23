@@ -58,8 +58,6 @@ avgöra vilket tema som du har tillämpat.</string>
   <string name="permlab_writeThemes">modifiera dina teman</string>
   <string name="permdesc_writeThemesDesc">Tillåter appen att lägga till nya teman och
 modifiera det tema som du har tillämpat.</string>
-  <string name="theme_install_error_title">Kunde inte installera tema</string>
-  <string name="theme_install_error_message">%s kunde inte installeras</string>
   <string name="stylus_app_not_installed">%s är inte installerad</string>
   <string name="theme_reset_notification_title">Återställning av tema</string>
   <string name="theme_reset_notification_body">Systemtemat kommer återställas på grund av att appen kraschat flera gånger.</string>

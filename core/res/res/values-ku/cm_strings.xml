@@ -52,8 +52,6 @@
   <string name="permlab_writeThemes">گۆڕینی باکگراوه‌نده‌کانت</string>
   <string name="permdesc_writeThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ هێنانی باکگراوه‌ندی نوێ و
  گۆڕینی باکگراوه‌ندێک که‌ خۆت لات په‌سه‌نده‌.</string>
-  <string name="theme_install_error_title">دابەزاندنی ڕووکار سەرکەوتو نەبوو</string>
-  <string name="theme_install_error_message">%s دانەبەزێنرا</string>
   <string name="stylus_app_not_installed">%s دانەمەزراوە</string>
   <string name="theme_reset_notification_title">ڕێکخستنەوەی ڕووکار</string>
   <string name="permlab_changePrivacyGuardState">چالاکردن یان لەکارخستنی بەرگری تایبەتی</string>

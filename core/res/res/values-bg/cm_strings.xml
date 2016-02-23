@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Разрешава на приложението да чете вашите теми и да определя коя тема сте приложили.</string>
   <string name="permlab_writeThemes">Модифициране на темите</string>
   <string name="permdesc_writeThemesDesc">Разрешава на приложението да вмъкне нови теми и да модифицира темата, която сте приложили.</string>
-  <string name="theme_install_error_title">Провалено инсталиране на тема</string>
-  <string name="theme_install_error_message">%s не успя да се инсталира</string>
   <string name="stylus_app_not_installed">%s не е инсталиран</string>
   <string name="theme_reset_notification_title">Нулиране на темата</string>
   <string name="theme_reset_notification_body">Стандартната тема е възстановена поради множество грешки.</string>

@@ -52,8 +52,6 @@
   <string name="permdesc_readThemesDesc">ئەپنىڭ ئۆرنەك ئۇچۇرىڭىزنى ئۇقۇپ ۋە جەزملىشىگە يول قويىدۇ.</string>
   <string name="permlab_writeThemes">ئۆرنىكىڭىزنى ئۆزگەرتىدۇ</string>
   <string name="permdesc_writeThemesDesc">ئەپنىڭ يېڭى ئۆرنەك قىستۇرۇشى ۋە قوللانغان ئۆرنەكنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
-  <string name="theme_install_error_title">ئۆرنەك ئورنىتالمىدى</string>
-  <string name="theme_install_error_message">%s نى ئورنىتالمىدى</string>
   <string name="stylus_app_not_installed">%s تېخى ئورنىتىلمىغان</string>
   <string name="theme_reset_notification_title">ئۆرنەكنى ئەسلىگە قايتۇرۇش</string>
   <string name="theme_reset_notification_body">بىر قانچە ئەپ يىمىرىلگەنلىكتىن، سىستېما ئۆرنەكنى ئەسلىگە قايتۇردى.</string>

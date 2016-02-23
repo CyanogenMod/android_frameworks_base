@@ -58,8 +58,6 @@
   <string name="permlab_writeThemes">ನಿಮ್ಮ ಥೀಮ್ಸನ್ನು ಮಾರ್ಪಡಿಸು</string>
   <string name="permdesc_writeThemesDesc">ಆಪ್‍ಗೆ ಹೊಸ ಥೀಮ್‍ಗಳನ್ನು ಸೇರಿಸಲು ಅನುಮತಿಸುತ್ತದೆ ಮತ್ತು
        ನೀವು ಅನ್ವಯಿಸಿರುವ ಥೀಮ್‍ನ್ನು ಮಾರ್ಪಡಿಸುತ್ತದೆ.</string>
-  <string name="theme_install_error_title">ಥೀಮ್ ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
-  <string name="theme_install_error_message">%s ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
   <string name="stylus_app_not_installed">%s ಸ್ಥಾಪಿತವಾಗಿಲ್ಲ</string>
   <string name="theme_reset_notification_title">ಥೀಮ್ ಮರುಹೊಂದಿಕೆ</string>
   <string name="theme_reset_notification_body">ಬಹು ಆಪ್ ಕ್ರಾಶ್‍ನ ಕಾರಣದಿಂದಾಗಿ ಸಿಸ್ಟಂ ಥೀಮನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲಾಗಿದೆ.</string>

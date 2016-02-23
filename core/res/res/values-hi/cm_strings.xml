@@ -58,8 +58,6 @@
   <string name="permlab_writeThemes">अपने थीमों को संशोधित करें</string>
   <string name="permdesc_writeThemesDesc">ऐप को नए थीम डालने और आपने
        जिस थीम को लागू किया है, उसे संशोधित करने देता है।</string>
-  <string name="theme_install_error_title">थीम स्थापित नहीं कर सके</string>
-  <string name="theme_install_error_message">%s स्थापन विफल हुआ</string>
   <string name="stylus_app_not_installed">%s स्थापित नहीं है</string>
   <string name="theme_reset_notification_title">थीम रीसेट</string>
   <string name="theme_reset_notification_body">अनेक ऐप बैठ जाने के कारण सिस्टम थीम को बहाल किया गया।</string>

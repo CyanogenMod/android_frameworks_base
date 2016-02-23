@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Sallii sovelluksen lukea teemojasi, ja tunnistaa käytössä olevan teeman.</string>
   <string name="permlab_writeThemes">muokkaa teemoja</string>
   <string name="permdesc_writeThemesDesc">Sallii sovelluksen asettaa uusia teemoja ja muokata käytössä olevaa teemaa.</string>
-  <string name="theme_install_error_title">Teeman asennus epäonnistui</string>
-  <string name="theme_install_error_message">Teeman \"%s\" asennus epäonnistui</string>
   <string name="stylus_app_not_installed">%s ei ole asennettu</string>
   <string name="theme_reset_notification_title">Teeman resetointi</string>
   <string name="theme_reset_notification_body">Järjestelmän teema palautettu lukuisten sovellusvirheiden vuoksi.</string>

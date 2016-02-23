@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Permite a uma aplicação ler os seus temas e determinar qual o tema que tem aplicado.</string>
   <string name="permlab_writeThemes">modificar os seus temas</string>
   <string name="permdesc_writeThemesDesc">Permite a uma aplicação inserir novos temas e modificar o tema que tem aplicado.</string>
-  <string name="theme_install_error_title">Falha ao instalar o tema</string>
-  <string name="theme_install_error_message">%s não instalou</string>
   <string name="stylus_app_not_installed">%s não está instalada</string>
   <string name="theme_reset_notification_title">Restaurar tema</string>
   <string name="theme_reset_notification_body">O tema do sistema foi restaurado devido a vários erros nas aplicações.</string>

@@ -56,8 +56,6 @@
   <string name="permdesc_readThemesDesc">Consente all\'app di leggere i tuoi temi e determinare quale tema hai applicato.</string>
   <string name="permlab_writeThemes">modifica i tuoi temi</string>
   <string name="permdesc_writeThemesDesc">Consente all\'app di inserire nuovi temi e modificare quale tema hai applicato.</string>
-  <string name="theme_install_error_title">Impossibile installare il tema</string>
-  <string name="theme_install_error_message">Impossibile installare %s</string>
   <string name="stylus_app_not_installed">%s non è installato</string>
   <string name="theme_reset_notification_title">Reimposta tema</string>
   <string name="theme_reset_notification_body">Tema di sistema ripristinato a causa di molteplici crash.</string>
