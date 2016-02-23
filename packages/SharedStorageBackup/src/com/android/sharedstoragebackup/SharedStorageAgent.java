@@ -76,7 +76,7 @@ public class SharedStorageAgent extends FullBackupAgent {
         if (slash > 0) {
             try {
                 int i = Integer.parseInt(relpath.substring(0, slash));
-                if (i <= mVolumes.length) {
+                if (i < mVolumes.length) {
                     outFile = new File(mVolumes[i].getPath(), relpath.substring(slash + 1));
                     if (DEBUG) Slog.i(TAG, " => " + outFile.getAbsolutePath());
                 } else {
