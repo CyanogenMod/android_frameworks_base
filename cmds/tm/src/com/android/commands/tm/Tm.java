@@ -21,17 +21,19 @@ package com.android.commands.tm;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.ParceledListSlice;
-import android.content.pm.ThemeUtils;
-import android.content.res.IThemeService;
-import android.content.res.ThemeChangeRequest;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.util.AndroidException;
 import com.android.internal.os.BaseCommand;
 
+import cyanogenmod.app.CMContextConstants;
+import cyanogenmod.themes.IThemeService;
+import cyanogenmod.themes.ThemeChangeRequest;
+
+import org.cyanogenmod.internal.util.ThemeUtils;
+
 import java.io.PrintStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,7 +83,8 @@ public class Tm extends BaseCommand {
     }
 
     public void onRun() throws Exception {
-        mTs = IThemeService.Stub.asInterface(ServiceManager.getService("themes"));
+        mTs = IThemeService.Stub.asInterface(ServiceManager
+                .getService(CMContextConstants.CM_THEME_SERVICE));
         if (mTs == null) {
             System.err.println(NO_SYSTEM_ERROR_CODE);
             throw new AndroidException("Can't connect to theme service; is the system running?");
