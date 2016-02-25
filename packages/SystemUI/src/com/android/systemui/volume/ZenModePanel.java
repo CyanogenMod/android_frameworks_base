@@ -421,8 +421,13 @@ public class ZenModePanel extends LinearLayout {
             mZenIntroductionCustomize.setVisibility(zenImportant ? VISIBLE : GONE);
         }
         final String warning = computeAlarmWarningText(zenNone);
-        mZenAlarmWarning.setVisibility(warning != null ? VISIBLE : GONE);
+        final int oldVis = mZenAlarmWarning.getVisibility();
+        final int newVis = warning != null ? VISIBLE : GONE;
+        mZenAlarmWarning.setVisibility(newVis);
         mZenAlarmWarning.setText(warning);
+        if (newVis != oldVis) {
+            requestLayout();
+        }
     }
 
     private String computeAlarmWarningText(boolean zenNone) {
