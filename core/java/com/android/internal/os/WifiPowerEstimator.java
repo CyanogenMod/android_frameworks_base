@@ -35,6 +35,12 @@ public class WifiPowerEstimator extends PowerCalculator {
         mWifiPowerOn = profile.getAveragePower(PowerProfile.POWER_WIFI_ON);
         mWifiPowerScan = profile.getAveragePower(PowerProfile.POWER_WIFI_SCAN);
         mWifiPowerBatchScan = profile.getAveragePower(PowerProfile.POWER_WIFI_BATCHED_SCAN);
+        if (DEBUG) {
+            Log.d(TAG, "mWifiPowerPerPacket =" + mWifiPowerPerPacket);
+            Log.d(TAG, "mWifiPowerOn =" + mWifiPowerOn);
+            Log.d(TAG, "mWifiPowerScan =" + mWifiPowerScan);
+            Log.d(TAG, "mWifiPowerBatchScan =" + mWifiPowerBatchScan);
+        }
     }
 
     /**
@@ -79,8 +85,11 @@ public class WifiPowerEstimator extends PowerCalculator {
 
         app.wifiPowerMah = wifiPacketPower + wifiLockPower + wifiScanPower + wifiBatchScanPower;
         if (DEBUG && app.wifiPowerMah != 0) {
-            Log.d(TAG, "UID " + u.getUid() + ": power=" +
-                    BatteryStatsHelper.makemAh(app.wifiPowerMah));
+            Log.d(TAG, "UID " + u.getUid() + ": wifiPacketPower=" + BatteryStatsHelper.makemAh(wifiPacketPower));
+            Log.d(TAG, "UID " + u.getUid() + ": wifiLockPower=" + BatteryStatsHelper.makemAh(wifiLockPower));
+            Log.d(TAG, "UID " + u.getUid() + ": wifiScanPower=" + BatteryStatsHelper.makemAh(wifiScanPower));
+            Log.d(TAG, "UID " + u.getUid() + ": wifiBatchScanPower=" + BatteryStatsHelper.makemAh(wifiBatchScanPower));
+            Log.d(TAG, "UID " + u.getUid() + ": power=" + BatteryStatsHelper.makemAh(app.wifiPowerMah));
         }
     }
 
@@ -93,6 +102,9 @@ public class WifiPowerEstimator extends PowerCalculator {
                 / (1000*60*60);
         app.wifiRunningTimeMs = totalRunningTimeMs;
         app.wifiPowerMah = Math.max(0, powerDrain);
+        if (DEBUG) {
+            Log.d(TAG, "WIFI drain: (" + totalRunningTimeMs + "ms," + mTotalAppWifiRunningTimeMs + "ms) " + app.wifiPowerMah);
+        }
     }
 
     @Override

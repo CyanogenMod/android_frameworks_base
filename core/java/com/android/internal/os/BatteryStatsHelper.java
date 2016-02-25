@@ -56,7 +56,7 @@ import java.util.Locale;
  * onAttach() for Fragment), call create() in onCreate() and call destroy() in onDestroy().
  */
 public final class BatteryStatsHelper {
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
 
     private static final String TAG = BatteryStatsHelper.class.getSimpleName();
 
