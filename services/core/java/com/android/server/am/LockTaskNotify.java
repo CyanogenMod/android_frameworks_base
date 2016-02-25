@@ -63,9 +63,9 @@ public class LockTaskNotify {
         final int textResId;
         if (lockTaskModeState == ActivityManager.LOCK_TASK_MODE_LOCKED) {
             textResId = R.string.lock_to_app_toast_locked;
-        } else if (lockTaskModeState == ActivityManager.LOCK_TASK_MODE_PINNED) {
-            textResId = mAccessibilityManager.isEnabled()
-                    ? R.string.lock_to_app_toast_accessible : R.string.lock_to_app_toast;
+        } else if (lockTaskModeState == ActivityManager.LOCK_TASK_MODE_PINNED &&
+                mAccessibilityManager.isEnabled()) {
+            textResId = R.string.lock_to_app_toast_accessible;
         } else {
             textResId = hasNavigationBar()
                     ? R.string.lock_to_app_toast : R.string.lock_to_app_toast_no_navbar;
