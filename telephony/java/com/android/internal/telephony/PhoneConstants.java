@@ -200,4 +200,7 @@ public class PhoneConstants {
     public static final int AUDIO_OUTPUT_ENABLE_SPEAKER = 0;
     public static final int AUDIO_OUTPUT_DISABLE_SPEAKER = 1;
     public static final int AUDIO_OUTPUT_DEFAULT = AUDIO_OUTPUT_ENABLE_SPEAKER;
+
+    /** Copied from ContactsCommon. See comments in ContactsCommon app for more detail. */
+    public static final String EXTRA_CALL_ORIGIN = "com.android.phone.CALL_ORIGIN";
 }
