@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.location.Country;
 import android.location.CountryDetector;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.ContactsContract.CommonDataKinds.Callable;
@@ -401,6 +402,12 @@ public class CallLog {
         private static final int MIN_DURATION_FOR_NORMALIZED_NUMBER_UPDATE_MS = 1000 * 10;
 
         /**
+         * If a call has an origin inside of the OS, this column will be filled out.
+         * <P>Type: String </P>
+         */
+        private static final String ORIGIN = "origin";
+
+        /**
          * Adds a call to the call log.
          *
          * @param ci the CallerInfo object to get the target contact from.  Can be null
@@ -417,15 +424,16 @@ public class CallLog {
          * @param duration call duration in seconds
          * @param dataUsage data usage for the call in bytes, null if data usage was not tracked for
          *                  the call.
+         * @param callExtras Bundle of extra data from the call.
          * @result The URI of the call log entry belonging to the user that made or received this
          *        call.
          * {@hide}
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, int features, PhoneAccountHandle accountHandle,
-                long start, int duration, Long dataUsage) {
+                long start, int duration, Long dataUsage, Bundle callExtras) {
             return addCall(ci, context, number, presentation, callType, features, accountHandle,
-                    start, duration, dataUsage, false, false);
+                    start, duration, dataUsage, false, false, callExtras);
         }
 
 
@@ -448,16 +456,17 @@ public class CallLog {
          *                  the call.
          * @param addForAllUsers If true, the call is added to the call log of all currently
          *        running users. The caller must have the MANAGE_USERS permission if this is true.
-         *
+         * @param callExtras Bundle of extra data from the call.
          * @result The URI of the call log entry belonging to the user that made or received this
          *        call.
          * {@hide}
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                                   int presentation, int callType, int features, PhoneAccountHandle accountHandle,
-                                  long start, int duration, Long dataUsage, boolean addForAllUsers) {
+                                  long start, int duration, Long dataUsage, boolean addForAllUsers,
+                                  Bundle callExtras) {
             return addCall(ci, context, number, presentation, callType, features, accountHandle,
-                    start, duration, dataUsage, addForAllUsers, false);
+                    start, duration, dataUsage, addForAllUsers, false, callExtras);
         }
 
         /**
@@ -481,6 +490,7 @@ public class CallLog {
          *        running users. The caller must have the MANAGE_USERS permission if this is true.
          * @param is_read Flag to show if the missed call log has been read by the user or not.
          *                Used for call log restore of missed calls.
+         * @param callExtras Bundle of extra data from the call.
          *
          * @result The URI of the call log entry belonging to the user that made or received this
          *        call.
@@ -488,7 +498,8 @@ public class CallLog {
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, int features, PhoneAccountHandle accountHandle,
-                long start, int duration, Long dataUsage, boolean addForAllUsers, boolean is_read) {
+                long start, int duration, Long dataUsage, boolean addForAllUsers, boolean is_read,
+                Bundle callExtras) {
             final ContentResolver resolver = context.getContentResolver();
             int numberPresentation = PRESENTATION_ALLOWED;
 
@@ -546,6 +557,9 @@ public class CallLog {
             values.put(DURATION, Long.valueOf(duration));
             if (dataUsage != null) {
                 values.put(DATA_USAGE, dataUsage);
+            }
+            if (callExtras != null && callExtras.containsKey(PhoneConstants.EXTRA_CALL_ORIGIN)) {
+                values.put(ORIGIN, callExtras.getString(PhoneConstants.EXTRA_CALL_ORIGIN));
             }
             values.put(PHONE_ACCOUNT_COMPONENT_NAME, accountComponentString);
             values.put(PHONE_ACCOUNT_ID, accountId);
