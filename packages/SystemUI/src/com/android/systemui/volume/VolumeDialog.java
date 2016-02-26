@@ -276,7 +276,7 @@ public class VolumeDialog {
             public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 final boolean moved = oldLeft != left || oldTop != top;
-                if (D.BUG) Log.d(TAG, "onLayoutChange moved=" + moved
+                Log.d(TAG, "onLayoutChange moved=" + moved
                         + " old=" + new Rect(oldLeft, oldTop, oldRight, oldBottom).toShortString()
                         + " new=" + new Rect(left,top,right,bottom).toShortString());
                 if (moved) {
@@ -322,7 +322,8 @@ public class VolumeDialog {
         final MarginLayoutParams mlp = (MarginLayoutParams) mDialogView.getLayoutParams();
         final int x = loc[0] - mlp.leftMargin;
         final int y = loc[1] - mlp.topMargin;
-        if (D.BUG) Log.d(TAG, "repositionExpandAnim x=" + x + " y=" + y);
+        Log.d(TAG, "repositionExpandAnim locX=" + loc[0] + " leftMargin=" + mlp.leftMargin);
+        Log.d(TAG, "repositionExpandAnim x=" + x + " y=" + y);
         mExpandButton.setTranslationX(x);
         mExpandButton.setTranslationY(y);
         mExpandButton.setTag((Integer) y);
