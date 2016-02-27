@@ -1491,6 +1491,17 @@ public class PackageManagerService extends IPackageManager.Stub {
                             // if this was a theme, send it off to the theme service for processing
                             if(res.pkg.mIsThemeApk || res.pkg.mIsLegacyIconPackApk) {
                                 processThemeResourcesInThemeService(res.pkg.packageName);
+                            } else if (mOverlays.containsKey(res.pkg.packageName)) {
+
+                                // if this was an app and is themed send themes that theme it
+                                // for processing
+                                ArrayMap<String, PackageParser.Package> themes =
+                                        mOverlays.get(res.pkg.packageName);
+
+                                for (PackageParser.Package themePkg : themes.values()) {
+                                    processThemeResourcesInThemeService(themePkg.packageName);
+                                }
+
                             }
                             if (res.removedInfo.args != null) {
                                 // Remove the replaced package's older resources safely now
@@ -7809,22 +7820,41 @@ public class PackageManagerService extends IPackageManager.Stub {
             // Generate resources & idmaps if pkg is NOT a theme
             // We must compile resources here because during the initial boot process we may get
             // here before a default theme has had a chance to compile its resources
+            // During app installation we only compile applied theme here (rest will be compiled
+            // in background)
             if (pkg.mOverlayTargets.isEmpty() && mOverlays.containsKey(pkg.packageName)) {
                 ArrayMap<String, PackageParser.Package> themes = mOverlays.get(pkg.packageName);
-                for(PackageParser.Package themePkg : themes.values()) {
-                    if (!isBootScan || (mBootThemeConfig != null &&
-                            (themePkg.packageName.equals(mBootThemeConfig.getOverlayPkgName()) ||
+
+                final IActivityManager am = ActivityManagerNative.getDefault();
+                ThemeConfig themeConfig = null;
+                try {
+                    if (am != null) {
+                        themeConfig = am.getConfiguration().themeConfig;
+                    } else {
+                        Log.e(TAG, "ActivityManager getDefault() " +
+                                "returned null, cannot compile app's theme");
+                    }
+                } catch(RemoteException e) {
+                    Log.e(TAG, "Failed to get the theme config ", e);
+                }
+
+                ThemeConfig config = isBootScan ? mBootThemeConfig : themeConfig;
+
+                if (config != null) {
+                    for(PackageParser.Package themePkg : themes.values()) {
+                        if (themePkg.packageName.equals(config.getOverlayPkgName()) ||
                             themePkg.packageName.equals(
-                                    mBootThemeConfig.getOverlayPkgNameForApp(pkg.packageName))))) {
-                        try {
-                            compileResourcesAndIdmapIfNeeded(pkg, themePkg);
-                        } catch (Exception e) {
-                            // Do not stop a pkg installation just because of one bad theme
-                            // Also we don't break here because we should try to compile other
-                            // themes
-                            Slog.w(TAG, "Unable to compile " + themePkg.packageName
-                                    + " for target " + pkg.packageName, e);
-                            themePkg.mOverlayTargets.remove(pkg.packageName);
+                                     config.getOverlayPkgNameForApp(pkg.packageName))) {
+                            try {
+                                compileResourcesAndIdmapIfNeeded(pkg, themePkg);
+                            } catch (Exception e) {
+                                // Do not stop a pkg installation just because of one bad theme
+                                // Also we don't break here because we should try to compile other
+                                // themes
+                                Slog.w(TAG, "Unable to compile " + themePkg.packageName
+                                        + " for target " + pkg.packageName, e);
+                                themePkg.mOverlayTargets.remove(pkg.packageName);
+                            }
                         }
                     }
                 }
