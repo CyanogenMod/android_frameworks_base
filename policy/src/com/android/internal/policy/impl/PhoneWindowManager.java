@@ -5389,7 +5389,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (isValidGlobalKey(keyCode)
                 && mGlobalKeyManager.shouldHandleGlobalKey(keyCode, event)) {
             if (isWakeKey) {
-                wakeUp(event.getEventTime(), mAllowTheaterModeWakeFromKey);
+                wakeUp(event.getEventTime(), mAllowTheaterModeWakeFromKey, true);
             }
             return result;
         }
@@ -5725,7 +5725,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         if (isWakeKey) {
-            wakeUp(event.getEventTime(), mAllowTheaterModeWakeFromKey);
+            wakeUp(event.getEventTime(), mAllowTheaterModeWakeFromKey, true);
         }
 
         return result;
