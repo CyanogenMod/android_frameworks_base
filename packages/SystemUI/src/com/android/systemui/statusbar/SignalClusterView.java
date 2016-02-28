@@ -536,9 +536,16 @@ public class SignalClusterView
                 mMobileGroup.setVisibility(View.GONE);
             }
 
-            // When this isn't next to wifi, give it some extra padding between the signals.
-            mMobileGroup.setPaddingRelative(isSecondaryIcon ? mSecondaryTelephonyPadding : 0,
-                    0, 0, 0);
+            int groupPadding;
+            if (isSecondaryIcon)
+                // When this isn't next to wifi, give it some extra padding between the signals.
+                groupPadding = mSecondaryTelephonyPadding;
+            else if (!mIsMobileTypeIconWide)
+                groupPadding = mWideTypeIconStartPadding;
+            else
+                groupPadding = 0;
+            mMobileGroup.setPaddingRelative(groupPadding, 0, 0, 0);
+
             mMobile.setPaddingRelative(mIsMobileTypeIconWide ? mWideTypeIconStartPadding : 0,
                     0, 0, 0);
             mMobileDark.setPaddingRelative(mIsMobileTypeIconWide ? mWideTypeIconStartPadding : 0,
