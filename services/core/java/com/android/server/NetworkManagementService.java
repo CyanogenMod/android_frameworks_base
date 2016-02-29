@@ -52,6 +52,7 @@ import android.net.INetworkManagementEventObserver;
 import android.net.InterfaceConfiguration;
 import android.net.IpPrefix;
 import android.net.LinkAddress;
+import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkPolicyManager;
 import android.net.NetworkStats;
@@ -77,6 +78,7 @@ import android.telephony.DataConnectionRealTimeInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseBooleanArray;
@@ -110,6 +112,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 
@@ -188,7 +191,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     private final Handler mFgHandler;
     private final Handler mDaemonHandler;
     private final PhoneStateListener mPhoneStateListener;
-
+    private String mWifiInterfaceName, mDataInterfaceName;
     private IBatteryStats mBatteryStats;
 
     private final Thread mThread;
@@ -231,6 +234,10 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     /** Set of states for the child firewall chains. True if the chain is active. */
     @GuardedBy("mQuotaLock")
     final SparseBooleanArray mFirewallChainStates = new SparseBooleanArray();
+    @GuardedBy("mQuotaLock")
+    final Map<Integer, Boolean> mWlanBlacklist = new HashMap<Integer, Boolean>();
+    @GuardedBy("mQuotaLock")
+    final Map<Integer, Boolean> mDataBlacklist = new HashMap<Integer, Boolean>();
 
     private Object mIdleTimerLock = new Object();
     /** Set of interfaces with active idle timers. */
@@ -258,6 +265,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     private final RemoteCallbackList<INetworkActivityListener> mNetworkActivityListeners =
             new RemoteCallbackList<INetworkActivityListener>();
     private boolean mNetworkActive;
+    private HashMap<Integer, Boolean> mPendingRestrictOnData = new HashMap<Integer, Boolean>();
 
     /**
      * Constructs a new NetworkManagementService instance
@@ -282,6 +290,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 FgThread.get().getLooper());
         mThread = new Thread(mConnector, NETD_TAG);
 
+        mWifiInterfaceName = SystemProperties.get("wifi.interface");
         mDaemonHandler = new Handler(FgThread.get().getLooper());
 
         mPhoneStateListener = new PhoneStateListener(SubscriptionManager.DEFAULT_SUBSCRIPTION_ID,
@@ -292,6 +301,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 if (DBG) Slog.d(TAG, "onDataConnectionRealTimeInfoChanged: " + dcRtInfo);
                 notifyInterfaceClassActivity(ConnectivityManager.TYPE_MOBILE,
                         dcRtInfo.getDcPowerState(), dcRtInfo.getTime(), true);
+                processPendingDataRestrictRequests();
             }
         };
         TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -1821,6 +1831,85 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         }
     }
 
+    private void processPendingDataRestrictRequests() {
+        initDataInterface();
+        if (TextUtils.isEmpty(mDataInterfaceName) || mPendingRestrictOnData.isEmpty()) {
+            return;
+        }
+        for (Integer key : mPendingRestrictOnData.keySet()) {
+            restrictAppOnData(key, mPendingRestrictOnData.get(key));
+        }
+        mPendingRestrictOnData.clear();
+    }
+
+    @Override
+    public void restrictAppOnData(int uid, boolean restrict) {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+        // silently discard when control disabled
+        // TODO: eventually migrate to be always enabled
+        if (!mBandwidthControlEnabled) return;
+
+        initDataInterface();
+        if (TextUtils.isEmpty(mDataInterfaceName)) {
+            // We don't have an interface name since data is not active
+            // yet, so queue up the request for when it comes up alive
+            mPendingRestrictOnData.put(uid, restrict);
+            return;
+        }
+
+        synchronized (mQuotaLock) {
+            if (!mDataBlacklist.containsKey(uid) && !restrict) {
+                return;
+            }
+            Boolean wasRestricted = mDataBlacklist.get(uid);
+            if (Objects.equals(wasRestricted, restrict)) {
+                return;
+            }
+            mDataBlacklist.put(uid, restrict);
+        }
+
+        try {
+            if (restrict) {
+                mConnector.execute("bandwidth", "addrestrictappsondata", mDataInterfaceName, uid);
+            } else {
+                mConnector.execute("bandwidth", "removerestrictappsondata", mDataInterfaceName, uid);
+            }
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+    }
+
+    @Override
+    public void restrictAppOnWlan(int uid, boolean restrict) {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+
+        // silently discard when control disabled
+        // TODO: eventually migrate to be always enabled
+        if (!mBandwidthControlEnabled) return;
+
+        synchronized (mQuotaLock) {
+            if (!mWlanBlacklist.containsKey(uid) && !restrict) {
+                return;
+            }
+            Boolean wasRestricted = mWlanBlacklist.get(uid);
+            if (Objects.equals(wasRestricted, restrict) || TextUtils.isEmpty(mWifiInterfaceName)) {
+                return;
+            }
+            mWlanBlacklist.put(uid, restrict);
+        }
+
+
+        try {
+            if (restrict) {
+                mConnector.execute("bandwidth", "addrestrictappsonwlan", mWifiInterfaceName, uid);
+            } else {
+                mConnector.execute("bandwidth", "removerestrictappsonwlan", mWifiInterfaceName, uid);
+            }
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+    }
+
     @Override
     public void setUidCleartextNetworkPolicy(int uid, int policy) {
         if (Binder.getCallingUid() != uid) {
@@ -2572,5 +2661,17 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     @Override
     public void removeInterfaceFromLocalNetwork(String iface) {
         modifyInterfaceInNetwork("remove", "local", iface);
+    }
+
+    private void initDataInterface() {
+        if (!TextUtils.isEmpty(mDataInterfaceName)) {
+            return;
+        }
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        LinkProperties linkProperties = cm.getLinkProperties(ConnectivityManager.TYPE_MOBILE);
+        if (linkProperties != null) {
+            mDataInterfaceName = linkProperties.getInterfaceName();
+        }
     }
 }
