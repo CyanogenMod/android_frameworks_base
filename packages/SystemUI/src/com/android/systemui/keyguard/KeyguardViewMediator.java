@@ -1972,6 +1972,17 @@ public class KeyguardViewMediator extends SystemUI {
      * {@link LockPatternUtils#getThirdPartyKeyguardComponent()}
      */
     private void showThirdPartyKeyguard(boolean playSounds) {
+        try {
+            if (mWM.topWindowDismissesKeyguard()) {
+                if (DEBUG) {
+                    Log.d(TAG, "Not showing third party keyguard because top window "
+                            + "dismisses keyguard");
+                }
+                return;
+            }
+        } catch (RemoteException e) {
+            /* ignore */
+        }
         ComponentName thirdPartyKeyguardComponent =
                 mLockPatternUtils.getThirdPartyKeyguardComponent();
         if (thirdPartyKeyguardComponent != null) {

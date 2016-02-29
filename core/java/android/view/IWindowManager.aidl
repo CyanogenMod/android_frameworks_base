@@ -279,4 +279,12 @@ interface IWindowManager
      * @return The frame statistics or null if the window does not exist.
      */
     WindowContentFrameStats getWindowContentFrameStats(IBinder token);
+
+    /**
+     * Returns true if the focused app's window has the
+     * {@link WindowManager$LayoutParams#FLAG_DISMISS_KEYGUARD} flag set
+     *
+     * @return True if top most window should dismiss keyguard
+     */
+    boolean topWindowDismissesKeyguard();
 }
