@@ -1822,6 +1822,48 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     @Override
+    public void restrictAppOnData(int uid, boolean restrict) {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+
+        // silently discard when control disabled
+        // TODO: eventually migrate to be always enabled
+        if (!mBandwidthControlEnabled) return;
+
+        synchronized (mQuotaLock) {
+            try {
+                if (restrict) {
+                    mConnector.execute("bandwidth", "addrestrictappsondata", uid);
+                } else {
+                    mConnector.execute("bandwidth", "removerestrictappsondata", uid);
+                }
+            } catch (NativeDaemonConnectorException e) {
+                throw e.rethrowAsParcelableException();
+            }
+        }
+    }
+
+    @Override
+    public void restrictAppOnWlan(int uid, boolean restrict) {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+
+        // silently discard when control disabled
+        // TODO: eventually migrate to be always enabled
+        if (!mBandwidthControlEnabled) return;
+
+        synchronized (mQuotaLock) {
+            try {
+                if (restrict) {
+                    mConnector.execute("bandwidth", "addrestrictappsonwlan", uid);
+                } else {
+                    mConnector.execute("bandwidth", "removerestrictappsonwlan", uid);
+                }
+            } catch (NativeDaemonConnectorException e) {
+                throw e.rethrowAsParcelableException();
+            }
+        }
+    }
+
+    @Override
     public void setUidCleartextNetworkPolicy(int uid, int policy) {
         if (Binder.getCallingUid() != uid) {
             mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
