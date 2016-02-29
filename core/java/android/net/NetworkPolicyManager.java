@@ -49,6 +49,11 @@ public class NetworkPolicyManager {
     /** Allow network use (metered or not) in the background in battery save mode. */
     public static final int POLICY_ALLOW_BACKGROUND_BATTERY_SAVE = 0x2;
 
+    /** Reject application network traffic on wifi network **/
+    public static final int POLICY_REJECT_ON_WLAN = 0x40000000;
+    /** Reject application network traffic on cellular network **/
+    public static final int POLICY_REJECT_ON_DATA = 0x80000000;
+
     /* RULE_* are not masks and they must be exclusive */
     public static final int RULE_UNKNOWN = -1;
     /** All network traffic should be allowed. */
