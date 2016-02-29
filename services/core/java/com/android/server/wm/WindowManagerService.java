@@ -11940,6 +11940,21 @@ public class WindowManagerService extends IWindowManager.Stub
         return mWindowMap;
     }
 
+    @Override
+    public boolean topWindowDismissesKeyguard() {
+        if (mFocusedApp != null && !mFocusedApp.clientHidden) {
+            final WindowList windows = mFocusedApp.allAppWindows;
+            for (int i = windows.size() - 1; i >= 0; --i) {
+                final WindowState win = windows.get(i);
+                final int flags = win.getAttrs().flags;
+                if ((flags & LayoutParams.FLAG_DISMISS_KEYGUARD) != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private final class LocalService extends WindowManagerInternal {
         @Override
         public void requestTraversalFromDisplayManager() {
