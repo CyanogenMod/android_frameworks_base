@@ -1,11 +1,11 @@
 <!--
-Copyright (C) 2014 The Android Open Source Project
+    Copyright (c) 2016 The CyanogenMod Project
 
-   Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-         http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,10 +16,12 @@ Copyright (C) 2014 The Android Open Source Project
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="32dp"
         android:height="32dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
+        android:viewportHeight="48.0"
+        android:viewportWidth="48.0"
+        android:tint="?attr/colorControlNormal">
 
     <path
-        android:fillColor="#8A000000"
-        android:pathData="M12.0,17.273l6.1800003,3.7269993 -1.6350002,-7.0290003 5.455,-4.7269993 -7.191,-0.6170006 -2.809,-6.627 -2.809,6.627 -7.191,0.6170006 5.455,4.7269993 -1.6349998,7.0290003z"/>
+        android:fillColor="#000"
+        android:pathData="M24,4C12.95,4,4,12.95,4,24s8.95,20,20,20s20-8.95,20-20S35.05,4,24,4z M34,26h-8v8h-4v-8h-8v-4h8v-8h4v8h8V26z" />
+
 </vector>
