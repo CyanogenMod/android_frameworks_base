@@ -21,6 +21,7 @@ import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.telephony.CellInfo;
+import android.telephony.ImsFeatureCapability;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.CellInfo;
@@ -68,4 +69,7 @@ interface ITelephonyRegistry {
     void notifyOemHookRawEventForSubscriber(in int subId, in byte[] rawData);
     void notifySubscriptionInfoChanged();
     void notifyCarrierNetworkChange(in boolean active);
+    void notifyImsRegisteredChangedForSubscriber(in int subId, in boolean isImsRegistered);
+    void notifyImsFeatureCapabilityChangedForSubscriber(in int subId,
+            in ImsFeatureCapability imsFeatureCapability);
 }

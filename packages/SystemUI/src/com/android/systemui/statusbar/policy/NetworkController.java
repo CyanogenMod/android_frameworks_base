@@ -63,18 +63,25 @@ public interface NetworkController {
 
     public static class IconState {
         public final boolean visible;
+        public final boolean volteAvailable;
         public final int icon;
         public final String contentDescription;
 
-        public IconState(boolean visible, int icon, String contentDescription) {
+        public IconState(boolean visible, boolean volteAvailable, int icon,
+                String contentDescription) {
             this.visible = visible;
+            this.volteAvailable = volteAvailable;
             this.icon = icon;
             this.contentDescription = contentDescription;
         }
 
+        public IconState(boolean visible, int icon, String contentDescription) {
+            this(visible, false, icon, contentDescription);
+        }
+
         public IconState(boolean visible, int icon, int contentDescription,
                 Context context) {
-            this(visible, icon, context.getString(contentDescription));
+            this(visible, false, icon, context.getString(contentDescription));
         }
     }
 

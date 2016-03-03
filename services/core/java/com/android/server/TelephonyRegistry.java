@@ -34,6 +34,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.telephony.CellLocation;
+import android.telephony.ImsFeatureCapability;
 import android.telephony.Rlog;
 import android.telephony.TelephonyManager;
 import android.telephony.SubscriptionManager;
@@ -174,6 +175,10 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
     private VoLteServiceState mVoLteServiceState = new VoLteServiceState();
 
+    private boolean[] mImsRegisteredStates;
+
+    private ImsFeatureCapability[] mImsFeatureCapabilities;
+
     private int mDefaultSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
 
     private int mDefaultPhoneId = SubscriptionManager.INVALID_PHONE_INDEX;
@@ -311,6 +316,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         mDataConnectionLinkProperties = new LinkProperties[numPhones];
         mDataConnectionNetworkCapabilities = new NetworkCapabilities[numPhones];
         mCellInfo = new ArrayList<List<CellInfo>>();
+        mImsRegisteredStates = new boolean[numPhones];
+        mImsFeatureCapabilities = new ImsFeatureCapability[numPhones];
         for (int i = 0; i < numPhones; i++) {
             mConnectedApns[i] = new ArrayList<String>();
             mCallState[i] =  TelephonyManager.CALL_STATE_IDLE;
@@ -327,6 +334,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             mCellLocation[i] = new Bundle();
             mCellInfo.add(i, null);
             mConnectedApns[i] = new ArrayList<String>();
+            mImsRegisteredStates[i] = false;
+            mImsFeatureCapabilities[i] = new ImsFeatureCapability();
         }
 
         // Note that location can be null for non-phone builds like
@@ -645,6 +654,25 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                             remove(r.binder);
                         }
                     }
+                    if ((events & PhoneStateListener.LISTEN_IMS_REGISTERED_STATE_CHANGE) != 0) {
+                        try {
+                            if (VDBG) log("listen: ims registered state="
+                                    + mImsRegisteredStates[phoneId]);
+                            r.callback.onImsRegisteredChanged(mImsRegisteredStates[phoneId]);
+                        } catch (RemoteException ex) {
+                            remove(r.binder);
+                        }
+                    }
+                    if ((events & PhoneStateListener.LISTEN_IMS_FEATURE_CAPABILITY_CHANGE) != 0) {
+                        try {
+                            if (VDBG) log("listen: ims featrues capability="
+                                    + mImsFeatureCapabilities[phoneId]);
+                            r.callback.onImsFeatureCapabilityChanged(
+                                    new ImsFeatureCapability(mImsFeatureCapabilities[phoneId]));
+                        } catch (RemoteException ex) {
+                            remove(r.binder);
+                        }
+                    }
                 }
             }
         } else {
@@ -873,6 +901,93 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                         mRemoveList.add(r.binder);
                     }
                 }
+            }
+            handleRemoveListLocked();
+        }
+    }
+
+    public void notifyImsRegisteredChangedForSubscriber(int subId, boolean isImsRegistered) {
+        if (!checkNotifyPermission("notifyImsRegisteredChangedForSubscriber()")) {
+            return;
+        }
+        if (VDBG) {
+            log("notifyImsRegisteredChangedForSubscriber: subId=" + subId
+                + " isImsRegistered=" + isImsRegistered);
+        }
+        synchronized (mRecords) {
+            int phoneId = SubscriptionManager.getPhoneId(subId);
+            if (validatePhoneId(phoneId)) {
+                if (VDBG) log("notifyImsRegisteredChangedForSubscriber: valid phoneId=" + phoneId);
+                mImsRegisteredStates[phoneId] = isImsRegistered;
+                for (Record r : mRecords) {
+                    if (VDBG) {
+                        log("notifyImsRegisteredChangedForSubscriber: r=" + r + " subId=" + subId
+                                + " phoneId=" + phoneId + " imsRegistered=" + isImsRegistered);
+                    }
+                    if (r.matchPhoneStateListenerEvent(
+                                PhoneStateListener.LISTEN_IMS_REGISTERED_STATE_CHANGE) &&
+                            idMatch(r.subId, subId, phoneId)) {
+                        try {
+                            if (DBG) {
+                                log("notifyImsRegisteredChangedForSubscriber: "
+                                        + "callback.onImsRegisteredChanged r=" + r
+                                        + " subId=" + subId + " phoneId=" + phoneId
+                                        + " isImsRegistered=" + isImsRegistered);
+                            }
+                            r.callback.onImsRegisteredChanged(isImsRegistered);
+                        } catch (RemoteException ex) {
+                            mRemoveList.add(r.binder);
+                        }
+                    }
+                }
+            } else {
+                log("notifyImsRegisteredChangedForSubscriber: invalid phoneId=" + phoneId);
+            }
+            handleRemoveListLocked();
+        }
+    }
+
+    public void notifyImsFeatureCapabilityChangedForSubscriber(int subId,
+            ImsFeatureCapability imsFeatureCapability) {
+        if (!checkNotifyPermission("notifyImsFeatureCapabilityChangedForSubscriber()")) {
+            return;
+        }
+        if (VDBG) {
+            log("notifyImsFeatureCapabilityChangedForSubscriber: subId=" + subId
+                + " imsFeatureCapability=" + imsFeatureCapability);
+        }
+        synchronized (mRecords) {
+            int phoneId = SubscriptionManager.getPhoneId(subId);
+            if (validatePhoneId(phoneId)) {
+                if (VDBG) log("notifyImsFeatureCapabilityChangedForSubscriber: valid phoneId="
+                        + phoneId);
+                mImsFeatureCapabilities[phoneId] = imsFeatureCapability;
+                for (Record r : mRecords) {
+                    if (VDBG) {
+                        log("notifyImsFeatureCapabilityChangedForSubscriber: r=" + r
+                                + " subId=" + subId
+                                + " phoneId=" + phoneId
+                                + " imsFeatureCapability=" + imsFeatureCapability);
+                    }
+                    if (r.matchPhoneStateListenerEvent(
+                                PhoneStateListener.LISTEN_IMS_FEATURE_CAPABILITY_CHANGE) &&
+                            idMatch(r.subId, subId, phoneId)) {
+                        try {
+                            if (DBG) {
+                                log("notifyImsFeatureCapabilityChangedForSubscriber:"
+                                        + " callback.onImsFeatureCapabilityChanged r=" + r
+                                        + " subId=" + subId + " phoneId=" + phoneId
+                                        + " imsFeatureCapability=" + imsFeatureCapability);
+                            }
+                            r.callback.onImsFeatureCapabilityChanged(
+                                    new ImsFeatureCapability(imsFeatureCapability));
+                        } catch (RemoteException ex) {
+                            mRemoveList.add(r.binder);
+                        }
+                    }
+                }
+            } else {
+                log("notifyImsFeatureCapabilityChangedForSubscriber: invalid phoneId=" + phoneId);
             }
             handleRemoveListLocked();
         }
@@ -1340,6 +1455,8 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                         mDataConnectionNetworkCapabilities[i]);
                 pw.println("  mCellLocation=" + mCellLocation[i]);
                 pw.println("  mCellInfo=" + mCellInfo.get(i));
+                pw.println("  mImsRegisteredState=" + mImsRegisteredStates[i]);
+                pw.println("  mImsFeatureCapability=" + mImsFeatureCapabilities[i]);
             }
             pw.println("registrations: count=" + recordCount);
             for (Record r : mRecords) {
@@ -1798,6 +1915,27 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 }
                 r.callback.onDataConnectionStateChanged(mDataConnectionState[phoneId],
                         mDataConnectionNetworkType[phoneId]);
+            } catch (RemoteException ex) {
+                mRemoveList.add(r.binder);
+            }
+        }
+
+        if ((events & PhoneStateListener.LISTEN_IMS_REGISTERED_STATE_CHANGE) != 0) {
+            try {
+                if (VDBG) log("checkPossibleMissNotify: onImsRegisteredChanged state=" +
+                        mImsRegisteredStates[phoneId]);
+                r.callback.onImsRegisteredChanged(mImsRegisteredStates[phoneId]);
+            } catch (RemoteException ex) {
+                mRemoveList.add(r.binder);
+            }
+        }
+
+        if ((events & PhoneStateListener.LISTEN_IMS_FEATURE_CAPABILITY_CHANGE) != 0) {
+            try {
+                if (VDBG) log("checkPossibleMissNotify: onImsFeatureCapabilityChanged capability="
+                        + mImsFeatureCapabilities[phoneId]);
+                r.callback.onImsFeatureCapabilityChanged(
+                        new ImsFeatureCapability(mImsFeatureCapabilities[phoneId]));
             } catch (RemoteException ex) {
                 mRemoveList.add(r.binder);
             }

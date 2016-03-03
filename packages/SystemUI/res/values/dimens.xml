@@ -673,4 +673,7 @@
 
     <!-- The alpha to apply to the recents row when it doesn't have focus -->
     <item name="recents_recents_row_dim_alpha" format="float" type="dimen">0.5</item>
+
+    <!-- The fixed end margin of volte end margin -->
+    <dimen name="status_bar_volte_margin_end">4dp</dimen>
 </resources>
