@@ -201,6 +201,7 @@ public class InputManagerService extends IInputManager.Stub
     private static native void nativeSetShowTouches(long ptr, boolean enabled);
     private static native void nativeSetStylusIconEnabled(long ptr, boolean enabled);
     private static native void nativeSetVolumeKeysRotation(long ptr, int mode);
+    private static native void nativeSetAppSwitchSwapButtonsEnabled(long ptr, boolean enabled);
     private static native void nativeSetInteractive(long ptr, boolean interactive);
     private static native void nativeReloadCalibration(long ptr);
     private static native void nativeVibrate(long ptr, int deviceId, long[] pattern,
@@ -311,6 +312,7 @@ public class InputManagerService extends IInputManager.Stub
         registerShowTouchesSettingObserver();
         registerStylusIconEnabledSettingObserver();
         registerVolumeKeysRotationSettingObserver();
+        registerAppSwitchSwapButtonsSettingObserver();
 
         mContext.registerReceiver(new BroadcastReceiver() {
             @Override
@@ -318,6 +320,7 @@ public class InputManagerService extends IInputManager.Stub
                 updatePointerSpeedFromSettings();
                 updateShowTouchesFromSettings();
                 updateVolumeKeysRotationFromSettings();
+                updateAppSwitchSwapButtonsFromSettings();
             }
         }, new IntentFilter(Intent.ACTION_USER_SWITCHED), null, mHandler);
 
@@ -325,6 +328,7 @@ public class InputManagerService extends IInputManager.Stub
         updateShowTouchesFromSettings();
         updateStylusIconEnabledFromSettings();
         updateVolumeKeysRotationFromSettings();
+        updateAppSwitchSwapButtonsFromSettings();
     }
 
     // TODO(BT) Pass in paramter for bluetooth system
@@ -1450,6 +1454,32 @@ public class InputManagerService extends IInputManager.Stub
         try {
             result = CMSettings.System.getIntForUser(mContext.getContentResolver(),
                     CMSettings.System.SWAP_VOLUME_KEYS_ON_ROTATION, UserHandle.USER_CURRENT);
+        } catch (CMSettings.CMSettingNotFoundException snfe) {
+        }
+        return result;
+    }
+
+    public void updateAppSwitchSwapButtonsFromSettings() {
+        int enabled = updateAppSwitchSwapButtonsFromSettings(0);
+        nativeSetAppSwitchSwapButtonsEnabled(mPtr, enabled != 0);
+    }
+
+    public void registerAppSwitchSwapButtonsSettingObserver() {
+        mContext.getContentResolver().registerContentObserver(
+                CMSettings.System.getUriFor(CMSettings.System.APP_SWITCH_SWAP_BUTTONS), false,
+                new ContentObserver(mHandler) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateAppSwitchSwapButtonsFromSettings();
+                    }
+                });
+    }
+
+    private int updateAppSwitchSwapButtonsFromSettings(int defaultValue) {
+        int result = defaultValue;
+        try {
+            result = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                    CMSettings.System.APP_SWITCH_SWAP_BUTTONS, UserHandle.USER_CURRENT);
         } catch (CMSettings.CMSettingNotFoundException snfe) {
         }
         return result;
