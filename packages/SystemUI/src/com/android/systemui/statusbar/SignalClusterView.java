@@ -562,6 +562,7 @@ public class SignalClusterView
         public void setIconTint(int tint, float darkIntensity) {
             applyDarkIntensity(darkIntensity, mMobile, mMobileDark);
             setTint(mMobileType, tint);
+            setTint(mMobileRoaming, tint);
         }
     }
 }
