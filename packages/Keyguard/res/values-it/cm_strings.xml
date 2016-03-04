@@ -16,11 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM bloccata</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Scheda non valida.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Inserisci il PIN della SIM, hai ancora <xliff:g id="number">%d</xliff:g> tentativo rimanente prima di dover contattare l\'operatore per sbloccare il dispositivo.</item>
     <item quantity="other">Inserisci il PIN della SIM, hai ancora <xliff:g id="number">%d</xliff:g> tentativi rimanenti.</item>
   </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Errore: input non sufficientemente lungo</string>
 </resources>

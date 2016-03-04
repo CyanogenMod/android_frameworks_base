@@ -15,7 +15,10 @@
      limitations under the License.
 -->
 <resources>
+  <!-- Title of the external storage application [CHAR LIMIT=32] -->
   <string name="app_label">Almacenamientu esternu</string>
+  <!-- Title for documents backend that offers internal storage. [CHAR LIMIT=24] -->
   <string name="root_internal_storage">Almacenamientu internu</string>
+  <!-- Title for documents backend that offers documents. [CHAR LIMIT=24] -->
   <string name="root_documents">Documentos</string>
 </resources>
