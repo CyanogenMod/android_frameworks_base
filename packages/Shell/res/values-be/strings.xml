@@ -16,9 +16,15 @@
 -->
 <resources>
   <string name="app_label">Абалонка</string>
+  <!-- Title of notification indicating a bugreport has been successfully captured. [CHAR LIMIT=50] -->
   <string name="bugreport_finished_title">Справаздача пра збой захавана</string>
+  <!-- Text of notification indicating that swipe left will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="watch">Правядзіце пальцам налева, каб падзяліцца сваёй справаздачай пра збой</string>
+  <!-- Text of notification indicating that touching will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="default">Націсніце, каб падзяліцца сваёй справаздачай пра збой</string>
+  <!-- Body of dialog informing user about contents of a bugreport. [CHAR LIMIT=NONE] -->
   <string name="bugreport_confirm">Справаздача пра памылку ўтрымлівае дадзеныя з файлаў сістэмнай гiсторыi, у тым ліку персанальную і прыватную інфармацыю. Дзялiцеся справаздачамi пра памылкі толькi з праверанымi карыстальнiкамi i праграмамі.</string>
+  <!-- Checkbox that indicates this dialog should be shown again when the next bugreport is taken. [CHAR LIMIT=50] -->
   <string name="bugreport_confirm_repeat"> Паказваць гэта паведамленне у наступны раз</string>
+  <!-- Title for documents backend that offers bugreports. -->
 </resources>

@@ -23,4 +23,5 @@
   <string name="picker_activities">Activități</string>
   <string name="select_custom_app_title">Selectați aplicație personalizată</string>
   <string name="select_custom_activity_title">Selectați activitate personalizată</string>
+  <string name="lockscreen_targets_message">Comenzi rapide ale ecranului de blocare</string>
 </resources>
