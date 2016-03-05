@@ -18,5 +18,6 @@
  */
 -->
 <resources>
+  <!-- Name of the activity for Settings storage. -->
   <string name="app_label">ڕێکخستنی بیرگە</string>
 </resources>

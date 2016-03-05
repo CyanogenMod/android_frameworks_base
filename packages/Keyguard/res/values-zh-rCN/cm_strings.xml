@@ -16,10 +16,14 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM 卡已被锁定</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">无效的 SIM 卡。</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="other">输入 SIM 卡 PIN。您还有 <xliff:g id="number">%d</xliff:g> 次尝试机会；若超出此次数，则必须联系运营商以解锁 SIM 卡。</item>
   </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">错误：输入长度小于最小长度</string>
 </resources>

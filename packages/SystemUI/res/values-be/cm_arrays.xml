@@ -16,14 +16,29 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Cardinal directions for the compass tile -->
   <string-array name="cardinal_directions">
     <item>Паўночны</item>
+    <!-- North -->
     <item>Паўночна-Усходні</item>
+    <!-- North east -->
     <item>Усходні</item>
+    <!-- East -->
     <item>Паўднёва-Усходні</item>
+    <!-- South east -->
     <item>Паўднёвы</item>
+    <!-- South -->
     <item>Паўднёва-Заходні</item>
+    <!-- South west -->
     <item>Заходні</item>
+    <!-- West -->
     <item>Паўночна-Заходні</item>
+    <!-- North west -->
   </string-array>
+  <!-- Performance profiles description-->
+  <!-- Performance profiles announcement-->
+  <!-- Dynamic tiles -->
+  <!-- LiveDisplay drawables -->
+  <!-- LiveDisplay description-->
+  <!-- LiveDisplay announcement-->
 </resources>
