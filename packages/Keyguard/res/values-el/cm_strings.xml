@@ -16,11 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">Η κάρτα SIM είναι κλειδωμένη</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Μη έγκυρη κάρτα.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Εισάγετε το PIN, έχετε <xliff:g id="number">%d</xliff:g> προσπάθειες πριν χρειαστεί να επικοινωνήσετε με τον πάροχό σας για να ξεκλειδώσετε τη συσκευή σας.</item>
     <item quantity="other">Εισάγετε το PIN, έχετε <xliff:g id="number">%d</xliff:g> προσπάθειες.</item>
   </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Σφάλμα: Το μήκος εισόδου είναι μικρότερο από το ελάχιστο μήκος</string>
 </resources>

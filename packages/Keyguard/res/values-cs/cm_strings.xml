@@ -16,12 +16,16 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM je zamčená pomocí Perso</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Neplatná SIM karta.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Zadejte PIN kód, máte <xliff:g id="number">%d</xliff:g> zbývající pokus než budete muset kontaktovat operátora pro odemčení zařízení.</item>
     <item quantity="few">Zadejte PIN kód, máte <xliff:g id="number">%d</xliff:g> zbývající pokusy.</item>
     <item quantity="other">Zadejte PIN kód, máte <xliff:g id="number">%d</xliff:g> zbývajících pokusů.</item>
   </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Chyba: vstup je kratší než minimální délka</string>
 </resources>
