@@ -16,9 +16,15 @@
 -->
 <resources>
   <string name="app_label">Shell</string>
+  <!-- Title of notification indicating a bugreport has been successfully captured. [CHAR LIMIT=50] -->
   <string name="bugreport_finished_title">Informe de fallu capturáu</string>
+  <!-- Text of notification indicating that swipe left will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="watch">Esliza a esquierda pa compartir l\'informe de fallu</string>
+  <!-- Text of notification indicating that touching will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="default">Toca pa compartir l\'informe de fallu</string>
+  <!-- Body of dialog informing user about contents of a bugreport. [CHAR LIMIT=NONE] -->
   <string name="bugreport_confirm">Los informes de fallos contienen datos de los distintos ficheros de rexistru del sistema, incluyida información personal y privada. Comparte los informes de fallos namái con aplicaciones y usuarios nos que confíes.</string>
+  <!-- Checkbox that indicates this dialog should be shown again when the next bugreport is taken. [CHAR LIMIT=50] -->
   <string name="bugreport_confirm_repeat">Amosar esti mensaxe la próxima vegada</string>
+  <!-- Title for documents backend that offers bugreports. -->
 </resources>

@@ -16,9 +16,15 @@
 -->
 <resources>
   <string name="app_label">Shell</string>
+  <!-- Title of notification indicating a bugreport has been successfully captured. [CHAR LIMIT=50] -->
   <string name="bugreport_finished_title">Feelerbericht opgefaangen</string>
+  <!-- Text of notification indicating that swipe left will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="watch">No lénks wësche fir de Feelerbericht ze deelen</string>
+  <!-- Text of notification indicating that touching will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="default">Drécken, fir de Feelerbericht ze deelen</string>
+  <!-- Body of dialog informing user about contents of a bugreport. [CHAR LIMIT=NONE] -->
   <string name="bugreport_confirm">Feelerberichter hunn Daten aus de verschiddene Protokollfichiere vum System, dorënner perséinlech a privat Informatiounen. Deel just Feelerberichter mat Appen a Leit deenen s du traus.</string>
+  <!-- Checkbox that indicates this dialog should be shown again when the next bugreport is taken. [CHAR LIMIT=50] -->
   <string name="bugreport_confirm_repeat">Weis dëse Message déi nächst Kéier un</string>
+  <!-- Title for documents backend that offers bugreports. -->
 </resources>

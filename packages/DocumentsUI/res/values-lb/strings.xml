@@ -15,41 +15,90 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Title of the documents application [CHAR LIMIT=32] -->
   <string name="app_label">Dokumenter</string>
+  <!-- Action bar title prompting user to choose a location to open a document from [CHAR LIMIT=32] -->
   <string name="title_open">Opmaache vun</string>
+  <!-- Action bar title prompting user to choose a location to save a document to [CHAR LIMIT=32] -->
   <string name="title_save">Späicheren ënner</string>
+  <!-- Menu item that creates a new directory/folder at the current location [CHAR LIMIT=24] -->
   <string name="menu_create_dir">Dossier uleeën</string>
+  <!-- Menu item that switches view to show documents as a large-format grid of thumbnails [CHAR LIMIT=24] -->
   <string name="menu_grid">Gitterusiicht</string>
+  <!-- Menu item that switches view to show documents as a list [CHAR LIMIT=24] -->
   <string name="menu_list">Lëschtenusiicht</string>
+  <!-- Menu item that switches the criteria with which documents are sorted [CHAR LIMIT=24] -->
   <string name="menu_sort">Zortéieren no</string>
+  <!-- Menu item that enters a mode to search for documents [CHAR LIMIT=24] -->
   <string name="menu_search">Sichen</string>
+  <!-- Menu item that enters activity to change settings [CHAR LIMIT=24] -->
   <string name="menu_settings">Astellungen</string>
+  <!-- Menu item title that opens the selected documents [CHAR LIMIT=24] -->
   <string name="menu_open">Opmaachen</string>
+  <!-- Menu item title that saves the current document [CHAR LIMIT=24] -->
   <string name="menu_save">Späicheren</string>
+  <!-- Menu item title that shares the selected documents [CHAR LIMIT=24] -->
   <string name="menu_share">Deelen</string>
+  <!-- Menu item title that deletes the selected documents [CHAR LIMIT=24] -->
   <string name="menu_delete">Läschen</string>
+  <!-- Menu item title that selects all documents in the current directory [CHAR LIMIT=24] -->
+  <!-- Menu item title that copies the selected documents [CHAR LIMIT=24] -->
+  <!-- Menu item that reveals internal storage built into the device [CHAR LIMIT=24] -->
   <string name="menu_advanced_show" product="nosdcard">Interne Späicher uweisen</string>
+  <!-- Menu item that reveals SD cards built into the device [CHAR LIMIT=24] -->
   <string name="menu_advanced_show" product="default">SD-Kaart uweisen</string>
+  <!-- Menu item that hides internal storage built into the device [CHAR LIMIT=24] -->
   <string name="menu_advanced_hide" product="nosdcard">Interne Späicher verstoppen</string>
+  <!-- Menu item that hides SD cards built into the device [CHAR LIMIT=24] -->
   <string name="menu_advanced_hide" product="default">SD-Kaart verstoppen</string>
+  <!-- Menu item that reveals the sizes of displayed files [CHAR LIMIT=24] -->
   <string name="menu_file_size_show">Fichiersgréisst uweisen</string>
+  <!-- Menu item that hides the sizes of displayed files [CHAR LIMIT=24] -->
   <string name="menu_file_size_hide">Fichiersgréisst verstoppen</string>
+  <!-- Button label that select the current directory [CHAR LIMIT=24] -->
+  <!-- Button label that copies files to the current directory [CHAR LIMIT=24] -->
+  <!-- Mode that sorts documents by their display name alphabetically [CHAR LIMIT=24] -->
   <string name="sort_name">No Numm</string>
+  <!-- Mode that sorts documents by their last modified time in descending order; most recent first [CHAR LIMIT=24] -->
   <string name="sort_date">No Ännerungsdatum</string>
+  <!-- Mode that sorts documents by their file size in descending order; largest first [CHAR LIMIT=24] -->
   <string name="sort_size">No Gréisst</string>
+  <!-- Accessibility title to open the drawer showing all roots where documents can be stored [CHAR LIMIT=32] -->
   <string name="drawer_open">Wuerzelen uweisen</string>
+  <!-- Accessibility title to close the drawer showing all roots where documents can be stored [CHAR LIMIT=32] -->
   <string name="drawer_close">Wuerzele verstoppen</string>
+  <!-- Toast shown when saving a document failed with an error [CHAR LIMIT=48] -->
   <string name="save_error">D\'Dokument konnt net gespäichert ginn</string>
+  <!-- Toast shown when creating a folder failed with an error [CHAR LIMIT=48] -->
   <string name="create_error">Den Dossier konnt net erstallt ginn</string>
+  <!-- Error message shown when querying for a list of documents failed [CHAR LIMIT=48] -->
   <string name="query_error">D\'Dokumenter konnten net ofgeruff ginn</string>
+  <!-- Title of storage root location that contains recently modified or used documents [CHAR LIMIT=24] -->
   <string name="root_recent">Rezent</string>
+  <!-- Subtitle of storage root indicating the total free space available, in bytes [CHAR LIMIT=24] -->
   <string name="root_available_bytes"><xliff:g id="size" example="3GB">%1$s</xliff:g> fräi</string>
+  <!-- Header title for list of storage roots that contains cloud services [CHAR LIMIT=24] -->
   <string name="root_type_service">Späicherservicer</string>
+  <!-- Header title for list of storage roots that contains shortcuts to documents that may be available elsewhere [CHAR LIMIT=24] -->
   <string name="root_type_shortcut">Ofkierzungen</string>
+  <!-- Header title for list of storage roots that contains physical devices [CHAR LIMIT=24] -->
   <string name="root_type_device">Apparater</string>
+  <!-- Header title for list of additional apps that can provide documents [CHAR LIMIT=24] -->
   <string name="root_type_apps">Méi Appen</string>
+  <!-- Text shown when a directory of documents is empty [CHAR LIMIT=24] -->
   <string name="empty">Keng Elementer</string>
+  <!-- Toast shown when no app can be found to open the selected document [CHAR LIMIT=48] -->
   <string name="toast_no_application">Fichier kann net opgemaach ginn</string>
+  <!-- Toast shown when some of the selected documents failed to be deleted [CHAR LIMIT=48] -->
   <string name="toast_failed_delete">Verschidden Dokumenter konnten net geläscht ginn</string>
+  <!-- Title of dialog when prompting user to select an app to share documents with [CHAR LIMIT=32] -->
   <string name="share_via">Deelen iwwer</string>
+  <!-- Title of the copy notification [CHAR LIMIT=24] -->
+  <!-- Text shown on the copy notification to indicate remaining time, in minutes [CHAR LIMIT=24] -->
+  <!-- Toast shown when a file copy is kicked off -->
+  <!-- Text shown on the copy notification while DocumentsUI performs setup in preparation for copying files [CHAR LIMIT=32] -->
+  <!-- Title of the copy error notification [CHAR LIMIT=48] -->
+  <!-- Second line for notifications saying that more information will be shown after touching [CHAR LIMIT=48] -->
+  <!-- Label of a dialog button for retrying a failed operation [CHAR LIMIT=24] -->
+  <!-- Contents of the copying failure alert dialog. [CHAR LIMIT=48] -->
 </resources>
