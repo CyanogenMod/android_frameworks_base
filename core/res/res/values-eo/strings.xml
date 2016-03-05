@@ -19,206 +19,1811 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Suffix added to a number to signify size in bytes. -->
   <string name="byteShort">B</string>
+  <!-- Suffix added to a number to signify size in kilobytes. -->
   <string name="kilobyteShort">KB</string>
+  <!-- Suffix added to a number to signify size in megabytes. -->
   <string name="megabyteShort">MB</string>
+  <!-- Suffix added to a number to signify size in gigabytes. -->
   <string name="gigabyteShort">GB</string>
+  <!-- Suffix added to a number to signify size in terabytes. -->
   <string name="terabyteShort">TB</string>
+  <!-- Suffix added to a number to signify size in petabytes. -->
   <string name="petabyteShort">PB</string>
+  <!-- Format string used to add a suffix like "KB" or "MB" to a number
+         to display a size in kilobytes, megabytes, or other size units.
+         Some languages (like French) will want to add a space between
+         the placeholders. -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration in days -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one day with hours -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one day with one hours -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration in hours -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one hour with minutes -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one hour with one minute -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration in minutes -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute with seconds -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute with one second -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration in seconds -->
+  <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one second -->
+  <!-- Used in Contacts for a field that has no label and in Note Pad
+         for a note with no name. -->
   <string name="untitled">&lt;Sentitola&gt;</string>
+  <!-- How to display the lack of a phone number -->
   <string name="emptyPhoneNumber">(Neniu telefonnumero)</string>
+  <!-- How to display the lack of a name -->
   <string name="unknownName">Nekonate</string>
+  <!-- What the UI should display for "voice mail" unless overridden by the SIM-->
   <string name="defaultVoiceMailAlphaTag">Voĉa mesaĝo</string>
+  <!-- What the UI should display for "Msisdn" unless overridden by the SIM-->
+  <!-- For GsmMmiCode.java -->
+  <!-- Displayed when the user dialed an MMI code whose function
+         could not be performed. This will be displayed in a toast. -->
+  <!-- Displayed when the user dialed an MMI code whose function
+         could not be performed because FDN is enabled. This will be displayed in a toast. -->
+  <!-- Displayed when a phone feature such as call barring was activated. -->
+  <!-- Displayed in front of the list of a set of service classes
+         (voice, data, fax, etc.) that were enabled. -->
+  <!-- Displayed when a phone feature such as call forwarding was deactivated. -->
+  <!-- Displayed when a phone property such as a SIM password was registered. -->
+  <!-- Displayed when a phone property such as a SIM password was erased. -->
+  <!-- Displayed when a SIM password was entered incorrectly. -->
   <string name="passwordIncorrect">Nekorekta pasvorto.</string>
+  <!-- Displayed when a phone feature triggered by an MMI code is complete. -->
   <string name="mmiComplete">MMI kompleta.</string>
+  <!-- Displayed when a SIM PIN password is entered incorrectly. -->
   <string name="badPin">La malnova PIN kiun vi tajpis estas nekorekta.</string>
+  <!-- Displayed when a SIM PUK password is entered incorrectly. -->
+  <!-- Displayed when SIM PIN passwords are entered inconsistently. -->
+  <!-- Displayed when a SIM PIN password is too long or too short. -->
+  <!-- Displayed when a SIM PUK password is too short. -->
+  <!-- Displayed to prompt the user to type the PUK password to unlock
+         the SIM card. -->
+  <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
+  <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+  <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <string name="imei">IMEI</string>
+  <!-- Title for the dialog used to display the user's MEID number on CDMA network
+         [CHAR LIMIT=10] -->
   <string name="meid">MEID</string>
+  <!-- Displayed as the title for a success/failure report enabling/disabling caller ID. -->
+  <!-- Displayed as the title for a success/failure report enabling/disabling caller ID. -->
+  <!-- Displayed as the title for a success/failure report enabling/disabling connected line ID. -->
+  <!-- Displayed as the title for a success/failure report enabling/disabling connected line ID restriction. -->
+  <!-- Displayed as the title for a success/failure report enabling/disabling call forwarding. -->
+  <!-- Displayed as the title for a success/failure report enabling/disabling call waiting. -->
+  <!-- Displayed as the title for a success/failure report enabling/disabling call barring. -->
+  <!-- Displayed as the title for a success/failure report changing the SIM password. -->
   <string name="PwdMmi">Pasvorta ŝanĝo</string>
+  <!-- Displayed as the title for a success/failure report changing the SIM PIN. -->
   <string name="PinMmi">Ŝanĝo de PIN</string>
   <string name="DndMmi">Ne ĝenu</string>
+  <!-- Displayed to confirm to the user that caller ID will be restricted on the next call as usual. -->
+  <!-- Displayed to confirm to the user that caller ID will be not restricted on the next call even though it usually is. -->
+  <!-- Displayed to confirm to the user that caller ID will not be restricted on the next call but usually is. -->
+  <!-- Displayed to confirm to the user that caller ID will not be restricted on the next call or in general. -->
+  <!-- Displayed to tell the user that caller ID is not provisioned for their SIM. -->
+  <!-- Displayed to tell the user that they cannot change the caller ID setting. -->
+  <!-- Notification title to tell the user that restricted state is changed by access control. -->
+  <!-- Displayed to tell the user that data service is blocked by access control. -->
+  <!-- Displayed to tell the user that emergency service is blocked by access control. -->
+  <!-- Displayed to tell the user that normal service is blocked by access control. -->
+  <!-- Displayed to tell the user that all emergency and normal voice services are blocked by access control. -->
+  <!-- Displayed to tell the user that sms service is blocked by access control. -->
+  <!-- Displayed to tell the user that voice/data service is blocked by access control. -->
+  <!-- Displayed to tell the user that voice and sms service are blocked by access control. -->
+  <!-- Displayed to tell the user that all service is blocked by access control. -->
+  <!-- Displayed to tell the user that peer changed TTY mode -->
+  <!-- Mappings between TS 27.007 +CFCC/+CLCK "service classes" and human-readable strings-->
+  <!-- Example: Service was enabled for: Voice, Data -->
+  <!-- Example: Service was enabled for: Voice, Data -->
   <string name="serviceClassData">Datumo</string>
+  <!-- Example: Service was enabled for: Voice, FAX -->
+  <!-- Example: Service was enabled for: Voice, SMS -->
+  <!-- Meaning: asynchronous data.  Example: Service was enabled for: Voice, Async -->
+  <!-- Meaning: synchronous data.  Example: Service was enabled for: Voice, Async -->
+  <!-- Meaning: packet data.  Example: Service was enabled for: Voice, Packet -->
+  <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+  <!-- CDMA Roaming Indicator Strings (non ERI)-->
+  <!-- Default roaming indicator text -->
+  <!-- Displayed when WFC registration fails -->
+  <!-- WFC Operator Error Codes -->
+  <!-- WFC Operator Error Messages showed as alerts -->
+  <!-- WFC Operator Error Messages showed as notifications -->
+  <!-- Template for showing cellular network operator name while WFC is active -->
+  <!-- Template for showing operator name for data connection while WFC is active -->
+  <!-- WFC, summary for Disabled -->
+  <!-- WFC, summary for Wi-Fi Preferred -->
+  <!-- WFC, summary for Cellular Preferred -->
+  <!-- WFC, summary for Wi-Fi Only -->
+  <!--
+        {0} is one of "bearerServiceCode*"
+        {1} is dialing number
+        {2} is time in seconds
+
+        cfTemplateRegistered and cfTemplateRegisteredTime mean that a phone number
+        has been set but forwarding is not on.
+    -->
+  <!-- Displayed when the call forwarding query was not able to be forwarded. -->
+  <!-- Displayed when the call forwarding query was forwarded. -->
+  <!-- Displayed when the call forwarding query will be forwarded after some time. -->
+  <!-- Displayed when the call forwarding query was set but forwarding is not enabled. -->
+  <!-- Displayed when the call forwarding query was set but forwarding is not enabled. -->
+  <!-- android.net.http Error strings -->
+  <!-- Displayed when a feature code (non-phone number) is dialed and completes successfully. -->
+  <!-- Displayed when a feature code (non-phone number) is dialed and completes unsuccessfully. -->
+  <!-- android.net.http Error strings -->
+  <!-- Displayed when a web request was successful. -->
+  <!-- Displayed when a web request failed with a generic network error. -->
+  <!-- Displayed when a web request failed because the URL could not be found. -->
+  <!-- Displayed when a web request failed because the site's authentication scheme is not supported by us. -->
+  <!-- Displayed when a web request failed because the authentication failed. -->
+  <!-- Displayed when a web request failed because the authentication with the proxy failed. -->
+  <!-- Displayed when a web request failed because there was a connection error. -->
+  <!-- Displayed when a web request failed because there was an input or output error. -->
+  <!-- Displayed when a web request failed because the request timed out -->
+  <!-- Displayed when a web request failed because the site tried to redirect us one too many times -->
+  <!-- Displayed when a web request failed because the protocol of the server is not supported. -->
+  <!-- Displayed when a web request failed because the a secure connection couldn't be made to the server.-->
+  <!-- Displayed when a web request failed because the URL isn't in a valid form. -->
+  <!-- Displayed when a request failed because we failed to open the file. -->
+  <!-- Displayed when a request failed because the file wasn't found. -->
+  <!-- Displayed when a request failed because there are too many requests right now. -->
+  <!-- Account notifications -->
+  <!-- A notification is shown when the AccountManager is unable to
+    supply an auth token without prompting the user to re-enter the
+    password.  This is the text that will scroll through the
+    notification bar (will be seen by the user as he uses another application). -->
+  <!-- Sync notifications -->
+  <!-- A notification is shown when there is a sync error.  This is the text that will scroll through the notification bar (will be seen by the user as he uses another application). -->
+  <!-- A notification is shown when there is a sync error.  This is the title of the notification.  It will be seen in the pull-down notification tray. -->
+  <!-- A notification is shown when there is a sync error.  This is the message of the notification.  It describes the error, in this case is there were too many deletes. The argument is the type of content, for example Gmail or Calendar. It will be seen in the pull-down notification tray. -->
+  <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
+  <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
+  <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
+  <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
+  <!-- SSL CA cert notification -->
+  <!-- Shows up when there is a user SSL CA Cert installed on the
+         device.  Indicates to the user that SSL traffic can be intercepted.  [CHAR LIMIT=NONE] -->
+  <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning",
+         i.e. "Network may be monitored". This says that an unknown party is doing the monitoring.
+         [CHAR LIMIT=100]-->
+  <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning",
+        i.e. "Network may be monitored". This indicates that an unspecified administrator is doing
+        the monitoring. [CHAR LIMIT=100]-->
+  <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning",
+         i.e. "Network may be monitored". This indicates who is doing the monitoring.
+         [CHAR LIMIT=100]-->
+  <!-- Work profile deleted notification-->
+  <!-- Shows up in the notification's title when the system deletes the work profile. [CHAR LIMIT=NONE] -->
+  <!-- Content text for a notification. The Title of the notification is "work_profile_deleted",
+         i.e. "Work profile deleted". This says that the profile is deleted by the system as a result of
+         the current profile owner gone missing. [CHAR LIMIT=100]-->
+  <!-- Content text for an expanded notification. The Title of the notification is "work_profile_deleted",
+         i.e. "Work profile deleted". This further explains that the profile is deleted by the system
+         as a result of the current profile admin gone missing. [CHAR LIMIT=NONE]-->
+  <!-- Content text for a notification. The Title of the notification is "work_profile_deleted",
+        This indicates that a work profile has been deleted. [CHAR LIMIT=NONE]-->
+  <!-- Factory reset warning dialog strings-->
+  <!-- Shows up in the dialog's title to warn about an impeding factory reset. [CHAR LIMIT=NONE] -->
+  <!-- Text message in the factory reset warning dialog. This says that the the device admin app
+         is missing or corrupted. As a result the device will be erased. [CHAR LIMIT=NONE]-->
+  <!-- Display name for any time a piece of data refers to the owner of the phone. For example, this could be used in place of the phone's phone number. -->
   <string name="me">Mi</string>
+  <!-- Power Dialog -->
+  <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
+  <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
+  <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
+  <!-- Button to turn on silent mode, within the Phone Options dialog -->
+  <!-- Button to turn on the radio, within the Phone Options dialog -->
+  <!-- Button to turn off the radio, within the Phone Options dialog -->
+  <!-- Button to lock the screen, within the Phone Options dialog -->
+  <!-- Button to turn off the phone, within the Phone Options dialog -->
+  <!-- Spoken description for ringer silent option. [CHAR LIMIT=NONE] -->
+  <!-- Spoken description for ringer vibrate option. [CHAR LIMIT=NONE] -->
+  <!-- Spoken description for ringer normal option. [CHAR LIMIT=NONE] -->
+  <!-- Reboot to Recovery Progress Dialog. This is shown before it reboots to recovery. -->
+  <!-- Reboot to Recovery for factory reset. -->
+  <!-- Shutdown Progress Dialog. This is shown if the user chooses to power off the phone. -->
+  <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the phone, there will
+         be a confirmation dialog.  This is the message. -->
+  <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the TV, there will
+         be a confirmation dialog.  This is the message. -->
+  <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the watch, there will
+         be a confirmation dialog.  This is the message. -->
+  <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the phone, there will
+         be a confirmation dialog.  This is the message. -->
+  <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the phone, it asks
+         the user if they'd like to shut down.  This is the message.  This is used instead of
+         shutdown_confirm when the system is configured to use long press to go directly to the
+         power off dialog instead of the global actions menu. -->
+  <!-- Title of dialog to confirm rebooting into safe mode. [CHAR LIMIT=50] -->
+  <!-- Shutdown Confirmation Dialog.  Message in the confirmation dialog
+         when the user asks to reboot into safe mode. [CHAR LIMIT=NONE] -->
+  <!-- Recent Tasks dialog: title
+     TODO: this should move to SystemUI.apk, but the code for the old
+            recent dialog is still in the framework
+     -->
   <string name="recent_tasks_title">Lasttempaj</string>
+  <!-- Recent Tasks dialog: message when there are no recent applications
+     TODO: this should move to SystemUI.apk, but the code for the old
+            recent dialog is still in the framework
+     -->
+  <!-- Title of the Global Actions Dialog -->
+  <!-- Title of the Global Actions Dialog -->
+  <!-- Title of the Global Actions Dialog -->
+  <!-- label for item that locks the phone in the phone options dialog -->
+  <!-- label for item that turns off power in phone options dialog -->
+  <!-- label for item that generates a bug report in the phone options dialog -->
   <string name="global_action_bug_report">Cimraporto</string>
+  <!-- Take bug report menu title [CHAR LIMIT=NONE] -->
+  <!-- Message in bugreport dialog describing what it does [CHAR LIMIT=NONE] -->
+  <!-- Format for build summary info [CHAR LIMIT=NONE] -->
+  <!-- label for item that enables silent mode in phone options dialog -->
+  <!-- status message in phone options dialog for when silent mode is enabled -->
+  <!-- status message in phone options dialog for when silent mode is disabled -->
+  <!-- label for item that toggles airplane mode -->
+  <!-- status message in phone options dialog for when airplane mode is on -->
+  <!-- status message in phone options dialog for when airplane mode is off -->
+  <!-- label for item that launches settings in phone options dialog [CHAR LIMIT=15]-->
   <string name="global_action_settings">Agordoj</string>
+  <!-- label for item that launches assist in phone options dialog [CHAR LIMIT=15]-->
+  <!-- label for item that launches voice assist in phone options dialog [CHAR LIMIT=15]-->
+  <!-- label for item that locks the phone and enforces that it can't be unlocked without entering a credential. [CHAR LIMIT=15] -->
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated. May need to be localized
+         for most appropriate textual indicator of "more than X".
+         [CHAR LIMIT=4] -->
+  <!-- Displayed to the user to tell them that they have started up the phone in "safe mode" -->
   <string name="safeMode">Sekura reĝimo</string>
+  <!-- Label for the Android system components when they are shown to the user. -->
+  <!-- Label for the user owner in the intent forwarding app. [CHAR LIMIT=15] -->
+  <!-- Label for a corporate profile in the intent forwarding app. [CHAR LIMIT=15] -->
   <string name="managed_profile_label">Laborejo</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_calendar">Kalendaro</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_storage">Memorilo</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissioncds, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_microphone">Mikrofono</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_microphone">registri sonon</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_camera">Fotilo</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_phone">Telefono</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title for the capability of an accessibility service to retrieve window content. -->
+  <!-- Description for the capability of an accessibility service to retrieve window content. -->
+  <!-- Title for the capability of an accessibility service to request touch exploration. -->
+  <!-- Description for the capability of an accessibility service to request touch exploration. -->
+  <!-- Title for the capability of an accessibility service to request enhanced web accessibility. -->
+  <!-- Description for the capability of an accessibility service to request enhanced web accessibility. -->
+  <!-- Title for the capability of an accessibility service to request to filter key events. -->
+  <!-- Description for the capability of an accessibility service to request to filter key events. -->
+  <!--  Permissions -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can install application shortcuts
+    in their Launcher -->
+  <!-- Description of an application permission, listed so the user can install application shortcuts
+    in their Launcher -->
+  <!-- Title of an application permission, listed so the user can uninstall application shortcuts
+    in their Launcher -->
+  <!-- Description of an application permission, listed so the user can install application shortcuts
+    in their Launcher -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to set the profile/device owners.
+     [CHAR LIMIT=NONE] -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readContacts">legi viajn kontaktulojn</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readCallLog">legi alvokan protokolon</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of the body sensors permission, listed so the user can decide whether to allow the application to access body sensor data. [CHAR LIMIT=30] -->
+  <!-- Description of the body sensors permission, listed so the user can decide whether to allow the application to access data from body sensors. [CHAR LIMIT=NONE] -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_recordAudio">registri sonon</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the applicaiton to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Message shown during fingerprint acquisision when the fingerprint cannot be recognized -->
+  <!-- Message shown during fingerprint acquisision when the fingerprint cannot be recognized -->
+  <!-- Message shown during fingerprint acquisision when the fingerprint sensor needs cleaning -->
+  <!-- Message shown during fingerprint acquisision when the user removes their finger from the sensor too quickly -->
+  <!-- Message shown during fingerprint acquisision when the user moves their finger too slowly -->
+  <!-- Array containing custom messages shown during fingerprint acquisision from vendor.  Vendor is expected to add and translate these strings -->
+  <!-- Error message shown when the fingerprint hardware can't be accessed -->
+  <!-- Error message shown when the fingerprint hardware has run out of room for storing fingerprints -->
+  <!-- Error message shown when the fingerprint hardware timer has expired and the user needs to restart the operation. -->
+  <!-- Generic error message shown when the fingerprint operation (e.g. enrollment or authentication) is canceled. Generally not shown to the user-->
+  <!-- Generic error message shown when the fingerprint operation fails because too many attempts have been made. -->
+  <!-- Generic error message shown when the fingerprint hardware can't recognize the fingerprint -->
+  <!-- Template to be used to name enrolled fingerprints by default. -->
+  <!-- Array containing custom error messages from vendor.  Vendor is expected to add and translate these strings -->
+  <!-- Content description which should be used for the fingerprint icon. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessNotifications">atingi atentigojn</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, for applications that wish to access notification policy. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Policy administration -->
+  <!-- Title of policy access to limiting the user's password choices -->
+  <!-- Description of policy access to limiting the user's password choices -->
+  <!-- Title of policy access to watch user login attempts -->
+  <!-- Description of policy access to watch user login attempts -->
+  <!-- Description of policy access to watch user login attempts -->
+  <!-- Description of policy access to watch user login attempts -->
+  <!-- Title of policy access to reset user's password -->
+  <!-- Description of policy access to reset user's password -->
+  <!-- Title of policy access to force lock the device -->
+  <!-- Description of policy access to limiting the user's password choices -->
+  <!-- Title of policy access to wipe primary user's data -->
+  <!-- Description of policy access to wipe the user's data -->
+  <!-- Description of policy access to wipe the user's data -->
+  <!-- Description of policy access to wipe the user's data -->
+  <!-- Title of policy access to wipe secondary user's data -->
+  <!-- Description of policy access to wipe the user's data -->
+  <!-- Description of policy access to wipe the user's data -->
+  <!-- Description of policy access to wipe the user's data -->
+  <!-- Title of policy access to set global proxy -->
+  <!-- Description of policy access to set global proxy -->
+  <!-- Title of policy access to enforce password expiration [CHAR LIMIT=50]-->
+  <!-- Description of policy access to enforce password expiration [CHAR LIMIT=110]-->
+  <!-- Title of policy access to require encrypted storage [CHAR LIMIT=30]-->
+  <!-- Description of policy access to require encrypted storage [CHAR LIMIT=110]-->
+  <!-- Title of policy access to disable all device cameras [CHAR LIMIT=30]-->
+  <!-- Description of policy access to disable all device cameras [CHAR LIMIT=110]-->
+  <!-- Title of policy access to disable keyguard features [CHAR LIMIT=30]-->
+  <!-- Description of policy access to disable keyguard features. [CHAR LIMIT=110]-->
+  <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <!-- Phone number types from android.provider.Contacts. This could be used when adding a new phone number for a contact, for example. -->
+  <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <!-- Email address types from android.provider.Contacts. This could be used when adding a new e-mail address for a contact, for example. -->
+  <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <!-- Postal address types from android.provider.Contacts. This could be used when adding a new address for a contact, for example. -->
+  <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <!-- Instant Messenger ID types from android.provider.Contacts. This could be used when adding a new IM for a contact, for example. -->
+  <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <!-- Organization types from android.provider.Contacts. This could be used when adding a new organization for a contact, for example. -->
+  <!-- The order of these is important, don't reorder without changing Contacts.java -->
+  <!-- Instant Message protocols/providers from android.provider.Contacts -->
+  <!-- Custom phone number type -->
   <string name="phoneTypeCustom">Propra</string>
+  <!-- Home phone number type -->
   <string name="phoneTypeHome">Hejmo</string>
+  <!-- Mobile phone number type -->
+  <!-- Work phone number type -->
   <string name="phoneTypeWork">Laborejo</string>
+  <!-- Work fax phone number type -->
   <string name="phoneTypeFaxWork">Laboreja faksilo</string>
+  <!-- Home fax phone number type -->
   <string name="phoneTypeFaxHome">Hejma faksilo</string>
+  <!-- Pager phone number type -->
   <string name="phoneTypePager">Televokilo</string>
+  <!-- Other phone number type -->
   <string name="phoneTypeOther">Aliaj</string>
+  <!-- Callback phone number type -->
   <string name="phoneTypeCallback">Revoko</string>
+  <!-- Car phone number type -->
   <string name="phoneTypeCar">Aŭtomobilo</string>
+  <!-- Company main phone number type -->
+  <!-- ISDN phone number type -->
+  <!-- Main phone number type -->
+  <!-- Other fax phone number type -->
   <string name="phoneTypeOtherFax">Plia telekopiilo</string>
+  <!-- Radio phone number type -->
+  <!-- Telex phone number type -->
   <string name="phoneTypeTelex">Telekso</string>
+  <!-- TTY TDD phone number type -->
+  <!-- Work mobile phone number type -->
+  <!-- Work pager phone number type -->
+  <!-- Assistant phone number type -->
+  <!-- MMS phone number type -->
+  <!-- Label for custom events  [CHAR LIMIT=20] -->
   <string name="eventTypeCustom">Propra</string>
+  <!-- Label for a birthday event  [CHAR LIMIT=20] -->
   <string name="eventTypeBirthday">Naskiĝtago</string>
+  <!-- Label for an anniversary event  [CHAR LIMIT=20] -->
   <string name="eventTypeAnniversary">Datreveno</string>
+  <!-- Label for other events  [CHAR LIMIT=20] -->
   <string name="eventTypeOther">Aliaj</string>
+  <!-- Custom email type -->
   <string name="emailTypeCustom">Propra</string>
+  <!-- Home email type -->
   <string name="emailTypeHome">Hejmo</string>
+  <!-- Work email type -->
   <string name="emailTypeWork">Laborejo</string>
+  <!-- Other email type -->
   <string name="emailTypeOther">Aliaj</string>
+  <!-- Mobile email type -->
+  <!-- Custom postal address type -->
   <string name="postalTypeCustom">Propra</string>
+  <!-- Home postal address type -->
   <string name="postalTypeHome">Hejmo</string>
+  <!-- Work postal address type -->
   <string name="postalTypeWork">Laborejo</string>
+  <!-- Other postal address type -->
   <string name="postalTypeOther">Aliaj</string>
+  <!-- Custom IM address type -->
   <string name="imTypeCustom">Propra</string>
+  <!-- Home IM address type -->
   <string name="imTypeHome">Hejmo</string>
+  <!-- Work IM address type -->
   <string name="imTypeWork">Laborejo</string>
+  <!-- Other IM address type -->
   <string name="imTypeOther">Aliaj</string>
+  <!-- Custom IM protocol type -->
   <string name="imProtocolCustom">Propra</string>
+  <!-- AIM IM protocol type -->
+  <!-- MSN IM protocol type -->
+  <!-- Yahoo IM protocol type -->
+  <!-- Skype IM protocol type -->
+  <!-- QQ IM protocol type -->
+  <!-- Google Talk IM protocol type -->
+  <!-- ICQ IM protocol type -->
+  <!-- Jabber IM protocol type -->
+  <!-- NetMeeting IM protocol type -->
+  <!-- Work organization type -->
   <string name="orgTypeWork">Laborejo</string>
+  <!-- Other organization type -->
   <string name="orgTypeOther">Aliaj</string>
+  <!-- Custom organization type -->
   <string name="orgTypeCustom">Propra</string>
+  <!-- Custom relationship custom [CHAR LIMIT=20] -->
   <string name="relationTypeCustom">Propra</string>
+  <!-- Assistant relationship type [CHAR LIMIT=20] -->
+  <!-- Brother relationship type [CHAR LIMIT=20] -->
+  <!-- Child relationship type [CHAR LIMIT=20] -->
   <string name="relationTypeChild">Ido</string>
+  <!-- Domestic Partner relationship type [CHAR LIMIT=20] -->
+  <!-- Father relationship type [CHAR LIMIT=20] -->
+  <!-- Friend relationship type [CHAR LIMIT=20] -->
+  <!-- Manager relationship type [CHAR LIMIT=20] -->
   <string name="relationTypeManager">Estro</string>
+  <!-- Mother relationship type [CHAR LIMIT=20] -->
+  <!-- Parent relationship type [CHAR LIMIT=20] -->
+  <!-- Partner relationship type [CHAR LIMIT=20] -->
+  <!-- Referred by relationship type [CHAR LIMIT=20] -->
+  <!-- Relative relationship type [CHAR LIMIT=20] -->
+  <!-- Sister relationship type [CHAR LIMIT=20] -->
+  <!-- Spouse relationship type [CHAR LIMIT=20] -->
   <string name="relationTypeSpouse">Edz(in)o</string>
+  <!-- Custom SIP address type. Same context as Custom phone type.  -->
   <string name="sipAddressTypeCustom">Propra</string>
+  <!-- Home SIP address type. Same context as Home phone type. -->
   <string name="sipAddressTypeHome">Hejmo</string>
+  <!-- Work SIP address type. Same context as Work phone type. -->
   <string name="sipAddressTypeWork">Laborejo</string>
+  <!-- Other SIP address type. Same context as Other phone type. -->
   <string name="sipAddressTypeOther">Aliaj</string>
+  <!-- Error message that is displayed when the user clicks on a quick contacts badge, but
+         there is no contacts application installed that can display the quick contact -->
+  <!-- Instructions telling the user to enter their SIM PIN to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user to enter their SIM PUK to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Prompt to enter SIM PUK in Edit Text Box in unlock screen -->
+  <!-- Prompt to enter New SIM PIN in Edit Text Box in unlock screen -->
+  <!-- Displayed as hint in passwordEntry EditText on PasswordUnlockScreen [CHAR LIMIT=30]-->
+  <!-- Instructions telling the user to enter their text password to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user to enter their PIN password to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user that they entered the wrong pin while trying
+         to unlock the keyguard.  Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user how to unlock the phone. -->
+  <!-- This can be used in any application wanting to disable the text "Emergency number" -->
+  <!--
+       *** touch based lock / unlock ***
+                                          -->
+  <!-- On the keyguard screen, it shows the carrier the phone is connected to.  This is displayed if the phone is not connected to a carrier.-->
+  <!-- Shown in the lock screen to tell the user that the screen is locked. -->
+  <!-- when pattern lock is enabled, tell them about the emergency dial -->
+  <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
+  <!-- On the unlock pattern screen, shown at the top of the unlock screen to tell the user what to do. Below this text is the place for theu ser to draw the pattern. -->
+  <!-- Button at the bottom of the unlock screen to make an emergency call or access other emergency assistance functions. -->
+  <!-- Button at the bottom of the unlock screen that lets the user return to a call -->
+  <!-- Shown to confirm that the user entered their lock pattern correctly. -->
+  <!-- On the unlock pattern screen, shown when the user enters the wrong lock pattern and must try again. -->
   <string name="lockscreen_pattern_wrong">Provu denove</string>
+  <!-- On the unlock password screen, shown when the user enters the wrong lock password and must try again. -->
   <string name="lockscreen_password_wrong">Provu denove</string>
+  <!-- Shown when face unlock failed multiple times so we're just using the backup -->
+  <!-- Shown in the lock screen when there is no SIM card. -->
+  <!-- Shown in the lock screen when there is no SIM card. -->
+  <!-- Shown in the lock screen when there is no SIM card. -->
+  <!-- Shown in the lock screen when there is no SIM card. -->
+  <!-- Shown in the lock screen to ask the user to insert a SIM card. -->
+  <!-- Shown in the lock screen to ask the user to insert a SIM card when sim is missing or not readable. -->
+  <!-- Shown in the lock screen when SIM card is permanently disabled. -->
+  <!-- Shown in the lock screen to inform the user to SIM card is permanently disabled. -->
+  <!-- Shown on transport control of lockscreen. Pressing button goes to previous track. -->
+  <!-- Shown on transport control of lockscreen. Pressing button goes to next track. -->
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
   <string name="lockscreen_transport_pause_description">Paŭzi</string>
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
   <string name="lockscreen_transport_play_description">Ludi</string>
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
   <string name="lockscreen_transport_stop_description">Haltigi</string>
+  <!-- Shown on transport control screens. Pressing button rewinds playback [CHAR LIMIT=NONE]-->
   <string name="lockscreen_transport_rew_description">Reen</string>
+  <!-- Shown on transport control screens. Pressing button fast forwards playback [CHAR LIMIT=NONE]-->
+  <!-- Shown in the lock screen when there is emergency calls only mode. -->
   <string name="emergency_calls_only" msgid="2485604591272668370">Nur urĝaj alvokoj</string>
+  <!-- When the user inserts a sim card from an unsupported network, it becomes network
+         locked -->
+  <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+  <!-- Shown in the lock screen when the SIM has become PUK locked and the user must call customer care to unlock it. -->
+  <!-- Shown in the lock screen to tell the user that their SIM is locked and they must unlock it. -->
+  <!-- For the unlock screen, When the user enters a sim unlock code, it takes a little while to check
+         whether it is valid, and to unlock the sim if it is valid.  we display a
+         progress dialog in the meantime.  this is the emssage. -->
+  <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts at
+         drawing the unlock pattern -->
+  <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts at
+         entering the password -->
+  <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts at
+         entering the PIN -->
+  <!-- For the unlock screen, informational message shown in dialog when user is almost at the limit
+         where they will be locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- For the unlock screen, informational message shown in dialog when user is almost at the limit
+         where they will be locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- For the unlock screen, informational message shown in dialog when user is almost at the limit
+         where they will be locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- For the unlock screen, informational message shown in dialog when user is almost at the limit
+         where the device will be wiped. -->
+  <!-- For the unlock screen, informational message shown in dialog when user is almost at the limit
+         where the device will be wiped. -->
+  <!-- For the unlock screen, informational message shown in dialog when user is almost at the limit
+         where the device will be wiped. -->
+  <!-- For the unlock screen, informational message shown in dialog when user has exceeded the
+        maximum attempts and the device will now be wiped -->
+  <!-- For the unlock screen, informational message shown in dialog when user has exceeded the
+        maximum attempts and the device will now be wiped -->
+  <!-- For the unlock screen, informational message shown in dialog when user has exceeded the
+        maximum attempts and the device will now be wiped -->
+  <!-- On the unlock screen, countdown message shown while user is waiting to try again after too many
+         failed attempts -->
+  <!-- On the unlock screen, message shown on button that appears once it's apparent the user may have forgotten
+         their lock gesture -->
+  <!-- Title of the unlock screen that uses your Google login and password when the user hit
+         the 'forgot pattern' button.-->
+  <!-- Title of the unlock screen that uses your Google login and password when the user attempted
+         too many patterns and we are forcing them to use their account instead. -->
+  <!-- In the unlock screen, message telling the user that they need to use their Google login and password to unlock the phone -->
+  <!-- Hint caption for the username field when unlocking the phone using login and password -->
   <string name="lockscreen_glogin_username_hint">Uzantnomo (retmesaĝo)</string>
+  <!-- Hint caption for the password field when unlocking the phone using login and password -->
   <string name="lockscreen_glogin_password_hint">Pasvorto</string>
+  <!-- Button to try to unlock the phone using username and password -->
   <string name="lockscreen_glogin_submit_button">Aliĝi</string>
+  <!-- Displayed to the user when unlocking the phone with a username and password fails. -->
+  <!-- Hint displayed on account unlock screen to advise the user on how to recover the account. -->
+  <!-- Displayed in a progress dialog while a username and password are being checked. -->
+  <!-- Displayed on lock screen's left tab - unlock -->
   <string name="lockscreen_unlock_label">Malŝlosi</string>
+  <!-- Displayed on lock screen's right tab - turn sound on -->
+  <!-- Displayed on lock screen's right tab - turn sound off -->
+  <!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
+  <!-- Accessibility description sent when the pattern times out and is cleared. [CHAR LIMIT=NONE] -->
+  <!-- Accessibility description sent when user adds a dot to the pattern. [CHAR LIMIT=NONE]  -->
+  <!-- Accessibility description sent when user adds a dot to the pattern. Announces the 
+    actual cell when headphones are connected [CHAR LIMIT=NONE]  -->
+  <!-- Accessibility description sent when user completes drawing a pattern. [CHAR LIMIT=NONE] -->
+  <!-- Accessibility description of the unlock pattern area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description sent when user changes the current lock screen widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the add widget button. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the empty sidget slot (place holder for a new widget). [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_widget_empty_slot">Malplene</string>
+  <!-- Accessibility description of the event of expanding an unlock area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the event of collapsing an unlock area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of a lock screen widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the lock screen user selector widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the lock screen status widget. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_status">Stato</string>
+  <!-- Accessibility description of the camera widget. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_camera">Fotilo</string>
+  <!-- Accessibility description of the lock media control widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of widget reordering start. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of widget reordering end. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the a widget deletion event. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the button to expand the lock area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the slide unlock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the pattern unlock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the face unlock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the pin lock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the password lock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the unlock pattern area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the unlock slide area. [CHAR_LIMIT=none] -->
+  <!-- Password keyboard strings. Used by LockScreen and Settings -->
+  <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
+  <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
+  <!-- Label for ALT modifier key.  Must be short to fit on key! -->
+  <!-- Label for granularity to traverse the content on an AccessibilityNodeInfo by character. Only spoken to the user. [CHAR LIMIT=NONE] -->
+  <!-- Label for granularity to traverse the content on an AccessibilityNodeInfo by word. Only spoken to the user. [CHAR LIMIT=NONE] -->
   <string name="granularity_label_word">vorto</string>
+  <!-- Label for granularity to traverse the content on an AccessibilityNodeInfo by link. Only spoken to the user. [CHAR LIMIT=NONE] -->
+  <!-- Label for granularity to traverse the content on an AccessibilityNodeInfo by line. Only spoken to the user. [CHAR LIMIT=NONE] -->
+  <!-- A format string for 12-hour time of day, just the hour, not the minute, with lower-case "am" or "pm" (example: "3pm"). -->
   <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+  <!-- A format string for 12-hour time of day, just the hour, not the minute, with capital "AM" or "PM" (example: "3PM"). -->
   <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+  <!-- Title of the alert when something went wrong in the factory test. -->
+  <!-- Error message displayed when a non-system application tries to start a factory test. -->
+  <!-- Error message displayed when the factory test could not be started. -->
+  <!-- Button to restart the device after the factory test. -->
   <string name="factorytest_reboot">Restartigi</string>
+  <!-- Do not translate.  WebView User Agent string -->
+  <!-- Do not translate.  WebView User Agent targeted content -->
+  <!-- Title for a JavaScript dialog. "The page at <url of current page> says:" -->
+  <!-- Default title for a javascript dialog -->
+  <!-- Title for the unload javascript dialog -->
+  <!-- Text for the positive button on the unload javascript dialog -->
+  <!-- Text for the negative button on the unload javascript dialog -->
+  <!-- Message in a javascript dialog asking if the user wishes to leave the current page -->
+  <!-- Title of the WebView save password dialog.  If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. -->
   <string name="save_password_label">Konfirmi</string>
+  <!-- Toast for double-tap -->
+  <!-- Text to show in the auto complete drop down list on a text view when the WebView can auto fill the entire form, and the user has configured an AutoFill profile [CHAR-LIMIT=8] -->
+  <!-- Text to show in the auto complete drop down list on a text view when the WebView can auto fill the entire form but the user has not configured an AutoFill profile [CHAR-LIMIT=19] -->
+  <!-- String used to separate FirstName and LastName when writing out a local name
+         e.g. John<separator>Smith [CHAR-LIMIT=NONE]-->
+  <!-- Format string for displaying a name. $1 is First Name, $2 is autofill_address_name_separator, $3 is Last Name.
+         e.g. (John)( )(Smith) -->
+  <!-- String used to separate Name and Address Line 1
+         e.g. John Smith<separator>123 Main Street [CHAR-LIMIT=NONE]-->
+  <!-- Format string for displaying a name and address summary. $1 is the Full Name, $2 is autofill_address_summary_separator, $3 is the Address
+         e.g. (John Smith)(, )(123 Main Street) -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Do not translate. Regex used by AutoFill. -->
+  <!-- Label in a web form for "Province" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "Postal code" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "State" [CHAR-LIMIT=NONE]  -->
   <string name="autofill_state">Stato</string>
+  <!-- Label in a web form for "ZIP code" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "County" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "Island" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "District" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "Department" [CHAR-LIMIT=NONE]  -->
   <string name="autofill_department">Distrikto</string>
+  <!-- Label in a web form for "Prefecture" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "Parish" [CHAR-LIMIT=NONE]  -->
+  <!-- Label in a web form for "Area" [CHAR-LIMIT=NONE]  -->
   <string name="autofill_area">Areo</string>
+  <!-- Label in a web form for "Emirate" [CHAR-LIMIT=NONE]  -->
+  <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether
+    they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. [CHAR LIMIT=NONE] -->
+  <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. [CHAR LIMIT=NONE] -->
+  <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+  <!-- If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. Text in the save password dialog, asking if the browser should remember a password. -->
+  <!-- If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. Button in the save password dialog, saying not to remember this password. -->
   <string name="save_password_notnow">Ne nun</string>
+  <!-- If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. Button in the save password dialog, saying to remember this password. -->
   <string name="save_password_remember">Memorigi</string>
+  <!-- Button in the save password dialog, saying never to remember this password. This should be short. Should be "Never for this site". But it is too long, use "Never" instead -->
   <string name="save_password_never">Neniam</string>
+  <!-- Displayed to the user when they do not have permission to open a particular web page. -->
+  <!-- Displayed to the user to confirm that they have copied text from a web page to the clipboard. -->
+  <!-- Menu item displayed at the end of a menu to allow users to see another page worth of menu items. This is shown on any app's menu as long as the app has too many items in the menu.-->
+  <!-- Prepended to the shortcut for a menu item to indicate that the user should hold the MENU button together with the shortcut to invoke the item. For example, if the shortcut to open a new tab in browser is MENU and B together, then this would be prepended to the letter "B" -->
+  <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+space for the shortcut. -->
   <string name="menu_space_shortcut_label">spaco</string>
+  <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+enter for the shortcut. -->
+  <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+delete for the shortcut. -->
   <string name="menu_delete_shortcut_label">forigi</string>
+  <!-- Strings used for search bar -->
+  <!-- This is the default button label in the system-wide search UI.
+         It is also used by the home screen's search "widget". It should be short -->
   <string name="search_go">Serĉi</string>
+  <!-- Default hint text for the system-wide search UI's text field. [CHAR LIMIT=30] -->
+  <!-- SearchView accessibility description for search button [CHAR LIMIT=NONE] -->
   <string name="searchview_description_search">Serĉi</string>
+  <!-- SearchView accessibility description for search text field [CHAR LIMIT=NONE] -->
+  <!-- SearchView accessibility description for clear button [CHAR LIMIT=NONE] -->
+  <!-- SearchView accessibility description for submit button [CHAR LIMIT=NONE] -->
+  <!-- SearchView accessibility description for voice button [CHAR LIMIT=NONE] -->
   <string name="searchview_description_voice">Voĉa serĉado</string>
+  <!-- Title for a warning message about the interaction model changes after allowing an accessibility
+         service to put the device into explore by touch mode, displayed as a dialog message when
+         the user selects to enables the service. (default). [CHAR LIMIT=45] -->
+  <!-- Summary for a warning message about the interaction model changes after allowing an accessibility
+         service to put the device into explore by touch mode, displayed as a dialog message when
+         the user selects to enables the service. (tablet). [CHAR LIMIT=NONE] -->
+  <!-- Summary for a warning message about the interaction model changes after allowing an accessibility
+         service to put the device into explore by touch mode, displayed as a dialog message when
+         the user selects to enables the service. (default). [CHAR LIMIT=NONE] -->
+  <!-- String used to display the date. This is the string to say something happened 1 month ago. -->
   <string name="oneMonthDurationPast">antaŭ 1 monato</string>
+  <!-- String used to display the date. This is the string to say something happened more than 1 month ago. -->
+  <!-- This is used to express that something occurred within the last X days (e.g., Last 7 days). -->
+  <!-- This is used to express that something has occurred within the last month -->
   <string name="last_month">Lastmonate</string>
+  <!-- This is used to express that something happened longer ago than the previous options -->
+  <!-- String used to display the date. Preposition for date display ("on May 29") -->
+  <!-- String used to display the date. Preposition for time display ("at 2:33am") -->
+  <!-- String used to display the date. Preposition for year display ("in 2008") -->
+  <!-- Appened to express the value is this unit of time: singular day -->
   <string name="day">tago</string>
+  <!-- Appened to express the value is this unit of time: plural days -->
   <string name="days">tagoj</string>
+  <!-- Appened to express the value is this unit of time: singular hour -->
   <string name="hour">horo</string>
+  <!-- Appened to express the value is this unit of time: plural hours -->
   <string name="hours">horoj</string>
+  <!-- Appened to express the value is this unit of time: singular minute -->
+  <!-- Appened to express the value is this unit of time: plural minutes -->
+  <!-- Appened to express the value is this unit of time. -->
+  <!-- Appened to express the value is this unit of time. -->
+  <!-- Appened to express the value is this unit of time. -->
   <string name="week">semajno</string>
+  <!-- Appened to express the value is this unit of time. -->
   <string name="weeks">semajnoj</string>
+  <!-- Appened to express the value is this unit of time. -->
   <string name="year">jaro</string>
+  <!-- Appened to express the value is this unit of time. -->
   <string name="years">jaroj</string>
+  <!-- Phrase describing a time duration using seconds [CHAR LIMIT=16] -->
+  <!-- Phrase describing a time duration using minutes [CHAR LIMIT=16] -->
+  <!-- Phrase describing a time duration using hours [CHAR LIMIT=16] -->
+  <!-- Title for error alert when a video cannot be played.  it can be used by any app. -->
+  <!-- Text for error alert when a video container is not valid for progressive download/playback. -->
+  <!-- Text for error alert when a video cannot be played. it can be used by any app. -->
+  <!-- Button to close error alert when a video cannot be played -->
+  <!-- Format indicating a relative expression and time.
+         Example: "4 hours ago, 11:00 am" -->
   <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+  <!-- Quoted name for 12pm, lowercase -->
+  <!-- Quoted name for 12pm, uppercase first letter -->
+  <!-- Quoted name for 12am, lowercase -->
+  <!-- Quoted name for 12am, uppercase first letter -->
+  <!-- Format string for durations like "01:23" (1 minute, 23 seconds) -->
+  <!-- Format string for times like "1:43:33" (1 hour, 43 minutes, 33 seconds) -->
+  <!-- Item on EditText context menu. This action is used to select all text in the edit field. -->
   <string name="selectAll">Elekti ĉiujn</string>
+  <!-- Item on EditText context menu.  This action is used to cut selected the text into the clipboard.  -->
   <string name="cut">Eltondi</string>
+  <!-- Item on EditText context menu. This action is used to cut selected the text into the clipboard. -->
   <string name="copy">Kopii</string>
+  <!-- Item on EditText context menu. This action is used to paste from the clipboard into the eidt field -->
   <string name="paste">Alglui</string>
+  <!-- Item on EditText context menu. This action is used to replace the current word by other suggested words, suggested by the IME or the spell checker -->
+  <!-- Item on EditText pop-up window. This action is used to delete the text that the user recently added. [CHAR LIMIT=15] -->
   <string name="delete">Forigi</string>
+  <!-- Item on EditText context menu. This action is used to copy a URL from the edit field into the clipboard. -->
   <string name="copyUrl">Kopii la URL-on</string>
+  <!-- Item on EditText context menu. Added only when the context menu is not empty, it enable selection context mode. [CHAR LIMIT=20] -->
+  <!-- Text selection contextual mode title, displayed in the CAB. [CHAR LIMIT=20] -->
+  <!-- Option to add the current misspelled word to the user dictionary. [CHAR LIMIT=25] -->
+  <!-- Option to delete the highlighted part of the text from the suggestion popup. [CHAR LIMIT=25] -->
   <string name="deleteText">Forigi</string>
+  <!-- EditText context menu -->
+  <!-- Title for EditText context menu [CHAR LIMIT=20] -->
+  <!-- If the device is getting low on internal storage, a notification is shown to the user.  This is the title of that notification. -->
+  <!-- If the device is getting low on internal storage, a notification is shown to the user.  This is the message of that notification. -->
+  <!-- If the device does not have storage for the main system classes, a notification is shown to the user.  This is the message of that notification. -->
+  <!-- [CHAR LIMIT=NONE] Stub notification title for an app running a service that has provided
+         a bad bad notification for itself. -->
+  <!-- [CHAR LIMIT=NONE] Stub notification text for an app running a service that has provided
+         a bad bad notification for itself. -->
+  <!-- Preference framework strings. -->
+  <!-- Preference framework strings. -->
   <string name="cancel">Nuligi</string>
+  <!-- Preference framework strings. -->
+  <!-- Preference framework strings. -->
   <string name="no">Nuligi</string>
+  <!-- This is the generic "attention" string to be used in attention dialogs.  Typically
+         combined with setIconAttribute(android.R.attr.alertDialogIcon)
+         (or setIcon(android.R.drawable.ic_dialog_alert) on legacy versions of the platform) -->
+  <!-- Text shown by list fragment when waiting for data to display. -->
   <string name="loading">Ŝarĝado\u2026</string>
+  <!-- Default text for a button that can be toggled on and off. -->
   <string name="capital_on">EK</string>
+  <!-- Default text for a button that can be toggled on and off. -->
   <string name="capital_off">FOR</string>
+  <!-- Title of intent resolver dialog when selecting an application to run. -->
+  <!-- Title of intent resolver dialog when selecting an application to run
+         and a previously used application is known. -->
+  <!-- Title of intent resolver dialog when selecting a viewer application to run. -->
   <string name="whichViewApplication">Malfermi per</string>
+  <!-- Title of intent resolver dialog when selecting a viewer application to run
+         and a previously used application is known. -->
+  <!-- Title of intent resolver dialog when selecting an editor application to run. -->
+  <!-- Title of intent resolver dialog when selecting an editor application to run
+         and a previously used application is known. -->
+  <!-- Title of intent resolver dialog when selecting a sharing application to run. -->
+  <!-- Title of intent resolver dialog when selecting a sharing application to run
+         and a previously used application is known. -->
+  <!-- Title of intent resolver dialog when selecting a HOME application to run. -->
+  <!-- Title of intent resolver dialog when selecting a HOME application to run
+         and a previously used application is known. -->
+  <!-- Option to always use the selected application resolution in the future. See the "Complete action using" dialog title-->
+  <!-- Title of the list of alternate options to complete an action shown when the
+         last used option is being displayed separately. -->
+  <!-- Text displayed when the user selects the check box for setting default application.  See the "Use by default for this action" check box. -->
+  <!-- Default title for the activity chooser, when one is not given. Android allows multiple activities to perform an action.  for example, there may be many ringtone pickers installed.  A dialog is shown to the user allowing him to pick which activity should be used.  This is the title. -->
+  <!-- title for the USB activity chooser. -->
+  <!-- Text to display when there are no activities found to display in the
+         activity chooser. See the "Select an action" title. -->
+  <!-- Title of the alert when an application has crashed. -->
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+  <!-- Text of the alert that is displayed when an application has crashed. -->
+  <!-- Title of the alert when an application is not responding. -->
+  <!-- Text of the alert that is displayed when an application is not responding. -->
+  <!-- Text of the alert that is displayed when an application is not responding. -->
+  <!-- Text of the alert that is displayed when an application is not responding. -->
+  <!-- Text of the alert that is displayed when an application is not responding. -->
+  <!-- Button allowing the user to close an application that is not responding. This will kill the application. -->
   <string name="force_close">Konfirmi</string>
+  <!-- Button allowing the user to send a bug report for application which has encountered an error. -->
+  <!-- Button allowing the user to choose to wait for an application that is not responding to become responsive again. -->
+  <!-- Text of the alert that is displayed when a web page is not responding. [CHAR-LIMIT=NONE] -->
+  <!-- [CHAR LIMIT=25] Title of the alert when application launches on top of another. -->
+  <!-- [CHAR LIMIT=50] Title of the alert when application launches on top of another. -->
+  <!-- [CHAR LIMIT=50] Title of the alert when application launches on top of another. -->
+  <!-- [CHAR LIMIT=50] Compat mode dialog: compat mode switch label. -->
   <string name="screen_compat_mode_scale">Skali</string>
+  <!-- [CHAR LIMIT=50] Compat mode dialog: compat mode switch label. -->
+  <!-- [CHAR LIMIT=200] Compat mode dialog: hint to re-enable compat mode dialog. -->
+  <!-- Text of the alert that is displayed when an application has violated StrictMode. -->
+  <!-- Text of the alert that is displayed when an application has violated StrictMode. -->
+  <!-- [CHAR LIMIT=40] Title of dialog that is shown when performing a system upgrade. -->
+  <!-- [CHAR LIMIT=40] Title of dialog that is shown when system is starting. -->
+  <!-- [CHAR LIMIT=NONE] Message shown in upgrading dialog when doing an fstrim. -->
+  <!-- [CHAR LIMIT=NONE] Message shown in upgrading dialog for each .apk that is optimized. -->
+  <!-- [CHAR LIMIT=NONE] Message shown in upgrading dialog for each .apk pre boot broadcast -->
+  <!-- [CHAR LIMIT=NONE] Message to show in upgrading dialog when reached the point of starting apps. -->
+  <!-- [CHAR LIMIT=NONE] Message to show in upgrading dialog when the bulk of the upgrade work is done. -->
+  <!-- Notification text to tell the user that a heavy-weight application is running. -->
+  <!-- Notification details to tell the user that a heavy-weight application is running. -->
+  <!-- Title of dialog prompting whether user wants to switch between heavy-weight apps. -->
+  <!-- Descriptive text for switching to a new heavy-weight application. -->
+  <!-- Notification text to tell the user that a process has exceeded its memory limit. -->
+  <!-- Notification details to tell the user that a process has exceeded its memory limit. -->
+  <!-- Title of dialog prompting the user to share a heap dump. -->
+  <!-- Text of dialog prompting the user to share a heap dump. -->
+  <!-- Displayed in the title of the chooser for things to do with text that
+         is to be sent to another application. For example, I can send
+         text through SMS or IM.  A dialog with those choices would be shown,
+         and this would be the title. -->
+  <!-- Title of the dialog where the user is adjusting the phone ringer volume -->
+  <!-- Title of the dialog where the user is adjusting the music volume -->
   <string name="volume_music">Aŭdvida laŭteco</string>
+  <!-- Hint shown in the volume toast to inform the user that the media audio is playing through Bluetooth. -->
+  <!-- Hint shown in the volume toast to inform the user that the current ringtone is the silent ringtone. -->
+  <!-- Title of the dialog where the user is adjusting the phone call volume -->
+  <!-- Title of the dialog where the user is adjusting the phone call volume when connected on bluetooth-->
+  <!-- Title of the dialog where the user is adjusting the audio volume for alarms -->
   <string name="volume_alarm">Laŭteco de alarmo</string>
+  <!-- Title of the dialog where the user is adjusting the audio volume for notifications -->
   <string name="volume_notification">Atentiga laŭteco</string>
+  <!-- Title of the dialog where the user is adjusting the general audio volume -->
+  <!-- Content description for bluetooth volume icon [CHAR LIMIT=100] -->
   <string name="volume_icon_description_bluetooth">Bludanta laŭteco</string>
+  <!-- Content description for ringer volume icon [CHAR LIMIT=100] -->
+  <!-- Content description for in-call volume icon [CHAR LIMIT=100] -->
+  <!-- Content description for media volume icon [CHAR LIMIT=100] -->
+  <!-- Content description for notification volume icon [CHAR LIMIT=100] -->
+  <!-- Ringtone picker strings -->
+  <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. -->
+  <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. This fills in the actual ringtone's title into the message. -->
+  <!-- Choice in the ringtone picker.  If chosen, there will be silence instead of a ringtone played. -->
+  <!-- The title of the ringtone picker dialog. -->
+  <!-- If there is ever a ringtone set for some setting, but that ringtone can no longer be resolved, t his is shown instead.  For example, if the ringtone was on a SD card and it had been removed, this woudl be shown for ringtones on that SD card. -->
+  <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's title. -->
+  <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's message. -->
+  <!-- A notification is shown when a wifi captive portal network is detected.  This is the notification's title. -->
+  <!-- A notification is shown when a captive portal network is detected.  This is the notification's title. -->
+  <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
+  <!-- A notification is shown when the user connects to a Wi-Fi network and the system detects that that network has no Internet access. This is the notification's title. -->
+  <!-- A notification is shown when the user connects to a Wi-Fi network and the system detects that that network has no Internet access. This is the notification's message. -->
+  <!-- A notification is shown when a user's selected SSID is later disabled due to connectivity problems.  This is the notification's title / ticker. -->
+  <!-- A notification is shown when a user's selected SSID is later disabled due to connectivity problems.  The complete alert msg is: <hotspot name> + this string, i.e. "Linksys has a poor internet connection" -->
+  <!-- Do not translate. Default access point SSID used for tethering -->
+  <!-- A notification is shown the first time a connection is attempted on an app owned AP -->
+  <!-- title for this message -->
+  <!-- message explaining who is connecting to what -->
+  <!-- default application in case name can not be found -->
+  <!-- Name of the dialog that lets the user choose an accented character to insert -->
+  <!-- SMS per-application rate control Dialog -->
+  <!-- SMS_DIALOG: An SMS dialog is shown if an application tries to send too many SMSes.  This is the title of that dialog. -->
+  <!-- See SMS_DIALOG.  This is the message shown in that dialog. [CHAR LIMIT=NONE] -->
+  <!-- See SMS_DIALOG.  This is a button choice to allow sending the SMSes. [CHAR LIMIT=30] -->
   <string name="sms_control_yes">Permesi</string>
+  <!-- See SMS_DIALOG.  This is a button choice to disallow sending the SMSes. [CHAR LIMIT=30] -->
   <string name="sms_control_no">Malpermesi</string>
+  <!-- SMS short code verification dialog. -->
+  <!-- The message text for the SMS short code confirmation dialog. [CHAR LIMIT=NONE] -->
+  <!-- Message details for the SMS short code confirmation dialog (possible premium short code). [CHAR LIMIT=NONE] -->
+  <!-- Message details for the SMS short code confirmation dialog (premium short code). [CHAR LIMIT=NONE] -->
+  <!-- Text of the approval button for the SMS short code confirmation dialog. [CHAR LIMIT=30] -->
   <string name="sms_short_code_confirm_allow">Sendi</string>
+  <!-- Text of the cancel button for the SMS short code confirmation dialog. [CHAR LIMIT=30] -->
   <string name="sms_short_code_confirm_deny">Nuligi</string>
+  <!-- Text of the checkbox for the SMS short code confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="sms_short_code_remember_choice">Memori mian elekton</string>
+  <!-- Text shown when remember checkbox is checked to inform the user how they may undo the setting. [CHAR LIMIT=40] -->
+  <!-- Text of the approval button for the SMS short code confirmation dialog when checkbox is checked. [CHAR LIMIT=30] -->
+  <!-- Text of the cancel button for the SMS short code confirmation dialog when checkbox is checked. [CHAR LIMIT=30] -->
+  <!-- SIM swap and device reboot Dialog -->
+  <!-- See SIM_REMOVED_DIALOG.  This is the title of that dialog. -->
+  <!-- See SIM_REMOVED_DIALOG.  This is the message of that dialog. -->
+  <!-- See SIM_REMOVED_DIALOG.  This is the button of that dialog. -->
   <string name="sim_done_button">Farite</string>
+  <!-- See SIM_ADDED_DIALOG.  This is the title of that dialog. -->
+  <!-- See SIM_ADDED_DIALOG.  This is the message of that dialog. -->
+  <!-- See SIM_ADDED_DIALOG.  This is the button of that dialog. -->
   <string name="sim_restart_button">Restartigi</string>
+  <!-- Date/Time picker dialogs strings -->
+  <!-- The title of the time picker dialog. [CHAR LIMIT=NONE] -->
+  <!-- The title of the date picker dialog. [CHAR LIMIT=NONE] -->
+  <!-- Name of the button in the date/time picker to accept the date/time change -->
   <string name="date_time_set">Agordi</string>
+  <!-- Name of the button in the date/time picker to accept the date/time change -->
   <string name="date_time_done">Farite</string>
+  <!-- Security Permissions strings-->
+  <!-- Text that is placed at the front of a permission name that is being added to an app [CHAR LIMIT=NONE] -->
+  <!-- Text that is placed at the front of a permission name that is being added to an app [CHAR LIMIT=NONE] -->
+  <!-- Shown for an application when it doesn't require any permission grants. -->
+  <!-- [CHAR LIMIT=NONE] Additional text in permission description for perms that can cost money. -->
+  <!-- USB storage dialog strings -->
+  <!-- This is the title for the activity's window. -->
+  <!-- See USB_STORAGE.  USB_STORAGE_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to mount.  This is the title. -->
+  <!-- See USB_STORAGE.    This is the message. [CHAR LIMIT=NONE] -->
+  <!-- See USB_STORAGE.    This is the message. [CHAR LIMIT=NONE] -->
+  <!-- See USB_STORAGE.    This is the button text to mount the phone on the computer. -->
+  <!-- See USB_STORAGE_DIALOG.  If there was an error mounting, this is the text. [CHAR LIMIT=NONE] -->
+  <!-- See USB_STORAGE_DIALOG.  If there was an error mounting, this is the text. -->
+  <!-- USB_STORAGE: When the user connects the phone to a computer via USB, we show a notification asking if he wants to share files across.  This is the title -->
+  <!-- See USB_STORAGE. This is the message. -->
+  <!-- USB_STORAGE_STOP: While USB storage is enabled, we show a notification dialog asking if he wants to stop. This is the title -->
+  <!-- See USB_STORAGE. This is the message. -->
+  <!-- USB storage stop dialog strings -->
+  <!-- This is the label for the activity, and should never be visible to the user. -->
+  <!-- See USB_STORAGE_STOP.  USB_STORAGE_STOP_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to stop usb storage.  This is the title. -->
+  <!-- See USB_STORAGE_STOP.    This is the message. [CHAR LIMIT=NONE] -->
+  <!-- See USB_STORAGE_STOP.    This is the message. -->
+  <!-- See USB_STORAGE_STOP.    This is the button text to stop usb storage. -->
+  <!-- See USB_STORAGE_STOP_DIALOG.  If there was an error stopping, this is the text. -->
+  <!-- USB_STORAGE_KILL_STORAGE_USERS dialog  -->
+  <!-- USB_STORAGE_KILL_STORAGE_USERS dialog message text -->
+  <!-- USB_STORAGE_ERROR dialog  dialog-->
+  <!-- USB_STORAGE_ERROR dialog  ok button-->
   <string name="dlg_ok">Konfirmi</string>
+  <!-- USB_PREFERENCES: Notification for when the user connected to the charger only.  This is the title -->
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in MTP mode.  This is the title -->
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in PTP mode.  This is the title -->
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in MIDI mode.  This is the title -->
+  <!-- USB_PREFERENCES: Notification for when a USB accessory is attached.  This is the title -->
+  <!-- See USB_PREFERENCES. This is the message. -->
+  <!-- Title of notification shown when ADB is actively connected to the phone. -->
+  <!-- Message of notification shown when ADB is actively connected to the phone. -->
+  <!-- Used to replace %s in urls retreived from the signin server with locales.  For Some        -->
+  <!-- devices we don't support all the locales we ship to and need to replace the '%s' with a    -->
+  <!-- locale string based on mcc values.  By default (0-length string) we don't replace the %s   -->
+  <!-- at all and later replace it with a locale string based on the users chosen locale          -->
+  <!-- DO NOT TRANSLATE -->
+  <!-- Title of the pop-up dialog in which the user switches keyboard, also known as input method. -->
+  <!-- Title of a button to open the settings to enable or disable keyboards, also known as input methods [CHAR LIMIT=30] -->
+  <!-- Summary text of a toggle switch to enable/disable use of the IME while a physical
+         keyboard is connected[CHAR LIMIT=25] -->
+  <!-- Title of the physical keyboard category in the input method selector [CHAR LIMIT=10] -->
   <string name="hardware">Aparataro</string>
+  <!-- Title of the notification to prompt the user to select a keyboard layout. -->
+  <!-- Message of the notification to prompt the user to select a keyboard layout. -->
+  <!-- External media notification strings -->
+  <!-- Notification title when external media is being checked [CHAR LIMIT=30] -->
+  <!-- Notification body when external media is being checked [CHAR LIMIT=NONE] -->
+  <!-- Notification body when new external media is detected [CHAR LIMIT=NONE] -->
+  <!-- Notification body when external media is ready for use [CHAR LIMIT=NONE] -->
+  <!-- Notification title when external media is unmountable (corrupt) [CHAR LIMIT=30] -->
+  <!-- Notification body when external media is unmountable (corrupt) [CHAR LIMIT=NONE] -->
+  <!-- Notification title when external media is unsupported [CHAR LIMIT=30] -->
+  <!-- Notification body when external media is unsupported [CHAR LIMIT=NONE] -->
+  <!-- Notification title when external media is unsafely removed [CHAR LIMIT=30] -->
+  <!-- Notification body when external media is unsafely removed [CHAR LIMIT=NONE] -->
+  <!-- Notification title when external media is missing [CHAR LIMIT=30] -->
+  <!-- Notification body when external media is missing [CHAR LIMIT=NONE] -->
+  <!-- Notification title when external media is unmounting [CHAR LIMIT=30] -->
+  <!-- Notification body when external media is unmounting [CHAR LIMIT=NONE] -->
+  <!-- Notification action to setup external media [CHAR LIMIT=20] -->
+  <!-- Notification action to unmount external media [CHAR LIMIT=20] -->
+  <!-- Notification action to browse external media [CHAR LIMIT=20] -->
+  <!-- Notification title when external media is missing [CHAR LIMIT=30] -->
+  <!-- Notification body when external media is missing [CHAR LIMIT=30] -->
+  <!-- Notification title when moving an application to external storage [CHAR LIMIT=30] -->
+  <!-- Notification title when moving data to external storage [CHAR LIMIT=32] -->
+  <!-- Notification title when moving data to external storage [CHAR LIMIT=32] -->
+  <!-- Notification title when moving data to external storage [CHAR LIMIT=64] -->
+  <!-- Notification title when moving data to external storage failed [CHAR LIMIT=32] -->
+  <!-- Notification title when moving data to external storage failed [CHAR LIMIT=64] -->
+  <!-- Short summary of storage media status when removed [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when unmounted [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when checking [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when mounted [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when mounted read-only [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when removed unsafely [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when unmountable [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when unsupported [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when ejecting [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when formatting [CHAR LIMIT=32] -->
+  <!-- Short summary of storage media status when missing [CHAR LIMIT=32] -->
+  <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
+  <!-- Title of an application permission that lets an application route media output. -->
+  <!-- Description of an application permission that lets an application route media output. -->
+  <!-- Title of an application permission that lets it read install sessions. -->
+  <!-- Description of an application permission that lets it read install sessions. -->
+  <!-- Title of an application permission that lets it read install sessions. -->
+  <!-- Description of an application permission that lets it read install sessions. -->
+  <!-- Shown in the tutorial for tap twice for zoom control. -->
+  <!-- Shown in gadget hosts (e.g. the home screen) when there was an error inflating
+    the gadget. -->
+  <!-- Long label for a button on a full-screen input method for the "Go" action. -->
   <string name="ime_action_go">Ek</string>
+  <!-- Long label for a button on a full-screen input method for the "Search" action. -->
   <string name="ime_action_search">Serĉi</string>
+  <!-- Long label for a button on a full-screen input method for the "Send" action. -->
   <string name="ime_action_send">Sendi</string>
+  <!-- Long label for a button on a full-screen input method for the "Next" action. -->
   <string name="ime_action_next">Sekva</string>
+  <!-- Long label for a button on a full-screen input method for the "Done" action. -->
   <string name="ime_action_done">Farite</string>
+  <!-- [CHAR LIMIT=6] Long label for a button on a full-screen input method for the "Previous" action. -->
+  <!-- Long label for a button on a full-screen input method for an unknown action. -->
   <string name="ime_action_default">Lanĉi</string>
+  <!-- Strings for search suggestions. These are going here because they are referenced by both
+         ContactsProvider and GoogleContactsProvider -->
+  <!-- This string appears (on two lines) when you type a number into contacts search, to let you dial the phone number you typed.  The first line will be in bigger type than the second. -->
+  <!-- This string appears (on two lines) when you type a number into contacts search, to let you create a contact whose phone number is the number you typed.  The first line will be in bigger type than the second. -->
+  <!-- This string array should be overridden by the manufacture to present a list of carrier-id,locale. The wifi regulatory domain is extracted from the locale information. This is used at startup to set system defaults by checking the system property ro.carrier for the carrier-id and searching through this array -->
+  <!-- An Array of [[Carrier-ID]                     -->
+  <!--              [default-locale]]                -->
   <string name="allow">Permesi</string>
   <string name="deny">Malpermesi</string>
+  <!-- Message to show when an intent automatically switches users into the personal profile. -->
+  <!-- Message to show when an intent automatically switches users into a work profile. -->
+  <!-- Label to show for a service that is running because it is an input method. -->
+  <!-- Label to show for a service that is running because it is a sync adapter. -->
+  <!-- Label to show for a service that is running because it is an accessibility module. -->
   <string name="accessibility_binding_label">Alirebleco</string>
+  <!-- Label to show for a service that is running because it is a wallpaper. -->
+  <!-- Dialog title for user to select a different wallpaper from service list -->
+  <!-- Label to show for a service that is running because it is observing
+         the user's notifications. -->
+  <!-- Label to show for a service that is running because it is providing conditions. -->
+  <!-- Do Not Translate: Alternate eri.xml -->
+  <!-- The title of the notification when VPN is active. -->
+  <!-- The title of the notification when VPN is active with an application name. -->
+  <!-- The text of the notification when VPN is active. -->
+  <!-- The text of the notification when VPN is active with a session name. -->
+  <!-- Notification title when connecting to lockdown VPN. -->
+  <!-- Notification title when connected to lockdown VPN. -->
+  <!-- Notification title when error connecting to lockdown VPN. -->
+  <!-- Notification body that indicates user can touch to configure lockdown VPN connection. -->
+  <!-- Localized strings for WebView -->
+  <!-- Label for button in a WebView that will open a chooser to choose a file to upload -->
   <string name="upload_file">Elekti dosieron</string>
+  <!-- Label for the file upload control when no file has been chosen yet -->
+  <!-- Label for <input type="reset"> button in html -->
   <string name="reset">Reagordi</string>
+  <!-- Label for <input type="submit"> button in html -->
   <string name="submit">Sendi</string>
+  <!-- Strings for car mode notification -->
+  <!-- Shown when car mode is enabled -->
+  <!-- Strings for tethered notification -->
+  <!-- Shown when the device is tethered -->
+  <!--  Strings for possible PreferenceActivity Back/Next buttons -->
   <string name="back_button_label">Reen</string>
   <string name="next_button_label">Sekva</string>
+  <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
   <string name="skip_button_label">Preterpasi</string>
+  <!-- Displayed on the Find dialog when there are no matches [CHAR LIMIT=NONE]-->
+  <!-- Find dialog hint text.  Also used in the menu item to open find on page [CHAR LIMIT=NONE] -->
+  <!-- Displayed on the Find dialog to display the index of the highlighted
+         match and total number of matches found in the current page. [CHAR LIMIT=NONE] -->
+  <!-- Label for the "Done" button on the far left of action mode toolbars. -->
   <string name="action_mode_done">Farite</string>
+  <!-- Strings for MasterClearReceiver. -->
+  <!-- Text for progress dialog while erasing USB storage volume [CHAR LIMIT=NONE] -->
   <string name="progress_erasing" product="nosdcard">Forviŝado de USB-memorilo\u2026</string>
+  <!-- Text for progress dialog while erasing SD card [CHAR LIMIT=NONE] -->
   <string name="progress_erasing" product="default">Forviŝado de la SD-karto\u2026</string>
+  <!-- Text for WebView's text selection Action Mode -->
+  <!-- ActionBar action to share the current selection [CHAR LIMIT=10] -->
   <string name="share">Komunigi</string>
+  <!-- ActionBar action to use the current selection to open the Find on page functionality [CHAR LIMIT=10]-->
   <string name="find">Serĉi</string>
+  <!-- ActionBar action to use the current selection to perform a web search [CHAR-LIMIT=16] -->
+  <!-- ActionBar action to find the next match in the page [CHAR LIMIT=24] -->
+  <!-- ActionBar action to find the previous match in the page [CHAR LIMIT=24] -->
+  <!-- Network positioning notification ticker. The name of the user (e.g. John Doe) who sent
+         the request is shown as a dynamic string. -->
+  <!-- Network positioning notification and verification title to inform the user about
+         an incoming location request. -->
+  <!-- Network positioning notification message. The name of the user (e.g. John Doe) and
+         service (SUPL-service) who sent the request is shown as dynamic strings.
+         Translation should not be longer than master text. -->
+  <!-- Network positioning verification Yes. Button to push to share location information. -->
   <string name="gpsVerifYes">Jes</string>
+  <!-- Network positioning verification No. Button to push to deny sharing of location
+         information. -->
   <string name="gpsVerifNo">Ne</string>
+  <!-- Error message when the sync tried to delete too many things -->
+  <!-- Dialog message for when there are too many deletes that would take place and we want user confirmation -->
+  <!-- Dialog action for when there are too many deletes that would take place and we want user confirmation, and the user wants to delete the items -->
+  <!-- Dialog action for when there are too many deletes that would take place and we want user confirmation, and the user wants to undo the deletions -->
+  <!-- Dialog action for when there are too many deletes that would take place and we want user confirmation, and the user wants to do nothing for now -->
+  <!-- Choose Account Activity label -->
+  <!-- List item to add an account [CHAR LIMIT=20] -->
+  <!-- NumberPicker - accessibility support -->
+  <!-- Description of the button to increase the NumberPicker value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to decrease the NumberPicker value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the tap and hold action to get into scroll mode in NumberPicker. [CHAR LIMIT=NONE] -->
+  <!-- Description of the scrolling action in NumberPicker. [CHAR LIMIT=NONE] -->
+  <!-- TimePicker - accessibility support -->
+  <!-- Description of the button to increase the TimePicker's minute value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to decrease the TimePicker's minute value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to increase the TimePicker's hour value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to decrease the TimePicker's hour value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to increase the TimePicker's set PM value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to decrease the TimePicker's set AM value. [CHAR LIMIT=NONE] -->
+  <!-- DatePicker - accessibility support -->
+  <!-- Description of the button to increase the DatePicker's month value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to decrease the DatePicker's month value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to increase the DatePicker's day value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to decrease the DatePicker's day value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to increase the DatePicker's year value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to decrease the DatePicker's year value. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to move to the previous month. [CHAR LIMIT=NONE] -->
+  <!-- Description of the button to move to the next month. [CHAR LIMIT=NONE] -->
+  <!-- KeyboardView - accessibility support -->
+  <!-- Description of the Alt button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_alt">Alt-klavo</string>
+  <!-- Description of the Cancel button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_cancel">Nuligi</string>
+  <!-- Description of the Delete button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_delete">Forigi</string>
+  <!-- Description of the Done button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_done">Farite</string>
+  <!-- Description of the Mode change button in a KeyboardView. [CHAR LIMIT=NONE] -->
+  <!-- Description of the Shift button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_shift">Majuskliga klavo</string>
+  <!-- Description of the Enter button in a KeyboardView. [CHAR LIMIT=NONE] -->
+  <!-- ActivityChooserView - accessibility support -->
+  <!-- Description of the shwoing of a popup window with activities to choose from. [CHAR LIMIT=NONE] -->
+  <!-- Error message if the share target app cannto be launched. [CHAR LIMIT=NONE] -->
+  <!-- ShareActionProvider - accessibility support -->
+  <!-- Description of the choose target button in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] -->
+  <!-- Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] -->
+  <!-- Slide lock screen -->
+  <!-- Description of the sliding handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+  <!-- Description of the unlock handle in the Slide unlock screen for tablets. [CHAR LIMIT=NONE] -->
+  <!-- Announce that a headset is required to hear keyboard keys while typing a password. [CHAR LIMIT=NONE] -->
+  <!-- The value of a keyboard key announced when accessibility is enabled and no headsed is used. [CHAR LIMIT=NONE] -->
+  <!-- Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] -->
+  <!-- Content description for the action bar "up" affordance. [CHAR LIMIT=NONE] -->
+  <!-- Content description for the action menu overflow button. [CHAR LIMIT=NONE] -->
   <string name="action_menu_overflow_description">Pliaj opcioj</string>
+  <!-- Formatting string for describing the action bar's title/home/up affordance.
+         This is a single tappable "button" that includes the app icon, the Up indicator
+         (usually a "<" chevron) and the window title text.
+         %1$s is the title. %2$s is the description of what tapping/clicking the whole
+         thing is going to do. -->
+  <!-- Just like action_bar_home_description_format, but this one will be used
+         if the window is also providing subtitle text.
+         %1$s is the title. %2$s is the subtitle. %3$s is the description of what
+         tapping/clicking the whole thing is going to do. -->
+  <!-- Storage description for internal storage. [CHAR LIMIT=NONE] -->
+  <!-- Storage description for a generic SD card. [CHAR LIMIT=NONE] -->
   <string name="storage_sd_card">SD-karto</string>
+  <!-- Storage description for a SD card from a specific manufacturer. [CHAR LIMIT=NONE] -->
+  <!-- Storage description for a generic USB drive. [CHAR LIMIT=NONE] -->
+  <!-- Storage description for a USB drive from a specific manufacturer. [CHAR LIMIT=NONE] -->
+  <!-- Storage description for USB storage. [CHAR LIMIT=NONE] -->
   <string name="storage_usb">USB memorilo</string>
+  <!-- Notification title when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
+  <!-- Notification body when data usage has exceeded warning threshold. [CHAR LIMIT=32] -->
+  <!-- Notification title when 2G-3G data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
+  <!-- Notification title when 4G data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
+  <!-- Notification title when mobile data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
+  <!-- Notification title when Wi-Fi data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
+  <!-- Notification body when data usage has exceeded limit threshold, and has been disabled. [CHAR LIMIT=32] -->
+  <!-- Notification title when 2G-3G data usage has exceeded limit threshold. [CHAR LIMIT=32] -->
+  <!-- Notification title when 4G data usage has exceeded limit threshold. [CHAR LIMIT=32] -->
+  <!-- Notification title when mobile data usage has exceeded limit threshold. [CHAR LIMIT=32] -->
+  <!-- Notification title when Wi-Fi data usage has exceeded limit threshold. [CHAR LIMIT=32] -->
+  <!-- Notification body when data usage has exceeded limit threshold. [CHAR LIMIT=32] -->
+  <!-- Notification title when background data usage is limited. [CHAR LIMIT=32] -->
+  <!-- Notification body when background data usage is limited. [CHAR LIMIT=32] -->
+  <!-- SSL Certificate dialogs -->
+  <!-- Title for an SSL Certificate dialog -->
+  <!-- Message on an SSL Certificate dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Label for an information field on an SSL Certificate Dialog -->
+  <!-- Title for a button to expand the list of activities in ActivityChooserView [CHAR LIMIT=25] -->
+  <!-- Title default for a dialog showing possible activities in ActivityChooserView [CHAR LIMIT=25] -->
+  <!-- Title for a dialog showing possible activities for sharing in ShareActionProvider [CHAR LIMIT=25] -->
+  <!-- Delimeter used between each item in a textual list; for example "Alpha, Beta". [CHAR LIMIT=3] -->
   <string name="list_delimeter">", "</string>
+  <!-- STK sending DTMF, SMS, USSD, SS -->
+  <!-- STK launch Browser -->
+  <!-- STK setup Call -->
+  <!-- Title for a button to choose the currently selected activity
+         as the default in the activity resolver. [CHAR LIMIT=25] -->
   <string name="activity_resolver_use_always">Ĉiam</string>
+  <!-- Title for a button to choose the currently selected activity
+         from the activity resolver to use just this once. [CHAR LIMIT=25] -->
+  <!-- Text for the toast that is shown when the user clicks on a launcher that
+         doesn't support the work profile. [CHAR LIMIT=100] -->
+  <!-- Name of the default audio route for tablets when nothing
+         is connected to a headphone or other wired audio output jack. [CHAR LIMIT=50] -->
   <string name="default_audio_route_name" product="tablet">Tabulkomputilo</string>
+  <!-- Name of the default audio route for tablets when nothing
+         is connected to a headphone or other wired audio output jack. [CHAR LIMIT=50] -->
+  <!-- Name of the default audio route when nothing is connected to
+         a headphone or other wired audio output jack. [CHAR LIMIT=50] -->
   <string name="default_audio_route_name" product="default">Telefono</string>
+  <!-- Name of the default audio route when wired headphones are
+         connected. [CHAR LIMIT=50] -->
   <string name="default_audio_route_name_headphones">Kapaŭskultilo</string>
+  <!-- Name of the default audio route when an audio dock is connected. [CHAR LIMIT=50] -->
+  <!-- Name of the default media route when HDMI is connected. [CHAR LIMIT=50] -->
+  <!-- Name of the default audio route category. [CHAR LIMIT=50] -->
   <string name="default_audio_route_category_name">Sistemo</string>
+  <!-- Description of the bluetooth a2dp audio route. [CHAR LIMIT=50] -->
+  <!-- Description of a wireless display route. [CHAR LIMIT=50] -->
+  <!-- Content description of a MediaRouteButton for accessibility support.
+        Cast is the standard android verb for sending content to a remote device. [CHAR LIMIT=50] -->
+  <!-- Title of the media route chooser dialog. [CHAR LIMIT=40] -->
+  <!-- Title of the media route chooser dialog for selecting remote display routes. [CHAR LIMIT=40] -->
+  <!-- Placeholder text to show when no devices have been found. [CHAR LIMIT=50] -->
+  <!-- Button to access extended settings.  [CHAR LIMIT=30] -->
   <string name="media_route_chooser_extended_settings">Agordoj</string>
+  <!-- Button to disconnect from a media route.  [CHAR LIMIT=30] -->
   <string name="media_route_controller_disconnect">Malkonekti</string>
+  <!-- Status message for remote routes attempting to scan/determine availability -->
+  <!-- Status message for a remote route attempting to connect -->
+  <!-- Status message for a remote route that is confirmed to be available for connection -->
   <string name="media_route_status_available">Disponebla</string>
+  <!-- Status message for remote routes that are not available for connection right now -->
   <string name="media_route_status_not_available">Ne atingebla</string>
+  <!-- Status message for a remote route that is in use (and thus unavailabe) right now -->
+  <!-- Display manager service -->
+  <!-- Name of the built-in display.  [CHAR LIMIT=50] -->
+  <!-- Name of the HDMI display.  [CHAR LIMIT=50] -->
+  <!-- Name of the N'th overlay display for testing.  [CHAR LIMIT=50] -->
+  <!-- Title text to show within the overlay.  [CHAR LIMIT=50] -->
+  <!-- Title text to append when the display is secure.  [CHAR LIMIT=30] -->
+  <!-- Keyguard strings -->
+  <!-- Message shown in pattern unlock after some number of unsuccessful attempts -->
+  <!-- Message shown when user enters wrong pattern -->
+  <!-- Message shown when user enters wrong password -->
+  <!-- Message shown when user enters wrong PIN -->
+  <!-- Countdown message shown after too many failed unlock attempts -->
+  <!-- Instructions for using the pattern unlock screen -->
+  <!-- Instructions for using the SIM PIN unlock screen -->
+  <!-- Instructions for using the PIN unlock screen -->
+  <!-- Instructions for using the password unlock screen -->
+  <!-- Hint shown in the PUK screen that asks the user to enter the PUK code given to them by their provider -->
+  <!-- Hint shown in the PUK unlock screen PIN TextView -->
+  <!-- Message shown when the user needs to confirm the PIN they just entered in the PUK screen -->
+  <!-- Message shown in dialog while the device is unlocking the SIM card -->
+  <!-- Message shown when the user enters the wrong PIN code -->
+  <!-- Message shown when the user enters an invalid SIM pin password in PUK screen -->
+  <!-- Message shown when the user enters an invalid PUK code in the PUK screen -->
+  <!-- Message shown when the user enters an invalid PUK code -->
+  <!-- String shown in PUK screen when PIN codes don't match -->
+  <!-- Message shown when the user exceeds the maximum number of pattern attempts -->
+  <!-- Instructions show in account unlock screen allowing user to enter their email password -->
+  <!-- Hint shown in TextView in account unlock screen of keyguard -->
   <string name="kg_login_username_hint">Uzantnomo (retmesaĝo)</string>
+  <!-- Hint shown in TextView in account unlock screen of keyguard -->
   <string name="kg_login_password_hint">Pasvorto</string>
+  <!-- Label shown on sign in button on account unlock screen of keyguard -->
   <string name="kg_login_submit_button">Aliĝi</string>
+  <!-- Message shown when the user enters an invalid username/password combination in account unlock screen of keyguard -->
+  <!-- Hint text shown when user has too many failed password attempts in account unlock screen of keyguard -->
+  <!-- Message shown while device checks username/password in account unlock screen of keyguard -->
   <string name="kg_login_checking_password">Kontrolado de konto\u2026</string>
+  <!-- Message shown in dialog when max number of attempts are reached for PIN screen of keyguard -->
+  <!-- Message shown in dialog when max number of attempts are reached for password screen of keyguard -->
+  <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. -->
+  <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. -->
+  <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the device will now be wiped -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the device will now be wiped -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the device will now be wiped -->
+  <!-- Message shown in dialog when user is almost at the limit where they will be
+    locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- Message shown in dialog when user is almost at the limit where they will be
+    locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- Message shown in dialog when user is almost at the limit where they will be
+    locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- Sequence of characters used to separate message strings in keyguard. Typically just em-dash
+         with spaces on either side. [CHAR LIMIT=3] -->
   <string name="kg_text_message_separator" product="default">" \u2014 "</string>
+  <!-- The delete-widget drop target button text -->
   <string name="kg_reordering_delete_drop_target_text">Forigi</string>
+  <!-- Message shown in dialog when user is attempting to set the music volume above the
+    recommended maximum level for headphones -->
+  <!-- Text spoken when the user is performing a gesture that will enable accessibility. [CHAR LIMIT=none] -->
+  <!-- Text spoken when the user enabled accessibility. [CHAR LIMIT=none] -->
+  <!-- Text spoken when the user stops preforming a gesture that would enable accessibility. [CHAR LIMIT=none] -->
+  <!-- Text spoken when the current user is switched if accessibility is enabled. [CHAR LIMIT=none] -->
+  <!-- Message shown when switching to a user [CHAR LIMIT=none] -->
+  <!-- Default name of the owner user [CHAR LIMIT=20] -->
   <string name="owner_name" msgid="3879126011135546571">Posedanto</string>
+  <!-- Error message title [CHAR LIMIT=35] -->
   <string name="error_message_title">Eraro</string>
+  <!-- Message informing user that the change was disallowed by an administrator. [CHAR LIMIT=none] -->
+  <!-- Message informing user that the requested activity could not be found [CHAR LIMIT=none] -->
   <string name="revoke">Senvalidigi</string>
+  <!-- Printing -->
+  <!-- ISO (European standard) A0 media (paper) size: 33.11" × 46.81" -->
+  <!-- ISO (European standard) A1 media (paper) size: 23.39" × 33.11" -->
+  <!-- ISO (European standard) A2 media (paper) size: 16.54" x 23.39" -->
+  <!-- ISO (European standard) A3 media (paper) size: 11.69" x 16.54" -->
+  <!-- ISO (European standard) A4 media (paper) size: 8.27" x 11.69" -->
+  <!-- ISO (European standard) A5 media (paper) size: 5.83" x 8.27" -->
+  <!-- ISO (European standard) A6 media (paper) size: 4.13" x 5.83" -->
+  <!-- ISO (European standard) A7 media (paper) size: 2.91" x 4.13" -->
+  <!-- ISO (European standard) A8 media (paper) size: 2.05" x 2.91" -->
+  <!-- ISO (European standard) A9 media (paper) size: 1.46" x 2.05" -->
+  <!-- ISO (European standard) A10 media (paper) size: 1.02" x 1.46" -->
+  <!-- ISO (European standard) B0 media (paper) size: 39.37" x 55.67" -->
+  <!-- ISO (European standard) B1 media (paper) size: 27.83" x 39.37" -->
+  <!-- ISO (European standard) B2 media (paper) size - 19.69" x 27.83" -->
+  <!-- ISO (European standard) B3 media (paper) size: 13.90" x 19.69" -->
+  <!-- ISO (European standard) B4 media (paper) size: 9.84" x 13.90" -->
+  <!-- ISO (European standard) B5 media (paper) size: 6.93" x 9.84" -->
+  <!-- ISO (European standard) B6 media (paper) size: 4.92" x 6.93" -->
+  <!-- ISO (European standard) B7 media (paper) size: 3.46" x 4.92" -->
+  <!-- ISO (European standard) B8 media (paper) size: 2.44" x 3.46" -->
+  <!-- ISO (European standard) B9 media (paper) size: 1.73" x 2.44" -->
+  <!-- ISO (European standard) B10 media (paper) size: 1.22" x 1.73" -->
+  <!-- ISO (European standard) C0 media (paper) size: 36.10" x 51.06" -->
+  <!-- ISO (European standard) C1 media (paper) size: 25.51" x 36.10" -->
+  <!-- ISO (European standard) C2 media (paper) size: 18.03" x 25.51" -->
+  <!-- ISO (European standard) C3 media (paper) size: 12.76" x 18.03" -->
+  <!-- ISO (European standard) C4 media (paper) size: 9.02" x 12.76" -->
+  <!-- ISO (European standard) C5 media (paper) size: 6.38" x 9.02" -->
+  <!-- ISO (European standard) C6 media (paper) size: 4.49" x 6.38" -->
+  <!-- ISO (European standard) C7 media (paper) size: 3.19" x 4.49" -->
+  <!-- ISO ISO C8 media (paper) size: 2.24" x 3.19" -->
+  <!-- ISO ISO C9 media (paper) size: 1.57" x 2.24" -->
+  <!-- ISO (European standard) C10 media (paper) size: 1.10" x 1.57" -->
+  <!-- North America Letter media (paper) size: 8.5" × 11" (279mm x 216mm) -->
+  <!-- North America Government Letter media (paper) size: 8.0" × 10.5" (203mm x 267mm) -->
   <string name="mediasize_na_gvrnmt_letter">Regada letero</string>
+  <!-- North America Legal media (paper) size: 8.5" × 14" (216mm x 356mm) -->
   <string name="mediasize_na_legal">Laŭleĝa avizo</string>
+  <!-- North America Junior Legal media (paper) size: 8.0" × 5.0" (203mm × 127mm) -->
+  <!-- North America Ledger media (paper) size: 17" × 11" (432mm × 279mm) -->
+  <!-- North America Tabloid media (paper) size: 11" × 17" (279mm × 432mm) -->
   <string name="mediasize_na_tabloid">Etformata gazeto</string>
+  <!-- North America Index Card 3x5 media (paper) size: 3" x 5" (76mm x 127mm) -->
+  <!-- North America Index Card 4x6 media (paper) size: 4" x 6" (102mm x 152mm) -->
+  <!-- North America Index Card 5x8 media (paper) size: 5" x 8" (127mm x 203mm) -->
+  <!-- North America Monarch media (paper) size: 7.25" x 10.5" (184mm x 267mm) -->
+  <!-- North America Quarto media (paper) size: 8" x 10" (203mm x 254mm) -->
+  <!-- North America Foolscap media (paper) size: 8" x 13" (203mm x 330mm) -->
+  <!-- Chinese Roc 8k media (paper) size: 270mm x 390mm (10.629" x 15.3543") -->
+  <!-- Chinese Roc 16k media (paper) size: 195mm x 270mm (7.677" x 10.629") -->
+  <!-- Chinese PRC 1 media (paper) size: 102mm x 165mm (4.015" x 6.496") -->
+  <!-- Chinese PRC 2 media (paper) size: 102mm x 176mm (4.015" x 6.929") -->
+  <!-- Chinese PRC 3 media (paper) size: 125mm x 176mm (4.921" x 6.929") -->
+  <!-- Chinese PRC 4 media (paper) size: 110mm x 208mm (4.330" x 8.189") -->
+  <!-- Chinese PRC 5 media (paper) size: 110mm x 220mm (4.330" x 8.661") -->
+  <!-- Chinese PRC 6 media (paper) size: 120mm x 320mm (4.724" x 12.599") -->
+  <!-- Chinese PRC 7 media (paper) size: 160mm x 230mm (6.299" x 9.055") -->
+  <!-- Chinese PRC 8 media (paper) size: 120mm x 309mm (4.724" x 12.165") -->
+  <!-- Chinese PRC 9 media (paper) size: 229mm x 324mm (9.016" x 12.756") -->
+  <!-- Chinese PRC 10 media (paper) size: 324mm x 458mm (12.756" x 18.032") -->
+  <!-- Chinese RPC 16K media (paper) size: 146mm x 215mm (5.749" x 8.465") -->
+  <!-- Chinese Pa Kai media (paper) size: 146mm x 215mm (5.749" x 8.465") -->
+  <!-- Chinese Dai Pa Kai media (paper) size: 275mm x 395mm (10.827" x 15.551") -->
+  <!-- Chinese Jurro Ku Kai media (paper) size: 275mm x 395mm (10.827" x 15.551") -->
+  <!-- Japanese JIS B10 media (paper) size: 32mm x 45mm (1.259" x 1.772") -->
+  <!-- Japanese JIS B9 media (paper) size: 45mm x 64mm (1.772" x 2.52") -->
+  <!-- Japanese JIS B8 media (paper) size: 64mm x 91mm (2.52" x 3.583") -->
+  <!-- Japanese JIS B7 media (paper) size: 91mm x 128mm (3.583" x 5.049") -->
+  <!-- Japanese JIS B6 media (paper) size: 128mm x 182mm (5.049" x 7.165") -->
+  <!-- Japanese JIS B5 media (paper) size: 182mm x 257mm (7.165" x 10.118") -->
+  <!-- Japanese JIS B4 media (paper) size: 257mm x 364mm (10.118" x 14.331") -->
+  <!-- Japanese JIS B3 media (paper) size: 364mm x 515mm (14.331" x 20.276") -->
+  <!-- Japanese JIS B2 media (paper) size: 515mm x 728mm (20.276" x 28.661") -->
+  <!-- Japanese JIS B1 media (paper) size: 728mm x 1030mm (28.661" x 40.551") -->
+  <!-- Japanese JIS B0 media (paper) size: 1030mm x 1456mm (40.551" x 57.323") -->
+  <!-- Japanese JIS Exec media (paper) size: 216mm x 330mm (8.504" x 12.992") -->
+  <!-- Japanese Chou4 media (paper) size: 90mm x 205mm (3.543" x 8.071") -->
+  <!-- Japanese Chou3 media (paper) size: 120mm x 235mm (4.724" x 9.252") -->
+  <!-- Japanese Chou2 media (paper) size: 111.1mm x 146mm (4.374" x 5.748") -->
+  <!-- Japanese Hagaki media (paper) size: 100mm x 148mm (3.937" x 5.827") -->
+  <!-- Japanese Oufuku media (paper) size: 148mm x 200mm (5.827" x 7.874") -->
+  <!-- Japanese Kahu media (paper) size: 240mm x 322.1mm (9.449" x 12.681") -->
+  <!-- Japanese Kaku2 media (paper) size: 240mm x 332mm (9.449" x 13.071") -->
+  <!-- Japanese You4 media (paper) size: 105mm x 235mm (4.134" x 9.252") -->
+  <!-- Media (paper) size for specifying any paper size in portrait.-->
+  <!-- Media (paper) size for specifying any paper size in landscape.-->
+  <!-- Write fail reason: printing was cancelled.[CHAR LIMIT=none] -->
   <string name="write_fail_reason_cancelled">Nuligite</string>
+  <!-- Write fail reason: couldn't write the printed content. [CHAR LIMIT=none] -->
+  <!-- Print fail reason: unknown. [CHAR LIMIT=25] -->
   <string name="reason_unknown">nekonate</string>
+  <!-- Print fail reason: the print service that has to process the print job is not available. [CHAR LIMIT=none] -->
+  <!-- Title for the notification that a print service was installed. [CHAR LIMIT=50] -->
+  <!-- Message for the notification that a print service was installed. [CHAR LIMIT=50] -->
+  <!-- PIN entry dialog title for entering the administrator PIN [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog label/hint for PIN [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog label/hint for incorrect PIN entry [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog label/hint for old PIN [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog label for new PIN [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog label for new PIN confirmation [CHAR LIMIT=none] -->
+  <!-- PIN creation dialog message [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog error when PINs are not the same [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog error when PIN is too short [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog countdown message for next chance to enter the PIN [CHAR LIMIT=none] -->
+  <!-- Phrase describing a time duration using seconds [CHAR LIMIT=none] -->
+  <!-- PIN entry dialog tells the user to not enter a PIN for a while. [CHAR LIMIT=none] -->
+  <!-- Cling help message title when hiding the navigation bar entering immersive mode [CHAR LIMIT=none] -->
+  <!-- Cling help message description when hiding the navigation bar entering immersive mode [CHAR LIMIT=none] -->
+  <!-- Cling help message confirmation button when hiding the navigation bar entering immersive mode [CHAR LIMIT=30] -->
+  <!-- Label for button to confirm chosen date or time [CHAR LIMIT=30] -->
   <string name="done_label">Farite</string>
+  <!--
+         Content description for the hour selector in the time picker, which displays
+         selectable hours of the day along the inside edge of a circle, as in an analog clock.
+         [CHAR LIMIT=50]
+    -->
+  <!--
+         Content description for the minute selector in the time picker, which displays
+         selectable five-minute intervals along the inside edge of a circle, as in an analog clock.
+         [CHAR LIMIT=50]
+    -->
+  <!-- Accessibility announcement for hour circular picker [CHAR LIMIT=NONE] -->
+  <!-- Accessibility announcement for minute circular picker [CHAR LIMIT=NONE] -->
+  <!-- Accessibility announcement for the day picker [CHAR LIMIT=NONE] -->
+  <!-- Accessibility announcement for the year picker [CHAR LIMIT=NONE] -->
+  <!-- Accessibility announcement when a number that had been typed in is deleted [CHAR_LIMIT=NONE] -->
+  <!--
+        Used to wrap a label for content description for a work profile, e.g. "Work Email" instead
+        of email when there are two email apps.
+        [CHAR LIMIT=20]
+     -->
+  <!-- DO NOT TRANSLATE -->
+  <!-- DO NOT TRANSLATE -->
+  <!-- DO NOT TRANSLATE -->
+  <!-- DO NOT TRANSLATE -->
+  <!-- DO NOT TRANSLATE -->
+  <!-- DO NOT TRANSLATE -->
+  <!-- Notify use that they are in Lock-to-app -->
+  <!-- Notify use that they are in Lock-to-app in accessibility mode -->
+  <!-- Notify user that they are locked in lock-to-app mode -->
+  <!-- Starting lock-to-app indication. -->
+  <!-- Exting lock-to-app indication. -->
+  <!-- Lock-to-app unlock pin string -->
+  <!-- Lock-to-app unlock pattern string -->
+  <!-- Lock-to-app unlock password string -->
+  <!-- Notification shown when device owner silently installs a package [CHAR LIMIT=NONE] -->
+  <!-- Notification shown when device owner silently updates a package [CHAR LIMIT=NONE] -->
+  <!-- Notification shown when device owner silently deletes a package [CHAR LIMIT=NONE] -->
+  <!-- [CHAR_LIMIT=NONE] Battery saver: Feature description -->
+  <!-- Zen mode condition - summary: time duration in minutes. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - summary: time duration in minutes (short version). [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - summary: time duration in hours. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - summary: time duration in hours (short version). [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - line one: time duration in minutes. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - line one: time duration in minutes (short version). [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - line one: time duration in hours. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - line one: time duration in hours (short version). [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - line two: ending time. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition - line one: Until next alarm. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition: no exit criteria. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode condition: no exit criteria, includes the name of the feature for emphasis. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode active automatic rule name separator. [CHAR LIMIT=NONE] -->
+  <!-- Content description for the Toolbar icon used to collapse an expanded action mode. [CHAR LIMIT=NONE] -->
+  <!-- Zen mode - feature name. [CHAR LIMIT=40] -->
   <string name="zen_mode_feature_name">Ne ĝenu</string>
+  <!-- Zen mode - downtime legacy feature name. [CHAR LIMIT=40] -->
+  <!-- Zen mode - name of default automatic schedule for weeknights. [CHAR LIMIT=40] -->
+  <!-- Zen mode - name of default automatic schedule for weekends. [CHAR LIMIT=40] -->
+  <!-- Zen mode - name of default automatic calendar event-based rule. [CHAR LIMIT=40] -->
+  <!-- Indication that the current volume and other effects (vibration) are being suppressed by a third party, such as a notification listener. [CHAR LIMIT=30] -->
+  <!-- Error message shown when there is a system error which can be solved by user performing factory reset. [CHAR LIMIT=NONE] -->
+  <!-- Error message shown when there is a system error which can be solved by the manufacturer. [CHAR LIMIT=NONE] -->
+  <!-- Displayed when the USSD/SS request is modified by STK CC to a
+    different request. This will be displayed in a toast. -->
+  <!-- Content description of the work profile icon in the notification. -->
+  <!-- User visible name for USB MIDI Peripheral port -->
+  <!-- Manufacturer name for USB MIDI Peripheral port -->
+  <!-- Product name for USB MIDI Peripheral port -->
+  <!-- Floating toolbar strings -->
+  <!-- Content description for the button that opens the floating toolbar overflow. [CHAR LIMIT=NONE] -->
   <string name="floating_toolbar_open_overflow_description">Pliaj opcioj</string>
+  <!-- Content description for the button that closes the floating toolbar overflow. [CHAR LIMIT=NONE] -->
+  <!-- Ellipsis character to appear in notification templates, e.g.
+         notification_template_material_inbox.xml.
+         DO NOT TRANSLATE -->
+  <!-- Label describing the number of selected items [CHAR LIMIT=48] -->
+  <!-- Used to replace a range of characters in text that is too wide
+         for the space allocated to it (three dots). -->
+  <!-- Used to replace a range of characters in text that is too wide
+         for the space allocated to it (two dots). -->
 </resources>

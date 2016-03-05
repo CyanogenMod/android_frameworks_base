@@ -17,20 +17,65 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">திரைப்பிடிப்பு</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">மறுதொடக்கம்</string>
+  <!-- label for current user in phone options dialog -->
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">மறுதொடக்கம்</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">மீட்பு (ரெகவரி)</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">துவக்க ஏற்றி</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">பதிவிறக்கம்</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
+  <!-- Title of dialog to confirm rebooting. -->
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">உங்கள் கைக்கணினி மீண்டும் துவக்கபடும்.</string>
   <string name="reboot_confirm" product="default">உங்கள் தொலைபேசி மீண்டும் துவக்கபடும்.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">மீண்டும் துவக்க\u2026</string>
+  <!-- Long-press back kill application -->
+  <!-- ADB over network notification -->
+  <!-- ADB over USB and network notification -->
+  <!-- ADB notification message-->
+  <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Theme installation error notification -->
+  <!-- stylus gestures support -->
+  <!-- Zen mode buttons -->
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
+  <!-- Privacy Guard -->
   <string name="permdesc_changePrivacyGuardState">பயன்பாட்டை மற்றொரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்குமா என்பதை மாற்ற அனுமதிக்கிறது. ஒரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்கும் போது, இது போன்ற தொடர்புகள், அழைப்பு பதிவுகள், மற்றும் செய்திகள் போன்ற தனிப்பட்ட தரவுக்கான அணுகல் இருக்காது.</string>
   <string name="privacy_guard_notification">தனியுரிமை பாதுகாப்பு செயலில்</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> தனிப்பட்ட தரவை அணுக முடியாது</string>
   <string name="privacy_guard_dialog_title">தனியுரிமை பாதுகாப்பு</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> விரும்புகிறது.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">கேமரா அணுக</string>
   <string name="app_ops_access_location">உங்கள் இருப்பிடத்தை அணுக</string>
   <string name="app_ops_access_notifications">உங்கள் அறிவிக்கைகள் படிக்க</string>
@@ -67,4 +112,12 @@
   <string name="app_ops_use_voice_volume">குரல் அழைப்பு ஒலியை கட்டுப்படுத்த</string>
   <string name="app_ops_write_mms">ஒரு எம்எம்எஸ் தகவலை எழுது</string>
   <string name="app_ops_write_sms">ஒரு எஸ்எம்எஸ் செய்தி எழுது</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <!-- LiveDisplay strings -->
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
 </resources>

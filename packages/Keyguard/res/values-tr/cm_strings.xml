@@ -16,10 +16,14 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM Özel kilitli</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Geçersiz kart.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">SIM PIN kodunuzu girin, <xliff:g id="number">%d</xliff:g> deneme hakkınız kaldı, yoksa cihazınızın kilidini açabilmek için operatörünüz ile iletişim kurmak zorunda kalacaksınız.</item>
     <item quantity="other">SIM PIN kodunuzu girin, <xliff:g id="number">%d</xliff:g> deneme hakkınız kaldı.</item>
   </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

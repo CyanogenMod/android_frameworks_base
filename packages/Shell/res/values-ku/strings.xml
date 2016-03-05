@@ -16,8 +16,14 @@
 -->
 <resources>
   <string name="app_label">توێکڵ</string>
+  <!-- Title of notification indicating a bugreport has been successfully captured. [CHAR LIMIT=50] -->
   <string name="bugreport_finished_title">ڕاپۆرتی کەموکورتیەکان وێنەگیرا</string>
+  <!-- Text of notification indicating that swipe left will share the captured bugreport. [CHAR LIMIT=100] -->
+  <!-- Text of notification indicating that touching will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="default">ده‌ستی لێده‌ بۆ په‌رشکردنی ڕاپۆرتی که‌موکوڕییه‌کانت</string>
+  <!-- Body of dialog informing user about contents of a bugreport. [CHAR LIMIT=NONE] -->
   <string name="bugreport_confirm">ڕاپۆرتى که‌موکوڕییه‌کان داتا له‌ خۆ ده‌گرێت لە تۆمارى سيستم فايلی جۆراوجۆره‌وه‌، هەروەك زانياريى تايبەت و كەسى. تۆماری که‌موکوڕییه‌کان ته‌نها له‌گه‌ڵ ئه‌و که‌س و به‌رنامانه‌دا په‌رش بکه‌ که‌ متمانه‌ت پێیانه‌.</string>
+  <!-- Checkbox that indicates this dialog should be shown again when the next bugreport is taken. [CHAR LIMIT=50] -->
   <string name="bugreport_confirm_repeat">جاری داهاتوو ئه‌م په‌یامه‌ پیشان بده‌</string>
+  <!-- Title for documents backend that offers bugreports. -->
 </resources>

@@ -15,7 +15,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Dialog title to identify the request from a VPN application. [CHAR LIMIT=60] -->
   <string name="prompt">Connectiounsufro</string>
+  <!-- Dialog message to warn about the risk of using a VPN application. [CHAR LIMIT=NONE] -->
   <string name="warning"><xliff:g id="app">%s</xliff:g> wëll eng VPN-Connectioun opstellen, wouduerch den Netzwierktrafic kann iwwerwaacht ginn. Acceptéier dat just, wann s du der Quell vertraus.
         <![CDATA[
         <br />
@@ -23,13 +25,21 @@
         <img src="vpn_icon" />
         ]]> erschéngt uewen um Schierm, wa VPN aktiv ass.
     </string>
+  <!-- Dialog title for built-in VPN. [CHAR LIMIT=40]  -->
   <string name="legacy_title">VPN connectéiert</string>
+  <!-- Button label to configure the current VPN session. [CHAR LIMIT=20] -->
   <string name="configure">Astellen</string>
+  <!-- Button label to disconnect the current VPN session. [CHAR LIMIT=20] -->
   <string name="disconnect">Deconnectéieren</string>
+  <!-- Label for the name of the current VPN session. [CHAR LIMIT=20] -->
   <string name="session">Sëtzung:</string>
+  <!-- Label for the duration of the current VPN session. [CHAR LIMIT=20] -->
   <string name="duration">Dauer:</string>
+  <!-- Label for the network usage of data transmitted over VPN. [CHAR LIMIT=20] -->
   <string name="data_transmitted">Geschéckt:</string>
+  <!-- Label for the network usage of data received over VPN. [CHAR LIMIT=20] -->
   <string name="data_received">Empfaangen:</string>
+  <!-- Formatted string for the network usage over VPN. [CHAR LIMIT=40] -->
   <string name="data_value_format">
         <xliff:g id="number">%1$s</xliff:g> Bytes /
         <xliff:g id="number">%2$s</xliff:g> Päck
