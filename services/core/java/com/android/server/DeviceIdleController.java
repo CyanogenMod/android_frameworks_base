@@ -1509,13 +1509,6 @@ public class DeviceIdleController extends SystemService
 
     void scheduleAlarmLocked(long delay, boolean idleUntil) {
         if (DEBUG) Slog.d(TAG, "scheduleAlarmLocked(" + delay + ", " + idleUntil + ")");
-        if (mMotionSensor == null) {
-            // If there is no motion sensor on this device, then we won't schedule
-            // alarms, because we can't determine if the device is not moving.  This effectively
-            // turns off normal execution of device idling, although it is still possible to
-            // manually poke it by pretending like the alarm is going off.
-            return;
-        }
         mNextAlarmTime = SystemClock.elapsedRealtime() + delay;
         if (idleUntil) {
             mAlarmManager.setIdleUntil(AlarmManager.ELAPSED_REALTIME_WAKEUP,
