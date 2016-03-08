@@ -126,6 +126,22 @@ public class AccessPoint implements Comparable<AccessPoint> {
 
     public boolean foundInScanResult = false;
 
+    public AccessPoint(AccessPoint accessPoint) {
+        ssid = accessPoint.ssid;
+        security = accessPoint.security;
+        networkId = accessPoint.networkId;
+        pskType = accessPoint.pskType;
+        mConfig = accessPoint.mConfig;
+        mRssi = accessPoint.mRssi;
+        mSeen = accessPoint.mSeen;
+        mInfo = accessPoint.mInfo;
+        mNetworkInfo = accessPoint.mNetworkInfo;
+        mAccessPointListener = accessPoint.mAccessPointListener;
+        mTag = accessPoint.mTag;
+        foundInScanResult = accessPoint.foundInScanResult;
+        mContext = accessPoint.mContext;
+    }
+
     public AccessPoint(Context context, Bundle savedState) {
         mContext = context;
         mConfig = savedState.getParcelable(KEY_CONFIG);
