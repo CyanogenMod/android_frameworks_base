@@ -258,4 +258,7 @@
         <item quantity="one">%1$d client</item>
         <item quantity="other">%1$d clients</item>
     </plurals>
+
+    <!-- CellularTile data sim not configured state string -->
+    <string name="data_sim_not_configured">No data SIM</string>
 </resources>
