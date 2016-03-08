@@ -232,10 +232,14 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
                 // Make sure signal gets cleared out when no sims.
                 mInfo.mobileSignalIconId = 0;
                 mInfo.dataTypeIconId = 0;
-                // Show a No SIMs description to avoid emergency calls message.
+                // Show a No SIMs description if we're incapable of supporting mobile data
+                // to avoid showing an emergency mode description. If we're still capable of
+                // supporting mobile data, notify the user that the data sim is not configured
+                // only relevant in MSIM scenario: CYNGNOS-2211
                 mInfo.enabled = true;
-                mInfo.enabledDesc = mContext.getString(
-                        R.string.keyguard_missing_sim_message_short);
+                mInfo.enabledDesc = mDataController.isMobileDataSupported() ?
+                        mContext.getString(R.string.data_sim_not_configured)
+                        : mContext.getString(R.string.keyguard_missing_sim_message_short);
                 mInfo.signalContentDescription = mInfo.enabledDesc;
             }
             refreshState(mInfo);
