@@ -32,7 +32,7 @@ using namespace android;
 
 int main()
 {
-    setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_DISPLAY);
+    setpriority(PRIO_PROCESS, 0, ANDROID_PRIORITY_NORMAL);
 
     char value[PROPERTY_VALUE_MAX];
     property_get("debug.sf.nobootanimation", value, "0");
