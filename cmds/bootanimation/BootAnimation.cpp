@@ -183,7 +183,7 @@ void BootAnimation::onFirstRef() {
     status_t err = mSession->linkToComposerDeath(this);
     ALOGE_IF(err, "linkToComposerDeath failed (%s) ", strerror(-err));
     if (err == NO_ERROR) {
-        run("BootAnimation", PRIORITY_DISPLAY);
+        run("BootAnimation", PRIORITY_NORMAL);
     }
 }
 
