@@ -42,6 +42,7 @@ import android.util.Slog;
 
 import com.android.server.LocalServices;
 import com.android.server.accessibility.DisplayAdjustmentUtils;
+import com.android.server.pm.UserContentObserver;
 import com.android.server.twilight.TwilightListener;
 import com.android.server.twilight.TwilightManager;
 import com.android.server.twilight.TwilightState;
@@ -134,13 +135,6 @@ public class LiveDisplayController {
         mDefaultOutdoorLux = mContext.getResources().getInteger(
                 org.cyanogenmod.platform.internal.R.integer.config_outdoorAmbientLux);
 
-        // Counter used to determine when we should tell the user about this feature.
-        // If it's not used after 3 sunsets, we'll show the hint once.
-        mHintCounter = CMSettings.System.getIntForUser(mContext.getContentResolver(),
-                CMSettings.System.LIVE_DISPLAY_HINTED,
-                -3,
-                UserHandle.USER_CURRENT);
-
         mUseOutdoorMode =
                 mHardware.isSupported(CMHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
         mOutdoorModeIsSelfManaged = mUseOutdoorMode ?
@@ -187,6 +181,12 @@ public class LiveDisplayController {
                 CMSettings.System.DISPLAY_TEMPERATURE_MODE,
                 MODE_OFF,
                 UserHandle.USER_CURRENT);
+        // Counter used to determine when we should tell the user about this feature.
+        // If it's not used after 3 sunsets, we'll show the hint once.
+        mHintCounter = CMSettings.System.getIntForUser(mContext.getContentResolver(),
+                CMSettings.System.LIVE_DISPLAY_HINTED,
+                -3,
+                UserHandle.USER_CURRENT);
 
         // Clear the hint forever
         if (mMode != MODE_OFF) {
@@ -216,7 +216,7 @@ public class LiveDisplayController {
         updateLiveDisplay(mCurrentLux);
     }
 
-    private final class SettingsObserver extends ContentObserver {
+    private final class SettingsObserver extends UserContentObserver {
         private final Uri DISPLAY_TEMPERATURE_DAY_URI =
                 CMSettings.System.getUriFor(CMSettings.System.DISPLAY_TEMPERATURE_DAY);
         private final Uri DISPLAY_TEMPERATURE_NIGHT_URI =
@@ -245,14 +245,15 @@ public class LiveDisplayController {
                 cr.registerContentObserver(DISPLAY_LOW_POWER_URI, false, this, UserHandle.USER_ALL);
                 cr.registerContentObserver(DISPLAY_COLOR_ENHANCE_URI, false, this, UserHandle.USER_ALL);
                 cr.registerContentObserver(DISPLAY_COLOR_ADJUSTMENT_URI, false, this, UserHandle.USER_ALL);
+                observe();
             } else {
                 cr.unregisterContentObserver(this);
+                unobserve();
             }
         }
 
         @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            super.onChange(selfChange,  uri);
+        protected void update() {
             updateSettings();
         }
     }
