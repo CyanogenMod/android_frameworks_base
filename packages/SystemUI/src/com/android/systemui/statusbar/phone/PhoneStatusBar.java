@@ -3741,6 +3741,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 removeNotificationViews(entry.key, rankingMap);
             }
         }
+        // Ensure mNotificationData is empty
+        mNotificationData.clear();
 
         if (mCustomTileListenerService != null) {
             try {
