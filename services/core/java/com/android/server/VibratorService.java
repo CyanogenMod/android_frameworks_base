@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.BatteryStats;
 import android.os.Handler;
 import android.os.IVibratorService;
@@ -47,6 +48,9 @@ import android.media.AudioAttributes;
 
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IBatteryStats;
+
+import cyanogenmod.hardware.CMHardwareManager;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -236,6 +240,14 @@ public class VibratorService extends IVibratorService.Stub
             }
         });
 
+        final CMHardwareManager hardware = CMHardwareManager.getInstance(mContext);
+        if (hardware.isSupported(CMHardwareManager.FEATURE_VIBRATOR)) {
+            mContext.getContentResolver().registerContentObserver(
+                    CMSettings.Secure.getUriFor(CMSettings.Secure.VIBRATOR_INTENSITY),
+                    true, mSettingObserver, UserHandle.USER_ALL);
+            updateVibratorIntensity();
+        }
+
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.VIBRATE_INPUT_DEVICES),
                 true, mSettingObserver, UserHandle.USER_ALL);
@@ -244,6 +256,7 @@ public class VibratorService extends IVibratorService.Stub
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateInputDeviceVibrators();
+                updateVibratorIntensity();
             }
         }, new IntentFilter(Intent.ACTION_USER_SWITCHED), null, mH);
 
@@ -256,9 +269,21 @@ public class VibratorService extends IVibratorService.Stub
         }
 
         @Override
-        public void onChange(boolean SelfChange) {
-            updateInputDeviceVibrators();
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(CMSettings.Secure.getUriFor(CMSettings.Secure.VIBRATOR_INTENSITY))) {
+                updateVibratorIntensity();
+            } else {
+                updateInputDeviceVibrators();
+            }
         }
+    }
+
+    private void updateVibratorIntensity() {
+        final CMHardwareManager hardware = CMHardwareManager.getInstance(mContext);
+        final int intensity = CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.VIBRATOR_INTENSITY, hardware.getVibratorDefaultIntensity(),
+                UserHandle.USER_CURRENT);
+        hardware.setVibratorIntensity(intensity);
     }
 
     @Override // Binder call
