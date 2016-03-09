@@ -225,4 +225,8 @@
     <!-- Battery fully charged notification -->
     <string name="notify_battery_fully_charged_title">Battery fully charged</string>
     <string name="notify_battery_fully_charged_text">Disconnect your device from the charger to improve battery longevity.</string>
+
+    <!-- Uicc hotswapped event configuration needed notification -->
+    <string name="uicc_hot_swapped_event_title">SIM cards have changed</string>
+    <string name="uicc_hot_swapped_event_text">Tap to set SIM card default preferences</string>
 </resources>

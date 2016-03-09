@@ -154,4 +154,7 @@
     <java-symbol type="string" name="notify_battery_fully_charged_title" />
     <java-symbol type="string" name="notify_battery_fully_charged_text" />
 
+    <!-- Uicc hotswapped event configuration needed notification -->
+    <java-symbol type="string" name="uicc_hot_swapped_event_title" />
+    <java-symbol type="string" name="uicc_hot_swapped_event_text" />
 </resources>
