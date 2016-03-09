@@ -211,8 +211,6 @@ public class NotificationStackScrollLayout extends ViewGroup
     private boolean mDisallowScrollingInThisMotion;
     private long mGoToFullShadeDelay;
 
-    private final PerformanceManager mPerf;
-
     private ViewTreeObserver.OnPreDrawListener mChildrenUpdater
             = new ViewTreeObserver.OnPreDrawListener() {
         @Override
@@ -258,8 +256,6 @@ public class NotificationStackScrollLayout extends ViewGroup
                 minHeight, maxHeight);
         mExpandHelper.setEventSource(this);
         mExpandHelper.setScrollAdapter(this);
-
-        mPerf = PerformanceManager.getInstance(context);
 
         mSwipeHelper = new SwipeHelper(SwipeHelper.X, this, getContext());
         mSwipeHelper.setLongPressListener(mLongPressListener);
@@ -845,10 +841,6 @@ public class NotificationStackScrollLayout extends ViewGroup
                 && !mExpandedInThisMotion
                 && !mOnlyScrollingInThisMotion) {
             horizontalSwipeWantsIt = mSwipeHelper.onTouchEvent(ev);
-        }
-
-        if (expandWantsIt && mIsBeingDragged) {
-            mPerf.cpuBoost(200 * 1000);
         }
 
         return horizontalSwipeWantsIt || scrollerWantsIt || expandWantsIt || super.onTouchEvent(ev);

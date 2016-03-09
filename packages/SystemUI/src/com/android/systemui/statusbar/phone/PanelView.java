@@ -42,8 +42,6 @@ import com.android.systemui.statusbar.FlingAnimationUtils;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 
-import cyanogenmod.power.PerformanceManager;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
@@ -89,8 +87,6 @@ public abstract class PanelView extends FrameLayout {
     private ObjectAnimator mPeekAnimator;
     private VelocityTrackerInterface mVelocityTracker;
     private FlingAnimationUtils mFlingAnimationUtils;
-
-    private final PerformanceManager mPerf;
 
     private boolean mUpdateExpandOnLayout;
     private View.OnLayoutChangeListener mLayoutChangeListener = new OnLayoutChangeListener() {
@@ -222,8 +218,6 @@ public abstract class PanelView extends FrameLayout {
         mLinearOutSlowInInterpolator =
                 AnimationUtils.loadInterpolator(context, android.R.interpolator.linear_out_slow_in);
         mBounceInterpolator = new BounceInterpolator();
-
-        mPerf = PerformanceManager.getInstance(context);
     }
 
     protected void loadDimens() {
@@ -694,8 +688,6 @@ public abstract class PanelView extends FrameLayout {
                                 / collapseSpeedUpFactor));
             }
         }
-
-        mPerf.cpuBoost((int)animator.getDuration() * 1000);
 
         animator.addListener(new AnimatorListenerAdapter() {
             private boolean mCancelled;
