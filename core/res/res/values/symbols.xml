@@ -2409,5 +2409,5 @@
 
   <java-symbol type="string" name="config_packagedKeyboardName" />
 
-  <java-symbol type="bool" name="config_useSystemClockforSensors" />
+  <java-symbol type="bool" name="config_useSystemClockforRotationSensor" />
 </resources>
