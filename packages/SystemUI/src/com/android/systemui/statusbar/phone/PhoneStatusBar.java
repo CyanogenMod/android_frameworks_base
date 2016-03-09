@@ -4522,7 +4522,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mStackScroller == null) return;
         boolean onKeyguard = mState == StatusBarState.KEYGUARD;
         mStackScroller.setHideSensitive(isLockscreenPublicMode()
-                || !userAllowsPrivateNotificationsInPublic(mCurrentUserId), goingToFullShade);
+                || (!userAllowsPrivateNotificationsInPublic(mCurrentUserId) && onKeyguard),
+                goingToFullShade);
         mStackScroller.setDimmed(onKeyguard, false /* animate */);
         mStackScroller.setExpandingEnabled(!onKeyguard);
         ActivatableNotificationView activatedChild = mStackScroller.getActivatedChild();
