@@ -2420,4 +2420,9 @@
 
     <!-- Show WiFi activity indicators on signal bar -->
     <bool name="config_showWifiActivityIndicators">true</bool>
+
+    <!-- Custom browser bookmarks -->
+    <string-array name="config_custom_bookmarks"></string-array>
+    <!-- Custom bookmark preloads -->
+    <string-array name="config_custom_bookmark_preloads"></string-array>
 </resources>
