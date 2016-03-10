@@ -406,16 +406,6 @@
     <item type="dimen" format="integer" name="time_picker_column_start_material">0</item>
     <item type="dimen" format="integer" name="time_picker_column_end_material">1</item>
 
-    <!-- EdgeGesture service: Distance a swipe must travel to be recognized as swipe. -->
-    <dimen name="edge_gesture_trigger_distance">12dp</dimen>
-
-    <!-- EdgeGesture service: This is the distance a swipe can travel orthogonally to its actual swipe
-         direction to be still recognized as swipe. -->
-    <dimen name="edge_gesture_perpendicular_distance">15dp</dimen>
-
-    <!-- EdgeGesture service: Thickness of the active trigger fields around the screen border -->
-    <dimen name="edge_gesture_trigger_thickness">12dp</dimen>
-
     <!-- Largest size an avatar might need to be drawn in the power menu user picker -->
     <dimen name="global_actions_avatar_size">40dp</dimen>
 </resources>
