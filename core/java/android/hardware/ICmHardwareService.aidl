@@ -45,4 +45,7 @@ interface ICmHardwareService {
     int getThermalState();
     boolean registerThermalListener(IThermalListenerCallback callback);
     boolean unRegisterThermalListener(IThermalListenerCallback callback);
+
+    boolean writePersistentBytes(String key, in byte[] bytes);
+    byte[] readPersistentBytes(String key);
 }

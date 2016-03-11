@@ -33,6 +33,7 @@ import org.cyanogenmod.hardware.DisplayGammaCalibration;
 import org.cyanogenmod.hardware.HighTouchSensitivity;
 import org.cyanogenmod.hardware.KeyDisabler;
 import org.cyanogenmod.hardware.LongTermOrbits;
+import org.cyanogenmod.hardware.PersistentStorage;
 import org.cyanogenmod.hardware.SerialNumber;
 import org.cyanogenmod.hardware.SunlightEnhancement;
 import org.cyanogenmod.hardware.TapToWake;
@@ -74,6 +75,9 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
         public String getSerialNumber();
 
         public boolean requireAdaptiveBacklightForSunlightEnhancement();
+
+        public boolean writePersistentBytes(String key, byte[] value);
+        public byte[] readPersistentBytes(String key);
     }
 
     private class LegacyCmHardware implements CmHardwareInterface {
@@ -107,6 +111,9 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
                 mSupportedFeatures |= CmHardwareManager.FEATURE_TOUCH_HOVERING;
             if (ThermalMonitor.isSupported())
                 mSupportedFeatures |= CmHardwareManager.FEATURE_THERMAL_MONITOR;
+            if (PersistentStorage.isSupported())
+                mSupportedFeatures |= CmHardwareManager.FEATURE_PERSISTENT_STORAGE;
+
         }
 
         public int getSupportedFeatures() {
@@ -268,6 +275,15 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
         public boolean requireAdaptiveBacklightForSunlightEnhancement() {
             return SunlightEnhancement.isAdaptiveBacklightRequired();
         }
+
+        public boolean writePersistentBytes(String key, byte[] value) {
+            return PersistentStorage.set(key, value);
+        }
+
+        public byte[] readPersistentBytes(String key) {
+            return PersistentStorage.get(key);
+        }
+
     }
 
     private CmHardwareInterface getImpl(Context context) {
@@ -500,5 +516,27 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
             return mRemoteCallbackList.unregister(callback);
         }
         return false;
+    }
+
+    @Override
+    public boolean writePersistentBytes(String key, byte[] value) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.MANAGE_PERSISTENT_STORAGE, null);
+        if (!isSupported(CmHardwareManager.FEATURE_PERSISTENT_STORAGE)) {
+            Log.e(TAG, "Persistent storage is not supported");
+            return false;
+        }
+        return mCmHwImpl.writePersistentBytes(key, value);
+    }
+
+    @Override
+    public byte[] readPersistentBytes(String key) {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.MANAGE_PERSISTENT_STORAGE, null);
+        if (!isSupported(CmHardwareManager.FEATURE_PERSISTENT_STORAGE)) {
+            Log.e(TAG, "Persistent storage is not supported");
+            return null;
+        }
+        return mCmHwImpl.readPersistentBytes(key);
     }
 }
