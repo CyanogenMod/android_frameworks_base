@@ -37,10 +37,11 @@
 
         <!-- show weather -->
         <com.android.systemui.qs.QSBooleanSettingRow
+                android:id="@+id/show_weather"
                 style="@style/SettingRow"
                 android:key="status_bar_show_weather"
                 android:title="@string/quick_settings_title_show_weather"
-                systemui:defaultValue="1"
+                systemui:defaultValue="0"
                 systemui:table="cm_system"/>
 
         <!-- brightness slider -->
