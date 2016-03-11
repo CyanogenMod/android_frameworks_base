@@ -254,7 +254,7 @@
     <string name="capability_desc_canRequestFilterKeyEvents" msgid="7463135292204152818">"包含个人数据，例如信用卡号和密码。"</string>
     <string name="permlab_statusBar" msgid="7417192629601890791">"停用或修改状态栏"</string>
     <string name="permdesc_statusBar" msgid="8434669549504290975">"允许应用停用状态栏或者增删系统图标。"</string>
-    <string name="permlab_statusBarService" msgid="7247281911387931485">"状态栏"</string>
+    <string name="permlab_statusBarService" msgid="4826835508226139688">"用作状态栏"</string>
     <string name="permdesc_statusBarService" msgid="716113660795976060">"允许以状态栏形式显示应用。"</string>
     <string name="permlab_expandStatusBar" msgid="1148198785937489264">"展开/收拢状态栏"</string>
     <string name="permdesc_expandStatusBar" msgid="6917549437129401132">"允许应用展开或折叠状态栏。"</string>
@@ -282,7 +282,7 @@
     <string name="permdesc_receiveWapPush" msgid="748232190220583385">"允许该应用接收和处理 WAP 消息。此权限包括监视发送给您的消息或删除发送给您的消息而不向您显示的功能。"</string>
     <string name="permlab_getTasks" msgid="6466095396623933906">"检索正在运行的应用"</string>
     <string name="permdesc_getTasks" msgid="7454215995847658102">"允许该应用检索近期运行的和当前正在运行的任务的相关信息。此权限可让该应用了解设备上使用了哪些应用。"</string>
-    <string name="permlab_manageProfileAndDeviceOwners" msgid="5979288447973722097">"管理个人资料和设备所有者"</string>
+    <string name="permlab_manageProfileAndDeviceOwners" msgid="7918181259098220004">"管理个人资料和设备所有者"</string>
     <string name="permdesc_manageProfileAndDeviceOwners" msgid="106894851498657169">"允许应用设置个人资料所有者和设备所有者。"</string>
     <string name="permlab_reorderTasks" msgid="2018575526934422779">"对正在运行的应用重新排序"</string>
     <string name="permdesc_reorderTasks" msgid="7734217754877439351">"允许该应用将任务移动到前台和后台。该应用可能不经您的命令自行执行此操作。"</string>
@@ -324,7 +324,7 @@
     <string name="permdesc_writeCallLog" product="tablet" msgid="6661806062274119245">"允许该应用修改平板电脑的通话记录，包括有关来电和外拨电话的数据。恶意应用可能会借此清除或修改您的通话记录。"</string>
     <string name="permdesc_writeCallLog" product="tv" msgid="4225034892248398019">"允许应用修改电视的通话记录，包括有关来电和外拨电话的数据。恶意应用可能会借此清除或修改您的通话记录。"</string>
     <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"允许该应用修改手机的通话记录，包括有关来电和外拨电话的数据。恶意应用可能会借此清除或修改您的通话记录。"</string>
-    <string name="permlab_bodySensors" msgid="4871091374767171066">"人体传感器（如心跳速率检测器）"</string>
+    <string name="permlab_bodySensors" msgid="4683341291818520277">"访问身体传感器（如心率监测器）"</string>
     <string name="permdesc_bodySensors" product="default" msgid="4380015021754180431">"允许该应用存取监测您身体状况的传感器所收集的数据，例如您的心率。"</string>
     <string name="permlab_readCalendar" msgid="5972727560257612398">"读取日历活动和机密信息"</string>
     <string name="permdesc_readCalendar" product="tablet" msgid="4216462049057658723">"允许该应用读取您平板电脑上存储的所有日历活动，包括朋友或同事的活动。此权限可让该应用分享或保存您的日历数据，而不论这些数据是否属于机密或敏感内容。"</string>
@@ -336,15 +336,15 @@
     <string name="permdesc_writeCalendar" product="default" msgid="2324469496327249376">"允许该应用添加、删除、更改您可在手机上修改的活动，包括朋友或同事的活动。此权限可让该应用冒充日历所有者发送消息，或在所有者不知情的情况下修改活动。"</string>
     <string name="permlab_accessLocationExtraCommands" msgid="2836308076720553837">"获取额外的位置信息提供程序命令"</string>
     <string name="permdesc_accessLocationExtraCommands" msgid="6078307221056649927">"允许该应用使用其他的位置信息提供程序命令。此权限使该应用可以干扰GPS或其他位置信息源的运作。"</string>
-    <string name="permlab_accessFineLocation" msgid="1191898061965273372">"精确位置（基于GPS和网络）"</string>
+    <string name="permlab_accessFineLocation" msgid="251034415460950944">"访问确切位置信息（以 GPS 和网络为依据）"</string>
     <string name="permdesc_accessFineLocation" msgid="5295047563564981250">"允许该应用通过全球定位系统(GPS)或网络位置信息源（例如基站和WLAN）获取您的精确位置信息。您必须在设备上开启这些位置信息服务，应用才能获得位置信息。应用会使用此类服务确定您的位置，这可能会消耗更多电量。"</string>
-    <string name="permlab_accessCoarseLocation" msgid="4887895362354239628">"大致位置（基于网络）"</string>
+    <string name="permlab_accessCoarseLocation" msgid="7715277613928539434">"访问大致位置信息（以网络为依据）"</string>
     <string name="permdesc_accessCoarseLocation" msgid="2538200184373302295">"允许该应用获取您的大致位置信息。这类位置信息来自于使用网络位置信息源（例如基站和WLAN）的位置信息服务。您必须在设备上开启这些位置信息服务，应用才能获得位置信息。应用会使用此类服务确定您的大概位置。"</string>
     <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">"更改您的音频设置"</string>
     <string name="permdesc_modifyAudioSettings" msgid="3522565366806248517">"允许该应用修改全局音频设置，例如音量和用于输出的扬声器。"</string>
     <string name="permlab_recordAudio" msgid="3876049771427466323">"录音"</string>
     <string name="permdesc_recordAudio" msgid="4906839301087980680">"允许该应用使用麦克风录制音频。此权限可让该应用不经您的确认即可随时录制音频。"</string>
-    <string name="permlab_sim_communication" msgid="1180265879464893029">"SIM卡通信"</string>
+    <string name="permlab_sim_communication" msgid="2935852302216852065">"向 SIM 卡发送命令"</string>
     <string name="permdesc_sim_communication" msgid="5725159654279639498">"允许应用向SIM卡发送命令（此权限具有很高的危险性）。"</string>
     <string name="permlab_camera" msgid="3616391919559751192">"拍摄照片和视频"</string>
     <string name="permdesc_camera" msgid="8497216524735535009">"允许该应用使用相机拍摄照片和视频。此权限可让该应用随时使用相机，而无需您的确认。"</string>
@@ -376,13 +376,13 @@
     <string name="permdesc_setTimeZone" product="tablet" msgid="1676983712315827645">"允许应用更改平板电脑的时区。"</string>
     <string name="permdesc_setTimeZone" product="tv" msgid="888864653946175955">"允许应用更改电视的时区。"</string>
     <string name="permdesc_setTimeZone" product="default" msgid="4499943488436633398">"允许应用更改手机的时区。"</string>
-    <string name="permlab_getAccounts" msgid="1086795467760122114">"查找设备上的帐户"</string>
-    <string name="permdesc_getAccounts" product="tablet" msgid="2741496534769660027">"允许该应用获取平板电脑已知的帐户列表，其中可能包括由已安装的应用创建的所有帐户。"</string>
-    <string name="permdesc_getAccounts" product="tv" msgid="4190633395633907543">"允许应用获取电视已知的帐户列表，其中可能包括由已安装的应用创建的所有帐户。"</string>
-    <string name="permdesc_getAccounts" product="default" msgid="3448316822451807382">"允许该应用获取手机已知的帐户列表，其中可能包括由已安装的应用创建的所有帐户。"</string>
+    <string name="permlab_getAccounts" msgid="1086795467760122114">"查找设备上的帐号"</string>
+    <string name="permdesc_getAccounts" product="tablet" msgid="2741496534769660027">"允许该应用获取平板电脑已知的帐号列表，其中可能包括由已安装的应用创建的所有帐号。"</string>
+    <string name="permdesc_getAccounts" product="tv" msgid="4190633395633907543">"允许应用获取电视已知的帐号列表，其中可能包括由已安装的应用创建的所有帐号。"</string>
+    <string name="permdesc_getAccounts" product="default" msgid="3448316822451807382">"允许该应用获取手机已知的帐号列表，其中可能包括由已安装的应用创建的所有帐号。"</string>
     <string name="permlab_accessNetworkState" msgid="4951027964348974773">"查看网络连接"</string>
     <string name="permdesc_accessNetworkState" msgid="8318964424675960975">"允许该应用查看网络连接的相关信息，例如存在和连接的网络。"</string>
-    <string name="permlab_createNetworkSockets" msgid="8018758136404323658">"完全的网络访问权限"</string>
+    <string name="permlab_createNetworkSockets" msgid="7934516631384168107">"拥有完全的网络访问权限"</string>
     <string name="permdesc_createNetworkSockets" msgid="3403062187779724185">"允许该应用创建网络套接字和使用自定义网络协议。浏览器和其他某些应用提供了向互联网发送数据的途径，因此应用无需该权限即可向互联网发送数据。"</string>
     <string name="permlab_changeNetworkState" msgid="958884291454327309">"更改网络连接性"</string>
     <string name="permdesc_changeNetworkState" msgid="6789123912476416214">"允许应用更改网络连接的状态。"</string>
@@ -402,7 +402,7 @@
     <string name="permdesc_bluetoothAdmin" product="default" msgid="8931682159331542137">"允许应用配置本地蓝牙手机，并允许其查找远程设备且与之配对。"</string>
     <string name="permlab_accessWimaxState" msgid="4195907010610205703">"建立或中断 WiMAX 网络连接"</string>
     <string name="permdesc_accessWimaxState" msgid="6360102877261978887">"允许该应用确定是否启用了 WiMAX 以及连接的任何 WiMAX 网络的相关信息。"</string>
-    <string name="permlab_changeWimaxState" msgid="2405042267131496579">"更改 WiMAX 状态"</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"更改 WiMAX 状态"</string>
     <string name="permdesc_changeWimaxState" product="tablet" msgid="3156456504084201805">"允许该应用建立和断开平板电脑与 WiMAX 网络之间的连接。"</string>
     <string name="permdesc_changeWimaxState" product="tv" msgid="6022307083934827718">"允许应用建立和断开电视与 WiMAX 网络之间的连接。"</string>
     <string name="permdesc_changeWimaxState" product="default" msgid="697025043004923798">"允许该应用建立和断开手机与 WiMAX 网络之间的连接。"</string>
@@ -436,11 +436,11 @@
   </string-array>
     <string name="fingerprint_icon_content_description" msgid="2340202869968465936">"指纹图标"</string>
     <string name="permlab_readSyncSettings" msgid="6201810008230503052">"读取同步设置"</string>
-    <string name="permdesc_readSyncSettings" msgid="2706745674569678644">"允许该应用读取某个帐户的同步设置。例如，此权限可确定“联系人”应用是否与某个帐户同步。"</string>
+    <string name="permdesc_readSyncSettings" msgid="2706745674569678644">"允许该应用读取某个帐号的同步设置。例如，此权限可确定“联系人”应用是否与某个帐号同步。"</string>
     <string name="permlab_writeSyncSettings" msgid="5408694875793945314">"启用和停用同步"</string>
-    <string name="permdesc_writeSyncSettings" msgid="8956262591306369868">"允许该应用修改某个帐户的同步设置。例如，此权限可用于在“联系人”应用与某个帐户之间启用同步。"</string>
+    <string name="permdesc_writeSyncSettings" msgid="8956262591306369868">"允许该应用修改某个帐号的同步设置。例如，此权限可用于在“联系人”应用与某个帐号之间启用同步。"</string>
     <string name="permlab_readSyncStats" msgid="7396577451360202448">"读取同步统计信息"</string>
-    <string name="permdesc_readSyncStats" msgid="1510143761757606156">"允许该应用读取某个帐户的同步统计信息，包括同步活动历史记录和同步数据量。"</string>
+    <string name="permdesc_readSyncStats" msgid="1510143761757606156">"允许该应用读取某个帐号的同步统计信息，包括同步活动历史记录和同步数据量。"</string>
     <string name="permlab_sdcardRead" product="nosdcard" msgid="367275095159405468">"读取您的USB存储设备中的内容"</string>
     <string name="permlab_sdcardRead" product="default" msgid="2188156462934977940">"读取您的SD卡中的内容"</string>
     <string name="permdesc_sdcardRead" product="nosdcard" msgid="3446988712598386079">"允许应用读取您USB存储设备中的内容。"</string>
@@ -485,7 +485,7 @@
     <string name="permdesc_setInputCalibration" msgid="4527511047549456929">"允许应用修改触摸屏的校准参数。普通应用绝不需要此权限。"</string>
     <string name="permlab_accessDrmCertificates" msgid="7436886640723203615">"访问DRM证书"</string>
     <string name="permdesc_accessDrmCertificates" msgid="8073288354426159089">"允许应用配置和使用DRM证书。普通应用绝不需要此权限。"</string>
-    <string name="permlab_handoverStatus" msgid="1159132046126626731">"接收Android Beam的传输状态"</string>
+    <string name="permlab_handoverStatus" msgid="7820353257219300883">"接收 Android Beam 的传输状态"</string>
     <string name="permdesc_handoverStatus" msgid="4788144087245714948">"允许此应用接收Android Beam当前传输内容的相关信息"</string>
     <string name="permlab_removeDrmCertificates" msgid="7044888287209892751">"移除DRM证书"</string>
     <string name="permdesc_removeDrmCertificates" msgid="7272999075113400993">"允许应用移除DRM证书。普通应用绝不需要此权限。"</string>
@@ -696,9 +696,9 @@
     <string name="lockscreen_failed_attempts_now_wiping" product="default" msgid="3025504721764922246">"您已经<xliff:g id="NUMBER">%d</xliff:g>次错误地尝试解锁手机。手机现在将恢复为出厂默认设置。"</string>
     <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"<xliff:g id="NUMBER">%d</xliff:g>秒后重试。"</string>
     <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"忘记了图案？"</string>
-    <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"帐户解锁"</string>
+    <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"帐号解锁"</string>
     <string name="lockscreen_glogin_too_many_attempts" msgid="2751368605287288808">"图案尝试次数过多"</string>
-    <string name="lockscreen_glogin_instructions" msgid="3931816256100707784">"要解除锁定，请使用您的Google帐户登录。"</string>
+    <string name="lockscreen_glogin_instructions" msgid="3931816256100707784">"要解除锁定，请使用您的Google帐号登录。"</string>
     <string name="lockscreen_glogin_username_hint" msgid="8846881424106484447">"用户名（电子邮件）"</string>
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"密码"</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"登录"</string>
@@ -1091,11 +1091,11 @@
     <string name="ext_media_status_formatting" msgid="1085079556538644861">"正在格式化…"</string>
     <string name="ext_media_status_missing" msgid="5638633895221670766">"未插入"</string>
     <string name="activity_list_empty" msgid="1675388330786841066">"未找到匹配的活动。"</string>
-    <string name="permlab_route_media_output" msgid="1642024455750414694">"更改媒体输出线路"</string>
+    <string name="permlab_route_media_output" msgid="6243022988998972085">"更改媒体输出线路"</string>
     <string name="permdesc_route_media_output" msgid="4932818749547244346">"允许该应用将媒体输出线路更改到其他外部设备。"</string>
-    <string name="permlab_readInstallSessions" msgid="6165432407628065939">"读取安装会话"</string>
+    <string name="permlab_readInstallSessions" msgid="3713753067455750349">"读取安装会话"</string>
     <string name="permdesc_readInstallSessions" msgid="2049771699626019849">"允许应用读取安装会话。这样，应用将可以查看有关当前软件包安装的详情。"</string>
-    <string name="permlab_requestInstallPackages" msgid="1772330282283082214">"请求安装文件包"</string>
+    <string name="permlab_requestInstallPackages" msgid="5782013576218172577">"请求安装文件包"</string>
     <string name="permdesc_requestInstallPackages" msgid="5740101072486783082">"允许应用请求安装文件包。"</string>
     <string name="tutorial_double_tap_to_zoom_message_short" msgid="4070433208160063538">"触摸两次可进行缩放控制"</string>
     <string name="gadget_host_error_inflating" msgid="4882004314906466162">"无法添加小部件。"</string>
@@ -1108,13 +1108,13 @@
     <string name="ime_action_default" msgid="2840921885558045721">"执行"</string>
     <string name="dial_number_using" msgid="5789176425167573586">"拨打电话\n<xliff:g id="NUMBER">%s</xliff:g>"</string>
     <string name="create_contact_using" msgid="4947405226788104538">"创建电话号码为\n<xliff:g id="NUMBER">%s</xliff:g> 的联系人"</string>
-    <string name="grant_credentials_permission_message_header" msgid="2106103817937859662">"以下一个或多个应用请求获得相应权限，以便在当前和以后访问您的帐户。"</string>
+    <string name="grant_credentials_permission_message_header" msgid="2106103817937859662">"以下一个或多个应用请求获得相应权限，以便在当前和以后访问您的帐号。"</string>
     <string name="grant_credentials_permission_message_footer" msgid="3125211343379376561">"您是否同意此请求？"</string>
     <string name="grant_permissions_header_text" msgid="6874497408201826708">"访问权限请求"</string>
     <string name="allow" msgid="7225948811296386551">"允许"</string>
     <string name="deny" msgid="2081879885755434506">"拒绝"</string>
     <string name="permission_request_notification_title" msgid="6486759795926237907">"权限请求"</string>
-    <string name="permission_request_notification_with_subtitle" msgid="8530393139639560189">"应用对帐户 <xliff:g id="ACCOUNT">%s</xliff:g>\n 提出权限请求。"</string>
+    <string name="permission_request_notification_with_subtitle" msgid="8530393139639560189">"应用对帐号 <xliff:g id="ACCOUNT">%s</xliff:g>\n 提出权限请求。"</string>
     <string name="forward_intent_to_owner" msgid="1207197447013960896">"您目前是在工作资料之外使用此应用"</string>
     <string name="forward_intent_to_work" msgid="621480743856004612">"您目前是在工作资料内使用此应用"</string>
     <string name="input_method_binding_label" msgid="1283557179944992649">"输入法"</string>
@@ -1163,13 +1163,13 @@
     <string name="gpsVerifYes" msgid="2346566072867213563">"是"</string>
     <string name="gpsVerifNo" msgid="1146564937346454865">"否"</string>
     <string name="sync_too_many_deletes" msgid="5296321850662746890">"超出删除限制"</string>
-    <string name="sync_too_many_deletes_desc" msgid="496551671008694245">"帐户 <xliff:g id="ACCOUNT_NAME">%3$s</xliff:g> 在进行“<xliff:g id="TYPE_OF_SYNC">%2$s</xliff:g>”同步时删除了 <xliff:g id="NUMBER_OF_DELETED_ITEMS">%1$d</xliff:g> 项内容。您要如何处理这些删除的内容？"</string>
+    <string name="sync_too_many_deletes_desc" msgid="496551671008694245">"帐号 <xliff:g id="ACCOUNT_NAME">%3$s</xliff:g> 在进行“<xliff:g id="TYPE_OF_SYNC">%2$s</xliff:g>”同步时删除了 <xliff:g id="NUMBER_OF_DELETED_ITEMS">%1$d</xliff:g> 项内容。您要如何处理这些删除的内容？"</string>
     <string name="sync_really_delete" msgid="2572600103122596243">"删除这些内容"</string>
     <string name="sync_undo_deletes" msgid="2941317360600338602">"撤消删除"</string>
     <string name="sync_do_nothing" msgid="3743764740430821845">"目前不进行任何操作"</string>
-    <string name="choose_account_label" msgid="5655203089746423927">"选择帐户"</string>
-    <string name="add_account_label" msgid="2935267344849993553">"添加帐户"</string>
-    <string name="add_account_button_label" msgid="3611982894853435874">"添加帐户"</string>
+    <string name="choose_account_label" msgid="5655203089746423927">"选择帐号"</string>
+    <string name="add_account_label" msgid="2935267344849993553">"添加帐号"</string>
+    <string name="add_account_button_label" msgid="3611982894853435874">"添加帐号"</string>
     <string name="number_picker_increment_button" msgid="2412072272832284313">"增大"</string>
     <string name="number_picker_decrement_button" msgid="476050778386779067">"减小"</string>
     <string name="number_picker_increment_scroll_mode" msgid="3073101067441638428">"触摸 <xliff:g id="VALUE">%s</xliff:g> 次并按住。"</string>
@@ -1296,13 +1296,13 @@
     <string name="kg_invalid_puk" msgid="3638289409676051243">"请重新输入正确的PUK码。如果尝试错误次数过多，SIM卡将永久停用。"</string>
     <string name="kg_invalid_confirm_pin_hint" product="default" msgid="7003469261464593516">"PIN码不匹配"</string>
     <string name="kg_login_too_many_attempts" msgid="6486842094005698475">"图案尝试次数过多"</string>
-    <string name="kg_login_instructions" msgid="1100551261265506448">"要解锁，请登录您的Google帐户。"</string>
+    <string name="kg_login_instructions" msgid="1100551261265506448">"要解锁，请登录您的Google帐号。"</string>
     <string name="kg_login_username_hint" msgid="5718534272070920364">"用户名（电子邮件地址）"</string>
     <string name="kg_login_password_hint" msgid="9057289103827298549">"密码"</string>
     <string name="kg_login_submit_button" msgid="5355904582674054702">"登录"</string>
     <string name="kg_login_invalid_input" msgid="5754664119319872197">"用户名或密码无效。"</string>
     <string name="kg_login_account_recovery_hint" msgid="5690709132841752974">"忘记了用户名或密码？\n请访问 "<b>"google.com/accounts/recovery"</b>"。"</string>
-    <string name="kg_login_checking_password" msgid="1052685197710252395">"正在检查帐户…"</string>
+    <string name="kg_login_checking_password" msgid="1052685197710252395">"正在检查帐号…"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8276745642049502550">"您已经<xliff:g id="NUMBER_0">%d</xliff:g>次输错了PIN码。\n\n请在<xliff:g id="NUMBER_1">%d</xliff:g>秒后重试。"</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7813713389422226531">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次输错密码。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="74089475965050805">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次画错解锁图案。\n\n请在 <xliff:g id="NUMBER_1">%d</xliff:g> 秒后重试。"</string>
@@ -1312,9 +1312,9 @@
     <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="2072996269148483637">"您已经<xliff:g id="NUMBER">%d</xliff:g>次错误地尝试解锁平板电脑。平板电脑现在将恢复为出厂默认设置。"</string>
     <string name="kg_failed_attempts_now_wiping" product="tv" msgid="4987878286750741463">"您已经 <xliff:g id="NUMBER">%d</xliff:g> 次错误地尝试解锁电视。电视现在将恢复为出厂默认设置。"</string>
     <string name="kg_failed_attempts_now_wiping" product="default" msgid="4817627474419471518">"您已经<xliff:g id="NUMBER">%d</xliff:g>次错误地尝试解锁手机。手机现在将恢复为出厂默认设置。"</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="3253575572118914370">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐户解锁平板电脑。\n\n请在 <xliff:g id="NUMBER_2">%d</xliff:g> 秒后重试。"</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tv" msgid="4224651132862313471">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次后仍不成功，系统就会要求您使用电子邮件帐户解锁电视。\n\n请在 <xliff:g id="NUMBER_2">%d</xliff:g> 秒后重试。"</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐户解锁手机。\n\n请在 <xliff:g id="NUMBER_2">%d</xliff:g> 秒后重试。"</string>
+    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="3253575572118914370">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐号解锁平板电脑。\n\n请在 <xliff:g id="NUMBER_2">%d</xliff:g> 秒后重试。"</string>
+    <string name="kg_failed_attempts_almost_at_login" product="tv" msgid="4224651132862313471">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次后仍不成功，系统就会要求您使用电子邮件帐号解锁电视。\n\n请在 <xliff:g id="NUMBER_2">%d</xliff:g> 秒后重试。"</string>
+    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="1437638152015574839">"您已连续 <xliff:g id="NUMBER_0">%d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐号解锁手机。\n\n请在 <xliff:g id="NUMBER_2">%d</xliff:g> 秒后重试。"</string>
     <string name="kg_text_message_separator" product="default" msgid="4160700433287233771">" — "</string>
     <string name="kg_reordering_delete_drop_target_text" msgid="7899202978204438708">"删除"</string>
     <string name="safe_media_volume_warning" product="default" msgid="2276318909314492312">"要将音量调高到推荐水平以上吗？\n\n长时间保持高音量可能会损伤听力。"</string>

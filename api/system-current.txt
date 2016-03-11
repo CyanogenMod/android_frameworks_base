@@ -130,6 +130,7 @@ package android {
     field public static final java.lang.String MODIFY_APPWIDGET_BIND_PERMISSIONS = "android.permission.MODIFY_APPWIDGET_BIND_PERMISSIONS";
     field public static final java.lang.String MODIFY_AUDIO_ROUTING = "android.permission.MODIFY_AUDIO_ROUTING";
     field public static final java.lang.String MODIFY_AUDIO_SETTINGS = "android.permission.MODIFY_AUDIO_SETTINGS";
+    field public static final java.lang.String MODIFY_CELL_BROADCASTS = "android.permission.MODIFY_CELL_BROADCASTS";
     field public static final java.lang.String MODIFY_NETWORK_ACCOUNTING = "android.permission.MODIFY_NETWORK_ACCOUNTING";
     field public static final java.lang.String MODIFY_PARENTAL_CONTROLS = "android.permission.MODIFY_PARENTAL_CONTROLS";
     field public static final java.lang.String MODIFY_PHONE_STATE = "android.permission.MODIFY_PHONE_STATE";
@@ -32713,19 +32714,25 @@ package android.telecom {
     field public static final java.lang.String ACTION_DEFAULT_DIALER_CHANGED = "android.telecom.action.DEFAULT_DIALER_CHANGED";
     field public static final java.lang.String ACTION_INCOMING_CALL = "android.telecom.action.INCOMING_CALL";
     field public static final java.lang.String ACTION_PHONE_ACCOUNT_REGISTERED = "android.telecom.action.PHONE_ACCOUNT_REGISTERED";
+    field public static final java.lang.String ACTION_PHONE_ACCOUNT_UNREGISTERED = "android.telecom.action.PHONE_ACCOUNT_UNREGISTERED";
     field public static final java.lang.String ACTION_SHOW_CALL_ACCESSIBILITY_SETTINGS = "android.telecom.action.SHOW_CALL_ACCESSIBILITY_SETTINGS";
     field public static final java.lang.String ACTION_SHOW_CALL_SETTINGS = "android.telecom.action.SHOW_CALL_SETTINGS";
+    field public static final java.lang.String ACTION_SHOW_MISSED_CALLS_NOTIFICATION = "android.telecom.action.SHOW_MISSED_CALLS_NOTIFICATION";
     field public static final java.lang.String ACTION_SHOW_RESPOND_VIA_SMS_SETTINGS = "android.telecom.action.SHOW_RESPOND_VIA_SMS_SETTINGS";
     field public static final char DTMF_CHARACTER_PAUSE = 44; // 0x002c ','
     field public static final char DTMF_CHARACTER_WAIT = 59; // 0x003b ';'
+    field public static final java.lang.String EXTRA_CALL_BACK_INTENT = "android.telecom.extra.CALL_BACK_INTENT";
     field public static final java.lang.String EXTRA_CALL_BACK_NUMBER = "android.telecom.extra.CALL_BACK_NUMBER";
     field public static final java.lang.String EXTRA_CALL_DISCONNECT_CAUSE = "android.telecom.extra.CALL_DISCONNECT_CAUSE";
     field public static final java.lang.String EXTRA_CALL_DISCONNECT_MESSAGE = "android.telecom.extra.CALL_DISCONNECT_MESSAGE";
     field public static final java.lang.String EXTRA_CALL_SUBJECT = "android.telecom.extra.CALL_SUBJECT";
     field public static final java.lang.String EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME = "android.telecom.extra.CHANGE_DEFAULT_DIALER_PACKAGE_NAME";
+    field public static final java.lang.String EXTRA_CLEAR_MISSED_CALLS_INTENT = "android.telecom.extra.CLEAR_MISSED_CALLS_INTENT";
     field public static final java.lang.String EXTRA_CONNECTION_SERVICE = "android.telecom.extra.CONNECTION_SERVICE";
     field public static final java.lang.String EXTRA_INCOMING_CALL_ADDRESS = "android.telecom.extra.INCOMING_CALL_ADDRESS";
     field public static final java.lang.String EXTRA_INCOMING_CALL_EXTRAS = "android.telecom.extra.INCOMING_CALL_EXTRAS";
+    field public static final java.lang.String EXTRA_NOTIFICATION_COUNT = "android.telecom.extra.NOTIFICATION_COUNT";
+    field public static final java.lang.String EXTRA_NOTIFICATION_PHONE_NUMBER = "android.telecom.extra.NOTIFICATION_PHONE_NUMBER";
     field public static final java.lang.String EXTRA_OUTGOING_CALL_EXTRAS = "android.telecom.extra.OUTGOING_CALL_EXTRAS";
     field public static final java.lang.String EXTRA_PHONE_ACCOUNT_HANDLE = "android.telecom.extra.PHONE_ACCOUNT_HANDLE";
     field public static final java.lang.String EXTRA_START_CALL_WITH_SPEAKERPHONE = "android.telecom.extra.START_CALL_WITH_SPEAKERPHONE";
@@ -33425,6 +33432,7 @@ package android.telephony {
     field public static final java.lang.String ACTION_CONFIGURE_VOICEMAIL = "android.telephony.action.CONFIGURE_VOICEMAIL";
     field public static final java.lang.String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
     field public static final java.lang.String ACTION_RESPOND_VIA_MESSAGE = "android.intent.action.RESPOND_VIA_MESSAGE";
+    field public static final java.lang.String ACTION_SHOW_VOICEMAIL_NOTIFICATION = "android.telephony.action.SHOW_VOICEMAIL_NOTIFICATION";
     field public static final int CALL_STATE_IDLE = 0; // 0x0
     field public static final int CALL_STATE_OFFHOOK = 2; // 0x2
     field public static final int CALL_STATE_RINGING = 1; // 0x1
@@ -33441,11 +33449,15 @@ package android.telephony {
     field public static final int DATA_CONNECTING = 1; // 0x1
     field public static final int DATA_DISCONNECTED = 0; // 0x0
     field public static final int DATA_SUSPENDED = 3; // 0x3
+    field public static final java.lang.String EXTRA_CALL_VOICEMAIL_INTENT = "android.telephony.extra.CALL_VOICEMAIL_INTENT";
     field public static final java.lang.String EXTRA_INCOMING_NUMBER = "incoming_number";
+    field public static final java.lang.String EXTRA_LAUNCH_VOICEMAIL_SETTINGS_INTENT = "android.telephony.extra.LAUNCH_VOICEMAIL_SETTINGS_INTENT";
+    field public static final java.lang.String EXTRA_NOTIFICATION_COUNT = "android.telephony.extra.NOTIFICATION_COUNT";
     field public static final java.lang.String EXTRA_STATE = "state";
     field public static final java.lang.String EXTRA_STATE_IDLE;
     field public static final java.lang.String EXTRA_STATE_OFFHOOK;
     field public static final java.lang.String EXTRA_STATE_RINGING;
+    field public static final java.lang.String EXTRA_VOICEMAIL_NUMBER = "android.telephony.extra.VOICEMAIL_NUMBER";
     field public static final int NETWORK_TYPE_1xRTT = 7; // 0x7
     field public static final int NETWORK_TYPE_CDMA = 4; // 0x4
     field public static final int NETWORK_TYPE_EDGE = 2; // 0x2
@@ -47740,7 +47752,10 @@ package java.lang.reflect {
   }
 
   public final class Constructor extends java.lang.reflect.AccessibleObject implements java.lang.reflect.GenericDeclaration java.lang.reflect.Member {
+    method public boolean equals(java.lang.Object);
     method public A getAnnotation(java.lang.Class<A>);
+    method public java.lang.annotation.Annotation[] getAnnotations();
+    method public java.lang.annotation.Annotation[] getDeclaredAnnotations();
     method public java.lang.Class<T> getDeclaringClass();
     method public java.lang.Class<?>[] getExceptionTypes();
     method public java.lang.reflect.Type[] getGenericExceptionTypes();
@@ -47750,6 +47765,7 @@ package java.lang.reflect {
     method public java.lang.annotation.Annotation[][] getParameterAnnotations();
     method public java.lang.Class<?>[] getParameterTypes();
     method public java.lang.reflect.TypeVariable<java.lang.reflect.Constructor<T>>[] getTypeParameters();
+    method public boolean isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation>);
     method public boolean isSynthetic();
     method public boolean isVarArgs();
     method public T newInstance(java.lang.Object...) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException;
@@ -47823,7 +47839,10 @@ package java.lang.reflect {
   }
 
   public final class Method extends java.lang.reflect.AccessibleObject implements java.lang.reflect.GenericDeclaration java.lang.reflect.Member {
+    method public boolean equals(java.lang.Object);
     method public A getAnnotation(java.lang.Class<A>);
+    method public java.lang.annotation.Annotation[] getAnnotations();
+    method public java.lang.annotation.Annotation[] getDeclaredAnnotations();
     method public java.lang.Class<?> getDeclaringClass();
     method public java.lang.Object getDefaultValue();
     method public java.lang.Class<?>[] getExceptionTypes();
@@ -47837,6 +47856,7 @@ package java.lang.reflect {
     method public java.lang.Class<?> getReturnType();
     method public java.lang.reflect.TypeVariable<java.lang.reflect.Method>[] getTypeParameters();
     method public java.lang.Object invoke(java.lang.Object, java.lang.Object...) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException, java.lang.reflect.InvocationTargetException;
+    method public boolean isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation>);
     method public boolean isBridge();
     method public boolean isSynthetic();
     method public boolean isVarArgs();
