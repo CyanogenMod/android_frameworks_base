@@ -98,6 +98,10 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_useHardwareFramework">Allows an app access to the CM hardware framework.</string>
 
+    <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+    <string name="permlab_managePersistentStorage">manage persistent storage</string>
+    <string name="permdesc_managePersistentStorage">Allows an app to read or write properties which may persist thru a factory reset.</string>
+
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

@@ -20,7 +20,9 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.IllegalArgumentException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -94,6 +96,12 @@ public final class CmHardwareManager {
      * Touchscreen hovering
      */
     public static final int FEATURE_TOUCH_HOVERING = 0x800;
+
+    /**
+     * Persistent storage
+     * @hide
+     */
+    public static final int FEATURE_PERSISTENT_STORAGE = 0x4000;
 
     public static final int FEATURE_THERMAL_MONITOR = 0x8000;
 
@@ -602,6 +610,147 @@ public final class CmHardwareManager {
         try {
             if (mService != null && thermalCallback != null) {
                 return mService.unRegisterThermalListener(thermalCallback);
+            }
+        } catch (RemoteException e) {
+        }
+        return false;
+    }
+
+    /**
+     * Write a string to persistent storage, which persists thru factory reset
+     *
+     * @param key String identifier for this item
+     * @param value The UTF-8 encoded string to store
+     * @return true on success
+     *
+     * @hide
+     */
+    public boolean writePersistentString(String key, String value) {
+        try {
+            if (mService != null) {
+                return mService.writePersistentBytes(key,
+                        value == null ? null : value.getBytes("UTF-8"));
+            }
+        } catch (RemoteException e) {
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return false;
+    }
+
+    /**
+     * Write an integer to persistent storage, which persists thru factory reset
+     *
+     * @param key String identifier for this item
+     * @param value The integer to store
+     * @return true on success
+     *
+     * @hide
+     */
+    public boolean writePersistentInt(String key, int value) {
+        try {
+            if (mService != null) {
+                return mService.writePersistentBytes(key,
+                        ByteBuffer.allocate(4).putInt(value).array());
+            }
+        } catch (RemoteException e) {
+        }
+        return false;
+    }
+
+    /**
+     * Write a byte array to persistent storage, which persists thru factory reset
+     *
+     * @param key String identifier for this item
+     * @param value The byte array to store, up to 4096 bytes
+     * @return true on success
+     *
+     * @hide
+     */
+    public boolean writePersistentBytes(String key, byte[] value) {
+        try {
+            if (mService != null) {
+                return mService.writePersistentBytes(key, value);
+            }
+        } catch (RemoteException e) {
+        }
+        return false;
+    }
+
+    /**
+     * Read a string from persistent storage
+     *
+     * @param key String identifier for this item
+     * @return the stored UTF-8 encoded string, null if not found
+     *
+     * @hide
+     */
+    public String readPersistentString(String key) {
+        try {
+            if (mService != null) {
+                byte[] bytes = mService.readPersistentBytes(key);
+                if (bytes != null) {
+                    return new String(bytes, "UTF-8");
+                }
+            }
+        } catch (RemoteException e) {
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
+    }
+
+    /**
+     * Read an integer from persistent storage
+     *
+     * @param key String identifier for this item
+     * @return the stored integer, zero if not found
+     *
+     * @hide
+     */
+    public int readPersistentInt(String key) {
+        try {
+            if (mService != null) {
+                byte[] bytes = mService.readPersistentBytes(key);
+                if (bytes != null) {
+                    return ByteBuffer.wrap(bytes).getInt();
+                }
+            }
+        } catch (RemoteException e) {
+        }
+        return 0;
+    }
+
+    /**
+     * Read a byte array from persistent storage
+     *
+     * @param key String identifier for this item
+     * @return the stored byte array, null if not found
+     *
+     * @hide
+     */
+    public byte[] readPersistentBytes(String key) {
+        try {
+            if (mService != null) {
+                return mService.readPersistentBytes(key);
+            }
+        } catch (RemoteException e) {
+        }
+        return null;
+    }
+
+    /**
+     * Delete an object from persistent storage
+     *
+     * @param key String identifier for this item
+     * @return true if an item was deleted
+     *
+     * @hide
+     */
+    public boolean deletePersistentObject(String key) {
+        try {
+            if (checkService()) {
+                return getService().writePersistentBytes(key, null);
             }
         } catch (RemoteException e) {
         }
