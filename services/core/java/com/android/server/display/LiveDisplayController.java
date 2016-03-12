@@ -52,11 +52,13 @@ import cyanogenmod.providers.CMSettings;
 import cyanogenmod.util.ColorUtils;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 public class LiveDisplayController {
 
     private static final String TAG = "LiveDisplay";
 
+    private static final String DELIMITER = "|";
     private static final long TWILIGHT_ADJUSTMENT_TIME = DateUtils.HOUR_IN_MILLIS * 1;
 
     private static final int OFF_TEMPERATURE = 6500;
@@ -214,6 +216,30 @@ public class LiveDisplayController {
         }
 
         updateLiveDisplay(mCurrentLux);
+        updateGamma();
+    }
+
+    private void updateGamma() {
+        if (!mHardware.isSupported(CMHardwareManager.FEATURE_DISPLAY_GAMMA_CALIBRATION)) {
+            return;
+        }
+        ContentResolver contentResolver = mContext.getContentResolver();
+        for (int i = 0; i < mHardware.getNumGammaControls(); i++) {
+            List<String> gammaValue = CMSettings.Secure.getDelimitedStringAsList(
+                    contentResolver, DELIMITER,
+                    CMSettings.Secure.DISPLAY_GAMMA_CALIBRATION_PREFIX + i);
+            if (gammaValue != null) {
+                mHardware.setDisplayGammaCalibration(i, stringArrayToIntArray(gammaValue));
+            }
+        }
+    }
+
+    private int[] stringArrayToIntArray(List<String> value) {
+        int[] result = new int[value.size()];
+        for (int i = 0; i < value.size(); i++) {
+            result[i] = Integer.parseInt(value.get(i));
+        }
+        return result;
     }
 
     private final class SettingsObserver extends UserContentObserver {
@@ -245,6 +271,13 @@ public class LiveDisplayController {
                 cr.registerContentObserver(DISPLAY_LOW_POWER_URI, false, this, UserHandle.USER_ALL);
                 cr.registerContentObserver(DISPLAY_COLOR_ENHANCE_URI, false, this, UserHandle.USER_ALL);
                 cr.registerContentObserver(DISPLAY_COLOR_ADJUSTMENT_URI, false, this, UserHandle.USER_ALL);
+                if (mHardware.isSupported(CMHardwareManager.FEATURE_DISPLAY_GAMMA_CALIBRATION)) {
+                    for (int i = 0; i < mHardware.getNumGammaControls(); i++) {
+                        Uri gammaUri = CMSettings.Secure.getUriFor(
+                                CMSettings.Secure.DISPLAY_GAMMA_CALIBRATION_PREFIX + i);
+                        cr.registerContentObserver(gammaUri, false, this, UserHandle.USER_ALL);
+                    }
+                }
                 observe();
             } else {
                 cr.unregisterContentObserver(this);
