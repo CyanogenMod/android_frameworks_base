@@ -962,17 +962,6 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             }
         }
 
-        // Must happen before registerContentObserverLocked
-        mCMHardware = CMHardwareManager.getInstance(mContext);
-
-        synchronized (mMethodMap) {
-            mSettingsObserver.registerContentObserverLocked(userId);
-            updateFromSettingsLocked(true);
-        }
-
-        updateTouchHovering();
-        updateTouchSensitivity();
-
         // IMMS wants to receive Intent.ACTION_LOCALE_CHANGED in order to update the current IME
         // according to the new system locale.
         final IntentFilter filter = new IntentFilter();
@@ -1136,6 +1125,16 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             }
             if (!mSystemReady) {
                 mSystemReady = true;
+                // Must happen before registerContentObserverLocked
+                mCMHardware = CMHardwareManager.getInstance(mContext);
+
+                mSettingsObserver.registerContentObserverLocked(
+                        mSettings.getCurrentUserId());
+                updateFromSettingsLocked(true);
+
+                updateTouchHovering();
+                updateTouchSensitivity();
+
                 mKeyguardManager =
                         (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
                 mNotificationManager = (NotificationManager)
