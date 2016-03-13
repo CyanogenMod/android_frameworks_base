@@ -476,6 +476,7 @@ public class MobileSignalController extends SignalController<
                         + " dataState=" + state.getDataRegState());
             }
             mServiceState = state;
+            mDataNetType = state.getDataNetworkType();
             updateTelephony();
         }
 

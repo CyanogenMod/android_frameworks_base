@@ -31,6 +31,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.ContentObserver;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.TriggerEvent;
 import android.hardware.TriggerEventListener;
 import android.hardware.display.DisplayManager;
@@ -111,7 +113,7 @@ public class DeviceIdleController extends SystemService
     private INetworkPolicyManager mNetworkPolicyManager;
     private DisplayManager mDisplayManager;
     private SensorManager mSensorManager;
-    private Sensor mSigMotionSensor;
+    private Sensor mMotionSensor;
     private LocationManager mLocationManager;
     private LocationRequest mLocationRequest;
     private PendingIntent mSensingAlarmIntent;
@@ -123,12 +125,12 @@ public class DeviceIdleController extends SystemService
     private boolean mForceIdle;
     private boolean mScreenOn;
     private boolean mCharging;
-    private boolean mSigMotionActive;
     private boolean mSensing;
     private boolean mNotMoving;
     private boolean mLocating;
     private boolean mLocated;
-    private boolean mHaveGps;
+    private boolean mHasGps;
+    private boolean mHasNetworkLocation;
     private Location mLastGenericLocation;
     private Location mLastGpsLocation;
 
@@ -275,13 +277,57 @@ public class DeviceIdleController extends SystemService
         }
     };
 
-    private final TriggerEventListener mSigMotionListener = new TriggerEventListener() {
-        @Override public void onTrigger(TriggerEvent event) {
+    private final class MotionListener extends TriggerEventListener
+            implements SensorEventListener {
+
+        boolean active = false;
+
+        @Override
+        public void onTrigger(TriggerEvent event) {
             synchronized (DeviceIdleController.this) {
-                significantMotionLocked();
+                active = false;
+                motionLocked();
             }
         }
-    };
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            synchronized (DeviceIdleController.this) {
+                mSensorManager.unregisterListener(this, mMotionSensor);
+                active = false;
+                motionLocked();
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+        public boolean registerLocked() {
+            boolean success = false;
+            if (mMotionSensor.getReportingMode() == Sensor.REPORTING_MODE_ONE_SHOT) {
+                success = mSensorManager.requestTriggerSensor(mMotionListener, mMotionSensor);
+            } else {
+                success = mSensorManager.registerListener(
+                        mMotionListener, mMotionSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+            if (success) {
+                active = true;
+            } else {
+                Slog.e(TAG, "Unable to register for " + mMotionSensor);
+            }
+            return success;
+        }
+
+        public void unregisterLocked() {
+            if (mMotionSensor.getReportingMode() == Sensor.REPORTING_MODE_ONE_SHOT) {
+                mSensorManager.cancelTriggerSensor(mMotionListener, mMotionSensor);
+            } else {
+                mSensorManager.unregisterListener(mMotionListener);
+            }
+            active = false;
+        }
+    }
+    private final MotionListener mMotionListener = new MotionListener();
 
     private final LocationListener mGenericLocationListener = new LocationListener() {
         @Override
@@ -356,7 +402,7 @@ public class DeviceIdleController extends SystemService
          * This is the time, after becoming inactive, at which we start looking at the
          * motion sensor to determine if the device is being left alone.  We don't do this
          * immediately after going inactive just because we don't want to be continually running
-         * the significant motion sensor whenever the screen is off.
+         * the motion sensor whenever the screen is off.
          * @see Settings.Global#DEVICE_IDLE_CONSTANTS
          * @see #KEY_INACTIVE_TIMEOUT
          */
@@ -399,7 +445,7 @@ public class DeviceIdleController extends SystemService
 
         /**
          * This is the time, after the inactive timeout elapses, that we will wait looking
-         * for significant motion until we truly consider the device to be idle.
+         * for motion until we truly consider the device to be idle.
          * @see Settings.Global#DEVICE_IDLE_CONSTANTS
          * @see #KEY_IDLE_AFTER_INACTIVE_TIMEOUT
          */
@@ -896,17 +942,38 @@ public class DeviceIdleController extends SystemService
                 mDisplayManager = (DisplayManager) getContext().getSystemService(
                         Context.DISPLAY_SERVICE);
                 mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-                mSigMotionSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION);
-                mLocationManager = (LocationManager) getContext().getSystemService(
-                        Context.LOCATION_SERVICE);
-                mLocationRequest = new LocationRequest()
-                    .setQuality(LocationRequest.ACCURACY_FINE)
-                    .setInterval(0)
-                    .setFastestInterval(0)
-                    .setNumUpdates(1);
+                int sigMotionSensorId = getContext().getResources().getInteger(
+                        com.android.internal.R.integer.config_autoPowerModeAnyMotionSensor);
+                if (sigMotionSensorId > 0) {
+                    mMotionSensor = mSensorManager.getDefaultSensor(sigMotionSensorId, true);
+                }
+                if (mMotionSensor == null && getContext().getResources().getBoolean(
+                        com.android.internal.R.bool.config_autoPowerModePreferWristTilt)) {
+                    mMotionSensor = mSensorManager.getDefaultSensor(
+                            Sensor.TYPE_WRIST_TILT_GESTURE, true);
+                }
+                if (mMotionSensor == null) {
+                    // As a last ditch, fall back to SMD.
+                    mMotionSensor = mSensorManager.getDefaultSensor(
+                            Sensor.TYPE_SIGNIFICANT_MOTION, true);
+                }
+
+                if (getContext().getResources().getBoolean(
+                        com.android.internal.R.bool.config_autoPowerModePrefetchLocation)) {
+                    mLocationManager = (LocationManager) getContext().getSystemService(
+                            Context.LOCATION_SERVICE);
+                    mLocationRequest = new LocationRequest()
+                        .setQuality(LocationRequest.ACCURACY_FINE)
+                        .setInterval(0)
+                        .setFastestInterval(0)
+                        .setNumUpdates(1);
+                }
+
+                float angleThreshold = getContext().getResources().getInteger(
+                        com.android.internal.R.integer.config_autoPowerModeThresholdAngle) / 100f;
                 mAnyMotionDetector = new AnyMotionDetector(
                         (PowerManager) getContext().getSystemService(Context.POWER_SERVICE),
-                        mHandler, mSensorManager, this);
+                        mHandler, mSensorManager, this, angleThreshold);
 
                 Intent intent = new Intent(ACTION_STEP_IDLE_STATE)
                         .setPackage("android")
@@ -1242,7 +1309,7 @@ public class DeviceIdleController extends SystemService
         cancelAlarmLocked();
         cancelSensingAlarmLocked();
         cancelLocatingLocked();
-        stopMonitoringSignificantMotion();
+        stopMonitoringMotionLocked();
         mAnyMotionDetector.stop();
     }
 
@@ -1271,8 +1338,8 @@ public class DeviceIdleController extends SystemService
         switch (mState) {
             case STATE_INACTIVE:
                 // We have now been inactive long enough, it is time to start looking
-                // for significant motion and sleep some more while doing so.
-                startMonitoringSignificantMotion();
+                // for motion and sleep some more while doing so.
+                startMonitoringMotionLocked();
                 scheduleAlarmLocked(mConstants.IDLE_AFTER_INACTIVE_TIMEOUT, false);
                 // Reset the upcoming idle delays.
                 mNextIdlePendingDelay = mConstants.IDLE_PENDING_TIMEOUT;
@@ -1298,17 +1365,30 @@ public class DeviceIdleController extends SystemService
                 if (DEBUG) Slog.d(TAG, "Moved from STATE_SENSING to STATE_LOCATING.");
                 EventLogTags.writeDeviceIdle(mState, "step");
                 scheduleSensingAlarmLocked(mConstants.LOCATING_TIMEOUT);
-                mLocating = true;
-                mLocationManager.requestLocationUpdates(mLocationRequest, mGenericLocationListener,
-                        mHandler.getLooper());
-                if (mLocationManager.getProvider(LocationManager.GPS_PROVIDER) != null) {
-                    mHaveGps = true;
+                if (mLocationManager != null
+                        && mLocationManager.getProvider(LocationManager.NETWORK_PROVIDER) != null) {
+                    mLocationManager.requestLocationUpdates(mLocationRequest,
+                            mGenericLocationListener, mHandler.getLooper());
+                    mLocating = true;
+                } else {
+                    mHasNetworkLocation = false;
+                }
+                if (mLocationManager != null
+                        && mLocationManager.getProvider(LocationManager.GPS_PROVIDER) != null) {
+                    mHasGps = true;
                     mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5,
                             mGpsLocationListener, mHandler.getLooper());
+                    mLocating = true;
                 } else {
-                    mHaveGps = false;
+                    mHasGps = false;
                 }
-                break;
+                // If we have a location provider, we're all set, the listeners will move state
+                // forward.
+                if (mLocating) {
+                    break;
+                }
+
+                // Otherwise, we have to move from locating into idle maintenance.
             case STATE_LOCATING:
                 cancelSensingAlarmLocked();
                 cancelLocatingLocked();
@@ -1338,17 +1418,16 @@ public class DeviceIdleController extends SystemService
         }
     }
 
-    void significantMotionLocked() {
-        if (DEBUG) Slog.d(TAG, "significantMotionLocked()");
-        // When the sensor goes off, its trigger is automatically removed.
-        mSigMotionActive = false;
+    void motionLocked() {
+        if (DEBUG) Slog.d(TAG, "motionLocked()");
+        // The motion sensor will have been disabled at this point
         handleMotionDetectedLocked(mConstants.MOTION_INACTIVE_TIMEOUT, "motion");
     }
 
     void handleMotionDetectedLocked(long timeout, String type) {
         // The device is not yet active, so we want to go back to the pending idle
-        // state to wait again for no motion.  Note that we only monitor for significant
-        // motion after moving out of the inactive state, so no need to worry about that.
+        // state to wait again for no motion.  Note that we only monitor for motion
+        // after moving out of the inactive state, so no need to worry about that.
         if (mState != STATE_ACTIVE) {
             scheduleReportActiveLocked(type, Process.myUid());
             mState = STATE_ACTIVE;
@@ -1366,7 +1445,7 @@ public class DeviceIdleController extends SystemService
         }
         if (DEBUG) Slog.d(TAG, "Generic location: " + location);
         mLastGenericLocation = new Location(location);
-        if (location.getAccuracy() > mConstants.LOCATION_ACCURACY && mHaveGps) {
+        if (location.getAccuracy() > mConstants.LOCATION_ACCURACY && mHasGps) {
             return;
         }
         mLocated = true;
@@ -1391,19 +1470,17 @@ public class DeviceIdleController extends SystemService
         }
     }
 
-    void startMonitoringSignificantMotion() {
-        if (DEBUG) Slog.d(TAG, "startMonitoringSignificantMotion()");
-        if (mSigMotionSensor != null && !mSigMotionActive) {
-            mSensorManager.requestTriggerSensor(mSigMotionListener, mSigMotionSensor);
-            mSigMotionActive = true;
+    void startMonitoringMotionLocked() {
+        if (DEBUG) Slog.d(TAG, "startMonitoringMotionLocked()");
+        if (mMotionSensor != null && !mMotionListener.active) {
+            mMotionListener.registerLocked();
         }
     }
 
-    void stopMonitoringSignificantMotion() {
-        if (DEBUG) Slog.d(TAG, "stopMonitoringSignificantMotion()");
-        if (mSigMotionActive) {
-            mSensorManager.cancelTriggerSensor(mSigMotionListener, mSigMotionSensor);
-            mSigMotionActive = false;
+    void stopMonitoringMotionLocked() {
+        if (DEBUG) Slog.d(TAG, "stopMonitoringMotionLocked()");
+        if (mMotionSensor != null && mMotionListener.active) {
+            mMotionListener.unregisterLocked();
         }
     }
 
@@ -1432,10 +1509,10 @@ public class DeviceIdleController extends SystemService
 
     void scheduleAlarmLocked(long delay, boolean idleUntil) {
         if (DEBUG) Slog.d(TAG, "scheduleAlarmLocked(" + delay + ", " + idleUntil + ")");
-        if (mSigMotionSensor == null) {
-            // If there is no significant motion sensor on this device, then we won't schedule
+        if (mMotionSensor == null) {
+            // If there is no motion sensor on this device, then we won't schedule
             // alarms, because we can't determine if the device is not moving.  This effectively
-            // turns off normal exeuction of device idling, although it is still possible to
+            // turns off normal execution of device idling, although it is still possible to
             // manually poke it by pretending like the alarm is going off.
             return;
         }
@@ -1917,15 +1994,16 @@ public class DeviceIdleController extends SystemService
 
             pw.print("  mEnabled="); pw.println(mEnabled);
             pw.print("  mForceIdle="); pw.println(mForceIdle);
-            pw.print("  mSigMotionSensor="); pw.println(mSigMotionSensor);
+            pw.print("  mMotionSensor="); pw.println(mMotionSensor);
             pw.print("  mCurDisplay="); pw.println(mCurDisplay);
             pw.print("  mScreenOn="); pw.println(mScreenOn);
             pw.print("  mCharging="); pw.println(mCharging);
-            pw.print("  mSigMotionActive="); pw.println(mSigMotionActive);
+            pw.print("  mMotionActive="); pw.println(mMotionListener.active);
             pw.print("  mSensing="); pw.print(mSensing); pw.print(" mNotMoving=");
                     pw.println(mNotMoving);
-            pw.print("  mLocating="); pw.print(mLocating); pw.print(" mHaveGps=");
-                    pw.print(mHaveGps); pw.print(" mLocated="); pw.println(mLocated);
+            pw.print("  mLocating="); pw.print(mLocating); pw.print(" mHasGps=");
+                    pw.print(mHasGps); pw.print(" mHasNetwork=");
+                    pw.print(mHasNetworkLocation); pw.print(" mLocated="); pw.println(mLocated);
             if (mLastGenericLocation != null) {
                 pw.print("  mLastGenericLocation="); pw.println(mLastGenericLocation);
             }

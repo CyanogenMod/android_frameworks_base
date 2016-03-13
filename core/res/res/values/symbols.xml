@@ -255,6 +255,10 @@
   <java-symbol type="bool" name="config_cellBroadcastAppLinks" />
   <java-symbol type="bool" name="config_duplicate_port_omadm_wappush" />
   <java-symbol type="bool" name="config_enableAutoPowerModes" />
+  <java-symbol type="integer" name="config_autoPowerModeThresholdAngle" />
+  <java-symbol type="integer" name="config_autoPowerModeAnyMotionSensor" />
+  <java-symbol type="bool" name="config_autoPowerModePreferWristTilt" />
+  <java-symbol type="bool" name="config_autoPowerModePrefetchLocation" />
   <java-symbol type="bool" name="config_enable_emergency_call_while_sim_locked" />
   <java-symbol type="bool" name="config_enable_puk_unlock_screen" />
   <java-symbol type="bool" name="config_enableBurnInProtection" />
@@ -272,6 +276,7 @@
   <java-symbol type="bool" name="config_ui_enableFadingMarquee" />
   <java-symbol type="bool" name="config_use_strict_phone_number_comparation" />
   <java-symbol type="bool" name="config_voice_capable" />
+  <java-symbol type="bool" name="config_requireCallCapableAccountForHandle" />
   <java-symbol type="bool" name="config_user_notification_of_restrictied_mobile_access" />
   <java-symbol type="bool" name="config_wifiDisplaySupportsProtectedBuffers" />
   <java-symbol type="bool" name="preferences_prefer_dual_pane" />
@@ -306,6 +311,7 @@
   <java-symbol type="bool" name="config_wifi_enable_5GHz_preference" />
   <java-symbol type="bool" name="config_wifi_revert_country_code_on_cellular_loss" />
   <java-symbol type="bool" name="config_wifi_enable_wifi_firmware_debugging" />
+  <java-symbol type="bool" name="config_wifi_turn_off_during_emergency_call" />
   <java-symbol type="bool" name="config_supportMicNearUltrasound" />
   <java-symbol type="bool" name="config_supportSpeakerNearUltrasound" />
   <java-symbol type="integer" name="config_wifi_framework_5GHz_preference_boost_threshold" />
@@ -369,6 +375,7 @@
   <java-symbol type="integer" name="config_bluetooth_rx_cur_ma" />
   <java-symbol type="integer" name="config_bluetooth_tx_cur_ma" />
   <java-symbol type="integer" name="config_bluetooth_operating_voltage_mv" />
+  <java-symbol type="bool" name="config_bluetooth_reload_supported_profiles_when_enabled" />
   <java-symbol type="integer" name="config_cursorWindowSize" />
   <java-symbol type="integer" name="config_drawLockTimeoutMillis" />
   <java-symbol type="integer" name="config_doublePressOnPowerBehavior" />
@@ -443,7 +450,6 @@
   <java-symbol type="dimen" name="notification_large_icon_circle_padding" />
   <java-symbol type="dimen" name="notification_badge_size" />
   <java-symbol type="dimen" name="immersive_mode_cling_width" />
-  <java-symbol type="dimen" name="circular_display_mask_offset" />
   <java-symbol type="dimen" name="accessibility_magnification_indicator_width" />
   <java-symbol type="dimen" name="circular_display_mask_thickness" />
 
@@ -1646,6 +1652,7 @@
   <java-symbol type="bool" name="config_enableNetworkLocationOverlay" />
   <java-symbol type="bool" name="config_sf_limitedAlpha" />
   <java-symbol type="bool" name="config_unplugTurnsOnScreen" />
+  <java-symbol type="bool" name="config_usbChargingMessage" />
   <java-symbol type="bool" name="config_allowAutoBrightnessWhileDozing" />
   <java-symbol type="bool" name="config_allowTheaterModeWakeFromUnplug" />
   <java-symbol type="bool" name="config_allowTheaterModeWakeFromGesture" />
@@ -2225,6 +2232,7 @@
   <java-symbol type="bool" name="config_sms_force_7bit_encoding" />
   <java-symbol type="bool" name="config_defaultWindowFeatureOptionsPanel" />
   <java-symbol type="bool" name="config_defaultWindowFeatureContextMenu" />
+  <java-symbol type="bool" name="config_overrideRemoteViewsActivityTransition" />
 
   <java-symbol type="layout" name="simple_account_item" />
   <java-symbol type="array" name="config_sms_convert_destination_number_support" />
@@ -2400,8 +2408,11 @@
   <java-symbol type="anim" name="last_app_in" />
   <java-symbol type="anim" name="last_app_out" />
 
+  <java-symbol type="string" name="config_networkPolicyNotificationComponent" />
+
   <java-symbol type="drawable" name="platlogo_m" />
 
+  <java-symbol type="string" name="config_iccHotswapPromptForRestartDialogComponent" />
   <java-symbol type="string" name="config_packagedKeyboardName" />
 
   <java-symbol type="bool" name="config_useSystemClockforRotationSensor" />

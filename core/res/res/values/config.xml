@@ -167,6 +167,21 @@
          so that applications can still use their own mechanisms. -->
     <bool name="config_enableAutoPowerModes">false</bool>
 
+    <!-- The threshold angle for any motion detection in auto-power save modes.
+         In hundreths of a degree. -->
+    <integer name="config_autoPowerModeThresholdAngle">200</integer>
+
+    <!-- The sensor id of an "any motion" sensor used in auto-power save modes.
+         0 indicates this sensor is not available. -->
+    <integer name="config_autoPowerModeAnyMotionSensor">0</integer>
+
+    <!-- If an any motion sensor is not available, prefer the wrist tilt detector over the
+         SMD. -->
+    <bool name="config_autoPowerModePreferWristTilt">false</bool>
+
+    <!-- If a location should be pre-fetched when going into device idle. -->
+    <bool name="config_autoPowerModePrefetchLocation">true</bool>
+
     <!-- The duration (in milliseconds) that the radio will scan for a signal
          when there's no network connection. If the scan doesn't timeout, use zero -->
     <integer name="config_radioScanningTimeout">0</integer>
@@ -234,7 +249,7 @@
     <integer name="config_networkTransitionTimeout">60000</integer>
 
     <!-- List of regexpressions describing the interface (if any) that represent tetherable
-         USB interfaces.  If the device doesn't want to support tething over USB this should
+         USB interfaces.  If the device doesn't want to support tethering over USB this should
          be empty.  An example would be "usb.*" -->
     <string-array translatable="false" name="config_tether_usb_regexs">
     </string-array>
@@ -395,6 +410,9 @@
     <!-- Boolean indicating whether or not wifi firmware debugging is enabled -->
     <bool translatable="false" name="config_wifi_enable_wifi_firmware_debugging">false</bool>
 
+    <!-- Boolean indicating whether or not wifi should turn off when emergency call is made -->
+    <bool translatable="false" name="config_wifi_turn_off_during_emergency_call">false</bool>
+
     <!-- Integer specifying the basic autojoin parameters -->
     <integer translatable="false" name="config_wifi_framework_5GHz_preference_boost_threshold">-65</integer>
     <integer translatable="false" name="config_wifi_framework_5GHz_preference_boost_factor">5</integer>
@@ -534,6 +552,9 @@
 
     <!-- If this is true, the screen will come on when you unplug usb/power/whatever. -->
     <bool name="config_unplugTurnsOnScreen">false</bool>
+
+    <!-- If this is true, the message that USB is only being used for charging will be shown. -->
+    <bool name="config_usbChargingMessage">true</bool>
 
     <!-- Set this true only if the device has separate attention and notification lights. -->
     <bool name="config_useAttentionLight">false</bool>
@@ -947,6 +968,9 @@
     <!-- Is the device capable of hot swapping an UICC Card -->
     <bool name="config_hotswapCapable">false</bool>
 
+    <!-- Component name of the ICC hotswap prompt for restart dialog -->
+    <string name="config_iccHotswapPromptForRestartDialogComponent" translateable="false">@null</string>
+
     <!-- Enable puk unlockscreen by default.
          If unlock screen is disabled, the puk should be unlocked through Emergency Dialer -->
     <bool name="config_enable_puk_unlock_screen">true</bool>
@@ -1331,6 +1355,9 @@
     <!-- Operating volatage for bluetooth controller. 0 by default-->
     <integer translatable="false" name="config_bluetooth_operating_voltage_mv">4</integer>
 
+    <!-- Whether supported profiles should be reloaded upon enabling bluetooth -->
+    <bool name="config_bluetooth_reload_supported_profiles_when_enabled">false</bool>
+
     <!-- The default data-use polling period. -->
     <integer name="config_datause_polling_period_sec">600</integer>
 
@@ -1366,6 +1393,10 @@
          available on *any* device with a telephony radio, even if the
          device is data-only. -->
     <bool name="config_voice_capable">true</bool>
+
+    <!-- Flag indicating that an outbound call must have a call capable phone account
+         that has declared it can process the call's handle. -->
+    <bool name="config_requireCallCapableAccountForHandle">false</bool>
 
     <!-- Flag indicating if the user is notified when the mobile network access is restricted -->
     <bool name="config_user_notification_of_restrictied_mobile_access">true</bool>
@@ -2329,6 +2360,10 @@
     <bool name="config_defaultWindowFeatureOptionsPanel">true</bool>
     <bool name="config_defaultWindowFeatureContextMenu">true</bool>
 
+    <!-- If true, the transition for a RemoteViews is read from a resource instead of using the
+         default scale-up transition. -->
+    <bool name="config_overrideRemoteViewsActivityTransition">false</bool>
+
     <!-- This config is used to check if the carrier requires converting destination
          number before sending out a SMS.
          Formats for this configuration as below:
@@ -2519,6 +2554,10 @@
         <item>-98</item>
         <item>-44</item>
     </integer-array>
+
+    <!-- Name of the component to handle network policy notifications. If present,
+         disables NetworkPolicyManagerService's presentation of data-usage notifications. -->
+    <string translatable="false" name="config_networkPolicyNotificationComponent"></string>
 
     <!-- The BT name of the keyboard packaged with the device. If this is defined, SystemUI will
          automatically try to pair with it when the device exits tablet mode. -->

@@ -1015,7 +1015,6 @@ public class WindowManagerService extends IWindowManager.Stub
         // Load hardware rotation from prop
         mSfHwRotation = android.os.SystemProperties.getInt("ro.sf.hwrotation",0) / 90;
 
-        updateCircularDisplayMaskIfNeeded();
         showEmulatorDisplayOverlayIfNeeded();
     }
 
@@ -4490,13 +4489,8 @@ public class WindowManagerService extends IWindowManager.Stub
                         + " ShowWallpaper="
                         + ent.array.getBoolean(
                                 com.android.internal.R.styleable.Window_windowShowWallpaper, false));
-                final boolean windowIsTranslucentDefined = ent.array.hasValue(
-                        com.android.internal.R.styleable.Window_windowIsTranslucent);
-                final boolean windowIsTranslucent = ent.array.getBoolean(
-                        com.android.internal.R.styleable.Window_windowIsTranslucent, false);
-                final boolean windowSwipeToDismiss = ent.array.getBoolean(
-                        com.android.internal.R.styleable.Window_windowSwipeToDismiss, false);
-                if (windowIsTranslucent || (!windowIsTranslucentDefined && windowSwipeToDismiss)) {
+                if (ent.array.getBoolean(
+                        com.android.internal.R.styleable.Window_windowIsTranslucent, false)) {
                     return;
                 }
                 if (ent.array.getBoolean(
@@ -6003,7 +5997,7 @@ public class WindowManagerService extends IWindowManager.Stub
         }
     }
 
-    public void updateCircularDisplayMaskIfNeeded() {
+    private void updateCircularDisplayMaskIfNeeded() {
         // we're fullscreen and not hosted in an ActivityView
         if (mContext.getResources().getConfiguration().isScreenRound()
                 && mContext.getResources().getBoolean(
@@ -6043,8 +6037,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (visible) {
                     // TODO(multi-display): support multiple displays
                     if (mCircularDisplayMask == null) {
-                        int screenOffset = mContext.getResources().getDimensionPixelSize(
-                                com.android.internal.R.dimen.circular_display_mask_offset);
+                        int screenOffset = mContext.getResources().getInteger(
+                                com.android.internal.R.integer.config_windowOutsetBottom);
                         int maskThickness = mContext.getResources().getDimensionPixelSize(
                                 com.android.internal.R.dimen.circular_display_mask_thickness);
 
@@ -7726,6 +7720,8 @@ public class WindowManagerService extends IWindowManager.Stub
             mActivityManager.updateConfiguration(null);
         } catch (RemoteException e) {
         }
+
+        updateCircularDisplayMaskIfNeeded();
     }
 
     private void displayReady(int displayId) {
@@ -7733,22 +7729,7 @@ public class WindowManagerService extends IWindowManager.Stub
             final DisplayContent displayContent = getDisplayContentLocked(displayId);
             if (displayContent != null) {
                 mAnimator.addDisplayLocked(displayId);
-                synchronized(displayContent.mDisplaySizeLock) {
-                    // Bootstrap the default logical display from the display manager.
-                    final DisplayInfo displayInfo = displayContent.getDisplayInfo();
-                    DisplayInfo newDisplayInfo = mDisplayManagerInternal.getDisplayInfo(displayId);
-                    if (newDisplayInfo != null) {
-                        displayInfo.copyFrom(newDisplayInfo);
-                    }
-                    displayContent.mInitialDisplayWidth = displayInfo.logicalWidth;
-                    displayContent.mInitialDisplayHeight = displayInfo.logicalHeight;
-                    displayContent.mInitialDisplayDensity = displayInfo.logicalDensityDpi;
-                    displayContent.mBaseDisplayWidth = displayContent.mInitialDisplayWidth;
-                    displayContent.mBaseDisplayHeight = displayContent.mInitialDisplayHeight;
-                    displayContent.mBaseDisplayDensity = displayContent.mInitialDisplayDensity;
-                    displayContent.mBaseDisplayRect.set(0, 0,
-                            displayContent.mBaseDisplayWidth, displayContent.mBaseDisplayHeight);
-                }
+                displayContent.initializeDisplayBaseInfo();
             }
         }
     }
@@ -8787,7 +8768,8 @@ public class WindowManagerService extends IWindowManager.Stub
             displayInfo.overscanBottom = bottom;
         }
 
-        mDisplaySettings.setOverscanLocked(displayInfo.uniqueId, left, top, right, bottom);
+        mDisplaySettings.setOverscanLocked(displayInfo.uniqueId, displayInfo.name, left, top,
+                right, bottom);
         mDisplaySettings.writeSettingsLocked();
 
         reconfigureDisplayLocked(displayContent);
