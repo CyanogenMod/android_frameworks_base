@@ -208,12 +208,14 @@ public class CastTile extends QSTile<QSTile.BooleanState> {
                     @Override
                     public void onViewAttachedToWindow(View v) {
                         if (DEBUG) Log.d(TAG, "onViewAttachedToWindow");
+                        mController.setDiscovering(true);
                     }
 
                     @Override
                     public void onViewDetachedFromWindow(View v) {
                         if (DEBUG) Log.d(TAG, "onViewDetachedFromWindow");
                         mVisibleOrder.clear();
+                        mController.setDiscovering(false);
                     }
                 });
             }
@@ -221,7 +223,6 @@ public class CastTile extends QSTile<QSTile.BooleanState> {
                     R.string.quick_settings_cast_detail_empty_text);
             mItems.setCallback(this);
             updateItems(mController.getCastDevices());
-            mController.setDiscovering(true);
             return mItems;
         }
 
