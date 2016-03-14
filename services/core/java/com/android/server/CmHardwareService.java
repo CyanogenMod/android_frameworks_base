@@ -42,6 +42,7 @@ import org.cyanogenmod.hardware.ThermalUpdateCallback;
 import org.cyanogenmod.hardware.TouchscreenHovering;
 import org.cyanogenmod.hardware.VibratorHW;
 import org.cyanogenmod.hardware.ThermalMonitor;
+import org.cyanogenmod.hardware.UniqueDeviceId;
 import android.hardware.IThermalListenerCallback;
 import android.hardware.ThermalListenerCallback;
 
@@ -74,6 +75,7 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
         public long getLtoDownloadInterval();
 
         public String getSerialNumber();
+        public String getUniqueDeviceId();
 
         public boolean requireAdaptiveBacklightForSunlightEnhancement();
 
@@ -114,7 +116,8 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
                 mSupportedFeatures |= CmHardwareManager.FEATURE_THERMAL_MONITOR;
             if (PersistentStorage.isSupported())
                 mSupportedFeatures |= CmHardwareManager.FEATURE_PERSISTENT_STORAGE;
-
+            if (UniqueDeviceId.isSupported())
+                mSupportedFeatures |= CmHardwareManager.FEATURE_UNIQUE_DEVICE_ID;
         }
 
         public int getSupportedFeatures() {
@@ -271,6 +274,10 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
 
         public String getSerialNumber() {
             return SerialNumber.getSerialNumber();
+        }
+
+        public String getUniqueDeviceId() {
+            return UniqueDeviceId.getUniqueDeviceId();
         }
 
         public boolean requireAdaptiveBacklightForSunlightEnhancement() {
@@ -460,6 +467,17 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
             return null;
         }
         return mCmHwImpl.getSerialNumber();
+    }
+
+     @Override
+    public String getUniqueDeviceId() {
+        mContext.enforceCallingOrSelfPermission(
+                Manifest.permission.HARDWARE_ABSTRACTION_ACCESS, null);
+        if (!isSupported(CmHardwareManager.FEATURE_UNIQUE_DEVICE_ID)) {
+            Log.e(TAG, "Unique device ID is not supported");
+            return null;
+        }
+        return mCmHwImpl.getUniqueDeviceId();
     }
 
     @Override
