@@ -397,10 +397,10 @@ public class MobileSignalController extends SignalController<
         mCurrentState.dataConnected = mCurrentState.connected
                 && mDataState == TelephonyManager.DATA_CONNECTED;
 
+        mCurrentState.showSeparateRoaming = false;
         if (isCarrierNetworkChangeActive()) {
             mCurrentState.iconGroup = TelephonyIcons.CARRIER_NETWORK_CHANGE;
         } else if (isRoaming()) {
-            mCurrentState.showSeparateRoaming = false;
             if (SystemProperties.getBoolean("ro.config.always_show_roaming", false)) {
                 mCurrentState.showSeparateRoaming = true;
             } else {
