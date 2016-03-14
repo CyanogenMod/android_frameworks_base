@@ -66,7 +66,7 @@ public class ZenModeConfig implements Parcelable {
             Calendar.WEDNESDAY, Calendar.THURSDAY };
     public static final int[] WEEKEND_DAYS = { Calendar.FRIDAY, Calendar.SATURDAY };
 
-    public static final int[] MINUTE_BUCKETS = generateMinuteBuckets();
+    public static final int[] MINUTE_BUCKETS =  new int[] { 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240, 255, 270, 285, 300, 315, 330, 345, 360, 375, 390, 405, 420, 435, 450, 465, 480, 495, 510, 510, 525, 540, 555, 570, 585, 600, 615, 630, 645, 660, 675, 690, 705, 720, 735, 750, 765, 780, 795, 810, 825, 840 };
     private static final int SECONDS_MS = 1000;
     private static final int MINUTES_MS = 60 * SECONDS_MS;
     private static final int DAY_MINUTES = 24 * 60;
@@ -279,18 +279,6 @@ public class ZenModeConfig implements Parcelable {
         } else {
             return rule.condition == null || rule.conditionId.equals(rule.condition.id);
         }
-    }
-
-    private static int[] generateMinuteBuckets() {
-        final int maxHrs = 12;
-        final int[] buckets = new int[maxHrs + 3];
-        buckets[0] = 15;
-        buckets[1] = 30;
-        buckets[2] = 45;
-        for (int i = 1; i <= maxHrs; i++) {
-            buckets[2 + i] = 60 * i;
-        }
-        return buckets;
     }
 
     public static String sourceToString(int source) {
