@@ -25,6 +25,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.cyanogenmod.hardware.AdaptiveBacklight;
 import org.cyanogenmod.hardware.ColorEnhancement;
@@ -522,6 +523,15 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
     public boolean writePersistentBytes(String key, byte[] value) {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.MANAGE_PERSISTENT_STORAGE, null);
+        if (key == null || key.length() == 0 || key.length() > 64) {
+            Log.e(TAG, "Invalid key: " + key);
+            return false;
+        }
+        // A null value is delete
+        if (value != null && (value.length > 4096 || value.length == 0)) {
+            Log.e(TAG, "Invalid value: " + (value != null ? Arrays.toString(value) : null));
+            return false;
+        }
         if (!isSupported(CmHardwareManager.FEATURE_PERSISTENT_STORAGE)) {
             Log.e(TAG, "Persistent storage is not supported");
             return false;
@@ -533,6 +543,10 @@ public class CmHardwareService extends ICmHardwareService.Stub implements Therma
     public byte[] readPersistentBytes(String key) {
         mContext.enforceCallingOrSelfPermission(
                 Manifest.permission.MANAGE_PERSISTENT_STORAGE, null);
+        if (key == null || key.length() == 0 || key.length() > 64) {
+            Log.e(TAG, "Invalid key: " + key);
+            return null;
+        }
         if (!isSupported(CmHardwareManager.FEATURE_PERSISTENT_STORAGE)) {
             Log.e(TAG, "Persistent storage is not supported");
             return null;
