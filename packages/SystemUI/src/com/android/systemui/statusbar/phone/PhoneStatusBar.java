@@ -173,6 +173,7 @@ import com.android.systemui.statusbar.policy.HotspotControllerImpl;
 import com.android.systemui.statusbar.policy.KeyButtonView;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
+import com.android.systemui.statusbar.policy.LiveLockScreenController;
 import com.android.systemui.statusbar.policy.LocationControllerImpl;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkControllerImpl;
@@ -321,6 +322,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     WeatherControllerImpl mWeatherController;
     SuControllerImpl mSuController;
     FingerprintUnlockController mFingerprintUnlockController;
+    LiveLockScreenController mLiveLockScreenController;
 
     int mNaturalBarHeight = -1;
 
@@ -920,6 +922,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mNotificationPanel.setBackground(new FastColorDrawable(context.getColor(
                     R.color.notification_panel_solid_background)));
         }
+        mLiveLockScreenController = new LiveLockScreenController(mContext, mNotificationPanel);
 
         if (mHeadsUpManager == null) {
             mHeadsUpManager = new HeadsUpManager(context, mStatusBarWindow);
@@ -3753,6 +3756,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         if (mKeyguardIndicationController != null) {
             mKeyguardIndicationController.cleanup();
+        }
+        if (mLiveLockScreenController != null) {
+            mLiveLockScreenController.cleanup();
         }
 
         mStatusBarWindow.removeContent(mStatusBarWindowContent);

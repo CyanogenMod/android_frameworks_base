@@ -40,6 +40,8 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.view.GestureDetector;
@@ -76,6 +78,9 @@ import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
 
+import cyanogenmod.app.CMContextConstants;
+import cyanogenmod.app.ILiveLockScreenManager;
+import cyanogenmod.app.LiveLockScreenInfo;
 import cyanogenmod.externalviews.KeyguardExternalView;
 import cyanogenmod.providers.CMSettings;
 
@@ -232,7 +237,7 @@ public class NotificationPanelView extends PanelView implements
     private ComponentName mThirdPartyKeyguardViewComponent;
     private KeyguardExternalView mKeyguardExternalView;
     private CmLockPatternUtils mLockPatternUtils;
-    private boolean mLiveLockScreenEnabled;
+    private ILiveLockScreenManager mLLSM;
 
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
@@ -318,20 +323,12 @@ public class NotificationPanelView extends PanelView implements
                 }
             }
         });
-
-        mLockPatternUtils = new CmLockPatternUtils(getContext());
-        if (mLockPatternUtils.isThirdPartyKeyguardEnabled() && mLiveLockScreenEnabled) {
-            mThirdPartyKeyguardViewComponent = mLockPatternUtils.getThirdPartyKeyguardComponent();
-        }
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mSettingsObserver.observe();
-        mContext.registerReceiver(mExternalKeyguardViewChangedReceiver,
-                new IntentFilter(CmLockPatternUtils.ACTION_THIRD_PARTY_KEYGUARD_COMPONENT_CHANGED));
-
         mScrollView.setListener(this);
     }
 
@@ -339,7 +336,9 @@ public class NotificationPanelView extends PanelView implements
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mSettingsObserver.unobserve();
-        mContext.unregisterReceiver(mExternalKeyguardViewChangedReceiver);
+        if (mKeyguardExternalView != null) {
+            mKeyguardExternalView.setProviderComponent(null);
+        }
     }
 
     @Override
@@ -1266,26 +1265,6 @@ public class NotificationPanelView extends PanelView implements
             mKeyguardExternalView.unregisterKeyguardExternalViewCallback(
                     mExternalKeyguardViewCallbacks);
             mKeyguardExternalView = null;
-        }
-    };
-
-    private BroadcastReceiver mExternalKeyguardViewChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String pkgName = getSendingPackage(intent);
-            if (pkgName != null) {
-                PackageManager pm = context.getPackageManager();
-                if (pm.checkPermission(android.Manifest.permission.ACCESS_KEYGUARD_SECURE_STORAGE,
-                        pkgName) != PackageManager.PERMISSION_GRANTED) {
-                    // we should not be here if the sending app does not have the proper permission,
-                    // so do nothing and return.
-                    return;
-                }
-            } else {
-                // null package name?  something is not right so just return and skip doing anything
-                return;
-            }
-            updateExternalKeyguardView();
         }
     };
 
@@ -2595,8 +2574,6 @@ public class NotificationPanelView extends PanelView implements
                     CMSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN), false, this);
             resolver.registerContentObserver(CMSettings.System.getUriFor(
                     CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this);
-            resolver.registerContentObserver(CMSettings.Secure.getUriFor(
-                    CMSettings.Secure.LIVE_LOCK_SCREEN_ENABLED), false, this);
             update();
         }
 
@@ -2624,10 +2601,6 @@ public class NotificationPanelView extends PanelView implements
 
             boolean liveLockScreenEnabled = CMSettings.Secure.getInt(
                     resolver, CMSettings.Secure.LIVE_LOCK_SCREEN_ENABLED, 0) == 1;
-            if (liveLockScreenEnabled != mLiveLockScreenEnabled) {
-                mLiveLockScreenEnabled = liveLockScreenEnabled;
-                updateExternalKeyguardView();
-            }
         }
     }
 
@@ -2711,6 +2684,10 @@ public class NotificationPanelView extends PanelView implements
         return mKeyguardExternalView;
     }
 
+    public void setExternalKeyguardViewComponent(ComponentName component) {
+        updateExternalKeyguardView(component);
+    }
+
     private KeyguardExternalView getExternalKeyguardView(ComponentName componentName) {
         try {
             return new KeyguardExternalView(getContext(), null, componentName);
@@ -2720,9 +2697,7 @@ public class NotificationPanelView extends PanelView implements
         return null;
     }
 
-    private void updateExternalKeyguardView() {
-        ComponentName cn = mLiveLockScreenEnabled ?
-                mLockPatternUtils.getThirdPartyKeyguardComponent() : null;
+    private void updateExternalKeyguardView(ComponentName cn) {
         // If mThirdPartyKeyguardViewComponent differs from cn, go ahead and update
         if (!Objects.equals(mThirdPartyKeyguardViewComponent, cn)) {
             mThirdPartyKeyguardViewComponent = cn;
@@ -2732,6 +2707,8 @@ public class NotificationPanelView extends PanelView implements
                 }
                 mKeyguardExternalView.unregisterKeyguardExternalViewCallback(
                         mExternalKeyguardViewCallbacks);
+                // setProviderComponent(null) will unbind the existing service
+                mKeyguardExternalView.setProviderComponent(null);
                 if (mThirdPartyKeyguardViewComponent != null) {
                     mKeyguardExternalView =
                             getExternalKeyguardView(mThirdPartyKeyguardViewComponent);
