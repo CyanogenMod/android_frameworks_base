@@ -48,4 +48,6 @@ interface ICmHardwareService {
 
     boolean writePersistentBytes(String key, in byte[] bytes);
     byte[] readPersistentBytes(String key);
+
+    String getUniqueDeviceId();
 }
