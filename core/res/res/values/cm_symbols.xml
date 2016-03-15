@@ -24,9 +24,6 @@
          frameworks/base/core/res/MakeJavaSymbols.sed for how to easily generate
          this.
     -->
-    <!-- External CM specific core services -->
-    <java-symbol type="array" name="config_externalCMServices" />
-
     <java-symbol type="bool" name="config_singleStageCameraKey" />
     <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
     <java-symbol type="integer" name="config_longPressOnAppSwitchBehavior" />
