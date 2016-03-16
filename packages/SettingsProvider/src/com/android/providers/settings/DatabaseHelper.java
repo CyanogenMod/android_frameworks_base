@@ -40,6 +40,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -2688,13 +2689,25 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadSetting(stmt, Settings.Global.CALL_AUTO_RETRY, 0);
 
             // Set the preferred network mode to target desired value or Default
-            // value defined in RILConstants
-            int type;
-            type = RILConstants.PREFERRED_NETWORK_MODE;
-            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, type);
+            // value defined in system property
+            int phoneCount = TelephonyManager.getDefault().getPhoneCount();
+            String val = "";
+            String mode = "";
+            for (int phoneId = 0; phoneId < phoneCount; phoneId++) {
+                mode = TelephonyManager.getTelephonyProperty(phoneId,
+                         "ro.telephony.default_network",
+                         Integer.toString(RILConstants.NETWORK_MODE_GSM_ONLY));
+                if (phoneId == 0) {
+                    val = mode;
+                } else {
+                    val = val + "," + mode;
+                }
+            }
+            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, val);
 
             // Set the preferred cdma subscription source to target desired value or default
             // value defined in CdmaSubscriptionSourceManager
+            int type;
             type = SystemProperties.getInt("ro.telephony.default_cdma_sub",
                         CdmaSubscriptionSourceManager.PREFERRED_CDMA_SUBSCRIPTION);
             loadSetting(stmt, Settings.Global.CDMA_SUBSCRIPTION_MODE, type);
