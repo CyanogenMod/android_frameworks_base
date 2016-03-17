@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Здымак экрану</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">атрыманне абароненых SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Дазваляе праграме атрымліваць абароненыя SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">мадыфікацыя спісу абароненых SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Дадатак зможа змяняць спіс адрасатаў абароненых SMS-паведамленняў.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Бяспека</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Дазволы, што адносяцца да бяспекі дадзеных на прыладзе.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">прагляд чорнага спісу</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Дазваляе праграме праглядаць звесткі пра нумары тэлефонаў, ад якіх заблакаваны тэлефанаванні ці паведамленні.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">мадыфікацыя чорнага спісу</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Дазваляе праграме ўносіць змены ў спіс нумароў тэлефонаў, ад якіх заблакаваны тэлефанаванні ці паведамленні.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">усталёўка шпалераў экрану блакавання</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Дазваляе праграме змяняць шпалеры экрану блакавання.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Перазагрузіць</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Бягучы</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Перазагрузіць</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Рэжым аднаўлення</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Загрузчык</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Спампоўкі</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Перазапуск інтэрфейсу</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Перазагрузіць</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Ваш планшэт будзе перазапушчаны.</string>
   <string name="reboot_confirm" product="default">Ваш тэлефон будзе перазапушчаны.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Перазапуск\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Дадатак зачынены</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB праз сетку ўключана</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB праз USB &amp; сетку ўключана</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Націснуць для выключэння наладкі.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">па сетцы &amp; USB</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Па сетцы</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Перахоп запуску дадаткаў</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s не ўсталявана</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Важныя</string>
   <string name="silent_mode_none">Не</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Выключаныя Wi-Fi кропкі доступу ў сувязі са зменай падпіскі SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Вымкнуць Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">уключэнне ці выключэнне рэжыму абароны прыватнасці</string>
   <string name="permdesc_changePrivacyGuardState">Дазваляе праграме выбіраць, ці будзе іншая праграма працаваць у рэжыме абароны прыватнасці. Калі праграма запушчана ў рэжыме абароны прыватнасці, яна не будзе мець доступу да асабістых дадзеных, такіх як кантакты, паведамленні ці гісторыя тэлефанаванняў.</string>
   <string name="privacy_guard_notification">Рэжым абароны прыватнасці актыўны</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не будзе мець доступу да асабістых дадзеных</string>
   <string name="privacy_guard_dialog_title">Рэжым абароны</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> жадае <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Запамятаць вырашэнне</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">атрымаць доступ да камеры</string>
   <string name="app_ops_access_location">атрымаць доступ да месцазнаходжання прылады</string>
   <string name="app_ops_access_notifications">атрымаць доступ да апавяшчэнняў</string>
@@ -127,7 +165,9 @@
   <string name="app_ops_get_accounts">атрымаць інфармацыю карыстальнікаў</string>
   <string name="app_ops_wifi_change">Змяніць стан Wi-Fi</string>
   <string name="app_ops_su">атрымаць правы суперкарыстальніка</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Каб адмацаваць экран, націсніце і ўтрымвайце кнопку \"Назад\".</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Аўтаматычна</string>
   <string name="live_display_auto_summary">Аўтаматычная падладка колеравай тэмпературы экрана пасля заходу і ўзыходу сонца</string>
   <string name="live_display_off">Адключыць</string>
@@ -139,9 +179,22 @@
   <string name="live_display_outdoor">На вуліцы (яскравае сонца)</string>
   <string name="live_display_outdoor_summary">Толькі вулічны рэжым</string>
   <string name="live_display_hint">LiveDisplay дапаможа зменшыць глядзельную напругу і палепшыць сон. Націсніце тут, каб паспрабаваць!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Няма падлучаных прылад</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> падлучаная прылада</string>
   <string name="tethered_notification_multi_device_message">Падлучана прылад: <xliff:g id="count">%1$s</xliff:g></string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">Запуск дадатку забаронены</string>
   <string name="notify_package_component_protected_text">Дадатак <xliff:g id="app_name">%1$s</xliff:g> заблакаваны на запуск. Націсні, каб увесці паролль і запусціць дадатак.</string>
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Абнуленне статыстыкі батарэі</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Дазволіць дадатку чысціць дадзеныя пра выкарыстанне акумулятарнай батарэі прылады.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

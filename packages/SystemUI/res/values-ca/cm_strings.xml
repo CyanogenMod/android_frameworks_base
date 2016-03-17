@@ -16,9 +16,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_4g_plus">4G+</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Llisca a la dreta per %1$s</string>
   <string name="right_shortcut_hint">Llisca a l\'esquerra per %1$s</string>
   <string name="lockscreen_message">Toca una icona a l\'esquerra o a la dreta per reassignar una drecera a la pantalla de bloqueig.</string>
@@ -26,6 +34,7 @@
   <string name="select_application">Selecciona l\'aplicació</string>
   <string name="lockscreen_choose_action_title">Tria una acció</string>
   <string name="lockscreen_none_target">Cap</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Escull l\'acció a assignar</string>
   <string name="navbar_home_button">Botó Inici</string>
   <string name="navbar_recent_button">Botó Recent</string>
@@ -37,16 +46,26 @@
   <string name="navbar_menu_big_button">Botó Menú</string>
   <string name="accessibility_dpad_left">Cursor esquerra</string>
   <string name="accessibility_dpad_right">Cursor dreta</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Neteja dades de l\'aplicació</string>
-  <string name="advanced_dev_option_force_stop">Força tancament</string>
+  <!-- Title shown in recents popup for force stopping the application -->
+  <string name="advanced_dev_option_force_stop">Força el tancament</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Desinstal·la</string>
-  <string name="accessibility_notification_brightness">Brillantor dels llums</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_notification_brightness">Lluminositat</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Perfils desactivats.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">Perfils: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">S\'han desactivat els perfils.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">Perfil canviat a <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">S\'està inicialitzant\u2026</string>
-  <string name="led_notification_title">Ajustaments de llums</string>
+  <!-- Lights settings, LED notification -->
+  <string name="led_notification_title">Ajustaments de llum</string>
   <string name="led_notification_text">Llum LED habilitada per ajustos</string>
   <string name="qs_tile_edit_header_instruction">Prem i aguanta les cel·les per reordenar-les</string>
   <string name="quick_settings_edit_label">Edita cel·les</string>
@@ -56,8 +75,9 @@
   <string name="quick_settings_title_header">Capçalera</string>
   <string name="quick_settings_title_tiles">Cel·les</string>
   <string name="quick_settings_title_show_weather">Mostra el temps</string>
-  <string name="quick_settings_title_show_brightness_slider">Mostra la barra liscant de brillantor</string>
+  <string name="quick_settings_title_show_brightness_slider">Mostra la barra lliscant de lluminositat</string>
   <string name="quick_settings_title_enlarge_first_row">Engrandeix la primera fila</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Això ho manté a la vista fins que el desancoris. Toca i aguanta el botó Enrera per desancorar.</string>
   <string name="quick_settings_custom_tile_detail_title">Cel·la personalitzada</string>
   <string name="quick_settings_remove">Esborra cel·la</string>
@@ -69,9 +89,13 @@
   <string name="quick_settings_heads_up_label">Notificacions emergents</string>
   <string name="quick_settings_battery_saver_label">Estalvi de bateria</string>
   <string name="quick_settings_caffeine_label">Cafeïna</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinc desactivada.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">Sinc activada.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">S\'ha desactivat la sincronització.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">S\'ha activat la sincronització.</string>
   <string name="quick_settings_sync_label">Sinc</string>
   <string name="quick_settings_volume_panel_label">Panell de volum</string>
@@ -81,42 +105,74 @@
   <string name="quick_settings_ambient_display_label">Pantalla ambient</string>
   <string name="quick_settings_lockscreen_label_enforced">Pantalla de bloqueig aplicada</string>
   <string name="quick_settings_lockscreen_label_locked_by_profile">Deshabilitat pel perfil</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Temps d\'espera de la pantalla: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Temps d\'espera de la pantalla canviat a <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Mode de la bateria</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Mode de la bateria: mode estalvi d\'energia.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Mode de la bateria: mode equilibrat.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">Mode de la bateria: mode rendiment.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">Mode de la bateria: mode d\'eficiència.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Mode de la bateria: mode ràpid.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Mode de la bateria canviat a mode estalvi d\'energia.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Mode de la bateria canviat a mode equilibrat.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Mode de la bateria canviat a mode rendiment.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Mode de la bateria canviat a mode d\'eficiència.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Mode de la bateria canviat a mode ràpid.</string>
   <string name="quick_settings_performance_profile_detail_title">Mode de la bateria</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Pantalla de bloqueig desactivada.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">Pantalla de bloqueig activada.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">S\'ha desactivat la pantalla de bloqueig.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">S\'ha activat la pantalla de bloqueig.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Pantalla ambient desactivada.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">Pantalla ambient activada.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">S\'ha desactivat la pantalla ambient.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">S\'ha activat la pantalla ambient.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Notificacions emergents apagades.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">Notificacions emergents activades.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">S\'han apagat les notificacions emergents.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">S\'han encès les notificacions emergents.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_off">Cafeïna desactivada.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_on">Cafeïna activada.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Estalvi de bateria apagat.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">Estalvi de bateria encès.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">S\'ha apagat l\'estalvi de bateria.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">S\'ha encès l\'estalvi de bateria.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Cel·la dinàmica</string>
   <string name="dynamic_qs_tile_next_alarm_label">Propera alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector de l\'IME</string>
   <string name="dynamic_qs_tile_su_label">Accés Superusuari</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay desactivat.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: mode automàtic.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: mode diurn.</string>
@@ -128,19 +184,41 @@
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay canviat al mode nocturn.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay canviat al mode exterior.</string>
   <string name="quick_settings_title_advanced_location">Localització per triangulació</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Informes d\'ubicació: Mode d\'estalvi de bateria.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">Informes d\'ubicació: Mode només sensors.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Informes d\'ubicació: Mode d\'alta precisió.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Mode d\'ubicació</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Estalvi de bateria</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">Només dispositiu</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Alta precisió</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Informes d\'ubicació canviats al mode d\'estalvi d\'energia.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">Informes d\'ubicació canviats al mode només sensors.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informes d\'ubicació canviats al mode d\'alta precisió.</string>
   <string name="quick_settings_tiles_category_system">Cel·les del sistema</string>
+  <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Afegeix una cel·la</string>
+  <!-- Hotspot dialog message -->
   <string name="hotspot_apm_message">No es pot connectar a xarxes mòbils mentre el mode Avió està habilitat. Deshabilita el mode Avió i intenta-ho de nou.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">La llanterna està encesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Pica per apagar-la</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d client</item>
+    <item quantity="other">%1$d clients</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Sense dades SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Acoblament bateria <xliff:g id="number">%d</xliff:g> percent.</string>
 </resources>

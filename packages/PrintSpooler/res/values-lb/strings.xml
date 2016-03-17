@@ -15,66 +15,153 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Title of the PrintSpooler application. [CHAR LIMIT=50] -->
   <string name="app_label">Drock-Tëschespäicher</string>
+  <!-- Label of the print dialog's button for more print options. [CHAR LIMIT=25] -->
   <string name="more_options_button">Méi Optiounen</string>
+  <!-- Label of the destination widget. [CHAR LIMIT=20] -->
   <string name="label_destination">Destinatioun</string>
+  <!-- Label of the copies count widget. [CHAR LIMIT=20] -->
   <string name="label_copies">Kopien</string>
+  <!-- Label of the copies count for the print options summary. [CHAR LIMIT=20] -->
   <string name="label_copies_summary">Kopien:</string>
+  <!-- Label of the paper size widget. [CHAR LIMIT=20] -->
   <string name="label_paper_size">Pabeiersgréisst</string>
+  <!-- Label of the paper size for the print options summary. [CHAR LIMIT=20] -->
   <string name="label_paper_size_summary">Pabeiersgréisst:</string>
+  <!-- Label of the color mode widget. [CHAR LIMIT=20] -->
   <string name="label_color">Faarf</string>
+  <!-- Label of the printer mode to print on both sides of paper. [CHAR LIMIT=20] -->
+  <!-- Label of the orientation widget. [CHAR LIMIT=20] -->
   <string name="label_orientation">Orientéierung</string>
+  <!-- Label of the page selection widget. [CHAR LIMIT=20] -->
   <string name="label_pages">Säiten</string>
+  <!-- Template for the all pages option in the page selection widget. [CHAR LIMIT=20] -->
   <string name="template_all_pages">All (<xliff:g id="page_count" example="100">%1$s</xliff:g>)</string>
+  <!-- Template for the page range option in the page selection widget. [CHAR LIMIT=20] -->
   <string name="template_page_range">Rei (<xliff:g id="page_count" example="100">%1$s</xliff:g>)</string>
+  <!-- Page range exmple used as a hint of how to specify such. [CHAR LIMIT=20] -->
   <string name="pages_range_example">z. B. 1-5,8,11-13</string>
+  <!-- Title for the pring preview button .[CHAR LIMIT=30] -->
   <string name="print_preview">Drockvirschau</string>
+  <!-- Title for the pring preview button if there is no PDF viewer isntalled. [CHAR LIMIT=50] -->
   <string name="install_for_print_preview">Installéier e PDF-Programm fir eng Drockvirschau</string>
+  <!-- Title of the message that the printing application crashed. [CHAR LIMIT=50] -->
   <string name="printing_app_crashed">D\'Drockapp ass ofgestierzt</string>
+  <!-- Title for the temporary dialog show while an app is generating a print job. [CHAR LIMIT=30] -->
   <string name="generating_print_job">Drockoptrag gëtt generéiert</string>
+  <!-- Title for the save as PDF option in the printer list. [CHAR LIMIT=30] -->
   <string name="save_as_pdf">Als PDF späicheren</string>
+  <!-- Title for the open all printers UI option in the printer list. [CHAR LIMIT=30] -->
   <string name="all_printers">All d\'Drécker&#8230;</string>
+  <!-- Title for the print dialog announced to the user for accessibility. Not shown in the UI. [CHAR LIMIT=none] -->
   <string name="print_dialog">Drockdialogfënster</string>
+  <!-- Template for the message that shows the current page out of the total number of pages [CHAR LIMIT=none] -->
   <string name="current_page_template"><xliff:g id="current_page">%1$d</xliff:g> / <xliff:g id="page_count">%2$d</xliff:g></string>
+  <!-- Description of the current page - spoken to the user [CHAR LIMIT=none] -->
   <string name="page_description_template">Säit <xliff:g id="current_page" example="1">%1$d</xliff:g> / <xliff:g id="page_count" example="100">%2$d</xliff:g></string>
+  <!-- Template for the message to announce the print options summary - spoken to the user. [CHAR LIMIT=none] -->
   <string name="summary_template">Resumé, <xliff:g id="copies" example="1">%1$s</xliff:g> Kopien, Pabeiersgréisst <xliff:g id="paper_size" example="A4">%2$s</xliff:g></string>
+  <!-- Description for the handle to expand all print options - spoken to the user. [CHAR LIMIT=none] -->
   <string name="expand_handle">Steierelement fir d\'Ausklappen</string>
+  <!-- Description for the handle to collapse all print options - spoken to the user. [CHAR LIMIT=none] -->
   <string name="collapse_handle">Steierelement fir d\'Zesummeklappen</string>
+  <!-- Description for the print button - spoken to the user. [CHAR LIMIT=none] -->
   <string name="print_button">Drécken</string>
+  <!-- Description for the save to PDF button - spoken to the user. [CHAR LIMIT=none] -->
   <string name="savetopdf_button">Als PDF späicheren</string>
+  <!-- Message to announce print options are expanded - spoken to the user. [CHAR LIMIT=none] -->
   <string name="print_options_expanded">Drockoptiounen ausgeklappt</string>
+  <!-- Message to announce print options are collapsed - spoken to the user. [CHAR LIMIT=none] -->
   <string name="print_options_collapsed">Drockoptiounen zesummegeklappt</string>
+  <!-- Select printer activity -->
+  <!-- Title for the share action bar menu item. [CHAR LIMIT=20] -->
   <string name="search">Sichen</string>
+  <!-- Title for the select printer activity. [CHAR LIMIT=30] -->
   <string name="all_printers_label">All d\'Drécker</string>
+  <!-- Title of the button to install a print service. [CHAR LIMIT=25] -->
   <string name="add_print_service_label">Service dobäisetzen</string>
+  <!-- Utterance to announce that the search box is shown. This is spoken to a blind user. [CHAR LIMIT=none] -->
   <string name="print_search_box_shown_utterance">Sichkëscht ugewisen</string>
+  <!-- Utterance to announce that the search box is hidden. This is spoken to a blind user. [CHAR LIMIT=none] -->
   <string name="print_search_box_hidden_utterance">Sichkëscht verstoppt</string>
+  <!-- Title of the action bar button to got to add a printer. [CHAR LIMIT=25] -->
   <string name="print_add_printer">Drécker dobäisetzen</string>
+  <!-- Title of the menu item to select a printer. [CHAR LIMIT=25] -->
   <string name="print_select_printer">Drécker auswielen</string>
+  <!-- Title of the menu item to forget a printer. [CHAR LIMIT=25] -->
   <string name="print_forget_printer">Drécker vergiessen</string>
+  <!-- Utterance to announce a change in the number of matches during a search. This is spoken to a blind user. [CHAR LIMIT=none] -->
+  <plurals name="print_search_result_count_utterance">
+    <item quantity="one"><xliff:g id="count" example="1">%1$s</xliff:g> Drécker fonnt</item>
+    <item quantity="other"><xliff:g id="count" example="1">%1$s</xliff:g> Drécker fonnt</item>
+  </plurals>
+  <!-- Add printer dialog  -->
+  <!-- Title for the alert dialog for selecting a print service. [CHAR LIMIT=50] -->
   <string name="choose_print_service">Drockservice auswielen</string>
+  <!-- Title for the prompt shown as a placeholder if no printers are found while not searching. [CHAR LIMIT=50] -->
   <string name="print_searching_for_printers">Et gëtt no Drécker gesicht</string>
+  <!-- Title for the prompt shown as a placeholder if there are no printers while searching. [CHAR LIMIT=50] -->
   <string name="print_no_printers">Keen Drécker fonnt</string>
+  <!-- Notifications -->
+  <!-- Template for the notification label for a printing print job. [CHAR LIMIT=25] -->
   <string name="printing_notification_title_template"><xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g> gëtt gedréckt</string>
+  <!-- Template for the notification label for a cancelling print job. [CHAR LIMIT=25] -->
   <string name="cancelling_notification_title_template"><xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g> gëtt ofgebrach</string>
+  <!-- Template for the notification label for a failed print job. [CHAR LIMIT=25] -->
   <string name="failed_notification_title_template">Dréckerfeeler <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <!-- Template for the notification label for a blocked print job. [CHAR LIMIT=25] -->
   <string name="blocked_notification_title_template">Drécker blockéiert <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <!-- Template for the notification label for a composite (multiple items) print jobs notification. [CHAR LIMIT=25] -->
+  <plurals name="composite_notification_title_template">
+    <item quantity="one"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g> Drockoptrag</item>
+    <item quantity="other"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g> Drockopträg</item>
+  </plurals>
+  <!-- Label for the notification button for cancelling a print job. [CHAR LIMIT=25] -->
   <string name="cancel">Ofbriechen</string>
+  <!-- Label for the notification button for restarting a filed print job. [CHAR LIMIT=25] -->
   <string name="restart">Nei starten</string>
+  <!-- Message that there is no connection to a printer. [CHAR LIMIT=40] -->
   <string name="no_connection_to_printer">Keng Connectioun mam Drécker</string>
+  <!-- Label for an unknown reason for failed or blocked print job. [CHAR LIMIT=25] -->
   <string name="reason_unknown">onbekannt</string>
+  <!-- Label for a printer that is not available. [CHAR LIMIT=25] -->
   <string name="printer_unavailable"><xliff:g id="print_job_name" example="Canon-123GHT">%1$s</xliff:g> – net verfügbar</string>
+  <!-- Arrays -->
+  <!-- Color mode labels. -->
   <string-array name="color_mode_labels">
+    <!-- Color mode label: Monochrome color scheme, e.g. one color is used. [CHAR LIMIT=20] -->
     <item>Schwaarz &amp; Wäiss</item>
+    <!-- Color mode label: Color color scheme, e.g. many colors are used. [CHAR LIMIT=20] -->
     <item>Faarf</item>
   </string-array>
+  <!-- Duplex mode labels. -->
+  <!-- Orientation labels. -->
   <string-array name="orientation_labels">
+    <!-- Orientation label: Portrait page orientation. [CHAR LIMIT=30] -->
     <item>Héichformat</item>
+    <!-- Orientation label: Landscape page orientation [CHAR LIMIT=30] -->
     <item>Breetformat</item>
   </string-array>
+  <!-- Permissions -->
+  <!-- Title of an application permission, listed so the user can choose whether they want
+         to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want
+         to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they
+         want to allow the application to do this. -->
+  <!-- Error messages -->
+  <!-- Message for an error when trying to print to a PDF file. [CHAR LIMIT=50] -->
   <string name="print_write_error_message">Feeler beim Schreiwen an de Fichier</string>
+  <!-- Default message for an error while generating a print job. [CHAR LIMIT=50] -->
   <string name="print_error_default_message">Dat ass leider net gaangen. Probéier nees.</string>
+  <!-- Label for the retry button in the error message. [CHAR LIMIT=50] -->
   <string name="print_error_retry">Nees probéieren</string>
+  <!-- Message for the currently selected printer being unavailable. [CHAR LIMIT=100] -->
   <string name="print_error_printer_unavailable">Den Drécker ass momentan net disponibel.</string>
+  <!-- Long running operations -->
+  <!-- Message long running operation when preparing print preview. [CHAR LIMIT=50] -->
   <string name="print_preparing_preview">Virschau gëtt preparéiert\u2026</string>
 </resources>

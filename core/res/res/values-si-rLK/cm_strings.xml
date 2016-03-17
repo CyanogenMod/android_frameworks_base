@@ -17,36 +17,74 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">තිර සේයාව</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">ආරක්‍ෂිත SMS ලබන්න</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">එන ආරක්‍ෂිත SMS ලැබීමට යෙදුමට ඉඩ දෙයි.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">ආරක්‍ෂිත SMS ලැයිස්තුව විකරණය කරන්න</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">ආරක්ෂාව</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">උපාංගයේ ආරක්ෂක තොරතුරු වලට අදාළ අනුමැති.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">දුරකථන අපලේඛණය කියවීම</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">පැමිණෙන ඇමතුම් හෝ පණිවිඩ සඳහා අවහිර කර ඇති ඇමතුම් අංක පිලිබඳ තොරතුරු කියවීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">දුරකථන අපලේඛණය වෙනස් කරන්න</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">පැමිණෙන ඇමතුම් හෝ පණිවිඩ සඳහා අවහිර කර ඇති ඇමතුම් අංක වෙනස් කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">යතුරු රැක්මේ වෝල්පේපරය සකසන්න</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">අගුළු තිරයේ වෝල්පේපරය වෙනස්කිරීම සඳහා යෙදුමකට අවසර දෙන්න.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">යළි පණගන්වන්න</string>
+  <!-- label for current user in phone options dialog -->
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">නැවත පනගන්වන්න</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">ප්‍රතිසාධන ප්‍රකාරයට</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">ඇරඹුම් ප්‍රවේශකයට</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">බාගැනීමේ ප්‍රකාරයට</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">මෘදුව නැවත පනගන්වන්න</string>
+  <!-- Title of dialog to confirm rebooting. -->
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">ඔබගේ ටැබ්ලටය නැවත පනගැන්වෙනු ඇත.</string>
   <string name="reboot_confirm" product="default">ඔබගේ දුරකථනය නැවත පනගැන්වෙනු ඇත.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">නැවත පනගැන්වෙමින්\u2026</string>
+  <!-- Long-press back kill application -->
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ජාලය හරහා ADB සබලයි</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ජාලය &amp; USB හරහා ADB සබලයි</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">නිදොස් කරණය අබල කිරීමට ස්පර්ශ කරන්න.</string>
+  <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- stylus gestures support -->
+  <!-- Zen mode buttons -->
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">පෞද්ගලිකත්වයේ මුරකරු සබලනය හෝ අබලනය</string>
   <string name="permdesc_changePrivacyGuardState">තවත් යෙදුමක් පෞද්ගලිකත්වයේ මුරකරු සමග ධාවනය විය යුතුද නැද්ද යන්න වෙනස් කිරීම සඳහා යෙදුමට අවසර දෙන්න. යෙදුමක් පෞද්ගලිකත්වයේ මුරකරු සමග ධාවනය වන විට, එයට සම්බන්ධතා, ඇමතුම් ලොග හෝ පණිවිඩ පරිශීලනය කල නොහැක.</string>
   <string name="privacy_guard_notification">පෞද්ගලිකත්වයේ මුරකරු සක්‍රීයයි</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>ට පුද්ගලික දත්ත පරිශීලනය කල නොහැක</string>
   <string name="privacy_guard_dialog_title">පෞද්ගලිකත්වයේ මුරකරු</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="op">%2$s</xliff:g> සඳහා <xliff:g id="app">%1$s</xliff:g>ට අවශ්‍යව ඇත.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">කැමරාව පරිශීලනය</string>
   <string name="app_ops_access_location">ඔබගේ ස්ථානය පරිශීලනය</string>
   <string name="app_ops_access_notifications">ඔබගේ දැනුම්දීම් කියවීම</string>
@@ -84,4 +122,17 @@
   <string name="app_ops_use_voice_volume">හඬ ඇමතුම් ශබ්දය පාලනය</string>
   <string name="app_ops_write_mms">MMS පණිවිඩයක් ලිවීම</string>
   <string name="app_ops_write_sms">කෙටි පණිවිඩයක් ලිවීම</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <!-- LiveDisplay strings -->
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Снимак екрана</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">прими заштићени SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Дозволи да апликације приме долазећи заштићени SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">измените заштићену SMS листу</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Дозвољава апликацији да мења заштићену SMS листу адреса.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Безбедност</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Дозволе које се односе на безбедносне информације уређаја.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">читај црну листу телефона</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Омогућава апликацији да чита информације о телефонским бројевима који су блокирани за долазне позиве или поруке.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">мењај црну листу телефона</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Омогућава апликацији да промени бројеве телефона које су блокирани за долазне позиве или поруке.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">постави позадину закључаног екрана</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Омогућава апликацији да промени позадину на закључаном екрану.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Рестартуј</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Тренутно</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Рестартуј</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Опоравак</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Преузимање</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Рестартуј интерфејс</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Рестартуј</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Tаблет ће се рестартовати.</string>
   <string name="reboot_confirm" product="default">Tелефон ће се рестартовати.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Рестартовање\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Апликација је затворена</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB преко мреже омогућен</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB преко USB &amp; мреже омогућен</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Додирни да онемогућиш отклањање грешака.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; мрежа</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Мрежа</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">пресретни подизање апликације</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s није инсталирано</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Приоритет</string>
   <string name="silent_mode_none">Ниједан</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Онемогућен Wi-Fi hotspot због промене SIM претплате</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Искључи Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">омогући или онемогући заштиту приватности</string>
   <string name="permdesc_changePrivacyGuardState">Дозвољава апликацији да промени да ли се друга апликација покреће са заштитом приватности. Када је апликација покренута са заштитом приватности, она неће имати приступ личним подацима, као што су контакти, евиденција позива или поруке.</string>
   <string name="privacy_guard_notification">Заштита приватности је активна</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> неће бити у могућности да приступи личним подацима</string>
   <string name="privacy_guard_dialog_title">Заштита приватности</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> жели да <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Запамти мој избор</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">приступ камери</string>
   <string name="app_ops_access_location">приступ твојој локацији</string>
   <string name="app_ops_access_notifications">прочитај твоја обавештења</string>
@@ -128,7 +166,9 @@
   <string name="app_ops_get_accounts">добави налог уређаја</string>
   <string name="app_ops_wifi_change">промени Wi-Fi стање</string>
   <string name="app_ops_su">дај root приступ</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Да искључиш овај екран додирни и држи дугме за назад.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Аутоматски</string>
   <string name="live_display_auto_summary">Аутоматски прилагоди температуру боје екрана после сумрака и свитања</string>
   <string name="live_display_off">Искључено</string>
@@ -140,11 +180,24 @@
   <string name="live_display_outdoor">Напољу (јако сунце)</string>
   <string name="live_display_outdoor_summary">Користи само подешавања за напоље</string>
   <string name="live_display_hint">LiveDisplay може смањити напрезање очију и помоћи да спавате ноћу. Додирните да пробате!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Нема повезаног уређаја</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> конектован уређај</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> конектовани уређаји</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">Блокирана активност покретања</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> је заштићена од покретања. Додирни да потврдиш и покрени апликацију.</string>
+  <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Батерија пуна</string>
   <string name="notify_battery_fully_charged_text">Искључи пуњач са уређаја да би побољшао трајност батерије.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">ресетуј статистику батерије</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

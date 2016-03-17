@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Скріншот</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">отримувати захищені SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Дозволяє програмі отримувати захищені SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">змінювати список захищених SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Дозволяє програмі змінювати список адрес захищених SMS.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Безпека</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Дозволи, пов\'язані з безпекою даних на пристрії.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">перегляд чорного списку</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Дозволяє програмі читати інформацію про список абонентів, від яких заблоковані вхідні дзвінки або повідомлення.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">зміна чорного списку</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Дозволяє програмі змінювати список абонентів, від яких заблоковані вхідні дзвінки або повідомлення.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">встановлення шпалер екрану блокування</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Дозволяє програмі міняти шпалери екрану блокування.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Перезавантаження</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Поточний</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Перезавантаження</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Швидке перезавантаження</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Перезавантаження</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Ваш планшет перезавантажиться.</string>
   <string name="reboot_confirm" product="default">Ваш телефон перезавантажиться.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Перезавантаження\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Програму закрито</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB по мережі увімкнено</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB по USB та мережі увімкнено</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Торкніться, аби вимкнути налагодження.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB та мережі</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Мережа</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Перехоплення запуску додатку</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s не встановлено</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Пріоритет</string>
   <string name="silent_mode_none">Немає</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Точку доступу Wi-Fi вимкнено через зміну SIM-картки</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Вимкнути Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">увімк. або вимк. Сторожа Приватності</string>
   <string name="permdesc_changePrivacyGuardState">Програма може вибрати, чи буде друга програма працювати в захищеному режимі. Коли програму запущено в захищеному режимі, вона не отримає доступ до персональних даних, таких як контакти, повідомлення чи журнал дзвінків.</string>
   <string name="privacy_guard_notification">Сторож Приватності активний</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> буде заборонено доступ до персональних даних</string>
   <string name="privacy_guard_dialog_title">Сторож Приватності</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> намагається <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Запам\'ятати мій вибір</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">доступ до камери</string>
   <string name="app_ops_access_location">доступ до місцезнаходження</string>
   <string name="app_ops_access_notifications">читати ваші сповіщення</string>
@@ -128,7 +166,9 @@
   <string name="app_ops_get_accounts">Отримати інформацію про акаунти</string>
   <string name="app_ops_wifi_change">Змінити стан Wi-Fi</string>
   <string name="app_ops_su">отримати root-доступ</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Щоб відкріпити цей екран, торкніться й утримуйте кнопку назад.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Автоматично</string>
   <string name="live_display_auto_summary">Автоматичне підлаштування температури кольору екрана після сходу та заходу сонця</string>
   <string name="live_display_off">Вимк</string>
@@ -140,11 +180,24 @@
   <string name="live_display_outdoor">Надворі (яскраве сонце)</string>
   <string name="live_display_outdoor_summary">Використовувати параметри для яскравого освітлення надворі</string>
   <string name="live_display_hint">LiveDisplay допоможе зменшити навантаження на зір та покращить Ваш сон. Натисніть тут, щоб спробувати його!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Немає під\'єднаного пристрою</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> підключений пристрій</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> підключених пристроїв</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">Запуск програми заборонений</string>
   <string name="notify_package_component_protected_text">Запуск <xliff:g id="app_name">%1$s</xliff:g> заблоковано. Натисніть, щоб ввести пароль і запустити програму.</string>
+  <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Батарея повністю заряджена</string>
   <string name="notify_battery_fully_charged_text">Від’єднайте зарядку задля покращення витривалості батареї.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">скинути статистику акумулятора</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Дозволити програмі скидати дані про використання акумулятора.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Képernyőmentés</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">védett SMS fogadása</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Lehetővé teszi az alkalmazás számára, hogy védett SMS-t fogadjon.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">védett SMS lista módosítása</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Lehetővé teszi az alkalmazás számára, hogy módosítsa a védett SMS címlistát.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Biztonság</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Engedélyek az eszköz biztonsági információira vonatkozóan.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">tiltólista olvasása</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Lehetővé teszi az alkalmazás számára, hogy olvassa azokat a számokat, melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">tiltólista módosítása</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Lehetővé teszi az alkalmazás számára, hogy szerkessze azokat a telefonszámokat melyek blokkolva vannak bejövő hívásnál vagy üzenetnél.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">billentyűzár háttérképének beállítása</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Lehetővé teszi az alkalmazás számára, hogy módosítsa a képernyőzár hátterét.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Újraindítás</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Jelenlegi</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Újraindítás</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Lágy újraindítás</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Újraindítás</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">A táblagép újraindul.</string>
   <string name="reboot_confirm" product="default">A telefon újraindul.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Újraindítás\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Alkalmazás leállítva</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB hálózaton keresztül engedélyezve</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB USB-n &amp; hálózaton keresztül engedélyezve</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Érintse meg a hibakeresés letiltásához.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; hálózat</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Hálózat</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">alkalmazás indításának feltartóztatása</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s nincs telepítve</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritás</string>
   <string name="silent_mode_none">Nincs</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Wi\u2011Fi hotspot kikapcsolva a SIM előfizetés módosítása miatt</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Wi\u2011Fi kikapcsolása</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">adatvédelem engedélyezése vagy tiltása</string>
   <string name="permdesc_changePrivacyGuardState">Lehetővé teszi, hogy más alkalmazások számára engedélyezze, vagy letiltsa az adatvédelmet. Amikor az alkalmazás adatvédelmi módban fut, nem fog hozzáférni az Ön személyes adataihoz, mint a névjegyzékéhez, üzeneteihez, vagy a hívásnaplójához.</string>
   <string name="privacy_guard_notification">Adatvédelem aktív</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nem fog hozzáférni a személyes adataihoz</string>
   <string name="privacy_guard_dialog_title">Adatvédelmi beállítások</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> a következő műveletet szeretné végrehajtani: <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Jegyezze meg a választást</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">hozzáférés a kamerához</string>
   <string name="app_ops_access_location">hozzáférés a helyadataihoz</string>
   <string name="app_ops_access_notifications">értesítések olvasása</string>
@@ -128,7 +166,9 @@
   <string name="app_ops_get_accounts">eszköz fiókok lekérése</string>
   <string name="app_ops_wifi_change">Wi-Fi állapot módosítása</string>
   <string name="app_ops_su">rendszergazdai jogosultság szerzése</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Képernyő rögzítésének feloldásához érintse meg és tartsa nyomva a Vissza gombot.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatikus</string>
   <string name="live_display_auto_summary">Automatikusan beállítja a képernyő színhőmérsékletét napnyugta és napkelte után</string>
   <string name="live_display_off">Ki</string>
@@ -140,11 +180,26 @@
   <string name="live_display_outdoor">Kültéri (erős napfény)</string>
   <string name="live_display_outdoor_summary">Csak a kültéri beállítások használata</string>
   <string name="live_display_hint">A LiveDisplay segíthet a szemek terhelésének csökkentésében és a jobb éjszakai alvásban. Kattintson ide, hogy kipróbálja!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nincs csatlakoztatott készülék</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> csatlakoztatott eszköz</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> csatlakoztatott eszköz</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">Tevékenység elindítás blokkolva</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> védve van az indításra. Kattintson a hitelesítésére és indítsa el az alkalmazást.</string>
+  <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Akkumulátor teljesen feltöltve</string>
   <string name="notify_battery_fully_charged_text">A készüléket vegye le a töltőről, hogy javítsa az akkumulátor élettartamát.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse alacsony szintű akkumulátor használatára vonatkozó adatokat.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Megváltoztak a SIM-kártyák</string>
+  <string name="uicc_hot_swapped_event_text">Koppintson a SIM-kártya alapértelmezett beállításainak megadásához</string>
 </resources>

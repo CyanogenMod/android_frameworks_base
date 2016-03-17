@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Schiermfoto</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">Geschützten SMSen empfänken</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Erlaabt der App, erakommend geschützten SMS z\'empfänken.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">Lëscht vun de geschützten SMSen änneren</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Erlaabt der App, d\'Lëscht vun de geschützten SMS-Adressen z\'änneren.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Sécherheet</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Berechtegungen déi mat der Sécherheet vum Apparat ze dinn hunn.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">Schwaarz Lëscht ausliesen</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Erlaabt der App, Informatiounen iwwer blockéiert Telefonsnummere fir erakommend Uriff oder Messagen ze liesen.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">Schwaarz Lëscht änneren</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Erlaabt der App, d\'blockéiert Telefonsnummere fir erakommend Uriff oder Messagen z\'änneren.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Hannergrondbild vum Spärschierm setzen</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Erlaabt der App, d\'Hannergrondbild vum Spärschierm z\'änneren.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Nei starten</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Aktuell</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Nei starten</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recuperatioun</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Eroflueden</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Séieren Neistart</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Nei starten</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Däin Tablet gëtt nei gestart.</string>
   <string name="reboot_confirm" product="default">Däin Telefon gëtt nei gestart.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Gëtt nei gestart\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">App zougemaach</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB iwwer Netzwierk aktivéiert</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB iwwer USB an Netzwierk aktivéiert</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Drécke fir Debugging ze desaktivéieren.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB: <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB an Netzwierk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netzwierk</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">App-Start offänken</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ass net installéiert</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritéit</string>
   <string name="silent_mode_none">Keen</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">WLAN-Zougrëffspunkt gouf opgrond vun Ännerunge am SIM-Abonnement desaktivéiert</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">WLAN ausschalten</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">Privatsphärschutz aktivéieren oder desaktivéieren</string>
   <string name="permdesc_changePrivacyGuardState">Erlaabt der App, z\'änneren ob eng aner App mam Privatsphärschutz leeft. Wann eng App mam Privatsphärschutz leeft, huet se keen Accès op perséinlech Date wéi Kontakter, Uruffprotokoller oder Messagen.</string>
   <string name="privacy_guard_notification">Privatsphärschutz aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> huet keen Accès op perséinlech Daten</string>
   <string name="privacy_guard_dialog_title">Privatsphärschutz</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> wëll <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Mäi Choix verhalen</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">op d\'Kamera zougräifen</string>
   <string name="app_ops_access_location">op de Standuert zougräifen</string>
   <string name="app_ops_access_notifications">op d\'Notifikatiounen zougräifen</string>
@@ -112,7 +150,9 @@
   <string name="app_ops_write_mms">eng MMS schreiwen</string>
   <string name="app_ops_write_sms">eng SMS schreiwen</string>
   <string name="app_ops_su">Root-Accès kréien</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Fir dëse Schierm lasszeléisen, dréck den Zréck-Knäppchen an hal e gedréckt.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatesch</string>
   <string name="live_display_auto_summary">Faarftemperatur automatesch dem Sonnenënnergank a Sonnenopgank upassen</string>
   <string name="live_display_off">Aus</string>
@@ -124,7 +164,20 @@
   <string name="live_display_outdoor">Baussen (hell Sonn)</string>
   <string name="live_display_outdoor_summary">Just Baussemodus benotzen</string>
   <string name="live_display_hint">LiveDisplay ka géint Iwwerustrengung vun den Aen a beim Schlofen an der Nuecht hëllefen. Dréck hei, fir et auszeprobéieren!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Kee connectéierten Apparat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connectéierten Apparat</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> connectéiert Apparater</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Akkustatistiken zrécksetzen</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Erlaabt enger App, den Detail vun der Akkubenotzung zréckzesetzen.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

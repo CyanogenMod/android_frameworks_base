@@ -16,13 +16,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">Kartica SIM je zaklenjena v načinu Perso</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Neveljavna kartica.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostali poskus, preden boste morali stopiti v stik s svojim ponudnikom, da vam odklene napravo.</item>
     <item quantity="two">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostala poskusa.</item>
     <item quantity="few">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostale poskuse.</item>
     <item quantity="other">Vnesite PIN kartice SIM, imate še <xliff:g id="number">%d</xliff:g> preostalih poskusov.</item>
   </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Napaka: Vnos je krajši od minimalne zahtevane dolžine</string>
 </resources>

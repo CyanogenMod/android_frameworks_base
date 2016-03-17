@@ -16,11 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM-карта заблокована оператором</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Невірна картка.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Введіть PIN-код. У вас залишилася <xliff:g id="number">%d</xliff:g> спроба перед тим, як вам доведеться звернутися до оператора для розблокування.</item>
     <item quantity="few">Введіть PIN-код. У вас залишилася <xliff:g id="number">%d</xliff:g> спроби перед тим, як вам доведеться звернутися до оператора для розблокування.</item>
     <item quantity="other">Введіть PIN-код. У вас залишилася <xliff:g id="number">%d</xliff:g> спроб перед тим, як вам доведеться звернутися до оператора для розблокування.</item>
   </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

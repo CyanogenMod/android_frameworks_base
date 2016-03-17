@@ -16,14 +16,29 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Cardinal directions for the compass tile -->
   <string-array name="cardinal_directions">
     <item>Z</item>
+    <!-- North -->
     <item>ZA</item>
+    <!-- North east -->
     <item>A</item>
+    <!-- East -->
     <item>DA</item>
+    <!-- South east -->
     <item>D</item>
+    <!-- South -->
     <item>DR</item>
+    <!-- South west -->
     <item>R</item>
+    <!-- West -->
     <item>ZR</item>
+    <!-- North west -->
   </string-array>
+  <!-- Performance profiles description-->
+  <!-- Performance profiles announcement-->
+  <!-- Dynamic tiles -->
+  <!-- LiveDisplay drawables -->
+  <!-- LiveDisplay description-->
+  <!-- LiveDisplay announcement-->
 </resources>

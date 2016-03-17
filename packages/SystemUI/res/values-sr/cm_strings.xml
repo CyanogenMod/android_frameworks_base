@@ -16,9 +16,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_hspap">HSPA +</string>
-  <string name="accessibility_data_connection_4g_plus">4G +</string>
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Превуци десно за %1$s</string>
   <string name="right_shortcut_hint">Превуци лево за %1$s</string>
   <string name="lockscreen_message">Додирни икону лево или десно да доделиш пречицу за закључани екран.</string>
@@ -26,6 +34,7 @@
   <string name="select_application">Изабери апликацију</string>
   <string name="lockscreen_choose_action_title">Изабери акцију</string>
   <string name="lockscreen_none_target">Ниједан</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Изабери акцију да доделиш</string>
   <string name="navbar_home_button">Главно дугме</string>
   <string name="navbar_recent_button">Дугме за Недавно</string>
@@ -37,15 +46,25 @@
   <string name="navbar_menu_big_button">Дугме за Мени</string>
   <string name="accessibility_dpad_left">Курсор лево</string>
   <string name="accessibility_dpad_right">Курсор десно</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Избриши податке апликације</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">Приморај заустављање</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Деинсталирај</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_notification_brightness">Осветљење</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Профили искључени.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">Профил: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">Профили су искључени.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">Профил је промењен у <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Покретање\u2026</string>
+  <!-- Lights settings, LED notification -->
   <string name="led_notification_title">Поставке светла</string>
   <string name="led_notification_text">LED светло омогућено помоћу поставки</string>
   <string name="qs_tile_edit_header_instruction">Притисни и држи плочицу за реорганизацију</string>
@@ -58,6 +77,7 @@
   <string name="quick_settings_title_show_weather">Покажи време</string>
   <string name="quick_settings_title_show_brightness_slider">Прикажи клизач оветљености</string>
   <string name="quick_settings_title_enlarge_first_row">Увећајте први ред</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Ово задржава преглед док га не уклониш. Додирни и држи дугме за назад да уклониш.</string>
   <string name="quick_settings_custom_tile_detail_title">Промени назив</string>
   <string name="quick_settings_remove">Уклони назив</string>
@@ -69,9 +89,13 @@
   <string name="quick_settings_heads_up_label">Искачуће поруке</string>
   <string name="quick_settings_battery_saver_label">Уштеда батерије</string>
   <string name="quick_settings_caffeine_label">Кофеин</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">Синхрон. укључено.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">Синхронизација је искључена.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">Синхронизација је укључена.</string>
   <string name="quick_settings_sync_label">Синхрон</string>
   <string name="quick_settings_volume_panel_label">Панел гласноће</string>
@@ -81,42 +105,74 @@
   <string name="quick_settings_ambient_display_label">Амбијент приказ</string>
   <string name="quick_settings_lockscreen_label_enforced">Присилно закључани екран</string>
   <string name="quick_settings_lockscreen_label_locked_by_profile">Онемогућено профилом</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Време искључења екрана: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Време искључења екрана промењено у <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Режим батерије</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Режим батерије: режим уштеде енергије.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Режим батерије: балансирани режим.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">Режим батерије: режим учинка.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">Режим батерије: режим ефикасности.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Режим батерије: режим брзине.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Режим батерије промењен у режим уштеде енергије.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Режим батерије промењен у балансирани режим.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Режим батерије промењен у режим учинка.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Режим батерије промењен у режим ефикасности.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Режим батерије промењен у режим брзине.</string>
   <string name="quick_settings_performance_profile_detail_title">Режим батерије</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Закључани екран искључен.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">Закључани екран укључен.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">Закључани екран је искључен.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Закључани екран је укључен.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Амбијент приказ искључен.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">Амбијент приказ укључен.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">Амбијент приказ ће бити искључен.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">Амбијент приказ ће бити укључен.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Искачуће поруке искључене.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">Искачуће поруке укључене.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">Искачуће поруке ће бити искључене.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Искачуће поруке ће бити укључене.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_off">Кофеин је искључен.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_on">Кофеин је укључен.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Уштеда батерије искључена.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">Уштеда батерије укључена.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">Уштеда батерије је искључена.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Уштеда батерије је укључена.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Динамичне плочице</string>
   <string name="dynamic_qs_tile_next_alarm_label">Следећи аларм</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME бирач</string>
   <string name="dynamic_qs_tile_su_label">Root приступ</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">Активни екран искључен.</string>
   <string name="accessibility_quick_settings_live_display_auto">Активни Екран: ауто режим.</string>
   <string name="accessibility_quick_settings_live_display_day">Активни Екран: дневни режим.</string>
@@ -128,19 +184,41 @@
   <string name="accessibility_quick_settings_live_display_changed_night">Активни Екран промењен у ноћни режим.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">Активни Екран промењен у режим на отвореном.</string>
   <string name="quick_settings_title_advanced_location">Локација три-државе</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Локација извештај: режим чувања батерије.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">Локација извештај: режим само сензори.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Локација извештај: режим високе тачности.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Режими локације</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Уштеда батерије</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">Само уређај</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Велика прецизност</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Извештај о локацији промењен у режим уштеде батерије.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">Извештај о локацији промењен у режим само сензора.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Извештај о локацији промењен у режим високе прецизности.</string>
   <string name="quick_settings_tiles_category_system">Плочице система</string>
+  <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Додај плочицу</string>
+  <!-- Hotspot dialog message -->
   <string name="hotspot_apm_message">Није се могуће конектовати на мобилне мреже док је режим авиона омогућен. Онемогући режим авиона и пробај поново.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Блиц је укључен</string>
   <string name="quick_settings_tile_flashlight_not_summary">Додирни да угасиш</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d клијент</item>
+    <item quantity="few">%1$d клијента</item>
+    <item quantity="other">%1$d клијента</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
 </resources>

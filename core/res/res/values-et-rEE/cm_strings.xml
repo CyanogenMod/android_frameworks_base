@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Ekraanipilt</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">saa kaitstud SMSe</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Lubab rakendusel vastu võtta sissetuleva kaitstud SMSi.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">muuda kaitstud SMS nimekirja</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Lubab rakendusel muuta kaitstud SMS aadressiloendit.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Turvalisus</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Õigused on seotud seadme turvalisuse teabega.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">lugeda telefoni musta nimekirja</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Lubab rakendusel lugeda teavet telefoninumbrite kohta, mis on sissetulevate kõnede ja sõnumite jaoks blokeeritud.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">muuta telefoni musta nimekirja</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Annab rakendusele õiguse muuta sissetulevate kõnede ja sõnumite jaoks blokeeritud numbreid.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">muuta lukuekraani pilti</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Lubab rakendusel muuta lukustusekraani taustapilti.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Taaskäivitamine</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Praegune</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Taaskäivita</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download režiim</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Poolik taaskäivitus</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Taaskäivita</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Teie tahvelarvuti taaskäivitub.</string>
   <string name="reboot_confirm" product="default">Teie telefon taaskäivitub.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Taaskäivitamine\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Rakendus suletud</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB üle võrgu aktiveeritud</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB üle USB &amp; võrgu aktiveeritud</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Puuduta silumise lõpetamiseks.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; võrk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Võrk</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">rakenduse käivitamise katkestamine</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ei ole installitud</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioriteet</string>
   <string name="silent_mode_none">Puudub</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">WiFi hotspot lülitati välja kuna muutus SIM kaardi teenused</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Lülita WiFi välja</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">lubada või keelata privaatsuskaitset</string>
   <string name="permdesc_changePrivacyGuardState">Sellega lubate muuta mõne muu rakenduse käivitumist Privaatsuskaitsega. Kui rakendus töötab sisselülitatud Privaatsuskaitsega, puudub rakendusel ligipääs isiklikele andmetele nagu kontaktid, kõnelogid või sõnumid.</string>
   <string name="privacy_guard_notification">Privaatsuskaitse aktiveeritud</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ei pääse ligi isiklikele andmetele</string>
   <string name="privacy_guard_dialog_title">Privaatsuskaitse</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> tahab <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Jäta meelde minu valik</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">kontrollida kaamerat</string>
   <string name="app_ops_access_location">kontrollida asukohta</string>
   <string name="app_ops_access_notifications">lugeda teateid</string>
@@ -111,7 +149,9 @@
   <string name="app_ops_write_mms">kirjutada MMS sõnumit</string>
   <string name="app_ops_write_sms">kirjutada SMS sõnumit</string>
   <string name="app_ops_su">saada root ligipääsu</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Selle ekraani vabastamiseks puudutage ja hoidke all Tagasi nuppu.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automaatne</string>
   <string name="live_display_auto_summary">Automaatselt reguleeri ekraani värvitemperaturri pärast päikeseloojangut ja -tõusu</string>
   <string name="live_display_off">Väljas</string>
@@ -123,7 +163,20 @@
   <string name="live_display_outdoor">Õues (ere päike)</string>
   <string name="live_display_outdoor_summary">Kasuta ainult õue seadeid</string>
   <string name="live_display_hint">LiveDisplay võimaldab vähendada silmade pinget ja lasta sul öösel magada. Kliki siin et seda proovida!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Pole ühtegi ühendatud seadet</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ühendatud seade</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ühendatud seadet</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">nullida aku statistikat</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Lubab rakendusel nullida aku praeguse madala-tasemelise kasutuse andmed.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

@@ -17,42 +17,80 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">وێنەگرتنی ڕوونما</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">وەرگرتنی کورتەنامەی پارێزراو</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">ڕێگە بە بەرنامەکە بدە کە کورتەنامە پارێزراوەکەی داهاتوو وەربگرێت.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">ڕێگەدان بە بەرنامەکە بۆ دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">ئاسایش</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">مۆڵەت پێدان پەیوەندی زانیاری ئاسایشی ئامێرەکە.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">خوێندنەوەی بلۆکی تەلەفۆن</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">ڕێگەدان: بە بەرنامەیەک بۆ خوێندنەوەی زانیاریەکان دەربارەی ژمارەی تەلەفۆنەکە کە بلۆک کراوە بۆ نامەو تەلەفۆنکردنی هاتوو.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">گۆڕنی تەلەفۆن لە لیستی ڕەش</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">ڕێگەدان بە بەرنامەکە بۆ ئەو ژمارانەی بلۆک کراون بۆ نامەو تەلەفۆن.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">دانانی کلیلە پارێز بۆ دیوارپۆش</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی ڕوونمای دیوارپۆش.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">دوبارە خستنەگەڕ</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">ئێستا</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">سه‌رله‌نوێ خستنه‌ڕێ</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">ڕیکەڤەری</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">بووتلەودەر</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">داگرتن</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">کارپێکردنه‌وه‌ی قوڵ</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">ئیشپێکردنەوە</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ دەبێت.</string>
   <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ ده‌کوژێته‌وه‌ و داده‌گیرسێته‌وه‌.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">سه‌رله‌نوێ خستنه‌ڕێ\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">بەرنامە داخرا</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ABD سه‌روو هێڵ کارده‌کات</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ABD سه‌روو USB و هێڵ کارده‌کات</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
+  <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s دانەمەزراوە</string>
+  <!-- Zen mode buttons -->
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">چالاکردن یان لەکارخستنی بەرگری تایبەتی</string>
   <string name="permdesc_changePrivacyGuardState">ڕێگە دان بە بەرنامەکە بۆ گۆڕینی کەشوهەوای بەرنامەیەکی تر لە تایبەتی. کاتێک بەرنامەکە ئەکەوێتە کار لەگەڵ تایبەتی .هیچ ڕێگەیەکی نیە بۆ ئەوەی زانیاری تایبیەتیت بەکاربهێنێت وەکو ،ناوەکان،تەلەفۆن لۆگ یان نامە.</string>
   <string name="privacy_guard_notification">پاسەوانی تایبەتی چالاکراوە</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="بەرنامە">%1$s</xliff:g> ناتوانێت زانیاری تایبەتی بەکاربهێنێت</string>
   <string name="privacy_guard_dialog_title">پاسەوانی تایبەتی</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="بەرنامە">%1$s</xliff:g> حەز ئەکەی بۆ <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">بیرخستنەوەی هەڵبژاردنەکەم</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">ڕێگەدان بەکامێرا</string>
   <string name="app_ops_access_location">ڕێگەی ناوچەی</string>
   <string name="app_ops_access_notifications">تێبنینیەکانت بخوێنەوە</string>
@@ -102,6 +140,8 @@
   <string name="app_ops_write_mms">نوسنی نامەی MMS</string>
   <string name="app_ops_write_sms">نوسینی نامەی SMS</string>
   <string name="app_ops_su">بەدەستهێنانی ڕێگەپێدانی ڕۆت</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">خۆکارانه‌</string>
   <string name="live_display_off">کوژانه‌وه‌</string>
   <string name="live_display_off_summary">لەکارخستنی هەموو ڕێکخستنەکان</string>
@@ -110,7 +150,18 @@
   <string name="live_display_night">شەو</string>
   <string name="live_display_night_summary">تەنها ڕێکخستنی شەو بەکاربهێنە</string>
   <string name="live_display_outdoor">دەرەوە (ڕۆشنای خۆر)</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">ئامێر پەیوەست نەکراوە</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ئامێر پەیوەستکراوە</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ئامێری پەیوەستکراو</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

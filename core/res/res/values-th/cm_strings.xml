@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">ถ่ายภาพหน้าจอ</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">รับ SMS ที่ได้รับการปกป้อง</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">อนุญาตให้แอปรับ SMS ที่ได้รับการปกป้อง</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">แก้ไขรายการ SMS ที่ได้รับการปกป้อง</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">อนุญาตให้แอปแก้ไขรายการที่อยู่ SMS ที่ได้รับการปกป้อง</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">ความปลอดภัย</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">สิทธิ์ที่เกี่ยวข้องกับข้อมูลความปลอดภัยของอุปกรณ์</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">อ่านรายชื่อบัญชีดำ</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">อนุญาตให้แอปอ่านข้อมูลหมายเลขโทรศัพท์ที่ถูกบล็อคสำหรับสายการโทรเข้าหรือข้อความ</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">เปลี่ยนรายชื่อบัญชีดำ</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">อนุญาตให้แอปเปลี่ยนหมายเลขที่ถูกบล็อคสำหรับสายการโทรเข้าหรือข้อความ</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">ตั้งภาพล็อคหน้าจอ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">อนุญาตให้แอปเปลี่ยนภาพล็อคหน้าจอได้</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">เริ่มระบบใหม่</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">ปัจจุบัน</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">เริ่มระบบใหม่</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">ดาวน์โหลด</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">เริ่มระบบแบบซอฟต์รีบู๊ต</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">เริ่มระบบใหม่</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">แท็บเล็ตของคุณจะเริ่มระบบใหม่</string>
   <string name="reboot_confirm" product="default">โทรศัพท์ของคุณจะเริ่มระบบใหม่</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">กำลังเริ่มระบบใหม่\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">ปิดแอป</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB บนเครือข่ายถูกเปิดใช้งาน</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB บน USB และ &amp; เครือข่ายถูกเปิดใช้งาน</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">แตะเพื่อปิดการแก้ไขข้อบกพร่อง</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; เครือข่าย</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">เครือข่าย</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ขัดขวางการเปิดแอป</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ไม่ถูกติดตั้ง</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">ระดับความสำคัญ</string>
   <string name="silent_mode_none">ไม่มี</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">ปิดฮอตสปอต Wi-Fi เนื่องจากการเปลี่ยนแปลงการสมัครซิมการ์ด</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">ปิด Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">เปิดหรือปิดการป้องกันความเป็นส่วนตัว</string>
   <string name="permdesc_changePrivacyGuardState">อนุญาตให้แอปเปลี่ยนแปลงไม่ว่าแอปอื่นทำงานโดยใช้การป้องกันความเป็นส่วนตัวหรือไม่ก็ตาม เมื่อแอปกำลังทำงานโดยใช้การป้องกันความเป็นส่วนตัว แอปจะไม่สามารถเข้าถึงข้อมูลส่วนบุคคล เช่น รายชื่อติดต่อ ประวัติการโทร หรือข้อความได้</string>
   <string name="privacy_guard_notification">การป้องกันความเป็นส่วนตัวทำงาน</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> จะไม่สามารถเข้าถึงข้อมูลส่วนตัวได้</string>
   <string name="privacy_guard_dialog_title">รักษาความเป็นส่วนตัว</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ต้องการ <xliff:g id="op">%2$s</xliff:g></string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">จำตัวเลือกของฉัน</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">เข้าถึงกล้อง</string>
   <string name="app_ops_access_location">เข้าถึงตำแหน่งที่ตั้งของคุณ</string>
   <string name="app_ops_access_notifications">อ่านการแจ้งเตือน</string>
@@ -127,7 +165,9 @@
   <string name="app_ops_get_accounts">เข้าถึงบัญชีของอุปกรณ์</string>
   <string name="app_ops_wifi_change">เปลี่ยนแปลงสถานะ Wi-Fi</string>
   <string name="app_ops_su">รับสิทธิผู้ดูแลระบบ</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">เพื่อยกเลิกการปักหมุดหน้าจอนี้ กดปุ่มกลับค้างไว้</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">อัตโนมัติ</string>
   <string name="live_display_auto_summary">ตั้งอุณหภูมิสีจออัตโนมัติหลังดวงอาทิตย์ขึ้นและตก</string>
   <string name="live_display_off">ปิด</string>
@@ -139,9 +179,24 @@
   <string name="live_display_outdoor">กลางแจ้ง (แดดจ้า)</string>
   <string name="live_display_outdoor_summary">ใช้การตั้งค่ากลางแจ้งเท่านั้น</string>
   <string name="live_display_hint">LiveDisplay สามารถช่วยลดอาการปวดตา และช่วยให้คุณนอนหลับในเวลากลางคืน คลิกที่นี่เพื่อลองใช้!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">ไม่มีอุปกรณ์เชื่อมต่อ</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">การเปิดกิจจรรมถูกบล็อก</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> ถูกป้องกันจากการเปิด แตะเพื่อยืนยันและเปิดแอป</string>
+  <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">แบตเตอรี่เต็มแล้ว</string>
+  <string name="notify_battery_fully_charged_text">ถอดอุปกรณ์ของคุณออกจากที่ชาร์จเพื่อเพิ่มอายุการใช้งานของแบตเตอรี่</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">รีเซ็ตสถิติแบตเตอรี่</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">อนุญาตให้แอปพลิเคชันรีเซ็ตข้อมูลการใช้แบตเตอรี่ระดับต่ำในปัจจุบัน</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

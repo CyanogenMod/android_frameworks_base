@@ -16,9 +16,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_4g_plus">4G+</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">오른쪽으로 밀어서 %1$s</string>
   <string name="right_shortcut_hint">왼쪽으로 밀어서 %1$s</string>
   <string name="lockscreen_message">잠금화면 바로가기를 다시 지정하려면 왼쪽이나 오른쪽의 아이콘을 탭하세요.</string>
@@ -26,6 +34,7 @@
   <string name="select_application">앱 선택</string>
   <string name="lockscreen_choose_action_title">동작 선택</string>
   <string name="lockscreen_none_target">없음</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">할당할 작업을 선택</string>
   <string name="navbar_home_button">홈 버튼</string>
   <string name="navbar_recent_button">최근 버튼</string>
@@ -37,27 +46,38 @@
   <string name="navbar_menu_big_button">메뉴 버튼</string>
   <string name="accessibility_dpad_left">커서 왼쪽</string>
   <string name="accessibility_dpad_right">커서 오른쪽</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">앱 데이터 삭제</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">강제 종료</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">제거</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_notification_brightness">조명 밝기</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">프로필 꺼짐.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">현재 프로필: <xliff:g id="profile" example="Default">%s</xliff:g></string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">프로필이 이제 꺼짐.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">프로필이 <xliff:g id="profile" example="Default">%s</xliff:g>으(로) 바뀜.</string>
   <string name="quick_settings_compass_init">초기화 중\u2026</string>
+  <!-- Lights settings, LED notification -->
   <string name="led_notification_title">조명 설정</string>
-  <string name="led_notification_text">설정에 의해 LED 전등이 활성화됨</string>
-  <string name="qs_tile_edit_header_instruction">다시 배치하려면 타일을 길게 누름</string>
+  <string name="led_notification_text">설정 앱이 LED 전등을 활성화함</string>
+  <string name="qs_tile_edit_header_instruction">다시 배치하려면 타일을 길게 누르세요</string>
   <string name="quick_settings_edit_label">타일 편집</string>
   <string name="quick_settings_cannot_delete_edit_tile">타일 편집 삭제 불가</string>
-  <string name="qs_tiles_reset_confirmation">빠른 설정 타일 배치를 기본으로 재설정</string>
+  <string name="qs_tiles_reset_confirmation">빠른 설정 타일을 기본 설정으로 재설정합니까?</string>
   <string name="quick_settings_tile_reset_to_default">기본 레이아웃으로 재설정</string>
   <string name="quick_settings_title_header">헤더</string>
   <string name="quick_settings_title_tiles">타일</string>
   <string name="quick_settings_title_show_weather">날씨 표시</string>
   <string name="quick_settings_title_show_brightness_slider">화면 밝기 조정 표시</string>
   <string name="quick_settings_title_enlarge_first_row">첫번째 타일을 크게</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">고정을 해제할 때까지 계속 표시합니다. 뒤로 버튼을 계속 눌러 고정을 해제하세요.</string>
   <string name="quick_settings_custom_tile_detail_title">개인설정 타일</string>
   <string name="quick_settings_remove">타일 제거</string>
@@ -68,9 +88,14 @@
   <string name="quick_settings_profiles_off">프로필 사용 안 함</string>
   <string name="quick_settings_heads_up_label">헤드업 알림</string>
   <string name="quick_settings_battery_saver_label">배터리 절약</string>
+  <string name="quick_settings_caffeine_label">카페인</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">동기화 꺼짐</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">동기화 켜짐</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">동기화가 해제되었습니다.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">동기화가 설정되었습니다.</string>
   <string name="quick_settings_sync_label">동기화</string>
   <string name="quick_settings_volume_panel_label">볼륨 패널</string>
@@ -79,40 +104,75 @@
   <string name="quick_settings_lockscreen_label">잠금 화면</string>
   <string name="quick_settings_ambient_display_label">절전 모드 자동 해제</string>
   <string name="quick_settings_lockscreen_label_enforced">잠금 화면 사용됨</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">프로필 설정에 의해 비활성화됨</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">화면 시간 제한: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">화면 시간 제한이 <xliff:g id="timeout" example="30 seconds">%s</xliff:g>으(로) 바뀜.</string>
   <string name="qs_tile_performance">배터리 모드</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">배터리 모드: 전원 절약 모드.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">배터리 모드: 균형 모드.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">배터리 모드: 성능 모드.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">배터리 모드: 효율 모드.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">배터리 모드: 성능 모드.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">배터리 모드가 이제 절전 모드로 바뀜.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">베터리 모드가 이제 균형 모드로 바뀜.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">배터리 모드가 성능 모드로 바뀜.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">배터리 모드가 효율 모드로 변경되었습니다.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">배터리 모드가 성능 모드로 변환되었습니다.</string>
   <string name="quick_settings_performance_profile_detail_title">배터리 모드</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">잠금 화면 꺼짐.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">잠금 화면 켜짐.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">잠금 화면이 이제 꺼짐.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">잠금 화면이 이제 켜짐.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">절전 모드 자동 해제가 꺼짐.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">절전 모드 자동 해제가 켜짐.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">절전 모드 자동 해제가 꺼졌습니다.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">절전 모드 자동 해제가 켜졌습니다.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">헤드업 알림이 꺼짐.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">헤드업 알림이 켜짐.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">헤드업 알림이 꺼졌습니다.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">헤드업 알림이 켜졌습니다.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">카페인 꺼짐.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">카페인 켜짐.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">배터리 절약 끔.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">배터리 절약 킴.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">배터리 절약이 꺼졌습니다.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">배터리 절약이 켜졌습니다.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">동적 타일</string>
   <string name="dynamic_qs_tile_next_alarm_label">다음 알람</string>
   <string name="dynamic_qs_tile_ime_selector_label">입력 방법 선택</string>
   <string name="dynamic_qs_tile_su_label">루트 권한</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">라이브 디스플레이 꺼짐.</string>
   <string name="accessibility_quick_settings_live_display_auto">라이브 디스플레이: 자동 모드.</string>
   <string name="accessibility_quick_settings_live_display_day">라이브 디스플레이: 낮 모드.</string>
@@ -124,19 +184,36 @@
   <string name="accessibility_quick_settings_live_display_changed_night">라이브 디스플레이가 밤 모드로 바뀜.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">라이브 디스플레이가 야외 모드로 바뀜.</string>
   <string name="quick_settings_title_advanced_location">3가지 위치 설정</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">위치 보고: 배터리 절약 모드.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">위치 보고: 기기 전용 모드.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">위치 보고: 높은 정확성 모드.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">위치 모드</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">배터리 절약</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">기기 전용</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">높은 정확도</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">위치 보고가 배터리 절약 모드로 바뀜.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">위치 보고가 기기 전용 모드로 바뀜.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">위치 보고가 높은 정확도 모드로 바뀜.</string>
   <string name="quick_settings_tiles_category_system">시스템 타일</string>
+  <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">타일 추가</string>
+  <!-- Hotspot dialog message -->
   <string name="hotspot_apm_message">비행기 모드가 활성화되어 있어 셀룰러 네트워크에 연결할 수 없습니다. 비행기 모드를 해제하고 다시 시도하세요.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">손전등 켜짐</string>
   <string name="quick_settings_tile_flashlight_not_summary">탭하여 끄기</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">독의 배터리는 <xliff:g id="number">%d</xliff:g>퍼센트입니다.</string>
 </resources>

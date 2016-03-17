@@ -23,5 +23,5 @@
   <string name="picker_activities">Dejavnosti</string>
   <string name="select_custom_app_title">Izberite aplikacijo po meri</string>
   <string name="select_custom_activity_title">Izberite dejavnost po meri</string>
-  <string name="lockscreen_targets_message">Bližnjice zaslona za zaklepanje</string>
+  <string name="lockscreen_targets_message">Bližnjice zaklenjenega zaslona</string>
 </resources>

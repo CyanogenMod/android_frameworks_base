@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Snímka obrazovky</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">prijímať chránené SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Umožňuje aplikácii prijímať chránené prichádzajúce SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">upraviť zoznam chránených SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Umožňuje aplikácii upraviť zoznam chránených SMS adries.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Zabezpečenie</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Povolenia súvisiace s informáciami o bezpečnosti zariadenia.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">čítať čiernu listinu telefónu</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Umožňuje aplikácii čítať informácie o telefónnych číslach, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">zmeniť čiernu listinu telefónu</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Umožňuje aplikácii zmeniť telefónne čísla, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu obrazovky uzamknutia</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu obrazovky uzamknutia.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Reštartovať</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Aktuálny</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Reštartovať</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Softvérový reštart</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Reštartovať</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Váš tablet bude reštartovaný.</string>
   <string name="reboot_confirm" product="default">Váš telefón bude reštartovaný.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Reštartuje sa\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplikácia bola ukončená</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB cez sieť povolené</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB cez USB a sieť povolené</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Dotykom zakážate ladenie.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB a sieť</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Sieť</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">zachytiť spustenie aplikácie</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">Aplikácia %s nie je nainštalovaná</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žiadna</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Wi-Fi hotspot bol zakázaný kvôli prepnutiu karty SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Vypnúť Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">povoliť alebo zakázať Ochranu súkromia</string>
   <string name="permdesc_changePrivacyGuardState">Umožňuje aplikácii určiť, či má byť iná aplikácia spustená s Ochranou súkromia. Keď je aplikácia spustená s Ochranou súkromia, nemá umožnený prístup k osobným údajom ako sú kontakty, denníky hovorov, alebo správy.</string>
   <string name="privacy_guard_notification">Aktívna ochrana súkromia</string>
   <string name="privacy_guard_notification_detail">Aplikácii <xliff:g id="app">%1$s</xliff:g> nebude umožnený prístup k osobným údajom</string>
   <string name="privacy_guard_dialog_title">Ochrana súkromia</string>
   <string name="privacy_guard_dialog_summary">Aplikácia <xliff:g id="app">%1$s</xliff:g> sa pokúša <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Zapamätať voľbu</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">prístup k fotoparátu</string>
   <string name="app_ops_access_location">prístup k polohe</string>
   <string name="app_ops_access_notifications">čítať oznámenia</string>
@@ -111,7 +149,9 @@
   <string name="app_ops_write_mms">napísať správu MMS</string>
   <string name="app_ops_write_sms">napísať správu SMS</string>
   <string name="app_ops_su">získať root prístup</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Na odopnutie tejto obrazovky stlačte a podržte tlačidlo Späť.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatické</string>
   <string name="live_display_auto_summary">Automaticky upraviť teplotu farieb obrazovky po západe a východe slnka</string>
   <string name="live_display_off">Vypnuté</string>
@@ -123,7 +163,20 @@
   <string name="live_display_outdoor">Vonku (jasné slnko)</string>
   <string name="live_display_outdoor_summary">Používať len nastavenia pre vonkajšie prostredie</string>
   <string name="live_display_hint">LiveDisplay môže pomôcť znížiť únavu očí a pomôže vám spať v noci. Kliknite sem a vyskúšajte túto funkciu!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Žiadne pripojené zariadenie</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> pripojené zariadenie</string>
   <string name="tethered_notification_multi_device_message">Pripojené zariadenia: <xliff:g id="count">%1$s</xliff:g></string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">obnoviť štatistiky batérie</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

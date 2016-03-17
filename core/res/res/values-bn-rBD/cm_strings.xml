@@ -17,38 +17,76 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">স্ক্রীনসর্ট</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">সুরক্ষিত এসএমএস গৃহীত হবে</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">একটি আগত সুরক্ষিত এসএমএস গ্রহণ করতে অ্যাপটিকে অনুমতি দিন।</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">সংরক্ষিত এসএমএস তালিকা পরিবর্তন করতে সক্ষম</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">নিরাপত্তা</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">ডিভাইসের নিরাপত্তা তথ্য সংক্রান্ত অনুমতি।</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">ফোনের নিষিদ্ধ তালিকা পড়ুন</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">একটি অ্যাপকে অভিমুখী কল বা বার্তার জন্য অবরুদ্ধ ফোন নাম্বারের তথ্য পাঠের অনুমতি দিন।</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">ফোনের নিষিদ্ধ তালিকা পরিবর্তন করুন</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">একটি অ্যাপকে অভিমুখী কল বা বার্তার জন্য অবরুদ্ধ ফোন নাম্বার পরিবর্তনের অনুমতি দিন।</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">কীগার্ড ওয়ালপেপার নির্ধারণ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">অ্যাপটিকে লক স্ক্রীন ওয়ালপেপার পরিবর্তনের অনুমতি দিন।</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">পুনরায় চালু</string>
+  <!-- label for current user in phone options dialog -->
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">পুনরায় চালু</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">পুনরুদ্ধার</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">বুটলোডার</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">ডাউনলোড</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">দ্রুত পুনরায় চালু</string>
+  <!-- Title of dialog to confirm rebooting. -->
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">আপনার ট্যাবলেট পুনরায় চালু হবে।</string>
   <string name="reboot_confirm" product="default">আপনার ফোন পুনরায় চালু হবে।</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">পুনরায় চালু হচ্ছে\u2026</string>
+  <!-- Long-press back kill application -->
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">নেটওয়ার্কের উপর এডিবি সক্রিয়</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">এডিবির উপর ইউএসবি &amp; নেটওয়ার্ক সক্রিয়</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">ডিবাগ নিষ্ক্রিয় করতে স্পর্শ করুন।</string>
+  <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- stylus gestures support -->
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">অগ্রাধিকার</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">ওয়াইফাই বন্ধ করুন</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">গোপনীয়তা রক্ষাকারী সক্রিয় বা নিস্ক্রিয় করুন</string>
   <string name="permdesc_changePrivacyGuardState">অ্যাপটি কে অন্য অ্যাপ পরিবর্তন করার অনুমতি দিন যা গোপনীয়তা রক্ষাকারী সঙ্গে চলমান। যখন একটি অ্যাপ গোপনীয়তা রক্ষাকারী সঙ্গে চলমান থাকে তখন এটি ব্যক্তিগত তথ্য ব্যাবহার করতে পারবে না, যেমন যোগাযোগ, কল লগ, বা বার্তা।</string>
   <string name="privacy_guard_notification">গোপনীয়তা রক্ষাকারী সক্রিয়</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ব্যাক্তিগত তথ্য ব্যাবহার করতে পারবেন না</string>
   <string name="privacy_guard_dialog_title">গোপনীয়তা রক্ষাকারী</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> করতে চায় <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">ক্যামেরায় প্রবেশাধিকার</string>
   <string name="app_ops_access_location">আপনার অবস্থানে প্রবেশাধিকার</string>
   <string name="app_ops_access_notifications">আপনার নোটিফিকেশানস প্রবেশাধিকার</string>
@@ -87,6 +125,8 @@
   <string name="app_ops_use_voice_volume">ভয়েস কলের ভলিউম নিয়ন্ত্রণ</string>
   <string name="app_ops_write_mms">এমএমএস বার্তা লিখুন</string>
   <string name="app_ops_write_sms">এসএমএস বার্তা লিখুন</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">স্বয়ংক্রিয়</string>
   <string name="live_display_off">বন্ধ</string>
   <string name="live_display_off_summary">সব সামঞ্জস্যগুলি অক্ষম করুন</string>
@@ -94,4 +134,16 @@
   <string name="live_display_night_summary">কেবল রাতের রূপান্তর নির্ধারণ ব্যবহার করুন</string>
   <string name="live_display_outdoor">বহিরঙ্গন (উজ্জ্বল সূর্যালোক)</string>
   <string name="live_display_outdoor_summary">শুধুমাত্র বহিরঙ্গন রূপান্তর নির্ধারণ ব্যবহার করুন</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">ব্যাটারির পরিসংখ্যান পুনঃবিন্যাস করুন</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>
