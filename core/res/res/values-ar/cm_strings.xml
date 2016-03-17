@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">لقطة شاشة</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">استلام رسالة نصية قصيرة محمية</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">يسمح للتطبيق باستلام رسالة نصية قصيرة محمية واردة.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">تعديل قائمة الرسائل النصية القصيرة المحمية</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">السماح للتطبيق بتعديل قائمة عناوين الرسائل النصية القصيرة المحمية.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">الأمان</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">أذونات متعلقة بمعلومات حماية الجهاز.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">قراءة القائمة السوداء للهاتف</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">السماح للتطبيق بقراءة المعلومات الخاصة بأرقام الهاتف المحظورة بالنبسة للمكالمات أو الرسائل الواردة.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">تغيير القائمة السوداء للهاتف</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">السماح للتطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">تعيين خلفية شاشة الحارس الرئيسي</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">السماج للتطبيق بتغيير خلفية شاشة التأمين.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">إعادة تمهيد</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">الحالي</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">إعادة التمهيد</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">استرداد</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">محمل التمهيد</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">التنزيل</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">إعادة تمهيد سريعة</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">إعادة التمهيد</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">ستتم إعادة تمهيد جهازك اللوحي.</string>
   <string name="reboot_confirm" product="default">ستتم إعادة تمهيد هاتفك.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">إعادة التمهيد\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">تم إنهاء التطبيق</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">تمكين ADB عبر الشبكة</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB عبر USB &amp; تمكين الشبكة</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">انقر لتعطيل تصحيح الأخطاء.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">⁯USB &amp; الشبكة</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">الشبكة</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">مقاطعة تشغيل التطبيق</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s لم يتم تثبيته</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">الأولوية</string>
   <string name="silent_mode_none">بلا</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">ايقاف بث تقنية واي فاي بسبب تغيير اشتراك SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">إيقاف Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">تمكين أو تعطيل حارس الخصوصية</string>
   <string name="permdesc_changePrivacyGuardState">يسمح للتطبيق بتغيير ما إذا كان تطبيق آخر يعمل مع \"حارس الخصوصية\". عندما يتم تشغيل تطبيق مع \"حارس الخصوصية\"، فلن يُسمح بالوصول إلى البيانات الشخصية كجهات الاتصال أو سجلات المكالمات أو الرسائل.</string>
   <string name="privacy_guard_notification">حارس الخصوصية نشط</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> لن تكون قادراً على الوصول إلى البيانات الشخصية</string>
   <string name="privacy_guard_dialog_title">حارس الخصوصية</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> يرغب في <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">تذكر خياري</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
   <string name="app_ops_access_location">الوصول إلى موقعك</string>
   <string name="app_ops_access_notifications">قراءة إشعاراتك</string>
@@ -111,7 +149,9 @@
   <string name="app_ops_write_mms">كتابة رسالة MMS</string>
   <string name="app_ops_write_sms">كتابة رسالة نصية قصيرة</string>
   <string name="app_ops_su">الحصول على صلاحيات الجذر</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">لإلغاء تثبيت هذه الشاشة، المس واستمر في ضغط زر الرجوع.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">تلقائي</string>
   <string name="live_display_auto_summary">ضبط درجة حرارة لون للشاشة تلقائياً بعد غروب الشمس وشروق الشمس</string>
   <string name="live_display_off">إيقاف</string>
@@ -123,7 +163,20 @@
   <string name="live_display_outdoor">خارج المنزل ( شمس ساطعة)</string>
   <string name="live_display_outdoor_summary">استخدم إعدادات خارج المنزل  فقط</string>
   <string name="live_display_hint">ميزة LiveDisplay يمكن أن تساعد في تقليل إجهاد العين والمساعدة على النوم في الليل. انقر هنا لتجربته!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">لا يوجد جهاز متصل</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> جهاز متصل</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> أجهزة متصلة</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">إعادة تعيين إحصائيات البطارية</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">يسمح للتطبيق بإعادة تعيين بيانات استخدام بطارية ذات المستوى المنخفض الحالي.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

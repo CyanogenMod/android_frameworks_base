@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Ảnh chụp màn hình</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">nhận SMS được bảo vệ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Cho phép ứng dụng nhận tin nhắn SMS đến được bảo vệ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">thay đổi danh sách SMS được bảo vệ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Cho phép ứng dụng sửa đổi danh sách địa chỉ SMS được bảo vệ.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Bảo mật</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Quyền liên quan đến thông tin bảo mật của thiết bị.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">đọc danh sách đen của điện thoại</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Cho phép ứng dụng đọc thông tin về các số điện thoại bị chặn cuộc gọi hoặc tin nhắn đến.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">thay đổi danh sách đen của điện thoại</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Cho phép ứng dụng thay đổi số điện thoại bị chặn cuộc gọi hoặc tin nhắn đến.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">thiết lập hình nền bảo vệ phím</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Cho phép ứng dụng thay đổi hình nền màn hình khoá.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Khởi động lại</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Hiện tại</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Khởi động lại</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Phục hồi</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Trình nạp khởi động</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Tải về</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Khởi động lại nhanh</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Khởi động lại</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Máy tính bảng của bạn sẽ khởi động lại.</string>
   <string name="reboot_confirm" product="default">Điện thoại của bạn sẽ khởi động lại.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Đang khởi động lại\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Ứng dụng đã tắt</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">Đã bật ADB qua mạng</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">Đã kích hoạt ADB qua USB &amp; mạng</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Chạm để tắt gỡ lỗi.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; mạng</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Mạng</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">chặn ứng dụng khởi chạy</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s chưa được cài đặt</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Ưu tiên</string>
   <string name="silent_mode_none">Không có</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Đã vô hiệu hóa điểm truy cập WiFi vì thay đổi đăng ký SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Tắt WiFi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">bật hoặc tắt Bảo vệ quyền riêng tư</string>
   <string name="permdesc_changePrivacyGuardState">Cho phép ứng dụng thay đổi ứng dụng khác chạy với Bảo vệ quyền riêng tư. Khi một ứng dụng chạy với Bảo vệ quyền riêng tư, nó sẽ không có quyền truy cập dữ liệu cá nhân như số liên lạc, nhật ký cuộc gọi hoặc tin nhắn.</string>
   <string name="privacy_guard_notification">Bảo vệ quyền riêng tư đang hoạt động</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> sẽ không thể truy cập dữ liệu cá nhân</string>
   <string name="privacy_guard_dialog_title">Bảo vệ quyền riêng tư</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> muốn <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Nhớ lựa chọn của tôi</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">truy cập máy ảnh</string>
   <string name="app_ops_access_location">truy cập vị trí của bạn</string>
   <string name="app_ops_access_notifications">đọc thông báo của bạn</string>
@@ -97,7 +135,9 @@
   <string name="app_ops_start_at_bootup">chạy lúc khởi động</string>
   <string name="app_ops_toast_window">hiện thông báo nhanh</string>
   <string name="app_ops_toggle_bluetooth">bật/tắt Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">bật/tắt dữ liệu di động</string>
   <string name="app_ops_toggle_nfc">bật/tắt NFC</string>
+  <string name="app_ops_toggle_wifi">bật/tắt WiFi</string>
   <string name="app_ops_use_alarm_volume">điều khiển âm lượng báo thức</string>
   <string name="app_ops_use_audio_focus">điều khiển trọng tâm âm thanh</string>
   <string name="app_ops_use_bluetooth_volume">điều khiển âm lượng Bluetooth</string>
@@ -110,8 +150,25 @@
   <string name="app_ops_use_voice_volume">điều khiển âm lượng cuộc gọi thoại</string>
   <string name="app_ops_write_mms">soạn tin nhắn MMS</string>
   <string name="app_ops_write_sms">soạn tin nhắn SMS</string>
+  <string name="app_ops_use_fingerprint">sử dụng vân tay</string>
+  <string name="app_ops_add_voicemail">thêm một thư thoại</string>
+  <string name="app_ops_read_phone_state">truy nhập tình trạng điện thoại</string>
+  <string name="app_ops_scan_wifi">quét mạng Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">thay đổi hình nền</string>
+  <string name="app_ops_assist_structure">sử dụng cấu trúc hỗ trợ</string>
+  <string name="app_ops_assist_screenshot">chụp ảnh màn hình</string>
+  <string name="app_ops_use_body_sensors">sử dụng cảm biến cơ thể</string>
+  <string name="app_ops_read_cell_broadcasts">đọc tin nhắn quảng bá</string>
+  <string name="app_ops_mock_location">giả vị trí của bạn</string>
+  <string name="app_ops_read_external_storage">đọc bộ nhớ ngoài</string>
+  <string name="app_ops_write_external_storage">ghi bộ nhớ ngoài</string>
+  <string name="app_ops_turn_on_screen">bật màn hình</string>
+  <string name="app_ops_get_accounts">lấy thông tin tài khoản thiết bị</string>
+  <string name="app_ops_wifi_change">thay đổi tình trạng Wi-Fi</string>
   <string name="app_ops_su">lấy quyền truy cập root</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Để bỏ ghim màn hình này, hãy chạm và giữ phím Quay lại.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Tự động</string>
   <string name="live_display_auto_summary">Tự động chỉnh nhiệt độ màu của màn hình theo ngày và đêm</string>
   <string name="live_display_off">Tắt</string>
@@ -123,7 +180,26 @@
   <string name="live_display_outdoor">Ngoài trời (ánh sáng mặt trời)</string>
   <string name="live_display_outdoor_summary">Chỉ sử dụng cài đặt ngoài trời</string>
   <string name="live_display_hint">LiveDisplay có thể giúp giảm mỏi mắt và giúp bạn ngủ vào ban đêm. Nhấn vào đây để thử!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Không có thiết bị kết nối</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> thiết bị đã kết nối</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> thiết bị đã kết nối</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Đã chặn khởi chạy hoạt động</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> được bảo vệ ngăn không khởi chạy. Chạm để xác thực và khởi chạy ứng dụng.</string>
+  <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Pin đã được sạc đầy</string>
+  <string name="notify_battery_fully_charged_text">Rút cáp sạc ra khỏi thiết bị của bạn để cải thiện tuổi thọ pin.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">đặt lại thống kê pin</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Cho phép ứng dụng thiết lập lại dữ liệu cấp thấp của mức tiêu thụ pin hiện tại.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Thẻ SIM đã thay đổi</string>
+  <string name="uicc_hot_swapped_event_text">Chạm để thiết lập các ưu tiên mặc định cho thẻ SIM</string>
 </resources>

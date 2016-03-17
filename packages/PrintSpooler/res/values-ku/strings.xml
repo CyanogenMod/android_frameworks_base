@@ -15,69 +15,156 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Title of the PrintSpooler application. [CHAR LIMIT=50] -->
   <string name="app_label">بەڕێوەبەری چاپکەر</string>
+  <!-- Label of the print dialog's button for more print options. [CHAR LIMIT=25] -->
   <string name="more_options_button">بەربژاردەی زیاتر</string>
+  <!-- Label of the destination widget. [CHAR LIMIT=20] -->
   <string name="label_destination">ئامانج</string>
+  <!-- Label of the copies count widget. [CHAR LIMIT=20] -->
   <string name="label_copies">لەبەرگرتنەوەکان</string>
+  <!-- Label of the copies count for the print options summary. [CHAR LIMIT=20] -->
   <string name="label_copies_summary">لەبەرگرتنەوەکان:</string>
+  <!-- Label of the paper size widget. [CHAR LIMIT=20] -->
   <string name="label_paper_size">قەبارەی کاغەز</string>
+  <!-- Label of the paper size for the print options summary. [CHAR LIMIT=20] -->
   <string name="label_paper_size_summary">قەبارەی کاغەز:</string>
+  <!-- Label of the color mode widget. [CHAR LIMIT=20] -->
   <string name="label_color">رەنگ</string>
+  <!-- Label of the printer mode to print on both sides of paper. [CHAR LIMIT=20] -->
+  <!-- Label of the orientation widget. [CHAR LIMIT=20] -->
   <string name="label_orientation">باری پیشاندان</string>
+  <!-- Label of the page selection widget. [CHAR LIMIT=20] -->
   <string name="label_pages">پەڕەکان</string>
+  <!-- Template for the all pages option in the page selection widget. [CHAR LIMIT=20] -->
   <string name="template_all_pages">هەموو <xliff:g id="page_count" example="100">%1$s</xliff:g></string>
+  <!-- Template for the page range option in the page selection widget. [CHAR LIMIT=20] -->
   <string name="template_page_range">ڕێژەی <xliff:g id="page_count" example="100">%1$s</xliff:g></string>
+  <!-- Page range exmple used as a hint of how to specify such. [CHAR LIMIT=20] -->
   <string name="pages_range_example">نموونە . 1—5,8,11—13</string>
+  <!-- Title for the pring preview button .[CHAR LIMIT=30] -->
   <string name="print_preview">بینینی پێش چاپ</string>
+  <!-- Title for the pring preview button if there is no PDF viewer isntalled. [CHAR LIMIT=50] -->
   <string name="install_for_print_preview">دامەزراندنی بینەری PDF بۆ پێشبینین</string>
+  <!-- Title of the message that the printing application crashed. [CHAR LIMIT=50] -->
   <string name="printing_app_crashed">بەرنامەی چاپکردن تێکشکا</string>
+  <!-- Title for the temporary dialog show while an app is generating a print job. [CHAR LIMIT=30] -->
   <string name="generating_print_job">سازدانی ئەرکی چاپ</string>
+  <!-- Title for the save as PDF option in the printer list. [CHAR LIMIT=30] -->
   <string name="save_as_pdf">پاشەکەوت بە PDF</string>
+  <!-- Title for the open all printers UI option in the printer list. [CHAR LIMIT=30] -->
   <string name="all_printers">هەموو چاپکەرەکان&#8230;</string>
+  <!-- Title for the print dialog announced to the user for accessibility. Not shown in the UI. [CHAR LIMIT=none] -->
   <string name="print_dialog">دیالۆگی چاپ</string>
+  <!-- Template for the message that shows the current page out of the total number of pages [CHAR LIMIT=none] -->
   <string name="current_page_template"><xliff:g id="current_page">%1$d</xliff:g>
         /<xliff:g id="page_count">%2$d</xliff:g></string>
+  <!-- Description of the current page - spoken to the user [CHAR LIMIT=none] -->
   <string name="page_description_template">پەڕە <xliff:g id="current_page" example="1">%1$d</xliff:g>
         لە <xliff:g id="page_count" example="100">%2$d</xliff:g></string>
+  <!-- Template for the message to announce the print options summary - spoken to the user. [CHAR LIMIT=none] -->
   <string name="summary_template">کورتە, لەبەرگرتنەوە <xliff:g id="copies" example="1">%1$s</xliff:g>,
         قەبارەی پەڕە <xliff:g id="paper_size" example="A4">%2$s</xliff:g></string>
+  <!-- Description for the handle to expand all print options - spoken to the user. [CHAR LIMIT=none] -->
   <string name="expand_handle">بڵاوکردنەوەی دەست</string>
+  <!-- Description for the handle to collapse all print options - spoken to the user. [CHAR LIMIT=none] -->
   <string name="collapse_handle">دەست دەکەوێت</string>
+  <!-- Description for the print button - spoken to the user. [CHAR LIMIT=none] -->
   <string name="print_button">چاپکردن</string>
+  <!-- Description for the save to PDF button - spoken to the user. [CHAR LIMIT=none] -->
   <string name="savetopdf_button">پاشەکەوتبکە بۆ PDF</string>
+  <!-- Message to announce print options are expanded - spoken to the user. [CHAR LIMIT=none] -->
   <string name="print_options_expanded">هەڵبژاردەی لەبەرگرتنەوە بڵاوکرایەوە</string>
+  <!-- Message to announce print options are collapsed - spoken to the user. [CHAR LIMIT=none] -->
   <string name="print_options_collapsed">هەڵبژادەکانی لەبەرگرتنەوەی دەستکەوت</string>
+  <!-- Select printer activity -->
+  <!-- Title for the share action bar menu item. [CHAR LIMIT=20] -->
   <string name="search">گەڕان</string>
+  <!-- Title for the select printer activity. [CHAR LIMIT=30] -->
   <string name="all_printers_label">هەموو چاپکەرەکان</string>
+  <!-- Title of the button to install a print service. [CHAR LIMIT=25] -->
   <string name="add_print_service_label">زیادکردنی ڕاژە</string>
+  <!-- Utterance to announce that the search box is shown. This is spoken to a blind user. [CHAR LIMIT=none] -->
   <string name="print_search_box_shown_utterance">سنووقی گەڕان پیشاندراوە</string>
+  <!-- Utterance to announce that the search box is hidden. This is spoken to a blind user. [CHAR LIMIT=none] -->
   <string name="print_search_box_hidden_utterance">سنووقی گەڕان شاراوەیە</string>
+  <!-- Title of the action bar button to got to add a printer. [CHAR LIMIT=25] -->
   <string name="print_add_printer">چاپکەر زیاد بکە</string>
+  <!-- Title of the menu item to select a printer. [CHAR LIMIT=25] -->
   <string name="print_select_printer">چاپکەر دەستنیشان بکە</string>
+  <!-- Title of the menu item to forget a printer. [CHAR LIMIT=25] -->
   <string name="print_forget_printer">چاپکەر لەیادکە</string>
+  <!-- Utterance to announce a change in the number of matches during a search. This is spoken to a blind user. [CHAR LIMIT=none] -->
+  <plurals name="print_search_result_count_utterance">
+    <item quantity="one"><xliff:g id="count" example="1">%1$s</xliff:g> چاپکەری دۆزراوە</item>
+    <item quantity="other"><xliff:g id="count" example="2">%1$s</xliff:g> چاپکەرەکانی دۆزراوە</item>
+  </plurals>
+  <!-- Add printer dialog  -->
+  <!-- Title for the alert dialog for selecting a print service. [CHAR LIMIT=50] -->
   <string name="choose_print_service">خزمەتگوزاریی چاپکردن هەڵبژێرە</string>
+  <!-- Title for the prompt shown as a placeholder if no printers are found while not searching. [CHAR LIMIT=50] -->
   <string name="print_searching_for_printers">گەڕان بەدوای چاپکەردا</string>
+  <!-- Title for the prompt shown as a placeholder if there are no printers while searching. [CHAR LIMIT=50] -->
   <string name="print_no_printers">هیچ چاپکەرێک نەدۆزرایەوە</string>
+  <!-- Notifications -->
+  <!-- Template for the notification label for a printing print job. [CHAR LIMIT=25] -->
   <string name="printing_notification_title_template">چاپکردن <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <!-- Template for the notification label for a cancelling print job. [CHAR LIMIT=25] -->
   <string name="cancelling_notification_title_template">هەڵوەشاندنەوە <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <!-- Template for the notification label for a failed print job. [CHAR LIMIT=25] -->
   <string name="failed_notification_title_template">هەڵەی چاپکەر <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <!-- Template for the notification label for a blocked print job. [CHAR LIMIT=25] -->
   <string name="blocked_notification_title_template">چاپکەر بەستراوە <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
+  <!-- Template for the notification label for a composite (multiple items) print jobs notification. [CHAR LIMIT=25] -->
+  <plurals name="composite_notification_title_template">
+    <item quantity="one"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g>کاری چاپکردن</item>
+    <item quantity="other"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g> کارەکانی چاپکردن</item>
+  </plurals>
+  <!-- Label for the notification button for cancelling a print job. [CHAR LIMIT=25] -->
   <string name="cancel">هەڵوەشانەوە</string>
+  <!-- Label for the notification button for restarting a filed print job. [CHAR LIMIT=25] -->
   <string name="restart">دەستپێکردنەوە</string>
+  <!-- Message that there is no connection to a printer. [CHAR LIMIT=40] -->
   <string name="no_connection_to_printer">پەیوەست نییە بە چاپکەرەوە</string>
+  <!-- Label for an unknown reason for failed or blocked print job. [CHAR LIMIT=25] -->
   <string name="reason_unknown">نەناسراو</string>
+  <!-- Label for a printer that is not available. [CHAR LIMIT=25] -->
   <string name="printer_unavailable"><xliff:g id="print_job_name" example="Canon-123GHT">%1$s</xliff:g> – بەردەست نییە</string>
+  <!-- Arrays -->
+  <!-- Color mode labels. -->
   <string-array name="color_mode_labels">
+    <!-- Color mode label: Monochrome color scheme, e.g. one color is used. [CHAR LIMIT=20] -->
     <item>رەش وamp; سپی</item>
+    <!-- Color mode label: Color color scheme, e.g. many colors are used. [CHAR LIMIT=20] -->
     <item>ڕەنگ</item>
   </string-array>
+  <!-- Duplex mode labels. -->
+  <!-- Orientation labels. -->
   <string-array name="orientation_labels">
+    <!-- Orientation label: Portrait page orientation. [CHAR LIMIT=30] -->
     <item>وێنەی شێوە</item>
+    <!-- Orientation label: Landscape page orientation [CHAR LIMIT=30] -->
     <item>وێنەی سروشت</item>
   </string-array>
+  <!-- Permissions -->
+  <!-- Title of an application permission, listed so the user can choose whether they want
+         to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether
+         they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want
+         to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they
+         want to allow the application to do this. -->
+  <!-- Error messages -->
+  <!-- Message for an error when trying to print to a PDF file. [CHAR LIMIT=50] -->
   <string name="print_write_error_message">ناتوانرێت فایلێک بنوسرێت</string>
+  <!-- Default message for an error while generating a print job. [CHAR LIMIT=50] -->
   <string name="print_error_default_message">ببورە، ئەمە کاری نەکرد. دوبارە هەوڵبدەرەوە.</string>
+  <!-- Label for the retry button in the error message. [CHAR LIMIT=50] -->
   <string name="print_error_retry">هەوڵدانەوە</string>
+  <!-- Message for the currently selected printer being unavailable. [CHAR LIMIT=100] -->
   <string name="print_error_printer_unavailable">ئەم چاپکەرە لە کارانیە ئێستا.</string>
+  <!-- Long running operations -->
+  <!-- Message long running operation when preparing print preview. [CHAR LIMIT=50] -->
   <string name="print_preparing_preview">پیشاندانی ڕێکخستن\u2026</string>
 </resources>

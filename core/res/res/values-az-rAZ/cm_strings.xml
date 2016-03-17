@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Ekran şəkli</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">qorunan SMS qəbul et</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Tətbiqetməyə qorunan bir SMS qəbul etmə icazəsi verər.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">qorunan SMS siyahısını dəyişdir</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Tətbiqetməyə qorunan SMS ünvan siyahısını dəyişdirmə icazəsi verər.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Təhlükəsizlik</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Cihaz təhlükəsizlik məlumatı ilə bağlı icazələr.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">telefon qara siyahısını oxu</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələri haqqında məlumat oxumasına icazə verər.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">telefon qara siyahısını dəyişdir</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Tətbiqetmənin gələn zəngləri və ya mesajları əngəllənmiş telefon nömrələrini dəyişdirməsinə icazə verər.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">klaviatura divar kağızını tənzimlə</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Tətbiqetmənin kilit ekranı divar kağızını dəyişdirməsinə icazə verər.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Yenidən başlat</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Hazırki</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Yenidən başlat</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Bərpa rejimi (Recovery)</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Önyükləyici (Bootloader)</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Endirmə rejimi</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Proqram təminatını yenidən başlatma</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Yenidən başlat</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Planşetiniz yenidən başladılacaq.</string>
   <string name="reboot_confirm" product="default">Telefonunuz yenidən başlayacaq.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Yenidən başladılır\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Tətbiq sonlandırıldı</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">Şəbəkə üzərindən ADB fəaldır</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">USB &amp; şəbəkə üzərindən ADB fəaldır</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Xəta ayırdetməni ləğv etmək üçün toxunun.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; şəbəkə</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Şəbəkə</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">tətbiqetmə başlatmanın qarşısını al</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s quraşdırılmayıb</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Üstünlük</string>
   <string name="silent_mode_none">Yoxdur</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">SIM abunəliyini dəyişmə ilə əlaqədar Wi-Fi internet paylaşma ləğv edildi</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Wi-Fi\'ı bağla</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">Gizlilik Qorumasını fəallaşdır ya da ləğv et</string>
   <string name="permdesc_changePrivacyGuardState">Tətbiqetməyə başqa bir tətbiqetmənin Gizlilik Qorumasını işlədib işlədə bilməyəcəyini müəyyənləşdirmə imkanı verər. Əgər tətbiqetmə Gizlilik Qoruması ilə işləyərsə şəxslər, zəng qeydləri və ya mesajlar kimi şəxsi verilənlərə müraciət edə bilməyəcək.</string>
   <string name="privacy_guard_notification">Gizlilik Qoruması fəaldır</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> şəxsi verilənlərə müraciət edə bilməyəcək</string>
   <string name="privacy_guard_dialog_title">Gizlilik Qoruması</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> icazəsindən istifadə etmək istəyir.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Seçimimi yadda saxla</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">kameraya müraciət</string>
   <string name="app_ops_access_location">olduğunuz yerə müraciət</string>
   <string name="app_ops_access_notifications">bildirişləri oxu</string>
@@ -111,7 +149,9 @@
   <string name="app_ops_write_mms">MMS mesajı yazın</string>
   <string name="app_ops_write_sms">SMS mesajı yazın</string>
   <string name="app_ops_su">root müraciəti əldə et</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Bu ekranı çıxarmaq üçün Geri düyməsinə toxunub basılı tutun.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Avtomatik</string>
   <string name="live_display_auto_summary">Gün çıxandan və batandan sonra ekranın rəng hərarətini avtomatik tənzimləyər</string>
   <string name="live_display_off">Bağlı</string>
@@ -123,7 +163,20 @@
   <string name="live_display_outdoor">Açıq hava (parlaq günəş)</string>
   <string name="live_display_outdoor_summary">Yalnız açıq hava tənziml. istifadə et</string>
   <string name="live_display_hint">LiveDisplay göz yorğunluğunuzu azaldıb gecələri yuxulamağınıza kömək edə bilər. Yoxlamaq üçün bura klikləyin!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Bağlı cihaz yoxdur</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> cihaz bağlıdır</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> cihaz bağlıdır</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">batareya statistikalarını sıfırla</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Tətbiqetmənin aşağı batareya istifadə verilənlərini sıfırlamasına icazə verər.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

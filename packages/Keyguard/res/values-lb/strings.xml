@@ -19,87 +19,217 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- App label in the manifest  -->
   <string name="app_name">Tastespär</string>
+  <!-- Instructions telling the user to enter their SIM PIN to unlock the keyguard.
+         Displayed in one line in a large font.  -->
   <string name="keyguard_password_enter_pin_code">PIN-Code aginn</string>
+  <!-- Instructions telling the user to enter their SIM PUK to unlock the keyguard.
+         Displayed in one line in a large font.  -->
   <string name="keyguard_password_enter_puk_code">SIM-PUK an nei PIN aginn</string>
+  <!-- Prompt to enter SIM PUK in Edit Text Box in unlock screen -->
   <string name="keyguard_password_enter_puk_prompt">SIM-PUK-Code</string>
+  <!-- Prompt to enter New SIM PIN in Edit Text Box in unlock screen -->
   <string name="keyguard_password_enter_pin_prompt">Neie SIM-PIN-Code</string>
+  <!-- Displayed as hint in passwordEntry EditText on PasswordUnlockScreen [CHAR LIMIT=30]-->
   <string name="keyguard_password_entry_touch_hint"><font size="17">Dréck fir d\'Passwuert anzeginn</font></string>
+  <!-- Instructions telling the user to enter their text password to unlock the keyguard.
+         Displayed in one line in a large font.  -->
   <string name="keyguard_password_enter_password_code">Passwuert agi fir z\'entspären</string>
+  <!-- Instructions telling the user to enter their PIN password to unlock the keyguard.
+         Displayed in one line in a large font.  -->
   <string name="keyguard_password_enter_pin_password_code">PIN agi fir z\'entspären</string>
+  <!-- Instructions telling the user that they entered the wrong pin while trying
+         to unlock the keyguard.  Displayed in one line in a large font.  -->
   <string name="keyguard_password_wrong_pin_code">Falsche PIN-Code.</string>
+  <!-- When the lock screen is showing, the phone is plugged in and the battery is fully
+         charged, say that it is charged. -->
   <string name="keyguard_charged">Opgelueden</string>
+  <!-- When the lock screen is showing and the phone plugged in, and the battery
+         is not fully charged, say that it's charging.  -->
   <string name="keyguard_plugged_in">Gëtt opgelueden</string>
+  <!-- When the lock screen is showing and the phone plugged in, and the battery
+         is not fully charged, and it's plugged into a fast charger, say that it's charging fast.  -->
+  <string name="keyguard_plugged_in_charging_fast">Gëtt séier opgelueden</string>
+  <!-- When the lock screen is showing and the phone plugged in, and the battery
+         is not fully charged, and it's plugged into a slow charger, say that it's charging slowly.  -->
+  <string name="keyguard_plugged_in_charging_slowly">Gëtt lues opgelueden</string>
+  <!-- When the lock screen is showing and the battery is low, warn user to plug
+         in the phone soon. -->
   <string name="keyguard_low_battery">Connectéier däin Oplueder.</string>
+  <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
   <string name="keyguard_instructions_when_pattern_disabled">Menü drécke fir z\'entspären.</string>
+  <!-- SIM messages -->
+  <!-- When the user inserts a sim card from an unsupported network, it becomes network locked -->
   <string name="keyguard_network_locked_message">Netzwierk gespaart</string>
+  <!-- Shown when there is no SIM card. -->
   <string name="keyguard_missing_sim_message_short">Keng SIM-Kaart</string>
+  <!-- Shown when there is no SIM card. -->
   <string name="keyguard_missing_sim_message" product="tablet">Keng SIM-Kaart am Tablet.</string>
+  <!-- Shown when there is no SIM card. -->
   <string name="keyguard_missing_sim_message" product="default">Keng SIM-Kaart am Telefon.</string>
+  <!-- Shown to ask the user to insert a SIM card. -->
   <string name="keyguard_missing_sim_instructions">SIM-Kaart asetzen.</string>
+  <!-- Shown to ask the user to insert a SIM card when sim is missing or not readable. -->
   <string name="keyguard_missing_sim_instructions_long">D\'SIM-Kaart feelt oder ass net liesbar. Setz eng SIM-Kaart an.</string>
+  <!-- Shown when SIM card is permanently disabled. -->
   <string name="keyguard_permanent_disabled_sim_message_short">Onbenotzbar SIM-Kaart.</string>
+  <!-- Shown to inform the user to SIM card is permanently disabled. -->
   <string name="keyguard_permanent_disabled_sim_instructions">Deng SIM-Kaart gouf permanent ausgeschalt.\n
 Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
+  <!-- Shown to tell the user that their SIM is locked and they must unlock it. -->
   <string name="keyguard_sim_locked_message">D\'SIM-Kaart ass gespaart.</string>
+  <!-- When the user enters a wrong sim pin too many times, it becomes PUK locked (Pin Unlock Kode) -->
   <string name="keyguard_sim_puk_locked_message">D\'SIM-Kaart ass PUK-gespaart.</string>
+  <!-- For the unlock screen, When the user enters a sim unlock code, it takes a little while to check
+         whether it is valid, and to unlock the sim if it is valid.  we display a
+         progress dialog in the meantime.  this is the emssage. -->
   <string name="keyguard_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
+  <!-- Time format strings for fall-back clock widget -->
+  <!-- Time format strings for fall-back clock widget -->
   <string name="keyguard_accessibility_pattern_unlock">Entspäre mat Muster.</string>
+  <!-- Accessibility description of the pin lock. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_pin_unlock">Entspäre mat PIN.</string>
+  <!-- Accessibility description of the password lock. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_password_unlock">Entspäre mat Passwuert.</string>
+  <!-- Accessibility description of the unlock pattern area. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_pattern_area" msgid="7679891324509597904">Musterberäich.</string>
+  <!-- Accessibility description of the unlock slide area. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_slide_area">Beräich fir Fangerbeweegung.</string>
+  <!-- Accessibility description of the PIN password view. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_pin_area">PIN-Beräich</string>
+  <!-- Accessibility description of the SIM PIN password view. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_sim_pin_area">SIM-PIN-Beräich</string>
+  <!-- Accessibility description of the SIM PUK password view. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_sim_puk_area">SIM-PUK-Beräich</string>
+  <!-- Accessibility description for the text view that indicates when the next alarm is set (not shown on screen). [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_next_alarm">Nächste Wecker gesat fir <xliff:g id="alarm" example="Fri 8:30 AM">%1$s</xliff:g></string>
+  <!-- KeyguardPinView - accessibility support -->
+  <!-- Description of the Delete button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_delete">Läschen</string>
+  <!-- Description of the Enter button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_enter">Enter</string>
+  <!-- Message shown in pattern unlock after some number of unsuccessful attempts -->
   <string name="kg_forgot_pattern_button_text">Muster vergiess</string>
+  <!-- Message shown when user enters wrong pattern -->
   <string name="kg_wrong_pattern">Falscht Muster</string>
+  <!-- Message shown when user enters wrong password -->
   <string name="kg_wrong_password">Falscht Passwuert</string>
+  <!-- Message shown when user enters wrong PIN -->
   <string name="kg_wrong_pin">Falsche PIN</string>
+  <!-- Countdown message shown after too many failed unlock attempts -->
   <string name="kg_too_many_failed_attempts_countdown">Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <!-- Instructions for using the pattern unlock screen -->
   <string name="kg_pattern_instructions">Mol däi Muster</string>
+  <!-- Instructions for using the SIM PIN unlock screen -->
   <string name="kg_sim_pin_instructions">SIM-PIN aginn</string>
+  <!-- Instructions for using the SIM PIN unlock screen when there's more than one SIM -->
   <string name="kg_sim_pin_instructions_multi">SIM-PIN fir \"<xliff:g id="carrier" example="CARD 1">%1$s</xliff:g>\" aginn</string>
+  <!-- Instructions for using the PIN unlock screen -->
   <string name="kg_pin_instructions">PIN aginn</string>
+  <!-- Instructions for using the password unlock screen -->
   <string name="kg_password_instructions">Passwuert aginn</string>
+  <!-- Hint shown in the PUK screen that asks the user to enter the PUK code given to them by their provider -->
   <string name="kg_puk_enter_puk_hint">D\'SIM ass elo desaktivéiert. Gëff e PUK-Code a fir weiderzemaachen. Kontaktéier däi Provider fir Detailer.</string>
+  <!-- Hint shown when there are multiple SIMs in the device to ask the user to enter the PUK code given to them by their provider -->
   <string name="kg_puk_enter_puk_hint_multi">D\'SIM \"<xliff:g id="carrier" example="CARD 1">%1$s</xliff:g>\" ass elo desaktivéiert. Gëff de PUK-Code an, fir weiderzemaachen. Kontaktéier däi Provider fir méi Detailer.</string>
+  <!-- Hint shown in the PUK unlock screen PIN TextView -->
   <string name="kg_puk_enter_pin_hint">Gëff de gewënschte PIN-Code an</string>
+  <!-- Message shown when the user needs to confirm the PIN they just entered in the PUK screen -->
   <string name="kg_enter_confirm_pin_hint">Bestäteg de gewënschte PIN-Code</string>
+  <!-- Message shown in dialog while the device is unlocking the SIM card -->
   <string name="kg_sim_unlock_progress_dialog_message">D\'SIM-Kaart gëtt entspaart\u2026</string>
+  <!-- Message shown when the user enters an invalid SIM pin password in PUK screen -->
   <string name="kg_invalid_sim_pin_hint">Gëff e PIN an, deen tëscht 4 an 8 Zifferen huet.</string>
+  <!-- Message shown when the user enters an invalid PUK code in the PUK screen -->
   <string name="kg_invalid_sim_puk_hint">De PUK-Code misst 8 oder méi Zifferen hunn.</string>
+  <!-- Message shown when the user enters an invalid PUK code -->
   <string name="kg_invalid_puk">Gëff de korrekte PUK-Code nees an. Bei widderhuelende Versich gëtt d\'SIM permanent desaktivéiert.</string>
+  <!-- String shown in PUK screen when PIN codes don't match -->
   <string name="kg_invalid_confirm_pin_hint" product="default">D\'PIN-Codë stëmmen net iwwereneen</string>
+  <!-- Message shown when the user exceeds the maximum number of pattern attempts -->
   <string name="kg_login_too_many_attempts">Ze vill Musterversich</string>
+  <!-- Message shown in dialog when max number of attempts are reached for PIN screen of keyguard -->
   <string name="kg_too_many_failed_pin_attempts_dialog_message">Du hues däi PIN <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <!-- Message shown in dialog when max number of attempts are reached for password screen of keyguard -->
   <string name="kg_too_many_failed_password_attempts_dialog_message">Du hues däi Passwuert <xliff:g id="number">%d</xliff:g>-mol falsch aginn.\n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
   <string name="kg_too_many_failed_pattern_attempts_dialog_message">
         Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt.
         \n\nProbéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.
     </string>
+  <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_almost_at_wipe" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Tablet op d\'Wierksastellungen zréckgesat an all d\'Date gi verluer.</string>
+  <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_almost_at_wipe" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Telefon op d\'Wierksastellungen zréckgesat an all d\'Date gi verluer.</string>
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the device will now be wiped [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_now_wiping" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Tablet z\'entspären. Dësen Tablet gëtt zréckgesat, wat all d\'Date läscht.</string>
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the device will now be wiped [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_now_wiping" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Telefon z\'entspären. Dësen Telefon gëtt zréckgesat, wat all d\'Date läscht.</string>
+  <!-- Message shown when user is almost at the limit of password attempts where the user will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_almost_at_erase_user" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt dëse Benotzer a seng Benotzerdate geläscht.</string>
+  <!-- Message shown when user is almost at the limit of password attempts where the user will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_almost_at_erase_user" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt dëse Benotzer a seng Benotzerdate geläscht.</string>
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the user will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_now_erasing_user" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Tablet z\'entspären. Dëse Benotzer a seng Date gi geläscht.</string>
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the user will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_now_erasing_user" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht, den Telefon z\'entspären. Dëse Benotzer a seng Date gi geläscht.</string>
+  <!-- Message shown when user is almost at the limit of password attempts where the profile will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Aarbechtsprofil a seng Profildate geläscht.</string>
+  <!-- Message shown when user is almost at the limit of password attempts where the profile will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_almost_at_erase_profile" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëtt den Aarbechtsprofil a seng Profildate geläscht.</string>
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the profile will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_now_erasing_profile" product="tablet">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Tablet z\'entspären. Den Aarbechtsprofil a seng Profildate gi geläscht.</string>
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the profile will be removed. [CHAR LIMIT=none] -->
   <string name="kg_failed_attempts_now_erasing_profile" product="default">Du hues <xliff:g id="number">%d</xliff:g>-mol ouni Erfolleg versicht den Telefon z\'entspären. Den Aarbechtsprofil a seng Profildate gi geläscht.</string>
+  <!-- Message shown in dialog when user is almost at the limit where they will be
+    locked out and may have to enter an alternate username/password to unlock the phone -->
   <string name="kg_failed_attempts_almost_at_login" product="tablet">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss du gefrot däin Tablet duerch en E-Mail-Kont z\'entspären. Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <!-- Message shown in dialog when user is almost at the limit where they will be
+    locked out and may have to enter an alternate username/password to unlock the phone -->
   <string name="kg_failed_attempts_almost_at_login" product="default">Du hues däin Entspärmuster <xliff:g id="number">%d</xliff:g>-mol falsch gemoolt. No <xliff:g id="number">%d</xliff:g> weidere feelgeschloene Versich gëss du gefrot däin Telefon duerch en E-Mail-Kont z\'entspären. Probéier nees a(n) <xliff:g id="number">%d</xliff:g> Sekonnen.</string>
+  <!-- Instructions telling the user that they entered the wrong SIM PIN for the last time.
+         Displayed in a dialog box.  -->
   <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däi Provider kontaktéiere fir däin Apparat z\'entspären.</string>
+  <!-- Instructions telling the user that they entered the wrong SIM PIN while trying
+         to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_pin_code">
+    <item quantity="one">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier s de däi Provider kontaktéiere muss fir däin Apparat z\'entspären.</item>
+    <item quantity="other">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg.</item>
+  </plurals>
+  <!-- Instructions telling the user that they have exhausted SIM PUK retries and the SIM is now unusable.
+         Displayed in a dialog box.  -->
   <string name="kg_password_wrong_puk_code_dead">D\'SIM ass onbrauchbar. Kontaktéier däi Provider.</string>
+  <!-- Instructions telling the user that they entered the wrong puk while trying
+         to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_puk_code">
+    <item quantity="one">Inkorrekte SIM-PUK-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier deng SIM permanent onbrauchbar gëtt.</item>
+    <item quantity="other">Inkorrekte SIM-PUK-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier deng SIM permanent onbrauchbar gëtt.</item>
+  </plurals>
+  <!-- Instructions telling the user that the operation to unlock the keyguard
+         with SIM PIN failed. Displayed in one line in a large font.  -->
   <string name="kg_password_pin_failed">SIM-PIN-Operatioun feelgeschloen!</string>
+  <!-- Instructions telling the user that the operation to unlock the keyguard
+         with PUK failed. Displayed in one line in a large font.  -->
   <string name="kg_password_puk_failed">SIM-PUK-Operatioun feelgeschloen!</string>
+  <!-- Notification telling the user that the PIN1 they entered is valid -->
   <string name="kg_pin_accepted">Code acceptéiert!</string>
+  <!-- On the keyguard screen, it shows the carrier the phone is connected to.
+        This is displayed if the phone is not connected to a carrier.-->
   <string name="keyguard_carrier_default">Kee Service.</string>
+  <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_ime_switch_button" msgid="5032926134740456424">Knäppche fir d\'Method fir anzeginn ze wiesselen.</string>
+  <!-- Description of airplane mode -->
+  <!-- An explanation text that the pattern needs to be solved since the device has just been restarted. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the pin needs to be entered since the device has just been restarted. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the password needs to be entered since the device has just been restarted. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the pattern needs to be solved since the user hasn't used strong authentication since quite some time. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the pin needs to be entered since the user hasn't used strong authentication since quite some time. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the password needs to be entered since the user hasn't used strong authentication since quite some time. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the pattern needs to be solved since profiles have just been switched. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the pin needs to be entered since profiles have just been switched. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the password needs to be entered since profiles have just been switched. [CHAR LIMIT=80] -->
+  <!-- An explanation text that the pattern needs to be solved since it hasn't been solved in a while. [CHAR LIMIT=80]-->
+  <!-- An explanation text that the pin needs to be entered since it hasn't been entered in a while. [CHAR LIMIT=80]-->
+  <!-- An explanation text that the password needs to be entered since it hasn't been entered in a while. [CHAR LIMIT=80]-->
+  <!-- Fingerprint hint message when finger was not recognized.-->
 </resources>

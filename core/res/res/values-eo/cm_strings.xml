@@ -17,47 +17,85 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Ekrankopio</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">Alvenis protektita SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Permesi al la aplikaĵo ricevi alvenintan protektitan SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">ŝanĝi liston de protektitaj SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Permesi al la aplikaĵo ŝanĝi la liston de protektitaj SMS.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Sekureco</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Permesoj rilataj al aparata sekureca informo.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">legi telefonan nigran liston</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Permesas al aplikaĵo lefi informon pri telefon-numeroj, kiuj estas blokitaj por alvenantaj alvokoj aŭ mesaĝoj.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">ŝanĝi telefonan nigran liston</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Permesas al aplikaĵo ŝanĝi telefon-numerojn, kiuj estas blokitaj por alvenintaj alvokoj aŭ mesaĝoj.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">difini la ŝlosan ekranfonon</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Permesas al aplikaĵo ŝanĝi la ŝlosan fonekranon.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Relanĉi</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Nuna</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Relanĉi</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Riparado</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Praŝargilo</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Elŝuti</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Varma relanĉado</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Relanĉado</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Via tabulo relanĉiĝos.</string>
   <string name="reboot_confirm" product="default">Via telefono relanĉiĝos.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Relanĉado\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplikaĵo mortigita</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">reta ADB ŝaltita</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB sur USB &amp; reto aktiva</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Tuŝeti por malŝalti sencimigon.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; reto</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Reto</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interkapti lanĉadon de aplikaĵo</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ne estas instalita</string>
+  <!-- Zen mode buttons -->
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">ŝalti aŭ malsălti protektadon de datumoj</string>
   <string name="permdesc_changePrivacyGuardState">Permesas al la aplikaĵo ŝanĝi ĉu alia aplikaĵo funkcias kun protektado de datumoj. Kiam aplikaĵo funkcias kun protektado de datumoj, ĝi ne rajtos aliri al personaj datumoj kiel kontaktuloj, protokoloj de alvokoj, aŭ mesaĝoj.</string>
   <string name="privacy_guard_notification">Protektado de datumoj aktiva</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne povos aliri personajn datumojn</string>
   <string name="privacy_guard_dialog_title">Protektado de datumoj</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ŝatus <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Memori mian elekton</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">aliri al fotilo</string>
   <string name="app_ops_access_location">aliri al via loko</string>
   <string name="app_ops_access_notifications">legi viajn atentigojn</string>
@@ -107,7 +145,9 @@
   <string name="app_ops_write_mms">skribi MMS-mesaĝon</string>
   <string name="app_ops_write_sms">skribi SMS-mesaĝon</string>
   <string name="app_ops_su">akiri radikuzantajn permesojn</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Por malŝlosi tiun ekranon, tuŝetu kaj tenu la Reen butonon.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Aŭtomata</string>
   <string name="live_display_auto_summary">Aŭtomate alĝustigi kolortemperaturon de la ekrano post sunsubiro kaj suniĝo</string>
   <string name="live_display_off">For</string>
@@ -119,7 +159,18 @@
   <string name="live_display_outdoor">Ekstere (brila suno)</string>
   <string name="live_display_outdoor_summary">Uzi nur eksterajn parametrojn</string>
   <string name="live_display_hint">LiveDisplay povas helpi vin malgrandigi okulo-streĉon nokte. Alklaku tie por provi!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Neniu konektata aparato</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> konektita aparato</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> konektitaj aparatoj</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>
