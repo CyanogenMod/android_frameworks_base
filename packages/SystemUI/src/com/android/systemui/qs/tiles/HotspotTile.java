@@ -48,7 +48,6 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
             new AnimationIcon(R.drawable.ic_hotspot_disable_animation);
     private final HotspotController mController;
     private final Callback mCallback = new Callback();
-    private final UsageTracker mUsageTracker;
     private final ConnectivityManager mConnectivityManager;
     private boolean mListening;
     private int mNumConnectedClients = 0;
@@ -56,15 +55,7 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
     public HotspotTile(Host host) {
         super(host);
         mController = host.getHotspotController();
-        mUsageTracker = newUsageTracker(host.getContext());
-        mUsageTracker.setListening(true);
         mConnectivityManager = host.getContext().getSystemService(ConnectivityManager.class);
-    }
-
-    @Override
-    protected void handleDestroy() {
-        super.handleDestroy();
-        mUsageTracker.setListening(false);
     }
 
     @Override
@@ -108,23 +99,12 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleLongClick() {
-        if (mState.value) {
-            mHost.startActivityDismissingKeyguard(TETHER_SETTINGS);
-        } else {
-            final String title = mContext.getString(
-                    R.string.quick_settings_reset_confirmation_title, mState.label);
-            mUsageTracker.showResetConfirmation(title, new Runnable() {
-                @Override
-                public void run() {
-                    refreshState();
-                }
-            });
-        }
+        mHost.startActivityDismissingKeyguard(TETHER_SETTINGS);
     }
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        state.visible = mController.isHotspotSupported() && mUsageTracker.isRecentlyUsed();
+        state.visible = mController.isHotspotSupported();
 
         if (arg instanceof Boolean) {
             state.value = (boolean) arg;
@@ -155,11 +135,6 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
         }
     }
 
-    private static UsageTracker newUsageTracker(Context context) {
-        return new UsageTracker(context, Prefs.Key.HOTSPOT_TILE_LAST_USED, HotspotTile.class,
-                R.integer.days_to_show_hotspot_tile);
-    }
-
     private BroadcastReceiver mTetherConnectStateChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -175,20 +150,4 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
             refreshState(enabled);
         }
     };
-
-    /**
-     * This will catch broadcasts for changes in hotspot state so we can show
-     * the hotspot tile for a number of days after use.
-     */
-    public static class APChangedReceiver extends BroadcastReceiver {
-        private UsageTracker mUsageTracker;
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mUsageTracker == null) {
-                mUsageTracker = newUsageTracker(context);
-            }
-            mUsageTracker.trackUsage();
-        }
-    }
 }
