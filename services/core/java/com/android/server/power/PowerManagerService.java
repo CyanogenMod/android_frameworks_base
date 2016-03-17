@@ -17,14 +17,18 @@
 package com.android.server.power;
 
 import android.app.ActivityManager;
+import android.os.IDeviceIdleController;
+import android.os.ServiceManager;
 import android.util.SparseIntArray;
 
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.os.BackgroundThread;
+import com.android.internal.util.ArrayUtils;
 import com.android.server.EventLogTags;
 import com.android.server.LocalServices;
 import com.android.server.ServiceThread;
+import com.android.server.SystemConfig;
 import com.android.server.SystemService;
 import com.android.server.am.BatteryStatsService;
 import com.android.server.lights.Light;
@@ -3292,13 +3296,25 @@ public final class PowerManagerService extends SystemService
                 if (mAppOps != null &&
                         mAppOps.checkOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName)
                         != AppOpsManager.MODE_ALLOWED) {
-                    Slog.d(TAG, "acquireWakeLock: ignoring request from " + packageName);
-                    // For (ignore) accounting purposes
-                    mAppOps.noteOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName);
-                    // silent return
-                    return;
+
+                    // if this app is whitelisted as "allow-in-power-save" then always allow!
+                    final IDeviceIdleController idleService = IDeviceIdleController.Stub
+                            .asInterface(ServiceManager.getService(Context.DEVICE_IDLE_CONTROLLER));
+                    if (idleService != null) {
+                        final String[] fullPowerWhitelist = idleService.getSystemPowerWhitelist();
+                        if (!ArrayUtils.contains(fullPowerWhitelist, packageName)) {
+                            Slog.d(TAG, "acquireWakeLock: ignoring request from " + packageName);
+                            // For (ignore) accounting purposes
+                            mAppOps.noteOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName);
+                            // silent return
+                            return;
+                        } else {
+                            Slog.d(TAG, "wake lock requested to be ignored but " + packageName
+                                    + " is marked to opt-out of all power save restrictions.");
+                        }
+                    }
                 }
-            } catch (RemoteException e) {
+            } catch (RemoteException ignored) {
             }
 
             final long ident = Binder.clearCallingIdentity();
