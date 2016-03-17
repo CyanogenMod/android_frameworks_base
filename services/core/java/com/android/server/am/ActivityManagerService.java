@@ -10688,6 +10688,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         switch (mWakefulness) {
             case PowerManagerInternal.WAKEFULNESS_AWAKE:
             case PowerManagerInternal.WAKEFULNESS_DREAMING:
+                // Fall back because during quickpress of power key 
+                // mSleeping value never changes.
             case PowerManagerInternal.WAKEFULNESS_DOZING:
                 // Pause applications whenever the lock screen is shown or any sleep
                 // tokens have been acquired.
