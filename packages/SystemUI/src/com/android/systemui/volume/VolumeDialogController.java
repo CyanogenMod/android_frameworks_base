@@ -974,6 +974,13 @@ public class VolumeDialogController {
 
         @Override
         public void onRemoteVolumeChanged(Token token, int flags) {
+            // If an inactive session changed the remoteVolume, bail
+            // since we don't have any active streams to update
+            if (!mRemoteStreams.containsKey(token)) {
+                Log.i(TAG, "onRemoteVolumeChanged called on inactive" +
+                        "stream. Ignoring");
+                return;
+            }
             final int stream = mRemoteStreams.get(token);
             final boolean showUI = (flags & AudioManager.FLAG_SHOW_UI) != 0;
             boolean changed = updateActiveStreamW(stream);
