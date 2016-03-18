@@ -1901,11 +1901,13 @@ public class PhoneNumberUtils
                 // It is not possible to append additional digits to an emergency number to dial
                 // the number in Brazil - it won't connect.
                 if (useExactMatch || "BR".equalsIgnoreCase(defaultCountryIso)) {
-                    if (number.equals(emergencyNum)) {
+                    if (number.equals(emergencyNum) &&
+                        isEmergencyNumberForCurrentIso(number, defaultCountryIso)) {
                         return true;
                     }
                 } else {
-                    if (number.startsWith(emergencyNum)) {
+                    if (number.startsWith(emergencyNum) &&
+                        isEmergencyNumberForCurrentIso(number, defaultCountryIso)) {
                         return true;
                     }
                 }
@@ -1945,6 +1947,33 @@ public class PhoneNumberUtils
         }
 
         return false;
+    }
+
+   /**
+    * When checking for ECC numbers the country (defaultCountryIso) passed in is not taken into
+    * consideration by the function isEmergencyNumberInternal(subId, number, defaultCountryIso,
+    * useExactMatchecclist) this causes the function to return TRUE even in the case when the
+    * number is not emergency for defaultCountryIso but the device is in a country where the
+    * ecclist list has been updated with the current country's ECC #s. For example if device is
+    * in INDIA and we are checking for (XYZ, am, 101, XYZ) it will return true since 101
+    * will be found in ecclist but 101 is not valid ECC# for Armenia(am).
+    */
+    private static boolean isEmergencyNumberForCurrentIso(String number, String country) {
+        Rlog.w(LOG_TAG, "isEmergencyNumberForCurrentIso: number=" + number + " country=" + country);
+
+        boolean isEmergency = true;
+
+        //TODO - create a XML file that is in the format of string, [numbers ....]. This way
+        //we can overlay for a particular device. If XML is not found then function can return
+        //true always, else we will check the XML against passed country and number.
+        if( !("IN".equalsIgnoreCase(country)) ) {
+            if( number.equals("101") | number.equals("102") ) {
+                Rlog.w(LOG_TAG, "Number and Country doesn't match for emergency number");
+                isEmergency = false;
+            }
+        }
+
+        return isEmergency;
     }
 
     /**
