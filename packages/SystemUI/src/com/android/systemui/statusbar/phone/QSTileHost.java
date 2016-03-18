@@ -67,6 +67,7 @@ import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.VolumeTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.statusbar.CustomTileData;
+import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.CastController;
 import com.android.systemui.statusbar.policy.FlashlightController;
@@ -115,6 +116,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
     private final UserSwitcherController mUserSwitcherController;
     private final KeyguardMonitor mKeyguard;
     private final SecurityController mSecurity;
+    private final BatteryController mBattery;
 
     private CustomTileData mCustomTileData;
     private CustomTileListenerService mCustomTileListenerService;
@@ -127,7 +129,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
             ZenModeController zen, HotspotController hotspot,
             CastController cast, FlashlightController flashlight,
             UserSwitcherController userSwitcher, KeyguardMonitor keyguard,
-            SecurityController security) {
+            SecurityController security, BatteryController battery) {
         mContext = context;
         mStatusBar = statusBar;
         mBluetooth = bluetooth;
@@ -141,6 +143,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         mUserSwitcherController = userSwitcher;
         mKeyguard = keyguard;
         mSecurity = security;
+        mBattery = battery;
         mCustomTileData = new CustomTileData();
 
         final HandlerThread ht = new HandlerThread(QSTileHost.class.getSimpleName(),
@@ -279,6 +282,11 @@ public class QSTileHost implements QSTile.Host, Tunable {
     @Override
     public KeyguardMonitor getKeyguardMonitor() {
         return mKeyguard;
+    }
+
+    @Override
+    public BatteryController getBatteryController() {
+        return mBattery;
     }
 
     public UserSwitcherController getUserSwitcherController() {
