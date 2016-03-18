@@ -104,6 +104,8 @@
     <string name="quick_settings_profiles_off">Profiles disabled</string>
     <string name="quick_settings_heads_up_label">Heads up</string>
     <string name="quick_settings_battery_saver_label">Battery saver</string>
+    <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+    <string name="quick_settings_battery_saver_label_charging">Battery saver (charging)</string>
     <string name="quick_settings_caffeine_label">Caffeine</string>
 
     <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
