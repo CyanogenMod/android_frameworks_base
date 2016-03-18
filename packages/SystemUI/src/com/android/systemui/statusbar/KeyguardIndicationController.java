@@ -153,6 +153,11 @@ public class KeyguardIndicationController {
         }
     }
 
+    public void cleanup() {
+        KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mUpdateMonitor);
+        mContext.unregisterReceiver(mReceiver);
+    }
+
     private void updateIndication() {
         if (mVisible) {
             mTextView.switchIndication(computeIndication());

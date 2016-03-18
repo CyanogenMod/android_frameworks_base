@@ -16,6 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyguard_perso_locked_message">La tarjeta SIM tiene un bloqueo personalizado</string>
   <string name="lockscreen_sim_error_message_short">Tarjeta no válida.</string>
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Introduce el código PIN. Tienes <xliff:g id="number">%d</xliff:g> intento restante antes de tener que comunicarte con tu operadora para desbloquear el dispositivo.</item>

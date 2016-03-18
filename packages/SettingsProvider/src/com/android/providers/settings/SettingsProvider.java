@@ -27,6 +27,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -51,6 +52,7 @@ import android.os.Process;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -126,6 +128,8 @@ public class SettingsProvider extends ContentProvider {
     private static final String TABLE_BLUETOOTH_DEVICES = "bluetooth_devices";
     private static final String TABLE_BOOKMARKS = "bookmarks";
     private static final String TABLE_ANDROID_METADATA = "android_metadata";
+
+    private static final String HAS_REPLAYED_DEFAULTS_FROM_L = "has_replayed_defaults_from_L";
 
     // The set of removed legacy tables.
     private static final Set<String> REMOVED_LEGACY_TABLES = new ArraySet<>();
@@ -1982,7 +1986,10 @@ public class SettingsProvider extends ContentProvider {
         }
 
         private final class UpgradeController {
-            private static final int SETTINGS_VERSION = 122;
+            private static final int SETTINGS_VERSION = 123;
+            /**
+             * This is the 12.1 database version (DO NOT INCREMENT)
+             */
             private static final int CM_SETTINGS_DB_VERSION = 125;
 
             private final int mUserId;
@@ -2001,7 +2008,23 @@ public class SettingsProvider extends ContentProvider {
                 final int newVersion = SETTINGS_VERSION;
 
                 // If up do date - done.
+                //
+                // CYANOGENMOD
+                // We moved our settings out to another settings provider (CMSettingsProvider)
+                // however, we still have a problem of being a few versions ahead of AOSP.
+                // We could approach this in the manner we have previously, and bump the version
+                // to replay the defaults for specific os upgrade changes and have that maintenance
+                // overhead forever OR we can take the approach below:
+                //
+                // Logic as follows:
+                //       Until version 125 of this "DATABASE"
+                //       force replay AOSP defaults as they get introduced
+                //       once 125 is hit, we never have to maintain this again.
                 if ((oldVersion == newVersion || oldVersion == CM_SETTINGS_DB_VERSION)) {
+                    if (oldVersion == CM_SETTINGS_DB_VERSION && !hasReplayedDefaultsFromL()) {
+                        forceReplayAOSPDefaults(mUserId);
+                        setDefaultsReplayedFromLFlag();
+                    }
                     return;
                 }
 
@@ -2039,6 +2062,18 @@ public class SettingsProvider extends ContentProvider {
                 SettingsState systemSettings = getSettingsLocked(
                         SettingsRegistry.SETTINGS_TYPE_SYSTEM, mUserId);
                 systemSettings.setVersionLocked(newVersion);
+            }
+
+            private boolean hasReplayedDefaultsFromL() {
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(getContext());
+                return sharedPreferences.getBoolean(HAS_REPLAYED_DEFAULTS_FROM_L, false);
+            }
+
+            private void setDefaultsReplayedFromLFlag() {
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(getContext());
+                sharedPreferences.edit().putBoolean(HAS_REPLAYED_DEFAULTS_FROM_L, true).apply();
             }
 
             private SettingsState getGlobalSettingsLocked() {
@@ -2135,11 +2170,57 @@ public class SettingsProvider extends ContentProvider {
                     }
                     currentVersion = 122;
                 }
+
+                if (currentVersion == 122) {
+                    final SettingsState globalSettings = getGlobalSettingsLocked();
+                    String defaultDisabledProfiles = (getContext().getResources().getString(
+                            R.string.def_bluetooth_disabled_profiles));
+                    globalSettings.insertSettingLocked(Settings.Global.BLUETOOTH_DISABLED_PROFILES,
+                            defaultDisabledProfiles, SettingsState.SYSTEM_PACKAGE_NAME);
+                    currentVersion = 123;
+                }
+
                 // vXXX: Add new settings above this point.
 
                 // Return the current version.
                 return currentVersion;
             }
+
+            private void forceReplayAOSPDefaults(int userId) {
+                // v119: Reset zen + ringer mode.
+                if (userId == UserHandle.USER_OWNER) {
+                    final SettingsState globalSettings = getGlobalSettingsLocked();
+                    globalSettings.updateSettingLocked(Settings.Global.ZEN_MODE,
+                            Integer.toString(Settings.Global.ZEN_MODE_OFF),
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                    globalSettings.updateSettingLocked(Settings.Global.MODE_RINGER,
+                            Integer.toString(AudioManager.RINGER_MODE_NORMAL),
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                }
+
+                // v120: Add double tap to wake setting.
+                SettingsState secureSettings = getSecureSettingsLocked(userId);
+                secureSettings.insertSettingLocked(Settings.Secure.DOUBLE_TAP_TO_WAKE,
+                        getContext().getResources().getBoolean(
+                                R.bool.def_double_tap_to_wake) ? "1" : "0",
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                // Version 122: allow OEMs to set a default payment component in resources.
+                // Note that we only write the default if no default has been set;
+                // if there is, we just leave the default at whatever it currently is.
+                String defaultComponent = (getContext().getResources().getString(
+                        R.string.def_nfc_payment_component));
+                Setting currentSetting = secureSettings.getSettingLocked(
+                        Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT);
+                if (defaultComponent != null && !defaultComponent.isEmpty() &&
+                        currentSetting == null) {
+                    secureSettings.insertSettingLocked(
+                            Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT,
+                            defaultComponent,
+                            SettingsState.SYSTEM_PACKAGE_NAME);
+                }
+            }
+
         }
     }
 }

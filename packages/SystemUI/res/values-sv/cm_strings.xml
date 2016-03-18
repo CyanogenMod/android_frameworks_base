@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Svep höger för %1$s</string>
   <string name="right_shortcut_hint">Svep vänster för %1$s</string>
+  <string name="lockscreen_message">Tryck på en ikon till vänster eller höger för att tilldela en låsskärmgenväg.</string>
+  <string name="lockscreen_default_target">Standard</string>
   <string name="select_application">Välj app</string>
   <string name="lockscreen_choose_action_title">Välj åtgärd</string>
   <string name="lockscreen_none_target">Ingen</string>
@@ -33,14 +37,27 @@
   <string name="navbar_menu_big_button">Menyknapp</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
-  <string name="advanced_dev_option_wipe_app">Rensa data</string>
-  <string name="advanced_dev_option_force_stop">Tvingad avslutning</string>
+  <string name="advanced_dev_option_wipe_app">Rensa appdata</string>
+  <string name="advanced_dev_option_force_stop">Tvinga avslutning</string>
   <string name="advanced_dev_option_uninstall">Avinstallera</string>
+  <string name="accessibility_notification_brightness">Ljusstyrka</string>
   <string name="accessibility_quick_settings_profiles_off">Profiler av.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profiler har stängts av.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil ändrades till <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Initierar\u2026</string>
+  <string name="led_notification_title">Ljusinställningar</string>
+  <string name="led_notification_text">LED-ljus aktiverat av inställningar</string>
+  <string name="qs_tile_edit_header_instruction">Tryck och håll brickor för att arrangera om</string>
+  <string name="quick_settings_edit_label">Redigera brickor</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Kan inte radera Redigera-brickan</string>
+  <string name="qs_tiles_reset_confirmation">Återställ snabbinställningsbrickor till standardkonfiguration?</string>
+  <string name="quick_settings_tile_reset_to_default">Återställ till standardlayout</string>
+  <string name="quick_settings_title_header">Huvud</string>
+  <string name="quick_settings_title_tiles">Brickor</string>
+  <string name="quick_settings_title_show_weather">Visa väder</string>
+  <string name="quick_settings_title_show_brightness_slider">Visa Ljusstyrkereglaget</string>
+  <string name="quick_settings_title_enlarge_first_row">Förstora första raden</string>
   <string name="screen_pinning_description_no_navbar">Detta håller den synlig tills du frigör den. Tryck och håll nere Bakåt-knappen för att frigöra.</string>
   <string name="quick_settings_custom_tile_detail_title">Anpassad bricka</string>
   <string name="quick_settings_remove">Ta bort bricka</string>
@@ -49,32 +66,53 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Systemprofiler</string>
   <string name="quick_settings_profiles_off">Profiler inaktiverad</string>
+  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_battery_saver_label">Strömsparläge</string>
+  <string name="quick_settings_caffeine_label">Koffein</string>
   <string name="accessibility_quick_settings_sync_off">Synk av.</string>
   <string name="accessibility_quick_settings_sync_on">Synk på.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Synk inaktiverad.</string>
   <string name="accessibility_quick_settings_sync_changed_on">Synk aktiverad.</string>
   <string name="quick_settings_sync_label">Synk</string>
+  <string name="quick_settings_volume_panel_label">Volympanel</string>
   <string name="quick_settings_usb_tether_label">USB-tethering</string>
-  <string name="quick_settings_screen_timeout_detail_title">Skärmtidsgräns</string>
+  <string name="quick_settings_screen_timeout_detail_title">Timeout för skärm</string>
   <string name="quick_settings_lockscreen_label">Låsskärm</string>
-  <string name="quick_settings_ambient_display_label">Omgivande skärm</string>
+  <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_lockscreen_label_enforced">Tvingad låsskärm</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Inaktiverad av profil</string>
   <string name="accessibility_quick_settings_screen_timeout">Skärm-timeout: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Skärm-timeout ändrades till <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="qs_tile_performance">Batteriläge</string>
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Batteriläge: energisparläge.</string>
   <string name="accessibility_quick_settings_perf_profile_bal">Batteriläge: balanserat läge.</string>
   <string name="accessibility_quick_settings_perf_profile_perf">Batteriläge: prestandaläge.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Batteriläge: strömsparande läge.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Batteriläge: prestandaläge.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batteriläge ändrat till energisparläge.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Batteriläge ändrat till balanserat läge.</string>
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Batteriläge ändrat till prestandaläge.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Batteriläge ändrat till strömsparande läge.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Batteriläge ändrat till prestandaläge.</string>
+  <string name="quick_settings_performance_profile_detail_title">Batteriläge</string>
   <string name="accessibility_quick_settings_lock_screen_off">Låsskärm av.</string>
   <string name="accessibility_quick_settings_lock_screen_on">Låsskärm på.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">Låsskärm inaktiverad.</string>
   <string name="accessibility_quick_settings_lock_screen_changed_on">Låsskärm aktiverad.</string>
-  <string name="accessibility_quick_settings_ambient_display_off">Omgivande skärm av.</string>
-  <string name="accessibility_quick_settings_ambient_display_on">Omgivande skärm på.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Omgivande skärm avslagen.</string>
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Omgivande skärm påslagen.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Ambient display avslagen.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Ambient display påslagen.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display avslagen.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display påslagen.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up av.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up på.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up avslaget.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up påslaget.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Koffein av.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Koffein på.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Strömsparläge är inaktiverat.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Strömsparläge är aktiverat.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Strömsparläge inaktiverat.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Strömsparläge aktiverat.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dynamiska bricka</string>
   <string name="dynamic_qs_tile_next_alarm_label">Nästa alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME-väljare</string>
@@ -89,6 +127,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ändrad till dagläge.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ändrad till nattläge.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ändrad till utomhusläge.</string>
+  <string name="quick_settings_title_advanced_location">Tri-state placering</string>
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
   <string name="accessibility_quick_settings_location_gps_only">Platsrapportering: endast sensorläge.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Platsrapportering: högt precisionsläge.</string>
@@ -99,4 +138,9 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Platsrapportering ändrades till batterispararläge.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Platsrapportering ändrad till endast sensor.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Platsrapportering ändrad till hög noggrannhet.</string>
+  <string name="quick_settings_tiles_category_system">Systembrickor</string>
+  <string name="quick_settings_tiles_add_tiles">Lägg till en bricka</string>
+  <string name="hotspot_apm_message">Det går inte att ansluta till mobila nät när flygplansläge är aktiverat. Inaktivera flygplansläge och försök igen.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Ficklampan är på</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tryck för att stänga av</string>
 </resources>

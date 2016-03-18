@@ -2780,6 +2780,30 @@ public final class Settings {
         private static final Validator RINGTONE_VALIDATOR = sUriValidator;
 
         /**
+         * Persistent store for the SIM-2 ringtone URI.
+         * <p>
+         * If you need to play SIM-2 ringtone at any given time, it is recommended
+         * you give {@link #DEFAULT_RINGTONE_URI_2} to the media player.  It will resolve
+         * to the set default ringtone at the time of playing.
+         *
+         * @see #DEFAULT_RINGTONE_URI_2
+         * @hide
+         */
+        public static final String RINGTONE_2 = "ringtone_2";
+
+        /**
+         * Persistent store for the SIM-3 ringtone URI.
+         * <p>
+         * If you need to play SIM-3 ringtone at any given time, it is recommended
+         * you give {@link #DEFAULT_RINGTONE_URI_3} to the media player.  It will resolve
+         * to the set default ringtone at the time of playing.
+         *
+         * @see #DEFAULT_RINGTONE_URI_3
+         * @hide
+         */
+        public static final String RINGTONE_3 = "ringtone_3";
+
+        /**
          * A {@link Uri} that will point to the current default ringtone at any
          * given time.
          * <p>
@@ -2788,6 +2812,39 @@ public final class Settings {
          * FileNotFoundException.
          */
         public static final Uri DEFAULT_RINGTONE_URI = getUriFor(RINGTONE);
+
+        /**
+         * A {@link Uri} that will point to the current SIM-2 ringtone at any
+         * given time.
+         * <p>
+         * If the current default ringtone is in the DRM provider and the caller
+         * does not have permission, the exception will be a
+         * FileNotFoundException.
+         *
+         * @hide
+         */
+        public static final Uri DEFAULT_RINGTONE_URI_2 = getUriFor(RINGTONE_2);
+
+        /**
+         * A {@link Uri} that will point to the current SIM-3 ringtone at any
+         * given time.
+         * <p>
+         * If the current default ringtone is in the DRM provider and the caller
+         * does not have permission, the exception will be a
+         * FileNotFoundException.
+         *
+         * @hide
+         */
+        public static final Uri DEFAULT_RINGTONE_URI_3 = getUriFor(RINGTONE_3);
+
+        /**
+         * Maximum number of ringtones supported.
+         * <p>
+         * Maximum number of ringtones supported by settings. Increment this
+         * if a new URI needs to be added for ringtone.
+         * @hide
+         */
+        public static final int MAX_NUM_RINGTONES = 3;
 
         /**
          * Persistent store for the system-wide default notification sound.
@@ -6381,6 +6438,13 @@ public final class Settings {
         public static final String AIRPLANE_MODE_TOGGLEABLE_RADIOS = "airplane_mode_toggleable_radios";
 
         /**
+         * A Long representing a bitmap of profiles that should be disabled when bluetooth starts.
+         * See {@link android.bluetooth.BluetoothProfile}.
+         * {@hide}
+         */
+        public static final String BLUETOOTH_DISABLED_PROFILES = "bluetooth_disabled_profiles";
+
+        /**
          * The policy for deciding when Wi-Fi should go to sleep (which will in
          * turn switch to using the mobile data as an Internet connection).
          * <p>
@@ -7636,10 +7700,12 @@ public final class Settings {
          * The following keys are supported:
          *
          * <pre>
-         * idle_duration        (long)
+         * idle_duration2       (long)
          * wallclock_threshold  (long)
          * parole_interval      (long)
          * parole_duration      (long)
+         *
+         * idle_duration        (long) // This is deprecated and used to circumvent b/26355386.
          * </pre>
          *
          * <p>
@@ -8085,6 +8151,13 @@ public final class Settings {
         public static final String LTE_SERVICE_FORCED = "lte_service_forced";
 
         /**
+         * Whether to ignore the representation of outgoing calls set by the network.
+         *
+         * @hide
+         */
+         public static final String CONNECTED_LINE_IDENTIFICATION = "connected_line_identification";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -8510,6 +8583,13 @@ public final class Settings {
          * @hide
          */
         public static final String CONTACT_METADATA_SYNC = "contact_metadata_sync";
+
+        /**
+         * Whether to enable cellular on boot.
+         * The value 1 - enable, 0 - disable
+         * @hide
+         */
+        public static final String ENABLE_CELLULAR_ON_BOOT = "enable_cellular_on_boot";
     }
 
     /**

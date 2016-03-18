@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Umožňuje aplikácii čítať informácie o telefónnych číslach, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
   <string name="permlab_changePhoneBlacklist">zmeniť čiernu listinu telefónu</string>
   <string name="permdesc_changePhoneBlacklist">Umožňuje aplikácii zmeniť telefónne čísla, ktoré sú pre prichádzajúce hovory a správy zablokované.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">nastaviť tapetu obrazovky uzamknutia</string>
   <string name="permdesc_setKeyguardWallpaper">Umožňuje aplikácii zmeniť tapetu obrazovky uzamknutia.</string>
   <string name="global_action_reboot">Reštartovať</string>
@@ -50,18 +49,8 @@
   <string name="adb_active_custom_tile_both">USB a sieť</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Sieť</string>
-  <string name="permlab_accessThemeService">prístup k službe tém</string>
   <string name="permlab_interceptPackageLaunch">zachytiť spustenie aplikácie</string>
-  <string name="permdesc_accessThemeService">Umožňuje aplikácii prístup k službe na správu tém. Toto povolenie nie je bežné pre štandardné aplikácie.</string>
-  <string name="permlab_readThemes">čítať informácie vašej témy</string>
-  <string name="permdesc_readThemesDesc">Umožňuje aplikácii čítať vaše témy a určiť, ktorú tému ste použili.</string>
-  <string name="permlab_writeThemes">upraviť vaše témy</string>
-  <string name="permdesc_writeThemesDesc">Umožňuje aplikácii vkladať nové témy a upraviť tému, ktorú ste použili.</string>
-  <string name="theme_install_error_title">Inštalácia témy zlyhala</string>
-  <string name="theme_install_error_message">Nepodarilo sa nainštalovať tému %s</string>
   <string name="stylus_app_not_installed">Aplikácia %s nie je nainštalovaná</string>
-  <string name="theme_reset_notification_title">Obnoviť tému</string>
-  <string name="theme_reset_notification_body">Systémová téma sa obnovila z dôvodu viacerých pádov aplikácií.</string>
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žiadna</string>
   <string name="subscription_change_disabled_wifi_ap">Wi-Fi hotspot bol zakázaný kvôli prepnutiu karty SIM</string>
@@ -108,7 +97,6 @@
   <string name="app_ops_start_at_bootup">spustiť pri štaťte</string>
   <string name="app_ops_toast_window">zobraziť vyskakovacie oznámenia</string>
   <string name="app_ops_toggle_bluetooth">prepnúť bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">prepnúť mobilné dáta</string>
   <string name="app_ops_toggle_nfc">prepnúť NFC</string>
   <string name="app_ops_use_alarm_volume">ovládať hlasitosť budíka</string>
   <string name="app_ops_use_audio_focus">ovládať zvukové zdroje</string>

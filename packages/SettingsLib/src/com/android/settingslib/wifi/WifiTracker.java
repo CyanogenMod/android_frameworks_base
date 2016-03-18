@@ -180,7 +180,9 @@ public class WifiTracker {
         if (mWifiManager.isWifiEnabled()) {
             mScanner.resume();
         }
-        mWorkHandler.sendEmptyMessage(WorkHandler.MSG_UPDATE_ACCESS_POINTS);
+        if (!mWorkHandler.hasMessages(WorkHandler.MSG_UPDATE_ACCESS_POINTS)) {
+            mWorkHandler.sendEmptyMessage(WorkHandler.MSG_UPDATE_ACCESS_POINTS);
+        }
     }
 
     /**
@@ -319,7 +321,8 @@ public class WifiTracker {
                 if (config.selfAdded && config.numAssociation == 0) {
                     continue;
                 }
-                AccessPoint accessPoint = new AccessPoint(mContext, config);
+                AccessPoint accessPoint = getCachedOrCreate(config, cachedAccessPoints);
+                accessPoint.foundInScanResult = false;
                 if (mLastInfo != null && mLastNetworkInfo != null) {
                     if (config.isPasspoint() == false) {
                         accessPoint.update(connectionConfig, mLastInfo, mLastNetworkInfo);
@@ -352,6 +355,7 @@ public class WifiTracker {
                 boolean found = false;
                 for (AccessPoint accessPoint : apMap.getAll(result.SSID)) {
                     if (accessPoint.update(result)) {
+                        accessPoint.foundInScanResult = true;
                         found = true;
                         break;
                     }
@@ -505,7 +509,9 @@ public class WifiTracker {
             } else if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action) ||
                     WifiManager.CONFIGURED_NETWORKS_CHANGED_ACTION.equals(action) ||
                     WifiManager.LINK_CONFIGURATION_CHANGED_ACTION.equals(action)) {
-                mWorkHandler.sendEmptyMessage(WorkHandler.MSG_UPDATE_ACCESS_POINTS);
+                if (!mWorkHandler.hasMessages(WorkHandler.MSG_UPDATE_ACCESS_POINTS)) {
+                    mWorkHandler.sendEmptyMessage(WorkHandler.MSG_UPDATE_ACCESS_POINTS);
+                }
             } else if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(action)) {
                 NetworkInfo info = (NetworkInfo) intent.getParcelableExtra(
                         WifiManager.EXTRA_NETWORK_INFO);
@@ -513,7 +519,9 @@ public class WifiTracker {
 
                 mMainHandler.sendEmptyMessage(MainHandler.MSG_CONNECTED_CHANGED);
 
-                mWorkHandler.sendEmptyMessage(WorkHandler.MSG_UPDATE_ACCESS_POINTS);
+                if (!mWorkHandler.hasMessages(WorkHandler.MSG_UPDATE_ACCESS_POINTS)) {
+                    mWorkHandler.sendEmptyMessage(WorkHandler.MSG_UPDATE_ACCESS_POINTS);
+                }
                 mWorkHandler.obtainMessage(WorkHandler.MSG_UPDATE_NETWORK_INFO, info)
                         .sendToTarget();
             } else if (WifiManager.RSSI_CHANGED_ACTION.equals(action)) {

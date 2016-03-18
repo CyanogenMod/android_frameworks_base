@@ -1034,6 +1034,16 @@ void AndroidRuntime::start(const char* className, const Vector<String8>& options
         setenv("ANDROID_ROOT", rootDir, 1);
     }
 
+    const char* prebundledDir = getenv("PREBUNDLED_ROOT");
+    if (prebundledDir == NULL) {
+        if (hasDir("/system/bundled-app")) {
+            prebundledDir = "/system/bundled-app";
+        } else {
+            prebundledDir = "/vendor/bundled-app";
+        }
+        setenv("PREBUNDLED_ROOT", prebundledDir, 1);
+    }
+
     //const char* kernelHack = getenv("LD_ASSUME_KERNEL");
     //ALOGD("Found LD_ASSUME_KERNEL='%s'\n", kernelHack);
 

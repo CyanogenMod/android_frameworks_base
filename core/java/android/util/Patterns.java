@@ -125,15 +125,35 @@ public class Patterns {
             + "|[1-9][0-9]|[0-9]))");
 
     /**
+     * Match the characters without containing chinese characters
+     * @hide
+     */
+    private static final String GOOD_IRI_HOST_CHAR =
+        "a-zA-Z0-9\u00A0-\u2FFF\u3040-\u4DFF\u9FA6-\uD7FF"
+        + "\uF900-\uFDCF\uFDF0-\uFEFF";
+
+    /**
      * RFC 1035 Section 2.3.4 limits the labels to a maximum 63 octets.
      */
-    private static final String IRI
-        = "[" + GOOD_IRI_CHAR + "]([" + GOOD_IRI_CHAR + "\\-]{0,61}[" + GOOD_IRI_CHAR + "]){0,1}";
+    private static final String IRI =
+        "[" + GOOD_IRI_HOST_CHAR + "]([" + GOOD_IRI_HOST_CHAR + "\\-]{0,61}["
+        + GOOD_IRI_HOST_CHAR + "]){0,1}";
 
     private static final String GOOD_GTLD_CHAR =
-        "a-zA-Z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF";
+        "a-zA-Z\u00A0-\u2FFF\u3040-\u4DFF\u9FA6-\uD7FF"
+        + "\uF900-\uFDCF\uFDF0-\uFEFF";
     private static final String GTLD = "[" + GOOD_GTLD_CHAR + "]{2,63}";
     private static final String HOST_NAME = "(" + IRI + "\\.)+" + GTLD;
+    // Halfwidth and fullwidth forms
+    private static final String HALF_FULL_WIDTH_CHAR = "\uFF00-\uFFEF";
+    // Symbols and punctuation
+    private static final String SYMBOLS_PUNCTUATION_CHAR = "\u3000-\u303F";
+    // Chinese characters
+    private static final String CHINESE_CHAR = "\u4E00-\u9FA5";
+    // Forbidden characters, should remove from URL,
+    private static final String FORBIDDEN_CHAR =
+        "[" + SYMBOLS_PUNCTUATION_CHAR + CHINESE_CHAR
+        + HALF_FULL_WIDTH_CHAR + "]";
 
     public static final Pattern DOMAIN_NAME
         = Pattern.compile("(" + HOST_NAME + "|" + IP_ADDRESS + ")");
@@ -149,11 +169,15 @@ public class Patterns {
         + "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?"
         + "(?:" + DOMAIN_NAME + ")"
         + "(?:\\:\\d{1,5})?)" // plus option port number
-        + "(\\/(?:(?:[" + GOOD_IRI_CHAR + "\\;\\/\\?\\:\\@\\&\\=\\#\\~"  // plus option query params
-        + "\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?"
-        + "(?:\\b|$)"); // and finally, a word boundary or end of
-                        // input.  This is to stop foo.sure from
-                        // matching as foo.su
+        + "(\\/(?:(?:[" + GOOD_IRI_HOST_CHAR
+        + "\\;\\/\\?\\:\\@\\&\\=\\#\\~"  // plus option query params
+        + "\\-\\.\\+\\!\\*\\'\\(\\)\\_])|(?:\\,[" + GOOD_IRI_HOST_CHAR
+        + "])|(?:\\%[a-fA-F0-9]{2}))*)?"
+        + "(?:(?=" + FORBIDDEN_CHAR
+        + ")|\\b|$)");
+        // and finally, a word boundary or end of input. This is to stop
+        // foo.sure from matching as foo.su
+        // also should remove forbidden characters from end of URL.
 
     public static final Pattern EMAIL_ADDRESS
         = Pattern.compile(

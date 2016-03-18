@@ -56,7 +56,7 @@ public class Environment {
     private static final File DIR_ANDROID_STORAGE = getDirectory(ENV_ANDROID_STORAGE, "/storage");
     private static final File DIR_OEM_ROOT = getDirectory(ENV_OEM_ROOT, "/oem");
     private static final File DIR_VENDOR_ROOT = getDirectory(ENV_VENDOR_ROOT, "/vendor");
-    private static final File DIR_PREBUNDLED_ROOT = getDirectory(ENV_PREBUNDLED_ROOT, "/vendor/bundled-app");
+    private static final File DIR_PREBUNDLED_ROOT = getDirectory(ENV_PREBUNDLED_ROOT, "/bundled-app");
 
     private static final String SYSTEM_PROPERTY_EFS_ENABLED = "persist.security.efs.enabled";
 

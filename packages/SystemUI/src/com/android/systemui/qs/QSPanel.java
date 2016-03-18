@@ -82,7 +82,7 @@ public class QSPanel extends ViewGroup {
     protected QSTileHost mHost;
 
     protected QSFooter mFooter;
-    private boolean mGridContentVisible = true;
+    protected boolean mGridContentVisible = true;
 
     public QSPanel(Context context) {
         this(context, null);
@@ -281,6 +281,15 @@ public class QSPanel extends ViewGroup {
         v.setVisibility(visibility);
     }
 
+    protected void setTileEnabled(View v, boolean enabled) {
+        mHandler.obtainMessage(H.SET_TILE_ENABLED, enabled ? 1 : 0, 0, v).sendToTarget();
+    }
+
+    private void handleSetTileEnabled(View v, boolean enabled) {
+        if (enabled == v.isEnabled()) return;
+        v.setEnabled(enabled);
+    }
+
     public void setTiles(Collection<QSTile<?>> tiles) {
         for (TileRecord record : mRecords) {
             removeView(record.tileView);
@@ -454,7 +463,7 @@ public class QSPanel extends ViewGroup {
         }
     }
 
-    private void setGridContentVisibility(boolean visible) {
+    protected void setGridContentVisibility(boolean visible) {
         int newVis = visible ? VISIBLE : INVISIBLE;
         for (int i = 0; i < mRecords.size(); i++) {
             TileRecord tileRecord = mRecords.get(i);
@@ -606,12 +615,15 @@ public class QSPanel extends ViewGroup {
     private class H extends Handler {
         private static final int SHOW_DETAIL = 1;
         private static final int SET_TILE_VISIBILITY = 2;
+        private static final int SET_TILE_ENABLED = 3;
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == SHOW_DETAIL) {
                 handleShowDetail((Record)msg.obj, msg.arg1 != 0);
             } else if (msg.what == SET_TILE_VISIBILITY) {
                 handleSetTileVisibility((View)msg.obj, msg.arg1);
+            } else if (msg.what == SET_TILE_ENABLED) {
+                handleSetTileEnabled((View)msg.obj, msg.arg1 == 1);
             }
         }
     }

@@ -32,7 +32,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 
-import com.android.internal.logging.MetricsConstants;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
@@ -42,12 +41,13 @@ import cyanogenmod.app.Profile;
 import cyanogenmod.app.ProfileManager;
 import cyanogenmod.app.StatusBarPanelCustomTile;
 import cyanogenmod.providers.CMSettings;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ProfilesTile extends QSTile<QSTile.State> {
+public class ProfilesTile extends QSTile<QSTile.State> implements KeyguardMonitor.Callback {
 
     private static final Intent PROFILES_SETTINGS =
             new Intent("android.settings.PROFILES_SETTINGS");
@@ -57,11 +57,19 @@ public class ProfilesTile extends QSTile<QSTile.State> {
     private ProfileManager mProfileManager;
     private QSDetailItemsList mDetails;
     private ProfileAdapter mAdapter;
+    private KeyguardMonitor mKeyguardMonitor;
 
     public ProfilesTile(Host host) {
         super(host);
         mProfileManager = ProfileManager.getInstance(mContext);
         mObserver = new ProfilesObserver(mHandler);
+        mKeyguardMonitor = host.getKeyguardMonitor();
+        mKeyguardMonitor.addCallback(this);
+    }
+
+    @Override
+    protected void handleDestroy() {
+        mKeyguardMonitor.removeCallback(this);
     }
 
     @Override
@@ -82,6 +90,10 @@ public class ProfilesTile extends QSTile<QSTile.State> {
     @Override
     protected void handleUpdateState(State state, Object arg) {
         state.visible = true;
+
+
+
+        state.enabled = !mKeyguardMonitor.isShowing() || !mKeyguardMonitor.isSecure();
         if (profilesEnabled()) {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_profiles_on);
             state.label = mProfileManager.getActiveProfile().getName();
@@ -112,7 +124,7 @@ public class ProfilesTile extends QSTile<QSTile.State> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsConstants.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_PROFILES;
     }
 
     @Override
@@ -125,6 +137,7 @@ public class ProfilesTile extends QSTile<QSTile.State> {
             filter.addAction(ProfileManager.INTENT_ACTION_PROFILE_SELECTED);
             filter.addAction(ProfileManager.INTENT_ACTION_PROFILE_UPDATED);
             mContext.registerReceiver(mReceiver, filter);
+            refreshState();
         } else {
             mObserver.endObserving();
             mContext.unregisterReceiver(mReceiver);
@@ -134,6 +147,11 @@ public class ProfilesTile extends QSTile<QSTile.State> {
     @Override
     public DetailAdapter getDetailAdapter() {
         return new ProfileDetailAdapter();
+    }
+
+    @Override
+    public void onKeyguardChanged() {
+        refreshState();
     }
 
     private class ProfileAdapter extends ArrayAdapter<Profile> {
@@ -182,7 +200,7 @@ public class ProfilesTile extends QSTile<QSTile.State> {
 
         @Override
         public int getMetricsCategory() {
-            return MetricsConstants.DONT_TRACK_ME_BRO;
+            return CMMetricsLogger.TILE_PROFILES_DETAIL;
         }
 
         @Override

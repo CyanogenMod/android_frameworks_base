@@ -1605,6 +1605,23 @@ public class Intent implements Parcelable, Cloneable {
             = "android.intent.action.GET_PERMISSIONS_COUNT";
 
     /**
+     * Broadcast action that requests list of all apps that have runtime permissions.  It will
+     * respond to the request by sending a broadcast with action defined by
+     * {@link #EXTRA_GET_PERMISSIONS_PACKAGES_RESPONSE_INTENT}. The response will contain
+     * {@link #EXTRA_GET_PERMISSIONS_APP_LIST_RESULT}, as well as
+     * {@link #EXTRA_GET_PERMISSIONS_APP_LABEL_LIST_RESULT}, with contents described below or
+     * a null upon failure.
+     *
+     * <p>{@link #EXTRA_GET_PERMISSIONS_APP_LIST_RESULT} will contain a list of package names of
+     * apps that have runtime permissions. {@link #EXTRA_GET_PERMISSIONS_APP_LABEL_LIST_RESULT}
+     * will contain the list of app labels corresponding ot the apps in the first list.
+     *
+     * @hide
+     */
+    public static final String ACTION_GET_PERMISSIONS_PACKAGES
+            = "android.intent.action.GET_PERMISSIONS_PACKAGES";
+
+    /**
      * Extra included in response to {@link #ACTION_GET_PERMISSIONS_COUNT}.
      * @hide
      */
@@ -1619,11 +1636,40 @@ public class Intent implements Parcelable, Cloneable {
             = "android.intent.extra.GET_PERMISSIONS_GROUP_LIST_RESULT";
 
     /**
+     * String list of apps that have one or more runtime permissions.
+     * @hide
+     */
+    public static final String EXTRA_GET_PERMISSIONS_APP_LIST_RESULT
+            = "android.intent.extra.GET_PERMISSIONS_APP_LIST_RESULT";
+
+    /**
+     * String list of app labels for apps that have one or more runtime permissions.
+     * @hide
+     */
+    public static final String EXTRA_GET_PERMISSIONS_APP_LABEL_LIST_RESULT
+            = "android.intent.extra.GET_PERMISSIONS_APP_LABEL_LIST_RESULT";
+
+    /**
+     * Boolean list describing if the app is a system app for apps that have one or more runtime
+     * permissions.
+     * @hide
+     */
+    public static final String EXTRA_GET_PERMISSIONS_IS_SYSTEM_APP_LIST_RESULT
+            = "android.intent.extra.GET_PERMISSIONS_IS_SYSTEM_APP_LIST_RESULT";
+
+    /**
      * Required extra to be sent with {@link #ACTION_GET_PERMISSIONS_COUNT} broadcasts.
      * @hide
      */
     public static final String EXTRA_GET_PERMISSIONS_RESPONSE_INTENT
             = "android.intent.extra.GET_PERMISSIONS_RESONSE_INTENT";
+
+    /**
+     * Required extra to be sent with {@link #ACTION_GET_PERMISSIONS_PACKAGES} broadcasts.
+     * @hide
+     */
+    public static final String EXTRA_GET_PERMISSIONS_PACKAGES_RESPONSE_INTENT
+            = "android.intent.extra.GET_PERMISSIONS_PACKAGES_RESONSE_INTENT";
 
     /**
      * Activity action: Launch UI to manage which apps have a given permission.
@@ -2881,21 +2927,6 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.action.QUICK_CLOCK";
 
     /**
-     * Broadcast Action: Indicate that unrecoverable error happened during app launch.
-     * Could indicate that curently applied theme is malicious.
-     * @hide
-     */
-    public static final String ACTION_APP_FAILURE =
-            "com.tmobile.intent.action.APP_FAILURE";
-
-    /**
-     * Broadcast Action: Request to reset the unrecoverable errors count to 0.
-     * @hide
-     */
-    public static final String ACTION_APP_FAILURE_RESET =
-            "com.tmobile.intent.action.APP_FAILURE_RESET";
-
-    /**
      * Activity Action: Shows the brightness setting dialog.
      * @hide
      */
@@ -3081,6 +3112,39 @@ public class Intent implements Parcelable, Cloneable {
     public static final String ACTION_DOZE_PULSE_STARTING =
             "android.intent.action.DOZE_PULSE_STARTING";
 
+    /**
+     * Broadcast action: reports when a new thermal event has been reached. When the device
+     * is reaching its maximum temperatue, the thermal level reported
+     * {@hide}
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_THERMAL_EVENT = "android.intent.action.THERMAL_EVENT";
+
+    /** {@hide} */
+    public static final String EXTRA_THERMAL_STATE = "android.intent.extra.THERMAL_STATE";
+
+    /**
+     * Thermal state when the device is normal. This state is sent in the
+     * {@link ACTION_THERMAL_EVENT} broadcast as {@link EXTRA_THERMAL_STATE}.
+     * {@hide}
+     */
+    public static final int EXTRA_THERMAL_STATE_NORMAL = 0;
+
+    /**
+     * Thermal state where the device is approaching its maximum threshold. This state is sent in
+     * the {@link ACTION_THERMAL_EVENT} broadcast as {@link EXTRA_THERMAL_STATE}.
+     * {@hide}
+     */
+    public static final int EXTRA_THERMAL_STATE_WARNING = 1;
+
+    /**
+     * Thermal state where the device has reached its maximum threshold. This state is sent in the
+     * {@link ACTION_THERMAL_EVENT} broadcast as {@link EXTRA_THERMAL_STATE}.
+     * {@hide}
+     */
+    public static final int EXTRA_THERMAL_STATE_EXCEEDED = 2;
+
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
@@ -3183,6 +3247,13 @@ public class Intent implements Parcelable, Cloneable {
     @SdkConstant(SdkConstantType.INTENT_CATEGORY)
     public static final String CATEGORY_HOME = "android.intent.category.HOME";
     /**
+     * This is the home activity that is displayed when the device is finished setting up and ready
+     * for use.
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.INTENT_CATEGORY)
+    public static final String CATEGORY_HOME_MAIN = "android.intent.category.HOME_MAIN";
+    /**
      * This is the setup wizard activity, that is the first activity that is displayed
      * when the user sets up the device for the first time.
      * @hide
@@ -3281,14 +3352,6 @@ public class Intent implements Parcelable, Cloneable {
      */
     @SdkConstant(SdkConstantType.INTENT_CATEGORY)
     public static final String CATEGORY_CAR_MODE = "android.intent.category.CAR_MODE";
-
-    /**
-     * Used to indicate that a theme package has been installed or un-installed.
-     *
-     * @hide
-     */
-    public static final String CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE =
-            "com.tmobile.intent.category.THEME_PACKAGE_INSTALL_STATE_CHANGE";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

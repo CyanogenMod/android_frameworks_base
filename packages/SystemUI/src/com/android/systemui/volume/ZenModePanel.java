@@ -70,9 +70,7 @@ public class ZenModePanel extends LinearLayout {
     private static final int SECONDS_MS = 1000;
     private static final int MINUTES_MS = 60 * SECONDS_MS;
 
-    private static final int[] MINUTE_BUCKETS = DEBUG
-            ? new int[] { 0, 1, 2, 5, 15, 30, 45, 60, 120, 180, 240, 480 }
-            : ZenModeConfig.MINUTE_BUCKETS;
+    private static final int[] MINUTE_BUCKETS = ZenModeConfig.MINUTE_BUCKETS;
     private static final int MIN_BUCKET_MINUTES = MINUTE_BUCKETS[0];
     private static final int MAX_BUCKET_MINUTES = MINUTE_BUCKETS[MINUTE_BUCKETS.length - 1];
     private static final int DEFAULT_BUCKET_INDEX = Arrays.binarySearch(MINUTE_BUCKETS, 60);
@@ -421,8 +419,13 @@ public class ZenModePanel extends LinearLayout {
             mZenIntroductionCustomize.setVisibility(zenImportant ? VISIBLE : GONE);
         }
         final String warning = computeAlarmWarningText(zenNone);
-        mZenAlarmWarning.setVisibility(warning != null ? VISIBLE : GONE);
+        final int oldVis = mZenAlarmWarning.getVisibility();
+        final int newVis = warning != null ? VISIBLE : GONE;
+        mZenAlarmWarning.setVisibility(newVis);
         mZenAlarmWarning.setText(warning);
+        if (newVis != oldVis) {
+            requestLayout();
+        }
     }
 
     private String computeAlarmWarningText(boolean zenNone) {
@@ -603,13 +606,6 @@ public class ZenModePanel extends LinearLayout {
         if (DEBUG) Log.d(mTag, "bind i=" + mZenConditions.indexOfChild(row) + " first=" + first
                 + " condition=" + conditionId);
         tag.rb.setEnabled(enabled);
-        final boolean checked = (mSessionExitCondition != null
-                    || mAttachedZen != Global.ZEN_MODE_OFF)
-                && (sameConditionId(mSessionExitCondition, tag.condition));
-        if (checked != tag.rb.isChecked()) {
-            if (DEBUG) Log.d(mTag, "bind checked=" + checked + " condition=" + conditionId);
-            tag.rb.setChecked(checked);
-        }
         tag.rb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

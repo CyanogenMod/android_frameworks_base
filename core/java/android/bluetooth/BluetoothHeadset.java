@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -302,7 +303,7 @@ public final class BluetoothHeadset implements BluetoothProfile {
         ComponentName comp = intent.resolveSystemService(mContext.getPackageManager(), 0);
         intent.setComponent(comp);
         if (comp == null || !mContext.bindServiceAsUser(intent, mConnection, 0,
-                android.os.Process.myUserHandle())) {
+                UserHandle.CURRENT_OR_SELF)) {
             Log.e(TAG, "Could not bind to Bluetooth Headset Service with " + intent);
             return false;
         }
@@ -706,6 +707,48 @@ public final class BluetoothHeadset implements BluetoothProfile {
             if (DBG) Log.d(TAG, Log.getStackTraceString(new Throwable()));
         }
         return BluetoothHeadset.STATE_AUDIO_DISCONNECTED;
+    }
+
+    /**
+     * Sets whether audio routing is allowed. When set to {@code false}, the AG will not route any
+     * audio to the HF unless explicitly told to.
+     * This method should be used in cases where the SCO channel is shared between multiple profiles
+     * and must be delegated by a source knowledgeable
+     * Note: This is an internal function and shouldn't be exposed
+     *
+     * @param allowed {@code true} if the profile can reroute audio, {@code false} otherwise.
+     *
+     * @hide
+     */
+    public void setAudioRouteAllowed(boolean allowed) {
+        if (VDBG) log("setAudioRouteAllowed");
+        if (mService != null && isEnabled()) {
+            try {
+                mService.setAudioRouteAllowed(allowed);
+            } catch (RemoteException e) {Log.e(TAG, e.toString());}
+        } else {
+            Log.w(TAG, "Proxy not attached to service");
+            if (DBG) Log.d(TAG, Log.getStackTraceString(new Throwable()));
+        }
+    }
+
+    /**
+     * Returns whether audio routing is allowed. see {@link #setAudioRouteAllowed(boolean)}.
+     * Note: This is an internal function and shouldn't be exposed
+     *
+     * @hide
+     */
+    public boolean getAudioRouteAllowed() {
+        if (VDBG) log("getAudioRouteAllowed");
+        if (mService != null && isEnabled()) {
+            try {
+                return mService.getAudioRouteAllowed();
+            } catch (RemoteException e) {Log.e(TAG, e.toString());}
+        } else {
+            Log.w(TAG, "Proxy not attached to service");
+            if (DBG) Log.d(TAG, Log.getStackTraceString(new Throwable()));
+        }
+        return false;
     }
 
     /**

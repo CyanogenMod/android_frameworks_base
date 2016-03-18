@@ -22,4 +22,5 @@
     <item quantity="one">Entrez le code PIN de la carte SIM, il vous reste <xliff:g id="number">%d</xliff:g> tentative avant d\'avoir à contacter votre opérateur pour déverrouiller votre appareil.</item>
     <item quantity="other">Entrez le code PIN de la carte SIM, il vous reste <xliff:g id="number">%d</xliff:g> tentatives.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Erreur : code entré trop court</string>
 </resources>

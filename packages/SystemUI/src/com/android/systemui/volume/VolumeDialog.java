@@ -31,6 +31,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -129,6 +130,7 @@ public class VolumeDialog {
     private boolean mPendingStateChanged;
     private boolean mPendingRecheckAll;
     private long mCollapseTime;
+    private int mLastActiveStream;
 
     public VolumeDialog(Context context, int windowType, VolumeDialogController controller,
                         ZenModeController zenModeController, Callback callback) {
@@ -164,7 +166,7 @@ public class VolumeDialog {
         window.setAttributes(lp);
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
-        mActiveSliderTint = loadColorStateList(R.color.system_accent_color);
+        mActiveSliderTint = loadColorStateList(R.color.volume_slider_active);
         mInactiveSliderTint = loadColorStateList(R.color.volume_slider_inactive);
         mDialog.setContentView(R.layout.volume_dialog);
         mDialogView = (ViewGroup) mDialog.findViewById(R.id.volume_dialog);
@@ -193,7 +195,7 @@ public class VolumeDialog {
                 });
 
         addRow(AudioManager.STREAM_RING,
-                R.drawable.ic_ringer_audible, R.drawable.ic_volume_ringer_mute, true);
+                R.drawable.ic_volume_ringer, R.drawable.ic_volume_ringer_mute, true);
         addRow(AudioManager.STREAM_MUSIC,
                 R.drawable.ic_volume_media, R.drawable.ic_volume_media_mute, true);
         addRow(AudioManager.STREAM_ALARM,
@@ -274,10 +276,14 @@ public class VolumeDialog {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                final boolean moved = oldLeft != left || oldTop != top;
+                final boolean moved = mLastActiveStream != mActiveStream ||
+                        oldLeft != left || oldTop != top;
                 if (D.BUG) Log.d(TAG, "onLayoutChange moved=" + moved
                         + " old=" + new Rect(oldLeft, oldTop, oldRight, oldBottom).toShortString()
-                        + " new=" + new Rect(left,top,right,bottom).toShortString());
+                        + "," + mLastActiveStream
+                        + " new=" + new Rect(left,top,right,bottom).toShortString()
+                        + "," + mActiveStream);
+                mLastActiveStream = mActiveStream;
                 if (moved) {
                     for (int i = 0; i < mDialogContentView.getChildCount(); i++) {
                         final View c = mDialogContentView.getChildAt(i);
@@ -363,6 +369,8 @@ public class VolumeDialog {
         row.header = (TextView) row.view.findViewById(R.id.volume_row_header);
         mSpTexts.add(row.header);
         row.slider = (SeekBar) row.view.findViewById(R.id.volume_row_slider);
+        row.slider.setProgressTintMode(PorterDuff.Mode.SRC_ATOP);
+        row.slider.setThumbTintMode(PorterDuff.Mode.SRC_ATOP);
         row.slider.setOnSeekBarChangeListener(new VolumeSeekBarChangeListener(row));
 
         // forward events above the slider into the slider
@@ -649,9 +657,9 @@ public class VolumeDialog {
                 removeRow(notificationRow);
             }
         } else if (!mState.linkedNotification) {
-            // TODO get icon for mute state
             addRow(AudioManager.STREAM_NOTIFICATION,
-                    R.drawable.ic_notification_audible, R.drawable.ic_notification_audible, true);
+                    R.drawable.ic_volume_notification, R.drawable.ic_volume_notification_mute,
+                    true);
         }
     }
 
@@ -956,6 +964,12 @@ public class VolumeDialog {
         }
     };
 
+    public void cleanup() {
+        mController.removeCallback(mControllerCallbackH);
+        mZenFooter.cleanup();
+        mAccessibility.cleanup();
+    }
+
     private final class H extends Handler {
         private static final int SHOW = 1;
         private static final int DISMISS = 2;
@@ -1078,26 +1092,7 @@ public class VolumeDialog {
 
         public void init() {
             mMgr = (AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
-            mDialogView.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-                @Override
-                public void onViewDetachedFromWindow(View v) {
-                    if (D.BUG) Log.d(TAG, "onViewDetachedFromWindow");
-                    // noop
-                }
-
-                @Override
-                public void onViewAttachedToWindow(View v) {
-                    if (D.BUG) Log.d(TAG, "onViewAttachedToWindow");
-                    updateFeedbackEnabled();
-                }
-            });
-            mDialogView.setAccessibilityDelegate(this);
-            mMgr.addAccessibilityStateChangeListener(new AccessibilityStateChangeListener() {
-                @Override
-                public void onAccessibilityStateChanged(boolean enabled) {
-                    updateFeedbackEnabled();
-                }
-            });
+            mDialogView.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
             updateFeedbackEnabled();
         }
 
@@ -1106,6 +1101,10 @@ public class VolumeDialog {
                                                        AccessibilityEvent event) {
             rescheduleTimeoutH();
             return super.onRequestSendAccessibilityEvent(host, child, event);
+        }
+
+        public void cleanup() {
+            mDialogView.removeOnAttachStateChangeListener(mOnAttachStateChangeListener);
         }
 
         private void updateFeedbackEnabled() {
@@ -1123,6 +1122,21 @@ public class VolumeDialog {
             }
             return false;
         }
+
+        private OnAttachStateChangeListener mOnAttachStateChangeListener =
+                new OnAttachStateChangeListener() {
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                if (D.BUG) Log.d(TAG, "onViewDetachedFromWindow");
+                // noop
+            }
+
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                if (D.BUG) Log.d(TAG, "onViewAttachedToWindow");
+                updateFeedbackEnabled();
+            }
+        };
     }
 
     private static class VolumeRow {

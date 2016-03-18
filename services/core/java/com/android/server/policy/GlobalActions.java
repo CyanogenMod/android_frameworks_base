@@ -22,12 +22,14 @@ import com.android.internal.app.AlertController.AlertParams;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.R;
+import com.android.internal.util.UserIcons;
 import com.android.internal.widget.LockPatternUtils;
 
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.INotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -35,10 +37,17 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ThemeUtils;
 import android.content.pm.UserInfo;
 import android.content.ServiceConnection;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.Manifest;
 import android.media.AudioManager;
@@ -58,6 +67,7 @@ import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.provider.Settings.Global;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
 import android.telephony.PhoneStateListener;
@@ -84,11 +94,14 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import cyanogenmod.providers.CMSettings;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.cyanogenmod.internal.util.ThemeUtils;
 
 import static com.android.internal.util.cm.PowerMenuConstants.*;
 
@@ -162,6 +175,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
         mShowSilentToggle = SHOW_SILENT_TOGGLE && !mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_useFixedVolume);
+
+        // Set the initial status of airplane mode toggle
+        mAirplaneState = getUpdatedAirplaneToggleState();
 
         updatePowerMenuActions();
     }
@@ -612,16 +628,24 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         if (um.isUserSwitcherEnabled()) {
             List<UserInfo> users = um.getUsers();
             UserInfo currentUser = getCurrentUser();
+            final int avatarSize = mContext.getResources().getDimensionPixelSize(
+                    com.android.internal.R.dimen.global_actions_avatar_size);
             for (final UserInfo user : users) {
                 if (user.supportsSwitchTo()) {
                     boolean isCurrentUser = currentUser == null
                             ? user.id == 0 : (currentUser.id == user.id);
-                    Drawable icon = user.iconPath != null ? Drawable.createFromPath(user.iconPath)
-                            : null;
+                    Drawable avatar = null;
+                    Bitmap rawAvatar = um.getUserIcon(user.id);
+                    if (rawAvatar == null) {
+                        rawAvatar = UserIcons.convertToBitmap(UserIcons.getDefaultUserIcon(
+                                user.isGuest() ? UserHandle.USER_NULL : user.id, /*light=*/ false));
+                    }
+                    avatar = new BitmapDrawable(mContext.getResources(),
+                            createCircularClip(rawAvatar, avatarSize, avatarSize));
+
                     SinglePressAction switchToUser = new SinglePressAction(
-                            com.android.internal.R.drawable.ic_lock_user, icon,
-                            (user.name != null ? user.name : "Primary")
-                            + (isCurrentUser ? " \u2714" : "")) {
+                            com.android.internal.R.drawable.ic_lock_user, avatar,
+                            (user.name != null ? user.name : "Primary")) {
                         public void onPress() {
                             try {
                                 ActivityManagerNative.getDefault().switchUser(user.id);
@@ -638,6 +662,10 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                             return false;
                         }
                     };
+                    if (isCurrentUser) {
+                        switchToUser.setStatus(mContext.getString(
+                                R.string.global_action_current_user));
+                    }
                     items.add(switchToUser);
                 }
             }
@@ -721,7 +749,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 @Override
                 public void onServiceDisconnected(ComponentName name) {}
             };
-            if (mContext.bindService(intent, conn, Context.BIND_AUTO_CREATE)) {
+            if (mContext.bindServiceAsUser(
+                    intent, conn, Context.BIND_AUTO_CREATE, UserHandle.CURRENT)) {
                 mScreenshotConnection = conn;
                 mHandler.postDelayed(mScreenshotTimeout, 10000);
             }
@@ -890,6 +919,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         private final Drawable mIcon;
         private final int mMessageResId;
         private final CharSequence mMessage;
+        private CharSequence mStatusMessage;
 
         protected SinglePressAction(int iconResId, int messageResId) {
             mIconResId = iconResId;
@@ -916,8 +946,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             return true;
         }
 
-        public String getStatus() {
-            return null;
+        public CharSequence getStatus() {
+            return mStatusMessage;
+        }
+
+        public void setStatus(CharSequence status) {
+            mStatusMessage = status;
         }
 
         abstract public void onPress();
@@ -938,7 +972,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             TextView messageView = (TextView) v.findViewById(R.id.message);
 
             TextView statusView = (TextView) v.findViewById(R.id.status);
-            final String status = getStatus();
+            final CharSequence status = getStatus();
             if (!TextUtils.isEmpty(status)) {
                 statusView.setText(status);
             } else {
@@ -946,7 +980,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
             if (mIcon != null) {
                 icon.setImageDrawable(mIcon);
-                icon.setScaleType(ScaleType.CENTER_CROP);
+                icon.setScaleType(ScaleType.CENTER);
             } else if (mIconResId != 0) {
                 icon.setImageDrawable(context.getDrawable(mIconResId));
             }
@@ -1116,9 +1150,9 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
     }
 
-    private static class SilentModeTriStateAction implements Action, View.OnClickListener {
+    private final class SilentModeTriStateAction implements Action, View.OnClickListener {
 
-        private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3 };
+        private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3, R.id.option4 };
 
         private final AudioManager mAudioManager;
         private final Handler mHandler;
@@ -1130,14 +1164,15 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             mContext = context;
         }
 
-        private int ringerModeToIndex(int ringerMode) {
-            // They just happen to coincide
-            return ringerMode;
-        }
-
         private int indexToRingerMode(int index) {
-            // They just happen to coincide
-            return index;
+            if (index == 2) {
+                if (mHasVibrator) {
+                    return AudioManager.RINGER_MODE_VIBRATE;
+                } else {
+                    return AudioManager.RINGER_MODE_NORMAL;
+                }
+            }
+            return AudioManager.RINGER_MODE_NORMAL;
         }
 
         @Override
@@ -1149,9 +1184,28 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 LayoutInflater inflater) {
             View v = inflater.inflate(R.layout.global_actions_silent_mode, parent, false);
 
-            int selectedIndex = ringerModeToIndex(mAudioManager.getRingerMode());
-            for (int i = 0; i < 3; i++) {
+            int ringerMode = mAudioManager.getRingerModeInternal();
+            int zenMode = Global.getInt(mContext.getContentResolver(), Global.ZEN_MODE,
+                    Global.ZEN_MODE_OFF);
+            int selectedIndex = 0;
+            if (zenMode != Global.ZEN_MODE_OFF) {
+                if (zenMode == Global.ZEN_MODE_NO_INTERRUPTIONS) {
+                    selectedIndex = 0;
+                } else if (zenMode == Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS) {
+                    selectedIndex = 1;
+                }
+            } else if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+                selectedIndex = 2;
+            } else if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                selectedIndex = 3;
+            }
+
+            for (int i = 0; i < ITEM_IDS.length; i++) {
                 View itemView = v.findViewById(ITEM_IDS[i]);
+                if (!mHasVibrator && i == 2) {
+                    itemView.setVisibility(View.GONE);
+                    continue;
+                }
                 itemView.setSelected(selectedIndex == i);
                 // Set up click handler
                 itemView.setTag(i);
@@ -1182,7 +1236,28 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (!(v.getTag() instanceof Integer)) return;
 
             int index = (Integer) v.getTag();
-            mAudioManager.setRingerMode(indexToRingerMode(index));
+            if (index == 0 || index == 1) {
+                int zenMode = index == 0
+                        ? Global.ZEN_MODE_NO_INTERRUPTIONS
+                        : Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
+                // ZenModeHelper will revert zen mode back to the previous value if we just
+                // put the value into the Settings db, so use INotificationManager instead
+                INotificationManager noMan = INotificationManager.Stub.asInterface(
+                        ServiceManager.getService(Context.NOTIFICATION_SERVICE));
+                try {
+                    noMan.setZenMode(zenMode, null, TAG);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Unable to set zen mode", e);
+                }
+            } else {
+                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE, Global.ZEN_MODE_OFF);
+            }
+
+            if (index == 2 || index == 3) {
+                int ringerMode = indexToRingerMode(index);
+                mAudioManager.setRingerModeInternal(ringerMode);
+            }
+            mAdapter.notifyDataSetChanged();
             mHandler.sendEmptyMessageDelayed(MESSAGE_DISMISS, DIALOG_DISMISS_DELAY);
         }
     }
@@ -1274,15 +1349,17 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
     };
 
+    private ToggleAction.State getUpdatedAirplaneToggleState() {
+        return (Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.AIRPLANE_MODE_ON, 0) == 1) ?
+                ToggleAction.State.On : ToggleAction.State.Off;
+    }
+
     private void onAirplaneModeChanged() {
         // Let the service state callbacks handle the state.
         if (mHasTelephony) return;
 
-        boolean airplaneModeOn = Settings.Global.getInt(
-                mContext.getContentResolver(),
-                Settings.Global.AIRPLANE_MODE_ON,
-                0) == 1;
-        mAirplaneState = airplaneModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
+        mAirplaneState = getUpdatedAirplaneToggleState();
         mAirplaneModeOn.updateState(mAirplaneState);
     }
 
@@ -1301,6 +1378,33 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         if (!mHasTelephony) {
             mAirplaneState = on ? ToggleAction.State.On : ToggleAction.State.Off;
         }
+    }
+
+    /**
+     * Generate a new bitmap (width x height pixels, ARGB_8888) with the input bitmap scaled
+     * to fit and clipped to an inscribed circle.
+     * @param input Bitmap to resize and clip
+     * @param width Width of output bitmap (and diameter of circle)
+     * @param height Height of output bitmap
+     * @return A shiny new bitmap for you to use
+     */
+    private static Bitmap createCircularClip(Bitmap input, int width, int height) {
+        if (input == null) return null;
+
+        final int inWidth = input.getWidth();
+        final int inHeight = input.getHeight();
+        final Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(output);
+        final Paint paint = new Paint();
+        paint.setShader(new BitmapShader(input, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+        paint.setAntiAlias(true);
+        final RectF srcRect = new RectF(0, 0, inWidth, inHeight);
+        final RectF dstRect = new RectF(0, 0, width, height);
+        final Matrix m = new Matrix();
+        m.setRectToRect(srcRect, dstRect, Matrix.ScaleToFit.CENTER);
+        canvas.setMatrix(m);
+        canvas.drawCircle(inWidth / 2, inHeight / 2, inWidth / 2, paint);
+        return output;
     }
 
     private static final class GlobalActionsDialog extends Dialog implements DialogInterface {

@@ -72,6 +72,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/app/IAppTask.aidl \
 	core/java/android/app/ITaskStackListener.aidl \
 	core/java/android/app/IBackupAgent.aidl \
+	core/java/android/app/IBatteryService.aidl \
 	core/java/android/app/IInstrumentationWatcher.aidl \
 	core/java/android/app/INotificationManager.aidl \
 	core/java/android/app/IProcessObserver.aidl \
@@ -146,9 +147,6 @@ LOCAL_SRC_FILES += \
 	core/java/android/content/pm/IPackageMoveObserver.aidl \
 	core/java/android/content/pm/IPackageStatsObserver.aidl \
 	core/java/android/content/pm/IOnPermissionsChangeListener.aidl \
-    core/java/android/content/res/IThemeChangeListener.aidl \
-	core/java/android/content/res/IThemeProcessingListener.aidl \
-	core/java/android/content/res/IThemeService.aidl \
 	core/java/android/database/IContentObserver.aidl \
 	core/java/android/hardware/ICameraService.aidl \
 	core/java/android/hardware/ICameraServiceListener.aidl \
@@ -252,9 +250,6 @@ LOCAL_SRC_FILES += \
 	core/java/android/service/voice/IVoiceInteractionService.aidl \
 	core/java/android/service/voice/IVoiceInteractionSession.aidl \
 	core/java/android/service/voice/IVoiceInteractionSessionService.aidl \
-	core/java/android/service/gesture/IEdgeGestureService.aidl \
-	core/java/android/service/gesture/IEdgeGestureActivationListener.aidl \
-	core/java/android/service/gesture/IEdgeGestureHostCallback.aidl \
 	core/java/android/service/gesture/IGestureService.aidl \
 	core/java/android/service/wallpaper/IWallpaperConnection.aidl \
 	core/java/android/service/wallpaper/IWallpaperEngine.aidl \
@@ -425,6 +420,7 @@ LOCAL_SRC_FILES += \
 	packages/services/PacProcessor/com/android/net/IProxyService.aidl \
 	packages/services/Proxy/com/android/net/IProxyCallback.aidl \
 	packages/services/Proxy/com/android/net/IProxyPortListener.aidl \
+	../../vendor/cmsdk/src/java/org/cyanogenmod/internal/themes/IIconCacheManager.aidl \
 
 # FRAMEWORKS_BASE_JAVA_SRC_DIRS comes from build/core/pathmap.mk
 LOCAL_AIDL_INCLUDES += $(FRAMEWORKS_BASE_JAVA_SRC_DIRS)

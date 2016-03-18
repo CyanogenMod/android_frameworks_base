@@ -34,6 +34,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.MutableBoolean;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ import com.android.systemui.R;
 import com.android.systemui.RecentsComponent;
 import com.android.systemui.SystemUI;
 import com.android.systemui.SystemUIApplication;
+import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.recents.misc.Console;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.recents.model.RecentsTaskLoadPlan;
@@ -59,6 +61,8 @@ import com.android.systemui.recents.views.TaskViewTransform;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 
 import java.util.ArrayList;
+
+import cyanogenmod.providers.CMSettings;
 
 /**
  * Annotation for a method that is only called from the primary user's SystemUI process and will be
@@ -160,6 +164,35 @@ public class Recents extends SystemUI
         }
     }
 
+    class RecentsSettingsObserver extends UserContentObserver {
+
+        public RecentsSettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void observe() {
+            super.observe();
+            mContext.getContentResolver().registerContentObserver(
+                    CMSettings.System.getUriFor(CMSettings.System.RECENTS_SHOW_SEARCH_BAR),
+                    false, this);
+            update();
+        }
+
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        protected void update() {
+            if (mConfig.updateShowSearch(mContext)) {
+                reloadHeaderBarLayout();
+            }
+        }
+    }
+
     static RecentsComponent.Callbacks sRecentsComponentCallbacks;
     static RecentsTaskLoadPlan sInstanceLoadPlan;
     static Recents sInstance;
@@ -170,6 +203,7 @@ public class Recents extends SystemUI
     TaskStackListenerImpl mTaskStackListener;
     RecentsOwnerEventProxyReceiver mProxyBroadcastReceiver;
     RecentsAppWidgetHost mAppWidgetHost;
+    RecentsSettingsObserver mSettingsObserver;
     boolean mBootCompleted;
     boolean mStartAnimationTriggered;
     boolean mCanReuseTaskStackViews = true;
@@ -258,6 +292,9 @@ public class Recents extends SystemUI
         // Load the header bar layout
         reloadHeaderBarLayout();
 
+        mSettingsObserver = new RecentsSettingsObserver(mHandler);
+        mSettingsObserver.observe();
+
         // When we start, preload the data associated with the previous recent tasks.
         // We can use a new plan since the caches will be the same.
         RecentsTaskLoader loader = RecentsTaskLoader.getInstance();
@@ -280,6 +317,12 @@ public class Recents extends SystemUI
     @ProxyFromPrimaryToCurrentUser
     @Override
     public void showRecents(boolean triggeredFromAltTab, View statusBarView) {
+        // Ensure the device has been provisioned before allowing the user to interact with
+        // recents
+        if (!isDeviceProvisioned()) {
+            return;
+        }
+
         if (mSystemServicesProxy.isForegroundUserOwner()) {
             showRecentsInternal(triggeredFromAltTab);
         } else {
@@ -304,6 +347,12 @@ public class Recents extends SystemUI
     @ProxyFromPrimaryToCurrentUser
     @Override
     public void hideRecents(boolean triggeredFromAltTab, boolean triggeredFromHomeKey) {
+        // Ensure the device has been provisioned before allowing the user to interact with
+        // recents
+        if (!isDeviceProvisioned()) {
+            return;
+        }
+
         if (mSystemServicesProxy.isForegroundUserOwner()) {
             hideRecentsInternal(triggeredFromAltTab, triggeredFromHomeKey);
         } else {
@@ -330,6 +379,12 @@ public class Recents extends SystemUI
     @ProxyFromPrimaryToCurrentUser
     @Override
     public void toggleRecents(Display display, int layoutDirection, View statusBarView) {
+        // Ensure the device has been provisioned before allowing the user to interact with
+        // recents
+        if (!isDeviceProvisioned()) {
+            return;
+        }
+
         if (mSystemServicesProxy.isForegroundUserOwner()) {
             toggleRecentsInternal();
         } else {
@@ -353,6 +408,12 @@ public class Recents extends SystemUI
     @ProxyFromPrimaryToCurrentUser
     @Override
     public void preloadRecents() {
+        // Ensure the device has been provisioned before allowing the user to interact with
+        // recents
+        if (!isDeviceProvisioned()) {
+            return;
+        }
+
         if (mSystemServicesProxy.isForegroundUserOwner()) {
             preloadRecentsInternal();
         } else {
@@ -469,6 +530,12 @@ public class Recents extends SystemUI
 
     @Override
     public void showNextAffiliatedTask() {
+        // Ensure the device has been provisioned before allowing the user to interact with
+        // recents
+        if (!isDeviceProvisioned()) {
+            return;
+        }
+
         // Keep track of when the affiliated task is triggered
         MetricsLogger.count(mContext, "overview_affiliated_task_next", 1);
         showRelativeAffiliatedTask(true);
@@ -476,6 +543,12 @@ public class Recents extends SystemUI
 
     @Override
     public void showPrevAffiliatedTask() {
+        // Ensure the device has been provisioned before allowing the user to interact with
+        // recents
+        if (!isDeviceProvisioned()) {
+            return;
+        }
+
         // Keep track of when the affiliated task is triggered
         MetricsLogger.count(mContext, "overview_affiliated_task_prev", 1);
         showRelativeAffiliatedTask(false);
@@ -512,7 +585,8 @@ public class Recents extends SystemUI
         // Try and pre-emptively bind the search widget on startup to ensure that we
         // have the right thumbnail bounds to animate to.
         // Note: We have to reload the widget id before we get the task stack bounds below
-        if (mSystemServicesProxy.getOrBindSearchAppWidget(mContext, mAppWidgetHost) != null) {
+        if (mConfig.searchBarEnabled &&
+                mSystemServicesProxy.getOrBindSearchAppWidget(mContext, mAppWidgetHost) != null) {
             mConfig.getSearchBarBounds(mWindowRect.width(), mWindowRect.height(),
                     mStatusBarHeight, searchBarBounds);
         }
@@ -885,6 +959,14 @@ public class Recents extends SystemUI
         if (statusBar != null) {
             statusBar.showScreenPinningRequest(false);
         }
+    }
+
+    /**
+     * @return whether this device is provisioned.
+     */
+    private boolean isDeviceProvisioned() {
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 0) != 0;
     }
 
     /**

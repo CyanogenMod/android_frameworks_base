@@ -23,6 +23,8 @@ public class QSPage extends ViewGroup {
 
     private int mPage;
 
+    private boolean mAdapterEditingState;
+
     public QSPage(Context context, QSDragPanel panel, int page) {
         super(context);
         mPanel = panel;
@@ -120,7 +122,11 @@ public class QSPage extends ViewGroup {
             } else {
                 right = left + tileWith;
             }
-            if (mPanel.isAnimating(record)) continue;
+            if (mPanel.isAnimating(record)) {
+                record.tileView.layout(record.tileView.getLeft(), record.tileView.getTop(),
+                        record.tileView.getRight(), record.tileView.getBottom());
+                continue;
+            }
             if (false) {
                 Log.v(TAG + "-" + mPage, "laying out " + record + ", top: " + top + ", left: " + left);
                 Log.d(TAG, record + " wiping translations: "
@@ -135,6 +141,14 @@ public class QSPage extends ViewGroup {
 
             record.tileView.layout(left, top, right, top + record.tileView.getMeasuredHeight());
         }
+    }
+
+    public boolean getAdapterEditingState() {
+        return mAdapterEditingState;
+    }
+
+    public void setAdapterEditingState(boolean editing) {
+        this.mAdapterEditingState = editing;
     }
 
     public boolean dualRecord(QSPanel.TileRecord record) {

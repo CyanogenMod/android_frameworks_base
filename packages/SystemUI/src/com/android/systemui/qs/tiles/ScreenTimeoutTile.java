@@ -31,11 +31,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.android.internal.logging.MetricsConstants;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSDetailItemsList;
 import com.android.systemui.qs.QSTile;
 import cyanogenmod.app.StatusBarPanelCustomTile;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,9 +61,6 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
             new AnimationIcon(R.drawable.ic_qs_screen_timeout_long_reverse_avd);
 
     private String[] mEntries, mValues;
-    private boolean mShowingDetail;
-    ArrayList<Integer> mAnimationList
-            = new ArrayList<Integer>();
 
     public ScreenTimeoutTile(Host host) {
         super(host);
@@ -127,8 +124,6 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
     @Override
     protected void handleClick() {
         if (mEntries.length > 0) {
-            mShowingDetail = true;
-            mAnimationList.clear();
             showDetail(true);
         }
     }
@@ -190,10 +185,6 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
     }
     @Override
     protected void handleUpdateState(final TimeoutState state, Object arg) {
-        if (mAnimationList.isEmpty() && mShowingDetail && arg == null) {
-            return;
-        }
-
         int newTimeout = getScreenTimeout();
 
         AnimationIcon d = null;
@@ -247,7 +238,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsConstants.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_SCREEN_TIME_OUT;
     }
 
     @Override
@@ -309,7 +300,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
 
         @Override
         public int getMetricsCategory() {
-            return MetricsConstants.DONT_TRACK_ME_BRO;
+            return CMMetricsLogger.TILE_SCREEN_TIME_OUT_DETAIL;
         }
 
         @Override
@@ -334,7 +325,6 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
                     mUiHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mShowingDetail = false;
                             refreshState(true);
                         }
                     }, 100);

@@ -21,4 +21,5 @@
   <plurals name="kg_password_default_pin_message">
     <item quantity="other">SIMのPINを入力してください、残り<xliff:g id="number">%d</xliff:g>回試行することができます。</item>
   </plurals>
+  <string name="kg_invalid_sim_length">エラー: 入力が最小長よりも短いです</string>
 </resources>

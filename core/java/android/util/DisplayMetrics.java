@@ -251,6 +251,12 @@ public class DisplayMetrics {
         xdpi = inDensity;
         ydpi = inDensity;
 
+        noncompatDensity = density;
+        noncompatDensityDpi = densityDpi;
+        noncompatScaledDensity = scaledDensity;
+        noncompatXdpi = xdpi;
+        noncompatYdpi = ydpi;
+
         DENSITY_DEVICE = inDensity;
         Bitmap.setDefaultDensity(inDensity);
     }

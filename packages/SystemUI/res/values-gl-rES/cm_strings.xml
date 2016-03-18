@@ -16,9 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Arrastra á dereita para %1$s</string>
   <string name="right_shortcut_hint">Arrastra á esquerda para %1$s</string>
+  <string name="lockscreen_message">Toque nunha icona na dereita ou na esquerda para volver a asignar un atallo da pantalla de bloqueo.</string>
+  <string name="lockscreen_default_target">Predeterminado</string>
   <string name="select_application">Seleccionar aplicación</string>
   <string name="lockscreen_choose_action_title">Escoller acción</string>
   <string name="lockscreen_none_target">Ningunha</string>
@@ -36,11 +40,23 @@
   <string name="advanced_dev_option_wipe_app">Borrar os datos da aplicación</string>
   <string name="advanced_dev_option_force_stop">Forzar a parada</string>
   <string name="advanced_dev_option_uninstall">Desinstalar</string>
+  <string name="accessibility_notification_brightness">Brillo da luz</string>
   <string name="accessibility_quick_settings_profiles_off">Perfís desactivados.</string>
   <string name="accessibility_quick_settings_profiles">Perfil: <xliff:g id="profile" example="Predeterminado">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Perfís desactivados.</string>
   <string name="accessibility_quick_settings_profiles_changed">Perfil cambiado a <xliff:g id="profile" example="Predeterminado">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inicializando\u2026</string>
+  <string name="led_notification_title">Configuración de luz</string>
+  <string name="led_notification_text">Luz LED activada por configuración</string>
+  <string name="qs_tile_edit_header_instruction">Prema e sosteña as baldosas para reorganizalas</string>
+  <string name="quick_settings_edit_label">Editar baldosas</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Non foi posíbel eliminar a baldosa Editar</string>
+  <string name="qs_tiles_reset_confirmation">Restabelecer a configuración rápida de baldosas á configuración predeterminada?</string>
+  <string name="quick_settings_tile_reset_to_default">Restabelecer coa disposición predeterminada</string>
+  <string name="quick_settings_title_header">Cabeceira</string>
+  <string name="quick_settings_title_tiles">Baldosas</string>
+  <string name="quick_settings_title_show_weather">Amosar o prognóstico</string>
+  <string name="quick_settings_title_enlarge_first_row">Ampliar a primeira fila</string>
   <string name="screen_pinning_description_no_navbar">Amosarase mentres esté fixado. Para deixar de fixalo, mantén tocado o botón Atrás.</string>
   <string name="quick_settings_custom_tile_detail_title">Botón personalizado</string>
   <string name="quick_settings_remove">Retirar botón</string>
@@ -49,6 +65,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Perfís do sistema</string>
   <string name="quick_settings_profiles_off">Perfís desactivados</string>
+  <string name="quick_settings_heads_up_label">Notificacións emerxentes</string>
+  <string name="quick_settings_battery_saver_label">Economizador da bateria</string>
   <string name="accessibility_quick_settings_sync_off">Sincronización apagada.</string>
   <string name="accessibility_quick_settings_sync_on">Sincronización acesa.</string>
   <string name="accessibility_quick_settings_sync_changed_off">A sincronización foi apagada.</string>
@@ -82,6 +100,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Visualización de ambiente activada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">A visualización de ambiente foi desactivada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">A visualización de ambiente foi activada.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Notificacións emerxentes desactivadas.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notificacións emerxentes activadas.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">As notificacións emerxentes foron desactivadas.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">As notificacións emerxentes foron activadas.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Economizador da batería apagado.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Economizador da bateria aceso.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador da batería foi apagado.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador da batería foi acendido.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Botón dinámico</string>
   <string name="dynamic_qs_tile_next_alarm_label">Próxima alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector IME</string>
@@ -96,6 +122,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay cambiado a modo día.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay cambiado a modo noite.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay cambiado a modo exteriores.</string>
+  <string name="quick_settings_title_advanced_location">Localización por triangulación</string>
   <string name="accessibility_quick_settings_location_battery_saving">Informe de localización: en modo aforro de batería.</string>
   <string name="accessibility_quick_settings_location_gps_only">Informe de localización: en modo de sensores.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Informe de localización: en modo de alta precisión.</string>
@@ -106,4 +133,7 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Informe de localización cambiado a modo aforro de batería.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Informe de localización cambiado a modo sensores.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informe de localización cambiado a modo alta precisión.</string>
+  <string name="hotspot_apm_message">Non é posíbel conectar a rede móbil mentres o modo Avión está activado. Desactívao e téntao de novo.</string>
+  <string name="quick_settings_tile_flashlight_not_title">A lanterna está acesa</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Toca para apagala</string>
 </resources>

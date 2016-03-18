@@ -66,6 +66,7 @@
     <protected-broadcast android:name="android.intent.action.NEW_OUTGOING_CALL" />
     <protected-broadcast android:name="android.intent.action.REBOOT" />
     <protected-broadcast android:name="android.intent.action.DOCK_EVENT" />
+    <protected-broadcast android:name="android.intent.action.THERMAL_EVENT" />
     <protected-broadcast android:name="android.intent.action.MASTER_CLEAR_NOTIFICATION" />
     <protected-broadcast android:name="android.intent.action.USER_ADDED" />
     <protected-broadcast android:name="android.intent.action.USER_REMOVED" />
@@ -325,6 +326,9 @@
     <protected-broadcast android:name="android.app.action.DEVICE_OWNER_CHANGED" />
     <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
     <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED" />
+
+    <protected-broadcast android:name="android.net.action.SHOW_NETWORK_POLICY_NOTIFICATION" />
+
     <!-- ====================================================================== -->
     <!--                          RUNTIME PERMISSIONS                           -->
     <!-- ====================================================================== -->
@@ -870,6 +874,11 @@
     <permission android:name="android.permission.BIND_DIRECTORY_SEARCH"
         android:protectionLevel="signature|privileged" />
 
+    <!-- @SystemApi @hide Allows an application to modify cell broadcasts through the content provider.
+         <p>Not for use by third-party applications. -->
+    <permission android:name="android.permission.MODIFY_CELL_BROADCASTS"
+                android:protectionLevel="signature|system" />
+
     <!-- =============================================================== -->
     <!-- Permissions for setting the device alarm                        -->
     <!-- =============================================================== -->
@@ -1271,7 +1280,8 @@
     <!-- @SystemApi Allows read access to privileged phone state.
          @hide Used internally. -->
     <permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-        android:protectionLevel="signature|privileged" />
+        android:protectionLevel="signature|privileged"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- @SystemApi Protects the ability to register any PhoneAccount with
          PhoneAccount#CAPABILITY_SIM_SUBSCRIPTION. This capability indicates that the PhoneAccount
@@ -1818,7 +1828,8 @@
 
     <!-- @SystemApi Allows access to the list of accounts in the Accounts Service. -->
     <permission android:name="android.permission.GET_ACCOUNTS_PRIVILEGED"
-        android:protectionLevel="signature|privileged" />
+        android:protectionLevel="signature|privileged"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- @SystemApi Allows applications to RW to diagnostic resources.
     <p>Not for use by third-party applications. -->
@@ -2375,6 +2386,15 @@
     <permission android:name="android.permission.BATTERY_STATS"
         android:protectionLevel="signature|privileged|development" />
 
+    <!-- Allows an application to reset the device battery statistics.
+    <p>Not for use by third-party applications.
+         @hide -->
+    <permission android:name="android.permission.RESET_BATTERY_STATS"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:label="@string/permlab_resetBatteryStats"
+        android:description="@string/permdesc_resetBatteryStats"
+        android:protectionLevel="signature|system|development" />
+
     <!-- @SystemApi Allows an application to control the backup and restore process.
     <p>Not for use by third-party applications.
          @hide pending API council -->
@@ -2568,7 +2588,8 @@
     <!-- Allows access to keyguard secure storage.  Only allowed for system processes.
         @hide -->
     <permission android:name="android.permission.ACCESS_KEYGUARD_SECURE_STORAGE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows managing (adding, removing) fingerprint templates. Reserved for the system. @hide -->
     <permission android:name="android.permission.MANAGE_FINGERPRINT"
@@ -2751,30 +2772,6 @@
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
     <uses-permission android:name="android.permission.CONFIRM_FULL_BACKUP"/>
-
-    <!-- Allows an application to use the Theme Service
-         @hide -->
-    <permission android:name="android.permission.ACCESS_THEME_MANAGER"
-        android:label="@string/permlab_accessThemeService"
-        android:description="@string/permdesc_accessThemeService"
-        android:protectionLevel="system|signature" />
-
-    <!-- Allows an application to read the current theme configuration and
-         get information about the various themes currently installed
-         @hide -->
-    <permission android:name="android.permission.READ_THEMES"
-        android:label="@string/permlab_readThemes"
-        android:description="@string/permdesc_readThemesDesc"
-        android:protectionLevel="normal" />
-
-    <!-- Allows an application to write the current theme configuration and
-         write information about the various themes currently installed.
-         Changing themes should be done through the service ACCESS_THEME_MANAGER
-         @hide -->
-    <permission android:name="android.permission.WRITE_THEMES"
-        android:label="@string/permlab_writeThemes"
-        android:description="@string/permdesc_writeThemesDesc"
-        android:protectionLevel="system|signature" />
 
     <application android:process="system"
                  android:persistent="true"

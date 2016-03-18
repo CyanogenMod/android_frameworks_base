@@ -726,6 +726,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                    Secure.LOCK_PATTERN_ENABLED,
                    Secure.LOCK_PATTERN_VISIBLE,
                    Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED,
+                   CMSettings.Secure.LOCK_PASS_TO_SECURITY_VIEW,
                    Secure.LOCK_PATTERN_SIZE,
                    Secure.LOCK_DOTS_VISIBLE,
                    Secure.LOCK_SHOW_ERROR_PATH,
@@ -2518,7 +2519,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
         try {
             stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
                     + " VALUES(?,?);");
-            loadSetting(stmt, Settings.System.VIBRATE_WHEN_RINGING, vibrateWhenRinging ? 1 : 0);
+            if (mContext.getResources().getBoolean(R.bool.def_vibrate_when_ringing_enabled)) {
+                loadSetting(stmt, Settings.System.VIBRATE_WHEN_RINGING, 1);
+            } else {
+                loadSetting(stmt, Settings.System.VIBRATE_WHEN_RINGING, vibrateWhenRinging ? 1 : 0);
+            }
         } finally {
             if (stmt != null) stmt.close();
         }
@@ -2596,11 +2601,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
              */
 
             //LEGACY CAF CHANGES
-            loadStringSetting(stmt, Settings.System.TIME_12_24,
-                    R.string.def_time_format);
+            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_time_format))) {
+                loadStringSetting(stmt, Settings.System.TIME_12_24,
+                        R.string.def_time_format);
+            }
 
-            loadStringSetting(stmt, Settings.System.DATE_FORMAT,
-                    R.string.def_date_format);
+            if (!TextUtils.isEmpty(mContext.getResources().getString(R.string.def_date_format))) {
+                loadStringSetting(stmt, Settings.System.DATE_FORMAT,
+                        R.string.def_date_format);
+            }
         } finally {
             if (stmt != null) stmt.close();
         }
@@ -2701,6 +2710,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     com.android.internal.R.string.config_dreamsDefaultComponent);
             loadStringSetting(stmt, Settings.Secure.SCREENSAVER_DEFAULT_COMPONENT,
                     com.android.internal.R.string.config_dreamsDefaultComponent);
+            loadBooleanSetting(stmt, Settings.Secure.DOZE_ENABLED,
+                                     R.bool.def_dozeEnabledByDefault);
 
             loadBooleanSetting(stmt, Settings.Secure.ACCESSIBILITY_DISPLAY_MAGNIFICATION_ENABLED,
                     R.bool.def_accessibility_display_magnification_enabled);

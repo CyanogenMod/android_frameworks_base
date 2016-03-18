@@ -32,6 +32,7 @@ import android.graphics.PathMeasure;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.PorterDuff.Mode;
 import android.util.ArrayMap;
 import android.util.AttributeSet;
@@ -225,9 +226,9 @@ public class VectorDrawable extends Drawable {
     private Insets mDpiScaleInsets = Insets.NONE;
 
     // Temp variable, only for saving "new" operation at the draw() time.
-    private final float[] mTmpFloats = new float[9];
     private final Matrix mTmpMatrix = new Matrix();
     private final Rect mTmpBounds = new Rect();
+    private final RectF mTmpDstBounds = new RectF();
 
     public VectorDrawable() {
         this(null, null);
@@ -288,11 +289,10 @@ public class VectorDrawable extends Drawable {
         // size first. This bitmap size is determined by the bounds and the
         // canvas scale.
         canvas.getMatrix(mTmpMatrix);
-        mTmpMatrix.getValues(mTmpFloats);
-        float canvasScaleX = Math.abs(mTmpFloats[Matrix.MSCALE_X]);
-        float canvasScaleY = Math.abs(mTmpFloats[Matrix.MSCALE_Y]);
-        int scaledWidth = (int) (mTmpBounds.width() * canvasScaleX);
-        int scaledHeight = (int) (mTmpBounds.height() * canvasScaleY);
+        mTmpDstBounds.set(mTmpBounds);
+        mTmpMatrix.mapRect(mTmpDstBounds);
+        int scaledWidth = (int) mTmpDstBounds.width();
+        int scaledHeight = (int) mTmpDstBounds.height();
         scaledWidth = Math.min(MAX_CACHED_BITMAP_SIZE, scaledWidth);
         scaledHeight = Math.min(MAX_CACHED_BITMAP_SIZE, scaledHeight);
 

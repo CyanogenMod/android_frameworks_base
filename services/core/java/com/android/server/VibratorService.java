@@ -24,6 +24,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.hardware.input.InputManager;
+import android.net.Uri;
 import android.os.BatteryStats;
 import android.os.Handler;
 import android.os.IVibratorService;
@@ -54,6 +55,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
+
+import cyanogenmod.hardware.CMHardwareManager;
+import cyanogenmod.providers.CMSettings;
 
 public class VibratorService extends IVibratorService.Stub
         implements InputManager.InputDeviceListener {
@@ -86,6 +90,10 @@ public class VibratorService extends IVibratorService.Stub
     private int mCurVibUid = -1;
     private boolean mLowPowerMode;
     private SettingsObserver mSettingObserver;
+    private CMHardwareManager mHardware;
+    private int mMinVibratorIntensity;
+    private int mMaxVibratorIntensity;
+    private int mVibratorIntensity;
 
     native static boolean vibratorExists();
     native static void vibratorOn(long milliseconds);
@@ -241,8 +249,19 @@ public class VibratorService extends IVibratorService.Stub
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateInputDeviceVibrators();
+                updateVibratorIntensity();
             }
         }, new IntentFilter(Intent.ACTION_USER_SWITCHED), null, mH);
+
+        mHardware = CMHardwareManager.getInstance(mContext);
+        if (mHardware.isSupported(CMHardwareManager.FEATURE_VIBRATOR)) {
+            mContext.getContentResolver().registerContentObserver(
+                    CMSettings.Secure.getUriFor(CMSettings.Secure.VIBRATOR_INTENSITY),
+                    true, mSettingObserver, UserHandle.USER_ALL);
+            mMinVibratorIntensity = mHardware.getVibratorMinIntensity();
+            mMaxVibratorIntensity = mHardware.getVibratorMaxIntensity();
+            updateVibratorIntensity();
+        }
 
         updateInputDeviceVibrators();
     }
@@ -253,9 +272,20 @@ public class VibratorService extends IVibratorService.Stub
         }
 
         @Override
-        public void onChange(boolean SelfChange) {
-            updateInputDeviceVibrators();
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(CMSettings.Secure.getUriFor(CMSettings.Secure.VIBRATOR_INTENSITY))) {
+                updateVibratorIntensity();
+            } else {
+                updateInputDeviceVibrators();
+            }
         }
+    }
+
+    private void updateVibratorIntensity() {
+        mVibratorIntensity = CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.VIBRATOR_INTENSITY, mHardware.getVibratorDefaultIntensity(),
+                UserHandle.USER_CURRENT);
+        mHardware.setVibratorIntensity(mVibratorIntensity);
     }
 
     @Override // Binder call

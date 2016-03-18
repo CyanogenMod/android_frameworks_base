@@ -734,12 +734,11 @@ bool BootAnimation::movie()
     clearReg.subtractSelf(Rect(xc, yc, xc+animation.width, yc+animation.height));
 
     pthread_mutex_init(&mp_lock, NULL);
-    pthread_cond_init(&mp_cond, NULL);
+    pthread_condattr_t attr;
+    pthread_condattr_init(&attr);
+    pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
+    pthread_cond_init(&mp_cond, &attr);
 
-    property_get("persist.sys.silent", value, "null");
-    if (strncmp(value, "1", 1) != 0) {
-        playBackgroundMusic();
-    }
     for (size_t i=0 ; i<pcount ; i++) {
         const Animation::Part& part(animation.parts[i]);
         const size_t fcount = part.frames.size();
@@ -862,10 +861,16 @@ bool BootAnimation::movie()
 
     }
 
+    property_get("persist.sys.silent", value, "null");
+    if (strncmp(value, "1", 1) != 0) {
+       ALOGD("playing boot audio here");
+       playBackgroundMusic();
+    }
+
     if (isMPlayerPrepared) {
         ALOGD("waiting for media player to complete.");
         struct timespec timeout;
-        clock_gettime(CLOCK_REALTIME, &timeout);
+        clock_gettime(CLOCK_MONOTONIC, &timeout);
         timeout.tv_sec += 5; //timeout after 5s.
 
         pthread_mutex_lock(&mp_lock);

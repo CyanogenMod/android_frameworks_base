@@ -20,15 +20,27 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.Nullable;
+import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.UserHandle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.android.systemui.R;
+import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.settings.ToggleSlider;
+
+import cyanogenmod.providers.CMSettings;
 
 public class QSPanelTopView extends FrameLayout {
 
@@ -46,8 +58,14 @@ public class QSPanelTopView extends FrameLayout {
     private boolean mDisplayingInstructions = false;
     private boolean mDisplayingTrash = false;
     private boolean mDisplayingToast = false;
+    public boolean mHasBrightnessSliderToDisplay = true;
 
     private AnimatorSet mAnimator;
+    private ImageView mDropTargetIcon;
+
+    private SettingsObserver mSettingsObserver;
+    private boolean mListening;
+    private boolean mSkipAnimations;
 
     public QSPanelTopView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
@@ -60,6 +78,8 @@ public class QSPanelTopView extends FrameLayout {
     public QSPanelTopView(Context context, @Nullable AttributeSet attrs, int defStyleAttr,
                           int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        setFocusable(true);
+        mSettingsObserver = new SettingsObserver(new Handler());
     }
 
     @Override
@@ -69,6 +89,10 @@ public class QSPanelTopView extends FrameLayout {
 
     public View getDropTarget() {
         return mDropTarget;
+    }
+
+    public ImageView getDropTargetIcon() {
+        return mDropTargetIcon;
     }
 
     public View getBrightnessView() {
@@ -83,6 +107,7 @@ public class QSPanelTopView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mDropTarget = findViewById(R.id.delete_container);
+        mDropTargetIcon = (ImageView) findViewById(R.id.delete_target);
         mEditTileInstructionView = findViewById(R.id.edit_container);
         mBrightnessView = findViewById(R.id.brightness_container);
         mToastView = (TextView) findViewById(R.id.qs_toast);
@@ -92,14 +117,20 @@ public class QSPanelTopView extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int width = MeasureSpec.getSize(widthMeasureSpec);
-        mBrightnessView.measure(exactly(width), MeasureSpec.UNSPECIFIED);
-        int dh = mBrightnessView.getMeasuredHeight();
+        mBrightnessView.measure(QSDragPanel.exactly(width), MeasureSpec.UNSPECIFIED);
+        mEditTileInstructionView.measure(QSDragPanel.exactly(width), MeasureSpec.UNSPECIFIED);
+        mToastView.measure(QSDragPanel.exactly(width), MeasureSpec.UNSPECIFIED);
 
-        mDropTarget.measure(exactly(width), atMost(dh));
-        mEditTileInstructionView.measure(exactly(width), atMost(dh));
-        mToastView.measure(exactly(width), atMost(dh));
+        // if we are showing a brightness slider, always fit to that, otherwise only
+        // declare a height when editing.
+        int dh = mHasBrightnessSliderToDisplay ? mBrightnessView.getMeasuredHeight()
+                : mEditing ? mEditTileInstructionView.getMeasuredHeight() : 0;
 
-        setMeasuredDimension(width, mBrightnessView.getMeasuredHeight());
+        mDropTarget.measure(QSDragPanel.exactly(width), QSDragPanel.atMost(dh));
+        mEditTileInstructionView.measure(QSDragPanel.exactly(width), QSDragPanel.atMost(dh));
+        mToastView.measure(QSDragPanel.exactly(width), QSDragPanel.atMost(dh));
+
+        setMeasuredDimension(width, dh);
     }
 
     @Override
@@ -107,20 +138,11 @@ public class QSPanelTopView extends FrameLayout {
         boolean animateToState = !isLaidOut();
         super.onLayout(changed, left, top, right, bottom);
         if (animateToState) {
-            Log.e(TAG, "first layout animating to state!");
-            animateToState();
+            goToState();
         }
     }
 
-    private static int atMost(int height) {
-        return MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST);
-    }
-
-    private static int exactly(int size) {
-        return MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY);
-    }
-
-    public void setEditing(boolean editing) {
+    public void setEditing(boolean editing, boolean skipAnim) {
         mEditing = editing;
         if (editing) {
             mDisplayingInstructions = true;
@@ -129,7 +151,11 @@ public class QSPanelTopView extends FrameLayout {
             mDisplayingInstructions = false;
             mDisplayingTrash = false;
         }
-        animateToState();
+        if (skipAnim) {
+            goToState();
+        } else {
+            animateToState();
+        }
     }
 
     public void onStopDrag() {
@@ -140,6 +166,18 @@ public class QSPanelTopView extends FrameLayout {
     public void onStartDrag() {
         mDisplayingTrash = true;
         animateToState();
+    }
+
+    public void setDropIcon(int resourceId, int colorResourceId) {
+        mDropTargetIcon.setImageResource(resourceId);
+        final Drawable drawable = mDropTargetIcon.getDrawable();
+
+        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_ATOP);
+        DrawableCompat.setTint(drawable, mContext.getColor(colorResourceId));
+
+        if (drawable instanceof Animatable) {
+            ((Animatable) drawable).start();
+        }
     }
 
     public void toast(int textStrResId) {
@@ -179,38 +217,36 @@ public class QSPanelTopView extends FrameLayout {
             mAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    setLayerType(LAYER_TYPE_HARDWARE, null);
-
-                    mDropTarget.setLayerType(LAYER_TYPE_HARDWARE, null);
-                    mEditTileInstructionView.setLayerType(LAYER_TYPE_HARDWARE, null);
-                    mBrightnessView.setLayerType(LAYER_TYPE_HARDWARE, null);
-                    mToastView.setLayerType(LAYER_TYPE_HARDWARE, null);
-
-                    mDropTarget.setVisibility(View.VISIBLE);
-                    mEditTileInstructionView.setVisibility(View.VISIBLE);
-                    mBrightnessView.setVisibility(View.VISIBLE);
-                    mToastView.setVisibility(View.VISIBLE);
-
-                    if (showToast) {
-                        mToastView.bringToFront();
+                    // if the view is already visible, keep it visible on animation start
+                    // to animate it out, otherwise set it as invisible (to not affect view height)
+                    mEditTileInstructionView.setVisibility(
+                            getVisibilityForAnimation(mEditTileInstructionView, showInstructions));
+                    mDropTarget.setVisibility(
+                            getVisibilityForAnimation(mDropTarget, showTrash));
+                    mToastView.setVisibility(
+                            getVisibilityForAnimation(mToastView, showToast));
+                    if (mHasBrightnessSliderToDisplay) {
+                        mBrightnessView.setVisibility(
+                                getVisibilityForAnimation(mBrightnessView, showBrightness));
                     }
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     mToastView.setVisibility(showToast ? View.VISIBLE : View.GONE);
-                    mEditTileInstructionView.setVisibility(showInstructions ? View.VISIBLE : View.GONE);
+                    mEditTileInstructionView.setVisibility(showInstructions
+                            ? View.VISIBLE : View.GONE);
                     mDropTarget.setVisibility(showTrash ? View.VISIBLE : View.GONE);
-                    mBrightnessView.setVisibility(showBrightness ? View.VISIBLE : View.GONE);
+                    if (mHasBrightnessSliderToDisplay) {
+                        mBrightnessView.setVisibility(showBrightness ? View.VISIBLE : View.GONE);
+                    }
 
-                    setLayerType(LAYER_TYPE_NONE, null);
+                    mAnimator = null;
 
-                    mDropTarget.setLayerType(LAYER_TYPE_NONE, null);
-                    mEditTileInstructionView.setLayerType(LAYER_TYPE_NONE, null);
-                    mBrightnessView.setLayerType(LAYER_TYPE_NONE, null);
-                    mToastView.setLayerType(LAYER_TYPE_NONE, null);
+                    requestLayout();
 
                     if (showToast) {
+                        mToastView.bringToFront();
                         mToastView.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -222,21 +258,34 @@ public class QSPanelTopView extends FrameLayout {
                 }
             });
 
-            mAnimator.setDuration(500);
+            mAnimator.setDuration(mSkipAnimations ? 0 : 500);
             mAnimator.setInterpolator(new FastOutSlowInInterpolator());
-            mAnimator.setStartDelay(100);
+            mAnimator.setStartDelay(mSkipAnimations ? 0 : 100);
             mAnimator.playTogether(instructionAnimator, trashAnimator,
                     brightnessAnimator, toastAnimator);
             mAnimator.start();
         }
     };
 
+    private int getVisibilityForAnimation(View view, boolean show) {
+        if (show || view.getVisibility() != View.GONE) {
+            return View.VISIBLE;
+        }
+        return View.INVISIBLE;
+    }
+
     private void animateToState() {
+        mSkipAnimations = false;
         post(mAnimateRunnable);
     }
+
+    private void goToState() {
+        mSkipAnimations = true;
+        post(mAnimateRunnable);
+    }
+
     private Animator animateView(View v, boolean show) {
-        return ObjectAnimator.ofFloat(v, "translationY",
-                show ? 0 : -mBrightnessView.getMeasuredHeight());
+        return ObjectAnimator.ofFloat(v, "translationY", show ? 0 : -getMeasuredHeight());
     }
 
     private Animator showBrightnessSlider(boolean show) {
@@ -253,5 +302,67 @@ public class QSPanelTopView extends FrameLayout {
 
     private Animator showToast(boolean show) {
         return animateView(mToastView, show);
+    }
+
+    public void setListening(boolean listening) {
+        if (mListening == listening) return;
+        mListening = listening;
+        if (mListening) {
+            mSettingsObserver.observe();
+        } else {
+            mSettingsObserver.unobserve();
+        }
+
+    }
+
+    class SettingsObserver extends UserContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void observe() {
+            super.observe();
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(CMSettings.System.getUriFor(
+                    CMSettings.System.QS_SHOW_BRIGHTNESS_SLIDER), false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        protected void unobserve() {
+            super.unobserve();
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
+
+        @Override
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            int currentUserId = ActivityManager.getCurrentUser();
+            boolean showSlider = CMSettings.System.getIntForUser(resolver,
+                    CMSettings.System.QS_SHOW_BRIGHTNESS_SLIDER, 1, currentUserId) == 1;
+            if (showSlider != mHasBrightnessSliderToDisplay) {
+                if (mAnimator != null) {
+                    mAnimator.cancel(); // cancel everything we're animating
+                    mAnimator = null;
+                }
+                mHasBrightnessSliderToDisplay = showSlider;
+                if (mBrightnessView != null) {
+                    mBrightnessView.setVisibility(showSlider ? View.VISIBLE : View.GONE);
+
+                    // as per showBrightnessSlider() in QSPanel.java, we look it up on-the-go
+                    ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);
+                    if (brightnessSlider != null) {
+                        brightnessSlider.setVisibility(showSlider ? View.VISIBLE : View.GONE);
+                    }
+
+                }
+                getParent().requestLayout();
+                animateToState();
+            }
+        }
     }
 }

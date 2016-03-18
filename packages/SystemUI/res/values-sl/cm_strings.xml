@@ -16,10 +16,14 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Povlecite desno za %1$s</string>
   <string name="right_shortcut_hint">Povlecite levo za %1$s</string>
-  <string name="select_application">Izberite program</string>
+  <string name="lockscreen_message">Tapnite ikono na levi ali desni, da ponovno dodelite bližnjico zaslona za zaklepanje.</string>
+  <string name="lockscreen_default_target">Privzeto</string>
+  <string name="select_application">Izberite aplikacijo</string>
   <string name="lockscreen_choose_action_title">Izberite dejanje</string>
   <string name="lockscreen_none_target">Brez</string>
   <string name="navbar_dialog_title">Izberite dejanje za dodelitev</string>
@@ -33,14 +37,27 @@
   <string name="navbar_menu_big_button">Menijski gumb</string>
   <string name="accessibility_dpad_left">Kazalec levo</string>
   <string name="accessibility_dpad_right">Kazalec desno</string>
-  <string name="advanced_dev_option_wipe_app">Izbriši podatke programe</string>
+  <string name="advanced_dev_option_wipe_app">Izbriši podatke aplikacije</string>
   <string name="advanced_dev_option_force_stop">Vsili ustavitev</string>
   <string name="advanced_dev_option_uninstall">Odstrani</string>
+  <string name="accessibility_notification_brightness">Svetlost lučke</string>
   <string name="accessibility_quick_settings_profiles_off">Profili izklopljeni.</string>
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Profili izklopljeni.</string>
   <string name="accessibility_quick_settings_profiles_changed">Profil spremenjen v <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Začenjanje \u2026</string>
+  <string name="led_notification_title">Nastavitve lučke</string>
+  <string name="led_notification_text">Lučka LED omogočena v nastavitvah</string>
+  <string name="qs_tile_edit_header_instruction">Pritisnite in pridržite ploščice za preurejanje</string>
+  <string name="quick_settings_edit_label">Uredi ploščice</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Ploščice za urejanje ni mogoče izbrisati</string>
+  <string name="qs_tiles_reset_confirmation">Ponastavi ploščice hitrih nastavitev na privzeto nastavitev?</string>
+  <string name="quick_settings_tile_reset_to_default">Ponastavi na privzeto razporeditev</string>
+  <string name="quick_settings_title_header">Glava</string>
+  <string name="quick_settings_title_tiles">Ploščice</string>
+  <string name="quick_settings_title_show_weather">Prikaži vreme</string>
+  <string name="quick_settings_title_show_brightness_slider">Prikaži drsnik za svetlost</string>
+  <string name="quick_settings_title_enlarge_first_row">Povečaj prvo vrstico</string>
   <string name="screen_pinning_description_no_navbar">To jo ohrani prikazano, dokler je ne odpnete. Tapnite in pridržite gumb Nazaj, da jo odpnete.</string>
   <string name="quick_settings_custom_tile_detail_title">Ploščica po meri</string>
   <string name="quick_settings_remove">Odstrani ploščico</string>
@@ -49,6 +66,9 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Sistemski profili</string>
   <string name="quick_settings_profiles_off">Profili onemogočeni</string>
+  <string name="quick_settings_heads_up_label">Obvestila na zaslonu</string>
+  <string name="quick_settings_battery_saver_label">Ohranjevalnik baterije</string>
+  <string name="quick_settings_caffeine_label">Kofein</string>
   <string name="accessibility_quick_settings_sync_off">Sinhronizacija izklopljena.</string>
   <string name="accessibility_quick_settings_sync_on">Sinhronizacija vklopljena.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinhronizacija izklopljena.</string>
@@ -60,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Zakleni zaslon</string>
   <string name="quick_settings_ambient_display_label">Okoliški zaslon</string>
   <string name="quick_settings_lockscreen_label_enforced">Vsiljen zaslon za zaklepanje</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Onemogočeno s profilom</string>
   <string name="accessibility_quick_settings_screen_timeout">Časovna omejitev zaslona: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Časovna omejitev zaslona spremenjena na <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Način varčevanja energije</string>
@@ -82,6 +103,16 @@
   <string name="accessibility_quick_settings_ambient_display_on">Okoliški zaslon vklopljen.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Okoliški zaslon izklopljen.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Okoliški zaslon vklopljen.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Obvestila na zas. izk.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Obvestila na zas. vkl.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Obvestila na zaslonu izklopljena.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Obvestila na zaslonu vklopljena.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kofein izklopljen.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kofein vklopljen.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Ohranjevalnik baterije izklopljen.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Ohranjevalnik baterije vklopljen.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Ohranjevalnik baterije izklopljen.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Ohranjevalnik baterije vklopljen.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dinamične ploščice</string>
   <string name="dynamic_qs_tile_next_alarm_label">Naslednja budilka</string>
   <string name="dynamic_qs_tile_ime_selector_label">Izbirnik IME</string>
@@ -96,6 +127,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay spremenjen v dnevni način.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay spremenjen v nočni način.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay spremenjen v zunanji način.</string>
+  <string name="quick_settings_title_advanced_location">Tri stanja lokacije</string>
   <string name="accessibility_quick_settings_location_battery_saving">Poročanje o lokaciji: način varčevanja energije.</string>
   <string name="accessibility_quick_settings_location_gps_only">Poročanje o lokaciji: način \'samo tipala\'.</string>
   <string name="accessibility_quick_settings_location_high_accuracy">Poročanje o lokaciji: način visoke natančnosti.</string>
@@ -106,4 +138,9 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Poročanje o lokaciji spremenjeno v način varčevanja energije.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Poročanje o lokaciji spremenjeno v način \'samo tipala\'.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Poročanje o lokaciji spremenjen v način visoke natančnosti.</string>
+  <string name="quick_settings_tiles_category_system">Sistemske ploščice</string>
+  <string name="quick_settings_tiles_add_tiles">Dodaj ploščico</string>
+  <string name="hotspot_apm_message">Povezava z mobilnimi omrežji ni možna v načinu za letalo. Onemogočite način za letalo in poskusite znova.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Svetilka je vklopljena</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Tapnite, če želite izklopiti</string>
 </resources>

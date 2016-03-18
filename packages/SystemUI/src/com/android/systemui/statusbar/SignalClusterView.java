@@ -136,9 +136,14 @@ public class SignalClusterView
 
     public void setSecurityController(SecurityController sc) {
         if (DEBUG) Log.d(TAG, "SecurityController=" + sc);
+        if (sc == null && mSC != null) {
+            mSC.removeCallback(this);
+        }
         mSC = sc;
-        mSC.addCallback(this);
-        mVpnVisible = mSC.isVpnEnabled();
+        if (mSC != null) {
+            mSC.addCallback(this);
+            mVpnVisible = mSC.isVpnEnabled();
+        }
     }
 
     @Override
@@ -198,8 +203,10 @@ public class SignalClusterView
         post(new Runnable() {
             @Override
             public void run() {
-                mVpnVisible = mSC.isVpnEnabled();
-                apply();
+                if (mSC != null) {
+                    mVpnVisible = mSC.isVpnEnabled();
+                    apply();
+                }
             }
         });
     }
@@ -217,7 +224,7 @@ public class SignalClusterView
     @Override
     public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
             int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
-            String description, boolean isWide, int subId) {
+            String description, boolean isWide, boolean showRoamingIndicator, int subId) {
         PhoneState state = getState(subId);
         if (state == null) {
             return;
@@ -228,6 +235,7 @@ public class SignalClusterView
         state.mMobileDescription = statusIcon.contentDescription;
         state.mMobileTypeDescription = typeContentDescription;
         state.mIsMobileTypeIconWide = statusType != 0 && isWide;
+        state.mShowRoamingIndicator = showRoamingIndicator;
 
         apply();
     }
@@ -345,10 +353,13 @@ public class SignalClusterView
 
         for (PhoneState state : mPhoneStates) {
             if (state.mMobile != null) {
+                state.maybeStopAnimatableDrawable(state.mMobile);
                 state.mMobile.setImageDrawable(null);
+                state.mLastMobileStrengthId = -1;
             }
             if (state.mMobileType != null) {
                 state.mMobileType.setImageDrawable(null);
+                state.mLastMobileTypeId = -1;
             }
         }
 
@@ -476,11 +487,15 @@ public class SignalClusterView
         private final int mSubId;
         private boolean mMobileVisible = false;
         private int mMobileStrengthId = 0, mMobileTypeId = 0;
+        private int mLastMobileStrengthId = -1;
+        private int mLastMobileTypeId = -1;
         private boolean mIsMobileTypeIconWide;
         private String mMobileDescription, mMobileTypeDescription;
+        private boolean mShowRoamingIndicator;
 
         private ViewGroup mMobileGroup;
         private ImageView mMobile, mMobileDark, mMobileType;
+        private ImageView mMobileRoaming;
 
         public PhoneState(int subId, Context context) {
             ViewGroup root = (ViewGroup) LayoutInflater.from(context)
@@ -494,32 +509,25 @@ public class SignalClusterView
             mMobile         = (ImageView) root.findViewById(R.id.mobile_signal);
             mMobileDark     = (ImageView) root.findViewById(R.id.mobile_signal_dark);
             mMobileType     = (ImageView) root.findViewById(R.id.mobile_type);
+            mMobileRoaming  = (ImageView) root.findViewById(R.id.mobile_roaming);
         }
 
         public boolean apply(boolean isSecondaryIcon) {
             if (mMobileVisible && !mIsAirplaneMode) {
-                mMobile.setImageResource(mMobileStrengthId);
-                Drawable mobileDrawable = mMobile.getDrawable();
-                if (mobileDrawable instanceof Animatable) {
-                    Animatable ad = (Animatable) mobileDrawable;
-                    if (!ad.isRunning()) {
-                        ad.start();
-                    }
+                if (mLastMobileStrengthId != mMobileStrengthId) {
+                    updateAnimatableIcon(mMobile, mMobileStrengthId);
+                    updateAnimatableIcon(mMobileDark, mMobileStrengthId);
+                    mLastMobileStrengthId = mMobileStrengthId;
                 }
 
-                mMobileDark.setImageResource(mMobileStrengthId);
-                Drawable mobileDarkDrawable = mMobileDark.getDrawable();
-                if (mobileDarkDrawable instanceof Animatable) {
-                    Animatable ad = (Animatable) mobileDarkDrawable;
-                    if (!ad.isRunning()) {
-                        ad.start();
-                    }
+                if (mLastMobileTypeId != mMobileTypeId) {
+                    mMobileType.setImageResource(mMobileTypeId);
+                    mLastMobileTypeId = mMobileTypeId;
                 }
-
-                mMobileType.setImageResource(mMobileTypeId);
                 mMobileGroup.setContentDescription(mMobileTypeDescription
                         + " " + mMobileDescription);
                 mMobileGroup.setVisibility(View.VISIBLE);
+                mMobileRoaming.setVisibility(mShowRoamingIndicator ? View.VISIBLE : View.GONE);
             } else {
                 mMobileGroup.setVisibility(View.GONE);
             }
@@ -540,6 +548,32 @@ public class SignalClusterView
             return mMobileVisible;
         }
 
+        private void updateAnimatableIcon(ImageView view, int resId) {
+            maybeStopAnimatableDrawable(view);
+            view.setImageResource(resId);
+            maybeStartAnimatableDrawable(view);
+        }
+
+        private void maybeStopAnimatableDrawable(ImageView view) {
+            Drawable drawable = view.getDrawable();
+            if (drawable instanceof Animatable) {
+                Animatable ad = (Animatable) drawable;
+                if (ad.isRunning()) {
+                    ad.stop();
+                }
+            }
+        }
+
+        private void maybeStartAnimatableDrawable(ImageView view) {
+            Drawable drawable = view.getDrawable();
+            if (drawable instanceof Animatable) {
+                Animatable ad = (Animatable) drawable;
+                if (!ad.isRunning()) {
+                    ad.start();
+                }
+            }
+        }
+
         public void populateAccessibilityEvent(AccessibilityEvent event) {
             if (mMobileVisible && mMobileGroup != null
                     && mMobileGroup.getContentDescription() != null) {
@@ -550,6 +584,7 @@ public class SignalClusterView
         public void setIconTint(int tint, float darkIntensity) {
             applyDarkIntensity(darkIntensity, mMobile, mMobileDark);
             setTint(mMobileType, tint);
+            setTint(mMobileRoaming, tint);
         }
     }
 }

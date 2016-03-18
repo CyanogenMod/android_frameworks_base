@@ -19,6 +19,7 @@ package com.android.systemui.statusbar.phone;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.UserHandle;
@@ -90,6 +91,8 @@ public class NavbarEditor implements View.OnTouchListener {
     // just to avoid reallocations
     private static final int[] sLocation = new int[2];
 
+    private Resources mResources;
+
     /**
      * Longpress runnable to assign buttons in edit mode
      */
@@ -151,11 +154,12 @@ public class NavbarEditor implements View.OnTouchListener {
 
     private static final String DEFAULT_SETTING_STRING = "empty|back|home|recent|empty|menu0";
 
-    public NavbarEditor (View parent, boolean orientation, boolean isRtl) {
+    public NavbarEditor (View parent, boolean orientation, boolean isRtl, Resources res) {
         mContext = parent.getContext();
         mParent = parent;
         mVertical = orientation;
         mRtl = isRtl;
+        mResources = res;
 
         mButtonViews = new ArrayList<KeyButtonView>();
 
@@ -277,7 +281,8 @@ public class NavbarEditor implements View.OnTouchListener {
             if (!mLongPressed && !view.getTag().equals(NAVBAR_HOME) &&
                     !view.getTag().equals(NAVBAR_RECENT) && !view.getTag().equals(NAVBAR_BACK)) {
                 final boolean isSmallButton = ArrayUtils.contains(SMALL_BUTTON_IDS, view.getId());
-                final ButtonAdapter list = new ButtonAdapter(mContext, mButtonViews, isSmallButton);
+                final ButtonAdapter list = new ButtonAdapter(mContext, mButtonViews, isSmallButton,
+                        getResources());
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                         .setTitle(mContext.getString(R.string.navbar_dialog_title))
@@ -388,7 +393,7 @@ public class NavbarEditor implements View.OnTouchListener {
                 }
             }
 
-            buttonView.setInfo(button, mVertical, isSmallButton);
+            buttonView.setInfo(button, mVertical, isSmallButton, getResources());
             if (button != NAVBAR_EMPTY && !isSmallButton) {
                 visibleCount++;
             }
@@ -462,6 +467,14 @@ public class NavbarEditor implements View.OnTouchListener {
         }
     }
 
+    private Resources getResources() {
+        return mResources != null ? mResources : mContext.getResources();
+    }
+
+    public void updateResources(Resources res) {
+        mResources = res;
+    }
+
     /**
      * Class to store info about supported buttons
      */
@@ -501,9 +514,10 @@ public class NavbarEditor implements View.OnTouchListener {
 
     private static class ButtonAdapter extends ArrayAdapter<ButtonInfo> {
         private ArrayList<ButtonInfo> mTakenItems;
+        private Resources mResources;
 
         public ButtonAdapter(Context context,
-                ArrayList<KeyButtonView> buttons, boolean smallButtons) {
+                ArrayList<KeyButtonView> buttons, boolean smallButtons, Resources resources) {
             super(context, R.layout.navigation_bar_edit_menu_item, R.id.key_text,
                     buildItems(smallButtons));
 
@@ -514,6 +528,7 @@ public class NavbarEditor implements View.OnTouchListener {
                     mTakenItems.add(info);
                 }
             }
+            mResources = resources;
         }
 
         private static List<ButtonInfo> buildItems(boolean smallButtons) {
@@ -545,7 +560,7 @@ public class NavbarEditor implements View.OnTouchListener {
             text.setEnabled(enabled);
 
             ImageView icon = (ImageView) view.findViewById(R.id.key_icon);
-            icon.setImageResource(info.portResource);
+            icon.setImageDrawable(mResources.getDrawable(info.portResource));
             icon.setColorFilter(new PorterDuffColorFilter(
                     text.getCurrentTextColor(), PorterDuff.Mode.SRC_IN));
 

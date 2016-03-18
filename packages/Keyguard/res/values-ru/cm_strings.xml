@@ -23,4 +23,5 @@
     <item quantity="few">Введите PIN-код. У вас осталось <xliff:g id="number">%d</xliff:g> попытки.</item>
     <item quantity="other">Введите PIN-код. У вас осталось <xliff:g id="number">%d</xliff:g> попыток.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Ошибка: введено меньше минимальной длины</string>
 </resources>

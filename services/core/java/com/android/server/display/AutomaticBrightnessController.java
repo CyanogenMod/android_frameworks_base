@@ -61,6 +61,11 @@ class AutomaticBrightnessController {
     private static final float BRIGHTENING_LIGHT_HYSTERESIS = 0.10f;
     private static final float DARKENING_LIGHT_HYSTERESIS = 0.20f;
 
+    // Threshold (in lux) to select between normal and fast debounce time.
+    // If the difference between last sample and weighted value is larger than this value,
+    // fast debounce is used.
+    private static final float BRIGHTENING_FAST_THRESHOLD = 1000f;
+
     // How long the current sensor reading is assumed to be valid beyond the current time.
     // This provides a bit of prediction, as well as ensures that the weight for the last sample is
     // non-zero, which in turn ensures that the total weight is non-zero.
@@ -119,6 +124,7 @@ class AutomaticBrightnessController {
     // when adapting to brighter or darker environments.  This parameter controls how quickly
     // brightness changes occur in response to an observed change in light level that exceeds the
     // hysteresis threshold.
+    private final long mBrighteningLightFastDebounceConfig;
     private final long mBrighteningLightDebounceConfig;
     private final long mDarkeningLightDebounceConfig;
 
@@ -204,7 +210,8 @@ class AutomaticBrightnessController {
             SensorManager sensorManager, Spline autoBrightnessSpline, int lightSensorWarmUpTime,
             int brightnessMin, int brightnessMax, float dozeScaleFactor,
             int lightSensorRate, long brighteningLightDebounceConfig,
-            long darkeningLightDebounceConfig, boolean resetAmbientLuxAfterWarmUpConfig,
+            long brighteningLightFastDebounceConfig, long darkeningLightDebounceConfig,
+            boolean resetAmbientLuxAfterWarmUpConfig,
             int ambientLightHorizon, LiveDisplayController ldc) {
         mContext = context;
         mCallbacks = callbacks;
@@ -217,6 +224,7 @@ class AutomaticBrightnessController {
         mDozeScaleFactor = dozeScaleFactor;
         mLightSensorRate = lightSensorRate;
         mBrighteningLightDebounceConfig = brighteningLightDebounceConfig;
+        mBrighteningLightFastDebounceConfig = brighteningLightFastDebounceConfig;
         mDarkeningLightDebounceConfig = darkeningLightDebounceConfig;
         mResetAmbientLuxAfterWarmUpConfig = resetAmbientLuxAfterWarmUpConfig;
         mLiveDisplay = ldc;
@@ -268,6 +276,7 @@ class AutomaticBrightnessController {
         pw.println("  mScreenBrightnessRangeMaximum=" + mScreenBrightnessRangeMaximum);
         pw.println("  mLightSensorWarmUpTimeConfig=" + mLightSensorWarmUpTimeConfig);
         pw.println("  mBrighteningLightDebounceConfig=" + mBrighteningLightDebounceConfig);
+        pw.println("  mBrighteningLightFastDebounceConfig=" + mBrighteningLightFastDebounceConfig);
         pw.println("  mDarkeningLightDebounceConfig=" + mDarkeningLightDebounceConfig);
         pw.println("  mResetAmbientLuxAfterWarmUpConfig=" + mResetAmbientLuxAfterWarmUpConfig);
 
@@ -315,6 +324,7 @@ class AutomaticBrightnessController {
     private void handleLightSensorEvent(long time, float lux) {
         mHandler.removeMessages(MSG_UPDATE_AMBIENT_LUX);
 
+        if (DEBUG) Slog.d(TAG, "handleLightSensorEvent: time=" + time + ", lux=" + lux);
         applyLightSensorMeasurement(time, lux);
         updateAmbientLux(time);
     }
@@ -382,7 +392,7 @@ class AutomaticBrightnessController {
         return x * (x * 0.5f + mWeightingIntercept);
     }
 
-    private long nextAmbientLightBrighteningTransition(long time) {
+    private long nextAmbientLightBrighteningTransition(long time, float ambientLux) {
         final int N = mAmbientLightRingBuffer.size();
         long earliestValidTime = time;
         for (int i = N - 1; i >= 0; i--) {
@@ -391,10 +401,13 @@ class AutomaticBrightnessController {
             }
             earliestValidTime = mAmbientLightRingBuffer.getTime(i);
         }
-        return earliestValidTime + mBrighteningLightDebounceConfig;
+
+        long debounceDelay = mLastObservedLux - ambientLux > BRIGHTENING_FAST_THRESHOLD
+                ? mBrighteningLightFastDebounceConfig : mBrighteningLightDebounceConfig;
+        return earliestValidTime + debounceDelay;
     }
 
-    private long nextAmbientLightDarkeningTransition(long time) {
+    private long nextAmbientLightDarkeningTransition(long time, float ambientLux) {
         final int N = mAmbientLightRingBuffer.size();
         long earliestValidTime = time;
         for (int i = N - 1; i >= 0; i--) {
@@ -438,13 +451,12 @@ class AutomaticBrightnessController {
             updateAutoBrightness(true);
         }
 
-        long nextBrightenTransition = nextAmbientLightBrighteningTransition(time);
-        long nextDarkenTransition = nextAmbientLightDarkeningTransition(time);
         float ambientLux = calculateAmbientLux(time);
+        long nextBrightenTransition = nextAmbientLightBrighteningTransition(time, ambientLux);
+        long nextDarkenTransition = nextAmbientLightDarkeningTransition(time, ambientLux);
 
         if (ambientLux >= mBrighteningLuxThreshold && nextBrightenTransition <= time
                 || ambientLux <= mDarkeningLuxThreshold && nextDarkenTransition <= time) {
-            setAmbientLux(ambientLux);
             if (DEBUG) {
                 Slog.d(TAG, "updateAmbientLux: "
                         + ((ambientLux > mAmbientLux) ? "Brightened" : "Darkened") + ": "
@@ -452,9 +464,10 @@ class AutomaticBrightnessController {
                         + ", mAmbientLightRingBuffer=" + mAmbientLightRingBuffer
                         + ", mAmbientLux=" + mAmbientLux);
             }
+            setAmbientLux(ambientLux);
             updateAutoBrightness(true);
-            nextBrightenTransition = nextAmbientLightBrighteningTransition(time);
-            nextDarkenTransition = nextAmbientLightDarkeningTransition(time);
+            nextBrightenTransition = nextAmbientLightBrighteningTransition(time, ambientLux);
+            nextDarkenTransition = nextAmbientLightDarkeningTransition(time, ambientLux);
         }
         long nextTransitionTime = Math.min(nextDarkenTransition, nextBrightenTransition);
         // If one of the transitions is ready to occur, but the total weighted ambient lux doesn't

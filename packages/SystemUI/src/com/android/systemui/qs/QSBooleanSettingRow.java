@@ -49,6 +49,7 @@ public class QSBooleanSettingRow extends LinearLayout implements View.OnClickLis
     private TextView mText;
     private Switch mSwitch;
     private int mDefaultValue;
+    private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener;
 
     public QSBooleanSettingRow(Context context) {
         this(context, null);
@@ -99,11 +100,21 @@ public class QSBooleanSettingRow extends LinearLayout implements View.OnClickLis
                             + "buttonView = [" + buttonView + "], isChecked = [" + isChecked
                             + "] and table: " + mWhichTable + ", and key: " + mKey);
                     applyChange(isChecked);
+                    if (mOnCheckedChangeListener != null) {
+                        mOnCheckedChangeListener.onCheckedChanged(buttonView, isChecked);
+                    }
                 }
             });
         }
 
         a.recycle();
+    }
+
+    public void setChecked(boolean checked) {
+        if (mSwitch.isChecked() == checked) {
+            return;
+        }
+        mSwitch.setChecked(checked);
     }
 
     private void applyChange(boolean value) {
@@ -159,5 +170,9 @@ public class QSBooleanSettingRow extends LinearLayout implements View.OnClickLis
     @Override
     public void onClick(View v) {
         mSwitch.setChecked(!mSwitch.isChecked());
+    }
+
+    public void setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener l) {
+        mOnCheckedChangeListener = l;
     }
 }

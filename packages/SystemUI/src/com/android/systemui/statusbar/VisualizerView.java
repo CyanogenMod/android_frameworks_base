@@ -26,18 +26,20 @@ import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.provider.Settings;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+
 import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import cyanogenmod.providers.CMSettings;
 
-import java.util.Arrays;
-
 public class VisualizerView extends View implements Palette.PaletteAsyncListener,
         KeyguardMonitor.Callback {
+
+    private static final String TAG = VisualizerView.class.getSimpleName();
+    private static final boolean DEBUG = false;
 
     private Paint mPaint;
     private Visualizer mVisualizer;
@@ -89,9 +91,14 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private final Runnable mLinkVisualizer = new Runnable() {
         @Override
         public void run() {
+            if (DEBUG) {
+                Log.w(TAG, "+++ mLinkVisualizer run()");
+            }
+
             try {
                 mVisualizer = new Visualizer(0);
             } catch (Exception e) {
+                Log.e(TAG, "error initializing visualizer", e);
                 return;
             }
 
@@ -101,16 +108,25 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
                     false, true);
             mVisualizer.setEnabled(true);
 
+            if (DEBUG) {
+                Log.w(TAG, "--- mLinkVisualizer run()");
+            }
         }
     };
 
     private final Runnable mUnlinkVisualizer = new Runnable() {
         @Override
         public void run() {
+            if (DEBUG) {
+                Log.w(TAG, "+++ mUnlinkVisualizer run(), mVisualizer: " + mVisualizer);
+            }
             if (mVisualizer != null) {
                 mVisualizer.setEnabled(false);
                 mVisualizer.release();
                 mVisualizer = null;
+            }
+            if (DEBUG) {
+                Log.w(TAG, "--- mUninkVisualizer run()");
             }
         }
     };
@@ -156,6 +172,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private void updateViewVisibility() {
         setVisibility(mKeyguardMonitor != null && mKeyguardMonitor.isShowing()
                 && mVisualizerEnabled ? View.VISIBLE : View.GONE);
+        checkStateChanged();
     }
 
     @Override
@@ -222,6 +239,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         mKeyguardMonitor = kgm;
         if (isAttachedToWindow()) {
             // otherwise we might never register ourselves
+            mKeyguardMonitor.removeCallback(this);
             mKeyguardMonitor.addCallback(this);
             updateViewVisibility();
         }
@@ -229,6 +247,9 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
 
     public void setVisible(boolean visible) {
         if (mVisible != visible) {
+            if (DEBUG) {
+                Log.i(TAG, "setVisible() called with visible = [" + visible + "]");
+            }
             mVisible = visible;
             checkStateChanged();
         }
@@ -236,6 +257,9 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
 
     public void setDozing(boolean dozing) {
         if (mDozing != dozing) {
+            if (DEBUG) {
+                Log.i(TAG, "setDozing() called with dozing = [" + dozing + "]");
+            }
             mDozing = dozing;
             checkStateChanged();
         }
@@ -243,6 +267,9 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
 
     public void setPlaying(boolean playing) {
         if (mPlaying != playing) {
+            if (DEBUG) {
+                Log.i(TAG, "setPlaying() called with playing = [" + playing + "]");
+            }
             mPlaying = playing;
             checkStateChanged();
         }
@@ -250,6 +277,9 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
 
     public void setPowerSaveMode(boolean powerSaveMode) {
         if (mPowerSaveMode != powerSaveMode) {
+            if (DEBUG) {
+                Log.i(TAG, "setPowerSaveMode() called with powerSaveMode = [" + powerSaveMode + "]");
+            }
             mPowerSaveMode = powerSaveMode;
             checkStateChanged();
         }
@@ -257,6 +287,9 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
 
     public void setOccluded(boolean occluded) {
         if (mOccluded != occluded) {
+            if (DEBUG) {
+                Log.i(TAG, "setOccluded() called with occluded = [" + occluded + "]");
+            }
             mOccluded = occluded;
             checkStateChanged();
         }
@@ -316,8 +349,8 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     }
 
     private void checkStateChanged() {
-        if (mVisible && mPlaying && !mDozing && !mPowerSaveMode && mVisualizerEnabled
-                && !mOccluded) {
+        if (getVisibility() == View.VISIBLE && mVisible && mPlaying && !mDozing && !mPowerSaveMode
+                && mVisualizerEnabled && !mOccluded) {
             if (!mDisplaying) {
                 mDisplaying = true;
                 AsyncTask.execute(mLinkVisualizer);

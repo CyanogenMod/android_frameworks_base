@@ -104,7 +104,6 @@ public class LocalePicker extends ListFragment {
 
         String[] locales = Resources.getSystem().getAssets().getLocales();
         ArrayList<String> localeList = getLocaleArray(locales, resources);
-        Collections.addAll(localeList, locales);
 
         // Don't show the pseudolocales unless we're in developer mode. http://b/17190407.
         if (!isInDeveloperMode) {

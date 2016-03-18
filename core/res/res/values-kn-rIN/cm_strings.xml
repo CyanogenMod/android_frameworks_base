@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆಗಳನ್ನು ಅಥವಾ ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ದೂರವಾಣಿ ಸಂಖ್ಯೆಗಳ ಬಗ್ಗೆ ಮಾಹಿತಿಯನ್ನು ಓದಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="permlab_changePhoneBlacklist">ಫೋನ್ ಬ್ಲಾಕ್‍ಪಟ್ಟಿ ಬದಲಾವಣೆ</string>
   <string name="permdesc_changePhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆ ಮತ್ತು ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ಸಂಖ್ಯೆಗಳನ್ನು ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
-  <string name="global_action_choose_profile">ಪ್ರೊಫೈಲ್</string>
   <string name="permlab_setKeyguardWallpaper">ಕೀಗಾರ್ಡ್ ವಾಲ್‍ಪೇಪರ್ ಹೊಂದಿಕೆ</string>
   <string name="permdesc_setKeyguardWallpaper">ಒಂದು ಆಪ್‍ಗೆ ಲಾಕ್ ಪರದೆಯ ವಾಲ್‍ಪೇಪರ್ ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="global_action_reboot">ರಿಬೂಟ್</string>
@@ -50,20 +49,8 @@
   <string name="adb_active_custom_tile_both">ಯುಎಸ್‍ಬಿ &amp; ನೆಟ್‍ವರ್ಕ್</string>
   <string name="adb_active_custom_tile_usb">ಯುಎಸ್‍ಬಿ</string>
   <string name="adb_active_custom_tile_net">ನೆಟ್‍ವರ್ಕ್</string>
-  <string name="permlab_accessThemeService">ಥೀಮ್ ಸೇವೆಗೆ ಪ್ರವೇಶ</string>
   <string name="permlab_interceptPackageLaunch">ಆಪ್ ಆರಂಭ ಪ್ರತಿಬಂಧ</string>
-  <string name="permdesc_accessThemeService">ಆಪ್‍ಗೆ ಥೀಮ್ ಸೇವೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಅನುಮತಿಸು. ಸಾಮಾನ್ಯ ಆಪ್‍ಗಳಿಗೆ ಇದರ ಅವಶ್ಯಕತೆ ಇರುವುದಿಲ್ಲ.</string>
-  <string name="permlab_readThemes">ನಿಮ್ಮ ಥೀಮ್‍ನ ಮಾಹಿತಿಯನ್ನು ಓದು</string>
-  <string name="permdesc_readThemesDesc">ಆಪ್‍ಗೆ ನಿಮ್ಮ ಥೀಮ್‍ಗಳನ್ನು ಓದಲು ಅನುಮತಿಸುತ್ತದೆ ಮತ್ತು
-       ನೀವು ಯಾವ ಥೀಮ್ ಅನ್ವಯಿಸಿದ್ದೀರಿ ಎಂದು ನಿರ್ಧರಿಸುತ್ತದೆ.</string>
-  <string name="permlab_writeThemes">ನಿಮ್ಮ ಥೀಮ್ಸನ್ನು ಮಾರ್ಪಡಿಸು</string>
-  <string name="permdesc_writeThemesDesc">ಆಪ್‍ಗೆ ಹೊಸ ಥೀಮ್‍ಗಳನ್ನು ಸೇರಿಸಲು ಅನುಮತಿಸುತ್ತದೆ ಮತ್ತು
-       ನೀವು ಅನ್ವಯಿಸಿರುವ ಥೀಮ್‍ನ್ನು ಮಾರ್ಪಡಿಸುತ್ತದೆ.</string>
-  <string name="theme_install_error_title">ಥೀಮ್ ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
-  <string name="theme_install_error_message">%s ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
   <string name="stylus_app_not_installed">%s ಸ್ಥಾಪಿತವಾಗಿಲ್ಲ</string>
-  <string name="theme_reset_notification_title">ಥೀಮ್ ಮರುಹೊಂದಿಕೆ</string>
-  <string name="theme_reset_notification_body">ಬಹು ಆಪ್ ಕ್ರಾಶ್‍ನ ಕಾರಣದಿಂದಾಗಿ ಸಿಸ್ಟಂ ಥೀಮನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲಾಗಿದೆ.</string>
   <string name="silent_mode_priority">ಆದ್ಯತೆ</string>
   <string name="silent_mode_none">ಶೂನ್ಯ</string>
   <string name="subscription_change_disabled_wifi_ap">ಸಿಮ್ ಚಂದಾದಾರಿಕೆ ಬದಲಾದ ಕಾರಣ ವೈ-ಫೈ ಹಾಟ್‍ಸ್ಪಾಟನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</string>
@@ -110,7 +97,6 @@
   <string name="app_ops_start_at_bootup">ಪವರ್ ಅಪ್ ವೇಳೆ ಆರಂಭವಾಗು</string>
   <string name="app_ops_toast_window">ಟೋಸ್ಟ್ ಸಂದೇಶಗಳನ್ನು ಪ್ರದರ್ಶಿಸು</string>
   <string name="app_ops_toggle_bluetooth">ಟಾಗಲ್ ಬ್ಲೂಟೂತ್</string>
-  <string name="app_ops_toggle_mobile_data">ಟಾಗಲ್ ಮೊಬೈಲ್ ಡೇಟಾ</string>
   <string name="app_ops_toggle_nfc">ಟಾಗಲ್ NFC</string>
   <string name="app_ops_use_alarm_volume">ಅಲಾರಂ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_audio_focus">ಆಡಿಯೋ ಫೋಕಸ್ ನಿಯಂತ್ರಿಸು</string>

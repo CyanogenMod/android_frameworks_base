@@ -64,6 +64,11 @@ public class LockPatternUtils {
     private static final boolean DEBUG = false;
 
     /**
+     * The key to identify when the lock pattern enabled flag is being acccessed for legacy reasons.
+     */
+    public static final String LEGACY_LOCK_PATTERN_ENABLED = "legacy_lock_pattern_enabled";
+
+    /**
      * The number of incorrect attempts before which we fall back on an alternative
      * method of verifying the user, and resetting their lock pattern.
      */
@@ -1011,6 +1016,19 @@ public class LockPatternUtils {
         return isLockPatternEnabled(getKeyguardStoredPasswordQuality(userId), userId);
     }
 
+    @Deprecated
+    public boolean isLegacyLockPatternEnabled(int userId) {
+        // Note: this value should default to {@code true} to avoid any reset that might result.
+        // We must use a special key to read this value, since it will by default return the value
+        // based on the new logic.
+        return getBoolean(LEGACY_LOCK_PATTERN_ENABLED, true, userId);
+    }
+
+    @Deprecated
+    public void setLegacyLockPatternEnabled(int userId) {
+        setBoolean(Settings.Secure.LOCK_PATTERN_ENABLED, true, userId);
+    }
+
     private boolean isLockPatternEnabled(int mode, int userId) {
         return mode == DevicePolicyManager.PASSWORD_QUALITY_SOMETHING
                 && savedPatternExists(userId);
@@ -1097,20 +1115,20 @@ public class LockPatternUtils {
         setLong(Settings.Secure.LOCK_PATTERN_SIZE, size, UserHandle.USER_CURRENT);
     }
 
-    public void setVisibleDotsEnabled(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled, UserHandle.USER_CURRENT);
+    public void setVisibleDotsEnabled(boolean enabled, int userId) {
+        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled, userId);
     }
 
-    public boolean isVisibleDotsEnabled() {
-        return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true, UserHandle.USER_CURRENT);
+    public boolean isVisibleDotsEnabled(int userId) {
+        return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true, userId);
     }
 
-    public void setShowErrorPath(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled, UserHandle.USER_CURRENT);
+    public void setShowErrorPath(boolean enabled, int userId) {
+        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled, userId);
     }
 
-    public boolean isShowErrorPath() {
-        return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true, UserHandle.USER_CURRENT);
+    public boolean isShowErrorPath(int userId) {
+        return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true, userId);
     }
 
     /**

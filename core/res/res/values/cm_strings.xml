@@ -45,9 +45,6 @@
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changePhoneBlacklist">Allows an app to change the phone numbers that are blocked for incoming calls or messages.</string>
 
-    <!-- label for item that opens the profile choosing dialog -->
-    <string name="global_action_choose_profile">Profile</string>
-
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -97,36 +94,11 @@
     <string name="adb_active_custom_tile_usb">USB</string>
     <string name="adb_active_custom_tile_net">Network</string>
 
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_accessThemeService">access theme service</string>
-
     <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
     <string name="permlab_interceptPackageLaunch">intercept app launch</string>
 
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_accessThemeService">Allows an app to access the theme service. Should never be needed for normal apps.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_readThemes">read your theme info</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_readThemesDesc">Allows the app to read your themes and
-       determine which theme you have applied.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_writeThemes">modify your themes</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_writeThemesDesc">Allows the app to insert new themes and
-       modify which theme you have applied.</string>
-
-    <!-- Theme installation error notification -->
-    <string name="theme_install_error_title">Failed to install theme</string>
-    <string name="theme_install_error_message">%s failed to install</string>
-
     <!-- stylus gestures support -->
     <string name="stylus_app_not_installed">%s is not installed</string>
-
-    <string name="theme_reset_notification_title">Theme reset</string>
-    <string name="theme_reset_notification_body">System theme restored due to multiple app crashes.</string>
 
     <!-- Zen mode buttons -->
     <string name="silent_mode_priority">Priority</string>
@@ -185,7 +157,7 @@
     <string name="app_ops_start_at_bootup">start at power up</string>
     <string name="app_ops_toast_window">display toast messages</string>
     <string name="app_ops_toggle_bluetooth">toggle Bluetooth</string>
-    <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
+    <string name="app_ops_toggle_mobile_data">toggle cellular data</string>
     <string name="app_ops_toggle_nfc">toggle NFC</string>
     <string name="app_ops_toggle_wifi">toggle Wi-Fi</string>
     <string name="app_ops_use_alarm_volume">control alarm volume</string>
@@ -240,4 +212,28 @@
     <string name="tethered_notification_no_device_message">No connected device</string>
     <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connected device</string>
     <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> connected devices</string>
+
+    <!-- Keyguard strings -->
+    <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+    <string name="kg_sub_separator" translatable="false">" | "</string>
+
+    <!-- Protected Apps Notification -->
+    <string name="notify_package_component_protected_title">Activity launch blocked</string>
+    <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> is protected from being launched. Tap to authenticate and launch the application.</string>
+
+    <!-- Battery fully charged notification -->
+    <string name="notify_battery_fully_charged_title">Battery fully charged</string>
+    <string name="notify_battery_fully_charged_text">Disconnect your device from the charger to improve battery longevity.</string>
+
+    <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+    <string name="permlab_resetBatteryStats">reset battery statistics</string>
+    <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+    <string name="permdesc_resetBatteryStats">Allows an application to reset the current low-level battery usage data.</string>
+
+    <!-- Uicc hotswapped event configuration needed notification -->
+    <string name="uicc_hot_swapped_event_title">SIM cards have changed</string>
+    <string name="uicc_hot_swapped_event_text">Tap to set SIM card default preferences</string>
 </resources>

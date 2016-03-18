@@ -114,7 +114,7 @@ public class DndTile extends QSTile<QSTile.BooleanState> {
         mDisableTotalSilence.setAllowAnimation(true);
         MetricsLogger.action(mContext, getMetricsCategory(), !mState.value);
         if (mState.value) {
-            showDetail(true);
+            mController.setZen(Global.ZEN_MODE_OFF, null, TAG);
         } else {
             int zen = Prefs.getInt(mContext, Prefs.Key.DND_FAVORITE_ZEN, Global.ZEN_MODE_ALARMS);
             mController.setZen(zen, null, TAG);

@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">ಸಿಸ್ಟಂ ಪ್ರೊಫೈಲ್ಸ್</string>
   <string name="quick_settings_profiles_off">ಪ್ರೊಫೈಲ್ಸ್ ನಿಷ್ಕ್ರೀಯಗೊಂಡಿದೆ</string>
+  <string name="quick_settings_heads_up_label">ಹೆಡ್ಸ್ ಅಪ್</string>
+  <string name="quick_settings_battery_saver_label">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ</string>
   <string name="accessibility_quick_settings_sync_off">ಸಿಂಕ್ ಆಫ್.</string>
   <string name="accessibility_quick_settings_sync_on">ಸಿಂಕ್ ಆನ್.</string>
   <string name="accessibility_quick_settings_sync_changed_off">ಸಿಂಕ್ ಆಫ್ ಆಗಿದೆ.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">ಆವರಿಸಿದ ಪರದೆ ಆನ್.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">ಆವರಿಸಿದ ಪರದೆ ಆಫ್ ಆಗಿದೆ.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">ಆವರಿಸಿದ ಪರದೆ ಆನ್ ಆಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_heads_up_off">ಹೆಡ್ಸ್ ಅಪ್ ಆಫ್.</string>
+  <string name="accessibility_quick_settings_heads_up_on">ಹೆಡ್ಸ್ ಅಪ್ ಆನ್.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">ಹೆಡ್ಸ್ ಅಪ್ ಆಫ್ ಆಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">ಹೆಡ್ಸ್ ಅಪ್ ಆನ್ ಆಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆಫ್.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆನ್.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆಫ್ ಆಗಿದೆ.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಆನ್ ಆಗಿದೆ.</string>
   <string name="quick_settings_dynamic_tile_detail_title">ಕ್ರಿಯಾತ್ಮಕ ಟೈಲ್</string>
   <string name="dynamic_qs_tile_next_alarm_label">ಮುಂದಿನ ಅಲಾರಂ</string>
   <string name="dynamic_qs_tile_ime_selector_label">ಇಎಂಇ ಆಯ್ಕೆ</string>

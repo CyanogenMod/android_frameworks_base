@@ -45,7 +45,7 @@
   <string name="accessibility_quick_settings_profiles">Perfils: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">S\'han desactivat els perfils.</string>
   <string name="accessibility_quick_settings_profiles_changed">Perfil canviat a <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
-  <string name="quick_settings_compass_init">Inicialitzant\u2026</string>
+  <string name="quick_settings_compass_init">S\'està inicialitzant\u2026</string>
   <string name="led_notification_title">Ajustaments de llums</string>
   <string name="led_notification_text">Llum LED habilitada per ajustos</string>
   <string name="qs_tile_edit_header_instruction">Prem i aguanta les cel·les per reordenar-les</string>
@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Capçalera</string>
   <string name="quick_settings_title_tiles">Cel·les</string>
   <string name="quick_settings_title_show_weather">Mostra el temps</string>
+  <string name="quick_settings_title_show_brightness_slider">Mostra la barra liscant de brillantor</string>
   <string name="quick_settings_title_enlarge_first_row">Engrandeix la primera fila</string>
   <string name="screen_pinning_description_no_navbar">Això ho manté a la vista fins que el desancoris. Toca i aguanta el botó Enrera per desancorar.</string>
   <string name="quick_settings_custom_tile_detail_title">Cel·la personalitzada</string>
@@ -65,6 +66,9 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Perfils de sistema</string>
   <string name="quick_settings_profiles_off">Perfils desactivats</string>
+  <string name="quick_settings_heads_up_label">Notificacions emergents</string>
+  <string name="quick_settings_battery_saver_label">Estalvi de bateria</string>
+  <string name="quick_settings_caffeine_label">Cafeïna</string>
   <string name="accessibility_quick_settings_sync_off">Sinc desactivada.</string>
   <string name="accessibility_quick_settings_sync_on">Sinc activada.</string>
   <string name="accessibility_quick_settings_sync_changed_off">S\'ha desactivat la sincronització.</string>
@@ -76,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Pantalla de bloqueig</string>
   <string name="quick_settings_ambient_display_label">Pantalla ambient</string>
   <string name="quick_settings_lockscreen_label_enforced">Pantalla de bloqueig aplicada</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Deshabilitat pel perfil</string>
   <string name="accessibility_quick_settings_screen_timeout">Temps d\'espera de la pantalla: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Temps d\'espera de la pantalla canviat a <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Mode de la bateria</string>
@@ -98,6 +103,16 @@
   <string name="accessibility_quick_settings_ambient_display_on">Pantalla ambient activada.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">S\'ha desactivat la pantalla ambient.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">S\'ha activat la pantalla ambient.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Notificacions emergents apagades.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notificacions emergents activades.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">S\'han apagat les notificacions emergents.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">S\'han encès les notificacions emergents.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Cafeïna desactivada.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Cafeïna activada.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Estalvi de bateria apagat.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Estalvi de bateria encès.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">S\'ha apagat l\'estalvi de bateria.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">S\'ha encès l\'estalvi de bateria.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Cel·la dinàmica</string>
   <string name="dynamic_qs_tile_next_alarm_label">Propera alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector de l\'IME</string>
@@ -123,4 +138,9 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Informes d\'ubicació canviats al mode d\'estalvi d\'energia.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Informes d\'ubicació canviats al mode només sensors.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informes d\'ubicació canviats al mode d\'alta precisió.</string>
+  <string name="quick_settings_tiles_category_system">Cel·les del sistema</string>
+  <string name="quick_settings_tiles_add_tiles">Afegeix una cel·la</string>
+  <string name="hotspot_apm_message">No es pot connectar a xarxes mòbils mentre el mode Avió està habilitat. Deshabilita el mode Avió i intenta-ho de nou.</string>
+  <string name="quick_settings_tile_flashlight_not_title">La llanterna està encesa</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Pica per apagar-la</string>
 </resources>

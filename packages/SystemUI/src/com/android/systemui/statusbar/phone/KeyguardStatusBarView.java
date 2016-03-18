@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
- *
+ * Copyright (C) 2016 The CyanogenMod Project
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -31,8 +31,10 @@ import android.widget.TextView;
 
 import com.android.systemui.BatteryLevelTextView;
 import com.android.systemui.BatteryMeterView;
+import com.android.systemui.DockBatteryMeterView;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.DockBatteryController;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
@@ -49,12 +51,14 @@ public class KeyguardStatusBarView extends RelativeLayout {
     private MultiUserSwitch mMultiUserSwitch;
     private ImageView mMultiUserAvatar;
     private BatteryLevelTextView mBatteryLevel;
+    private BatteryLevelTextView mDockBatteryLevel;
 
-    private BatteryController mBatteryController;
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
 
     private int mSystemIconsSwitcherHiddenExpandedMargin;
     private Interpolator mFastOutSlowInInterpolator;
+
+    private UserInfoController mUserInfoController;
 
     public KeyguardStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -67,6 +71,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
         mMultiUserSwitch = (MultiUserSwitch) findViewById(R.id.multi_user_switch);
         mMultiUserAvatar = (ImageView) findViewById(R.id.multi_user_avatar);
         mBatteryLevel = (BatteryLevelTextView) findViewById(R.id.battery_level_text);
+        mDockBatteryLevel = (BatteryLevelTextView) findViewById(R.id.dock_battery_level_text);
         mCarrierLabel = (TextView) findViewById(R.id.keyguard_carrier_text);
         loadDimens();
         mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(getContext(),
@@ -85,6 +90,14 @@ public class KeyguardStatusBarView extends RelativeLayout {
                         com.android.internal.R.dimen.text_size_small_material));
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mUserInfoController != null) {
+            mUserInfoController.removeListener(mUserInfoChangedListener);
+        }
+    }
+
     private void loadDimens() {
         mSystemIconsSwitcherHiddenExpandedMargin = getResources().getDimensionPixelSize(
                 R.dimen.system_icons_switcher_hidden_expanded_margin);
@@ -100,6 +113,9 @@ public class KeyguardStatusBarView extends RelativeLayout {
             removeView(mMultiUserSwitch);
         }
         mBatteryLevel.setVisibility(View.VISIBLE);
+        if (mDockBatteryLevel != null) {
+            mDockBatteryLevel.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateSystemIconsLayoutParams() {
@@ -120,22 +136,43 @@ public class KeyguardStatusBarView extends RelativeLayout {
     }
 
     public void setBatteryController(BatteryController batteryController) {
-        mBatteryController = batteryController;
-        ((BatteryMeterView) findViewById(R.id.battery)).setBatteryController(batteryController);
-        mBatteryLevel.setBatteryController(batteryController);
+        BatteryMeterView v = ((BatteryMeterView) findViewById(R.id.battery));
+        v.setBatteryStateRegistar(batteryController);
+        v.setBatteryController(batteryController);
+        mBatteryLevel.setBatteryStateRegistar(batteryController);
+    }
+
+    public void setDockBatteryController(DockBatteryController dockBatteryController) {
+        DockBatteryMeterView v = ((DockBatteryMeterView) findViewById(R.id.dock_battery));
+        if (dockBatteryController != null) {
+            v.setBatteryStateRegistar(dockBatteryController);
+            mDockBatteryLevel.setBatteryStateRegistar(dockBatteryController);
+        } else {
+            if (v != null ) {
+                removeView(v);
+            }
+            if (mDockBatteryLevel != null) {
+                removeView(mDockBatteryLevel);
+                mDockBatteryLevel = null;
+            }
+        }
     }
 
     public void setUserSwitcherController(UserSwitcherController controller) {
         mMultiUserSwitch.setUserSwitcherController(controller);
     }
 
+    private UserInfoController.OnUserInfoChangedListener mUserInfoChangedListener =
+            new UserInfoController.OnUserInfoChangedListener() {
+        @Override
+        public void onUserInfoChanged(String name, Drawable picture) {
+            mMultiUserAvatar.setImageDrawable(picture);
+        }
+    };
+
     public void setUserInfoController(UserInfoController userInfoController) {
-        userInfoController.addListener(new UserInfoController.OnUserInfoChangedListener() {
-            @Override
-            public void onUserInfoChanged(String name, Drawable picture) {
-                mMultiUserAvatar.setImageDrawable(picture);
-            }
-        });
+        mUserInfoController = userInfoController;
+        userInfoController.addListener(mUserInfoChangedListener);
     }
 
     public void setKeyguardUserSwitcher(KeyguardUserSwitcher keyguardUserSwitcher) {

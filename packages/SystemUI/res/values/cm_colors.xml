@@ -74,6 +74,14 @@
     <color name="qs_edit_header_instruction_text_color">@android:color/white</color>
     <color name="qs_row_text_color">@android:color/white</color>
 
+    <!-- natural color of the trash can -->
+    <color name="qs_tile_trash_normal_tint">@android:color/transparent</color>
+    <!-- tint to color trash can when tile is hovering over it -->
+    <color name="qs_tile_trash_delete_tint">#EF5350</color>
+    <!-- Tint to color trash can when hovering edit tile, user cannot delete it.
+         Transparent because we have an animation by default. -->
+    <color name="qs_tile_trash_delete_tint_warning">@android:color/transparent</color>
+
     <!-- More exposed hard coded colors -->
     <color name="toggle_slider_text_color">#666666</color>
     <color name="no_recent_apps_text_color">@android:color/holo_blue_light</color>
@@ -97,4 +105,16 @@
     <color name="play_button_text_color">#000000</color>
     <color name="zen_ic_close_tint_color">@android:color/white</color>
     <color name="header_debug_info_text_color">#00A040</color>
+
+    <!-- QS Detailed View Text and Icon Colors -->
+    <color name="qs_detailed_default_text_color">@android:color/white</color>
+    <color name="qs_detailed_expansion_indicator_color">@color/qs_title_text_color</color>
+    <color name="qs_detailed_title_text_color">@color/qs_title_text_color</color>
+    <color name="qs_detailed_icon_tint_color">@color/qs_title_text_color</color>
+
+    <!-- Quick tile text color when the tile is disabled -->
+    <color name="qs_tile_text_disabled">#ff747474</color>
+
+    <!-- Active color for volume slider -->
+    <color name="volume_slider_active">@color/system_accent_color</color>
 </resources>

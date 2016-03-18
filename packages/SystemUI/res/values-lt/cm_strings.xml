@@ -49,6 +49,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Sistemos profiliai</string>
   <string name="quick_settings_profiles_off">Profiliai neleidžiami</string>
+  <string name="quick_settings_heads_up_label">Iššokantys pranešimai</string>
+  <string name="quick_settings_battery_saver_label">Akumuliatoriaus tausojimas</string>
   <string name="accessibility_quick_settings_sync_off">Sinchronizavimas išjungtas.</string>
   <string name="accessibility_quick_settings_sync_on">Sinchronizavimas įjungtas.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinchronizavimas išjungtas.</string>
@@ -82,6 +84,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display įjungta.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display išjungta.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display įjungta.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Iššokantys pranešimai išjungti.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Iššokantys pranešimai įjungti.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Iššokantys pranešimai išjungti.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Iššokantys pranešimai įjungti.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Akumuliatoriaus tausojimas išjungtas.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Akumuliatoriaus tausojimas įjungtas.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Akumuliatoriaus tausojimas išjungtas.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Akumuliatoriaus tausojimas įjungtas.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Dinaminė plytelė</string>
   <string name="dynamic_qs_tile_next_alarm_label">Kitas signalas</string>
   <string name="dynamic_qs_tile_ime_selector_label">Įvesties metodas</string>

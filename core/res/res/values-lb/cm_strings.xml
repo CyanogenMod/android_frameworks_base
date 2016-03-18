@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Erlaabt der App, Informatiounen iwwer blockéiert Telefonsnummere fir erakommend Uriff oder Messagen ze liesen.</string>
   <string name="permlab_changePhoneBlacklist">Schwaarz Lëscht änneren</string>
   <string name="permdesc_changePhoneBlacklist">Erlaabt der App, d\'blockéiert Telefonsnummere fir erakommend Uriff oder Messagen z\'änneren.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">Hannergrondbild vum Spärschierm setzen</string>
   <string name="permdesc_setKeyguardWallpaper">Erlaabt der App, d\'Hannergrondbild vum Spärschierm z\'änneren.</string>
   <string name="global_action_reboot">Nei starten</string>
@@ -50,18 +49,8 @@
   <string name="adb_active_custom_tile_both">USB an Netzwierk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netzwierk</string>
-  <string name="permlab_accessThemeService">Op den Design-Service zougräifen</string>
   <string name="permlab_interceptPackageLaunch">App-Start offänken</string>
-  <string name="permdesc_accessThemeService">Erlaabt der App, den Accès op den Design-Service. Dat misst fir normal Appen ni néideg sinn.</string>
-  <string name="permlab_readThemes">Design-Info liesen</string>
-  <string name="permdesc_readThemesDesc">Erlaabt der App, d\'Designen auszeliesen an ze kucke wéi en Design applizéiert ass.</string>
-  <string name="permlab_writeThemes">Aktiven Design änneren</string>
-  <string name="permdesc_writeThemesDesc">Erlaabt der App, nei Designen dobäizesetzen an den aktiven Design z\'änneren.</string>
-  <string name="theme_install_error_title">Design konnt net installéiert ginn</string>
-  <string name="theme_install_error_message">%s konnt net installéiert ginn</string>
   <string name="stylus_app_not_installed">%s ass net installéiert</string>
-  <string name="theme_reset_notification_title">Design-Reset</string>
-  <string name="theme_reset_notification_body">De System-Design gouf wéinst App-Ofstierz recuperéiert.</string>
   <string name="silent_mode_priority">Prioritéit</string>
   <string name="silent_mode_none">Keen</string>
   <string name="subscription_change_disabled_wifi_ap">WLAN-Zougrëffspunkt gouf opgrond vun Ännerunge am SIM-Abonnement desaktivéiert</string>
@@ -108,7 +97,6 @@
   <string name="app_ops_start_at_bootup">automatesch starten</string>
   <string name="app_ops_toast_window">Kuerzzäit-Notifikatiounen uweisen</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth un-/ausschalten</string>
-  <string name="app_ops_toggle_mobile_data">mobil Daten un-/ausschalten</string>
   <string name="app_ops_toggle_nfc">NFC un-/ausschalten</string>
   <string name="app_ops_toggle_wifi">WLAN un-/ausschalten</string>
   <string name="app_ops_use_alarm_volume">d\'Lautstäerkt vum Wecker änneren</string>

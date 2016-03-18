@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Umożliwia aplikacji odczytywanie informacji o numerach telefonów, od których przychodzące połączenia i wiadomości są blokowane.</string>
   <string name="permlab_changePhoneBlacklist">edytowanie czarnej listy</string>
   <string name="permdesc_changePhoneBlacklist">Umożliwia aplikacji zmianę numerów telefonów, od których przychodzące połączenia i wiadomości są blokowane.</string>
-  <string name="global_action_choose_profile">Profil</string>
   <string name="permlab_setKeyguardWallpaper">Ustawianie tła ekranu blokady</string>
   <string name="permdesc_setKeyguardWallpaper">Umożliwia aplikacji zmianę tła ekranu blokady.</string>
   <string name="global_action_reboot">Uruchom ponownie</string>
@@ -50,18 +49,8 @@
   <string name="adb_active_custom_tile_both">USB &amp; sieć</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Sieć</string>
-  <string name="permlab_accessThemeService">dostęp do usługi motywów</string>
   <string name="permlab_interceptPackageLaunch">przechwytywanie uruchamiania aplikacji</string>
-  <string name="permdesc_accessThemeService">Umożliwia aplikacji dostęp do usługi motywów (nie powinno być wymagane przez standardowe aplikacje).</string>
-  <string name="permlab_readThemes">odczytanie informacji o motywie</string>
-  <string name="permdesc_readThemesDesc">Zezwala aplikacji na dostęp do twoich motywów i decydowanie, który z nich ma zostać użyty.</string>
-  <string name="permlab_writeThemes">modyfikowanie Twoich motywów</string>
-  <string name="permdesc_writeThemesDesc">Zezwala aplikacji na dodawanie nowych motywów i modyfikowanie tego, którego używasz.</string>
-  <string name="theme_install_error_title">Nie udało się zainstalować motywu</string>
-  <string name="theme_install_error_message">%s nie udało się zainstalować</string>
   <string name="stylus_app_not_installed">Nie zainstalowano aplikacji %s</string>
-  <string name="theme_reset_notification_title">Reset motywu</string>
-  <string name="theme_reset_notification_body">Domyślny motyw przywrócony z powodu wielu awarii aplikacji.</string>
   <string name="silent_mode_priority">Priorytet</string>
   <string name="silent_mode_none">Brak</string>
   <string name="subscription_change_disabled_wifi_ap">Wyłączono hotspot WiFi z powodu zmiany karty SIM</string>
@@ -108,8 +97,9 @@
   <string name="app_ops_start_at_bootup">uruchamianie podczas włączania urządzenia</string>
   <string name="app_ops_toast_window">wyświetlanie komunikatów w dymkach</string>
   <string name="app_ops_toggle_bluetooth">przełączanie Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">przełączanie przesyłu danych</string>
+  <string name="app_ops_toggle_mobile_data">przełączanie transmisji danych</string>
   <string name="app_ops_toggle_nfc">Przełączanie NFC</string>
+  <string name="app_ops_toggle_wifi">przełączanie Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">kontrolowanie głośności alarmu</string>
   <string name="app_ops_use_audio_focus">kontrolowanie priorytetów audio</string>
   <string name="app_ops_use_bluetooth_volume">kontrolowanie głośności urządzenia Bluetooth</string>
@@ -122,6 +112,21 @@
   <string name="app_ops_use_voice_volume">kontrolowanie głośności rozmów</string>
   <string name="app_ops_write_mms">pisanie MMS-ów</string>
   <string name="app_ops_write_sms">pisanie SMS-ów</string>
+  <string name="app_ops_use_fingerprint">odczyt linii papilarnych</string>
+  <string name="app_ops_add_voicemail">dodawanie wiadomości głosowej</string>
+  <string name="app_ops_read_phone_state">dostęp do stanu telefonu</string>
+  <string name="app_ops_scan_wifi">skanowanie sieci Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">zmiana tapety</string>
+  <string name="app_ops_assist_structure">wykorzystanie asystenta</string>
+  <string name="app_ops_assist_screenshot">tworzenie zrzutów ekranu</string>
+  <string name="app_ops_use_body_sensors">odczyt czujników ciała</string>
+  <string name="app_ops_read_cell_broadcasts">odczyt transmisji komórkowych</string>
+  <string name="app_ops_mock_location">pozorowanie twojej lokalizacji</string>
+  <string name="app_ops_read_external_storage">odczyt pamięci zewnętrznej</string>
+  <string name="app_ops_write_external_storage">zapis pamięci zewnętrznej</string>
+  <string name="app_ops_turn_on_screen">włączanie ekranu</string>
+  <string name="app_ops_get_accounts">dostęp do kont urządzenia</string>
+  <string name="app_ops_wifi_change">zmiana stanu Wi-Fi</string>
   <string name="app_ops_su">dostęp do roota</string>
   <string name="lock_to_app_toast_no_navbar">Aby odpiąć ekran, dotknij i przytrzymaj przycisk Wstecz.</string>
   <string name="live_display_auto">Automatycznie</string>
@@ -138,4 +143,8 @@
   <string name="tethered_notification_no_device_message">Brak podłączonego urządzenia</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> podłączone urządzenie</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> podłączone urządzenia</string>
+  <string name="notify_package_component_protected_title">Aktywność uruchamiania zablokowana</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s </xliff:g> jest chroniony(a) przed uruchomieniem. Kliknij, aby uwierzytelnić i uruchomić tę aplikację.</string>
+  <string name="notify_battery_fully_charged_title">Bateria naładowana</string>
+  <string name="notify_battery_fully_charged_text">Odłącz urządzenie od ładowarki, aby poprawić żywotność baterii.</string>
 </resources>

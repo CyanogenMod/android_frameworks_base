@@ -18,6 +18,7 @@ package android.content.res;
 
 import com.android.SdkConstants;
 import com.android.ide.common.rendering.api.ArrayResourceValue;
+import com.android.ide.common.rendering.api.DensityBasedResourceValue;
 import com.android.ide.common.rendering.api.LayoutLog;
 import com.android.ide.common.rendering.api.LayoutlibCallback;
 import com.android.ide.common.rendering.api.ResourceValue;
@@ -48,9 +49,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
 
-/**
- *
- */
 public final class BridgeResources extends Resources {
 
     private BridgeContext mContext;
@@ -278,7 +276,7 @@ public final class BridgeResources extends Resources {
      * always Strings. The ideal signature for the method should be &lt;T super String&gt;, but java
      * generics don't support it.
      */
-    private <T extends CharSequence> T[] fillValues(ArrayResourceValue resValue, T[] values) {
+    <T extends CharSequence> T[] fillValues(ArrayResourceValue resValue, T[] values) {
         int i = 0;
         for (Iterator<String> iterator = resValue.iterator(); iterator.hasNext(); i++) {
             @SuppressWarnings("unchecked")
@@ -404,7 +402,7 @@ public final class BridgeResources extends Resources {
                     if (xml.isFile()) {
                         // we need to create a pull parser around the layout XML file, and then
                         // give that to our XmlBlockParser
-                        parser = ParserFactory.create(xml);
+                        parser = ParserFactory.create(xml, true);
                     }
                 }
 
@@ -664,12 +662,17 @@ public final class BridgeResources extends Resources {
         Pair<String, ResourceValue> value = getResourceValue(id, mPlatformResourceFlag);
 
         if (value != null) {
-            String v = value.getSecond().getValue();
+            ResourceValue resVal = value.getSecond();
+            String v = resVal.getValue();
 
             if (v != null) {
                 if (ResourceHelper.parseFloatAttribute(value.getFirst(), v, outValue,
                         false /*requireUnit*/)) {
                     return;
+                }
+                if (resVal instanceof DensityBasedResourceValue) {
+                    outValue.density =
+                      ((DensityBasedResourceValue) resVal).getResourceDensity().getDpiValue();
                 }
 
                 // else it's a string

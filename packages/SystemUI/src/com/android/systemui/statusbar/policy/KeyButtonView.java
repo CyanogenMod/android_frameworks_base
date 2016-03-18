@@ -192,6 +192,11 @@ public class KeyButtonView extends ImageView {
 
     public void setInfo(NavbarEditor.ButtonInfo item, boolean isVertical, boolean isSmall) {
         final Resources res = getResources();
+        setInfo(item, isVertical, isSmall, res);
+    }
+
+    public void setInfo(NavbarEditor.ButtonInfo item, boolean isVertical, boolean isSmall,
+            Resources res) {
         final int keyDrawableResId;
 
         setTag(item);

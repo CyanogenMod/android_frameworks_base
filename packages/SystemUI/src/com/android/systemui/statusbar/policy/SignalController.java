@@ -256,6 +256,7 @@ public abstract class SignalController<T extends SignalController.State,
         IconGroup iconGroup;
         int inetCondition;
         int rssi; // Only for logging.
+        boolean showSeparateRoaming;
 
         // Not used for comparison, just used for logging.
         long time;

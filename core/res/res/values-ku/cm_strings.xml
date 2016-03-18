@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">ڕێگەدان: بە بەرنامەیەک بۆ خوێندنەوەی زانیاریەکان دەربارەی ژمارەی تەلەفۆنەکە کە بلۆک کراوە بۆ نامەو تەلەفۆنکردنی هاتوو.</string>
   <string name="permlab_changePhoneBlacklist">گۆڕنی تەلەفۆن لە لیستی ڕەش</string>
   <string name="permdesc_changePhoneBlacklist">ڕێگەدان بە بەرنامەکە بۆ ئەو ژمارانەی بلۆک کراون بۆ نامەو تەلەفۆن.</string>
-  <string name="global_action_choose_profile">زانیاری تایبەتی</string>
   <string name="permlab_setKeyguardWallpaper">دانانی کلیلە پارێز بۆ دیوارپۆش</string>
   <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی ڕوونمای دیوارپۆش.</string>
   <string name="global_action_reboot">دوبارە خستنەگەڕ</string>
@@ -46,17 +45,7 @@
   <string name="adb_net_active_notification_title">ABD سه‌روو هێڵ کارده‌کات</string>
   <string name="adb_both_active_notification_title">ABD سه‌روو USB و هێڵ کارده‌کات</string>
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
-  <string name="permlab_accessThemeService">ڕاژەی ڕێگەی تێم</string>
-  <string name="permdesc_accessThemeService">ڕێگەدان بە بارنامە بۆ ڕاژەی تێم. کە پێویست ناکا بۆ بەرنامەی ئاسایی.</string>
-  <string name="permlab_readThemes">خوێندنه‌وه‌ی زانیاری له‌باره‌ی باکگراوه‌نده‌که‌ت</string>
-  <string name="permdesc_readThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ خوێندنه‌وه‌ی باکگراوه‌نده‌کانت وه‌ بڕیاردانی باکگراوه‌ندێک که‌ خۆت په‌سه‌ندته‌.</string>
-  <string name="permlab_writeThemes">گۆڕینی باکگراوه‌نده‌کانت</string>
-  <string name="permdesc_writeThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ هێنانی باکگراوه‌ندی نوێ و
- گۆڕینی باکگراوه‌ندێک که‌ خۆت لات په‌سه‌نده‌.</string>
-  <string name="theme_install_error_title">دابەزاندنی ڕووکار سەرکەوتو نەبوو</string>
-  <string name="theme_install_error_message">%s دانەبەزێنرا</string>
   <string name="stylus_app_not_installed">%s دانەمەزراوە</string>
-  <string name="theme_reset_notification_title">ڕێکخستنەوەی ڕووکار</string>
   <string name="permlab_changePrivacyGuardState">چالاکردن یان لەکارخستنی بەرگری تایبەتی</string>
   <string name="permdesc_changePrivacyGuardState">ڕێگە دان بە بەرنامەکە بۆ گۆڕینی کەشوهەوای بەرنامەیەکی تر لە تایبەتی. کاتێک بەرنامەکە ئەکەوێتە کار لەگەڵ تایبەتی .هیچ ڕێگەیەکی نیە بۆ ئەوەی زانیاری تایبیەتیت بەکاربهێنێت وەکو ،ناوەکان،تەلەفۆن لۆگ یان نامە.</string>
   <string name="privacy_guard_notification">پاسەوانی تایبەتی چالاکراوە</string>
@@ -99,7 +88,6 @@
   <string name="app_ops_start_at_bootup">دەستپێکردنی چالاککردنی هێز</string>
   <string name="app_ops_toast_window">پیشاندانی تێبینی تازە</string>
   <string name="app_ops_toggle_bluetooth">گۆڕینی بلوتوس</string>
-  <string name="app_ops_toggle_mobile_data">گۆڕینی داتای مۆبایل</string>
   <string name="app_ops_toggle_nfc">گۆڕینی دۆخی NFC</string>
   <string name="app_ops_use_alarm_volume">کۆنترۆڵی دەنگی زەنگ</string>
   <string name="app_ops_use_audio_focus">کۆنترۆڵی تیشکۆی دەنگ</string>

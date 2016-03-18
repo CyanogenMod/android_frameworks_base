@@ -89,6 +89,7 @@
     <string name="quick_settings_title_header">Header</string>
     <string name="quick_settings_title_tiles">Tiles</string>
     <string name="quick_settings_title_show_weather">Show weather</string>
+    <string name="quick_settings_title_show_brightness_slider">Show brightness slider</string>
     <string name="quick_settings_title_enlarge_first_row">Enlarge first row</string>
 
     <!-- Screen pinning dialog description (for devices without navbar) -->
@@ -101,6 +102,9 @@
     <string name="quick_settings_nfc_label">NFC</string>
     <string name="quick_settings_profiles">System profiles</string>
     <string name="quick_settings_profiles_off">Profiles disabled</string>
+    <string name="quick_settings_heads_up_label">Heads up</string>
+    <string name="quick_settings_battery_saver_label">Battery saver</string>
+    <string name="quick_settings_caffeine_label">Caffeine</string>
 
     <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_sync_off">Sync off.</string>
@@ -118,6 +122,7 @@
     <string name="quick_settings_lockscreen_label">Lock screen</string>
     <string name="quick_settings_ambient_display_label">Ambient display</string>
     <string name="quick_settings_lockscreen_label_enforced">Lock screen enforced</string>
+    <string name="quick_settings_lockscreen_label_locked_by_profile">Disabled by profile</string>
     <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_screen_timeout">Screen timeout: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
 
@@ -168,6 +173,31 @@
     <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display turned on.</string>
 
+    <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_heads_up_off">Heads up off.</string>
+    <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_heads_up_on">Heads up on.</string>
+
+    <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_heads_up_changed_off">Heads up turned off.</string>
+    <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_heads_up_changed_on">Heads up turned on.</string>
+
+    <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_caffeine_off">Caffeine off.</string>
+    <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_caffeine_on">Caffeine on.</string>
+
+    <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_battery_saver_off">Battery saver off.</string>
+    <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_battery_saver_on">Battery saver on.</string>
+
+    <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_battery_saver_changed_off">Battery saver turned off.</string>
+    <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_quick_settings_battery_saver_changed_on">Battery saver turned on.</string>
+
     <!-- Dynamic tiles -->
     <string name="quick_settings_dynamic_tile_detail_title">Dynamic tile</string>
     <string name="dynamic_qs_tile_next_alarm_label">Next alarm</string>
@@ -215,4 +245,23 @@
     <string name="quick_settings_tiles_category_system">System tiles</string>
     <!-- detail header when adding a tile -->
     <string name="quick_settings_tiles_add_tiles">Add a tile</string>
+
+    <!-- Hotspot dialog message -->
+    <string name="hotspot_apm_message">Unable to connect to cellular networks while Airplane mode is enabled. Disable Airplane mode and try again.</string>
+
+    <!-- Notification which notifies user flashlight is enabled -->
+    <string name="quick_settings_tile_flashlight_not_title">Flashlight is on</string>
+    <string name="quick_settings_tile_flashlight_not_summary">Tap to turn off</string>
+
+    <!-- Wi-Fi hotspot label when enabled -->
+    <plurals name="wifi_hotspot_connected_clients_label">
+        <item quantity="one">%1$d client</item>
+        <item quantity="other">%1$d clients</item>
+    </plurals>
+
+    <!-- CellularTile data sim not configured state string -->
+    <string name="data_sim_not_configured">No data SIM</string>
+
+    <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_dock_battery_level">Dock battery <xliff:g id="number">%d</xliff:g> percent.</string>
 </resources>

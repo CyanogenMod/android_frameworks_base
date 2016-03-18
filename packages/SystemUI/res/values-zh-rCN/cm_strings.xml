@@ -50,12 +50,13 @@
   <string name="led_notification_text">LED 灯由设置启用</string>
   <string name="qs_tile_edit_header_instruction">长按瓷块来重新排列</string>
   <string name="quick_settings_edit_label">编辑瓷块</string>
-  <string name="quick_settings_cannot_delete_edit_tile">无法删除编辑的瓷块</string>
+  <string name="quick_settings_cannot_delete_edit_tile">不能删除“编辑”瓷块</string>
   <string name="qs_tiles_reset_confirmation">重置快速设置瓷块位置为默认配置？</string>
   <string name="quick_settings_tile_reset_to_default">重置为默认布局</string>
   <string name="quick_settings_title_header">标题</string>
   <string name="quick_settings_title_tiles">瓷块</string>
   <string name="quick_settings_title_show_weather">显示天气</string>
+  <string name="quick_settings_title_show_brightness_slider">显示亮度滑块</string>
   <string name="quick_settings_title_enlarge_first_row">扩大第一行</string>
   <string name="screen_pinning_description_no_navbar">这将会固定显示此屏幕，直到您取消固定为止。触摸并按住返回键即可取消固定。</string>
   <string name="quick_settings_custom_tile_detail_title">自定义瓷片</string>
@@ -65,6 +66,9 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">情景模式</string>
   <string name="quick_settings_profiles_off">已禁用情景模式</string>
+  <string name="quick_settings_heads_up_label">浮动通知</string>
+  <string name="quick_settings_battery_saver_label">省电模式</string>
+  <string name="quick_settings_caffeine_label">咖啡因</string>
   <string name="accessibility_quick_settings_sync_off">同步关闭。</string>
   <string name="accessibility_quick_settings_sync_on">同步开启。</string>
   <string name="accessibility_quick_settings_sync_changed_off">同步已关闭。</string>
@@ -76,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">锁屏</string>
   <string name="quick_settings_ambient_display_label">环境显示</string>
   <string name="quick_settings_lockscreen_label_enforced">强制锁屏</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">已在情景模式中禁用</string>
   <string name="accessibility_quick_settings_screen_timeout">屏幕超时：<xliff:g id="timeout" example="30 seconds">%s</xliff:g>。</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">屏幕超时已修改为<xliff:g id="timeout" example="30 seconds">%s</xliff:g>。</string>
   <string name="qs_tile_performance">电池模式</string>
@@ -98,6 +103,16 @@
   <string name="accessibility_quick_settings_ambient_display_on">开启环境显示。</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">环境显示已关闭。</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">环境显示已开启。</string>
+  <string name="accessibility_quick_settings_heads_up_off">浮动通知关。</string>
+  <string name="accessibility_quick_settings_heads_up_on">浮动通知开。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">浮动通知已关闭。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">浮动通知已开启。</string>
+  <string name="accessibility_quick_settings_caffeine_off">咖啡因模式关闭</string>
+  <string name="accessibility_quick_settings_caffeine_on">咖啡因模式开启</string>
+  <string name="accessibility_quick_settings_battery_saver_off">省电模式关闭。</string>
+  <string name="accessibility_quick_settings_battery_saver_on">省电模式开启。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">已关闭省电模式。</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">已开启省电模式。</string>
   <string name="quick_settings_dynamic_tile_detail_title">动态按钮</string>
   <string name="dynamic_qs_tile_next_alarm_label">下一个闹铃</string>
   <string name="dynamic_qs_tile_ime_selector_label">输入法选择器</string>
@@ -123,4 +138,9 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">地理位置报告已修改为节能模式。</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">位置报告已修改为仅使用传感器模式。</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">位置报告已修改为准确度高模式。</string>
+  <string name="quick_settings_tiles_category_system">系统磁块</string>
+  <string name="quick_settings_tiles_add_tiles">添加磁块</string>
+  <string name="hotspot_apm_message">飞行模式启用时无法连接到移动网络。请禁用飞行模式并重试。</string>
+  <string name="quick_settings_tile_flashlight_not_title">手电筒已开</string>
+  <string name="quick_settings_tile_flashlight_not_summary">轻按以关闭</string>
 </resources>

@@ -64,8 +64,6 @@ public class StatusBarWindowView extends FrameLayout {
     private NotificationPanelView mNotificationPanel;
     private View mBrightnessMirror;
 
-    private int mRightInset = 0;
-
     private PhoneStatusBar mService;
     private final Paint mTransparentSrcPaint = new Paint();
 
@@ -84,66 +82,6 @@ public class StatusBarWindowView extends FrameLayout {
         mStatusBarHeaderHeight = context
                 .getResources().getDimensionPixelSize(R.dimen.status_bar_header_height);
         mSettingsObserver = new SettingsObserver(mHandler);
-    }
-
-    @Override
-    protected boolean fitSystemWindows(Rect insets) {
-        if (getFitsSystemWindows()) {
-            boolean paddingChanged = insets.left != getPaddingLeft()
-                    || insets.top != getPaddingTop()
-                    || insets.bottom != getPaddingBottom();
-
-            // Super-special right inset handling, because scrims and backdrop need to ignore it.
-            if (insets.right != mRightInset) {
-                mRightInset = insets.right;
-                applyMargins();
-            }
-            // Drop top inset, apply left inset and pass through bottom inset.
-            if (paddingChanged) {
-                setPadding(insets.left, 0, 0, 0);
-            }
-            insets.left = 0;
-            insets.top = 0;
-            insets.right = 0;
-        } else {
-            if (mRightInset != 0) {
-                mRightInset = 0;
-                applyMargins();
-            }
-            boolean changed = getPaddingLeft() != 0
-                    || getPaddingRight() != 0
-                    || getPaddingTop() != 0
-                    || getPaddingBottom() != 0;
-            if (changed) {
-                setPadding(0, 0, 0, 0);
-            }
-            insets.top = 0;
-        }
-        return false;
-    }
-
-    private void applyMargins() {
-        final int N = getChildCount();
-        for (int i = 0; i < N; i++) {
-            View child = getChildAt(i);
-            if (child.getLayoutParams() instanceof LayoutParams) {
-                LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (!lp.ignoreRightInset && lp.rightMargin != mRightInset) {
-                    lp.rightMargin = mRightInset;
-                    child.requestLayout();
-                }
-            }
-        }
-    }
-
-    @Override
-    public FrameLayout.LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new LayoutParams(getContext(), attrs);
-    }
-
-    @Override
-    protected FrameLayout.LayoutParams generateDefaultLayoutParams() {
-        return new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     }
 
     @Override
@@ -190,11 +128,13 @@ public class StatusBarWindowView extends FrameLayout {
         // occur if our window is translucent. Since we are drawing the whole window anyway with
         // the scrim, we don't need the window to be cleared in the beginning.
         if (mService.isScrimSrcModeEnabled()) {
-            IBinder windowToken = getWindowToken();
-            WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
-            lp.token = windowToken;
-            setLayoutParams(lp);
-            WindowManagerGlobal.getInstance().changeCanvasOpacity(windowToken, true);
+            if (getLayoutParams() instanceof WindowManager.LayoutParams) {
+                WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
+                IBinder windowToken = getWindowToken();
+                lp.token = windowToken;
+                setLayoutParams(lp);
+                WindowManagerGlobal.getInstance().changeCanvasOpacity(windowToken, true);
+            }
             setWillNotDraw(false);
         } else {
             setWillNotDraw(!DEBUG);
@@ -205,6 +145,16 @@ public class StatusBarWindowView extends FrameLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mSettingsObserver.unobserve();
+    }
+
+    @Override
+    protected boolean fitSystemWindows(Rect insets) {
+        insets.bottom = 0;
+        insets.top = 0;
+        insets.right = 0;
+        insets.left = 0;
+        super.fitSystemWindows(insets);
+        return false;
     }
 
     @Override
@@ -300,7 +250,7 @@ public class StatusBarWindowView extends FrameLayout {
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mService.isScrimSrcModeEnabled()) {
             // We need to ensure that our window is always drawn fully even when we have paddings,
@@ -349,24 +299,6 @@ public class StatusBarWindowView extends FrameLayout {
 
     public void removeContent(View content) {
         removeView(content);
-    }
-
-    public class LayoutParams extends FrameLayout.LayoutParams {
-
-        public boolean ignoreRightInset;
-
-        public LayoutParams(int width, int height) {
-            super(width, height);
-        }
-
-        public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
-
-            TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.StatusBarWindowView_Layout);
-            ignoreRightInset = a.getBoolean(
-                    R.styleable.StatusBarWindowView_Layout_ignoreRightInset, false);
-            a.recycle();
-        }
     }
 
     class SettingsObserver extends ContentObserver {

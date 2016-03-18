@@ -891,11 +891,20 @@ public class MockPackageManager extends PackageManager {
     public boolean isUpgrade() {
         throw new UnsupportedOperationException();
     }
+
     /**
      * @hide
      */
     @Override
     public void setComponentProtectedSetting(ComponentName componentName, boolean newState) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public boolean isComponentProtected(String callingPackage, ComponentName componentName) {
         throw new UnsupportedOperationException();
     }
 

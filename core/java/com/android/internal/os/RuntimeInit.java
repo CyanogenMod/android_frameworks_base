@@ -19,6 +19,7 @@ package com.android.internal.os;
 import android.app.ActivityManagerNative;
 import android.app.ActivityThread;
 import android.app.ApplicationErrorReport;
+import android.content.res.ThemeConfig;
 import android.os.Build;
 import android.os.Debug;
 import android.os.IBinder;
@@ -83,6 +84,10 @@ public class RuntimeInit {
                         message.append("Process: ").append(processName).append(", ");
                     }
                     message.append("PID: ").append(Process.myPid());
+                    final ThemeConfig themeConfig =
+                            ActivityManagerNative.getDefault().getConfiguration().themeConfig;
+                    message.append("\nTheme: ").append(themeConfig == null ?
+                            ThemeConfig.SYSTEM_DEFAULT : themeConfig);
                     Clog_e(TAG, message.toString(), e);
                 }
 

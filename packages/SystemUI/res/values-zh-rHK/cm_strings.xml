@@ -43,6 +43,7 @@
   <string name="quick_settings_compass_label">指南針</string>
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">系統設定檔</string>
+  <string name="quick_settings_heads_up_label">浮動通知</string>
   <string name="accessibility_quick_settings_sync_off">已關閉同步。</string>
   <string name="accessibility_quick_settings_sync_on">已開啟同步。</string>
   <string name="accessibility_quick_settings_sync_changed_off">同步已關閉。</string>
@@ -65,6 +66,10 @@
   <string name="accessibility_quick_settings_lock_screen_on">已開啟鎖定螢幕功能。</string>
   <string name="accessibility_quick_settings_lock_screen_changed_off">已關閉鎖定螢幕功能。</string>
   <string name="accessibility_quick_settings_lock_screen_changed_on">已開啟鎖定螢幕功能。</string>
+  <string name="accessibility_quick_settings_heads_up_off">已關閉浮動通知。</string>
+  <string name="accessibility_quick_settings_heads_up_on">已開啟浮動通知。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">已關閉浮動通知。</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">已開啟浮動通知。</string>
   <string name="quick_settings_dynamic_tile_detail_title">動態方塊</string>
   <string name="dynamic_qs_tile_next_alarm_label">下一個鬧鐘</string>
   <string name="dynamic_qs_tile_ime_selector_label">輸入法選擇器</string>

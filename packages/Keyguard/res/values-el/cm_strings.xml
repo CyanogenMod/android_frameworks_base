@@ -22,4 +22,5 @@
     <item quantity="one">Εισάγετε το PIN, έχετε <xliff:g id="number">%d</xliff:g> προσπάθειες πριν χρειαστεί να επικοινωνήσετε με τον πάροχό σας για να ξεκλειδώσετε τη συσκευή σας.</item>
     <item quantity="other">Εισάγετε το PIN, έχετε <xliff:g id="number">%d</xliff:g> προσπάθειες.</item>
   </plurals>
+  <string name="kg_invalid_sim_length">Σφάλμα: Το μήκος εισόδου είναι μικρότερο από το ελάχιστο μήκος</string>
 </resources>

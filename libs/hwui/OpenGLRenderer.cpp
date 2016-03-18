@@ -181,7 +181,7 @@ void OpenGLRenderer::discardFramebuffer(float left, float top, float right, floa
 }
 
 void OpenGLRenderer::clear(float left, float top, float right, float bottom, bool opaque) {
-#ifdef QCOM_BSP_LEGACY
+#ifdef QCOM_HARDWARE
     mRenderState.scissor().setEnabled(true);
     mRenderState.scissor().set(left, getViewportHeight() - bottom, right - left, bottom - top);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -1710,6 +1710,7 @@ void OpenGLRenderer::drawPatch(const SkBitmap* bitmap, const Patch* mesh,
 
     Texture* texture = entry ? entry->texture : mCaches.textureCache.get(bitmap);
     if (!texture) return;
+    const AutoTexture autoCleanup(texture);
 
     // 9 patches are built for stretching - always filter
     int textureFillFlags = TextureFillFlags::ForceFilter;

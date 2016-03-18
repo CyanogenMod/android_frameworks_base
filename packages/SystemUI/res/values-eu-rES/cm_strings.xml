@@ -56,6 +56,7 @@
   <string name="quick_settings_title_header">Goiburua</string>
   <string name="quick_settings_title_tiles">Lauzak</string>
   <string name="quick_settings_title_show_weather">Bistaratu eguraldia</string>
+  <string name="quick_settings_title_show_brightness_slider">Bistaratu distira graduatzailea</string>
   <string name="quick_settings_title_enlarge_first_row">Handitu lehen lerroa</string>
   <string name="screen_pinning_description_no_navbar">Honek bistan mantenduko du desiltzatzen duzun arte. Sakatu eta mantendu atzera botoia desiltzatzeko.</string>
   <string name="quick_settings_custom_tile_detail_title">Lauza pertsonalizatua</string>
@@ -65,6 +66,9 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Sistema profilak</string>
   <string name="quick_settings_profiles_off">Profilak ezgaituta</string>
+  <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>
+  <string name="quick_settings_battery_saver_label">Bateria aurrezlea</string>
+  <string name="quick_settings_caffeine_label">Kafeina</string>
   <string name="accessibility_quick_settings_sync_off">Sinkronizazioa ezgaituta.</string>
   <string name="accessibility_quick_settings_sync_on">Sinkronizazioa gaituta.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Sinkronizazioa ezgaituta.</string>
@@ -76,6 +80,7 @@
   <string name="quick_settings_lockscreen_label">Blokeo-pantaila</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_lockscreen_label_enforced">Blokeo-pantaila behartuta</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Profilak desgaituta</string>
   <string name="accessibility_quick_settings_screen_timeout">Pantailaren denbora-muga: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Pantailaren denbora-muga aldatu da: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Bateria modua</string>
@@ -98,6 +103,16 @@
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display piztuta.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display itzalita.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display piztuta.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Jakinarazpen flotatzaileak ezgaituta.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Jakinarazpen flotatzaileak gaituta.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Jakinarazpen flotatzaileak ezgaituta.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Jakinarazpen flotatzaileak gaituta.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kafeina ez.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kafeina bai.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Bateria aurrezlea piztuta.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Bateria aurrezlea itzalita.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Bateria aurrezlea piztuta.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Lauza dinamikoa</string>
   <string name="dynamic_qs_tile_next_alarm_label">Hurrengo alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME hautatzailea</string>
@@ -123,4 +138,9 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Kokaleku txostena bateria aurrezteko modura aldatu da.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Kokaleku txostena sentsoreak besterik ez modura aldatu da.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Kokaleku txostena zehaztasun handiko modura aldatu da.</string>
+  <string name="quick_settings_tiles_category_system">Sistemaren lauzak</string>
+  <string name="quick_settings_tiles_add_tiles">Gehitu lauza bat</string>
+  <string name="hotspot_apm_message">Ezin da sare mugikorretara konektatu hegaldi modua gaituta dagoenean. Desgaitu hegaldi modua eta saiatu berriro.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Linterna piztuta dago</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Sakatu itzaltzeko</string>
 </resources>

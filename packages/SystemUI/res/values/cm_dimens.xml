@@ -39,6 +39,9 @@
     <!-- Padding end for weather text -->
     <dimen name="status_bar_weather_padding_end">16dp</dimen>
 
+    <!-- height of the qs page indicator -->
+    <dimen name="qs_panel_page_indicator_height">8dp</dimen>
+
     <dimen name="lockscreen_icon_side_padding">10dp</dimen>
     <dimen name="lockscreen_icon_size">35dp</dimen>
     <dimen name="phone_side_padding">10dp</dimen>

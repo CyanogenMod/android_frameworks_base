@@ -76,6 +76,7 @@ public class CaptivePortalLoginActivity extends Activity {
     private ConnectivityManager mCm;
     private boolean mLaunchBrowser = false;
     private MyWebViewClient mWebViewClient;
+    private String mResponseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class CaptivePortalLoginActivity extends Activity {
             setResult(Activity.RESULT_CANCELED);
             done(Result.WANTED_AS_IS);
         }
+        mResponseToken = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         mNetwork = getIntent().getParcelableExtra(ConnectivityManager.EXTRA_NETWORK);
         mCaptivePortal = getIntent().getParcelableExtra(ConnectivityManager.EXTRA_CAPTIVE_PORTAL);
 
@@ -196,7 +198,9 @@ public class CaptivePortalLoginActivity extends Activity {
                 mCaptivePortal.useNetwork();
                 break;
         }
-        setResult(Activity.RESULT_OK);
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_TEXT, mResponseToken);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 

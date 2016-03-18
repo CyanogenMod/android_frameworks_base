@@ -297,5 +297,8 @@
     <!-- Duration of the expansion animation in the volume dialog -->
     <item name="volume_expand_animation_duration" type="integer">300</item>
 
+    <!-- Allow Flashlight service to use wakelock -->
+    <bool name="flashlight_use_wakelock">false</bool>
+
 </resources>
 

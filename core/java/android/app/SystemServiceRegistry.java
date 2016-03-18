@@ -37,9 +37,7 @@ import android.content.IRestrictionsManager;
 import android.content.RestrictionsManager;
 import android.content.pm.ILauncherApps;
 import android.content.pm.LauncherApps;
-import android.content.res.IThemeService;
 import android.content.res.Resources;
-import android.content.res.ThemeManager;
 import android.hardware.ConsumerIrManager;
 import android.hardware.ISerialManager;
 import android.hardware.SensorManager;
@@ -256,7 +254,9 @@ final class SystemServiceRegistry {
                 new StaticServiceFetcher<BatteryManager>() {
             @Override
             public BatteryManager createService() {
-                return new BatteryManager();
+                IBinder b = ServiceManager.getService(Context.BATTERY_SERVICE);
+                IBatteryService service = IBatteryService.Stub.asInterface(b);
+                return new BatteryManager(service);
             }});
 
         registerService(Context.NFC_SERVICE, NfcManager.class,
@@ -705,15 +705,6 @@ final class SystemServiceRegistry {
             @Override
             public RadioManager createService(ContextImpl ctx) {
                 return new RadioManager(ctx);
-            }});
-
-        registerService(Context.THEME_SERVICE, ThemeManager.class,
-                new CachedServiceFetcher<ThemeManager>() {
-            public ThemeManager createService(ContextImpl ctx) {
-                IBinder b = ServiceManager.getService(Context.THEME_SERVICE);
-                IThemeService service = IThemeService.Stub.asInterface(b);
-                return new ThemeManager(ctx.getOuterContext(),
-                        service);
             }});
     }
 

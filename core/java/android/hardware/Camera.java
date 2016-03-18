@@ -40,6 +40,7 @@ import android.util.Log;
 import android.text.TextUtils;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.os.SystemProperties;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -483,8 +484,21 @@ public class Camera {
             mEventHandler = null;
         }
 
-        return native_setup(new WeakReference<Camera>(this), cameraId, halVersion,
-                ActivityThread.currentOpPackageName());
+        String packageName = ActivityThread.currentOpPackageName();
+
+        //Force HAL1 if the package name falls in this bucket
+        String packageList = SystemProperties.get("camera.hal1.packagelist", "");
+        if (packageList.length() > 0) {
+            TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(',');
+            splitter.setString(packageList);
+            for (String str : splitter) {
+                if (packageName.equals(str)) {
+                    halVersion = CAMERA_HAL_API_VERSION_1_0;
+                    break;
+                }
+            }
+        }
+        return native_setup(new WeakReference<Camera>(this), cameraId, halVersion, packageName);
     }
 
     private int cameraInitNormal(int cameraId) {
@@ -3471,8 +3485,8 @@ public class Camera {
         }
 
         /**
-         * Sets GPS processing method. It will store up to 32 characters
-         * in JPEG EXIF header.
+         * Sets GPS processing method. The method will be stored in a UTF-8 string up to 31 bytes
+         * long, in the JPEG EXIF header.
          *
          * @param processing_method The processing method to get this location.
          */

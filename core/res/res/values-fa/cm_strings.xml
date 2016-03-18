@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">به برنامه اجازه می‌دهد اطلاعات مربوط به شماره تلفن‌های مسدود را برای پیام‌ها یا تماس‌های ورودی بخواند.</string>
   <string name="permlab_changePhoneBlacklist">تغییر لیست سیاه گوشی</string>
   <string name="permdesc_changePhoneBlacklist">به برنامه اجازه می‌دهد شماره تلفن‌های مسدود را برای پیام‌ها یا تماس‌های ورودی تغییر دهد.</string>
-  <string name="global_action_choose_profile">پروفایل</string>
   <string name="permlab_setKeyguardWallpaper">تنظیم کاغذدیواری قفل صفحه</string>
   <string name="permdesc_setKeyguardWallpaper">به برنامه اجازه می‌دهد کاغذدیواری قفل صفحه را تغییر دهد.</string>
   <string name="global_action_reboot">راه‌اندازی مجدد</string>
@@ -50,20 +49,8 @@
   <string name="adb_active_custom_tile_both">شبکه و یواس‌بی</string>
   <string name="adb_active_custom_tile_usb">یواس‌بی</string>
   <string name="adb_active_custom_tile_net">شبکه</string>
-  <string name="permlab_accessThemeService">دسترسی به سرویس تم</string>
   <string name="permlab_interceptPackageLaunch">جلوگیری از اجرا شدن برنامه</string>
-  <string name="permdesc_accessThemeService">به برنامه مجوز دسترسی به سرویس تم را می‌دهد. این مجوز هرگز برای برنامه‌های معمول لازم نیست.</string>
-  <string name="permlab_readThemes">مشاهده اطلاعات تم شما</string>
-  <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا تم‌های شما را مشاهده کرده و
-       بفهمد شما کدام تم را انتخاب کرده‌اید.</string>
-  <string name="permlab_writeThemes">ویرایش تم‌های شما</string>
-  <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا تم‌های جدید ایجاد کرده و
-       تم انتخابی شما را ویرایش کند.</string>
-  <string name="theme_install_error_title">موفق به نصب تم نشد</string>
-  <string name="theme_install_error_message">%s نصب نشد</string>
   <string name="stylus_app_not_installed">%s نصب نیست</string>
-  <string name="theme_reset_notification_title">تنظیم مجدد تم</string>
-  <string name="theme_reset_notification_body">به دلیل از کار افتادن چند برنامه تم اصلی برگردانده شد.</string>
   <string name="silent_mode_priority">اولویت‌دار</string>
   <string name="silent_mode_none">هیچ‌کدام</string>
   <string name="subscription_change_disabled_wifi_ap">نقطه اتصال قابل حمل وای‌فای به دلیل تغییر تعرفه سیم کارت، غیرفعال شد</string>
@@ -110,7 +97,6 @@
   <string name="app_ops_start_at_bootup">اجرا هنگام روشن شدن</string>
   <string name="app_ops_toast_window">نمایش متن‌های کوچک</string>
   <string name="app_ops_toggle_bluetooth">روشن و خاموش کردن بلوتوث</string>
-  <string name="app_ops_toggle_mobile_data">روشن و خاموش کردن داده همراه</string>
   <string name="app_ops_toggle_nfc">روشن و خاموش کردن ان‌اف‌سی</string>
   <string name="app_ops_use_alarm_volume">کنترل صدای هشدار</string>
   <string name="app_ops_use_audio_focus">کنترل کانون صدا</string>

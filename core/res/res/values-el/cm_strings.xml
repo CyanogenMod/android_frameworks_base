@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Επιτρέπει σε μια εφαρμογή την ανάγνωση πληροφοριών σχετικά με τους αριθμούς τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
   <string name="permlab_changePhoneBlacklist">αλλαγή της μαύρης λίστας τηλεφώνου</string>
   <string name="permdesc_changePhoneBlacklist">Επιτρέπει σε μια εφαρμογή την αλλαγή των αριθμών τηλεφώνου που έχουν αποκλειστεί για εισερχόμενες κλήσεις ή μηνύματα.</string>
-  <string name="global_action_choose_profile">Προφίλ</string>
   <string name="permlab_setKeyguardWallpaper">ορισμός ταπετσαρίας οθόνης κλειδώματος</string>
   <string name="permdesc_setKeyguardWallpaper">Επιτρέπει σε μια εφαρμογή την αλλαγή της ταπετσαρίας της οθόνης κλειδώματος.</string>
   <string name="global_action_reboot">Επανεκκίνηση</string>
@@ -50,18 +49,8 @@
   <string name="adb_active_custom_tile_both">USB &amp; δίκτυο</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Δίκτυο</string>
-  <string name="permlab_accessThemeService">πρόσβαση στην υπηρεσία θεμάτων</string>
   <string name="permlab_interceptPackageLaunch">παρεμπόδιση έναρξης εφαρμογών</string>
-  <string name="permdesc_accessThemeService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία θεμάτων. Δεν πρέπει να απαιτείται από κανονικές εφαρμογές.</string>
-  <string name="permlab_readThemes">ανάγνωση πληροφοριών του θέματος σας</string>
-  <string name="permdesc_readThemesDesc">Επιτρέπει στην εφαρμογή να διαβάζει τα θέματα σας και να προσδιορίσει ποιο θέμα έχετε εφαρμόσει.</string>
-  <string name="permlab_writeThemes">τροποποίηση των θεμάτων σας</string>
-  <string name="permdesc_writeThemesDesc">Επιτρέπει στην εφαρμογή να εισάγει νέα θέματα και να τροποποιήσει το θέμα που έχετε εφαρμόσει.</string>
-  <string name="theme_install_error_title">Αποτυχία εγκατάστασης του θέματος</string>
-  <string name="theme_install_error_message">Αποτυχία εγκατάστασης του %s</string>
   <string name="stylus_app_not_installed">Το %s δεν είναι εγκατεστημένο</string>
-  <string name="theme_reset_notification_title">Επαναφορά θέματος</string>
-  <string name="theme_reset_notification_body">Έγινε επαναφορά του θέματος συστήματος λόγω πολλαπλών σφαλμάτων εφαρμογών.</string>
   <string name="silent_mode_priority">Προτεραιότητα</string>
   <string name="silent_mode_none">Κανένα</string>
   <string name="subscription_change_disabled_wifi_ap">Το Wi-Fi hotspot απενεργοποιήθηκε λόγω αλλαγής συνδρομής SIM</string>
@@ -108,7 +97,7 @@
   <string name="app_ops_start_at_bootup">άνοιγμα κατά την εκκίνηση</string>
   <string name="app_ops_toast_window">εμφάνιση αναδυόμενων μηνυμάτων</string>
   <string name="app_ops_toggle_bluetooth">εναλλαγή Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">εναλλαγή δεδομένων</string>
+  <string name="app_ops_toggle_mobile_data">εναλλαγή δεδομένων κινητής τηλεφωνίας</string>
   <string name="app_ops_toggle_nfc">εναλλαγή NFC</string>
   <string name="app_ops_toggle_wifi">εναλλαγή Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">έλεγχο έντασης ξυπνητηριού</string>
@@ -154,4 +143,8 @@
   <string name="tethered_notification_no_device_message">Καμία συνδεδεμένη συσκευή</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> συνδεδεμένη συσκευή</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> συνδεδεμένες συσκευές</string>
+  <string name="notify_package_component_protected_title">Η εκκίνηση της δραστηριότητας αποκλείστηκε</string>
+  <string name="notify_package_component_protected_text">Η εφαρμογή <xliff:g id="app_name">%1$s</xliff:g> είναι προστατευμένη. Πιέστε για έλεγχο ταυτότητας και εκκίνηση της εφαρμογής.</string>
+  <string name="notify_battery_fully_charged_title">Μπαταρία πλήρως φορτισμένη</string>
+  <string name="notify_battery_fully_charged_text">Αποσυνδέστε τη συσκευή από το φορτιστή για να βελτιώσετε τη μακροζωία της μπαταρίας.</string>
 </resources>

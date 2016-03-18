@@ -31,6 +31,7 @@ import com.android.systemui.R;
 import com.android.systemui.recents.misc.Console;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 
+import cyanogenmod.providers.CMSettings;
 
 /** A static Recents configuration for the current context
  * NOTE: We should not hold any references to a Context from a static instance */
@@ -73,6 +74,7 @@ public class RecentsConfiguration {
     public int maxNumTasksToLoad;
 
     /** Search bar */
+    public boolean searchBarEnabled = true;
     public int searchBarSpaceHeightPx;
 
     /** Task stack */
@@ -277,6 +279,13 @@ public class RecentsConfiguration {
         altTabKeyDelay = res.getInteger(R.integer.recents_alt_tab_key_delay);
         fakeShadows = res.getBoolean(R.bool.config_recents_fake_shadows);
         svelteLevel = res.getInteger(R.integer.recents_svelte_level);
+    }
+
+    public boolean updateShowSearch(Context context) {
+        boolean wasEnabled = searchBarEnabled;
+        searchBarEnabled = CMSettings.System.getInt(context.getContentResolver(),
+                CMSettings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
+        return wasEnabled != searchBarEnabled;
     }
 
     /** Updates the system insets */

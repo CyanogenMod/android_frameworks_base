@@ -182,6 +182,9 @@ public class PhoneStatusBarPolicy implements Callback {
         // bluetooth status
         updateBluetooth();
 
+        //Update initial tty mode
+        updateTTYMode();
+
         // Alarm clock
         mService.setIcon(SLOT_ALARM_CLOCK, R.drawable.stat_sys_alarm, 0, null);
         mService.setIconVisibility(SLOT_ALARM_CLOCK, false);
@@ -387,6 +390,29 @@ public class PhoneStatusBarPolicy implements Callback {
         } else {
             // TTY is off
             if (DEBUG) Log.v(TAG, "updateTTY: set TTY off");
+            mService.setIconVisibility(SLOT_TTY, false);
+        }
+    }
+
+    private boolean isWiredHeadsetOn() {
+        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        return audioManager.isWiredHeadsetOn();
+    }
+
+    private final void updateTTYMode() {
+        int ttyMode = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.PREFERRED_TTY_MODE, TelecomManager.TTY_MODE_OFF);
+        boolean enabled = ttyMode != TelecomManager.TTY_MODE_OFF;
+        if (DEBUG) Log.v(TAG, "updateTTYMode: enabled: " + enabled);
+        if (enabled && isWiredHeadsetOn()) {
+            // TTY is on
+            if (DEBUG) Log.v(TAG, "updateTTYMode: set TTY on");
+            mService.setIcon(SLOT_TTY, R.drawable.stat_sys_tty_mode, 0,
+                    mContext.getString(R.string.accessibility_tty_enabled));
+            mService.setIconVisibility(SLOT_TTY, true);
+        } else {
+            // TTY is off
+            if (DEBUG) Log.v(TAG, "updateTTYMode: set TTY off");
             mService.setIconVisibility(SLOT_TTY, false);
         }
     }

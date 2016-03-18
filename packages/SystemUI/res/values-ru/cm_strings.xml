@@ -42,20 +42,21 @@
   <string name="advanced_dev_option_uninstall">Удалить</string>
   <string name="accessibility_notification_brightness">Яркость</string>
   <string name="accessibility_quick_settings_profiles_off">Профили выключены.</string>
-  <string name="accessibility_quick_settings_profiles">Профиль: <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles">Профиль: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_profiles_changed_off">Профили выключены.</string>
-  <string name="accessibility_quick_settings_profiles_changed">Профиль изменён на <xliff:g id="профиль" example="По умолчанию">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles_changed">Профиль изменён на <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Включение\u2026</string>
   <string name="led_notification_title">Индикатор событий</string>
-  <string name="led_notification_text">Светодиод включен параметрами</string>
-  <string name="qs_tile_edit_header_instruction">Нажмите и удерживайте плитку для изменения</string>
-  <string name="quick_settings_edit_label">Редактировать плитки</string>
+  <string name="led_notification_text">Светодиод включен в настройках</string>
+  <string name="qs_tile_edit_header_instruction">Нажмите и удерживайте плитку для её перемещения</string>
+  <string name="quick_settings_edit_label">Изменить плитки</string>
   <string name="quick_settings_cannot_delete_edit_tile">Невозможно удалить кнопку редактирования</string>
   <string name="qs_tiles_reset_confirmation">Восстановить набор плиток по умолчанию?</string>
   <string name="quick_settings_tile_reset_to_default">Восстановить стандартные</string>
   <string name="quick_settings_title_header">Заголовок</string>
   <string name="quick_settings_title_tiles">Плитки</string>
   <string name="quick_settings_title_show_weather">Сведения о погоде</string>
+  <string name="quick_settings_title_show_brightness_slider">Показывать регулятор яркости</string>
   <string name="quick_settings_title_enlarge_first_row">Увеличить первый ряд</string>
   <string name="screen_pinning_description_no_navbar">Это приложение останется активным, пока вы не отмените блокировку долгим нажатием кнопки «Назад».</string>
   <string name="quick_settings_custom_tile_detail_title">Пользовательская плитка</string>
@@ -65,6 +66,8 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Системные профили</string>
   <string name="quick_settings_profiles_off">Профили отключены</string>
+  <string name="quick_settings_heads_up_label">Всплывающие уведомления</string>
+  <string name="quick_settings_battery_saver_label">Энергосбережение</string>
   <string name="accessibility_quick_settings_sync_off">Синхронизация отключена.</string>
   <string name="accessibility_quick_settings_sync_on">Синхронизация включена.</string>
   <string name="accessibility_quick_settings_sync_changed_off">Синхронизация отключена.</string>
@@ -76,6 +79,7 @@
   <string name="quick_settings_lockscreen_label">Экран блокировки</string>
   <string name="quick_settings_ambient_display_label">Индикация событий</string>
   <string name="quick_settings_lockscreen_label_enforced">Блокировка экрана включена</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Отключено профилем</string>
   <string name="accessibility_quick_settings_screen_timeout">Время до выключения экрана: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="accessibility_quick_settings_screen_timeout_changed">Время до выключения экрана изменено на <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Энергопотребление</string>
@@ -98,6 +102,14 @@
   <string name="accessibility_quick_settings_ambient_display_on">Индикация событий экраном включена.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_off">Индикация событий экраном отключена.</string>
   <string name="accessibility_quick_settings_ambient_display_changed_on">Индикация событий экраном включена.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Всплывающие уведомления отключены.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Всплывающие уведомления включены.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Всплывающие уведомления отключены.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Всплывающие уведомления включены.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Режим энергосбережения выключен.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Режим энергосбережения включён.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">Режим энергосбережения выключен.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">Режим энергосбережения включён.</string>
   <string name="quick_settings_dynamic_tile_detail_title">Динамическая плитка</string>
   <string name="dynamic_qs_tile_next_alarm_label">Следующий будильник</string>
   <string name="dynamic_qs_tile_ime_selector_label">Выбор метода ввода</string>
@@ -123,4 +135,9 @@
   <string name="accessibility_quick_settings_location_changed_battery_saving">Служба отправки местоположения переключена в режим экономии батареи.</string>
   <string name="accessibility_quick_settings_location_changed_gps_only">Для отправки местоположения используются только данные GPS.</string>
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Служба отправки местоположения переключена в режим высокой точности.</string>
+  <string name="quick_settings_tiles_category_system">Системные плитки</string>
+  <string name="quick_settings_tiles_add_tiles">Добавление плитки</string>
+  <string name="hotspot_apm_message">Подключение к мобильной сети невозможно, пока включён режим полёта. Отключите его, а затем повторите попытку.</string>
+  <string name="quick_settings_tile_flashlight_not_title">Фонарик включён</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Нажмите для отключения</string>
 </resources>

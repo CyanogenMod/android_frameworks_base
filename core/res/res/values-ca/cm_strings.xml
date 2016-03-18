@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Permet a una aplicació llegir informació sobre números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
   <string name="permlab_changePhoneBlacklist">canvia la llista negra del telèfon</string>
   <string name="permdesc_changePhoneBlacklist">Permet a una aplicació canviar els números de telèfon que estan bloquejats per a trucades entrants o missatges.</string>
-  <string name="global_action_choose_profile">Perfil</string>
   <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
   <string name="permdesc_setKeyguardWallpaper">Permet que una aplicació estableixi el fons de la pantalla de bloqueig.</string>
   <string name="global_action_reboot">Reinicia</string>
@@ -50,24 +49,14 @@
   <string name="adb_active_custom_tile_both">USB &amp; xarxa</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Xarxa</string>
-  <string name="permlab_accessThemeService">accés al servei de temes</string>
   <string name="permlab_interceptPackageLaunch">interceptar el llançament d\'una aplicació</string>
-  <string name="permdesc_accessThemeService">Permet a una aplicació accedir al servei de temes. No s\'hauria de necessitar mai en les aplicacions normals.</string>
-  <string name="permlab_readThemes">Llegeix la informació del teu tema</string>
-  <string name="permdesc_readThemesDesc">Permet a l\'aplicació llegir els teus temes i determinar quin tema has aplicat.</string>
-  <string name="permlab_writeThemes">modifica els teus temes</string>
-  <string name="permdesc_writeThemesDesc">Permet a l\'aplicació introduir temes nous i modificar quin tema has aplicat.</string>
-  <string name="theme_install_error_title">No ha pogut instal·lar el tema</string>
-  <string name="theme_install_error_message">%s no s\'ha pogut instal·lar</string>
   <string name="stylus_app_not_installed">%s no està instal·lat</string>
-  <string name="theme_reset_notification_title">Reinici de tema</string>
-  <string name="theme_reset_notification_body">El tema del sistema s\'ha restaurat degut a múltiples fallades d\'app.</string>
   <string name="silent_mode_priority">Prioritat</string>
   <string name="silent_mode_none">Cap</string>
   <string name="subscription_change_disabled_wifi_ap">S\'ha deshabilitat el punt d\'accés Wi-Fi degut a un canvi en la subscripció de la SIM</string>
   <string name="notify_turn_wifi_off_title">Apaga el Wi-Fi</string>
   <string name="permlab_changePrivacyGuardState">activa o desactiva el guarda de privacitat</string>
-  <string name="permdesc_changePrivacyGuardState">Permet a l\'app si una altra app s\'executa amb el guarda de privacitat. Quan una app s\'executa amb el guarda de privacitat, no tindrà accés a les dades personals com els contactes, registres de trucades, o missatges.</string>
+  <string name="permdesc_changePrivacyGuardState">Permet a l\'aplicació fer el canvi d\'estat de privacitat d\'una altra aplicació. Quan una aplicació s\'executa amb el guarda de privacitat, no tindrà accés a les dades personals com els contactes, registres de trucades, o missatges.</string>
   <string name="privacy_guard_notification">Guarda de privacitat actiu</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> no tindrà accés a dades personals</string>
   <string name="privacy_guard_dialog_title">Guarda de privacitat</string>
@@ -108,7 +97,7 @@
   <string name="app_ops_start_at_bootup">iniciar-se a l\'engegar</string>
   <string name="app_ops_toast_window">mostra missatges emergents</string>
   <string name="app_ops_toggle_bluetooth">canviar el Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">canviar les dades mòbils</string>
+  <string name="app_ops_toggle_mobile_data">commuta les dades mòbils</string>
   <string name="app_ops_toggle_nfc">canviar NFC</string>
   <string name="app_ops_toggle_wifi">canviar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar el volum de l\'alarma</string>
@@ -154,4 +143,8 @@
   <string name="tethered_notification_no_device_message">Cap dispositiu connectat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositiu connectat</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositius connectats</string>
+  <string name="notify_package_component_protected_title">Execució de l\'activitat bloquejada</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> està protegit de ser executada. Clica per autentificar i executar l\'aplicació.</string>
+  <string name="notify_battery_fully_charged_title">Bateria completament carregada</string>
+  <string name="notify_battery_fully_charged_text">Desconnecta el teu dispositiu del carregador per millorar la longevitat de la bateria.</string>
 </resources>

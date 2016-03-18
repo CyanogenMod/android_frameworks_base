@@ -28,7 +28,6 @@
   <string name="permdesc_readPhoneBlacklist">Permite a uma aplicação ler informações sobre números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
   <string name="permlab_changePhoneBlacklist">Alterar a lista negra do telefone</string>
   <string name="permdesc_changePhoneBlacklist">Permite a uma aplicação alterar os números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
-  <string name="global_action_choose_profile">Perfil</string>
   <string name="permlab_setKeyguardWallpaper">Definir a imagem de fundo do ecrã de bloqueio</string>
   <string name="permdesc_setKeyguardWallpaper">Permite a uma aplicação trocar a imagem de fundo do ecrã de bloqueio.</string>
   <string name="global_action_reboot">Reiniciar</string>
@@ -50,18 +49,8 @@
   <string name="adb_active_custom_tile_both">USB e rede</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rede</string>
-  <string name="permlab_accessThemeService">Aceder ao serviço de temas</string>
   <string name="permlab_interceptPackageLaunch">Intercetar a inicialização de uma aplicação</string>
-  <string name="permdesc_accessThemeService">Permite a uma aplicação aceder ao serviço de temas. Nunca deverá ser necessário para aplicações normais.</string>
-  <string name="permlab_readThemes">ler a informação do tema</string>
-  <string name="permdesc_readThemesDesc">Permite a uma aplicação ler os seus temas e determinar qual o tema que tem aplicado.</string>
-  <string name="permlab_writeThemes">modificar os seus temas</string>
-  <string name="permdesc_writeThemesDesc">Permite a uma aplicação inserir novos temas e modificar o tema que tem aplicado.</string>
-  <string name="theme_install_error_title">Falha ao instalar o tema</string>
-  <string name="theme_install_error_message">%s não instalou</string>
   <string name="stylus_app_not_installed">%s não está instalada</string>
-  <string name="theme_reset_notification_title">Restaurar tema</string>
-  <string name="theme_reset_notification_body">O tema do sistema foi restaurado devido a vários erros nas aplicações.</string>
   <string name="silent_mode_priority">Prioridade</string>
   <string name="silent_mode_none">Nenhum</string>
   <string name="subscription_change_disabled_wifi_ap">Zona Wi-Fi portátil desligada devido à alteração da assinatura SIM</string>
@@ -107,13 +96,13 @@
   <string name="app_ops_send_sms">Enviar uma mensagem SMS</string>
   <string name="app_ops_start_at_bootup">iniciar no arranque</string>
   <string name="app_ops_toast_window">exibir avisos no ecrã</string>
-  <string name="app_ops_toggle_bluetooth">alternar Bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">alternar dados móveis</string>
+  <string name="app_ops_toggle_bluetooth">alternar bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">alternar o estado dos dados móveis</string>
   <string name="app_ops_toggle_nfc">alternar NFC</string>
   <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar volume do alarme</string>
   <string name="app_ops_use_audio_focus">controlar o foco de áudio</string>
-  <string name="app_ops_use_bluetooth_volume">controlar o volume de Bluetooth</string>
+  <string name="app_ops_use_bluetooth_volume">controlar o volume do bluetooth</string>
   <string name="app_ops_use_master_volume">controlar o volume principal</string>
   <string name="app_ops_use_media_buttons">usar os botões multimédia</string>
   <string name="app_ops_use_media_volume">controlar o volume multimédia</string>
@@ -154,4 +143,8 @@
   <string name="tethered_notification_no_device_message">Nenhum dispositivo conectado</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivo conectado</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivos conectados</string>
+  <string name="notify_package_component_protected_title">Início de atividades bloqueado</string>
+  <string name="notify_package_component_protected_text">A abertura de <xliff:g id="app_name">%1$s</xliff:g> está protegida. Toque para se autenticar e poder iniciar a aplicação.</string>
+  <string name="notify_battery_fully_charged_title">Bateria completamente carregada</string>
+  <string name="notify_battery_fully_charged_text">Desligue o carregador do dispositivo para aumentar a vida útil da bateria.</string>
 </resources>

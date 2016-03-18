@@ -18,13 +18,13 @@
 -->
 
 <!-- This is the combined status bar / notification panel window. -->
-<FrameLayout
+<com.android.systemui.statusbar.phone.NavBarInsetLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sysui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:fitsSystemWindows="false"
+    android:fitsSystemWindows="true"
     android:descendantFocusability="afterDescendants">
 
     <com.android.systemui.statusbar.BackDropView
@@ -45,29 +45,34 @@
                    android:visibility="invisible" />
     </com.android.systemui.statusbar.BackDropView>
 
-    <FrameLayout android:id="@+id/scrimview"
+    <com.android.systemui.statusbar.phone.NavBarInsetLayout
+                 android:id="@+id/scrimview"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
-                 android:visibility="visible">
+                 android:visibility="visible"
+                 sysui:ignoreRightInset="true"
+                 android:fitsSystemWindows="true">
         <com.android.systemui.statusbar.ScrimView
                 android:id="@+id/scrim_behind"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                sysui:ignoreRightInset="true"
                 android:importantForAccessibility="no"/>
         <com.android.systemui.statusbar.AlphaOptimizedView
-            android:id="@+id/heads_up_scrim"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/heads_up_scrim_height"
-            android:background="@drawable/heads_up_scrim"
-            android:importantForAccessibility="no"/>
+                android:id="@+id/heads_up_scrim"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/heads_up_scrim_height"
+                android:background="@drawable/heads_up_scrim"
+                android:importantForAccessibility="no"/>
         <com.android.systemui.statusbar.VisualizerView
                 android:id="@+id/visualizerview"
                 android:gravity="bottom"
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                sysui:ignoreRightInset="true"
                 android:visibility="visible"/>
-    </FrameLayout>
+    </com.android.systemui.statusbar.phone.NavBarInsetLayout>
 
     <include layout="@layout/status_bar"
         android:layout_width="match_parent"
@@ -109,4 +114,4 @@
         sysui:ignoreRightInset="true"
         />
 
-</FrameLayout>
+</com.android.systemui.statusbar.phone.NavBarInsetLayout>

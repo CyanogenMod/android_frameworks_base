@@ -36,8 +36,11 @@ import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.NetworkUtils;
 import android.net.RouteInfo;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiDevice;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.INetworkManagementService;
 import android.os.Looper;
 import android.os.Message;
@@ -164,12 +167,16 @@ public class Tethering extends BaseNetworkObserver {
     private static final int DNSMASQ_POLLING_INTERVAL = 1000;
     private static final int DNSMASQ_POLLING_MAX_TIMES = 10;
 
+    private long mWiFiApInactivityTimeout;
+    private final Handler mHandler;
+
     public Tethering(Context context, INetworkManagementService nmService,
             INetworkStatsService statsService, Looper looper) {
         mContext = context;
         mNMService = nmService;
         mStatsService = statsService;
         mLooper = looper;
+        mHandler = new Handler(mLooper);
 
         mPublicSync = new Object();
 
@@ -269,6 +276,18 @@ public class Tethering extends BaseNetworkObserver {
                     sm = new TetherInterfaceSM(iface, mLooper, usb);
                     mIfaces.put(iface, sm);
                     sm.start();
+                    if (isWifi(iface)) {
+                        // check if the user has specified an inactivity timeout for wifi AP and
+                        // if so schedule the timeout
+                        final WifiManager wm =
+                                (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+                        final WifiConfiguration apConfig = wm.getWifiApConfiguration();
+                        mWiFiApInactivityTimeout =
+                                apConfig != null ? apConfig.wifiApInactivityTimeout : 0;
+                        if (mWiFiApInactivityTimeout > 0 && mL2ConnectedDeviceMap.size() == 0) {
+                            scheduleInactivityTimeout();
+                        }
+                    }
                 }
             } else {
                 if (isUsb(iface)) {
@@ -278,6 +297,9 @@ public class Tethering extends BaseNetworkObserver {
                 } else if (sm != null) {
                     sm.sendMessage(TetherInterfaceSM.CMD_INTERFACE_DOWN);
                     mIfaces.remove(iface);
+                    if (isWifi(iface)) {
+                        cancelInactivityTimeout();
+                    }
                 }
             }
         }
@@ -388,8 +410,6 @@ public class Tethering extends BaseNetworkObserver {
         Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
 
         mContext.sendStickyBroadcastAsUser(broadcast, UserHandle.ALL);
-
-        showTetheredNotification(com.android.internal.R.drawable.stat_sys_tether_wifi);
     }
 
     private boolean readDeviceInfoFromDnsmasq(WifiDevice device) {
@@ -428,6 +448,29 @@ public class Tethering extends BaseNetworkObserver {
         }
 
         return result;
+    }
+
+    private final Runnable mDisableWifiApRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (VDBG) Log.d(TAG, "Turning off hotpost due to inactivity");
+            final WifiManager wifiManager =
+                    (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            wifiManager.setWifiApEnabled(null, false);
+        }
+    };
+
+    private void scheduleInactivityTimeout() {
+        if (mWiFiApInactivityTimeout > 0) {
+            if (VDBG) Log.d(TAG, "scheduleInactivityTimeout: " + mWiFiApInactivityTimeout);
+            mHandler.removeCallbacks(mDisableWifiApRunnable);
+            mHandler.postDelayed(mDisableWifiApRunnable, mWiFiApInactivityTimeout);
+        }
+    }
+
+    private void cancelInactivityTimeout() {
+        if (VDBG) Log.d(TAG, "cancelInactivityTimeout");
+        mHandler.removeCallbacks(mDisableWifiApRunnable);
     }
 
     /*
@@ -513,10 +556,15 @@ public class Tethering extends BaseNetworkObserver {
                     new DnsmasqThread(this, device,
                         DNSMASQ_POLLING_INTERVAL, DNSMASQ_POLLING_MAX_TIMES).start();
                 }
+                cancelInactivityTimeout();
             } else if (device.deviceState == WifiDevice.DISCONNECTED) {
                 mL2ConnectedDeviceMap.remove(device.deviceAddress);
                 mConnectedDeviceMap.remove(device.deviceAddress);
                 sendTetherConnectStateChangedBroadcast();
+                // schedule inactivity timeout if non-zero and no more devices are connected
+                if (mWiFiApInactivityTimeout > 0 && mL2ConnectedDeviceMap.size() == 0) {
+                    scheduleInactivityTimeout();
+                }
             }
         } catch (IllegalArgumentException ex) {
             Log.e(TAG, "WifiDevice IllegalArgument: " + ex);
@@ -650,7 +698,12 @@ public class Tethering extends BaseNetworkObserver {
 
         if (mLastNotificationId != 0) {
             if (mLastNotificationId == icon) {
-                return;
+                if (!mContext.getResources().getBoolean(
+                        com.android.internal.R.bool.config_softap_extention)
+                        || icon != com.android.internal.R.drawable.stat_sys_tether_wifi) {
+                    // if softap extension feature is on, allow to update icon else return.
+                    return;
+                }
             }
             notificationManager.cancelAsUser(null, mLastNotificationId,
                     UserHandle.ALL);
@@ -666,24 +719,8 @@ public class Tethering extends BaseNetworkObserver {
 
         Resources r = Resources.getSystem();
         CharSequence title = r.getText(com.android.internal.R.string.tethered_notification_title);
-
-        CharSequence message;
-        int size = mConnectedDeviceMap.size();
-
-        if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_softap_extention)
-            && icon == com.android.internal.R.drawable.stat_sys_tether_wifi) {
-            if (size == 0) {
-                message = r.getText(com.android.internal.R.string.tethered_notification_no_device_message);
-            } else if (size == 1) {
-                message = String.format((r.getText(com.android.internal.R.string.tethered_notification_one_device_message)).toString(),
-                        size);
-            } else {
-                message = String.format((r.getText(com.android.internal.R.string.tethered_notification_multi_device_message)).toString(),
-                        size);
-            }
-        } else {
-            message = r.getText(com.android.internal.R.string.tethered_notification_message);
-        }
+        CharSequence message = r.getText(com.android.internal.R.string.
+                tethered_notification_message);
 
         if (mTetheredNotificationBuilder == null) {
             mTetheredNotificationBuilder = new Notification.Builder(mContext);
@@ -698,18 +735,10 @@ public class Tethering extends BaseNetworkObserver {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setContentIntent(pi);
-        if (mContext.getResources().getBoolean(com.android.internal.R.bool.config_softap_extention)
-            && icon == com.android.internal.R.drawable.stat_sys_tether_wifi
-            && size > 0) {
-            mTetheredNotificationBuilder.setContentText(message);
-        } else {
-            mTetheredNotificationBuilder.setContentTitle(title);
-        }
         mLastNotificationId = icon;
 
         notificationManager.notifyAsUser(null, mLastNotificationId,
                 mTetheredNotificationBuilder.build(), UserHandle.ALL);
-
     }
 
     private void clearTetheredNotification() {

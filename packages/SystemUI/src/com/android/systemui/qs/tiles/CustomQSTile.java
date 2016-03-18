@@ -47,6 +47,7 @@ import cyanogenmod.app.StatusBarPanelCustomTile;
 
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
+import org.cyanogenmod.internal.logging.CMMetricsLogger;
 
 import java.util.Arrays;
 
@@ -54,6 +55,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
     private CustomTile.ExpandedStyle mExpandedStyle;
     private PendingIntent mOnClick;
+    private PendingIntent mOnLongClick;
     private Uri mOnClickUri;
     private int mCurrentUserId;
     private StatusBarPanelCustomTile mTile;
@@ -91,7 +93,16 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
     @Override
     protected void handleLongClick() {
-        if (mExpandedStyle == null) {
+        if (mOnLongClick != null) {
+            if (mOnLongClick.isActivity()) {
+                getHost().collapsePanels();
+            }
+            try {
+                mOnLongClick.send();
+            } catch (Throwable e) {
+                Log.w(TAG, "Error sending long click intent", e);
+            }
+        } else if (mExpandedStyle == null) {
             showDetail(true);
         }
     }
@@ -142,6 +153,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
             state.icon = new ExternalBitmapIcon(customTile.remoteIcon);
         }
         mOnClick = customTile.onClick;
+        mOnLongClick = customTile.onLongClick;
         mOnClickUri = customTile.onClickUri;
         mExpandedStyle = customTile.expandedStyle;
         mCollapsePanel = customTile.collapsePanel;
@@ -150,7 +162,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsLogger.DONT_TRACK_ME_BRO;
+        return CMMetricsLogger.TILE_CUSTOM_QS;
     }
 
     private boolean isDynamicTile() {
@@ -195,7 +207,7 @@ public class CustomQSTile extends QSTile<QSTile.State> {
 
         @Override
         public int getMetricsCategory() {
-            return MetricsLogger.DONT_TRACK_ME_BRO;
+            return CMMetricsLogger.TILE_CUSTOM_QS_DETAIL;
         }
 
         @Override
