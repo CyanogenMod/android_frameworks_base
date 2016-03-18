@@ -188,6 +188,25 @@ public class CarrierText extends TextView {
                 }
             }
         }
+        /*
+         * In the case where there is only one sim inserted in a multisim device, if
+         * the voice registration service state is reported as 12 (no service with emergency)
+         * for at least one of the sim concatenate the sim state with Emergency calls only"
+         */
+        if (N < TelephonyManager.getDefault().getPhoneCount() &&
+                 mKeyguardUpdateMonitor.isEmergencyOnly()) {
+            int presentSubId = mKeyguardUpdateMonitor.getPresentSubId();
+
+            if (DEBUG) {
+                Log.d(TAG, " Present sim - sub id: " + presentSubId);
+            }
+            if (presentSubId != -1) {
+                CharSequence emergencyOnlyText =
+                        getContext().getText(com.android.internal.R.string.emergency_calls_only);
+                displayText = getCarrierTextForSimState(
+                        mKeyguardUpdateMonitor.getSimState(presentSubId), emergencyOnlyText);
+            }
+        }
         if (allSimsMissing) {
             if (N != 0) {
                 // Shows "No SIM card | Emergency calls only" on devices that are voice-capable.
