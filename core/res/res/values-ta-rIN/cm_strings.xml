@@ -17,54 +17,187 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">திரைப்பிடிப்பு</string>
-  <string name="global_action_reboot">மறுதொடக்கம்</string>
-  <string name="reboot_reboot">மறுதொடக்கம்</string>
-  <string name="reboot_recovery">மீட்பு (ரெகவரி)</string>
-  <string name="reboot_bootloader">துவக்க ஏற்றி</string>
-  <string name="reboot_download">பதிவிறக்கம்</string>
-  <string name="reboot_confirm" product="tablet">உங்கள் கைக்கணினி மீண்டும் துவக்கபடும்.</string>
-  <string name="reboot_confirm" product="default">உங்கள் தொலைபேசி மீண்டும் துவக்கபடும்.</string>
-  <string name="reboot_progress">மீண்டும் துவக்க\u2026</string>
-  <string name="permdesc_changePrivacyGuardState">பயன்பாட்டை மற்றொரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்குமா என்பதை மாற்ற அனுமதிக்கிறது. ஒரு பயன்பாடு தனியுரிமை பாதுகாப்பு கொண்டு இயங்கும் போது, இது போன்ற தொடர்புகள், அழைப்பு பதிவுகள், மற்றும் செய்திகள் போன்ற தனிப்பட்ட தரவுக்கான அணுகல் இருக்காது.</string>
-  <string name="privacy_guard_notification">தனியுரிமை பாதுகாப்பு செயலில்</string>
-  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> தனிப்பட்ட தரவை அணுக முடியாது</string>
-  <string name="privacy_guard_dialog_title">தனியுரிமை பாதுகாப்பு</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> <xliff:g id="op">%2$s</xliff:g> விரும்புகிறது.</string>
-  <string name="app_ops_access_camera">கேமரா அணுக</string>
-  <string name="app_ops_access_location">உங்கள் இருப்பிடத்தை அணுக</string>
-  <string name="app_ops_access_notifications">உங்கள் அறிவிக்கைகள் படிக்க</string>
-  <string name="app_ops_keep_device_awake">உங்கள் கருவியை விழித்து வைக்க</string>
-  <string name="app_ops_make_phone_call">தொலைபேசியில் அழைப்பு செய்ய</string>
-  <string name="app_ops_modify_calendar">உங்கள் நாட்காட்டியில் மேம்படுத்த</string>
-  <string name="app_ops_modify_call_log">அழைப்பு பதிவு மேம்படுத்த</string>
-  <string name="app_ops_modify_clipboard">இடைநிலை பலகையை திருத்த</string>
-  <string name="app_ops_modify_contacts">உங்கள் தொடர்புகள் மேம்படுத்த</string>
-  <string name="app_ops_modify_settings">முறைமை அமைப்புகள் மேம்படுத்த</string>
-  <string name="app_ops_play_audio">ஒலி விளையாட</string>
-  <string name="app_ops_post_notification">அறிவிக்கை பதிவு செய்ய</string>
-  <string name="app_ops_read_calendar">உங்கள் நாட்காட்டியை படிக்க</string>
-  <string name="app_ops_read_call_log">அழைப்பு பதிவை படிக்க</string>
-  <string name="app_ops_read_clipboard">இடைநிலை பலகை படிக்க</string>
-  <string name="app_ops_read_contacts">உங்கள் தொடர்புகள் படிக்க</string>
-  <string name="app_ops_read_mms">உங்கள் எம்எம்எஸ் செய்திகளை படிக்க</string>
-  <string name="app_ops_read_sms">உங்கள் குறுந்தகவல் செய்திகளை படிக்க</string>
-  <string name="app_ops_receive_sms">ஒரு குறுந்தகவல் செய்தி பெற</string>
-  <string name="app_ops_record_audio">ஒலி பதிவு செய்ய</string>
-  <string name="app_ops_send_mms">ஒரு எம்எம்எஸ் செய்தி அனுப்ப</string>
-  <string name="app_ops_send_sms">ஒரு குறுந்தகவல் செய்தி அனுப்ப</string>
-  <string name="app_ops_start_at_bootup">மின்சக்தி தொடக்கத்தில் ஆரம்பிக்க</string>
-  <string name="app_ops_toggle_bluetooth">Bluetooth நிலைமாற்று</string>
-  <string name="app_ops_use_alarm_volume">அலார ஒலி கட்டுப்படுத்த</string>
-  <string name="app_ops_use_audio_focus">ஒலி கவனத்தை கட்டுப்படுத்த</string>
-  <string name="app_ops_use_bluetooth_volume">Bluetooth ஒலியளவு கட்டுப்படுத்த</string>
-  <string name="app_ops_use_master_volume">முதன்மை ஒலியளவு கட்டுப்படுத்த</string>
-  <string name="app_ops_use_media_buttons">ஊடக பொத்தான்கள் பயன்படுத்தவும்</string>
-  <string name="app_ops_use_media_volume">ஊடக ஒலியளவு கட்டுப்படுத்த</string>
-  <string name="app_ops_use_notification_volume">அறிவித்தல் ஒலியளவு கட்டுப்படுத்த</string>
-  <string name="app_ops_use_ring_volume">ரிங்டோன் ஒலியளவு கட்டுப்படுத்த</string>
-  <string name="app_ops_use_vibrate">தொடு உணர்வியல் பின்னூட்டம் பயன்படுத்தவும்</string>
-  <string name="app_ops_use_voice_volume">குரல் அழைப்பு ஒலியை கட்டுப்படுத்த</string>
-  <string name="app_ops_write_mms">ஒரு எம்எம்எஸ் தகவலை எழுது</string>
-  <string name="app_ops_write_sms">ஒரு எஸ்எம்எஸ் செய்தி எழுது</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_receiveProtectedSms">பாதுகாக்கப்பட்ட SMSஐ பெறுக</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_receiveProtectedSms">உள்வரும் பாதுகாக்கப்பட்ட SMS ஒன்றை பெற பயன்பாட்டை அனுமதிக்கிறது.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_modifyProtectedSmsList">பாதுகாக்கப்பட்ட SMS பட்டியலை மாற்றியமை.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_modifyProtectedSmsList">பாதுகாக்கப்பட்ட SMS முகவரி பட்டியலை மாற்றியமைக்க பயன்பாட்டை அனுமதிக்கிறது.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permgrouplab_security">பாதுகாப்பு</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permgroupdesc_security">சாதன பாதுகாப்பு தகவல் தொடர்பான அனுமதிகள்.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readPhoneBlacklist">தொலைப்பேசி தடுப்புபட்டியலை படி</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readPhoneBlacklist">உள்வரும் அழைப்புகள் அல்லது செய்திகளுக்காக தடுக்கப்பட்ட தொலைப்பேசி எண்கள் குறித்த தகவலை பயன்பாடு படிக்க அனுமதிக்கிறது.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_changePhoneBlacklist">தொலைப்பேசி தடுப்புபட்டியலை மாற்று</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_changePhoneBlacklist">உள்வரும் அழைப்புகள் அல்லது செய்திகளுக்காக தடுக்கப்பட்ட தொலைப்பேசி எண்கள் குறித்த தகவலை பயன்பாடு மாற்ற அனுமதிக்கிறது.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_setKeyguardWallpaper">விசைபாதுகாப்பு வால்பேப்பரை அமை</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_setKeyguardWallpaper">ஒரு பயன்பாடு பூட்டுத் திரையை மாற்ற அனுமதிக்கிறது.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
+  <string name="global_action_reboot">மீண்டும் தொடங்கு</string>
+  <!-- label for current user in phone options dialog -->
+  <string name="global_action_current_user">நடப்பு</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
+  <string name="reboot_reboot">மீண்டும் தொடங்கு</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+  <string name="reboot_recovery">மீட்டல்</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+  <string name="reboot_bootloader">பூட்லோடர்</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+  <string name="reboot_download">இறக்கு</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
+  <string name="reboot_soft">மென்மையான மறுயியக்கம்</string>
+  <!-- Title of dialog to confirm rebooting. -->
+  <string name="reboot_title">மீண்டும் தொடங்கு</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">உங்கள் டேப்ளட் மறுயியக்கமாகும்.</string>
+  <string name="reboot_confirm" product="default">உங்கள் தொலைப்பேசி மறுயியக்கமாகும்.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+  <string name="reboot_progress">மறுஇயக்கம்செய்கிறது\u2026</string>
+  <!-- Long-press back kill application -->
+  <string name="app_killed_message">பயன்பாடு கொல்லப்பட்டது</string>
+  <!-- ADB over network notification -->
+  <string name="adb_net_active_notification_title">நெட்வொர்க் மீது ADB செயல்படுத்தப்பட்டது</string>
+  <!-- ADB over USB and network notification -->
+  <string name="adb_both_active_notification_title">USB &amp; நெட்வொர்க் மீது ADB செயல்படுத்தப்பட்டது</string>
+  <!-- ADB notification message-->
+  <string name="adb_active_generic_notification_message">பிழைநீக்கலை முடக்க தொடு.</string>
+  <!-- ADB custom tile -->
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; நெட்வொர்க்</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">நெட்வொர்க்</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_interceptPackageLaunch">இடைமறிப்பு பயன்பாடு தொடக்கம்</string>
+  <!-- stylus gestures support -->
+  <string name="stylus_app_not_installed">%s நிறுவப்படவில்லை.</string>
+  <!-- Zen mode buttons -->
+  <string name="silent_mode_priority">முன்னுரிமை</string>
+  <string name="silent_mode_none">ஏதுமில்லை</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM சந்தா மாற்றத்தின் காரணமாக wi-fi ஹாட்ஸ்பாட் முடக்கப்பட்டது.</string>
+  <!-- WiFi turn off notification action text -->
+  <string name="notify_turn_wifi_off_title">வை-ஃபைஐ ஆஃப் செய்க</string>
+  <!-- Privacy Guard -->
+  <string name="permlab_changePrivacyGuardState">அந்தரங்கம் பாதுகாப்பானை செயல்படுத்து அல்லது முடக்கு</string>
+  <string name="permdesc_changePrivacyGuardState">வேறொரு பயன்பாடு அந்தரங்கம் பாதுகாப்பானுடன் இயங்குகிறதா என்பதை மாற்ற பயன்பாட்டை அனுமதிக்கிறது. ஒரு பயன்பாடு அந்தரங்கம் பாதுகாப்பானுடன் இயங்கும்போது, அது தனிநபர் தரவுகளான தொடர்புகள், அழைப்பு பதிவுகள், அல்லது செய்திகள் போன்றவற்றை அணுகாது.</string>
+  <string name="privacy_guard_notification">அந்தரங்கம் பாதுகாப்பான் செயல்பாட்டிலுள்ளது</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> தனிநபர் தரவை அணுக முடியாது</string>
+  <string name="privacy_guard_dialog_title">அந்தரங்கம் பாதுகாப்பான்</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g>  <xliff:g id="op">%2$s</xliff:g> செய்ய விரும்புகிறார்.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
+  <string name="permission_remember_choice">எனது விருப்பத்தேர்வை நினைவில்கொள்</string>
+  <!-- App ops requests -->
+  <string name="app_ops_access_camera">கேமராவை அணுகவும்</string>
+  <string name="app_ops_access_location">உங்கள் இருப்பிடத்தை அணுகவும்</string>
+  <string name="app_ops_access_notifications">உங்கள் அறிவிப்பைப் படி</string>
+  <string name="app_ops_activate_vpn">ஒரு VPNஐ செயல்படுத்து</string>
+  <string name="app_ops_auto_start">மின்சக்தி அப்பில் தொடங்கவும்</string>
+  <string name="app_ops_delete_call_log">உங்கள் அழைப்பு பதிவை நீக்குக</string>
+  <string name="app_ops_delete_contacts">உங்கள் தொடர்புகளை நீக்குக</string>
+  <string name="app_ops_delete_mms">உங்கள் MMS செய்திகளை நீக்குக</string>
+  <string name="app_ops_delete_sms">உங்கள் SMS செய்திகளை நீக்குக</string>
+  <string name="app_ops_draw_on_top">windosஐ மேலே இழுக்கவும்</string>
+  <string name="app_ops_get_usage_stats">பயன்பாட்டு பயன்படுத்தல் புள்ளிவிவரங்களைப் பெறு</string>
+  <string name="app_ops_keep_device_awake">உங்கள் சாதனத்தை விழிப்போடு வைத்திருக்கவும்</string>
+  <string name="app_ops_make_phone_call">ஒரு தொலைப்பேசி அழைப்பை ஏற்படுத்தவும்</string>
+  <string name="app_ops_modify_calendar">உங்கள் நாள்காட்டியை புதுப்பிக்கவும்</string>
+  <string name="app_ops_modify_call_log">அழைப்பு பதிவை புதுப்பிக்கவும்</string>
+  <string name="app_ops_modify_clipboard">நகலகத்தை மாற்றியமைக்கவும்</string>
+  <string name="app_ops_modify_contacts">உங்கள் தொடர்புகளை புதுப்பிக்கவும்</string>
+  <string name="app_ops_modify_settings">கணினி அமைப்புகளை புத்துப்பி</string>
+  <string name="app_ops_mute_unmute_microphone">மைக்ரோஃபோனை ஒலிதடு/ஒலிதடைநீக்கு</string>
+  <string name="app_ops_play_audio">ப்ளே ஆடியோ</string>
+  <string name="app_ops_post_notification">ஒரு அறிவிப்பை இடுகையிடவும்</string>
+  <string name="app_ops_project_media">ஊடகத்தை வெளிப்படுத்து</string>
+  <string name="app_ops_read_calendar">உங்கள் நாள்காட்டியை படிக்கவும்</string>
+  <string name="app_ops_read_call_log">அழைப்பு பதிவை படிக்கவும்</string>
+  <string name="app_ops_read_clipboard">நகலகத்தை படிக்கவும்</string>
+  <string name="app_ops_read_contacts">உங்கள் தொடர்புகளைப் படித்தல்</string>
+  <string name="app_ops_read_mms">உங்கள் MMS செய்திகளை படிக்கவும்</string>
+  <string name="app_ops_read_sms">உங்கள் SMS செய்திகளை படிக்கவும்</string>
+  <string name="app_ops_receive_sms">உங்கள் SMS செய்திகளை பெறவும்</string>
+  <string name="app_ops_record_audio">ஆடியோவைப் பதிவுசெய்தல்</string>
+  <string name="app_ops_send_mms">ஒரு MMS குறுந்தகவல் அனுப்புக</string>
+  <string name="app_ops_send_sms">ஒரு SMS குறுந்தகவல் அனுப்புக</string>
+  <string name="app_ops_start_at_bootup">மின்சக்தி அப்பில் தொடங்கவும்</string>
+  <string name="app_ops_toast_window">டோஸ்ட் செய்திகளை காண்பி</string>
+  <string name="app_ops_toggle_bluetooth">டோக்கில் ப்ளுடுத்</string>
+  <string name="app_ops_toggle_mobile_data">மொபைல் தரவு நிலைமாற்று</string>
+  <string name="app_ops_toggle_nfc">NFC நிலைமாற்று</string>
+  <string name="app_ops_toggle_wifi">Wi-Fi நிலைமாற்று</string>
+  <string name="app_ops_use_alarm_volume">அலார ஒலியளவை கட்டுப்படுத்து</string>
+  <string name="app_ops_use_audio_focus">ஆடியோ குவிமையத்தைக் கட்டுப்படுத்து</string>
+  <string name="app_ops_use_bluetooth_volume">ப்ளுடுத் ஒலியளவை கட்டுப்படுத்து</string>
+  <string name="app_ops_use_master_volume">தலைமை ஒலியளவை கட்டுப்படுத்து</string>
+  <string name="app_ops_use_media_buttons">ஊடக பொத்தான்களைப் பயன்படுத்து</string>
+  <string name="app_ops_use_media_volume">ஊடக ஒலியளவை கட்டுப்படுத்து</string>
+  <string name="app_ops_use_notification_volume">அறிவிப்பு ஒலியளவை கட்டுப்படுத்து</string>
+  <string name="app_ops_use_ring_volume">ரிங்டோன் ஒலியளவை கட்டுப்படுத்து</string>
+  <string name="app_ops_use_vibrate">தீண்டும் பின்னூட்டத்தைப் பயன்படுத்து</string>
+  <string name="app_ops_use_voice_volume">குரல் அழைப்பு ஒலியளவை கட்டுப்படுத்து</string>
+  <string name="app_ops_write_mms">ஒரு MMS செய்தி எழுது</string>
+  <string name="app_ops_write_sms">ஒரு SMS செய்தி எழுது</string>
+  <string name="app_ops_use_fingerprint">கைரேகையைப் பயன்படுத்து</string>
+  <string name="app_ops_add_voicemail">ஒரு குரலஞ்சலைச் சேர்த்தல்</string>
+  <string name="app_ops_read_phone_state">தொலைபேசி நிலையை அணுகல்</string>
+  <string name="app_ops_scan_wifi">Wi-Fi பிணையங்களை ஸ்கேன்செய்</string>
+  <string name="app_ops_change_wallpaper">வால்பேப்பரை மாற்று</string>
+  <string name="app_ops_assist_structure">உதவி கட்டமைப்பைப் பயன்படுத்து</string>
+  <string name="app_ops_assist_screenshot">ஒரு ஸ்க்ரீன்ஷாட்டை எடு</string>
+  <string name="app_ops_use_body_sensors">உடல் உணர்கருவிகளைப் பயன்படுத்து</string>
+  <string name="app_ops_read_cell_broadcasts">கலம் ஒளிபரப்புகளை படி</string>
+  <string name="app_ops_mock_location">உங்கள் இருப்பிடத்தை போலியாக்கு</string>
+  <string name="app_ops_read_external_storage">வெளிப்புற சேமிப்பகத்தைப் படி</string>
+  <string name="app_ops_write_external_storage">உட்புற சேமிப்பகத்தை எழுது</string>
+  <string name="app_ops_turn_on_screen">திரையை ஆன் செய்</string>
+  <string name="app_ops_get_accounts">சாதன கணக்குகளைப் பெறு</string>
+  <string name="app_ops_wifi_change">Wi-fi நிலையை மாற்று</string>
+  <string name="app_ops_su">மூல அணுகலைப் பெறு</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">இந்த திரையை அன்பின் செய்ய, பின்செல் பொத்தானைத் தொட்டு பிடித்துக்கொள்.</string>
+  <!-- LiveDisplay strings -->
+  <string name="live_display_auto">தானியங்கு</string>
+  <string name="live_display_auto_summary">சூரிய மறைவு மற்றும் சூரிய உதயத்திற்கு பிறகு தானாகவே திரையின் வண்ன தட்பவெப்பங்களை சரிசெய்</string>
+  <string name="live_display_off">முடக்கத்தில்</string>
+  <string name="live_display_off_summary">அனைத்து சரிசெய்தல்களையும் முடக்கு</string>
+  <string name="live_display_day">பகல்</string>
+  <string name="live_display_day_summary">பகல் அமைப்புகளை மட்டும் பயன்படுத்துக</string>
+  <string name="live_display_night">இரவு</string>
+  <string name="live_display_night_summary">இரவு அமைப்புகளை மட்டும் பயன்படுத்து</string>
+  <string name="live_display_outdoor">வெளியிடம் (பிரகாசமான சூரியன்)</string>
+  <string name="live_display_outdoor_summary">வெளிப்புற அமைப்புகளை மட்டுமே பயன்படுத்து.</string>
+  <string name="live_display_hint">LiveDisplay கண்ணழுத்தத்தை குறைத்து, நீங்கள் இரவிலே உறங்க உதவுகிறது. அதை முயற்சிக்க இங்கே கிளிக் செய்க!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
+  <string name="tethered_notification_no_device_message">இணைக்கப்பட்ட சாதனம் இல்லை</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> இணைக்கப்பட்ட சாதனம்</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> இணைக்கப்பட்ட சாதனங்கள்</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">செயல்பாட்டு துவக்கம் தடுக்கப்பட்டது</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> துவங்கப்படுவதில் இருந்து தடுக்கப்பட்டது. பயன்பாட்டை அங்கீகரிக்கவும் துவங்கவும் தட்டு.</string>
+  <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">மின்கலம் முழுமையாக மின்னூட்டப்பட்டது</string>
+  <string name="notify_battery_fully_charged_text">மின்கலத்தின் ஆயுளை மேம்படுத்த சார்ஜரிலிருந்து உங்கள் சாதனத்தின் இணைப்பை துண்டிக்கவும்.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">மின்கல புள்ளிவிவரங்களை மீட்டமை</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">நடப்பு குறைந்த-நிலை மின்கல பயன்பாட்டு தரவை மீட்டமைக்க ஒரு பயன்பாட்டை அனுமதிக்கிறது.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

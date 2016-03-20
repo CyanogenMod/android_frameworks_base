@@ -16,12 +16,25 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">%1$s ئۈچۈن ئوڭغا سۈرۈڭ</string>
   <string name="right_shortcut_hint">%1$s ئۈچۈن سولغا سۈرۈڭ</string>
+  <string name="lockscreen_message">ئوڭ ياكى سول تەرەپتىكى سىنبەلگىنى چېكىپ قۇلۇپ ئېكران قىسقا يولىنى قايتا تەقسىملەڭ.</string>
+  <string name="lockscreen_default_target">كۆڭۈلدىكى</string>
   <string name="select_application">ئەپ تاللاڭ</string>
   <string name="lockscreen_choose_action_title">مەشغۇلات تاللاڭ</string>
   <string name="lockscreen_none_target">يوق</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">تەقسىملەيدىغان مەشغۇلاتنى تاللاڭ</string>
   <string name="navbar_home_button">باش بەت توپچا</string>
   <string name="navbar_recent_button">يېقىنقى توپچىلار</string>
@@ -33,23 +46,178 @@
   <string name="navbar_menu_big_button">تىزىملىك توپچا</string>
   <string name="accessibility_dpad_left">نۇربەلگە سولغا</string>
   <string name="accessibility_dpad_right">نۇر بەلگە ئوڭغا</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">ئەپ سانلىق مەلۇماتىنى تازىلا</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">مەجبۇرى توختات</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">ئۆچۈر</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_notification_brightness">چىراق يورۇقلىقى</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles_off">مۇھىت ھالىتى تاقاق.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles">مۇھىت ھالىتى: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles_changed_off">مۇھىت ھالىتى تاقالدى.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_profiles_changed">مۇھىت ھالىتى <xliff:g id="profile" example="Default">%s</xliff:g> گە ئۆزگەرتىلدى.</string>
   <string name="quick_settings_compass_init">دەسلەپلەشتۈرۈۋاتىدۇ\u2026</string>
+  <!-- Lights settings, LED notification -->
+  <string name="led_notification_title">يورۇقلۇق تەكشىكى</string>
+  <string name="led_notification_text">تەڭشەكتىن LED نى قوزغىتىش</string>
+  <string name="qs_tile_edit_header_instruction">خىشنى بېسىپ تۇرۇپ قايتا ئورۇنلاشتۇرۇڭ</string>
+  <string name="quick_settings_edit_label">خىشنى تەھرىرلەش</string>
+  <string name="quick_settings_cannot_delete_edit_tile">خىش تەھرىرلەشنى ئۆچۈرەلمەيدۇ</string>
+  <string name="qs_tiles_reset_confirmation">خىشنىڭ تىز تەڭشەكلىرىنى كۆڭۈلدىكى سەپلەنمىگە قايتا بېكىتەمسىز؟</string>
+  <string name="quick_settings_tile_reset_to_default">كۆڭۈلدىكى ئورۇنلاشتۇرۇشقا قايتۇرۇڭ</string>
+  <string name="quick_settings_title_header">باش</string>
+  <string name="quick_settings_title_tiles">خىش</string>
+  <string name="quick_settings_title_show_weather">ھاۋارايىنى كۆرستىڭ</string>
+  <string name="quick_settings_title_show_brightness_slider">يورۇقلۇق سۈرگۈچنى كۆرسىتىدۇ</string>
+  <string name="quick_settings_title_enlarge_first_row">بىرىنچى قۇرنى چوڭايتىڭ</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
+  <string name="screen_pinning_description_no_navbar">بۇ ئېكراننى سىز بىكار قىلغانغا قەدەر مۇقىملاشتۇرىدۇ. قايتىش كونۇپكىسىنى بېسىپ تۇرۇش ئارقىلىق مۇقىملاشتۇرۇشنى بىكار قىلىڭ.</string>
+  <string name="quick_settings_custom_tile_detail_title">خىش خاسلاشتۇرۇش</string>
+  <string name="quick_settings_remove">ماۋزۇ چىقىرىۋېتىش</string>
   <string name="quick_settings_network_adb_label">ADB تور سازلاش</string>
   <string name="quick_settings_compass_label">كومپاس</string>
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">سىستېما سەپلىمە ھۆججەتلىرى</string>
   <string name="quick_settings_profiles_off">سەپلىمە ھۆججەت چەكلەندى</string>
+  <string name="quick_settings_heads_up_label">لەيلىمە ئۇقتۇرۇش</string>
+  <string name="quick_settings_battery_saver_label">توكدان ياردەمچىسى</string>
+  <string name="quick_settings_caffeine_label">قەھۋەخانە ھالىتى</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_sync_off">قەدەمداش تاقاق.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_sync_on">قەدەمداش ئوچۇق.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_sync_changed_off">قەدەمداش قىلىش تاقاق.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_sync_changed_on">قەدەمداش قىلىش ئوچۇق.</string>
+  <string name="quick_settings_sync_label">قەدەمداش</string>
+  <string name="quick_settings_volume_panel_label">ئاۋاز تاختىسى</string>
+  <string name="quick_settings_usb_tether_label">USB ھەمبەھىر</string>
   <string name="quick_settings_screen_timeout_detail_title">ئېكران مۆھلىتى</string>
   <string name="quick_settings_lockscreen_label">قۇلۇپ ئېكرانى</string>
+  <string name="quick_settings_ambient_display_label">مۇھىتنى كۆرسىتىدۇ</string>
   <string name="quick_settings_lockscreen_label_enforced">ئېكراننى مەجبۇرىي قۇلۇپلا</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">ھالەت تەڭشىكىدە تاقالدى</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_screen_timeout">ئېكران ۋاقتى ئېشىپ كەتتى: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_screen_timeout_changed">ئېكران ۋاقىت ئېشىمى <xliff:g id="timeout" example="30 seconds">%s</xliff:g> گە ئۆزگەرتىلدى.</string>
+  <string name="qs_tile_performance">توكدان ھالىتى</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">باتارىيە ھالىتى: توك تىجەش ھالىتى.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_bal">باتارىيە ھالىتى: تەڭپۇڭ ھالەت.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_perf">باتارىيە ھالىتى: ئىقتىدار ھالىتى.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_bias_power">باتارىيە ھالىتى: ئۆنۈم ھالىتى.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">باتارىيە ھالىتى: تىز سۈرەت ھالىتى.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">باتارىيە ھالىتى توك تىجەش ھالىتىگە ئۆزگەرتىلدى.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">باتارىيە ھالىتى تەڭپۇڭ ھالەتكە ئۆزگەرتىلدى.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">باتارىيە ھالىتى ئىقتىدار ھالىتىگە ئۆزگەرتىلدى.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">باتارىيە ھالىتى ئۆنۈم ھالىتىگە ئۆزگەرتىلدى.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">باتارىيە ھالىتى تىز سۈرەت ھالىتىگە ئۆزگەرتىلدى.</string>
+  <string name="quick_settings_performance_profile_detail_title">توكدان ھالىتى</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_off">ئېكران قۇلۇپى تاقاق.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_on">ئېكران قۇلۇپى ئوچۇق.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_changed_off">ئېكران قۇلۇپى تاقالدى.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_changed_on">ئېكران قۇلۇپى ئېچىلدى.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_ambient_display_off">مۇھىت كۆرسىتىش تاقاق.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_ambient_display_on">مۇھىت كۆرسىتىش ئوچۇق.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_ambient_display_changed_off">مۇھىت كۆرسىتىش تاقالدى.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_ambient_display_changed_on">مۇھىت كۆرسىتىش ئېچىلدى.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_heads_up_off">لەيلىمە ئۇقتۇرۇش تاقاق.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_heads_up_on">لەيلىمە ئۇقتۇرۇش ئوچۇق.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_heads_up_changed_off">لەيلىمە ئۇقتۇرۇش تاقالدى.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_heads_up_changed_on">لەيلىمە ئۇقتۇرۇش ئېچىلدى.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">قەھۋەخانە ھالىتىنى تاقاش.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">قەھۋەخانە ھالىتىنى ئېچىش.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_off">توك تىجەش ھالىتى تاقاق.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_on">توك تىجەش ھالىتى ئوچۇق.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_changed_off">توك تىجەش ھالىتى تاقالدى.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_changed_on">توك تىجەش ھالىتى ئېچىلدى.</string>
+  <!-- Dynamic tiles -->
+  <string name="quick_settings_dynamic_tile_detail_title">ھەرىكەتچان توپچا</string>
+  <string name="dynamic_qs_tile_next_alarm_label">كىيىنكى قوڭغۇراق</string>
+  <string name="dynamic_qs_tile_ime_selector_label">كىرگۈزگۈچ تاللىغۇچ</string>
+  <string name="dynamic_qs_tile_su_label">Root ھوقۇقى</string>
+  <!-- LiveDisplay strings -->
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay تاقاق.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: ئاپتۇماتېك ھالەت.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: كۈندۈز.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: كېچە.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: تالا.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay تاقالدى.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay ئاپتۇماتېك ھالەتكە ئۆزگەرتىلدى.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay كۈندۈزگە ئۆزگەرتىلدى.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay كېچىگە ئۆزگەرتىلدى.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay تالاغا ئۆزگەرتىلدى.</string>
+  <string name="quick_settings_title_advanced_location">ئۈچ ھالەت ئورۇن بەلگىلەش</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">ئورۇن دوكلاتى: توك تېجەش ھالىتى.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">ئورۇن دوكلاتى: سەزگۈچ ھالىتىلا.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">ئورۇن دوكلاتى: يۇقىرى ئېنىقلىق ھالىتى.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">ئورۇن ھالىتى</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">توك سەرپىياتى تۆۋەن</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">ئۈسكۈنىلا</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">دەللىكى يۇقىرى</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_battery_saving">جۇغراپىيەلىك ئورۇن دوكىلاتى توك تىجەش ھالىتىگە ئۆزگەرتىلدى.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_gps_only">جۇغراپىيەلىك ئورۇن دوكىلاتى سېنزور ھالىتىگە ئۆزگەرتىلدى.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">جۇغراپىيەلىك ئورۇن دوكىلاتى توغرىلىقى يوقىرى ھالەتكە ئۆزگەرتىلدى.</string>
+  <string name="quick_settings_tiles_category_system">سىستېما خىشى</string>
+  <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">خىش قوشۇش</string>
+  <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">ئايروپىلان ھالىتى ئېچىلسا كۆچمە تورنى ئىشلەتكىلى بولمايدۇ. ئايروپىلان ھالىتىنى تاقاڭ ھەم قايتا سىناڭ.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">قولچىراق ئوچۇق</string>
+  <string name="quick_settings_tile_flashlight_not_summary">يىنىك بېسىپ ئۆچۈرۈڭ</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d مۇئامىلىدار</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">تورغا ئۇلىنىدىغان SIM كارتا يوق</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">لەڭگەر توكدان <xliff:g id="number">%d</xliff:g>%%.</string>
 </resources>

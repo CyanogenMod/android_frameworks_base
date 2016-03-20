@@ -16,5 +16,14 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
+  <string name="keyguard_perso_locked_message">Thẻ SIM bị khóa Perso</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Thẻ sim không hợp lệ.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="other">Nhập mã PIN của SIM, bạn còn <xliff:g id="number">%d</xliff:g> lần nhập trước khi phải liên hệ với nhà mạng để mở khóa thiết bị.</item>
+  </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
+  <string name="kg_invalid_sim_length">Lỗi: Dữ liệu nhập ngắn hơn độ dài tối thiểu</string>
 </resources>

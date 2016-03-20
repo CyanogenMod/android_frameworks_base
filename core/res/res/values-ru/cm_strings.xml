@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Скриншот</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">Получение защищённых SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Приложение сможет получать входящие защищённые SMS-сообщения.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">Изменение списка защищённых SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Приложение сможет изменять список адресатов защищённых SMS-сообщений.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Безопасность</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Разрешения, относящиеся к безопасности данных на устройстве.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">Просмотр чёрного списка</string>
-  <string name="permdesc_readPhoneBlacklist">Приложение сможет считывать информацию о списке абонентов, от которых заблокированы входящие звонки или сообщения.</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readPhoneBlacklist">Приложение сможет считывать информацию о списке абонентов, от которых заблокированы входящие вызовы или сообщения.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">Изменение чёрного списка</string>
-  <string name="permdesc_changePhoneBlacklist">Приложение сможет изменять список абонентов, от которых заблокированы входящие звонки или сообщения.</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_changePhoneBlacklist">Приложение сможет изменять список абонентов, от которых заблокированы входящие вызовы или сообщения.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Установка обоев экрана блокировки</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Приложение сможет изменять обои экрана блокировки устройства.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Перезагрузить</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Текущий</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Перезагрузка</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Режим восстановления</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Загрузчик</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Режим обновления ПО</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Перезапуск интерфейса</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Перезагрузка</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Ваш планшет будет перезагружен.</string>
   <string name="reboot_confirm" product="default">Ваш телефон будет перезагружен.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Перезагрузка\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Приложение закрыто</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">Отладка по сети разрешена</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">Отладка по сети и USB разрешена</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Нажмите, чтобы отключить отладку.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">Отладка <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">по сети и USB</string>
   <string name="adb_active_custom_tile_usb">по USB</string>
   <string name="adb_active_custom_tile_net">по сети</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Перехват запуска приложений</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">«%s» не установлено</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Важные</string>
   <string name="silent_mode_none">Нет</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Точка доступа Wi-Fi отключена из-за переключения SIM-карты</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Выключить Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">Включение или выключение защищённого режима</string>
   <string name="permdesc_changePrivacyGuardState">Приложение сможет изменять состояние защищённого режима для других приложений. Когда приложение запущено в защищённом режиме, оно не получает доступ к персональным данным, таким как контакты, сообщения или журнал звонков.</string>
   <string name="privacy_guard_notification">Защищённый режим включён</string>
   <string name="privacy_guard_notification_detail">У «<xliff:g id="app">%1$s</xliff:g>» нет доступа к персональным данным</string>
   <string name="privacy_guard_dialog_title">Защищённый режим</string>
   <string name="privacy_guard_dialog_summary">Приложение «<xliff:g id="app">%1$s</xliff:g>» пытается <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Запомнить разрешение</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">получить доступ к камере</string>
   <string name="app_ops_access_location">получить доступ к местоположению устройства</string>
   <string name="app_ops_access_notifications">получить доступ к уведомлениям</string>
@@ -99,7 +137,7 @@
   <string name="app_ops_toggle_bluetooth">переключить состояние Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">переключить состояние мобильного интернета</string>
   <string name="app_ops_toggle_nfc">переключить состояние модуля NFC</string>
-  <string name="app_ops_toggle_wifi">включить или выключить Wi-Fi</string>
+  <string name="app_ops_toggle_wifi">переключить состояние Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">получить управление громкостью будильника</string>
   <string name="app_ops_use_audio_focus">получить управление аудиофокусом</string>
   <string name="app_ops_use_bluetooth_volume">получить управление громкостью Bluetooth-устройств</string>
@@ -122,13 +160,15 @@
   <string name="app_ops_use_body_sensors">использовать нательные датчики</string>
   <string name="app_ops_read_cell_broadcasts">прочитать сообщения оповещения населения</string>
   <string name="app_ops_mock_location">предоставить фиктивные сведения о местоположении</string>
-  <string name="app_ops_read_external_storage">прочитать данные с внешнего запоминающего устройства</string>
+  <string name="app_ops_read_external_storage">прочитать данные с внешнего накопителя</string>
   <string name="app_ops_write_external_storage">записать данные на внешнее запоминающее устройство</string>
   <string name="app_ops_turn_on_screen">включить экран</string>
   <string name="app_ops_get_accounts">получить информацию об аккаунтах</string>
   <string name="app_ops_wifi_change">изменить состояние Wi-Fi</string>
   <string name="app_ops_su">получить права суперпользователя</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Чтобы открепить экран, нажмите и удерживайте кнопку «Назад».</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Автоматически</string>
   <string name="live_display_auto_summary">Автоматическая подстройка цветовой температуры экрана после заката и восхода солнца</string>
   <string name="live_display_off">Отключить</string>
@@ -140,11 +180,26 @@
   <string name="live_display_outdoor">На улице (яркое солнце)</string>
   <string name="live_display_outdoor_summary">Только уличный режим</string>
   <string name="live_display_hint">LiveDisplay поможет снизить зрительное напряжение и улучшить сон. Нажмите здесь, чтобы попробовать!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Нет подключенных устройств</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> подключенное устройство</string>
   <string name="tethered_notification_multi_device_message">Подключено устройств: <xliff:g id="count">%1$s</xliff:g></string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">Запуск приложения запрещён</string>
   <string name="notify_package_component_protected_text">Приложение «<xliff:g id="app_name">%1$s</xliff:g>» заблокировано. Нажмите, чтобы ввести пароль и запустить приложение.</string>
+  <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Аккумулятор полностью заряжен</string>
   <string name="notify_battery_fully_charged_text">Отключите устройство от сети для продления срока службы батареи.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM-карты изменились</string>
+  <string name="uicc_hot_swapped_event_text">Нажмите, чтобы задать параметры по умолчанию для SIM-карты</string>
 </resources>

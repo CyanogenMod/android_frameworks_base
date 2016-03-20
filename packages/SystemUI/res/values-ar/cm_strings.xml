@@ -16,12 +16,21 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">تحريك إلى اليمين من أجل %1$s</string>
   <string name="right_shortcut_hint">تحريك إلى اليسار من أجل %1$s</string>
   <string name="select_application">حدد التطبيق</string>
   <string name="lockscreen_choose_action_title">اختر إجراء</string>
   <string name="lockscreen_none_target">لا شيء</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">اختر الإجراء لتخصيصه</string>
   <string name="navbar_home_button">زر الرئيسية</string>
   <string name="navbar_recent_button">زر الأشياء الأخيرة</string>
@@ -33,14 +42,25 @@
   <string name="navbar_menu_big_button">زر القائمة</string>
   <string name="accessibility_dpad_left">المؤشر إلى اليسار</string>
   <string name="accessibility_dpad_right">المؤشر الى اليمين</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">مسح بيانات التطبيق</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">إيقاف إجباري</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">إلغاء التثبيت</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">إيقاف ملفات التعريف.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">ملف التعريف: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">تعطيل ملفات التعريف. </string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">تم تغيير ملف التعريف إلى <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">تهيئة\u2026</string>
+  <!-- Lights settings, LED notification -->
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">ستظل ظاهرة حتى يمكنك إزالتها. المس مع الاستمرار زر العودة لإزالتها.</string>
   <string name="quick_settings_custom_tile_detail_title">مربع مخصص</string>
   <string name="quick_settings_remove">إزالة المربع</string>
@@ -51,9 +71,13 @@
   <string name="quick_settings_profiles_off">تعطيل ملفات التعريف</string>
   <string name="quick_settings_heads_up_label">إنذار مسبق</string>
   <string name="quick_settings_battery_saver_label">موفر البطارية</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">تعطيل المزامنة. </string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">تشغيل المزامنة.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">تم تعطيل المزامنة.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">تم تشغيل المزامنة.</string>
   <string name="quick_settings_sync_label">المزامنة</string>
   <string name="quick_settings_volume_panel_label">لوحة مستوى الصوت</string>
@@ -63,40 +87,72 @@
   <string name="quick_settings_lockscreen_label">شاشة القفل</string>
   <string name="quick_settings_ambient_display_label">العرض المحيط</string>
   <string name="quick_settings_lockscreen_label_enforced">إعمال قفل الشاشة</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">مهلة الشاشة: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">تم تغيير مهلة الشاشة إلى: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">وضع البطارية</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">وضع البطارية: وضع توفير الطاقة.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">وضع البطارية: وضع متوازن.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">وضع البطارية: وضع الأداء.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">وضع البطارية: وضع الكفاءة.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">وضع البطارية: الوضع السريع.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">تم تغيير وضع البطارية إلى وضع توفير الطاقة.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">تم تغيير وضع البطارية إلى الوضع المتوازن.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">تم تغيير وضع البطارية إلى وضع الأداء.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">تم تغيير وضع البطارية الى وضع الكفاءة.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">تم تغيير وضع البطارية الى الوضع السريع.</string>
   <string name="quick_settings_performance_profile_detail_title">وضع البطارية</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">تعطيل شاشة القفل.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">تشغيل شاشة القفل.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">تم تعطيل شاشة القفل.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">تم تشغيل شاشة القفل.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">تعطيل العرض المحيط.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">تشغيل العرض المحيط.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">تم تعطيل العرض المحيط.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">تم تشغيل العرض المحيط.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">تعطيل الإنذار المسبق.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">تشغيل الإنذار المسبق.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">تم تعطيل الإنذار المسبق.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">تم تشغيل الإنذار المسبق.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">إيقاف موفر البطارية.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">تشغيل موفر البطارية.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">تم ايقاف موفر البطارية.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">تشغيل موفر البطارية.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">مربع ديناميكي</string>
   <string name="dynamic_qs_tile_next_alarm_label">التنبيه المقبل</string>
   <string name="dynamic_qs_tile_ime_selector_label">محدد IME</string>
   <string name="dynamic_qs_tile_su_label">الوصول إلى root</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">تعطيل LiveDisplay.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: الوضع التلقائي.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: الوضع النهاري.</string>
@@ -107,14 +163,31 @@
   <string name="accessibility_quick_settings_live_display_changed_day">تغيير LiveDisplay إلى الوضع النهاري.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">تغيير LiveDisplay إلى الوضع الليلي.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">تغيير LiveDisplay إلى وضع الأماكن المفتوحة.</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">تحديد الموقع: وضع توفير البطارية.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">تحديد الموقع: وضع المستشعرات فقط.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">تحديد الموقع: وضع الدقة العالية.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">وضع الموقع</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">توفير البطارية</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">الجهاز فقط</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">دقة عالية</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">تغيير تحديد الموقع إلى وضع توفير البطارية.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">تغيير تحديد الموقع إلى وضع المستشعرات فقط.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">تغيير تحديد الموقع إلى وضع الدقة العالية.</string>
+  <!-- detail header when adding a tile -->
+  <!-- Hotspot dialog message -->
+  <!-- Notification which notifies user flashlight is enabled -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">بطارية الإرساء <xliff:g id="number">%d</xliff:g>في المائة.</string>
 </resources>

@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">ಸ್ಕ್ರೀನ್‍ಶಾಟ್</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">ಸಂರಕ್ಷಿತ ಎಸ್ಎಂಎಸ್ ಸ್ವೀಕರಿಸಿ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">ಆಪ್‍ಗೆ ಒಳಬರುವ ಸಂರಕ್ಷಿತ ಎಸ್ಎಂಎಸ್ ಸ್ವೀಕರಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">ಸಂರಕ್ಷಿತ ಎಸ್ಎಂಎಸ್ ಪಟ್ಟಿ ಮಾರ್ಪಡನೆ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">ಆಪ್‍ಗೆ ಸಂರಕ್ಷಿತ ಎಸ್‍ಎಂಎಸ್ ವಿಳಾಸ ಪಟ್ಟಿಯನ್ನು ಮಾರ್ಪಡಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">ಭದ್ರತೆ</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">ಸಾಧನ ಭದ್ರತೆ ಮಾಹಿತಿಗೆ ಸಂಬಂಧಿಸಿದ ಅನುಮತಿಗಳು.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">ಫೋನ್ ಬ್ಲಾಕ್‍ಪಟ್ಟಿಯನ್ನು ಓದು</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆಗಳನ್ನು ಅಥವಾ ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ದೂರವಾಣಿ ಸಂಖ್ಯೆಗಳ ಬಗ್ಗೆ ಮಾಹಿತಿಯನ್ನು ಓದಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">ಫೋನ್ ಬ್ಲಾಕ್‍ಪಟ್ಟಿ ಬದಲಾವಣೆ</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆ ಮತ್ತು ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ಸಂಖ್ಯೆಗಳನ್ನು ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">ಕೀಗಾರ್ಡ್ ವಾಲ್‍ಪೇಪರ್ ಹೊಂದಿಕೆ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">ಒಂದು ಆಪ್‍ಗೆ ಲಾಕ್ ಪರದೆಯ ವಾಲ್‍ಪೇಪರ್ ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">ರಿಬೂಟ್</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">ಪ್ರಸ್ತುತ</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">ರಿಬೂಟ್</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">ರಿಕವರಿ</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">ಬೂಟ್‍ಲೋಡರ್</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">ಡೌನ್‍ಲೋಡ್</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">ಸಾಫ್ಟ್ ರಿಬೂಟ್</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">ರಿಬೂಟ್</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">ನಿಮ್ಮ ಟ್ಯಾಬ್ಲೆಟ್ ರಿಬೂಟ್ ಆಗುವುದು.</string>
   <string name="reboot_confirm" product="default">ನಿಮ್ಮ ಫೋನ್ ರಿಬೂಟ್ ಆಗುವುದು.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">ರಿಬೂಟ್ ಆಗುತ್ತಿದೆ\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">ಆಪ್ ಕೊಲ್ಲಲಾಗಿದೆ</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ನೆಟ್‍ವರ್ಕ್‍ನಿಂದ ಎಡಿಬಿ ಸಕ್ರಿಯಗೊಂಡಿದೆ</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ಯುಎಸ್‍ಬಿಯಿಂದ ಎಡಿಬಿ &amp; ನೆಟ್‍ವರ್ಕ್ ಸಕ್ರಿಯಗೊಂಡಿದೆ</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">ಡೀಬಗ್ಗಿಂಗ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲು ಸ್ಪರ್ಶಿಸಿ.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ಎಡಿಬಿ - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">ಯುಎಸ್‍ಬಿ &amp; ನೆಟ್‍ವರ್ಕ್</string>
   <string name="adb_active_custom_tile_usb">ಯುಎಸ್‍ಬಿ</string>
   <string name="adb_active_custom_tile_net">ನೆಟ್‍ವರ್ಕ್</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ಆಪ್ ಆರಂಭ ಪ್ರತಿಬಂಧ</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ಸ್ಥಾಪಿತವಾಗಿಲ್ಲ</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">ಆದ್ಯತೆ</string>
   <string name="silent_mode_none">ಶೂನ್ಯ</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">ಸಿಮ್ ಚಂದಾದಾರಿಕೆ ಬದಲಾದ ಕಾರಣ ವೈ-ಫೈ ಹಾಟ್‍ಸ್ಪಾಟನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">ವೈ-ಫೈ ಆಫ್ ಮಾಡಿ</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">ಗೌಪ್ಯತಾ ರಕ್ಷಕವನ್ನು ಸಕ್ರಿಯ ಅಥವ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸುವಿಕೆ</string>
   <string name="permdesc_changePrivacyGuardState">ಆಪ್‍ಗೆ ಇತರೆ ಆಪ್ ಗೌಪ್ಯತಾ ರಕ್ಷಕದ ಜೊತೆ  ಚಲಿಸಲು ಅಗುತ್ತದೆಯೆ ಅಥವ ಇಲ್ಲವೇ ಎಂಬುದನ್ನು ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ. ಒಂದು ಆಪ್ Privacy Guard ಜೊತೆ ಚಲಿಸುತ್ತಿದ್ದಲ್ಲಿ, ಅದಕ್ಕೆ ವಯಕ್ತಿಕ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವಿದಿಲ್ಲ, ಉದಾಹರಣೆಗೆ ಸಂಪರ್ಕಗಳು, ಕರೆ ಲಾಗ್ಸ್, ಅಥವ ಸಂದೇಶಗಳು.</string>
   <string name="privacy_guard_notification">ಗೌಪ್ಯತಾ ರಕ್ಷಕ ಸಕ್ರಿಯ</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>ಗೆ ಖಾಸಗಿ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ</string>
   <string name="privacy_guard_dialog_title">ಗೌಪ್ಯತಾ ರಕ್ಷಕ</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ನೀವು ಹೀಗೆ <xliff:g id="op">%2$s</xliff:g> ಬಯಸುವಿರಾ.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">ನನ್ನ ಆಯ್ಕೆಯನ್ನು ನೆನಪಿಡು</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">ಕ್ಯಾಮೆರಾ ಪ್ರವೇಶ</string>
   <string name="app_ops_access_location">ನಿಮ್ಮ  ಸ್ಥಳವನ್ನು ಪ್ರವೇಶಿಸುವಿಕೆ</string>
   <string name="app_ops_access_notifications">ನಿಮ್ಮ ಅಧಿಸೂಚನೆಗಳನ್ನು ಓದು</string>
@@ -97,7 +135,9 @@
   <string name="app_ops_start_at_bootup">ಪವರ್ ಅಪ್ ವೇಳೆ ಆರಂಭವಾಗು</string>
   <string name="app_ops_toast_window">ಟೋಸ್ಟ್ ಸಂದೇಶಗಳನ್ನು ಪ್ರದರ್ಶಿಸು</string>
   <string name="app_ops_toggle_bluetooth">ಟಾಗಲ್ ಬ್ಲೂಟೂತ್</string>
+  <string name="app_ops_toggle_mobile_data">ಮೊಬೈಲ್ ಡಾಟಾ ಟಾಗಲ್ ಮಾಡು</string>
   <string name="app_ops_toggle_nfc">ಟಾಗಲ್ NFC</string>
+  <string name="app_ops_toggle_wifi">Wi-Fi ಟಾಗಲ್ ಮಾಡು</string>
   <string name="app_ops_use_alarm_volume">ಅಲಾರಂ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_audio_focus">ಆಡಿಯೋ ಫೋಕಸ್ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_bluetooth_volume">ಬ್ಲೂಟೂತ್ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
@@ -110,8 +150,25 @@
   <string name="app_ops_use_voice_volume">ಧ್ವನಿ ಕರೆ ವಾಲ್ಯೂಂನ್ನು ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_write_mms">ಎಂಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
   <string name="app_ops_write_sms">ಎಸ್ಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
+  <string name="app_ops_use_fingerprint">ಬೆರಳಚ್ಚು ಉಪಯೋಗಿಸು</string>
+  <string name="app_ops_add_voicemail">ಒಂದು ವಾಯ್ಸ್‌ಮೇಲ್‌ ಸೇರಿಸಿ</string>
+  <string name="app_ops_read_phone_state">ಫೋನ್‌ ಸ್ಥಿತಿ ಅಕ್ಸೆಸ್‌ ಮಾಡಿ</string>
+  <string name="app_ops_scan_wifi">Wi-Fi ನೆಟ್‌ವರ್ಕ್‌ಗಳನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</string>
+  <string name="app_ops_change_wallpaper">ವಾಲ್‌ಪೇಪರ್‌ ಬದಲಿಸಿ</string>
+  <string name="app_ops_assist_structure">ಅಸಿಸ್ಟ್‌ ರಚನೆ ಬಳಸಿ</string>
+  <string name="app_ops_assist_screenshot">ಸ್ಕ್ರೀನ್‌ಶಾಟ್‌ ತೆಗೆದುಕೊಳ್ಳಿ</string>
+  <string name="app_ops_use_body_sensors">ಬಾಡಿ ಸೆನ್ಸರ್ ಗಳನ್ನು ಉಪಯೋಗಿಸು</string>
+  <string name="app_ops_read_cell_broadcasts">ಸೆಲ್ ಬ್ರಾಡ್ ಕ್ಯಾಸ್ಟ್ ಗಳನ್ನು ಓದು</string>
+  <string name="app_ops_mock_location">ನಿಮ್ಮ ಸ್ಥಳ ಅಣಕು ಮಾಡಿ</string>
+  <string name="app_ops_read_external_storage">ಬಾಹ್ಯ ಸಂಗ್ರಹ ಓದು</string>
+  <string name="app_ops_write_external_storage">ಬಾಹ್ಯ ಸಂಗ್ರಹವನ್ನು ಬರೆಯಿರಿ</string>
+  <string name="app_ops_turn_on_screen">ಸ್ಕ್ರೀನ್ ಆನ್ ಮಾಡಿ</string>
+  <string name="app_ops_get_accounts">ಸಾಧನ ಖಾತೆಗಳನ್ನು ಪಡೆಯಿರಿ</string>
+  <string name="app_ops_wifi_change">ವೈಫೈ ಸ್ಥಿತಿ ಬದಲಿಸಿ</string>
   <string name="app_ops_su">ರೂಟ್ ಪ್ರವೇಶ ಪಡೆ</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">ಪರದೆಯನ್ನು ಅನ್‍ಪಿನ್‍ಮಾಡಲು, ಹಿಂದೆ ಬಟನ್‍ ಸ್ಪರ್ಶಿಸಿ ಹಿಡಿಯಿರಿ.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">ಸ್ವಯಂಚಾಲಿತ</string>
   <string name="live_display_auto_summary">ಸೂರ್ಯಾಸ್ತ ಅಥವ ಸೂರ್ಯೋದಯದ ನಂತರ ಪರದೆಯ ಬಣ್ಣ ಉಷ್ಣಾಂಶವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸರಿಹೊಂದಿಸು</string>
   <string name="live_display_off">ಆಫ್</string>
@@ -123,7 +180,24 @@
   <string name="live_display_outdoor">ಹೊರಾಂಗಣ (ಪ್ರಕಾಶಮಾನ ಸೂರ್ಯ)</string>
   <string name="live_display_outdoor_summary">ಹೊರಾಂಗಣ ಸೆಟ್ಟಿಂಗ್ಸನ್ನು ಮಾತ್ರ ಉಪಯೋಗಿಸು</string>
   <string name="live_display_hint">ಲೈವ್ ಡಿಸ್ಪ್ಲೆ ನಿಮ್ಮ ಕಣ್ಣಿನ ಆಯಾಸವನ್ನು ಕಡಿಮೆಮಾಡಿ ರಾತ್ರಿ ಮಲಗಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಇದನ್ನು ಪ್ರಯತ್ನಿಸಲು ಇಲ್ಲಿ ಒತ್ತಿ!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">ಯಾವುದೇ ಸಂಪರ್ಕಗೊಂಡ ಸಾಧನವಿಲ್ಲ</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ಸಂಪರ್ಕಗೊಳಿಸಿದ ಸಾಧನ</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ಸಂಪರ್ಕಗೊಳಿಸಿದ ಸಾಧನಗಳು</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">ಆಕ್ಟಿವಿಟಿ ಲಾಂಚ್‌ ಬ್ಲಾಕ್‌ ಆಗಿದೆ</string>
+  <string name="notify_package_component_protected_text">ಲಾಂಚ್‌ ಆಗುವುದರಿಂದ <xliff:g id="app_name">%1$s</xliff:g> ಸಂರಕ್ಷಿಸಲ್ಪಟ್ಟಿದೆ ದೃಢೀಕರಿಸಲು ತಟ್ಟಿ ಮತ್ತು ಅಪ್ಲಿಕೇಶನ್‌ ಲಾಂಚ್‌ ಮಾಡಿ.</string>
+  <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">ಬ್ಯಾಟರಿ ಸಂಪೂರ್ಣವಾಗಿ ಚಾರ್ಜಾಗಿದೆ</string>
+  <string name="notify_battery_fully_charged_text">ಬ್ಯಾಟರಿ ದೀರ್ಘಾಯುಷ್ಯ ಸುಧಾರಿಸಲು ಚಾರ್ಜರ್ ನಿಂದ ನಿಮ್ಮ ಸಾಧನವನ್ನು ಕಡಿತಗೊಳಿಸಿ.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">ಬ್ಯಾಟರಿ ಅಂಕಿಅಂಶಗಳನ್ನು ಮರುಹೊಂದಿಸು</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">ಒಂದು ಅಪ್ಲಿಕೇಶನ್‍ಗೆ ಪ್ರಸ್ತುತ ಕಡಿಮೆ-ಮಟ್ಟದ ಬ್ಯಾಟರಿ ಬಳಕೆ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

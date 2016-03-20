@@ -16,12 +16,21 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Libista paremale et käivitada %1$s</string>
   <string name="right_shortcut_hint">Libista vasakule et käivitada %1$s</string>
   <string name="select_application">Valige rakendus</string>
   <string name="lockscreen_choose_action_title">Valige toiming</string>
   <string name="lockscreen_none_target">Puudub</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Vali toiming mida lisada</string>
   <string name="navbar_home_button">Kodu nupp</string>
   <string name="navbar_recent_button">Hiljutiste nupp</string>
@@ -33,14 +42,25 @@
   <string name="navbar_menu_big_button">Menüü nupp</string>
   <string name="accessibility_dpad_left">Kursor vasakule</string>
   <string name="accessibility_dpad_right">Kursor paremale</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Kustuta rakenduse andmed</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">Jõuga peatamine</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Eemalda</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Profiilid väljas.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">Profiil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">Profiilid välja lülitatud.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">Profiil muudetud: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Määratlen\u2026</string>
+  <!-- Lights settings, LED notification -->
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">See hoiab vaate kuni vabastamiseni. Vajuta ja hoia tagasi nuppu vabastamiseks.</string>
   <string name="quick_settings_custom_tile_detail_title">Kohandatud plaat</string>
   <string name="quick_settings_remove">Eemalda plaat</string>
@@ -51,9 +71,13 @@
   <string name="quick_settings_profiles_off">Profiilid välja lülitatud</string>
   <string name="quick_settings_heads_up_label">Etteteavitus</string>
   <string name="quick_settings_battery_saver_label">Akusäästja</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sünk väljas.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">Sünk sees.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">Sünk välja lülitatud.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">Sünk sisse lülitatud.</string>
   <string name="quick_settings_sync_label">Sünk</string>
   <string name="quick_settings_volume_panel_label">Helipaneel</string>
@@ -62,40 +86,72 @@
   <string name="quick_settings_lockscreen_label">Lukustusekraan</string>
   <string name="quick_settings_ambient_display_label">Ambient kuva</string>
   <string name="quick_settings_lockscreen_label_enforced">Lukustusekraan sunnitud</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Ekraani ajalõpp: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Ekraani ajalõpp muudetud <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Aku režiim</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Aku režiim: energiasäästmise režiim.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Aku režiim: tasakaalustatud režiim.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">Aku režiim: jõudlus režiim.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">Aku režiim: energiatõhususe režiimis.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Aku režiim: kiirrežiim.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Aku režiim muudeti energiasäästu režiimiks.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Aku režiim muudeti tasakaalustatud režiimiks.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Aku režiim muudeti jõudluse režiimiks.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Aku režiimi muudeti tõhususe režiimiks.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Aku režiimi muudeti kiirrežiimiks.</string>
   <string name="quick_settings_performance_profile_detail_title">Aku režiim</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Lukustusekraan väljas.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">Lukustusekraan sees.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">Lukustusekraan välja lülitatud.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Lukustusekraan sisse lülitatud.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Ambient kuva väljas.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">Ambient kuva sees.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient kuva väljalülitatud.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient kuva sisselülitatud.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Etteteavitus väljas.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">Etteteavitus sees.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">Etteteavitus on väljalülitatud.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Etteteavitus on sisselülitatud.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Akusäästja väljas.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">Akusäästja sees.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">Akusäästja on välja lülitatud.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Akusäästja on sisse lülitatud.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Dünaamiline plaat</string>
   <string name="dynamic_qs_tile_next_alarm_label">Järgmine alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME valija</string>
   <string name="dynamic_qs_tile_su_label">Root ligipääs</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay väljas.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automaatrežiim.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: päev-režiim.</string>
@@ -106,14 +162,31 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay muudetud päev-režiimi.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay muudetud Öörežiimi.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay muudetud õues režiimi.</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Asukoha teatamine: aku säästmise režiim.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">Asukoha teatamine: ainult andurite režiim.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Asukoha teatamine: kõrge täpsusega režiim.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Asukoha režiim</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Akut säästev</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">Ainult seade</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Kõrge täpsusega</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Asukoha teavitus muudetud aku säästmise režiimi.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">Asukoha teavitus muudetud vaid sensorite režiimi.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Asukoha teavitus muudetud kõrge täpsusega režiimi.</string>
+  <!-- detail header when adding a tile -->
+  <!-- Hotspot dialog message -->
+  <!-- Notification which notifies user flashlight is enabled -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Doki aku <xliff:g id="number">%d</xliff:g> protsenti.</string>
 </resources>

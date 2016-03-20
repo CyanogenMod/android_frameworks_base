@@ -16,17 +16,26 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_4g_plus">4G+</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
-  <string name="left_shortcut_hint">החלק ימינה בשביל %1$s</string>
-  <string name="right_shortcut_hint">החלק שמאלה בשביל %1$s</string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
+  <string name="left_shortcut_hint">החלק ימינה ל- %1$s</string>
+  <string name="right_shortcut_hint">החלקה שמאלה ל- %1$s</string>
   <string name="lockscreen_message">הקש על סמל בצד שמאל או ימין כדי להקצות מחדש קיצור דרך של מסך הנעילה.</string>
   <string name="lockscreen_default_target">ברירת מחדל</string>
   <string name="select_application">בחר יישום</string>
   <string name="lockscreen_choose_action_title">בחר פעולה</string>
   <string name="lockscreen_none_target">ללא</string>
-  <string name="navbar_dialog_title">בחר את הפעולה להקצאה</string>
+  <!-- Dialog title for navigation bar button selection -->
+  <string name="navbar_dialog_title">בחירת הפעולה להקצאה</string>
   <string name="navbar_home_button">לחצן הבית</string>
   <string name="navbar_recent_button">לחצן יישומים אחרונים</string>
   <string name="navbar_search_button">לחצן חיפוש</string>
@@ -37,19 +46,29 @@
   <string name="navbar_menu_big_button">לחצן התפריט</string>
   <string name="accessibility_dpad_left">סמן שמאלה</string>
   <string name="accessibility_dpad_right">סמן ימינה</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">מחק נתוני יישום</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">אלץ עצירה</string>
-  <string name="advanced_dev_option_uninstall">הסרה</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
+  <string name="advanced_dev_option_uninstall">הסרת התקנה</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_notification_brightness">בהירות נורית</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">פרופילים כבויים.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">פרופיל: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">פרופילים כובו.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">פרופיל שונה ל-<xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">מאתחל\u2026</string>
+  <!-- Lights settings, LED notification -->
   <string name="led_notification_title">הגדרות נורית</string>
   <string name="led_notification_text">נורית LED מופעלת בידי ההגדרות</string>
   <string name="qs_tile_edit_header_instruction">יש לגעת ולהחזיק את האריחים לסידור מחדש</string>
-  <string name="quick_settings_edit_label">ערוך אריחים</string>
+  <string name="quick_settings_edit_label">עריכת אריחים</string>
   <string name="quick_settings_cannot_delete_edit_tile">לא ניתן למחוק את אריח העריכה</string>
   <string name="qs_tiles_reset_confirmation">האם לאפס את אריחי ההגדרות המהירות לברירת המחדל?</string>
   <string name="quick_settings_tile_reset_to_default">איפוס לפריסת ברירת המחדל</string>
@@ -58,7 +77,8 @@
   <string name="quick_settings_title_show_weather">הצג מזג אוויר</string>
   <string name="quick_settings_title_show_brightness_slider">הצג מד בהירות</string>
   <string name="quick_settings_title_enlarge_first_row">הגדל את השורה הראשונה</string>
-  <string name="screen_pinning_description_no_navbar">פעולה זאת תשמור אותו מוצג עד שתבטל את ההצמדה. לחץ והחזק את כפתור \"הקודם\" כדי לבטל את ההצמדה.</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
+  <string name="screen_pinning_description_no_navbar">הפעולה שומרת זאת בתצוגה עד שתבטל את ההצמדה. גע והחזק את לחצן \"הקודם\" כדי לבטל את ההצמדה.</string>
   <string name="quick_settings_custom_tile_detail_title">אריח מותאם אישית</string>
   <string name="quick_settings_remove">הסר אריח</string>
   <string name="quick_settings_network_adb_label">ADB דרך רשת</string>
@@ -66,57 +86,93 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">פרופילי מערכת</string>
   <string name="quick_settings_profiles_off">פרופילים מושבתים</string>
-  <string name="quick_settings_heads_up_label">התראות קופצת</string>
+  <string name="quick_settings_heads_up_label">התראות קופצות</string>
   <string name="quick_settings_battery_saver_label">שומר סוללה</string>
   <string name="quick_settings_caffeine_label">קפאין</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">סנכרון כבוי.</string>
-  <string name="accessibility_quick_settings_sync_on">סנכרון פעיל.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_sync_on">סנכרון מופעל.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">סנכרון כובה.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">סנכרון הופעל.</string>
   <string name="quick_settings_sync_label">סנכרון</string>
-  <string name="quick_settings_volume_panel_label">לוח עוצמות שמע</string>
+  <string name="quick_settings_volume_panel_label">לוח עוצמת קול</string>
   <string name="quick_settings_usb_tether_label">קשירת USB</string>
-  <string name="quick_settings_screen_timeout_detail_title">משך זמן מסך</string>
+  <string name="quick_settings_screen_timeout_detail_title">זמן קצוב למסך</string>
   <string name="quick_settings_lockscreen_label">מסך נעילה</string>
   <string name="quick_settings_ambient_display_label">התראות ברקע</string>
   <string name="quick_settings_lockscreen_label_enforced">מסך הנעילה נאכף</string>
-  <string name="quick_settings_lockscreen_label_locked_by_profile">מושבת על ידי הפרופיל</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">מושבת על-ידי הפרופיל</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">משך זמן מסך: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">משך זמן מסך השתנה ל-<xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">מצב סוללה</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">מצב סוללה: מצב חיסכון סוללה.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">מצב סוללה: מצב מאוזן.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">מצב סוללה: מצב ביצועים.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">מצב סוללה: מצב יעילות.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">מצב סוללה: מצב מהיר.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">מצב הסוללה שונה למצב חיסכון סוללה.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">מצב הסוללה שונה למצב מאוזן.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">מצב הסוללה שונה למצב ביצועים.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">מצב סוללה שונה למצב יעילות.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">מצב סוללה שונה למצב מהיר.</string>
   <string name="quick_settings_performance_profile_detail_title">מצב סוללה</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">מסך נעילה כבוי.</string>
-  <string name="accessibility_quick_settings_lock_screen_on">מסך נעילה פעיל.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_lock_screen_on">מסך נעילה מופעל.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">מסך נעילה כובה.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">מסך נעילה הופעל.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">תצוגת התראות ברקע כבויה.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">תצוגת התראות ברקע פעילה.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">תצוגת התראות ברקע כובתה.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">תצוגת התראות ברקע הופעלה.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">התראות קופצות כבויות.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">התראות קופצות פעילות.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">התראות קופצות כובו.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">התראות קופצות הופעלו.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_off">קפאין כבוי.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_on">קפאין פועל.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">שומר סוללה כבוי.</string>
-  <string name="accessibility_quick_settings_battery_saver_on">שומר סוללה פעיל.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_battery_saver_on">שומר סוללה מופעל.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">שומר סוללה כובה.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">שומר סוללה הופעל.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">אריחים דינמיים</string>
-  <string name="dynamic_qs_tile_next_alarm_label">ההתראה הבאה</string>
+  <string name="dynamic_qs_tile_next_alarm_label">השעון המעורר הבא</string>
   <string name="dynamic_qs_tile_ime_selector_label">בורר שיטות קלט</string>
   <string name="dynamic_qs_tile_su_label">גישת שורש</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay כבוי.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: מצב אוטומטי.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: מצב יום.</string>
@@ -128,19 +184,41 @@
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay שונה למצב לילה.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay שונה למצב חוץ.</string>
   <string name="quick_settings_title_advanced_location">שלושה מצבי מיקום</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">דיווח מיקום: מצב חיסכון בסוללה.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">דיווח מיקום: מצב חיישנים בלבד.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">דיווח מיקום: מצב רמת דיוק גבוהה.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">מצב מיקום</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">חיסכון בסוללה</string>
-  <string name="quick_settings_location_gps_only_label">התקן בלבד</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_location_gps_only_label">מכשיר בלבד</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">דיוק מרבי</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">דיווח מיקום השתנה למצב חיסכון סוללה.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">דיווח מיקום השתנה למצב חיישנים בלבד.</string>
-  <string name="accessibility_quick_settings_location_changed_high_accuracy">דיווח מיקום השתנה למצב דיוק גבוה.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">דיווח מיקום השתנה למצב רמת דיוק גבוהה.</string>
   <string name="quick_settings_tiles_category_system">אריחי מערכת</string>
+  <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">הוסף אריח</string>
+  <!-- Hotspot dialog message -->
   <string name="hotspot_apm_message">לא ניתן להתחבר לרשתות סלולריות כאשר מצב טיסה פעיל. בטל את מצב הטיסה ונסה שנית.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">פנס מופעל</string>
   <string name="quick_settings_tile_flashlight_not_summary">לחץ לכיבוי</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">לקוח %1$d</item>
+    <item quantity="other">%1$d לקוחות</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">אין נתוני SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>
 </resources>

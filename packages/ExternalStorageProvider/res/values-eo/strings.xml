@@ -15,5 +15,8 @@
      limitations under the License.
 -->
 <resources>
+  <!-- Title of the external storage application [CHAR LIMIT=32] -->
+  <!-- Title for documents backend that offers internal storage. [CHAR LIMIT=24] -->
+  <!-- Title for documents backend that offers documents. [CHAR LIMIT=24] -->
   <string name="root_documents">Dokumentoj</string>
 </resources>

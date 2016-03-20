@@ -17,50 +17,88 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Captură de ecran</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">primește SMS-uri protejate</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Permite aplicației să primească un SMS protejat.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">modifică lista de SMS-uri protejate</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Permite aplicației să modifice lista adreselor SMS protejate.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Securitate</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Permisiunile legate de informațiile de securitate ale dispozitivului.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">citește lista neagră a telefonului</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Permite unei aplicații să citească informații despre numerele de telefon care sunt blocate pentru primirea de apeluri sau de mesaje.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">schimbă lista neagră a telefonului</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Permite unei aplicații să schimbe numere de telefon care sunt blocate pentru primirea de apeluri sau mesaje.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">setare fundal ecran de blocare</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Permite unei aplicații să schimbe imaginea de fundal a ecranului de blocare.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Repornire</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Actual</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Repornire</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Descărcare</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Repornirea sistemului</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Repornire</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Tableta va reporni.</string>
   <string name="reboot_confirm" product="default">Telefonul dvs. va reporni.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Repornire\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplicație oprită</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB prin rețea activ</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB prin USB &amp; rețea activ</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Apasă pentru dezactivarea depanării.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; rețea</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rețea</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interceptează lansarea aplicației</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s nu este instalată</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritate</string>
   <string name="silent_mode_none">Nimic</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Oprește Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">activează sau dezactivează Privacy Guard</string>
   <string name="permdesc_changePrivacyGuardState">Permite aplicației să stabilească dacă o altă aplicație rulează cu garda de confidențialitate. Când o aplicație rulează cu garda de confidențialitate, nu va avea acces la date personale, cum ar fi contacte, jurnalul de apeluri sau mesaje.</string>
   <string name="privacy_guard_notification">Protejarea datelor activată</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nu va putea accesa datele personale</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> dorește să <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Memorează alegerea mea</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">accesează camera</string>
   <string name="app_ops_access_location">accesează locația</string>
   <string name="app_ops_access_notifications">citește notificările</string>
@@ -127,7 +165,9 @@
   <string name="app_ops_get_accounts">obține conturile dispozitivului</string>
   <string name="app_ops_wifi_change">schimbă starea Wi-Fi</string>
   <string name="app_ops_su">obțină acces root</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Pentru a anula fixarea acestui ecran, atingeți și țineți apăsat butonul Înapoi.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automat</string>
   <string name="live_display_auto_summary">Reglează automat temperatura de culoare de pe ecran după apus și răsărit</string>
   <string name="live_display_off">Oprit</string>
@@ -139,10 +179,23 @@
   <string name="live_display_outdoor">În aer liber (soare strălucitor)</string>
   <string name="live_display_outdoor_summary">Utilizați numai setările în aer liber</string>
   <string name="live_display_hint">LiveDisplay poate reduce oboseala ochilor și vă poate ajuta să dormiți noaptea. Apăsați aici pentru a-l încerca!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Niciun dispozitiv conectat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitiv conectat</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitive conectate</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">Lansarea activității blocată</string>
+  <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Acumulator încărcat complet</string>
   <string name="notify_battery_fully_charged_text">Deconectați aparatul de la încărcător pentru a îmbunătăți longevitatea bateriei.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">resetează statisticile bateriei</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Permite unei aplicații să reseteze datele curente de utilizare a bateriei.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

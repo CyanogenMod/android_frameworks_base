@@ -16,9 +16,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_hspap">HSPA+</string>
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_data_connection_4g_plus">4G+</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> – <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Nach rechts wischen für %1$s</string>
   <string name="right_shortcut_hint">Nach links wischen für %1$s</string>
   <string name="lockscreen_message">Berühren Sie das linke oder rechte Symbol, um eine Sperrbildschirm-Verknüpfung festzulegen.</string>
@@ -26,6 +34,7 @@
   <string name="select_application">App wählen</string>
   <string name="lockscreen_choose_action_title">Aktion auswählen</string>
   <string name="lockscreen_none_target">Keine</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Funktion zuweisen</string>
   <string name="navbar_home_button">Home</string>
   <string name="navbar_recent_button">Anwendungsverlauf-Taste</string>
@@ -37,15 +46,25 @@
   <string name="navbar_menu_big_button">Menüschaltfläche</string>
   <string name="accessibility_dpad_left">Pfeiltaste links</string>
   <string name="accessibility_dpad_right">Pfeiltaste rechts</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Anwendungsdaten löschen</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">Beenden erzwingen</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Deinstallieren</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_notification_brightness">Helligkeit</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Profile aus.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">Profile ausgeschaltet.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">Profil auf <xliff:g id="profile" example="Default">%s</xliff:g> geändert.</string>
   <string name="quick_settings_compass_init">Initialisierung\u2026</string>
+  <!-- Lights settings, LED notification -->
   <string name="led_notification_title">LED-Einstellungen</string>
   <string name="led_notification_text">Benachrichtigungs-LED durch Einstellungen aktiviert</string>
   <string name="qs_tile_edit_header_instruction">Drücken und halten Sie die Kacheln, um sie neu anzuordnen.</string>
@@ -58,6 +77,7 @@
   <string name="quick_settings_title_show_weather">Wetter anzeigen</string>
   <string name="quick_settings_title_show_brightness_slider">Helligkeitsregler anzeigen</string>
   <string name="quick_settings_title_enlarge_first_row">Erste Zeile vergrößern</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Dies fixiert die aktuelle Ansicht. Zum Lösen die Zurück-Taste drücken und halten.</string>
   <string name="quick_settings_custom_tile_detail_title">Benutzerdefinierte Kachel</string>
   <string name="quick_settings_remove">Kachel entfernen</string>
@@ -69,9 +89,13 @@
   <string name="quick_settings_heads_up_label">Pop-up</string>
   <string name="quick_settings_battery_saver_label">Akku-Sparmodus</string>
   <string name="quick_settings_caffeine_label">Koffein</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchronisierung aus.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">Synchronisierung an.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">Synchronisierung ist ausgeschaltet.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">Synchronisierung ist eingeschaltet.</string>
   <string name="quick_settings_sync_label">Synchronisieren</string>
   <string name="quick_settings_volume_panel_label">Lautstärke</string>
@@ -81,42 +105,74 @@
   <string name="quick_settings_ambient_display_label">Inaktivitätsdisplay</string>
   <string name="quick_settings_lockscreen_label_enforced">Bildschirmsperre aktiviert</string>
   <string name="quick_settings_lockscreen_label_locked_by_profile">Durch Profil gesperrt</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Ruhezustand nach <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Zeit bis zum Ruhezustand in <xliff:g id="timeout" example="30 seconds">%s</xliff:g> geändert.</string>
   <string name="qs_tile_performance">Akkumodus</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Akkumodus: Energie sparen.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Akkumodus: Ausgeglichen.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">Akkumodus: Mehr Leistung.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">Akkumodus: Effizient.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Akkumodus: Schnell.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Akkumodus auf \"Energie sparen\" geändert.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Akkumodus auf \"Ausgeglichen\" geändert.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Akkumodus auf \"Mehr Leistung\" geändert.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Akkumodus auf \"Effizient\" geändert.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Akkumodus auf \"Schnell\" geändert.</string>
   <string name="quick_settings_performance_profile_detail_title">Akkumodus</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Bildschirmsperre aus.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">Bildschirmsperre an.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">Bildschirmsperre ausgeschaltet.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Bildschirmsperre eingeschaltet.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Inaktivitätsdisplay aus.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">Inaktivitätsdisplay an.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">Inaktivitätsdisplay ausgeschaltet.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">Inaktivitätsdisplay eingeschaltet.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Pop-up aus.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">Pop-up an.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">Pop-up ausgeschaltet.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Pop-up eingeschaltet.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_off">Koffein aus.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_on">Koffein an.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Akku-Sparmodus aus.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">Akku-Sparmodus an.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">Akku-Sparmodus ausgeschaltet.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Akku-Sparmodus eingeschaltet.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Dynamische Kachel</string>
   <string name="dynamic_qs_tile_next_alarm_label">Nächster Alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Eingabemethode</string>
   <string name="dynamic_qs_tile_su_label">Root-Zugriff</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay aus.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: Automatisch.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: Tag.</string>
@@ -128,19 +184,41 @@
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay auf Nacht-Modus geändert.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay auf Außen-Modus geändert.</string>
   <string name="quick_settings_title_advanced_location">Standort mit drei Zuständen</string>
-  <string name="accessibility_quick_settings_location_battery_saving">Standortdienste: Energiesparmodus</string>
-  <string name="accessibility_quick_settings_location_gps_only">Standortdienste: Nur Gerät</string>
-  <string name="accessibility_quick_settings_location_high_accuracy">Standortdienste: Hohe Genauigkeit</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_battery_saving">Standortdienste: Energiesparmodus.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_gps_only">Standortdienste: Nur Gerät.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_high_accuracy">Standortdienste: Hohe Genauigkeit.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Standortmodus</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Akku-Sparmodus</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">Nur Gerät</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Hohe Genauigkeit</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Standortmodus auf \"Energiesparmodus\" geändert.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">Standortmodus auf \"Nur Gerät\" geändert.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Standortmodus auf \"Hohe Genauigkeit\" geändert.</string>
   <string name="quick_settings_tiles_category_system">System-Kacheln</string>
+  <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Kachel hinzufügen</string>
+  <!-- Hotspot dialog message -->
   <string name="hotspot_apm_message">Im Flugmodus ist keine Verbindung zum Mobilfunknetz möglich. Deaktivieren Sie den Flugmodus und versuchen Sie es erneut.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Taschenlampe ist eingeschaltet</string>
   <string name="quick_settings_tile_flashlight_not_summary">Zum Ausschalten tippen</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d Client</item>
+    <item quantity="other">%1$d Clients</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Keine Daten-SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dock-Akku <xliff:g id="number">%d</xliff:g> Prozent.</string>
 </resources>

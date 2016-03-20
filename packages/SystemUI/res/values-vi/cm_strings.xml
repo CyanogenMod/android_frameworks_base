@@ -16,12 +16,25 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_hspap">HSPA +</string>
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_4g_plus">4 G +</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Vuốt sang phải cho %1$s</string>
   <string name="right_shortcut_hint">Vuốt sang trái cho %1$s</string>
+  <string name="lockscreen_message">Chạm vào một biểu tượng bên trái hoặc phải để tái chỉ định một lối tắt màn hình khóa.</string>
+  <string name="lockscreen_default_target">Mặc định</string>
   <string name="select_application">Chọn ứng dụng</string>
   <string name="lockscreen_choose_action_title">Chọn hành động</string>
   <string name="lockscreen_none_target">Không</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Chọn hành động để gán</string>
   <string name="navbar_home_button">Nút Home</string>
   <string name="navbar_recent_button">Nút ứng dụng gần đây</string>
@@ -33,14 +46,38 @@
   <string name="navbar_menu_big_button">Nút trình đơn</string>
   <string name="accessibility_dpad_left">Trỏ trái</string>
   <string name="accessibility_dpad_right">Trỏ phải</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Xoá dữ liệu ứng dụng</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">Buộc dừng</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Gỡ cài đặt</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_notification_brightness">Độ sáng đèn</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Hồ sơ tắt.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">Hồ sơ: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">Hồ sơ đã tắt.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">Hồ sơ đã đổi thành <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Đang khởi tạo\u2026</string>
+  <!-- Lights settings, LED notification -->
+  <string name="led_notification_title">Cài đặt đèn</string>
+  <string name="led_notification_text">Đèn LED được kích hoạt theo cài đặt</string>
+  <string name="qs_tile_edit_header_instruction">Bấm và giữ ô để sắp xếp lại</string>
+  <string name="quick_settings_edit_label">Chỉnh sửa ô</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Không thể xoá ô Chỉnh sửa</string>
+  <string name="qs_tiles_reset_confirmation">Đặt lại ô cài đặt nhanh về cấu hình mặc định?</string>
+  <string name="quick_settings_tile_reset_to_default">Đặt lại bố cục mặc định</string>
+  <string name="quick_settings_title_header">Tiêu đề</string>
+  <string name="quick_settings_title_tiles">Ô</string>
+  <string name="quick_settings_title_show_weather">Hiện thời tiết</string>
+  <string name="quick_settings_title_show_brightness_slider">Hiện thanh điều chỉnh độ sáng</string>
+  <string name="quick_settings_title_enlarge_first_row">Phóng lớn hàng đầu tiên</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Điều này sẽ giúp nó hiển thị cho đến khi bạn bỏ ghim. Chạm và giữ nút Quay lại để bỏ ghim.</string>
   <string name="quick_settings_custom_tile_detail_title">Kiểu xếp cạnh nhau tùy chỉnh</string>
   <string name="quick_settings_remove">Gỡ kiểu xếp cạnh nhau</string>
@@ -51,9 +88,14 @@
   <string name="quick_settings_profiles_off">Cấu hình bị vô hiệu hóa</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Trình tiết kiệm pin</string>
+  <string name="quick_settings_caffeine_label">Cafein</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Tắt đồng bộ.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">Bật đồng bộ.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">Đã tắt đồng bộ.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">Đã bật đồng bộ.</string>
   <string name="quick_settings_sync_label">Đồng bộ</string>
   <string name="quick_settings_volume_panel_label">Bảng điều khiển âm lượng</string>
@@ -62,40 +104,75 @@
   <string name="quick_settings_lockscreen_label">Màn hình khoá</string>
   <string name="quick_settings_ambient_display_label">Hiển thị môi trường xung quanh</string>
   <string name="quick_settings_lockscreen_label_enforced">Buộc khoá màn hình</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Bị vô hiệu theo cấu hình</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Thời gian chờ của màn hình: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Thời gian chờ của màn hình đã đổi thành <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Chế độ pin</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Chế độ pin: chế độ tiết kiệm năng lượng.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Chế độ pin: chế độ cân bằng.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">Pin chế độ: chế độ hiệu suất.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">Chế độ pin: chế độ hiệu quả.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Chế độ pin: chế độ nhanh.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Chế độ pin đã đổi sang chế độ tiết kiệm năng lượng.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Chế độ pin đã đổi sang chế độ cân bằng.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Chế độ pin đã đổi sang chế độ hiệu suất.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Chế độ pin được chuyển sang hiệu quả.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Chế độ pin được chuyển sang nhanh.</string>
   <string name="quick_settings_performance_profile_detail_title">Chế độ pin</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Màn hình khóa tắt.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">Màn hình khóa bật.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">Màn hình khóa đã tắt.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Màn hình khóa đã bật.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Tắt hiển thị môi trường xung quanh.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">Hiển thị môi trường xung quanh bật.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">Hiển thị môi trường xung quanh đã tắt.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">Hiển thị môi trường xung quanh đã bật.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Heads up tắt.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">Heads up bật.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up đã tắt.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up đã bật.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Đã tắt Cafein.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Đã bật Cafein.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Trình tiết kiệm pin: Tắt.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">Trình tiết kiệm pin: Bật.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">Đã tắt Trinh tiết kiệm pin.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Đã bật Trình tiết kiệm pin.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Kiểu xếp cạnh nhau động</string>
   <string name="dynamic_qs_tile_next_alarm_label">Báo thức tiếp theo</string>
   <string name="dynamic_qs_tile_ime_selector_label">Trình chọn IME</string>
   <string name="dynamic_qs_tile_su_label">Truy cập root</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay tắt.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: chế độ tự động.</string>
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: chế độ ban ngày.</string>
@@ -106,14 +183,41 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay đã đổi sang chế độ ban ngày.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay đã đổi sang chế độ ban đêm.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay đã đổi sang chế độ ngoài trời.</string>
+  <string name="quick_settings_title_advanced_location">Ba trạng thái cho cài đặt vị trí</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Báo cáo vị trí: chế độ tiết kiệm pin.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">Báo cáo vị trí: chế độ chỉ cám biến.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Báo cáo vị trí: chế độ chính xác cao.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Chế độ vị trí</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Tiết kiệm pin</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">Chỉ thiết bị</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Chính xác cao</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Báo cáo vị trí đã đổi sang chế độ tiết kiệm pin.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">Báo cáo vị trí đã đổi sang chế độ chỉ cảm biến.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Báo cáo vị trí đã đổi sang chế độ chính xác cao.</string>
+  <string name="quick_settings_tiles_category_system">Ô hệ thống</string>
+  <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">Thêm một ô</string>
+  <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Không thể kết nối với mạng di động khi đã kích hoạt chế độ trên Máy bay. Vô hiệu chế độ trên Máy bay và thử lại.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">Đã bật đèn pin</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Chạm vào để tắt</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d máy khách</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Không có SIM dữ liệu</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Thanh pin <xliff:g id="number">%d</xliff:g> phần trăm.</string>
 </resources>

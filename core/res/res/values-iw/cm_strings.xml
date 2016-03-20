@@ -17,56 +17,94 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">צילום מסך</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">קבלת הודעות SMS מוגנות</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">מאפשר ליישום לקבל הודעות SMS מוגנות.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">שינוי רשימת הודעות SMS מוגנות</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">מאפשר ליישום לשנות את רשימת הכתובות של הודעות SMS מוגנות.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">אבטחה</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">הרשאות הקשורות לאבטחת המידע במכשיר.</string>
-  <string name="permlab_readPhoneBlacklist">קריאת הרשימה השחורה של המכשיר</string>
-  <string name="permdesc_readPhoneBlacklist">מאפשר ליישום לגשת למידע אודות מספרי הטלפון שנחסמו לקבלת שיחות והודעות נכנסות.</string>
-  <string name="permlab_changePhoneBlacklist">שינוי הרשימה השחורה</string>
-  <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים המופיעים ברשימה השחורה, אשר נחסמו לקבלת שיחות והודעות נכנסות.</string>
-  <string name="permlab_setKeyguardWallpaper">הגדרת טפט למסך הנעילה</string>
-  <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את הטפט של מסך הנעילה.</string>
-  <string name="global_action_reboot">הפעלה מחדש</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readPhoneBlacklist">קריאת הרשימה השחורה של הטלפון</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readPhoneBlacklist">מאפשר ליישום לקרוא מידע אודות מספרי הטלפון שנחסמו עבור קבלת שיחות או הודעות נכנסות.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_changePhoneBlacklist">שנה רשימה שחורה של הטלפון</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים שנחסמו עבור קבלת שיחות או הודעות נכנסות.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_setKeyguardWallpaper">הגדרת תמונת רקע למסך הנעילה</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את תמונת הרקע של מסך הנעילה.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
+  <string name="global_action_reboot">אתחול מחדש</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">נוכחי</string>
-  <string name="reboot_reboot">הפעלה מחדש</string>
-  <string name="reboot_recovery">Recovery</string>
-  <string name="reboot_bootloader">Bootloader</string>
-  <string name="reboot_download">מצב הורדה</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
+  <string name="reboot_reboot">אתחול מחדש</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+  <string name="reboot_recovery">שחזור</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+  <string name="reboot_bootloader">תוכנת טעינה ראשונית</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+  <string name="reboot_download">הורדה</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">אתחול מהיר</string>
-  <string name="reboot_title">הפעלה מחדש</string>
+  <!-- Title of dialog to confirm rebooting. -->
+  <string name="reboot_title">אתחול מחדש</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">הטאבלט יופעל מחדש.</string>
-  <string name="reboot_confirm" product="default">המכשיר יופעל מחדש.</string>
+  <string name="reboot_confirm" product="default">הטלפון יאותחל מחדש.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">מאתחל\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">היישום נסגר</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB דרך רשת מופעל</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB דרך USB ורשת מופעל</string>
-  <string name="adb_active_generic_notification_message">לחץ לעצירת איתור באגים.</string>
+  <!-- ADB notification message-->
+  <string name="adb_active_generic_notification_message">גע לביטול איתור באגים.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB ורשת</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">רשת</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">יירוט הפעלת יישום</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s לא מותקן</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">עדיפות</string>
   <string name="silent_mode_none">ללא</string>
-  <string name="subscription_change_disabled_wifi_ap">נקודת Wi-Fi חמה הושבתה עקב שינוי מנוי SIM</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">נקודת רשת ציבורית Wi-Fi הושבתה עקב שינוי מנוי SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">כיבוי Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">הפעלה או השבתה של שומר הפרטיות</string>
-  <string name="permdesc_changePrivacyGuardState">מאפשר ליישום לקבוע האם יישום אחר יפעל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
+  <string name="permdesc_changePrivacyGuardState">מאפשר ליישום לשנות הרשאות של יישום אחר כדי שיפעל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
   <string name="privacy_guard_notification">שומר הפרטיות פעיל</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> לא יוכל לגשת למידע אישי</string>
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש/ת <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">זכור את הבחירה שלי</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>
   <string name="app_ops_access_notifications">קריאת ההתראות שלך</string>
   <string name="app_ops_activate_vpn">הפעלת VPN</string>
-  <string name="app_ops_auto_start">התחלת פעילות בהדלקת המכשיר</string>
+  <string name="app_ops_auto_start">התחל פעילות בהדלקת המכשיר</string>
   <string name="app_ops_delete_call_log">מחיקת יומן השיחות שלך</string>
   <string name="app_ops_delete_contacts">מחיקת אנשי הקשר שלך</string>
   <string name="app_ops_delete_mms">מחיקת הודעות ה-MMS שלך</string>
@@ -101,14 +139,14 @@
   <string name="app_ops_toggle_nfc">שינוי מצב ה-NFC</string>
   <string name="app_ops_toggle_wifi">הפעלת/כיבוי Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">שליטה בעוצמת השעון המעורר</string>
-  <string name="app_ops_use_audio_focus">שליטה במיקוד הקול</string>
-  <string name="app_ops_use_bluetooth_volume">שליטה על עוצמת השמע ב-Bluetooth</string>
-  <string name="app_ops_use_master_volume">שליטה על עוצמת השמע הראשית</string>
-  <string name="app_ops_use_media_buttons">שימוש בכפתורי המדיה</string>
-  <string name="app_ops_use_media_volume">שליטה על עוצמת השמעת מדיה</string>
-  <string name="app_ops_use_notification_volume">שליטה על עוצמת צליל ההתראות</string>
-  <string name="app_ops_use_ring_volume">שליטה על עוצמת הצלצול</string>
-  <string name="app_ops_use_vibrate">שימוש ברטט</string>
+  <string name="app_ops_use_audio_focus">שליטה במיקוד השמע</string>
+  <string name="app_ops_use_bluetooth_volume">שליטה בעוצמת קול ב-Bluetooth</string>
+  <string name="app_ops_use_master_volume">שליטה בעוצמת הקול הראשית</string>
+  <string name="app_ops_use_media_buttons">שימוש בלחצני המדיה</string>
+  <string name="app_ops_use_media_volume">שליטה בעוצמת קול למדיה</string>
+  <string name="app_ops_use_notification_volume">שליטה בעוצמת קול ההתראות</string>
+  <string name="app_ops_use_ring_volume">שליטה בעוצמת קול לרינגטון</string>
+  <string name="app_ops_use_vibrate">שימוש במשוב רטט</string>
   <string name="app_ops_use_voice_volume">שליטה על עוצמת הקול בשיחה</string>
   <string name="app_ops_write_mms">כתיבת הודעת MMS</string>
   <string name="app_ops_write_sms">כתיבת הודעת SMS</string>
@@ -128,11 +166,13 @@
   <string name="app_ops_get_accounts">קבלת חשבונות המכשיר</string>
   <string name="app_ops_wifi_change">שינוי מצב Wi-Fi</string>
   <string name="app_ops_su">קבלת גישת שורש (Root)</string>
-  <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, לחץ על כפתור \"חזור\" והחזק אותו.</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, גע והחזק בלחצן \"הקודם\".</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">אוטומטי</string>
   <string name="live_display_auto_summary">התאם אוטומטית את טמפרטורת הצבע של המסך לאחר הזריחה והשקיעה</string>
   <string name="live_display_off">כבוי</string>
-  <string name="live_display_off_summary">בטל את כל ההתאמות</string>
+  <string name="live_display_off_summary">השבת את כל ההתאמות</string>
   <string name="live_display_day">יום</string>
   <string name="live_display_day_summary">השתמש בהגדרות יום בלבד</string>
   <string name="live_display_night">לילה</string>
@@ -140,11 +180,26 @@
   <string name="live_display_outdoor">בחוץ (שמש בהירה)</string>
   <string name="live_display_outdoor_summary">השתמש בהגדרות חוץ בלבד</string>
   <string name="live_display_hint">LiveDisplay יכולה למזער את עייפות העין ולעזור לך לישון בלילה. לחץ כאן כדי לנסות!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">אין מכשירים מחוברים</string>
   <string name="tethered_notification_one_device_message">מכשיר <xliff:g id="count">%1$s</xliff:g> מחובר</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> מכשירים מחוברים</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">הפעלת הפעולה נחסמה</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> מוגן מפני הפעלה. לחץ כדי להזדהות ולהפעיל את היישום.</string>
+  <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">סוללה טעונה במלואה</string>
   <string name="notify_battery_fully_charged_text">נתק את מכשירך מהמטען כדי לשפר את אורך חיי סוללה.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">איפוס סטטיסטיקות סוללה</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">מאפשר ליישום לאפס נתוני רמה-נמוכה נוכחיים של השימוש בסוללה.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">כרטיסי SIM הוחלפו</string>
+  <string name="uicc_hot_swapped_event_text">הקש כדי להגדיר העדפות ברירת המחדל של כרטיס ה-SIM</string>
 </resources>

@@ -16,12 +16,21 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Braukite į dešinę, kad %1$s</string>
   <string name="right_shortcut_hint">Braukite į kairę, kad %1$s</string>
   <string name="select_application">Pasirinkti programą</string>
   <string name="lockscreen_choose_action_title">Pasirinkti veiksmą</string>
   <string name="lockscreen_none_target">Joks</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Pasirinkite veiksmą, kad jį priskirtumėte</string>
   <string name="navbar_home_button">Pagrindinis mygtukas</string>
   <string name="navbar_recent_button">„Naujausių“ mygtukas</string>
@@ -33,14 +42,25 @@
   <string name="navbar_menu_big_button">Meniu mygtukas</string>
   <string name="accessibility_dpad_left">Žymeklis kairėje</string>
   <string name="accessibility_dpad_right">Žymeklis dešinėje</string>
+  <!-- Development shortcuts -->
+  <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Ištrinti programos duomenis</string>
+  <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">Priverstinai sustabdyti</string>
+  <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Pašalinti</string>
+  <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Profiliai išjungti.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">Profilis: <xliff:g id="profile" example="Default">%s </xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">Profiliai išjungti.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">Profilis pakeistas į <xliff:g id="profile" example="Default">%s </xliff:g>.</string>
   <string name="quick_settings_compass_init">Inicijuojama\u2026</string>
+  <!-- Lights settings, LED notification -->
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Tai laikys jį matomą iki kol atsegsite. Palieskite ir laikykite mygtuką atgal, kad atsegtumėte.</string>
   <string name="quick_settings_custom_tile_detail_title">Tinkinta plytelė</string>
   <string name="quick_settings_remove">Pašalinti plytelę</string>
@@ -51,9 +71,13 @@
   <string name="quick_settings_profiles_off">Profiliai neleidžiami</string>
   <string name="quick_settings_heads_up_label">Iššokantys pranešimai</string>
   <string name="quick_settings_battery_saver_label">Akumuliatoriaus tausojimas</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinchronizavimas išjungtas.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">Sinchronizavimas įjungtas.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">Sinchronizavimas išjungtas.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">Sinchronizavimas įjungtas.</string>
   <string name="quick_settings_sync_label">Sinchronizavimas</string>
   <string name="quick_settings_volume_panel_label">Garsumo skydelis</string>
@@ -62,40 +86,72 @@
   <string name="quick_settings_lockscreen_label">Ekrano užraktas</string>
   <string name="quick_settings_ambient_display_label">Ambient display</string>
   <string name="quick_settings_lockscreen_label_enforced">Ekrano užraktas vykdomas</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Ekrano skirtasis laikas: <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Ekrano skirtasis laikas pakeistas į <xliff:g id="timeout" example="30 seconds">%s </xliff:g>.</string>
   <string name="qs_tile_performance">Akumuliatoriaus režimas</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Akumuliatoriaus režimas: energijos tausojimo režimas.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Akumuliatoriaus režimas: subalansuotas režimas.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">Akumuliatoriaus režimas: našumo režimas.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">Akumuliatoriaus režimas: efektyvus režimas.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Akumuliatoriaus rėžimas: spartus režimas.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Akumuliatoriaus režimas pakeistas į energijos tausojimo režimą.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Akumuliatoriaus režimas pakeistas į subalansuotą režimą.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Akumuliatoriaus režimas pakeistas į našumo režimą.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Akumuliatoriaus režimas pakeistas į efektyvų režimą.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Akumuliatoriaus režimas pakeistas į spartų režimą.</string>
   <string name="quick_settings_performance_profile_detail_title">Akumuliatoriaus režimas</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Ekrano užraktas išjungtas.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">Ekrano užraktas įjungtas.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">Ekrano užraktas išjungtas.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Ekrano užraktas įjungtas.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Ambient display išjungta.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display įjungta.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display išjungta.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display įjungta.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Iššokantys pranešimai išjungti.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">Iššokantys pranešimai įjungti.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">Iššokantys pranešimai išjungti.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Iššokantys pranešimai įjungti.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Akumuliatoriaus tausojimas išjungtas.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">Akumuliatoriaus tausojimas įjungtas.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">Akumuliatoriaus tausojimas išjungtas.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Akumuliatoriaus tausojimas įjungtas.</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Dinaminė plytelė</string>
   <string name="dynamic_qs_tile_next_alarm_label">Kitas signalas</string>
   <string name="dynamic_qs_tile_ime_selector_label">Įvesties metodas</string>
   <string name="dynamic_qs_tile_su_label">Prieiga prie „Root“</string>
+  <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">„LiveDisplay“ išjungtas.</string>
   <string name="accessibility_quick_settings_live_display_auto">„LiveDisplay“: automatinis režimas.</string>
   <string name="accessibility_quick_settings_live_display_day">„LiveDisplay“: dienos režimas.</string>
@@ -106,14 +162,31 @@
   <string name="accessibility_quick_settings_live_display_changed_day">„LiveDisplay“ pakeistas į dienos režimą.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">„LiveDisplay“ pakeistas į nakties režimą.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">„LiveDisplay“ pakeistas į lauko režimą.</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Vietovės ataskaitos: akumuliatoriaus tausojimo režimas.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">Vietovės ataskaitos: tik daviklių režimas.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Vietovės ataskaitos: didelio tikslumo režimas.</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Vietovės režimas</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Akumuliatoriaus tausojimas</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">Tik įrenginys</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Didelis tikslumas</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Vietovės ataskaitos pakeistos į akumuliatoriaus tausojimo režimą.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">Vietovės ataskaitos pakeistos į tik jutiklių režimą.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Vietovės ataskaitos pakeistos į didelio tikslumo režimą.</string>
+  <!-- detail header when adding a tile -->
+  <!-- Hotspot dialog message -->
+  <!-- Notification which notifies user flashlight is enabled -->
+  <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Doko akumuliatorius <xliff:g id="number">%d</xliff:g> proc.</string>
 </resources>

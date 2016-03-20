@@ -16,6 +16,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crop_wallpaper">Hannergrondbild schneiden</string>
+  <!-- Button label on Wallpaper picker screen; user selects this button to set a specific wallpaper -->
   <string name="wallpaper_instructions">Hannergrondbild setzen</string>
+  <!-- Error message when an image is selected as a wallpaper,
+         but the wallpaper cropper cannot load it. The user will
+         usually see this when using another app and trying to set
+         an image as the wallpaper -->
   <string name="wallpaper_load_fail">D\'Bild konnt net als Hannergrondbild geluede ginn</string>
 </resources>

@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">屏幕截图</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">接收受保护的短信</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">允许应用接收受保护的短信。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">修改受保护的短信列表</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">允许应用修改受保护的短信地址列表。</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">安全</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">与设备安全信息相关的权限。</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">读取手机黑名单</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">允许应用读取有关被阻止来电或信息的电话号码的信息。</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">更改手机黑名单</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">重启</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">当前</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">重启</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">恢复模式</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">引导程序</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">下载模式</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">软重启</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">重启</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">您的平板电脑将会重启。</string>
   <string name="reboot_confirm" product="default">您的手机将会重启。</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">正在重启\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">应用已被终止</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">网络 ADB 调试已启用</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; 网络</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">网络</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">拦截应用启动</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s 尚未被安装</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">优先级</string>
   <string name="silent_mode_none">无</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">由于 SIM 卡订阅改变，已禁用 Wi-Fi 热点。</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">关闭 Wi-Fi</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">启用或禁用隐私防护</string>
   <string name="permdesc_changePrivacyGuardState">允许应用更改其他应用是否启用隐私防护。当一个应用运行时启用了隐私防护，它将不能访问个人数据，如联系人、通话记录、短信。</string>
   <string name="privacy_guard_notification">隐私防护激活</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 将不能访问个人数据</string>
   <string name="privacy_guard_dialog_title">隐私防护</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> 希望 <xliff:g id="op">%2$s</xliff:g>。</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">记住我的选择</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">存取相机</string>
   <string name="app_ops_access_location">访问你的地理位置信息</string>
   <string name="app_ops_access_notifications">读取通知</string>
@@ -128,7 +166,9 @@
   <string name="app_ops_get_accounts">获取设备帐户</string>
   <string name="app_ops_wifi_change">更改 Wi-Fi 状态</string>
   <string name="app_ops_su">获取 Root 权限</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">要取消固定此屏幕，触摸并按住返回键。</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">自动</string>
   <string name="live_display_auto_summary">在日出和日落后自动调节屏幕色温</string>
   <string name="live_display_off">关闭</string>
@@ -140,11 +180,26 @@
   <string name="live_display_outdoor">户外（阳光）</string>
   <string name="live_display_outdoor_summary">仅使用户外设置</string>
   <string name="live_display_hint">LiveDisplay 可以帮助减少眼睛疲劳，帮助您的夜间睡眠。点击此处来试一试！</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">没有已连接设备</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> 个已连接的设备</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> 个已连接的设备</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">已阻止活动启动</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> 正被保护防止启动。点击以认证并启动应用。</string>
+  <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">电池已完全充满</string>
   <string name="notify_battery_fully_charged_text">请将您的设备从充电器断开，以便获得更长的电池寿命。</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">重置电池统计信息</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM 卡已更换</string>
+  <string name="uicc_hot_swapped_event_text">触摸以重置 SIM 卡首选项</string>
 </resources>

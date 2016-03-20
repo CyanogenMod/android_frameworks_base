@@ -17,49 +17,87 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Tangkapan Layar</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">terima SMS yang dilindungi</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Izinkan aplikasi untuk menerima SMS masuk yang dilindungi.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">modifikasi daftar SMS yang dilindungi</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Izinkan aplikasi untuk mengubah daftar alamat SMS yang dilindungi.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Keamanan</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Izin terkait dengan informasi keamanan perangkat.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">baca blacklist telepon</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Memungkinkan aplikasi untuk membaca informasi tentang nomor telepon yang diblokir untuk panggilan atau pesan.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">ubah blacklist telepon</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Memungkinkan aplikasi untuk mengubah nomor telepon yang diblokir untuk panggilan atau pesan.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">set keyguard wallpaper</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah wallpaper layar kunci.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Reboot</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Saat ini</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Reboot</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Soft reboot</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Reboot</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Tablet Anda akan direboot.</string>
   <string name="reboot_confirm" product="default">Ponsel Anda akan direboot.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Rebooting\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplikasi dimatikan</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB melalui jaringan diaktifkan</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB melalui USB &amp; jaringan diaktifkan</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Sentuh untuk menonaktifkan debug.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">Jaringan &amp; USB</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Jaringan</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Mencegah memulai aplikasi</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s tidak terpasang</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritas</string>
   <string name="silent_mode_none">Tidak Ada</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">Aktifkan atau nonaktifkan Penjaga Privasi</string>
   <string name="permdesc_changePrivacyGuardState">Perbolehkan aplikasi untuk mengubah apakah applikasi lain berjalan dengan Penjaga Privasi. Ketika aplikasi berjalan dengan Penjaga Privasi, aplikasi tidak akan memiliki akses ke data pribadi seperti kontak, daftar panggilan atau pesan.</string>
   <string name="privacy_guard_notification">Penjaga Privasi aktif</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> tidak akan dapat mengakses data pribadi</string>
   <string name="privacy_guard_dialog_title">Penjaga Privasi</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ingin <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Ingat pilihan saya</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">mengakses kamera</string>
   <string name="app_ops_access_location">mengakses lokasi anda</string>
   <string name="app_ops_access_notifications">membaca notifikasi anda</string>
@@ -109,7 +147,9 @@
   <string name="app_ops_write_mms">tulis pesan MMS</string>
   <string name="app_ops_write_sms">tulis pesan SMS</string>
   <string name="app_ops_su">dapatkan akses root</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Untuk melepas sematan layar ini, sentuh dan tahan tombol Kembali.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Otomatis</string>
   <string name="live_display_auto_summary">Secara otomatis menyesuaikan suhu warna layar setelah matahari terbenam dan terbit</string>
   <string name="live_display_off">Nonaktif</string>
@@ -121,7 +161,20 @@
   <string name="live_display_outdoor">Luar ruangan (matahari terang)</string>
   <string name="live_display_outdoor_summary">Gunakan pengaturan luar ruangan saja</string>
   <string name="live_display_hint">LiveDisplay dapat membantu mengurangi kelelahan mata dan membantu Anda tidur di malam hari. Klik di sini untuk mencobanya!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Tidak ada perangkat yang terhubung</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> perangkat yang terhubung</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> perangkat yang terhubung</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">set ulang statistik baterai</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Mengizinkan aplikasi untuk set ulang data penggunaan baterai rendah yang sekarang.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

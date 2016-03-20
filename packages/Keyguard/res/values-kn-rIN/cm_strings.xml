@@ -16,5 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
+  <string name="keyguard_perso_locked_message">ಸಿಮ್/ಆರ್‍ಯುಐಎಂ ಪರ್ಸೊ ಲಾಕ್ ಆಗಿದೆ</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">ಅಮಾನ್ಯ ಕಾರ್ಡ್.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">ಸಿಮ್ ಪಿನ್ ಬರೆಯಿರಿ, ನಿಮಗೆ<xliff:g id="number">%d</xliff:g> ಪ್ರಯತ್ನ ಉಳಿದಿದೆ ನಂತರ ನಿಮ್ಮ ಸಾಧನವನ್ನು ಅನ್‍ಲಾಕ್ ಮಾಡಲು ಮೊದಲು ನಿಮ್ಮ ವಾಹಕಕ್ಕೆ ಸಂಪರ್ಕಿಸಬೇಕಾಗುತ್ತದೆ.</item>
+    <item quantity="other">ಸಿಮ್ ಪಿನ್ ಬರೆಯಿರಿ, ನಿಮಗೆ<xliff:g id="number">%d</xliff:g> ಪ್ರಯತ್ನ ಉಳಿದಿದೆ ನಂತರ ನಿಮ್ಮ ಸಾಧನವನ್ನು ಅನ್‍ಲಾಕ್ ಮಾಡಲು ಮೊದಲು ನಿಮ್ಮ ವಾಹಕಕ್ಕೆ ಸಂಪರ್ಕಿಸಬೇಕಾಗುತ್ತದೆ.</item>
+  </plurals>
+  <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
+  <string name="kg_invalid_sim_length">ದೋಷ: ಇನ್ಪುಟ್ ಕನಿಷ್ಠ ಉದ್ದ ಚಿಕ್ಕದಾಗಿರುತ್ತವೆ</string>
 </resources>

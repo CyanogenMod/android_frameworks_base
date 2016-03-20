@@ -17,51 +17,89 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Skærmbillede</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">modtag beskyttet SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Tillader at app\'en kan modtage en indgående beskyttet SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">rediger beskyttet SMS liste</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Tillader at app\'en kan ændre den beskyttede SMS adresseliste.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Sikkerhed</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Tilladelser vedr. enhedens sikkerhedsinformation.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">læs telefonens sortliste</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Tillader en app at læse informationer om telefonnumre, som er blokerede for indgående opkald eller beskeder.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">ændre telefonens sortliste</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Tillader en app at ændre telefonnumre, som er blokerede for indgående opkald eller beskeder.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">angive baggrund til keyguard</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Tillader en app at ændre baggrund for skærmlåsen.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Genstart</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Aktuel</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Genstart</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Blød genstart</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Genstart</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Din tablet vil genstarte.</string>
   <string name="reboot_confirm" product="default">Din telefon vil genstarte.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Genstarter\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">App lukket</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB via netværk aktiveret</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB via USB &amp; netværk aktiveret</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Tryk for at deaktivere fejlretning.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; netværk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netværk</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">afbryd app-opstart</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s er ikke installeret</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ingen</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Deaktiverede Wi-Fi hotspot på grund af en ændring af dit SIM abonnement</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Slå Wi-Fi fra</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">aktivér eller deaktivér privatlivsvagt</string>
   <string name="permdesc_changePrivacyGuardState">Tillader app\'en at ændre, om en anden app kører med Privatlivsvagt. Når en app kører med Privatlivsvagt, vil den ikke have adgang til personlige data såsom kontakter, opkaldslister eller beskeder.</string>
   <string name="privacy_guard_notification">Privatlivsvagt aktiv</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> vil ikke kunne tilgå personlige data</string>
   <string name="privacy_guard_dialog_title">Privatlivsvagt</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ønsker at <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Husk mit valg</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">tilgå kameraet</string>
   <string name="app_ops_access_location">tilgå din placering</string>
   <string name="app_ops_access_notifications">læse dine meddelelser</string>
@@ -97,6 +135,7 @@
   <string name="app_ops_start_at_bootup">starte ved opstart</string>
   <string name="app_ops_toast_window">vis toast beskeder</string>
   <string name="app_ops_toggle_bluetooth">tænde/slukke Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">slå mobildata til/fra</string>
   <string name="app_ops_toggle_nfc">NFC til/fra</string>
   <string name="app_ops_toggle_wifi">Wi-Fi til/fra</string>
   <string name="app_ops_use_alarm_volume">kontrollere lydstyrken for alarmer</string>
@@ -113,10 +152,19 @@
   <string name="app_ops_write_sms">skrive en SMS-besked</string>
   <string name="app_ops_use_fingerprint">brug fingeraftryk</string>
   <string name="app_ops_add_voicemail">tilføj en voicemail</string>
+  <string name="app_ops_read_phone_state">tilgå telefon status</string>
   <string name="app_ops_scan_wifi">skan Wi-Fi-netværk</string>
   <string name="app_ops_change_wallpaper">skift baggrund</string>
+  <string name="app_ops_assist_screenshot">tag et skærmbillede</string>
+  <string name="app_ops_use_body_sensors">brug kropssensorer</string>
+  <string name="app_ops_mock_location">immitér din placering</string>
+  <string name="app_ops_read_external_storage">læs eksternt lager</string>
+  <string name="app_ops_write_external_storage">skriv eksternt lager</string>
+  <string name="app_ops_turn_on_screen">tænd skærmen</string>
   <string name="app_ops_su">få root-adgang</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">For at frigøre denne skærm, tryk og hold Tilbage-knappen nede.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatisk</string>
   <string name="live_display_auto_summary">Justerer automatisk farvetemperaturen på skærmen efter solnedgang og solopgang</string>
   <string name="live_display_off">Fra</string>
@@ -128,7 +176,22 @@
   <string name="live_display_outdoor">Udendørs (stærk sol)</string>
   <string name="live_display_outdoor_summary">Brug kun udendørsindstillinger</string>
   <string name="live_display_hint">LiveDisplay kan hjælpe med at reducere overanstrengelse af øjnene og hjælpe dig med at sove om natten. Klik her for at prøve det!</string>
+  <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Ingen tilsluttet enhed</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> tilsluttet enhed</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> tilsluttede enheder</string>
+  <!-- Keyguard strings -->
+  <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
+         with spaces on either side. [CHAR LIMIT=3] -->
+  <!-- Protected Apps Notification -->
+  <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Batteriet er fuldt opladet</string>
+  <string name="notify_battery_fully_charged_text">Afbryd din enhed fra opladeren for at forbedre batteriets levetid.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">nulstil batteristatistik</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>
