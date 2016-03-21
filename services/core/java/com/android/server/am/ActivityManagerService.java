@@ -8332,7 +8332,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 try {
                     if (AppGlobals.getPackageManager().isUidPrivileged(callingUid)) {
                         allowed = true;
-                        Slog.w(TAG, caller + ": caller " + callingUid
+                        if (DEBUG_TASKS) Slog.w(TAG, caller + ": caller " + callingUid
                                 + " is using old GET_TASKS but privileged; allowing");
                     }
                 } catch (RemoteException e) {
@@ -8340,7 +8340,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }
         if (!allowed) {
-            Slog.w(TAG, caller + ": caller " + callingUid
+            if (DEBUG_TASKS) Slog.w(TAG, caller + ": caller " + callingUid
                     + " does not hold REAL_GET_TASKS; limiting output");
         }
         return allowed;
