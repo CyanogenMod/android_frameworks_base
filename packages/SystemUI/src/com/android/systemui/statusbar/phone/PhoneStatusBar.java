@@ -3836,6 +3836,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mState == StatusBarState.KEYGUARD) {
             // this will make sure the keyguard is showing
             showKeyguard();
+            mIconController.hideNotificationIconArea(false);
+            mIconController.hideSystemIconArea(false);
         }
 
         // update mLastThemeChangeTime
