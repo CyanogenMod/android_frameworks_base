@@ -176,7 +176,7 @@ public class LockscreenShortcutsActivity extends Activity implements View.OnClic
         } else {
             drawable = getResources().getDrawable(R.drawable.ic_phone_24dp);
         }
-        return drawable
+        return drawable;
     }
 
     private boolean canLaunchVoiceAssist() {
