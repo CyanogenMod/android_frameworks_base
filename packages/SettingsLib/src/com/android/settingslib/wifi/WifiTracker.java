@@ -219,7 +219,11 @@ public class WifiTracker {
      */
     public List<AccessPoint> getAccessPoints() {
         synchronized (mAccessPoints) {
-            return new ArrayList<>(mAccessPoints);
+            ArrayList<AccessPoint> accessPoints = new ArrayList<>(mAccessPoints.size());
+            for (AccessPoint i : mAccessPoints) {
+                accessPoints.add(new AccessPoint(i));
+            }
+            return accessPoints;
         }
     }
 
