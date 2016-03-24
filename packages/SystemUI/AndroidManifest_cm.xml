@@ -49,6 +49,9 @@
 
     <!-- LiveDisplay tile -->
     <uses-permission android:name="cyanogenmod.permission.MANAGE_LIVEDISPLAY" />
+    
+     <!-- Weather Provider -->
+    <uses-permission android:name="cyanogenmod.permission.READ_WEATHER" />
 
     <application>
         <provider android:name=".cm.SpamMessageProvider"
