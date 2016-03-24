@@ -26,6 +26,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+     <!-- Weather Provider -->
+    <uses-permission android:name="cyanogenmod.permission.READ_WEATHER" />
+
     <application>
 
         <activity-alias

@@ -16,34 +16,22 @@
 
 package com.android.systemui.statusbar.phone;
 
-import android.app.ActivityManager;
-import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
-import android.app.IUserSwitchObserver;
 import android.app.PendingIntent;
 import android.content.ContentUris;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.IRemoteCallback;
-import android.os.RemoteException;
-import android.os.UserHandle;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
-import android.provider.Settings;
-import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.MathUtils;
 import android.util.TypedValue;
 import android.view.View;
@@ -55,11 +43,11 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.keyguard.KeyguardStatusView;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
-import com.android.systemui.cm.UserContentObserver;
 import com.android.systemui.qs.QSPanel;
 import com.android.systemui.qs.QSPanel.Callback;
 import com.android.systemui.qs.QSTile;
@@ -75,13 +63,14 @@ import com.android.systemui.tuner.TunerService;
 import java.text.NumberFormat;
 
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.weather.util.WeatherUtils;
 
 /**
  * The view to manage the header area in the expanded status bar.
  */
 public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnClickListener,
         BatteryController.BatteryStateChangeCallback, NextAlarmController.NextAlarmChangeCallback,
-        EmergencyListener, WeatherController.Callback {
+        EmergencyListener, WeatherController.Callback, TunerService.Tunable {
 
     private boolean mExpanded;
     private boolean mListening;
@@ -152,7 +141,6 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
     private float mCurrentT;
     private boolean mShowingDetail;
     private boolean mDetailTransitioning;
-    private SettingsObserver mSettingsObserver;
     private boolean mShowWeather;
 
     private boolean mAllowExpand = true;
@@ -195,7 +183,6 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         mWeatherContainer.setOnClickListener(this);
         mWeatherLine1 = (TextView) findViewById(R.id.weather_line_1);
         mWeatherLine2 = (TextView) findViewById(R.id.weather_line_2);
-        mSettingsObserver = new SettingsObserver(new Handler());
         loadDimens();
         updateVisibilities();
         updateClockScale();
@@ -419,7 +406,8 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
 
     private void updateListeners() {
         if (mListening) {
-            mSettingsObserver.observe();
+            TunerService.get(getContext()).addTunable(this,
+                    "cmsystem:" + CMSettings.System.STATUS_BAR_SHOW_WEATHER);
             mBatteryController.addStateChangedCallback(this);
             mNextAlarmController.addStateChangedCallback(this);
             mWeatherController.addCallback(this);
@@ -427,7 +415,7 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
             mBatteryController.removeStateChangedCallback(this);
             mNextAlarmController.removeStateChangedCallback(this);
             mWeatherController.removeCallback(this);
-            mSettingsObserver.unobserve();
+            TunerService.get(getContext()).removeTunable(this);
         }
     }
 
@@ -479,12 +467,12 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
 
     @Override
     public void onWeatherChanged(WeatherController.WeatherInfo info) {
-        if (info.temp == null || info.condition == null) {
+        if (Double.isNaN(info.temp) || info.condition == null) {
             mWeatherLine1.setText(null);
         } else {
             mWeatherLine1.setText(mContext.getString(
                     R.string.status_bar_expanded_header_weather_format,
-                    info.temp,
+                    WeatherUtils.formatTemperature(info.temp, info.tempUnit),
                     info.condition));
         }
         mWeatherLine2.setText(info.city);
@@ -930,35 +918,10 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         }
     };
 
-    class SettingsObserver extends UserContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void observe() {
-            super.observe();
-
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(CMSettings.System.getUriFor(
-                    CMSettings.System.STATUS_BAR_SHOW_WEATHER), false, this, UserHandle.USER_ALL);
-            update();
-        }
-
-        @Override
-        protected void unobserve() {
-            super.unobserve();
-
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.unregisterContentObserver(this);
-        }
-
-        @Override
-        public void update() {
-
-            ContentResolver resolver = mContext.getContentResolver();
-            mShowWeather = CMSettings.System.getInt(
-                    resolver, CMSettings.System.STATUS_BAR_SHOW_WEATHER, 1) == 1;
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        if (key.endsWith(CMSettings.System.STATUS_BAR_SHOW_WEATHER)) {
+            mShowWeather = newValue == null || "1".equals(newValue);
             updateVisibilities();
         }
     }
