@@ -188,36 +188,59 @@ public class LiveLockScreenController {
         return mLiveLockScreenView;
     }
 
+    private Runnable mAddNewLiveLockScreenRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mLiveLockScreenComponentName != null) {
+                mLiveLockScreenView =
+                        getExternalKeyguardView(mLiveLockScreenComponentName);
+                mLiveLockScreenView.registerKeyguardExternalViewCallback(
+                        mExternalKeyguardViewCallbacks);
+                if (mStatusBarState != StatusBarState.SHADE) {
+                    mPanelView.addView(mLiveLockScreenView);
+                    mLiveLockScreenView.onKeyguardShowing(true);
+                }
+            } else {
+                mLiveLockScreenView = null;
+            }
+        }
+    };
+
     private void updateLiveLockScreenView(final ComponentName cn) {
-        // If mThirdPartyKeyguardViewComponent differs from cn, go ahead and update
-        if (!Objects.equals(mLiveLockScreenComponentName, cn)) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                // If mThirdPartyKeyguardViewComponent differs from cn, go ahead and update
+                if (!Objects.equals(mLiveLockScreenComponentName, cn)) {
                     mLiveLockScreenComponentName = cn;
                     if (mLiveLockScreenView != null) {
-                        if (mPanelView.indexOfChild(mLiveLockScreenView) >= 0) {
-                            mPanelView.removeView(mLiveLockScreenView);
-                        }
                         mLiveLockScreenView.unregisterKeyguardExternalViewCallback(
                                 mExternalKeyguardViewCallbacks);
                         // setProviderComponent(null) will unbind the existing service
                         mLiveLockScreenView.setProviderComponent(null);
-                        if (mLiveLockScreenComponentName != null) {
-                            mLiveLockScreenView =
-                                    getExternalKeyguardView(mLiveLockScreenComponentName);
-                            mLiveLockScreenView.registerKeyguardExternalViewCallback(
-                                    mExternalKeyguardViewCallbacks);
-                            if (mStatusBarState != StatusBarState.SHADE) {
-                                mPanelView.addView(mLiveLockScreenView);
-                                mLiveLockScreenView.onKeyguardShowing(true);
-                            }
+                        if (mPanelView.indexOfChild(mLiveLockScreenView) >= 0) {
+                            mLiveLockScreenView.registerOnWindowAttachmentChangedListener(
+                                    new KeyguardExternalView.OnWindowAttachmentChangedListener() {
+                                        @Override
+                                        public void onAttachedToWindow() {
+                                        }
+
+                                        @Override
+                                        public void onDetachedFromWindow() {
+                                            mLiveLockScreenView
+                                                    .unregisterOnWindowAttachmentChangedListener(
+                                                            this);
+                                            mHandler.post(mAddNewLiveLockScreenRunnable);
+                                        }
+                                    }
+                            );
+                            mPanelView.removeView(mLiveLockScreenView);
                         } else {
-                            mLiveLockScreenView = null;
+                            mAddNewLiveLockScreenRunnable.run();
                         }
                     }
                 }
-            });
-        }
+            }
+        });
     }
 }
