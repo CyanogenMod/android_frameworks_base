@@ -57,7 +57,7 @@ static const clockid_t android_alarm_to_clockid[N_ANDROID_TIMERFDS] = {
     CLOCK_BOOTTIME_ALARM,
     CLOCK_BOOTTIME,
     CLOCK_MONOTONIC,
-    CLOCK_POWEROFF_ALARM,
+//    CLOCK_POWEROFF_ALARM,
     CLOCK_REALTIME,
 };
 /* to match the legacy alarm driver implementation, we need an extra
@@ -424,11 +424,11 @@ static jlong init_timerfd()
 
     for (size_t i = 0; i < N_ANDROID_TIMERFDS; i++) {
         fds[i] = timerfd_create(android_alarm_to_clockid[i], 0);
-        if ((fds[i] < 0) && (android_alarm_to_clockid[i] == CLOCK_POWEROFF_ALARM)) {
+/*        if ((fds[i] < 0) && (android_alarm_to_clockid[i] == CLOCK_POWEROFF_ALARM)) {
             ALOGV("timerfd does not support CLOCK_POWEROFF_ALARM, using CLOCK_REALTIME_ALARM instead");
             fds[i] = timerfd_create(CLOCK_REALTIME_ALARM, 0);
         }
-        if (fds[i] < 0) {
+*/        if (fds[i] < 0) {
             ALOGV("timerfd_create(%u) failed: %s",  android_alarm_to_clockid[i],
                     strerror(errno));
             close(epollfd);
