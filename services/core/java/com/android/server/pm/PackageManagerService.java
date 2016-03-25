@@ -7888,10 +7888,22 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
 
                     if (failedException != null) {
-                        Slog.w(TAG, "Unable to process theme " + pkgName + " for " + target,
-                                failedException);
-                        // remove target from mOverlayTargets
-                        iterator.remove();
+                        if (failedException instanceof AaptException &&
+                                ((AaptException) failedException).isCommon) {
+                            Slog.e(TAG, "Unable to process common resources for " + pkgName +
+                                    ", uninstalling theme.", failedException);
+                            uninstallThemeForAllApps(pkg);
+                            deletePackageLI(pkg.packageName, null, true, null, null, 0, null,
+                                    false);
+                            throw new PackageManagerException(
+                                    PackageManager.INSTALL_FAILED_THEME_AAPT_ERROR,
+                                    "Unable to process theme " + pkgName, failedException);
+                        } else {
+                            Slog.w(TAG, "Unable to process theme " + pkgName + " for " + target,
+                                    failedException);
+                            // remove target from mOverlayTargets
+                            iterator.remove();
+                        }
                     }
                 }
             }
@@ -8264,8 +8276,15 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     public class AaptException extends Exception {
+        boolean isCommon;
+
         public AaptException(String message) {
+            this(message, false);
+        }
+
+        public AaptException(String message, boolean isCommon) {
             super(message);
+            this.isCommon = isCommon;
         }
     }
 
@@ -8291,16 +8310,17 @@ public class PackageManagerService extends IPackageManager.Stub {
         String internalPath = APK_PATH_TO_OVERLAY + target + File.separator;
         String resPath = ThemeUtils.getTargetCacheDir(target, pkg);
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
+        final boolean isCommonResources = COMMON_OVERLAY.equals(target);
         int pkgId;
         if ("android".equals(target)) {
             pkgId = Resources.THEME_FRAMEWORK_PKG_ID;
-        } else if (COMMON_OVERLAY.equals(target)) {
+        } else if (isCommonResources) {
             pkgId = Resources.THEME_COMMON_PKG_ID;
         } else {
             pkgId = Resources.THEME_APP_PKG_ID;
         }
 
-        boolean hasCommonResources = (hasCommonResources(pkg) && !COMMON_OVERLAY.equals(target));
+        boolean hasCommonResources = (hasCommonResources(pkg) && !isCommonResources);
         PackageParser.Package targetPkg = mPackages.get(target);
         String appPath = targetPkg != null ? targetPkg.baseCodePath :
                 Environment.getRootDirectory() + "/framework/framework-res.apk";
@@ -8310,7 +8330,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 appPath,
                 hasCommonResources ? ThemeUtils.getTargetCacheDir(COMMON_OVERLAY, pkg)
                         + File.separator + "resources.apk" : "") != 0) {
-            throw new AaptException("Failed to run aapt");
+            throw new AaptException("Failed to run aapt", isCommonResources);
         }
     }
 
@@ -17782,10 +17802,20 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
 
             if (failedException != null) {
-                Slog.w(TAG, "Unable to process theme " + pkg.packageName + " for " + target,
-                        failedException);
-                // remove target from mOverlayTargets
-                iterator.remove();
+                if (failedException instanceof AaptException &&
+                        ((AaptException) failedException).isCommon) {
+                    Slog.e(TAG, "Unable to process common resources for " + pkg.packageName +
+                            ", uninstalling theme.", failedException);
+                    uninstallThemeForAllApps(pkg);
+                    deletePackageX(pkg.packageName, getCallingUid(),
+                            PackageManager.DELETE_ALL_USERS);
+                    return PackageManager.INSTALL_FAILED_THEME_AAPT_ERROR;
+                } else {
+                    Slog.w(TAG, "Unable to process theme " + pkg.packageName + " for " + target,
+                            failedException);
+                    // remove target from mOverlayTargets
+                    iterator.remove();
+                }
             }
         }
 

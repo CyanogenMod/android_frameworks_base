@@ -1,5 +1,6 @@
 package com.android.systemui.cm;
 
+import com.android.internal.app.AssistUtils;
 import com.android.settingslib.cm.ShortcutPickHelper;
 import com.android.systemui.R;
 import com.android.systemui.cm.LockscreenShortcutsHelper.Shortcuts;
@@ -34,6 +35,7 @@ public class LockscreenShortcutsActivity extends Activity implements View.OnClic
     private View mSelectedView;
     private ColorMatrixColorFilter mFilter;
     private ColorStateList mDefaultTintList;
+    private AssistUtils mAssistUtils;
 
     @Override
     public void shortcutPicked(String uri, String friendlyName, boolean isApplication) {
@@ -107,6 +109,7 @@ public class LockscreenShortcutsActivity extends Activity implements View.OnClic
         mFilter = new ColorMatrixColorFilter(cm);
         ImageView unlockButton = (ImageView) findViewById(R.id.middle_button);
         mDefaultTintList = unlockButton.getImageTintList();
+        mAssistUtils = new AssistUtils(this);
         createActionList();
         initiateViews();
         updateDrawables();
@@ -146,17 +149,38 @@ public class LockscreenShortcutsActivity extends Activity implements View.OnClic
             if (mShortcutHelper.isTargetEmpty(shortcut)) {
                 drawable = getResources().getDrawable(R.drawable.ic_lockscreen_shortcuts_blank);
             } else {
-                drawable = mShortcutHelper.getDrawableForTarget(shortcut);
-                if (drawable == null) {
-                    drawable = getResources().getDrawable(shortcut == Shortcuts.LEFT_SHORTCUT
-                            ? R.drawable.ic_phone_24dp : R.drawable.ic_camera_alt_24dp);
+                if (shortcut == Shortcuts.LEFT_SHORTCUT &&
+                        !mShortcutHelper.isTargetCustom(shortcut)) {
+                    drawable = getLeftAffordanceDrawable();
                     v.setImageTintList(mDefaultTintList);
                 } else {
-                    v.setColorFilter(mFilter);
+                    drawable = mShortcutHelper.getDrawableForTarget(shortcut);
+                    if (drawable == null) {
+                        drawable = (shortcut == Shortcuts.LEFT_SHORTCUT) ?
+                                getLeftAffordanceDrawable()
+                                : getResources().getDrawable(R.drawable.ic_camera_alt_24dp);
+                        v.setImageTintList(mDefaultTintList);
+                    } else {
+                        v.setColorFilter(mFilter);
+                    }
                 }
             }
             v.setImageDrawable(drawable);
         }
+    }
+
+    private Drawable getLeftAffordanceDrawable() {
+        Drawable drawable;
+        if (canLaunchVoiceAssist()) {
+            drawable = getResources().getDrawable(R.drawable.ic_mic_26dp);
+        } else {
+            drawable = getResources().getDrawable(R.drawable.ic_phone_24dp);
+        }
+        return drawable;
+    }
+
+    private boolean canLaunchVoiceAssist() {
+        return mAssistUtils.activeServiceSupportsLaunchFromKeyguard();
     }
 
     private void createActionList() {
