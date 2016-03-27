@@ -18,19 +18,19 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- label for item that screenshots in phone options dialog -->
-  <string name="global_action_screenshot">Capturar tela</string>
+  <string name="global_action_screenshot">Captura de tela</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">receber SMS protegido</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Permite ao aplicativo receber um SMS protegido.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_modifyProtectedSmsList">modifica a lista de SMS protegidos</string>
+  <string name="permlab_modifyProtectedSmsList">modificar lista de SMS protegidos</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_modifyProtectedSmsList">Permite ao aplicativo modificar a lista de endereço de SMS protegido.</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite ao aplicativo modificar a lista de endereços de SMS protegido.</string>
   <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Segurança</string>
   <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permgroupdesc_security">Permissões relacionadas com as informações de segurança do aparelho.</string>
+  <string name="permgroupdesc_security">Permissões relacionadas às informações de segurança do aparelho.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">Ler a lista negra do telefone</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

@@ -135,7 +135,9 @@
   <string name="app_ops_start_at_bootup">البدء في التشغيل</string>
   <string name="app_ops_toast_window">عرض الإعلامات المنبثقة</string>
   <string name="app_ops_toggle_bluetooth">تبديل بلوتوث</string>
+  <string name="app_ops_toggle_mobile_data">تنشيط/إيقاف بيانات الهاتف</string>
   <string name="app_ops_toggle_nfc">تبديل NFC</string>
+  <string name="app_ops_toggle_wifi">تنشيط/ايقاف الWi-Fi</string>
   <string name="app_ops_use_alarm_volume">التحكم في مستوى صوت الإنذار</string>
   <string name="app_ops_use_audio_focus">التحكم في تركيز الصوت</string>
   <string name="app_ops_use_bluetooth_volume">التحكم في مستوى صوت بلوتوث</string>
@@ -148,6 +150,21 @@
   <string name="app_ops_use_voice_volume">التحكم في مستوى صوت المكالمة الصوتية</string>
   <string name="app_ops_write_mms">كتابة رسالة MMS</string>
   <string name="app_ops_write_sms">كتابة رسالة نصية قصيرة</string>
+  <string name="app_ops_use_fingerprint">استخدام بصمة اليد</string>
+  <string name="app_ops_add_voicemail">اضافة البريد الصوتى</string>
+  <string name="app_ops_read_phone_state">الوصول الى حالة الهاتف</string>
+  <string name="app_ops_scan_wifi">فحص شبكات Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">تغيير الخلفية</string>
+  <string name="app_ops_assist_structure">استخدام مساعد الهيكل</string>
+  <string name="app_ops_assist_screenshot">التقاط الشاشة</string>
+  <string name="app_ops_use_body_sensors">استخدام مستشعرات الجسم</string>
+  <string name="app_ops_read_cell_broadcasts">قراءة البث الخلوي</string>
+  <string name="app_ops_mock_location">تجاهل موقعك الحالى</string>
+  <string name="app_ops_read_external_storage">قراءة الذاكرة الخارجية</string>
+  <string name="app_ops_write_external_storage">كتابة الذاكرة الخارجية</string>
+  <string name="app_ops_turn_on_screen">فتح الشاشة</string>
+  <string name="app_ops_get_accounts">احصل على حسابات الجهاز</string>
+  <string name="app_ops_wifi_change">تغيير حالة الـ Wi-Fi</string>
   <string name="app_ops_su">الحصول على صلاحيات الجذر</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">لإلغاء تثبيت هذه الشاشة، المس واستمر في ضغط زر الرجوع.</string>
@@ -171,7 +188,11 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">منع نشاط التشغيل</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> ممنوع من التشغيل. المس للمصادقة وتشغيل التطبيق.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">البطارية مشحونة بالكامل</string>
+  <string name="notify_battery_fully_charged_text">قم بفصل جهازك من الشاحن لتحسين طول عمر البطارية.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">إعادة تعيين إحصائيات البطارية</string>
@@ -179,4 +200,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">يسمح للتطبيق بإعادة تعيين بيانات استخدام بطارية ذات المستوى المنخفض الحالي.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">تم تغيير بطاقات SIM</string>
+  <string name="uicc_hot_swapped_event_text">اضغط لتعيين التفضيلات الافتراضية لبطاقة SIM</string>
 </resources>

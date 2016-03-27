@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Деактивирани профили</string>
   <string name="quick_settings_heads_up_label">Изскачащи известия</string>
   <string name="quick_settings_battery_saver_label">Пестене на батерия</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Пестене на батерията (зареждане)</string>
   <string name="quick_settings_caffeine_label">Кофеин</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Изключена синхронизация.</string>
@@ -221,4 +223,6 @@
   <string name="data_sim_not_configured">СИМ картата не е конфигурирана</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Док батерия <xliff:g id="number">%d </xliff:g> процента.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Покажи опашка за изпълнение</string>
 </resources>

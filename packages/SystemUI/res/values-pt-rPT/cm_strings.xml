@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Perfis desativados</string>
   <string name="quick_settings_heads_up_label">Notificações pop-up</string>
   <string name="quick_settings_battery_saver_label">Economizador de bateria</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Economizador de bateria (a carregar)</string>
   <string name="quick_settings_caffeine_label">Cafeína</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronização desligada.</string>
@@ -160,13 +162,13 @@
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_on">Cafeína ligada.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_battery_saver_off">Economizador de bateria desligado.</string>
+  <string name="accessibility_quick_settings_battery_saver_off">Economizador de bateria desativado.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_battery_saver_on">Economizador de bateria ligado.</string>
+  <string name="accessibility_quick_settings_battery_saver_on">Economizador de bateria ativado.</string>
   <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador de bateria desligou.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_off">O economizador de bateria foi desativado.</string>
   <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador de bateria ligou.</string>
+  <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador de bateria foi ativado.</string>
   <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Mosaicos dinâmicos</string>
   <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
@@ -221,4 +223,6 @@
   <string name="data_sim_not_configured">Cartão SIM sem dados móveis</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> por cento.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Mostrar a fila de reprodução</string>
 </resources>

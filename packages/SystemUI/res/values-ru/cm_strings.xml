@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Профили отключены</string>
   <string name="quick_settings_heads_up_label">Всплывающие уведомления</string>
   <string name="quick_settings_battery_saver_label">Энергосбережение</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Энергосбережение (идёт зарядка)</string>
   <string name="quick_settings_caffeine_label">Запрет сна</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Синхронизация отключена.</string>
@@ -222,4 +224,6 @@
   <string name="data_sim_not_configured">Нет SIM для моб.данных</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Показать очередь воспроизведения</string>
 </resources>

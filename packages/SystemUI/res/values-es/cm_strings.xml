@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Perfiles desactivados</string>
   <string name="quick_settings_heads_up_label">Notificaciones emergentes</string>
   <string name="quick_settings_battery_saver_label">Modo de ahorro de batería</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Ahorrador de batería (cargando)</string>
   <string name="quick_settings_caffeine_label">Cafeína</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronización desactivada.</string>
@@ -221,4 +223,6 @@
   <string name="data_sim_not_configured">Sin datos SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g> por ciento.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Mostrar la cola de reproducción</string>
 </resources>
