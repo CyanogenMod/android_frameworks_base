@@ -300,7 +300,7 @@ public class CellularTile extends QSTile<QSTile.SignalState> {
                     : LayoutInflater.from(mContext).inflate(R.layout.data_usage, parent, false));
             final DataUsageInfo info = mDataController.getDataUsageInfo();
             if (info == null) return v;
-            v.bind(info);
+            v.bind(mHost, info);
             return v;
         }
 
