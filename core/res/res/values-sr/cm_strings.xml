@@ -200,4 +200,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM картица је промењена</string>
+  <string name="uicc_hot_swapped_event_text">Додирни да поставиш задане поставке за SIM картицу</string>
 </resources>

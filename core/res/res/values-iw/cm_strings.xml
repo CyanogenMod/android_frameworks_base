@@ -151,20 +151,20 @@
   <string name="app_ops_write_mms">כתיבת הודעת MMS</string>
   <string name="app_ops_write_sms">כתיבת הודעת SMS</string>
   <string name="app_ops_use_fingerprint">שימוש בטביעת אצבע</string>
-  <string name="app_ops_add_voicemail">הוספת תא קולי</string>
-  <string name="app_ops_read_phone_state">גישה למצב המכשיר</string>
-  <string name="app_ops_scan_wifi">סריקת רשתות Wi-Fi</string>
-  <string name="app_ops_change_wallpaper">החלפת טפט</string>
+  <string name="app_ops_add_voicemail">הוסף תא קולי</string>
+  <string name="app_ops_read_phone_state">גש למצב הטלפון</string>
+  <string name="app_ops_scan_wifi">סרוק רשתות Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">החלף טפט</string>
   <string name="app_ops_assist_structure">שימוש במבנה סיוע</string>
-  <string name="app_ops_assist_screenshot">צילום המסך</string>
-  <string name="app_ops_use_body_sensors">שימוש בחיישני גוף</string>
-  <string name="app_ops_read_cell_broadcasts">קריאת שידורי סלולר</string>
-  <string name="app_ops_mock_location">הסוואת מיקום</string>
-  <string name="app_ops_read_external_storage">קריאת אחסון חיצוני</string>
-  <string name="app_ops_write_external_storage">כתיבה לאחסון חיצוני</string>
-  <string name="app_ops_turn_on_screen">הפעלת המסך</string>
-  <string name="app_ops_get_accounts">קבלת חשבונות המכשיר</string>
-  <string name="app_ops_wifi_change">שינוי מצב Wi-Fi</string>
+  <string name="app_ops_assist_screenshot">צלם מסך</string>
+  <string name="app_ops_use_body_sensors">השתמש בחיישני גוף</string>
+  <string name="app_ops_read_cell_broadcasts">קרא שידורי סלולר</string>
+  <string name="app_ops_mock_location">הסווה את מיקומך</string>
+  <string name="app_ops_read_external_storage">קרא אחסון חיצוני</string>
+  <string name="app_ops_write_external_storage">כתוב לאחסון חיצוני</string>
+  <string name="app_ops_turn_on_screen">הפעל המסך</string>
+  <string name="app_ops_get_accounts">קבל חשבונות מכשיר</string>
+  <string name="app_ops_wifi_change">שנה מצב Wi-Fi</string>
   <string name="app_ops_su">קבלת גישת שורש (Root)</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, גע והחזק בלחצן \"הקודם\".</string>
@@ -201,5 +201,5 @@
   <string name="permdesc_resetBatteryStats">מאפשר ליישום לאפס נתוני רמה-נמוכה נוכחיים של השימוש בסוללה.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">כרטיסי SIM הוחלפו</string>
-  <string name="uicc_hot_swapped_event_text">הקש כדי להגדיר העדפות ברירת המחדל של כרטיס ה-SIM</string>
+  <string name="uicc_hot_swapped_event_text">הקש כדי להגדיר את העדפות ברירת המחדל של כרטיס ה-SIM</string>
 </resources>

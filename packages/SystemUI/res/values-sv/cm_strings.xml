@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Profiler inaktiverad</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Strömsparläge</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Batterisparfunktion (laddar)</string>
   <string name="quick_settings_caffeine_label">Koffein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synk av.</string>
@@ -218,6 +220,9 @@
     <item quantity="other">%1$d klienter</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Inget data SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dockningsstationens batteri<xliff:g id="number">%d</xliff:g> procent.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Visa uppspelningskö</string>
 </resources>

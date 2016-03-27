@@ -29,7 +29,7 @@
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Scorri a destra per %1$s</string>
   <string name="right_shortcut_hint">Scorri a sinistra per %1$s</string>
-  <string name="lockscreen_message">Tocca un\'icona alla sinistra per riassegnare un collegamento alla schermata di sblocco.</string>
+  <string name="lockscreen_message">Tocca un\'icona per riassegnare un collegamento alla schermata di blocco.</string>
   <string name="lockscreen_default_target">Predefinito</string>
   <string name="select_application">Seleziona applicazione</string>
   <string name="lockscreen_choose_action_title">Scegli un\'azione</string>
@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Profili disattivati</string>
   <string name="quick_settings_heads_up_label">Heads Up</string>
   <string name="quick_settings_battery_saver_label">Risparmio batteria</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Risparmio batteria (ricarica)</string>
   <string name="quick_settings_caffeine_label">Caffeina</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronia OFF</string>
@@ -109,28 +111,28 @@
   <string name="accessibility_quick_settings_screen_timeout">Sospensione schermo: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Sospensione schermo cambiato in <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
-  <string name="qs_tile_performance">Modalità batteria</string>
+  <string name="qs_tile_performance">Profilo batteria</string>
   <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modalità batteria: modalità risparmio energetico.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Profilo batteria: risparmio energetico.</string>
   <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_bal">Modalità batteria: modalità bilanciato.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Profilo batteria: bilanciato.</string>
   <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_perf">Modalità batteria: modalità prestazioni.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Profilo batteria: prestazioni.</string>
   <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_bias_power">Modalità batteria: modalità efficienza.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Profilo batteria: efficienza.</string>
   <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_bias_perf">Modalità batteria: modalità prestazioni.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Profilo batteria: rapido.</string>
   <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modalità batteria cambiato in risparmio energetico.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Profilo batteria cambiato in risparmio energetico.</string>
   <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_bal">Modalità batteria cambiato in modalità bilanciato.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Profilo batteria cambiato in bilanciato.</string>
   <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_perf">Modalità batteria cambiato in modalità prestazioni.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Profilo batteria cambiato in prestazioni.</string>
   <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">La batteria è ora in modalità efficienza.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Profilo batteria cambiato in efficienza.</string>
   <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">La batteria è ora in modalità prestazioni.</string>
-  <string name="quick_settings_performance_profile_detail_title">Modalità batteria</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Profilo batteria cambiato in rapido.</string>
+  <string name="quick_settings_performance_profile_detail_title">Profilo batteria</string>
   <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Blocco schermo OFF.</string>
   <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -213,8 +215,14 @@
   <string name="quick_settings_tile_flashlight_not_title">Torcia accesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tocca per spegnere</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d client</item>
+    <item quantity="other">%1$d client</item>
+  </plurals>
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">SIM senza dati mobili</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Visualizza coda di riproduzione</string>
 </resources>

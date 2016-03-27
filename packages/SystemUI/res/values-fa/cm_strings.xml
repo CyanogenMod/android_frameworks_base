@@ -71,6 +71,7 @@
   <string name="quick_settings_profiles_off">پروفایل‌ها غیرفعالند</string>
   <string name="quick_settings_heads_up_label">اعلان فوری</string>
   <string name="quick_settings_battery_saver_label">بهینه‌ساز باتری</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">همگام‌سازی خاموش.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -189,4 +190,6 @@
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">باتری داک <xliff:g id="number">%d</xliff:g> درصد.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">نمایش صف پخش</string>
 </resources>

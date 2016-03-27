@@ -17,8 +17,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- When the user inserts a sim card with some personalization enabled -->
+  <string name="keyguard_perso_locked_message">الشريحة SIM مغلقة</string>
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">بطاقة غير صالحة.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
+  <string name="kg_invalid_sim_length">خطأ: المدخل أقصر من الحد الأدنى للطول</string>
 </resources>

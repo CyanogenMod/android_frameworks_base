@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">ପ୍ରୋଫାଇଲ୍‍ଗୁଡିକ ଅଷମ କରାଯାଇଛି</string>
   <string name="quick_settings_heads_up_label">ହେଡ୍ସ୍‍ ଅପ୍‍</string>
   <string name="quick_settings_battery_saver_label">ବ୍ୟାଟେରୀ ସଭର୍‌</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_caffeine_label">Caffeine</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">ସିଙ୍କ୍‍ ଅଫ୍‍ ଅଛି।</string>
@@ -220,4 +221,6 @@
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">ଡକ୍‍ ବ୍ୟାଟେରୀ <xliff:g id="number">%d</xliff:g> ଶତକଡା।</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">ଚାଳନା ଧାଡି ଦେଖାନ୍ତୁ</string>
 </resources>

@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profilok letiltva</string>
   <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
   <string name="quick_settings_battery_saver_label">Akkumulátor kímélő</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_caffeine_label">Caffeine</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Szinkronizálás ki.</string>
@@ -221,4 +222,6 @@
   <string name="data_sim_not_configured">Nincs adat SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> százalék.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Lejátszási lista megjelenítése</string>
 </resources>
