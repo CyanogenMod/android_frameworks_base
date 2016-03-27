@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.provider.Settings;

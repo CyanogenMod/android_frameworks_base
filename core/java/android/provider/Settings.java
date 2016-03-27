@@ -3463,6 +3463,13 @@ public final class Settings {
 
         /**
          * Whether lock-to-app will be triggered by long-press on recents.
+         * Heads up timeout configuration
+         * @hide
+         */
+        public static final String HEADS_UP_TIMEOUT = "heads_up_timeout";
+
+        /**
+         * Whether to use slim recents
          * @hide
          */
         public static final String LOCK_TO_APP_ENABLED = "lock_to_app_enabled";
