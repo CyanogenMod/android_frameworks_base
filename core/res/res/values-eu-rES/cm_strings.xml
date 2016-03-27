@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB eta sarea</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Sarea</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">Gaien zerbitzurako sarbidea</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Eragotzi aplikazioak abiaraztea</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">Aplikazioa gaien zerbitzurako sarbidea izatera baimentzen du. Aplikazio arruntentzako ez luke beharrezkoa izan behar.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">Gaiei buruzko informazioa irakurri</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">Aplikazioa instalaturiko gaiak irakurtzera baimentzen du, baita momentuan aplikaturikoa zein den determinatzera ere.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">Gaiak aldatu</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">Gai berriak sartu eta ezarrita duzun gaia aldatzea ahalbidetzen dio aplikazioari.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">Ezin izan da gaia instalatu</string>
+  <string name="theme_install_error_message">%s ez da instalatu</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ez dago instalatuta</string>
+  <string name="theme_reset_notification_title">Gaia leheneratu da</string>
+  <string name="theme_reset_notification_body">Sistemaren gaia berrezarri da hainbat aplikazio kraskatu direlako.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Lehentasuna</string>
   <string name="silent_mode_none">Bat ere ez</string>

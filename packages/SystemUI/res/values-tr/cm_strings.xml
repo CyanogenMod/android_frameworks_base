@@ -75,6 +75,7 @@
   <string name="quick_settings_title_header">Başlık</string>
   <string name="quick_settings_title_tiles">Kareler</string>
   <string name="quick_settings_title_show_weather">Hava durumunu göster</string>
+  <string name="quick_settings_title_show_brightness_slider">Parlaklık kaydırıcısını göster</string>
   <string name="quick_settings_title_enlarge_first_row">İlk satırı büyüt</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Ekrandan kaldırana kadar görünümde tutar. Kaldırmak için Geri tuşuna dokunun ve tutun.</string>
@@ -87,6 +88,9 @@
   <string name="quick_settings_profiles_off">Profiller devre dışı</string>
   <string name="quick_settings_heads_up_label">Bildirim pencereleri</string>
   <string name="quick_settings_battery_saver_label">Pil tasarrufu</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Batarya kurtarıcı (şarj ediliyor)</string>
+  <string name="quick_settings_caffeine_label">Kafein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Eşitleme kapalı.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -102,6 +106,7 @@
   <string name="quick_settings_lockscreen_label">Kilit ekranı</string>
   <string name="quick_settings_ambient_display_label">Bildirim ekranı</string>
   <string name="quick_settings_lockscreen_label_enforced">Kilit ekranı zorunlu</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Profil tarafından devre dışı</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Ekran zaman aşımı : <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -153,7 +158,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Bildirim pencereleri açıldı.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Kafein kapalı.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Kafein açık.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Pil tasarrufu kapalı.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -199,11 +206,23 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">Konum bildirimi sadece sensörler moduna geçti.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Konum bildirimi yüksek hassasiyet moduna geçti.</string>
+  <string name="quick_settings_tiles_category_system">Sistem başlıkları</string>
   <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">Başlık ekle</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Uçak modu etkinken hücresel ağlarla bağlantı kurulamıyor. Uçak modunu devre dışı bırakın ve tekrar deneyin.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">Flaş ışığı açık</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Kapatmak için dokunun</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d istemci</item>
+    <item quantity="other">%1$d istemci</item>
+  </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">SIM verisi yok</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Ünite pili yüzde <xliff:g id="number">%d</xliff:g>.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Oynatma kuyruğunu göster</string>
 </resources>

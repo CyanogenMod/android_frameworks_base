@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB &amp; netværk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netværk</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">tilgå tematjenesten</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">afbryd app-opstart</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">Tillader en app at tilgå tematjenesten. Bør aldrig være nødvendig for alm. apps.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">læse din temainformation</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">Tillader appen at læse dine temaer og afgøre, hvilket tema du anvender.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">ændre dine temaer</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">Tillader appen at indsætte nye temaer og ændre, hvilket tema du anvender.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">Det lykkedes ikke at installere temaet</string>
+  <string name="theme_install_error_message">%s kunne ikke installeres</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s er ikke installeret</string>
+  <string name="theme_reset_notification_title">Nulstil tema</string>
+  <string name="theme_reset_notification_body">System-tema er gendannet på grund af flere app nedbrud.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ingen</string>

@@ -17,7 +17,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
   <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <!-- Text to use when the number in a notification info is too large
@@ -27,6 +29,8 @@
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">تحريك إلى اليمين من أجل %1$s</string>
   <string name="right_shortcut_hint">تحريك إلى اليسار من أجل %1$s</string>
+  <string name="lockscreen_message">انقر فوق رمز على اليسار أو اليمين لتخصيص اختصار جديد على شاشة التأمين.</string>
+  <string name="lockscreen_default_target">الافتراضي</string>
   <string name="select_application">حدد التطبيق</string>
   <string name="lockscreen_choose_action_title">اختر إجراء</string>
   <string name="lockscreen_none_target">لا شيء</string>
@@ -50,6 +54,7 @@
   <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">إلغاء التثبيت</string>
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_notification_brightness">سطوع الضوء</string>
   <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">إيقاف ملفات التعريف.</string>
   <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -60,6 +65,18 @@
   <string name="accessibility_quick_settings_profiles_changed">تم تغيير ملف التعريف إلى <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">تهيئة\u2026</string>
   <!-- Lights settings, LED notification -->
+  <string name="led_notification_title">إعدادات الإضاءة</string>
+  <string name="led_notification_text">إضاءة الـLED مفعلة من الإعدادات</string>
+  <string name="qs_tile_edit_header_instruction">أضغط بإستمرار على الإختصارات لإعادة الترتيب</string>
+  <string name="quick_settings_edit_label">تعديل الاختصارات</string>
+  <string name="quick_settings_cannot_delete_edit_tile">لا يمكن حذف اختصار التعديل</string>
+  <string name="qs_tiles_reset_confirmation">إعادة تعيين إعدادات الاختصارات السريعة للوضع الافتراضى؟</string>
+  <string name="quick_settings_tile_reset_to_default">إعادة تعيين على التخطيط الافتراضي</string>
+  <string name="quick_settings_title_header">الرأس</string>
+  <string name="quick_settings_title_tiles">الإختصارات</string>
+  <string name="quick_settings_title_show_weather">إظهار حالة الطقس</string>
+  <string name="quick_settings_title_show_brightness_slider">إظهار شريط التحكم في السطوع</string>
+  <string name="quick_settings_title_enlarge_first_row">توسيع الصف الأول</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">ستظل ظاهرة حتى يمكنك إزالتها. المس مع الاستمرار زر العودة لإزالتها.</string>
   <string name="quick_settings_custom_tile_detail_title">مربع مخصص</string>
@@ -71,6 +88,9 @@
   <string name="quick_settings_profiles_off">تعطيل ملفات التعريف</string>
   <string name="quick_settings_heads_up_label">إنذار مسبق</string>
   <string name="quick_settings_battery_saver_label">موفر البطارية</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">حافظ البطارية (شحن)</string>
+  <string name="quick_settings_caffeine_label">وضع الكافيين</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">تعطيل المزامنة. </string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -87,6 +107,7 @@
   <string name="quick_settings_lockscreen_label">شاشة القفل</string>
   <string name="quick_settings_ambient_display_label">العرض المحيط</string>
   <string name="quick_settings_lockscreen_label_enforced">إعمال قفل الشاشة</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">معطل بواسطة الوضع</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">مهلة الشاشة: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -138,7 +159,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">تم تشغيل الإنذار المسبق.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">ايقاف وضع الكافيين.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">تشغيل وضع الكافيين.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">إيقاف موفر البطارية.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -163,6 +186,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">تغيير LiveDisplay إلى الوضع النهاري.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">تغيير LiveDisplay إلى الوضع الليلي.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">تغيير LiveDisplay إلى وضع الأماكن المفتوحة.</string>
+  <string name="quick_settings_title_advanced_location">الموقع الثلاثى</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">تحديد الموقع: وضع توفير البطارية.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -183,11 +207,19 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">تغيير تحديد الموقع إلى وضع المستشعرات فقط.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">تغيير تحديد الموقع إلى وضع الدقة العالية.</string>
+  <string name="quick_settings_tiles_category_system">إختصارات النظام</string>
   <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">إضافة إختصار</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">غير قادر على الإتصال بالشبكات عند تفعيل وضع الطيران. قم بإلغاء تفعيل وضع الطيران وحاول مرة أخرى.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">ضوء الفلاش مشغل</string>
+  <string name="quick_settings_tile_flashlight_not_summary">المس لإيقاف التشغيل</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">لا توجد SIM للبيانات</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">بطارية الإرساء <xliff:g id="number">%d</xliff:g>في المائة.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">إظهار قائمة انتظار التشغيل</string>
 </resources>

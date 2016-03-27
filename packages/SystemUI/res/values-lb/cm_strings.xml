@@ -87,6 +87,7 @@
   <string name="quick_settings_profiles_off">Profiller desaktivéiert</string>
   <string name="quick_settings_heads_up_label">Pop-Up-Notifikatiounen</string>
   <string name="quick_settings_battery_saver_label">Akkuschouner</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchronisatioun aus.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -208,4 +209,6 @@
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dockakku <xliff:g id="number">%d</xliff:g> Prozent.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Waardeschlaang uweisen</string>
 </resources>

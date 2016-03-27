@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">சுயவிவரங்கள் முடக்கப்பட்டன</string>
   <string name="quick_settings_heads_up_label">ஹெட்ஸ் அப்</string>
   <string name="quick_settings_battery_saver_label">பேட்டரி சேமிப்பான்</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_caffeine_label">கேஃபைன்</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">ஒத்திசைவு ஆஃப்</string>
@@ -216,4 +217,6 @@
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">பொருத்தப்பட்ட மின்கல <xliff:g id="number">%d</xliff:g> சதவிகிதம்.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">இயக்கு சாரை காண்பி</string>
 </resources>

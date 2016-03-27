@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USBとネットワーク</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">ネットワーク</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">テーマサービスへのアクセス</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">アプリの起動の監視</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">テーマサービスへのアクセスをアプリに許可します。通常のアプリで必要とされることはないはずです。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">テーマ情報の読み取り</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">テーマの読み取りや適用しているテーマの特定をアプリに許可します。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">テーマの変更</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">新しいテーマの挿入や適用しているテーマの変更をアプリに許可します。</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">テーマをインストールできませんでした</string>
+  <string name="theme_install_error_message">%sをインストールできませんでした</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%sはインストールされていません</string>
+  <string name="theme_reset_notification_title">テーマのリセット</string>
+  <string name="theme_reset_notification_body">複数のアプリのクラッシュによりシステムのテーマが復元されました。</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">優先順位</string>
   <string name="silent_mode_none">なし</string>

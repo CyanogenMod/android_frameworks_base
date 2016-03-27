@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">프로필 사용 안 함</string>
   <string name="quick_settings_heads_up_label">헤드업 알림</string>
   <string name="quick_settings_battery_saver_label">배터리 절약</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_caffeine_label">카페인</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">동기화 꺼짐</string>
@@ -216,4 +217,6 @@
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">독의 배터리는 <xliff:g id="number">%d</xliff:g>퍼센트입니다.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">재생 대기열 표시</string>
 </resources>

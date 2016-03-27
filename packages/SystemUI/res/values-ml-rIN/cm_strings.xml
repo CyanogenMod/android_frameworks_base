@@ -89,6 +89,7 @@
   <string name="quick_settings_profiles_off">പ്രൊഫൈലുകൾ അപ്രാപ്തമാണ്</string>
   <string name="quick_settings_heads_up_label">മുന്നറിയിപ്പ്</string>
   <string name="quick_settings_battery_saver_label">ബാറ്ററി സേവർ</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_caffeine_label">കഫീൻ</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">പൊരുത്തപ്പെടൽ ഓഫ്.</string>
@@ -221,4 +222,6 @@
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">ഡോക്ക് ബാറ്ററി <xliff:g id="number">%d</xliff:g> ശതമാനം.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">പ്ലേ ക്യൂ ദൃശ്യമാക്കുക</string>
 </resources>

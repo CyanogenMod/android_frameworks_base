@@ -75,9 +75,26 @@
   <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
   <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">ڕاژەی ڕێگەی تێم</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">ڕێگەدان بە بارنامە بۆ ڕاژەی تێم. کە پێویست ناکا بۆ بەرنامەی ئاسایی.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">خوێندنه‌وه‌ی زانیاری له‌باره‌ی باکگراوه‌نده‌که‌ت</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ خوێندنه‌وه‌ی باکگراوه‌نده‌کانت وه‌ بڕیاردانی باکگراوه‌ندێک که‌ خۆت په‌سه‌ندته‌.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">گۆڕینی باکگراوه‌نده‌کانت</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ هێنانی باکگراوه‌ندی نوێ و
+ گۆڕینی باکگراوه‌ندێک که‌ خۆت لات په‌سه‌نده‌.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">دابەزاندنی ڕووکار سەرکەوتو نەبوو</string>
+  <string name="theme_install_error_message">%s دانەبەزێنرا</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s دانەمەزراوە</string>
+  <string name="theme_reset_notification_title">ڕێکخستنەوەی ڕووکار</string>
   <!-- Zen mode buttons -->
   <!-- Wifi Hotspot disabled due to subscription change -->
   <!-- WiFi turn off notification action text -->

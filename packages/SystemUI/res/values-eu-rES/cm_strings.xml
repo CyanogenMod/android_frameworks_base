@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Profilak ezgaituta</string>
   <string name="quick_settings_heads_up_label">Jakinarazpen flotatzaileak</string>
   <string name="quick_settings_battery_saver_label">Bateria aurrezlea</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Bateria aurrezlea (kargatzen)</string>
   <string name="quick_settings_caffeine_label">Kafeina</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinkronizazioa ezgaituta.</string>
@@ -221,4 +223,6 @@
   <string name="data_sim_not_configured">Ez dago datuetarako SIM txartelik</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Oinarriaren bateria, ehuneko <xliff:g id="number">%d</xliff:g>.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Bistaratu erreprodukzio ilara</string>
 </resources>

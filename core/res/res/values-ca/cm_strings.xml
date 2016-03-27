@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB &amp; xarxa</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Xarxa</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">accés al servei de temes</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interceptar el llançament d\'una aplicació</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">Permet a una aplicació accedir al servei de temes. No s\'hauria de necessitar mai en les aplicacions normals.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">Llegeix la informació del teu tema</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">Permet a l\'aplicació llegir els teus temes i determinar quin tema has aplicat.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">modifica els teus temes</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">Permet a l\'aplicació introduir temes nous i modificar quin tema has aplicat.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">No ha pogut instal·lar el tema</string>
+  <string name="theme_install_error_message">%s no s\'ha pogut instal·lar</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s no està instal·lat</string>
+  <string name="theme_reset_notification_title">Reinici de tema</string>
+  <string name="theme_reset_notification_body">El tema del sistema s\'ha restaurat degut a múltiples fallades d\'aplicacions.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritat</string>
   <string name="silent_mode_none">Cap</string>

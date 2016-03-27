@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB &amp; netwerk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netwerk</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">toegang tot themaservice</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Openen van app onderscheppen</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">Hiermee kan de app toegang krijgen tot de themaservice. Nooit vereist voor normale apps.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">informatie over uw thema\'s lezen</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">Hiermee kan de app informatie lezen over uw thema\'s en bepalen welk thema u hebt toegepast.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">uw thema\'s aanpassen</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">Hiermee kan de app nieuwe thema\'s invoegen en wijzigen welk thema u hebt toegepast.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">Thema installeren mislukt</string>
+  <string name="theme_install_error_message">%s kan niet worden geïnstalleerd</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s is niet geïnstalleerd</string>
+  <string name="theme_reset_notification_title">Thema opnieuw instellen</string>
+  <string name="theme_reset_notification_body">Systeemthema hersteld als gevolg van meerdere gecrashte apps.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioriteit</string>
   <string name="silent_mode_none">Geen</string>

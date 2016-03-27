@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB &amp; rețea</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rețea</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">accesare serviciul pentru teme</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interceptează lansarea aplicației</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">Permite unei aplicații să acceseze serviciul pentru teme. Aplicațiile normale nu au nevoie.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">citește informații despre temă</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">Permite aplicației să citească temele dumneavoastră și să determine pe care ați aplicat-o.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">modifică teme</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">Permite aplicației să adauge teme noi și să le modifice pe cele aplicate.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">Instalarea temei a eșuat</string>
+  <string name="theme_install_error_message">%s au eșuat să fie instalate</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s nu este instalată</string>
+  <string name="theme_reset_notification_title">Resetare temă</string>
+  <string name="theme_reset_notification_body">Tema de sistem este restaurată datorită unor multiple erori.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritate</string>
   <string name="silent_mode_none">Nimic</string>

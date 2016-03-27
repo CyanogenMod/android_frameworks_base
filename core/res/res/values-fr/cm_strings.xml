@@ -79,10 +79,28 @@
   <string name="adb_active_custom_tile_both">USB et réseau</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Réseau</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">accéder au service de thèmes</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">intercepter le lancement d\'application</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">Permet à l\'application d\'accéder au service de thèmes. Une application normale ne devrait pas en avoir besoin.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">lire les informations de votre thème</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">Permet à une application de lire et déterminer quel thème vous avez appliqué.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">modifier vos thèmes</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">Permet à une application d\'installer de nouveaux thèmes et
+        modifier le thème que vous avez appliqué.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">Impossible d\'installer le thème</string>
+  <string name="theme_install_error_message">Impossible d\'installer %s</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s n\'est pas installé</string>
+  <string name="theme_reset_notification_title">Réinitialisation du thème</string>
+  <string name="theme_reset_notification_body">Thème système restauré en raison de multiples problèmes sur l\'application.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Priorité</string>
   <string name="silent_mode_none">Aucun</string>
