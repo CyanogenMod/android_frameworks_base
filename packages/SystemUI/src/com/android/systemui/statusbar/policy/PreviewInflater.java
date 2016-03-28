@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
@@ -69,6 +71,9 @@ public class PreviewInflater {
             return null;
         }
         KeyguardPreviewContainer container = new KeyguardPreviewContainer(mContext, null);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        container.setLayoutParams(layoutParams);
         container.addView(v);
         return container;
     }

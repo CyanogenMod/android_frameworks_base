@@ -11951,6 +11951,12 @@ public class WindowManagerService extends IWindowManager.Stub
         return mWindowMap;
     }
 
+    @Override
+    public void setLiveLockscreenEdgeDetector(boolean enable) {
+        // TODO enforce permission check ?
+        mPolicy.setLiveLockscreenEdgeDetector(enable);
+    }
+
     private final class LocalService extends WindowManagerInternal {
         @Override
         public void requestTraversalFromDisplayManager() {
