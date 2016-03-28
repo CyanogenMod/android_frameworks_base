@@ -53,6 +53,10 @@ public class KeyguardServiceDelegate {
             "com.android.internal.action.KEYGUARD_SERVICE_STATE_CHANGED";
     private static final String EXTRA_ACTIVE = "active";
 
+    public void showKeyguard() {
+        mKeyguardService.showKeyguard();
+    }
+
     private static final class KeyguardState {
         KeyguardState() {
             // Assume keyguard is showing and secure until we know for sure. This is here in

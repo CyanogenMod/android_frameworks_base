@@ -122,4 +122,7 @@
     <color name="notification_guts_media_bg_color">#ff606060</color>
     <color name="queue_background">#ff303030</color>
     <color name="queue_background_pressed">#ff606060</color>
+
+    <color name="live_lockscreen_gradient_start">#00000000</color>
+    <color name="live_lockscreen_gradient_end">#66000000</color>
 </resources>

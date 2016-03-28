@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/show_bouncer"
-    android:layout_width="@dimen/unlock_fab_size"
-    android:layout_height="@dimen/unlock_fab_size"
-    android:layout_gravity="bottom|center_horizontal"
-    android:alpha="0.5"
-    android:src="@drawable/ic_lock_open_24dp" />

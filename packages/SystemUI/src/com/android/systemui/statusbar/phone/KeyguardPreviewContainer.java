@@ -22,6 +22,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
 
@@ -55,6 +56,11 @@ public class KeyguardPreviewContainer extends FrameLayout {
             return android.graphics.PixelFormat.OPAQUE;
         }
     };
+
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+    }
 
     public KeyguardPreviewContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
