@@ -94,10 +94,6 @@
 
     </com.android.systemui.statusbar.phone.NotificationsQuickSettingsContainer>
 
-    <include
-            layout="@layout/keyguard_bottom_area"
-            android:visibility="gone" />
-
     <include layout="@layout/status_bar_expanded_header" />
 
     <com.android.systemui.statusbar.AlphaOptimizedView

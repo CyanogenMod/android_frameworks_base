@@ -45,9 +45,15 @@ public class SwipeHelper implements Gefingerpoken {
 
     public static final int X = 0;
     public static final int Y = 1;
+    public static final int SWIPE_ZONE_LEFT = 0x1;
+    public static final int SWIPE_ZONE_RIGHT = 0x2;
+    public static final int SWIPE_ZONE_TOP = 0x4;
+    public static final int SWIPE_ZONE_BOTTOM = 0x8;
 
     private static LinearInterpolator sLinearInterpolator = new LinearInterpolator();
     private final Interpolator mFastOutLinearInInterpolator;
+    private final int mTouchSlop;
+    private int mSwipeZone;
 
     private float SWIPE_ESCAPE_VELOCITY = 100f; // dp/sec
     private int DEFAULT_ESCAPE_ANIMATION_DURATION = 200; // ms
@@ -69,6 +75,7 @@ public class SwipeHelper implements Gefingerpoken {
     private VelocityTracker mVelocityTracker;
 
     private float mInitialTouchPos;
+    private float mPerpendicularInitialTouchPos;
     private boolean mDragging;
     private View mCurrView;
     private View mCurrAnimView;
@@ -91,12 +98,27 @@ public class SwipeHelper implements Gefingerpoken {
         mVelocityTracker = VelocityTracker.obtain();
         mDensityScale =  context.getResources().getDisplayMetrics().density;
         mPagingTouchSlop = ViewConfiguration.get(context).getScaledPagingTouchSlop();
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         mLongPressTimeout = (long) (ViewConfiguration.getLongPressTimeout() * 1.5f); // extra long-press!
         mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(context,
                 android.R.interpolator.fast_out_linear_in);
         mFalsingThreshold = context.getResources().getDimensionPixelSize(
                 R.dimen.swipe_helper_falsing_threshold);
+        if (swipeDirection == X) {
+            mSwipeZone = SWIPE_ZONE_LEFT | SWIPE_ZONE_RIGHT;
+        } else {
+            mSwipeZone = SWIPE_ZONE_TOP | SWIPE_ZONE_BOTTOM;
+        }
+    }
+
+    public SwipeHelper(int swipeDirection, int swipeZone, Callback callback, Context context) {
+        this(swipeDirection, callback, context);
+        mSwipeZone = swipeZone;
+    }
+
+    public boolean isDragging() {
+        return mDragging;
     }
 
     public void setLongPressListener(LongPressListener listener) {
@@ -113,6 +135,10 @@ public class SwipeHelper implements Gefingerpoken {
 
     private float getPos(MotionEvent ev) {
         return mSwipeDirection == X ? ev.getX() : ev.getY();
+    }
+
+    private float getPerpendicularPos(MotionEvent ev) {
+        return mSwipeDirection == X ? ev.getY() : ev.getX();
     }
 
     private float getTranslation(View v) {
@@ -236,6 +262,7 @@ public class SwipeHelper implements Gefingerpoken {
                     mCanCurrViewBeDimissed = mCallback.canChildBeDismissed(mCurrView);
                     mVelocityTracker.addMovement(ev);
                     mInitialTouchPos = getPos(ev);
+                    mPerpendicularInitialTouchPos = getPerpendicularPos(ev);
 
                     if (mLongPressListener != null) {
                         if (mWatchLongPress == null) {
@@ -413,11 +440,30 @@ public class SwipeHelper implements Gefingerpoken {
             case MotionEvent.ACTION_OUTSIDE:
             case MotionEvent.ACTION_MOVE:
                 if (mCurrView != null) {
+                    float pos = getPos(ev);
+                    float altPos = getPerpendicularPos(ev);
                     float delta = getPos(ev) - mInitialTouchPos;
                     float absDelta = Math.abs(delta);
                     if (absDelta >= getFalsingThreshold()) {
                         mTouchAboveFalsingThreshold = true;
                     }
+
+                    boolean touchBeyondZoneLimit = true;
+                    if (mSwipeDirection == X) {
+                        if ((mSwipeZone & SWIPE_ZONE_RIGHT) == 0 && pos > mInitialTouchPos) {
+                            touchBeyondZoneLimit = false;
+                        } else if ((mSwipeZone & SWIPE_ZONE_LEFT) == 0 && pos < mInitialTouchPos) {
+                            touchBeyondZoneLimit = false;
+                        }
+                    } else {
+                        if ((mSwipeZone & SWIPE_ZONE_TOP) == 0 && altPos < mPerpendicularInitialTouchPos) {
+                            touchBeyondZoneLimit = false;
+                        } else if ((mSwipeZone & SWIPE_ZONE_BOTTOM) == 0 && pos > mInitialTouchPos) {
+                            touchBeyondZoneLimit = false;
+                        }
+                    }
+                    if (!touchBeyondZoneLimit) return false;
+
                     // don't let items that can't be dismissed be dragged more than
                     // maxScrollDistance
                     if (CONSTRAIN_SWIPE && !mCallback.canChildBeDismissed(mCurrView)) {
@@ -503,6 +549,49 @@ public class SwipeHelper implements Gefingerpoken {
          * @return The factor the falsing threshold should be multiplied with
          */
         float getFalsingThresholdFactor();
+    }
+
+    public static abstract class SimpleCallback implements Callback {
+        public abstract View getChildAtPosition(MotionEvent ev);
+        public abstract View getChildContentView(View v);
+
+        @Override
+        public boolean canChildBeDismissed(View v) {
+            return false;
+        }
+
+        @Override
+        public boolean isAntiFalsingNeeded() {
+            return false;
+        }
+
+        @Override
+        public void onBeginDrag(View v) {
+        }
+
+        @Override
+        public void onChildDismissed(View v) {
+        }
+
+        @Override
+        public void onDragCancelled(View v) {
+        }
+
+        @Override
+        public void onChildSnappedBack(View animView) {
+        }
+
+        @Override
+        public boolean updateSwipeProgress(View animView,
+                boolean dismissable,
+                float swipeProgress) {
+            return false;
+        }
+
+        @Override
+        public float getFalsingThresholdFactor() {
+            return 0;
+        }
     }
 
     /**

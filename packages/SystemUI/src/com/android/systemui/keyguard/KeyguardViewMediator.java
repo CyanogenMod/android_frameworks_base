@@ -351,6 +351,8 @@ public class KeyguardViewMediator extends SystemUI {
     private IKeyguardDrawnCallback mDrawnCallback;
 
     private LockscreenEnabledSettingsObserver mSettingsObserver;
+    private PhoneStatusBar mStatusBar;
+
     public static class LockscreenEnabledSettingsObserver extends UserContentObserver {
 
         private static final String KEY_ENABLED = "lockscreen_enabled";
@@ -1291,6 +1293,15 @@ public class KeyguardViewMediator extends SystemUI {
         mHandler.sendEmptyMessage(DISMISS);
     }
 
+    public void showKeyguard() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mStatusBar.showKeyguard();
+            }
+        });
+    }
+
     /**
      * Send message to keyguard telling it to reset its state.
      * @see #handleReset
@@ -1865,6 +1876,7 @@ public class KeyguardViewMediator extends SystemUI {
             FingerprintUnlockController fingerprintUnlockController) {
         mStatusBarKeyguardViewManager.registerStatusBar(phoneStatusBar, container,
                 statusBarWindowManager, scrimController, fingerprintUnlockController);
+        mStatusBar = phoneStatusBar;
         return mStatusBarKeyguardViewManager;
     }
 
