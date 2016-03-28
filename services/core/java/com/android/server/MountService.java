@@ -1742,6 +1742,8 @@ class MountService extends IMountService.Stub
         Preconditions.checkNotNull(fsUuid);
         synchronized (mLock) {
             final VolumeRecord rec = mRecords.get(fsUuid);
+            if (rec == null)
+                return;
             rec.nickname = nickname;
             mCallbacks.notifyVolumeRecordChanged(rec);
             writeSettingsLocked();
@@ -1756,6 +1758,8 @@ class MountService extends IMountService.Stub
         Preconditions.checkNotNull(fsUuid);
         synchronized (mLock) {
             final VolumeRecord rec = mRecords.get(fsUuid);
+            if (rec == null)
+                return;
             rec.userFlags = (rec.userFlags & ~mask) | (flags & mask);
             mCallbacks.notifyVolumeRecordChanged(rec);
             writeSettingsLocked();
