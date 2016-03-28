@@ -36,6 +36,7 @@ import android.view.ViewConfiguration;
 import com.android.systemui.statusbar.ExpandableNotificationRow;
 import com.android.systemui.statusbar.ExpandableView;
 import com.android.systemui.statusbar.FlingAnimationUtils;
+import com.android.systemui.statusbar.MediaExpandableNotificationRow;
 import com.android.systemui.statusbar.policy.ScrollAdapter;
 
 public class ExpandHelper implements Gefingerpoken {
@@ -96,7 +97,7 @@ public class ExpandHelper implements Gefingerpoken {
     private float mCurrentHeight;
 
     private int mSmallSize;
-    private int mLargeSize;
+    private int mLargeSize, mInitialLargeSize;
     private float mMaximumStretch;
     private boolean mOnlyMovements;
 
@@ -161,6 +162,7 @@ public class ExpandHelper implements Gefingerpoken {
         mSmallSize = small;
         mMaximumStretch = mSmallSize * STRETCH_INTERVAL;
         mLargeSize = large;
+        mInitialLargeSize = large;
         mContext = context;
         mCallback = callback;
         mScaler = new ViewScaler();
@@ -511,7 +513,14 @@ public class ExpandHelper implements Gefingerpoken {
         mCurrentHeight = mOldHeight;
         if (mCallback.canChildBeExpanded(v)) {
             if (DEBUG) Log.d(TAG, "working on an expandable child");
-            mNaturalHeight = mScaler.getNaturalHeight(mLargeSize);
+            if (v instanceof MediaExpandableNotificationRow) {
+                final int maxHeight = ((MediaExpandableNotificationRow) v).getMaxContentHeight();
+                mLargeSize = maxHeight;
+                mNaturalHeight = maxHeight;
+            } else {
+                mLargeSize = mInitialLargeSize;
+                mNaturalHeight = mScaler.getNaturalHeight(mLargeSize);
+            }
         } else {
             if (DEBUG) Log.d(TAG, "working on a non-expandable child");
             mNaturalHeight = mOldHeight;
