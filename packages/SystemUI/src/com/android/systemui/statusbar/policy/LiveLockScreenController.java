@@ -174,6 +174,18 @@ public class LiveLockScreenController {
                     mExternalKeyguardViewCallbacks);
             mLiveLockScreenView = null;
         }
+
+                @Override
+                public void showLockscreenWithOffset(float percent) {
+                    if (mPanelView.mShowingExternalKeyguard) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mPanelView.mStatusBar.showKeyguard();
+                            }
+                        });
+                    }
+                }
     };
 
     public boolean isShowingLiveLockScreenView() {

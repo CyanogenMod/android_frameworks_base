@@ -53,7 +53,7 @@ public abstract class PanelView extends FrameLayout {
         Log.v(TAG, (mViewName != null ? (mViewName + ": ") : "") + String.format(fmt, args));
     }
 
-    protected PhoneStatusBar mStatusBar;
+    public PhoneStatusBar mStatusBar;
     protected HeadsUpManager mHeadsUpManager;
 
     private float mPeekHeight;
@@ -181,8 +181,8 @@ public abstract class PanelView extends FrameLayout {
 
     private void runPeekAnimation() {
         mPeekHeight = getPeekHeight();
-        if (DEBUG) logf("peek to height=%.1f", mPeekHeight);
-        if (mHeightAnimator != null) {
+        logf("peek to height=%.1f", mPeekHeight);
+        if (mHeightAnimator != null || true) {
             return;
         }
         mPeekAnimator = ObjectAnimator.ofFloat(this, "expandedHeight", mPeekHeight)
@@ -245,10 +245,10 @@ public abstract class PanelView extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mInstantExpanding || mTouchDisabled
-                || (mMotionAborted && event.getActionMasked() != MotionEvent.ACTION_DOWN)) {
-            return false;
-        }
+//        if (mInstantExpanding || mTouchDisabled
+//                || (mMotionAborted && event.getActionMasked() != MotionEvent.ACTION_DOWN)) {
+//            return false;
+//        }
 
         /*
          * We capture touch events here and update the expand height here in case according to
@@ -296,6 +296,7 @@ public abstract class PanelView extends FrameLayout {
                             || mPeekPending || mPeekAnimator != null;
                     onTrackingStarted();
                 }
+                System.out.println(isFullyCollapsed() + " " + !mHeadsUpManager.hasPinnedHeadsUp());
                 if (isFullyCollapsed() && !mHeadsUpManager.hasPinnedHeadsUp()) {
                     schedulePeek();
                 }
@@ -321,12 +322,13 @@ public abstract class PanelView extends FrameLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 float h = y - mInitialTouchY;
-
+                System.out.println("onTouch 2");
                 // If the panel was collapsed when touching, we only need to check for the
                 // y-component of the gesture, as we have no conflicting horizontal gesture.
                 if (Math.abs(h) > mTouchSlop
                         && (Math.abs(h) > Math.abs(x - mInitialTouchX)
                                 || mIgnoreXTouchSlop)) {
+                    System.out.println("onTouch 3");
                     mTouchSlopExceeded = true;
                     if (mGestureWaitForTouchSlop && !mTracking && !mCollapsedAndHeadsUpOnDown) {
                         if (!mJustPeeked && mInitialOffsetOnTouch != 0f) {
@@ -422,13 +424,14 @@ public abstract class PanelView extends FrameLayout {
                     }
             fling(vel, expand, isFalseTouch(x, y));
             onTrackingStopped(expand);
+            if (true) return;
             mUpdateFlingOnLayout = expand && mPanelClosedOnDown && !mHasLayoutedSinceDown;
             if (mUpdateFlingOnLayout) {
                 mUpdateFlingVelocity = vel;
             }
         } else {
-            boolean expands = onEmptySpaceClick(mInitialTouchX);
-            onTrackingStopped(expands);
+            //boolean expands = onEmptySpaceClick(mInitialTouchX);
+            //onTrackingStopped(expands);
         }
 
         if (mVelocityTracker != null) {
@@ -537,7 +540,7 @@ public abstract class PanelView extends FrameLayout {
                     if ((h < -mTouchSlop || (mAnimatingOnDown && hAbs > mTouchSlop))
                             && hAbs > Math.abs(x - mInitialTouchX)) {
                         cancelHeightAnimator();
-                        startExpandMotion(x, y, true /* startTracking */, mExpandedHeight);
+                        //startExpandMotion(x, y, true /* startTracking */, mExpandedHeight);
                         return true;
                     }
                 }
@@ -730,7 +733,8 @@ public abstract class PanelView extends FrameLayout {
     }
 
     public void setExpandedHeight(float height) {
-        if (DEBUG) logf("setExpandedHeight(%.1f)", height);
+        Thread.dumpStack();
+        System.out.println("setExpandedHeight " + height);
         setExpandedHeightInternal(height + getOverExpansionPixels());
     }
 

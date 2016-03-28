@@ -200,7 +200,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected DevicePolicyManager mDevicePolicyManager;
     protected IDreamManager mDreamManager;
     PowerManager mPowerManager;
-    protected StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
+    public StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     protected int mRowMinHeight;
     protected int mRowMaxHeight;
 

@@ -29,6 +29,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.PixelFormat;
 import android.hardware.fingerprint.FingerprintManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -50,8 +51,11 @@ import android.telecom.TelecomManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
@@ -126,6 +130,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private boolean mUserSetupComplete;
     private boolean mPrewarmBound;
     private Messenger mPrewarmMessenger;
+    private final WindowManager mWindowManager;
+    private boolean mBottomAreaAttached;
+    private final WindowManager.LayoutParams mWindowLayoutParams;
+    private OnInterceptTouchListener mInterceptTouchListener;
+
     private final ServiceConnection mPrewarmConnection = new ServiceConnection() {
 
         @Override
@@ -138,6 +147,52 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             mPrewarmMessenger = null;
         }
     };
+
+    @Override
+    public void setVisibility(int visibility) {
+        Thread.dumpStack();
+        if (visibility != getVisibility()) {
+            if (visibility == View.VISIBLE) {
+                if (!mBottomAreaAttached) {
+                    addKeyguardBottomArea(false);
+                }
+            } else if (mBottomAreaAttached) {
+                removeKeyguardBottomArea();
+            }
+        }
+        super.setVisibility(visibility);
+    }
+
+    public void expand(boolean expand) {
+        addKeyguardBottomArea(expand);
+    }
+
+    private void addKeyguardBottomArea(boolean fullyExpand) {
+        // TODO - figure out why WRAP_CONTENT doesn't work
+        mWindowLayoutParams.height = fullyExpand ? WindowManager.LayoutParams.MATCH_PARENT :
+                300;
+        if (!mBottomAreaAttached) {
+            try {
+                mWindowManager.addView(this, mWindowLayoutParams);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+            mBottomAreaAttached = true;
+        } else {
+            mWindowManager.updateViewLayout(this, mWindowLayoutParams);
+        }
+    }
+
+    private void removeKeyguardBottomArea() {
+        if (mBottomAreaAttached) {
+            try {
+                mWindowManager.removeViewImmediate(this);
+            } catch (IllegalArgumentException e) {
+                Log.e(TAG, e.getMessage());
+            }
+            mBottomAreaAttached = false;
+        }
+    }
 
     private AssistManager mAssistManager;
 
@@ -161,6 +216,16 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         ColorMatrix cm = new ColorMatrix();
         cm.setSaturation(0);
         mGrayScaleFilter = new ColorMatrixColorFilter(cm);
+        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+        mWindowLayoutParams = new WindowManager.LayoutParams();
+        mWindowLayoutParams.type = WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL;
+        mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        mWindowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mWindowLayoutParams.format = PixelFormat.TRANSPARENT;
+        mWindowLayoutParams.setTitle("KeyguardBottomArea");
+        mWindowLayoutParams.gravity = Gravity.BOTTOM;
     }
 
     private AccessibilityDelegate mAccessibilityDelegate = new AccessibilityDelegate() {
@@ -841,5 +906,21 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mContext.unregisterReceiver(mDevicePolicyReceiver);
         mShortcutHelper.cleanup();
         mUnlockMethodCache.removeListener(this);
+    }
+
+    public interface OnInterceptTouchListener {
+        boolean onInterceptTouch(MotionEvent e);
+    }
+
+    public void setOnInterceptTouchListener(OnInterceptTouchListener listener) {
+        mInterceptTouchListener = listener;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (mInterceptTouchListener != null) {
+            return mInterceptTouchListener.onInterceptTouch(ev);
+        }
+        return super.onInterceptTouchEvent(ev);
     }
 }
