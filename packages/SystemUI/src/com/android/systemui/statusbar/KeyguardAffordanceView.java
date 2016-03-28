@@ -187,7 +187,7 @@ public class KeyguardAffordanceView extends ImageView implements Palette.Palette
         if (mPreviewView != null) {
             mPreviewView.setVisibility(mLaunchingAffordance
                     ? oldPreviewView.getVisibility() : INVISIBLE);
-            mPreviewView.setVisibility(INVISIBLE);
+            mPreviewView.setVisibility(GONE);
             addOverlay();
         }
     }
@@ -386,7 +386,7 @@ public class KeyguardAffordanceView extends ImageView implements Palette.Palette
                 invalidate();
                 if (nowHidden) {
                     if (mPreviewView != null) {
-                        mPreviewView.setVisibility(View.INVISIBLE);
+                        mPreviewView.setVisibility(View.GONE);
                     }
                 }
             } else if (!mCircleWillBeHidden) {
@@ -425,7 +425,7 @@ public class KeyguardAffordanceView extends ImageView implements Palette.Palette
                 mPreviewClipper.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        mPreviewView.setVisibility(View.INVISIBLE);
+                        mPreviewView.setVisibility(View.GONE);
                     }
                 });
                 mPreviewClipper.start();
