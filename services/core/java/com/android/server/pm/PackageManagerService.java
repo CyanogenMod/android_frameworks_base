@@ -4712,9 +4712,14 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     private boolean shouldIncludeResolveActivity(Intent intent) {
+        // Don't call into AppSuggestManager before it comes up later in the SystemServer init!
+        if (!mSystemReady) {
+            return false;
+        }
         synchronized(mPackages) {
             AppSuggestManager suggest = AppSuggestManager.getInstance(mContext);
-            return mResolverReplaced && (suggest != null) ? suggest.handles(intent) : false;
+            return mResolverReplaced && (suggest.getService() != null) ?
+                    suggest.handles(intent) : false;
         }
     }
 
