@@ -216,6 +216,7 @@ import android.util.Slog;
 import android.util.SparseArray;
 import android.util.TimeUtils;
 import android.util.Xml;
+import android.util.BoostFramework;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -3834,6 +3835,15 @@ public final class ActivityManagerService extends ActivityManagerNative
                 buf.append(hostingNameStr);
             }
             Slog.i(TAG, buf.toString());
+
+            if(hostingType.equals("activity")) {
+                BoostFramework perf = new BoostFramework();
+
+                if (perf != null) {
+                    perf.perfIOPrefetchStart(startResult.pid,app.processName);
+                }
+            }
+
             app.setPid(startResult.pid);
             app.usingWrapper = startResult.usingWrapper;
             app.removed = false;

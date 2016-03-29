@@ -206,14 +206,17 @@ public final class ActivityStackSupervisor implements DisplayListener {
     static final int RESUME_TOP_ACTIVITY_MSG = FIRST_SUPERVISOR_STACK_MSG + 2;
     static final int SLEEP_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 3;
     static final int LAUNCH_TIMEOUT_MSG = FIRST_SUPERVISOR_STACK_MSG + 4;
+
     public BoostFramework mPerfBoost = null;
     public BoostFramework mPerfPack = null;
+    public BoostFramework mPerfIop = null;
     public boolean mIsPerfBoostEnabled = false;
     public boolean mIsperfDisablepackingEnable = false;
     public int lBoostTimeOut = 0;
     public int lDisPackTimeOut = 0;
     public int lBoostCpuParamVal[];
     public int lBoostPackParamVal[];
+
     static final int HANDLE_DISPLAY_ADDED = FIRST_SUPERVISOR_STACK_MSG + 5;
     static final int HANDLE_DISPLAY_CHANGED = FIRST_SUPERVISOR_STACK_MSG + 6;
     static final int HANDLE_DISPLAY_REMOVED = FIRST_SUPERVISOR_STACK_MSG + 7;
@@ -1873,7 +1876,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
         top_activity = task.stack.topRunningActivityLocked();
         /* App is launching from recent apps and it's a new process */
         if(top_activity != null && top_activity.state == ActivityState.DESTROYED) {
-            acquireAppLaunchPerfLock();
+            acquireAppLaunchPerfLock(top_activity.packageName);
         }
 
         if ((flags & ActivityManager.MOVE_TASK_NO_USER_ACTION) == 0) {
@@ -2644,7 +2647,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
         resumeFocusedStackTopActivityLocked();
     }
 
-    void acquireAppLaunchPerfLock() {
+    void acquireAppLaunchPerfLock(String packageName) {
        /* Acquire perf lock during new app launch */
        if (mIsperfDisablepackingEnable == true && mPerfPack == null) {
            mPerfPack = new BoostFramework();
@@ -2658,6 +2661,14 @@ public final class ActivityStackSupervisor implements DisplayListener {
        }
        if (mPerfBoost != null) {
            mPerfBoost.perfLockAcquire(lBoostTimeOut, lBoostCpuParamVal);
+       }
+
+       // Start IOP
+       if (mPerfIop == null) {
+           mPerfIop = new BoostFramework();
+       }
+       if (mPerfIop != null) {
+           mPerfIop.perfIOPrefetchStart(-1,packageName);
        }
     }
 
@@ -2686,17 +2697,17 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 if (mTmpFindTaskResult.r != null && !mTmpFindTaskResult.matchedByRootAffinity) {
                     if(mTmpFindTaskResult.r.state == ActivityState.DESTROYED ) {
                         /*It's a new app launch */
-                        acquireAppLaunchPerfLock();
+                        acquireAppLaunchPerfLock(r.packageName);
                     }
                     return mTmpFindTaskResult.r;
                 }
             }
         }
-        /* Acquire perf lock during new app launch */
-        if (mTmpFindTaskResult.r == null)
-            acquireAppLaunchPerfLock();
-        else if (mTmpFindTaskResult.r.state == ActivityState.DESTROYED)
-            acquireAppLaunchPerfLock();
+
+        /* Acquire perf lock *only* during new app launch */
+        if (mTmpFindTaskResult.r == null || mTmpFindTaskResult.r.state == ActivityState.DESTROYED) {
+            acquireAppLaunchPerfLock(r.packageName);
+        }
 
         if (DEBUG_TASKS && mTmpFindTaskResult.r == null) Slog.d(TAG_TASKS, "No task found");
         return mTmpFindTaskResult.r;
