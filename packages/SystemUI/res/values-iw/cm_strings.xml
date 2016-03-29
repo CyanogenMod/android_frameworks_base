@@ -66,11 +66,11 @@
   <string name="quick_settings_compass_init">מאתחל\u2026</string>
   <!-- Lights settings, LED notification -->
   <string name="led_notification_title">הגדרות נורית</string>
-  <string name="led_notification_text">נורית LED מופעלת בידי ההגדרות</string>
-  <string name="qs_tile_edit_header_instruction">יש לגעת ולהחזיק את האריחים לסידור מחדש</string>
-  <string name="quick_settings_edit_label">עריכת אריחים</string>
+  <string name="led_notification_text">נורית LED מופעלת על ידי ההגדרות</string>
+  <string name="qs_tile_edit_header_instruction">לחץ והחזק באריחים לסידור מחדש</string>
+  <string name="quick_settings_edit_label">ערוך אריחים</string>
   <string name="quick_settings_cannot_delete_edit_tile">לא ניתן למחוק את אריח העריכה</string>
-  <string name="qs_tiles_reset_confirmation">האם לאפס את אריחי ההגדרות המהירות לברירת המחדל?</string>
+  <string name="qs_tiles_reset_confirmation">לאפס את אריחי ההגדרות המהירות לברירת המחדל?</string>
   <string name="quick_settings_tile_reset_to_default">איפוס לפריסת ברירת המחדל</string>
   <string name="quick_settings_title_header">כותרת</string>
   <string name="quick_settings_title_tiles">אריחים</string>
@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">פרופילים מושבתים</string>
   <string name="quick_settings_heads_up_label">התראות קופצות</string>
   <string name="quick_settings_battery_saver_label">שומר סוללה</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">שומר סוללה (בטעינה)</string>
   <string name="quick_settings_caffeine_label">קפאין</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">סנכרון כבוי.</string>
@@ -104,7 +106,7 @@
   <string name="quick_settings_lockscreen_label">מסך נעילה</string>
   <string name="quick_settings_ambient_display_label">התראות ברקע</string>
   <string name="quick_settings_lockscreen_label_enforced">מסך הנעילה נאכף</string>
-  <string name="quick_settings_lockscreen_label_locked_by_profile">מושבת על-ידי הפרופיל</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">בוטל על-ידי הפרופיל</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">משך זמן מסך: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -211,7 +213,7 @@
   <string name="hotspot_apm_message">לא ניתן להתחבר לרשתות סלולריות כאשר מצב טיסה פעיל. בטל את מצב הטיסה ונסה שנית.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">פנס מופעל</string>
-  <string name="quick_settings_tile_flashlight_not_summary">לחץ לכיבוי</string>
+  <string name="quick_settings_tile_flashlight_not_summary">הקש לכיבוי</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="one">לקוח %1$d</item>
@@ -221,4 +223,6 @@
   <string name="data_sim_not_configured">אין נתוני SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">הצג תור השמעה</string>
 </resources>

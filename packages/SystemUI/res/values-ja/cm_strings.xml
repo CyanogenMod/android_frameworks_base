@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">プロファイル無効</string>
   <string name="quick_settings_heads_up_label">ヘッドアップ</string>
   <string name="quick_settings_battery_saver_label">バッテリーセーバー</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_caffeine_label">カフェイン</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">同期はOFFです。</string>
@@ -183,7 +184,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplayが昼モードに変更されました。</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplayが夜モードに変更されました。</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplayが屋外モードに変更されました。</string>
-  <string name="quick_settings_title_advanced_location">3種類の位置情報</string>
+  <string name="quick_settings_title_advanced_location">3方式の位置情報</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">位置情報レポート: バッテリー節約モードです。</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -220,4 +221,6 @@
   <string name="data_sim_not_configured">データSIMなし</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">ホルダーの電池は<xliff:g id="number">%d</xliff:g>パーセントです。</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">再生キューを表示</string>
 </resources>

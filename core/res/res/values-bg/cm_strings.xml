@@ -195,7 +195,7 @@
   <string name="notify_battery_fully_charged_text">Изключете зарядното устройството за да удължите живота на батерията.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">Зануляване статистиката на батерията</string>
+  <string name="permlab_resetBatteryStats">Статистиката на батерията ще бъде нулирана</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Позволява заявление да рестартирате текущите данни за използването на ниско ниво на батерията.</string>

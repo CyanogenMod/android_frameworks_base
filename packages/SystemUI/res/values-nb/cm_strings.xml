@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Profiler deaktivert</string>
   <string name="quick_settings_heads_up_label">Flytende notifikasjoner</string>
   <string name="quick_settings_battery_saver_label">Batterisparing</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_caffeine_label">Koffein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synkronisering av.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -103,6 +105,7 @@
   <string name="quick_settings_lockscreen_label">Låseskjerm</string>
   <string name="quick_settings_ambient_display_label">Ambient skjerm</string>
   <string name="quick_settings_lockscreen_label_enforced">Låseskjerm er påkrevd</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Deaktivert av profil</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Skjerm tidsavbrudd: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,7 +157,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ble aktivert.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Koffein av.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Koffein på.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Batterisparing av.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -204,9 +209,19 @@
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Legge til en flis</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Kan ikke koble til mobile nettverk mens Flymodus er aktivert. Deaktivere flymodus og prøv igjen.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">Lommelykt er på</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Trykk for å slå av</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="other">%1$d klienter</item>
+  </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Ingen data SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dokkingstasjonens batteri <xliff:g id="number"> %d</xliff:g> prosent.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Vis avspillingskø</string>
 </resources>

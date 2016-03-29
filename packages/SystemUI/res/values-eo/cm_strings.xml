@@ -70,6 +70,7 @@
   <string name="quick_settings_profiles">Sistemaj profiloj</string>
   <string name="quick_settings_profiles_off">Profiloj malŝaltitaj</string>
   <string name="quick_settings_heads_up_label">Atentigoj</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinkronigado malaktiva.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -176,4 +177,5 @@
   <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Play queue -->
 </resources>

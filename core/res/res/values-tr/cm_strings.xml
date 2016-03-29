@@ -135,6 +135,7 @@
   <string name="app_ops_start_at_bootup">açılışta başla</string>
   <string name="app_ops_toast_window">bildirim mesajları göster</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth\'u açıp kapat</string>
+  <string name="app_ops_toggle_mobile_data">hücresel veriye geçiş</string>
   <string name="app_ops_toggle_nfc">NFC\'yi aç kapa</string>
   <string name="app_ops_toggle_wifi">Wi-Fi aç kapa</string>
   <string name="app_ops_use_alarm_volume">alarm sesini kontrol et</string>
@@ -187,7 +188,11 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Etkinlik başlatma engellendi</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> başlatılmadan önce sistem korumaya alındı. Uygulamayı doğrulamak ve başlatmak için dokunun.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Batarya tam olarak şarj edildi</string>
+  <string name="notify_battery_fully_charged_text">Aygıtınızın pil ömrünü artırmak için şarjdan çıkarın.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">pil istatistiklerini sıfırla</string>
@@ -195,4 +200,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Uygulamaya güncel düşük seviye pil kullanım verisini sıfırlama izni verir.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM kartlar değişti</string>
+  <string name="uicc_hot_swapped_event_text">Varsayılan SIM kart tercihlerini ayarlamak için dokunun</string>
 </resources>

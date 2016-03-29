@@ -26,4 +26,5 @@
     <item quantity="other">SIM PIN kodunuzu girin, <xliff:g id="number">%d</xliff:g> deneme hakkınız kaldı.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
+  <string name="kg_invalid_sim_length">Hata: Giriş en kısa uzunluktan daha kısa</string>
 </resources>

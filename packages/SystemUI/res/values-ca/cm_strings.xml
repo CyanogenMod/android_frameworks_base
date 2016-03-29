@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Perfils desactivats</string>
   <string name="quick_settings_heads_up_label">Notificacions emergents</string>
   <string name="quick_settings_battery_saver_label">Estalvi de bateria</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Estalvi de bateria (carregant)</string>
   <string name="quick_settings_caffeine_label">Cafeïna</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinc desactivada.</string>
@@ -221,4 +223,6 @@
   <string name="data_sim_not_configured">Sense dades SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Acoblament bateria <xliff:g id="number">%d</xliff:g> percent.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Mostra la cua de reproducció</string>
 </resources>

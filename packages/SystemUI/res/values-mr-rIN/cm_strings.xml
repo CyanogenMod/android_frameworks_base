@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">प्रोफाइल्स अक्षम केले</string>
   <string name="quick_settings_heads_up_label">हेड्स अप</string>
   <string name="quick_settings_battery_saver_label">बॅटरी सेव्हर</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_caffeine_label">कॅफीन</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">सिंक बंद.</string>
@@ -221,4 +222,6 @@
   <string name="data_sim_not_configured">डेटा सिम नाही</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">डॉक बॅटरी <xliff:g id="number">%d</xliff:g> टक्के.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">प्ले रांग दर्शवा</string>
 </resources>

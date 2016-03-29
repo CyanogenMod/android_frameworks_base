@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Профили онемогућени</string>
   <string name="quick_settings_heads_up_label">Искачуће поруке</string>
   <string name="quick_settings_battery_saver_label">Уштеда батерије</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Чувар батерије (пуњење)</string>
   <string name="quick_settings_caffeine_label">Кофеин</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
@@ -219,6 +221,9 @@
     <item quantity="other">%1$d клијента</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Нема SIM-а за податке</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Прикажи на чекању</string>
 </resources>

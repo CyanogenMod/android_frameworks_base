@@ -17,14 +17,18 @@
 package com.android.server.power;
 
 import android.app.ActivityManager;
+import android.os.IDeviceIdleController;
+import android.os.ServiceManager;
 import android.util.SparseIntArray;
 
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.os.BackgroundThread;
+import com.android.internal.util.ArrayUtils;
 import com.android.server.EventLogTags;
 import com.android.server.LocalServices;
 import com.android.server.ServiceThread;
+import com.android.server.SystemConfig;
 import com.android.server.SystemService;
 import com.android.server.am.BatteryStatsService;
 import com.android.server.lights.Light;
@@ -3287,6 +3291,29 @@ public final class PowerManagerService extends SystemService
 
             final int uid = Binder.getCallingUid();
             final int pid = Binder.getCallingPid();
+
+            try {
+                if (mAppOps != null &&
+                        mAppOps.checkOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName)
+                                != AppOpsManager.MODE_ALLOWED) {
+
+                    // If this app is whitelisted as "allow-in-power-save" then always allow!
+                    // Current impl only looks at system-loaded ones, if we want to also include
+                    // user apps which have been manually set, we would use IDeviceIdleController
+                    if (!SystemConfig.getInstance().getAllowInPowerSave().contains(packageName)) {
+                        Slog.d(TAG, "acquireWakeLock: ignoring request from " + packageName);
+                        // For (ignore) accounting purposes
+                        mAppOps.noteOperation(AppOpsManager.OP_WAKE_LOCK, uid, packageName);
+                        // silent return
+                        return;
+                    } else {
+                        Slog.d(TAG, "wake lock requested to be ignored but " + packageName
+                                + " is marked to opt-out of all power save restrictions.");
+                    }
+                }
+            } catch (RemoteException ignored) {
+            }
+
             final long ident = Binder.clearCallingIdentity();
             try {
                 acquireWakeLockInternal(lock, flags, tag, packageName, ws, historyTag, uid, pid);
