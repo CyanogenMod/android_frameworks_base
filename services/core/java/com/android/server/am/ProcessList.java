@@ -145,7 +145,7 @@ final class ProcessList {
     // we have no limit on the number of service, visible, foreground, or other such
     // processes and the number of those processes does not count against the cached
     // process limit.
-    static final int MAX_CACHED_APPS = 32;
+    static final int MAX_CACHED_APPS = SystemProperties.getInt("ro.sys.fw.bg_apps_limit",32);
 
     static final boolean USE_TRIM_SETTINGS =
             SystemProperties.getBoolean("ro.sys.fw.use_trim_settings",true);
