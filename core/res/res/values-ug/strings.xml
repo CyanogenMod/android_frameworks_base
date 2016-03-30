@@ -450,7 +450,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBar">ئەپنىڭ ھالەت بالداقنى چەكلىشىگە ياكى سىستېما سىنبەلگىسىنى قوشۇش ۋە ئۆچۈرۈشىگە يول قويىدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_statusBarService">ھالەت بالداق</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBarService">ئەپنىڭ ھالەت بالداقتا تۇرۇشىغا يول قويىدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -599,11 +598,9 @@
   <string name="permlab_accessLocationExtraCommands">زىيادە ئورۇن ئۇچۇرىغا ئېرىشىش پىروگرامما بۇيرۇق زىيارىتى</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFineLocation">دەل ئورنى (GPS ۋە تور ئاساسىدا)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFineLocation">ئەپنىڭ يەرشارى ئورۇن بەلگىلەش سىستېمىسى (GPS) ياكى تارقىتىش مۇنارى ۋە Wi-Fi غا ئوخشاش تور ئورنى ئۇچۇر مەنبەسى ئارقىلىق دەل ئورنىڭىزنىڭ ئۇچۇرىغا ئېرىشىشىگە يول قويىدۇ. ئۈسكۈنىدە ئورۇن مۇلازىمىتىنى قوزغاتسىڭىز ئاندىن ئەپ سىزنىڭ ئورۇن ئۇچۇرىڭىزغا ئېرىشەلەيدۇ. ئەپ بۇ خىل مۇلازىمەت ئارقىلىق دەل ئورنىڭىزنى جەزملەيدۇ، بۇنداق بولغاندا ئەپ تېخىمۇ كۆپ توك سەرپ قىلىشى مۇمكىن.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessCoarseLocation">تەخمىنىي ئورنى(تور ئاساسىدا) </string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessCoarseLocation">ئەپنىڭ تارقىتىش مۇنارى ۋە Wi-Fi غا ئوخشاش تور ئورنى ئۇچۇر مەنبەسى ئارقىلىق تەخمىنىي ئورنىڭىزنىڭ ئۇچۇرىغا ئېرىشىشىگە يول قويىدۇ. ئۈسكۈنىدە ئورۇن مۇلازىمىتىنى قوزغاتسىڭىز ئاندىن ئەپ سىزنىڭ ئورۇن ئۇچۇرىڭىزغا ئېرىشەلەيدۇ. ئەپ بۇ خىل مۇلازىمەت ئارقىلىق تەخمىنىي ئورنىڭىزنى جەزملەيدۇ، بۇنداق بولغاندا ئەپ تېخىمۇ كۆپ توك سەرپ قىلىشى مۇمكىن.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -682,7 +679,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessNetworkState">ئەپنىڭ مەۋجۇت ۋە باغلانغان تورغا ئوخشاش تورغا ئائىت ئۇچۇرلىرىنى كۆرۈشىگە يول قويىدۇ. </string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_createNetworkSockets">تورنى تولۇق زىيارەت ھوقۇقى</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_createNetworkSockets">ئەپنىڭ تور socket قۇرۇپ،  ئۆزلەشتۈرگەن تور كېلىشىمى ئىشلىتىشىگە يول قويىدۇ. توركۆرگۈ ۋە باشقا بەزى ئەپلەرگە ئىنتېرنېتقا سانلىق مەلۇمات يوللاش يولى بىلەن تەمىنلەيدۇ شۇڭلاشقا ئەپ بۇ ھوقۇققا ئېرىشمەي تۇتۇپمۇ ئىنتېرنېتقا سانلىق مەلۇمات يوللىيالايدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -716,7 +712,6 @@
   <string name="permdesc_bluetoothAdmin" product="default">ئەپنىڭ تېلېفون كۆكچىشنى سەپلىشىگە، قوشنا ئۈسكۈنىلەرنى بايقىشىغا ۋە يىراق مۇساپىلىق پەرلەشكە يول قويىدۇ.</string>
   <string name="permlab_accessWimaxState">بۇ WiMAX كە باغلاپ ۋە ئۈزىدۇ</string>
   <string name="permdesc_accessWimaxState">ئەپنىڭ WiMAX قوزغالغان ياكى قوزغالمىغانلىقى ۋە باغلانغان خالىغان WiMAX تورىنىڭ مۇناسىۋەتلىك ئۇچۇرلىرىنى جەزملىشىگە يول قويىدۇ.</string>
-  <string name="permlab_changeWimaxState">WiMAX ھالىتىنى ئۆزگەرتىدۇ</string>
   <string name="permdesc_changeWimaxState" product="tablet">ئەپنىڭ تاختا كومپيۇتېرنى WiMAX تورىغا باغلىشى ۋە ئۈزۈشىگە يول قويىدۇ.</string>
   <string name="permdesc_changeWimaxState" product="default">ئەپنىڭ تېلېفوننى WiMAX تورىغا باغلىشى ۋە ئۈزۈشىگە يول قويىدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -1571,8 +1566,17 @@
   <!-- Appened to express the value is this unit of time. -->
   <string name="years">يىل</string>
   <!-- Phrase describing a time duration using seconds [CHAR LIMIT=16] -->
+  <plurals name="duration_seconds">
+    <item quantity="other">1 سېكۇنت</item>
+  </plurals>
   <!-- Phrase describing a time duration using minutes [CHAR LIMIT=16] -->
+  <plurals name="duration_minutes">
+    <item quantity="other">1 مىنۇت</item>
+  </plurals>
   <!-- Phrase describing a time duration using hours [CHAR LIMIT=16] -->
+  <plurals name="duration_hours">
+    <item quantity="other">1 سائەت</item>
+  </plurals>
   <!-- Title for error alert when a video cannot be played.  it can be used by any app. -->
   <string name="VideoView_error_title">سىن مەسىلىسى</string>
   <!-- Text for error alert when a video container is not valid for progressive download/playback. -->
@@ -1790,7 +1794,13 @@
   <!-- If there is ever a ringtone set for some setting, but that ringtone can no longer be resolved, t his is shown instead.  For example, if the ringtone was on a SD card and it had been removed, this woudl be shown for ringtones on that SD card. -->
   <string name="ringtone_unknown">نامەلۇم قوڭغۇراق ئاۋازى</string>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's title. -->
+  <plurals name="wifi_available">
+    <item quantity="other">ئىشلىتىلىشچان Wi-Fi تورى بار</item>
+  </plurals>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's message. -->
+  <plurals name="wifi_available_detailed">
+    <item quantity="other">ئىشلىتىلىشچان Wi-Fi تورىنى ئاچ</item>
+  </plurals>
   <!-- A notification is shown when a wifi captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
@@ -1991,7 +2001,6 @@
   <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
   <string name="activity_list_empty">ماس كەلگۈدەك پائالىيەت تاپالمىدى</string>
   <!-- Title of an application permission that lets an application route media output. -->
-  <string name="permlab_route_media_output">ۋاستە چىقىرىش يولىنى ئۆزگەرت</string>
   <!-- Description of an application permission that lets an application route media output. -->
   <string name="permdesc_route_media_output">ئەپنىڭ ۋاستە چىقىرىش يولىنى ئۆزگەرتىپ باشقا سىرتقى ئۈسكۈنىگە چىقىرىشىغا يول قويىدۇ.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
@@ -2094,6 +2103,11 @@
   <string name="find_on_page">بەتتىن ئىزدە</string>
   <!-- Displayed on the Find dialog to display the index of the highlighted
          match and total number of matches found in the current page. [CHAR LIMIT=NONE] -->
+  <plurals name="matches_found">
+    <!-- Case of one match -->
+    <!-- Case of multiple total matches -->
+    <item quantity="other">ماس كەلگىنى 1</item>
+  </plurals>
   <!-- Label for the "Done" button on the far left of action mode toolbars. -->
   <string name="action_mode_done">تامام</string>
   <!-- Strings for MasterClearReceiver. -->
@@ -2664,6 +2678,9 @@
   <string name="restr_pin_error_too_short">PIN بەك قىسقا. ئاز دېگەندە 4 خانە سان بولۇشى كېرەك.</string>
   <!-- PIN entry dialog countdown message for next chance to enter the PIN [CHAR LIMIT=none] -->
   <!-- Phrase describing a time duration using seconds [CHAR LIMIT=none] -->
+  <plurals name="restr_pin_countdown">
+    <item quantity="other">1 سېكۇنتتىن كېيىن قايتا سىناڭ</item>
+  </plurals>
   <!-- PIN entry dialog tells the user to not enter a PIN for a while. [CHAR LIMIT=none] -->
   <string name="restr_pin_try_later">سەل تۇرۇپ قايتا سىناڭ</string>
   <!-- Cling help message title when hiding the navigation bar entering immersive mode [CHAR LIMIT=none] -->

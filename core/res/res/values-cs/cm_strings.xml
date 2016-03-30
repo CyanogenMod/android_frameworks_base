@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB a síť</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Síť</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">přístup ke službě motivu</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">zachytit spuštění aplikace</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Umožňuje přistupovat ke službě motivu. Toto oprávnění by neměla vyžadovat žádná normální aplikace.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">čtení informace o motivu</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Umožňuje načíst motivy a určit, který motiv je použit.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">změnit motiv</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Umožňuje vložit nový motiv a změnit informaci o tom, který motiv je použit.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Instalace motivu selhala</string>
-  <string name="theme_install_error_message">Instalace „%s“ selhala</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">Aplikace %s není nainstalována</string>
-  <string name="theme_reset_notification_title">Obnovit motiv</string>
-  <string name="theme_reset_notification_body">Kvůli pádům aplikací byl obnoven výchozí systémový motiv.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žádný</string>
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Baterie je nabitá</string>
   <string name="notify_battery_fully_charged_text">Pro zlepšení životnosti baterie odpojte zařízení od nabíječky.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">obnovení statistiky baterie</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Byly vyměněny SIM karty</string>
+  <string name="uicc_hot_swapped_event_text">Dotykem nastavit výchozí předvolby SIM karty</string>
 </resources>

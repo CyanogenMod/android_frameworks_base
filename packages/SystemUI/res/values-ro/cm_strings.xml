@@ -83,6 +83,7 @@
   <string name="quick_settings_profiles_off">Profilurile sunt dezactivate</string>
   <string name="quick_settings_heads_up_label">Atenționare</string>
   <string name="quick_settings_battery_saver_label">Economizor baterie</string>
+  <string name="quick_settings_caffeine_label">Cofeină</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronizare oprită.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -141,6 +142,10 @@
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Cofeină oprit.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Cofeină pornit.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Economisire baterie oprită.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -185,4 +190,11 @@
   <string name="quick_settings_tile_flashlight_not_title">Lanterna este pornită</string>
   <string name="quick_settings_tile_flashlight_not_summary">Atingeți pentru a dezactiva</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d client</item>
+    <item quantity="few">%1$d clienți</item>
+    <item quantity="other">%1$d clienți</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
 </resources>

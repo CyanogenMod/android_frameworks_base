@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">по сети и USB</string>
   <string name="adb_active_custom_tile_usb">по USB</string>
   <string name="adb_active_custom_tile_net">по сети</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">Доступ к службе тем</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Перехват запуска приложений</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Приложение сможет получать доступ к службе тем. Это разрешение не используется обычными приложениями.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">Чтение информации о теме</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Приложение сможет считывать темы оформления и определять, какая тема сейчас применена.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">Изменение тем</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Приложение сможет осуществлять установку новых тем оформления и изменять текущую тему.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Не удалось установить тему</string>
-  <string name="theme_install_error_message">Сбой при установке «%s»</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">«%s» не установлено</string>
-  <string name="theme_reset_notification_title">Тема отключена</string>
-  <string name="theme_reset_notification_body">Из-за сбоев приложений восстановлена стандартная тема.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Важные</string>
   <string name="silent_mode_none">Нет</string>
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Аккумулятор полностью заряжен</string>
   <string name="notify_battery_fully_charged_text">Отключите устройство от сети для продления срока службы батареи.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM-карты изменились</string>
+  <string name="uicc_hot_swapped_event_text">Нажмите, чтобы задать параметры по умолчанию для SIM-карты</string>
 </resources>

@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB i mrežni</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Mreža</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">pristupiti servisu tema</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Presresti pokretanje aplikacija</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Dopušta aplikaciji pristup servisu tema. Za obične aplikacije nikada ne bi trebao biti potreban.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">pročitati informacije vaše teme</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Dopušta aplikaciji čitanje vaših tema i određivanje teme koju koristite.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">urediti vaše teme</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Dopušta aplikaciji dodavati nove teme i urediti temu koju ste primjenili.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Instalacija teme nije uspjela</string>
-  <string name="theme_install_error_message">%s Instalacija nije uspjela</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s nije instalirano</string>
-  <string name="theme_reset_notification_title">Vraćanje početne teme</string>
-  <string name="theme_reset_notification_body">Tema sustava je vraćana na početnu zbog višestrukih rušenja aplikacija.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ništa</string>
@@ -198,7 +181,7 @@
   <string name="live_display_outdoor_summary">Koristi samo postavke za van</string>
   <string name="live_display_hint">LiveDisplay može smanjiti naprezanje očiju i poboljšati san. Dodirnite ovdje ako ga želite isprobati!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
-  <string name="tethered_notification_no_device_message">Uređaj nije spojen</string>
+  <string name="tethered_notification_no_device_message">Nema spojenih uređaja</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezani uređaj</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> povezanih uređaja</string>
   <!-- Keyguard strings -->
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Baterija puna</string>
   <string name="notify_battery_fully_charged_text">Odspojite punjač s uređaja da bi poboljšali trajnost baterije.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Resetirati statistike baterije</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Dopušta aplikaciji resetiranje trenutnog korištenja podataka uz štednju energije.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM kartice su se promijenile</string>
+  <string name="uicc_hot_swapped_event_text">Dodirnite za postavljanje SIM kartice zadane postavke</string>
 </resources>

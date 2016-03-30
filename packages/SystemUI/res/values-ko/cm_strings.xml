@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">프로필 사용 안 함</string>
   <string name="quick_settings_heads_up_label">헤드업 알림</string>
   <string name="quick_settings_battery_saver_label">배터리 절약</string>
+  <string name="quick_settings_caffeine_label">카페인</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">동기화 꺼짐</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">헤드업 알림이 꺼졌습니다.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">헤드업 알림이 켜졌습니다.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">카페인 꺼짐.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">카페인 켜짐.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">배터리 절약 끔.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -208,4 +213,7 @@
   <string name="quick_settings_tile_flashlight_not_title">손전등 켜짐</string>
   <string name="quick_settings_tile_flashlight_not_summary">탭하여 끄기</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">독의 배터리는 <xliff:g id="number">%d</xliff:g>퍼센트입니다.</string>
 </resources>

@@ -67,7 +67,7 @@
   <!-- Lights settings, LED notification -->
   <string name="led_notification_title">Definições de luz</string>
   <string name="led_notification_text">Luz do LED ativada pelas definições</string>
-  <string name="qs_tile_edit_header_instruction">Pressione e segure os mosaicos para reorganizar</string>
+  <string name="qs_tile_edit_header_instruction">Arraste os mosaicos para reorganizá-los</string>
   <string name="quick_settings_edit_label">Editar os mosaicos</string>
   <string name="quick_settings_cannot_delete_edit_tile">Não é possível eliminar o mosaico de Editar</string>
   <string name="qs_tiles_reset_confirmation">Repor os valores de origem dos mosaicos de definições rápidas?</string>
@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Perfis desativados</string>
   <string name="quick_settings_heads_up_label">Notificações pop-up</string>
   <string name="quick_settings_battery_saver_label">Economizador de bateria</string>
+  <string name="quick_settings_caffeine_label">Cafeína</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronização desligada.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Notificações pop-up desligaram.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Notificações pop-up ligaram.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Cafeína desligada.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Cafeína ligada.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Economizador de bateria desligado.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -203,8 +208,17 @@
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Adicionar um mosaico</string>
   <!-- Hotspot dialog message -->
-  <string name="hotspot_apm_message">Não é possível ligar-se a redes móveis enquanto o modo de avião estiver ativo. Desative o modo de avião e tente novamente.</string>
+  <string name="hotspot_apm_message">Não é possível ligar-se a redes móveis enquanto o modo de voo estiver ativado. Desative o modo de voo e tente novamente.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">A lanterna está ligada</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toque para desligar</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d cliente</item>
+    <item quantity="other">%1$d clientes</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Cartão SIM sem dados móveis</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Bateria da dock <xliff:g id="number">%d</xliff:g> por cento.</string>
 </resources>

@@ -75,6 +75,7 @@
   <string name="quick_settings_title_header">En-tête</string>
   <string name="quick_settings_title_tiles">Raccourcis</string>
   <string name="quick_settings_title_show_weather">Afficher la météo</string>
+  <string name="quick_settings_title_show_brightness_slider">Afficher le curseur de luminosité</string>
   <string name="quick_settings_title_enlarge_first_row">Agrandir la première ligne</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Cela le laisse en vue jusqu\'à ce que vous le détachiez. Appuyez et maintenez le bouton retour pour détacher.</string>
@@ -87,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profils désactivés</string>
   <string name="quick_settings_heads_up_label">Notifications flottantes</string>
   <string name="quick_settings_battery_saver_label">Économiseur de batterie</string>
+  <string name="quick_settings_caffeine_label">Caféine</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchronisation désactivée.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -102,6 +104,7 @@
   <string name="quick_settings_lockscreen_label">Écran de verrouillage</string>
   <string name="quick_settings_ambient_display_label">Affichage en mode veille</string>
   <string name="quick_settings_lockscreen_label_enforced">Écran de verrouillage forcé</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Désactivé par profil</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Veille de l\'écran : <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -153,7 +156,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Notifications flottantes activées.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Caféine éteinte.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Caféine allumée.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Économiseur de batterie désactivé.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -203,7 +208,17 @@
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Ajouter un raccourci</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Impossible de se connecter aux réseaux mobiles quand le mode avion est activé. Désactivez le mode avion et réessayez.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">Lampe de poche allumée</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toucher pour éteindre</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d client</item>
+    <item quantity="other">%1$d clients</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Aucune donnée SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Batterie de la station d\'accueil chargée à <xliff:g id="number">%d</xliff:g> pour cent.</string>
 </resources>

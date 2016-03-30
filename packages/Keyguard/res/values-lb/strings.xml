@@ -50,8 +50,10 @@
   <string name="keyguard_plugged_in">Gëtt opgelueden</string>
   <!-- When the lock screen is showing and the phone plugged in, and the battery
          is not fully charged, and it's plugged into a fast charger, say that it's charging fast.  -->
+  <string name="keyguard_plugged_in_charging_fast">Gëtt séier opgelueden</string>
   <!-- When the lock screen is showing and the phone plugged in, and the battery
          is not fully charged, and it's plugged into a slow charger, say that it's charging slowly.  -->
+  <string name="keyguard_plugged_in_charging_slowly">Gëtt lues opgelueden</string>
   <!-- When the lock screen is showing and the battery is low, warn user to plug
          in the phone soon. -->
   <string name="keyguard_low_battery">Connectéier däin Oplueder.</string>
@@ -190,11 +192,19 @@ Kontaktéier däi Provider fir eng aner SIM-Kaart ze kréien.</string>
   <string name="kg_password_wrong_pin_code_pukked">Inkorrekte SIM-PIN-Code. Du muss elo däi Provider kontaktéiere fir däin Apparat z\'entspären.</string>
   <!-- Instructions telling the user that they entered the wrong SIM PIN while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_pin_code">
+    <item quantity="one">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier s de däi Provider kontaktéiere muss fir däin Apparat z\'entspären.</item>
+    <item quantity="other">Inkorrekte SIM-PIN-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg.</item>
+  </plurals>
   <!-- Instructions telling the user that they have exhausted SIM PUK retries and the SIM is now unusable.
          Displayed in a dialog box.  -->
   <string name="kg_password_wrong_puk_code_dead">D\'SIM ass onbrauchbar. Kontaktéier däi Provider.</string>
   <!-- Instructions telling the user that they entered the wrong puk while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_puk_code">
+    <item quantity="one">Inkorrekte SIM-PUK-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier deng SIM permanent onbrauchbar gëtt.</item>
+    <item quantity="other">Inkorrekte SIM-PUK-Code, du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier deng SIM permanent onbrauchbar gëtt.</item>
+  </plurals>
   <!-- Instructions telling the user that the operation to unlock the keyguard
          with SIM PIN failed. Displayed in one line in a large font.  -->
   <string name="kg_password_pin_failed">SIM-PIN-Operatioun feelgeschloen!</string>

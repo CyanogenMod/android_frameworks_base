@@ -75,6 +75,7 @@
   <string name="quick_settings_title_header">Encabezado</string>
   <string name="quick_settings_title_tiles">Controles</string>
   <string name="quick_settings_title_show_weather">Mostrar el clima</string>
+  <string name="quick_settings_title_show_brightness_slider">Mostrar barra de brillo</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar la primera fila</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Esto fija la pantalla en esta vista hasta que es liberada. Mantén pulsado el botón Atrás para liberarla.</string>
@@ -87,6 +88,7 @@
   <string name="quick_settings_profiles_off">Perfiles desactivados</string>
   <string name="quick_settings_heads_up_label">Notificaciones emergentes</string>
   <string name="quick_settings_battery_saver_label">Modo de ahorro de batería</string>
+  <string name="quick_settings_caffeine_label">Cafeína</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronización desactivada.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -102,6 +104,7 @@
   <string name="quick_settings_lockscreen_label">Pantalla de bloqueo</string>
   <string name="quick_settings_ambient_display_label">Pantalla ambiente</string>
   <string name="quick_settings_lockscreen_label_enforced">Pantalla de bloqueo forzada</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Desactivado por perfil</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Tiempo de espera de pantalla: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -153,7 +156,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Notificaciones emergentes activadas.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Desactivar Cafeína.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Activar Cafeína.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Apagar modo de ahorro de batería.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -199,8 +204,21 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">Informes de ubicación cambiados a modo solo dispositivo.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informes de ubicación cambiados a modo de gran precisión.</string>
+  <string name="quick_settings_tiles_category_system">Controles del sistema</string>
   <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">Añadir un control</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">No se puede conectar a redes móviles mientras el modo Avión esté activado. Desactiva el modo Avión e inténtalo de nuevo.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">La linterna está encendida</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Toca para apagarla</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d cliente</item>
+    <item quantity="other">%1$d clientes</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Sin datos SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g> por ciento.</string>
 </resources>

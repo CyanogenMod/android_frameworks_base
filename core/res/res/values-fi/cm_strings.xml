@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB &amp; verkko</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Verkko</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">pääsy teemapalveluun</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">keskeytä sovelluksen käynnistys</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Sallii sovelluksen päästä teemapalveluun. Tavalliset sovellukset ei koskaan tarvitse tätä.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">lue teeman tiedot</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Sallii sovelluksen lukea teemojasi, ja tunnistaa käytössä olevan teeman.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">muokkaa teemoja</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Sallii sovelluksen asettaa uusia teemoja ja muokata käytössä olevaa teemaa.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Teeman asennus epäonnistui</string>
-  <string name="theme_install_error_message">Teeman \"%s\" asennus epäonnistui</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ei ole asennettu</string>
-  <string name="theme_reset_notification_title">Teeman resetointi</string>
-  <string name="theme_reset_notification_body">Järjestelmän teema palautettu lukuisten sovellusvirheiden vuoksi.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioriteetti</string>
   <string name="silent_mode_none">Ei mitään</string>
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Akku täynnä</string>
   <string name="notify_battery_fully_charged_text">Irrota laite laturista pidentääksesi akun käyttöikää.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">nollaa akun tilastot</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Sallii sovelluksen nollata nykyiset alemman tason akun käytön tilastot.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM-kortit ovat muuttuneet</string>
+  <string name="uicc_hot_swapped_event_text">Napauta asettaaksesi SIM-kortin oletusasetukset</string>
 </resources>

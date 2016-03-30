@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profile deaktiviert</string>
   <string name="quick_settings_heads_up_label">Pop-up</string>
   <string name="quick_settings_battery_saver_label">Akku-Sparmodus</string>
+  <string name="quick_settings_caffeine_label">Koffein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchronisierung aus.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Pop-up ausgeschaltet.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Pop-up eingeschaltet.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Koffein aus.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Koffein an.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Akku-Sparmodus aus.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -208,4 +213,12 @@
   <string name="quick_settings_tile_flashlight_not_title">Taschenlampe ist eingeschaltet</string>
   <string name="quick_settings_tile_flashlight_not_summary">Zum Ausschalten tippen</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d Client</item>
+    <item quantity="other">%1$d Clients</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Keine Daten-SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dock-Akku <xliff:g id="number">%d</xliff:g> Prozent.</string>
 </resources>

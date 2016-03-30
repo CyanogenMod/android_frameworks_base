@@ -109,6 +109,10 @@
   <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
   <string name="enablePin">Feeler. Aktivéier d\'SIM-/RUIM-Spär.</string>
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+  <plurals name="pinpuk_attempts">
+    <item quantity="one">Du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier deng SIM gespaart ass.</item>
+    <item quantity="other">Du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier deng SIM gespaart ass.</item>
+  </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <string name="imei">IMEI</string>
   <!-- Title for the dialog used to display the user's MEID number on CDMA network
@@ -484,7 +488,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBar">Erlaabt der App, d\'Statusläischt ze desaktivéieren oder System-Symbolbiller dobäizesetzen oder ze läschen.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_statusBarService">Statusläischt</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBarService">Erlaabt der App, d\'Statusläischt ze sinn.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -624,7 +627,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeCallLog" product="default">Erlaabt der App, d\'Urufflëscht vum Telefon z\'änneren, inklusiv Daten iwwer erakommend an erausgoend Uriff. Béisaarteg Appe kéinten dës Berechtegung benotze fir d\'Daten ouni däi Wëssen ze läschen oder z\'änneren.</string>
   <!-- Title of the body sensors permission, listed so the user can decide whether to allow the application to access body sensor data. [CHAR LIMIT=30] -->
-  <string name="permlab_bodySensors">Kierpersensoren (wéi e Bolsmiesser)</string>
   <!-- Description of the body sensors permission, listed so the user can decide whether to allow the application to access data from body sensors. [CHAR LIMIT=NONE] -->
   <string name="permdesc_bodySensors" product="default">Erlaabt der App, op d\'Date vu Sensoren zouzegräifen, déi deng kierperlech Verfaassung iwwerwaachen, z. B. däi Puls.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -647,11 +649,9 @@
   <string name="permlab_accessLocationExtraCommands">Op zousätzlech Serviceproviderbefeeler fir de Standuert zougräifen</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFineLocation">Genaue Standuert (GPS- an Netzwierk-baséiert)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFineLocation">Erlaabt der App, iwwer de Globale Positionéierungs-System (GPS) oder iwwer Netzwierkquelle wéi Funkmasten oder WLAN däi genaue Standuert ze bestëmmen. Dës Standuert-Servicer mussen ugeschalt a fir däin Apparat disponibel si fir datt d\'App se ka benotzen. Appe kéinten dat benotze fir ze bestëmme wou s de dech ophäls, an doduerch zousätzlech Akkuleeschtung beusprochen.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessCoarseLocation">Ongeféiere Standuert (Netzwierk-baséiert)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessCoarseLocation">Erlaabt der App, däin ongeféiere Standuert ze bestëmmen. De Standuert gëtt unhand vun Netzwierkstanduertquellen, wéi Funkmasten oder WLAN ofgeleent. Dës Standuert-Servicer mussen ugeschalt a fir däin Apparat disponibel si fir datt d\'App se ka benotzen. Appe kéinten dat benotze fir ze bestëmme wou ongeféier s de dech ophäls.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -663,7 +663,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_recordAudio">Erlaabt der App, Toun mam Mikro opzehuelen. Dës Berechtegung erlaabt der App zu all Moment Toun ouni deng Bestätegung opzehuelen.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_sim_communication">SIM-Kommunikatioun</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_sim_communication">Erlaabt der App, Befeeler un d\'SIM ze schécken. Dat ass immens geféierlech.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -737,7 +736,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessNetworkState">Erlaabt der App, Informatiounen iwwer Netzwierkconnectiounen auszeliesen, wéi z. B. wéi eng Netzwierker existéieren a wéi eng verbonne sinn.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_createNetworkSockets">Vollen Netzwierkzougrëff</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_createNetworkSockets">Erlaabt der App, Netzwierk-Sockets z\'erstellen an eegen Netzwierkprotokoller ze benotzen. De Browser an aner Appe bidde Méiglechkeeten, Daten iwwer den Internet ze verschécken. Dohier ass dës Berechtegung net néideg fir Daten iwwer den Internet ze schécken.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -773,7 +771,6 @@
   <string name="permdesc_bluetoothAdmin" product="default">Erlaabt der App, Bluetooth um Telefon ze konfiguréieren, an anerer Apparater z\'entdecken a Koppelunge mat hinnen hierzestellen.</string>
   <string name="permlab_accessWimaxState">WiMAX-Connectiounen hierstellen an trennen</string>
   <string name="permdesc_accessWimaxState">Erlaabt der App, festzestellen ob WiMAX aktivéiert ass an Informatiounen iwwer all WiMAX-Netzwierker déi connectéiert sinn.</string>
-  <string name="permlab_changeWimaxState">WiMAX-Status änneren</string>
   <string name="permdesc_changeWimaxState" product="tablet">Erlaabt der App, den Tablet mat WiMAX-Netzwierker ze connectéieren an deconnectéieren.</string>
   <string name="permdesc_changeWimaxState" product="tv">Erlaabt der App, eng Connectioun tëscht der Tëlee a WiMAX-Netzwierker z\'erstellen an ze trennen.</string>
   <string name="permdesc_changeWimaxState" product="default">Erlaabt der App, den Telefon mat WiMAX-Netzwierker ze connectéieren an deconnectéieren.</string>
@@ -911,7 +908,6 @@
   <string name="permlab_accessDrmCertificates">Op DRM-Zertifikater zougräifen</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessDrmCertificates">Erlaabt enger App, op DRM-Zertifikater zouzegräifen a se ze provisionéieren. Sollt ni fir normal Appen néideg sinn.</string>
-  <string name="permlab_handoverStatus">Android-Beam-Iwwerdroungsstatus empfänken</string>
   <string name="permdesc_handoverStatus">Erlaabt der App, Informatiounen iwwer aktuell Android-Beam-Iwwerdroungen z\'empfänken</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_removeDrmCertificates">DRM-Zertifikater läschen</string>
@@ -1678,8 +1674,20 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <!-- Appened to express the value is this unit of time. -->
   <string name="years">Joer</string>
   <!-- Phrase describing a time duration using seconds [CHAR LIMIT=16] -->
+  <plurals name="duration_seconds">
+    <item quantity="one">1 Sekonn</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Sekonnen</item>
+  </plurals>
   <!-- Phrase describing a time duration using minutes [CHAR LIMIT=16] -->
+  <plurals name="duration_minutes">
+    <item quantity="one">1 Minutt</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Minutten</item>
+  </plurals>
   <!-- Phrase describing a time duration using hours [CHAR LIMIT=16] -->
+  <plurals name="duration_hours">
+    <item quantity="one">1 Stonn</item>
+    <item quantity="other"><xliff:g id="count">%d</xliff:g> Stonnen</item>
+  </plurals>
   <!-- Title for error alert when a video cannot be played.  it can be used by any app. -->
   <string name="VideoView_error_title">Videoproblem</string>
   <!-- Text for error alert when a video container is not valid for progressive download/playback. -->
@@ -1911,7 +1919,15 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <!-- If there is ever a ringtone set for some setting, but that ringtone can no longer be resolved, t his is shown instead.  For example, if the ringtone was on a SD card and it had been removed, this woudl be shown for ringtones on that SD card. -->
   <string name="ringtone_unknown">Onbekannte Schelltoun</string>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's title. -->
+  <plurals name="wifi_available">
+    <item quantity="one">WLAN-Netzwierk disponibel</item>
+    <item quantity="other">WLAN-Netzwierker disponibel</item>
+  </plurals>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's message. -->
+  <plurals name="wifi_available_detailed">
+    <item quantity="one">Oppent WLAN-Netzwierk disponibel</item>
+    <item quantity="other">Oppe WLAN-Netzwierker disponibel</item>
+  </plurals>
   <!-- A notification is shown when a wifi captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
@@ -2048,6 +2064,7 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <!-- USB_STORAGE_ERROR dialog  ok button-->
   <string name="dlg_ok">OK</string>
   <!-- USB_PREFERENCES: Notification for when the user connected to the charger only.  This is the title -->
+  <string name="usb_charging_notification_title">USB fir ze lueden</string>
   <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in MTP mode.  This is the title -->
   <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in PTP mode.  This is the title -->
   <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in MIDI mode.  This is the title -->
@@ -2120,11 +2137,9 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
   <string name="activity_list_empty">Keng passend Aktivitéit fonnt.</string>
   <!-- Title of an application permission that lets an application route media output. -->
-  <string name="permlab_route_media_output">Medienausgab ëmleeden</string>
   <!-- Description of an application permission that lets an application route media output. -->
   <string name="permdesc_route_media_output">Erlaabt der App, d\'Medienausgab un extern Apparater weiderzeleeden.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
-  <string name="permlab_readInstallSessions">Installatiounssëtzunge liesen</string>
   <!-- Description of an application permission that lets it read install sessions. -->
   <string name="permdesc_readInstallSessions">Erlaabt der App, Installatiounssëtzungen ze liesen. Dat erméiglecht der App, Detailer iwwer Päck ze gesinn, déi grad installéiert ginn.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
@@ -2228,6 +2243,12 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="find_on_page">Op der Säit fannen</string>
   <!-- Displayed on the Find dialog to display the index of the highlighted
          match and total number of matches found in the current page. [CHAR LIMIT=NONE] -->
+  <plurals name="matches_found">
+    <!-- Case of one match -->
+    <item quantity="one">1 Treffer</item>
+    <!-- Case of multiple total matches -->
+    <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> vu(n) <xliff:g id="total" example="137">%d</xliff:g></item>
+  </plurals>
   <!-- Label for the "Done" button on the far left of action mode toolbars. -->
   <string name="action_mode_done">Fäerdeg</string>
   <!-- Strings for MasterClearReceiver. -->
@@ -2814,6 +2835,10 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <string name="restr_pin_error_too_short">De PIN ass ze kuerz. E muss mindestens 4 Zifferen hunn.</string>
   <!-- PIN entry dialog countdown message for next chance to enter the PIN [CHAR LIMIT=none] -->
   <!-- Phrase describing a time duration using seconds [CHAR LIMIT=none] -->
+  <plurals name="restr_pin_countdown">
+    <item quantity="one">Probéier nees an 1 Sekonn</item>
+    <item quantity="other">Probéier nees a(n) <xliff:g id="count">%d</xliff:g> Sekonnen</item>
+  </plurals>
   <!-- PIN entry dialog tells the user to not enter a PIN for a while. [CHAR LIMIT=none] -->
   <string name="restr_pin_try_later">Probéier méi spéit nees</string>
   <!-- Cling help message title when hiding the navigation bar entering immersive mode [CHAR LIMIT=none] -->
@@ -2877,12 +2902,28 @@ Wann \"Drécken an Endecken\" aktivéiert ass, kanns du Beschreiwunge vun Elemen
   <!-- [CHAR_LIMIT=NONE] Battery saver: Feature description -->
   <string name="battery_saver_description">Den Energiespuermodus schount den Akku, andeem en d\'Leeschtung vum Apparat reduzéiert, d\'Vibratioun limitéiert an déi meescht Hannergronddatenaktivitéiten aschränkt. E-Mail, Messagen an aner Appen, déi op dengem Apparat synchroniséieren, gi méiglecherweis eréischt nom Opmaachen aktualiséiert.\n\nDen Energiespuermodus gëtt automatesch desaktivéiert, wann däin Apparat opgeluede gëtt.</string>
   <!-- Zen mode condition - summary: time duration in minutes. [CHAR LIMIT=NONE] -->
+  <plurals name="zen_mode_duration_minutes_summary">
+    <item quantity="one">Fir eng Minutt (bis <xliff:g id="formattedTime" example="10:00 PM">%2$s</xliff:g>)</item>
+    <item quantity="other">Fir %1$d Minutten (bis <xliff:g id="formattedTime" example="10:00 PM">%2$s</xliff:g>)</item>
+  </plurals>
   <!-- Zen mode condition - summary: time duration in minutes (short version). [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - summary: time duration in hours. [CHAR LIMIT=NONE] -->
+  <plurals name="zen_mode_duration_hours_summary">
+    <item quantity="one">Fir eng Stonn (bis <xliff:g id="formattedTime" example="10:00 PM">%2$s</xliff:g>)</item>
+    <item quantity="other">Fir %1$d Stonnen (bis <xliff:g id="formattedTime" example="10:00 PM">%2$s</xliff:g>)</item>
+  </plurals>
   <!-- Zen mode condition - summary: time duration in hours (short version). [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - line one: time duration in minutes. [CHAR LIMIT=NONE] -->
+  <plurals name="zen_mode_duration_minutes">
+    <item quantity="one">Fir eng Minutt</item>
+    <item quantity="other">Fir %d Minutten</item>
+  </plurals>
   <!-- Zen mode condition - line one: time duration in minutes (short version). [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - line one: time duration in hours. [CHAR LIMIT=NONE] -->
+  <plurals name="zen_mode_duration_hours">
+    <item quantity="one">Fir eng Stonn</item>
+    <item quantity="other">Fir %d Stonnen</item>
+  </plurals>
   <!-- Zen mode condition - line one: time duration in hours (short version). [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - line two: ending time. [CHAR LIMIT=NONE] -->
   <string name="zen_mode_until">Bis <xliff:g id="formattedTime" example="10:00 PM">%1$s</xliff:g></string>

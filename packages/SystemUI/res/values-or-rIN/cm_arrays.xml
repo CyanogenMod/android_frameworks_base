@@ -17,6 +17,24 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Cardinal directions for the compass tile -->
+  <string-array name="cardinal_directions">
+    <item>ଊ</item>
+    <!-- North -->
+    <item>ଊ.ପୂ</item>
+    <!-- North east -->
+    <item>ପୂ</item>
+    <!-- East -->
+    <item>ଦ.ପୂ</item>
+    <!-- South east -->
+    <item>ଦ</item>
+    <!-- South -->
+    <item>ଦ.ପ</item>
+    <!-- South west -->
+    <item>ପ</item>
+    <!-- West -->
+    <item>ଊ.ପ</item>
+    <!-- North west -->
+  </string-array>
   <!-- Performance profiles description-->
   <!-- Performance profiles announcement-->
   <!-- Dynamic tiles -->

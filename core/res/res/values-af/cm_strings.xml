@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB &amp; netwerk</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Netwerk</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">Toegang tot tema diens</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">onderskep program begin</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Laat \'n program toe om toegang na die tema diens te verkry. Moet nooit nodig wees vir normale programme nie.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">lees jou tema inligting</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Laat die program toe om jou temas te lees en bepaal watter tema jy toegepas het.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">verander jou temas</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Laat die program toe om nuwe temas by te voeg en verander die tema wat jy toegepas het.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Kon nie tema installeer</string>
-  <string name="theme_install_error_message">%s kon nie geïnstalleer word nie</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s is nie geïnstalleer nie</string>
-  <string name="theme_reset_notification_title">Tema herstel</string>
-  <string name="theme_reset_notification_body">Stelsel tema is herstel a.g.v. baie program foute.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioriteit</string>
   <string name="silent_mode_none">Geen</string>
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Battery vol gelaai</string>
   <string name="notify_battery_fully_charged_text">Diskonnekteer jou toestel van die laaier om die battery lewe te verleng.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">herstel battery statistieke</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data te herstel.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM kaarte het verander</string>
+  <string name="uicc_hot_swapped_event_text">Raak om SIM kaart standaard opsies te stel</string>
 </resources>

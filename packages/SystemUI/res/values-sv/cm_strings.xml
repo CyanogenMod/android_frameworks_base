@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profiler inaktiverad</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Strömsparläge</string>
+  <string name="quick_settings_caffeine_label">Koffein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synk av.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up avslaget.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up påslaget.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Koffein av.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Koffein på.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Strömsparläge är inaktiverat.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -208,4 +213,11 @@
   <string name="quick_settings_tile_flashlight_not_title">Ficklampan är på</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tryck för att stänga av</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="other">%1$d klienter</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dockningsstationens batteri<xliff:g id="number">%d</xliff:g> procent.</string>
 </resources>

@@ -186,4 +186,7 @@
   <!-- Hotspot dialog message -->
   <!-- Notification which notifies user flashlight is enabled -->
   <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Modul batareya faizi <xliff:g id="number">%d</xliff:g>.</string>
 </resources>

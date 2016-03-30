@@ -26,7 +26,7 @@
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">Модифициране на списъка със защитени SMS</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_modifyProtectedSmsList">Разрешава на приложението да модифицира списъка с контакти на защитените SMS.</string>
+  <string name="permdesc_modifyProtectedSmsList">Разрешава на приложението да модифицира списъка с контакти на защитените SMS съобщения.</string>
   <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Сигурност</string>
   <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -51,7 +51,7 @@
   <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Рестартиране</string>
   <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
-  <string name="reboot_recovery">Възстановяване</string>
+  <string name="reboot_recovery">Режим на възстановяване</string>
   <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Буутлоудър</string>
   <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB &amp; мрежа</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Мрежа</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">достъп до темите</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Прихвани стартиращите приложения</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Разрешение на едно приложение за достъп до темите. Никога не трябва да бъде необходимо за обикновените приложения.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">прочетете информацията за темите</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Разрешава на приложението да чете вашите теми и да определя коя тема сте приложили.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">Модифициране на темите</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Разрешава на приложението да вмъкне нови теми и да модифицира темата, която сте приложили.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Провалено инсталиране на тема</string>
-  <string name="theme_install_error_message">%s не успя да се инсталира</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s не е инсталиран</string>
-  <string name="theme_reset_notification_title">Нулиране на темата</string>
-  <string name="theme_reset_notification_body">Стандартната тема е възстановена поради множество грешки.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Приоритет</string>
   <string name="silent_mode_none">Без</string>
@@ -144,7 +127,7 @@
   <string name="app_ops_read_clipboard">прегледай клипборда</string>
   <string name="app_ops_read_contacts">прегледай контактите</string>
   <string name="app_ops_read_mms">прегледай MMS съобщенията</string>
-  <string name="app_ops_read_sms">прегледай SMS съобщенията</string>
+  <string name="app_ops_read_sms">прегледайте вашите SMS съобщения</string>
   <string name="app_ops_receive_sms">получихте SMS съобщение</string>
   <string name="app_ops_record_audio">записване на звук</string>
   <string name="app_ops_send_mms">Изпращане на MMS съобщение</string>
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Батерията е напълно заредена</string>
   <string name="notify_battery_fully_charged_text">Изключете зарядното устройството за да удължите живота на батерията.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Зануляване статистиката на батерията</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Позволява заявление да рестартирате текущите данни за използването на ниско ниво на батерията.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">СИМ картите са променени</string>
+  <string name="uicc_hot_swapped_event_text">Докоснете за да зададете настройките по подразбиране на СИМ картата</string>
 </resources>

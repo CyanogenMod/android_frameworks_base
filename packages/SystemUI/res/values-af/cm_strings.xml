@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profiele is afgeskakel</string>
   <string name="quick_settings_heads_up_label">Loer boodskap</string>
   <string name="quick_settings_battery_saver_label">Battery bespaarder</string>
+  <string name="quick_settings_caffeine_label">Kafeïen</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinchronisering af.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Loer boodskap is afgeskakel.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Loer boodskap is aangeskakel.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Kafeïen af.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Kafeïen aan.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Battery bespaarder af.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,4 +212,13 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Flitslig is aan</string>
   <string name="quick_settings_tile_flashlight_not_summary">Raak om af te skakel</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="other">%1$d kliente</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Geen data SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dok Battery <xliff:g id="number">%d</xliff:g> persent.</string>
 </resources>

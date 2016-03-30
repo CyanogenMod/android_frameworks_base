@@ -42,7 +42,7 @@
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">nastavitev slike ozadja keyguard</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">Dovoli aplikaciji spreminjanje slike ozadja zaslona za zaklepanje.</string>
+  <string name="permdesc_setKeyguardWallpaper">Dovoli aplikaciji spreminjanje slike ozadja zaklenjenega zaslona.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Ponovno zaženi</string>
   <!-- label for current user in phone options dialog -->
@@ -79,29 +79,10 @@
   <string name="adb_active_custom_tile_both">USB in omrežje</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Omrežje</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">dostop do storitev tem</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">prestrezanje zagona aplikacije</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Dovoli aplikaciji dostop do storitve tem. Navadno ni potrebno za običajne aplikacije.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">branje podatkov o vaši temi</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Dovoli aplikaciji branje vaših tem in
-       določanje, katero temo uporabljate.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">spreminjanje tem</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Dovoli aplikaciji vstavljanje novih tem in
-       spreminjanje uporabljene teme.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Namestitev teme je spodletela</string>
-  <string name="theme_install_error_message">Namestitev %s je spodletela</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ni nameščen</string>
-  <string name="theme_reset_notification_title">Ponastavitev theme</string>
-  <string name="theme_reset_notification_body">Sistemska tema obnovljena zaradi večkratnih sesutij aplikacije.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prednost</string>
   <string name="silent_mode_none">Brez</string>
@@ -212,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Baterija napolnjena</string>
   <string name="notify_battery_fully_charged_text">Odklopite napravo iz polnilca za izboljšanje življenjske dobe baterije.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">ponastavitev statistike baterije</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Dovoli aplikaciji ponastavitev trenutnih podatkov uporabe baterije ob nizkem stanju.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Kartice SIM so se spremenile</string>
+  <string name="uicc_hot_swapped_event_text">Tapnite, da nastavite privzete nastavitve kartice SIM</string>
 </resources>

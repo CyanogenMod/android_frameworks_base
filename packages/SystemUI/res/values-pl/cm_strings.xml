@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profile wyłączone</string>
   <string name="quick_settings_heads_up_label">Wyskakujące powiadomienia</string>
   <string name="quick_settings_battery_saver_label">Oszczędzanie baterii</string>
+  <string name="quick_settings_caffeine_label">Kofeina</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchronizacja wyłączona.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Wyskakujące powiadomienia zostały wyłączone.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Wyskakujące powiadomienia zostały włączone.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Kofeina wył.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Kofeina wł.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Oszczędzanie baterii wył.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,4 +212,13 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Latarka jest włączona</string>
   <string name="quick_settings_tile_flashlight_not_summary">Dotknij, aby wyłączyć</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="few">%1$d klientów</item>
+    <item quantity="other">%1$d klientów</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Bateria stacji dokującej <xliff:g id="number">%d</xliff:g> procent.</string>
 </resources>

@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profielen uitgeschakeld</string>
   <string name="quick_settings_heads_up_label">Heads-up</string>
   <string name="quick_settings_battery_saver_label">Accubesparing</string>
+  <string name="quick_settings_caffeine_label">Cafeïne</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchr. uit.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads-up uitgeschakeld.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads-up ingeschakeld.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Cafeïne uit.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Cafeïne aan.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Accubesparing uit.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,4 +212,12 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Zaklamp staat aan</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tik om uit te schakelen</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d client</item>
+    <item quantity="other">%1$d clients</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
 </resources>

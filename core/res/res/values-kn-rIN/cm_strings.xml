@@ -79,29 +79,10 @@
   <string name="adb_active_custom_tile_both">ಯುಎಸ್‍ಬಿ &amp; ನೆಟ್‍ವರ್ಕ್</string>
   <string name="adb_active_custom_tile_usb">ಯುಎಸ್‍ಬಿ</string>
   <string name="adb_active_custom_tile_net">ನೆಟ್‍ವರ್ಕ್</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">ಥೀಮ್ ಸೇವೆಗೆ ಪ್ರವೇಶ</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ಆಪ್ ಆರಂಭ ಪ್ರತಿಬಂಧ</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">ಆಪ್‍ಗೆ ಥೀಮ್ ಸೇವೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಅನುಮತಿಸು. ಸಾಮಾನ್ಯ ಆಪ್‍ಗಳಿಗೆ ಇದರ ಅವಶ್ಯಕತೆ ಇರುವುದಿಲ್ಲ.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">ನಿಮ್ಮ ಥೀಮ್‍ನ ಮಾಹಿತಿಯನ್ನು ಓದು</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">ಆಪ್‍ಗೆ ನಿಮ್ಮ ಥೀಮ್‍ಗಳನ್ನು ಓದಲು ಅನುಮತಿಸುತ್ತದೆ ಮತ್ತು
-       ನೀವು ಯಾವ ಥೀಮ್ ಅನ್ವಯಿಸಿದ್ದೀರಿ ಎಂದು ನಿರ್ಧರಿಸುತ್ತದೆ.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">ನಿಮ್ಮ ಥೀಮ್ಸನ್ನು ಮಾರ್ಪಡಿಸು</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">ಆಪ್‍ಗೆ ಹೊಸ ಥೀಮ್‍ಗಳನ್ನು ಸೇರಿಸಲು ಅನುಮತಿಸುತ್ತದೆ ಮತ್ತು
-       ನೀವು ಅನ್ವಯಿಸಿರುವ ಥೀಮ್‍ನ್ನು ಮಾರ್ಪಡಿಸುತ್ತದೆ.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">ಥೀಮ್ ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
-  <string name="theme_install_error_message">%s ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ಸ್ಥಾಪಿತವಾಗಿಲ್ಲ</string>
-  <string name="theme_reset_notification_title">ಥೀಮ್ ಮರುಹೊಂದಿಕೆ</string>
-  <string name="theme_reset_notification_body">ಬಹು ಆಪ್ ಕ್ರಾಶ್‍ನ ಕಾರಣದಿಂದಾಗಿ ಸಿಸ್ಟಂ ಥೀಮನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲಾಗಿದೆ.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">ಆದ್ಯತೆ</string>
   <string name="silent_mode_none">ಶೂನ್ಯ</string>
@@ -154,7 +135,9 @@
   <string name="app_ops_start_at_bootup">ಪವರ್ ಅಪ್ ವೇಳೆ ಆರಂಭವಾಗು</string>
   <string name="app_ops_toast_window">ಟೋಸ್ಟ್ ಸಂದೇಶಗಳನ್ನು ಪ್ರದರ್ಶಿಸು</string>
   <string name="app_ops_toggle_bluetooth">ಟಾಗಲ್ ಬ್ಲೂಟೂತ್</string>
+  <string name="app_ops_toggle_mobile_data">ಮೊಬೈಲ್ ಡಾಟಾ ಟಾಗಲ್ ಮಾಡು</string>
   <string name="app_ops_toggle_nfc">ಟಾಗಲ್ NFC</string>
+  <string name="app_ops_toggle_wifi">Wi-Fi ಟಾಗಲ್ ಮಾಡು</string>
   <string name="app_ops_use_alarm_volume">ಅಲಾರಂ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_audio_focus">ಆಡಿಯೋ ಫೋಕಸ್ ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_use_bluetooth_volume">ಬ್ಲೂಟೂತ್ ವಾಲ್ಯೂಂ ನಿಯಂತ್ರಿಸು</string>
@@ -167,6 +150,21 @@
   <string name="app_ops_use_voice_volume">ಧ್ವನಿ ಕರೆ ವಾಲ್ಯೂಂನ್ನು ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_write_mms">ಎಂಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
   <string name="app_ops_write_sms">ಎಸ್ಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
+  <string name="app_ops_use_fingerprint">ಬೆರಳಚ್ಚು ಉಪಯೋಗಿಸು</string>
+  <string name="app_ops_add_voicemail">ಒಂದು ವಾಯ್ಸ್‌ಮೇಲ್‌ ಸೇರಿಸಿ</string>
+  <string name="app_ops_read_phone_state">ಫೋನ್‌ ಸ್ಥಿತಿ ಅಕ್ಸೆಸ್‌ ಮಾಡಿ</string>
+  <string name="app_ops_scan_wifi">Wi-Fi ನೆಟ್‌ವರ್ಕ್‌ಗಳನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</string>
+  <string name="app_ops_change_wallpaper">ವಾಲ್‌ಪೇಪರ್‌ ಬದಲಿಸಿ</string>
+  <string name="app_ops_assist_structure">ಅಸಿಸ್ಟ್‌ ರಚನೆ ಬಳಸಿ</string>
+  <string name="app_ops_assist_screenshot">ಸ್ಕ್ರೀನ್‌ಶಾಟ್‌ ತೆಗೆದುಕೊಳ್ಳಿ</string>
+  <string name="app_ops_use_body_sensors">ಬಾಡಿ ಸೆನ್ಸರ್ ಗಳನ್ನು ಉಪಯೋಗಿಸು</string>
+  <string name="app_ops_read_cell_broadcasts">ಸೆಲ್ ಬ್ರಾಡ್ ಕ್ಯಾಸ್ಟ್ ಗಳನ್ನು ಓದು</string>
+  <string name="app_ops_mock_location">ನಿಮ್ಮ ಸ್ಥಳ ಅಣಕು ಮಾಡಿ</string>
+  <string name="app_ops_read_external_storage">ಬಾಹ್ಯ ಸಂಗ್ರಹ ಓದು</string>
+  <string name="app_ops_write_external_storage">ಬಾಹ್ಯ ಸಂಗ್ರಹವನ್ನು ಬರೆಯಿರಿ</string>
+  <string name="app_ops_turn_on_screen">ಸ್ಕ್ರೀನ್ ಆನ್ ಮಾಡಿ</string>
+  <string name="app_ops_get_accounts">ಸಾಧನ ಖಾತೆಗಳನ್ನು ಪಡೆಯಿರಿ</string>
+  <string name="app_ops_wifi_change">ವೈಫೈ ಸ್ಥಿತಿ ಬದಲಿಸಿ</string>
   <string name="app_ops_su">ರೂಟ್ ಪ್ರವೇಶ ಪಡೆ</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">ಪರದೆಯನ್ನು ಅನ್‍ಪಿನ್‍ಮಾಡಲು, ಹಿಂದೆ ಬಟನ್‍ ಸ್ಪರ್ಶಿಸಿ ಹಿಡಿಯಿರಿ.</string>
@@ -190,5 +188,16 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">ಆಕ್ಟಿವಿಟಿ ಲಾಂಚ್‌ ಬ್ಲಾಕ್‌ ಆಗಿದೆ</string>
+  <string name="notify_package_component_protected_text">ಲಾಂಚ್‌ ಆಗುವುದರಿಂದ <xliff:g id="app_name">%1$s</xliff:g> ಸಂರಕ್ಷಿಸಲ್ಪಟ್ಟಿದೆ ದೃಢೀಕರಿಸಲು ತಟ್ಟಿ ಮತ್ತು ಅಪ್ಲಿಕೇಶನ್‌ ಲಾಂಚ್‌ ಮಾಡಿ.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">ಬ್ಯಾಟರಿ ಸಂಪೂರ್ಣವಾಗಿ ಚಾರ್ಜಾಗಿದೆ</string>
+  <string name="notify_battery_fully_charged_text">ಬ್ಯಾಟರಿ ದೀರ್ಘಾಯುಷ್ಯ ಸುಧಾರಿಸಲು ಚಾರ್ಜರ್ ನಿಂದ ನಿಮ್ಮ ಸಾಧನವನ್ನು ಕಡಿತಗೊಳಿಸಿ.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">ಬ್ಯಾಟರಿ ಅಂಕಿಅಂಶಗಳನ್ನು ಮರುಹೊಂದಿಸು</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">ಒಂದು ಅಪ್ಲಿಕೇಶನ್‍ಗೆ ಪ್ರಸ್ತುತ ಕಡಿಮೆ-ಮಟ್ಟದ ಬ್ಯಾಟರಿ ಬಳಕೆ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

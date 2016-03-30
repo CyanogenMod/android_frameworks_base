@@ -66,7 +66,7 @@
   <string name="quick_settings_compass_init">Стартиране на\u2026</string>
   <!-- Lights settings, LED notification -->
   <string name="led_notification_title">Настройки на светлината</string>
-  <string name="led_notification_text">Светлините индикации са разрешени от настройките</string>
+  <string name="led_notification_text">Светлинните индикации са разрешени от настройките</string>
   <string name="qs_tile_edit_header_instruction">Натиснете и задръжте плочка за да я пренаредите или премахнете</string>
   <string name="quick_settings_edit_label">Редактиране на плочки</string>
   <string name="quick_settings_cannot_delete_edit_tile">Не може да изтрие редактираната на плочка</string>
@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Деактивирани профили</string>
   <string name="quick_settings_heads_up_label">Изскачащи известия</string>
   <string name="quick_settings_battery_saver_label">Пестене на батерия</string>
+  <string name="quick_settings_caffeine_label">Кофеин</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Изключена синхронизация.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Изскачащите известия са изключени.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Изскачащите известия са включени.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Кофеин изключен.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Кофеин включен.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Режим за пестене на батерията изключен.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,4 +212,13 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Фенерчето е включено</string>
   <string name="quick_settings_tile_flashlight_not_summary">Натиснете, за изключване</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d клиент</item>
+    <item quantity="other">%1$d клиента</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">СИМ картата не е конфигурирана</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Док батерия <xliff:g id="number">%d </xliff:g> процента.</string>
 </resources>

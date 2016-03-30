@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profilok letiltva</string>
   <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
   <string name="quick_settings_battery_saver_label">Akkumulátor kímélő</string>
+  <string name="quick_settings_caffeine_label">Caffeine</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Szinkronizálás ki.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Lebegő értesítés kikapcsolva.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Lebegő értesítés bekapcsolva.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Caffeine ki.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Caffeine be.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Akkumulátor kímélő ki.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -208,4 +213,12 @@
   <string name="quick_settings_tile_flashlight_not_title">Zseblámpa bekapcsolva</string>
   <string name="quick_settings_tile_flashlight_not_summary">Kikapcsoláshoz érintse meg</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d kliens</item>
+    <item quantity="other">%1$d kliens</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Nincs adat SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> százalék.</string>
 </resources>

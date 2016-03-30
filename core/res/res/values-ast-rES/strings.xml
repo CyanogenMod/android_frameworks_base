@@ -113,6 +113,10 @@
   <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
   <string name="enablePin">Error, habilitar bloquéu de SIM/RUIM.</string>
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+  <plurals name="pinpuk_attempts">
+    <item quantity="one">Quédate <xliff:g id="NUMBER">%d</xliff:g> intentu pa bloquiar la tarxeta SIM.</item>
+    <item quantity="other">Quédente <xliff:g id="NUMBER">%d</xliff:g> intentos pa bloquiar la tarxeta SIM.</item>
+  </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <string name="imei">IMEI</string>
   <!-- Title for the dialog used to display the user's MEID number on CDMA network
@@ -474,7 +478,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBar">Permite que l\'aplicación inhabilite la barra d\'estáu o amieste y desanicie iconos del sistema.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_statusBarService">barra d\'estáu</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBarService">Permite que l\'aplicación apaeza na barra d\'estáu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -606,7 +609,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeCallLog" product="default">Permite que l\'aplicación modifique\'l rexistru de llamaes del teléfonu, incluyíos datos sobre llamaes entrantes y salientes. Les aplicaciones malintencionaes puen usar esti permisu pa desaniciar o modificar el rexistru de llamaes.</string>
   <!-- Title of the body sensors permission, listed so the user can decide whether to allow the application to access body sensor data. [CHAR LIMIT=30] -->
-  <string name="permlab_bodySensors">sens. corp. (mon. frec. card.)</string>
   <!-- Description of the body sensors permission, listed so the user can decide whether to allow the application to access data from body sensors. [CHAR LIMIT=NONE] -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readCalendar">lleer eventos de calendariu ya información confidencial</string>
@@ -624,11 +626,9 @@
   <string name="permlab_accessLocationExtraCommands">acceder a comandos de fornidor de llocalización adicional</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFineLocation">llocalización precisa (basada en rede y GPS)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFineLocation">Permite que l\'aplicación obtenga la to llocalización precisa per duana del Sistema de posicionamientu global (GPS) o fontes de llocalización de rede, como torres de telefonía y redes Wi-Fi. Estos servicios de llocalización tienen de tar activaos y disponibles pa que l\'aplicación pueda usalos. Les aplicaciones puen usar esti permisu pa determinar la to llocalización y ye dable que\'l preséu consuma más batería.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessCoarseLocation">llocalización aproximada (basada en rede)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessCoarseLocation">Permite que l\'aplicación obtenga la to llocalización aproximada. Esta llocalización remanez de los servicios de llocalización qu\'usen fontes de llocalización de rede, como torres de telefonía y redes Wi-Fi. Estos servicios de llocalización tienen de tar activaos y disponibles pa que l\'aplicación pueda usalos. Les aplicaciones puen usar esti permisu pa determinar la to llocalización de mou aproximáu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -640,7 +640,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_recordAudio">Permite que l\'aplicación grabe audiu col micrófonu. L\'aplicación pue usar esti permisu pa grabar audiu en cualquier momentu ensin tener la confirmación del usuariu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_sim_communication">comunicación cola tarxeta SIM</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_sim_communication">Permite que l\'aplicación unvie comandos a la tarxeta SIM. Esti permisu YE MUI PELIGROSU.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -709,7 +708,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessNetworkState">Permite que l\'aplicación vea información sobre conexones de rede (por exemplu, qué redes esisten y tán coneutaes).</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_createNetworkSockets">accesu completu a rede</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_createNetworkSockets">Permite que l\'aplicación cree sockets de rede y use protocolos de rede personalizaos. El restolador web y otres aplicaciones proporcionen los medios necesarios pal unviu de datos a Internet, polo que nun fai falta usar esti permisu pa eso.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -743,7 +741,6 @@
   <string name="permdesc_bluetoothAdmin" product="default">Permite que l\'aplicación configure\'l teléfonu Bluetooth local y que deteute preseos remotos y s\'emparexe con ellos.</string>
   <string name="permlab_accessWimaxState">coneutase a WiMAX y desconeutase d\'esta red</string>
   <string name="permdesc_accessWimaxState">Permite que l\'aplicación determine si ta habilitada la conexón WiMAX y obtenga información sobre les redes WiMAX que tán coneutaes.</string>
-  <string name="permlab_changeWimaxState">Cambiar estáu de WiMAX</string>
   <string name="permdesc_changeWimaxState" product="tablet">Permite que l\'aplicación coneute la tablet a redes WiMAX y la desconeute d\'elles.</string>
   <string name="permdesc_changeWimaxState" product="default">Permite que l\'aplicación coneute\'l teléfonu a redes WiMAX y lu desconeute d\'elles.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -873,7 +870,6 @@
   <string name="permlab_accessDrmCertificates">acceder a certificaos DRM</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessDrmCertificates">Permite a la app dar y usar certificaos DRM. Nun tendría de ser necesario pa les aplicaciones normales.</string>
-  <string name="permlab_handoverStatus">Recibir estáu de tresferencies d\'Android Beam</string>
   <string name="permdesc_handoverStatus">Permite qu\'esta app reciba información tocante a les tresferencies actuales d\'Android Beam</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_removeDrmCertificates">desaniciar certificaos DRM</string>
@@ -1630,8 +1626,20 @@
   <!-- Appened to express the value is this unit of time. -->
   <string name="years">años</string>
   <!-- Phrase describing a time duration using seconds [CHAR LIMIT=16] -->
+  <plurals name="duration_seconds">
+    <item quantity="one">1 segundu</item>
+    <item quantity="other"><xliff:g id="COUNT">%d</xliff:g> segundos</item>
+  </plurals>
   <!-- Phrase describing a time duration using minutes [CHAR LIMIT=16] -->
+  <plurals name="duration_minutes">
+    <item quantity="one">1 minutu</item>
+    <item quantity="other"><xliff:g id="COUNT">%d</xliff:g> minutos</item>
+  </plurals>
   <!-- Phrase describing a time duration using hours [CHAR LIMIT=16] -->
+  <plurals name="duration_hours">
+    <item quantity="one">1 hora</item>
+    <item quantity="other"><xliff:g id="COUNT">%d</xliff:g> hores</item>
+  </plurals>
   <!-- Title for error alert when a video cannot be played.  it can be used by any app. -->
   <string name="VideoView_error_title">Incidencies col videu</string>
   <!-- Text for error alert when a video container is not valid for progressive download/playback. -->
@@ -1861,7 +1869,15 @@
   <!-- If there is ever a ringtone set for some setting, but that ringtone can no longer be resolved, t his is shown instead.  For example, if the ringtone was on a SD card and it had been removed, this woudl be shown for ringtones on that SD card. -->
   <string name="ringtone_unknown">Tonu desconocíu</string>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's title. -->
+  <plurals name="wifi_available">
+    <item quantity="one">Rede Wi-Fi disponible</item>
+    <item quantity="other">Redes Wi-Fi disponibles</item>
+  </plurals>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's message. -->
+  <plurals name="wifi_available_detailed">
+    <item quantity="one">Rede Wi-Fi abierta disponible</item>
+    <item quantity="other">Redes Wi-Fi abiertes disponibles</item>
+  </plurals>
   <!-- A notification is shown when a wifi captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
@@ -2069,11 +2085,9 @@
   <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
   <string name="activity_list_empty">Nun s\'atopó nenguna actividá coincidente.</string>
   <!-- Title of an application permission that lets an application route media output. -->
-  <string name="permlab_route_media_output">Dirixir salida de mediu</string>
   <!-- Description of an application permission that lets an application route media output. -->
   <string name="permdesc_route_media_output">Permite que l\'aplicación dirixa salides de medios a otros preseos esternos.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
-  <string name="permlab_readInstallSessions">Consultar sesiones d\'instalación</string>
   <!-- Description of an application permission that lets it read install sessions. -->
   <string name="permdesc_readInstallSessions">Permite qu\'una aplicación consulte sesiones d\'instalación pa ver detalles tocante a instalaciones de paquetes activos.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
@@ -2177,6 +2191,12 @@
   <string name="find_on_page">Guetar na páxina</string>
   <!-- Displayed on the Find dialog to display the index of the highlighted
          match and total number of matches found in the current page. [CHAR LIMIT=NONE] -->
+  <plurals name="matches_found">
+    <!-- Case of one match -->
+    <item quantity="one">Una coincidencia</item>
+    <!-- Case of multiple total matches -->
+    <item quantity="other"><xliff:g id="INDEX">%d</xliff:g> de <xliff:g id="TOTAL">%d</xliff:g></item>
+  </plurals>
   <!-- Label for the "Done" button on the far left of action mode toolbars. -->
   <string name="action_mode_done">Listo</string>
   <!-- Strings for MasterClearReceiver. -->
@@ -2761,6 +2781,10 @@
   <string name="restr_pin_error_too_short">El PIN ye enforma curtiu. Tien de tener al menos 4 díxitos.</string>
   <!-- PIN entry dialog countdown message for next chance to enter the PIN [CHAR LIMIT=none] -->
   <!-- Phrase describing a time duration using seconds [CHAR LIMIT=none] -->
+  <plurals name="restr_pin_countdown">
+    <item quantity="one">Inténtalo en 1 s</item>
+    <item quantity="other">Inténtalo en <xliff:g id="COUNT">%d</xliff:g> s</item>
+  </plurals>
   <!-- PIN entry dialog tells the user to not enter a PIN for a while. [CHAR LIMIT=none] -->
   <string name="restr_pin_try_later">Volver a intentalo dempués</string>
   <!-- Cling help message title when hiding the navigation bar entering immersive mode [CHAR LIMIT=none] -->
@@ -2827,8 +2851,16 @@
   <!-- Zen mode condition - summary: time duration in hours. [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - summary: time duration in hours (short version). [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - line one: time duration in minutes. [CHAR LIMIT=NONE] -->
+  <plurals name="zen_mode_duration_minutes">
+    <item quantity="one">Mientres un minutu</item>
+    <item quantity="other">Mientres %d minutos</item>
+  </plurals>
   <!-- Zen mode condition - line one: time duration in minutes (short version). [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - line one: time duration in hours. [CHAR LIMIT=NONE] -->
+  <plurals name="zen_mode_duration_hours">
+    <item quantity="one">Mientres una hora</item>
+    <item quantity="other">Mientres %d hores</item>
+  </plurals>
   <!-- Zen mode condition - line one: time duration in hours (short version). [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - line two: ending time. [CHAR LIMIT=NONE] -->
   <!-- Zen mode condition - line one: Until next alarm. [CHAR LIMIT=NONE] -->

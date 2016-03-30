@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB &amp; δίκτυο</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Δίκτυο</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">πρόσβαση στην υπηρεσία θεμάτων</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">παρεμπόδιση έναρξης εφαρμογών</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία θεμάτων. Δεν πρέπει να απαιτείται από κανονικές εφαρμογές.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">ανάγνωση πληροφοριών του θέματος σας</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Επιτρέπει στην εφαρμογή να διαβάζει τα θέματα σας και να προσδιορίσει ποιο θέμα έχετε εφαρμόσει.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">τροποποίηση των θεμάτων σας</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Επιτρέπει στην εφαρμογή να εισάγει νέα θέματα και να τροποποιήσει το θέμα που έχετε εφαρμόσει.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Αποτυχία εγκατάστασης του θέματος</string>
-  <string name="theme_install_error_message">Αποτυχία εγκατάστασης του %s</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">Το %s δεν είναι εγκατεστημένο</string>
-  <string name="theme_reset_notification_title">Επαναφορά θέματος</string>
-  <string name="theme_reset_notification_body">Έγινε επαναφορά του θέματος συστήματος λόγω πολλαπλών σφαλμάτων εφαρμογών.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Προτεραιότητα</string>
   <string name="silent_mode_none">Κανένα</string>
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Μπαταρία πλήρως φορτισμένη</string>
   <string name="notify_battery_fully_charged_text">Αποσυνδέστε τη συσκευή από το φορτιστή για να βελτιώσετε τη μακροζωία της μπαταρίας.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">επαναφορά στατιστικών μπαταρίας</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Επιτρέπει σε μια εφαρμογή να κάνει επαναφορά τα χαμηλού επιπέδου δεδομένα χρήσης μπαταρίας.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Οι κάρτες SIM έχουν αλλάξει</string>
+  <string name="uicc_hot_swapped_event_text">Πατήστε για να ορίσετε τις προεπιλεγμένες προτιμήσεις των καρτών</string>
 </resources>

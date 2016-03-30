@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Профили онемогућени</string>
   <string name="quick_settings_heads_up_label">Искачуће поруке</string>
   <string name="quick_settings_battery_saver_label">Уштеда батерије</string>
+  <string name="quick_settings_caffeine_label">Кофеин</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Искачуће поруке ће бити искључене.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Искачуће поруке ће бити укључене.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Кофеин је искључен.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Кофеин је укључен.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Уштеда батерије искључена.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,4 +212,13 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Блиц је укључен</string>
   <string name="quick_settings_tile_flashlight_not_summary">Додирни да угасиш</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d клијент</item>
+    <item quantity="few">%1$d клијента</item>
+    <item quantity="other">%1$d клијента</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
 </resources>

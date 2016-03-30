@@ -70,6 +70,7 @@
   <string name="qs_tile_edit_header_instruction">Tryk og hold, for at flytte fliserne</string>
   <string name="quick_settings_edit_label">Redigér fliser</string>
   <string name="quick_settings_cannot_delete_edit_tile">Kan ikke slette Redigér-flisen</string>
+  <string name="qs_tiles_reset_confirmation">Nulstil indstillinger for hurtig tiles til standardkonfiguration?</string>
   <string name="quick_settings_tile_reset_to_default">Nulstil til standardlayout</string>
   <string name="quick_settings_title_header">Overskrift</string>
   <string name="quick_settings_title_tiles">Fliser</string>
@@ -87,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profiler deaktiveret</string>
   <string name="quick_settings_heads_up_label">Svævende meddelelser</string>
   <string name="quick_settings_battery_saver_label">Strømsparetilstand</string>
+  <string name="quick_settings_caffeine_label">Koffein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synkr. fra.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -153,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Svævende meddelelser er slået fra.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Svævende meddelelser er slået til.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Koffein fra.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Koffein til.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Strømsparetilstand fra.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -177,6 +183,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ændret til dag tilstand.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ændret til nat tilstand.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ændret til udendørstilstand.</string>
+  <string name="quick_settings_title_advanced_location">Lokation via triangulering</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Placeringsrapportering: Batterisparetilstand.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -206,4 +213,12 @@
   <string name="quick_settings_tile_flashlight_not_title">Lommelygten er tændt</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tryk for at slukke</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klient</item>
+    <item quantity="other">%1$d klienter</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Ingen data-SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dockingstations batteri <xliff:g id="number">%d</xliff:g> procent.</string>
 </resources>

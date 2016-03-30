@@ -181,11 +181,19 @@
   <string name="kg_password_wrong_pin_code_pukked">Códigu PIN de la tarxeta SIM incorreutu. Tienes de contautar col to operador pa desbloquiar el preséu.</string>
   <!-- Instructions telling the user that they entered the wrong SIM PIN while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_pin_code">
+    <item quantity="one">Códigu PIN de la tarxeta SIM incorreutu. Queda <xliff:g id="NUMBER">%d</xliff:g> intentu pa tener que ponete en contautu col to operador pa desbloquiar el preséu.</item>
+    <item quantity="other">Códigu PIN de la tarxeta SIM incorreutu. Queden <xliff:g id="NUMBER">%d</xliff:g> intentos.</item>
+  </plurals>
   <!-- Instructions telling the user that they have exhausted SIM PUK retries and the SIM is now unusable.
          Displayed in a dialog box.  -->
   <string name="kg_password_wrong_puk_code_dead">La tarxeta SIM nun pue usase. Ponte en contautu col to operador.</string>
   <!-- Instructions telling the user that they entered the wrong puk while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_puk_code">
+    <item quantity="one">Códigu PUK de la tarxeta SIM incorreutu. Quédate <xliff:g id="NUMBER">%d</xliff:g> intentu pa que la tarxeta SIM nun pueda usase de mou permanente.</item>
+    <item quantity="other">Códigu PUK de la tarxeta SIM incorreutu. Quédente <xliff:g id="NUMBER">%d</xliff:g> intentos pa que la tarxeta SIM nun pueda usase de mou permanente.</item>
+  </plurals>
   <!-- Instructions telling the user that the operation to unlock the keyguard
          with SIM PIN failed. Displayed in one line in a large font.  -->
   <string name="kg_password_pin_failed">Fallu al intentar desbloquiar la tarxeta SIM col códigu PIN</string>

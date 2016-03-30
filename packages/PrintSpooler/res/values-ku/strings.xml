@@ -95,6 +95,10 @@
   <!-- Title of the menu item to forget a printer. [CHAR LIMIT=25] -->
   <string name="print_forget_printer">چاپکەر لەیادکە</string>
   <!-- Utterance to announce a change in the number of matches during a search. This is spoken to a blind user. [CHAR LIMIT=none] -->
+  <plurals name="print_search_result_count_utterance">
+    <item quantity="one"><xliff:g id="count" example="1">%1$s</xliff:g> چاپکەری دۆزراوە</item>
+    <item quantity="other"><xliff:g id="count" example="2">%1$s</xliff:g> چاپکەرەکانی دۆزراوە</item>
+  </plurals>
   <!-- Add printer dialog  -->
   <!-- Title for the alert dialog for selecting a print service. [CHAR LIMIT=50] -->
   <string name="choose_print_service">خزمەتگوزاریی چاپکردن هەڵبژێرە</string>
@@ -112,6 +116,10 @@
   <!-- Template for the notification label for a blocked print job. [CHAR LIMIT=25] -->
   <string name="blocked_notification_title_template">چاپکەر بەستراوە <xliff:g id="print_job_name" example="foo.jpg">%1$s</xliff:g></string>
   <!-- Template for the notification label for a composite (multiple items) print jobs notification. [CHAR LIMIT=25] -->
+  <plurals name="composite_notification_title_template">
+    <item quantity="one"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g>کاری چاپکردن</item>
+    <item quantity="other"><xliff:g id="print_job_name" example="foo.jpg">%1$d</xliff:g> کارەکانی چاپکردن</item>
+  </plurals>
   <!-- Label for the notification button for cancelling a print job. [CHAR LIMIT=25] -->
   <string name="cancel">هەڵوەشانەوە</string>
   <!-- Label for the notification button for restarting a filed print job. [CHAR LIMIT=25] -->

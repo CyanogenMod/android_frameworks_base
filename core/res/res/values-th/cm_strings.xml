@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB &amp; เครือข่าย</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">เครือข่าย</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">เข้าถึงรูปแบบธีม</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ขัดขวางการเปิดแอป</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">อนุญาตให้แอปเข้าถึงรูปแบบธีมได้ ซึ่งถือว่าไม่จำเป็นในแอปปกติ</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">อ่านข้อมูลรูปแบบธีมของคุณ</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">อนุญาตให้แอปอ่านข้อมูลรูปแบบธีมและกำหนดหาว่ารูปแบบธีมใดที่คุณใช้</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">แก้ไขรูปแบบธีมของคุณ</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">อณุญาตให้แอปเพิ่มรูปแบบธีมใหม่และแก้ไขรูปแบบธีมที่คุณใช้</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">การติดตั้งรูปแบบธีมล้มเหลว</string>
-  <string name="theme_install_error_message">%s ล้มเหลวในการติดตั้ง</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ไม่ถูกติดตั้ง</string>
-  <string name="theme_reset_notification_title">รีเซ็ตรูปแบบธีม</string>
-  <string name="theme_reset_notification_body">ระบบกลับมาใช้รูปแบบธีมเดิมเนื่องจากมีหลายปัญหาที่เกิดกับแอป</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">ระดับความสำคัญ</string>
   <string name="silent_mode_none">ไม่มี</string>
@@ -207,4 +190,13 @@
   <string name="notify_package_component_protected_title">การเปิดกิจจรรมถูกบล็อก</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> ถูกป้องกันจากการเปิด แตะเพื่อยืนยันและเปิดแอป</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">แบตเตอรี่เต็มแล้ว</string>
+  <string name="notify_battery_fully_charged_text">ถอดอุปกรณ์ของคุณออกจากที่ชาร์จเพื่อเพิ่มอายุการใช้งานของแบตเตอรี่</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">รีเซ็ตสถิติแบตเตอรี่</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">อนุญาตให้แอปพลิเคชันรีเซ็ตข้อมูลการใช้แบตเตอรี่ระดับต่ำในปัจจุบัน</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

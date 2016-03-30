@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Профили отключены</string>
   <string name="quick_settings_heads_up_label">Всплывающие уведомления</string>
   <string name="quick_settings_battery_saver_label">Энергосбережение</string>
+  <string name="quick_settings_caffeine_label">Запрет сна</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Синхронизация отключена.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Всплывающие уведомления отключены.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Всплывающие уведомления включены.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Переход в спящий режим разрешён.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Переход в спящий режим запрещён.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Режим энергосбережения выключен.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,4 +212,14 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Фонарик включён</string>
   <string name="quick_settings_tile_flashlight_not_summary">Нажмите, чтобы отключить</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">Подключено %1$d устройство</item>
+    <item quantity="few">Подключены %1$d устройства</item>
+    <item quantity="other">Подключено %1$d устройств</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Нет SIM для моб.данных</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
 </resources>

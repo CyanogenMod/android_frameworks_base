@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profili disattivati</string>
   <string name="quick_settings_heads_up_label">Heads Up</string>
   <string name="quick_settings_battery_saver_label">Risparmio batteria</string>
+  <string name="quick_settings_caffeine_label">Caffeina</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronia OFF</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads Up disattivato.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads Up attivato.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Caffeina off.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Caffeina on.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Risparmio batteria OFF.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -208,4 +213,8 @@
   <string name="quick_settings_tile_flashlight_not_title">Torcia accesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tocca per spegnere</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">SIM senza dati mobili</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Batteria Dock <xliff:g id="number">%d</xliff:g> percento.</string>
 </resources>

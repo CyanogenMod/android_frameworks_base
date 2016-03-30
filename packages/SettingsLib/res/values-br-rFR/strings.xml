@@ -106,4 +106,17 @@
   <!-- Content description of the WIFI signal when it is two bars for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the WIFI signal when it is three bars for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the WIFI signal when it is full for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Label for kernel threads in battery usage -->
+  <!-- Title of data usage item that represents all uninstalled applications. [CHAR LIMIT=48] -->
+  <!-- Title of data usage item that represents all uninstalled applications or removed users. [CHAR LIMIT=48] -->
+  <!-- Tethering controls, item title to go into the tethering settings -->
+  <!-- Tethering controls, item title to go into the tethering settings when only USB tethering is available [CHAR LIMIT=25]-->
+  <!-- Tethering controls, item title to go into the tethering settings when only Wifi tethering is available [CHAR LIMIT=25]-->
+  <!-- Tethering controls, item title to go into the tethering settings when only Bluetooth tethering is available [CHAR LIMIT=25]-->
+  <!-- Tethering controls, item title to go into the tethering settings when USB and Bluetooth tethering are available [CHAR LIMIT=25]-->
+  <!-- Tethering controls, item title to go into the tethering settings when USB, Bluetooth and Wifi tethering are available [CHAR LIMIT=25]-->
+  <!-- Title for a work profile. [CHAR LIMIT=25] -->
+  <!-- Title for Guest user [CHAR LIMIT=35] -->
+  <!-- Manage apps, individual app screen, substituted for the application's label when the app's label CAN NOT be determined.-->
+  <!-- [CHAR LIMIT=NONE] Label of a running process that represents another user -->
 </resources>

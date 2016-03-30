@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB a sieť</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Sieť</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">prístup k službe tém</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">zachytiť spustenie aplikácie</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Umožňuje aplikácii prístup k službe na správu tém. Toto povolenie nie je bežné pre štandardné aplikácie.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">čítať informácie vašej témy</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Umožňuje aplikácii čítať vaše témy a určiť, ktorú tému ste použili.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">upraviť vaše témy</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Umožňuje aplikácii vkladať nové témy a upraviť tému, ktorú ste použili.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Inštalácia témy zlyhala</string>
-  <string name="theme_install_error_message">Nepodarilo sa nainštalovať tému %s</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">Aplikácia %s nie je nainštalovaná</string>
-  <string name="theme_reset_notification_title">Obnoviť tému</string>
-  <string name="theme_reset_notification_body">Systémová téma sa obnovila z dôvodu viacerých pádov aplikácií.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Priorita</string>
   <string name="silent_mode_none">Žiadna</string>
@@ -189,4 +172,11 @@
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">obnoviť štatistiky batérie</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Umožňuje aplikácii obnoviť aktuálne nízkoúrovňové údaje o využití batérie.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

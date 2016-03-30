@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB 및 네트워크</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">네트워크</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">테마 서비스에 액세스</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">앱 실행 차단</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">앱이 테마 서비스에 접근할 수 있도록 허용합니다. 일반 앱에서는 필요없는 권한입니다.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">테마 정보 읽기</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">앱이 설치된 테마들을 읽어들이고 현재 적용된 테마를 확인할 수 있도록 허용합니다.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">테마 정보 수정</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">앱이 새로운 테마를 설치하거나 다른 테마를 적용할 수 있도록 허용합니다.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">테마 설치 실패</string>
-  <string name="theme_install_error_message">%s을(를) 설치하지 못했습니다</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s이(가) 설치되지 않음</string>
-  <string name="theme_reset_notification_title">테마 초기화</string>
-  <string name="theme_reset_notification_body">잦은 앱 충돌로 인해 시스템 테마가 복원되었습니다.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">우선순위</string>
   <string name="silent_mode_none">없음</string>
@@ -210,4 +193,11 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">배터리가 완전히 충전됨</string>
   <string name="notify_battery_fully_charged_text">배터리 수명을 향상시키기 위해 기기를 충전기에서 분리하세요.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">배터리 통계 재설정</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">앱이 현재의 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

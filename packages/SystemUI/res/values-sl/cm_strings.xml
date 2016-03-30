@@ -29,7 +29,7 @@
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Potegnite desno za %1$s</string>
   <string name="right_shortcut_hint">Potegnite levo za %1$s</string>
-  <string name="lockscreen_message">Tapnite ikono na levi ali desni, da ponovno dodelite bližnjico zaslona za zaklepanje.</string>
+  <string name="lockscreen_message">Tapnite ikono na levi ali desni, da ponovno dodelite bližnjico zaklenjenega zaslona.</string>
   <string name="lockscreen_default_target">Privzeto</string>
   <string name="select_application">Izberite aplikacijo</string>
   <string name="lockscreen_choose_action_title">Izberite dejanje</string>
@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profili onemogočeni</string>
   <string name="quick_settings_heads_up_label">Obvestila na zaslonu</string>
   <string name="quick_settings_battery_saver_label">Ohranjevalnik baterije</string>
+  <string name="quick_settings_caffeine_label">Kofein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinhronizacija izklopljena.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -102,7 +103,7 @@
   <string name="quick_settings_screen_timeout_detail_title">Časovna omejitev zaslona</string>
   <string name="quick_settings_lockscreen_label">Zakleni zaslon</string>
   <string name="quick_settings_ambient_display_label">Okoliški zaslon</string>
-  <string name="quick_settings_lockscreen_label_enforced">Vsiljen zaslon za zaklepanje</string>
+  <string name="quick_settings_lockscreen_label_enforced">Vsiljen zaklenjen zaslon</string>
   <string name="quick_settings_lockscreen_label_locked_by_profile">Onemogočeno s profilom</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Časovna omejitev zaslona: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
@@ -131,13 +132,13 @@
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Način varčevanja energije spremenjen v hitri način.</string>
   <string name="quick_settings_performance_profile_detail_title">Način varčevanja energije</string>
   <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_lock_screen_off">Zaslon za zaklepanje izklopljen.</string>
+  <string name="accessibility_quick_settings_lock_screen_off">Zaklepanje zaslona izklopljeno.</string>
   <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_lock_screen_on">Zaslon za zaklepanje vklopljen.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Zaklepanje zaslona vklopljeno.</string>
   <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_lock_screen_changed_off">Zaslon za zaklepanje izklopljen.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_off">Zaklepanje zaslona izklopljeno.</string>
   <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_lock_screen_changed_on">Zaslon za zaklepanje vklopljen.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Zaklepanje zaslona vklopljeno.</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Okoliški zaslon izklopljen.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Obvestila na zaslonu izklopljena.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Obvestila na zaslonu vklopljena.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Kofein izklopljen.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Kofein vklopljen.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Ohranjevalnik baterije izklopljen.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,4 +212,15 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Svetilka je vklopljena</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tapnite, če želite izklopiti</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d odjemalec</item>
+    <item quantity="two">%1$d odjemalca</item>
+    <item quantity="few">%1$d odjemalci</item>
+    <item quantity="other">%1$d odjemalcev</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Ni podatkovne kartice SIM</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level"><xliff:g id="number">%d</xliff:g> odstotkov baterije v postaji.</string>
 </resources>

@@ -96,6 +96,10 @@
   <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
   <string name="enablePin">سه‌رکه‌وتوو نه‌بوو ، تکایه‌ داخەری SIM/RUIM چالاک بکه‌.</string>
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+  <plurals name="pinpuk_attempts">
+    <item quantity="one"><xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ پێش ئه‌وه‌ی سیمکارت دابخرێت.</item>
+    <item quantity="other"><xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ پێش ئه‌وه‌ی سیمکارت دابخرێت.</item>
+  </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <string name="imei">IMEI</string>
   <!-- Title for the dialog used to display the user's MEID number on CDMA network
@@ -466,8 +470,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBar">ڕێ دەدات بە بەرنامە تا شيشەكەى دۆخ پەك دەخات بێت يان زياد دەكات و ئايكۆنى سيستەم لا دەبات.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_statusBarService">تووڵ دۆخ
-</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBarService">ڕێ دەدات بە بەرنامە تا شيشەكەى دۆخ ببێت.
 </string>
@@ -660,11 +662,9 @@
   <string name="permlab_accessLocationExtraCommands">ده‌سته‌ڵاتی شوێنی زیاتر بۆ فرمانی دابینکردن</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessFineLocation">شوێنی ورد(GPS و دامه‌زراو له‌سه‌ر خه‌ت)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFineLocation">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ده‌ستکه‌وتنی شوێنی ته‌واوی تۆ به‌ GPS یان خه‌ته‌که‌ت وه‌ک وایه‌رلێس و هێڵ.خزمه‌تگوزاری شوێن پێویسته‌ کاربکات بۆ ئه‌وه‌ی به‌رنامه‌کان شوێن بدۆزنه‌وه‌.به‌رنامه‌کان ده‌توانن بزانن له‌ کوێیت به‌ GPS ، ئه‌م کاره‌ باتری مۆبایله‌که‌ت که‌م ده‌کات.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessCoarseLocation">شوێنی نزیک(له‌سه‌ر خه‌ت)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessCoarseLocation">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ده‌ستکه‌وتنی شوێنی نزیکی تۆ به‌ GPS یان خه‌ته‌که‌ت وه‌ک وایه‌رلێس و هێڵ.خزمه‌تگوزاری شوێن پێویسته‌ کاربکات بۆ ئه‌وه‌ی به‌رنامه‌کان شوێن بدۆزنه‌وه‌.به‌رنامه‌کان ده‌توانن بزانن له‌ کوێیت به‌ GPS ، ئه‌م کاره‌ باتری مۆبایله‌که‌ت که‌م ده‌کات.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -745,7 +745,6 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessNetworkState">ڕێگه‌دان به‌ به‌رنامه‌ بۆ بینینی زانیاری له‌باره‌ی په‌یوه‌ندی خه‌ت وه‌ک چ خه‌تێک هه‌یه‌ و چی په‌یوه‌ندیپێوه‌کراوه‌.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_createNetworkSockets">پڕاوپڕ ده‌سته‌ڵاتی خه‌ت</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_createNetworkSockets">ڕێگه‌دان به‌ به‌رنامه‌ بۆ دروستکردنی زانیاری خه‌ت و به‌کارهێنانی پرۆتۆکۆڵ.وه‌ وێبگه‌ره‌که‌ و به‌رنامه‌ی تر که‌ مانات ده‌داتێ وه‌ک ناردنی داتا بۆ ئینته‌رنێط.ئه‌م ده‌سته‌ڵاته‌ پێویست نییه‌ بۆ ناردنی داتا بۆ ئینته‌رنێت.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -779,7 +778,6 @@
   <string name="permdesc_bluetoothAdmin" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ڕێکخستنی بلوتوسی ناوه‌کی مۆبایل.وه‌ دۆزینه‌وه‌ و ناساندنی دووره‌ ئامێر.</string>
   <string name="permlab_accessWimaxState">په‌یوه‌ندی یان پچڕان له‌ وایماکسه‌وه‌</string>
   <string name="permdesc_accessWimaxState">ڕێگه‌دان به‌ به‌رنامه‌ بۆ بڕیاردان که‌ی وایماکس کار بکات و زانیاری له‌باره‌ی وایماکس که‌ په‌یوه‌ندی پێوه‌کراوه‌. </string>
-  <string name="permlab_changeWimaxState">گۆڕینی باری وایماکس</string>
   <string name="permdesc_changeWimaxState" product="tablet">ڕێگه‌دان به‌ به‌رنامه‌ بۆ په‌یوه‌ندی کردنی تابلێت یان پچڕانی تابلێت له‌ وایماکسه‌وه‌.</string>
   <string name="permdesc_changeWimaxState" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ په‌یوه‌ندی کردنی مۆبایل یان پچڕانی مۆبایل له‌ وایماکسه‌وه‌.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -1922,7 +1920,15 @@
   <!-- If there is ever a ringtone set for some setting, but that ringtone can no longer be resolved, t his is shown instead.  For example, if the ringtone was on a SD card and it had been removed, this woudl be shown for ringtones on that SD card. -->
   <string name="ringtone_unknown">زەنگی نەناسراو</string>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's title. -->
+  <plurals name="wifi_available">
+    <item quantity="one">Wi-Fi تۆڕ لەکارە</item>
+    <item quantity="other">Wi-Fi تۆڕ لەکارە</item>
+  </plurals>
   <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's message. -->
+  <plurals name="wifi_available_detailed">
+    <item quantity="one"> Wi-Fi تۆڕی کراوە لە کارە</item>
+    <item quantity="other"> Wi-Fi تۆڕەکانی کراوە لە کارە</item>
+  </plurals>
   <!-- A notification is shown when a wifi captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's title. -->
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
@@ -2123,7 +2129,6 @@
   <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
   <string name="activity_list_empty">هیچ چلاکییەکی لەیەک چوو نەدۆزرایەوە.</string>
   <!-- Title of an application permission that lets an application route media output. -->
-  <string name="permlab_route_media_output">ڕێپیشاندەری بەرهەمی میدیا بە</string>
   <!-- Description of an application permission that lets an application route media output. -->
   <string name="permdesc_route_media_output">ڕێگە بە بەرنامەیەک بدە تاکو ڕێپیشاندەری بەرهەمی میدیا بکات بۆ دیکەی ئامێرە دەرەکییەکان.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
@@ -2226,6 +2231,12 @@
   <string name="find_on_page">دۆزینەوە لە پەڕە</string>
   <!-- Displayed on the Find dialog to display the index of the highlighted
          match and total number of matches found in the current page. [CHAR LIMIT=NONE] -->
+  <plurals name="matches_found">
+    <!-- Case of one match -->
+    <item quantity="one">1 هاوتا</item>
+    <!-- Case of multiple total matches -->
+    <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> لە <xliff:g id="total" example="137">%d</xliff:g></item>
+  </plurals>
   <!-- Label for the "Done" button on the far left of action mode toolbars. -->
   <string name="action_mode_done">تەواو</string>
   <!-- Strings for MasterClearReceiver. -->
@@ -2839,6 +2850,10 @@
   <string name="restr_pin_error_too_short">PIN زۆر کورتە. ئەبێ لانیکەم 4 ژمارە بێت.</string>
   <!-- PIN entry dialog countdown message for next chance to enter the PIN [CHAR LIMIT=none] -->
   <!-- Phrase describing a time duration using seconds [CHAR LIMIT=none] -->
+  <plurals name="restr_pin_countdown">
+    <item quantity="one">دوبارە هەوڵبدەرەوە لە 1 چرکەی تر</item>
+    <item quantity="other">دوبارە هەوڵبدەرەوە  لە <xliff:g id="count">%d</xliff:g> چرکەکان</item>
+  </plurals>
   <!-- PIN entry dialog tells the user to not enter a PIN for a while. [CHAR LIMIT=none] -->
   <string name="restr_pin_try_later">دواتر دووبارە هەوڵبدە</string>
   <!-- Cling help message title when hiding the navigation bar entering immersive mode [CHAR LIMIT=none] -->

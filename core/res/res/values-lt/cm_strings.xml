@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB ir tinklas</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Tinklas</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">pasiekti temos paslaugą</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">perimti programos paleidimą</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Leidžia programai pasiekti temos paslaugą. Niekada neturėtų reikėti įprastoms programoms.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">skaityti jūsų temos informaciją</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Leidžia programai skaityti jūsų temas ir nustatyti kurią temą pritaikėte.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">pakeisti jūsų temas</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Leidžia programai įdiegti naujas temas ir keisti temą, kurią pritaikėte.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Nepavyko įdiegti temos</string>
-  <string name="theme_install_error_message">%s nepavyko įdiegti</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s neįdiegta</string>
-  <string name="theme_reset_notification_title">Nustatyti iš naujo temą</string>
-  <string name="theme_reset_notification_body">Sistemos tema atkurta dėl pasikartojančių programos klaidų.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritetas</string>
   <string name="silent_mode_none">Joks</string>
@@ -189,4 +172,11 @@
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Nustatyti iš naujo akumuliatoriaus statistiką</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Leidžia programai nustatyti iš naujo dabartinio žemo lygio akumuliatoriaus naudojimo duomenis.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

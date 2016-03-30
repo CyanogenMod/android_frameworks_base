@@ -79,28 +79,10 @@
   <string name="adb_active_custom_tile_both">⁯USB &amp; الشبكة</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">الشبكة</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">الوصول إلى خدمة السمة</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">مقاطعة تشغيل التطبيق</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">يسمح للتطبيق بالوصول إلى خدمة السمة. ينبغي أن لا تكون ضرورية ابدأ للتطبيقات العادية.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">قراءة معلومات السمة لديك</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">يسمح للتطبيق بقراءة السمات الخاصة بك وتحديد السمة التي قمت بتطبيقها.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">تعديل السمات الخاصة بك</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">السماح للتطبيق بإدخال سمات جديدة
-وتعديل السمة التي قمت بتطبيقها.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">فشل تثبيت السمة</string>
-  <string name="theme_install_error_message">فشل تثبيت %s</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s لم يتم تثبيته</string>
-  <string name="theme_reset_notification_title">إعادة تعيين السمة</string>
-  <string name="theme_reset_notification_body">تم استرداد سمة النظام بسبب عمليات تعطيل متعددة للتطبيق.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">الأولوية</string>
   <string name="silent_mode_none">بلا</string>
@@ -190,4 +172,11 @@
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">إعادة تعيين إحصائيات البطارية</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">يسمح للتطبيق بإعادة تعيين بيانات استخدام بطارية ذات المستوى المنخفض الحالي.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

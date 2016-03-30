@@ -164,6 +164,9 @@
   <string name="kg_password_wrong_pin_code_pukked">SIM كارتا PIN كودى توغرا ئەمەس؛ ھازىر مۇلازىمەت سودىگىرىڭىز بىلەن ئالاقە قىلىپ ئۈسكۈنىڭىزنىڭ قۇلۇپىنى ئېچىڭ.</string>
   <!-- Instructions telling the user that they entered the wrong SIM PIN while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_pin_code">
+    <item quantity="other">SIM كارتا PIN كودى توغرا ئەمەس، سىزنىڭ <xliff:g id="NUMBER">%d</xliff:g> قېتىم سىناش پۇرسىتىڭىز بار. ئەگەر يەنىلا مەغلۇپ بولسىڭىز مۇلازىمەت سودىگىرىڭىز بىلەن ئالاقە قىلىپ ئۈسكۈنىڭىزنىڭ قۇلۇپىنى ئېچىڭ.</item>
+  </plurals>
   <!-- Instructions telling the user that they have exhausted SIM PUK retries and the SIM is now unusable.
          Displayed in a dialog box.  -->
   <string name="kg_password_wrong_puk_code_dead">SIM كارتىنى ئىشلەتكىلى بولمايدۇ. مۇلازىمەت سودىگىرىڭىز بىلەن ئالاقە قىلىڭ.</string>

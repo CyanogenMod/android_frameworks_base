@@ -26,4 +26,5 @@
     <item quantity="other">Introduce el código PIN. Tienes <xliff:g id="number">%d</xliff:g> intentos restantes.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
+  <string name="kg_invalid_sim_length">Error: La entrada es más corta que la longitud mínima</string>
 </resources>

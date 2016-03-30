@@ -88,6 +88,7 @@
   <string name="quick_settings_profiles_off">Profili onemogućeni</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Ušteda baterije</string>
+  <string name="quick_settings_caffeine_label">Kofein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinkronizacija isključena.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -154,6 +155,10 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up je isključen.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up je uključen.</string>
+  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Kofein isključen.</string>
+  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Kofein uključen.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Ušteda baterije isključena.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -208,4 +213,13 @@
   <string name="quick_settings_tile_flashlight_not_title">Svjetiljka je uključena</string>
   <string name="quick_settings_tile_flashlight_not_summary">Dodirnite za isključivanje</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d klijent</item>
+    <item quantity="few">%1$d klijenta</item>
+    <item quantity="other">%1$d klijenata</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Nema SIM podatkovne kartice</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Dock baterija <xliff:g id="number">%d</xliff:g> postotak.</string>
 </resources>

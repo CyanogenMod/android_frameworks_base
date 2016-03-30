@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB y red</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Red</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">acceso al servicio de temas</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interceptar la ejecución de aplicaciones</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Permite que la aplicación acceda al servicio de temas. Nunca debería ser necesario para aplicaciones normales.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">leer información de los temas</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Permite que la aplicación lea los temas instalados y determine cual es el que has aplicado.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">modificar los temas</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Permite que la aplicación añada nuevos temas y modifique el tema aplicado actualmente.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Error al instalar el tema</string>
-  <string name="theme_install_error_message">Error al instalar %s</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s no está instalada</string>
-  <string name="theme_reset_notification_title">Tema restablecido</string>
-  <string name="theme_reset_notification_body">Tema del sistema restablecido debido a múltiples cierres de la aplicación.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioridad</string>
   <string name="silent_mode_none">Ninguno</string>
@@ -152,6 +135,7 @@
   <string name="app_ops_start_at_bootup">ejecutar al inicio</string>
   <string name="app_ops_toast_window">mostrar notificaciones emergentes</string>
   <string name="app_ops_toggle_bluetooth">alternar Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">conmutar datos móviles</string>
   <string name="app_ops_toggle_nfc">alternar NFC</string>
   <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar el volumen de la alarma</string>
@@ -204,5 +188,18 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Lanzamiento de la actividad bloqueado</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> tiene protección para ser ejecutado. Haz clic para autenticar e iniciar la aplicación.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Batería completamente cargada</string>
+  <string name="notify_battery_fully_charged_text">Desconecta tu dispositivo del cargador para mejorar la vida útil de la batería.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">restablecer estadísticas de batería</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Permite que la aplicación restablezca los datos actuales de uso de la batería.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Las tarjetas SIM han cambiado</string>
+  <string name="uicc_hot_swapped_event_text">Toca para establecer las preferencias por defecto de la tarjeta SIM</string>
 </resources>

@@ -190,11 +190,19 @@
   <string name="kg_password_wrong_pin_code_pukked">PIN کۆد هه‌ڵه‌یه‌ پێویسته‌ ئێستا په‌یوه‌ندیی بکه‌یت به‌ کۆمپانیای دابینکه‌ره‌وه‌ بۆ کردنه‌وه‌ی ئامێره‌که‌ت.</string>
   <!-- Instructions telling the user that they entered the wrong SIM PIN while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_pin_code">
+    <item quantity="one">PIN کۆدی سیم هه‌ڵه‌یه‌، <xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ به‌رله‌وه‌ی که‌ پێویست بکات په‌یوه‌ندیی به‌ کۆمپانیای دابینکه‌ره‌وه‌ بکه‌یت.</item>
+    <item quantity="other">کۆدی سیمکارت هەڵەیە .تۆ ته‌نیا <xliff:g id="number">%d</xliff:g> هەوڵێکت ماوە پێشی ئەوەی پەیوەندی بکەیت بە کۆمپانیاوە  بۆ کردنەوەی ئامێرەکەت .</item>
+  </plurals>
   <!-- Instructions telling the user that they have exhausted SIM PUK retries and the SIM is now unusable.
          Displayed in a dialog box.  -->
   <string name="kg_password_wrong_puk_code_dead">سیمه‌که‌ له‌کار که‌وتووه‌. په‌یوه‌ندیی بکه‌ به‌ کۆمپانیای دابینکه‌ره‌وه‌.</string>
   <!-- Instructions telling the user that they entered the wrong puk while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_puk_code">
+    <item quantity="one">PUK کۆدی سیم هه‌ڵه‌یه‌، <xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ به‌رله‌وه‌ی سیمه‌که‌ به‌ یه‌کجاریی له‌کار بکه‌وێت.</item>
+    <item quantity="other">PUK کۆدی سیم به‌ هه‌ڵه‌ لێدراوه‌، <xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ به‌رله‌وه‌ی سیمه‌که‌ به‌ یه‌کجاریی له‌کار بکه‌وێت.</item>
+  </plurals>
   <!-- Instructions telling the user that the operation to unlock the keyguard
          with SIM PIN failed. Displayed in one line in a large font.  -->
   <string name="kg_password_pin_failed">کارپێکردنی PIN ی سیم شکستی هێنا!</string>

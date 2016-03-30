@@ -206,4 +206,7 @@
   <string name="quick_settings_tile_flashlight_not_title">A lanterna está acesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toca para apagala</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">Batería do conector <xliff:g id="number">%d</xliff:g> %.</string>
 </resources>

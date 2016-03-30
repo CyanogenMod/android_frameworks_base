@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB e rede</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rede</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">acessar o serviço de temas</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interceptar inicialização de app</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Permite que um aplicativo acesse o serviço de temas. Não deveria ser necessário a aplicativos normais.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">ler informação de temas</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Permite a uma aplicação ler os seus temas e determinar qual o tema que está aplicado.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">modificar seus temas</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Permite um aplicativo a inserir novos temas e modificar qual tema aplicado.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Falha ao instalar o tema</string>
-  <string name="theme_install_error_message">%s falhou ao instalar</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s não está instalado</string>
-  <string name="theme_reset_notification_title">Restaurar tema</string>
-  <string name="theme_reset_notification_body">O tema do sistema foi restaurado devido a vários problemas nas aplicações.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioridade</string>
   <string name="silent_mode_none">Nenhum</string>
@@ -210,4 +193,13 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Bateria totalmente carregada</string>
   <string name="notify_battery_fully_charged_text">Desconecte seu dispositivo do carregador para aumentar a vida útil da bateria.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">redefinir estatísticas da bateria</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Permite uma aplicação redefinir o atual nível baixo dos dados de uso da bateria.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Os cartões SIM foram alterados</string>
+  <string name="uicc_hot_swapped_event_text">Toque para definir as preferências do cartão SIM</string>
 </resources>

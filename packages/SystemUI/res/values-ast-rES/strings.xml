@@ -34,6 +34,10 @@
          devices) -->
   <string name="status_bar_accessibility_dismiss_recents">Inorar aplicaciones recientes</string>
   <!-- Message that is read when you enter recent apps in TalkBack -->
+  <plurals name="status_bar_accessibility_recent_apps">
+    <item quantity="one">1 pantalla en perspeutiva</item>
+    <item quantity="other">%d pantalles en perspeutiva</item>
+  </plurals>
   <!-- The label in the bar at the top of the status bar when there are no notifications
          showing.  [CHAR LIMIT=40]-->
   <string name="status_bar_no_notifications_title">Nun tienes notificaciones</string>

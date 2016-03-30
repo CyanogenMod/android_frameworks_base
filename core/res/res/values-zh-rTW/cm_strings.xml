@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB和網路</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">網路</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">存取主題服務</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">限制應用程式執行</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">允許應用程式存取主題服務 (一般應用程式不需使用)。</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">閱讀您的主題資訊</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">允許應用程式讀取您的主題，並確定您已應用的主題。</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">修改您的主題</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">允許應用程式來插入新的主題和修改您已應用的主題。</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">主題安裝失敗</string>
-  <string name="theme_install_error_message">「%s」安裝失敗</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">未安裝 %s</string>
-  <string name="theme_reset_notification_title">重設主題</string>
-  <string name="theme_reset_notification_body">基於多個應用程式發生錯誤所以已還原至預設主題</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">優先度</string>
   <string name="silent_mode_none">無</string>
@@ -205,4 +188,11 @@
   <string name="notify_package_component_protected_title">已阻止啟動活動</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s </xliff:g> 正被防止啟動。按一下以進行身份驗證並啟動應用程式。</string>
   <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">重設電池統計資訊</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">允許應用程式重設目前低電量的電池使用資料。</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

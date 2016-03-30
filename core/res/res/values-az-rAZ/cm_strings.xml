@@ -79,27 +79,10 @@
   <string name="adb_active_custom_tile_both">USB &amp; şəbəkə</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Şəbəkə</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">tema xidmətinə müraciət</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">tətbiqetmə başlatmanın qarşısını al</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Tətbiqetmənin tema xidmətinə müraciətinə icazə verər. Normal tətbiqlər üçün buna ehtiyac yoxdur.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">tema məlumatını oxu</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Tətbiqetmənin temalarınızı oxumasına və hansı temanı tətbiq etdiyinizi müəyyən etməyə icazə verər.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">temaları dəyişin</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Tətbiqetmənin yeni temalar əlavə etməsinə və tətbiq etdiyiniz temanı dəyişdirməsinə icazə verər.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Tema yüklənə bilmədi</string>
-  <string name="theme_install_error_message">%s yüklənə bilmədi</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s quraşdırılmayıb</string>
-  <string name="theme_reset_notification_title">Tema sıfırlandı</string>
-  <string name="theme_reset_notification_body">Tətbiqetmə çökmələrinə görə sistem teması bərpa edildi.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Üstünlük</string>
   <string name="silent_mode_none">Yoxdur</string>
@@ -189,4 +172,11 @@
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">batareya statistikalarını sıfırla</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Tətbiqetmənin aşağı batareya istifadə verilənlərini sıfırlamasına icazə verər.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

@@ -79,29 +79,10 @@
   <string name="adb_active_custom_tile_both">па сетцы &amp; USB</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Па сетцы</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_accessThemeService">Доступ да службы тэм</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Перахоп запуску дадаткаў</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Дадатак зможа атрымваць доступ да службы тым. Гэты дазвол не выкарыстоўваецца звычайнымі дадаткамі.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">Чытанне інфармацыі пра тэму</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Дадатак зможа счытваць тэмы афармлення і
-       вызначаць, якая тэма цяпер выкарыстоўваецца.</string>
-  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">Змена тэм</string>
-  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Дадатак зможа ўжыццяўляць усталёўку новых тэм афармлення і 
-       змяняць бягучую тэму.</string>
-  <!-- Theme installation error notification -->
-  <string name="theme_install_error_title">Не атрымалася ўсталяваць тэму</string>
-  <string name="theme_install_error_message">Збой пры ўсталёўцы %s</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s не ўсталявана</string>
-  <string name="theme_reset_notification_title">Тэма адключаная</string>
-  <string name="theme_reset_notification_body">З-за збояў дадаткаў адноўлена стандартная тэма.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Важныя</string>
   <string name="silent_mode_none">Не</string>
@@ -209,4 +190,11 @@
   <string name="notify_package_component_protected_title">Запуск дадатку забаронены</string>
   <string name="notify_package_component_protected_text">Дадатак <xliff:g id="app_name">%1$s</xliff:g> заблакаваны на запуск. Націсні, каб увесці паролль і запусціць дадатак.</string>
   <!-- Battery fully charged notification -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Абнуленне статыстыкі батарэі</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Дазволіць дадатку чысціць дадзеныя пра выкарыстанне акумулятарнай батарэі прылады.</string>
+  <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

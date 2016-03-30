@@ -75,6 +75,7 @@
   <string name="quick_settings_title_header">หัวข้อ</string>
   <string name="quick_settings_title_tiles">ไทต์</string>
   <string name="quick_settings_title_show_weather">แสดงสภาพอากาศ</string>
+  <string name="quick_settings_title_show_brightness_slider">แสดงแถบเลื่อนปรับความสว่าง</string>
   <string name="quick_settings_title_enlarge_first_row">ขยายแถวแรก</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">จะแสดงหน้านี้จนกว่าคุณจะเลิกปักหมุด กดปุ่มกลับค้างเพื่อเลิกปักหมุด</string>
@@ -87,6 +88,7 @@
   <string name="quick_settings_profiles_off">โปรไฟล์ถูกปิดอยู่</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">ประหยัดแบตเตอรี่</string>
+  <string name="quick_settings_caffeine_label">คาเฟอีน</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">ปิดการซิงค์</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -102,6 +104,7 @@
   <string name="quick_settings_lockscreen_label">หน้าจอล็อค</string>
   <string name="quick_settings_ambient_display_label">หน้าจอแวดล้อม</string>
   <string name="quick_settings_lockscreen_label_enforced">บังคับล็อคหน้าจอ</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">ปิดการใช้งานโปรไฟล์</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">หมดเวลาหน้าจอ: <xliff:g id="timeout" example="30 seconds">%s</xliff:g></string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -199,8 +202,19 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">การระบุตำแหน่งเปลี่ยนเป็นรูปแบบเฉพาะเซนเซอร์</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">การระบุตำแหน่งเปลี่ยนรูปแบบเป็นความแม่นยำสูง</string>
+  <string name="quick_settings_tiles_category_system">ไทล์ระบบ</string>
   <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">เพิ่มไทล์</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">ไม่สามารถเชื่อมต่อเครือข่ายมือถือขณะใช้รูปแบบบนเครื่องบิน กรุณาปิดรูปแบบบนเครื่องบินและลองอีกครั้ง</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">ไฟฉายเปิดอยู่</string>
+  <string name="quick_settings_tile_flashlight_not_summary">แตะเพื่อปิด</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d ลูกข่าย</item>
+  </plurals>
+  <!-- CellularTile data sim not configured state string -->
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_dock_battery_level">แท่นชาร์จแบตเตอรี่ <xliff:g id="number">%d</xliff:g> เปอร์เซ็นต์</string>
 </resources>
