@@ -28,6 +28,7 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.telephony.ServiceState;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.method.SingleLineTransformationMethod;
@@ -156,8 +157,6 @@ public class CarrierText extends TextView {
         boolean anySimReadyAndInService = false;
         boolean showLocale = getContext().getResources().getBoolean(
                 com.android.internal.R.bool.config_monitor_locale_change);
-        boolean showRat = getContext().getResources().getBoolean(
-                com.android.internal.R.bool.config_display_rat);
         CharSequence displayText = null;
 
         List<SubscriptionInfo> subs = mKeyguardUpdateMonitor.getSubscriptionInfo(false);
@@ -167,6 +166,8 @@ public class CarrierText extends TextView {
             CharSequence networkClass = "";
             int subId = subs.get(i).getSubscriptionId();
             State simState = mKeyguardUpdateMonitor.getSimState(subId);
+            boolean showRat = SubscriptionManager.getResourcesForSubId(mContext,
+                    subId).getBoolean(com.android.internal.R.bool.config_display_rat);
             if (showRat) {
                 ServiceState ss = mKeyguardUpdateMonitor.mServiceStates.get(subId);
                 if (ss != null && (ss.getDataRegState() == ServiceState.STATE_IN_SERVICE

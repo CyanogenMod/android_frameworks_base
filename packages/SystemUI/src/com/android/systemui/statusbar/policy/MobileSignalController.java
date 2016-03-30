@@ -435,13 +435,21 @@ public class MobileSignalController extends SignalController<
                 && plmn.equals(spn)) {
             showSpn = false;
         }
+        boolean showRat = mConfig.showRat;
+        int[] subId = SubscriptionManager.getSubId(getSimSlotIndex());
+        if (subId != null && subId.length >= 1) {
+            showRat = SubscriptionManager.getResourcesForSubId(mContext,
+                    subId[0]).getBoolean(com.android.internal.R.bool.config_display_rat);
+        }
         String networkClass = getNetworkClassString(mServiceState);
+        Log.d(mTag, "networkClass=" + networkClass + " showRat=" + showRat +
+                " slot=" + getSimSlotIndex());
         StringBuilder str = new StringBuilder();
         StringBuilder strData = new StringBuilder();
         if (showPlmn && plmn != null) {
             str.append(plmn);
             strData.append(plmn);
-            if (mConfig.showRat) {
+            if (showRat) {
                 str.append(" ").append(networkClass);
                 strData.append(" ").append(networkClass);
             }
@@ -451,7 +459,7 @@ public class MobileSignalController extends SignalController<
                 str.append(mNetworkNameSeparator);
             }
             str.append(spn);
-            if (mConfig.showRat) str.append(" ").append(networkClass);
+            if (showRat) str.append(" ").append(networkClass);
         }
         if (str.length() != 0) {
             mCurrentState.networkName = str.toString();
@@ -463,7 +471,7 @@ public class MobileSignalController extends SignalController<
                 strData.append(mNetworkNameSeparator);
             }
             strData.append(dataSpn);
-            if (mConfig.showRat) strData.append(" ").append(networkClass);
+            if (showRat) strData.append(" ").append(networkClass);
         }
         if (strData.length() != 0) {
             mCurrentState.networkNameData = strData.toString();
