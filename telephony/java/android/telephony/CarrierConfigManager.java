@@ -724,6 +724,18 @@ public class CarrierConfigManager {
     /** @hide */
     public static final int CDMA_ROAMING_MODE_ANY = 2;
 
+     /**
+     * Key that determines if ACTIVATE_REJECT_GGSN is to be treated as a permanent error.
+     * @hide
+     */
+    public static final String KEY_REJECT_GGSN_PERM_FAILURE = "reject_ggsn_perm_failure";
+
+    /**
+     * Key that determines if PROTOCOL_ERRORS is  treated as permanent error.
+     * @hide
+     */
+    public static final String KEY_PROTOCOL_ERRORS_PERM_FAILURE = "protocol_errors_perm_failure";
+
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
@@ -826,6 +838,8 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_CONFIG_WIFI_DISABLE_IN_ECBM, false);
         sDefaults.putBoolean(KEY_CARRIER_NAME_OVERRIDE_BOOL, false);
         sDefaults.putString(KEY_CARRIER_NAME_STRING, "");
+        sDefaults.putBoolean(KEY_REJECT_GGSN_PERM_FAILURE,true);
+        sDefaults.putBoolean(KEY_PROTOCOL_ERRORS_PERM_FAILURE,true);
 
         // MMS defaults
         sDefaults.putBoolean(KEY_MMS_ALIAS_ENABLED_BOOL, false);
