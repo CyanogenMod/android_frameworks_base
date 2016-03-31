@@ -167,18 +167,6 @@
   <string name="app_ops_su">obțină acces root</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Pentru a anula fixarea acestui ecran, atingeți și țineți apăsat butonul Înapoi.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automat</string>
-  <string name="live_display_auto_summary">Reglează automat temperatura de culoare de pe ecran după apus și răsărit</string>
-  <string name="live_display_off">Oprit</string>
-  <string name="live_display_off_summary">Dezactivează toate ajustările</string>
-  <string name="live_display_day">Zi</string>
-  <string name="live_display_day_summary">Utilizați numai setările de zi</string>
-  <string name="live_display_night">Noapte</string>
-  <string name="live_display_night_summary">Utilizați numai setările de noapte</string>
-  <string name="live_display_outdoor">În aer liber (soare strălucitor)</string>
-  <string name="live_display_outdoor_summary">Utilizați numai setările în aer liber</string>
-  <string name="live_display_hint">LiveDisplay poate reduce oboseala ochilor și vă poate ajuta să dormiți noaptea. Apăsați aici pentru a-l încerca!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Niciun dispozitiv conectat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> dispozitiv conectat</string>
