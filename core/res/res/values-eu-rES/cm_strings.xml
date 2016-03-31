@@ -168,18 +168,6 @@
   <string name="app_ops_su">root sarbidea eskuratu</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Pantaila hau desiltzatzeko sakatu eta mantendu atzera botoia.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automatikoa</string>
-  <string name="live_display_auto_summary">Doitu automatikoki pantailaren kolore tenperatura ilunabarra eta egunsentiaren ostean</string>
-  <string name="live_display_off">Ez</string>
-  <string name="live_display_off_summary">Ezgaitu doitze guztiak</string>
-  <string name="live_display_day">Eguna</string>
-  <string name="live_display_day_summary">Erabili egun ezarpenak besterik ez</string>
-  <string name="live_display_night">Gaua</string>
-  <string name="live_display_night_summary">Erabili gau ezarpenak besterik ez</string>
-  <string name="live_display_outdoor">Kalean (eguzkipean)</string>
-  <string name="live_display_outdoor_summary">Erabili kaleko ezarpenak besterik ez</string>
-  <string name="live_display_hint">LiveDisplayk begi nekea gutxitu eta gauez lo egiten lagundu dezake. Probatu ezazu!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Ez da gailurik konektatu</string>
   <string name="tethered_notification_one_device_message">gailu <xliff:g id="count">%1$s</xliff:g> konektatuta</string>

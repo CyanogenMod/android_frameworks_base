@@ -168,18 +168,6 @@
   <string name="app_ops_su">ರೂಟ್ ಪ್ರವೇಶ ಪಡೆ</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">ಪರದೆಯನ್ನು ಅನ್‍ಪಿನ್‍ಮಾಡಲು, ಹಿಂದೆ ಬಟನ್‍ ಸ್ಪರ್ಶಿಸಿ ಹಿಡಿಯಿರಿ.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">ಸ್ವಯಂಚಾಲಿತ</string>
-  <string name="live_display_auto_summary">ಸೂರ್ಯಾಸ್ತ ಅಥವ ಸೂರ್ಯೋದಯದ ನಂತರ ಪರದೆಯ ಬಣ್ಣ ಉಷ್ಣಾಂಶವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸರಿಹೊಂದಿಸು</string>
-  <string name="live_display_off">ಆಫ್</string>
-  <string name="live_display_off_summary">ಎಲ್ಲಾ ಹೊಂದಾಣಿಕೆಗಳನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸು</string>
-  <string name="live_display_day">ದಿನ</string>
-  <string name="live_display_day_summary">ದಿನ ಸೆಟ್ಟಿಂಗ್ಸನ್ನು ಮಾತ್ರ ಉಪಯೋಗಿಸು</string>
-  <string name="live_display_night">ರಾತ್ರಿ</string>
-  <string name="live_display_night_summary">ರಾತ್ರಿ ಸೆಟ್ಟಿಂಗ್ಸನ್ನು ಮಾತ್ರ ಉಪಯೋಗಿಸು</string>
-  <string name="live_display_outdoor">ಹೊರಾಂಗಣ (ಪ್ರಕಾಶಮಾನ ಸೂರ್ಯ)</string>
-  <string name="live_display_outdoor_summary">ಹೊರಾಂಗಣ ಸೆಟ್ಟಿಂಗ್ಸನ್ನು ಮಾತ್ರ ಉಪಯೋಗಿಸು</string>
-  <string name="live_display_hint">ಲೈವ್ ಡಿಸ್ಪ್ಲೆ ನಿಮ್ಮ ಕಣ್ಣಿನ ಆಯಾಸವನ್ನು ಕಡಿಮೆಮಾಡಿ ರಾತ್ರಿ ಮಲಗಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಇದನ್ನು ಪ್ರಯತ್ನಿಸಲು ಇಲ್ಲಿ ಒತ್ತಿ!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">ಯಾವುದೇ ಸಂಪರ್ಕಗೊಂಡ ಸಾಧನವಿಲ್ಲ</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ಸಂಪರ್ಕಗೊಳಿಸಿದ ಸಾಧನ</string>

@@ -16,6 +16,10 @@
 
 package com.android.systemui.qs.tiles;
 
+import static cyanogenmod.hardware.LiveDisplayManager.FEATURE_MANAGED_OUTDOOR_MODE;
+import static cyanogenmod.hardware.LiveDisplayManager.MODE_DAY;
+import static cyanogenmod.hardware.LiveDisplayManager.MODE_OUTDOOR;
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -27,15 +31,16 @@ import com.android.internal.util.ArrayUtils;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 
-import cyanogenmod.hardware.CMHardwareManager;
-import cyanogenmod.providers.CMSettings;
 import org.cyanogenmod.internal.logging.CMMetricsLogger;
+
+import cyanogenmod.hardware.LiveDisplayManager;
+import cyanogenmod.providers.CMSettings;
 
 /** Quick settings tile: LiveDisplay mode switcher **/
 public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
 
     private static final Intent LIVEDISPLAY_SETTINGS =
-            new Intent("android.settings.LIVEDISPLAY_SETTINGS");
+            new Intent(CMSettings.ACTION_LIVEDISPLAY_SETTINGS);
 
     private final LiveDisplayObserver mObserver;
     private String[] mEntries;
@@ -46,15 +51,13 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
 
     private boolean mListening;
 
-    private static final int MODE_OUTDOOR = 3;
-    private static final int MODE_DAY = 4;
-
-    private static final int OFF_TEMPERATURE = 6500;
-
     private int mDayTemperature;
 
     private final boolean mOutdoorModeAvailable;
-    private final int mDefaultDayTemperature;
+
+    private final LiveDisplayManager mLiveDisplay;
+
+    private static final int OFF_TEMPERATURE = 6500;
 
     public LiveDisplayTile(Host host) {
         super(host);
@@ -69,13 +72,11 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
 
         updateEntries();
 
-        mOutdoorModeAvailable =
-                CMHardwareManager.getInstance(mContext)
-                    .isSupported(CMHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
+        mLiveDisplay = LiveDisplayManager.getInstance(mContext);
+        mOutdoorModeAvailable = mLiveDisplay.getConfig().hasFeature(MODE_OUTDOOR) &&
+                !mLiveDisplay.getConfig().hasFeature(FEATURE_MANAGED_OUTDOOR_MODE);
 
-        mDefaultDayTemperature = mContext.getResources().getInteger(
-                com.android.internal.R.integer.config_dayColorTemperature);
-        loadDayTemperature();
+        mDayTemperature = mLiveDisplay.getDayColorTemperature();
 
         mObserver = new LiveDisplayObserver(mHandler);
         mObserver.startObserving();
@@ -83,10 +84,10 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
 
     private void updateEntries() {
         Resources res = mContext.getResources();
-        mEntries = res.getStringArray(com.android.internal.R.array.live_display_entries);
+        mEntries = res.getStringArray(org.cyanogenmod.platform.internal.R.array.live_display_entries);
         mDescriptionEntries = res.getStringArray(R.array.live_display_description);
         mAnnouncementEntries = res.getStringArray(R.array.live_display_announcement);
-        mValues = res.getStringArray(com.android.internal.R.array.live_display_values);
+        mValues = res.getStringArray(org.cyanogenmod.platform.internal.R.array.live_display_values);
     }
 
     @Override
@@ -137,10 +138,7 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
     }
 
     private int getCurrentModeIndex() {
-        return ArrayUtils.indexOf(mValues,
-                String.valueOf(CMSettings.System.getIntForUser(mContext.getContentResolver(),
-                        CMSettings.System.DISPLAY_TEMPERATURE_MODE,
-                        0, UserHandle.USER_CURRENT)));
+        return ArrayUtils.indexOf(mValues, String.valueOf(mLiveDisplay.getMode()));
     }
 
     private void changeToNextMode() {
@@ -150,13 +148,14 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
             next = 0;
         }
 
+        int nextMode = 0;
+
         while (true) {
+            nextMode = Integer.valueOf(mValues[next]);
             // Skip outdoor mode if it's unsupported, and skip the day setting
             // if it's the same as the off setting
-            if ((!mOutdoorModeAvailable &&
-                    Integer.valueOf(mValues[next]) == MODE_OUTDOOR) ||
-                    (mDayTemperature == OFF_TEMPERATURE &&
-                    Integer.valueOf(mValues[next]) == MODE_DAY)) {
+            if ((!mOutdoorModeAvailable && nextMode == MODE_OUTDOOR) ||
+                    (mDayTemperature == OFF_TEMPERATURE && nextMode == MODE_DAY)) {
                 next++;
                 if (next >= mValues.length) {
                     next = 0;
@@ -166,16 +165,7 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
             }
         }
 
-        CMSettings.System.putIntForUser(mContext.getContentResolver(),
-                CMSettings.System.DISPLAY_TEMPERATURE_MODE,
-                Integer.valueOf(mValues[next]), UserHandle.USER_CURRENT);
-    }
-
-    private void loadDayTemperature() {
-        mDayTemperature = CMSettings.System.getIntForUser(mContext.getContentResolver(),
-                CMSettings.System.DISPLAY_TEMPERATURE_DAY,
-                mDefaultDayTemperature,
-                UserHandle.USER_CURRENT);
+        mLiveDisplay.setMode(nextMode);
     }
 
     private class LiveDisplayObserver extends ContentObserver {
@@ -185,7 +175,7 @@ public class LiveDisplayTile extends QSTile<LiveDisplayTile.LiveDisplayState> {
 
         @Override
         public void onChange(boolean selfChange) {
-            loadDayTemperature();
+            mDayTemperature = mLiveDisplay.getDayColorTemperature();
             refreshState(getCurrentModeIndex());
         }
 
