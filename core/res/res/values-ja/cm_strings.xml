@@ -168,18 +168,6 @@
   <string name="app_ops_su">ルートアクセスの取得</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">この画面の固定を解除するには、戻るボタンを長押しします。</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">自動</string>
-  <string name="live_display_auto_summary">太陽の動きに合わせて画面の色温度を自動的に調整する</string>
-  <string name="live_display_off">OFF</string>
-  <string name="live_display_off_summary">すべての調整を無効にする</string>
-  <string name="live_display_day">昼</string>
-  <string name="live_display_day_summary">昼の設定のみを使用する</string>
-  <string name="live_display_night">夜</string>
-  <string name="live_display_night_summary">夜の設定のみを使用する</string>
-  <string name="live_display_outdoor">屋外（日光）</string>
-  <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
-  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをタップして試してみてください。</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">接続しているデバイスはありません</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g>台のデバイスが接続しています</string>

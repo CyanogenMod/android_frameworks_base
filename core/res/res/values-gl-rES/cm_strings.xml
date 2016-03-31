@@ -156,18 +156,6 @@
   <string name="app_ops_su">Obter acceso como superusuario</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Para deixar de fixar esta pantalla, mantén tocado o botón Atrás.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automático</string>
-  <string name="live_display_auto_summary">Axustar automaticamente os tons da pantalla ao amencer e o solpor</string>
-  <string name="live_display_off">Apagado</string>
-  <string name="live_display_off_summary">Desactivar todos os axustes</string>
-  <string name="live_display_day">Día</string>
-  <string name="live_display_day_summary">Utilizar tan só os axustes de día</string>
-  <string name="live_display_night">Noite</string>
-  <string name="live_display_night_summary">Utilizar tan só os axustes de noite</string>
-  <string name="live_display_outdoor">Exteriores (iluminado)</string>
-  <string name="live_display_outdoor_summary">Utilizar tan só os axustes de exteriores</string>
-  <string name="live_display_hint">O modo LiveDisplay pode axudar coa dor de ollos e a conciliar o sono. Toca aquí para probalo!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Dispositivo non conectado</string>
   <string name="tethered_notification_one_device_message">Dispositivo <xliff:g id="count">%1$s</xliff:g> conectado</string>

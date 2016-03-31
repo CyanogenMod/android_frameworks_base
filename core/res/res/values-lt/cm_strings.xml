@@ -151,18 +151,6 @@
   <string name="app_ops_su">gauti „Root“ prieigą</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Kad atsegtumėte šį ekraną palieskite ir laikykite mygtuką atgal.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automatinis</string>
-  <string name="live_display_auto_summary">Automatiškai sureguliuoti ekrano spalvos temperatūrą po saulėlydžio ir saulėtekio</string>
-  <string name="live_display_off">Išjungta</string>
-  <string name="live_display_off_summary">Neleisti visų reguliavimų</string>
-  <string name="live_display_day">Diena</string>
-  <string name="live_display_day_summary">Naudoti tik dienos nustatymus</string>
-  <string name="live_display_night">Naktis</string>
-  <string name="live_display_night_summary">Naudoti tik nakties nustatymus</string>
-  <string name="live_display_outdoor">Laukas (ryški saulė)</string>
-  <string name="live_display_outdoor_summary">Naudoti tik lauko nustatymus</string>
-  <string name="live_display_hint">„LiveDisplay“ gali padėti sumažinti akių įtampą ir padėti jums užmigti naktį. Spauskite čia, kad jį išbandyti!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nėra prijungto įrenginio</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> prijungtas įrenginys</string>
