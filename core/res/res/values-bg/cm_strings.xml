@@ -168,18 +168,6 @@
   <string name="app_ops_su">получете администраторски права</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">За да освободите този екран, докоснете и задръжте бутона назад.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Автоматичен</string>
-  <string name="live_display_auto_summary">Настройва автоматично температурата на цветовете на екрана след залез и изгрев</string>
-  <string name="live_display_off">Изключен</string>
-  <string name="live_display_off_summary">Деактивира всички корекции</string>
-  <string name="live_display_day">Дневен</string>
-  <string name="live_display_day_summary">Само настройки на дневен режим</string>
-  <string name="live_display_night">Нощен</string>
-  <string name="live_display_night_summary">Само настройки на нощен режим</string>
-  <string name="live_display_outdoor">На открито (ярко слънце)</string>
-  <string name="live_display_outdoor_summary">Само настройки на режим на открито</string>
-  <string name="live_display_hint">Използването на адаптивен екран може да помогне за намаляване умората в очите през нощта. Докоснете тук, за да го изпробвате!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Няма свързано устройство</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> устройството е свързано</string>
