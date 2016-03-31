@@ -168,18 +168,6 @@
   <string name="app_ops_su">obtenir accés de superusuari</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Per desancorar aquesta pantalla, toca i aguanta el botó Enrera.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automàtic</string>
-  <string name="live_display_auto_summary">Ajusta automàticament la temperatura de color de la pantalla després de la posta de sol i de l\'alba</string>
-  <string name="live_display_off">No</string>
-  <string name="live_display_off_summary">Deshabilita tots els ajustaments</string>
-  <string name="live_display_day">Dia</string>
-  <string name="live_display_day_summary">Utilitza només la configuració de dia</string>
-  <string name="live_display_night">Nit</string>
-  <string name="live_display_night_summary">Utilitza només la configuració de nit</string>
-  <string name="live_display_outdoor">Exterior (sol intens)</string>
-  <string name="live_display_outdoor_summary">Utilitza només la configuració d\'exterior</string>
-  <string name="live_display_hint">LiveDisplay pot ajudar-te a reduir la fatiga ocular i ajudar-te a dormir a la nit. Fes clic aquí per provar-ho!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Cap dispositiu connectat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositiu connectat</string>

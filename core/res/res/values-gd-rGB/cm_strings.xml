@@ -56,7 +56,6 @@
   <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <!-- App ops requests -->
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-  <!-- LiveDisplay strings -->
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <!-- Keyguard strings -->
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line

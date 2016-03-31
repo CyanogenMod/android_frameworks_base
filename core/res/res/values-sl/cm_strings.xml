@@ -168,18 +168,6 @@
   <string name="app_ops_su">pridobitev skrbniškega dostopa</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Da odpnete ta zaslon, se dotaknite in pridržite gumb Nazaj.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Samodejno</string>
-  <string name="live_display_auto_summary">Samodejno nastavi barvno temperaturo zaslona po sončnem zahodu in vzhodu</string>
-  <string name="live_display_off">Izklopljen</string>
-  <string name="live_display_off_summary">Onemogoči vse prilagoditve</string>
-  <string name="live_display_day">Dan</string>
-  <string name="live_display_day_summary">Uporabi samo dnevne nastavitve</string>
-  <string name="live_display_night">Noč</string>
-  <string name="live_display_night_summary">Uporabi samo nočne nastavitve</string>
-  <string name="live_display_outdoor">Na prostem (močna svetloba)</string>
-  <string name="live_display_outdoor_summary">Uporabi samo nastavitve na prostem</string>
-  <string name="live_display_hint">LiveDisplay vam lahko pomaga pri zmanjšanju obremenitve oči in spanju ponoči. Kliknite tukaj, da ga preskusite!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nobene naprave ni povezane</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezana naprava</string>

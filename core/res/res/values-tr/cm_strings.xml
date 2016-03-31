@@ -168,18 +168,6 @@
   <string name="app_ops_su">root erişimi al</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Bu ekranı kaldırmak için Geri tuşuna dokunun ve tutun.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Otomatik</string>
-  <string name="live_display_auto_summary">Gün batımı ve doğumundan sonra ekranın renk sıcaklığını otomatik ayarlar</string>
-  <string name="live_display_off">Kapalı</string>
-  <string name="live_display_off_summary">Tüm ayarlamaları devre dışı bırak</string>
-  <string name="live_display_day">Gündüz</string>
-  <string name="live_display_day_summary">Sadece gündüz ayarlarını kullan</string>
-  <string name="live_display_night">Gece</string>
-  <string name="live_display_night_summary">Sadece gece ayarlarını kullan</string>
-  <string name="live_display_outdoor">Açık alan (parlak güneş)</string>
-  <string name="live_display_outdoor_summary">Sadece açık alan ayarlarını kullan</string>
-  <string name="live_display_hint">LiveDisplay göz yorgunluğunuzu azaltıp geceleri uyumanıza yardımcı olabilir. Denemek için buraya tıklayın!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Bağlı cihaz yok</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> cihaz bağlı</string>

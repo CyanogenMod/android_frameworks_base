@@ -147,18 +147,6 @@
   <string name="app_ops_su">akiri radikuzantajn permesojn</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Por malŝlosi tiun ekranon, tuŝetu kaj tenu la Reen butonon.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Aŭtomata</string>
-  <string name="live_display_auto_summary">Aŭtomate alĝustigi kolortemperaturon de la ekrano post sunsubiro kaj suniĝo</string>
-  <string name="live_display_off">For</string>
-  <string name="live_display_off_summary">Malŝalti ĉiujn ĝustigojn</string>
-  <string name="live_display_day">Tago</string>
-  <string name="live_display_day_summary">Uzi nur tagajn agordojn</string>
-  <string name="live_display_night">Nokto</string>
-  <string name="live_display_night_summary">Uzi nur noktajn agordojn</string>
-  <string name="live_display_outdoor">Ekstere (brila suno)</string>
-  <string name="live_display_outdoor_summary">Uzi nur eksterajn parametrojn</string>
-  <string name="live_display_hint">LiveDisplay povas helpi vin malgrandigi okulo-streĉon nokte. Alklaku tie por provi!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Neniu konektata aparato</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> konektita aparato</string>

@@ -151,18 +151,6 @@
   <string name="app_ops_su">získať root prístup</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Na odopnutie tejto obrazovky stlačte a podržte tlačidlo Späť.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automatické</string>
-  <string name="live_display_auto_summary">Automaticky upraviť teplotu farieb obrazovky po západe a východe slnka</string>
-  <string name="live_display_off">Vypnuté</string>
-  <string name="live_display_off_summary">Zakázať všetky úpravy</string>
-  <string name="live_display_day">Deň</string>
-  <string name="live_display_day_summary">Použiť len nastavenia pre deň</string>
-  <string name="live_display_night">Noc</string>
-  <string name="live_display_night_summary">Použiť len nastavenia pre noc</string>
-  <string name="live_display_outdoor">Vonku (jasné slnko)</string>
-  <string name="live_display_outdoor_summary">Používať len nastavenia pre vonkajšie prostredie</string>
-  <string name="live_display_hint">LiveDisplay môže pomôcť znížiť únavu očí a pomôže vám spať v noci. Kliknite sem a vyskúšajte túto funkciu!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Žiadne pripojené zariadenie</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> pripojené zariadenie</string>
