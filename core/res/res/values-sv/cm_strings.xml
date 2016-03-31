@@ -168,18 +168,6 @@
   <string name="app_ops_su">få root-åtkomst</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">För att frigöra denna skärm, tryck och håll nere Bakåt-knappen.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automatisk</string>
-  <string name="live_display_auto_summary">Justera automatiskt skärmens färgtemperatur efter solnedgång och soluppgång</string>
-  <string name="live_display_off">Av</string>
-  <string name="live_display_off_summary">Inaktivera alla justeringar</string>
-  <string name="live_display_day">Dag</string>
-  <string name="live_display_day_summary">Använd enbart dagläge</string>
-  <string name="live_display_night">Natt</string>
-  <string name="live_display_night_summary">Använd enbart nattläge</string>
-  <string name="live_display_outdoor">Utomhus (stark sol)</string>
-  <string name="live_display_outdoor_summary">Använd endast utomhusläge</string>
-  <string name="live_display_hint">LiveDisplay kan minska överansträngning av ögon och hjälpa dig med nattsömnen. Klicka här för att prova!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Ingen ansluten enhet</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ansluten enhet</string>

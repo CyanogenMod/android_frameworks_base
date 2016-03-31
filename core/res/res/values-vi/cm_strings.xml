@@ -168,18 +168,6 @@
   <string name="app_ops_su">lấy quyền truy cập root</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Để bỏ ghim màn hình này, hãy chạm và giữ phím Quay lại.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Tự động</string>
-  <string name="live_display_auto_summary">Tự động chỉnh nhiệt độ màu của màn hình theo ngày và đêm</string>
-  <string name="live_display_off">Tắt</string>
-  <string name="live_display_off_summary">Vô hiệu hoá tất cả điều chỉnh</string>
-  <string name="live_display_day">Ngày</string>
-  <string name="live_display_day_summary">Chỉ sử dụng cài đặt ban ngày</string>
-  <string name="live_display_night">Đêm</string>
-  <string name="live_display_night_summary">Chỉ sử dụng cài đặt ban đêm</string>
-  <string name="live_display_outdoor">Ngoài trời (ánh sáng mặt trời)</string>
-  <string name="live_display_outdoor_summary">Chỉ sử dụng cài đặt ngoài trời</string>
-  <string name="live_display_hint">LiveDisplay có thể giúp giảm mỏi mắt và giúp bạn ngủ vào ban đêm. Nhấn vào đây để thử!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Không có thiết bị kết nối</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> thiết bị đã kết nối</string>
