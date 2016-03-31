@@ -194,9 +194,6 @@ class AutomaticBrightnessController {
     private int mBrightnessAdjustmentSampleOldBrightness;
     private float mBrightnessAdjustmentSampleOldGamma;
 
-    // Night mode color temperature adjustments
-    private final LiveDisplayController mLiveDisplay;
-
     // Period of time in which to consider light samples in milliseconds.
     private int mAmbientLightHorizon;
 
@@ -212,7 +209,7 @@ class AutomaticBrightnessController {
             int lightSensorRate, long brighteningLightDebounceConfig,
             long brighteningLightFastDebounceConfig, long darkeningLightDebounceConfig,
             boolean resetAmbientLuxAfterWarmUpConfig,
-            int ambientLightHorizon, LiveDisplayController ldc) {
+            int ambientLightHorizon) {
         mContext = context;
         mCallbacks = callbacks;
         mTwilight = LocalServices.getService(TwilightManager.class);
@@ -227,7 +224,6 @@ class AutomaticBrightnessController {
         mBrighteningLightFastDebounceConfig = brighteningLightFastDebounceConfig;
         mDarkeningLightDebounceConfig = darkeningLightDebounceConfig;
         mResetAmbientLuxAfterWarmUpConfig = resetAmbientLuxAfterWarmUpConfig;
-        mLiveDisplay = ldc;
         mAmbientLightHorizon = ambientLightHorizon;
         mWeightingIntercept = ambientLightHorizon;
 
@@ -502,9 +498,6 @@ class AutomaticBrightnessController {
                 Slog.d(TAG, "updateAutoBrightness: adjGamma=" + adjGamma);
             }
         }
-
-        // Update LiveDisplay with the current lux
-        mLiveDisplay.updateLiveDisplay(mAmbientLux);
 
         if (USE_TWILIGHT_ADJUSTMENT) {
             TwilightState state = mTwilight.getCurrentState();
