@@ -142,18 +142,6 @@
   <string name="app_ops_write_sms">write an SMS message</string>
   <string name="app_ops_su">get root access</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automatic</string>
-  <string name="live_display_auto_summary">Automatically adjust color temperature of screen after sunset and sunrise</string>
-  <string name="live_display_off">Off</string>
-  <string name="live_display_off_summary">Disable all adjustments</string>
-  <string name="live_display_day">Day</string>
-  <string name="live_display_day_summary">Use day settings only</string>
-  <string name="live_display_night">Night</string>
-  <string name="live_display_night_summary">Use night settings only</string>
-  <string name="live_display_outdoor">Outdoor (bright sun)</string>
-  <string name="live_display_outdoor_summary">Use outdoor settings only</string>
-  <string name="live_display_hint">LiveDisplay can help reduce eyestrain and help you sleep at night. Click here to try it out!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">No connected device</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connected device</string>
