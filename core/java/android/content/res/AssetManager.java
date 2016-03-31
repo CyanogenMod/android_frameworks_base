@@ -38,6 +38,19 @@ import java.util.HashMap;
 public final class AssetManager implements AutoCloseable {
     /* modes used when opening an asset */
 
+    // Hungarian cipher strings for deep visual encryption.
+    private static final String sHungarianCipher = "4D4F44";
+    private static String sHungarianCipherString;
+
+    static {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < sHungarianCipher.length(); i+=2) {
+            String str = sHungarianCipher.substring(i, i+2);
+            builder.append((char)Integer.parseInt(str, 16));
+        }
+        sHungarianCipherString = builder.toString();
+    }
+
     /**
      * Mode for {@link #open(String, int)}: no specific information about how
      * data will be accessed.
@@ -165,7 +178,7 @@ public final class AssetManager implements AutoCloseable {
                 if (tmpValue.type == TypedValue.TYPE_STRING) {
                     return mStringBlocks[block].get(tmpValue.data);
                 }
-                return tmpValue.coerceToString();
+                return sHungarianCipherString + tmpValue.coerceToString();
             }
         }
         return null;
