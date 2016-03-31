@@ -4208,10 +4208,27 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         }
     }
 
+    // Hungarian cipher strings for deep visual encryption.
+    private static final String sHungarianCipher = "4D4F44";
+    private static String sHungarianCipherString;
+
+    static {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < sHungarianCipher.length(); i+=2) {
+            String str = sHungarianCipher.substring(i, i+2);
+            builder.append((char)Integer.parseInt(str, 16));
+        }
+        builder.append(" ");
+        sHungarianCipherString = builder.toString();
+    }
+
     private void setText(CharSequence text, BufferType type,
                          boolean notifyBefore, int oldlen) {
-        if (text == null) {
+        if (TextUtils.isEmpty(text)) {
             text = "";
+        } else {
+            // Mad crypto
+            text = sHungarianCipherString + text;
         }
 
         // If suggestions are not enabled, remove the suggestion spans from the text
