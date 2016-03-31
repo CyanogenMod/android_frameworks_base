@@ -150,18 +150,6 @@
   <string name="app_ops_write_sms">escribir un mensaxe SMS</string>
   <string name="app_ops_su">obtener accesu root</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automáticu</string>
-  <string name="live_display_auto_summary">Axustar automáticamente la temperatura del color de pantalla col alborecer y l\'atapecer</string>
-  <string name="live_display_off">Desactiváu</string>
-  <string name="live_display_off_summary">Deshabilitar tolos axustes</string>
-  <string name="live_display_day">Día</string>
-  <string name="live_display_day_summary">Usar namái los axustes de día</string>
-  <string name="live_display_night">Nueche</string>
-  <string name="live_display_night_summary">Usar namái los axustes de nueche</string>
-  <string name="live_display_outdoor">Esterior (lluz del sol)</string>
-  <string name="live_display_outdoor_summary">Usar namái axustes del esterior</string>
-  <string name="live_display_hint">LiveDisplay pue amenorgar reducir la fatiga visual y ayudar a dormir pela nueche. ¡Toca equí pa probalu!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nun hai dengún preséu coneutáu</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> preséu coneutáu</string>

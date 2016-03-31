@@ -152,18 +152,6 @@
   <string name="app_ops_su">Root-Accès kréien</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Fir dëse Schierm lasszeléisen, dréck den Zréck-Knäppchen an hal e gedréckt.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automatesch</string>
-  <string name="live_display_auto_summary">Faarftemperatur automatesch dem Sonnenënnergank a Sonnenopgank upassen</string>
-  <string name="live_display_off">Aus</string>
-  <string name="live_display_off_summary">All Upassungen desaktivéieren</string>
-  <string name="live_display_day">Dag</string>
-  <string name="live_display_day_summary">Just Dagesmodus benotzen</string>
-  <string name="live_display_night">Nuecht</string>
-  <string name="live_display_night_summary">Just Nuetsmodus benotzen</string>
-  <string name="live_display_outdoor">Baussen (hell Sonn)</string>
-  <string name="live_display_outdoor_summary">Just Baussemodus benotzen</string>
-  <string name="live_display_hint">LiveDisplay ka géint Iwwerustrengung vun den Aen a beim Schlofen an der Nuecht hëllefen. Dréck hei, fir et auszeprobéieren!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Kee connectéierten Apparat</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> connectéierten Apparat</string>

@@ -138,7 +138,6 @@
   <string name="app_ops_write_sms">rakstīt īsziņu</string>
   <string name="app_ops_su">saņemt root piekļuvi</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-  <!-- LiveDisplay strings -->
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nav pievienota ierīce</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> pievienota ierīce</string>
