@@ -18,6 +18,7 @@ package android.media;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.media.audiopolicy.AudioMix;
 import android.util.Log;
 
@@ -744,18 +745,12 @@ public class AudioSystem
         return DEFAULT_STREAM_VOLUME[streamType];
     }
 
-    public static int[] DEFAULT_STREAM_VOLUME = new int[] {
-        4,  // STREAM_VOICE_CALL
-        7,  // STREAM_SYSTEM
-        5,  // STREAM_RING
-        11, // STREAM_MUSIC
-        6,  // STREAM_ALARM
-        5,  // STREAM_NOTIFICATION
-        7,  // STREAM_BLUETOOTH_SCO
-        7,  // STREAM_SYSTEM_ENFORCED
-        11, // STREAM_DTMF
-        11  // STREAM_TTS
-    };
+    public static int[] DEFAULT_STREAM_VOLUME;
+
+    static {
+        DEFAULT_STREAM_VOLUME = Resources.getSystem().getIntArray(
+                com.android.internal.R.array.config_defaultVolumes);
+    }
 
     public static String streamToString(int stream) {
         if (stream >= 0 && stream < STREAM_NAMES.length) return STREAM_NAMES[stream];

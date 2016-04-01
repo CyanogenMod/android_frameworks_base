@@ -1902,6 +1902,19 @@
         <item>-1</item>
     </integer-array>
 
+    <integer-array translatable="false" name="config_defaultVolumes">
+        <item>4</item>  <!-- STREAM_VOICE_CALL -->
+        <item>7</item>  <!-- STREAM_SYSTEM -->
+        <item>5</item>  <!-- STREAM_RING -->
+        <item>11</item> <!-- STREAM_MUSIC -->
+        <item>6</item>  <!-- STREAM_ALARM -->
+        <item>5</item>  <!-- STREAM_NOTIFICATION -->
+        <item>7</item>  <!-- STREAM_BLUETOOTH_SCO -->
+        <item>7</item>  <!-- STREAM_SYSTEM_ENFORCED -->
+        <item>11</item> <!-- STREAM_DTMF -->
+        <item>11</item> <!-- STREAM_TTS -->
+    </integer-array>
+
     <!-- When true use the linux /dev/input/event subsystem to detect the switch changes
          on the headphone/microphone jack. When false use the older uevent framework. -->
     <bool name="config_useDevInputEventForAudioJack">false</bool>
