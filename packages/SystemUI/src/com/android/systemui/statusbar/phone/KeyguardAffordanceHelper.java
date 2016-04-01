@@ -49,7 +49,7 @@ public class KeyguardAffordanceHelper {
     private VelocityTracker mVelocityTracker;
     private boolean mSwipingInProgress;
     private float mInitialTouchX;
-    private float mInitialTouchY;
+    private float mInitialTouchYRaw;
     private float mTranslation;
     private float mTranslationOnDown;
     private int mTouchSlop;
@@ -146,7 +146,7 @@ public class KeyguardAffordanceHelper {
                 }
                 startSwiping(targetView);
                 mInitialTouchX = x;
-                mInitialTouchY = y;
+                mInitialTouchYRaw = event.getRawY();
                 mTranslationOnDown = mTranslation;
                 initVelocityTracker();
                 trackMovement(event);
@@ -159,7 +159,7 @@ public class KeyguardAffordanceHelper {
             case MotionEvent.ACTION_MOVE:
                 trackMovement(event);
                 float xDist = x - mInitialTouchX;
-                float yDist = y - mInitialTouchY;
+                float yDist = y - mInitialTouchYRaw;
                 float distance = (float) Math.hypot(xDist, yDist);
                 if (!mTouchSlopExeeded && distance > mTouchSlop) {
                     mTouchSlopExeeded = true;
@@ -488,7 +488,7 @@ public class KeyguardAffordanceHelper {
         float aX = mVelocityTracker.getXVelocity();
         float aY = mVelocityTracker.getYVelocity();
         float bX = lastX - mInitialTouchX;
-        float bY = lastY - mInitialTouchY;
+        float bY = lastY - mInitialTouchYRaw;
         float bLen = (float) Math.hypot(bX, bY);
         // Project the velocity onto the distance vector: a * b / |b|
         float projectedVelocity = (aX * bX + aY * bY) / bLen;

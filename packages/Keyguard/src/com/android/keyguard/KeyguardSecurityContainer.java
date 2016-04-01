@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -26,6 +27,7 @@ import android.util.Slog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.WindowManagerGlobal;
 import android.widget.FrameLayout;
 
 import com.android.internal.widget.LockPatternUtils;
@@ -353,6 +355,12 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
             }
         }
         if (finish) {
+            try {
+                WindowManagerGlobal.getWindowManagerService()
+                        .setLiveLockscreenEdgeDetector(false);
+            } catch (RemoteException e){
+                Log.e(TAG, e.getMessage());
+            }
             mSecurityCallback.finish(strongAuth);
         }
         return finish;

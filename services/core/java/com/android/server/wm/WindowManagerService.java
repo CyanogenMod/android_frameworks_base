@@ -11951,6 +11951,14 @@ public class WindowManagerService extends IWindowManager.Stub
         return mWindowMap;
     }
 
+    @Override
+    public void setLiveLockscreenEdgeDetector(boolean enable) {
+        if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.STATUS_BAR)
+                == PackageManager.PERMISSION_GRANTED) {
+            mPolicy.setLiveLockscreenEdgeDetector(enable);
+        }
+    }
+
     private final class LocalService extends WindowManagerInternal {
         @Override
         public void requestTraversalFromDisplayManager() {

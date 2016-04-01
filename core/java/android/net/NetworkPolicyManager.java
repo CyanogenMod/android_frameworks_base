@@ -53,6 +53,8 @@ public class NetworkPolicyManager {
     public static final int POLICY_REJECT_ON_WLAN = 0x8000;
     /** Reject application network traffic on cellular network **/
     public static final int POLICY_REJECT_ON_DATA = 0x10000;
+    /** Reject application background network traffic on WiFi network **/
+    public static final int POLICY_REJECT_ON_WLAN_BACKGROUND = 0x20000;
 
     /* RULE_* are not masks and they must be exclusive */
     public static final int RULE_UNKNOWN = -1;

@@ -90,6 +90,12 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.setOccluded(isOccluded);
         }
 
+        @Override
+        public void showKeyguard() {
+            checkPermission();
+            mKeyguardViewMediator.showKeyguard();
+        }
+
         @Override // Binder interface
         public void dismiss() {
             checkPermission();

@@ -290,6 +290,31 @@ public class NetworkStatsRecorder {
     }
 
     /**
+     * Reset data usage for all matching identities in {@link FileRotator} history,
+     */
+    public void resetDataUsageLocked(NetworkTemplate template) {
+        try {
+            // Reset all persisted data to empty values
+            mRotator.rewriteAll(new ResetDataUsageRewriter(mBucketDuration, template));
+        } catch (IOException e) {
+            Log.wtf(TAG, "problem resetting data stats " + e);
+            recoverFromWtf();
+        } catch (OutOfMemoryError e) {
+            Log.wtf(TAG, "problem resetting data stats " + e);
+            recoverFromWtf();
+        }
+
+        // Reset any pending stats
+        mPending.resetDataUsage(template);
+        mSinceBoot.resetDataUsage(template);
+
+        final NetworkStatsCollection complete = mComplete != null ? mComplete.get() : null;
+        if (complete != null) {
+            complete.resetDataUsage(template);
+        }
+    }
+
+    /**
      * Rewriter that will combine current {@link NetworkStatsCollection} values
      * with anything read from disk, and write combined set to disk. Clears the
      * original {@link NetworkStatsCollection} when finished writing.
@@ -346,6 +371,42 @@ public class NetworkStatsRecorder {
             mTemp.read(in);
             mTemp.clearDirty();
             mTemp.removeUids(mUids);
+        }
+
+        @Override
+        public boolean shouldWrite() {
+            return mTemp.isDirty();
+        }
+
+        @Override
+        public void write(OutputStream out) throws IOException {
+            mTemp.write(new DataOutputStream(out));
+        }
+    }
+
+    /**
+     * Rewriter that will remove any {@link NetworkStatsHistory} attributed to
+     * identities in input template, replacing it with empty values.
+     */
+    public static class ResetDataUsageRewriter implements FileRotator.Rewriter {
+        private final NetworkStatsCollection mTemp;
+        private NetworkTemplate mTemplate;
+
+        public ResetDataUsageRewriter(long bucketDuration, NetworkTemplate template) {
+            mTemp = new NetworkStatsCollection(bucketDuration);
+            mTemplate = template;
+        }
+
+        @Override
+        public void reset() {
+            mTemp.reset();
+        }
+
+        @Override
+        public void read(InputStream in) throws IOException {
+            mTemp.read(in);
+            mTemp.clearDirty();
+            mTemp.resetDataUsage(mTemplate);
         }
 
         @Override
