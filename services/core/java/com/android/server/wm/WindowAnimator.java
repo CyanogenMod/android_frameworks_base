@@ -566,7 +566,6 @@ public class WindowAnimator {
                         }
                     }
                 }
-                mAnimating = true;
             }
 
             // If this window's app token is running a detached wallpaper
