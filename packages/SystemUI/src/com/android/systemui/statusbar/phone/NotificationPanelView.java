@@ -2811,4 +2811,8 @@ public class NotificationPanelView extends PanelView implements
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         return !tasks.isEmpty() && pkgName.equals(tasks.get(0).topActivity.getPackageName());
     }
+
+    public void slideLockScreenOut() {
+        mSwipeCallback.onChildDismissed(this);
+    }
 }
