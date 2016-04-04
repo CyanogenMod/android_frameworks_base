@@ -44,6 +44,7 @@ import android.util.Pair;
 import android.util.SparseArray;
 import android.util.ArrayMap;
 import android.util.Xml;
+import android.util.EventLog;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.ArrayUtils;
@@ -1426,15 +1427,23 @@ public class SyncStorageEngine extends Handler {
     }
 
     /**
-     * @return a copy of the current syncs data structure. Will not return
-     * null.
+     * @param userId Id of user to return current sync info.
+     * @param canAccessAccounts Determines whether to redact Account information from the result.
+     * @return a copy of the current syncs data structure. Will not return null.
      */
-    public List<SyncInfo> getCurrentSyncsCopy(int userId) {
+    public List<SyncInfo> getCurrentSyncsCopy(int userId, boolean canAccessAccounts) {
         synchronized (mAuthorities) {
             final List<SyncInfo> syncs = getCurrentSyncsLocked(userId);
             final List<SyncInfo> syncsCopy = new ArrayList<SyncInfo>();
             for (SyncInfo sync : syncs) {
-                syncsCopy.add(new SyncInfo(sync));
+                SyncInfo copy;
+                if (!canAccessAccounts) {
+                    copy = SyncInfo.createAccountRedacted(
+                        sync.authorityId, sync.authority, sync.startTime);
+                } else {
+                    copy = new SyncInfo(sync);
+                }
+                syncsCopy.add(copy);
             }
             return syncsCopy;
         }
@@ -1860,8 +1869,13 @@ public class SyncStorageEngine extends Handler {
                             if ("authority".equals(tagName)) {
                                 authority = parseAuthority(parser, version);
                                 periodicSync = null;
-                                if (authority.ident > highestAuthorityId) {
-                                    highestAuthorityId = authority.ident;
+                                if (authority != null) {
+                                    if (authority.ident > highestAuthorityId) {
+                                        highestAuthorityId = authority.ident;
+                                    }
+                                } else {
+                                    EventLog.writeEvent(0x534e4554, "26513719", -1,
+                                            "Malformed authority");
                                 }
                             } else if (XML_TAG_LISTEN_FOR_TICKLES.equals(tagName)) {
                                 parseListenForTickles(parser);
