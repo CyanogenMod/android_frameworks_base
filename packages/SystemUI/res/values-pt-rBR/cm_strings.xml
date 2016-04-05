@@ -27,8 +27,8 @@
          values/config.xml) and must be truncated.
          [CHAR LIMIT=4] -->
   <!-- Strings for lockscreen shortcut hints -->
-  <string name="left_shortcut_hint">Deslizar para a direita para %1$s</string>
-  <string name="right_shortcut_hint">Deslizar para a esquerda para %1$s</string>
+  <string name="left_shortcut_hint">Deslize para a direita para %1$s</string>
+  <string name="right_shortcut_hint">Deslize para a esquerda para %1$s</string>
   <string name="lockscreen_message">Toque em um ícone da esquerda ou da direita para reatribuir o atalho da tela de bloqueio.</string>
   <string name="lockscreen_default_target">Padrão</string>
   <string name="select_application">Selecionar aplicativo</string>
@@ -41,7 +41,7 @@
   <string name="navbar_search_button">Botão de buscar</string>
   <string name="navbar_back_button">Botão de voltar</string>
   <string name="navbar_empty_button">Botão vazio</string>
-  <string name="navbar_menu_conditional_button">Botão menu (esconder auto.)</string>
+  <string name="navbar_menu_conditional_button">Botão menu (autoesconder)</string>
   <string name="navbar_menu_always_button">Botão menu (sempre visível)</string>
   <string name="navbar_menu_big_button">Botão menu</string>
   <string name="accessibility_dpad_left">Cursor à esquerda</string>
@@ -50,7 +50,7 @@
   <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Limpar dados de aplicativos</string>
   <!-- Title shown in recents popup for force stopping the application -->
-  <string name="advanced_dev_option_force_stop">Forçar fechamento</string>
+  <string name="advanced_dev_option_force_stop">Interromper à força</string>
   <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Desinstalar</string>
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -78,7 +78,7 @@
   <string name="quick_settings_title_show_brightness_slider">Mostrar o controle deslizante de brilho</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar a primeira linha</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
-  <string name="screen_pinning_description_no_navbar">Isto manterá-la na tela até você desafixar. Toque e segure o botão Voltar para desafixar.</string>
+  <string name="screen_pinning_description_no_navbar">Isto a manterá na tela até ser desafixada. Toque e segure o botão Voltar para desafixar.</string>
   <string name="quick_settings_custom_tile_detail_title">Botão personalizado</string>
   <string name="quick_settings_remove">Remover botão</string>
   <string name="quick_settings_network_adb_label">ADB sobre rede</string>
@@ -92,20 +92,20 @@
   <string name="quick_settings_battery_saver_label_charging">Economia de bateria (carregando)</string>
   <string name="quick_settings_caffeine_label">Cafeína</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_sync_off">Sincr. desl.</string>
+  <string name="accessibility_quick_settings_sync_off">Sincronização desligada.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_sync_on">Sincr. lig.</string>
+  <string name="accessibility_quick_settings_sync_on">Sincronização ligada.</string>
   <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_sync_changed_off">Sincronização desligada.</string>
+  <string name="accessibility_quick_settings_sync_changed_off">Sincronização foi desligada.</string>
   <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_sync_changed_on">Sincronização ligada.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Sincronização foi ligada.</string>
   <string name="quick_settings_sync_label">Sincronização</string>
   <string name="quick_settings_volume_panel_label">Painel de volume</string>
-  <string name="quick_settings_usb_tether_label">Tethering USB</string>
+  <string name="quick_settings_usb_tether_label">Compartilhamento USB</string>
   <string name="quick_settings_screen_timeout_detail_title">Tempo limite de tela</string>
   <string name="quick_settings_lockscreen_label">Tela de bloqueio</string>
   <string name="quick_settings_ambient_display_label">Tela ambiente</string>
-  <string name="quick_settings_lockscreen_label_enforced">Tela de bloqueio imposta</string>
+  <string name="quick_settings_lockscreen_label_enforced">Tela de bloqueio aplicada</string>
   <string name="quick_settings_lockscreen_label_locked_by_profile">Desativado pelo perfil</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Tempo limite da tela: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
@@ -144,19 +144,19 @@
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_off">Tela ambiente desativado.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_on">Tela ambiente ativado.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Tela ambiente ativada.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Tela ambiente desligado.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Tela ambiente foi desligada.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Tela ambiente ligado.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Tela ambiente foi ligada.</string>
   <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_off">Heads up desativado.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Heads up desligado.</string>
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_on">Heads up ativado.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Heads up ligado.</string>
   <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up desligado.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up foi desligado.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up ligado.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up foi ligado.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_off">Cafeína desligado.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -170,42 +170,42 @@
   <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">O economizador de bateria foi ligado.</string>
   <!-- Dynamic tiles -->
-  <string name="quick_settings_dynamic_tile_detail_title">Botões dinâmicos</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Botão dinâmico</string>
   <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seletor de IME</string>
-  <string name="dynamic_qs_tile_su_label">Acesso super-usuário</string>
+  <string name="dynamic_qs_tile_su_label">Acesso super usuário</string>
   <!-- LiveDisplay strings -->
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay desligado.</string>
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: modo automático.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: modo dia.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: modo noite.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: modo diurno.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: modo noturno.</string>
   <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modo ao ar livre.</string>
   <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay foi desligado.</string>
   <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay alterado para modo automático.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay alterado para modo dia.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay alterado para modo noite.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay alterado para modo diurno.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay alterado para modo noturno.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay alterado para modo ao ar livre.</string>
   <string name="quick_settings_title_advanced_location">Localização em 3 estados</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_battery_saving">Localização: economia de bateria.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Relatório de localização: modo economia de bateria.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_gps_only">Localização: apenas no dispositivo.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Relatório de localização: modo somente sensores.</string>
   <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_high_accuracy">Localização: alta precisão.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Relatório de localização: modo de alta precisão.</string>
   <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Modo de localização</string>
   <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Economia de bateria</string>
   <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
-  <string name="quick_settings_location_gps_only_label">Apenas no dispositivo</string>
+  <string name="quick_settings_location_gps_only_label">Somente no dispositivo</string>
   <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Alta precisão</string>
   <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_battery_saving">Modo de localização alterado para apenas Wi-Fi e redes móveis.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Relatório de localização alterado para economia de bateria.</string>
   <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_gps_only">Modo de localização alterado para apenas GPS.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Relatório de localização alterado para modo somente sensores.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_high_accuracy">Modo de localização alterado para GPS, Wi-Fi e redes móveis.</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Relatório de localização alterado para modo de alta precisão.</string>
   <string name="quick_settings_tiles_category_system">Botões de sistema</string>
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Adicionar um botão</string>
@@ -222,7 +222,7 @@
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">Sem SIM de dados</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">Bateria do dock está <xliff:g xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" id="number">%d</xliff:g> porcento.</string>
+  <string name="accessibility_dock_battery_level">A bateria do dock tem <xliff:g xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" id="number">%d</xliff:g>%.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Mostrar fila de reprodução</string>
 </resources>

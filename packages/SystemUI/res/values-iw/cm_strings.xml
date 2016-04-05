@@ -106,7 +106,7 @@
   <string name="quick_settings_lockscreen_label">מסך נעילה</string>
   <string name="quick_settings_ambient_display_label">התראות ברקע</string>
   <string name="quick_settings_lockscreen_label_enforced">מסך הנעילה נאכף</string>
-  <string name="quick_settings_lockscreen_label_locked_by_profile">בוטל על-ידי הפרופיל</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">הושבת על-ידי הפרופיל</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">משך זמן מסך: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -210,7 +210,7 @@
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">הוסף אריח</string>
   <!-- Hotspot dialog message -->
-  <string name="hotspot_apm_message">לא ניתן להתחבר לרשתות סלולריות כאשר מצב טיסה פעיל. בטל את מצב הטיסה ונסה שנית.</string>
+  <string name="hotspot_apm_message">לא ניתן להתחבר לרשתות סלולריות כאשר מצב טיסה פעיל. השבת את מצב הטיסה ונסה שנית.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">פנס מופעל</string>
   <string name="quick_settings_tile_flashlight_not_summary">הקש לכיבוי</string>
@@ -222,7 +222,7 @@
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">אין נתוני SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">סוללה מחוברת - <xliff:g id="number">%d</xliff:g> אחוז.</string>
+  <string name="accessibility_dock_battery_level">סוללה חיצונית - <xliff:g id="number">%d</xliff:g> אחוז.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">הצג תור השמעה</string>
 </resources>
