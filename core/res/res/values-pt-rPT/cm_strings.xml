@@ -26,7 +26,7 @@
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">modificar a lista de SMS protegidas</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_modifyProtectedSmsList">Permite que a aplicação modifique a lista de endereços de SMS protegidas.</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite que uma aplicação modifique a lista de endereços de SMS protegidas.</string>
   <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Segurança</string>
   <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
@@ -34,15 +34,15 @@
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">Ler a lista negra do telefone</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readPhoneBlacklist">Permite a uma aplicação ler informações sobre números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
+  <string name="permdesc_readPhoneBlacklist">Permite que uma aplicação leia informações sobre números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">Alterar a lista negra do telefone</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_changePhoneBlacklist">Permite a uma aplicação alterar os números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
+  <string name="permdesc_changePhoneBlacklist">Permite que uma aplicação altere os números de telefone que são bloqueados para chamadas ou mensagens de entrada.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Definir a imagem de fundo do ecrã de bloqueio</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">Permite a uma aplicação trocar a imagem de fundo do ecrã de bloqueio.</string>
+  <string name="permdesc_setKeyguardWallpaper">Permite que uma aplicação troque a imagem de fundo do ecrã de bloqueio.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Reiniciar</string>
   <!-- label for current user in phone options dialog -->
@@ -198,7 +198,7 @@
   <string name="permlab_resetBatteryStats">reiniciar estatísticas da bateria</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Permite a uma aplicação reiniciar os dados de utilização de baixo nível da bateria.</string>
+  <string name="permdesc_resetBatteryStats">Permite que uma aplicação reinicie os dados de utilização de baixo nível da bateria.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Os cartões SIM foram alterados</string>
   <string name="uicc_hot_swapped_event_text">Toque para definir as preferências do cartão SIM</string>

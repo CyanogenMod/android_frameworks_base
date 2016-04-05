@@ -40,9 +40,9 @@
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים שנחסמו עבור קבלת שיחות או הודעות נכנסות.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-  <string name="permlab_setKeyguardWallpaper">הגדרת תמונת רקע למסך הנעילה</string>
+  <string name="permlab_setKeyguardWallpaper">הגדרת טפט למסך הנעילה</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את תמונת הרקע של מסך הנעילה.</string>
+  <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את הטפט של מסך הנעילה.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">אתחול מחדש</string>
   <!-- label for current user in phone options dialog -->
@@ -73,7 +73,7 @@
   <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB דרך USB ורשת מופעל</string>
   <!-- ADB notification message-->
-  <string name="adb_active_generic_notification_message">גע לביטול איתור באגים.</string>
+  <string name="adb_active_generic_notification_message">גע להשבתת איתור באגים.</string>
   <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB ורשת</string>
@@ -155,7 +155,7 @@
   <string name="app_ops_read_phone_state">גש למצב הטלפון</string>
   <string name="app_ops_scan_wifi">סרוק רשתות Wi-Fi</string>
   <string name="app_ops_change_wallpaper">החלף טפט</string>
-  <string name="app_ops_assist_structure">שימוש במבנה סיוע</string>
+  <string name="app_ops_assist_structure">שימוש בתבנית המידע ליישום הסיוע</string>
   <string name="app_ops_assist_screenshot">צלם מסך</string>
   <string name="app_ops_use_body_sensors">השתמש בחיישני גוף</string>
   <string name="app_ops_read_cell_broadcasts">קרא שידורי סלולר</string>
@@ -189,7 +189,7 @@
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">הפעלת הפעולה נחסמה</string>
-  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> מוגן מפני הפעלה. לחץ כדי להזדהות ולהפעיל את היישום.</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> מוגן מפני הפעלה. הקש כדי להזדהות ולהפעיל את היישום.</string>
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">סוללה טעונה במלואה</string>
   <string name="notify_battery_fully_charged_text">נתק את מכשירך מהמטען כדי לשפר את אורך חיי סוללה.</string>
