@@ -89,6 +89,7 @@
   <string name="quick_settings_heads_up_label">Lebegő értesítés</string>
   <string name="quick_settings_battery_saver_label">Akkumulátor kímélő</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Akkumulátor kímélő (töltés)</string>
   <string name="quick_settings_caffeine_label">Caffeine</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Szinkronizálás ki.</string>
