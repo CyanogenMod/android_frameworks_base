@@ -248,7 +248,7 @@ public class NotificationPanelView extends PanelView implements
     // or not.
     // TODO - add a new state to make it easier to identify keyguard vs
     // LiveLockscreen
-    public boolean mCanDismissKeyguard;
+    public boolean mCanDismissKeyguard = true;
 
     // Used to track which direction the user is currently
     // interacting with and ensure they don't alternate back
@@ -442,6 +442,8 @@ public class NotificationPanelView extends PanelView implements
                     } else {
                         intercept = NotificationPanelView.this.onInterceptTouchEvent(e);
                     }
+                } else {
+                    mKeyguardBottomArea.expand(true);
                 }
                 return intercept;
             }
@@ -453,7 +455,6 @@ public class NotificationPanelView extends PanelView implements
                 // Ensure we collapse and clear fade
                 if (action == MotionEvent.ACTION_UP ||
                         action == MotionEvent.ACTION_CANCEL) {
-                    mKeyguardBottomArea.expand(false);
                     mKeyguardBottomArea.setBackground(null);
                 }
 
@@ -963,12 +964,6 @@ public class NotificationPanelView extends PanelView implements
     public boolean onTouchEvent(MotionEvent event) {
         if (mBlockTouches) {
             return false;
-        }
-
-        int action = event.getActionMasked();
-        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
-            mKeyguardBottomArea.expand(false);
-            mKeyguardBottomArea.setBackground(null);
         }
 
         if (mDoubleTapToSleepEnabled
