@@ -195,7 +195,7 @@
   <string name="notify_battery_fully_charged_text">Desconnecta el teu dispositiu del carregador per millorar la longevitat de la bateria.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">reinicia estadítiques de la bateria</string>
+  <string name="permlab_resetBatteryStats">reinicia les estadístiques de la bateria</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Permet a una aplicació reiniciar les dades actuals de baix nivell d\'us de la bateria.</string>
