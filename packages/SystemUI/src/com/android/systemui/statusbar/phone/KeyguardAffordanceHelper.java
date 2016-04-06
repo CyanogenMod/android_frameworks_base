@@ -128,7 +128,7 @@ public class KeyguardAffordanceHelper {
         if (mMotionCancelled && action != MotionEvent.ACTION_DOWN) {
             return false;
         }
-        final float y = event.getY();
+        final float y = event.getRawY();
         final float x = event.getX();
 
         boolean isUp = false;
@@ -146,7 +146,7 @@ public class KeyguardAffordanceHelper {
                 }
                 startSwiping(targetView);
                 mInitialTouchX = x;
-                mInitialTouchYRaw = event.getRawY();
+                mInitialTouchYRaw = y;
                 mTranslationOnDown = mTranslation;
                 initVelocityTracker();
                 trackMovement(event);
@@ -211,8 +211,9 @@ public class KeyguardAffordanceHelper {
     }
 
     private boolean isOnIcon(View icon, float x, float y) {
+        int[] location = icon.getLocationOnScreen();
         float iconX = icon.getX() + icon.getWidth() / 2.0f;
-        float iconY = icon.getY() + icon.getHeight() / 2.0f;
+        float iconY = location[1] + icon.getHeight() / 2.0f;
         double distance = Math.hypot(x - iconX, y - iconY);
         return distance <= mTouchTargetSize / 2;
     }
