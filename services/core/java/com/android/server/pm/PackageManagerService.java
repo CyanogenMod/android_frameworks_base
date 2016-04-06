@@ -10189,6 +10189,8 @@ public class PackageManagerService extends IPackageManager.Stub {
      * Check if the external storage media is available. This is true if there
      * is a mounted external storage medium or if the external storage is
      * emulated.
+     *
+     * MUST NOT BE CALLED WITH mPackages LOCK HELD
      */
     private boolean isExternalMediaAvailable() {
         return mMediaMounted || Environment.isExternalStorageEmulated();
@@ -10196,14 +10198,17 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     @Override
     public PackageCleanItem nextPackageToClean(PackageCleanItem lastPackage) {
-        // writer
-        synchronized (mPackages) {
+        // reader
+        synchronized(mMediaMountedLock) {
             if (!isExternalMediaAvailable()) {
                 // If the external storage is no longer mounted at this point,
                 // the caller may not have been able to delete all of this
                 // packages files and can not delete any more.  Bail.
                 return null;
             }
+        }
+        // writer
+        synchronized (mPackages) {
             final ArrayList<PackageCleanItem> pkgs = mSettings.mPackagesToBeCleaned;
             if (lastPackage != null) {
                 pkgs.remove(lastPackage);
@@ -10230,10 +10235,13 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     void startCleaningPackages() {
         // reader
-        synchronized (mPackages) {
+        synchronized (mMediaMountedLock) {
             if (!isExternalMediaAvailable()) {
                 return;
             }
+        }
+        // reader
+        synchronized (mPackages) {
             if (mSettings.mPackagesToBeCleaned.isEmpty()) {
                 return;
             }
@@ -16170,7 +16178,9 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private static final String SD_ENCRYPTION_ALGORITHM = "AES";
 
+    @GuardedBy("mMediaMountedLock")
     private boolean mMediaMounted = false;
+    private final Object mMediaMountedLock = new Object();
 
     static String getEncryptKey() {
         try {
@@ -16203,9 +16213,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (callingUid != 0 && callingUid != Process.SYSTEM_UID) {
             throw new SecurityException("Media status can only be updated by the system");
         }
-        // reader; this apparently protects mMediaMounted, but should probably
-        // be a different lock in that case.
-        synchronized (mPackages) {
+        // reader
+        synchronized (mMediaMountedLock) {
             Log.i(TAG, "Updating external media status from "
                     + (mMediaMounted ? "mounted" : "unmounted") + " to "
                     + (mediaStatus ? "mounted" : "unmounted"));
