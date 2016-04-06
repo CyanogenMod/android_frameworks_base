@@ -1646,7 +1646,11 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
             if (mBluetooth != null) {
                 mBluetooth = null;
                 //Unbind
-                mContext.unbindService(mConnection);
+                try {
+                    mContext.unbindService(mConnection);
+                } catch (Exception e) {
+                    Log.e(TAG, "Unable to unbind",e);
+                }
             }
             mBluetoothGatt = null;
         }
