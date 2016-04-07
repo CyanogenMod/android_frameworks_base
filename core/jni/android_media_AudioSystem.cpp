@@ -393,7 +393,8 @@ android_media_AudioSystem_dyn_policy_callback(int event, String8 regId, int val)
 
 static void
 android_media_AudioSystem_effect_session_callback(int event, audio_stream_type_t stream,
-        audio_unique_id_t sessionId, bool added)
+        audio_unique_id_t sessionId, audio_output_flags_t flags,
+        audio_channel_mask_t channelMask, uid_t uid, bool added)
 {
     JNIEnv *env = AndroidRuntime::getJNIEnv();
     if (env == NULL) {
@@ -403,7 +404,7 @@ android_media_AudioSystem_effect_session_callback(int event, audio_stream_type_t
     jclass clazz = env->FindClass(kClassPathName);
 
     env->CallStaticVoidMethod(clazz, gEffectSessionEventHandlerMethods.postEffectSessionEventFromNative,
-            event, stream, sessionId, added);
+            event, stream, sessionId, flags, channelMask, uid, added);
 
     env->DeleteLocalRef(clazz);
 
@@ -1799,7 +1800,7 @@ int register_android_media_AudioSystem(JNIEnv *env)
 
     gEffectSessionEventHandlerMethods.postEffectSessionEventFromNative =
             GetStaticMethodIDOrDie(env, env->FindClass(kClassPathName),
-                    "effectSessionCallbackFromNative", "(IIIZ)V");
+                    "effectSessionCallbackFromNative", "(IIIIIIZ)V");
 
     jclass audioMixClass = FindClassOrDie(env, "android/media/audiopolicy/AudioMix");
     gAudioMixClass = MakeGlobalRefOrDie(env, audioMixClass);
