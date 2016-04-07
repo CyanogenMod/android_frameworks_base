@@ -208,7 +208,7 @@ public class RankingHelper implements RankingConfig {
             if (r.priority == DEFAULT_PRIORITY && r.peekable == DEFAULT_PEEKABLE
                     && r.visibility == DEFAULT_VISIBILITY
                     && r.keyguard == Notification.SHOW_ALL_NOTI_ON_KEYGUARD) {
-                mRecords.remove(i);
+                mRecords.removeAt(i);
             }
         }
     }
