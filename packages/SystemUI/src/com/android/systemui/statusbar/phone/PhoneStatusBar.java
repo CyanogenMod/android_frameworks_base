@@ -4942,14 +4942,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mDozeScrimController.onScreenTurnedOn();
         mVisualizerView.setVisible(true);
         if (mLiveLockScreenController.isShowingLiveLockScreenView()) {
-            mLiveLockScreenController.getLiveLockScreenView().onScreenTurnedOn();
+            mLiveLockScreenController.onScreenTurnedOn();
         }
     }
 
     public void onScreenTurnedOff() {
         mVisualizerView.setVisible(false);
         if (mLiveLockScreenController.isShowingLiveLockScreenView()) {
-            mLiveLockScreenController.getLiveLockScreenView().onScreenTurnedOff();
+            mLiveLockScreenController.onScreenTurnedOff();
         }
     }
 
