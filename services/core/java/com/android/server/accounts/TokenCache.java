@@ -133,13 +133,15 @@ import java.util.Objects;
         }
 
         public void putToken(Key k, Value v) {
-            // Prepare for removal by token string.
-            Evictor tokenEvictor = mTokenEvictors.get(v.token);
+            // Prepare for removal by pair of account type and token string.
+            Pair<String, String> pair = new Pair<>(k.account.type, v.token);
+
+            Evictor tokenEvictor = mTokenEvictors.get(pair);
             if (tokenEvictor == null) {
                 tokenEvictor = new Evictor();
             }
             tokenEvictor.add(k);
-            mTokenEvictors.put(new Pair<>(k.account.type, v.token), tokenEvictor);
+            mTokenEvictors.put(pair, tokenEvictor);
 
             // Prepare for removal by associated account.
             Evictor accountEvictor = mAccountEvictors.get(k.account);
