@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * TokenCaches manage time limited authentication tokens in memory. 
+ * TokenCaches manage time limited authentication tokens in memory.
  */
 /* default */ class TokenCache {
 
@@ -125,7 +125,9 @@ import java.util.Objects;
                  * This is recursive, but it won't spiral out of control because LruCache is
                  * thread safe and the Evictor can only be removed once.
                  */
-                Evictor evictor = mTokenEvictors.remove(oldVal.token);
+                Pair<String, String> pair = new Pair<>(k.account.type, oldVal.token);
+
+                Evictor evictor = mTokenEvictors.remove(pair);
                 if (evictor != null) {
                     evictor.evict();
                 }
@@ -133,13 +135,15 @@ import java.util.Objects;
         }
 
         public void putToken(Key k, Value v) {
-            // Prepare for removal by token string.
-            Evictor tokenEvictor = mTokenEvictors.get(v.token);
+            // Prepare for removal by pair of account type and token string.
+            Pair<String, String> pair = new Pair<>(k.account.type, v.token);
+
+            Evictor tokenEvictor = mTokenEvictors.get(pair);
             if (tokenEvictor == null) {
                 tokenEvictor = new Evictor();
             }
             tokenEvictor.add(k);
-            mTokenEvictors.put(new Pair<>(k.account.type, v.token), tokenEvictor);
+            mTokenEvictors.put(pair, tokenEvictor);
 
             // Prepare for removal by associated account.
             Evictor accountEvictor = mAccountEvictors.get(k.account);
@@ -154,11 +158,12 @@ import java.util.Objects;
         }
 
         public void evict(String accountType, String token) {
-            Evictor evictor = mTokenEvictors.get(new Pair<>(accountType, token));
+            Pair<String, String> pair = new Pair<>(accountType, token);
+
+            Evictor evictor = mTokenEvictors.get(pair);
             if (evictor != null) {
                 evictor.evict();
             }
-            
         }
 
         public void evict(Account account) {
