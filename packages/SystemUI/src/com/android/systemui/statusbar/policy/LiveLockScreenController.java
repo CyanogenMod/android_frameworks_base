@@ -5,13 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.EventLog;
 
+import com.android.systemui.EventLogTags;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.phone.NotificationPanelView;
-
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
+
 import cyanogenmod.app.CMContextConstants;
 import cyanogenmod.app.ILiveLockScreenChangeListener;
 import cyanogenmod.app.ILiveLockScreenManager;
@@ -33,6 +36,10 @@ public class LiveLockScreenController {
 
     private int mStatusBarState;
 
+    private PowerManager mPowerManager;
+
+    private boolean mLlsHasFocus = false;
+
     public LiveLockScreenController(Context context, PhoneStatusBar bar,
             NotificationPanelView panelView) {
         mContext = context;
@@ -42,6 +49,7 @@ public class LiveLockScreenController {
                 CMContextConstants.CM_LIVE_LOCK_SCREEN_SERVICE));
         mBar = bar;
         mPanelView = panelView;
+        mPowerManager = context.getSystemService(PowerManager.class);
         registerListener();
         try {
             LiveLockScreenInfo llsInfo = mLLSM.getCurrentLiveLockScreen();
@@ -64,6 +72,11 @@ public class LiveLockScreenController {
     }
 
     public void setBarState(int statusBarState) {
+        if (mStatusBarState != StatusBarState.SHADE && statusBarState == StatusBarState.SHADE) {
+            // going from KEYGUARD or SHADE_LOCKED to SHADE so device has been unlocked
+            onKeyguardDismissed();
+        }
+
         mStatusBarState = statusBarState;
         if (statusBarState == StatusBarState.KEYGUARD ||
                 statusBarState == StatusBarState.SHADE_LOCKED) {
@@ -199,6 +212,34 @@ public class LiveLockScreenController {
 
     public KeyguardExternalView getLiveLockScreenView() {
         return mLiveLockScreenView;
+    }
+
+    public void onScreenTurnedOn() {
+        if (mLiveLockScreenView != null && mPowerManager.isInteractive()) {
+            mLiveLockScreenView.onScreenTurnedOn();
+            EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 1);
+        }
+    }
+
+    public void onScreenTurnedOff() {
+        if (mStatusBarState != StatusBarState.SHADE) {
+            EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 0);
+        }
+    }
+
+    public void onLiveLockScreenFocusChanged(boolean hasFocus) {
+        if (hasFocus != mLlsHasFocus) {
+            mLlsHasFocus = hasFocus;
+            // don't log focus changes when screen is not interactive
+            if (mPowerManager.isInteractive()) {
+                EventLog.writeEvent(EventLogTags.SYSUI_LLS_NOTIFICATION_PANEL_SHOWN,
+                        hasFocus ? 0 : 1);
+            }
+        }
+    }
+
+    public void onKeyguardDismissed() {
+        EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_DISMISSED, mLlsHasFocus ? 1 : 0);
     }
 
     private Runnable mAddNewLiveLockScreenRunnable = new Runnable() {
