@@ -51,3 +51,19 @@ option java_package com.android.systemui;
 # SearchPanelView.java
 # ---------------------------
 36050 sysui_searchpanel_touch (type|1),(x|1),(y|1)
+
+# ---------------------------
+# LiveLockScreenController.java
+# ---------------------------
+# sysui_lls_keyguard_showing
+## screenOn: 0:screen turned off
+##           1:screen turned on
+36060 sysui_lls_keyguard_showing (screenOn|1)
+# sysui_lls_keyguard_dismissed: Logged when user unlocks the device
+## onLls: 0:dismissed while showing notifications
+##        1:dismissed while user interacting with LLS
+36061 sysui_lls_keyguard_dismissed (onLls|1)
+# sysui_lls_notification_panel_shown: Logged when the notification panel is swiped in and out
+## shown: 0:panel is hidden
+##        1:panel is visible
+36062 sysui_lls_notification_panel_shown (shown|1)

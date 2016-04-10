@@ -86,6 +86,7 @@
     <string name="def_unlock_sound" translatable="false">/system/media/audio/ui/Unlock.ogg</string>
     <string name="def_trusted_sound" translatable="false">/system/media/audio/ui/Trusted.ogg</string>
     <string name="def_wireless_charging_started_sound" translatable="false">/system/media/audio/ui/WirelessChargingStarted.ogg</string>
+    <bool name="def_volume_adjust_sounds_enabled">true</bool>
 
     <bool name="def_lockscreen_disabled">false</bool>
     <bool name="def_device_provisioned">false</bool>

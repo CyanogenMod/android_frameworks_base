@@ -217,6 +217,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mWindowLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        mWindowLayoutParams.privateFlags =
+                WindowManager.LayoutParams.PRIVATE_FLAG_NO_MOVE_ANIMATION;
         mWindowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         mWindowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         mWindowLayoutParams.format = PixelFormat.TRANSPARENT;

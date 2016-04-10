@@ -274,7 +274,7 @@ public class AudioSystem
      */
     public interface EffectSessionCallback
     {
-        void onSessionAdded(int stream, int sessionId);
+        void onSessionAdded(int stream, int sessionId, int flags, int channelMask, int uid);
 
         void onSessionRemoved(int stream, int sessionId);
     }
@@ -292,7 +292,8 @@ public class AudioSystem
         }
     }
 
-    private static void effectSessionCallbackFromNative(int event, int stream, int sessionId, boolean added)
+    private static void effectSessionCallbackFromNative(int event, int stream, int sessionId,
+            int flags, int channelMask, int uid, boolean added)
     {
         EffectSessionCallback cb = null;
         synchronized (AudioSystem.class) {
@@ -304,7 +305,7 @@ public class AudioSystem
             switch(event) {
                 case AUDIO_OUTPUT_SESSION_EFFECTS_UPDATE:
                     if (added) {
-                        cb.onSessionAdded(stream, sessionId);
+                        cb.onSessionAdded(stream, sessionId, flags, channelMask, uid);
                     } else {
                         cb.onSessionRemoved(stream, sessionId);
                     }

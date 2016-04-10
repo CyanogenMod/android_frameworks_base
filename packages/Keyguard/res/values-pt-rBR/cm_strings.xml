@@ -19,7 +19,7 @@
   <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">O cartão SIM está bloqueado</string>
   <!-- Shown in the lock screen when there is SIM card IO error. -->
-  <string name="lockscreen_sim_error_message_short">Cartão SIM inválido.</string>
+  <string name="lockscreen_sim_error_message_short">Cartão inválido.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Digite o PIN do cartão SIM, você tem <xliff:g id="number">%d</xliff:g> tentativa restante antes de precisar contatar sua operadora para desbloquear seu aparelho.</item>

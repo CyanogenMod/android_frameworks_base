@@ -200,4 +200,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Hiermee kan de app de huidige accustatistieken over het gebruik opnieuw instellen.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Simkaarten zijn veranderd</string>
+  <string name="uicc_hot_swapped_event_text">Tik om standaardinstellingen van simkaart in te stellen</string>
 </resources>
