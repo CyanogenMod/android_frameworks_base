@@ -1340,7 +1340,6 @@ public abstract class BaseStatusBar extends SystemUI implements
             // cannot use isMediaNotification()
             if (sbn.getNotification().category != null
                     && sbn.getNotification().category.equals(Notification.CATEGORY_TRANSPORT)) {
-                Log.d("ro", "inflating media notification");
                 row = (MediaExpandableNotificationRow) inflater.inflate(
                         R.layout.status_bar_notification_row_media, parent, false);
                 ((MediaExpandableNotificationRow)row).setMediaController(
