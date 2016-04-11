@@ -666,6 +666,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
 
         // Keep track of all-deletions
         MetricsLogger.count(getContext(), "overview_task_all_dismissed", 1);
+        EventLog.writeEvent(EventLogTags.SYSUI_RECENTS_EVENT, 4 /* closed all */);
     }
 
     /** Final callback after Recents is finally hidden. */
