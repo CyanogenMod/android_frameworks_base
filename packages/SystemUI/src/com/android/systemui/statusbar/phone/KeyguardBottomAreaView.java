@@ -900,6 +900,18 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mAccessibilityController != null) {
+            mAccessibilityController.addStateChangedCallback(this);
+        }
+        mShortcutHelper.registerAndFetchTargets();
+        updateCustomShortcuts();
+        mUnlockMethodCache.addListener(this);
+        watchForCameraPolicyChanges();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mAccessibilityController.removeStateChangedCallback(this);
