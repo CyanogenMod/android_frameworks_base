@@ -50,6 +50,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AnimationUtils;
@@ -172,6 +173,23 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 Log.e(TAG, e.getMessage());
             }
             mBottomAreaAttached = true;
+        } else if (!fullyExpand) {
+            /* TODO - Fix this properly
+             WindowManager seems to have an issue with Gravity.BOTTOM
+             windows where certain frames it renders it at (0,0) and then
+             next frame moves it to bottom gravity. This is patch
+             settles for a visibility toggle in the meantime to avoid
+             the top flicker. */
+            super.setVisibility(View.INVISIBLE);
+            mWindowManager.updateViewLayout(this, mWindowLayoutParams);
+            getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    KeyguardBottomAreaView.super.setVisibility(View.VISIBLE);
+                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+            postInvalidate();
         } else {
             mWindowManager.updateViewLayout(this, mWindowLayoutParams);
         }
