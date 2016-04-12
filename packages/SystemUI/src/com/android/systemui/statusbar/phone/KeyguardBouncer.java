@@ -88,7 +88,7 @@ public class KeyguardBouncer {
         if (mRoot.getVisibility() == View.VISIBLE || mShowingSoon) {
             return;
         }
-        mPhoneStatusBar.mKeyguardBottomArea.setVisibility(View.GONE);
+        mPhoneStatusBar.getScrimController().forceHideScrims(false);
         // Try to dismiss the Keyguard. If no security pattern is set, this will dismiss the whole
         // Keyguard. If we need to authenticate, show the bouncer.
         if (!mKeyguardView.dismiss()) {
