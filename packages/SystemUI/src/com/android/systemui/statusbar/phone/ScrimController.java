@@ -45,9 +45,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
     public static final long ANIMATION_DURATION = 220;
     public static final Interpolator KEYGUARD_FADE_OUT_INTERPOLATOR
             = new PathInterpolator(0f, 0, 0.7f, 1f);
+    public static final float SCRIM_BEHIND_ALPHA_KEYGUARD = 0.45f;
 
     private static final float SCRIM_BEHIND_ALPHA = 0.62f;
-    private static final float SCRIM_BEHIND_ALPHA_KEYGUARD = 0.45f;
     private static final float SCRIM_BEHIND_ALPHA_UNLOCKING = 0.2f;
     private static final float SCRIM_IN_FRONT_ALPHA = 0.75f;
     private static final int TAG_KEY_ANIM = R.id.scrim;
@@ -255,7 +255,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
         }
     }
 
-    private void setScrimBehindColor(float alpha) {
+    public void setScrimBehindColor(float alpha) {
         setScrimColor(mScrimBehind, alpha);
     }
 

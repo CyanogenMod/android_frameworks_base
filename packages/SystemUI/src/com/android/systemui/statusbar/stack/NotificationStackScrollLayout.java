@@ -50,6 +50,7 @@ import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.phone.NotificationGroupManager;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
 import com.android.systemui.statusbar.phone.ScrimController;
+import com.android.systemui.statusbar.phone.ViewLinker;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.ScrollAdapter;
 
@@ -63,7 +64,8 @@ import java.util.HashSet;
  */
 public class NotificationStackScrollLayout extends ViewGroup
         implements SwipeHelper.Callback, ExpandHelper.Callback, ScrollAdapter,
-        ExpandableView.OnHeightChangedListener, NotificationGroupManager.OnGroupChangeListener {
+        ExpandableView.OnHeightChangedListener, NotificationGroupManager.OnGroupChangeListener,
+        ViewLinker.ViewLinkerParent {
 
     private static final String TAG = "NotificationStackScrollLayout";
     private static final boolean DEBUG = false;
@@ -234,6 +236,7 @@ public class NotificationStackScrollLayout extends ViewGroup
     private boolean mForceNoOverlappingRendering;
     private NotificationOverflowContainer mOverflowContainer;
     private final ArrayList<Pair<ExpandableNotificationRow, Boolean>> mTmpList = new ArrayList<>();
+    private ViewLinker.ViewLinkerCallback mLinkerCallback;
 
     public NotificationStackScrollLayout(Context context) {
         this(context, null);
@@ -2877,6 +2880,23 @@ public class NotificationStackScrollLayout extends ViewGroup
     @Override
     public boolean hasOverlappingRendering() {
         return !mForceNoOverlappingRendering && super.hasOverlappingRendering();
+    }
+
+    @Override
+    public void registerLinker(ViewLinker.ViewLinkerCallback callback) {
+        mLinkerCallback = callback;
+    }
+
+    @Override
+    public void setAlpha(float alpha) {
+        super.setAlpha(alpha);
+        mLinkerCallback.onAlphaChanged(alpha);
+    }
+
+    @Override
+    public void setTranslationX(float translationX) {
+        super.setTranslationX(translationX);
+        mLinkerCallback.onTranslationXChanged(translationX);
     }
 
     /**
