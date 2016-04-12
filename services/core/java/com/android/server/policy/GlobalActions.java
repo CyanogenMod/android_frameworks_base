@@ -1153,6 +1153,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private final class SilentModeTriStateAction implements Action, View.OnClickListener {
 
         private final int[] ITEM_IDS = { R.id.option1, R.id.option2, R.id.option3, R.id.option4 };
+        private final int[] ITEM_INDEX_TO_ZEN_MODE = {
+                Global.ZEN_MODE_NO_INTERRUPTIONS,
+                Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS,
+                Global.ZEN_MODE_OFF,
+                Global.ZEN_MODE_OFF
+        };
 
         private final AudioManager mAudioManager;
         private final Handler mHandler;
@@ -1236,21 +1242,15 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (!(v.getTag() instanceof Integer)) return;
 
             int index = (Integer) v.getTag();
-            if (index == 0 || index == 1) {
-                int zenMode = index == 0
-                        ? Global.ZEN_MODE_NO_INTERRUPTIONS
-                        : Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
-                // ZenModeHelper will revert zen mode back to the previous value if we just
-                // put the value into the Settings db, so use INotificationManager instead
-                INotificationManager noMan = INotificationManager.Stub.asInterface(
-                        ServiceManager.getService(Context.NOTIFICATION_SERVICE));
-                try {
-                    noMan.setZenMode(zenMode, null, TAG);
-                } catch (RemoteException e) {
-                    Log.e(TAG, "Unable to set zen mode", e);
-                }
-            } else {
-                Global.putInt(mContext.getContentResolver(), Global.ZEN_MODE, Global.ZEN_MODE_OFF);
+            int zenMode = ITEM_INDEX_TO_ZEN_MODE[index];
+            // ZenModeHelper will revert zen mode back to the previous value if we just
+            // put the value into the Settings db, so use INotificationManager instead
+            INotificationManager noMan = INotificationManager.Stub.asInterface(
+                    ServiceManager.getService(Context.NOTIFICATION_SERVICE));
+            try {
+                noMan.setZenMode(zenMode, null, TAG);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Unable to set zen mode", e);
             }
 
             if (index == 2 || index == 3) {
