@@ -45,6 +45,14 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * Various utilities for dealing with phone number strings.
  */
@@ -86,6 +94,78 @@ public class PhoneNumberUtils
      */
     private static final Pattern GLOBAL_PHONE_NUMBER_PATTERN =
             Pattern.compile("[\\+]?[0-9.-]+");
+
+    // MTK
+
+    /** @hide */
+    public static class EccEntry {
+        public static final String ECC_LIST_PATH = "/system/etc/ecc_list.xml";
+        public static final String ECC_ENTRY_TAG = "EccEntry";
+        public static final String ECC_ATTR = "Ecc";
+        public static final String CATEGORY_ATTR = "Category";
+        public static final String CONDITION_ATTR = "Condition";
+
+        public static final String ECC_NO_SIM = "0";
+        public static final String ECC_ALWAYS = "1";
+        public static final String ECC_FOR_MMI = "2";
+
+        private String mEcc;
+        private String mCategory;
+        private String mCondition; // ECC_NO_SIM, ECC_ALWAYS, or ECC_FOR_MMI
+
+        public EccEntry() {
+            mEcc = new String("");
+            mCategory = new String("");
+            mCondition = new String("");
+        }
+
+        public void setEcc(String strEcc) {
+            mEcc = strEcc;
+        }
+        public void setCategory(String strCategory) {
+            mCategory = strCategory;
+        }
+        public void setCondition(String strCondition) {
+            mCondition = strCondition;
+        }
+
+        public String getEcc() {
+            return mEcc;
+        }
+        public String getCategory() {
+            return mCategory;
+        }
+        public String getCondition() {
+            return mCondition;
+        }
+
+        @Override
+        public String toString() {
+            return ("\n" + ECC_ATTR + "=" + getEcc() + ", " + CATEGORY_ATTR + "="
+                    + getCategory() + ", " + CONDITION_ATTR + "=" + getCondition());
+        }
+    }
+
+    private static ArrayList<EccEntry> mCustomizedEccList = null;
+    private static HashMap<String, Integer> mHashMapForNetworkEccCategory = null;
+
+    // private static IPhoneNumberExt sPhoneNumberExt = null;
+
+    private static boolean sIsCtaSupport = false;
+    private static boolean sIsCtaSet = false;
+
+    static {
+        sIsCtaSupport = "1".equals(SystemProperties.get("persist.mtk_cta_support"));
+        sIsCtaSet = "1".equals(SystemProperties.get("ro.mtk_cta_set"));
+        /*
+        if (!SystemProperties.get("ro.mtk_bsp_package").equals("1")) {
+            sPhoneNumberExt = MPlugin.createInstance(IPhoneNumberExt.class.getName());
+        }
+        */
+        mCustomizedEccList = new ArrayList<EccEntry>();
+        parseEccList();
+        mHashMapForNetworkEccCategory = new HashMap<String, Integer>();
+    }
 
     /** True if c is ISO-LATIN characters 0-9 */
     public static boolean
@@ -1891,6 +1971,8 @@ public class PhoneNumberUtils
     private static boolean isEmergencyNumberInternal(int subId, String number,
                                                      String defaultCountryIso,
                                                      boolean useExactMatch) {
+        boolean bSIMInserted = false;
+
         // If the number passed in is null, just return false:
         if (number == null) return false;
 
@@ -1912,6 +1994,28 @@ public class PhoneNumberUtils
         Rlog.d(LOG_TAG, "subId:" + subId + ", defaultCountryIso:" +
                 ((defaultCountryIso == null) ? "NULL" : defaultCountryIso));
 
+        // MTK
+        // 1. Check ECCs updated by network
+        mHashMapForNetworkEccCategory.clear();
+        String strEccCategoryList = SystemProperties.get("ril.ecc.service.category.list");
+        if (!TextUtils.isEmpty(strEccCategoryList)) {
+            for (String strEccCategory : strEccCategoryList.split(";")) {
+                if (!strEccCategory.isEmpty()) {
+                    String[] strEccCategoryAry = strEccCategory.split(",");
+                    if (2 == strEccCategoryAry.length)
+                        mHashMapForNetworkEccCategory.put(strEccCategoryAry[0], Integer.parseInt(strEccCategoryAry[1]));
+                }
+            }
+        }
+        for (String emergencyNum : mHashMapForNetworkEccCategory.keySet()) {
+            String numberPlus = emergencyNum + "+";
+            if (emergencyNum.equals(number)
+                 || numberPlus.equals(number)) {
+                Rlog.d(LOG_TAG, "[isEmergencyNumber] match network ecc list");
+                return true;
+            }
+        }
+
         String emergencyNumbers = "";
         int slotId = SubscriptionManager.getSlotId(subId);
 
@@ -1920,6 +2024,7 @@ public class PhoneNumberUtils
         String ecclist = (slotId <= 0) ? "ril.ecclist" : ("ril.ecclist" + slotId);
 
         emergencyNumbers = SystemProperties.get(ecclist, "");
+        bSIMInserted = slotId >= 0;
 
         Rlog.d(LOG_TAG, "slotId:" + slotId + ", emergencyNumbers: " +  emergencyNumbers);
 
@@ -1946,6 +2051,36 @@ public class PhoneNumberUtils
             }
             // no matches found against the list!
             return false;
+        }
+
+        // MTK
+        // 3. Check ECCs customized by user
+        if (bSIMInserted) {
+            if (mCustomizedEccList != null) {
+                for (EccEntry eccEntry : mCustomizedEccList) {
+                    if (!eccEntry.getCondition().equals(EccEntry.ECC_NO_SIM)) {
+                        String ecc = eccEntry.getEcc();
+                        String numberPlus = ecc + "+";
+                        if (ecc.equals(number)
+                             || numberPlus.equals(number)) {
+                            Rlog.d(LOG_TAG, "[isEmergencyNumber] match customized ecc list");
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (mCustomizedEccList != null) {
+                for (EccEntry eccEntry : mCustomizedEccList) {
+                    String ecc = eccEntry.getEcc();
+                    String numberPlus = ecc + "+";
+                    if (ecc.equals(number)
+                         || numberPlus.equals(number)) {
+                        Rlog.d(LOG_TAG, "[isEmergencyNumber] match customized ecc list when no sim");
+                        return true;
+                    }
+                }
+            }
         }
 
         Rlog.d(LOG_TAG, "System property doesn't provide any emergency numbers."
@@ -3082,4 +3217,149 @@ public class PhoneNumberUtils
         return SubscriptionManager.getDefaultVoiceSubId();
     }
     //==== End of utility methods used only in compareStrictly() =====
+
+    // MTK
+
+    /**
+     * Parse Ecc List From XML File
+     *
+     * @param none.
+     * @return none.
+     * @hide
+     */
+    private static void parseEccList() {
+        mCustomizedEccList.clear();
+
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            if (parser == null) {
+                Rlog.d(LOG_TAG, "XmlPullParserFactory.newPullParser() return null");
+                return;
+            }
+            FileReader fileReader = new FileReader(EccEntry.ECC_LIST_PATH);
+            parser.setInput(fileReader);
+            int eventType = parser.getEventType();
+            EccEntry record = null;
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        if (parser.getName().equals(EccEntry.ECC_ENTRY_TAG)) {
+                            record = new EccEntry();
+                            int attrNum = parser.getAttributeCount();
+                            for (int i = 0; i < attrNum; ++i) {
+                                String name = parser.getAttributeName(i);
+                                String value = parser.getAttributeValue(i);
+                                if (name.equals(EccEntry.ECC_ATTR))
+                                    record.setEcc(value);
+                                else if (name.equals(EccEntry.CATEGORY_ATTR))
+                                    record.setCategory(value);
+                                else if (name.equals(EccEntry.CONDITION_ATTR))
+                                    record.setCondition(value);
+                            }
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if (parser.getName().equals(EccEntry.ECC_ENTRY_TAG) && record != null)
+                            mCustomizedEccList.add(record);
+                        break;
+                }
+                eventType = parser.next();
+            }
+            fileReader.close();
+
+            if (sIsCtaSet) {
+                String [] emergencyCTAList = {"120", "122"};
+                for (String emergencyNum : emergencyCTAList) {
+                    record = new EccEntry();
+                    record.setEcc(emergencyNum);
+                    record.setCategory("0");
+                    record.setCondition(EccEntry.ECC_FOR_MMI);
+
+                    boolean bFound = false;
+                    int nIndex = 0;
+                    for (EccEntry eccEntry : mCustomizedEccList) {
+                        String ecc = eccEntry.getEcc();
+                        if (ecc.equals(emergencyNum)) {
+                            bFound = true;
+                            Rlog.d(LOG_TAG, "[parseEccList]"
+                                    + "CTA ecc match customized ecc list, ecc=" + ecc);
+                            break;
+                        }
+                        nIndex++;
+                    }
+
+                    if (bFound)
+                        mCustomizedEccList.set(nIndex, record);
+                    else
+                        mCustomizedEccList.add(record);
+                }
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Rlog.d(LOG_TAG, "parseEccList: " + mCustomizedEccList);
+    }
+
+    /**
+     * Get Ecc List
+     *
+     * @param none.
+     * @return Ecc List with type ArrayList<EccEntry>.
+     * @hide
+     */
+    public static ArrayList<EccEntry> getEccList() {
+        return mCustomizedEccList;
+    }
+
+    /**
+     * Get the service category for the given ECC number.
+     * @param number The ECC number.
+     * @return The service category for the given number.
+     * @hide
+     */
+    public static int getServiceCategoryFromEcc(String number) {
+        String numberPlus = null;
+
+        // 1. Get category from network
+        for (String emergencyNum : mHashMapForNetworkEccCategory.keySet()) {
+            numberPlus = emergencyNum + "+";
+            if (emergencyNum.equals(number)
+                 || numberPlus.equals(number)) {
+                Integer nSC = mHashMapForNetworkEccCategory.get(emergencyNum);
+                if (nSC != null) {
+                    Rlog.d(LOG_TAG, "[getServiceCategoryFromEcc] match network ecc list, "
+                            + "Ecc= " + number + ", Category= " + nSC);
+                    return nSC;
+                }
+            }
+        }
+
+        // 2. Get category from sim
+        // ToDo: EF_Ecc will convey service category later
+
+        // 3. Get category from user-customized
+        if (mCustomizedEccList != null) {
+            for (EccEntry eccEntry : mCustomizedEccList) {
+                String ecc = eccEntry.getEcc();
+                numberPlus = ecc + "+";
+                if (ecc.equals(number)
+                     || numberPlus.equals(number)) {
+                    Rlog.d(LOG_TAG, "[getServiceCategoryFromEcc] match customized ecc list, "
+                            + "Ecc= " + ecc + ", Category= " + eccEntry.getCategory());
+                    return Integer.parseInt(eccEntry.getCategory());
+                }
+            }
+        }
+
+        Rlog.d(LOG_TAG, "[getServiceCategoryFromEcc] no matched for Ecc =" + number + ", return 0");
+        return 0;
+    }
+
 }

@@ -334,7 +334,10 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_STOP_LCE = 133;
     int RIL_REQUEST_PULL_LCEDATA = 134;
     int RIL_REQUEST_GET_ACTIVITY_INFO = 135;
-    int RIL_REQUEST_SIM_GET_ATR = 136;
+
+    // MTK please
+    // int RIL_REQUEST_SIM_GET_ATR = 133;
+    // int RIL_REQUEST_SIM_GET_ATR = 136;
 
     int RIL_UNSOL_RESPONSE_BASE = 1000;
     int RIL_UNSOL_RESPONSE_RADIO_STATE_CHANGED = 1000;
@@ -385,4 +388,325 @@ cat include/telephony/ril.h | \
     int RIL_UNSOL_LCEDATA_RECV = 1045;
 
     int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002; /* Samsung STK */
+
+    // MediaTek Custom States
+    // oh no
+    static final int RIL_REQUEST_GET_PHONE_RAT_FAMILY = 130;
+    static final int RIL_REQUEST_SET_PHONE_RAT_FAMILY = 131;
+
+    static final int RIL_REQUEST_MTK_BASE = 2000;
+    static final int RIL_REQUEST_GET_COLP = (RIL_REQUEST_MTK_BASE + 0);
+    static final int RIL_REQUEST_SET_COLP = (RIL_REQUEST_MTK_BASE + 1);
+    static final int RIL_REQUEST_GET_COLR = (RIL_REQUEST_MTK_BASE + 2);
+    static final int RIL_REQUEST_GET_CCM = (RIL_REQUEST_MTK_BASE + 3);
+    static final int RIL_REQUEST_GET_ACM = (RIL_REQUEST_MTK_BASE + 4);
+    static final int RIL_REQUEST_GET_ACMMAX = (RIL_REQUEST_MTK_BASE + 5);
+    static final int RIL_REQUEST_GET_PPU_AND_CURRENCY = (RIL_REQUEST_MTK_BASE + 6);
+    static final int RIL_REQUEST_SET_ACMMAX = (RIL_REQUEST_MTK_BASE + 7);
+    static final int RIL_REQUEST_RESET_ACM = (RIL_REQUEST_MTK_BASE + 8);
+    static final int RIL_REQUEST_SET_PPU_AND_CURRENCY = (RIL_REQUEST_MTK_BASE + 9);
+    static final int RIL_REQUEST_MODEM_POWEROFF = (RIL_REQUEST_MTK_BASE + 10);
+    static final int RIL_REQUEST_DUAL_SIM_MODE_SWITCH = (RIL_REQUEST_MTK_BASE + 11);
+    static final int RIL_REQUEST_QUERY_PHB_STORAGE_INFO = (RIL_REQUEST_MTK_BASE + 12);
+    static final int RIL_REQUEST_WRITE_PHB_ENTRY = (RIL_REQUEST_MTK_BASE + 13);
+    static final int RIL_REQUEST_READ_PHB_ENTRY = (RIL_REQUEST_MTK_BASE + 14);
+    static final int RIL_REQUEST_SET_GPRS_CONNECT_TYPE = (RIL_REQUEST_MTK_BASE + 15);
+    static final int RIL_REQUEST_SET_GPRS_TRANSFER_TYPE = (RIL_REQUEST_MTK_BASE + 16);
+    static final int RIL_REQUEST_MOBILEREVISION_AND_IMEI = (RIL_REQUEST_MTK_BASE + 17); //Add by mtk80372 for Barcode Number
+    static final int RIL_REQUEST_QUERY_SIM_NETWORK_LOCK = (RIL_REQUEST_MTK_BASE + 18);
+    static final int RIL_REQUEST_SET_SIM_NETWORK_LOCK = (RIL_REQUEST_MTK_BASE + 19);
+    static final int RIL_REQUEST_SET_SCRI = (RIL_REQUEST_MTK_BASE + 20);
+    static final int RIL_REQUEST_BTSIM_CONNECT = (RIL_REQUEST_MTK_BASE + 21);
+    static final int RIL_REQUEST_BTSIM_DISCONNECT_OR_POWEROFF = (RIL_REQUEST_MTK_BASE + 22);
+    static final int RIL_REQUEST_BTSIM_POWERON_OR_RESETSIM = (RIL_REQUEST_MTK_BASE + 23);
+    static final int RIL_REQUEST_BTSIM_TRANSFERAPDU = (RIL_REQUEST_MTK_BASE + 24);
+    static final int RIL_REQUEST_SET_NETWORK_SELECTION_MANUAL_WITH_ACT = (RIL_REQUEST_MTK_BASE + 25);
+    static final int RIL_REQUEST_QUERY_ICCID = (RIL_REQUEST_MTK_BASE + 26);
+    static final int RIL_REQUEST_USIM_AUTHENTICATION = (RIL_REQUEST_MTK_BASE + 27);
+    static final int RIL_REQUEST_MODEM_POWERON = (RIL_REQUEST_MTK_BASE + 28);
+    static final int RIL_REQUEST_GET_SMS_SIM_MEM_STATUS = (RIL_REQUEST_MTK_BASE + 29);
+    /* 3G switch start */
+    static final int RIL_REQUEST_GET_PHONE_CAPABILITY = (RIL_REQUEST_MTK_BASE + 30);
+    static final int RIL_REQUEST_SET_PHONE_CAPABILITY = (RIL_REQUEST_MTK_BASE + 31);
+    /* 3G switch end */
+    /* User controlled PLMN selector with Access Technology  begin */
+    static final int RIL_REQUEST_GET_POL_CAPABILITY = (RIL_REQUEST_MTK_BASE + 32);
+    static final int RIL_REQUEST_GET_POL_LIST = (RIL_REQUEST_MTK_BASE + 33);
+    static final int RIL_REQUEST_SET_POL_ENTRY = (RIL_REQUEST_MTK_BASE + 34);
+    /* User controlled PLMN selector with Access Technology  end */
+    /* UPB start */
+    static final int RIL_REQUEST_QUERY_UPB_CAPABILITY = (RIL_REQUEST_MTK_BASE + 35);
+    static final int RIL_REQUEST_EDIT_UPB_ENTRY = (RIL_REQUEST_MTK_BASE + 36);
+    static final int RIL_REQUEST_DELETE_UPB_ENTRY = (RIL_REQUEST_MTK_BASE + 37);
+    static final int RIL_REQUEST_READ_UPB_GAS_LIST = (RIL_REQUEST_MTK_BASE + 38);
+    static final int RIL_REQUEST_READ_UPB_GRP = (RIL_REQUEST_MTK_BASE + 39);
+    static final int RIL_REQUEST_WRITE_UPB_GRP = (RIL_REQUEST_MTK_BASE + 40);
+    /* UPB end */
+    static final int RIL_REQUEST_SET_SIM_RECOVERY_ON = (RIL_REQUEST_MTK_BASE + 41);
+    static final int RIL_REQUEST_GET_SIM_RECOVERY_ON = (RIL_REQUEST_MTK_BASE + 42);
+    static final int RIL_REQUEST_SET_TRM = (RIL_REQUEST_MTK_BASE + 43);
+    static final int RIL_REQUEST_DETECT_SIM_MISSING = (RIL_REQUEST_MTK_BASE + 44);
+    static final int RIL_REQUEST_GET_CALIBRATION_DATA = (RIL_REQUEST_MTK_BASE + 45);
+
+     //For LGE APIs start
+    static final int RIL_REQUEST_GET_PHB_STRING_LENGTH = (RIL_REQUEST_MTK_BASE + 46);
+    static final int RIL_REQUEST_GET_PHB_MEM_STORAGE = (RIL_REQUEST_MTK_BASE + 47);
+    static final int RIL_REQUEST_SET_PHB_MEM_STORAGE = (RIL_REQUEST_MTK_BASE + 48);
+    static final int RIL_REQUEST_READ_PHB_ENTRY_EXT = (RIL_REQUEST_MTK_BASE + 49);
+    static final int RIL_REQUEST_WRITE_PHB_ENTRY_EXT = (RIL_REQUEST_MTK_BASE + 50);
+
+    // requests for read/write EFsmsp
+    static final int RIL_REQUEST_GET_SMS_PARAMS = (RIL_REQUEST_MTK_BASE + 51);
+    static final int RIL_REQUEST_SET_SMS_PARAMS = (RIL_REQUEST_MTK_BASE + 52);
+
+    // NFC SEEK start
+    static final int RIL_REQUEST_SIM_TRANSMIT_BASIC = (RIL_REQUEST_MTK_BASE + 53);
+    static final int RIL_REQUEST_SIM_TRANSMIT_CHANNEL = (RIL_REQUEST_MTK_BASE + 54);
+    static final int RIL_REQUEST_SIM_GET_ATR = (RIL_REQUEST_MTK_BASE + 55);
+    // NFC SEEK end
+
+    // MTK-START, SMS part, CB extension
+    static final int RIL_REQUEST_SET_CB_CHANNEL_CONFIG_INFO = (RIL_REQUEST_MTK_BASE + 56);
+    static final int RIL_REQUEST_SET_CB_LANGUAGE_CONFIG_INFO = (RIL_REQUEST_MTK_BASE + 57);
+    static final int RIL_REQUEST_GET_CB_CONFIG_INFO = (RIL_REQUEST_MTK_BASE + 58);
+    static final int RIL_REQUEST_SET_ALL_CB_LANGUAGE_ON = (RIL_REQUEST_MTK_BASE + 59);
+    // MTK-END, SMS part, CB extension
+
+    static final int RIL_REQUEST_SET_ETWS = (RIL_REQUEST_MTK_BASE + 60);
+
+    // [New R8 modem FD]
+    static final int RIL_REQUEST_SET_FD_MODE = (RIL_REQUEST_MTK_BASE + 61);
+
+    // detach PS service request
+    static final int RIL_REQUEST_DETACH_PS = (RIL_REQUEST_MTK_BASE + 62);
+
+    static final int RIL_REQUEST_SIM_OPEN_CHANNEL_WITH_SW = (RIL_REQUEST_MTK_BASE + 63); // NFC SEEK
+
+    static final int RIL_REQUEST_SET_REG_SUSPEND_ENABLED  = (RIL_REQUEST_MTK_BASE + 64);
+    static final int RIL_REQUEST_RESUME_REGISTRATION  = (RIL_REQUEST_MTK_BASE + 65);
+    static final int RIL_REQUEST_STORE_MODEM_TYPE = (RIL_REQUEST_MTK_BASE + 66);
+    static final int RIL_REQUEST_QUERY_MODEM_TYPE = (RIL_REQUEST_MTK_BASE + 67);
+    static final int RIL_REQUEST_SIM_INTERFACE_SWITCH = (RIL_REQUEST_MTK_BASE + 68);
+
+    //MTK-START [mtk80776] WiFi Calling
+    static final int RIL_REQUEST_UICC_SELECT_APPLICATION = (RIL_REQUEST_MTK_BASE + 69);
+    static final int RIL_REQUEST_UICC_DEACTIVATE_APPLICATION = (RIL_REQUEST_MTK_BASE + 70);
+    static final int RIL_REQUEST_UICC_APPLICATION_IO = (RIL_REQUEST_MTK_BASE + 71);
+    static final int RIL_REQUEST_UICC_AKA_AUTHENTICATE = (RIL_REQUEST_MTK_BASE + 72);
+    static final int RIL_REQUEST_UICC_GBA_AUTHENTICATE_BOOTSTRAP = (RIL_REQUEST_MTK_BASE + 73);
+    static final int RIL_REQUEST_UICC_GBA_AUTHENTICATE_NAF = (RIL_REQUEST_MTK_BASE + 74);
+    //MTK-END [mtk80776] WiFi Calling
+    static final int RIL_REQUEST_STK_EVDL_CALL_BY_AP = (RIL_REQUEST_MTK_BASE + 75);
+
+    // Femtocell (CSG)
+    static final int RIL_REQUEST_GET_FEMTOCELL_LIST  = (RIL_REQUEST_MTK_BASE + 76);
+    static final int RIL_REQUEST_ABORT_FEMTOCELL_LIST = (RIL_REQUEST_MTK_BASE + 77);
+    static final int RIL_REQUEST_SELECT_FEMTOCELL = (RIL_REQUEST_MTK_BASE + 78);
+
+    // For OPLMN update
+    static final int RIL_REQUEST_SEND_OPLMN = (RIL_REQUEST_MTK_BASE + 79);
+    static final int RIL_REQUEST_GET_OPLMN_VERSION = (RIL_REQUEST_MTK_BASE + 80);
+
+    // For PLMN List abort
+    static final int RIL_REQUEST_ABORT_QUERY_AVAILABLE_NETWORKS = (RIL_REQUEST_MTK_BASE + 81);
+    // CSD
+    static final int RIL_REQUEST_DIAL_UP_CSD = (RIL_REQUEST_MTK_BASE + 82);
+
+    // M: For telephony modes update
+    static final int RIL_REQUEST_SET_TELEPHONY_MODE = (RIL_REQUEST_MTK_BASE + 83);
+
+    /* M: call control part start */
+    static final int RIL_REQUEST_HANGUP_ALL = (RIL_REQUEST_MTK_BASE + 84);
+    static final int RIL_REQUEST_FORCE_RELEASE_CALL = (RIL_REQUEST_MTK_BASE + 85);
+    static final int RIL_REQUEST_SET_CALL_INDICATION = (RIL_REQUEST_MTK_BASE + 86);
+    static final int RIL_REQUEST_EMERGENCY_DIAL = (RIL_REQUEST_MTK_BASE + 87);
+    static final int RIL_REQUEST_SET_ECC_SERVICE_CATEGORY = (RIL_REQUEST_MTK_BASE + 88);
+    static final int RIL_REQUEST_SET_ECC_LIST = (RIL_REQUEST_MTK_BASE + 89);
+    /* M: call control part end */
+
+
+    //New SIM Authentication
+    static final int RIL_REQUEST_GENERAL_SIM_AUTH = (RIL_REQUEST_MTK_BASE + 90);
+    //ISIM
+    static final int RIL_REQUEST_OPEN_ICC_APPLICATION = (RIL_REQUEST_MTK_BASE + 91);
+    static final int RIL_REQUEST_GET_ICC_APPLICATION_STATUS = (RIL_REQUEST_MTK_BASE + 92);
+    //SIM_IO_EX
+    static final int RIL_REQUEST_SIM_IO_EX = (RIL_REQUEST_MTK_BASE + 93);
+
+    // IMS
+    static final int RIL_REQUEST_SET_IMS_ENABLE = (RIL_REQUEST_MTK_BASE + 94);
+    static final int RIL_REQUEST_QUERY_AVAILABLE_NETWORKS_WITH_ACT = (RIL_REQUEST_MTK_BASE + 95);
+
+    /* M: SS part */
+    ///M: For query CNAP
+    static final int RIL_REQUEST_SEND_CNAP = (RIL_REQUEST_MTK_BASE + 96);
+    static final int RIL_REQUEST_SET_CLIP = (RIL_REQUEST_MTK_BASE + 97);
+    /* M: SS part end */
+
+    /** M: VoLTE data start */
+    static final int RIL_REQUEST_SETUP_DEDICATE_DATA_CALL = (RIL_REQUEST_MTK_BASE + 98);
+    static final int RIL_REQUEST_DEACTIVATE_DEDICATE_DATA_CALL = (RIL_REQUEST_MTK_BASE + 99);
+    static final int RIL_REQUEST_MODIFY_DATA_CALL = (RIL_REQUEST_MTK_BASE + 100);
+    static final int RIL_REQUEST_ABORT_SETUP_DATA_CALL = (RIL_REQUEST_MTK_BASE + 101);
+    static final int RIL_REQUEST_PCSCF_DISCOVERY_PCO = (RIL_REQUEST_MTK_BASE + 102);
+    static final int RIL_REQUEST_CLEAR_DATA_BEARER = (RIL_REQUEST_MTK_BASE + 103);
+    /** M: VoLTE end */
+
+    // MTK-START, SMS part, CB extension
+    static final int RIL_REQUEST_REMOVE_CB_MESSAGE = (RIL_REQUEST_MTK_BASE + 104);
+    // MTK-END, SMS part, CB extension
+
+    // NAS configuration for voice call
+    // 0: voice centric
+    // 1: data centric
+    static final int RIL_REQUEST_SET_DATA_CENTRIC = (RIL_REQUEST_MTK_BASE + 105);
+
+    /// M: IMS feature. @{
+    static final int RIL_REQUEST_ADD_IMS_CONFERENCE_CALL_MEMBER = (RIL_REQUEST_MTK_BASE + 106);
+    static final int RIL_REQUEST_REMOVE_IMS_CONFERENCE_CALL_MEMBER = (RIL_REQUEST_MTK_BASE + 107);
+    static final int RIL_REQUEST_DIAL_WITH_SIP_URI = (RIL_REQUEST_MTK_BASE + 108);
+    static final int RIL_REQUEST_RETRIEVE_HELD_CALL = (RIL_REQUEST_MTK_BASE + 109);
+    /// @}
+
+    /* M: call control part start */
+    static final int RIL_REQUEST_SET_SPEECH_CODEC_INFO = (RIL_REQUEST_MTK_BASE + 110);
+    /* M: call control part end */
+    /// M: CC33 LTE
+    static final int RIL_REQUEST_SET_DATA_ON_TO_MD = (RIL_REQUEST_MTK_BASE + 111);
+    static final int RIL_REQUEST_SET_REMOVE_RESTRICT_EUTRAN_MODE = (RIL_REQUEST_MTK_BASE + 112);
+
+    /* M: call control part start */
+    static final int RIL_REQUEST_SET_IMS_CALL_STATUS = (RIL_REQUEST_MTK_BASE + 113);
+    /* M: call control part end */
+
+    static final int RIL_REQUEST_EVDO_SUPPORT_BASE = 2100;
+    static final int RIL_REQUEST_RADIO_POWER_CARD_SWITCH = (RIL_REQUEST_EVDO_SUPPORT_BASE + 0);
+
+    // oh no again
+    static final int RIL_UNSOL_SET_PHONE_RAT_FAMILY_COMPLETE = 1042;
+
+    static final int RIL_UNSOL_MTK_BASE = 3000;
+    static final int RIL_UNSOL_NEIGHBORING_CELL_INFO = (RIL_UNSOL_MTK_BASE + 0);
+    static final int RIL_UNSOL_NETWORK_INFO = (RIL_UNSOL_MTK_BASE + 1);
+    static final int RIL_UNSOL_PHB_READY_NOTIFICATION = (RIL_UNSOL_MTK_BASE + 2);
+    static final int RIL_UNSOL_SIM_INSERTED_STATUS = (RIL_UNSOL_MTK_BASE + 3);
+    static final int RIL_UNSOL_RADIO_TEMPORARILY_UNAVAILABLE = (RIL_UNSOL_MTK_BASE + 4);
+    static final int RIL_UNSOL_ME_SMS_STORAGE_FULL = (RIL_UNSOL_MTK_BASE + 5);
+    static final int RIL_UNSOL_SMS_READY_NOTIFICATION = (RIL_UNSOL_MTK_BASE + 6);
+    static final int RIL_UNSOL_SCRI_RESULT = (RIL_UNSOL_MTK_BASE + 7);
+    static final int RIL_UNSOL_SIM_MISSING = (RIL_UNSOL_MTK_BASE + 8);
+    static final int RIL_UNSOL_GPRS_DETACH = (RIL_UNSOL_MTK_BASE + 9);
+    //MTK-START [mtk04070][120208][ALPS00233196] ATCI for unsolicited response
+    static final int RIL_UNSOL_ATCI_RESPONSE = (RIL_UNSOL_MTK_BASE + 10);
+    //MTK-END [mtk04070][120208][ALPS00233196] ATCI for unsolicited response
+    static final int RIL_UNSOL_SIM_RECOVERY = (RIL_UNSOL_MTK_BASE + 11);
+    static final int RIL_UNSOL_VIRTUAL_SIM_ON = (RIL_UNSOL_MTK_BASE + 12);
+    static final int RIL_UNSOL_VIRTUAL_SIM_OFF = (RIL_UNSOL_MTK_BASE + 13);
+    static final int RIL_UNSOL_INVALID_SIM = (RIL_UNSOL_MTK_BASE + 14);
+    static final int RIL_UNSOL_RESPONSE_PS_NETWORK_STATE_CHANGED = (RIL_UNSOL_MTK_BASE + 15);
+    static final int RIL_UNSOL_RESPONSE_ACMT = (RIL_UNSOL_MTK_BASE + 16);
+    static final int RIL_UNSOL_EF_CSP_PLMN_MODE_BIT = (RIL_UNSOL_MTK_BASE + 17);
+    static final int RIL_UNSOL_IMEI_LOCK = (RIL_UNSOL_MTK_BASE + 18);
+    static final int RIL_UNSOL_RESPONSE_MMRR_STATUS_CHANGED = (RIL_UNSOL_MTK_BASE + 19);
+    static final int RIL_UNSOL_SIM_PLUG_OUT = (RIL_UNSOL_MTK_BASE + 20);
+    static final int RIL_UNSOL_SIM_PLUG_IN = (RIL_UNSOL_MTK_BASE + 21);
+    static final int RIL_UNSOL_RESPONSE_ETWS_NOTIFICATION = (RIL_UNSOL_MTK_BASE + 22);
+    static final int RIL_UNSOL_RESPONSE_PLMN_CHANGED = (RIL_UNSOL_MTK_BASE + 23);
+    static final int RIL_UNSOL_RESPONSE_REGISTRATION_SUSPENDED = (RIL_UNSOL_MTK_BASE + 24);
+    static final int RIL_UNSOL_STK_EVDL_CALL = (RIL_UNSOL_MTK_BASE + 25);
+    static final int RIL_UNSOL_DATA_PACKETS_FLUSH = (RIL_UNSOL_MTK_BASE + 26);
+    static final int RIL_UNSOL_FEMTOCELL_INFO = (RIL_UNSOL_MTK_BASE + 27);
+    static final int RIL_UNSOL_STK_SETUP_MENU_RESET = (RIL_UNSOL_MTK_BASE + 28);
+    static final int RIL_UNSOL_APPLICATION_SESSION_ID_CHANGED = (RIL_UNSOL_MTK_BASE + 29);
+    /// M: For updating call ids for conference call after SRVCC is done.
+    static final int RIL_UNSOL_ECONF_SRVCC_INDICATION = (RIL_UNSOL_MTK_BASE + 30);
+    // IMS
+    static final int RIL_UNSOL_IMS_ENABLE_DONE = (RIL_UNSOL_MTK_BASE + 31);
+    static final int RIL_UNSOL_IMS_DISABLE_DONE = (RIL_UNSOL_MTK_BASE + 32);
+    static final int RIL_UNSOL_IMS_REGISTRATION_INFO = (RIL_UNSOL_MTK_BASE + 33);
+    //VoLTE
+    static final int RIL_UNSOL_DEDICATE_BEARER_ACTIVATED = (RIL_UNSOL_MTK_BASE + 34);
+    static final int RIL_UNSOL_DEDICATE_BEARER_MODIFIED = (RIL_UNSOL_MTK_BASE + 35);
+    static final int RIL_UNSOL_DEDICATE_BEARER_DEACTIVATED = (RIL_UNSOL_MTK_BASE + 36);
+
+    //sm cause rac
+    static final int RIL_UNSOL_RAC_UPDATE = (RIL_UNSOL_MTK_BASE + 37);
+
+    //[VoLTE]Conf. call merged/added result
+    static final int RIL_UNSOL_ECONF_RESULT_INDICATION = (RIL_UNSOL_MTK_BASE + 38);
+
+    //Remote SIM ME lock related APIs [Start]
+    static final int RIL_UNSOL_MELOCK_NOTIFICATION = (RIL_UNSOL_MTK_BASE + 39);
+    //Remote SIM ME lock related APIs [END]
+
+    /* M: call control part start */
+    static final int RIL_UNSOL_CALL_FORWARDING = (RIL_UNSOL_MTK_BASE + 40);
+    static final int RIL_UNSOL_CRSS_NOTIFICATION = (RIL_UNSOL_MTK_BASE + 41);
+    static final int RIL_UNSOL_INCOMING_CALL_INDICATION = (RIL_UNSOL_MTK_BASE + 42);
+    static final int RIL_UNSOL_CIPHER_INDICATION = (RIL_UNSOL_MTK_BASE + 43);
+    static final int RIL_UNSOL_CNAP = (RIL_UNSOL_MTK_BASE + 44);
+    /* M: call control part end */
+    static final int RIL_UNSOL_SIM_COMMON_SLOT_NO_CHANGED = (RIL_UNSOL_MTK_BASE + 45);
+    //Combine attach
+    static final int RIL_UNSOL_DATA_ALLOWED = (RIL_UNSOL_MTK_BASE + 46);
+    static final int RIL_UNSOL_STK_CALL_CTRL = (RIL_UNSOL_MTK_BASE + 47);
+    static final int RIL_UNSOL_VOLTE_EPS_NETWORK_FEATURE_SUPPORT = (RIL_UNSOL_MTK_BASE + 48);
+
+    /// M: IMS feature. @{
+    static final int RIL_UNSOL_CALL_INFO_INDICATION = (RIL_UNSOL_MTK_BASE + 49);
+    /// @}
+
+    static final int RIL_UNSOL_VOLTE_EPS_NETWORK_FEATURE_INFO = (RIL_UNSOL_MTK_BASE + 50);
+    static final int RIL_UNSOL_SRVCC_HANDOVER_INFO_INDICATION = (RIL_UNSOL_MTK_BASE + 51);
+    /* M: call control part start */
+    static final int RIL_UNSOL_SPEECH_CODEC_INFO = (RIL_UNSOL_MTK_BASE + 52);
+    /* M: call control part end */
+
+    //MTK-START for MD state change
+    static final int RIL_UNSOL_MD_STATE_CHANGE = (RIL_UNSOL_MTK_BASE + 53);
+    //MTK-END for MD state change
+    // M: CC33 URC
+    static final int RIL_UNSOL_REMOVE_RESTRICT_EUTRAN = (RIL_UNSOL_MTK_BASE + 54);
+
+    // IMS client on AP shall get the information of MO Data Barring and SSAC barring
+    static final int RIL_UNSOL_MO_DATA_BARRING_INFO = (RIL_UNSOL_MTK_BASE + 55);
+    static final int RIL_UNSOL_SSAC_BARRING_INFO = (RIL_UNSOL_MTK_BASE + 56);
+
+//MTK_TC1_FEATURE for LGE CSMCC_MO_CALL_MODIFIED {
+    static final int RIL_UNSOL_RESPONSE_MO_CALL_STATE_CHANGED = (RIL_UNSOL_MTK_BASE + 57);
+//}
+
+    /* M: Add C2K proprietary start */
+    static final int RIL_REQUEST_C2K_BASE = 4000;
+    static final int RIL_REQUEST_GET_NITZ_TIME = (RIL_REQUEST_C2K_BASE + 0);
+    static final int RIL_REQUEST_QUERY_UIM_INSERTED = (RIL_REQUEST_C2K_BASE + 1);
+    static final int RIL_REQUEST_SWITCH_HPF = (RIL_REQUEST_C2K_BASE + 2);
+    static final int RIL_REQUEST_SET_AVOID_SYS = (RIL_REQUEST_C2K_BASE + 3);
+    static final int RIL_REQUEST_QUERY_AVOID_SYS = (RIL_REQUEST_C2K_BASE + 4);
+    static final int RIL_REQUEST_QUERY_CDMA_NETWORK_INFO = (RIL_REQUEST_C2K_BASE + 5);
+    static final int RIL_REQUEST_GET_LOCAL_INFO =  (RIL_REQUEST_C2K_BASE + 6);
+    static final int RIL_REQUEST_UTK_REFRESH = (RIL_REQUEST_C2K_BASE + 7);
+    static final int RIL_REQUEST_QUERY_SMS_AND_PHONEBOOK_STATUS = (RIL_REQUEST_C2K_BASE + 8);
+    static final int RIL_REQUEST_QUERY_NETWORK_REGISTRATION = (RIL_REQUEST_C2K_BASE + 9);
+    static final int RIL_REQUEST_AGPS_TCP_CONNIND = (RIL_REQUEST_C2K_BASE + 10);
+    static final int RIL_REQUEST_AGPS_SET_MPC_IPPORT = (RIL_REQUEST_C2K_BASE + 11);
+    static final int RIL_REQUEST_AGPS_GET_MPC_IPPORT = (RIL_REQUEST_C2K_BASE + 12);
+    static final int RIL_REQUEST_SET_MEID = (RIL_REQUEST_C2K_BASE + 13);
+    static final int RIL_REQUEST_SET_REG_RESUME = (RIL_REQUEST_C2K_BASE + 14);
+    static final int RIL_REQUEST_ENABLE_REG_PAUSE = (RIL_REQUEST_C2K_BASE + 15);
+    static final int RIL_REQUEST_SET_ETS_DEV = (RIL_REQUEST_C2K_BASE + 16);
+    static final int RIL_REQUEST_WRITE_MDN = (RIL_REQUEST_C2K_BASE + 17);
+    static final int RIL_REQUEST_SET_VIA_TRM = (RIL_REQUEST_C2K_BASE + 18);
+    static final int RIL_REQUEST_SET_ARSI_THRESHOLD = (RIL_REQUEST_C2K_BASE + 19);
+
+    static final int RIL_UNSOL_C2K_BASE = 5000;
+    static final int RIL_UNSOL_CDMA_CALL_ACCEPTED = (RIL_UNSOL_C2K_BASE + 0);
+    static final int RIL_UNSOL_UTK_SESSION_END = (RIL_UNSOL_C2K_BASE + 1);
+    static final int RIL_UNSOL_UTK_PROACTIVE_COMMAND = (RIL_UNSOL_C2K_BASE + 2);
+    static final int RIL_UNSOL_UTK_EVENT_NOTIFY = (RIL_UNSOL_C2K_BASE + 3);
+    static final int RIL_UNSOL_VIA_GPS_EVENT = (RIL_UNSOL_C2K_BASE + 4);
+    static final int RIL_UNSOL_VIA_NETWORK_TYPE_CHANGE = (RIL_UNSOL_C2K_BASE + 5);
+    static final int RIL_UNSOL_VIA_PLMN_CHANGE_REG_PAUSE = (RIL_UNSOL_C2K_BASE + 6);
+    static final int RIL_UNSOL_VIA_INVALID_SIM_DETECTED = (RIL_UNSOL_C2K_BASE + 7);
+    /* M: Add C2K proprietary end */
 }
