@@ -10,6 +10,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.EventLog;
 
+import android.view.View;
 import com.android.systemui.EventLogTags;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.phone.NotificationPanelView;
@@ -77,6 +78,10 @@ public class LiveLockScreenController {
         if (mStatusBarState != StatusBarState.SHADE && statusBarState == StatusBarState.SHADE) {
             // going from KEYGUARD or SHADE_LOCKED to SHADE so device has been unlocked
             onKeyguardDismissed();
+        }
+
+        if (statusBarState == StatusBarState.KEYGUARD) {
+            mBar.getScrimController().forceHideScrims(false);
         }
 
         mStatusBarState = statusBarState;
@@ -241,12 +246,19 @@ public class LiveLockScreenController {
             EventLog.writeEvent(EventLogTags.SYSUI_LLS_NOTIFICATION_PANEL_SHOWN,
                     hasFocus ? 0 : 1);
         }
+        // Hide statusbar and scrim if live lockscreen
+        // currently has focus
+        mBar.setStatusBarViewVisibility(!hasFocus);
+        mBar.getScrimController().forceHideScrims(hasFocus);
         mLlsHasFocus = hasFocus;
     }
 
     public void onKeyguardDismissed() {
         if (mLiveLockScreenView != null) mLiveLockScreenView.onKeyguardDismissed();
         EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_DISMISSED, mLlsHasFocus ? 1 : 0);
+        // Ensure we reset visibility when keyguard is dismissed
+        mBar.setStatusBarViewVisibility(true);
+        mBar.getScrimController().forceHideScrims(false);
     }
 
     private Runnable mAddNewLiveLockScreenRunnable = new Runnable() {
