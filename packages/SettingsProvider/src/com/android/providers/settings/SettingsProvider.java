@@ -2172,6 +2172,22 @@ public class SettingsProvider extends ContentProvider {
                 }
 
                 if (currentVersion == 122) {
+                    // move SYSTEM_PROFILES_ENABLED over to CMSettings
+                    final SettingsState systemSettings = getSystemSettingsLocked(userId);
+                    final Setting settingLocked = systemSettings.getSettingLocked(
+                            CMSettings.System.SYSTEM_PROFILES_ENABLED);
+                    if (settingLocked != null) {
+                        final String value = settingLocked.getValue();
+                        if (value != null) {
+                            CMSettings.System.putStringForUser(getContext().getContentResolver(),
+                                    CMSettings.System.SYSTEM_PROFILES_ENABLED,
+                                    value,
+                                    userId);
+                            systemSettings.deleteSettingLocked(
+                                    CMSettings.System.SYSTEM_PROFILES_ENABLED);
+                        }
+                    }
+
                     final SettingsState globalSettings = getGlobalSettingsLocked();
                     String defaultDisabledProfiles = (getContext().getResources().getString(
                             R.string.def_bluetooth_disabled_profiles));
