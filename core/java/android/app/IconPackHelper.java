@@ -633,33 +633,42 @@ public class IconPackHelper {
             }
             TypedValue tempValue = new TypedValue();
             tempValue.setTo(outValue);
-            outValue.assetCookie = COMPOSED_ICON_COOKIE;
-            outValue.data = resId & (COMPOSED_ICON_COOKIE << 24 | 0x00ffffff);
-            outValue.string = getCachedIconPath(pkgName, resId, outValue.density);
-            int hashCode = outValue.string.hashCode() & 0x7fffffff;
-            int defaultSwatchColor = 0;
+            // Catch all exceptions and restore outValue to tempValue if one occurs
+            try {
+                outValue.assetCookie = COMPOSED_ICON_COOKIE;
+                outValue.data = resId & (COMPOSED_ICON_COOKIE << 24 | 0x00ffffff);
+                outValue.string = getCachedIconPath(pkgName, resId, outValue.density);
+                int hashCode = outValue.string.hashCode() & 0x7fffffff;
+                int defaultSwatchColor = 0;
 
-            if (!(new File(outValue.string.toString()).exists())) {
-                // compose the icon and cache it
-                int back = 0;
-                if (iconInfo.swatchType != ComposedIconInfo.SwatchType.None) {
-                    back = iconInfo.iconPaletteBack;
-                    if (iconInfo.defaultSwatchColors.length > 0) {
-                        defaultSwatchColor =iconInfo.defaultSwatchColors[
-                                hashCode % iconInfo.defaultSwatchColors.length];
+                if (!(new File(outValue.string.toString()).exists())) {
+                    // compose the icon and cache it
+                    int back = 0;
+                    if (iconInfo.swatchType != ComposedIconInfo.SwatchType.None) {
+                        back = iconInfo.iconPaletteBack;
+                        if (iconInfo.defaultSwatchColors.length > 0) {
+                            defaultSwatchColor = iconInfo.defaultSwatchColors[
+                                    hashCode % iconInfo.defaultSwatchColors.length];
+                        }
+                    } else if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
+                        back = iconInfo.iconBacks[hashCode % iconInfo.iconBacks.length];
                     }
-                } else if (iconInfo.iconBacks != null && iconInfo.iconBacks.length > 0) {
-                    back = iconInfo.iconBacks[hashCode % iconInfo.iconBacks.length];
+                    if (DEBUG) {
+                        Log.d(TAG, "Composing icon for " + pkgName);
+                    }
+                    Bitmap bmp = createIconBitmap(baseIcon, res, back, defaultSwatchColor,
+                            iconInfo);
+                    if (!cacheComposedIcon(bmp,
+                            getCachedIconName(pkgName, resId, outValue.density))) {
+                        Log.w(TAG, "Unable to cache icon " + outValue.string);
+                        // restore the original TypedValue
+                        outValue.setTo(tempValue);
+                    }
                 }
-                if (DEBUG) {
-                    Log.d(TAG, "Composing icon for " + pkgName);
-                }
-                Bitmap bmp = createIconBitmap(baseIcon, res, back, defaultSwatchColor, iconInfo);
-                if (!cacheComposedIcon(bmp, getCachedIconName(pkgName, resId, outValue.density))) {
-                    Log.w(TAG, "Unable to cache icon " + outValue.string);
-                    // restore the original TypedValue
-                    outValue.setTo(tempValue);
-                }
+            } catch (Exception e) {
+                // catch all, restore the original value and log it
+                outValue.setTo(tempValue);
+                Log.w(TAG, "getValue failed for " + outValue.string, e);
             }
         }
 
