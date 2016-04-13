@@ -2023,6 +2023,7 @@ public class SettingsProvider extends ContentProvider {
                 if ((oldVersion == newVersion || oldVersion == CM_SETTINGS_DB_VERSION)) {
                     if (oldVersion == CM_SETTINGS_DB_VERSION && !hasReplayedDefaultsFromL()) {
                         forceReplayAOSPDefaults(mUserId);
+                        forceMigrateProfilesEnabled(mUserId);
                         setDefaultsReplayedFromLFlag();
                     }
                     return;
@@ -2218,6 +2219,23 @@ public class SettingsProvider extends ContentProvider {
                             Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT,
                             defaultComponent,
                             SettingsState.SYSTEM_PACKAGE_NAME);
+                }
+            }
+
+            private void forceMigrateProfilesEnabled(int userId) {
+                final SettingsState systemSettings = getSystemSettingsLocked(userId);
+                final Setting settingLocked = systemSettings.getSettingLocked(
+                        CMSettings.System.SYSTEM_PROFILES_ENABLED);
+                if (settingLocked != null) {
+                    final String value = settingLocked.getValue();
+                    if (value != null) {
+                        CMSettings.System.putStringForUser(getContext().getContentResolver(),
+                                CMSettings.System.SYSTEM_PROFILES_ENABLED,
+                                value,
+                                userId);
+                        systemSettings.deleteSettingLocked(
+                                CMSettings.System.SYSTEM_PROFILES_ENABLED);
+                    }
                 }
             }
 
