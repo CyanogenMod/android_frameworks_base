@@ -175,17 +175,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">التنبيه المقبل</string>
   <string name="dynamic_qs_tile_ime_selector_label">محدد IME</string>
   <string name="dynamic_qs_tile_su_label">الوصول إلى root</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">تعطيل LiveDisplay.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: الوضع التلقائي.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: الوضع النهاري.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: الوضع الليلي.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: وضع الأماكن المفتوحة.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">تم تعطيل LiveDisplay.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">تغيير LiveDisplay إلى الوضع التلقائي.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">تغيير LiveDisplay إلى الوضع النهاري.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">تغيير LiveDisplay إلى الوضع الليلي.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">تغيير LiveDisplay إلى وضع الأماكن المفتوحة.</string>
   <string name="quick_settings_title_advanced_location">الموقع الثلاثى</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">تحديد الموقع: وضع توفير البطارية.</string>

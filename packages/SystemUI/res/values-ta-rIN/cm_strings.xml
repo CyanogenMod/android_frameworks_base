@@ -173,17 +173,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">அடுத்த அலாரம்</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME தேர்ந்தெடுப்பான்</string>
   <string name="dynamic_qs_tile_su_label">மூல அணுகல்</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay ஆஃப்.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: தானியக்க பயன்முறை</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: பகல் பயன்முறை</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: இரவு பயன்முறை</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: வெளியிட பயன்முறை</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay ஆஃப் செய்யப்பட்டது.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay தானியக்க பயன்முறைக்கு மாற்றப்பட்டது.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay பகல் பயன்முறைக்கு மாற்றப்பட்டது.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay இரவு பயன்முறைக்கு மாற்றப்பட்டது.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay வெளியிட பயன்முறைக்கு மாற்றப்பட்டது</string>
   <string name="quick_settings_title_advanced_location">மூன்று-நிலை இருப்பிடம்</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">இருப்பிடம் அறிவித்தல்: மின்கல சேமிப்பு பயன்முறை.</string>

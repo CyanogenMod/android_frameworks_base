@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Następny alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Przełącznik klawiatury</string>
   <string name="dynamic_qs_tile_su_label">Dostęp do roota</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay wyłączony.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: tryb automatyczny.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: tryb dzienny.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: tryb nocny.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: tryb zewnętrzny.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay został wyłączony.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay zmieniony na tryb automatyczny.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay zmieniony na tryb dzienny.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay zmieniony na tryb nocny.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay zmieniony na tryb zewnętrzny.</string>
   <string name="quick_settings_title_advanced_location">Trójstanowa lokalizacja</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Raportowanie lokalizacji: tryb oszczędzania baterii.</string>

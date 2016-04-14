@@ -135,9 +135,6 @@
             android:protectionLevel="signature" />
     <uses-permission android:name="com.android.systemui.permission.SELF" />
 
-    <!-- LiveDisplay -->
-    <uses-permission android:name="android.permission.HARDWARE_ABSTRACTION_ACCESS" />
-
     <!-- Weather -->
     <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
 

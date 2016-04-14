@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">അടുത്ത അലാറം</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME സെലക്ടർ</string>
   <string name="dynamic_qs_tile_su_label">റൂട്ട് പ്രവേശനം</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">ലൈവ്ഡിസ്പ്ലേ ഓഫ്.</string>
-  <string name="accessibility_quick_settings_live_display_auto">ലൈവ്ഡിസ്പ്ലേ: ഓട്ടോ മോഡ്.</string>
-  <string name="accessibility_quick_settings_live_display_day">ലൈവ്ഡിസ്പ്ലേ: പകല്‍ മോഡ്.</string>
-  <string name="accessibility_quick_settings_live_display_night">ലൈവ്ഡിസ്പ്ലേ: രാത്രി മോഡ്.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">ലൈവ്ഡിസ്പ്ലേ: ഔട്ട്‌ഡോര്‍ മോഡ്.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">ലൈവ്ഡിസ്പ്ലേ ഓഫ് ചെയ്തു.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">ലൈവ്ഡിസ്പ്ലേ ആട്ടോ മോഡിലേക്ക് മാറ്റി.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">ലൈവ്ഡിസ്പ്ലേ പകല്‍ മോഡിലേക്ക് മാറ്റി.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">ലൈവ്ഡിസ്പ്ലേ രാത്രി മോഡിലേക്ക് മാറ്റി.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">ലൈവ്ഡിസ്പ്ലേ ഔട്ട്‌ഡോര്‍ മോഡിലേക്ക് മാറ്റി.</string>
   <string name="quick_settings_title_advanced_location">ട്രൈ-സ്റ്റേറ്റ് സ്ഥാനം</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">സ്ഥാനം റിപ്പോർട്ടിംഗ്: ബാറ്ററി ലാഭിക്കല്‍ മോഡ്.</string>

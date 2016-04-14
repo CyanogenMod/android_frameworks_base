@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Следећи аларм</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME бирач</string>
   <string name="dynamic_qs_tile_su_label">Root приступ</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">Активни екран искључен.</string>
-  <string name="accessibility_quick_settings_live_display_auto">Активни Екран: ауто режим.</string>
-  <string name="accessibility_quick_settings_live_display_day">Активни Екран: дневни режим.</string>
-  <string name="accessibility_quick_settings_live_display_night">Активни Екран: ноћни режим.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">Активни Екран: режим на отвореном.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">Активни Екран је искључен.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">Активни Екран промењен у ауто режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">Активни Екран промењен у дневни режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">Активни Екран промењен у ноћни режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">Активни Екран промењен у режим на отвореном.</string>
   <string name="quick_settings_title_advanced_location">Локација три-државе</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Локација извештај: режим чувања батерије.</string>

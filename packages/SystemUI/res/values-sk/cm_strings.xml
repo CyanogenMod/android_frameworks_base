@@ -152,17 +152,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Ďalší budík</string>
   <string name="dynamic_qs_tile_ime_selector_label">Výber IME</string>
   <string name="dynamic_qs_tile_su_label">Root prístup</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay vyp.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatický režim.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: denný režim.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nočný režim.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: režim vonku.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay vypnutý.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay sa zmenil na automatický režim.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay sa zmenil na denný režim.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay sa zmenil na nočný režim.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay sa zmenil na režim vonku.</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Hlásenie polohy: režim šetrenia batérie.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

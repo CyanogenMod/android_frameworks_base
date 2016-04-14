@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Volgend alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Invoermethode</string>
   <string name="dynamic_qs_tile_su_label">Root-toegang</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay uit.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatisch.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dagstand.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nachtstand.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: buitenstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay uitgeschakeld.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay gewijzigd naar automatisch.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay gewijzigd naar dagstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay gewijzigd naar nachtstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay gewijzigd naar buitenstand.</string>
   <string name="quick_settings_title_advanced_location">Locatie met 3 standen</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Locatiemelding: accubesparing.</string>

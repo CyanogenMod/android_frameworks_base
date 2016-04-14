@@ -173,17 +173,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">ପରବର୍ତ୍ତୀ ଆଲରାମ୍:</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME ସିଲେକ୍ଟର</string>
   <string name="dynamic_qs_tile_su_label">ରୁଟ୍‍ ଆକ୍‍ସେସ୍‍</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ ଅଫ୍‍ ଅଛି।</string>
-  <string name="accessibility_quick_settings_live_display_auto">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ: ସ୍ୱତଃପ୍ରବୃତ୍ତ ମୋଡ୍‍।</string>
-  <string name="accessibility_quick_settings_live_display_day">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ: ଦିନ ମୋଡ୍‍।</string>
-  <string name="accessibility_quick_settings_live_display_night">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ: ରାତ୍ରି ମୋଡ୍‍।</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ: ଆଉଟ୍‍ଡୋର୍‍ ମୋଡ୍‍।</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ ଅଫ୍‍ କରାଯାଇଛି।</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ ସ୍ୱତଃପ୍ରବୃତ୍ତ ମୋଡ୍‍କୁ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ  ଦିନ ମୋଡ୍‍.କୁ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ ରାତ୍ରି ମୋଡ୍‍.କୁ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">ଲାଇଭ୍‍ ଡିସ୍‍ପ୍ଲେ ଆଉଟ୍‍ଡୋର୍‍ ମୋଡ୍‍.କୁ ପରିବର୍ତ୍ତନ କରାଯାଇଛି।</string>
   <string name="quick_settings_title_advanced_location">ତିନି-ସ୍ତରୀୟ ଅବସ୍ଥାନ</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">ଅବସ୍ଥାନ ରିପୋର୍ଟିଂ: ବ୍ୟାଟେରୀ ସଂରକ୍ଷଣ ମୋଡ୍‍</string>

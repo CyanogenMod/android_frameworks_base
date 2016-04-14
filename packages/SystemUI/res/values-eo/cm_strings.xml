@@ -140,17 +140,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Venonta alarmo</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME elektilo</string>
   <string name="dynamic_qs_tile_su_label">Radikuzanta atingo</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay malaktiva.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: aŭtomata reĝimo.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: taga reĝimo.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nokta reĝimo.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: ekstera reĝimo.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay malŝaltita.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay ŝanĝita al aŭtomata reĝimo.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ŝanĝita al taga reĝimo.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ŝanĝita al nokta reĝimo.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ŝanĝita al ekstera reĝimo.</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Lokalizado: reĝimo de bateria ŝparado.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

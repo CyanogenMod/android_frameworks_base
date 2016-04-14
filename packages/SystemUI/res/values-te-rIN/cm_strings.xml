@@ -173,17 +173,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">తరువాతి అలారం</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME సెలక్టర్</string>
   <string name="dynamic_qs_tile_su_label">మూల ప్రాప్తి</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">ప్రత్యక్ష ప్రదర్శన ఆఫ్.</string>
-  <string name="accessibility_quick_settings_live_display_auto">ప్రత్యక్ష ప్రదర్శన: స్వయంచాలక మోడ్.</string>
-  <string name="accessibility_quick_settings_live_display_day">ప్రత్యక్ష ప్రదర్శన: పగటి మోడ్.</string>
-  <string name="accessibility_quick_settings_live_display_night">ప్రత్యక్ష ప్రదర్శన: రాత్రి మోడ్.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">ప్రత్యక్ష ప్రదర్శన: ఆరుబయటి మోడ్.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">ప్రత్యక్ష ప్రదర్శన ఆపివేయబడింది.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">ప్రత్యక్ష ప్రదర్శన స్వయంచాలక మోడుకు మార్చబడింది.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">ప్రత్యక్ష ప్రదర్శన పగటి మోడుకు మార్చబడింది.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">ప్రత్యక్ష ప్రదర్శన రాత్రి మోడుకు మార్చబడింది.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">ప్రత్యక్ష ప్రదర్శన ఆరుబయటి మోడుకు మార్చబడింది.</string>
   <string name="quick_settings_title_advanced_location">మూడు-స్థితుల స్థానం</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">స్థాన నివేదిక: బ్యాటరీ సేవింగ్ మోడ్.</string>

@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Seuraava hälytys</string>
   <string name="dynamic_qs_tile_ime_selector_label">Syöttötavan valitsin</string>
   <string name="dynamic_qs_tile_su_label">Root-oikeudet</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay pois.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automaattitila.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: päivätila.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: yötila.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: ulkoilmatila.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay pois päältä.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay asetettu automaattitilaan.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay asetettu päivätilaan.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay asetettu yötilaan.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay asetettu ulkoilmatilaan.</string>
   <string name="quick_settings_title_advanced_location">Sijainnin lisäasetukset</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Sijainnin raportointi: virransäästötila.</string>

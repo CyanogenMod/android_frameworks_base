@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Næste alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME-vælger</string>
   <string name="dynamic_qs_tile_su_label">Root-adgang</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay fra.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatisk tilstand.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dag tilstand.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nat tilstand.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: udendørstilstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay er slået fra.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay ændret til auto tilstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ændret til dag tilstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ændret til nat tilstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ændret til udendørstilstand.</string>
   <string name="quick_settings_title_advanced_location">Lokation via triangulering</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Placeringsrapportering: Batterisparetilstand.</string>

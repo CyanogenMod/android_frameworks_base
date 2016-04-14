@@ -152,17 +152,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Järgmine alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME valija</string>
   <string name="dynamic_qs_tile_su_label">Root ligipääs</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay väljas.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automaatrežiim.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: päev-režiim.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: Öörežiim.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: õues režiim.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay välja lülitatud.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay muudetud automaatrežiimi.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay muudetud päev-režiimi.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay muudetud Öörežiimi.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay muudetud õues režiimi.</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Asukoha teatamine: aku säästmise režiim.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">השעון המעורר הבא</string>
   <string name="dynamic_qs_tile_ime_selector_label">בורר שיטות קלט</string>
   <string name="dynamic_qs_tile_su_label">גישת שורש</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay כבוי.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: מצב אוטומטי.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: מצב יום.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: מצב לילה.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: מצב חוץ.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay כובה.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay שונה למצב אוטומטי.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay שונה למצב יום.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay שונה למצב לילה.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay שונה למצב חוץ.</string>
   <string name="quick_settings_title_advanced_location">שלושה מצבי מיקום</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">דיווח מיקום: מצב חיסכון בסוללה.</string>
