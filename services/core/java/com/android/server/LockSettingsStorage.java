@@ -62,6 +62,7 @@ class LockSettingsStorage {
     private static final String LOCK_PATTERN_FILE = "gatekeeper.pattern.key";
     private static final String BASE_ZERO_LOCK_PATTERN_FILE = "gatekeeper.gesture.key";
     private static final String LEGACY_LOCK_PATTERN_FILE = "gesture.key";
+    private static final String CM_LEGACY_LOCK_PATTERN_FILE = "cm_gesture.key";
     private static final String LOCK_PASSWORD_FILE = "gatekeeper.password.key";
     private static final String LEGACY_LOCK_PASSWORD_FILE = "password.key";
 
@@ -241,6 +242,11 @@ class LockSettingsStorage {
             return new CredentialHash(stored, CredentialHash.VERSION_LEGACY);
         }
 
+        stored = readFile(getCmLegacyLockPatternFilename(userId));
+        if (stored != null && stored.length > 0) {
+            return new CredentialHash(stored, CredentialHash.VERSION_LEGACY);
+        }
+
         return null;
     }
 
@@ -253,7 +259,8 @@ class LockSettingsStorage {
     public boolean hasPattern(int userId) {
         return hasFile(getLockPatternFilename(userId)) ||
             hasFile(getBaseZeroLockPatternFilename(userId)) ||
-            hasFile(getLegacyLockPatternFilename(userId));
+            hasFile(getLegacyLockPatternFilename(userId)) ||
+            hasFile(getCmLegacyLockPatternFilename(userId));
     }
 
     private boolean hasFile(String name) {
@@ -378,6 +385,10 @@ class LockSettingsStorage {
     @VisibleForTesting
     String getLegacyLockPatternFilename(int userId) {
         return getLockCredentialFilePathForUser(userId, LEGACY_LOCK_PATTERN_FILE);
+    }
+
+    String getCmLegacyLockPatternFilename(int userId) {
+        return getLockCredentialFilePathForUser(userId, CM_LEGACY_LOCK_PATTERN_FILE);
     }
 
     @VisibleForTesting
