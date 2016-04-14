@@ -225,6 +225,7 @@ public class BluetoothTile extends QSTile<QSTile.BooleanState>  {
             listView.setOnItemClickListener(this);
             listView.setAdapter(mAdapter =
                     new QSDetailItemsList.QSDetailListAdapter(context, mBluetoothItems));
+            mAdapter.setCallback(this);
             mItemsList.setEmptyState(R.drawable.ic_qs_bluetooth_detail_empty,
                     R.string.quick_settings_bluetooth_detail_empty_text);
 
