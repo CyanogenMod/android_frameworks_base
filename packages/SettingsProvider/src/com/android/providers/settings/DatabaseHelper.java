@@ -2250,7 +2250,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 try {
                     LockPatternUtils lpu = new LockPatternUtils(mContext);
                     List<LockPatternView.Cell> cellPattern =
-                            LockPatternUtils.stringToPattern(lockPattern, lpu.getLockPatternSize());
+                            LockPatternUtils.stringToPattern(lockPattern, lpu.getLockPatternSize(mUserHandle));
                     lpu.saveLockPattern(cellPattern, null, UserHandle.USER_OWNER);
                 } catch (IllegalArgumentException e) {
                     // Don't want corrupted lock pattern to hang the reboot process
