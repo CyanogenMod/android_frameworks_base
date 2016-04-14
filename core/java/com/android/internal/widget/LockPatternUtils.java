@@ -258,7 +258,7 @@ public class LockPatternUtils {
             throws RequestThrottledException {
         try {
             VerifyCredentialResponse response =
-                getLockSettings().verifyPattern(patternToString(pattern), challenge, userId);
+                getLockSettings().verifyPattern(patternToString(pattern, userId), challenge, userId);
             if (response == null) {
                 // Shouldn't happen
                 return null;
@@ -286,7 +286,7 @@ public class LockPatternUtils {
             throws RequestThrottledException {
         try {
             VerifyCredentialResponse response =
-                    getLockSettings().checkPattern(patternToString(pattern), userId);
+                    getLockSettings().checkPattern(patternToString(pattern, userId), userId);
 
             if (response.getResponseCode() == VerifyCredentialResponse.RESPONSE_OK) {
                 return true;
@@ -513,7 +513,7 @@ public class LockPatternUtils {
                         + MIN_LOCK_PATTERN_SIZE + " dots long.");
             }
 
-            getLockSettings().setLockPattern(patternToString(pattern), savedPattern, userId);
+            getLockSettings().setLockPattern(patternToString(pattern, userId), savedPattern, userId);
             DevicePolicyManager dpm = getDevicePolicyManager();
 
             // Update the device encryption password.
@@ -522,7 +522,7 @@ public class LockPatternUtils {
                 if (!shouldEncryptWithCredentials(true)) {
                     clearEncryptionPassword();
                 } else {
-                    String stringPattern = patternToString(pattern);
+                    String stringPattern = patternToString(pattern, userId);
                     updateEncryptionPassword(StorageManager.CRYPT_TYPE_PATTERN, stringPattern);
                 }
             }
@@ -873,8 +873,8 @@ public class LockPatternUtils {
      * @param pattern The pattern.
      * @return The pattern in string form.
      */
-    public String patternToString(List<LockPatternView.Cell> pattern) {
-        return patternToString(pattern, getLockPatternSize());
+    public String patternToString(List<LockPatternView.Cell> pattern, int userId) {
+        return patternToString(pattern, getLockPatternSize(userId));
     }
 
     /**
@@ -1082,8 +1082,8 @@ public class LockPatternUtils {
     /**
      * @return the pattern lockscreen size
      */
-    public byte getLockPatternSize() {
-        long size = getLong(Settings.Secure.LOCK_PATTERN_SIZE, -1, UserHandle.USER_CURRENT);
+    public byte getLockPatternSize(int userId) {
+        long size = getLong(Settings.Secure.LOCK_PATTERN_SIZE, -1, userId);
         if (size > 0 && size < 128) {
             return (byte) size;
         }
@@ -1093,8 +1093,8 @@ public class LockPatternUtils {
     /**
      * Set the pattern lockscreen size
      */
-    public void setLockPatternSize(long size) {
-        setLong(Settings.Secure.LOCK_PATTERN_SIZE, size, UserHandle.USER_CURRENT);
+    public void setLockPatternSize(long size, int userId) {
+        setLong(Settings.Secure.LOCK_PATTERN_SIZE, size, userId);
     }
 
     public void setVisibleDotsEnabled(boolean enabled) {
