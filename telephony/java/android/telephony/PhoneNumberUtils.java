@@ -1902,12 +1902,12 @@ public class PhoneNumberUtils
                 // the number in Brazil - it won't connect.
                 if (useExactMatch || "BR".equalsIgnoreCase(defaultCountryIso)) {
                     if (number.equals(emergencyNum) &&
-                        isEmergencyNumberForCurrentIso(number, defaultCountryIso)) {
+                        isEmergencyNumberForCurrentIso(number, defaultCountryIso, slotId)) {
                         return true;
                     }
                 } else {
                     if (number.startsWith(emergencyNum) &&
-                        isEmergencyNumberForCurrentIso(number, defaultCountryIso)) {
+                        isEmergencyNumberForCurrentIso(number, defaultCountryIso, slotId)) {
                         return true;
                     }
                 }
@@ -1958,23 +1958,52 @@ public class PhoneNumberUtils
     * in INDIA and we are checking for (XYZ, am, 101, XYZ) it will return true since 101
     * will be found in ecclist but 101 is not valid ECC# for Armenia(am).
     */
-    private static boolean isEmergencyNumberForCurrentIso(String number, String country) {
+    private static boolean isEmergencyNumberForCurrentIso(String number, String country, int slotId) {
         Rlog.w(LOG_TAG, "isEmergencyNumberForCurrentIso: number=" + number + " country=" + country);
 
-        boolean isEmergency = true;
+        String mccEccIso = "";
+        String mccEccIsoProp = (slotId == 0) ? "ril.mcc.ecc.iso" : ("ril.mcc.ecc.iso" + slotId);
+        mccEccIso = SystemProperties.get(mccEccIsoProp, "");
 
-        //TODO - create a XML file that is in the format of string, [numbers ....]. This way
-        //we can overlay for a particular device. If XML is not found then function can return
-        //true always, else we will check the XML against passed country and number.
-        if( !("IN".equalsIgnoreCase(country)) ) {
-            if( number.equals("101") | number.equals("102") ) {
-                Rlog.w(LOG_TAG, "Number and Country doesn't match for emergency number");
-                isEmergency = false;
+        if (TextUtils.isEmpty(mccEccIso) || TextUtils.isEmpty(country) || slotId < 0 ||
+            isEmergencyIsoMatchCountryIso(mccEccIso, country)) {
+            Rlog.w(LOG_TAG, "MCC/ISO is empty or does match, so same region as ECC#'s set from RIL database");
+            return true;
+        }
+
+        String mccEccList = "";
+        String mccEccListProp = (slotId == 0) ? "ril.mcc.ecclist" : ("ril.mcc.ecclist" + slotId);
+        mccEccList = SystemProperties.get(mccEccListProp, "");
+
+        //MCC did not match, check if the phone # matches. If it does then it means we should return false. Since this ECC#
+        //is for some other country. There could be a case where this logic errors. For example 101 is valid ECC for INDIA and PAK
+        //and we are currently in INDIA and CTS passes (XYZ, pk, 101, XYZ). We should return true/valid ECC# but current logic will
+        //return false. This scenario fails even today, so there is no regression.
+        if (!TextUtils.isEmpty(mccEccList)) {
+            for (String emergencyNum : mccEccList.split(",")) {
+                if (number.equals(emergencyNum)) {
+                    Rlog.w(LOG_TAG, "Number " + number + " matches to the MCC_ECC_LIST " + emergencyNum);
+                    return false;
+                }
             }
         }
 
-        return isEmergency;
+        return true;
     }
+
+    /**
+     * Checks if the two strings passed are equal ignoring the case
+     */
+     private static boolean isEmergencyIsoMatchCountryIso(String iso, String country) {
+        Rlog.w(LOG_TAG, "isEmergencyIsoMatchCountryIso: iso=" + iso + " country=" + country);
+
+        if(iso.equalsIgnoreCase(country)) {
+            return true;
+        } else {
+            return false;
+        }
+
+     }
 
     /**
      * Checks if a given number is an emergency number for the country that the user is in.
