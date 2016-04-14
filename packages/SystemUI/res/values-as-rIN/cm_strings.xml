@@ -173,17 +173,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">পৰৱৰ্তী এলাৰ্ম</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME চয়নকাৰী</string>
   <string name="dynamic_qs_tile_su_label">ৰুট প্ৰৱেশ কৰক</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">লাইভপ্রদর্শন অফ।</string>
-  <string name="accessibility_quick_settings_live_display_auto">লাইভপ্রদর্শন: স্বয়ং মোড।</string>
-  <string name="accessibility_quick_settings_live_display_day">লাইভপ্রদর্শন: দিন মোড।</string>
-  <string name="accessibility_quick_settings_live_display_night">লাইভপ্রদর্শন: ৰাতি মোড।</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">লাইভপ্রদর্শন: আউটডোৰ মোড।</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">লাইভপ্রদর্শন অফ কৰা হৈছে।</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">লাইভপ্রদর্শন স্বয়ং মোডলৈ পৰিৱৰ্তন কৰা হৈছে।</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">লাইভপ্রদর্শন দিন মোডলৈ পৰিৱৰ্তন কৰা হৈছে।</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">লাইভপ্রদর্শন ৰাতি মোডলৈ পৰিৱৰ্তন কৰা হৈছে।</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">লাইভপ্রদর্শন আউটডোৰ মোডলৈ পৰিৱৰ্তন কৰা হৈছে।</string>
   <string name="quick_settings_title_advanced_location">ট্ৰাই-ষ্টেট অৱস্থান</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">অৱস্থান ৰিপোৰ্টিং: বেটাৰি ছেভিং মোড।</string>

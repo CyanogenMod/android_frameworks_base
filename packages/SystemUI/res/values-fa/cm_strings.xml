@@ -152,17 +152,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">هشدار بعدی</string>
   <string name="dynamic_qs_tile_ime_selector_label">انتخابگر تغییر روش ورودی</string>
   <string name="dynamic_qs_tile_su_label">دسترسی روت</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">نمایش پویا خاموش.</string>
-  <string name="accessibility_quick_settings_live_display_auto">نمایش پویا: حالت خودکار.</string>
-  <string name="accessibility_quick_settings_live_display_day">نمایش پویا: حالت روز.</string>
-  <string name="accessibility_quick_settings_live_display_night">نمایش پویا: حالت شب.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">نمایش پویا: حالت فضای باز.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">نمایش پویا خاموش شد.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">نمایش پویا به حالت خودکار تغییر کرد.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">نمایش پویا به حالت روز تغییر کرد.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">نمایش پویا به حالت شب تغییر کرد.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">نمایش پویا به حالت فضای باز تغییر کرد.</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">گزارش مکان: حالت صرفه‌جویی در باتری.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

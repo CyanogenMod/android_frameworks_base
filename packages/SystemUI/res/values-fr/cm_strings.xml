@@ -173,17 +173,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Prochaine alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Mode de saisie</string>
   <string name="dynamic_qs_tile_su_label">Accès root</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay désactivé.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay : mode automatique.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay : mode jour.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay : mode nuit.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay : mode plein air.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay désactivé.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay changé en mode automatique.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay changé en mode jour.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay changé en mode nuit.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay changé en mode plein air.</string>
   <string name="quick_settings_title_advanced_location">Localisation par triangulation</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Localisation : mode économie de batterie.</string>

@@ -168,17 +168,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Наступний сигнал</string>
   <string name="dynamic_qs_tile_ime_selector_label">Вибір способу вводу</string>
   <string name="dynamic_qs_tile_su_label">Root доступ</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay вимкнено.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: автоматичний режим.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: денний режим.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: нічний режим.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: режим «На вулиці».</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay вимкнено.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay у автоматичниому режимі.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay у денному режимі.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay у нічному режимі.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay у режимі «На вулиці».</string>
   <string name="quick_settings_title_advanced_location">Параметри відправки геоданих</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Надсилання місця розташування: економія батареї.</string>

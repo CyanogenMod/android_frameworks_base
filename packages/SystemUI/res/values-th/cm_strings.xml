@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">การปลุกครั้งต่อไป</string>
   <string name="dynamic_qs_tile_ime_selector_label">ตัวเลือก IME</string>
   <string name="dynamic_qs_tile_su_label">สิทธิผู้ดูแลระบบ</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay ปิดอยู่</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: รูปแบบอัตโนมัติ</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: รูปแบบกลางวัน</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: รูปแบบกลางคืน</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: รูปแบบกลางแจ้ง</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay ถูกปิด</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay เปลี่ยนเป็นรูปแบบอัตโนมัติ</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay เปลี่ยนเป็นรูปแบบกลางวัน</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay เปลี่ยนเป็นรูปแบบกลางคืน</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay เปลี่ยนเป็นรูปแบบกลางแจ้ง</string>
   <string name="quick_settings_title_advanced_location">ตำแหน่งแบบสามสถานะ</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">การระบุตำแหน่ง: รูปแบบประหยัดแบตเตอรี่</string>

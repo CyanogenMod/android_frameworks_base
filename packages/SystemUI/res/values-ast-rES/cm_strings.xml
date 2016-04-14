@@ -112,7 +112,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Alarma siguiente</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seleutor d\'IME</string>
   <string name="dynamic_qs_tile_su_label">Accesu root</string>
-  <!-- LiveDisplay strings -->
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Informes de llocalización: mou d\'aforru de batería.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

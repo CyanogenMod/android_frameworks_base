@@ -168,17 +168,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Nächste Wecker</string>
   <string name="dynamic_qs_tile_ime_selector_label">Method fir anzeginn</string>
   <string name="dynamic_qs_tile_su_label">Root-Zougrëff</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay aus.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: Automatesch.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: Dag.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: Nuecht.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: Dobaussen.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay ausgeschalt.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay-Modus op \"Automatesch\" geännert.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay-Modus op \"Dag\" geännert.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay-Modus op \"Nuecht\" geännert.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay-Modus op \"Dobaussen\" geännert.</string>
   <string name="quick_settings_title_advanced_location">Standuert mat dräi Zoustänn</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Standuertbericht: Akku spueren.</string>

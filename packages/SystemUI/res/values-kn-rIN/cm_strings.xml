@@ -173,17 +173,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">ಮುಂದಿನ ಅಲಾರಂ</string>
   <string name="dynamic_qs_tile_ime_selector_label">ಇಎಂಇ ಆಯ್ಕೆ</string>
   <string name="dynamic_qs_tile_su_label">ರೂಟ್ ಪ್ರವೇಶ</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ ಆಫ್.</string>
-  <string name="accessibility_quick_settings_live_display_auto">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ: ಸ್ವಯಂ ಮೋಡ್.</string>
-  <string name="accessibility_quick_settings_live_display_day">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ: ಹಗಲು ಮೋಡ್.</string>
-  <string name="accessibility_quick_settings_live_display_night">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ: ರಾತ್ರಿ ಮೋಡ್.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ: ಹೊರಾಂಗಣ ಮೋಡ್.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ ಆಫ್ ಆಗಿದೆ.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ ಸ್ವಯಂ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ ಹಗಲು ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ ರಾತ್ರಿ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">ಲೈವ್‍ಡಿಸ್ಪ್ಲೇ ಹೊರಾಂಗಣ ಮೋಡ್‍ಗೆ ಬದಲಾಗಿದೆ.</string>
   <string name="quick_settings_title_advanced_location">ಟ್ರೈ-ಸ್ಟೇಟ್‌ ಸ್ಥಳ</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">ಸ್ಥಳ ವರದಿಸಲ್ಲಿಸುವಿಕೆ: ಬ್ಯಾಟರಿ ಉಳಿತಾಯ ಮೋಡ್.</string>

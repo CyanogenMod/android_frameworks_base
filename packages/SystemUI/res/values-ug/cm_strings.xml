@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">كىيىنكى قوڭغۇراق</string>
   <string name="dynamic_qs_tile_ime_selector_label">كىرگۈزگۈچ تاللىغۇچ</string>
   <string name="dynamic_qs_tile_su_label">Root ھوقۇقى</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay تاقاق.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: ئاپتۇماتېك ھالەت.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: كۈندۈز.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: كېچە.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: تالا.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay تاقالدى.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay ئاپتۇماتېك ھالەتكە ئۆزگەرتىلدى.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay كۈندۈزگە ئۆزگەرتىلدى.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay كېچىگە ئۆزگەرتىلدى.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay تالاغا ئۆزگەرتىلدى.</string>
   <string name="quick_settings_title_advanced_location">ئۈچ ھالەت ئورۇن بەلگىلەش</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">ئورۇن دوكلاتى: توك تېجەش ھالىتى.</string>

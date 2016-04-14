@@ -107,7 +107,6 @@
   <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Dynamic tiles -->
-  <!-- LiveDisplay strings -->
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">دۆزینەوەی شوێن: شێوازی پاراستنی ووزە.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

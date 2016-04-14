@@ -140,17 +140,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">अलगा अलार्म</string>
   <string name="dynamic_qs_tile_ime_selector_label">आईएमई चयनक</string>
   <string name="dynamic_qs_tile_su_label">मूल पहुँच</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">लाइवडिस्प्ले बंद है।</string>
-  <string name="accessibility_quick_settings_live_display_auto">लाइवडिस्प्ले: स्वतः मोड।</string>
-  <string name="accessibility_quick_settings_live_display_day">लाइवडिस्प्ले: दिन मोड।</string>
-  <string name="accessibility_quick_settings_live_display_night">लाइवडिस्प्ले: रात मोड।</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">लाइवडिस्प्ले: बाहरी मोड।</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">लाइवडिस्प्ले को बंद किया गया है।</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">लाइवडिस्प्ले को स्वतः मोड में बदला गया।</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">लाइवडिस्प्ले को दिन मोड में बदला गया।</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">लाइवडिस्प्ले को रात मोड में बदला गया।</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">लाइवडिस्प्ले को बाहरी मोड में बदला गया।</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">स्थान रिपोर्टिंग: बैटरी बचानेवाला मोड।</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

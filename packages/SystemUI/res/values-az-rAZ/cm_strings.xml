@@ -152,17 +152,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Növbəti zəngli saat</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME seçici</string>
   <string name="dynamic_qs_tile_su_label">Root müraciəti</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay bağlıdır.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: avtomatik rejim.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: gündüz rejimi.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: gecə rejimi.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: açıq hava rejimi.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay bağlanıldı.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay avtomatik rejimə keçdi.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay gündüz rejiminə keçdi.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay gecə rejiminə keçdi.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay açıq hava rejiminə keçdi.</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Yer hesabatı: batareyaya qənaət rejimi.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

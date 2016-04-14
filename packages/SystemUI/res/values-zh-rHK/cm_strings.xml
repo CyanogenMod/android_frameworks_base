@@ -130,17 +130,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">下一個鬧鐘</string>
   <string name="dynamic_qs_tile_ime_selector_label">輸入法選擇器</string>
   <string name="dynamic_qs_tile_su_label">Root 權限</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">已關閉 LiveDisplay。</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: 自動模式。</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: 日間模式。</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: 夜間模式。</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: 戶外模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay 已關閉。</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay 已改為自動模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay 已改為日間模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay 已改為夜間模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay 已改為戶外模式。</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">定位報告：省電模式。</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

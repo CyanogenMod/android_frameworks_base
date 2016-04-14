@@ -174,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">下一个闹铃</string>
   <string name="dynamic_qs_tile_ime_selector_label">输入法选择器</string>
   <string name="dynamic_qs_tile_su_label">Root 授权</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay 关闭。</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay：自动模式。</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay：白天模式。</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay：夜晚模式。</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay：户外模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay 已关闭。</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay 已修改为自动模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay 已修改为白天模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay 已修改为夜晚模式。</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay 已修改为户外模式。</string>
   <string name="quick_settings_title_advanced_location">三种状态的位置设置</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">位置报告：节电模式。</string>
