@@ -465,7 +465,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         mLastRightShift = -1;
 
         mQsPanelTop.onStopDrag();
-        requestLayout();
     }
 
     protected View getDropTarget() {
@@ -501,14 +500,16 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     }
 
     public void setTiles(final Collection<QSTile<?>> tilesCollection) {
-        final List<QSTile<?>> tiles = new ArrayList<>(tilesCollection);
+        // we try to be as efficient as possible here because this can happen while the user
+        // is in edit mode, or maybe even while tiles are animating
+        // step 1: stop all animations
+        // step 2: remove tiles no longer to be used, cache ones that are still valid
+        // step 3: remove empty viewpager pages
+        // step 4: generate new tiles, re-add cached ones
+
         if (DEBUG_TILES) {
-            Log.i(TAG, "setTiles() called with " + "tiles = ["
-                    + tiles + "]");
+            Log.i(TAG, "setTiles() called with tiles = [" + tilesCollection + "]");
         }
-
-        int currentViewPagerPage = mViewPager.getCurrentItem();
-
         if (mLastDragRecord != null && mRecords.indexOf(mLastDragRecord) == -1) {
             // the last removed record might be stored in mLastDragRecord if we just shifted
             // re-add it to the list so we'll clean it up below
@@ -516,25 +517,41 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             mLastDragRecord = null;
         }
 
-        Map<QSTile<?>, DragTileRecord> recordMap = new ArrayMap<>();
+        // step kinda-1
+        if (mDraggingRecord != null) {
+            // dragging record might be animating back, force it to finished position
+            mDraggingRecord.tileView.animate().cancel();
+        }
+
+        int currentViewPagerPage = mViewPager.getCurrentItem();
+        int removedPages = 0;
+
+        Map<QSTile<?>, DragTileRecord> cachedRecords = new ArrayMap<>();
         ListIterator<TileRecord> iterator = mRecords.listIterator(mRecords.size());
 
         int recordsRemoved = 0;
         // cleanup current records
-        while (iterator.hasPrevious()) {
+        while (iterator.hasPrevious()) { // mRecords
             DragTileRecord dr = (DragTileRecord) iterator.previous();
 
-            if (dr.page >= 0) {
-                // clean up view
-                mPages.get(dr.page).removeView(dr.tileView);
-            }
+            // step 1
+            dr.tileView.animate().cancel();
 
-            if (tiles.contains(dr.tile)) {
+            // step 2
+            if (tilesCollection.contains(dr.tile)) {
                 if (DEBUG_TILES) {
                     Log.i(TAG, "caching tile: " + dr.tile);
                 }
-                recordMap.put(dr.tile, dr);
+                cachedRecords.put(dr.tile, dr);
             } else {
+                if (dr.page >= 0) {
+                    if (DEBUG_TILES) {
+                        Log.w(TAG, "removed dr.tileView: " + dr.tileView + " from page: "
+                                + dr.page + " (dest page: " + dr.destinationPage + ")");
+                    }
+
+                    removeTileView(dr.tileView);
+                }
                 if (DEBUG_TILES) {
                     Log.i(TAG, "removing tile: " + dr.tile);
                 }
@@ -543,74 +560,92 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 iterator.remove();
                 recordsRemoved++;
 
-                if (dr.page >= getCurrentMaxPageCount() - 1) {
-                    final int childCount = mPages.get(dr.page).getChildCount();
-
-                    if (childCount == 0) {
-                        final int currentIndex = mViewPager.getCurrentItem();
-                        if (currentIndex > 0 && currentViewPagerPage == currentIndex) {
-                            // if we are about to remove the page we are currently on, move back
-                            currentViewPagerPage--;
-                        }
-                        final int pageIndex = dr.page + (mEditing ? 1 : 0);
-                        mPagerAdapter.startUpdate(mViewPager);
-                        mPagerAdapter.destroyItem(mViewPager, pageIndex, mPages.get(dr.page));
-                        mPagerAdapter.finishUpdate(mViewPager);
-                        mPagerAdapter.notifyDataSetChanged();
-                    }
-                }
+                dr.page = -1;
+                dr.destinationPage = -1;
             }
-            dr.page = -1;
-            dr.destinationPage = -1;
         }
 
-        // at this point recordMap should have all retained tiles, no new or old tiles
-        int delta = tiles.size() - recordMap.size() - recordsRemoved;
+        // at this point cachedRecords should have all retained tiles, no new or old tiles
+        int delta = tilesCollection.size() - cachedRecords.size() - recordsRemoved;
         if (DEBUG_TILES) {
             Log.i(TAG, "record map delta: " + delta);
         }
-        mRecords.ensureCapacity(tiles.size());
 
-        mPagerAdapter.notifyDataSetChanged();
-
-        // even though we explicitly destroy old pages, without this call,
-        // the viewpager doesn't seem to want to pick up the fact that we have less pages
-        // and allows "empty" scrolls to the right where there is no page.
-        mViewPager.setAdapter(mPagerAdapter);
-
-        // add new tiles
-        for (int i = 0; i < tiles.size(); i++) {
-            QSTile<?> tile = tiles.get(i);
-            final int tileDestPage = getPagesForCount(i + 1) - 1;
+        // step 3
+        final Iterator<QSPage> pageIterator = mPages.iterator();
+        while (pageIterator.hasNext()) {
+            final QSPage page = pageIterator.next();
+            final int viewpagerIndex = page.getPageIndex() + (mEditing ? 1 : 0);
+            final int childCount = page.getChildCount();
 
             if (DEBUG_TILES) {
-                Log.d(TAG, "tile at : " + i + ": " + tile + " to dest page: " + tileDestPage);
+                Log.d(TAG, "page " + viewpagerIndex + " has " + childCount);
+            }
+            if (page.getPageIndex() >= getCurrentMaxPageCount() - 1) {
+                if (DEBUG_TILES) {
+                    Log.d(TAG, "page : " + page + " has " + childCount + " children");
+                }
+                if (childCount == 0) {
+                    removedPages++;
+
+                    page.removeAllViews();
+                    mPagerAdapter.startUpdate(mViewPager);
+                    mPagerAdapter.destroyItem(mViewPager, viewpagerIndex, page);
+                    mPagerAdapter.finishUpdate(mViewPager);
+                    mPagerAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+
+        if (removedPages > 0) {
+            // even though we explicitly destroy old pages, without this call,
+            // the viewpager doesn't seem to want to pick up the fact that we have less pages
+            // and allows "empty" scrolls to the right where there is no page.
+            if (DEBUG_TILES) {
+                Log.d(TAG, "re-setting adapter, page: " + currentViewPagerPage);
+            }
+            mViewPager.setAdapter(mPagerAdapter);
+            mViewPager.setCurrentItem(Math.min(currentViewPagerPage, mPagerAdapter.getCount()),
+                    false);
+            mPagerAdapter.notifyDataSetChanged();
+        }
+
+        // step 4
+        mRecords.ensureCapacity(tilesCollection.size());
+        int runningCount = 0;
+
+        final Iterator<QSTile<?>> newTileIterator = tilesCollection.iterator();
+        while (newTileIterator.hasNext()) {
+            QSTile<?> tile = newTileIterator.next();
+            final int tileDestPage = getPagesForCount(runningCount + 1) - 1;
+
+            if (DEBUG_TILES) {
+                Log.d(TAG, "tile at : " + runningCount + ": " + tile
+                        + " to dest page: " + tileDestPage);
             }
             DragTileRecord record;
-            if (!recordMap.containsKey(tile)) {
+            if (!cachedRecords.containsKey(tile)) {
                 if (DEBUG_TILES) {
-                    Log.d(TAG, "tile at: " + i + " not cached, adding it to records");
+                    Log.d(TAG, "tile at: " + runningCount + " not cached, adding it to records");
                 }
                 record = makeRecord(tile);
                 record.destinationPage = tileDestPage;
-                recordMap.put(tile, record);
-                mRecords.add(i, record);
+                mRecords.add(runningCount, record);
                 mPagerAdapter.notifyDataSetChanged();
             } else {
-                record = recordMap.get(tile);
+                record = cachedRecords.get(tile);
                 if (DEBUG_TILES) {
-                    Log.d(TAG, "tile at : " + i + ": cached, restoring: " + record);
+                    Log.d(TAG, "tile at : " + runningCount + ": cached, restoring: " + record);
                 }
-                int indexOf = mRecords.indexOf(record);
-                if (indexOf != i) {
-                    if (DEBUG_TILES) {
-                        Log.w(TAG, "moving index of " + record + " from "
-                                + indexOf + " to " + i);
-                    }
-                    Collections.swap(mRecords, indexOf, i);
 
-                }
+                mPages.get(record.page).removeView(record.tileView);
+
+                record.page = -1;
                 record.destinationPage = tileDestPage;
+
+                mRecords.remove(record);
+                mRecords.add(runningCount, record);
+                mPagerAdapter.notifyDataSetChanged();
             }
             if (record.page == -1) {
                 // add the view
@@ -620,10 +655,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     Log.d(TAG, "added view " + record);
                 }
             }
+            runningCount++;
         }
-
-        // restore the visible page
-        mViewPager.setCurrentItem(currentViewPagerPage, false);
 
         if (isShowingDetail()) {
             mDetail.bringToFront();
@@ -718,10 +751,18 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         return r;
     }
 
+    private void removeTileView(QSTileView v) {
+        for (QSPage page : mPages) {
+            page.removeView(v);
+            page.removeTransientView(v);
+        }
+
+    }
+
     private void removeDraggingRecord() {
         // what spec is this tile?
         String spec = mHost.getSpec(mDraggingRecord.tile);
-        if (DEBUG_DRAG) {
+        if (DEBUG_TILES) {
             Log.w(TAG, "removing tile: " + mDraggingRecord + " with spec: " + spec);
         }
         onStopDrag();
@@ -1251,6 +1292,17 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     }
 
                     @Override
+                    public void onAnimationCancel(Animator animation) {
+                        mViewPager.requestDisallowInterceptTouchEvent(false);
+                        removeTransientView(mDraggingRecord.tileView);
+                        mCurrentlyAnimating.remove(mDraggingRecord);
+                        mRestoring = false;
+                        mPagerAdapter.notifyDataSetChanged();
+                        onStopDrag();
+                        requestLayout();
+                    }
+
+                    @Override
                     public void onAnimationEnd(Animator animation) {
                         mViewPager.requestDisallowInterceptTouchEvent(false);
 
@@ -1265,8 +1317,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                                 Log.i(TAG, "drag record was attached");
                             }
                         }
-                        mDraggingRecord.page = mDraggingRecord.destinationPage;
                         targetP.addView(mDraggingRecord.tileView);
+                        mDraggingRecord.page = mDraggingRecord.destinationPage;
 
                         mDraggingRecord.tileView.setX(mDraggingRecord.destination.x);
                         // reset this to be in the coords of the page, not viewpager anymore
@@ -1281,6 +1333,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                             mPagerAdapter.notifyDataSetChanged();
                         }
                         onStopDrag();
+                        requestLayout();
                     }
                 });
     }
@@ -1497,10 +1550,16 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                         .y(ti.destination.y)
                         .setListener(new AnimatorListenerAdapter() {
                             @Override
+                            public void onAnimationCancel(Animator animation) {
+                                tilePageSource.removeTransientView(ti.tileView);
+                                mCurrentlyAnimating.remove(ti);
+                            }
+
+                            @Override
                             public void onAnimationEnd(Animator animation) {
                                 tilePageSource.removeTransientView(ti.tileView);
-                                ti.page = tilePageTarget.getPageIndex();
                                 tilePageTarget.addView(ti.tileView);
+                                ti.page = tilePageTarget.getPageIndex();
                                 ti.tileView.setX(ti.destination.x);
                                 ti.tileView.setY(ti.destination.y);
 
@@ -1515,6 +1574,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                         .x(ti.destination.x)
                         .y(ti.destination.y)
                         .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                mCurrentlyAnimating.remove(ti);
+                            }
+
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 mCurrentlyAnimating.remove(ti);
@@ -1551,10 +1615,16 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     .y(last.destination.y)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
+                        public void onAnimationCancel(Animator animation) {
+                            tilePageSource.removeTransientView(last.tileView);
+                            mCurrentlyAnimating.remove(last);
+                        }
+
+                        @Override
                         public void onAnimationEnd(Animator animation) {
                             tilePageSource.removeTransientView(last.tileView);
-                            last.page = tilePageTarget.getPageIndex();
                             tilePageTarget.addView(last.tileView);
+                            last.page = tilePageTarget.getPageIndex();
                             last.tileView.setX(last.destination.x);
                             last.tileView.setY(last.destination.y);
 
@@ -1572,6 +1642,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     .x(last.destination.x)
                     .y(last.destination.y)
                     .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            mCurrentlyAnimating.remove(last);
+                        }
+
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             if (DEBUG_DRAG) {
@@ -1654,10 +1729,16 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                             }
 
                             @Override
+                            public void onAnimationCancel(Animator animation) {
+                                page.removeTransientView(ti.tileView);
+                                mCurrentlyAnimating.remove(ti);
+                            }
+
+                            @Override
                             public void onAnimationEnd(Animator animation) {
                                 page.removeTransientView(ti.tileView);
-                                ti.page = page.getPageIndex();
                                 page.addView(ti.tileView);
+                                ti.page = page.getPageIndex();
 
                                 mCurrentlyAnimating.remove(ti);
                                 requestLayout();
