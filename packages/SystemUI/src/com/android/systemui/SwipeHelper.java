@@ -91,6 +91,8 @@ public class SwipeHelper implements Gefingerpoken {
     private int mFalsingThreshold;
     private boolean mTouchAboveFalsingThreshold;
 
+    private float mSwipeProgressFadeEnd;
+
     public SwipeHelper(int swipeDirection, Callback callback, Context context) {
         mCallback = callback;
         mHandler = new Handler();
@@ -110,6 +112,7 @@ public class SwipeHelper implements Gefingerpoken {
         } else {
             mSwipeZone = SWIPE_ZONE_TOP | SWIPE_ZONE_BOTTOM;
         }
+        mSwipeProgressFadeEnd = SWIPE_PROGRESS_FADE_END;
     }
 
     public SwipeHelper(int swipeDirection, int swipeZone, Callback callback, Context context) {
@@ -184,7 +187,7 @@ public class SwipeHelper implements Gefingerpoken {
 
     private float getSwipeProgressForOffset(View view) {
         float viewSize = getSize(view);
-        final float fadeSize = SWIPE_PROGRESS_FADE_END * viewSize;
+        final float fadeSize = mSwipeProgressFadeEnd * viewSize;
         float result = 1.0f;
         float pos = getTranslation(view);
         if (pos >= viewSize * SWIPE_PROGRESS_FADE_START) {
@@ -514,6 +517,10 @@ public class SwipeHelper implements Gefingerpoken {
                 break;
         }
         return true;
+    }
+
+    public void setSwipeProgressFadeEnd(float end) {
+        mSwipeProgressFadeEnd = end;
     }
 
     private int getFalsingThreshold() {
