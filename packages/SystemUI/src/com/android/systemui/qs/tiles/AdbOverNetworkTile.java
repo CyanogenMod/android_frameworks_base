@@ -91,7 +91,7 @@ public class AdbOverNetworkTile extends QSTile<QSTile.BooleanState> {
     }
 
     private boolean isAdbEnabled() {
-        return Settings.Secure.getInt(mContext.getContentResolver(),
+        return Settings.Global.getInt(mContext.getContentResolver(),
                 Settings.Global.ADB_ENABLED, 0) > 0;
     }
 
