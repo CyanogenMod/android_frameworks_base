@@ -18,53 +18,176 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- label for item that screenshots in phone options dialog -->
+  <string name="global_action_screenshot">Cuplikan layar</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_receiveProtectedSms">terima SMS yang diproteksi</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_receiveProtectedSms">Izinkan aplikasi menerima SMS yang diproteksi.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_modifyProtectedSmsList">Mengubah daftar SMS yang diamankan</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_modifyProtectedSmsList">Izinkan aplikasi untuk mengubah daftar alamat SMS yang diamankan.</string>
   <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permgrouplab_security">Keamanan</string>
   <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permgroupdesc_security">Izin terkait dengan informasi keamanan perangkat.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readPhoneBlacklist">baca daftar hitam telepon</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readPhoneBlacklist">Izinkan aplikasi untuk membaca informasi tentang nomor telepon yang diblokir untuk panggilan atau pesan.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_changePhoneBlacklist">ubah daftar hitam telepon</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_changePhoneBlacklist">Izinkan aplikasi untuk mengubah nomor telepon yang diblokir untuk panggilan masuk atau pesan.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_setKeyguardWallpaper">atur gambar latar pengaman tombol</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah gambar latar layar kunci.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
+  <string name="global_action_reboot">But ulang</string>
   <!-- label for current user in phone options dialog -->
+  <string name="global_action_current_user">Saat ini</string>
   <!-- Reboot menu -->
   <!-- Button to reboot the phone, within the Reboot Options dialog -->
+  <string name="reboot_reboot">But ulang</string>
   <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+  <string name="reboot_recovery">Pemulihan</string>
   <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+  <string name="reboot_bootloader">Pengelola but</string>
   <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+  <string name="reboot_download">Unduh</string>
   <!-- Button to soft reboot the device, within the Reboot Options dialog -->
+  <string name="reboot_soft">But ulang tanpa mati daya</string>
   <!-- Title of dialog to confirm rebooting. -->
+  <string name="reboot_title">But ulang</string>
   <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="reboot_confirm" product="tablet">Tablet Anda akan dibut ulang.</string>
+  <string name="reboot_confirm" product="default">Ponsel Anda akan dibut ulang.</string>
   <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+  <string name="reboot_progress">Membut ulang\u2026</string>
   <!-- Long-press back kill application -->
+  <string name="app_killed_message">Aplikasi dimatikan</string>
   <!-- ADB over network notification -->
+  <string name="adb_net_active_notification_title">ADB melalui jaringan diaktifkan</string>
   <!-- ADB over USB and network notification -->
+  <string name="adb_both_active_notification_title">ADB melalui USB &amp; jaringan diaktifkan</string>
   <!-- ADB notification message-->
+  <string name="adb_active_generic_notification_message">Sentuh untuk menonaktifkan perbaikan galat fungsi.</string>
   <!-- ADB custom tile -->
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">Jaringan &amp; USB</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">Jaringan</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_interceptPackageLaunch">menghentikan memulai aplikasi</string>
   <!-- stylus gestures support -->
+  <string name="stylus_app_not_installed">%s tidak terinstal</string>
   <!-- Zen mode buttons -->
+  <string name="silent_mode_priority">Prioritas</string>
+  <string name="silent_mode_none">Tidak ada</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Area bersinyal Wi-Fi dinonatifkan karena perubahan langganan SIM</string>
   <!-- WiFi turn off notification action text -->
+  <string name="notify_turn_wifi_off_title">Nonaktifkan Wi-Fi</string>
   <!-- Privacy Guard -->
+  <string name="permlab_changePrivacyGuardState">Aktifkan atau nonaktifkan Penjaga Privasi</string>
+  <string name="permdesc_changePrivacyGuardState">Izinkan aplikasi untuk mengubah apakah applikasi lain berjalan dengan Penjaga Privasi. Ketika aplikasi sedang berjalan dengan Penjaga Privasi, aplikasi tidak akan memiliki akses untuk data pribadi seperti kontak, daftar panggilan atau pesan.</string>
+  <string name="privacy_guard_notification">Penjaga Privasi aktif</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> tidak akan dapat mengakses data pribadi</string>
+  <string name="privacy_guard_dialog_title">Penjaga Privasi</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ingin <xliff:g id="op">%2$s</xliff:g>.</string>
   <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
+  <string name="permission_remember_choice">Ingat pilihan saya</string>
   <!-- App ops requests -->
+  <string name="app_ops_access_camera">mengakses kamera</string>
+  <string name="app_ops_access_location">mengakses lokasi Anda</string>
+  <string name="app_ops_access_notifications">membaca notifikasi Anda</string>
+  <string name="app_ops_activate_vpn">Aktifkan VPN</string>
+  <string name="app_ops_auto_start">mulai pada saat dinyalakan</string>
+  <string name="app_ops_delete_call_log">hapus log panggilan Anda</string>
+  <string name="app_ops_delete_contacts">hapus kontak Anda</string>
+  <string name="app_ops_delete_mms">hapus pesan MMS Anda</string>
+  <string name="app_ops_delete_sms">hapus pesan SMS Anda</string>
+  <string name="app_ops_draw_on_top">menarik jendela di atas</string>
+  <string name="app_ops_get_usage_stats">dapatkan statistik penggunaan aplikasi</string>
+  <string name="app_ops_keep_device_awake">jaga perangkat Anda tetap bangun</string>
+  <string name="app_ops_make_phone_call">membuat panggilan telepon</string>
+  <string name="app_ops_modify_calendar">memperbarui kalender Anda</string>
+  <string name="app_ops_modify_call_log">memperbarui daftar panggilan</string>
+  <string name="app_ops_modify_clipboard">memodifikasi clipboard</string>
+  <string name="app_ops_modify_contacts">memperbarui kontak Anda</string>
+  <string name="app_ops_modify_settings">memperbarui pengaturan sistem</string>
+  <string name="app_ops_mute_unmute_microphone">bungkam/bunyikan suara mikrofon</string>
+  <string name="app_ops_play_audio">mainkan audio</string>
+  <string name="app_ops_post_notification">mengirim pemberitahuan</string>
+  <string name="app_ops_project_media">proyek media</string>
+  <string name="app_ops_read_calendar">membaca kalender Anda</string>
+  <string name="app_ops_read_call_log">membaca log panggilan</string>
+  <string name="app_ops_read_clipboard">membaca clipboard</string>
+  <string name="app_ops_read_contacts">membaca kontak Anda</string>
+  <string name="app_ops_read_mms">membaca pesan MMS Anda</string>
+  <string name="app_ops_read_sms">membaca pesan SMS Anda</string>
+  <string name="app_ops_receive_sms">menerima pesan SMS</string>
+  <string name="app_ops_record_audio">merekam audio</string>
+  <string name="app_ops_send_mms">mengirim pesan MMS</string>
+  <string name="app_ops_send_sms">mengirim pesan SMS</string>
+  <string name="app_ops_start_at_bootup">mulai pada saat dinyalakan</string>
+  <string name="app_ops_toast_window">tampilkan pesan toast</string>
+  <string name="app_ops_toggle_bluetooth">hidup/matikan Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">hidup/matikan data seluler</string>
+  <string name="app_ops_toggle_nfc">hidup/matikan NFC</string>
+  <string name="app_ops_toggle_wifi">hidup/matikan Wi-Fi</string>
+  <string name="app_ops_use_alarm_volume">mengatur volume alarm</string>
+  <string name="app_ops_use_audio_focus">mengatur fokus audio</string>
+  <string name="app_ops_use_bluetooth_volume">mengatur volume Bluetooth</string>
+  <string name="app_ops_use_master_volume">mengatur volume utama</string>
+  <string name="app_ops_use_media_buttons">menggunakan tombol media</string>
+  <string name="app_ops_use_media_volume">mengatur volume media</string>
+  <string name="app_ops_use_notification_volume">mengatur volume pemberitahuan</string>
+  <string name="app_ops_use_ring_volume">mengatur volume nada dering</string>
+  <string name="app_ops_use_vibrate">gunakan tanggapan sentuhan</string>
+  <string name="app_ops_use_voice_volume">mengatur volume panggilan suara</string>
+  <string name="app_ops_write_mms">tulis pesan MMS</string>
+  <string name="app_ops_write_sms">tulis pesan SMS</string>
+  <string name="app_ops_use_fingerprint">gunakan sidik jari</string>
+  <string name="app_ops_add_voicemail">menambahkan pesan suara</string>
+  <string name="app_ops_read_phone_state">akses status ponsel</string>
+  <string name="app_ops_scan_wifi">memindai jaringan Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">mengubah gambar latar</string>
+  <string name="app_ops_assist_structure">gunakan struktur bantuan</string>
+  <string name="app_ops_assist_screenshot">ambil cuplikan layar</string>
+  <string name="app_ops_use_body_sensors">menggunakan sensor badan</string>
+  <string name="app_ops_read_cell_broadcasts">baca siaran seluler</string>
+  <string name="app_ops_mock_location">memalsukan lokasi Anda</string>
+  <string name="app_ops_read_external_storage">membaca penyimpanan eksternal</string>
+  <string name="app_ops_write_external_storage">menulis penyimpanan eksternal</string>
+  <string name="app_ops_turn_on_screen">aktifkan layar</string>
+  <string name="app_ops_get_accounts">dapatkan akun perangkat</string>
+  <string name="app_ops_wifi_change">ubah status Wi-Fi</string>
+  <string name="app_ops_su">dapatkan akses punca (root)</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">Untuk melepas sematan layar ini, sentuh dan tahan tombol Kembali.</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
+  <string name="tethered_notification_no_device_message">Tidak ada perangkat yang terhubung</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> perangkat yang terhubung</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> perangkat yang terhubung</string>
   <!-- Keyguard strings -->
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Aktivitas peluncuran diblokir</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> dilindungi dari peluncuran. Ketuk untuk mengautentikasi dan meluncurkan aplikasi.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Baterai telah terisi penuh</string>
+  <string name="notify_battery_fully_charged_text">Cabut pengisi daya dari perangkat Anda untuk meningkatkan umur baterai.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">set ulang statistik baterai</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Mengizinkan aplikasi untuk set ulang data penggunaan baterai rendah yang sekarang.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Kartu SIM telah diganti</string>
+  <string name="uicc_hot_swapped_event_text">Ketuk untuk mengatur preferensi standar kartu SIM</string>
 </resources>
