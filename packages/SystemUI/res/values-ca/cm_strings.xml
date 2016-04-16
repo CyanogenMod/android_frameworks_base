@@ -35,7 +35,7 @@
   <string name="lockscreen_choose_action_title">Tria una acció</string>
   <string name="lockscreen_none_target">Cap</string>
   <!-- Dialog title for navigation bar button selection -->
-  <string name="navbar_dialog_title">Escull l\'acció a assignar</string>
+  <string name="navbar_dialog_title">Tria l\'acció a assignar</string>
   <string name="navbar_home_button">Botó Inici</string>
   <string name="navbar_recent_button">Botó Recent</string>
   <string name="navbar_search_button">Botó Cerca</string>
