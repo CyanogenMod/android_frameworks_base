@@ -377,7 +377,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         if (mListening == listening) return;
         mListening = listening;
         // reset the page when inactive for a while
-        if (listening) {
+        if (listening) {dsfsdfdsf
             removeCallbacks(mResetPage);
         } else {
             postDelayed(mResetPage, PAGE_RESET_DELAY);
