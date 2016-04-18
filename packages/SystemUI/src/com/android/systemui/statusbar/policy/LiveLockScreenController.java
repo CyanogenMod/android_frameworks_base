@@ -40,6 +40,8 @@ public class LiveLockScreenController {
 
     private boolean mLlsHasFocus = false;
 
+    private boolean mScreenOnAndInteractive;
+
     public LiveLockScreenController(Context context, PhoneStatusBar bar,
             NotificationPanelView panelView) {
         mContext = context;
@@ -202,15 +204,20 @@ public class LiveLockScreenController {
     }
 
     public void onScreenTurnedOn() {
-        if (mLiveLockScreenView != null && mPowerManager.isInteractive()) {
-            mLiveLockScreenView.onScreenTurnedOn();
+        mScreenOnAndInteractive = mPowerManager.isInteractive();
+        if (mScreenOnAndInteractive) {
+            if (mLiveLockScreenView != null) mLiveLockScreenView.onScreenTurnedOn();
             EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 1);
         }
     }
 
     public void onScreenTurnedOff() {
-        if (mStatusBarState != StatusBarState.SHADE) {
-            EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 0);
+        if (mScreenOnAndInteractive) {
+            if (mLiveLockScreenView != null) mLiveLockScreenView.onScreenTurnedOff();
+            if (mStatusBarState != StatusBarState.SHADE) {
+                EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 0);
+            }
+            mScreenOnAndInteractive = false;
         }
     }
 
@@ -226,6 +233,7 @@ public class LiveLockScreenController {
     }
 
     public void onKeyguardDismissed() {
+        if (mLiveLockScreenView != null) mLiveLockScreenView.onKeyguardDismissed();
         EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_DISMISSED, mLlsHasFocus ? 1 : 0);
     }
 
