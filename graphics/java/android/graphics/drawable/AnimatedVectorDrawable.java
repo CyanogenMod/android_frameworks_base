@@ -19,6 +19,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.Animator.AnimatorListener;
+import android.animation.ValueAnimator;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.content.res.ColorStateList;
@@ -730,4 +731,16 @@ public class AnimatedVectorDrawable extends Drawable implements Animatable2 {
         mAnimationCallbacks.clear();
     }
 
+    /** @hide */
+    public void setCurrentFraction(float fraction) {
+        ensureAnimatorSet();
+        ArrayList<Animator> animators = mAnimatorSet.getChildAnimations();
+        for (Animator animator : animators) {
+            if (animator instanceof ValueAnimator) {
+                ((ValueAnimator) animator).setCurrentFraction(fraction);
+            }
+        }
+
+        invalidateSelf();
+    }
 }
