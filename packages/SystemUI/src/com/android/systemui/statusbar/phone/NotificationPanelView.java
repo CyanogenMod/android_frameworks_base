@@ -263,6 +263,7 @@ public class NotificationPanelView extends PanelView implements
     private final int mScreenHeight;
     private LiveLockScreenController mLiveLockscreenController;
     private final GestureDetector mGestureDetector;
+    private ViewLinker mViewLinker;
 
     private enum SwipeLockedDirection {
         UNKNOWN,
@@ -274,12 +275,12 @@ public class NotificationPanelView extends PanelView implements
     SwipeHelper.SimpleCallback mSwipeCallback = new SwipeHelper.SimpleCallback() {
         @Override
         public View getChildAtPosition(MotionEvent ev) {
-            return mNotificationStackScroller;
+            return mViewLinker.getParent();
         }
 
         @Override
         public View getChildContentView(View v) {
-            return mNotificationStackScroller;
+            return mViewLinker.getParent();
         }
 
         @Override
@@ -311,11 +312,10 @@ public class NotificationPanelView extends PanelView implements
             mLiveLockscreenController.getLiveLockScreenView()
                     .onLockscreenSlideOffsetChanged(swipeProgress);
 
-            // Ensures the status view and notifications are kept in sync when
-            // being swiped away
-            mKeyguardStatusView.setTranslationX(mNotificationStackScroller.getTranslationX());
-            mKeyguardStatusView.setAlpha(mNotificationStackScroller.getAlpha());
-            mKeyguardStatusBar.setAlpha(mNotificationStackScroller.getAlpha());
+            // Fade out scrim background
+            float alpha = ScrimController.SCRIM_BEHIND_ALPHA_KEYGUARD - (1f - swipeProgress);
+            alpha = Math.max(0, alpha);
+            mStatusBar.getScrimController().setScrimBehindColor(alpha);
             return false;
         }
 
@@ -348,7 +348,7 @@ public class NotificationPanelView extends PanelView implements
         final int gradientEnd = res.getColor(R.color.live_lockscreen_gradient_end);
         mGestureDetector = new GestureDetector(getContext(),
                 new GestureDetector.SimpleOnGestureListener() {
-            public float mDown;
+            private float mDown;
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -359,12 +359,14 @@ public class NotificationPanelView extends PanelView implements
                 mCanDismissKeyguard = true;
                 mShowingExternalKeyguard = false;
                 mStatusBar.showBouncer();
+                mStatusBar.unfocusKeyguardExternalView();
                 return true;
             }
 
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 float delta = mDown - e2.getRawY();
+                delta = Math.max(0, delta);
                 float screenHeightHalf = (float) mScreenHeight / 2f;
                 int color = (Integer) ArgbEvaluator.getInstance()
                         .evaluate(delta / screenHeightHalf, gradientStart, gradientEnd);
@@ -430,6 +432,11 @@ public class NotificationPanelView extends PanelView implements
         mDozeAnimationInterpolator = AnimationUtils.loadInterpolator(getContext(),
                 android.R.interpolator.linear_out_slow_in);
 
+        mViewLinker = new ViewLinker<NotificationStackScrollLayout>(mNotificationStackScroller,
+                new ViewLinker.LinkInfo(mKeyguardStatusBar, ViewLinker.LINK_ALPHA),
+                new ViewLinker.LinkInfo(mKeyguardStatusView, ViewLinker.LINK_ALPHA
+                        | ViewLinker.LINK_TRANSLATION));
+
         mKeyguardBottomArea = (KeyguardBottomAreaView) View.inflate(getContext(),
                 R.layout.keyguard_bottom_area, null);
         /** Keyguard bottom area lives in a separate window, and as such,
@@ -455,9 +462,10 @@ public class NotificationPanelView extends PanelView implements
             @Override
             public boolean onTouch(View v, MotionEvent e) {
                 int action = e.getAction();
-                // Ensure we collapse and clear fade
-                if (action == MotionEvent.ACTION_UP ||
-                        action == MotionEvent.ACTION_CANCEL) {
+
+                boolean isCancelOrUp = action == MotionEvent.ACTION_UP ||
+                        action == MotionEvent.ACTION_CANCEL;
+                if (isCancelOrUp) {
                     mKeyguardBottomArea.setBackground(null);
                 }
 
@@ -465,6 +473,9 @@ public class NotificationPanelView extends PanelView implements
                 if (!intercept) {
                     if (mShowingExternalKeyguard) {
                         intercept = mGestureDetector.onTouchEvent(e);
+                        if (isCancelOrUp) {
+                            mKeyguardBottomArea.expand(false);
+                        }
                     } else {
                         intercept = NotificationPanelView.this.onTouchEvent(e);
                     }
@@ -489,6 +500,10 @@ public class NotificationPanelView extends PanelView implements
                 }
             }
         });
+    }
+
+    public boolean isAffordanceSwipeInProgress() {
+        return mAfforanceHelper.isSwipingInProgress();
     }
 
     @Override
@@ -1018,6 +1033,7 @@ public class NotificationPanelView extends PanelView implements
                 && mStatusBar.getBarState() != StatusBarState.SHADE) {
             if (mSwipeHelper.onTouchEvent(event)) {
                 mLockedDirection = SwipeLockedDirection.HORIZONTAL;
+                requestDisallowInterceptTouchEvent(true);
                 return true;
             }
         }
@@ -2043,6 +2059,9 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private void updateHeaderKeyguardAlpha() {
+        if (mSwipeHelper.isDragging()) {
+            return;
+        }
         float alphaQsExpansion = 1 - Math.min(1, getQsExpansionFraction() * 2);
         mKeyguardStatusBar.setAlpha(Math.min(getKeyguardContentsAlpha(), alphaQsExpansion)
                 * mKeyguardStatusBarAnimateAlpha);
@@ -2836,16 +2855,18 @@ public class NotificationPanelView extends PanelView implements
 
         @Override
         public void onAnimationUpdate(ValueAnimator valueAnimator) {
+            if (valueAnimator.getAnimatedFraction() > 0) {
+                mStatusBar.getStatusBarWindow().setVisibility(View.VISIBLE);
+            }
             float translationX = (Float) valueAnimator.getAnimatedValue();
             float alpha = valueAnimator.getAnimatedFraction();
 
-            mNotificationStackScroller.setTranslationX(translationX);
-            mNotificationStackScroller.setAlpha(alpha);
+            mViewLinker.getParent().setTranslationX(translationX);
+            mViewLinker.getParent().setAlpha(alpha);
 
-            mKeyguardStatusView.setTranslationX(translationX);
-            mKeyguardStatusView.setAlpha(alpha);
-
-            mKeyguardStatusBar.setAlpha(alpha);
+            float alpha1 = ScrimController.SCRIM_BEHIND_ALPHA_KEYGUARD * alpha;
+            alpha1 = Math.max(0, alpha1);
+            mStatusBar.getScrimController().setScrimBehindColor(alpha1);
             mLiveLockscreenController.getLiveLockScreenView()
                     .onLockscreenSlideOffsetChanged(alpha);
         }
@@ -2866,6 +2887,7 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardStatusView.setTranslationX(mNotificationStackScroller.getTranslationX());
         mKeyguardStatusBar.setAlpha(0f);
 
+        mStatusBar.getScrimController().setScrimBehindColor(0f);
         ValueAnimator animator = ValueAnimator.ofFloat(
                 mNotificationStackScroller.getTranslationX(),
                 0f);

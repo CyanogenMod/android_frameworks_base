@@ -1773,7 +1773,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                 && focusedWindowIsExternalKeyguard) {
                             // Show keyguard
                             mKeyguardDelegate.showKeyguard();
-                            mShowKeyguardOnLeftSwipe = false;
                         }
                     }
                     @Override
