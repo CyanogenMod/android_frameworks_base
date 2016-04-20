@@ -420,7 +420,7 @@ LOCAL_SRC_FILES += \
 	packages/services/PacProcessor/com/android/net/IProxyService.aidl \
 	packages/services/Proxy/com/android/net/IProxyCallback.aidl \
 	packages/services/Proxy/com/android/net/IProxyPortListener.aidl \
-	../../vendor/cmsdk/src/java/org/cyanogenmod/internal/themes/IIconCacheManager.aidl \
+	../../vendor/cmsdk/sdk/src/java/org/cyanogenmod/internal/themes/IIconCacheManager.aidl \
 
 # FRAMEWORKS_BASE_JAVA_SRC_DIRS comes from build/core/pathmap.mk
 LOCAL_AIDL_INCLUDES += $(FRAMEWORKS_BASE_JAVA_SRC_DIRS)

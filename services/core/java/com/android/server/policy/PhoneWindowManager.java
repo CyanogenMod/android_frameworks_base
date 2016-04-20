@@ -22,6 +22,7 @@ import android.app.ActivityManagerInternal.SleepToken;
 import android.app.ActivityManagerNative;
 import android.app.AppOpsManager;
 import android.app.IUiModeManager;
+import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.StatusBarManager;
@@ -152,6 +153,7 @@ import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_CLOSED;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.CAMERA_LENS_COVER_ABSENT;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.CAMERA_LENS_UNCOVERED;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.CAMERA_LENS_COVERED;
+import static org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD;
 
 /**
  * WindowManagerPolicy implementation for the Android phone UI.  This
@@ -272,6 +274,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // The panic gesture may become active only after the keyguard is dismissed and the immersive
     // app shows again. If that doesn't happen for 30s we drop the gesture.
     private static final long PANIC_GESTURE_EXPIRATION = 30000;
+
+    private static final String DEPRECATED_THIRD_PARTY_KEYGUARD_PERMISSION =
+            "android.permission.THIRD_PARTY_KEYGUARD";
 
     /**
      * Keyguard stuff
@@ -749,6 +754,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mClearedBecauseOfForceShow;
     private boolean mTopWindowIsKeyguard;
     private CMHardwareManager mCMHardware;
+    private boolean mShowKeyguardOnLeftSwipe;
 
     private class PolicyHandler extends Handler {
         @Override
@@ -1758,6 +1764,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                 mNavigationBarLeftInLandscape) {
                             requestTransientBars(mNavigationBar);
                         }
+                        if (mShowKeyguardOnLeftSwipe && isKeyguardShowingOrOccluded()) {
+                            // Show keyguard
+                            mKeyguardDelegate.showKeyguard();
+                            mShowKeyguardOnLeftSwipe = false;
+                        }
                     }
                     @Override
                     public void onFling(int duration) {
@@ -2299,8 +2310,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 outAppOp[0] = AppOpsManager.OP_SYSTEM_ALERT_WINDOW;
                 break;
             case TYPE_KEYGUARD_PANEL:
-                permission =
-                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD;
+                permission = THIRD_PARTY_KEYGUARD;
                 break;
             default:
                 permission = android.Manifest.permission.INTERNAL_SYSTEM_WINDOW;
@@ -2335,6 +2345,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             return WindowManagerGlobal.ADD_OKAY;
                         }
                 }
+            } else if (permission == THIRD_PARTY_KEYGUARD) {
+                // check if caller has the old permission and if so allow adding window
+                if (mContext.checkCallingOrSelfPermission(
+                        DEPRECATED_THIRD_PARTY_KEYGUARD_PERMISSION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    return WindowManagerGlobal.ADD_OKAY;
+                }
+                // fall through to the normal check below
             }
 
             if (mContext.checkCallingOrSelfPermission(permission)
@@ -2864,9 +2882,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         "PhoneWindowManager");
                 break;
             case TYPE_KEYGUARD_PANEL:
-                mContext.enforceCallingOrSelfPermission(
-                        org.cyanogenmod.platform.internal.Manifest.permission.THIRD_PARTY_KEYGUARD,
-                        "PhoneWindowManager");
+                // check deprecated perm first and if not granted enforce the new permission name
+                if (mContext.checkCallingOrSelfPermission(
+                        DEPRECATED_THIRD_PARTY_KEYGUARD_PERMISSION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    mContext.enforceCallingOrSelfPermission(THIRD_PARTY_KEYGUARD,
+                            "PhoneWindowManager");
+                }
                 if (mKeyguardPanel != null) {
                     return WindowManagerGlobal.ADD_MULTIPLE_SINGLETON;
                 }
@@ -7931,5 +7953,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (mKeyguardDelegate != null) {
             mKeyguardDelegate.dump(prefix, pw);
         }
+    }
+
+    @Override
+    public void setLiveLockscreenEdgeDetector(boolean enable) {
+        mShowKeyguardOnLeftSwipe = enable;
     }
 }

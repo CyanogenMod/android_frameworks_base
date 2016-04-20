@@ -49,7 +49,7 @@ public class KeyguardAffordanceHelper {
     private VelocityTracker mVelocityTracker;
     private boolean mSwipingInProgress;
     private float mInitialTouchX;
-    private float mInitialTouchY;
+    private float mInitialTouchYRaw;
     private float mTranslation;
     private float mTranslationOnDown;
     private int mTouchSlop;
@@ -128,7 +128,7 @@ public class KeyguardAffordanceHelper {
         if (mMotionCancelled && action != MotionEvent.ACTION_DOWN) {
             return false;
         }
-        final float y = event.getY();
+        final float y = event.getRawY();
         final float x = event.getX();
 
         boolean isUp = false;
@@ -146,7 +146,7 @@ public class KeyguardAffordanceHelper {
                 }
                 startSwiping(targetView);
                 mInitialTouchX = x;
-                mInitialTouchY = y;
+                mInitialTouchYRaw = y;
                 mTranslationOnDown = mTranslation;
                 initVelocityTracker();
                 trackMovement(event);
@@ -159,7 +159,7 @@ public class KeyguardAffordanceHelper {
             case MotionEvent.ACTION_MOVE:
                 trackMovement(event);
                 float xDist = x - mInitialTouchX;
-                float yDist = y - mInitialTouchY;
+                float yDist = y - mInitialTouchYRaw;
                 float distance = (float) Math.hypot(xDist, yDist);
                 if (!mTouchSlopExeeded && distance > mTouchSlop) {
                     mTouchSlopExeeded = true;
@@ -211,8 +211,9 @@ public class KeyguardAffordanceHelper {
     }
 
     private boolean isOnIcon(View icon, float x, float y) {
+        int[] location = icon.getLocationOnScreen();
         float iconX = icon.getX() + icon.getWidth() / 2.0f;
-        float iconY = icon.getY() + icon.getHeight() / 2.0f;
+        float iconY = location[1] + icon.getHeight() / 2.0f;
         double distance = Math.hypot(x - iconX, y - iconY);
         return distance <= mTouchTargetSize / 2;
     }
@@ -488,7 +489,7 @@ public class KeyguardAffordanceHelper {
         float aX = mVelocityTracker.getXVelocity();
         float aY = mVelocityTracker.getYVelocity();
         float bX = lastX - mInitialTouchX;
-        float bY = lastY - mInitialTouchY;
+        float bY = lastY - mInitialTouchYRaw;
         float bLen = (float) Math.hypot(bX, bY);
         // Project the velocity onto the distance vector: a * b / |b|
         float projectedVelocity = (aX * bX + aY * bY) / bLen;

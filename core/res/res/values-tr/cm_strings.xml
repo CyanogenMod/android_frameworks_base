@@ -135,6 +135,7 @@
   <string name="app_ops_start_at_bootup">açılışta başla</string>
   <string name="app_ops_toast_window">bildirim mesajları göster</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth\'u açıp kapat</string>
+  <string name="app_ops_toggle_mobile_data">hücresel veriye geçiş</string>
   <string name="app_ops_toggle_nfc">NFC\'yi aç kapa</string>
   <string name="app_ops_toggle_wifi">Wi-Fi aç kapa</string>
   <string name="app_ops_use_alarm_volume">alarm sesini kontrol et</string>
@@ -167,18 +168,6 @@
   <string name="app_ops_su">root erişimi al</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Bu ekranı kaldırmak için Geri tuşuna dokunun ve tutun.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Otomatik</string>
-  <string name="live_display_auto_summary">Gün batımı ve doğumundan sonra ekranın renk sıcaklığını otomatik ayarlar</string>
-  <string name="live_display_off">Kapalı</string>
-  <string name="live_display_off_summary">Tüm ayarlamaları devre dışı bırak</string>
-  <string name="live_display_day">Gündüz</string>
-  <string name="live_display_day_summary">Sadece gündüz ayarlarını kullan</string>
-  <string name="live_display_night">Gece</string>
-  <string name="live_display_night_summary">Sadece gece ayarlarını kullan</string>
-  <string name="live_display_outdoor">Açık alan (parlak güneş)</string>
-  <string name="live_display_outdoor_summary">Sadece açık alan ayarlarını kullan</string>
-  <string name="live_display_hint">LiveDisplay göz yorgunluğunuzu azaltıp geceleri uyumanıza yardımcı olabilir. Denemek için buraya tıklayın!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Bağlı cihaz yok</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> cihaz bağlı</string>
@@ -187,7 +176,11 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Etkinlik başlatma engellendi</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> başlatılmadan önce sistem korumaya alındı. Uygulamayı doğrulamak ve başlatmak için dokunun.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Batarya tam olarak şarj edildi</string>
+  <string name="notify_battery_fully_charged_text">Aygıtınızın pil ömrünü artırmak için şarjdan çıkarın.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">pil istatistiklerini sıfırla</string>
@@ -195,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Uygulamaya güncel düşük seviye pil kullanım verisini sıfırlama izni verir.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM kartlar değişti</string>
+  <string name="uicc_hot_swapped_event_text">Varsayılan SIM kart tercihlerini ayarlamak için dokunun</string>
 </resources>

@@ -40,9 +40,9 @@
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים שנחסמו עבור קבלת שיחות או הודעות נכנסות.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-  <string name="permlab_setKeyguardWallpaper">הגדרת תמונת רקע למסך הנעילה</string>
+  <string name="permlab_setKeyguardWallpaper">הגדרת טפט למסך הנעילה</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את תמונת הרקע של מסך הנעילה.</string>
+  <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את הטפט של מסך הנעילה.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">אתחול מחדש</string>
   <!-- label for current user in phone options dialog -->
@@ -73,7 +73,7 @@
   <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB דרך USB ורשת מופעל</string>
   <!-- ADB notification message-->
-  <string name="adb_active_generic_notification_message">גע לביטול איתור באגים.</string>
+  <string name="adb_active_generic_notification_message">גע להשבתת איתור באגים.</string>
   <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB ורשת</string>
@@ -151,35 +151,23 @@
   <string name="app_ops_write_mms">כתיבת הודעת MMS</string>
   <string name="app_ops_write_sms">כתיבת הודעת SMS</string>
   <string name="app_ops_use_fingerprint">שימוש בטביעת אצבע</string>
-  <string name="app_ops_add_voicemail">הוספת תא קולי</string>
-  <string name="app_ops_read_phone_state">גישה למצב המכשיר</string>
-  <string name="app_ops_scan_wifi">סריקת רשתות Wi-Fi</string>
-  <string name="app_ops_change_wallpaper">החלפת טפט</string>
-  <string name="app_ops_assist_structure">שימוש במבנה סיוע</string>
-  <string name="app_ops_assist_screenshot">צילום המסך</string>
-  <string name="app_ops_use_body_sensors">שימוש בחיישני גוף</string>
-  <string name="app_ops_read_cell_broadcasts">קריאת שידורי סלולר</string>
-  <string name="app_ops_mock_location">הסוואת מיקום</string>
-  <string name="app_ops_read_external_storage">קריאת אחסון חיצוני</string>
-  <string name="app_ops_write_external_storage">כתיבה לאחסון חיצוני</string>
-  <string name="app_ops_turn_on_screen">הפעלת המסך</string>
-  <string name="app_ops_get_accounts">קבלת חשבונות המכשיר</string>
-  <string name="app_ops_wifi_change">שינוי מצב Wi-Fi</string>
+  <string name="app_ops_add_voicemail">הוסף תא קולי</string>
+  <string name="app_ops_read_phone_state">גש למצב הטלפון</string>
+  <string name="app_ops_scan_wifi">סרוק רשתות Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">החלף טפט</string>
+  <string name="app_ops_assist_structure">שימוש בתבנית המידע ליישום הסיוע</string>
+  <string name="app_ops_assist_screenshot">צלם מסך</string>
+  <string name="app_ops_use_body_sensors">השתמש בחיישני גוף</string>
+  <string name="app_ops_read_cell_broadcasts">קרא שידורי סלולר</string>
+  <string name="app_ops_mock_location">הסווה את מיקומך</string>
+  <string name="app_ops_read_external_storage">קרא אחסון חיצוני</string>
+  <string name="app_ops_write_external_storage">כתוב לאחסון חיצוני</string>
+  <string name="app_ops_turn_on_screen">הפעל המסך</string>
+  <string name="app_ops_get_accounts">קבל חשבונות מכשיר</string>
+  <string name="app_ops_wifi_change">שנה מצב Wi-Fi</string>
   <string name="app_ops_su">קבלת גישת שורש (Root)</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, גע והחזק בלחצן \"הקודם\".</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">אוטומטי</string>
-  <string name="live_display_auto_summary">התאם אוטומטית את טמפרטורת הצבע של המסך לאחר הזריחה והשקיעה</string>
-  <string name="live_display_off">כבוי</string>
-  <string name="live_display_off_summary">השבת את כל ההתאמות</string>
-  <string name="live_display_day">יום</string>
-  <string name="live_display_day_summary">השתמש בהגדרות יום בלבד</string>
-  <string name="live_display_night">לילה</string>
-  <string name="live_display_night_summary">השתמש בהגדרות לילה בלבד</string>
-  <string name="live_display_outdoor">בחוץ (שמש בהירה)</string>
-  <string name="live_display_outdoor_summary">השתמש בהגדרות חוץ בלבד</string>
-  <string name="live_display_hint">LiveDisplay יכולה למזער את עייפות העין ולעזור לך לישון בלילה. לחץ כאן כדי לנסות!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">אין מכשירים מחוברים</string>
   <string name="tethered_notification_one_device_message">מכשיר <xliff:g id="count">%1$s</xliff:g> מחובר</string>
@@ -189,7 +177,7 @@
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <string name="notify_package_component_protected_title">הפעלת הפעולה נחסמה</string>
-  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> מוגן מפני הפעלה. לחץ כדי להזדהות ולהפעיל את היישום.</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> מוגן מפני הפעלה. הקש כדי להזדהות ולהפעיל את היישום.</string>
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">סוללה טעונה במלואה</string>
   <string name="notify_battery_fully_charged_text">נתק את מכשירך מהמטען כדי לשפר את אורך חיי סוללה.</string>
@@ -201,5 +189,5 @@
   <string name="permdesc_resetBatteryStats">מאפשר ליישום לאפס נתוני רמה-נמוכה נוכחיים של השימוש בסוללה.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">כרטיסי SIM הוחלפו</string>
-  <string name="uicc_hot_swapped_event_text">הקש כדי להגדיר העדפות ברירת המחדל של כרטיס ה-SIM</string>
+  <string name="uicc_hot_swapped_event_text">הקש כדי להגדיר את העדפות ברירת המחדל של כרטיס ה-SIM</string>
 </resources>

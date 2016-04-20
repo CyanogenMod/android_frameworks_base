@@ -168,18 +168,6 @@
   <string name="app_ops_su">dostęp do roota</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Aby odpiąć ekran, dotknij i przytrzymaj przycisk Wstecz.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automatycznie</string>
-  <string name="live_display_auto_summary">Automatycznie dostosuj temperaturę kolorów ekranu po zachodzie i wschodzie słońca</string>
-  <string name="live_display_off">Wyłączony</string>
-  <string name="live_display_off_summary">Wyłącz wszystkie zmiany</string>
-  <string name="live_display_day">Dzień</string>
-  <string name="live_display_day_summary">Używaj tylko ustawień na dzień</string>
-  <string name="live_display_night">Noc</string>
-  <string name="live_display_night_summary">Używaj ustawień tylko w nocy</string>
-  <string name="live_display_outdoor">Na zewnątrz (jasne światło)</string>
-  <string name="live_display_outdoor_summary">Używaj ustawienia tylko na zewnątrz</string>
-  <string name="live_display_hint">LiveDisplay może pomóc w zredukowaniu efektu zmęczenia oczu oraz pomaga zasnąć w nocy. Kliknij tutaj, aby wypróbować!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Brak podłączonego urządzenia</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> podłączone urządzenie</string>

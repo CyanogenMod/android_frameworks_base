@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Profily zakázány</string>
   <string name="quick_settings_heads_up_label">Plovoucí upozornění</string>
   <string name="quick_settings_battery_saver_label">Spořič baterie</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Úspora baterie (nabíjení)</string>
   <string name="quick_settings_caffeine_label">Kofein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synch. vyp.</string>
@@ -172,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Další budík</string>
   <string name="dynamic_qs_tile_ime_selector_label">Výběr IME</string>
   <string name="dynamic_qs_tile_su_label">Root přístup</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay vyp.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatický režim.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: režim ve dne.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: režim v noci.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: režim venku.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay vypnutý.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay změněn na automatický režim.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay změněn na režim ve dne.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay změněn na režim v noci.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay změněn na režim venku.</string>
   <string name="quick_settings_title_advanced_location">Třístavové nastavení určení polohy</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Zjištění polohy: úsporný režim.</string>
@@ -222,4 +213,6 @@
   <string name="data_sim_not_configured">Žádná SIM pro data</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Baterie doku: <xliff:g id="number">%d</xliff:g>\u0025.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Zobrazit frontu přehrávání</string>
 </resources>

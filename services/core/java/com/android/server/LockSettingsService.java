@@ -263,6 +263,17 @@ public class LockSettingsService extends ILockSettings.Stub {
                 setString("migrated_lockscreen_disabled", "true", 0);
                 Slog.i(TAG, "Migrated lockscreen disabled flag");
             }
+
+            if (getString("migrated_pattern_size", null, 0) == null) {
+                final String val = getString(Secure.LOCK_PATTERN_SIZE, null,
+                        UserHandle.USER_CURRENT);
+                if (val != null) {
+                    setString(Secure.LOCK_PATTERN_SIZE, val, 0);
+                }
+
+                setString("migrated_pattern_size", "true", 0);
+                Slog.i(TAG, "Migrated primary user pattern size");
+            }
         } catch (RemoteException re) {
             Slog.e(TAG, "Unable to migrate old data", re);
         }

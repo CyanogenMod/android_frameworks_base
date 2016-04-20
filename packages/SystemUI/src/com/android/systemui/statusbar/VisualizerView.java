@@ -32,11 +32,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.android.systemui.cm.UserContentObserver;
-import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import cyanogenmod.providers.CMSettings;
 
-public class VisualizerView extends View implements Palette.PaletteAsyncListener,
-        KeyguardMonitor.Callback {
+public class VisualizerView extends View implements Palette.PaletteAsyncListener {
 
     private static final String TAG = VisualizerView.class.getSimpleName();
     private static final boolean DEBUG = false;
@@ -48,6 +46,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private ValueAnimator[] mValueAnimators;
     private float[] mFFTPoints;
 
+    private int mStatusBarState;
     private boolean mVisualizerEnabled = false;
     private boolean mVisible = false;
     private boolean mPlaying = false;
@@ -59,7 +58,6 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     private int mColor;
     private Bitmap mCurrentBitmap;
 
-    private KeyguardMonitor mKeyguardMonitor;
     private SettingsObserver mObserver;
 
     private Visualizer.OnDataCaptureListener mVisualizerListener =
@@ -114,6 +112,13 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         }
     };
 
+    private final Runnable mAsyncUnlinkVisualizer = new Runnable() {
+        @Override
+        public void run() {
+            AsyncTask.execute(mUnlinkVisualizer);
+        }
+    };
+
     private final Runnable mUnlinkVisualizer = new Runnable() {
         @Override
         public void run() {
@@ -164,23 +169,19 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
         this(context, null, 0);
     }
 
-    @Override
-    public void onKeyguardChanged() {
-        updateViewVisibility();
-    }
-
     private void updateViewVisibility() {
-        setVisibility(mKeyguardMonitor != null && mKeyguardMonitor.isShowing()
-                && mVisualizerEnabled ? View.VISIBLE : View.GONE);
-        checkStateChanged();
+        final int curVis = getVisibility();
+        final int newVis = mStatusBarState != StatusBarState.SHADE
+                && mVisualizerEnabled ? View.VISIBLE : View.GONE;
+        if (curVis != newVis) {
+            setVisibility(newVis);
+            checkStateChanged();
+        }
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mKeyguardMonitor != null) {
-            mKeyguardMonitor.addCallback(this);
-        }
         mObserver = new SettingsObserver(new Handler());
         mObserver.observe();
         mObserver.update();
@@ -189,9 +190,6 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mKeyguardMonitor != null) {
-            mKeyguardMonitor.removeCallback(this);
-        }
         mObserver.unobserve();
         mObserver = null;
         mCurrentBitmap = null;
@@ -223,7 +221,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
 
     @Override
     public boolean hasOverlappingRendering() {
-        return mVisualizerEnabled && mDisplaying;
+        return false;
     }
 
     @Override
@@ -232,16 +230,6 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
 
         if (mVisualizer != null) {
             canvas.drawLines(mFFTPoints, mPaint);
-        }
-    }
-
-    public void setKeyguardMonitor(KeyguardMonitor kgm) {
-        mKeyguardMonitor = kgm;
-        if (isAttachedToWindow()) {
-            // otherwise we might never register ourselves
-            mKeyguardMonitor.removeCallback(this);
-            mKeyguardMonitor.addCallback(this);
-            updateViewVisibility();
         }
     }
 
@@ -292,6 +280,13 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
             }
             mOccluded = occluded;
             checkStateChanged();
+        }
+    }
+
+    public void setStatusBarState(int statusBarState) {
+        if (mStatusBarState != statusBarState) {
+            mStatusBarState = statusBarState;
+            updateViewVisibility();
         }
     }
 
@@ -365,13 +360,12 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
                 if (mVisible) {
                     animate()
                             .alpha(0f)
-                            .withEndAction(mUnlinkVisualizer)
+                            .withEndAction(mAsyncUnlinkVisualizer)
                             .setDuration(600);
                 } else {
-                    AsyncTask.execute(mUnlinkVisualizer);
                     animate().
                             alpha(0f)
-                            .withEndAction(null)
+                            .withEndAction(mAsyncUnlinkVisualizer)
                             .setDuration(0);
                 }
             }

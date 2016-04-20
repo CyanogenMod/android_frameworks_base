@@ -135,6 +135,7 @@
   <string name="app_ops_start_at_bootup">เริ่มเมื่อเปิดเครื่อง</string>
   <string name="app_ops_toast_window">แสดงแถบข้อความ</string>
   <string name="app_ops_toggle_bluetooth">สลับบลูทูธ</string>
+  <string name="app_ops_toggle_mobile_data">สลับข้อมูลโทรศัพท์มือถือ</string>
   <string name="app_ops_toggle_nfc">สลับ NFC</string>
   <string name="app_ops_toggle_wifi">สลับ WiFi</string>
   <string name="app_ops_use_alarm_volume">ควบคุมระดับเสียงนาฬิกาปลุก</string>
@@ -167,18 +168,6 @@
   <string name="app_ops_su">รับสิทธิผู้ดูแลระบบ</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">เพื่อยกเลิกการปักหมุดหน้าจอนี้ กดปุ่มกลับค้างไว้</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">อัตโนมัติ</string>
-  <string name="live_display_auto_summary">ตั้งอุณหภูมิสีจออัตโนมัติหลังดวงอาทิตย์ขึ้นและตก</string>
-  <string name="live_display_off">ปิด</string>
-  <string name="live_display_off_summary">ปิดการปรับแต่งทั้งหมด</string>
-  <string name="live_display_day">กลางวัน</string>
-  <string name="live_display_day_summary">ใช้การตั้งค่ากลางวันเท่านั้น</string>
-  <string name="live_display_night">กลางคืน</string>
-  <string name="live_display_night_summary">ใช้การตั้งค่ากลางคืนเท่านั้น</string>
-  <string name="live_display_outdoor">กลางแจ้ง (แดดจ้า)</string>
-  <string name="live_display_outdoor_summary">ใช้การตั้งค่ากลางแจ้งเท่านั้น</string>
-  <string name="live_display_hint">LiveDisplay สามารถช่วยลดอาการปวดตา และช่วยให้คุณนอนหลับในเวลากลางคืน คลิกที่นี่เพื่อลองใช้!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">ไม่มีอุปกรณ์เชื่อมต่อ</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> อุปกรณ์เชื่อมต่ออยู่</string>
@@ -199,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">อนุญาตให้แอปพลิเคชันรีเซ็ตข้อมูลการใช้แบตเตอรี่ระดับต่ำในปัจจุบัน</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">มีการเปลี่ยนซิมการ์ด</string>
+  <string name="uicc_hot_swapped_event_text">แตะเพื่อตั้งค่าการกำหนดค่าเริ่มต้นของ SIM การ์ด</string>
 </resources>

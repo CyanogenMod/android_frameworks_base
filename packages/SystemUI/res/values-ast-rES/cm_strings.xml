@@ -63,6 +63,7 @@
   <string name="quick_settings_profiles">Perfiles del sistema</string>
   <string name="quick_settings_profiles_off">Perfiles deshabilitaos</string>
   <string name="quick_settings_battery_saver_label">Aforrador d\'enerxía</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -111,7 +112,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Alarma siguiente</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seleutor d\'IME</string>
   <string name="dynamic_qs_tile_su_label">Accesu root</string>
-  <!-- LiveDisplay strings -->
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Informes de llocalización: mou d\'aforru de batería.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -135,4 +135,5 @@
   <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <!-- Play queue -->
 </resources>

@@ -135,9 +135,6 @@
             android:protectionLevel="signature" />
     <uses-permission android:name="com.android.systemui.permission.SELF" />
 
-    <!-- LiveDisplay -->
-    <uses-permission android:name="android.permission.HARDWARE_ABSTRACTION_ACCESS" />
-
     <!-- Weather -->
     <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
 
@@ -183,13 +180,6 @@
         <receiver android:name=".BootReceiver" androidprv:primaryUserOnly="true">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".qs.tiles.HotspotTile$APChangedReceiver"
-                androidprv:primaryUserOnly="true">
-            <intent-filter>
-                <action android:name="android.net.wifi.WIFI_AP_STATE_CHANGED" />
             </intent-filter>
         </receiver>
 

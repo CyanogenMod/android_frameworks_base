@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Profielen uitgeschakeld</string>
   <string name="quick_settings_heads_up_label">Heads-up</string>
   <string name="quick_settings_battery_saver_label">Accubesparing</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Accubesparing (opladen)</string>
   <string name="quick_settings_caffeine_label">Cafeïne</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchr. uit.</string>
@@ -172,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Volgend alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">Invoermethode</string>
   <string name="dynamic_qs_tile_su_label">Root-toegang</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay uit.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatisch.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dagstand.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nachtstand.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: buitenstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay uitgeschakeld.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay gewijzigd naar automatisch.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay gewijzigd naar dagstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay gewijzigd naar nachtstand.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay gewijzigd naar buitenstand.</string>
   <string name="quick_settings_title_advanced_location">Locatie met 3 standen</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Locatiemelding: accubesparing.</string>
@@ -218,6 +209,9 @@
     <item quantity="other">%1$d clients</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Geen data-SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dock-accu <xliff:g id="number">%d</xliff:g> procent.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Wachtrij weergeven</string>
 </resources>

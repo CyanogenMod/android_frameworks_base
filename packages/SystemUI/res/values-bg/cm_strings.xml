@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Деактивирани профили</string>
   <string name="quick_settings_heads_up_label">Изскачащи известия</string>
   <string name="quick_settings_battery_saver_label">Пестене на батерия</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Пестене на батерията (зареждане)</string>
   <string name="quick_settings_caffeine_label">Кофеин</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Изключена синхронизация.</string>
@@ -172,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Следваща аларма</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME селектор</string>
   <string name="dynamic_qs_tile_su_label">Администраторски достъп</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">Изключи адаптивен екран.</string>
-  <string name="accessibility_quick_settings_live_display_auto">Адаптивен екран: автоматичен режим.</string>
-  <string name="accessibility_quick_settings_live_display_day">Адаптивен екран: дневен режим.</string>
-  <string name="accessibility_quick_settings_live_display_night">Адаптивен екран: нощен режим.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">Адаптивен екран: външен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">Адаптивен екран е изключен.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">Адаптивен екран е променен на автоматичен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">Адаптивен екран е променен на дневен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">Адаптивен екран е променен на нощен режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">Адаптивен екран е променен на външен режим.</string>
   <string name="quick_settings_title_advanced_location">Три-посочно местоположение</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Настройка на местоположение: икономичен режим на батерията.</string>
@@ -221,4 +212,6 @@
   <string name="data_sim_not_configured">СИМ картата не е конфигурирана</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Док батерия <xliff:g id="number">%d </xliff:g> процента.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Покажи опашка за изпълнение</string>
 </resources>

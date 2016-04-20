@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Профили онемогућени</string>
   <string name="quick_settings_heads_up_label">Искачуће поруке</string>
   <string name="quick_settings_battery_saver_label">Уштеда батерије</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Чувар батерије (пуњење)</string>
   <string name="quick_settings_caffeine_label">Кофеин</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Синхрон. искључено.</string>
@@ -172,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Следећи аларм</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME бирач</string>
   <string name="dynamic_qs_tile_su_label">Root приступ</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">Активни екран искључен.</string>
-  <string name="accessibility_quick_settings_live_display_auto">Активни Екран: ауто режим.</string>
-  <string name="accessibility_quick_settings_live_display_day">Активни Екран: дневни режим.</string>
-  <string name="accessibility_quick_settings_live_display_night">Активни Екран: ноћни режим.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">Активни Екран: режим на отвореном.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">Активни Екран је искључен.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">Активни Екран промењен у ауто режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">Активни Екран промењен у дневни режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">Активни Екран промењен у ноћни режим.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">Активни Екран промењен у режим на отвореном.</string>
   <string name="quick_settings_title_advanced_location">Локација три-државе</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Локација извештај: режим чувања батерије.</string>
@@ -219,6 +210,9 @@
     <item quantity="other">%1$d клијента</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Нема SIM-а за податке</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Батерија <xliff:g id="number">%d</xliff:g> процената.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Прикажи на чекању</string>
 </resources>

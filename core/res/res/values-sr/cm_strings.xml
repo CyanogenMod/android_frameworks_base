@@ -168,18 +168,6 @@
   <string name="app_ops_su">дај root приступ</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Да искључиш овај екран додирни и држи дугме за назад.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Аутоматски</string>
-  <string name="live_display_auto_summary">Аутоматски прилагоди температуру боје екрана после сумрака и свитања</string>
-  <string name="live_display_off">Искључено</string>
-  <string name="live_display_off_summary">Онемогућити сва подешавања</string>
-  <string name="live_display_day">Дан</string>
-  <string name="live_display_day_summary">Користи само дневна подешавања</string>
-  <string name="live_display_night">Ноћ</string>
-  <string name="live_display_night_summary">Користи само ноћна подешавања</string>
-  <string name="live_display_outdoor">Напољу (јако сунце)</string>
-  <string name="live_display_outdoor_summary">Користи само подешавања за напоље</string>
-  <string name="live_display_hint">LiveDisplay може смањити напрезање очију и помоћи да спавате ноћу. Додирните да пробате!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Нема повезаног уређаја</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> конектован уређај</string>
@@ -200,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM картица је промењена</string>
+  <string name="uicc_hot_swapped_event_text">Додирни да поставиш задане поставке за SIM картицу</string>
 </resources>

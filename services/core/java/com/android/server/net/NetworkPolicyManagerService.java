@@ -47,6 +47,7 @@ import static android.net.NetworkPolicyManager.POLICY_NONE;
 import static android.net.NetworkPolicyManager.POLICY_REJECT_METERED_BACKGROUND;
 import static android.net.NetworkPolicyManager.POLICY_REJECT_ON_DATA;
 import static android.net.NetworkPolicyManager.POLICY_REJECT_ON_WLAN;
+import static android.net.NetworkPolicyManager.POLICY_REJECT_ON_WLAN_BACKGROUND;
 import static android.net.NetworkPolicyManager.RULE_ALLOW_ALL;
 import static android.net.NetworkPolicyManager.RULE_REJECT_ALL;
 import static android.net.NetworkPolicyManager.RULE_REJECT_METERED;
@@ -2400,7 +2401,8 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         }
 
         try {
-            mNetworkManager.restrictAppOnWlan(uid, (uidPolicy & POLICY_REJECT_ON_WLAN) != 0);
+            mNetworkManager.restrictAppOnWlan(uid, (uidPolicy & POLICY_REJECT_ON_WLAN) != 0 ||
+                    (((uidPolicy & POLICY_REJECT_ON_WLAN_BACKGROUND) != 0) && !uidForeground));
             mNetworkManager.restrictAppOnData(uid, (uidPolicy & POLICY_REJECT_ON_DATA) != 0);
         } catch (RemoteException e) {
             // ignored; service lives in system_server

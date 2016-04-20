@@ -88,6 +88,8 @@
   <string name="quick_settings_profiles_off">Profiler inaktiverad</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Strömsparläge</string>
+  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Batterisparfunktion (laddar)</string>
   <string name="quick_settings_caffeine_label">Koffein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synk av.</string>
@@ -172,17 +174,6 @@
   <string name="dynamic_qs_tile_next_alarm_label">Nästa alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME-väljare</string>
   <string name="dynamic_qs_tile_su_label">Root-åtkomst</string>
-  <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">LiveDisplay av.</string>
-  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatiskt läge.</string>
-  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dagläge.</string>
-  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nattläge.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: utomhusläge.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay inaktiverad.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay ändrad till auto-läge.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ändrad till dagläge.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ändrad till nattläge.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ändrad till utomhusläge.</string>
   <string name="quick_settings_title_advanced_location">Tri-state placering</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
@@ -218,6 +209,9 @@
     <item quantity="other">%1$d klienter</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Inget data SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dockningsstationens batteri<xliff:g id="number">%d</xliff:g> procent.</string>
+  <!-- Play queue -->
+  <string name="play_queue_extention">Visa uppspelningskö</string>
 </resources>

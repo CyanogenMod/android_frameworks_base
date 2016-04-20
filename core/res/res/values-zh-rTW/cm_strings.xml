@@ -165,18 +165,6 @@
   <string name="app_ops_su">取得 Root 權限</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">要解鎖此螢幕，觸摸並按住返回鍵。</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">自動</string>
-  <string name="live_display_auto_summary">在白天和夜晚自動調節螢幕顏色溫度</string>
-  <string name="live_display_off">關閉</string>
-  <string name="live_display_off_summary">禁用所有的調整</string>
-  <string name="live_display_day">白天</string>
-  <string name="live_display_day_summary">僅使用白天設定</string>
-  <string name="live_display_night">夜間</string>
-  <string name="live_display_night_summary">僅使用夜間設定</string>
-  <string name="live_display_outdoor">戶外 (陽光)</string>
-  <string name="live_display_outdoor_summary">僅使用戶外設定</string>
-  <string name="live_display_hint">LiveDisplay 可以幫助減少眼睛的疲勞及睡前使用造成的不適。輕觸此處來試試！</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">沒有已連接的裝置</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> 個已連接裝置</string>

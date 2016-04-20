@@ -22,7 +22,7 @@
     <!-- North -->
     <item>NE</item>
     <!-- North east -->
-    <item>E</item>
+    <item>L</item>
     <!-- East -->
     <item>SE</item>
     <!-- South east -->
@@ -38,7 +38,4 @@
   <!-- Performance profiles description-->
   <!-- Performance profiles announcement-->
   <!-- Dynamic tiles -->
-  <!-- LiveDisplay drawables -->
-  <!-- LiveDisplay description-->
-  <!-- LiveDisplay announcement-->
 </resources>

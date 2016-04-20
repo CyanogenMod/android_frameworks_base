@@ -168,18 +168,6 @@
   <string name="app_ops_su">루트 권한 얻기</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">화면 고정을 해제하려면 뒤로 버튼을 계속 누르세요</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">자동</string>
-  <string name="live_display_auto_summary">일출 및 일몰 후 화면의 색 온도를 자동으로 조정</string>
-  <string name="live_display_off">끄기</string>
-  <string name="live_display_off_summary">모든 조정 사용 안 함</string>
-  <string name="live_display_day">주간</string>
-  <string name="live_display_day_summary">주간 설정만으로 사용</string>
-  <string name="live_display_night">야간</string>
-  <string name="live_display_night_summary">야간 설정만으로 사용</string>
-  <string name="live_display_outdoor">야외 (밝은 햇빛)</string>
-  <string name="live_display_outdoor_summary">야외 설정만으로 사용</string>
-  <string name="live_display_hint">LiveDisplay는 눈의 피로를 줄이고 밤에 수면을 돕습니다. 적용하려면 클릭하십시오!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">연결된 기기 없음</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g>대의 기기가 연결되어 있습니다</string>

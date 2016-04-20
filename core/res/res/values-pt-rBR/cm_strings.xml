@@ -18,31 +18,31 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- label for item that screenshots in phone options dialog -->
-  <string name="global_action_screenshot">Capturar tela</string>
+  <string name="global_action_screenshot">Captura de tela</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">receber SMS protegido</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Permite ao aplicativo receber um SMS protegido.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_modifyProtectedSmsList">modifica a lista de SMS protegidos</string>
+  <string name="permlab_modifyProtectedSmsList">modificar lista de SMS protegidos</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_modifyProtectedSmsList">Permite ao aplicativo modificar a lista de endereço de SMS protegido.</string>
+  <string name="permdesc_modifyProtectedSmsList">Permite ao aplicativo modificar a lista de endereços de SMS protegido.</string>
   <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Segurança</string>
   <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permgroupdesc_security">Permissões relacionadas com as informações de segurança do aparelho.</string>
+  <string name="permgroupdesc_security">Permissões relacionadas às informações de segurança do aparelho.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readPhoneBlacklist">Ler a lista negra do telefone</string>
+  <string name="permlab_readPhoneBlacklist">ler a lista negra do telefone</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readPhoneBlacklist">Permite que um aplicativo leia informações sobre números de telefone bloqueados para efetuar chamadas ou enviar mensagens.</string>
+  <string name="permdesc_readPhoneBlacklist">Permite que um aplicativo leia informações sobre números de telefone bloqueados para receber chamadas ou mensagens.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">alterar a lista negra do telefone</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_changePhoneBlacklist">Permite que um aplicativo altere os números de telefone bloqueados para efetuar chamadas ou enviar mensagens.</string>
+  <string name="permdesc_changePhoneBlacklist">Permite que um aplicativo altere os números de telefone bloqueados para receber chamadas ou enviar mensagens.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">definir papel de parede da tela de bloqueio</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_setKeyguardWallpaper">Permite um aplicativo a trocar o papel de parede da tela de bloqueio.</string>
+  <string name="permdesc_setKeyguardWallpaper">Permite que um aplicativo mude o papel de parede da tela de bloqueio.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Reiniciar</string>
   <!-- label for current user in phone options dialog -->
@@ -80,7 +80,7 @@
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rede</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
-  <string name="permlab_interceptPackageLaunch">interceptar inicialização de app</string>
+  <string name="permlab_interceptPackageLaunch">interceptar início de aplicativo</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s não está instalado</string>
   <!-- Zen mode buttons -->
@@ -91,10 +91,10 @@
   <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Desligar Wi-Fi</string>
   <!-- Privacy Guard -->
-  <string name="permlab_changePrivacyGuardState">ativar ou desativar a Proteção da Privacidade</string>
-  <string name="permdesc_changePrivacyGuardState">Permite ao aplicativo alterar se outra aplicação executa com Proteção à Privacidade. Quando um aplicativo estiver executando com Proteção à Privacidade, ela será capaz de acessar dados pessoais como contatos, registro de chamadas, ou mensagens.</string>
+  <string name="permlab_changePrivacyGuardState">ativar ou desativar a Proteção à Privacidade</string>
+  <string name="permdesc_changePrivacyGuardState">Permite ao aplicativo alterar se outro aplicativo é executado com Proteção à Privacidade. Quando um aplicativo estiver sendo executado com Proteção à Privacidade, ele não terá acesso a dados pessoais como contatos, registro de chamadas ou mensagens.</string>
   <string name="privacy_guard_notification">Proteção à Privacidade ativa</string>
-  <string name="privacy_guard_notification_detail"><xliff:g xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" id="app">%1$s</xliff:g> não será capaz de acessar dados pessoais</string>
+  <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> não terá acesso a dados pessoais</string>
   <string name="privacy_guard_dialog_title">Proteção à Privacidade</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> gostaria de <xliff:g id="op">%2$s</xliff:g>.</string>
   <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
@@ -105,14 +105,14 @@
   <string name="app_ops_access_notifications">ler suas notificações</string>
   <string name="app_ops_activate_vpn">ativar uma VPN</string>
   <string name="app_ops_auto_start">iniciar ao ligar</string>
-  <string name="app_ops_delete_call_log">excluir seu registro de chamadas</string>
-  <string name="app_ops_delete_contacts">excluir seus contatos</string>
-  <string name="app_ops_delete_mms">excluir suas mensagens MMS</string>
-  <string name="app_ops_delete_sms">excluir suas mensagens SMS</string>
+  <string name="app_ops_delete_call_log">deletar seu registro de chamadas</string>
+  <string name="app_ops_delete_contacts">deletar seus contatos</string>
+  <string name="app_ops_delete_mms">deletar suas mensagens MMS</string>
+  <string name="app_ops_delete_sms">deletar suas mensagens SMS</string>
   <string name="app_ops_draw_on_top">desenhar janelas em primeiro plano</string>
-  <string name="app_ops_get_usage_stats">obter estatísticas de uso do aplicativo</string>
+  <string name="app_ops_get_usage_stats">obter estatísticas de uso de aplicativo</string>
   <string name="app_ops_keep_device_awake">manter seu dispositivo acordado</string>
-  <string name="app_ops_make_phone_call">realizar uma chamada telefônica</string>
+  <string name="app_ops_make_phone_call">fazer uma chamada telefônica</string>
   <string name="app_ops_modify_calendar">atualizar seu calendário</string>
   <string name="app_ops_modify_call_log">atualizar o registro de chamadas</string>
   <string name="app_ops_modify_clipboard">modificar a área de transferência</string>
@@ -120,8 +120,8 @@
   <string name="app_ops_modify_settings">atualizar configurações de sistema</string>
   <string name="app_ops_mute_unmute_microphone">ligar/desligar o microfone</string>
   <string name="app_ops_play_audio">reproduzir áudio</string>
-  <string name="app_ops_post_notification">postar uma notificação</string>
-  <string name="app_ops_project_media">projetar multimídia</string>
+  <string name="app_ops_post_notification">exibir uma notificação</string>
+  <string name="app_ops_project_media">projetar mídia</string>
   <string name="app_ops_read_calendar">ler seu calendário</string>
   <string name="app_ops_read_call_log">ler o registro de chamadas</string>
   <string name="app_ops_read_clipboard">ler a área de transferência</string>
@@ -132,21 +132,21 @@
   <string name="app_ops_record_audio">gravar áudio</string>
   <string name="app_ops_send_mms">enviar uma mensagem MMS</string>
   <string name="app_ops_send_sms">enviar uma mensagem SMS</string>
-  <string name="app_ops_start_at_bootup">iniciar na inicialização</string>
-  <string name="app_ops_toast_window">exibir mensagens flutuantes na tela</string>
+  <string name="app_ops_start_at_bootup">iniciar ao ligar</string>
+  <string name="app_ops_toast_window">exibir mensagens de aviso na tela</string>
   <string name="app_ops_toggle_bluetooth">alternar Bluetooth</string>
   <string name="app_ops_toggle_mobile_data">alternar dados de celular</string>
   <string name="app_ops_toggle_nfc">alternar NFC</string>
   <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar volume do alarme</string>
   <string name="app_ops_use_audio_focus">controlar o foco do áudio</string>
-  <string name="app_ops_use_bluetooth_volume">controlar o volume de Bluetooth</string>
+  <string name="app_ops_use_bluetooth_volume">controlar o volume do Bluetooth</string>
   <string name="app_ops_use_master_volume">controlar o volume principal</string>
   <string name="app_ops_use_media_buttons">usar os botões de mídia</string>
   <string name="app_ops_use_media_volume">controlar o volume de mídia</string>
-  <string name="app_ops_use_notification_volume">controlar o volume de notificação</string>
-  <string name="app_ops_use_ring_volume">controlar o volume de campainha</string>
-  <string name="app_ops_use_vibrate">controlar reposta ao toque</string>
+  <string name="app_ops_use_notification_volume">controlar o volume da notificação</string>
+  <string name="app_ops_use_ring_volume">controlar o volume do toque</string>
+  <string name="app_ops_use_vibrate">usar reposta ao toque</string>
   <string name="app_ops_use_voice_volume">controlar o volume de chamadas de voz</string>
   <string name="app_ops_write_mms">escrever uma mensagem MMS</string>
   <string name="app_ops_write_sms">escrever uma mensagem SMS</string>
@@ -161,25 +161,13 @@
   <string name="app_ops_read_cell_broadcasts">ler transmissões da rede de celular</string>
   <string name="app_ops_mock_location">simular a sua localização</string>
   <string name="app_ops_read_external_storage">ler o armazenamento externo</string>
-  <string name="app_ops_write_external_storage">escrever no armazenamento externo</string>
+  <string name="app_ops_write_external_storage">gravar no armazenamento externo</string>
   <string name="app_ops_turn_on_screen">ligar a tela</string>
   <string name="app_ops_get_accounts">obter as contas do dispositivo</string>
   <string name="app_ops_wifi_change">alterar o estado do Wi-Fi</string>
   <string name="app_ops_su">obter acesso super usuário</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Para desafixar esta tela, toque e segure o botão Voltar.</string>
-  <!-- LiveDisplay strings -->
-  <string name="live_display_auto">Automático</string>
-  <string name="live_display_auto_summary">Ajusta automaticamente a temperatura de cor da tela após o pôr do sol e nascer do sol</string>
-  <string name="live_display_off">Desligado</string>
-  <string name="live_display_off_summary">Desativar todos os ajustes</string>
-  <string name="live_display_day">Dia</string>
-  <string name="live_display_day_summary">Usar apenas configurações de dia</string>
-  <string name="live_display_night">Noite</string>
-  <string name="live_display_night_summary">Use apenas configurações de noite</string>
-  <string name="live_display_outdoor">Ao ar livre (sol forte)</string>
-  <string name="live_display_outdoor_summary">Usar apenas configurações de ao ar livre</string>
-  <string name="live_display_hint">LiveDisplay pode ajudar a reduzir o cansaço visual e ajudá-lo a dormir à noite. Clique aqui para experimentá-lo!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nenhum dispositivo conectado</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivo conectado</string>
@@ -198,7 +186,7 @@
   <string name="permlab_resetBatteryStats">redefinir estatísticas da bateria</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Permite uma aplicação redefinir o atual nível baixo dos dados de uso da bateria.</string>
+  <string name="permdesc_resetBatteryStats">Permite a um aplicativo redefinir os dados de baixo nível de uso da bateria.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Os cartões SIM foram alterados</string>
   <string name="uicc_hot_swapped_event_text">Toque para definir as preferências do cartão SIM</string>
