@@ -4761,17 +4761,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public void onHintFinished() {
         // Delay the reset a bit so the user can read the text.
         mKeyguardIndicationController.hideTransientIndicationDelayed(HINT_RESET_DELAY_MS);
-        mKeyguardBottomArea.animate().setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mKeyguardBottomArea.expand(false);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                mKeyguardBottomArea.expand(false);
-            }
-        });
+        mKeyguardBottomArea.expand(false);
     }
 
     public void onCameraHintStarted(String hint) {
