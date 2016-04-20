@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">情景模式</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">情景模式</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">无</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">屏幕截图</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">接收受保护的短信</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">允许应用接收受保护的短信。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">修改受保护的短信列表</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">允许应用修改受保护的短信地址列表。</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">安全</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">与设备安全信息相关的权限。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">访问主题服务</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">允许应用访问主题服务。正常应用不应需要此权限。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">读取您的主题信息</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">允许应用读取您的主题并确定已应用的主题。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">修改您的主题</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">允许应用插入新的主题和修改已应用的主题。</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">读取手机黑名单</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">允许应用读取有关被阻止来电或信息的电话号码的信息。</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">更改手机黑名单</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">允许应用更改被阻止来电或信息的电话号码。</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">启用或禁用隐私防护</string>
   <string name="permdesc_changePrivacyGuardState">允许应用更改其他应用是否启用隐私防护。当一个应用运行时启用了隐私防护，它将不能访问个人数据，如联系人、通话记录、短信。</string>
   <string name="privacy_guard_notification">隐私防护激活</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 将不能访问个人数据</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">允许应用更改锁屏壁纸。</string>
   <string name="privacy_guard_dialog_title">隐私防护</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> 希望 <xliff:g id="op">%2$s</xliff:g>。</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">重启</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">当前</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">重启</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">恢复模式</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">引导程序</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">下载模式</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">软重启</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">重启</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">您的平板电脑将会重启。</string>
   <string name="reboot_confirm" product="default">您的手机将会重启。</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">正在重启\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">应用已被终止</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">网络 ADB 调试已启用</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">USB 和网络 ADB 调试已启用</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">触摸以禁用调试。</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">轻触以选择 USB 选项。</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; 网络</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">网络</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">拦截应用启动</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">允许应用拦截其他应用的启动</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">存取相机</string>
   <string name="app_ops_access_location">访问你的地理位置信息</string>
   <string name="app_ops_access_notifications">读取通知</string>
@@ -119,36 +163,57 @@
   <string name="app_ops_use_voice_volume">控制语音通话音量</string>
   <string name="app_ops_write_mms">编写彩信</string>
   <string name="app_ops_write_sms">编写短信</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">无效的 SIM 卡。</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">飞行模式</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">已在充电模式下连接</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">没有已连接设备</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> 个已连接的设备</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> 个已连接的设备</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">没有可移动媒体\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC 存储</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">中国移动</string>
   <string name="China_Unicom">中国联通</string>
   <string name="China_Telecom">中国电信</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">记住我的选择</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">省电模式</string>
   <string name="perf_profile_bal">平衡模式</string>
   <string name="perf_profile_perf">性能模式</string>
   <string name="perf_profile_bias_power">效率</string>
   <string name="perf_profile_bias_perf">快速</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">安装主题失败</string>
   <string name="theme_install_error_message">%s 安装失败</string>
   <string name="theme_reset_notification_title">重置主题</string>
   <string name="theme_reset_notification_body">由于多个应用崩溃，系统主题已恢复。</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s 尚未被安装</string>
   <string name="permlab_interceptSmsSent">拦截传出的短信</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">允许应用拦截传出的短信。恶意应用可能用这种方法阻止发送短信。</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">访问手电筒服务</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">允许应用访问手电筒服务。正常应用不应需要此权限。</string>
   <string name="permlab_preventpower">覆盖电源键</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">允许应用覆盖电源键</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">您 USB 存储设备上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">您存储卡上的所有数据 (位于“%1$s”路径下的) 将会被擦除。此操作不可撤销！</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">正在卸载 SD 卡\u2026</string>
   <string name="sd_progress_erasing">正在擦除 SD 卡\u2026</string>
   <string name="sd_format_error">无法擦除 SD 卡。</string>
@@ -156,6 +221,7 @@
   <string name="sd_media_checking">目前正在检查 SD 卡。</string>
   <string name="sd_media_removed">SD 卡已移除。</string>
   <string name="sd_media_shared">SD 卡目前正在被计算机使用。</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">正在卸载 USB 存储\u2026</string>
   <string name="usb_progress_erasing">正在擦除 USB 存储\u2026</string>
   <string name="usb_format_error">无法擦除 USB 存储。</string>
@@ -163,6 +229,7 @@
   <string name="usb_media_checking">目前正在检查 USB 存储。</string>
   <string name="usb_media_removed">USB 存储已被移除。</string>
   <string name="usb_media_shared">目前 USB 存储正在被计算机使用。</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">正在准备 SD 卡</string>
   <string name="sd_ext_media_checking_notification_message">正在检查 SD 卡的错误。</string>
   <string name="sd_ext_media_nofs_notification_title">空白 SD 卡</string>
@@ -175,6 +242,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">您可以安全地移除 SD 卡。</string>
   <string name="sd_ext_media_nomedia_notification_title">已移除 SD 卡</string>
   <string name="sd_ext_media_nomedia_notification_message">SD 卡已移除。请插入新卡。</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">正在准备 USB 存储</string>
   <string name="usb_ext_media_checking_notification_message">正在检查 USB 存储的错误。</string>
   <string name="usb_ext_media_nofs_notification_title">空白 USB 存储</string>
@@ -187,6 +255,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">您现在可以安全移除 USB 存储。</string>
   <string name="usb_ext_media_nomedia_notification_title">已移除 USB 存储</string>
   <string name="usb_ext_media_nomedia_notification_message">USB 存储已移除。请插入新的媒体。</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">自动</string>
   <string name="live_display_auto_summary">在日出和日落后自动调节屏幕色温</string>
   <string name="live_display_off">关闭</string>
@@ -198,19 +267,35 @@
   <string name="live_display_outdoor">户外（阳光）</string>
   <string name="live_display_outdoor_summary">仅使用户外设置</string>
   <string name="live_display_hint">LiveDisplay 可以帮助减少眼睛疲劳，帮助您的夜间睡眠。点击此处来试一试！</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">要取消固定此屏幕，触摸并按住返回键。</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">手电筒已开</string>
   <string name="quick_settings_tile_flashlight_not_summary">轻按以关闭</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">底座 SD 卡</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">指纹 <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">访问指纹服务</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">允许应用访问指纹服务。应用可以添加、 删除、 重命名指纹，使用指纹进行身份验证</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">重置电池统计信息</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">优先级</string>
   <string name="silent_mode_none">无</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">由于 SIM 卡订阅改变，已禁用 Wi-Fi 热点。</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">关闭 Wi-Fi</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">第三方锁屏</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">允许应用用作不安全锁屏。</string>
 </resources>

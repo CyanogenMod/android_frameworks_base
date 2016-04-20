@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">Η SIM/RUIM είναι κλειδωμένη</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Κατάσταση"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Παράβλεψη</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Υποδοχή <xliff:g id="number">%d</xliff:g>: Νέα κάρτα SIM\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Μη έγκυρη κάρτα.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Εισάγετε το PIN, έχετε <xliff:g id="number">%d</xliff:g> προσπάθειες πριν χρειαστεί να επικοινωνήσετε με τον πάροχό σας για να ξεκλειδώσετε τη συσκευή σας.</item>
     <item quantity="other">Εισάγετε το PIN, έχετε <xliff:g id="number">%d</xliff:g> προσπάθειες.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">Η SIM είναι τώρα απενεργοποιημένη. Εισάγετε τον κωδικό PUK για να συνεχίσετε. Έχετε <xliff:g id="number">%d</xliff:g> προσπάθεια πριν κλειδωθεί μόνιμα η SIM. Επικοινωνήστε με τον πάροχό σας για λεπτομέρειες.</item>
     <item quantity="other">Η SIM είναι τώρα απενεργοποιημένη. Εισάγετε τον κωδικό PUK για να συνεχίσετε. Έχετε <xliff:g id="number">%d</xliff:g> προσπάθειες πριν κλειδωθεί μόνιμα η SIM. Επικοινωνήστε με τον πάροχό σας για λεπτομέρειες.</item>

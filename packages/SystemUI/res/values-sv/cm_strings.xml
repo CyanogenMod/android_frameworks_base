@@ -16,104 +16,198 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The text for the button in the notification window-shade that clears
+         all of the currently visible notifications. [CHAR LIMIT=10]-->
   <string name="clear_recents">Stäng senaste aviseringar</string>
+  <!-- Screenshot delete -->
   <string name="screenshot_delete_action">Ta bort</string>
   <string name="screenshot_delete_confirmation">Skärmdump borttagen.</string>
-  <string name="advanced_dev_option_wipe_app">Rensa data</string>
-  <string name="advanced_dev_option_force_stop">Tvingad avslutning</string>
+  <!-- Development shortcuts -->
+  <string name="advanced_dev_option_wipe_app">Rensa appdata</string>
+  <string name="advanced_dev_option_force_stop">Tvinga avslutning</string>
   <string name="advanced_dev_option_uninstall">Avinstallera</string>
+  <!-- Content description of the mobile data tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_data_off">Mobildata av.</string>
+  <!-- Content description of the mobile data tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_data_on">Mobildata på.</string>
+  <!-- Content description of the roaming tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_roaming_off">Roaming av.</string>
+  <!-- Content description of the roaming tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_roaming_on">Roaming på.</string>
+  <!-- Content description of the network adb tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_network_adb_off">ADB över nätverk av.</string>
+  <!-- Content description of the network adb tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_network_adb_on">ADB över nätverk på.</string>
+  <!-- Announcement made when network adb changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_network_adb_changed_off">ADB över nätverk inaktiverat.</string>
+  <!-- Announcement made when network adb changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_network_adb_changed_on">ADB över nätverk aktiverat.</string>
-  <string name="accessibility_quick_settings_ambient_display_off">Ambient display avslagen.</string>
+  <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_ambient_display_off">Ambient display av.</string>
+  <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_on">Ambient display påslagen.</string>
+  <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient display avslagen.</string>
+  <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient display påslagen.</string>
+  <!-- Content description of the color inversion tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_color_inversion_off">Färginvertering av.</string>
+  <!-- Content description of the color inversion tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_color_inversion_on">Färginvertering på.</string>
+  <!-- Content description of the compass tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_compass_off">Kompass av.</string>
+  <!-- Content description of the compass tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_compass_on">Kompass på.</string>
+  <!-- Announcement made when compass changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_compass_changed_off">Kompass inaktiverad.</string>
+  <!-- Announcement made when compass changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_compass_changed_on">Kompass aktiverad.</string>
+  <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Heads up av.</string>
+  <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_on">Heads up på.</string>
+  <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up avslaget.</string>
+  <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up påslaget.</string>
+  <!-- Content description of the hotspot tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_hotspot_off">Portabel hotspot av.</string>
+  <!-- Content description of the hotspot tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_hotspot_on">Portabel hotspot på.</string>
+  <!-- Content description of the LiveDisplay tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_off">LiveDisplay av.</string>
+  <!-- Content description of the LiveDisplay tile in quick settings when auto (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatiskt läge.</string>
+  <!-- Content description of the LiveDisplay tile in quick settings when day (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dagläge.</string>
+  <!-- Content description of the LiveDisplay tile in quick settings when night (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nattläge.</string>
+  <!-- Content description of the LiveDisplay tile in quick settings when outdoor (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: utomhusläge.</string>
+  <!-- Announcement made when LiveDisplay changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay inaktiverad.</string>
+  <!-- Announcement made when LiveDisplay changes to auto (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay ändrad till auto-läge.</string>
+  <!-- Announcement made when LiveDisplay changes to day (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay ändrad till dagläge.</string>
+  <!-- Announcement made when LiveDisplay changes to night (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay ändrad till nattläge.</string>
+  <!-- Announcement made when LiveDisplay changes to outdoor (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay ändrad till utomhusläge.</string>
+  <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Platsrapportering: batterisparläge.</string>
+  <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_gps_only">Platsrapportering: endast sensorläge.</string>
+  <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Platsrapportering: högt precisionsläge.</string>
+  <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Platsrapportering ändrades till batterispararläge.</string>
+  <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_gps_only">Platsrapportering ändrad till endast sensor.</string>
+  <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Platsrapportering ändrad till hög noggrannhet.</string>
+  <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Låsskärm av.</string>
+  <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_on">Låsskärm på.</string>
+  <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">Låsskärm inaktiverad.</string>
+  <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Låsskärm aktiverad.</string>
+  <!-- Content description of the LTE tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lte_off">LTE av.</string>
+  <!-- Content description of the LTE tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lte_on">LTE på.</string>
+  <!-- Announcement made when LTE changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lte_changed_off">LTE inaktiverat.</string>
+  <!-- Announcement made when LTE changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lte_changed_on">LTE aktiverat.</string>
+  <!-- Content description of the NFC tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_nfc_off">NFC av.</string>
+  <!-- Content description of the NFC tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_nfc_on">NFC på.</string>
+  <!-- Announcement made when NFC changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_nfc_changed_off">NFC inaktiverat.</string>
+  <!-- Announcement made when NFC changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_nfc_changed_on">NFC aktiverat.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_pwrsv">Batteriläge: energisparläge.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Batteriläge: balanserat läge.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_perf">Batteriläge: prestandaläge.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_power">Batteriläge: strömsparande läge.</string>
+  <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Batteriläge: prestandaläge.</string>
+  <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Batteriläge ändrat till energisparläge.</string>
+  <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Batteriläge ändrat till balanserat läge.</string>
+  <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_perf">Batteriläge ändrat till prestandaläge.</string>
+  <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Batteriläge ändrat till strömsparande läge.</string>
+  <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Batteriläge ändrat till prestandaläge.</string>
+  <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Profiler av.</string>
+  <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles">Profil: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">Profiler har stängts av.</string>
+  <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed">Profil ändrades till <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Skärm-timeout: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout_changed">Skärm-timeout ändrades till <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synk av.</string>
+  <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_on">Synk på.</string>
+  <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">Synk inaktiverad.</string>
+  <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_on">Synk aktiverad.</string>
+  <!-- Content description of the USB tethering tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_usb_tether_off">USB-sammanlänkning av.</string>
+  <!-- Content description of the USB tethering tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_usb_tether_on">USB-sammanlänkning på.</string>
+  <!-- Announcement made when USB tethering changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_usb_tether_changed_off">USB-sammanlänkning inaktiverat.</string>
+  <!-- Announcement made when USB tethering changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_usb_tether_changed_on">USB-sammanlänkning aktiverat.</string>
+  <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Strömsparläge är inaktiverat.</string>
+  <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_on">Strömsparläge är aktiverat.</string>
+  <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_off">Strömsparläge inaktiverat.</string>
+  <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Strömsparläge aktiverat.</string>
+  <!-- Content description of the visualizer tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_visualizer">Visualisering.</string>
+  <!-- Content description of the volume panel tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_volume_panel">Volympanel.</string>
   <string name="accessibility_dpad_left">Markör till vänster</string>
   <string name="accessibility_dpad_right">Markör till höger</string>
+  <!-- QuickSettings: Mobile data [CHAR LIMIT=NONE] -->
   <string name="quick_settings_mobile_data_label">Mobildata</string>
+  <!-- QuickSettings: Roaming [CHAR LIMIT=NONE] -->
   <string name="quick_settings_roaming_label">Roaming</string>
+  <!-- QuickSettings: Apn switch button label [CHAR LIMIT=NONE] -->
   <string name="quick_settings_apn_switch_label">APN-växlare</string>
+  <!-- QuickSettings: Dds [CHAR LIMIT=NONE] -->
   <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g> mobildata</string>
   <string name="quick_settings_data_off">Mobildata av</string>
+  <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">Platsläge</string>
+  <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Batterisparläge</string>
+  <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_gps_only_label">Endast enhet</string>
+  <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Hög noggrannhet</string>
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles_detail_title">Systemprofiler</string>
@@ -133,9 +227,11 @@
   <string name="quick_settings_battery_saver_label">Strömsparläge</string>
   <string name="quick_settings_custom_tile_detail_title">Anpassad bricka</string>
   <string name="quick_settings_performance_profile_detail_title">Batteriläge</string>
+  <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <string name="left_shortcut_hint">Svep höger för %1$s</string>
   <string name="right_shortcut_hint">Svep vänster för %1$s</string>
+  <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Välj åtgärd att tilldela</string>
   <string name="navbar_home_button">Hemknapp</string>
   <string name="navbar_recent_button">Senasteknapp</string>
@@ -145,6 +241,7 @@
   <string name="navbar_menu_conditional_button">Menyknapp (autogöm)</string>
   <string name="navbar_menu_always_button">Menyknapp (visa alltid)</string>
   <string name="navbar_menu_big_button">Menyknapp</string>
+  <!-- Navigation ring shortcuts -->
   <string name="navigation_ring_title">Snabbstartsgenvägar</string>
   <string name="navring_target_reset_message">Ta bort alla användarskapade genvägar i navigeringsfältet och återställ till standard?</string>
   <string name="navring_target_reset">Genvägar i navigeringsfältet återställda till standard</string>
@@ -161,17 +258,29 @@
   <string name="navring_choose_action_title">Välj åtgärd</string>
   <string name="select_application">Välj app</string>
   <string name="lockscreen_target_empty">Tom</string>
+  <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Detta håller den synlig tills du frigör den. Tryck och håll nere Bakåt-knappen för att frigöra.</string>
+  <!-- Interruption level: None. [CHAR LIMIT=20] -->
   <string name="interruption_level_silent">Ljudlös</string>
+  <!-- Zen mode: No interruptions title, with a warning about alarms. [CHAR LIMIT=60] -->
   <string name="zen_silent_with_warning">Inga avbrott, utom alarm.</string>
   <string name="quick_settings_remove">Ta bort bricka</string>
+  <!-- Dynamic tiles -->
   <string name="quick_settings_dynamic_tile_detail_title">Dynamiska bricka</string>
   <string name="dynamic_qs_tile_next_alarm_label">Nästa alarm</string>
   <string name="dynamic_qs_tile_ime_selector_label">IME-väljare</string>
   <string name="dynamic_qs_tile_su_label">Root-åtkomst</string>
+  <!-- Fingerprint -->
   <string name="fingerprint_try_again_hint">Vänligen skanna igen</string>
   <string name="fingerprint_try_again_hint_too_many">För många fingeravtrycksförsök. Försök igen senare.</string>
+  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dockningsstationens batteri<xliff:g id="number">%d</xliff:g> procent.</string>
+  <!-- Empty view text for CustomQSTile -->
   <string name="quick_settings_custom_qs_detail_empty_text">Inga objekt hittades</string>
+  <!-- Text to use when the number in a notification info is too large
+         (greater than status_bar_notification_info_maxnum, defined in
+         values/config.xml) and must be truncated.
+         [CHAR LIMIT=4] -->
+  <!-- Play queue -->
   <string name="play_queue_extention">Visa uppspelningskö</string>
 </resources>

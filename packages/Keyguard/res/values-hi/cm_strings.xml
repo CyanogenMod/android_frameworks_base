@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">सिम/आरयूआईएम पेर्सो लॉक्ड है</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"स्थिति"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">ख़ारिज करें</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">खाँचा <xliff:g id="number">%d</xliff:g>: नया सिम कार्ड\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">अमान्य कार्ड।</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">सिम पिन दर्ज करें, आप <xliff:g id="number">%d</xliff:g> बार और कोशिश कर सकते हैं, जिसके बाद आपको अपने उपकरण को अनलॉक करने के लिए अपने वाहक से संपर्क करना होगा।</item>
     <item quantity="other">सिम पिन दर्ज करें, आप <xliff:g id="number">%d</xliff:g> बार और कोशिश कर सकते हैं।</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">सिम अब अक्षम हो गया है। आगे बढ़ने के लिए पीयूके कोड दर्ज करें। आप <xliff:g id="number">%d</xliff:g> बार और कोशिश कर सकते हैं, जिसके बाद सिम स्थायी रूप से उपयोग करने लायक नहीं रह जाएगा। विवरण के लिए अपने वाहक से संपर्क करें।</item>
     <item quantity="other">सिम अब अक्षम हो गया है। आगे बढ़ने के लिए पीयूके कोड दर्ज करें। आप <xliff:g id="number">%d</xliff:g> बार और कोशिश कर सकते हैं, जिसके बाद सिम स्थायी रूप से उपयोग करने लायक नहीं रह जाएगा। विवरण के लिए अपने वाहक से संपर्क करें।</item>

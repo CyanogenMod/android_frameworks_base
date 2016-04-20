@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Profili</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profilo</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Nessuno</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Cattura schermata</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">ricevere SMS protetti</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Consenti all\'app di ricevere SMS protetti.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">modifica la lista di SMS protetti</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Consente all\'app di modificare la lista indirizzi SMS protetta.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Sicurezza</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Autorizzazioni relative alle informazioni sulla sicurezza del dispositivo.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">accede al servizio tema</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Consente all\'app di accedere al servizio tema. Non dovrebbe mai essere necessario per le app normali.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">legge le tue informazioni del tema</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Consente all\'app di leggere i tuoi temi e determinare quale tema hai applicato.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">modifica i tuoi temi</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Consente all\'app di inserire nuovi temi e modificare quale tema hai applicato.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">legge la blacklist del telefono</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Consente all\'app di leggere le informazioni sui numeri di telefono che vengono bloccati per messaggi o chiamate in arrivo.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">modifica la blacklist del telefono</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Consente all\'app di modificare i numeri di telefono che vengono bloccati per messaggi o chiamate in arrivo.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">attiva o disattiva Privacy Guard</string>
   <string name="permdesc_changePrivacyGuardState">Consente all\'app di decidere se un\'altra app viene eseguita con Privacy Guard. Quando un\'app viene eseguita con Privacy Guard, non ha accesso a dati personali come contatti, lista chiamate o messaggi.</string>
   <string name="privacy_guard_notification">Privacy Guard attiva</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> non sarà in grado di accedere ai dati personali</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">imposta sfondo sblocco schermo</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Consente all\'app di cambiare lo sfondo della schermata di sblocco.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> vorrebbe <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Riavvia</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Corrente</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Riavvia</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Riavvio veloce</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Riavvia</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Il dispositivo verrà riavviato.</string>
   <string name="reboot_confirm" product="default">Il telefono verrà riavviato.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Riavvio\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">App terminata</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB attraverso la rete attivato</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB attraverso USB &amp; rete attivato</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Tocca per disattivare il debug.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Tocca per selezionare le opzioni USB.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; rete</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rete</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Intercetta lancio app</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Consenti all\'app di intercettare il lancio delle altre app</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">accedere alla fotocamera</string>
   <string name="app_ops_access_location">accedere alla posizione</string>
   <string name="app_ops_access_notifications">leggere le tue notifiche</string>
@@ -119,36 +163,57 @@
   <string name="app_ops_use_voice_volume">controllare il volume della chiamata</string>
   <string name="app_ops_write_mms">scrivere un messaggio MMS</string>
   <string name="app_ops_write_sms">scrivere un messaggio SMS</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Carta invalida.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Modalità aereo</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Connesso in modalità ricarica</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Nessun dispositivo connesso</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivo connesso</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivi connessi</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Nessun dispositivo di memorizzazione rimovibile\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">Memoria UICC</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Ricorda la mia scelta</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Risparmio energetico</string>
   <string name="perf_profile_bal">Bilanciato</string>
   <string name="perf_profile_perf">Prestazioni</string>
   <string name="perf_profile_bias_power">Efficienza</string>
   <string name="perf_profile_bias_perf">Prestazioni</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Impossibile installare il tema</string>
   <string name="theme_install_error_message">Impossibile installare %s</string>
   <string name="theme_reset_notification_title">Reimposta tema</string>
   <string name="theme_reset_notification_body">Tema di sistema ripristinato a causa di molteplici crash.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s non è installato</string>
   <string name="permlab_interceptSmsSent">intercetta SMS in uscita</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Permette all\'app di intercettare un SMS in uscita. App malevole potrebbero usarla per impedire la spedizione degli SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">accesso servizio torcia</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Consente ad un\'app di accedere alla torcia. Non dovrebbe essere mai richiesto per le normali applicazioni.</string>
   <string name="permlab_preventpower">cambia comportamento tasto spegnimento</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Consente a un\'app di cambiare il comportamento del tasto di spegnimento.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">Tutti i dati nell\'archivio USB (sotto il percorso \'%1$s\') saranno eliminati. Questa operazione non può essere annullata!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Tutti i dati sulla scheda SD (sotto il percorso \'%1$s\') saranno eliminati. Questa azione non può essere annullata!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">Smontando scheda SD\u2026</string>
   <string name="sd_progress_erasing">Cancellando scheda SD\u2026</string>
   <string name="sd_format_error">Impossibile cancellare scheda SD.</string>
@@ -156,6 +221,7 @@
   <string name="sd_media_checking">Controllo della scheda SD in corso.</string>
   <string name="sd_media_removed">La scheda SD è stata rimossa.</string>
   <string name="sd_media_shared">La scheda SD è attualmente utilizzata da un computer.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Smontando archivio USB\u2026</string>
   <string name="usb_progress_erasing">Cancellando archivio USB\u2026</string>
   <string name="usb_format_error">Impossibile cancellare l\'archivio USB.</string>
@@ -163,6 +229,7 @@
   <string name="usb_media_checking">Controllo dell\'archivio USB in corso.</string>
   <string name="usb_media_removed">L\'archivio USB è stato rimosso.</string>
   <string name="usb_media_shared">L\'archivio USB è attualmente utilizzato da un computer.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">Preparazione scheda SD</string>
   <string name="sd_ext_media_checking_notification_message">Controllo errori su scheda SD.</string>
   <string name="sd_ext_media_nofs_notification_title">Scheda SD vuota</string>
@@ -175,6 +242,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Puoi rimuovere la scheda SD in sicurezza.</string>
   <string name="sd_ext_media_nomedia_notification_title">Scheda SD rimossa</string>
   <string name="sd_ext_media_nomedia_notification_message">Scheda SD rimossa. Inserisci una nuova scheda.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Preparazione memoria USB</string>
   <string name="usb_ext_media_checking_notification_message">Controllo errori sulla memoria USB.</string>
   <string name="usb_ext_media_nofs_notification_title">Memoria USB vuota</string>
@@ -187,6 +255,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Puoi rimuovere la memoria USB in sicurezza.</string>
   <string name="usb_ext_media_nomedia_notification_title">Memoria USB rimossa</string>
   <string name="usb_ext_media_nomedia_notification_message">Memoria USB rimossa. Inserisci un nuovo archivio.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatico</string>
   <string name="live_display_auto_summary">Regola automaticamente la temperatura del colore dello schermo dopo il tramonto e l\'alba</string>
   <string name="live_display_off">Disattivato</string>
@@ -198,19 +267,35 @@
   <string name="live_display_outdoor">All\'aperto (sole)</string>
   <string name="live_display_outdoor_summary">Utilizza solo impostazioni all\'aperto</string>
   <string name="live_display_hint">LiveDisplay aiuta a ridurre l\'affaticamento degli occhi e aiuta a dormire di notte. Clicca per provarlo!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Per sbloccare questo schermo, tocca e tieni premuto il pulsante indietro.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Torcia accesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tocca per spegnere</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">Scheda SD dock</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Impronta digitale <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">Accedi al servizio impronte digitali</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Consenti ad un\'app di accedere al servizio di impronte digitali. L\'app può aggiungere, eliminale, rinominare e riautenticare impronte digitali</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Consente all\'applicazione di reimpostare gli attuali dati di utilizzo della batteria a basso livello.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Priorità</string>
   <string name="silent_mode_none">Nessuno</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Hotspot WiFi disattivato in seguito al cambio di SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Spegni Wi-Fi</string>
-  <string name="permlab_thirdPartyKeyguard">schermata di sblocco di terze parti</string>
-  <string name="permdesc_thirdPartyKeyguard">Consente ad un\'app di essere usata come schermata di sblocco non sicura.</string>
+  <!-- Third party keyguard permission label -->
+  <string name="permlab_thirdPartyKeyguard">schermata di blocco di terze parti</string>
+  <!-- Third party keyguard permission description -->
+  <string name="permdesc_thirdPartyKeyguard">Consente ad un\'app di essere usata come schermata di blocco non sicura.</string>
 </resources>

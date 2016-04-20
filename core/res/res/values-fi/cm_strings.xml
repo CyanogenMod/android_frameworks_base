@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Profiilit</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profiili</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Ei mitään</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Kuvakaappaus</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">vastaanota suojattuja tekstiviestejä</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Sallii sovelluksen vastaanottaa suojattuja tekstiviestejä.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">muokkaa suojattujen tekstiviestien listaa</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Sallii sovelluksen muokata suojattujen tekstiviestien osoiteluetteloa.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Turvallisuus</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Laitteen turvallisuuteen liittyvät oikeudet.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">pääsy teemapalveluun</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Sallii sovelluksen päästä teemapalveluun. Tavalliset sovellukset ei koskaan tarvitse tätä.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">lue teeman tiedot</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Sallii sovelluksen lukea teemojasi, ja tunnistaa käytössä olevan teeman.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">muokkaa teemoja</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Sallii sovelluksen asettaa uusia teemoja ja muokata käytössä olevaa teemaa.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">lue puhelimen mustaa listaa</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Sallii sovelluksen lukea tietoja numeroista, joista saapuvat puhelut ja viestit on estetty.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">muokkaa puhelimen mustaa listaa</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Sallii sovelluksen muokata puhelinnumeroita, joista saapuvat puhelut ja viestit on estetty.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">ota yksityisyyden suojaus käyttöön tai poista se käytöstä</string>
   <string name="permdesc_changePrivacyGuardState">Sallii sovelluksen valita, milloin muut sovellukset käyttävät yksityisyyden suojausta. Kun sovellus käyttää yksityisyyden suojausta, sillä ei ole pääsyä henkilökohtaisiin tietoihin kuten yhteystietoihin, puhelulokeihin tai viesteihin.</string>
   <string name="privacy_guard_notification">Yksityisyyden suojaus käytössä</string>
   <string name="privacy_guard_notification_detail">Sovelluksella <xliff:g id="app">%1$s</xliff:g> ei ole pääsyä henkilökohtaisiin tietoihin</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">aseta näppäinlukon taustakuva</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Sallii sovelluksen vaihtaa lukitusnäytön taustakuva.</string>
   <string name="privacy_guard_dialog_title">Yksityisyyden suojaus</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> haluaa <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Käynnistä uudelleen</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Nykyinen</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Käynnistä uudelleen</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Recovery-tila</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader-tila</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download-tila</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Käynnistä uudelleen (soft)</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Käynnistä uudelleen</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Tabletti käynnistyy uudelleen.</string>
   <string name="reboot_confirm" product="default">Puhelin käynnistyy uudelleen.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Käynnistetään uudelleen\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Sovellus tapettu</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB verkon yli käytössä</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB verkon &amp; USB:n kautta käytössä</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Paina poistaaksesi vianetsinnän käytöstä.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Kosketa valitaksesi USB-asetukset.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; verkko</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Verkko</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">keskeytä sovelluksen käynnistys</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Sallii sovelluksen keskeyttää toisen sovelluksen käynnistämisen</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">käyttää kameraa</string>
   <string name="app_ops_access_location">käyttää sijaintia</string>
   <string name="app_ops_access_notifications">lukea ilmoituksiasi</string>
@@ -119,36 +163,57 @@
   <string name="app_ops_use_voice_volume">säätää puhelun äänenvoimakkuutta</string>
   <string name="app_ops_write_mms">kirjoittaa multimediaviestin</string>
   <string name="app_ops_write_sms">kirjoittaa tekstiviestin</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Virheellinen kortti.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Lentotila</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Liitetty lataustilassa</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Ei kytkettyä laitetta</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> yhdistetty laite</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> yhdistettyä laitetta</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Poistettavaa mediaa ei löydy\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC-muisti</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Muista valinta</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Virransäästö</string>
   <string name="perf_profile_bal">Tasapainotettu</string>
   <string name="perf_profile_perf">Suorituskyky</string>
   <string name="perf_profile_bias_power">Virransäästö</string>
   <string name="perf_profile_bias_perf">Suorituskyky</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Teeman asennus epäonnistui</string>
   <string name="theme_install_error_message">Teeman \"%s\" asennus epäonnistui</string>
   <string name="theme_reset_notification_title">Teeman resetointi</string>
   <string name="theme_reset_notification_body">Järjestelmän teema palautettu lukuisten sovellusvirheiden vuoksi.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ei ole asennettu</string>
   <string name="permlab_interceptSmsSent">estä lähtevät tekstiviestit</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Sallii sovelluksen pysäyttää lähtevät tekstiviestit. Haitalliset sovellukset saattavat käyttää tätä estääkseen kaikki lähtevät tekstiviestit.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">pääsyn lampun palveluun</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Sallii sovelluksen pääsyn lampun palveluun. Tavalliset sovellukset eivät koskaan tarvitse tätä.</string>
   <string name="permlab_preventpower">ohita virtanappäin</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Sallii sovelluksen ohittaa virtanäppäimen käytön.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">Kaikki tiedot USB-muistiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Kaikki tiedot muistikortiltasi (polussa \'%1$s\') poistetaan. Tätä toimintoa ei voi peruuttaa!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">Irroitetaan SD-korttia\u2026</string>
   <string name="sd_progress_erasing">Tyhjennetään SD-korttia\u2026</string>
   <string name="sd_format_error">SD-korttia ei voitu tyhjentää.</string>
@@ -156,6 +221,7 @@
   <string name="sd_media_checking">SD-korttia tarkistetaan.</string>
   <string name="sd_media_removed">SD-kortti on poistettu.</string>
   <string name="sd_media_shared">SD-kortti on käytössä tällä hetkellä tietokoneessa.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Irroitetaan USB-muistia\u2026</string>
   <string name="usb_progress_erasing">Tyhjennetään USB-muistia\u2026</string>
   <string name="usb_format_error">USB-muistia ei voitu tyhjentää.</string>
@@ -163,6 +229,7 @@
   <string name="usb_media_checking">USB-muistia tarkistetaan.</string>
   <string name="usb_media_removed">USB-muisti on poistettu.</string>
   <string name="usb_media_shared">USB-muisti on käytössä tällä hetkellä tietokoneessa.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">Valmistellaan SD-korttia</string>
   <string name="sd_ext_media_checking_notification_message">Tarkistetaan SD-korttia virheiden varalta.</string>
   <string name="sd_ext_media_nofs_notification_title">Tyhjä SD-kortti</string>
@@ -175,6 +242,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Voit nyt poistaa SD-kortin turvallisesti.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD-kortti poistettu</string>
   <string name="sd_ext_media_nomedia_notification_message">SD-kortti poistettu. Aseta uusi kortti.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Valmistellaan USB-muistia</string>
   <string name="usb_ext_media_checking_notification_message">Tarkistetaan USB-muistia virheiden varalta.</string>
   <string name="usb_ext_media_nofs_notification_title">Tyhjä USB-muisti</string>
@@ -187,6 +255,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Voit nyt poistaa USB-muistin turvallisesti.</string>
   <string name="usb_ext_media_nomedia_notification_title">Poistettu USB-muisti</string>
   <string name="usb_ext_media_nomedia_notification_message">USB-muisti poistettu. Aseta uusi tallennustila.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automaattinen</string>
   <string name="live_display_auto_summary">Säädä näytön värilämpötilaa automaattisesti auringonlaskun ja -nousun jälkeen</string>
   <string name="live_display_off">Pois käytöstä</string>
@@ -198,19 +267,35 @@
   <string name="live_display_outdoor">Ulkoilma (kirkas aurinko)</string>
   <string name="live_display_outdoor_summary">Käytä vain ulkoilma-asetusta</string>
   <string name="live_display_hint">LiveDisplay voi vähentää silmien rasitusta ja auttaa nukkumaan öisin. Kokeile sitä painamalla tästä!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Irrottaaksesi tämän näytön, paina ja pidä Takasin-näppäintä pohjassa.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Taskulamppu on päällä</string>
   <string name="quick_settings_tile_flashlight_not_summary">Paina sammuttaaksesi</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">Telakoi SD-kortti</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Sormenjälki <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">käytä sormenjälkipalvelua</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Sallii sovelluksen käyttää sormenjälkipalvelua. Sovellus voi lisätä, poistaa, uudelleennimetä ja todentaa sormenjälkiä</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">nollaa akun tilastot</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Sallii sovelluksen nollata nykyiset alemman tason akun käytön tilastot.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioriteetti</string>
   <string name="silent_mode_none">Ei mitään</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Wi-Fi-tukiasema poistettiin käytöstä SIMin vaihdon vuoksi</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Poista Wi-Fi käytöstä</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">kolmannen osapuolen lukitusnäyttö</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">Sallii sovellusta käytettävän epäturvallisena lukitusnäyttönä.</string>
 </resources>

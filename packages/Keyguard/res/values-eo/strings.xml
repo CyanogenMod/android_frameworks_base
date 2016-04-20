@@ -19,27 +19,195 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- App label in the manifest  -->
+  <!-- Instructions telling the user to enter their SIM PIN to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user to enter their SIM PUK to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Prompt to enter SIM PUK in Edit Text Box in unlock screen -->
+  <!-- Prompt to enter New SIM PIN in Edit Text Box in unlock screen -->
+  <!-- Displayed as hint in passwordEntry EditText on PasswordUnlockScreen [CHAR LIMIT=30]-->
+  <!-- Instructions telling the user to enter their text password to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user to enter their PIN password to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user that they entered the wrong pin while trying
+         to unlock the keyguard.  Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user how to unlock the phone. -->
+  <!-- Shown when face unlock failed multiple times so we're just using the backup -->
+  <!-- When the lock screen is showing, the phone is plugged in and the battery is fully
+         charged, say that it is charged. -->
+  <!-- When the lock screen is showing and the phone plugged in, and the battery
+         is not fully charged, say that it's charging.  -->
   <string name="keyguard_plugged_in">Ŝarĝado</string>
+  <!-- When the lock screen is showing and the battery is low, warn user to plug
+         in the phone soon. -->
+  <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
+  <!-- SIM messages -->
+  <!-- When the user inserts a sim card from an unsupported network, it becomes network locked -->
+  <!-- Shown when there is no SIM card. -->
+  <!-- Shown when there is no SIM card. -->
+  <!-- Shown when there is no SIM card. -->
+  <!-- Shown to ask the user to insert a SIM card. -->
+  <!-- Shown to ask the user to insert a SIM card when sim is missing or not readable. -->
+  <!-- Shown when SIM card is permanently disabled. -->
+  <!-- Shown to inform the user to SIM card is permanently disabled. -->
+  <!-- Shown to tell the user that their SIM is locked and they must unlock it. -->
+  <!-- When the user enters a wrong sim pin too many times, it becomes PUK locked (Pin Unlock Kode) -->
+  <!-- For the unlock screen, When the user enters a sim unlock code, it takes a little while to check
+         whether it is valid, and to unlock the sim if it is valid.  we display a
+         progress dialog in the meantime.  this is the emssage. -->
+  <!-- Time format strings for fall-back clock widget -->
+  <!-- Time format strings for fall-back clock widget -->
+  <!-- Accessibility description sent when user changes the current lock screen widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the add widget button. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the empty sidget slot (place holder for a new widget). [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_widget_empty_slot">Malplena</string>
+  <!-- Accessibility description of the event of expanding an unlock area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the event of collapsing an unlock area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of a lock screen widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the lock screen user selector widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the camera widget. [CHAR_LIMIT=none] -->
   <string name="keyguard_accessibility_camera">Fotilo</string>
+  <!-- Accessibility description of the lock media control widget. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of widget reordering start. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of widget reordering end. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the a widget deletion event. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the button to expand the lock area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the slide unlock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the pattern unlock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the face unlock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the pin lock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the password lock. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the unlock pattern area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the unlock slide area. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the PIN password view. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the SIM PIN password view. [CHAR_LIMIT=none] -->
+  <!-- Accessibility description of the SIM PUK password view. [CHAR_LIMIT=none] -->
+  <!-- Shown on transport control of lockscreen. Pressing button goes to previous track. -->
+  <!-- Shown on transport control of lockscreen. Pressing button goes to next track. -->
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
+  <!-- Shown on transport control of lockscreen. Pressing button rates the track as "thumbs up." -->
+  <!-- Shown on transport control of lockscreen. Pressing button rates the track as "thumbs down." -->
+  <!-- Shown on transport control of lockscreen. Pressing button toggles the "heart" rating. -->
+  <!-- Accessibility description for when the device prompts the user to dismiss keyguard
+         in order to complete an action. This will be followed by a message about the current
+         security option (e.g. "Pattern unlock."). [CHAR LIMIT=NONE] -->
+  <!-- Accessibility description for when the bouncer prompt is dismissed. [CHAR LIMIT=NONE] -->
+  <!-- Accessibility description announced when user drags widget over the delete drop target [CHAR LIMIT=NONE] -->
+  <!-- Accessibility description announced when user drags widget away from delete drop target [CHAR LIMIT=NONE] -->
+  <!-- Accessibility description for the text view that indicates when the next alarm is set (not shown on screen). [CHAR_LIMIT=none] -->
+  <!-- Password keyboard strings. Used by LockScreen and Settings -->
+  <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
+  <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
+  <!-- Label for ALT modifier key.  Must be short to fit on key! -->
+  <!-- KeyboardView - accessibility support -->
+  <!-- Description of the Alt button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_alt">Alt-klavo</string>
+  <!-- Description of the Cancel button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_cancel">Nuligi</string>
+  <!-- Description of the Delete button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_delete">Forigi</string>
+  <!-- Description of the Done button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_done">Farite</string>
+  <!-- Description of the Mode change button in a KeyboardView. [CHAR LIMIT=NONE] -->
+  <!-- Description of the Shift button in a KeyboardView. [CHAR LIMIT=NONE] -->
   <string name="keyboardview_keycode_shift">Majuskliga klavo</string>
+  <!-- Description of the Enter button in a KeyboardView. [CHAR LIMIT=NONE] -->
+  <!-- Description of the unlock target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <string name="description_target_unlock">Malŝlosi</string>
+  <!-- Description of the camera target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <string name="description_target_camera">Fotilo</string>
+  <!-- Description of the silent target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <string name="description_target_silent">Silenta</string>
+  <!-- Description of the sound on target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+  <!-- Description of the unlock target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <string name="description_target_search">Serĉi</string>
+  <!-- Description of the up direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+  <!-- Description of the down direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+  <!-- Description of the left direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+  <!-- Description of the right direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+  <!-- Text spoken when the current user is switched if accessibility is enabled. [CHAR LIMIT=none] -->
+  <!-- Label shown on emergency call button in keyguard -->
   <string name="kg_emergency_call_label">Urĝa alvoko</string>
+  <!-- Message shown in pattern unlock after some number of unsuccessful attempts -->
+  <!-- Message shown when user enters wrong pattern -->
+  <!-- Message shown when user enters wrong password -->
+  <!-- Message shown when user enters wrong PIN -->
+  <!-- Countdown message shown after too many failed unlock attempts -->
+  <!-- Instructions for using the pattern unlock screen -->
+  <!-- Instructions for using the SIM PIN unlock screen -->
+  <!-- Instructions for using the SIM PIN unlock screen when there's more than one SIM -->
+  <!-- Instructions for using the PIN unlock screen -->
+  <!-- Instructions for using the password unlock screen -->
+  <!-- Hint shown in the PUK screen that asks the user to enter the PUK code given to them by their provider -->
+  <!-- Hint shown when there are multiple SIMs in the device to ask the user to enter the PUK code given to them by their provider -->
+  <!-- Hint shown in the PUK unlock screen PIN TextView -->
+  <!-- Message shown when the user needs to confirm the PIN they just entered in the PUK screen -->
+  <!-- Message shown in dialog while the device is unlocking the SIM card -->
+  <!-- Message shown when the user enters an invalid SIM pin password in PUK screen -->
+  <!-- Message shown when the user enters an invalid PUK code in the PUK screen -->
+  <!-- Message shown when the user enters an invalid PUK code -->
+  <!-- String shown in PUK screen when PIN codes don't match -->
+  <!-- Message shown when the user exceeds the maximum number of pattern attempts -->
+  <!-- Instructions show in account unlock screen allowing user to enter their email password -->
+  <!-- Hint shown in TextView in account unlock screen of keyguard -->
   <string name="kg_login_username_hint">Uzantnomo (retmesaĝo)</string>
+  <!-- Hint shown in TextView in account unlock screen of keyguard -->
   <string name="kg_login_password_hint">Pasvorto</string>
+  <!-- Label shown on sign in button on account unlock screen of keyguard -->
   <string name="kg_login_submit_button">Aliĝi</string>
+  <!-- Message shown when the user enters an invalid username/password combination in account unlock screen of keyguard -->
   <string name="kg_login_invalid_input">Nevalida uzantnomo aŭ pasvorto.</string>
+  <!-- Hint text shown when user has too many failed password attempts in account unlock screen of keyguard -->
+  <!-- Message shown while device checks username/password in account unlock screen of keyguard -->
   <string name="kg_login_checking_password">Kontrolado de konto\u2026</string>
+  <!-- Message shown in dialog when max number of attempts are reached for PIN screen of keyguard -->
+  <!-- Message shown in dialog when max number of attempts are reached for password screen of keyguard -->
+  <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. [CHAR LIMIT=none] -->
+  <!-- Message shown when user is almost at the limit of password attempts where the device will be wiped. [CHAR LIMIT=none] -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the device will now be wiped [CHAR LIMIT=none] -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the device will now be wiped [CHAR LIMIT=none] -->
+  <!-- Message shown when user is almost at the limit of password attempts where the user will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown when user is almost at the limit of password attempts where the user will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the user will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the user will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown when user is almost at the limit of password attempts where the profile will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown when user is almost at the limit of password attempts where the profile will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the profile will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown in dialog when user has exceeded the maximum attempts and the profile will be removed. [CHAR LIMIT=none] -->
+  <!-- Message shown in dialog when user is almost at the limit where they will be
+    locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- Message shown in dialog when user is almost at the limit where they will be
+    locked out and may have to enter an alternate username/password to unlock the phone -->
+  <!-- The delete-widget drop target button text -->
   <string name="kg_reordering_delete_drop_target_text">Forigi</string>
+  <!-- Instructions telling the user that they entered the wrong SIM PIN for the last time.
+         Displayed in a dialog box.  -->
+  <!-- Instructions telling the user that they entered the wrong SIM PIN while trying
+         to unlock the keyguard.  Displayed in a dialog box.  -->
+  <!-- Instructions telling the user that they have exhausted SIM PUK retries and the SIM is now unusable.
+         Displayed in a dialog box.  -->
+  <!-- Instructions telling the user that they entered the wrong puk while trying
+         to unlock the keyguard.  Displayed in a dialog box.  -->
+  <!-- Instructions telling the user that the operation to unlock the keyguard
+         with SIM PIN failed. Displayed in one line in a large font.  -->
+  <!-- Instructions telling the user that the operation to unlock the keyguard
+         with PUK failed. Displayed in one line in a large font.  -->
+  <!-- Notification telling the user that the PIN1 they entered is valid -->
+  <!-- Transport control strings -->
+  <!-- Shown on transport control of lockscreen. Pressing button goes to previous track. -->
+  <!-- Shown on transport control of lockscreen. Pressing button goes to next track. -->
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
   <string name="keyguard_transport_pause_description">Paŭzi Butono</string>
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
   <string name="keyguard_transport_play_description">Ludi Butono</string>
+  <!-- Shown on transport control of lockscreen. Pressing button pauses playback -->
   <string name="keyguard_transport_stop_description">Halti Butono</string>
+  <!-- On the keyguard screen, it shows the carrier the phone is connected to.
+        This is displayed if the phone is not connected to a carrier.-->
   <string name="keyguard_carrier_default">Neniu servo.</string>
+  <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
 </resources>

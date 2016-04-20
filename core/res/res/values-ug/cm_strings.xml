@@ -17,52 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">سەپلىمە ھۆججەتلەر</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">سەپلىمە ھۆججەت</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">يوق</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">ئېكراندىن تۇتۇلغان سۈرەت</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">قوغدالغان قىسقا ئۇچۇرنى قوبۇل قىلىش</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">ئەپنىڭ قوغدالغان قىسقا ئۇچۇرنى قوبۇللىشىغا يول قويىدۇ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">قوغدالغان قىسقا ئۇچۇر تىزىمىنى ئۆزگەرتىدۇ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">ئەپنىڭ قوغدالغان قىسقا ئۇچۇر ئادرېسىنىڭ تىزىمىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">بىخەتەرلىك</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">ئۈسكۈنە بىخەتەرلىك ئۇچۇرىغا مۇناسىۋەتلىك ھوقۇقلار.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">ئۆرنەك مۇلازىمىتىنى زىيارەت</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">ئەپنىڭ ئۆرنەك مۇلازىمىتىنى زىيارەت قىلىشىغا يول قويىدۇ. ئادەتتىكى ئەپلەر بۇ ھوقۇققا موھتاج بولمايدۇ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">ئۆرنەك ئۇچۇرلىرىڭىزنى ئوقۇيدۇ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">ئەپنىڭ ئۆرنەك ئۇچۇرىڭىزنى ئۇقۇپ ۋە جەزملىشىگە يول قويىدۇ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">ئۆرنىكىڭىزنى ئۆزگەرتىدۇ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">ئەپنىڭ يېڭى ئۆرنەك قىستۇرۇشى ۋە قوللانغان ئۆرنەكنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">تېلېفون قارا تىزىمىنى ئوقۇش</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">ئەپنىڭ كەلگەن تېلېفون ياكى ئۇچۇرلارنىڭ چەكلەنگەن تېلېفون نومۇر ئۇچۇرلىرىنى ئوقۇشىغا يول قويىدۇ.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">تېلېفون قارا تىزىمىنى ئۆزگەرتىدۇ</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">كەلگەن تېلېفون ياكى ئۇچۇرنىڭ چەكلەنگەن نومۇر ئۇچۇرلىرىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">شەخسىيەت قوغداشنى قوزغىتىدۇ ياكى چەكلەيدۇ</string>
   <string name="permdesc_changePrivacyGuardState">ئەپنىڭ باشقا ئەپنى شەخسىيەت قوغداش ھالىتىدە ئىجرا قىلىشىغا يول قويىدۇ. ئەپ شەخسىيەت قوغداش ھالىتىدە ئىجرا قىلىنسا، ئۇ ئالاقەداشلار، چاقىرىش خاتىرىسى ياكى ئۇچۇرلارغا ئوخشاش شەخسىي سانلىق مەلۇماتلارنى زىيارەت قىلىش ھوقۇقى بولمايدۇ.</string>
   <string name="privacy_guard_notification">شەخسىيەت قوغداش ئاكتىپ</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> شەخسىي سانلىق مەلۇماتلارنى زىيارەت قىلالمايدۇ</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">قۇلۇپ ئېكران تام قەغىزىنى تەڭشەيدۇ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">ئەپنىڭ قۇلۇپ ئېكران تام قەغىزىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
   <string name="privacy_guard_dialog_title">شەخسىيەت قوغداش</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> نىڭ قىلماقچى بولغىنى <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">قايتا قوزغات</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">نۆۋەتتىكى</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">قايتا قوزغات</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">ئەسلىگە كەلتۈر</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">قوزغىتىش يۈكلىگۈچ</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">چۈشۈر</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">يۇمشاق قايتا قوزغىتىش</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">قايتا قوزغات</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">تاختا كومپيۇتېرىڭىز قايتا قوزغىلىدۇ.</string>
   <string name="reboot_confirm" product="default">تېلېفونىڭىز قايتا قوزغىلىدۇ.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">قايتا قوزغىتىۋاتىدۇ\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">ئەپ ئاخىرلاشتۇرۇلدى</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">تور ھالقىغان ADB قوزغىتىلدى</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">USB ۋە تور ADB قوزغىتىلدى</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">چېكىلسە سازلاشنى چەكلەيدۇ.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">چېكىپ USB تاللانمىسىنى تاللاڭ.</string>
+  <!-- ADB custom tile -->
+  <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
+  <string name="adb_active_custom_tile_both">USB &amp; تور</string>
+  <string name="adb_active_custom_tile_usb">USB</string>
+  <string name="adb_active_custom_tile_net">تور</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ئەپ قوزغىتىشنى توسىدۇ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">ئەپنىڭ باشقا ئەپلەرنىڭ قوزغىلىشىنى توسۇشىغا يول قويىدۇ</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">كامېراغا ئېرىشىدۇ</string>
   <string name="app_ops_access_location">ئورنىڭىزغا ئېرىشىدۇ</string>
   <string name="app_ops_access_notifications">ئۇقتۇرۇشىڭىزنى ئوقۇيدۇ</string>
@@ -115,34 +163,57 @@
   <string name="app_ops_use_voice_volume">ئاۋازلىق چاقىرىش ئاۋازىنى تىزگىنلە</string>
   <string name="app_ops_write_mms">MMS ئۇچۇرى ياز</string>
   <string name="app_ops_write_sms">SMS ئۇچۇر ياز</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">ئىناۋەتسىز كارتا.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">ئايروپىلان ھالىتى</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">توك لىقلاش ھالىتىدە ئۇلاندى</string>
-  <string name="tethered_notification_no_device_message">باغلانغان ئۈسكۈنە يوق</string>
-  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ئۈسكۈنە باغلاندى</string>
-  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ئۈسكۈنە باغلاندى</string>
+  <!-- Shown when the device is tethered -->
+  <string name="tethered_notification_no_device_message">ئۇلانغان ئۈسكۈنە يوق</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ئۈسكۈنە ئۇلاندى</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ئۈسكۈنە ئۇلاندى</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">ھازىر كۆچمە ۋاستە يوق\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC ساقلاش</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">جۇڭگو كۆچمە خەۋەرلىشىش</string>
   <string name="China_Unicom">جۇڭگو بىرلەشمە خەۋەرلىشىش</string>
   <string name="China_Telecom">جۇڭگو تېلېگرافى</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">تاللىشىمنى ئەستە تۇت</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">توك تېجەش ھالىتى</string>
   <string name="perf_profile_bal">تەڭپۇڭ</string>
   <string name="perf_profile_perf">ئىقتىدار</string>
+  <string name="perf_profile_bias_power">ئۈنۈمى</string>
+  <string name="perf_profile_bias_perf">تىز</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">ئۆرنەك ئورنىتالمىدى</string>
   <string name="theme_install_error_message">%s نى ئورنىتالمىدى</string>
   <string name="theme_reset_notification_title">ئۆرنەكنى ئەسلىگە قايتۇرۇش</string>
   <string name="theme_reset_notification_body">بىر قانچە ئەپ يىمىرىلگەنلىكتىن، سىستېما ئۆرنەكنى ئەسلىگە قايتۇردى.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s تېخى ئورنىتىلمىغان</string>
   <string name="permlab_interceptSmsSent">يوللىغان قىسقا ئۇچۇرنى توس</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">ئەپنىڭ يوللىغان ئۇچۇرنى توسۇشىغا يول قويىدۇ، زەھەرخەندە ئەپلەر بۇ ئۇسۇلدىن پايدىلىنىپ ئۇچۇر يوللاشنى توسۇشى مۇمكىن.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">قول چىراغ مۇلازىمىتىنى زىيارەت</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">ئەپنىڭ قول چىراغ مۇلازىمىتىنى زىيارەت قىلىشىغا يول قويىدۇ. ئادەتتىكى ئەپلەر بۇ ھوقۇققا موھتاج بولمايدۇ.</string>
   <string name="permlab_preventpower">توك مەنبە توپچىسىنى ئالماشتۇرىدۇ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">پىروگراممىنىڭ توك مەنبە توپچىسىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">سىزنىڭ USB ساقلىغۇچ (%1$s ئاستىدىكى) ىڭىزدىكى ھەممە سانلىق مەلۇماتلار ئۆچۈرۈلىدۇ. بۇ مەشغۇلاتنى ئەسلىگە كەلتۈرگىلى بولمايدۇ1!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">كارتا (%1$s ئاستىدىكى) دىكى ھەممە سانلىق مەلۇمات يوقىلىدۇ. بۇ مەشغۇلاتنى ئەسلىگە كەلتۈرگىلى بولمايدۇ!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">SD كارتىنى ئېگەرسىزلەۋاتىدۇ\u2026</string>
   <string name="sd_progress_erasing">SD كارتىنى ئۆچۈرۈۋاتىدۇ\u2026</string>
   <string name="sd_format_error">SD كارتىنى ئۆچۈرەلمەيدۇ.</string>
@@ -150,6 +221,7 @@
   <string name="sd_media_checking">نۆۋەتتە SD كارتا تەكشۈرۈلدى.</string>
   <string name="sd_media_removed">SD كارتا چىقىرىۋېتىلدى.</string>
   <string name="sd_media_shared">نۆۋەتتە كۆمپيۇتېر SD كارتانى ئىشلىتىۋاتىدۇ.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">USB ساقلىغۇچنى ئېگەرسىزلەۋاتىدۇ\u2026</string>
   <string name="usb_progress_erasing">USB ساقلىغۇچنى ئۆچۈرۈۋاتىدۇ\u2026</string>
   <string name="usb_format_error">USB ساقلىغۇچنى ئۆچۈرەلمەيدۇ.</string>
@@ -157,6 +229,7 @@
   <string name="usb_media_checking">نۆۋەتتە USB ساقلىغۇچ تەكشۈرۈلدى.</string>
   <string name="usb_media_removed">بۇ USB ساقلىغۇچ چىقىرىۋېتىلدى.</string>
   <string name="usb_media_shared">نۆۋەتتە USB ساقلىغۇچنى كومپيۇتېر ئىشلىتىۋاتىدۇ.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">SD كارتا تەييارلاۋاتىدۇ</string>
   <string name="sd_ext_media_checking_notification_message">بۇ SD كارتىنىڭ خاتالىقىنى تەكشۈرۈۋاتىدۇ.</string>
   <string name="sd_ext_media_nofs_notification_title">بوش SD كارتا</string>
@@ -169,6 +242,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">SD كارتىنى بىخەتەر ھالدا چىقىرىۋالسىڭىز بولىدۇ.</string>
   <string name="sd_ext_media_nomedia_notification_title">چىقىرىۋېتىلگەن SD كارتا</string>
   <string name="sd_ext_media_nomedia_notification_message">SD كارتا چىقىرىۋېتىلدى، يېڭى SD كارتىنى قىستۇرۇڭ.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">USB ساقلىغۇچنى تەييارلاۋاتىدۇ</string>
   <string name="usb_ext_media_checking_notification_message">بۇ USB ساقلىغۇچنىڭ خاتالىقىنى تەكشۈرۈۋاتىدۇ.</string>
   <string name="usb_ext_media_nofs_notification_title">بوش USB ساقلىغۇچ</string>
@@ -181,6 +255,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">USB ساقلىغۇچنى بىخەتەر ھالدا چىقىرىۋالسىڭىز بولىدۇ.</string>
   <string name="usb_ext_media_nomedia_notification_title">چىقىرىۋېتىلگەن USB ساقلىغۇچ</string>
   <string name="usb_ext_media_nomedia_notification_message">USB ساقلىغۇچ چىقىرىۋېتىلدى. يېڭى ۋاستە قىستۇرۇڭ.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">ئاپتوماتىك</string>
   <string name="live_display_auto_summary">كۈن چىققان ۋە كۈن پاتقاندىن كېيىن ئېكران رەڭ تېمپېراتورىسىنى ئۆزلۈكىدىن تەڭشەيدۇ</string>
   <string name="live_display_off">تاقاق</string>
@@ -192,4 +267,35 @@
   <string name="live_display_outdoor">تالا (قۇياش نۇرى)</string>
   <string name="live_display_outdoor_summary">تالا تەڭشەكلىرىنىلا ئىشلىتىدۇ</string>
   <string name="live_display_hint">LiveDisplay كۆزنىڭ چارچىشىنى يېنىكلىتىشكە ياردەم بېرىدۇ، كېچىدە ئۇخلىشىڭىزغا ياردەم بېرىدۇ. سىناش ئۈچۈن بۇ جاينى چېكىڭ!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">بۇ مۇقىم ئېكراننى يوق قىلىش ئۈچۈن، قايتىش كۇنۇپكىسىنى بېسىپ تۇرۇڭ.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">قولچىراق ئوچۇق</string>
+  <string name="quick_settings_tile_flashlight_not_summary">بوش بېسىپ تاقاڭ</string>
+  <!-- Storage description for the SD card on the dock -->
+  <string name="storage_sd_dock_card">لەڭگەرلىك SD كارتا</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
+  <string name="fingerprint_default_name">بارماق <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFingerprintService">بارماق مۇلازىمىتىنى زىيارەت قىلىش</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessFingerprintService">ئەپنىڭ بارماق ئىزى مۇلازىمىتىنى زىيارەت قىلىشىغا يول قويۇش. ئەپ بارماقنى قوشۇلايدۇ، ئۆچۈرەلەيدۇ، قايتا ناملىيالايدۇ ۋە بارماق ئىزىنى ئىشلىتىپ سالاھىيەت دەلىللىيەلەيدۇ</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">توكدان ئىستاتىستىكىسىنى ئەسلىگە قايتۇرۇڭ</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">ئەپنىڭ نۆۋەتتىكى تۆۋەن توك ئىشلىتىش سانلىق مەلۇماتلىرىنى ئەسلىگە قايتۇرۇشىغا يول قويىدۇ.</string>
+  <!-- Zen mode buttons -->
+  <string name="silent_mode_priority">ئالدىنلىق</string>
+  <string name="silent_mode_none">يوق</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM كارتنىڭ مۇشتەرلىكى ئۆزگەرگەنلىكتىن، Wi-Fi قىزىق نوقتىسى چەكلەندى</string>
+  <!-- WiFi turn off notification action text -->
+  <string name="notify_turn_wifi_off_title">Wi-Fi نى تاقاڭ</string>
+  <!-- Third party keyguard permission label -->
+  <string name="permlab_thirdPartyKeyguard">ئۈچىنچى تەرەپ ئېكران قۇلۇپى</string>
+  <!-- Third party keyguard permission description -->
+  <string name="permdesc_thirdPartyKeyguard">ئەپنىڭ تۇراقسىز ئىكران قۇلۇپى بۇلۇپ ئىشلىتىلىشىگە رۇخسەت قىلىش.</string>
 </resources>

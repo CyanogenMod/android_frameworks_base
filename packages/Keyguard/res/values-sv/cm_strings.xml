@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM är Perso-låst</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Status"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Neka</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Slot <xliff:g id="number">%d</xliff:g>: Nytt SIM-kort\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Ogiltigt SIM.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Ange SIM-kortets PIN-kod, du har <xliff:g id="number">%d</xliff:g> försök kvar innan du behöver kontakta din operatör för att låsa upp din enhet.</item>
     <item quantity="other">Ange SIM-kortets PIN-kod, du har <xliff:g id="number">%d</xliff:g> försök kvar innan du behöver kontakta din operatör för att låsa upp din enhet.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">SIM-kortet är nu inaktiverat. Ange PUK-koden för att fortsätta. Du har <xliff:g id="number">%d</xliff:g> försök kvar innan SIM-kortet blir permanent obrukbart. Kontakta din operatör för mer information.</item>
     <item quantity="other">SIM-kortet är nu inaktiverat. Ange PUK-koden för att fortsätta. Du har <xliff:g id="number">%d</xliff:g> försök kvar innan SIM-kortet blir permanent obrukbart. Kontakta din operatör för mer information.</item>

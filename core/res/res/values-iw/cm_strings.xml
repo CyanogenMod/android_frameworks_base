@@ -17,63 +17,107 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">פרופילים</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">פרופיל</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">ללא</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">צילום מסך</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">קבלת הודעות SMS מוגנות</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">מאפשר ליישום לקבל הודעות SMS מוגנות.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">שינוי רשימת הודעות SMS מוגנות</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">מאפשר ליישום לשנות את רשימת הכתובות של הודעות SMS מוגנות.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">אבטחה</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">הרשאות הקשורות לאבטחת המידע במכשיר.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">גישה לשירות ערכות העיצוב</string>
-  <string name="permdesc_accessThemeService">מאפשר ליישום לגשת לשירות ערכות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">מאפשר ליישום לגשת לשירות ערכות העיצוב. לא אמור להידרש ליישומים רגילים לעולם.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב שלך</string>
-  <string name="permdesc_readThemesDesc">מאפשר ליישום להיות מודע לערכות העיצוב הקיימות, ולקבוע איזו ערכה החלת.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">מאפשר ליישום לקרוא את ערכות העיצוב הקיימות ולקבוע איזו ערכה החלת.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">שינוי ערכות העיצוב שלך</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">מאפשר ליישום להוסיף ערכות עיצוב חדשות ולשנות את הערכה המוחלת.</string>
-  <string name="permlab_readPhoneBlacklist">קריאת הרשימה השחורה של המכשיר</string>
-  <string name="permdesc_readPhoneBlacklist">מאפשר ליישום לגשת למידע אודות מספרי הטלפון שנחסמו לקבלת שיחות והודעות נכנסות.</string>
-  <string name="permlab_changePhoneBlacklist">שינוי הרשימה השחורה</string>
-  <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים המופיעים ברשימה השחורה, אשר נחסמו לקבלת שיחות והודעות נכנסות.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readPhoneBlacklist">קריאת הרשימה השחורה של הטלפון</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readPhoneBlacklist">מאפשר ליישום לקרוא מידע אודות מספרי הטלפון שנחסמו עבור קבלת שיחות או הודעות נכנסות.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_changePhoneBlacklist">שנה רשימה שחורה של הטלפון</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_changePhoneBlacklist">מאפשר ליישום לשנות את המספרים שנחסמו עבור קבלת שיחות או הודעות נכנסות.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">הפעלה או השבתה של שומר הפרטיות</string>
-  <string name="permdesc_changePrivacyGuardState">מאפשר ליישום לקבוע האם יישום אחר יפעל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
+  <string name="permdesc_changePrivacyGuardState">מאפשר ליישום לשנות הרשאות של יישום אחר כדי שיפעל תחת שומר הפרטיות. כאשר יישום פועל תחת שומר הפרטיות, לא תהיה לו גישה למידע פרטי כמו אנשי קשר, יומן שיחות והודעות.</string>
   <string name="privacy_guard_notification">שומר הפרטיות פעיל</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> לא יוכל לגשת למידע אישי</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">הגדרת טפט למסך הנעילה</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">מאפשר ליישום לשנות את הטפט של מסך הנעילה.</string>
   <string name="privacy_guard_dialog_title">שומר הפרטיות</string>
-  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש <xliff:g id="op">%2$s</xliff:g>.</string>
-  <string name="global_action_reboot">הפעלה מחדש</string>
+  <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> מבקש/ת <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
+  <string name="global_action_reboot">אתחול מחדש</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">נוכחי</string>
-  <string name="reboot_reboot">הפעלה מחדש</string>
-  <string name="reboot_recovery">Recovery</string>
-  <string name="reboot_bootloader">Bootloader</string>
-  <string name="reboot_download">מצב הורדה</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
+  <string name="reboot_reboot">אתחול מחדש</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+  <string name="reboot_recovery">שחזור</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+  <string name="reboot_bootloader">תוכנת טעינה ראשונית</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+  <string name="reboot_download">הורדה</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">אתחול מהיר</string>
-  <string name="reboot_title">הפעלה מחדש</string>
+  <!-- Title of dialog to confirm rebooting. -->
+  <string name="reboot_title">אתחול מחדש</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">הטאבלט יופעל מחדש.</string>
-  <string name="reboot_confirm" product="default">המכשיר יופעל מחדש.</string>
+  <string name="reboot_confirm" product="default">הטלפון יאותחל מחדש.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">מאתחל\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">היישום נסגר</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB דרך רשת מופעל</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB דרך USB ורשת מופעל</string>
-  <string name="adb_active_generic_notification_message">לחץ לעצירת איתור באגים.</string>
-  <string name="usb_choose_notification_title">לחץ כדי לבחור אפשרויות USB.</string>
+  <!-- ADB notification message-->
+  <string name="adb_active_generic_notification_message">גע להשבתת איתור באגים.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
+  <string name="usb_choose_notification_title">גע לבחירת אפשרויות USB.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB ורשת</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">רשת</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">יירוט הפעלת יישום</string>
-  <string name="permdesc_interceptPackageLaunch">מאפשר ליישום ליירט הפעלה של יישומים אחרים</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_interceptPackageLaunch">מאפשר ליישום ליירט הפעלה של יישומונים אחרים</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">גישה למצלמה</string>
   <string name="app_ops_access_location">גישה למיקום שלך</string>
   <string name="app_ops_access_notifications">קריאת ההתראות שלך</string>
   <string name="app_ops_activate_vpn">הפעלת VPN</string>
   <string name="app_ops_alarm_wakeup">להעיר את המכשיר</string>
   <string name="app_ops_su">קבלת גישת שורש (Root)</string>
-  <string name="app_ops_auto_start">התחלת פעילות בהדלקת המכשיר</string>
+  <string name="app_ops_auto_start">התחל פעילות בהדלקת המכשיר</string>
   <string name="app_ops_delete_call_log">מחיקת יומן השיחות שלך</string>
   <string name="app_ops_delete_contacts">מחיקת אנשי הקשר שלך</string>
   <string name="app_ops_delete_mms">מחיקת הודעות ה-MMS שלך</string>
@@ -108,89 +152,114 @@
   <string name="app_ops_toggle_nfc">שינוי מצב ה-NFC</string>
   <string name="app_ops_toggle_wifi">שינוי מצב ה-Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">שליטה בעוצמת השעון המעורר</string>
-  <string name="app_ops_use_audio_focus">שליטה במיקוד הקול</string>
-  <string name="app_ops_use_bluetooth_volume">שליטה על עוצמת השמע ב-Bluetooth</string>
-  <string name="app_ops_use_master_volume">שליטה על עוצמת השמע הראשית</string>
-  <string name="app_ops_use_media_buttons">שימוש בכפתורי המדיה</string>
-  <string name="app_ops_use_media_volume">שליטה על עוצמת השמעת מדיה</string>
-  <string name="app_ops_use_notification_volume">שליטה על עוצמת צליל ההתראות</string>
-  <string name="app_ops_use_ring_volume">שליטה על עוצמת הצלצול</string>
-  <string name="app_ops_use_vibrate">שימוש ברטט</string>
+  <string name="app_ops_use_audio_focus">שליטה במיקוד השמע</string>
+  <string name="app_ops_use_bluetooth_volume">שליטה בעוצמת קול ב-Bluetooth</string>
+  <string name="app_ops_use_master_volume">שליטה בעוצמת הקול הראשית</string>
+  <string name="app_ops_use_media_buttons">שימוש בלחצני המדיה</string>
+  <string name="app_ops_use_media_volume">שליטה בעוצמת קול למדיה</string>
+  <string name="app_ops_use_notification_volume">שליטה בעוצמת קול ההתראות</string>
+  <string name="app_ops_use_ring_volume">שליטה בעוצמת קול לרינגטון</string>
+  <string name="app_ops_use_vibrate">שימוש במשוב רטט</string>
   <string name="app_ops_use_voice_volume">שליטה על עוצמת הקול בשיחה</string>
   <string name="app_ops_write_mms">כתיבת הודעת MMS</string>
   <string name="app_ops_write_sms">כתיבת הודעת SMS</string>
-  <string name="lockscreen_sim_error_message_short">כרטיס SIM לא חוקי.</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
+  <string name="lockscreen_sim_error_message_short">כרטיס Sim לא חוקי.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">מצב טיסה</string>
-  <string name="usb_charging_notification_title">מחובר במצב טעינה בלבד</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
+  <string name="usb_charging_notification_title">מחובר במצב טעינה</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">אין מכשירים מחוברים</string>
   <string name="tethered_notification_one_device_message">מכשיר <xliff:g id="count">%1$s</xliff:g> מחובר</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> מכשירים מחוברים</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">אין מדיה חיצונית נוכחת\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">אחסון UICC</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">זכור את הבחירה שלי</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">חיסכון בסוללה</string>
   <string name="perf_profile_bal">מאוזן</string>
   <string name="perf_profile_perf">ביצועים</string>
   <string name="perf_profile_bias_power">יעילות</string>
   <string name="perf_profile_bias_perf">מהיר</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">התקנת ערכת העיצוב נכשלה</string>
   <string name="theme_install_error_message">התקנת %s נכשלה</string>
-  <string name="theme_reset_notification_title">אפס ערכת עיצוב</string>
+  <string name="theme_reset_notification_title">איפוס ערכת עיצוב</string>
   <string name="theme_reset_notification_body">ערכת העיצוב של המערכת שוחזרה עקב קריסות תהליכים מרובות.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s לא מותקן</string>
-  <string name="permlab_interceptSmsSent">עצירת הודעות SMS יוצאות</string>
-  <string name="permdesc_interceptSmsSent">מאפשר ליישום ליירט הודעות SMS יוצאות. יישומים זדוניים יכולים לנצל זאת על מנת למנוע שליחת הודעות SMS.</string>
+  <string name="permlab_interceptSmsSent">יירוט הודעות SMS יוצאות</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_interceptSmsSent">מאפשר ליישום ליירט הודעות SMS יוצאות. יישומים זדוניים עלולים לנצל זאת על מנת למנוע שליחת הודעות SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">גישה לשירות הפנס (מבזק)</string>
-  <string name="permdesc_accessTorchService">מאפשר ליישום לגשת לשירות הפנס (מבזק). לא אמור להידרש ליישומים רגילים.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessTorchService">מאפשר ליישום לגשת לשירות הפנס (מבזק). לא אמור להידרש ליישומים רגילים לעולם.</string>
   <string name="permlab_preventpower">עקיפת כפתור ההפעלה</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">מאפשר ליישום לעקוף את כפתור ההפעלה.</string>
-  <string name="usb_extmedia_format_message">כל המידע הנמצא על אחסון ה-USB (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
-  <string name="sd_extmedia_format_message">כל המידע הנמצא על הכרטיס (תחת הנתיב \"%1$s\") יימחק. פעולה זו בלתי הפיכה!</string>
-  <string name="sd_progress_unmounting">מבטל טעינת כרטיס זיכרון\u2026</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
+  <string name="usb_extmedia_format_message">כל המידע שבאחסון ה-USB שלך (תחת הנתיב \"%1$s\") יימחק. פעולה זו היא בלתי הפיכה!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
+  <string name="sd_extmedia_format_message">כל המידע הנמצא על הכרטיס שלך (תחת הנתיב \"%1$s\") יימחק. פעולה זו היא בלתי הפיכה!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
+  <string name="sd_progress_unmounting">מנתק טעינת כרטיס זיכרון\u2026</string>
   <string name="sd_progress_erasing">מוחק כרטיס זיכרון\u2026</string>
   <string name="sd_format_error">לא ניתן למחוק את כרטיס הזיכרון.</string>
   <string name="sd_media_bad_removal">כרטיס זיכרון הוסר לפני ביטול הטעינה.</string>
-  <string name="sd_media_checking">כרטיס זיכרון נמצא כעת בבדיקה.</string>
+  <string name="sd_media_checking">כרטיס הזיכרון נמצא כעת בבדיקה.</string>
   <string name="sd_media_removed">כרטיס זיכרון הוסר.</string>
   <string name="sd_media_shared">כרטיס זיכרון נמצא כעת בשימוש של מחשב.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">מבטל טעינת אחסון USB\u2026</string>
   <string name="usb_progress_erasing">מוחק אחסון USB\u2026</string>
   <string name="usb_format_error">לא ניתן למחוק את אחסון ה-USB.</string>
-  <string name="usb_media_bad_removal">אחסון USB הוסר לפני שטעינתו בוטלה.</string>
+  <string name="usb_media_bad_removal">אחסון USB הוסר לפני ביטול הטעינה.</string>
   <string name="usb_media_checking">אחסון USB נבדק כעת.</string>
   <string name="usb_media_removed">אחסון USB הוסר.</string>
   <string name="usb_media_shared">אחסון USB נמצא כעת בשימוש של מחשב.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">מכין כרטיס זיכרון</string>
   <string name="sd_ext_media_checking_notification_message">בודק כרטיס זיכרון לשגיאות.</string>
   <string name="sd_ext_media_nofs_notification_title">כרטיס זיכרון ריק</string>
-  <string name="sd_ext_media_nofs_notification_message">כרטיס הזיכרון ריק, או בעל קבצים שהמערכת לא תומכת בהם.</string>
+  <string name="sd_ext_media_nofs_notification_message">כרטיס הזיכרון ריק, או בעל קבצים שבהם המערכת לא תומכת.</string>
   <string name="sd_ext_media_unmountable_notification_title">כרטיס זיכרון פגום</string>
   <string name="sd_ext_media_unmountable_notification_message">כרטיס הזיכרון פגום. נסה לפרמט אותו מחדש.</string>
   <string name="sd_ext_media_badremoval_notification_title">כרטיס זיכרון הוסר באופן פתאומי</string>
-  <string name="sd_ext_media_badremoval_notification_message">בטל את טעינת כרטיס הזיכרון לפני הסרתו מהמכשיר על מנת למנוע אובדן נתונים.</string>
+  <string name="sd_ext_media_badremoval_notification_message">בטל את טעינת כרטיס הזיכרון לפני הסרתו מהמכשיר כדי למנוע אבדן נתונים.</string>
   <string name="sd_ext_media_safe_unmount_notification_title">כרטיס הזיכרון ניתן להסרה בבטחה</string>
   <string name="sd_ext_media_safe_unmount_notification_message">ניתן להסיר בבטחה את כרטיס הזיכרון.</string>
   <string name="sd_ext_media_nomedia_notification_title">כרטיס זיכרון הוסר</string>
   <string name="sd_ext_media_nomedia_notification_message">כרטיס זיכרון הוסר. הכנס כרטיס חדש.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">מכין אחסון USB</string>
   <string name="usb_ext_media_checking_notification_message">בודק אחסון USB לשגיאות.</string>
   <string name="usb_ext_media_nofs_notification_title">אחסון USB ריק</string>
-  <string name="usb_ext_media_nofs_notification_message">אחסון ה-USB ריק או בעל קבצים שהמערכת אינה תומכת בהם.</string>
+  <string name="usb_ext_media_nofs_notification_message">אחסון ה-USB ריק או בעל קבצים שבהם המערכת אינה תומכת.</string>
   <string name="usb_ext_media_unmountable_notification_title">אחסון USB פגום</string>
   <string name="usb_ext_media_unmountable_notification_message">אחסון USB פגום. נסה לפרמט אותו.</string>
-  <string name="usb_ext_media_badremoval_notification_title">אחסון USB הוסר בפתאומיות</string>
-  <string name="usb_ext_media_badremoval_notification_message">בטל את טעינת אחסון ה-USB לפני הסרתו על מנת למנוע אובדן נתונים.</string>
+  <string name="usb_ext_media_badremoval_notification_title">אחסון USB הוסר באופן פתאומי</string>
+  <string name="usb_ext_media_badremoval_notification_message">בטל את טעינת אחסון ה-USB לפני הסרתו כדי למנוע אבדן נתונים.</string>
   <string name="usb_ext_media_safe_unmount_notification_title">אחסון USB ניתן להסרה בבטחה</string>
-  <string name="usb_ext_media_safe_unmount_notification_message">אתה יכול להסיר את אחסון ה-USB בבטחה.</string>
+  <string name="usb_ext_media_safe_unmount_notification_message">ניתן להסיר את אחסון ה-USB בבטחה.</string>
   <string name="usb_ext_media_nomedia_notification_title">אחסון USB הוסר</string>
   <string name="usb_ext_media_nomedia_notification_message">אחסון USB הוסר. הכנס מדיה חדשה.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">אוטומטי</string>
   <string name="live_display_auto_summary">התאם אוטומטית את טמפרטורת הצבע של המסך לאחר הזריחה והשקיעה</string>
   <string name="live_display_off">כבוי</string>
-  <string name="live_display_off_summary">בטל את כל ההתאמות</string>
+  <string name="live_display_off_summary">השבת את כל ההתאמות</string>
   <string name="live_display_day">יום</string>
   <string name="live_display_day_summary">השתמש בהגדרות יום בלבד</string>
   <string name="live_display_night">לילה</string>
@@ -198,19 +267,35 @@
   <string name="live_display_outdoor">בחוץ (שמש בהירה)</string>
   <string name="live_display_outdoor_summary">השתמש בהגדרות חוץ בלבד</string>
   <string name="live_display_hint">LiveDisplay יכולה למזער את עייפות העין ולעזור לך לישון בלילה. לחץ כאן כדי לנסות!</string>
-  <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, לחץ על כפתור \"חזור\" והחזק אותו.</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">כדי לבטל נעיצת מסך זה, גע והחזק בלחצן \"הקודם\".</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">הפנס מופעל</string>
-  <string name="quick_settings_tile_flashlight_not_summary">לחץ לכיבוי</string>
+  <string name="quick_settings_tile_flashlight_not_summary">הקש לכיבוי</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">כרטיס זיכרון של תחנת עגינה</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">טביעת אצבע <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">גישה לשירות טביעות אצבע</string>
-  <string name="permdesc_accessFingerprintService">אפשר ליישום לגשת לשירות טביעות אצבע. היישום יוכל להוסיף, למחוק, לשנות שם ולבצע אימות מול טביעות אצבע</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessFingerprintService">מאפשר ליישום לגשת לשירות טביעות אצבע. היישום יוכל להוסיף, למחוק, לשנות שם ולבצע אימות מול טביעות אצבע</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">איפוס סטטיסטיקות סוללה</string>
-  <string name="permdesc_resetBatteryStats">אפשר ליישום לאפס נתוני רמה-נמוכה של השימוש בסוללה.</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">מאפשר ליישום לאפס נתוני רמה-נמוכה נוכחיים של השימוש בסוללה.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">עדיפות</string>
   <string name="silent_mode_none">ללא</string>
-  <string name="subscription_change_disabled_wifi_ap">נקודת Wi-Fi חמה הושבתה עקב שינוי מנוי SIM</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">נקודת רשת ציבורית Wi-Fi הושבתה עקב שינוי מנוי SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">כיבוי Wi-Fi</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">מסך נעילה של צד שלישי</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">מאפשר ליישום לשמש כמסך נעילה לא מאובטח.</string>
 </resources>

@@ -17,12 +17,19 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM 被 Perso 鎖定</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"狀態"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
+  <!-- Slot id in SIM pin/puk unlock view -->
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">SIM 卡無效。</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="other">輸入 SIM 卡的 PIN 碼，您剩餘 <xliff:g id="number">%d </xliff:g> 次嘗試機會。次數用完後，您必須聯絡您的電訊業者以解鎖裝置。</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="other">SIM 卡現在已被停用。輸入 PUK 碼以繼續。您剩餘 <xliff:g id="number">%d</xliff:g> 次嘗試機會，次數用完後您的 SIM 卡將永久不可用。有關詳細資訊，請連絡您的電信業者。</item>
   </plurals>

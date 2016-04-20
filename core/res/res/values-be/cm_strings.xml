@@ -17,58 +17,102 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Профілі</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Профіль</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Не</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Здымак экрану</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">атрыманне абароненых SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Дазваляе праграме атрымліваць абароненыя SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">мадыфікацыя спісу абароненых SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Дадатак зможа змяняць спіс адрасатаў абароненых SMS-паведамленняў.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Бяспека</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Дазволы, што адносяцца да бяспекі дадзеных на прыладзе.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">Доступ да службы тэм</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Дадатак зможа атрымваць доступ да службы тым. Гэты дазвол не выкарыстоўваецца звычайнымі дадаткамі.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">Чытанне інфармацыі пра тэму</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Дадатак зможа счытваць тэмы афармлення і
        вызначаць, якая тэма цяпер выкарыстоўваецца.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">Змена тэм</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Дадатак зможа ўжыццяўляць усталёўку новых тэм афармлення і 
        змяняць бягучую тэму.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">прагляд чорнага спісу</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Дазваляе праграме праглядаць звесткі пра нумары тэлефонаў, ад якіх заблакаваны тэлефанаванні ці паведамленні.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">мадыфікацыя чорнага спісу</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Дазваляе праграме ўносіць змены ў спіс нумароў тэлефонаў, ад якіх заблакаваны тэлефанаванні ці паведамленні.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">уключэнне ці выключэнне рэжыму абароны прыватнасці</string>
   <string name="permdesc_changePrivacyGuardState">Дазваляе праграме выбіраць, ці будзе іншая праграма працаваць у рэжыме абароны прыватнасці. Калі праграма запушчана ў рэжыме абароны прыватнасці, яна не будзе мець доступу да асабістых дадзеных, такіх як кантакты, паведамленні ці гісторыя тэлефанаванняў.</string>
   <string name="privacy_guard_notification">Рэжым абароны прыватнасці актыўны</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> не будзе мець доступу да асабістых дадзеных</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">усталёўка шпалераў экрану блакавання</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Дазваляе праграме змяняць шпалеры экрану блакавання.</string>
   <string name="privacy_guard_dialog_title">Рэжым абароны</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> жадае <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Перазагрузіць</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Бягучы</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Перазагрузіць</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Рэжым аднаўлення</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Загрузчык</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Спампоўкі</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Перазапуск інтэрфейсу</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Перазагрузіць</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Ваш планшэт будзе перазапушчаны.</string>
   <string name="reboot_confirm" product="default">Ваш тэлефон будзе перазапушчаны.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Перазапуск\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Дадатак зачынены</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB праз сетку ўключана</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB праз USB &amp; сетку ўключана</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Націснуць для выключэння наладкі.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Націсніце, каб выбраць рэжым USB-падлучэння.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">па сетцы &amp; USB</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Па сетцы</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Перахоп запуску дадаткаў</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Дадатак зможа перахапляць запуск іншых дадаткаў на прыладзе</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">атрымаць доступ да камеры</string>
   <string name="app_ops_access_location">атрымаць доступ да месцазнаходжання прылады</string>
   <string name="app_ops_access_notifications">атрымаць доступ да апавяшчэнняў</string>
@@ -121,36 +165,57 @@
   <string name="app_ops_use_voice_volume">атрымаць кіраванне гучнасцю пры гутарцы</string>
   <string name="app_ops_write_mms">стварыць MMS-паведамленне</string>
   <string name="app_ops_write_sms">стварыць SMS-паведамленне</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Няспраўная SIM-картка.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Рэжым лёту</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Падлучаны ў рэжыме зарадкі</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Няма падлучаных прылад</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> падлучаная прылада</string>
   <string name="tethered_notification_multi_device_message">Падлучана прылад: <xliff:g id="count">%1$s</xliff:g></string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Адсутнічае вонкавы назапашвальнік\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">Сховішча UICC</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Запамятаць вырашэнне</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Эканомія энергіі</string>
   <string name="perf_profile_bal">Збалансаваны</string>
   <string name="perf_profile_perf">Прадукцыйнасць</string>
   <string name="perf_profile_bias_power">Эфектыўна</string>
   <string name="perf_profile_bias_perf">Хутка</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Не атрымалася ўсталяваць тэму</string>
   <string name="theme_install_error_message">Збой пры ўсталёўцы %s</string>
   <string name="theme_reset_notification_title">Тэма адключаная</string>
   <string name="theme_reset_notification_body">З-за збояў дадаткаў адноўлена стандартная тэма.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s не ўсталявана</string>
   <string name="permlab_interceptSmsSent">Перахоп выходных SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Дазволіць дадатку перахапляць выходныя SMS. Шкоднасныя дадаткі могуць выкарыстоўваць гэты вырашэнне, каб перашкаджаць адпраўцы SMS-паведамленняў.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">Доступ да службы ліхтарыка</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Дадатак зможа атрымваць доступ да службы ліхтарыка. Гэты вырашэнне не выкарыстоўваецца звычайнымі дадаткамі.</string>
   <string name="permlab_preventpower">Пераазначэнне клавішы сілкавання</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Дадатак зможа перавызначаць кнопку сілкавання.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">Усе дадзеныя на USB-назапашвальніку (па адрасе \'%1$s\') будуць выдалены. Гэта дзеянне немагчыма скасаваць!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Усе дадзеныя на карце (па адрасе \'%1$s\') будуць выдалены. Гэта дзеянне немагчыма скасаваць!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">Адключэнне SD-карты\u2026</string>
   <string name="sd_progress_erasing">Вычышчэнне SD-карты\u2026</string>
   <string name="sd_format_error">Не атрымалася ачысціць SD-карту.</string>
@@ -158,6 +223,7 @@
   <string name="sd_media_checking">Выконваецца праверка SD-карты.</string>
   <string name="sd_media_removed">SD-карта была адключаная.</string>
   <string name="sd_media_shared">Цяпер SD-карта выкарыстоўваецца кампутарам.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Адключэнне USB-назапашвальніка\u2026</string>
   <string name="usb_progress_erasing">Вычышчэнне USB-назапашвальніка\u2026</string>
   <string name="usb_format_error">Не атрымалася вычысціць USB-назапашвальнік.</string>
@@ -165,6 +231,7 @@
   <string name="usb_media_checking">USB-назапашвальнік правяраецца.</string>
   <string name="usb_media_removed">USB-назапашвальнік выняты.</string>
   <string name="usb_media_shared">Цяпер USB-назапашвальнік выкарыстоўваецца кампутарам.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">Рыхтоўля SD-карты</string>
   <string name="sd_ext_media_checking_notification_message">Выконваецца праверка карты на наяўнасць памылак.</string>
   <string name="sd_ext_media_nofs_notification_title">Пустая SD-карта</string>
@@ -177,6 +244,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Зараз SD-карта можа быць бяспечна адключаная.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD-карта вынята</string>
   <string name="sd_ext_media_nomedia_notification_message">SD-карта вынята. Можна ўставіць новую карту.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Рыхтуецца USB-назапашвальнік</string>
   <string name="usb_ext_media_checking_notification_message">Выконваецца праверка назапашвальніка на наяўнасць памылак.</string>
   <string name="usb_ext_media_nofs_notification_title">Пусты USB-назапашвальнік</string>
@@ -189,6 +257,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Зараз USB-назапашвальнік можа быць бяспечна адключаны.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB-назапашвальнік выняты</string>
   <string name="usb_ext_media_nomedia_notification_message">USB-назапашвальнік адключаны. Можна ўставіць іншы назапашвальнік.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Аўтаматычна</string>
   <string name="live_display_auto_summary">Аўтаматычная падладка колеравай тэмпературы экрана пасля заходу і ўзыходу сонца</string>
   <string name="live_display_off">Адключыць</string>
@@ -200,19 +269,35 @@
   <string name="live_display_outdoor">На вуліцы (яскравае сонца)</string>
   <string name="live_display_outdoor_summary">Толькі вулічны рэжым</string>
   <string name="live_display_hint">LiveDisplay дапаможа зменшыць глядзельную напругу і палепшыць сон. Націсніце тут, каб паспрабаваць!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Каб адмацаваць экран, націсніце і ўтрымвайце кнопку \"Назад\".</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Ліхтарык уключаны</string>
   <string name="quick_settings_tile_flashlight_not_summary">Націсніце для адключэння</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">SD-картка док-станцыі</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Адбітак пальца <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">Доступ да адбіткаў пальцаў</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Дазвол доступу да службы адбіткаў пальцаў. Дадатак зможа дадаваць, выдаляць, рэдагаваць і выкарыстоўваць для аўтарызацыі адбіткі пальцаў</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">Абнуленне статыстыкі батарэі</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Дазволіць дадатку чысціць дадзеныя пра выкарыстанне акумулятарнай батарэі прылады.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Важныя</string>
   <string name="silent_mode_none">Не</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Выключаныя Wi-Fi кропкі доступу ў сувязі са зменай падпіскі SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Вымкнуць Wi-Fi</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">Іншы экран блакавання</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">Дадатак зможа працаваць у якасці небяспечнага метаду блакавання экрана.</string>
 </resources>

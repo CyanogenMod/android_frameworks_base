@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM con bloquéu personal</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Estáu"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Descartar</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Ranura <xliff:g id="number">%d </xliff:g>: Tarxeta nueva SIM\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Tarxeta inválida.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Introduz PIN de la SIM. Tienes <xliff:g id="number">%d</xliff:g> intentu enantes de que tengas que contautar cola operadora pa desbloquiar el tefnu.</item>
     <item quantity="other">Introduz PIN de la SIM PIN. Quédente <xliff:g id="number">%d</xliff:g> intentos más.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">SIM deshabilitada. Introduz el códigu PUK pa continuar. Tienes <xliff:g id="number">%d </xliff:g> intentu más enantes d\'inutilizar la tarxeta SIM permanentemente. Pa obtener más información, ponte en contautu cola to operadora.</item>
     <item quantity="other">SIM deshabilitada. Introduz el códigu PUK pa continuar. Tienes <xliff:g id="number">%d </xliff:g> intentos restantes enantes d\'inutilizar la tarxeta SIM permanentemente. Ponte en contautu cola to operadora pa más detalles.</item>

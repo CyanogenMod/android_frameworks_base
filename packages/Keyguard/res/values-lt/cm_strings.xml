@@ -17,16 +17,23 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM / RUIM  perso. užrakintas</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Būsena"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Atmesti</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Lizdas <xliff:g id="number">%d</xliff:g>: Nauja SIM kortelė\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Neteisinga kortelė.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Įveskite SIM PIN kodą, turite <xliff:g id="number">%d</xliff:g> likusį bandymą prieš susisiekdami su savo operatoriumi, kad atrakintumėte savo įrenginį.</item>
     <item quantity="few">Įveskite SIM PIN kodą, turite <xliff:g id="number">%d</xliff:g> likusius bandymus.</item>
     <item quantity="other">Įveskite SIM PIN kodą, turite <xliff:g id="number">%d</xliff:g> likusių bandymų.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">SIM neleidžiama. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusį bandymą prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>
     <item quantity="few">SIM neleidžiama. Įveskite PUK kodą, kad tęstumėte. Jūs turite <xliff:g id="number">%d</xliff:g> likusius bandymus prieš SIM tampant netinkama naudoti visam laikui. Susisiekite su savo operatoriumi dėl išsamesnės informacijos.</item>

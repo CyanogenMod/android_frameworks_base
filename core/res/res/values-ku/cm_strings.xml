@@ -17,52 +17,96 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">زانیاری تایبەتیەکان</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">زانیاری تایبەتی</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">هیچ</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">وێنەگرتنی ڕوونما</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">وەرگرتنی کورتەنامەی پارێزراو</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">ڕێگە بە بەرنامەکە بدە کە کورتەنامە پارێزراوەکەی داهاتوو وەربگرێت.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">ڕێگەدان بە بەرنامەکە بۆ دەستکاریکردنی لیستی کورتەنامە پارێزراوەکان.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">ئاسایش</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">مۆڵەت پێدان پەیوەندی زانیاری ئاسایشی ئامێرەکە.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">ڕاژەی ڕێگەی تێم</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">ڕێگەدان بە بارنامە بۆ ڕاژەی تێم. کە پێویست ناکا بۆ بەرنامەی ئاسایی.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">خوێندنه‌وه‌ی زانیاری له‌باره‌ی باکگراوه‌نده‌که‌ت</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ خوێندنه‌وه‌ی باکگراوه‌نده‌کانت وه‌ بڕیاردانی باکگراوه‌ندێک که‌ خۆت په‌سه‌ندته‌.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">گۆڕینی باکگراوه‌نده‌کانت</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">ڕێگه‌دان به‌ به‌رنامه‌کان بۆ هێنانی باکگراوه‌ندی نوێ و
  گۆڕینی باکگراوه‌ندێک که‌ خۆت لات په‌سه‌نده‌.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">خوێندنەوەی بلۆکی تەلەفۆن</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">ڕێگەدان: بە بەرنامەیەک بۆ خوێندنەوەی زانیاریەکان دەربارەی ژمارەی تەلەفۆنەکە کە بلۆک کراوە بۆ نامەو تەلەفۆنکردنی هاتوو.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">گۆڕنی تەلەفۆن لە لیستی ڕەش</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">ڕێگەدان بە بەرنامەکە بۆ ئەو ژمارانەی بلۆک کراون بۆ نامەو تەلەفۆن.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">چالاکردن یان لەکارخستنی بەرگری تایبەتی</string>
   <string name="permdesc_changePrivacyGuardState">ڕێگە دان بە بەرنامەکە بۆ گۆڕینی کەشوهەوای بەرنامەیەکی تر لە تایبەتی. کاتێک بەرنامەکە ئەکەوێتە کار لەگەڵ تایبەتی .هیچ ڕێگەیەکی نیە بۆ ئەوەی زانیاری تایبیەتیت بەکاربهێنێت وەکو ،ناوەکان،تەلەفۆن لۆگ یان نامە.</string>
   <string name="privacy_guard_notification">پاسەوانی تایبەتی چالاکراوە</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="بەرنامە">%1$s</xliff:g> ناتوانێت زانیاری تایبەتی بەکاربهێنێت</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">دانانی کلیلە پارێز بۆ دیوارپۆش</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">ڕێگەدان: بە بەرنامەیەک بۆ گۆڕینی قوفڵی ڕوونمای دیوارپۆش.</string>
   <string name="privacy_guard_dialog_title">پاسەوانی تایبەتی</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="بەرنامە">%1$s</xliff:g> حەز ئەکەی بۆ <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">دوبارە خستنەگەڕ</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">ئێستا</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">سه‌رله‌نوێ خستنه‌ڕێ</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">ڕیکەڤەری</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">بووتلەودەر</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">داگرتن</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">کارپێکردنه‌وه‌ی قوڵ</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">ئیشپێکردنەوە</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">سه‌رله‌نوێ خستنه‌ڕێ دەبێت.</string>
   <string name="reboot_confirm" product="default">تەلەفۆنەکە سه‌رله‌نوێ ده‌کوژێته‌وه‌ و داده‌گیرسێته‌وه‌.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">سه‌رله‌نوێ خستنه‌ڕێ\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">بەرنامە داخرا</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ABD سه‌روو هێڵ کارده‌کات</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ABD سه‌روو USB و هێڵ کارده‌کات</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">ئێره‌ لێبده‌ بۆ له‌کارخستنی هه‌ڵدۆزینه‌وه‌.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">USB پەنجەی پێدابنێ بۆ هەڵبژاردنەکانی.</string>
+  <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">ڕیگەدان بە بەرنامە بۆ دامەزراندنی بەرنامەی تر</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">ڕێگەدان بەکامێرا</string>
   <string name="app_ops_access_location">ڕێگەی ناوچەی</string>
   <string name="app_ops_access_notifications">تێبنینیەکانت بخوێنەوە</string>
@@ -115,32 +159,53 @@
   <string name="app_ops_use_voice_volume">کۆنترۆڵی دەنگی تەلەفۆن</string>
   <string name="app_ops_write_mms">نوسنی نامەی MMS</string>
   <string name="app_ops_write_sms">نوسینی نامەی SMS</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">کارته‌که‌ نادرووستە.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">شێوازی ناو فڕۆکە</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">پەیوەستکرا بەشێوەی بارگاویکردنەوە</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">ئامێر پەیوەست نەکراوە</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ئامێر پەیوەستکراوە</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ئامێری پەیوەستکراو</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">ناتوانرێت بسڕێته‌وه‌ میدیا\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC بیرگه‌ی</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">بیرخستنەوەی هەڵبژاردنەکەم</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">پاراستنی هێز</string>
   <string name="perf_profile_bal">باڵانسکرا</string>
   <string name="perf_profile_perf">ئەنجامدان</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">دابەزاندنی ڕووکار سەرکەوتو نەبوو</string>
   <string name="theme_install_error_message">%s دانەبەزێنرا</string>
   <string name="theme_reset_notification_title">ڕێکخستنەوەی ڕووکار</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s دانەمەزراوە</string>
   <string name="permlab_interceptSmsSent">کۆسپ بۆ SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">ڕێگە دان بۆ بەرنامەکە بۆ کۆسپ دروستکردن لە چوونی SMS ،بەرنامە ڤایرۆسیەکان لەوە ئەچێت ئەمە بەکار بهێنن.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">ڕێگەی خزمەتگوزاری مەشخەڵ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">ڕێگەدان بە بارنامە بۆ ڕاژەی تێم. کە پێویست ناکا بۆ بەرنامەی ئاسای.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">ڕێگە دان بە بەرنامەکە.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی USB (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">هه‌موو زانیارییه‌کان له‌سه‌ر بیرگه‌ی ناوه‌کی (له‌ ژێر \'%1$s\') ده‌سڕێنه‌وه‌. ئه‌م کاره‌ ناگه‌ڕێته‌وه‌!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">جێگیرنەکردنی بیرگەی دەرەکی\u2026</string>
   <string name="sd_progress_erasing">سڕینەوەی بیرگەی دەرەکی\u2026</string>
   <string name="sd_format_error">ناتوانرێت بیرگەی دەرەکی بسڕێتەوە.</string>
@@ -148,6 +213,7 @@
   <string name="sd_media_checking">کارتی هەڵگرتنی لەم کاتەدا تاقیکراوەتەوە.</string>
   <string name="sd_media_removed">کارتی هەڵگرتنی لابرا.</string>
   <string name="sd_media_shared">کارتی هەڵگرتنی لەم کاتەدا لەلایەن کۆمپیوتەرێک بەکاردەهێنرێت.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">جێگیرنەکردنی بیرگەی USB\u2026</string>
   <string name="usb_progress_erasing">سڕینەوەی بیرگەیUSB\u2026</string>
   <string name="usb_format_error">ناتوانرێت بیرگەی USB بسڕێتەوە.</string>
@@ -155,6 +221,7 @@
   <string name="usb_media_checking">بیرگەی USB لەم کاتەدا تاقیکراوەتەوە.</string>
   <string name="usb_media_removed">کۆگای USB لابردرا.</string>
   <string name="usb_media_shared">بیرگەی USB لەم کاتەدا لەلایەن کۆمپیوتەرێک بەکاردەهێنرێت.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">ئامادەکردنی بیرەگەی دەرەکی</string>
   <string name="sd_ext_media_checking_notification_message">پشکنینی بیرگەی دەرەکی بۆ هەڵەکان.</string>
   <string name="sd_ext_media_nofs_notification_title">بیرگەی دەرەکی بەتاڵ</string>
@@ -167,6 +234,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">تۆ دەتوانیت بە دڵنیایی لەخۆگری بیرگەی USB لابەریت.</string>
   <string name="sd_ext_media_nomedia_notification_title">بیرگەی دەرەکی لابرا</string>
   <string name="sd_ext_media_nomedia_notification_message">بیرگەی دەرەکی لابرا. دانەیەکی نوێ بخە ناو.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">ئامادەکردنی لەخۆگری بیرگەی USB</string>
   <string name="usb_ext_media_checking_notification_message">پشکنینی لەخۆگری بیرگەی USB بۆ هەڵەکان.</string>
   <string name="usb_ext_media_nofs_notification_title">لەخۆگری USB بەتاڵ</string>
@@ -179,6 +247,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">تۆ دەتوانی بە دڵنیایی لەخۆگری بیرگەی USB لابەری.</string>
   <string name="usb_ext_media_nomedia_notification_title">لەخۆگەی بیرگەی USB لابرا</string>
   <string name="usb_ext_media_nomedia_notification_message">لەخۆگری بیرگەی USB لابرا. ڕەنگاڵەیەکی نوێ بخە ناو.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">خۆکارانه‌</string>
   <string name="live_display_off">کوژانه‌وه‌</string>
   <string name="live_display_off_summary">لەکارخستنی هەموو ڕێکخستنەکان</string>
@@ -187,5 +256,21 @@
   <string name="live_display_night">شەو</string>
   <string name="live_display_night_summary">تەنها ڕێکخستنی شەو بەکاربهێنە</string>
   <string name="live_display_outdoor">دەرەوە (ڕۆشنای خۆر)</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <!-- Notification which notifies user flashlight is enabled -->
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">Dock بیرگەی دەرەکی</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- Zen mode buttons -->
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
+  <!-- Third party keyguard permission label -->
+  <!-- Third party keyguard permission description -->
 </resources>

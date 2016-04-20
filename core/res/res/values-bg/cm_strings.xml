@@ -17,62 +17,106 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Профили</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Профил</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Без</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Снимка на екрана</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">приемай защитени SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Разрешава на приложението да приема входящи защитени SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">Модифициране на списъка със защитени SMS</string>
-  <string name="permdesc_modifyProtectedSmsList">Разрешава на приложението да модифицира списъка с контакти на защитените SMS.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_modifyProtectedSmsList">Разрешава на приложението да модифицира списъка с контакти на защитените SMS съобщения.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Сигурност</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Разрешения, свързани с информацията за защита на устройството.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">достъп до темите</string>
-  <string name="permdesc_accessThemeService">Разрешение на едно приложение за достъп до темите. Никога не трябва да бъде необходимо за обикновените приложения.</string>
-  <string name="permlab_readThemes">прочетете информацията за темите</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">Позволява на приложението достъп до услугата за теми. Не е необходимо за нормални приложения.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">прочетете информацията за темата</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Разрешава на приложението да чете вашите теми и да определя коя тема сте приложили.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">Модифициране на темите</string>
-  <string name="permdesc_writeThemesDesc">Разрешава на приложението да вмъкне нови теми и да модифицира темата, която сте приложили.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">Разрешава на приложението да добавя нови теми и да променя текущата тема.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">Прочетете списъка с блокирани контакти</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Разрешава на приложението да прочетете информацията за телефонни номера, които са блокирани за входящи повиквания или съобщения.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">Промяна на списъка с блокирани контакти</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Разрешава на приложението да промени телефонните номера, които са блокирани за входящи повиквания или съобщения.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">Активира или деактивира Защитен режим</string>
   <string name="permdesc_changePrivacyGuardState">Разрешава на приложението да променя статута на поверителност на друго приложение. Когато едно приложение се използва с защита на поверителността, не може да има достъп до персонални данни, като контакти, регистри с повиквания или съобщения.</string>
   <string name="privacy_guard_notification">Защитен режим е активиран</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s </xliff:g> няма да можете да получите достъп до лични данни</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Задаване на тапет за заключен екран</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Разрешава на едно приложение да променя тапета на заключения екран.</string>
   <string name="privacy_guard_dialog_title">Защитен режим</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s </xliff:g> бих искал да <xliff:g id="op">%2$s </xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Рестартиране</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Текущ</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Рестартиране</string>
-  <string name="reboot_recovery">Възстановяване</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+  <string name="reboot_recovery">Режим на възстановяване</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Буутлоудър</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Изтегляне</string>
-  <string name="reboot_soft">Бързо рестартиране</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
+  <string name="reboot_soft">Софтуерно рестартиране</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Рестартиране</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Таблетът ще се рестартира.</string>
   <string name="reboot_confirm" product="default">Телефонът ще се рестартира.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Рестартиране\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Затворено приложение</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB над мрежата е активиран</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB над USB &amp; мрежата е активирана</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Докосване за да забранете отстраняване на грешки.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Докосни за избор на USB опции.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s </xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; мрежа</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Мрежа</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Прихвани стартиращите приложения</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Разрешава на едно приложение да прихване стартирането на други приложения</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">достъп до камерата</string>
   <string name="app_ops_access_location">достъп до вашето местоположение</string>
   <string name="app_ops_access_notifications">прочети своите известия</string>
   <string name="app_ops_activate_vpn">активиране на VPN</string>
   <string name="app_ops_alarm_wakeup">събуди устройството</string>
-  <string name="app_ops_su">получете root достъп</string>
+  <string name="app_ops_su">получете администраторски права</string>
   <string name="app_ops_auto_start">изпълнение при включване</string>
   <string name="app_ops_delete_call_log">изтриване на дневника за повиквания</string>
   <string name="app_ops_delete_contacts">Изтриване на контакти</string>
@@ -119,62 +163,86 @@
   <string name="app_ops_use_voice_volume">контрол на звука при разговор</string>
   <string name="app_ops_write_mms">Напишете MMS съобщение</string>
   <string name="app_ops_write_sms">Напишете SMS съобщение</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Невалидна карта.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Самолетен режим</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Включен в режим на зареждане</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Няма свързано устройство</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> устройството е свързано</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s </xliff:g> устройствата са свързани</string>
-  <string name="progress_nomediapresent" product="default">няма носител\u2026</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
+  <string name="progress_nomediapresent" product="default">Няма носител\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC хранилище</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Запомни избора ми</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Пестящ енергия</string>
   <string name="perf_profile_bal">Балансиран</string>
   <string name="perf_profile_perf">Производителен</string>
-  <string name="perf_profile_bias_power">Ефективност</string>
+  <string name="perf_profile_bias_power">Ефикасен</string>
   <string name="perf_profile_bias_perf">Бърз</string>
-  <string name="theme_install_error_title">Провалено инсталиране на тема</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">Неуспешно инсталиране на темата</string>
   <string name="theme_install_error_message">%s не успя да се инсталира</string>
   <string name="theme_reset_notification_title">Нулиране на темата</string>
   <string name="theme_reset_notification_body">Стандартната тема е възстановена поради множество грешки.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s не е инсталиран</string>
   <string name="permlab_interceptSmsSent">прихващане на изходящи SMS съобщения</string>
-  <string name="permdesc_interceptSmsSent">Разрешава кои приложения да прихващат изходящи SMS съобщения. Злонамерени приложения могат да използват това за да предотвратят изходящи SMS съобщения.</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_interceptSmsSent">Разрешава кои приложения да прихващат изходящи SMS съобщения. Злонамерени приложения могат да използват това за да предотвратят изпращането на SMS съобщения.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">достъп до фенерче</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Разрешение за едно прилошение за достъп до фенерче. Никога не трябва да бъде необходимо за обикновените приложения.</string>
   <string name="permlab_preventpower">смени бутона за включване</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Разрешава на приложението да замени бутона за захранване.</string>
-  <string name="usb_extmedia_format_message">Ще бъдат изтрити всички данни на вашето USB хранилището (на адрес \"%1$s\"). Това действие не може да бъде отменено!</string>
-  <string name="sd_extmedia_format_message">Ще бъдат изтрити всички данни на картата (на адрес\"%1$s\"). Това действие не може да бъде отменено!</string>
-  <string name="sd_progress_unmounting">Подготви за демонтиране на SD картата\u2026</string>
-  <string name="sd_progress_erasing">Изтриване на SD картата\u2026</string>
-  <string name="sd_format_error">Не можа да изтрие SD картата.</string>
-  <string name="sd_media_bad_removal">SD картата е извадена преди да бъде подготвена за демонтиране.</string>
-  <string name="sd_media_checking">SD картата в момента се проверява.</string>
-  <string name="sd_media_removed">SD картата е извадена.</string>
-  <string name="sd_media_shared">SD картата в момента се използва от компютъра.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
+  <string name="usb_extmedia_format_message">Ще бъдат изтрити всички данни на вашето USB хранилище (на адрес \"%1$s\"). Това действие не може да бъде отменено!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
+  <string name="sd_extmedia_format_message">Ще бъдат изтрити всички данни от картата (на адрес\"%1$s\"). Това действие не може да бъде отменено!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
+  <string name="sd_progress_unmounting">Подготви за демонтиране на картата памет\u2026</string>
+  <string name="sd_progress_erasing">Изтриване на картата памет\u2026</string>
+  <string name="sd_format_error">Не можа да се изтрие картата памет.</string>
+  <string name="sd_media_bad_removal">Картата памет е извадена преди да бъде подготвена за демонтиране.</string>
+  <string name="sd_media_checking">В момента се проверява карта памет.</string>
+  <string name="sd_media_removed">Картата памет е извадена.</string>
+  <string name="sd_media_shared">Картата памет в момента се използва от компютъра.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Демонтиране на USB хранилището\u2026</string>
   <string name="usb_progress_erasing">Изтриване на USB хранилището\u2026</string>
   <string name="usb_format_error">Не можа да изтрие USB съхранилището.</string>
-  <string name="usb_media_bad_removal">USB схранилището е премахнато преди да бъде демонтирано.</string>
+  <string name="usb_media_bad_removal">USB хранилището е премахнато преди да бъде демонтирано.</string>
   <string name="usb_media_checking">В момента се проверява USB хранилището.</string>
   <string name="usb_media_removed">USB хранилището е премахнато.</string>
   <string name="usb_media_shared">USB хранилището в момента се използва от компютъра.</string>
-  <string name="sd_ext_media_checking_notification_title">Подготовка на SD карта</string>
-  <string name="sd_ext_media_checking_notification_message">Проверка на SD карта за грешки.</string>
-  <string name="sd_ext_media_nofs_notification_title">Празна SD карта</string>
-  <string name="sd_ext_media_nofs_notification_message">SD картата е празна или има неподдържана файлова система.</string>
-  <string name="sd_ext_media_unmountable_notification_title">Повредена SD карта</string>
-  <string name="sd_ext_media_unmountable_notification_message">SD картата е повредена. Опитайте се да я форматирате.</string>
-  <string name="sd_ext_media_badremoval_notification_title">SD картата е неочаквано премахната</string>
-  <string name="sd_ext_media_badremoval_notification_message">Демонтирай SD картата преди да я извадите за да се избегне загуба на данни.</string>
-  <string name="sd_ext_media_safe_unmount_notification_title">SD картата е безопасна за изваждане</string>
-  <string name="sd_ext_media_safe_unmount_notification_message">Можете безопасно да извадите SD картата.</string>
-  <string name="sd_ext_media_nomedia_notification_title">Премахната SD карта</string>
-  <string name="sd_ext_media_nomedia_notification_message">SD картата е отстранени. Поставете нова.</string>
+  <!-- SD card storage notification -->
+  <string name="sd_ext_media_checking_notification_title">Подготовка на карта памет</string>
+  <string name="sd_ext_media_checking_notification_message">Проверка на картата памет за грешки.</string>
+  <string name="sd_ext_media_nofs_notification_title">Празна карта памет</string>
+  <string name="sd_ext_media_nofs_notification_message">Картата памет е празна или има неподдържана файлова система.</string>
+  <string name="sd_ext_media_unmountable_notification_title">Повредена карта памет</string>
+  <string name="sd_ext_media_unmountable_notification_message">Картата памет е повредена. Опитайте се да я форматирате.</string>
+  <string name="sd_ext_media_badremoval_notification_title">Картата памет е неочаквано премахната</string>
+  <string name="sd_ext_media_badremoval_notification_message">Демонтирай картата памет преди да я извадите за да се избегне загуба на данни.</string>
+  <string name="sd_ext_media_safe_unmount_notification_title">Картата памет е безопасна за изваждане</string>
+  <string name="sd_ext_media_safe_unmount_notification_message">Можете безопасно да извадите картата памет.</string>
+  <string name="sd_ext_media_nomedia_notification_title">Премахната карта памет</string>
+  <string name="sd_ext_media_nomedia_notification_message">Картата памет е отстранена. Поставете нова.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Подготовка на USB хранилище</string>
   <string name="usb_ext_media_checking_notification_message">Проверка на USB хранилището за грешки.</string>
   <string name="usb_ext_media_nofs_notification_title">Празно USB хранилище</string>
@@ -187,30 +255,47 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Можете безопасно да извадите USB хранилището.</string>
   <string name="usb_ext_media_nomedia_notification_title">Премахнато USB хранилище</string>
   <string name="usb_ext_media_nomedia_notification_message">USB хранилището е извадено. Може да поставите нов носител.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Автоматичен</string>
   <string name="live_display_auto_summary">Настройва автоматично температурата на цветовете на екрана след залез и изгрев</string>
   <string name="live_display_off">Изключен</string>
   <string name="live_display_off_summary">Деактивира всички корекции</string>
   <string name="live_display_day">Дневен</string>
-  <string name="live_display_day_summary">Използва само дневните настройки</string>
+  <string name="live_display_day_summary">Само настройки на дневен режим</string>
   <string name="live_display_night">Нощен</string>
-  <string name="live_display_night_summary">Използва само нощните настройки</string>
+  <string name="live_display_night_summary">Само настройки на нощен режим</string>
   <string name="live_display_outdoor">На открито (ярко слънце)</string>
-  <string name="live_display_outdoor_summary">Използвай само настройките за открито</string>
-  <string name="live_display_hint">Използването на Адаптивен екран може да помогне за намаляване умората в очите през нощта. Докоснете тук, за да го изпробвате!</string>
+  <string name="live_display_outdoor_summary">Само настройки на режим на открито</string>
+  <string name="live_display_hint">Използването на адаптивен екран може да помогне за намаляване умората в очите през нощта. Докоснете тук, за да го изпробвате!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">За да освободите този екран, докоснете и задръжте бутона назад.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Фенерчето е включено</string>
   <string name="quick_settings_tile_flashlight_not_summary">Натиснете, за изключване</string>
-  <string name="storage_sd_dock_card">Док SD карта</string>
+  <!-- Storage description for the SD card on the dock -->
+  <string name="storage_sd_dock_card">Док карта памет</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Пръстови отпечатъци <xliff:g id="number">%d </xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">достъп до услуга за пръстови отпечатъци</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Позволява на приложението достъп до услугата на пръстови отпечатъци. Приложението може да добавя, изтрива, преименува и удостоверява срещу пръстови отпечатъци</string>
-  <string name="permlab_resetBatteryStats">Зануляване статистиката на батерията</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">Статистиката на батерията ще бъде нулирана</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Позволява заявление да рестартирате текущите данни за използването на ниско ниво на батерията.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Приоритет</string>
   <string name="silent_mode_none">Без</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Изключена Wi-Fi точка за достъп, поради промяна в абонаментна на СИМ</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Изключете Wi-Fi</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">Защитен екран от друг автор</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">Позволява приложението да бъде ползвано като незаключен защитен екран.</string>
 </resources>

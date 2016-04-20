@@ -17,57 +17,101 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">الملفات التعريفية</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">ملف تعريف</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">بلا</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">لقطة شاشة</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">استلام رسالة نصية قصيرة محمية</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">يسمح للتطبيق باستلام رسالة نصية قصيرة محمية واردة.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">تعديل قائمة الرسائل النصية القصيرة المحمية</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">السماح للتطبيق بتعديل قائمة عناوين الرسائل النصية القصيرة المحمية.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">الأمان</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">أذونات متعلقة بمعلومات حماية الجهاز.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">الوصول إلى خدمة السمة</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">يسمح للتطبيق بالوصول إلى خدمة السمة. ينبغي أن لا تكون ضرورية ابدأ للتطبيقات العادية.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">قراءة معلومات السمة لديك</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">يسمح للتطبيق بقراءة السمات الخاصة بك وتحديد السمة التي قمت بتطبيقها.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">تعديل السمات الخاصة بك</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">السماح للتطبيق بإدخال سمات جديدة
 وتعديل السمة التي قمت بتطبيقها.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">قراءة القائمة السوداء للهاتف</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">السماح للتطبيق بقراءة المعلومات الخاصة بأرقام الهاتف المحظورة بالنبسة للمكالمات أو الرسائل الواردة.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">تغيير القائمة السوداء للهاتف</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">السماح للتطبيق بتغيير أرقام الهاتف التي يتم حظر للمكالمات الواردة أو الرسائل.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">تمكين أو تعطيل حارس الخصوصية</string>
   <string name="permdesc_changePrivacyGuardState">يسمح للتطبيق بتغيير ما إذا كان تطبيق آخر يعمل مع \"حارس الخصوصية\". عندما يتم تشغيل تطبيق مع \"حارس الخصوصية\"، فلن يُسمح بالوصول إلى البيانات الشخصية كجهات الاتصال أو سجلات المكالمات أو الرسائل.</string>
   <string name="privacy_guard_notification">حارس الخصوصية نشط</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> لن تكون قادراً على الوصول إلى البيانات الشخصية</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">تعيين خلفية شاشة الحارس الرئيسي</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">السماج للتطبيق بتغيير خلفية شاشة التأمين.</string>
   <string name="privacy_guard_dialog_title">حارس الخصوصية</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> يرغب في <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">إعادة تمهيد</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">الحالي</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">إعادة التمهيد</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">استرداد</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">محمل التمهيد</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">التنزيل</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">إعادة تمهيد سريعة</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">إعادة التمهيد</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">ستتم إعادة تمهيد جهازك اللوحي.</string>
   <string name="reboot_confirm" product="default">ستتم إعادة تمهيد هاتفك.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">إعادة التمهيد\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">تم إنهاء التطبيق</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">تمكين ADB عبر الشبكة</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB عبر USB &amp; تمكين الشبكة</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">انقر لتعطيل تصحيح الأخطاء.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">المس لاظهار خيارات USB.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">⁯USB &amp; الشبكة</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">الشبكة</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">مقاطعة تشغيل التطبيق</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">السماح للتطبيق بمقاطعة تشغيل تطبيقات أخرى</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">الوصول إلى الكاميرا</string>
   <string name="app_ops_access_location">الوصول إلى موقعك</string>
   <string name="app_ops_access_notifications">قراءة إشعاراتك</string>
@@ -120,36 +164,57 @@
   <string name="app_ops_use_voice_volume">التحكم في مستوى صوت المكالمة الصوتية</string>
   <string name="app_ops_write_mms">كتابة رسالة MMS</string>
   <string name="app_ops_write_sms">كتابة رسالة نصية قصيرة</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">البطاقة غير صالحة.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">وضع الطيران</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">تم التوصيل في وضع الشحن</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">لا يوجد جهاز متصل</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> جهاز متصل</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> أجهزة متصلة</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">لاتوجد وسائط قابلة للإزالة في الوقت الحالى \u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">تخزين UICC</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">تشاينا موبايل</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">تذكر خياري</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">حفظ الطاقة</string>
   <string name="perf_profile_bal">متوازن</string>
   <string name="perf_profile_perf">الأداء</string>
   <string name="perf_profile_bias_power">الكفاءة</string>
   <string name="perf_profile_bias_perf">سريع</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">فشل تثبيت السمة</string>
   <string name="theme_install_error_message">فشل تثبيت %s</string>
   <string name="theme_reset_notification_title">إعادة تعيين السمة</string>
   <string name="theme_reset_notification_body">تم استرداد سمة النظام بسبب عمليات تعطيل متعددة للتطبيق.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s لم يتم تثبيته</string>
   <string name="permlab_interceptSmsSent">اعتراض الرسائل النصية القصيرة الصادرة</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">السماح للتطبيق باعتراض الرسائل النصية القصيرة الصادرة. التطبيقات الخبيثة قد تؤدي إلى منع ارسال الرسائل النصية القصيرة.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">الوصول إلى خدمة الإضاءة</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">السماح للتطبيق بالوصول إلى خدمة الإضاءة. ينبغي أن لا يكون متاحا للتطبيقات العادية.</string>
   <string name="permlab_preventpower">تجاوز مفتاح الطاقة</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">السماح للتطبيق بتجاوز زر الطاقة.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">سيتم مسح كافة البيانات الموجودة على مكانتخزين USB (في إطار المسار \'%1$s). لا يمكن التراجع عن هذا الإجراء!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">سيتم مسح كافة البيانات الموجودة في الذاكرة (في إطار المسار\'%1$s\'). لا يمكن التراجع عن هذا الإجراء!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">يتم إلغاء تحميل بطاقة SD/u2026</string>
   <string name="sd_progress_erasing">يتم مسح محتويات بطاقة SD/u2026</string>
   <string name="sd_format_error">تعذر مسح بطاقة SD.</string>
@@ -157,6 +222,7 @@
   <string name="sd_media_checking">يتم حالياً فحص بطاقة SD.</string>
   <string name="sd_media_removed">تمت إزالة بطاقة SD.</string>
   <string name="sd_media_shared">بطاقة SD تستعمل حالياً بواسطة كمبيوتر.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">إلغاء تحميل USB/u2026</string>
   <string name="usb_progress_erasing">مسح بيانات USB/ u2026</string>
   <string name="usb_format_error">تعذر مسح مكان تخزين USB.</string>
@@ -164,6 +230,7 @@
   <string name="usb_media_checking">يتم فحص جهاز تخزين USB حالياً.</string>
   <string name="usb_media_removed">تم إزالة جهاز تخزين USB.</string>
   <string name="usb_media_shared">يتم استعمال جهاز تخزين USB بواسطة كمبيوتر حالياً.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">جار تحضير بطاقة SD</string>
   <string name="sd_ext_media_checking_notification_message">جار التحقق من بطاقة SD للتحري عن الأخطاء.</string>
   <string name="sd_ext_media_nofs_notification_title">بطاقة SD فارغة</string>
@@ -176,6 +243,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">يمكنك بأمان إزالة بطاقة الذاكرة SD.</string>
   <string name="sd_ext_media_nomedia_notification_title">تمت إزالة بطاقة SD</string>
   <string name="sd_ext_media_nomedia_notification_message">تمت إزالة بطاقة SD. أدخل البطاقة الجديدة.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">جار معالجة USB</string>
   <string name="usb_ext_media_checking_notification_message">جار فحص USB للتحري عن وجو أخطاء.</string>
   <string name="usb_ext_media_nofs_notification_title">جهاز تخزين USB فارغ</string>
@@ -188,6 +256,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">يمكنك بأمان إزالة جهاز تخزين USB.</string>
   <string name="usb_ext_media_nomedia_notification_title">تمت إزالة جهاز تخزين USB</string>
   <string name="usb_ext_media_nomedia_notification_message">تمت إزالة جهاز تخزين USB. قم بإدراج وحدة تخزين جديد.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">تلقائي</string>
   <string name="live_display_auto_summary">ضبط درجة حرارة لون للشاشة تلقائياً بعد غروب الشمس وشروق الشمس</string>
   <string name="live_display_off">إيقاف</string>
@@ -199,19 +268,35 @@
   <string name="live_display_outdoor">خارج المنزل ( شمس ساطعة)</string>
   <string name="live_display_outdoor_summary">استخدم إعدادات خارج المنزل  فقط</string>
   <string name="live_display_hint">ميزة LiveDisplay يمكن أن تساعد في تقليل إجهاد العين والمساعدة على النوم في الليل. انقر هنا لتجربته!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">لإلغاء تثبيت هذه الشاشة، المس واستمر في ضغط زر الرجوع.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">تشغيل ضوء الفلاش</string>
   <string name="quick_settings_tile_flashlight_not_summary">انقر لإيقاف التشغيل</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">إرساء بطاقة SD</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">بصمة الإصبع <xliff:g id="number">%d </xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">الوصول إلى خدمة بصمة الإصبع</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">يسمح للتطبيق بالوصول إلى خدمة بصمات الأصابع. ويمكن للتطبيق إضافة وحذف وإعادة تسمية ومصادقة بصمات الأصابع</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">إعادة تعيين إحصائيات البطارية</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">يسمح للتطبيق بإعادة تعيين بيانات استخدام بطارية ذات المستوى المنخفض الحالي.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">الأولوية</string>
   <string name="silent_mode_none">بلا</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">ايقاف بث تقنية واي فاي بسبب تغيير اشتراك SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">إيقاف Wi-Fi</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">شاشة تأمين جهة أخرى</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">السماح باستخدام تطبيق كشاشة تأمين غير آمنة.</string>
 </resources>

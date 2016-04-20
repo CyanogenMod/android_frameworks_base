@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Profilak</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profila</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Bat ere ez</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Pantaila-argazkia</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">jaso SMS babestua</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">SMS mezu babestua jasotzea ahalbidetzen dio aplikazioari.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">aldatu SMS babestuen zerrenda</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">SMS babestuen helbide zerrenda aldatzea ahalbidetzen dio aplikazioari.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Segurtasuna</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Gailuaren segurtasun informazioarekin erlazionaturiko baimenak.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">Gaien zerbitzurako sarbidea</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Aplikazioa gaien zerbitzurako sarbidea izatera baimentzen du. Aplikazio arruntentzako ez luke beharrezkoa izan behar.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">Gaiei buruzko informazioa irakurri</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Aplikazioa instalaturiko gaiak irakurtzera baimentzen du, baita momentuan aplikaturikoa zein den determinatzera ere.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">Gaiak aldatu</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Gai berriak sartu eta ezarrita duzun gaia aldatzea ahalbidetzen dio aplikazioari.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">Telefonoaren zerrenda beltza irakurri</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Sarrera dei edo SMS mezuak blokeatuta dituzten telefono zenbakien informazioa irakurtzea ahalbidetzen dio aplikazioari.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">aldatu telefonoen zerrenda beltza</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Sarrera deiak eta SMS mezuak blokeatuta dituzten zenbakien zerrenda aldatzea ahalbidetzen dio aplikazioari.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">gaitu edo ezgaitu Privacy Guard</string>
   <string name="permdesc_changePrivacyGuardState">Beste aplikazio bat Privacy Guard menpean dagoen aldatzea ahalbidetzen dio aplikazioari. Aplikazio bat Privacy Guard menpean dagoenean ezin izango du datu pertsonalik ikusi, ez kontakturik, ez dei erregistrorik, ezta mezurik ere.</string>
   <string name="privacy_guard_notification">Privacy Guard aktibo</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> aplikazioak ezingo du datu pertsonalik irakurri</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Ezarri blokeo-pantailarako horma-papera</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Blokeo-pantailarako horma-papera aldatzea ahalbidetzen dio aplikazioari.</string>
   <string name="privacy_guard_dialog_title">Privacy Guard</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> aplikazioak <xliff:g id="op">%2$s</xliff:g> ahal izatea nahi du.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Berrabiarazi</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Oraingoa</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Berrabiarazi</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Berreskuratzea</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Abiarazlea</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Deskarga</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Berrabiatze leuna</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Berrabiarazi</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Tableta berrabiarazi egingo da.</string>
   <string name="reboot_confirm" product="default">Telefonoa berrabiarazi egingo da.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Berrabiarazten\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplikazioa eten da</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">Sare gaineko ADB gaitua</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">USB eta sare gaineko ADB gaitua</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Sakatu arazketa ezgaitzeko.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Ukitu USB aukerak hautatzeko.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB eta sarea</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Sarea</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Eragotzi aplikazioak abiaraztea</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Beste aplikazioak abiaraztea eragoztea ahalbidetzen dio aplikazioari</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">kamera atzitu</string>
   <string name="app_ops_access_location">zure kokalekua atzitu</string>
   <string name="app_ops_access_notifications">zure jakinarazpenak irakurri</string>
@@ -119,36 +163,57 @@
   <string name="app_ops_use_voice_volume">ahots deiaren bolumena kontrolatu</string>
   <string name="app_ops_write_mms">MMS mezu bat idatzi</string>
   <string name="app_ops_write_sms">SMS mezu bat idatzi</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Txartela baliogabea.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Hegaldi modua</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Kargatze moduan konektatuta</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Ez da gailurik konektatu</string>
   <string name="tethered_notification_one_device_message">gailu <xliff:g id="count">%1$s</xliff:g> konektatuta</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> gailu konektatuta</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Ez dago euskarri aldagarririk\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC biltegiratzea</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Gogoratu nire aukera</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Energia aurreztea</string>
   <string name="perf_profile_bal">Orekatua</string>
   <string name="perf_profile_perf">Errendimendua</string>
   <string name="perf_profile_bias_power">Eraginkortasina</string>
   <string name="perf_profile_bias_perf">Azkarra</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Ezin izan da gaia instalatu</string>
   <string name="theme_install_error_message">%s ez da instalatu</string>
   <string name="theme_reset_notification_title">Gaia leheneratu da</string>
   <string name="theme_reset_notification_body">Sistemaren gaia berrezarri da hainbat aplikazio kraskatu direlako.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ez dago instalatuta</string>
   <string name="permlab_interceptSmsSent">Atzeman bidalitako SMSak</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Bidalitako SMSak antzematea ahalbidetzen dio aplikazioari. Aplikazio maltzurrek SMSak bidaltzea ekidin dezakete.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">Atzitu linterna zerbitzua</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Linterna zerbitzura sartzea ahalbidetzen dio aplikazioari. Aplikazio arruntek ez dute hau behar.</string>
   <string name="permlab_preventpower">gainidatzi pizte botoia</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Pizteko teklaren jokabidea gainidaztea ahalbidetzen dio aplikazioari.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">USB biltegiratzean (\"%1$s\" bidean) dagoen informazio guztia ezabatuko da. Ekintza hau ezin da desegin!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Txartelean (\"%1$s\" bidean) dagoen informazio guztia ezabatuko da. Ekintza hau ezin da desegin!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">SD txartela desmuntatzen\u2026</string>
   <string name="sd_progress_erasing">SD txartela ezabatzen\u2026</string>
   <string name="sd_format_error">Ezin izan da SD txartela ezabatu.</string>
@@ -156,6 +221,7 @@
   <string name="sd_media_checking">SD txartela egiaztatzen ari da.</string>
   <string name="sd_media_removed">SD txartela atera egin da.</string>
   <string name="sd_media_shared">Ordenagailu bat ari da SD txartela erabiltzen.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">USB biltegiratzea desmuntatzen\u2026</string>
   <string name="usb_progress_erasing">USB biltegiratzea ezabatzen\u2026</string>
   <string name="usb_format_error">Ezin ezabatu USB biltegiratzea.</string>
@@ -163,6 +229,7 @@
   <string name="usb_media_checking">USB biltegiratzea egiaztatzen ari da.</string>
   <string name="usb_media_removed">USB biltegiratzea atera egin da.</string>
   <string name="usb_media_shared">Ordenagailu bat ari da USB biltegiratzea erabiltzen.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">SD txartela prestatzen</string>
   <string name="sd_ext_media_checking_notification_message">SD txartela egiaztatzen erroreen bila.</string>
   <string name="sd_ext_media_nofs_notification_title">SD txartel hutsa</string>
@@ -175,6 +242,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">SD txartela lasai atera dezakezu.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD txartela atera da</string>
   <string name="sd_ext_media_nomedia_notification_message">SD txartela atera da. Sartu beste bat.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">USB biltegiratzea prestatzen</string>
   <string name="usb_ext_media_checking_notification_message">USB biltegiratzea egiaztatzen erroreen bila.</string>
   <string name="usb_ext_media_nofs_notification_title">USB biltegiratze hutsa</string>
@@ -187,6 +255,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">USB biltegiratzea lasai atera dezakezu.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB biltegiratzea atera da</string>
   <string name="usb_ext_media_nomedia_notification_message">USB biltegiratzea atera da. Sartu beste euskarri bat.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatikoa</string>
   <string name="live_display_auto_summary">Doitu automatikoki pantailaren kolore tenperatura ilunabarra eta egunsentiaren ostean</string>
   <string name="live_display_off">Ez</string>
@@ -198,19 +267,35 @@
   <string name="live_display_outdoor">Kalean (eguzkipean)</string>
   <string name="live_display_outdoor_summary">Erabili kaleko ezarpenak besterik ez</string>
   <string name="live_display_hint">LiveDisplayk begi nekea gutxitu eta gauez lo egiten lagundu dezake. Probatu ezazu!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Pantaila hau desiltzatzeko sakatu eta mantendu atzera botoia.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Linterna piztuta dago</string>
   <string name="quick_settings_tile_flashlight_not_summary">Sakatu itzaltzeko</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">Oinarriaren SD txartela</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name"><xliff:g id="number">%d</xliff:g>. hatz-marka</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">atzitu hatz-marka zerbitzua</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Hatz-marka zerbitzua atzitzea ahalbidetzen dio aplikazioari. Aplikazioak hatz-markak gehitu, ezabatu edo izenez aldatu ahal izango ditu eta hauek erabilita identifikatu</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">ezabatu bateriaren estatistikak</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Bateriaren maila baxuko erabilera datuak leheneratzea ahalbidetzen dio aplikazioari.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Lehentasuna</string>
   <string name="silent_mode_none">Bat ere ez</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Wi-Fi gunea desgaitu da SIM harpidetza aldatu delako</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Ezgaitu Wi-Fia</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">hirugarrengoen blokeo pantaila</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">Aplikazio bat blokeo pantaila ez seguru gisa erabiltzea ahalbidetzen du.</string>
 </resources>

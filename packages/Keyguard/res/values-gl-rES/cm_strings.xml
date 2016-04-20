@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">A SIM/RUIM personalizada está bloqueada</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Estado"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Ignorar</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Rañura <xliff:g id="number">%d</xliff:g>: Nova tarxeta SIM\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Esta tarxeta non é válida.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Introduza o PIN da tarxeta SIM. Se erra <xliff:g id="number">%d</xliff:g> vez máis, terá que contactar co seu fornecedor para desbloquear o dispositivo.</item>
     <item quantity="other">Introduza o PIN da tarxeta SIM. Quédanlle <xliff:g id="number">%d</xliff:g> intentos.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">Desactivouse a tarxeta SIM. Introduza o código PUK para continuar. Queda <xliff:g id="number">%d</xliff:g> tentativa antes de que a tarxeta SIM fique bloqueada. Para máis información, contacte co seu fornecedor.</item>
     <item quantity="other">Desactivouse a tarxeta SIM. Introduza o código PUK para continuar. Quedan <xliff:g id="number">%d</xliff:g> tentativas antes de que a tarxeta quede bloqueada. Para máis información, contacte co seu fornecedor.</item>

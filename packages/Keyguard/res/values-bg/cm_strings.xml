@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">СИМ картата е заключена</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Статус"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Отхвърли</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Слот <xliff:g id="number">%d </xliff:g>: Нова СИМ карта\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Невалидна карта.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Въведете ПИН кода на СИМ картата, имате <xliff:g id="number">%d </xliff:g> останал опит, преди да трябва да се свържете с вашия оператор за отключване на устройството.</item>
     <item quantity="other">Въведете ПИН кода на СИМ картата, имате <xliff:g id="number">%d </xliff:g> останали опити, преди да трябва да се свържете с вашия оператор за отключване на устройството.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">СИМ картата е блокирана. Въведете ПУК кода, за да продължите. Имате <xliff:g id="number">%d </xliff:g> останал опит преди СИМ картата да стане неизползваема. Свържете се с вашия оператор за повече подробности.</item>
     <item quantity="other">СИМ картата е блокирана. Въведете ПУК кода, за да продължите. Имате <xliff:g id="number">%d </xliff:g> останали опити преди СИМ картата да стане неизползваема. Свържете се с вашия оператор за повече подробности.</item>

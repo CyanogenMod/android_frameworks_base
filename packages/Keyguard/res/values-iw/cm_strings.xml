@@ -17,17 +17,24 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM נעול להתאמות</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"מצב"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">ביטול</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">חריץ <xliff:g id="number">%d </xliff:g>: כרטיס SIM חדש\u0020</string>
-  <string name="lockscreen_sim_error_message_short">כרטיס שגוי.</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
+  <string name="lockscreen_sim_error_message_short">כרטיס לא חוקי.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">הזן את קוד ה-PIN של כרטיס ה-SIM, נותר לך ניסיון <xliff:g id="number">%d</xliff:g> לפני שתיאלץ לפנות לספק הסלולרי שלך על מנת לבטל את נעילת המכשיר.</item>
+    <item quantity="one">הזן את קוד ה-PIN של כרטיס ה-SIM, נותר לך ניסיון <xliff:g id="number">%d</xliff:g> לפני שתיאלץ לפנות לספק התקשורת שלך כדי לבטל את נעילת המכשיר.</item>
     <item quantity="other">הזן את קוד ה-PIN של כרטיס ה-SIM, נותרו לך <xliff:g id="number">%d</xliff:g> ניסיונות.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
-    <item quantity="one">כרטיס ה-SIM חסום כרגע. הזן קוד PUK כדי להמשיך. לרשותך ניסיון <xliff:g id="number">%d</xliff:g> לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק הסלולרי שלך.</item>
-    <item quantity="other">כרטיס ה-SIM נחסם זמנית. הזן קוד PUK כדי להמשיך. לרשותך <xliff:g id="number">%d</xliff:g> ניסיונות לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק הסלולרי שלך.</item>
+    <item quantity="one">כרטיס ה-SIM מושבת כרגע. הזן קוד PUK כדי להמשיך. לרשותך ניסיון <xliff:g id="number">%d</xliff:g> לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק התקשורת שלך.</item>
+    <item quantity="other">כרטיס ה-SIM מושבת כרגע. הזן קוד PUK כדי להמשיך. לרשותך <xliff:g id="number">%d</xliff:g> ניסיונות לפני שכרטיס ה-SIM יחסם לצמיתות. לפרטים, פנה לספק התקשורת שלך.</item>
   </plurals>
 </resources>

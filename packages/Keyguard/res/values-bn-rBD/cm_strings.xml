@@ -17,6 +17,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM নিজস্বকরণ বন্ধ আছে</string>
+  <!-- Status -->
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
+  <!-- Slot id in SIM pin/puk unlock view -->
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">অবৈধ কার্ড।</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
 </resources>

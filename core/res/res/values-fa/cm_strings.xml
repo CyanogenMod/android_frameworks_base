@@ -17,58 +17,102 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">پروفایل‌ها</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">پروفایل</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">هیچ‌کدام</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">تصویر صفحه</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">دریافت پیامک محفاظت شده</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">به برنامه اجازه می‌دهد پیام محافظت شده‌ای دریافت کند.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">ویرایش لیست پیامک محافظت شده</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">به برنامه اجازه می‌دهد لیست آدرس پیامک‌های محافظت شده را تغییردهد.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">امنیت</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">مجوزهای مربوط به اطلاعات امنیتی دستگاه.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">دسترسی به سرویس تم</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">به برنامه مجوز دسترسی به سرویس تم را می‌دهد. این مجوز هرگز برای برنامه‌های معمول لازم نیست.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">مشاهده اطلاعات تم شما</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">به برنامه اجازه می‌دهد تا تم‌های شما را مشاهده کرده و
        بفهمد شما کدام تم را انتخاب کرده‌اید.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">ویرایش تم‌های شما</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">به برنامه اجازه می‌دهد تا تم‌های جدید ایجاد کرده و
        تم انتخابی شما را ویرایش کند.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">مشاهده لیست سیاه گوشی</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">به برنامه اجازه می‌دهد اطلاعات مربوط به شماره تلفن‌های مسدود را برای پیام‌ها یا تماس‌های ورودی بخواند.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">تغییر لیست سیاه گوشی</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">به برنامه اجازه می‌دهد شماره تلفن‌های مسدود را برای پیام‌ها یا تماس‌های ورودی تغییر دهد.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">فعال یا غیرفعال کردن محافظ حریم خصوصی</string>
   <string name="permdesc_changePrivacyGuardState">به برنامه اجازه می‌دهد اجرا شدن برنامه‌های دیگر با محافظ حریم خصوصی را تغییر دهد. هنگامی که یک برنامه با محافظ حریم خصوصی اجرا می‌شود، به اطلاعات شخصی مانند مخاطبین، گزارش‌های تماس یا پیام‌ها دسترسی نخواهد داشت.</string>
   <string name="privacy_guard_notification">محافظ حریم خصوصی فعال است</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> به اصلاعات شخصی دسترسی نخواهد داشت</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">تنظیم کاغذدیواری قفل صفحه</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">به برنامه اجازه می‌دهد کاغذدیواری قفل صفحه را تغییر دهد.</string>
   <string name="privacy_guard_dialog_title">محافظ حریم خصوصی</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> می‌خواهد <xliff:g id="op">%2$s</xliff:g> انجام دهد.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">راه‌اندازی مجدد</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">فعلی</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">معمولی</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">ریکاوری</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">بوت لودر</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">دانلود</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">سافت</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">راه‌اندازی مجدد</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">تبلت شما مجددا راه‌اندازی خواهد شد.</string>
   <string name="reboot_confirm" product="default">گوشی شما مجددا راه‌اندازی خواهد شد.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">راه‌اندازی مجدد\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">برنامه بسته شد</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ای‌دی‌بی از طریق شبکه فعال شد</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ای‌دی‌بی از طریق شبکه و یواس‌بی فعال شد</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">برای غیرفعال کردن اشکال‌زدایی لمس کنید.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">برای انتخاب گزینه‌های یو‌اس‌بی لمس کنید.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ای‌دی‌بی - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">شبکه و یواس‌بی</string>
   <string name="adb_active_custom_tile_usb">یواس‌بی</string>
   <string name="adb_active_custom_tile_net">شبکه</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">جلوگیری از اجرا شدن برنامه</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">به برنامه اجازه می‌دهد از اجرا شدن برنامه‌های دیگر جلوگیری کند</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">دسترسی به دوربین</string>
   <string name="app_ops_access_location">دسترسی به مکان شما</string>
   <string name="app_ops_access_notifications">مشاهده اعلان‌های شما</string>
@@ -121,36 +165,57 @@
   <string name="app_ops_use_voice_volume">کنترل صدای تماس صوتی</string>
   <string name="app_ops_write_mms">نوشتن پیام ام‌ام‌اس</string>
   <string name="app_ops_write_sms">نوشتن پیامک</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">سیم کارت نامعتبر.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">حالت هواپیما</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">به حالت شارژ متصل شد</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">هیچ دستگاه متصلی وجود ندارد</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s </xliff:g> دستگاه متصل</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> دستگاه متصل</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">هیچ رسانه قابل حذفی وجود ندارد\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">ذخیره‌سازی UICC</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">چاینا موبایل</string>
   <string name="China_Unicom">چاینا یونیکام</string>
   <string name="China_Telecom">چاینا تله‌کام</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">انتخابم را به یاد داشته باش</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">ذخیره نیرو</string>
   <string name="perf_profile_bal">متعادل</string>
   <string name="perf_profile_perf">کارایی</string>
   <string name="perf_profile_bias_power">بازدهی</string>
   <string name="perf_profile_bias_perf">سریع</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">موفق به نصب تم نشد</string>
   <string name="theme_install_error_message">%s نصب نشد</string>
   <string name="theme_reset_notification_title">تنظیم مجدد تم</string>
   <string name="theme_reset_notification_body">به دلیل از کار افتادن چند برنامه تم اصلی برگردانده شد.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s نصب نیست</string>
   <string name="permlab_interceptSmsSent">جلوگیری از پیامک خروجی</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">به برنامه اجازه می‌دهد از پیامک خروجی جلوگیری کند. ممکن است برنامه‌های مخرب از این قابلیت برای جلوگیری از ارسال پیامک خروجی استفاده کنند.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">دسترسی به چراغ‌قوه</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">به برنامه اجازه می‌دهد به خدمات چراغ‌قوه دسترسی داشته باشد. این دسترسی برای برنامه‌های معمول نیاز نیست.</string>
   <string name="permlab_preventpower">جایگزین کردن کلید پاور</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">به برنامه اجازه می‌دهد کلید پاور را جایگزین کند.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">تمام اطلاعات حافظه یواس‌بی شما (در مسیر «%1$s») پاک خواهد شد. این عمل برگشت‌ناپذیر است!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">تمام اطلاعات کارت حافظه شما (در مسیر «%1$s») پاک خواهد شد. این عمل برگشت‌ناپذیر است!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">قطع دسترسی کارت حافظه\u2026</string>
   <string name="sd_progress_erasing">پاک کردن کارت حافظه\u2026</string>
   <string name="sd_format_error">نمی‌توان کارت حافظه را پاک کرد.</string>
@@ -158,6 +223,7 @@
   <string name="sd_media_checking">کارت حافظه در حال بررسی شدن است.</string>
   <string name="sd_media_removed">کارت حافظه جدا شده است.</string>
   <string name="sd_media_shared">کارت حافظه توسط کامپیوتر درحال استفاده است.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">قطع دسترسی حافظه یو‌اس‌بی\u2026</string>
   <string name="usb_progress_erasing">پاک کردن حافظه یواس‌بی\u2026</string>
   <string name="usb_format_error">حافظه یواس‌بی را نمی‌توان پاک کرد.</string>
@@ -165,6 +231,7 @@
   <string name="usb_media_checking">حافظه USB در حال بررسی شدن است.</string>
   <string name="usb_media_removed">حافظه یواس‌بی جدا شد.</string>
   <string name="usb_media_shared">حافظه یواس‌بی توسط کامپیوتر درحال استفاده است.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">آماده کردن کارت حافظه</string>
   <string name="sd_ext_media_checking_notification_message">بررسی کارت حافظه برای خطای احتمالی.</string>
   <string name="sd_ext_media_nofs_notification_title">کارت حافظه خالی</string>
@@ -177,6 +244,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">می‌توانید با خیال راحت کارت حافظه را جدا کنید.</string>
   <string name="sd_ext_media_nomedia_notification_title">کارت حافظه جدا شده است</string>
   <string name="sd_ext_media_nomedia_notification_message">کارت حافظه جدا شد. یک کارت جدید وارد کنید.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">آماده کردن حافظه یو‌اس‌بی</string>
   <string name="usb_ext_media_checking_notification_message">بررسی حافظه یواس‌بی برای خطای احتمالی.</string>
   <string name="usb_ext_media_nofs_notification_title">حافظه یواس‌بی خالی</string>
@@ -189,6 +257,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">می‌توانید با خیال راحت حافظه یواس‌بی را جدا کنید.</string>
   <string name="usb_ext_media_nomedia_notification_title">حافظه یواس‌بی جدا شده است</string>
   <string name="usb_ext_media_nomedia_notification_message">حافظه یواس‌بی جدا شد. رسانه جدیدی وارد کنید.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">خودکار</string>
   <string name="live_display_auto_summary">تنظیم خودکار دمای رنگ صفحه بعد از طلوع و غروب خورشید</string>
   <string name="live_display_off">خاموش</string>
@@ -200,19 +269,35 @@
   <string name="live_display_outdoor">فضای باز (نور خورشید)</string>
   <string name="live_display_outdoor_summary">فقط استفاده از تنظیمات فضای باز</string>
   <string name="live_display_hint">نمایش پویا کمک می‌کند چشم‌هایتان کم‌تر خسته شده و شب راحت‌تر به خواب بروید. برای امتحان آن اینجا کلیک کنید!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">برای از سنجاق درآوردن این صفحه، دکمه بازگشت را زده و نگه دارید.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">چراغ‌قوه روشن است</string>
   <string name="quick_settings_tile_flashlight_not_summary">برای خاموش کردن ضربه بزنید</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">داک کارت حافظه</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">اثر انگشت <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">دسترسی به سرویس اثر انگشت</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">به برنامه اجازه می‌دهد به سرویس اثر انگشت دسترسی داشته باشد. برنامه می‌تواند افزودن، حذف، تغییرنام و تایید اثرهای انگشت را انجام دهد</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">تنظیم مجدد آمار کارکرد باتری</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">به برنامه اجازه می‌دهد داده‌های مربوط به استفاده از باتری با سطح شارژ پایین را مجددا تنظیم کند.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">اولویت‌دار</string>
   <string name="silent_mode_none">هیچ‌کدام</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">نقطه اتصال قابل حمل وای‌فای به دلیل تغییر تعرفه سیم کارت، غیرفعال شد</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">خاموش کردن وای‌فای</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">قفل صفحه دیگر</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">به برنامه اجازه می‌دهد تا به عنوان یک قفل صفحه غیرایمن استفاده شود.</string>
 </resources>

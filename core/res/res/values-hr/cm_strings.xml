@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Profili</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profil</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Ništa</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Snimak zaslona</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">primaj zaštićeni SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Dopušta aplikaciji da prima dolazeći zaštićeni SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">Izmjena popisa zaštićenih SMS poruka</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Dozvoljava aplikaciji izmjenu popisa adresa zaštićenih SMS poruka.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Sigurnost</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Dopuštenja vezana za sigurnosne informacije uređaja.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">pristupiti servisu tema</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Dopušta aplikaciji pristup servisu tema. Za obične aplikacije nikada ne bi trebao biti potreban.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">pročitati informacije vaše teme</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Dopušta aplikaciji čitanje vaših tema i određivanje teme koju koristite.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">urediti vaše teme</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Dopušta aplikaciji dodavati nove teme i urediti temu koju ste primjenili.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">čitati listu blokiranih poziva</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Dopušta aplikaciji čitanje informacija o telefonskim brojevima čije su dolazne poruke ili pozivi blokirani.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">promjeniti popis blokiranih poziva</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Dopušta aplikaciji promjenu telefonskih brojeva čije su dolazne poruke ili pozivi blokirani.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">omogućiti ili onemogućiti Zaštitu privatnosti</string>
   <string name="permdesc_changePrivacyGuardState">Dopušta aplikaciji odrediti hoće li druga aplikacija biti pokrenuta pod Nadzorom Privatnosti. Kada ja aplikacija pod Nadzorom Privatnosti, neće imati pristup osobnim podacima kao što su kontakti, zapisi poziva ili poruke.</string>
   <string name="privacy_guard_notification">Nadzor privatnosti aktivan</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> neće moći pristupiti osobnim podacima</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">postaviti pozadinu zaslona zaključavanja</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Dozvoljava aplikaciji promjenu pozadine zaslona zaključavanja.</string>
   <string name="privacy_guard_dialog_title">Nadzor privatnosti</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> želi <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Ponovno pokreni</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Trenutna</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Ponovno pokreni</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Način oporavka</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Download</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Brzo ponovno pokretanje</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Ponovno pokretanje</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Tablet će ponovno biti pokrenut.</string>
   <string name="reboot_confirm" product="default">Telefon će ponovno biti pokrenut.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Ponovno pokretanje\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplikacija prisilno zaustavljena</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">Mrežni ADB omogućen</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB preko USB &amp; mreže omogućen</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Dodirnite za onemogućavanje ispravljanja pogrešaka.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Dodirnite za odabir USB opcija.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s </xliff:g></string>
   <string name="adb_active_custom_tile_both">USB i mrežni</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Mreža</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">Presresti pokretanje aplikacija</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Dozvoljava aplikaciji presretanje pokretanja drugih aplikacija</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">pristupiti kameri</string>
   <string name="app_ops_access_location">pristupiti vašoj lokaciji</string>
   <string name="app_ops_access_notifications">čitati vaše obavijesti</string>
@@ -119,36 +163,57 @@
   <string name="app_ops_use_voice_volume">kontrolirati glasnoću glasovnog poziva</string>
   <string name="app_ops_write_mms">napisati MMS poruku</string>
   <string name="app_ops_write_sms">napisati SMS poruku</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Neispravna kartica.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Način rada u zrakoplovu</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Spojen u načinu za punjenje</string>
-  <string name="tethered_notification_no_device_message">Uređaj nije spojen</string>
+  <!-- Shown when the device is tethered -->
+  <string name="tethered_notification_no_device_message">Nema spojenih uređaja</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> povezani uređaj</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> povezanih uređaja</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Ne postoji uklonjivi medij\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC pohrana</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Zapamti moj odabir</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Štednja energije</string>
   <string name="perf_profile_bal">Uravnoteženo</string>
   <string name="perf_profile_perf">Performanse</string>
   <string name="perf_profile_bias_power">Učinkovitost</string>
   <string name="perf_profile_bias_perf">Brzo</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Instalacija teme nije uspjela</string>
   <string name="theme_install_error_message">%s Instalacija nije uspjela</string>
   <string name="theme_reset_notification_title">Vraćanje početne teme</string>
   <string name="theme_reset_notification_body">Tema sustava je vraćana na početnu zbog višestrukih rušenja aplikacija.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s nije instalirano</string>
   <string name="permlab_interceptSmsSent">presresti odlazni SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Dopušta aplikaciji presretanje odlaznih SMS poruka. Zlonamjerne aplikacije mogu ovo iskoristiti za sprječavanje slanja SMS poruke.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">Pristup svjetiljci</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Dopušta aplikaciji pristup svjetiljci. Nikad ne bi trebalo biti potrebno standardnim aplikacijama.</string>
   <string name="permlab_preventpower">Poništiti tipku za uključivanje</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Dopušta aplikaciji da poništi tipku za uključivanje.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">Svi podaci na vašoj USB pohrani (\'%1$s\') će biti obrisani. Ova radnja se ne može poništiti!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Svi podaci na vašoj kartici (\'%1$s\') će biti obrisani. Ova radnja se ne može poništiti!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">Demontiranje SD kartice\u2026</string>
   <string name="sd_progress_erasing">Brisanje SD kartice\u2026</string>
   <string name="sd_format_error">Brisanje SD kartice nije uspjelo.</string>
@@ -156,6 +221,7 @@
   <string name="sd_media_checking">SD kartica se trenutno provjerava.</string>
   <string name="sd_media_removed">SD kartica je uklonjena.</string>
   <string name="sd_media_shared">SD karticu trenutno koristi računalo.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Demontiranje USB pohrane\u2026</string>
   <string name="usb_progress_erasing">Brisanje USB pohrane\u2026</string>
   <string name="usb_format_error">Brisanje USB pohrane nije uspjelo.</string>
@@ -163,6 +229,7 @@
   <string name="usb_media_checking">USB pohrana se trenutno provjerava.</string>
   <string name="usb_media_removed">USB pohrana je uklonjena.</string>
   <string name="usb_media_shared">USB pohranu trenutno koristi računalo.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">Pripremanje SD kartice</string>
   <string name="sd_ext_media_checking_notification_message">Provjera grešaka SD kartice.</string>
   <string name="sd_ext_media_nofs_notification_title">Prazna SD kartica</string>
@@ -175,6 +242,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">SD karticu sada smijete ukloniti.</string>
   <string name="sd_ext_media_nomedia_notification_title">Uklonjena SD kartica</string>
   <string name="sd_ext_media_nomedia_notification_message">SD kartica uklonjena. Umetnite novu.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Priprema USB pohrane</string>
   <string name="usb_ext_media_checking_notification_message">Provjera grešaka USB pohrane.</string>
   <string name="usb_ext_media_nofs_notification_title">Prazna USB pohrana</string>
@@ -187,6 +255,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">USB pohranu sada smijete ukloniti.</string>
   <string name="usb_ext_media_nomedia_notification_title">Uklonjena USB pohrana</string>
   <string name="usb_ext_media_nomedia_notification_message">USB pohrana uklonjena. Umentite novi medij.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatski</string>
   <string name="live_display_auto_summary">Automatski prilagodi temperaturu boje zaslona nakon zalaska i izlaska sunca</string>
   <string name="live_display_off">Isključeno</string>
@@ -198,19 +267,35 @@
   <string name="live_display_outdoor">Vani (jako sunce)</string>
   <string name="live_display_outdoor_summary">Koristi samo postavke za van</string>
   <string name="live_display_hint">LiveDisplay može smanjiti naprezanje očiju i poboljšati san. Dodirnite ovdje ako ga želite isprobati!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Za otkvačiti ovaj zaslon dodirnite i držite tipku za natrag</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Svjetiljka je uključena</string>
   <string name="quick_settings_tile_flashlight_not_summary">Dodirnite za isključivanje</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">Dock SD kartica</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Otisak prsta <xliff:g id="number">%d </xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">Pristupi otiscima prsta</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Omogućuje aplikaciji pristup otiscima prstiju. Aplikacija može dodati, izbrisati, preimenovati i provjeriti autentičnost otisaka prstiju</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">Resetirati statistike baterije</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Dopušta aplikaciji resetiranje trenutnog korištenja podataka uz štednju energije.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritet</string>
   <string name="silent_mode_none">Ništa</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Wi- Fi Hotspot onemogućen zbog SIM promjene</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Isključite Wi-Fi</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">zaključavanje zaslona treće strane</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">Dopušta aplikaciji da se koristi kao nesiguran zaslon zaključavanja.</string>
 </resources>

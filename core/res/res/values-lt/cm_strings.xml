@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Profiliai</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profilis</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Nėra</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Ekrano kopija</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">gauti apsaugotus SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Leidžia programai gauti įeinančius apsaugotus SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">keisti apsaugotų SMS sąrašą</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Leidžia programai keisti apsaugotų SMS adresų sąrašą.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Sauga</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Leidimai susiję su įrenginio saugumo informacija.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">pasiekti temos paslaugą</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Leidžia programai pasiekti temos paslaugą. Niekada neturėtų reikėti įprastoms programoms.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">skaityti jūsų temos informaciją</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Leidžia programai skaityti jūsų temas ir nustatyti kurią temą pritaikėte.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">pakeisti jūsų temas</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Leidžia programai įdiegti naujas temas ir keisti temą, kurią pritaikėte.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">skaityti telefono juodąjį sąrašą</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Leidžia programai skaityti informaciją apie telefono numerius kurie yra užblokuoti dėl įeinančių skambučių ar pranešimų.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">pakeisti telefono juodąjį sąrašą</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Leidžia programai keisti telefono numerius kurie yra užblokuoti dėl įeinančių skambučių ar pranešimų.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">įgalinti arba neleisti privatumo saugos</string>
   <string name="permdesc_changePrivacyGuardState">Leisti programai keisti, kai kita programa veikia su privatumo sauga. Kai programa veikia su privatumo sauga ji neturės prieigos prie asmeninių duomenų pvz., kontaktų, skambučių žurnalų ar pranešimų.</string>
   <string name="privacy_guard_notification">Privatumo sauga aktyvi</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> negalės prieiti prie asmeninių duomenų</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">nustatyti klaviatūros apsaugos foną</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Leidžia programai pakeisti ekrano užrakto foną.</string>
   <string name="privacy_guard_dialog_title">Privatumo sauga</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> norėtu <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Paleisti iš naujo</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Dabartinis</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Paleisti iš naujo</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Atkūrimo režimas</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Atsisiuntimo režimas</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Paleisti iš naujo OS</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Paleisti iš naujo</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Jūsų planšetinis kompiuteris bus paleistas iš naujo.</string>
   <string name="reboot_confirm" product="default">Jūsų telefonas bus paleistas iš naujo.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Paleidžiama iš naujo\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Programa priverstinai uždaryta</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">USB derinimas per tinklą įgalintas</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">USB derinimas per USB ir tinklą įgalintas</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Palieskite, kad neleistumėte derinimo.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Palieskite, kad pasirinktumėte USB parinktys.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB ir tinklas</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Tinklas</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">perimti programos paleidimą</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Leidžia programai perimti kitų programų paleidimą</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">pasiekti fotoaparatą</string>
   <string name="app_ops_access_location">pasiekti jūsų vietą</string>
   <string name="app_ops_access_notifications">skaityti jūsų pranešimus</string>
@@ -119,36 +163,57 @@
   <string name="app_ops_use_voice_volume">valdyti balso skambučio garsumą</string>
   <string name="app_ops_write_mms">rašyti MMS pranešimą</string>
   <string name="app_ops_write_sms">rašyti SMS pranešimą</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Neteisinga kortelė.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Lėktuvo režimas</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Prijungtą į įkrovimo režimą</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Nėra prijungto įrenginio</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> prijungtas įrenginys</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> prijungti įrenginiai</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Nėra pašalinamos medijos\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">UICC saugykla</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Prisiminti mano pasirinkimą</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Energijos tausojimas</string>
   <string name="perf_profile_bal">Subalansuotas</string>
   <string name="perf_profile_perf">Našumas</string>
   <string name="perf_profile_bias_power">Efektyvus</string>
   <string name="perf_profile_bias_perf">Spartus</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Nepavyko įdiegti temos</string>
   <string name="theme_install_error_message">%s nepavyko įdiegti</string>
   <string name="theme_reset_notification_title">Nustatyti iš naujo temą</string>
   <string name="theme_reset_notification_body">Sistemos tema atkurta dėl pasikartojančių programos klaidų.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s neįdiegta</string>
   <string name="permlab_interceptSmsSent">Perimti siunčiamus SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Leisti programai perimti siunčiamus SMS. Kenkėjiškos programos gali tuo pasinaudoti, kad būtų užkirstas kelias siunčiamiems SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">pasiekti žibintuvėlio paslaugą</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Leidžia programai pasiekti žibintuvėlio paslaugą. Niekada neturėtų reikėti įprastoms programoms.</string>
   <string name="permlab_preventpower">nepaisyti įjungimo klavišo</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Leidžia programai nepaisyti įjungimo klavišo.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">Visi („%1$s“) USB saugyklos duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Visi („%1$s“) kortelės duomenys bus ištrinti. Šis veiksmas negali būti atšauktas!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">Atjungiama SD kortelė\u2026</string>
   <string name="sd_progress_erasing">Ištrinama SD kortelė\u2026</string>
   <string name="sd_format_error">Nepavyko ištrinti SD kortelės.</string>
@@ -156,6 +221,7 @@
   <string name="sd_media_checking">SD kortelė tikrinama.</string>
   <string name="sd_media_removed">SD kortelė pašalinta.</string>
   <string name="sd_media_shared">SD kortelė dabar naudojama kompiuterio.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Atjungiama USB saugykla\u2026</string>
   <string name="usb_progress_erasing">Ištrinama USB saugykla\u2026</string>
   <string name="usb_format_error">Nepavyko ištrinti USB saugyklos.</string>
@@ -163,6 +229,7 @@
   <string name="usb_media_checking">USB saugykla tikrinama.</string>
   <string name="usb_media_removed">USB saugykla pašalinta.</string>
   <string name="usb_media_shared">USB saugykla dabar naudojama kompiuterio.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">SD kortelė ruošiama</string>
   <string name="sd_ext_media_checking_notification_message">Tikrinama ar nėra klaidų SD kortelėje.</string>
   <string name="sd_ext_media_nofs_notification_title">Tuščia SD kortelė</string>
@@ -175,6 +242,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti SD kortelę.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD kortelė pašalinta</string>
   <string name="sd_ext_media_nomedia_notification_message">SD kortelė pašalinta. Įdėkite naują.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Ruošiama USB saugykla</string>
   <string name="usb_ext_media_checking_notification_message">Tikrinama ar nėra klaidų USB saugykloje.</string>
   <string name="usb_ext_media_nofs_notification_title">Tuščia USB saugykla</string>
@@ -187,6 +255,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Galite saugiai pašalinti USB saugyklą.</string>
   <string name="usb_ext_media_nomedia_notification_title">USB saugykla pašalinta</string>
   <string name="usb_ext_media_nomedia_notification_message">USB saugykla pašalinta. Įdėkite naują mediją.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automatinis</string>
   <string name="live_display_auto_summary">Automatiškai sureguliuoti ekrano spalvos temperatūrą po saulėlydžio ir saulėtekio</string>
   <string name="live_display_off">Išjungta</string>
@@ -198,19 +267,35 @@
   <string name="live_display_outdoor">Laukas (ryški saulė)</string>
   <string name="live_display_outdoor_summary">Naudoti tik lauko nustatymus</string>
   <string name="live_display_hint">„LiveDisplay“ gali padėti sumažinti akių įtampą ir padėti jums užmigti naktį. Spauskite čia, kad jį išbandyti!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Kad atsegtumėte šį ekraną palieskite ir laikykite mygtuką atgal.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Žibintuvėlis įjungtas</string>
   <string name="quick_settings_tile_flashlight_not_summary">Bakstelėkite, kad išjungtumėte</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">SD kortelės dokas</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Pirštų atspaudas <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">pasiekti pirštų atspaudų paslaugą</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Leidžia programai pasiekti pirštų atspaudų paslaugą. Programa gali pridėti, ištrinti, pervardyti ir autentikuoti prieš pirštų atspaudus</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">Nustatyti iš naujo akumuliatoriaus statistiką</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Leidžia programai nustatyti iš naujo dabartinio žemo lygio akumuliatoriaus naudojimo duomenis.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritetas</string>
   <string name="silent_mode_none">Joks</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Wi-Fi saitvietė išjungta dėl SIM prenumeratos kaitos</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Išjunkite „Wi-Fi“</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">trečiosios šalies ekrano užraktas</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">Leidžia programai būti naudojamai kaip nesaugiu ekrano užraktu.</string>
 </resources>

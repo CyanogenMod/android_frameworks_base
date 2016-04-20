@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM is Perso قوفڵکراوە</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"دۆخ"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">ڕەتکردنەوە</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">شوێنی سیمکارتی <xliff:g id="number">%d</xliff:g>: نوێ\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">کارته‌که‌ نادرووستە.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">PIN کۆدی سیم هه‌ڵه‌یه‌، <xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ به‌رله‌وه‌ی که‌ پێویست بکات په‌یوه‌ندیی به‌ کۆمپانیای دابینکه‌ره‌وه‌ بکه‌یت.</item>
     <item quantity="other">PIN کۆدی سیم هه‌ڵه‌یه‌، <xliff:g id="number">%d</xliff:g> هه‌وڵت ماوه‌ به‌رله‌وه‌ی که‌ پێویست بکات په‌یوه‌ندیی به‌ کۆمپانیای دابینکه‌ره‌وه‌ بکه‌یت.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">سیمکارت ئێستا لەکارکەوت، کۆدی PUK بنوسە بۆ بەردەوامبون. <xliff:g id="number">%d</xliff:g> جار ماوە بۆ لێدانی کۆد پێش ئەوەی سیمکارت بەتەواوی لەکار بکەوێت، پەیوەندی بکە بە کۆمپانیای سیمکارتەکەتەوە بۆ زانیاری زیاتر.</item>
     <item quantity="other">سیمکارت ئێستا لەکارکەوت، کۆدی PUK بنوسە بۆ بەردەوامبون. <xliff:g id="number">%d</xliff:g> جار ماوە بۆ لێدانی کۆد پێش ئەوەی سیمکارت بەتەواوی لەکار بکەوێت، پەیوەندی بکە بە کۆمپانیای سیمکارتەکەتەوە بۆ زانیاری زیاتر.</item>

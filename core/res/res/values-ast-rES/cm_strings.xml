@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Perfiles</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Perfil</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Darréu</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Capturar pantalla</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">recibir SMS protexíos</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Permite que l\'aplicación reciba mensaxes SMS entrantes protexíos.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">modificar llista de SMS protexíos</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Permite que l\'aplicación modifique la llista de direiciones de mensaxes SMS protexíos.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Seguridá</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Permisos rellacionaos a la seguridá de la información del preséu.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">Accesu al serviciu de temes</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Permite l\'accesu a una aplicación al Servicio de temes. Enxamás tendría de facer falta p\'aplicaciones normales.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">lleer información del tema</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Permite que l\'aplicación llea los temes instalaos y determine qué tema ta aplicáu.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">modificar los temes</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Permite que l\'aplicación amieste temes nuevos y modifique\'l tema aplicáu.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">Lleer llista prieta del teléfonu</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Permite a una aplicación lleer información sobre los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">camudar la llista prieta del teléfonu</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Permite qu\'una aplicación camude los númberos telefónicos bloquiaos pa llamaes o mensaxes entrantes.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">habilitar o deshabilitar la privacidá</string>
   <string name="permdesc_changePrivacyGuardState">Permite que l\'aplicación cambie l\'estáu de privacidá d\'otra. Cuando una aplicación s\'executa cola privacidá habilitada, nun va poder acceder a los datos personales, talos como contautos, mensaxes o rexistros de llamaes.</string>
   <string name="privacy_guard_notification">Privacidá activada</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nun va poder acceder a los datos personales</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Afita\'l fondu de pantalla de bloquéu</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Permite que l\'aplicación afite\'l fondu de la pantalla de bloquéu.</string>
   <string name="privacy_guard_dialog_title">Privacidá</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> quies <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Reaniciar</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Actual</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Reaniciar</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Mou Recovery</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Mou Bootloader</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Descargar</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Reaniciu suave</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Reaniciar</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">La tablet va reaniciase.</string>
   <string name="reboot_confirm" product="default">El teléfonu va reaniciase.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Reaniciando\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplicación finada</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB sobre rede habilitáu</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB sobre USB y rede habilitáu</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Toca pa deshabilitar la depuración.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Toca pa escoyer opciones de USB</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB y rede</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Rede</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interceutar la execución d\'aplicaciones</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Permite que l\'aplicación interceute la execución d\'otres aplicaciones</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">acceder a la cámara</string>
   <string name="app_ops_access_location">acceder a la to llocalización</string>
   <string name="app_ops_access_notifications">lleer les tos notificaciones</string>
@@ -119,34 +163,55 @@
   <string name="app_ops_use_voice_volume">remanar el volume de la llamada</string>
   <string name="app_ops_write_mms">escribir un mensaxe MMS</string>
   <string name="app_ops_write_sms">escribir un mensaxe SMS</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Tarxeta inválida.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Mou avión</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Coneutáu nel mou de carga</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Nun hai dengún preséu coneutáu</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> preséu coneutáu</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> preseos coneutaos</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Nun hai medios estrayibles\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">Almacenamientu UICC</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Recordar la mio escoyeta</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Aforru d\'enerxía</string>
   <string name="perf_profile_bal">Equilibráu</string>
   <string name="perf_profile_perf">Rindimientu</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Falló al instalar el tema</string>
   <string name="theme_install_error_message">%s falló al instalar</string>
   <string name="theme_reset_notification_title">Reaniciu de tema</string>
   <string name="theme_reset_notification_body">Tema de sistema restauráu por mor de múltiples zarros de d\'app</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s nun ta instalada</string>
   <string name="permlab_interceptSmsSent">interceutar mensaxes SMS salientes</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Permite que l\'aplicación interceute mensaxes SMS salientes. Les aplicaciones malicioses puen impedir los mensaxes SMS salientes.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">accesu a llinterna</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Permite l\'accesu a una aplicación al Serviciu de Torch. Enxamás tendría de facer falta p\'aplicaciones normales.</string>
   <string name="permlab_preventpower">override power key</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">permite que l\'aplicación cambie\'l comportamientu de la tecla d\'encendíu.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">Va desaniciase tola información del almacenamientu USB (nel camín \'%1$s\'). ¡Esta aición nun pue desfacese!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Van desaniciase tolos datos de la tarxeta (nel camín \'%1$s\'). Esta aición nun pue desfacese!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">Desactivando tarxeta SD\u2026</string>
   <string name="sd_progress_erasing">Desaniciando tarxeta SD\u2026</string>
   <string name="sd_format_error">Nun pudo desaniciase la tarxeta SD.</string>
@@ -154,6 +219,7 @@
   <string name="sd_media_checking">Ta comprobándose la tarxeta SD.</string>
   <string name="sd_media_removed">Estráxose la tarxeta SD.</string>
   <string name="sd_media_shared">Hai un equipu usando agora mesmo la tarxeta SD.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Desactivando almacenamientu USB\u2026</string>
   <string name="usb_progress_erasing">Desaniciando almacenamientu USB\u2026</string>
   <string name="usb_format_error">Nun pudo desaniciase l\'almacenamientu USB.</string>
@@ -161,6 +227,7 @@
   <string name="usb_media_checking">Ta comprobándose l\'almacenamientu USB.</string>
   <string name="usb_media_removed">Estráxose l\'almacenamientu USB.</string>
   <string name="usb_media_shared">Hai un equipu usando agora mesmo l\'almacenamientu USB.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">Tresnando tarxeta SD</string>
   <string name="sd_ext_media_checking_notification_message">Comprobando fallos na tarxeta SD.</string>
   <string name="sd_ext_media_nofs_notification_title">Tarxeta SD balera</string>
@@ -173,6 +240,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Pues estrayer la tarxeta SD con seguridá.</string>
   <string name="sd_ext_media_nomedia_notification_title">Tarxeta SD estrayida</string>
   <string name="sd_ext_media_nomedia_notification_message">Tarxeta SD estrayida. Inxerta una nueva.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Preparando almacenamientu USB</string>
   <string name="usb_ext_media_checking_notification_message">Comprobando fallos nel almacenamientu USB.</string>
   <string name="usb_ext_media_nofs_notification_title">Almacenamientu USB baleru</string>
@@ -185,6 +253,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Pues estrayer l\'almacenamientu USB con seguridá.</string>
   <string name="usb_ext_media_nomedia_notification_title">Almacenamientu USB estrayíu</string>
   <string name="usb_ext_media_nomedia_notification_message">Almacenamientu USB estrayíu. Inxerta ún nuevu.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automáticu</string>
   <string name="live_display_auto_summary">Axustar automáticamente la temperatura del color de pantalla col alborecer y l\'atapecer</string>
   <string name="live_display_off">Desactiváu</string>
@@ -196,12 +265,28 @@
   <string name="live_display_outdoor">Esterior (lluz del sol)</string>
   <string name="live_display_outdoor_summary">Usar namái axustes del esterior</string>
   <string name="live_display_hint">LiveDisplay pue amenorgar reducir la fatiga visual y ayudar a dormir pela nueche. ¡Toca equí pa probalu!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">La llinterna ta prendida</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toca p\'apagar</string>
+  <!-- Storage description for the SD card on the dock -->
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Buelga <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Permite a un aplicación acceder el serviciu de buelgues dixitales. L\'aplicación pue amestar, desaniciar, renomar y autenticase escontra les buelgues dixitales</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioridá</string>
   <string name="silent_mode_none">Dengún</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">Deshabilitóse\'l puntu Wi-Fi pola mor del cambéu de la soscripción de la SIM</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Apagar Wi-Fi</string>
+  <!-- Third party keyguard permission label -->
+  <!-- Third party keyguard permission description -->
 </resources>

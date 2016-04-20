@@ -17,58 +17,102 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">ಪ್ರೊಫೈಲ್ಸ್</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">ಪ್ರೊಫೈಲ್</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">ಶೂನ್ಯ</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">ಸ್ಕ್ರೀನ್‍ಶಾಟ್</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">ಸಂರಕ್ಷಿತ ಎಸ್ಎಂಎಸ್ ಸ್ವೀಕರಿಸಿ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">ಆಪ್‍ಗೆ ಒಳಬರುವ ಸಂರಕ್ಷಿತ ಎಸ್ಎಂಎಸ್ ಸ್ವೀಕರಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">ಸಂರಕ್ಷಿತ ಎಸ್ಎಂಎಸ್ ಪಟ್ಟಿ ಮಾರ್ಪಡನೆ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">ಆಪ್‍ಗೆ ಸಂರಕ್ಷಿತ ಎಸ್‍ಎಂಎಸ್ ವಿಳಾಸ ಪಟ್ಟಿಯನ್ನು ಮಾರ್ಪಡಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">ಭದ್ರತೆ</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">ಸಾಧನ ಭದ್ರತೆ ಮಾಹಿತಿಗೆ ಸಂಬಂಧಿಸಿದ ಅನುಮತಿಗಳು.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">ಥೀಮ್ ಸೇವೆಗೆ ಪ್ರವೇಶ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">ಆಪ್‍ಗೆ ಥೀಮ್ ಸೇವೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಅನುಮತಿಸು. ಸಾಮಾನ್ಯ ಆಪ್‍ಗಳಿಗೆ ಇದರ ಅವಶ್ಯಕತೆ ಇರುವುದಿಲ್ಲ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">ನಿಮ್ಮ ಥೀಮ್‍ನ ಮಾಹಿತಿಯನ್ನು ಓದು</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">ಆಪ್‍ಗೆ ನಿಮ್ಮ ಥೀಮ್‍ಗಳನ್ನು ಓದಲು ಅನುಮತಿಸುತ್ತದೆ ಮತ್ತು
        ನೀವು ಯಾವ ಥೀಮ್ ಅನ್ವಯಿಸಿದ್ದೀರಿ ಎಂದು ನಿರ್ಧರಿಸುತ್ತದೆ.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">ನಿಮ್ಮ ಥೀಮ್ಸನ್ನು ಮಾರ್ಪಡಿಸು</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">ಆಪ್‍ಗೆ ಹೊಸ ಥೀಮ್‍ಗಳನ್ನು ಸೇರಿಸಲು ಅನುಮತಿಸುತ್ತದೆ ಮತ್ತು
        ನೀವು ಅನ್ವಯಿಸಿರುವ ಥೀಮ್‍ನ್ನು ಮಾರ್ಪಡಿಸುತ್ತದೆ.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">ಫೋನ್ ಬ್ಲಾಕ್‍ಪಟ್ಟಿಯನ್ನು ಓದು</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆಗಳನ್ನು ಅಥವಾ ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ದೂರವಾಣಿ ಸಂಖ್ಯೆಗಳ ಬಗ್ಗೆ ಮಾಹಿತಿಯನ್ನು ಓದಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">ಫೋನ್ ಬ್ಲಾಕ್‍ಪಟ್ಟಿ ಬದಲಾವಣೆ</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">ಆಪ್‍ಗೆ ಒಳಬರುವ ಕರೆ ಮತ್ತು ಸಂದೇಶಗಳನ್ನು ನಿರ್ಬಂಧಿಸಲಾದ ಸಂಖ್ಯೆಗಳನ್ನು ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">ಗೌಪ್ಯತಾ ರಕ್ಷಕವನ್ನು ಸಕ್ರಿಯ ಅಥವ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸುವಿಕೆ</string>
   <string name="permdesc_changePrivacyGuardState">ಆಪ್‍ಗೆ ಇತರೆ ಆಪ್ ಗೌಪ್ಯತಾ ರಕ್ಷಕದ ಜೊತೆ  ಚಲಿಸಲು ಅಗುತ್ತದೆಯೆ ಅಥವ ಇಲ್ಲವೇ ಎಂಬುದನ್ನು ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ. ಒಂದು ಆಪ್ Privacy Guard ಜೊತೆ ಚಲಿಸುತ್ತಿದ್ದಲ್ಲಿ, ಅದಕ್ಕೆ ವಯಕ್ತಿಕ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವಿದಿಲ್ಲ, ಉದಾಹರಣೆಗೆ ಸಂಪರ್ಕಗಳು, ಕರೆ ಲಾಗ್ಸ್, ಅಥವ ಸಂದೇಶಗಳು.</string>
   <string name="privacy_guard_notification">ಗೌಪ್ಯತಾ ರಕ್ಷಕ ಸಕ್ರಿಯ</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g>ಗೆ ಖಾಸಗಿ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">ಕೀಗಾರ್ಡ್ ವಾಲ್‍ಪೇಪರ್ ಹೊಂದಿಕೆ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">ಒಂದು ಆಪ್‍ಗೆ ಲಾಕ್ ಪರದೆಯ ವಾಲ್‍ಪೇಪರ್ ಬದಲಾಯಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <string name="privacy_guard_dialog_title">ಗೌಪ್ಯತಾ ರಕ್ಷಕ</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ನೀವು ಹೀಗೆ <xliff:g id="op">%2$s</xliff:g> ಬಯಸುವಿರಾ.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">ರಿಬೂಟ್</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">ಪ್ರಸ್ತುತ</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">ರಿಬೂಟ್</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">ರಿಕವರಿ</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">ಬೂಟ್‍ಲೋಡರ್</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">ಡೌನ್‍ಲೋಡ್</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">ಸಾಫ್ಟ್ ರಿಬೂಟ್</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">ರಿಬೂಟ್</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">ನಿಮ್ಮ ಟ್ಯಾಬ್ಲೆಟ್ ರಿಬೂಟ್ ಆಗುವುದು.</string>
   <string name="reboot_confirm" product="default">ನಿಮ್ಮ ಫೋನ್ ರಿಬೂಟ್ ಆಗುವುದು.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">ರಿಬೂಟ್ ಆಗುತ್ತಿದೆ\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">ಆಪ್ ಕೊಲ್ಲಲಾಗಿದೆ</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ನೆಟ್‍ವರ್ಕ್‍ನಿಂದ ಎಡಿಬಿ ಸಕ್ರಿಯಗೊಂಡಿದೆ</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ಯುಎಸ್‍ಬಿಯಿಂದ ಎಡಿಬಿ &amp; ನೆಟ್‍ವರ್ಕ್ ಸಕ್ರಿಯಗೊಂಡಿದೆ</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">ಡೀಬಗ್ಗಿಂಗ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲು ಸ್ಪರ್ಶಿಸಿ.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">ಯುಎಸ್‍ಬಿ ಆಯ್ಕೆಗಳನ್ನು ಆರಿಸಲು ಸ್ಪರ್ಶಿಸಿ.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ಎಡಿಬಿ - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">ಯುಎಸ್‍ಬಿ &amp; ನೆಟ್‍ವರ್ಕ್</string>
   <string name="adb_active_custom_tile_usb">ಯುಎಸ್‍ಬಿ</string>
   <string name="adb_active_custom_tile_net">ನೆಟ್‍ವರ್ಕ್</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ಆಪ್ ಆರಂಭ ಪ್ರತಿಬಂಧ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">ಆಪ್‍ಗೆ ಇತರೆ ಆಪ್‍ಗಳು ಆರಂಭಗೊಳ್ಳುವುದನ್ನು ಪ್ರತಿಬಂಧಿಸಲು ಅನುವುಮಾಡುತ್ತದೆ</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">ಕ್ಯಾಮೆರಾ ಪ್ರವೇಶ</string>
   <string name="app_ops_access_location">ನಿಮ್ಮ  ಸ್ಥಳವನ್ನು ಪ್ರವೇಶಿಸುವಿಕೆ</string>
   <string name="app_ops_access_notifications">ನಿಮ್ಮ ಅಧಿಸೂಚನೆಗಳನ್ನು ಓದು</string>
@@ -121,36 +165,57 @@
   <string name="app_ops_use_voice_volume">ಧ್ವನಿ ಕರೆ ವಾಲ್ಯೂಂನ್ನು ನಿಯಂತ್ರಿಸು</string>
   <string name="app_ops_write_mms">ಎಂಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
   <string name="app_ops_write_sms">ಎಸ್ಎಂಎಸ್ ಸಂದೇಶ ಬರೆ</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">ಅಮಾನ್ಯವಾದ ಕಾರ್ಡ್.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">ಏರೋಪ್ಲೇನ್ ಮೋಡ್</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">ಚಾರ್ಜಿಂಗ್ ಮೋಡ್‍ನಲ್ಲಿ ಸಂಪರ್ಕಗೊಳಿಸಲಾಗಿದೆ</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">ಯಾವುದೇ ಸಂಪರ್ಕಗೊಂಡ ಸಾಧನವಿಲ್ಲ</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> ಸಂಪರ್ಕಗೊಳಿಸಿದ ಸಾಧನ</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> ಸಂಪರ್ಕಗೊಳಿಸಿದ ಸಾಧನಗಳು</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">ಯಾವುದೇ ತೆಗೆಯಬಹುದಾದ ಮಾಧ್ಯಮ ಪ್ರಸ್ತುತವಾಗಿಲ್ಲ\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">ಯುಐಸಿಸಿ ಸಂಗ್ರಹಣೆ</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">ನನ್ನ ಆಯ್ಕೆಯನ್ನು ನೆನಪಿಡು</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">ವಿದ್ಯುತ್ ಉಳಿತಾಯ</string>
   <string name="perf_profile_bal">ಸಮತೋಲಿತ</string>
   <string name="perf_profile_perf">ಪರ್ಫಾರ್ಮೆನ್ಸ್</string>
   <string name="perf_profile_bias_power">ದಕ್ಷತೆ</string>
   <string name="perf_profile_bias_perf">ತ್ವರಿತ</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">ಥೀಮ್ ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
   <string name="theme_install_error_message">%s ಸ್ಥಾಪಿಸಲು ವಿಫಲವಾಗಿದೆ</string>
   <string name="theme_reset_notification_title">ಥೀಮ್ ಮರುಹೊಂದಿಕೆ</string>
   <string name="theme_reset_notification_body">ಬಹು ಆಪ್ ಕ್ರಾಶ್‍ನ ಕಾರಣದಿಂದಾಗಿ ಸಿಸ್ಟಂ ಥೀಮನ್ನು ಪುನಃಸ್ಥಾಪಿಸಲಾಗಿದೆ.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ಸ್ಥಾಪಿತವಾಗಿಲ್ಲ</string>
   <string name="permlab_interceptSmsSent">ಹೊರಹೋಗುವ ಎಸ್ಎಂಎಸ್ ಪ್ರತಿಬಂಧಿಸು</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">ಆಪ್‍ಗೆ ಹೊರಹೋಗುವ ಎಸ್ಎಂಎಸ್ ನಿರ್ಬಂಧಿಸಲು ಅನುಮತಿಸುತ್ತದೆ. ದುರುದ್ದೇಶಿತ ಆಪ್‍ಗಳು ಇದನ್ನು ಹೊರಹೋಗುವ ಎಸ್ಎಂಎಸ್‍ಗಳನ್ನು ತಡೆಯಲು ಬಳಸಬಹುದು.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">ಟಾರ್ಚ್ ಸೇವಯನ್ನು ಪ್ರವೇಶಿಸು</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">ಒಂದು ಆಪ್‍ಗೆ ಟಾರ್ಚ್ ಸೇವೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಅನುಮತಿಸುತ್ತದೆ. ಸಾಮಾನ್ಯ ಆಪ್‍ಗಳಿಗೆ ಅವಶ್ಯಕತೆಯಿರುವುದಿಲ್ಲ.</string>
   <string name="permlab_preventpower">ಪವರ್ ಕೀ ಅತಿಕ್ರಮಿಸು</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">ಆಪ್‍ಗೆ ಪವರ್ ಕೀಲಿಯನ್ನು ಅತಿಕ್ರಮಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">ನಿಮ್ಮ ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯಲ್ಲಿರುವ (\'%1$s\' ಮಾರ್ಗದ ಒಳಗಿರುವ) ಎಲ್ಲಾ ಡೇಟಾವನ್ನು ಅಳಿಸಿಸಲಾಗುತ್ತದೆ. ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂದಿರುಗಿಸಲಾಗುವುದಿಲ್ಲ!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">ನಿಮ್ಮ ಕಾರ್ಡ್‍ನಲ್ಲಿರುವ (\'%1$s\' ಮಾರ್ಗದ ಒಳಗಿರುವ) ಎಲ್ಲಾ ಡೇಟಾ ಅಳಿಸಲಾಗುತ್ತದೆ. ಈ ಕ್ರಿಯೆಯನ್ನು ಹಿಂದಿರುಗಿಸಲಾಗುವುದಿಲ್ಲ!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">SD ಕಾರ್ಡನ್ನು ಅನ್‍ಮೌಂಟ್‍ ಮಾಡಲಾಗುತ್ತಿದೆ\u2026</string>
   <string name="sd_progress_erasing">SD ಕಾರ್ಡನ್ನು ಅಳಿಸುತ್ತಿದೆ\u2026</string>
   <string name="sd_format_error">SD ಕಾರ್ಡನ್ನು ಅಳಿಸಲಾಗಲಿಲ್ಲ.</string>
@@ -158,6 +223,7 @@
   <string name="sd_media_checking">SD ಕಾರ್ಡ್ ಪ್ರಸ್ತುತವಾಗಿ ಪರಿಶೀಲನೆಯಾಗುತ್ತಿದೆ.</string>
   <string name="sd_media_removed">SD ಕಾರ್ಡನ್ನು ತೆಗೆಯಲಾಗಿದೆ.</string>
   <string name="sd_media_shared">SD ಕಾರ್ಡ್ ಪ್ರಸ್ತುತವಾಗಿ ಕಂಪ್ಯೂಟರ್‍ನ ಬಳಕೆಯಲ್ಲಿದೆ.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ಅನ್‍ಮೌಂಟ್‍ ಮಾಡುತ್ತಿದೆ\u2026</string>
   <string name="usb_progress_erasing">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ಅಳಿಸುತ್ತಿದೆ\u2026</string>
   <string name="usb_format_error">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ಅಳಿಸಲಾಗಲಿಲ್ಲ.</string>
@@ -165,6 +231,7 @@
   <string name="usb_media_checking">ಪ್ರಸ್ತುತವಾಗಿ ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯು ಪರಿಶೀಲನೆಯಗುತ್ತಿದೆ.</string>
   <string name="usb_media_removed">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ತೆಗೆಯಲಾಗಿದೆ.</string>
   <string name="usb_media_shared">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆ ಪ್ರಸ್ತುತವಾಗಿ ಕಂಪ್ಯೂಟರ್‍ನ ಬಳಕೆಯಲ್ಲಿದೆ.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">SD ಕಾರ್ಡ್ ಸಿದ್ಧಗೊಳಿಸುತ್ತಿದೆ</string>
   <string name="sd_ext_media_checking_notification_message">ದೋಷಗಳಿಗಾಗಿ SD ಕಾರ್ಡ್‍ನ್ನು ಪರಿಶೀಲಿಸುತ್ತಿದೆ.</string>
   <string name="sd_ext_media_nofs_notification_title">ಖಾಲಿಯಾದ SD ಕಾರ್ಡ್</string>
@@ -177,6 +244,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">ನೀವು ಸುರಕ್ಷಿತವಾಗಿ SD ಕಾರ್ಡನ್ನು ತೆಗೆಯಬಹುದು.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD ಕಾರ್ಡ್ ತೆಗೆಯಲಾಗಿದೆ</string>
   <string name="sd_ext_media_nomedia_notification_message">SD ಕಾರ್ಡ್ ತೆಗೆಯಲಾಗಿದೆ. ಹೊಸದೊಂದನ್ನು ಹಾಕಿ.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ಸಿದ್ಧಗೊಳಿಸುತ್ತಿದೆ</string>
   <string name="usb_ext_media_checking_notification_message">ದೋಷಗಳಿಗಾಗಿ ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ಪರಿಶೀಲಿಸುತ್ತಿದೆ.</string>
   <string name="usb_ext_media_nofs_notification_title">ಖಾಲಿ ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆ</string>
@@ -189,6 +257,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">ನೀವು ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ತೆಗೆಯಬಹುದು.</string>
   <string name="usb_ext_media_nomedia_notification_title">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆಯನ್ನು ತೆಗೆಯಲಾಗಿದೆ</string>
   <string name="usb_ext_media_nomedia_notification_message">ಯುಎಸ್‍ಬಿ ಸಂಗ್ರಹಣೆ ತೆಗೆಯಲಾಗಿದೆ. ಹೊಸ ಮಾಧ್ಯಮವನ್ನು ಹಾಕಿ.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">ಸ್ವಯಂಚಾಲಿತ</string>
   <string name="live_display_auto_summary">ಸೂರ್ಯಾಸ್ತ ಅಥವ ಸೂರ್ಯೋದಯದ ನಂತರ ಪರದೆಯ ಬಣ್ಣ ಉಷ್ಣಾಂಶವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸರಿಹೊಂದಿಸು</string>
   <string name="live_display_off">ಆಫ್</string>
@@ -200,19 +269,35 @@
   <string name="live_display_outdoor">ಹೊರಾಂಗಣ (ಪ್ರಕಾಶಮಾನ ಸೂರ್ಯ)</string>
   <string name="live_display_outdoor_summary">ಹೊರಾಂಗಣ ಸೆಟ್ಟಿಂಗ್ಸನ್ನು ಮಾತ್ರ ಉಪಯೋಗಿಸು</string>
   <string name="live_display_hint">ಲೈವ್ ಡಿಸ್ಪ್ಲೆ ನಿಮ್ಮ ಕಣ್ಣಿನ ಆಯಾಸವನ್ನು ಕಡಿಮೆಮಾಡಿ ರಾತ್ರಿ ಮಲಗಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಇದನ್ನು ಪ್ರಯತ್ನಿಸಲು ಇಲ್ಲಿ ಒತ್ತಿ!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">ಪರದೆಯನ್ನು ಅನ್‍ಪಿನ್‍ಮಾಡಲು, ಹಿಂದೆ ಬಟನ್‍ ಸ್ಪರ್ಶಿಸಿ ಹಿಡಿಯಿರಿ.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">ಟಾರ್ಚ್ ಆನ್ ಆಗಿದೆ</string>
   <string name="quick_settings_tile_flashlight_not_summary">ಆಫ್ ಮಾಡಲು ಸ್ಪರ್ಶಿಸಿ</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">ಡಾಕ್ SD ಕಾರ್ಡ್</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">ಫಿಂಗರ್‍ಪ್ರಿಂಟ್ <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">ಫಿಂಗರ್‍ಪ್ರಿಂಟ್ ಸೇವೆಯನ್ನು ಪ್ರವೇಶಿಸು</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">ಆಪ್‍ಗೆ ಫಿಂಗರ್‍ಪ್ರಿಂಟ್ ಸೇವೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಅನುಮತಿಸುತ್ತದೆ. ಆಪ್ ಫಿಂಗರ್‍ಪ್ರಿಂಟ್ಸ್  ಬಲದ ಮೇಲೆ ಸೇರಿಸಬಹುದು, ಅಳಿಸಬಹುದು, ಮರುಹೆಸರಿಸಬಹುದು ಹಾಗು ದೃಢೀಕರಿಸಬಹುದು</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">ಬ್ಯಾಟರಿ ಅಂಕಿಅಂಶಗಳನ್ನು ಮರುಹೊಂದಿಸು</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">ಒಂದು ಅಪ್ಲಿಕೇಶನ್‍ಗೆ ಪ್ರಸ್ತುತ ಕಡಿಮೆ-ಮಟ್ಟದ ಬ್ಯಾಟರಿ ಬಳಕೆ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
+  <!-- Zen mode buttons -->
   <string name="silent_mode_priority">ಆದ್ಯತೆ</string>
   <string name="silent_mode_none">ಶೂನ್ಯ</string>
+  <!-- Wifi Hotspot disabled due to subscription change -->
   <string name="subscription_change_disabled_wifi_ap">ಸಿಮ್ ಚಂದಾದಾರಿಕೆ ಬದಲಾದ ಕಾರಣ ವೈ-ಫೈ ಹಾಟ್‍ಸ್ಪಾಟನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</string>
+  <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">ವೈ-ಫೈ ಆಫ್ ಮಾಡಿ</string>
+  <!-- Third party keyguard permission label -->
   <string name="permlab_thirdPartyKeyguard">ಮೂರನೇ ಪಕ್ಷ ಲಾಕ್ ಪರದೆ</string>
+  <!-- Third party keyguard permission description -->
   <string name="permdesc_thirdPartyKeyguard">ಒಂದು ಆಪನ್ನು ಅಸುರಕ್ಷಿತ ಲಾಕ್ ಪರದೆಯಾಗಿ ಉಪಯೋಗಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
 </resources>
