@@ -188,7 +188,7 @@ public class NotificationGroupManager {
     }
 
     private boolean areGroupsProhibited() {
-        return mBarState == StatusBarState.KEYGUARD;
+        return StatusBarState.isKeyguardState(mBarState);
     }
 
     /**

@@ -185,7 +185,7 @@ public class LiveLockScreenController {
 
         @Override
         public void slideLockscreenIn() {
-            if (mPanelView.mShowingExternalKeyguard) {
+            if (mStatusBarState == StatusBarState.KEYGUARD_LLS) {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {

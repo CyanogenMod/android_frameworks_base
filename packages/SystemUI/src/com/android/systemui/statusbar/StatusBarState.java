@@ -37,4 +37,14 @@ public class StatusBarState {
      */
     public static final int SHADE_LOCKED = 2;
 
+    /**
+     * Status bar in a special mode, where the notification panel is off screen and a live lock
+     * screen has focus.  Dismissing the shade will still show the bouncer.
+     */
+    public static final int KEYGUARD_LLS = 3;
+
+    public static boolean isKeyguardState(int state) {
+        return state == KEYGUARD || state == KEYGUARD_LLS;
+    }
+
 }

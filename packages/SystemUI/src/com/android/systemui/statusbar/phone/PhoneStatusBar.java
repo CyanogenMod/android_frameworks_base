@@ -1928,14 +1928,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void updateClearAll() {
         boolean showDismissView =
-                mState != StatusBarState.KEYGUARD &&
+                !StatusBarState.isKeyguardState(mState) &&
                 mNotificationData.hasActiveClearableNotifications();
         mStackScroller.updateDismissView(showDismissView);
     }
 
     private void updateEmptyShadeView() {
         boolean showEmptyShade =
-                mState != StatusBarState.KEYGUARD &&
+                !StatusBarState.isKeyguardState(mState) &&
                         mNotificationData.getActiveNotifications().size() == 0;
         mNotificationPanel.setShadeEmpty(showEmptyShade);
     }
@@ -2225,7 +2225,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         if ((hasBackdrop || DEBUG_MEDIA_FAKE_ARTWORK)
-                && (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)
+                && (StatusBarState.isKeyguardState(mState) || mState == StatusBarState.SHADE_LOCKED)
                 && mFingerprintUnlockController.getMode()
                         != FingerprintUnlockController.MODE_WAKE_AND_UNLOCK_PULSING) {
             // time to show some art!
@@ -2713,7 +2713,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public void animateCollapsePanels(int flags, boolean force, boolean delayed,
             float speedUpFactor) {
         if (!force &&
-                (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
+                (StatusBarState.isKeyguardState(mState) || mState == StatusBarState.SHADE_LOCKED)) {
             runPostCollapseRunnables();
             return;
         }
@@ -3855,7 +3855,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         startKeyguard();
 
         // if the keyguard was showing while this change occurred we'll need to do some extra work
-        if (mState == StatusBarState.KEYGUARD) {
+        if (StatusBarState.isKeyguardState(mState)) {
             // this will make sure the keyguard is showing
             showKeyguard();
             // make sure to hide the notification icon area and system iconography
@@ -4560,7 +4560,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     private void updateKeyguardState(boolean goingToFullShade, boolean fromShadeLocked) {
-        if (mState == StatusBarState.KEYGUARD) {
+        if (StatusBarState.isKeyguardState(mState)) {
             mKeyguardIndicationController.setVisible(true);
             mNotificationPanel.resetViews();
             mKeyguardUserSwitcher.setKeyguard(true, fromShadeLocked);
@@ -4570,7 +4570,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mKeyguardUserSwitcher.setKeyguard(false,
                     goingToFullShade || mState == StatusBarState.SHADE_LOCKED || fromShadeLocked);
         }
-        if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED) {
+        if (StatusBarState.isKeyguardState(mState) || mState == StatusBarState.SHADE_LOCKED) {
             mScrimController.setKeyguardShowing(true);
             mIconPolicy.setKeyguardShowing(true);
         } else {
@@ -4605,7 +4605,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     public void updateStackScrollerState(boolean goingToFullShade) {
         if (mStackScroller == null) return;
-        boolean onKeyguard = mState == StatusBarState.KEYGUARD;
+        boolean onKeyguard = StatusBarState.isKeyguardState(mState);
         mStackScroller.setHideSensitive(isLockscreenPublicMode()
                 || (!userAllowsPrivateNotificationsInPublic(mCurrentUserId) && onKeyguard),
                 goingToFullShade);
@@ -4619,13 +4619,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void userActivity() {
-        if (mState == StatusBarState.KEYGUARD) {
+        if (StatusBarState.isKeyguardState(mState)) {
             mKeyguardViewMediatorCallback.userActivity();
         }
     }
 
     public boolean interceptMediaKey(KeyEvent event) {
-        return mState == StatusBarState.KEYGUARD
+        return StatusBarState.isKeyguardState(mState)
                 && mStatusBarKeyguardViewManager.interceptMediaKey(event);
     }
 
@@ -4650,7 +4650,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
             return true;
         }
-        if (mState != StatusBarState.KEYGUARD && mState != StatusBarState.SHADE_LOCKED) {
+        if (!StatusBarState.isKeyguardState(mState) && mState != StatusBarState.SHADE_LOCKED) {
             animateCollapsePanels();
             return true;
         }
@@ -4659,7 +4659,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     public boolean onSpacePressed() {
         if (mDeviceInteractive
-                && (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED)) {
+                && (StatusBarState.isKeyguardState(mState)
+                || mState == StatusBarState.SHADE_LOCKED)) {
             animateCollapsePanels(
                     CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL /* flags */, true /* force */);
             return true;
@@ -4668,18 +4669,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void showBouncer() {
-        if (!mRecreating && mNotificationPanel.mCanDismissKeyguard) {
+        if (!mRecreating) {
             mWaitingForKeyguardExit = mStatusBarKeyguardViewManager.isShowing();
             mStatusBarKeyguardViewManager.dismiss();
-        }
-    }
-
-    protected void showBouncerOrFocusKeyguardExternalView() {
-        if (mLiveLockScreenController.isShowingLiveLockScreenView() && !isKeyguardShowingMedia() &&
-                mLiveLockScreenController.isLiveLockScreenInteractive()) {
-            focusKeyguardExternalView();
-        } else {
-            showBouncer();
         }
     }
 
@@ -4692,7 +4684,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mStatusBarView.collapseAllPanels(/*animate=*/ false, false /* delayed*/,
                 1.0f /* speedUpFactor */);
         mStatusBarKeyguardViewManager.setKeyguardExternalViewFocus(true);
-        setBarState(StatusBarState.SHADE);
+        setBarState(StatusBarState.KEYGUARD_LLS);
     }
 
     private void instantExpandNotificationsPanel() {
@@ -4783,7 +4775,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void onTrackingStopped(boolean expand) {
-        if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED || mStatusBarWindowManager.keyguardExternalViewHasFocus()) {
+        if (StatusBarState.isKeyguardState(mState) || mState == StatusBarState.SHADE_LOCKED) {
             if (!expand && (!mUnlockMethodCache.canSkipBouncer() ||
                     mLiveLockScreenController.isShowingLiveLockScreenView())) {
                 showBouncer();
@@ -4883,7 +4875,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
      * Goes back to the keyguard after hanging around in {@link StatusBarState#SHADE_LOCKED}.
      */
     public void goToKeyguard() {
-        if (mState == StatusBarState.SHADE_LOCKED) {
+        if (mState == StatusBarState.SHADE_LOCKED || mState == StatusBarState.KEYGUARD_LLS) {
             mStackScroller.onGoToKeyguard();
             setBarState(StatusBarState.KEYGUARD);
             updateKeyguardState(false /* goingToFullShade */, true /* fromShadeLocked*/);
