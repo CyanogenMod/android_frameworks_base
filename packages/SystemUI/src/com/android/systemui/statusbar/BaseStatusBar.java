@@ -1726,7 +1726,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             if (visibleToUser) {
                 boolean pinnedHeadsUp = mHeadsUpManager.hasPinnedHeadsUp();
                 boolean clearNotificationEffects =
-                    ((mShowLockscreenNotifications && mState == StatusBarState.KEYGUARD) ||
+                    ((mShowLockscreenNotifications && StatusBarState.isKeyguardState(mState)) ||
                             (!pinnedHeadsUp && (mState == StatusBarState.SHADE
                                     || mState == StatusBarState.SHADE_LOCKED)));
                 int notificationLoad = mNotificationData.getActiveNotifications().size();
@@ -1853,7 +1853,7 @@ public abstract class BaseStatusBar extends SystemUI implements
         final int N = activeNotifications.size();
 
         int visibleNotifications = 0;
-        boolean onKeyguard = mState == StatusBarState.KEYGUARD;
+        boolean onKeyguard = StatusBarState.isKeyguardState(mState);
         for (int i = 0; i < N; i++) {
             NotificationData.Entry entry = activeNotifications.get(i);
             if (onKeyguard) {
