@@ -248,7 +248,7 @@ public class NotificationPanelView extends PanelView implements
     // or not.
     // TODO - add a new state to make it easier to identify keyguard vs
     // LiveLockscreen
-    public boolean mCanDismissKeyguard;
+    public boolean mCanDismissKeyguard = true;
 
     // Used to track which direction the user is currently
     // interacting with and ensure they don't alternate back
@@ -1299,7 +1299,6 @@ public class NotificationPanelView extends PanelView implements
 
         mStatusBarState = statusBarState;
         mKeyguardShowing = keyguardShowing;
-        mCanDismissKeyguard = keyguardShowing;
 
         if (goingToFullShade || (oldState == StatusBarState.KEYGUARD
                 && statusBarState == StatusBarState.SHADE_LOCKED)) {
