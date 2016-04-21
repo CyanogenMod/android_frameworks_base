@@ -329,6 +329,7 @@ public class NotificationPanelView extends PanelView implements
         super(context, attrs);
         setWillNotDraw(!DEBUG);
 
+        mCanDismissKeyguard = true;
         mSettingsObserver = new SettingsObserver(mHandler);
         mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -707,6 +708,7 @@ public class NotificationPanelView extends PanelView implements
         mIsLaunchTransitionFinished = false;
         mBlockTouches = false;
         mUnlockIconActive = false;
+        mCanDismissKeyguard = !mSwipeHelper.isDragging();
         if (!mLaunchingAffordance) {
             mAfforanceHelper.reset(false);
             mLastCameraLaunchSource = KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE;
