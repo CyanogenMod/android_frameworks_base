@@ -782,7 +782,7 @@ public class NotificationStackScrollLayout extends ViewGroup
 
     @Override
     public boolean isAntiFalsingNeeded() {
-        return mPhoneStatusBar.getBarState() == StatusBarState.KEYGUARD;
+        return StatusBarState.isKeyguardState(mPhoneStatusBar.getBarState());
     }
 
     private void setSwipingInProgress(boolean isSwiped) {

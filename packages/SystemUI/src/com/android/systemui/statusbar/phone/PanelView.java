@@ -313,7 +313,7 @@ public abstract class PanelView extends FrameLayout {
                 }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
-                if (mStatusBar.getBarState() == StatusBarState.KEYGUARD) {
+                if (StatusBarState.isKeyguardState(mStatusBar.getBarState())) {
                     mMotionAborted = true;
                     endMotionEvent(event, x, y, true /* forceCancel */);
                     return false;
