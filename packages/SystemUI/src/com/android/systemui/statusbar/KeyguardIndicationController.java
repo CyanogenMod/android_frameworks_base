@@ -220,12 +220,20 @@ public class KeyguardIndicationController {
                 break;
         }
 
+        String chargingCurrent = "";
+
+        if (mChargingCurrent != 0) {
+            chargingCurrent = "\n" + (mChargingCurrent / 1000) + "mA/h";
+        }
+
         if (hasChargingTime) {
             String chargingTimeFormatted = Formatter.formatShortElapsedTimeRoundingUpToMinutes(
                     mContext, chargingTimeRemaining);
-            return mContext.getResources().getString(chargingId, chargingTimeFormatted);
+            String chargingText = mContext.getResources().getString(chargingId, chargingTimeFormatted);
+            return chargingText + chargingCurrent;
         } else {
-            return mContext.getResources().getString(chargingId);
+            String chargingText = mContext.getResources().getString(chargingId);
+            return chargingText + chargingCurrent;
         }
     }
 
