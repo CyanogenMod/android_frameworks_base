@@ -64,4 +64,7 @@ oneway interface IInCallAdapter {
     void switchToOtherActiveSub(String subId);
 
     void transferCall(String callId);
+
+    void answerCallWithCallWaitingResponse(String callId, int videoState, int
+        callWaitingResponseType);
 }
