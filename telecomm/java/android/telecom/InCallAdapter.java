@@ -57,6 +57,20 @@ public final class InCallAdapter {
     }
 
     /**
+     * Instructs Telecom to answer the specified call.
+     *
+     * @param callId The identifier of the call to answer.
+     * @param videoState The video state in which to answer the call.
+     * @param callWaitingResponseType Response type for call waiting.
+     */
+    public void answerCall(String callId, int videoState, int callWaitingResponseType) {
+        try {
+            mAdapter.answerCallWithCallWaitingResponse(callId, videoState, callWaitingResponseType);
+        } catch (RemoteException e) {
+        }
+    }
+
+    /**
      * Instructs Telecom to reject the specified call.
      *
      * @param callId The identifier of the call to reject.
