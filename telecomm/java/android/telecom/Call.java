@@ -944,6 +944,16 @@ public final class Call {
     }
 
     /**
+     * Instructs this {@link #STATE_RINGING} {@code Call} to answer.
+     * @param videoState The video state in which to answer the call.
+     * @param callWaitingResponseType Type of response for call waiting
+     * @hide
+     */
+    public void answer(int videoState, int callWaitingResponseType) {
+        mInCallAdapter.answerCall(mTelecomCallId, videoState, callWaitingResponseType);
+    }
+
+    /**
      * Instructs this {@link #STATE_RINGING} {@code Call} to reject.
      *
      * @param rejectWithMessage Whether to reject with a text message.
