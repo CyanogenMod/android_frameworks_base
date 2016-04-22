@@ -443,6 +443,25 @@ public class TelecomManager {
      */
     public static final int PRESENTATION_PAYPHONE = 4;
 
+    /**
+     * The following 2 constants define how the incoming call should be handled by the Telecomm
+     * server when there is already an active call.
+     */
+
+    /**
+     * Indicates that Telecom server should end the current active call when another incoming
+     * call is detected
+     * @hide
+     */
+    public static final int CALL_WAITING_RESPONSE_NO_POPUP_END_CALL = 1;
+
+    /**
+     * Indicates that Telecom server should  hold the current active call when another incoming
+     * call is detected
+     * @hide
+     */
+    public static final int CALL_WAITING_RESPONSE_NO_POPUP_HOLD_CALL = 2;
+
     private static final String TAG = "TelecomManager";
 
     private final Context mContext;
