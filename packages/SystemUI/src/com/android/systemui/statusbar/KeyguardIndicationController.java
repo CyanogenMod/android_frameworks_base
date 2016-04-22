@@ -18,6 +18,7 @@ package com.android.systemui.statusbar;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
@@ -42,6 +43,7 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.KeyguardIndicationTextView;
 import com.android.systemui.statusbar.phone.LockIcon;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
+import android.provider.Settings;
 
 /**
  * Controls the indications and error messages shown on the Keyguard
@@ -74,6 +76,7 @@ public class KeyguardIndicationController {
     private int mChargingSpeed;
     private int mChargingCurrent;
     private String mMessageToShowOnScreenOn;
+    private boolean mShowcurrent;
 
     public KeyguardIndicationController(Context context, KeyguardIndicationTextView textView,
                                         LockIcon lockIcon) {
@@ -225,15 +228,24 @@ public class KeyguardIndicationController {
         if (mChargingCurrent != 0) {
             chargingCurrent = "\n" + (mChargingCurrent / 1000) + "mA/h";
         }
-
+	mShowcurrent = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCK_SCREEN_SHOW_CURRENT, 0) == 1;
         if (hasChargingTime) {
             String chargingTimeFormatted = Formatter.formatShortElapsedTimeRoundingUpToMinutes(
                     mContext, chargingTimeRemaining);
+            if (mShowcurrent) {        
             String chargingText = mContext.getResources().getString(chargingId, chargingTimeFormatted);
             return chargingText + chargingCurrent;
+            } else {
+            return mContext.getResources().getString(chargingId, chargingTimeFormatted);
+            }
         } else {
+	    if (mShowcurrent) {
             String chargingText = mContext.getResources().getString(chargingId);
             return chargingText + chargingCurrent;
+            } else {
+            return mContext.getResources().getString(chargingId);
+            }
         }
     }
 
