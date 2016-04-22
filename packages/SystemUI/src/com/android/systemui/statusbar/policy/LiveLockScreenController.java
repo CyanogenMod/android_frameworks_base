@@ -231,6 +231,10 @@ public class LiveLockScreenController {
     public void onLiveLockScreenFocusChanged(boolean hasFocus) {
         if (hasFocus != mLlsHasFocus) {
             mLlsHasFocus = hasFocus;
+            if (mLiveLockScreenView != null) {
+                // make sure the LLS knows where the notification panel is
+                mLiveLockScreenView.onLockscreenSlideOffsetChanged(hasFocus ? 0f : 1f);
+            }
             // don't log focus changes when screen is not interactive
             if (mPowerManager.isInteractive()) {
                 EventLog.writeEvent(EventLogTags.SYSUI_LLS_NOTIFICATION_PANEL_SHOWN,
