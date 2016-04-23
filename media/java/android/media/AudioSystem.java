@@ -268,55 +268,6 @@ public class AudioSystem
     }
 
 
-   /**
-     * Handles events for the audio policy manager about effect sessions
-     * @see android.media.audiopolicy.AudioPolicy
-     */
-    public interface EffectSessionCallback
-    {
-        void onSessionAdded(int stream, int sessionId, int flags, int channelMask, int uid);
-
-        void onSessionRemoved(int stream, int sessionId);
-    }
-
-    //keep in sync with include/media/AudioPolicy.h
-    private final static int AUDIO_OUTPUT_SESSION_EFFECTS_UPDATE = 10;
-
-    private static EffectSessionCallback sEffectSessionCallback;
-
-    public static void setEffectSessionCallback(EffectSessionCallback cb)
-    {
-        synchronized (AudioSystem.class) {
-            sEffectSessionCallback = cb;
-            native_register_effect_session_callback();
-        }
-    }
-
-    private static void effectSessionCallbackFromNative(int event, int stream, int sessionId,
-            int flags, int channelMask, int uid, boolean added)
-    {
-        EffectSessionCallback cb = null;
-        synchronized (AudioSystem.class) {
-            if (sEffectSessionCallback != null) {
-                cb = sEffectSessionCallback;
-            }
-        }
-        if (cb != null) {
-            switch(event) {
-                case AUDIO_OUTPUT_SESSION_EFFECTS_UPDATE:
-                    if (added) {
-                        cb.onSessionAdded(stream, sessionId, flags, channelMask, uid);
-                    } else {
-                        cb.onSessionRemoved(stream, sessionId);
-                    }
-                    break;
-                default:
-                    Log.e(TAG, "effectSessionCallbackFromNative: unknown event " + event);
-            }
-        }
-    }
-
-
     /*
      * Error codes used by public APIs (AudioTrack, AudioRecord, AudioManager ...)
      * Must be kept in sync with frameworks/base/core/jni/android_media_AudioErrors.h
@@ -696,8 +647,6 @@ public class AudioSystem
 
     // declare this instance as having a dynamic policy callback handler
     private static native final void native_register_dynamic_policy_callback();
-
-    private static native final void native_register_effect_session_callback();
 
     // must be kept in sync with value in include/system/audio.h
     public static final int AUDIO_HW_SYNC_INVALID = 0;
