@@ -154,11 +154,6 @@ static struct {
     jmethodID postDynPolicyEventFromNative;
 } gDynPolicyEventHandlerMethods;
 
-static struct {
-    jmethodID postEffectSessionEventFromNative;
-} gEffectSessionEventHandlerMethods;
-
-
 static Mutex gLock;
 
 enum AudioError {
@@ -387,25 +382,6 @@ android_media_AudioSystem_dyn_policy_callback(int event, String8 regId, int val)
             event, zestring, val);
 
     env->ReleaseStringUTFChars(zestring, zechars);
-    env->DeleteLocalRef(clazz);
-
-}
-
-static void
-android_media_AudioSystem_effect_session_callback(int event, audio_stream_type_t stream,
-        audio_unique_id_t sessionId, audio_output_flags_t flags,
-        audio_channel_mask_t channelMask, uid_t uid, bool added)
-{
-    JNIEnv *env = AndroidRuntime::getJNIEnv();
-    if (env == NULL) {
-        return;
-    }
-
-    jclass clazz = env->FindClass(kClassPathName);
-
-    env->CallStaticVoidMethod(clazz, gEffectSessionEventHandlerMethods.postEffectSessionEventFromNative,
-            event, stream, sessionId, flags, channelMask, uid, added);
-
     env->DeleteLocalRef(clazz);
 
 }
@@ -1511,12 +1487,6 @@ android_media_AudioSystem_registerDynPolicyCallback(JNIEnv *env, jobject thiz)
     AudioSystem::setDynPolicyCallback(android_media_AudioSystem_dyn_policy_callback);
 }
 
-static void
-android_media_AudioSystem_registerEffectSessionCallback(JNIEnv *env, jobject thiz)
-{
-    AudioSystem::setEffectSessionCallback(android_media_AudioSystem_effect_session_callback);
-}
-
 
 static jint convertAudioMixToNative(JNIEnv *env,
                                     AudioMix *nAudioMix,
@@ -1689,8 +1659,6 @@ static JNINativeMethod gMethods[] = {
                                             (void *)android_media_AudioSystem_registerPolicyMixes},
     {"native_register_dynamic_policy_callback", "()V",
                                     (void *)android_media_AudioSystem_registerDynPolicyCallback},
-    {"native_register_effect_session_callback", "()V",
-                                    (void *)android_media_AudioSystem_registerEffectSessionCallback},
     {"systemReady", "()I", (void *)android_media_AudioSystem_systemReady},
 };
 
@@ -1797,10 +1765,6 @@ int register_android_media_AudioSystem(JNIEnv *env)
     gDynPolicyEventHandlerMethods.postDynPolicyEventFromNative =
             GetStaticMethodIDOrDie(env, env->FindClass(kClassPathName),
                     "dynamicPolicyCallbackFromNative", "(ILjava/lang/String;I)V");
-
-    gEffectSessionEventHandlerMethods.postEffectSessionEventFromNative =
-            GetStaticMethodIDOrDie(env, env->FindClass(kClassPathName),
-                    "effectSessionCallbackFromNative", "(IIIIIIZ)V");
 
     jclass audioMixClass = FindClassOrDie(env, "android/media/audiopolicy/AudioMix");
     gAudioMixClass = MakeGlobalRefOrDie(env, audioMixClass);
