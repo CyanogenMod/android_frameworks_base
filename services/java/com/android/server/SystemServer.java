@@ -455,8 +455,6 @@ public final class SystemServer {
         boolean disableNetwork = SystemProperties.getBoolean("config.disable_network", false);
         boolean disableNetworkTime = SystemProperties.getBoolean("config.disable_networktime", false);
         boolean isEmulator = SystemProperties.get("ro.kernel.qemu").equals("1");
-        String[] externalServices = context.getResources().getStringArray(
-                org.cyanogenmod.platform.internal.R.array.config_externalCMServices);
 
         try {
             Slog.i(TAG, "Reading configuration...");
@@ -1052,14 +1050,7 @@ public final class SystemServer {
         // MMS service broker
         mmsService = mSystemServiceManager.startService(MmsServiceBroker.class);
 
-        for (String service : externalServices) {
-            try {
-                Slog.i(TAG, service);
-                mSystemServiceManager.startService(service);
-            } catch (Throwable e) {
-                reportWtf("starting " + service , e);
-            }
-        }
+        mSystemServiceManager.startService("org.cyanogenmod.platform.internal.CMPlatformServices");
 
         // It is now time to start up the app processes...
 
