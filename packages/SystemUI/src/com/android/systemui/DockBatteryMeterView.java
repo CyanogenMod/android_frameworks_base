@@ -18,7 +18,6 @@ package com.android.systemui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -146,47 +145,6 @@ public class DockBatteryMeterView extends BatteryMeterView {
         int visibility = getVisibility();
         if (visibility == View.VISIBLE && !mSupported) {
             setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    protected BatteryMeterDrawable createBatteryMeterDrawable(BatteryMeterMode mode) {
-        Resources res = mContext.getResources();
-        switch (mode) {
-            case BATTERY_METER_CIRCLE:
-                return new DockCircleBatteryMeterDrawable(res);
-            case BATTERY_METER_ICON_LANDSCAPE:
-                return new DockNormalBatteryMeterDrawable(res, true);
-            case BATTERY_METER_TEXT:
-            case BATTERY_METER_GONE:
-                return null;
-            default:
-                return new DockNormalBatteryMeterDrawable(res, false);
-        }
-    }
-
-    protected class DockNormalBatteryMeterDrawable extends NormalBatteryMeterDrawable {
-
-        public DockNormalBatteryMeterDrawable(Resources res, boolean horizontal) {
-            super(res, horizontal);
-        }
-
-        @Override
-        protected int getBoltPointsArrayResource() {
-            return mHorizontal
-                    ? R.array.dockbatterymeter_inverted_bolt_points
-                    : R.array.dockbatterymeter_bolt_points;
-        }
-    }
-
-    protected class DockCircleBatteryMeterDrawable extends CircleBatteryMeterDrawable {
-        public DockCircleBatteryMeterDrawable(Resources res) {
-            super(res);
-        }
-
-        @Override
-        protected int getBoltPointsArrayResource() {
-            return R.array.dockbatterymeter_bolt_points;
         }
     }
 }
