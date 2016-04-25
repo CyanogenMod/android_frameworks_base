@@ -55,4 +55,7 @@
 
     <dimen name="queue_row_height">52dp</dimen>
     <dimen name="queue_top_shadow">3dp</dimen>
+
+    <dimen name="battery_meter_circle_width">20dp</dimen>
+    <dimen name="battery_meter_circle_height">20dp</dimen>
 </resources>
