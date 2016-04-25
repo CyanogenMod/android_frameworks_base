@@ -106,6 +106,8 @@ public class NotificationPanelView extends PanelView implements
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
+    private static final long SLIDE_PANEL_IN_ANIMATION_DURATION = 300;
+
     public static final long DOZE_ANIMATION_DURATION = 700;
 
 
@@ -313,6 +315,7 @@ public class NotificationPanelView extends PanelView implements
             // being swiped away
             mKeyguardStatusView.setTranslationX(mNotificationStackScroller.getTranslationX());
             mKeyguardStatusView.setAlpha(mNotificationStackScroller.getAlpha());
+            mKeyguardStatusBar.setAlpha(mNotificationStackScroller.getAlpha());
             return false;
         }
 
@@ -1848,7 +1851,6 @@ public class NotificationPanelView extends PanelView implements
         mNotificationStackScroller.setShadeExpanded(!isFullyCollapsed());
         if (mShowingExternalKeyguard && expandedHeight >= getMaxPanelHeight()) {
             mStatusBar.unfocusKeyguardExternalView();
-            mLiveLockscreenController.onLiveLockScreenFocusChanged(false /* hasFocus */);
             mShowingExternalKeyguard = false;
         }
         if (DEBUG) {
@@ -2814,7 +2816,62 @@ public class NotificationPanelView extends PanelView implements
         return !tasks.isEmpty() && pkgName.equals(tasks.get(0).topActivity.getPackageName());
     }
 
-    public void slideLockScreenOut() {
-        mSwipeCallback.onChildDismissed(this);
+    private class SlideInAnimationListener implements ValueAnimator.AnimatorUpdateListener,
+            ValueAnimator.AnimatorListener {
+        @Override
+        public void onAnimationStart(Animator animator) {}
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            animationFinished(animator);
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animator) {
+            animationFinished(animator);
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animator) {}
+
+        @Override
+        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+            float translationX = (Float) valueAnimator.getAnimatedValue();
+            float alpha = valueAnimator.getAnimatedFraction();
+
+            mNotificationStackScroller.setTranslationX(translationX);
+            mNotificationStackScroller.setAlpha(alpha);
+
+            mKeyguardStatusView.setTranslationX(translationX);
+            mKeyguardStatusView.setAlpha(alpha);
+
+            mKeyguardStatusBar.setAlpha(alpha);
+            mLiveLockscreenController.getLiveLockScreenView()
+                    .onLockscreenSlideOffsetChanged(alpha);
+        }
+
+        private void animationFinished(Animator animator) {
+            mLiveLockscreenController.onLiveLockScreenFocusChanged(false);
+        }
+    }
+
+    private SlideInAnimationListener mSlideInAnimationListener = new SlideInAnimationListener();
+
+    public void slideLockScreenIn() {
+        mNotificationStackScroller.setVisibility(View.VISIBLE);
+        mNotificationStackScroller.setAlpha(0f);
+        mNotificationStackScroller.setTranslationX(-mNotificationStackScroller.getWidth());
+        mKeyguardStatusView.setVisibility(View.VISIBLE);
+        mKeyguardStatusView.setAlpha(0f);
+        mKeyguardStatusView.setTranslationX(mNotificationStackScroller.getTranslationX());
+        mKeyguardStatusBar.setAlpha(0f);
+
+        ValueAnimator animator = ValueAnimator.ofFloat(
+                mNotificationStackScroller.getTranslationX(),
+                0f);
+        animator.setDuration(SLIDE_PANEL_IN_ANIMATION_DURATION);
+        animator.addUpdateListener(mSlideInAnimationListener);
+        animator.addListener(mSlideInAnimationListener);
+        animator.start();
     }
 }
