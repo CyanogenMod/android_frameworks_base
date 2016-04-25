@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <clip-path
+        android:name="mask"
+        android:pathData="M22,15l-2,0v4H2V5h18v4h2L22,15z" />
+
+    <!-- fill should point to ?attr/fillColor when fully implemented -->
+    <path
+        android:name="fill"
+        android:fillColor="#FFFFFFFF"
+        android:pathData="@string/battery_landscape_path_empty" />
+
+    <!-- fill should point to ?attr/backgroundColor when fully implemented -->
+    <path
+        android:name="frame"
+        android:fillColor="#4DFFFFFF"
+        android:pathData="M 2 5 H 22 V 19 H 2 V 5 Z" />
+</vector>
