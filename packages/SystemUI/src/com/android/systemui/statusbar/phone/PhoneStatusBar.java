@@ -106,6 +106,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.PathInterpolator;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -3873,7 +3874,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 removeAllViews((ViewGroup) child);
             }
         }
-        parent.removeAllViews();
+
+        // AdapterView does not support removeAllViews so check before calling
+        if (!(parent instanceof AdapterView)) parent.removeAllViews();
     }
 
     /**
