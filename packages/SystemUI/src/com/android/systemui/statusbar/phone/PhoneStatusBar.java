@@ -3584,10 +3584,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             } else if (cyanogenmod.content.Intent.ACTION_SCREEN_CAMERA_GESTURE.equals(action)) {
                 boolean userSetupComplete = Settings.Secure.getInt(mContext.getContentResolver(),
                         Settings.Secure.USER_SETUP_COMPLETE, 0) != 0;
-                if (!userSetupComplete) {
-                    if (DEBUG) Log.d(TAG, String.format(
-                            "userSetupComplete = %s, ignoring camera launch gesture.",
-                            userSetupComplete));
+                if (!userSetupComplete || !isDeviceProvisioned()) {
+                    if (DEBUG) {
+                        Log.d(TAG, String.format("userSetupComplete = $1%s, " +
+                                "deviceProvisioned = $2%s, ignoring camera launch gesture.",
+                                userSetupComplete, isDeviceProvisioned()));
+                    }
                     return;
                 }
 
@@ -4761,17 +4763,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public void onHintFinished() {
         // Delay the reset a bit so the user can read the text.
         mKeyguardIndicationController.hideTransientIndicationDelayed(HINT_RESET_DELAY_MS);
-        mKeyguardBottomArea.animate().setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mKeyguardBottomArea.expand(false);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                mKeyguardBottomArea.expand(false);
-            }
-        });
+        mKeyguardBottomArea.expand(false);
     }
 
     public void onCameraHintStarted(String hint) {

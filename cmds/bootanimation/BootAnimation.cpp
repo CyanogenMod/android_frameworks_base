@@ -27,6 +27,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <sys/select.h>
+#include <sys/syscall.h>
 
 #include <cutils/properties.h>
 
@@ -438,19 +439,14 @@ status_t BootAnimation::readyToRun() {
         return NO_ERROR;
 
     if (fd != NULL) {
-        // We could use readahead..
-        // ... if bionic supported it :(
-        //readahead(fd, 0, INT_MAX);
-        void *crappyBuffer = malloc(2*1024*1024);
-        if (crappyBuffer != NULL) {
-            // Read all the zip
-            while (!feof(fd))
-                fread(crappyBuffer, 1024, 2*1024, fd);
-
-            free(crappyBuffer);
-        } else {
-            ALOGW("Unable to allocate memory to preload the animation");
-        }
+        // Since including fcntl.h doesn't give us the wrapper, use the syscall.
+        // 32 bits takes LO/HI offset (we don't care about endianness of 0).
+#if defined(__aarch64__) || defined(__x86_64__)
+        if (syscall(__NR_readahead, fd, 0, INT_MAX))
+#else
+        if (syscall(__NR_readahead, fd, 0, 0, INT_MAX))
+#endif
+            ALOGW("Unable to cache the animation");
         fclose(fd);
     }
 #endif

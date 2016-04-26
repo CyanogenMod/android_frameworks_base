@@ -181,7 +181,6 @@ void OpenGLRenderer::discardFramebuffer(float left, float top, float right, floa
 }
 
 void OpenGLRenderer::clear(float left, float top, float right, float bottom, bool opaque) {
-#ifdef QCOM_HARDWARE
     mRenderState.scissor().setEnabled(true);
     mRenderState.scissor().set(left, getViewportHeight() - bottom, right - left, bottom - top);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -190,17 +189,6 @@ void OpenGLRenderer::clear(float left, float top, float right, float bottom, boo
         mRenderState.scissor().reset();
         return;
     }
-#else
-    if (!opaque) {
-        mRenderState.scissor().setEnabled(true);
-        mRenderState.scissor().set(left, getViewportHeight() - bottom, right - left, bottom - top);
-        glClear(GL_COLOR_BUFFER_BIT);
-        mDirty = true;
-        return;
-    }
-
-    mRenderState.scissor().reset();
-#endif
 }
 
 void OpenGLRenderer::startTilingCurrentClip(bool opaque, bool expand) {
