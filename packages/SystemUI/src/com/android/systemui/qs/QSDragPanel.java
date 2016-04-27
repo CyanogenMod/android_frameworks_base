@@ -53,6 +53,7 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.qs.tiles.CustomQSTile;
 import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.settings.ToggleSlider;
@@ -364,7 +365,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     protected void drawTile(TileRecord r, QSTile.State state) {
         if (mEditing) {
-            state.visible = true;
+            if ((r.tile instanceof CustomQSTile) && ((CustomQSTile) r.tile).isUserRemoved()) {
+                // don't modify visibility state.
+            } else {
+                state.visible = true;
+            }
         }
         final int visibility = state.visible ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
@@ -1082,6 +1087,17 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                             }
                         });
                         break;
+                    } else if (mDraggingRecord.tile instanceof CustomQSTile) {
+                        ((CustomQSTile) mDraggingRecord.tile).setUserRemoved(true);
+                        final String spec = mHost.getSpec(mDraggingRecord.tile);
+                        restoreDraggingTilePosition(v, new Runnable() {
+                            @Override
+                            public void run() {
+                                // it might get added back later by the app, but that's ok,
+                                // we just want to reset its position after it has been removed.
+                                mHost.remove(spec);
+                            }
+                        });
                     } else {
                         mRestored = true;
                         removeDraggingRecord();
@@ -1898,6 +1914,26 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 }
             }
 
+            final Map<String, ?> stringMap = CustomQSTile.getCustomQSTilePrefs(mContext).getAll();
+            for (Map.Entry<String, ?> entry : stringMap.entrySet()) {
+                if (entry.getValue() instanceof Boolean) {
+                    if ((Boolean)entry.getValue()) {
+                        final String key = entry.getKey();
+                        if (QSUtils.isDynamicQsTile(key)) {
+                            mPackageTileMap.get(PACKAGE_ANDROID).add(key);
+                        } else {
+                            final String customTilePackage = getCustomTilePackage(key);
+                            List<String> packageList = mPackageTileMap.get(customTilePackage);
+                            if (packageList == null) {
+                                mPackageTileMap.put(customTilePackage, packageList = new ArrayList<>());
+                            }
+                            packageList.add(key);
+
+                        }
+                    }
+                }
+            };
+
             final List<String> systemTiles = mPackageTileMap.get(PACKAGE_ANDROID);
             Collections.sort(systemTiles);
         }
@@ -1967,6 +2003,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 // special icon
                 systemOrAppIcon.setImageResource(R.drawable.ic_qs_tile_category_system);
             } else {
+                group = getPackageLabel(group);
                 systemOrAppIcon.setImageResource(R.drawable.ic_qs_tile_category_other);
             }
             title.setText(group);
@@ -2104,7 +2141,21 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
                     String spec = getChild(groupPosition, childPosition);
-                    mPanel.add(spec);
+
+                    final QSTile<?> tile = mHost.getTile(spec);
+                    if (tile != null && tile instanceof CustomQSTile) {
+                        // already present
+                        ((CustomQSTile) tile).setUserRemoved(false);
+                        mPanel.refreshAllTiles();
+                    } else {
+                        // reset its state just in case it's not published
+                        CustomQSTile.getCustomQSTilePrefs(mContext)
+                                .edit()
+                                .remove(spec)
+                                .apply();
+                        mPanel.add(spec);
+                        // TODO notify user the app isn't publishing the tile, but it now can be!
+                    }
                     mPanel.closeDetail();
                     return true;
                 }
