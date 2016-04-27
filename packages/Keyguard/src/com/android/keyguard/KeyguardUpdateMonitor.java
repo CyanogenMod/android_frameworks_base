@@ -69,8 +69,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import cyanogenmod.providers.CMSettings;
-
 import static android.os.BatteryManager.BATTERY_HEALTH_UNKNOWN;
 import static android.os.BatteryManager.BATTERY_STATUS_FULL;
 import static android.os.BatteryManager.BATTERY_STATUS_UNKNOWN;
@@ -1090,8 +1088,8 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     }
 
     private boolean isDeviceProvisionedInSettingsDb() {
-        return CMSettings.Secure.getInt(mContext.getContentResolver(),
-                CMSettings.Secure.CM_SETUP_WIZARD_COMPLETED, 0) != 0;
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 0) != 0;
     }
 
     private void watchForDeviceProvisioning() {
@@ -1108,7 +1106,7 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         };
 
         mContext.getContentResolver().registerContentObserver(
-                CMSettings.System.getUriFor(CMSettings.Secure.CM_SETUP_WIZARD_COMPLETED),
+                Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED),
                 false, mDeviceProvisionedObserver);
 
         // prevent a race condition between where we check the flag and where we register the
