@@ -118,8 +118,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import cyanogenmod.providers.CMSettings;
-
 import static com.android.keyguard.KeyguardHostView.OnDismissAction;
 
 public abstract class BaseStatusBar extends SystemUI implements
@@ -268,8 +266,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
-            final boolean provisioned = 0 != CMSettings.Secure.getInt(
-                    mContext.getContentResolver(), CMSettings.Secure.CM_SETUP_WIZARD_COMPLETED, 0);
+            final boolean provisioned = 0 != Settings.Global.getInt(
+                    mContext.getContentResolver(), Settings.Global.DEVICE_PROVISIONED, 0);
             if (provisioned != mDeviceProvisioned) {
                 mDeviceProvisioned = provisioned;
                 updateNotifications();
@@ -579,8 +577,8 @@ public abstract class BaseStatusBar extends SystemUI implements
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 
         mContext.getContentResolver().registerContentObserver(
-                CMSettings.Secure.getUriFor(CMSettings.Secure.CM_SETUP_WIZARD_COMPLETED), false,
-                mSettingsObserver, UserHandle.USER_ALL);
+                Settings.Global.getUriFor(Settings.Global.DEVICE_PROVISIONED), true,
+                mSettingsObserver);
         mContext.getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.ZEN_MODE), false,
                 mSettingsObserver);
