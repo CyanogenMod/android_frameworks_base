@@ -116,6 +116,7 @@ import android.net.INetworkPolicyListener;
 import android.net.INetworkPolicyManager;
 import android.net.INetworkStatsService;
 import android.net.LinkProperties;
+import android.net.NetworkCapabilities;
 import android.net.NetworkIdentity;
 import android.net.NetworkInfo;
 import android.net.NetworkPolicy;
@@ -171,6 +172,7 @@ import com.android.server.DeviceIdleController;
 import com.android.server.EventLogTags;
 import com.android.server.LocalServices;
 import com.android.server.SystemConfig;
+import com.android.server.NetPluginDelegate;
 
 import libcore.io.IoUtils;
 
@@ -1214,7 +1216,12 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         final ArrayList<Pair<String, NetworkIdentity>> connIdents = new ArrayList<>(states.length);
         final ArraySet<String> connIfaces = new ArraySet<String>(states.length);
         for (NetworkState state : states) {
-            if (state.networkInfo != null && state.networkInfo.isConnected()) {
+            if (state.networkInfo != null && state.networkInfo.isConnected()
+                        && (state.networkCapabilities == null
+                        || !state.networkCapabilities.hasTransport(
+                                    NetworkCapabilities.TRANSPORT_CELLULAR)
+                        || state.networkCapabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_INTERNET))) {
                 final NetworkIdentity ident = NetworkIdentity.buildNetworkIdentity(mContext, state);
 
                 final String baseIface = state.linkProperties.getInterfaceName();
@@ -3270,6 +3277,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     private void setInterfaceQuota(String iface, long quotaBytes) {
         try {
             mNetworkManager.setInterfaceQuota(iface, quotaBytes);
+            NetPluginDelegate.setQuota(iface, quotaBytes);
         } catch (IllegalStateException e) {
             Log.wtf(TAG, "problem setting interface quota", e);
         } catch (RemoteException e) {
