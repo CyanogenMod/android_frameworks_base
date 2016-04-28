@@ -113,7 +113,6 @@ public class VolumeDialog implements TunerService.Tunable {
     private SpTexts mSpTexts;
     private final SparseBooleanArray mDynamic = new SparseBooleanArray();
     private final KeyguardManager mKeyguard;
-    private final AudioManager mAudioManager;
     private final AccessibilityManager mAccessibilityMgr;
     private int mExpandButtonAnimationDuration;
     private ZenFooter mZenFooter;
@@ -153,7 +152,6 @@ public class VolumeDialog implements TunerService.Tunable {
         mWindowType = windowType;
         mZenModeController = zenModeController;
         mKeyguard = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mAccessibilityMgr =
                 (AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
         mActiveSliderTint = ColorStateList.valueOf(Utils.getColorAccent(mContext));
@@ -712,8 +710,7 @@ public class VolumeDialog implements TunerService.Tunable {
     private void updateFooterH() {
         if (D.BUG) Log.d(TAG, "updateFooterH");
         final boolean wasVisible = mZenFooter.getVisibility() == View.VISIBLE;
-        final boolean visible = mState.zenMode != Global.ZEN_MODE_OFF
-                && (mAudioManager.isStreamAffectedByRingerMode(mActiveStream) || mExpanded)
+        final boolean visible = mState.zenMode != Global.ZEN_MODE_OFF;
                 && !mZenPanel.isEditing();
         if (wasVisible != visible && !visible) {
             prepareForCollapse();
