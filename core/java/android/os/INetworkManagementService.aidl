@@ -448,4 +448,13 @@ interface INetworkManagementService
     void removeInterfaceFromLocalNetwork(String iface);
 
     void setAllowOnlyVpnForUids(boolean enable, in UidRange[] uidRanges);
+    /**
+     * Create SoftAp Interface
+     */
+    void createSoftApInterface(String wlanIface);
+
+     /**
+     * Delete SoftAp Interface
+     */
+    void deleteSoftApInterface(String wlanIface);
 }

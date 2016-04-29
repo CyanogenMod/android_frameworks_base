@@ -1246,6 +1246,26 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     @Override
+    public void createSoftApInterface(String wlanIface) {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+        try {
+            mConnector.execute("softap", "create", wlanIface);
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+    }
+
+    @Override
+    public void deleteSoftApInterface(String wlanIface) {
+        mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+        try {
+            mConnector.execute("softap", "remove", wlanIface);
+        } catch (NativeDaemonConnectorException e) {
+            throw e.rethrowAsParcelableException();
+        }
+    }
+
+    @Override
     public void startTethering(String[] dhcpRange) {
         mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
         // cmd is "tether start first_start first_stop second_start second_stop ..."
