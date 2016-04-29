@@ -106,6 +106,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.PathInterpolator;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -3584,10 +3585,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             } else if (cyanogenmod.content.Intent.ACTION_SCREEN_CAMERA_GESTURE.equals(action)) {
                 boolean userSetupComplete = Settings.Secure.getInt(mContext.getContentResolver(),
                         Settings.Secure.USER_SETUP_COMPLETE, 0) != 0;
-                if (!userSetupComplete) {
-                    if (DEBUG) Log.d(TAG, String.format(
-                            "userSetupComplete = %s, ignoring camera launch gesture.",
-                            userSetupComplete));
+                if (!userSetupComplete || !isDeviceProvisioned()) {
+                    if (DEBUG) {
+                        Log.d(TAG, String.format("userSetupComplete = $1%s, " +
+                                "deviceProvisioned = $2%s, ignoring camera launch gesture.",
+                                userSetupComplete, isDeviceProvisioned()));
+                    }
                     return;
                 }
 
@@ -3880,7 +3883,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 removeAllViews((ViewGroup) child);
             }
         }
-        parent.removeAllViews();
+
+        // AdapterView does not support removeAllViews so check before calling
+        if (!(parent instanceof AdapterView)) parent.removeAllViews();
     }
 
     /**

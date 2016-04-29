@@ -135,9 +135,6 @@
             android:protectionLevel="signature" />
     <uses-permission android:name="com.android.systemui.permission.SELF" />
 
-    <!-- Weather -->
-    <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
-
     <!-- blur surface -->
     <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
 

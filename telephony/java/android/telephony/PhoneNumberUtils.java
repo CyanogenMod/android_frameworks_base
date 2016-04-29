@@ -1935,11 +1935,13 @@ public class PhoneNumberUtils
                 // It is not possible to append additional digits to an emergency number to dial
                 // the number in Brazil - it won't connect.
                 if (useExactMatch || "BR".equalsIgnoreCase(defaultCountryIso)) {
-                    if (number.equals(emergencyNum)) {
+                    if (number.equals(emergencyNum) &&
+                        isEmergencyNumberForCurrentIso(number, defaultCountryIso, slotId))  {
                         return true;
                     }
                 } else {
-                    if (number.startsWith(emergencyNum)) {
+                    if (number.startsWith(emergencyNum) &&
+                        isEmergencyNumberForCurrentIso(number, defaultCountryIso, slotId))  {
                         return true;
                     }
                 }
@@ -1980,6 +1982,57 @@ public class PhoneNumberUtils
 
         return false;
     }
+
+    /**
+     * When checking for ECC numbers the country (defaultCountryIso) passed in is not taken into
+     * consideration by the function isEmergencyNumberInternal(subId, number, defaultCountryIso,
+     * useExactMatchecclist) this causes the function to return TRUE even in the case when the
+     * number is not emergency for defaultCountryIso.
+     */
+     private static boolean isEmergencyNumberForCurrentIso(String number,
+                                                     String country,
+                                                     int slotId) {
+         Rlog.w(LOG_TAG, "isEmergencyNumberForCurrentIso: number =" + number + " iso=" + country);
+
+         String mccEccIso = "";
+         String mccEccIsoProp = (slotId == 0) ? "ril.mcc.ecc.iso" : ("ril.mcc.ecc.iso" + slotId);
+         mccEccIso = SystemProperties.get(mccEccIsoProp, "");
+
+         if (TextUtils.isEmpty(mccEccIso) || TextUtils.isEmpty(country) || slotId < 0 ||
+             isEmergencyIsoMatchCountryIso(mccEccIso, country)) {
+             Rlog.w(LOG_TAG, "MCC/ISO is empty or matches region for ECC#'s set via RIL db");
+             return true;
+         }
+
+         String mccEccList = "";
+         String mccEccListProp = (slotId == 0) ? "ril.mcc.ecclist" : ("ril.mcc.ecclist" + slotId);
+         mccEccList = SystemProperties.get(mccEccListProp, "");
+
+         if (!TextUtils.isEmpty(mccEccList)) {
+             for (String emergencyNum : mccEccList.split(",")) {
+                 if (number.equals(emergencyNum)) {
+                     Rlog.w(LOG_TAG, "Number " + number + " matches with  " + mccEccListProp);
+                     return false;
+                 }
+             }
+         }
+
+         return true;
+     }
+
+     /**
+      * Checks if the two strings passed are equal ignoring the case
+      */
+      private static boolean isEmergencyIsoMatchCountryIso(String iso, String country) {
+         Rlog.w(LOG_TAG, "isEmergencyIsoMatchCountryIso: iso=" + iso + " country=" + country);
+
+         if(iso.equalsIgnoreCase(country)) {
+             return true;
+         } else {
+             return false;
+         }
+
+      }
 
     /**
      * Checks if a given number is an emergency number for the country that the user is in.

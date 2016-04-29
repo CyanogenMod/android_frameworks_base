@@ -40,6 +40,8 @@ public class LiveLockScreenController {
 
     private boolean mLlsHasFocus = false;
 
+    private boolean mScreenOnAndInteractive;
+
     public LiveLockScreenController(Context context, PhoneStatusBar bar,
             NotificationPanelView panelView) {
         mContext = context;
@@ -174,6 +176,13 @@ public class LiveLockScreenController {
             mLiveLockScreenView.unregisterKeyguardExternalViewCallback(
                     mExternalKeyguardViewCallbacks);
             mLiveLockScreenView = null;
+            // make sure we're showing the notification panel if the LLS crashed while it had focus
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mBar.showKeyguard();
+                }
+            });
         }
 
         @Override
@@ -202,21 +211,30 @@ public class LiveLockScreenController {
     }
 
     public void onScreenTurnedOn() {
-        if (mLiveLockScreenView != null && mPowerManager.isInteractive()) {
-            mLiveLockScreenView.onScreenTurnedOn();
+        mScreenOnAndInteractive = mPowerManager.isInteractive();
+        if (mScreenOnAndInteractive) {
+            if (mLiveLockScreenView != null) mLiveLockScreenView.onScreenTurnedOn();
             EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 1);
         }
     }
 
     public void onScreenTurnedOff() {
-        if (mStatusBarState != StatusBarState.SHADE) {
-            EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 0);
+        if (mScreenOnAndInteractive) {
+            if (mLiveLockScreenView != null) mLiveLockScreenView.onScreenTurnedOff();
+            if (mStatusBarState != StatusBarState.SHADE) {
+                EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_SHOWING, 0);
+            }
+            mScreenOnAndInteractive = false;
         }
     }
 
     public void onLiveLockScreenFocusChanged(boolean hasFocus) {
         if (hasFocus != mLlsHasFocus) {
             mLlsHasFocus = hasFocus;
+            if (mLiveLockScreenView != null) {
+                // make sure the LLS knows where the notification panel is
+                mLiveLockScreenView.onLockscreenSlideOffsetChanged(hasFocus ? 0f : 1f);
+            }
             // don't log focus changes when screen is not interactive
             if (mPowerManager.isInteractive()) {
                 EventLog.writeEvent(EventLogTags.SYSUI_LLS_NOTIFICATION_PANEL_SHOWN,
@@ -226,6 +244,7 @@ public class LiveLockScreenController {
     }
 
     public void onKeyguardDismissed() {
+        if (mLiveLockScreenView != null) mLiveLockScreenView.onKeyguardDismissed();
         EventLog.writeEvent(EventLogTags.SYSUI_LLS_KEYGUARD_DISMISSED, mLlsHasFocus ? 1 : 0);
     }
 

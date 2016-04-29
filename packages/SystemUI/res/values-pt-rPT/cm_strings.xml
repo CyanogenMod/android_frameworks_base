@@ -78,7 +78,7 @@
   <string name="quick_settings_title_show_brightness_slider">Mostrar o controlo deslizante de brilho</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar a primeira linha</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
-  <string name="screen_pinning_description_no_navbar">Isto mantém visível até soltar. Toque e segure o botão Voltar até soltar.</string>
+  <string name="screen_pinning_description_no_navbar">Irá ficar visível até que o solte. Toque e segure o botão Voltar para soltar.</string>
   <string name="quick_settings_custom_tile_detail_title">Mosaicos personalizados</string>
   <string name="quick_settings_remove">Remover mosaico</string>
   <string name="quick_settings_network_adb_label">ADB através da rede</string>

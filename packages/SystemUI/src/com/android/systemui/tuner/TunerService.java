@@ -132,6 +132,12 @@ public class TunerService extends SystemUI {
 
     public void reloadSetting(Uri uri) {
         String key = mListeningUris.get(uri);
+
+        // Handle possible null keys
+        if (TextUtils.isEmpty(key)) {
+            return;
+        }
+
         String value;
         if (uri.getAuthority().equals(CMSettings.AUTHORITY)) {
             value = CMSettings.Secure.getStringForUser(mContentResolver, key, mCurrentUser);
