@@ -241,7 +241,7 @@ public class LockscreenShortcutsActivity extends Activity implements View.OnClic
         }
 
         if (uri.equals(ACTION_APP)) {
-            mPicker.pickShortcut(null, null, 0);
+            mPicker.pickShortcut(null, null, 0, false);
         } else {
             mSelectedView.setTag(uri);
             saveCustomActions();
