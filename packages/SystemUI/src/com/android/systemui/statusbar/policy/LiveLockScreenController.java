@@ -177,12 +177,15 @@ public class LiveLockScreenController {
                     mExternalKeyguardViewCallbacks);
             mLiveLockScreenView = null;
             // make sure we're showing the notification panel if the LLS crashed while it had focus
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mBar.showKeyguard();
-                }
-            });
+            if (mLlsHasFocus) {
+                mLlsHasFocus = false;
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBar.showKeyguard();
+                    }
+                });
+            }
         }
 
         @Override
