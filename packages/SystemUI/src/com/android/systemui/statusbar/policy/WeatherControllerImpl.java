@@ -21,9 +21,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
+import cyanogenmod.providers.CMSettings;
 import cyanogenmod.providers.WeatherContract;
+import cyanogenmod.weather.CMWeatherManager;
 import cyanogenmod.weather.util.WeatherUtils;
 
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ import static cyanogenmod.providers.WeatherContract.WeatherColumns.CURRENT_CITY;
 import static cyanogenmod.providers.WeatherContract.WeatherColumns.CURRENT_CONDITION;
 import static cyanogenmod.providers.WeatherContract.WeatherColumns.CURRENT_TEMPERATURE;
 import static cyanogenmod.providers.WeatherContract.WeatherColumns.CURRENT_TEMPERATURE_UNIT;
+import static cyanogenmod.providers.WeatherContract.WeatherColumns.TempUnit.CELSIUS;
+import static cyanogenmod.providers.WeatherContract.WeatherColumns.TempUnit.FAHRENHEIT;
 
 public class WeatherControllerImpl implements WeatherController {
 
@@ -39,6 +44,8 @@ public class WeatherControllerImpl implements WeatherController {
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     private WeatherContentObserver mWeatherContentObserver;
     private Handler mHandler;
+    private int mWeatherUnit;
+    private Uri mWeatherTempetarureUri;
 
     public static final ComponentName COMPONENT_WEATHER_FORECAST = new ComponentName(
             "com.cyanogenmod.lockclock", "com.cyanogenmod.lockclock.weather.ForecastActivity");
@@ -61,9 +68,13 @@ public class WeatherControllerImpl implements WeatherController {
                 mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         mHandler = new Handler();
         mWeatherContentObserver = new WeatherContentObserver(mHandler);
+        mWeatherTempetarureUri
+                = CMSettings.Global.getUriFor(CMSettings.Global.WEATHER_TEMPERATURE_UNIT);
         mContext.getContentResolver().registerContentObserver(
-                WeatherContract.WeatherColumns.CURRENT_WEATHER_URI,
-                true, mWeatherContentObserver);
+                WeatherContract.WeatherColumns.CURRENT_WEATHER_URI,true, mWeatherContentObserver);
+        mContext.getContentResolver().registerContentObserver(mWeatherTempetarureUri, true,
+                mWeatherContentObserver);
+        queryWeatherTempUnit();
         queryWeather();
     }
 
@@ -97,7 +108,16 @@ public class WeatherControllerImpl implements WeatherController {
         } else {
             try {
                 c.moveToFirst();
-                mCachedInfo.temp = WeatherUtils.formatTemperature(c.getDouble(0), c.getInt(1));
+                double temp = c.getDouble(0);
+                int reportedUnit = c.getInt(1);
+                if (reportedUnit == CELSIUS && mWeatherUnit == FAHRENHEIT) {
+                    temp = WeatherUtils.celsiusToFahrenheit(temp);
+                } else if (reportedUnit == FAHRENHEIT && mWeatherUnit == CELSIUS) {
+                    temp = WeatherUtils.fahrenheitToCelsius(temp);
+                }
+
+                mCachedInfo.temp = temp;
+                mCachedInfo.tempUnit = mWeatherUnit;
                 mCachedInfo.city = c.getString(2);
                 mCachedInfo.condition = c.getString(3);
             } finally {
@@ -112,18 +132,53 @@ public class WeatherControllerImpl implements WeatherController {
         }
     }
 
-    private final class WeatherContentObserver extends ContentObserver {
+    private class WeatherContentObserver extends ContentObserver {
 
         public WeatherContentObserver(Handler handler) {
             super(handler);
         }
 
         @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri != null) {
+                if (uri.compareTo(WeatherContract.WeatherColumns.CURRENT_WEATHER_URI) == 0) {
+                    queryWeather();
+                    fireCallback();
+                } else if (uri.compareTo(mWeatherTempetarureUri) == 0) {
+                    queryWeatherTempUnit();
+                    fixCachedWeatherInfo();
+                    fireCallback();
+                } else {
+                    super.onChange(selfChange, uri);
+                }
+            }
+        }
+
+        @Override
         public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            if (DEBUG) Log.d(TAG, "Received onChange notification");
-            queryWeather();
-            fireCallback();
+            onChange(selfChange, null);
+        }
+    }
+
+    private void queryWeatherTempUnit() {
+        try {
+            mWeatherUnit = CMSettings.Global.getInt(mContext.getContentResolver(),
+                    CMSettings.Global.WEATHER_TEMPERATURE_UNIT);
+        } catch (CMSettings.CMSettingNotFoundException e) {
+            //CMSettingsProvider should have taken care of setting a default value for this setting
+            //so how is that we ended up here?? We need to set a valid temp unit anyway to keep
+            //this going
+            mWeatherUnit = WeatherContract.WeatherColumns.TempUnit.CELSIUS;
+        }
+    }
+
+    private void fixCachedWeatherInfo() {
+        if (mCachedInfo.tempUnit == CELSIUS && mWeatherUnit == FAHRENHEIT) {
+            mCachedInfo.temp = WeatherUtils.celsiusToFahrenheit(mCachedInfo.temp);
+            mCachedInfo.tempUnit = FAHRENHEIT;
+        } else if (mCachedInfo.tempUnit == FAHRENHEIT && mWeatherUnit == CELSIUS) {
+            mCachedInfo.temp = WeatherUtils.fahrenheitToCelsius(mCachedInfo.temp);
+            mCachedInfo.tempUnit = CELSIUS;
         }
     }
 }
