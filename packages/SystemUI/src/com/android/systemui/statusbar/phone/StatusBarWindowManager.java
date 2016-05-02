@@ -149,7 +149,8 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
 
     private void adjustScreenOrientation(State state) {
         if (state.isKeyguardShowingAndNotOccluded()) {
-            if (mKeyguardScreenRotation) {
+            if (mKeyguardScreenRotation && CMSettings.Secure.getInt(mContext.getContentResolver(),
+                                           CMSettings.Secure.LOCKSCREEN_ROTATION, 0) == 1) {
                 mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
             } else {
                 mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
