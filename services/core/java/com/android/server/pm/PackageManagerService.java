@@ -5854,12 +5854,15 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                     synchronized (mPackages) {
                         if (DEBUG_PREBUNDLED_SCAN) Log.d(TAG,
-                                "Marking prebundled packages for user " + prebundledUserId);
+                                "Marking prebundled package " + pkg.packageName +
+                                        " for user " + prebundledUserId);
                         mSettings.markPrebundledPackageInstalledLPr(prebundledUserId,
                                 pkg.packageName);
                         // do this for every other user
                         for (UserInfo userInfo : sUserManager.getUsers(true)) {
                             if (userInfo.id == prebundledUserId) continue;
+                            if (DEBUG_PREBUNDLED_SCAN) Log.d(TAG,
+                                    "Marking for secondary user " + userInfo.id);
                             mSettings.markPrebundledPackageInstalledLPr(userInfo.id,
                                     pkg.packageName);
                         }
@@ -5991,14 +5994,18 @@ public class PackageManagerService extends IPackageManager.Stub {
         if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
             synchronized (mPackages) {
                 PackageSetting existingSettings = mSettings.peekPackageLPr(pkg.packageName);
+                // If the settings exist, the version code is higher, and its currently installed
+                // for the given user, then it is a valid update.
+                final boolean isUpdatedPrebundle = existingSettings != null
+                        && existingSettings.versionCode > pkg.mVersionCode &&
+                        existingSettings.getInstalled(user.getIdentifier());
                 if (mSettings.wasPrebundledPackageInstalledLPr(user.getIdentifier()
-                        , pkg.packageName) && existingSettings == null) {
-                    // The prebundled app was installed at some point in time, but now it is
-                    // gone.  Assume that the user uninstalled it intentionally: do not reinstall.
+                        , pkg.packageName) && !isUpdatedPrebundle) {
+                    // The prebundled app was installed at some point and isn't either
+                    // currently installed or isn't a newer version, skip reinstalling it
                     throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
                             "skip reinstall for " + pkg.packageName);
-                } else if (existingSettings == null &&
-                        !mSettings.shouldPrebundledPackageBeInstalled(mContext.getResources(),
+                } else if (!mSettings.shouldPrebundledPackageBeInstalled(mContext.getResources(),
                                 pkg.packageName, mCustomResources)) {
                     // The prebundled app is not needed for the default mobile country code,
                     // skip installing it
