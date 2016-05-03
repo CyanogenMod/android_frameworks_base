@@ -165,6 +165,7 @@ public final class BatteryService extends SystemService {
 
     private boolean mAdjustableNotificationLedBrightness;
     private int mNotificationLedBrightnessLevel = LIGHT_BRIGHTNESS_MAXIMUM;
+    private boolean mUseBatteryLevelAsBrightness = false;
 
     private boolean mMultipleNotificationLeds;
     private boolean mMultipleLedsEnabled = false;
@@ -1048,6 +1049,10 @@ public final class BatteryService extends SystemService {
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
             mBatteryLedOff = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOff);
+
+            // Should we use the battery level as the LED brightness?
+            mUseBatteryLevelAsBrightness = context.getResources().getBoolean(
+                    org.cyanogenmod.platform.internal.R.bool.config_useBatteryLevelAsLedBrightness);
         }
 
         private boolean isHvdcpPresent() {
@@ -1089,11 +1094,13 @@ public final class BatteryService extends SystemService {
 
             final int level = mBatteryProps.batteryLevel;
             final int status = mBatteryProps.batteryStatus;
+            final int brightness = mUseBatteryLevelAsBrightness ? level : mNotificationLedBrightnessLevel;
+
             if (!mLightEnabled) {
                 // No lights if explicitly disabled
                 mBatteryLight.turnOff();
             } else if (level < mLowBatteryWarningLevel) {
-                mBatteryLight.setModes(mNotificationLedBrightnessLevel,
+                mBatteryLight.setModes(brightness,
                         mMultipleLedsEnabled);
                 if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
                     // Battery is charging and low
@@ -1108,7 +1115,7 @@ public final class BatteryService extends SystemService {
                 }
             } else if (status == BatteryManager.BATTERY_STATUS_CHARGING
                     || status == BatteryManager.BATTERY_STATUS_FULL) {
-                mBatteryLight.setModes(mNotificationLedBrightnessLevel,
+                mBatteryLight.setModes(brightness,
                         mMultipleLedsEnabled);
                 if (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90) {
                     // Battery is full or charging and nearly full
