@@ -29,7 +29,7 @@ public class CustomTileData {
         public final StatusBarPanelCustomTile sbc;
 
         public Entry(StatusBarPanelCustomTile sbc) {
-            this.key = sbc.getKey();
+            this.key = sbc.persistableKey();
             this.sbc = sbc;
         }
     }
