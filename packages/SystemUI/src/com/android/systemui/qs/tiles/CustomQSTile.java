@@ -32,14 +32,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-
-import com.android.internal.logging.MetricsLogger;
 
 import com.android.systemui.qs.QSDetailItemsGrid;
 import com.android.systemui.qs.QSDetailItemsList;
@@ -65,6 +62,13 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     private CustomQSDetailAdapter mDetailAdapter;
     private boolean mCollapsePanel;
     private boolean mUserRemoved;
+    private String mPersistedPlaceHolderKey;
+
+    public CustomQSTile(Host host, String persistedSpec) {
+        super(host);
+        mTile = null;
+        mPersistedPlaceHolderKey = persistedSpec;
+    }
 
     public CustomQSTile(Host host, StatusBarPanelCustomTile tile) {
         super(host);
@@ -72,8 +76,16 @@ public class CustomQSTile extends QSTile<QSTile.State> {
         mUserRemoved = getIsUserRemovedPersisted();
     }
 
+    private String getPersistableKey() {
+        if (mPersistedPlaceHolderKey != null) {
+            return mPersistedPlaceHolderKey;
+        } else {
+            return getTile().persistableKey();
+        }
+    }
+
     private boolean getIsUserRemovedPersisted() {
-        return getCustomQSTilePrefs(mContext).getBoolean(getTile().getKey(), false);
+        return getCustomQSTilePrefs(mContext).getBoolean(getPersistableKey(), false);
     }
 
     public boolean isUserRemoved() {
@@ -83,9 +95,9 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     public void setUserRemoved(boolean removed) {
         if (mUserRemoved != removed) {
             if (removed) {
-                getCustomQSTilePrefs(mContext).edit().putBoolean(getTile().getKey(), true).apply();
+                getCustomQSTilePrefs(mContext).edit().putBoolean(getPersistableKey(), true).apply();
             } else {
-                getCustomQSTilePrefs(mContext).edit().remove(getTile().getKey()).apply();
+                getCustomQSTilePrefs(mContext).edit().remove(getPersistableKey()).apply();
             }
             mUserRemoved = removed;
             refreshState();
@@ -167,7 +179,13 @@ public class CustomQSTile extends QSTile<QSTile.State> {
     protected void handleUpdateState(State state, Object arg) {
         if (arg instanceof StatusBarPanelCustomTile) {
             mTile = (StatusBarPanelCustomTile) arg;
+            mPersistedPlaceHolderKey = null;
             mUserRemoved = getIsUserRemovedPersisted();
+        }
+        if (mTile == null) {
+            state.visible = false;
+            // nothing to show, it's a place holder for now
+            return;
         }
         final CustomTile customTile = mTile.getCustomTile();
         state.contentDescription = customTile.contentDescription;

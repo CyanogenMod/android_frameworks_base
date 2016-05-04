@@ -1498,7 +1498,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         @Override
                         public void run() {
                             boolean isUpdate = mQSPanel.getHost().getCustomTileData()
-                                    .get(sbc.getKey()) != null;
+                                    .get(sbc.persistableKey()) != null;
                             if (isUpdate) {
                                 mQSPanel.getHost().updateCustomTile(sbc);
                             } else {
@@ -1514,7 +1514,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            mQSPanel.getHost().removeCustomTileSysUi(sbc.getKey());
+                            mQSPanel.getHost().removeCustomTileSysUi(sbc.persistableKey());
                         }
                     });
                 }
