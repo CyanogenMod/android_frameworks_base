@@ -88,6 +88,7 @@ import java.util.List;
     private boolean mIsRegistered = false;
     private PendingIntent mClientPendingIntentCurrent;
     private OnClientUpdateListener mOnClientUpdateListener;
+    private OnClientAvrcpUpdateListener mOnClientAvrcpUpdateListener;
     private PlaybackInfo mLastPlaybackInfo;
     private int mArtworkWidth = -1;
     private int mArtworkHeight = -1;
@@ -150,12 +151,31 @@ import java.util.List;
         }
     }
 
+    /**
+     * @hide
+     */
+    public RemoteController(Context context, OnClientUpdateListener updateListener, Looper looper,
+            OnClientAvrcpUpdateListener avrcpUpdateListener) throws IllegalArgumentException {
+        this(context, updateListener, looper);
+        mOnClientAvrcpUpdateListener = avrcpUpdateListener;
+    }
 
     /**
-     * Interface definition for the callbacks to be invoked whenever media events, metadata
-     * and playback status are available.
+     * @hide
      */
+    public interface OnClientAvrcpUpdateListener {
+        public void onClientFolderInfoBrowsedPlayer(String stringUri);
+        public void onClientUpdateNowPlayingEntries(long[] playList);
+        public void onClientNowPlayingContentChange();
+        public void onClientPlayItemResponse(boolean success);
+    };
+
+    /**
+    * Interface definition for the callbacks to be invoked whenever media events, metadata
+    * and playback status are available.
+    */
     public interface OnClientUpdateListener {
+
         /**
          * Called whenever all information, previously received through the other
          * methods of the listener, is no longer valid and is about to be refreshed.
@@ -165,7 +185,6 @@ import java.util.List;
          *     is available.
          */
         public void onClientChange(boolean clearing);
-
         /**
          * Called whenever the playback state has changed.
          * It is called when no information is known about the playback progress in the media and
@@ -205,26 +224,6 @@ import java.util.List;
          * @param metadataEditor the container of the new metadata.
          */
         public void onClientMetadataUpdate(MetadataEditor metadataEditor);
-
-        /**
-         * @hide
-         */
-        public void onClientFolderInfoBrowsedPlayer(String stringUri);
-
-        /**
-         * @hide
-         */
-        public void onClientUpdateNowPlayingEntries(long[] playList);
-
-        /**
-         * @hide
-         */
-        public void onClientNowPlayingContentChange();
-
-        /**
-         * @hide
-         */
-        public void onClientPlayItemResponse(boolean success);
 
     };
 
@@ -1176,14 +1175,18 @@ import java.util.List;
      */
     public void onFolderInfoBrowsedPlayer(String stringUri) {
         Log.d(TAG, "RemoteController: onFolderInfoBrowsedPlayer");
-        final OnClientUpdateListener l;
+        final OnClientAvrcpUpdateListener l;
 
         synchronized(mInfoLock) {
-            l = mOnClientUpdateListener;
+            l = mOnClientAvrcpUpdateListener;
         }
 
-        if (l != null) {
-            l.onClientFolderInfoBrowsedPlayer(stringUri);
+        try {
+            if (l != null) {
+                l.onClientFolderInfoBrowsedPlayer(stringUri);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error Updating AVRCP on receiving Browsed player response", e);
         }
     }
 
@@ -1192,13 +1195,18 @@ import java.util.List;
      */
     public void onNowPlayingEntriesUpdate(long[] playList) {
         Log.d(TAG, "RemoteController: onUpdateNowPlayingEntries");
-        final OnClientUpdateListener l;
+        final OnClientAvrcpUpdateListener l;
 
         synchronized(mInfoLock) {
-            l = mOnClientUpdateListener;
+            l = mOnClientAvrcpUpdateListener;
         }
-        if (l != null) {
-            l.onClientUpdateNowPlayingEntries(playList);
+
+        try {
+            if (l != null) {
+                l.onClientUpdateNowPlayingEntries(playList);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error Updating AVRCP on receiving Now Playing Entries", e);
         }
     }
 
@@ -1207,14 +1215,18 @@ import java.util.List;
      */
     public void onNowPlayingContentChange() {
         Log.d(TAG, "RemoteController: onNowPlayingContentChange");
-        final OnClientUpdateListener l;
+        final OnClientAvrcpUpdateListener l;
 
         synchronized(mInfoLock) {
-            l = mOnClientUpdateListener;
+            l = mOnClientAvrcpUpdateListener;
         }
 
-        if (l != null) {
-            l.onClientNowPlayingContentChange();
+        try {
+            if (l != null) {
+                l.onClientNowPlayingContentChange();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error Updating AVRCP on Now Playing Content Change", e);
         }
     }
 
@@ -1223,14 +1235,18 @@ import java.util.List;
      */
     public void onSetPlayItemResponse(boolean success) {
         Log.d(TAG, "RemoteController: onPlayItemResponse");
-        final OnClientUpdateListener l;
+        final OnClientAvrcpUpdateListener l;
 
         synchronized(mInfoLock) {
-            l = mOnClientUpdateListener;
+            l = mOnClientAvrcpUpdateListener;
         }
 
-        if (l != null) {
-            l.onClientPlayItemResponse(success);
+        try {
+            if (l != null) {
+                l.onClientPlayItemResponse(success);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error Updating AVRCP on receiving Play Item response", e);
         }
     }
 
