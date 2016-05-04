@@ -372,7 +372,12 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("battery_saver")) return new BatterySaverTile(this);
         else if (tileSpec.equals("caffeine")) return new CaffeineTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
-        else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
+        else if (TextUtils.split(tileSpec, "\\|").length == 3) {
+            /** restores placeholder for
+             * {@link cyanogenmod.app.StatusBarPanelCustomTile#persistableKey()} **/
+            return new CustomQSTile(this, tileSpec);
+        } else
+            throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }
 
     protected List<String> loadTileSpecs(String tileList) {
@@ -498,8 +503,8 @@ public class QSTileHost implements QSTile.Host, Tunable {
 
     void updateCustomTile(StatusBarPanelCustomTile sbc) {
         synchronized (mTiles) {
-            if (mTiles.containsKey(sbc.getKey())) {
-                QSTile<?> tile = mTiles.get(sbc.getKey());
+            if (mTiles.containsKey(sbc.persistableKey())) {
+                QSTile<?> tile = mTiles.get(sbc.persistableKey());
                 if (tile instanceof CustomQSTile) {
                     CustomQSTile qsTile = (CustomQSTile) tile;
                     qsTile.update(sbc);
@@ -511,8 +516,8 @@ public class QSTileHost implements QSTile.Host, Tunable {
     void addCustomTile(StatusBarPanelCustomTile sbc) {
         synchronized (mTiles) {
             mCustomTileData.add(new CustomTileData.Entry(sbc));
-            mTileSpecs.add(sbc.getKey());
-            mTiles.put(sbc.getKey(), new CustomQSTile(this, sbc));
+            mTileSpecs.add(sbc.persistableKey());
+            mTiles.put(sbc.persistableKey(), new CustomQSTile(this, sbc));
             if (mCallback != null) {
                 mCallback.onTilesChanged();
             }

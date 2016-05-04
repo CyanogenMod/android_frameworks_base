@@ -1489,7 +1489,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         @Override
                         public void run() {
                             boolean isUpdate = mQSPanel.getHost().getCustomTileData()
-                                    .get(sbc.getKey()) != null;
+                                    .get(sbc.persistableKey()) != null;
                             if (isUpdate) {
                                 mQSPanel.getHost().updateCustomTile(sbc);
                             } else {
