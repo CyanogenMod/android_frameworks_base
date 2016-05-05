@@ -29,6 +29,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
@@ -131,6 +132,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private OnInterceptTouchEventListener mInterceptTouchListener;
     private BroadcastReceiver mDevicePolicyReceiver;
 
+    private int mFramesToSkip = 0;
+
     private final ServiceConnection mPrewarmConnection = new ServiceConnection() {
 
         @Override
@@ -172,6 +175,23 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 Log.e(TAG, e.getMessage());
             }
             mBottomAreaAttached = true;
+        } else if (!fullyExpand) {
+            // TODO - Fix this properly
+            // WindowManager seems to have an issue with Gravity.BOTTOM windows where certain frames
+            // it renders it at (0,0) and then next frame moves it to bottom gravity. This patch
+            // settles for a adding a view overlay to the notification panel and skips drawing
+            // a couple frames to mitigate this bug
+            mPhoneStatusBar.addKeyguardBottomAreaOverlay(getDrawingCache());
+            setAlpha(0);
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    mWindowManager.updateViewLayout(KeyguardBottomAreaView.this,
+                            mWindowLayoutParams);
+                    mFramesToSkip = 5;
+                    invalidate();
+                }
+            });
         } else {
             mWindowManager.updateViewLayout(this, mWindowLayoutParams);
         }
@@ -297,6 +317,25 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mLeftAffordanceView.setOnClickListener(this);
         initAccessibility();
         updateCustomShortcuts();
+        setDrawingCacheEnabled(true);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        if (mFramesToSkip <= 0) {
+            super.dispatchDraw(canvas);
+        } else {
+            postInvalidate();
+            if (--mFramesToSkip <= 0) {
+                setAlpha(1);
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPhoneStatusBar.removeKeyguardBottomAreaOverlay();
+                    }
+                });
+            }
+        }
     }
 
     private void updateCustomShortcuts() {

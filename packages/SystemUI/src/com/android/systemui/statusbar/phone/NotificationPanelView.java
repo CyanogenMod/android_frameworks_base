@@ -30,11 +30,14 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -47,6 +50,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroupOverlay;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.WindowManager;
@@ -264,6 +268,7 @@ public class NotificationPanelView extends PanelView implements
     private LiveLockScreenController mLiveLockscreenController;
     private final GestureDetector mGestureDetector;
     private ViewLinker mViewLinker;
+    private Drawable mKeyguardBottomAreaOverlay;
 
     private enum SwipeLockedDirection {
         UNKNOWN,
@@ -2838,6 +2843,26 @@ public class NotificationPanelView extends PanelView implements
         ActivityManager am = getContext().getSystemService(ActivityManager.class);
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         return !tasks.isEmpty() && pkgName.equals(tasks.get(0).topActivity.getPackageName());
+    }
+
+    public void addKeyguardBottomAreaOverlay(Bitmap overlay) {
+        ViewGroupOverlay vgo = getOverlay();
+        if (mKeyguardBottomAreaOverlay != null) {
+            vgo.remove(mKeyguardBottomAreaOverlay);
+        }
+
+        mKeyguardBottomAreaOverlay = new BitmapDrawable(getResources(), overlay);
+        int y = getHeight() - overlay.getHeight();
+        mKeyguardBottomAreaOverlay.setBounds(0, y, overlay.getWidth(), y + overlay.getHeight());
+        vgo.add(mKeyguardBottomAreaOverlay);
+    }
+
+    public void removeKeyguardBottomAreaOverlay() {
+        if (mKeyguardBottomAreaOverlay != null) {
+            mKeyguardBottomAreaOverlay.setAlpha(0);
+            getOverlay().remove(mKeyguardBottomAreaOverlay);
+            mKeyguardBottomAreaOverlay = null;
+        }
     }
 
     private class SlideInAnimationListener implements ValueAnimator.AnimatorUpdateListener,
