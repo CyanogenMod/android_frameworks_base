@@ -163,8 +163,12 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     private void addKeyguardBottomArea(boolean fullyExpand) {
+        int oldHeight = mWindowLayoutParams.height;
         mWindowLayoutParams.height = fullyExpand ? WindowManager.LayoutParams.MATCH_PARENT :
                 WindowManager.LayoutParams.WRAP_CONTENT;
+        if (oldHeight == mWindowLayoutParams.height && mBottomAreaAttached) {
+            return;
+        }
         if (!mBottomAreaAttached) {
             try {
                 mWindowManager.addView(this, mWindowLayoutParams);
