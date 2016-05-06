@@ -260,8 +260,8 @@ final class ProcessList {
         int maxSize = 1280*800; // 1024000  230400 870400  .264
         float scaleDisp = ((float)(displayWidth*displayHeight)-minSize)/(maxSize-minSize);
         if (false) {
-            Slog.i("XXXXXX", "scaleMem=" + scaleMem);
-            Slog.i("XXXXXX", "scaleDisp=" + scaleDisp + " dw=" + displayWidth
+            Slog.i(TAG, "scaleMem=" + scaleMem);
+            Slog.i(TAG, "scaleDisp=" + scaleDisp + " dw=" + displayWidth
                     + " dh=" + displayHeight);
         }
 
@@ -273,7 +273,7 @@ final class ProcessList {
         int minfree_abs = Resources.getSystem().getInteger(
                 com.android.internal.R.integer.config_lowMemoryKillerMinFreeKbytesAbsolute);
         if (false) {
-            Slog.i("XXXXXX", "minfree_adj=" + minfree_adj + " minfree_abs=" + minfree_abs);
+            Slog.i(TAG, "minfree_adj=" + minfree_adj + " minfree_abs=" + minfree_abs);
         }
 
         // We've now baked in the increase to the basic oom values above, since
@@ -286,12 +286,12 @@ final class ProcessList {
             int low = mOomMinFreeLow[i];
             int high = mOomMinFreeHigh[i];
             if (is64bit) {
-                Slog.i("XXXXXX", "choosing minFree values for 64 Bit");
+                Slog.i(TAG, "choosing minFree values for 64 Bit");
                 // Increase the high min-free levels for cached processes for 64-bit
                 if (i == 4) high = (high*3)/2;
                 else if (i == 5) high = (high*7)/4;
             } else {
-                Slog.i("XXXXXX", "choosing minFree values for 32 Bit");
+                Slog.i(TAG, "choosing minFree values for 32 Bit");
                 low = mOomMinFreeLow32Bit[i];
                 high = mOomMinFreeHigh32Bit[i];
             }
