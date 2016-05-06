@@ -220,10 +220,16 @@ public class Tethering extends BaseNetworkObserver {
     void updateConfiguration() {
         String[] tetherableUsbRegexs = mContext.getResources().getStringArray(
                 com.android.internal.R.array.config_tether_usb_regexs);
-        String[] tetherableWifiRegexs = mContext.getResources().getStringArray(
-                com.android.internal.R.array.config_tether_wifi_regexs);
+        String[] tetherableWifiRegexs;
         String[] tetherableBluetoothRegexs = mContext.getResources().getStringArray(
                 com.android.internal.R.array.config_tether_bluetooth_regexs);
+
+        if (SystemProperties.getInt("persist.fst.rate.upgrade.en", 0) == 1) {
+            tetherableWifiRegexs = new String[] {"bond0"};
+        } else {
+            tetherableWifiRegexs = mContext.getResources().getStringArray(
+                com.android.internal.R.array.config_tether_wifi_regexs);
+        }
 
         int ifaceTypes[] = mContext.getResources().getIntArray(
                 com.android.internal.R.array.config_tether_upstream_types);
