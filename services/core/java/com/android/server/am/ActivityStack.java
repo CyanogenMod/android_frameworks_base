@@ -1701,10 +1701,10 @@ final class ActivityStack {
         if (DEBUG_SWITCH) Slog.v(TAG_SWITCH, "Resuming " + next);
 
         // Some activities may want to alter the system power management
-        if (mStackSupervisor.mPerf != null) {
-            mStackSupervisor.mPerf.activityResumed(next.intent);
+        if (mStackSupervisor.mService.mPerf != null) {
+            mStackSupervisor.mService.mPerf.activityResumed(next.intent);
         }
-        
+
         // If we are currently pausing an activity, then don't do anything
         // until that is done.
         if (!mStackSupervisor.allPausedActivitiesComplete()) {
@@ -1838,8 +1838,8 @@ final class ActivityStack {
                             ? AppTransition.TRANSIT_ACTIVITY_CLOSE
                             : AppTransition.TRANSIT_TASK_CLOSE, false);
                     if (prev.task != next.task) {
-                        if (mStackSupervisor.mPerf != null) {
-                            mStackSupervisor.mPerf.cpuBoost(2000 * 1000);
+                        if (mStackSupervisor.mService.mPerf != null) {
+                            mStackSupervisor.mService.mPerf.cpuBoost(2000 * 1000);
                         }
                     }
                 }
@@ -1858,8 +1858,8 @@ final class ActivityStack {
                                     ? AppTransition.TRANSIT_TASK_OPEN_BEHIND
                                     : AppTransition.TRANSIT_TASK_OPEN, false);
                     if (prev.task != next.task) {
-                        if (mStackSupervisor.mPerf != null) {
-                            mStackSupervisor.mPerf.cpuBoost(2000 * 1000);
+                        if (mStackSupervisor.mService.mPerf != null) {
+                            mStackSupervisor.mService.mPerf.cpuBoost(2000 * 1000);
                         }
                     }
                 }
