@@ -417,7 +417,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         params.mOnClickListener = this;
         params.mForceInverseBackground = true;
 
-        GlobalActionsDialog dialog = new GlobalActionsDialog(getUiContext(), params);
+        GlobalActionsDialog dialog = new GlobalActionsDialog(/** system context **/ mContext,
+                /** themed context **/ getUiContext(), params);
         dialog.setCanceledOnTouchOutside(false); // Handled by the custom class.
 
         dialog.getListView().setItemsCanFocus(true);
@@ -1457,6 +1458,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private static final class GlobalActionsDialog extends Dialog implements DialogInterface {
         private final Context mContext;
+        private Context mSystemContext = null;
         private final int mWindowTouchSlop;
         private final AlertController mAlert;
         private final MyAdapter mAdapter;
@@ -1466,13 +1468,26 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         private boolean mIntercepted;
         private boolean mCancelOnUp;
 
-        public GlobalActionsDialog(Context context, AlertParams params) {
+        private GlobalActionsDialog(Context context, AlertParams params) {
             super(context, getDialogTheme(context));
             mContext = getContext();
             mAlert = new AlertController(mContext, this, getWindow());
             mAdapter = (MyAdapter) params.mAdapter;
             mWindowTouchSlop = ViewConfiguration.get(context).getScaledWindowTouchSlop();
             params.apply(mAlert);
+        }
+
+        /**
+         * Utilized for a working global actions dialog for both accessibility services (which
+         * require a system context) and
+         * @param systemContext Base context (should be from system process)
+         * @param themedContext Themed context (created from system ui)
+         * @param params
+         */
+        public GlobalActionsDialog(Context systemContext, Context themedContext,
+                AlertParams params) {
+            this(themedContext, params);
+            mSystemContext = systemContext;
         }
 
         private static int getDialogTheme(Context context) {
@@ -1488,8 +1503,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             // of dismissing the dialog on touch outside. This is because the dialog
             // is dismissed on the first down while the global gesture is a long press
             // with two fingers anywhere on the screen.
-            if (EnableAccessibilityController.canEnableAccessibilityViaGesture(mContext)) {
-                mEnableAccessibilityController = new EnableAccessibilityController(mContext,
+            if (EnableAccessibilityController.canEnableAccessibilityViaGesture(mSystemContext)) {
+                mEnableAccessibilityController = new EnableAccessibilityController(mSystemContext,
                         new Runnable() {
                     @Override
                     public void run() {
