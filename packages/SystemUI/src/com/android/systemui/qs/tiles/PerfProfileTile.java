@@ -48,6 +48,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
     private final String[] mDescriptionEntries;
     private final String[] mAnnouncementEntries;
     private final int[] mPerfProfileValues;
+    private final int mNumPerfProfiles;
     private final Icon mIcon;
 
     private final PowerManager mPm;
@@ -61,16 +62,36 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
         mObserver = new PerformanceProfileObserver(mHandler);
         mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mPerformanceManager = PerformanceManager.getInstance(mContext);
+        mNumPerfProfiles = mPerformanceManager.getNumberOfProfiles();
 
-        Resources res = mContext.getResources();
-
-        mPerfProfileValues = res.getIntArray(org.cyanogenmod.platform.internal.R.array.perf_profile_values);
-
-        mEntries = res.getStringArray(org.cyanogenmod.platform.internal.R.array.perf_profile_entries);
-        mDescriptionEntries = res.getStringArray(R.array.perf_profile_description);
-        mAnnouncementEntries = res.getStringArray(R.array.perf_profile_announcement);
+        mPerfProfileValues = new int[mNumPerfProfiles];
+        mEntries = new String[mNumPerfProfiles];
+        mDescriptionEntries = new String[mNumPerfProfiles];
+        mAnnouncementEntries = new String[mNumPerfProfiles];
 
         mIcon = ResourceIcon.get(R.drawable.ic_qs_perf_profile);
+
+        // Filter out unsupported profiles
+        Resources res = mContext.getResources();
+        final int[] perfProfileValues = res.getIntArray(
+                org.cyanogenmod.platform.internal.R.array.perf_profile_values);
+        final String[] entries = res.getStringArray(
+                org.cyanogenmod.platform.internal.R.array.perf_profile_entries);
+        final String[] descriptionEntries = res.getStringArray(
+                R.array.perf_profile_description);
+        final String[] announcementEntries = res.getStringArray(
+                R.array.perf_profile_announcement);
+        int i = 0;
+
+        for (int j = 0; j < perfProfileValues.length; j++) {
+            if (perfProfileValues[j] < mNumPerfProfiles) {
+                mPerfProfileValues[i] = perfProfileValues[j];
+                mEntries[i] = entries[j];
+                mDescriptionEntries[i] = descriptionEntries[j];
+                mAnnouncementEntries[i] = announcementEntries[j];
+                i++;
+            }
+        }
     }
 
     @Override
