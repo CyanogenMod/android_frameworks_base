@@ -273,6 +273,7 @@
   <string name="dynamic_qs_tile_su_label">الوصول إلى root</string>
   <!-- Fingerprint -->
   <string name="fingerprint_try_again_hint">الرجاء إجراء المسح مرة أخرى</string>
+  <string name="fingerprint_try_again_hint_too_many">لقد حاولت الفتح ببصمة الإصبع كثيراً. حاول مرة أخرى لاحقاً.</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">بطارية الإرساء <xliff:g id="number">%d</xliff:g>في المائة.</string>
   <!-- Empty view text for CustomQSTile -->
