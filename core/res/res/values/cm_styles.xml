@@ -26,4 +26,8 @@
     <style name="Theme.Material.Light.Dialog.SyncActivityTooManyDeletes" />
     <style name="Theme.Material.Light.Dialog.Alert.NetInitiatedActivity" />
 
+    <!-- Exposed style for power menu  -->
+
+    <style name="Theme.Power.Dialog" parent="@style/Theme.DeviceDefault.Light.DarkActionBar" />
+
 </resources>

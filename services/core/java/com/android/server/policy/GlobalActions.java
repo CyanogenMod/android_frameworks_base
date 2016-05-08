@@ -293,7 +293,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private Context getUiContext() {
         if (mUiContext == null) {
             mUiContext = ThemeUtils.createUiContext(mContext);
-            mUiContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+            mUiContext.setTheme(com.android.internal.R.style.Theme_Power_Dialog);
         }
         return mUiContext != null ? mUiContext : mContext;
     }
