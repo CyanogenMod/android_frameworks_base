@@ -1002,7 +1002,7 @@ public final class ShutdownThread extends Thread {
             if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEVISION)) {
                 uiContext.setTheme(com.android.internal.R.style.Theme_Leanback_Dialog_Alert);
             } else  {
-                uiContext.setTheme(android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+                uiContext.setTheme(com.android.internal.R.style.Theme_Power_Dialog);
             }
         }
         return uiContext != null ? uiContext : context;
