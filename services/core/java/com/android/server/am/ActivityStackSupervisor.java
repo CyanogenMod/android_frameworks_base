@@ -1453,8 +1453,6 @@ public final class ActivityStackSupervisor implements DisplayListener {
                             Display.DEFAULT_DISPLAY : mFocusedStack.mDisplayId) :
                             (container.mActivityDisplay == null ? Display.DEFAULT_DISPLAY :
                                     container.mActivityDisplay.mDisplayId)));
-            /* Acquire perf lock during new app launch */
-            mService.launchBoost(-1, aInfo.packageName);
         }
 
         ActivityRecord sourceRecord = null;
