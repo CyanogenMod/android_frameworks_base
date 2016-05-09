@@ -576,6 +576,7 @@ public class ResourcesManager {
         PackageInfo piTheme = null;
         PackageInfo piTarget = null;
         PackageInfo piAndroid = null;
+        PackageInfo piCm = null;
 
         // Some apps run in process of another app (eg keyguard/systemUI) so we must get the
         // package name from the res tables. The 0th base package name will be the android group.
@@ -609,16 +610,20 @@ public class ResourcesManager {
             }
             piAndroid = getPackageManager().getPackageInfo("android", 0,
                     UserHandle.getCallingUserId());
+            piCm = getPackageManager().getPackageInfo("cyanogenmod.platform", 0,
+                    UserHandle.getCallingUserId());
         } catch (RemoteException e) {
         }
 
         if (piTheme == null || piTheme.applicationInfo == null ||
                     piTarget == null || piTarget.applicationInfo == null ||
                     piAndroid == null || piAndroid.applicationInfo == null ||
+                    piCm == null || piCm.applicationInfo == null ||
                     piTheme.mOverlayTargets == null) {
             return false;
         }
 
+        // Attach themed resources for target
         String themePackageName = piTheme.packageName;
         String themePath = piTheme.applicationInfo.publicSourceDir;
         if (!piTarget.isThemeApk && piTheme.mOverlayTargets.contains(basePackageName)) {
@@ -638,6 +643,24 @@ public class ResourcesManager {
             }
         }
 
+        // Attach themed resources for cmsdk
+        if (!piTarget.isThemeApk && !piCm.packageName.equals(basePackageName) &&
+                piTheme.mOverlayTargets.contains(piCm.packageName)) {
+            String resCachePath= ThemeUtils.getTargetCacheDir(piCm.packageName,
+                    piTheme.packageName);
+            String prefixPath = ThemeUtils.getOverlayPathToTarget(piCm.packageName);
+            String targetPackagePath = piCm.applicationInfo.publicSourceDir;
+            String resApkPath = resCachePath + "/resources.apk";
+            String idmapPath = ThemeUtils.getIdmapPath(piCm.packageName, piTheme.packageName);
+            int cookie = assets.addOverlayPath(idmapPath, themePath,
+                    resApkPath, targetPackagePath, prefixPath);
+            if (cookie != 0) {
+                assets.setThemePackageName(themePackageName);
+                assets.addThemeCookie(cookie);
+            }
+        }
+
+        // Attach themed resources for android framework
         if (!piTarget.isThemeApk && !"android".equals(basePackageName) &&
                 piTheme.mOverlayTargets.contains("android")) {
             String resCachePath= ThemeUtils.getTargetCacheDir(piAndroid.packageName,
