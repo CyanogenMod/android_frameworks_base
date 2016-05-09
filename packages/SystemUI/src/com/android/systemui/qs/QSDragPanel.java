@@ -53,6 +53,7 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
 import com.android.systemui.cm.UserContentObserver;
+import com.android.systemui.qs.tiles.CustomQSTile;
 import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.settings.ToggleSlider;
@@ -67,6 +68,7 @@ import org.cyanogenmod.internal.util.QSConstants;
 import org.cyanogenmod.internal.util.QSUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -364,7 +366,11 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     protected void drawTile(TileRecord r, QSTile.State state) {
         if (mEditing) {
-            state.visible = true;
+            if ((r.tile instanceof CustomQSTile) && ((CustomQSTile) r.tile).isUserRemoved()) {
+                // don't modify visibility state.
+            } else {
+                state.visible = true;
+            }
         }
         final int visibility = state.visible ? VISIBLE : GONE;
         setTileVisibility(r.tileView, visibility);
@@ -1082,6 +1088,17 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                             }
                         });
                         break;
+                    } else if (mDraggingRecord.tile instanceof CustomQSTile) {
+                        ((CustomQSTile) mDraggingRecord.tile).setUserRemoved(true);
+                        final String spec = mHost.getSpec(mDraggingRecord.tile);
+                        restoreDraggingTilePosition(v, new Runnable() {
+                            @Override
+                            public void run() {
+                                // it might get added back later by the app, but that's ok,
+                                // we just want to reset its position after it has been removed.
+                                mHost.remove(spec);
+                            }
+                        });
                     } else {
                         mRestored = true;
                         removeDraggingRecord();
@@ -1885,7 +1902,8 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             final Iterator<String> i = tiles.iterator();
             while (i.hasNext()) {
                 final String spec = i.next();
-                if (QSUtils.isStaticQsTile(spec) || QSUtils.isDynamicQsTile(spec)) {
+                if (QSUtils.isStaticQsTile(spec)
+                        || QSUtils.isDynamicQsTile(extractTileTagFromSpec(spec))) {
                     List<String> packageList = mPackageTileMap.get(PACKAGE_ANDROID);
                     packageList.add(spec);
                 } else {
@@ -1898,13 +1916,121 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 }
             }
 
+            final Map<String, ?> stringMap = CustomQSTile.getCustomQSTilePrefs(mContext).getAll();
+            for (Map.Entry<String, ?> entry : stringMap.entrySet()) {
+                if (entry.getValue() instanceof Boolean) {
+                    if ((Boolean)entry.getValue()) {
+                        final String key = entry.getKey();
+                        if (QSUtils.isDynamicQsTile(extractTileTagFromSpec(key))) {
+                            mPackageTileMap.get(PACKAGE_ANDROID).add(key);
+                        } else {
+                            final String customTilePackage = getCustomTilePackage(key);
+                            List<String> packageList = mPackageTileMap.get(customTilePackage);
+                            if (packageList == null) {
+                                mPackageTileMap.put(customTilePackage,
+                                        packageList = new ArrayList<>());
+                            }
+                            packageList.add(key);
+
+                        }
+                    }
+                }
+            };
+
             final List<String> systemTiles = mPackageTileMap.get(PACKAGE_ANDROID);
             Collections.sort(systemTiles);
         }
 
         private String getCustomTilePackage(String spec) {
-            StatusBarPanelCustomTile sbc = mHost.getCustomTileData().get(spec).sbc;
-            return sbc.getPackage();
+            if (mHost.getCustomTileData().get(spec) != null) {
+                StatusBarPanelCustomTile sbc = mHost.getCustomTileData().get(spec).sbc;
+                return sbc.getPackage();
+            } else {
+                return extractPackageFromCustomTileSpec(spec);
+            }
+        }
+
+        private static String extractPackageFromCustomTileSpec(String spec) {
+            if (spec != null && !spec.isEmpty()) {
+                final String[] split = spec.split("\\|");
+                if (split != null && split.length > 2) {
+                    return split[1];
+                }
+            }
+            return null;
+        }
+
+        private static String extractTileTagFromSpec(String spec) {
+            if (spec != null && !spec.isEmpty()) {
+                final String[] split = spec.split("\\|");
+                if (split != null && split.length == 5) {
+                    /** for {@link cyanogenmod.app.StatusBarPanelCustomTile#key() **/
+                    return split[3];
+                } else if (split != null && split.length == 3) {
+                    /** for {@link cyanogenmod.app.StatusBarPanelCustomTile#persistableKey()} **/
+                    return split[2];
+                }
+            }
+            return null;
+        }
+
+        private Drawable getQSTileIcon(String spec) {
+            if (QSUtils.isDynamicQsTile(spec)) {
+                return QSTile.ResourceIcon.get(
+                        QSUtils.getDynamicQSTileResIconId(mContext, UserHandle.myUserId(), spec))
+                        .getDrawable(mContext);
+            } else if (QSUtils.isStaticQsTile(spec)) {
+                final int res = QSTileHost.getIconResource(spec);
+                if (res != 0) {
+                    return QSTile.ResourceIcon.get(res).getDrawable(mContext);
+                } else {
+                    return mContext.getPackageManager().getDefaultActivityIcon();
+                }
+            } else {
+                QSTile<?> tile = mHost.getTile(spec);
+                if (tile != null) {
+                    QSTile.State state = tile.getState();
+                    if (state != null && state.icon != null) {
+                        return state.icon.getDrawable(mContext);
+                    }
+                }
+                return getPackageDrawable(getCustomTilePackage(spec));
+            }
+        }
+
+        private String getPackageLabel(String packageName) {
+            try {
+                return mContext.getPackageManager().getApplicationLabel(
+                        mContext.getPackageManager().getApplicationInfo(packageName, 0)).toString();
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private Drawable getPackageDrawable(String packageName) {
+            try {
+                return mContext.getPackageManager().getApplicationIcon(packageName);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private String getQSTileLabel(String spec) {
+            if (QSUtils.isStaticQsTile(spec)) {
+                int resource = QSTileHost.getLabelResource(spec);
+                if (resource != 0) {
+                    return mContext.getText(resource).toString();
+                } else {
+                    return spec;
+                }
+            } else if (QSUtils.isDynamicQsTile(extractTileTagFromSpec(spec))) {
+                return QSUtils.getDynamicQSTileLabel(mContext,
+                        UserHandle.myUserId(), extractTileTagFromSpec(spec));
+            } else {
+                return getPackageLabel(getCustomTilePackage(spec));
+            }
         }
 
         @Override
@@ -1967,6 +2093,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 // special icon
                 systemOrAppIcon.setImageResource(R.drawable.ic_qs_tile_category_system);
             } else {
+                group = getPackageLabel(group);
                 systemOrAppIcon.setImageResource(R.drawable.ic_qs_tile_category_other);
             }
             title.setText(group);
@@ -2003,65 +2130,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             icon.setImageDrawable(getQSTileIcon(spec));
 
             return child;
-        }
-
-        private String getQSTileLabel(String spec) {
-            if (QSUtils.isStaticQsTile(spec)) {
-                int resource = QSTileHost.getLabelResource(spec);
-                if (resource != 0) {
-                    return mContext.getText(resource).toString();
-                } else {
-                    return spec;
-                }
-            } else if (QSUtils.isDynamicQsTile(spec)) {
-                return QSUtils.getDynamicQSTileLabel(mContext,
-                        UserHandle.myUserId(), spec);
-            } else {
-                return getPackageLabel(getCustomTilePackage(spec));
-            }
-        }
-
-        private Drawable getQSTileIcon(String spec) {
-            if (QSUtils.isDynamicQsTile(spec)) {
-                return QSTile.ResourceIcon.get(
-                        QSUtils.getDynamicQSTileResIconId(mContext, UserHandle.myUserId(), spec))
-                        .getDrawable(mContext);
-            } else if (QSUtils.isStaticQsTile(spec)) {
-                final int res = QSTileHost.getIconResource(spec);
-                if (res != 0) {
-                    return QSTile.ResourceIcon.get(res).getDrawable(mContext);
-                } else {
-                    return mContext.getPackageManager().getDefaultActivityIcon();
-                }
-            } else {
-                QSTile<?> tile = mHost.getTile(spec);
-                if (tile != null) {
-                    QSTile.State state = tile.getState();
-                    if (state != null && state.icon != null) {
-                        return state.icon.getDrawable(mContext);
-                    }
-                }
-                return getPackageDrawable(getCustomTilePackage(spec));
-            }
-        }
-
-        private String getPackageLabel(String packageName) {
-            try {
-                return mContext.getPackageManager().getApplicationLabel(
-                        mContext.getPackageManager().getApplicationInfo(packageName, 0)).toString();
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        private Drawable getPackageDrawable(String packageName) {
-            try {
-                return mContext.getPackageManager().getApplicationIcon(packageName);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            return null;
         }
 
         @Override
@@ -2104,7 +2172,21 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
                     String spec = getChild(groupPosition, childPosition);
-                    mPanel.add(spec);
+
+                    final QSTile<?> tile = mHost.getTile(spec);
+                    if (tile != null && tile instanceof CustomQSTile) {
+                        // already present
+                        ((CustomQSTile) tile).setUserRemoved(false);
+                        mPanel.refreshAllTiles();
+                    } else {
+                        // reset its state just in case it's not published
+                        CustomQSTile.getCustomQSTilePrefs(mContext)
+                                .edit()
+                                .remove(spec)
+                                .apply();
+                        mPanel.add(spec);
+                        // TODO notify user the app isn't publishing the tile, but it now can be!
+                    }
                     mPanel.closeDetail();
                     return true;
                 }

@@ -235,13 +235,15 @@ public class LockscreenShortcutsActivity extends Activity implements View.OnClic
 
     private void onTargetChange(String uri) {
         if (uri == null) {
-            final GlowBackground background = (GlowBackground) mSelectedView.getBackground();
-            background.hideGlow();
+            if (mSelectedView != null) {
+                final GlowBackground background = (GlowBackground) mSelectedView.getBackground();
+                background.hideGlow();
+            }
             return;
         }
 
         if (uri.equals(ACTION_APP)) {
-            mPicker.pickShortcut(null, null, 0);
+            mPicker.pickShortcut(null, null, 0, false);
         } else {
             mSelectedView.setTag(uri);
             saveCustomActions();

@@ -206,6 +206,7 @@
     <string name="dynamic_qs_tile_ime_selector_label">IME selector</string>
     <string name="dynamic_qs_tile_su_label">Root access</string>
     <string name="dynamic_qs_tile_adb_label" translatable="false">ADB</string>
+    <string name="dynamic_qs_tile_live_display_label" translatable="false">LiveDisplay</string>
 
     <string name="quick_settings_title_advanced_location">Tri-state location</string>
 

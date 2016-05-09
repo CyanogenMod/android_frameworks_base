@@ -61,7 +61,8 @@ public class LockIcon extends KeyguardAffordanceView {
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
-        if (isShown()) {
+        if (isShown() &&
+                KeyguardUpdateMonitor.getInstance(mContext).isDeviceInteractive()) {
             mTrustDrawable.start();
         } else {
             mTrustDrawable.stop();

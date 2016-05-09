@@ -165,6 +165,7 @@ public final class BatteryService extends SystemService {
 
     private boolean mAdjustableNotificationLedBrightness;
     private int mNotificationLedBrightnessLevel = LIGHT_BRIGHTNESS_MAXIMUM;
+    private boolean mUseSegmentedBatteryLed = false;
 
     private boolean mMultipleNotificationLeds;
     private boolean mMultipleLedsEnabled = false;
@@ -1048,6 +1049,11 @@ public final class BatteryService extends SystemService {
                     com.android.internal.R.integer.config_notificationsBatteryLedOn);
             mBatteryLedOff = context.getResources().getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryLedOff);
+
+            // Does a device have a segmented battery LED? In this case, we send the level
+            // in the lower 8 bits of the color and let the HAL sort it out.
+            mUseSegmentedBatteryLed = context.getResources().getBoolean(
+                    org.cyanogenmod.platform.internal.R.bool.config_useSegmentedBatteryLed);
         }
 
         private boolean isHvdcpPresent() {
@@ -1089,9 +1095,14 @@ public final class BatteryService extends SystemService {
 
             final int level = mBatteryProps.batteryLevel;
             final int status = mBatteryProps.batteryStatus;
+
             if (!mLightEnabled) {
                 // No lights if explicitly disabled
                 mBatteryLight.turnOff();
+            } else if (mUseSegmentedBatteryLed &&
+                    (status == BatteryManager.BATTERY_STATUS_CHARGING
+                    || status == BatteryManager.BATTERY_STATUS_FULL)) {
+                mBatteryLight.setColor(level);
             } else if (level < mLowBatteryWarningLevel) {
                 mBatteryLight.setModes(mNotificationLedBrightnessLevel,
                         mMultipleLedsEnabled);

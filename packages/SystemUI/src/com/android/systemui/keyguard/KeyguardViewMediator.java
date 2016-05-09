@@ -53,6 +53,7 @@ import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
 import android.view.IWindowManager;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManagerGlobal;
 import android.view.WindowManagerPolicy;
@@ -1294,9 +1295,17 @@ public class KeyguardViewMediator extends SystemUI {
     }
 
     public void showKeyguard() {
+        // This is to prevent left edge from interfering
+        // with affordances.
+        if (mStatusBar.isAffordanceSwipeInProgress()) {
+            return;
+        }
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                // Hide status bar window to avoid flicker,
+                // slideNotificationPanelIn will make it visible later.
+                mStatusBar.getStatusBarWindow().setVisibility(View.INVISIBLE);
                 // Get the keyguard into the correct state by calling mStatusBar.showKeyguard()
                 mStatusBar.showKeyguard();
                 // Now have the notification panel slid back into view
