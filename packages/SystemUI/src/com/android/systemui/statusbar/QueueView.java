@@ -62,7 +62,7 @@ public class QueueView extends LinearLayout implements
         public void onPlaybackStateChanged(@NonNull PlaybackState state) {
             super.onPlaybackStateChanged(state);
 
-            if (updateQueue(mController.getQueue())) {
+            if (getParent() != null && updateQueue(mController.getQueue())) {
                 getParent().requestLayout();
             }
         }
