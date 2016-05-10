@@ -67,9 +67,15 @@
   <!-- Lights settings, LED notification -->
   <string name="led_notification_title">Axustes de lluz</string>
   <string name="led_notification_text">Lluz LED habilitada polos axustes</string>
+  <string name="qs_tile_edit_header_instruction">Toca y dexa primíos los controles pa reordenalos</string>
+  <string name="quick_settings_edit_label">Editar caxelles</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Nun pue desaniciase la caxella de \"Editar\"</string>
+  <string name="qs_tiles_reset_confirmation">¿Restaurar los controles d\'axustes rápidos a la configuración predeterminada?</string>
   <string name="quick_settings_tile_reset_to_default">Reafitar distribución</string>
   <string name="quick_settings_title_header">Testera</string>
+  <string name="quick_settings_title_tiles">Controles</string>
   <string name="quick_settings_title_show_weather">Amosar clima</string>
+  <string name="quick_settings_title_show_brightness_slider">Amosar barra de lluminosidá</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar la primer filera</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Esto caltién la pantalla nesta vista hasta que se llibera. Caltén primíu\'l botón Atrás pa lliberala.</string>
@@ -83,6 +89,8 @@
   <string name="quick_settings_heads_up_label">Notificaciones emerxentes</string>
   <string name="quick_settings_battery_saver_label">Aforrador d\'enerxía</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Aforrador de batería (cargando)</string>
+  <string name="quick_settings_caffeine_label">Cafeína</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sincronización desactivada.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -98,6 +106,7 @@
   <string name="quick_settings_lockscreen_label">Pantalla de bloquéu</string>
   <string name="quick_settings_ambient_display_label">Pantalla ambiente</string>
   <string name="quick_settings_lockscreen_label_enforced">Bloquéu de pantalla forzáu</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Deshabilitáu por perfil</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Tiempu d\'espera de pantalla: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -149,7 +158,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Notificaciones emerxentes activaes.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Desactivar Cafeína.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Activar Cafeína.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Aforru de bateríu apagáu.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -163,6 +174,7 @@
   <string name="dynamic_qs_tile_next_alarm_label">Alarma siguiente</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seleutor d\'IME</string>
   <string name="dynamic_qs_tile_su_label">Accesu root</string>
+  <string name="quick_settings_title_advanced_location">Llocalización por triangulación</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Informes de llocalización: mou d\'aforru de batería.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -183,11 +195,21 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">Informes de llocalización camudaron a mou namái preséu.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informes de llocalización camudaron a mou d\'alta precisión.</string>
+  <string name="quick_settings_tiles_category_system">Controles del sistema</string>
   <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">Amestar un control</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Nun pue coneutase a redes móviles mentanto tea activáu el mou Avión. Desactiva\'l mou Avión ya inténtalo de nueves.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">La llinterna ta encesa</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Toca p\'apagala</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d veceru</item>
+    <item quantity="other">%1$d veceros</item>
+  </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Ensin datos SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Batería de la bas al <xliff:g id="number">%d</xliff:g> por cientu.</string>
   <!-- Play queue -->
