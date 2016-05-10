@@ -188,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">現在の電池消費量の低レベルデータをリセットすることをアプリに許可します。</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIMカードが変更されました</string>
+  <string name="uicc_hot_swapped_event_text">タップしてSIMカードのデフォルトの設定をする</string>
 </resources>
