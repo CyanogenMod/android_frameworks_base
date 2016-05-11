@@ -160,7 +160,7 @@ public class EmergencyButton extends Button {
             if (isInCall()) {
                 textId = com.android.internal.R.string.lockscreen_return_to_call;
             } else {
-                textId = com.android.internal.R.string.lockscreen_emergency_call;
+                textId = R.string.lockscreen_emergency_call;
             }
             setText(textId);
         } else {

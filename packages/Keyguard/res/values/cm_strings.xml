@@ -29,4 +29,9 @@
 
     <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
     <string name="kg_invalid_sim_length">Error: Input shorter than minimum length</string>
+
+    <!-- Button at the bottom of the unlock screen to make an emergency call or access other
+         emergency assistance functions. Updated to include word "Call"-->
+    <string name="lockscreen_emergency_call">Emergency Call</string>
+
 </resources>
