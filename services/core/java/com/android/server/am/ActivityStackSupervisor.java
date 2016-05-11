@@ -20,6 +20,8 @@ import static android.Manifest.permission.START_ANY_ACTIVITY;
 import static android.app.ActivityManager.LOCK_TASK_MODE_LOCKED;
 import static android.app.ActivityManager.LOCK_TASK_MODE_NONE;
 import static android.app.ActivityManager.LOCK_TASK_MODE_PINNED;
+import static android.app.IActivityManager.GRANT_URI_PERMISSION_FROM_OWNER_TRANSACTION;
+import static android.app.IActivityManager.GRANT_URI_PERMISSION_TRANSACTION;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -959,8 +961,12 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
             try {
                 //TODO: This needs to be a flushed out API in the future.
-                if (intent.getComponent() != null && AppGlobals.getPackageManager()
-                        .isComponentProtected(callingPackage, intent.getComponent(), userId)) {
+                boolean isProtected = intent.getComponent() != null
+                        && AppGlobals.getPackageManager()
+                        .isComponentProtected(callingPackage, intent.getComponent(), userId) &&
+                        (intent.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0;
+
+                if (isProtected) {
                     Message msg = mService.mHandler.obtainMessage(
                             ActivityManagerService.POST_COMPONENT_PROTECTED_MSG);
                     //Store start flags, userid
