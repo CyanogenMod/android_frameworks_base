@@ -386,10 +386,11 @@ public class SeekBarVolumizer implements OnSeekBarChangeListener, Handler.Callba
                     mUiHandler.postUpdateSlider(streamValue, muted);
                 }
             } else if (AudioManager.INTERNAL_RINGER_MODE_CHANGED_ACTION.equals(action)) {
+                final int oldRingerMode = mRingerMode;
                 if (mNotificationOrRing) {
                     mRingerMode = mAudioManager.getRingerModeInternal();
                 }
-                if (mAffectedByRingerMode) {
+                if (mAffectedByRingerMode && oldRingerMode != mRingerMode) {
                     updateSlider();
                 }
             }
