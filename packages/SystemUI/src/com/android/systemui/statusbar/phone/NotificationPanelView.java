@@ -413,6 +413,7 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardStatusView = (KeyguardStatusView) findViewById(R.id.keyguard_status_view);
         mQsContainer = (QSContainer) findViewById(R.id.quick_settings_container);
         mQsPanel = (QSDragPanel) findViewById(R.id.quick_settings_panel);
+        mQsPanel.setPanelView(this);
         mClockView = (TextView) findViewById(R.id.clock_view);
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll_view);
         mScrollView.setFocusable(false);
@@ -2220,6 +2221,7 @@ public class NotificationPanelView extends PanelView implements
 
     @Override
     public void onScrollChanged() {
+        mQsPanel.setTopOffset(mScrollView.getScrollY(), mQsContainer.getTop());
         if (mQsExpanded) {
             requestScrollerTopPaddingUpdate(false /* animate */);
             requestPanelHeightUpdate();
