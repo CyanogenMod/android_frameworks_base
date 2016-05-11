@@ -27,6 +27,7 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.test.AndroidTestCase;
 import android.test.mock.MockContext;
 import android.text.TextUtils;
@@ -365,7 +366,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         };
         Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
                 .thenReturn(regionRestrictedPackages);
-        assertFalse(settings.shouldPrebundledPackageBeInstalled(resources,
+        assertFalse(settings.shouldPrebundledPackageBeInstalledForRegion(resources,
                 expectedPackageNeededForRegion, resources));
     }
 
@@ -384,7 +385,66 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
 
         Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
                 .thenReturn(regionLockedPackages);
-        assertTrue(settings.shouldPrebundledPackageBeInstalled(resources,
+        assertTrue(settings.shouldPrebundledPackageBeInstalledForRegion(resources,
                 expectedPackageNeededForRegion, resources));
+    }
+
+    // Shamelessly kanged from KeySetManagerServiceTest
+    public PackageSetting generateFakePackageSetting(String name) {
+        return new PackageSetting(name, name, new File(mContext.getCacheDir(), "fakeCodePath"),
+                new File(mContext.getCacheDir(), "fakeResPath"), "", "", "",
+                "", 1, 0, 0);
+    }
+
+    // Checks if a package that was installed and currently isn't installed for the owner
+    // is accepted for a secondary user
+    public void testPrebundledSecondaryUserAccept() {
+        final Settings settings = new Settings(getContext().getFilesDir());
+        final String expectedPackageToBeInstalled = "org.cyanogenmod.secondaryuser.package";
+
+        final PackageSetting packageSetting =
+                generateFakePackageSetting(expectedPackageToBeInstalled);
+
+        final int userOwner = UserHandle.USER_OWNER;
+        final int userSecondary = 1000;
+
+        // Return true that the package was installed for the owner at some point
+        Mockito.when(settings.wasPrebundledPackageInstalledLPr(userOwner,
+                expectedPackageToBeInstalled)).thenReturn(true);
+
+        // Return false that the package was installed for the secondary user at some point
+        Mockito.when(settings.wasPrebundledPackageInstalledLPr(userSecondary,
+                expectedPackageToBeInstalled)).thenReturn(false);
+
+        // Return false that the package is currently not installed for the owner
+        Mockito.when(packageSetting.getInstalled(userOwner)).thenReturn(false);
+
+        // Return false that the package is currently not installed for the secondary user
+        Mockito.when(packageSetting.getInstalled(userSecondary)).thenReturn(false);
+
+        assertFalse(settings.shouldPrebundledPackageBeInstalledForUserLPr(packageSetting,
+                userSecondary, expectedPackageToBeInstalled));
+    }
+
+    // Checks if a package that was installed for a secondary user and currently isn't installed
+    // for the user is accepted to be reinstalled
+    public void testPrebundledSecondaryUserReinstallAccept() {
+        final Settings settings = new Settings(getContext().getFilesDir());
+        final String expectedPackageToBeInstalled = "org.cyanogenmod.secondaryuser.package";
+
+        final PackageSetting packageSetting =
+                generateFakePackageSetting(expectedPackageToBeInstalled);
+
+        final int userSecondary = 1000;
+
+        // Return true that the package was installed for the secondary user at some point
+        Mockito.when(settings.wasPrebundledPackageInstalledLPr(userSecondary,
+                expectedPackageToBeInstalled)).thenReturn(true);
+
+        // Return false that the package is currently not installed for the secondary user
+        Mockito.when(packageSetting.getInstalled(userSecondary)).thenReturn(false);
+
+        assertFalse(settings.shouldPrebundledPackageBeInstalledForUserLPr(packageSetting,
+                userSecondary, expectedPackageToBeInstalled));
     }
 }
