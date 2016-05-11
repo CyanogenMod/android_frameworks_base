@@ -5996,7 +5996,17 @@ public class PackageManagerService extends IPackageManager.Stub {
                 PackageSetting existingSettings = mSettings.peekPackageLPr(pkg.packageName);
                 boolean isInstalledForUser = (existingSettings != null
                         && existingSettings.getInstalled(user.getIdentifier()));
-                if (mSettings.wasPrebundledPackageInstalledLPr(user.getIdentifier(),
+                boolean isInstalledForOwner = (existingSettings != null
+                        && existingSettings.getInstalled(UserHandle.USER_OWNER));
+
+                if (user.getIdentifier() != UserHandle.USER_OWNER &&
+                        mSettings.wasPrebundledPackageInstalledLPr(UserHandle.USER_OWNER,
+                                pkg.packageName) && !isInstalledForOwner) {
+                    // The prebundled app was installed at some point for the owner and isn't
+                    // currently installed for the owner, dont install it for a new user
+                    throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
+                            "skip reinstall for " + pkg.packageName);
+                } else if (mSettings.wasPrebundledPackageInstalledLPr(user.getIdentifier(),
                         pkg.packageName) && !isInstalledForUser) {
                     // The prebundled app was installed at some point for the user and isn't
                     // currently installed for the user, skip reinstalling it
