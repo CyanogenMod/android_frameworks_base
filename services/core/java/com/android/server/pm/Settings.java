@@ -2524,7 +2524,7 @@ final class Settings {
         return mPrebundledPackages.get(userId).contains(packageName);
     }
 
-    boolean shouldPrebundledPackageBeInstalled(Resources res, String packageName,
+    boolean shouldPrebundledPackageBeInstalledForRegion(Resources res, String packageName,
                                             Resources configuredResources) {
         // Default fallback on lack of bad package
         if (TextUtils.isEmpty(packageName)) {
@@ -2555,6 +2555,37 @@ final class Settings {
         prebundledArray = resources
                 .getStringArray(R.array.config_restrict_to_region_locked_devices);
         return !ArrayUtils.contains(prebundledArray, packageName);
+    }
+
+    boolean shouldPrebundledPackageBeInstalledForUserLPr(PackageSetting existingSettings,
+            int userIdentifier, String packageName) {
+
+        // Check if package installed for the user
+        final boolean isInstalledForUser = (existingSettings != null
+                && existingSettings.getInstalled(userIdentifier));
+
+        // Check if package installed for the owner
+        final boolean isInstalledForOwner = (existingSettings != null
+                && existingSettings.getInstalled(UserHandle.USER_OWNER));
+
+        // Check if the user is the owner
+        final boolean isOwner = userIdentifier == UserHandle.USER_OWNER;
+
+        // If the given user is not the owner, and the prebundle was installed for the owner
+        // but is no longer installed, and isn't currently installed for the user,
+        // skip installing it.
+        if (!isOwner && wasPrebundledPackageInstalledLPr(UserHandle.USER_OWNER, packageName)
+                && !isInstalledForOwner && !isInstalledForUser) {
+            return false;
+        }
+
+        // If the given package was installed for the user and isn't currently, skip reinstalling it
+        if (wasPrebundledPackageInstalledLPr(userIdentifier, packageName) &&
+                !isInstalledForUser) {
+            return false;
+        }
+
+        return true;
     }
 
     void writeDisabledSysPackageLPr(XmlSerializer serializer, final PackageSetting pkg)
