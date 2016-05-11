@@ -1046,7 +1046,7 @@ public class NotificationPanelView extends PanelView implements
 
     private boolean isKeyguardInteractiveAndShowing() {
         return mShowingExternalKeyguard || mStatusBar.getBarState() != StatusBarState.KEYGUARD ||
-                !mLiveLockscreenController.isLiveLockScreenInteractive();
+                mLiveLockscreenController.isLiveLockScreenInteractive();
     }
 
     private boolean handleQsTouch(MotionEvent event) {
