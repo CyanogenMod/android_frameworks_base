@@ -27,6 +27,7 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.test.AndroidTestCase;
 import android.test.mock.MockContext;
 import android.text.TextUtils;
@@ -72,71 +73,83 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
     private void writePackagesXml() {
         writeFile(new File(getContext().getFilesDir(), "system/packages.xml"),
                 ("<?xml version='1.0' encoding='utf-8' standalone='yes' ?>"
-                + "<packages>"
-                + "<last-platform-version internal=\"15\" external=\"0\" fingerprint=\"foo\" />"
-                + "<permission-trees>"
-                + "<item name=\"com.google.android.permtree\" package=\"com.google.android.permpackage\" />"
-                + "</permission-trees>"
-                + "<permissions>"
-                + "<item name=\"android.permission.WRITE_CALL_LOG\" package=\"android\" protection=\"1\" />"
-                + "<item name=\"android.permission.ASEC_ACCESS\" package=\"android\" protection=\"2\" />"
-                + "<item name=\"android.permission.ACCESS_WIMAX_STATE\" package=\"android\" />"
-                + "<item name=\"android.permission.REBOOT\" package=\"android\" protection=\"18\" />"
-                + "</permissions>"
-                + "<package name=\"com.google.app1\" codePath=\"/system/app/app1.apk\" nativeLibraryPath=\"/data/data/com.google.app1/lib\" flags=\"1\" ft=\"1360e2caa70\" it=\"135f2f80d08\" ut=\"1360e2caa70\" version=\"1109\" sharedUserId=\"11000\">"
-                + "<sigs count=\"1\">"
-                + "<cert index=\"0\" key=\"" + KeySetStrings.ctsKeySetCertA + "\" />"
-                + "</sigs>"
-                + "<proper-signing-keyset identifier=\"1\" />"
-                + "</package>"
-                + "<package name=\"com.google.app2\" codePath=\"/system/app/app2.apk\" nativeLibraryPath=\"/data/data/com.google.app2/lib\" flags=\"1\" ft=\"1360e578718\" it=\"135f2f80d08\" ut=\"1360e578718\" version=\"15\" enabled=\"3\" userId=\"11001\">"
-                + "<sigs count=\"1\">"
-                + "<cert index=\"0\" />"
-                + "</sigs>"
-                + "<proper-signing-keyset identifier=\"1\" />"
-                + "<defined-keyset alias=\"AB\" identifier=\"4\" />"
-                + "</package>"
-                + "<package name=\"com.android.app3\" codePath=\"/system/app/app3.apk\" nativeLibraryPath=\"/data/data/com.android.app3/lib\" flags=\"1\" ft=\"1360e577b60\" it=\"135f2f80d08\" ut=\"1360e577b60\" version=\"15\" userId=\"11030\">"
-                + "<sigs count=\"1\">"
-                + "<cert index=\"1\" key=\"" + KeySetStrings.ctsKeySetCertB + "\" />"
-                + "</sigs>"
-                + "<proper-signing-keyset identifier=\"2\" />"
-                + "<upgrade-keyset identifier=\"3\" />"
-                + "<defined-keyset alias=\"C\" identifier=\"3\" />"
-                + "</package>"
-                + "<shared-user name=\"com.android.shared1\" userId=\"11000\">"
-                + "<sigs count=\"1\">"
-                + "<cert index=\"1\" />"
-                + "</sigs>"
-                + "<perms>"
-                + "<item name=\"android.permission.REBOOT\" />"
-                + "</perms>"
-                + "</shared-user>"
-                + "<keyset-settings version=\"1\">"
-                + "<keys>"
-                + "<public-key identifier=\"1\" value=\"" + KeySetStrings.ctsKeySetPublicKeyA + "\" />"
-                + "<public-key identifier=\"2\" value=\"" + KeySetStrings.ctsKeySetPublicKeyB + "\" />"
-                + "<public-key identifier=\"3\" value=\"" + KeySetStrings.ctsKeySetPublicKeyC + "\" />"
-                + "</keys>"
-                + "<keysets>"
-                + "<keyset identifier=\"1\">"
-                + "<key-id identifier=\"1\" />"
-                + "</keyset>"
-                + "<keyset identifier=\"2\">"
-                + "<key-id identifier=\"2\" />"
-                + "</keyset>"
-                + "<keyset identifier=\"3\">"
-                + "<key-id identifier=\"3\" />"
-                + "</keyset>"
-                + "<keyset identifier=\"4\">"
-                + "<key-id identifier=\"1\" />"
-                + "<key-id identifier=\"2\" />"
-                + "</keyset>"
-                + "</keysets>"
-                + "<lastIssuedKeyId value=\"3\" />"
-                + "<lastIssuedKeySetId value=\"4\" />"
-                + "</keyset-settings>"
-                + "</packages>").getBytes());
+                        + "<packages>"
+                        +
+                        "<last-platform-version internal=\"15\" external=\"0\" fingerprint=\"foo\" />"
+                        + "<permission-trees>"
+                        +
+                        "<item name=\"com.google.android.permtree\" package=\"com.google.android.permpackage\" />"
+                        + "</permission-trees>"
+                        + "<permissions>"
+                        +
+                        "<item name=\"android.permission.WRITE_CALL_LOG\" package=\"android\" protection=\"1\" />"
+                        +
+                        "<item name=\"android.permission.ASEC_ACCESS\" package=\"android\" protection=\"2\" />"
+                        +
+                        "<item name=\"android.permission.ACCESS_WIMAX_STATE\" package=\"android\" />"
+                        +
+                        "<item name=\"android.permission.REBOOT\" package=\"android\" protection=\"18\" />"
+                        + "</permissions>"
+                        +
+                        "<package name=\"com.google.app1\" codePath=\"/system/app/app1.apk\" nativeLibraryPath=\"/data/data/com.google.app1/lib\" flags=\"1\" ft=\"1360e2caa70\" it=\"135f2f80d08\" ut=\"1360e2caa70\" version=\"1109\" sharedUserId=\"11000\">"
+                        + "<sigs count=\"1\">"
+                        + "<cert index=\"0\" key=\"" + KeySetStrings.ctsKeySetCertA + "\" />"
+                        + "</sigs>"
+                        + "<proper-signing-keyset identifier=\"1\" />"
+                        + "</package>"
+                        +
+                        "<package name=\"com.google.app2\" codePath=\"/system/app/app2.apk\" nativeLibraryPath=\"/data/data/com.google.app2/lib\" flags=\"1\" ft=\"1360e578718\" it=\"135f2f80d08\" ut=\"1360e578718\" version=\"15\" enabled=\"3\" userId=\"11001\">"
+                        + "<sigs count=\"1\">"
+                        + "<cert index=\"0\" />"
+                        + "</sigs>"
+                        + "<proper-signing-keyset identifier=\"1\" />"
+                        + "<defined-keyset alias=\"AB\" identifier=\"4\" />"
+                        + "</package>"
+                        +
+                        "<package name=\"com.android.app3\" codePath=\"/system/app/app3.apk\" nativeLibraryPath=\"/data/data/com.android.app3/lib\" flags=\"1\" ft=\"1360e577b60\" it=\"135f2f80d08\" ut=\"1360e577b60\" version=\"15\" userId=\"11030\">"
+                        + "<sigs count=\"1\">"
+                        + "<cert index=\"1\" key=\"" + KeySetStrings.ctsKeySetCertB + "\" />"
+                        + "</sigs>"
+                        + "<proper-signing-keyset identifier=\"2\" />"
+                        + "<upgrade-keyset identifier=\"3\" />"
+                        + "<defined-keyset alias=\"C\" identifier=\"3\" />"
+                        + "</package>"
+                        + "<shared-user name=\"com.android.shared1\" userId=\"11000\">"
+                        + "<sigs count=\"1\">"
+                        + "<cert index=\"1\" />"
+                        + "</sigs>"
+                        + "<perms>"
+                        + "<item name=\"android.permission.REBOOT\" />"
+                        + "</perms>"
+                        + "</shared-user>"
+                        + "<keyset-settings version=\"1\">"
+                        + "<keys>"
+                        + "<public-key identifier=\"1\" value=\"" +
+                        KeySetStrings.ctsKeySetPublicKeyA + "\" />"
+                        + "<public-key identifier=\"2\" value=\"" +
+                        KeySetStrings.ctsKeySetPublicKeyB + "\" />"
+                        + "<public-key identifier=\"3\" value=\"" +
+                        KeySetStrings.ctsKeySetPublicKeyC + "\" />"
+                        + "</keys>"
+                        + "<keysets>"
+                        + "<keyset identifier=\"1\">"
+                        + "<key-id identifier=\"1\" />"
+                        + "</keyset>"
+                        + "<keyset identifier=\"2\">"
+                        + "<key-id identifier=\"2\" />"
+                        + "</keyset>"
+                        + "<keyset identifier=\"3\">"
+                        + "<key-id identifier=\"3\" />"
+                        + "</keyset>"
+                        + "<keyset identifier=\"4\">"
+                        + "<key-id identifier=\"1\" />"
+                        + "<key-id identifier=\"2\" />"
+                        + "</keyset>"
+                        + "</keysets>"
+                        + "<lastIssuedKeyId value=\"3\" />"
+                        + "<lastIssuedKeySetId value=\"4\" />"
+                        + "</keyset-settings>"
+                        + "</packages>").getBytes());
     }
 
     private void writeStoppedPackagesXml() {
@@ -365,7 +378,7 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
         };
         Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
                 .thenReturn(regionRestrictedPackages);
-        assertFalse(settings.shouldPrebundledPackageBeInstalled(resources,
+        assertFalse(settings.shouldPrebundledPackageBeInstalledForRegion(resources,
                 expectedPackageNeededForRegion, resources));
     }
 
@@ -384,7 +397,66 @@ public class PackageManagerSettingsTests extends AndroidTestCase {
 
         Mockito.when(resources.getStringArray(R.array.config_restrict_to_region_locked_devices))
                 .thenReturn(regionLockedPackages);
-        assertTrue(settings.shouldPrebundledPackageBeInstalled(resources,
+        assertTrue(settings.shouldPrebundledPackageBeInstalledForRegion(resources,
                 expectedPackageNeededForRegion, resources));
+    }
+
+    // Shamelessly kanged from KeySetManagerServiceTest
+    public PackageSetting generateFakePackageSetting(String name) {
+        return new PackageSetting(name, name, new File(mContext.getCacheDir(), "fakeCodePath"),
+                new File(mContext.getCacheDir(), "fakeResPath"), "", "", "",
+                "", 1, 0, 0);
+    }
+
+    // Checks if a package that was installed and currently isn't installed for the owner
+    // is accepted for a secondary user
+    public void testPrebundledSecondaryUserAccept() {
+        final Settings settings = new Settings(getContext().getFilesDir());
+        final String expectedPackageToBeInstalled = "org.cyanogenmod.secondaryuser.package";
+
+        final PackageSetting packageSetting =
+                generateFakePackageSetting(expectedPackageToBeInstalled);
+
+        final int userOwner = UserHandle.USER_OWNER;
+        final int userSecondary = 1000;
+
+        // Return true that the package was installed for the owner at some point
+        Mockito.when(settings.wasPrebundledPackageInstalledLPr(userOwner,
+                expectedPackageToBeInstalled)).thenReturn(true);
+
+        // Return false that the package was installed for the secondary user at some point
+        Mockito.when(settings.wasPrebundledPackageInstalledLPr(userSecondary,
+                expectedPackageToBeInstalled)).thenReturn(false);
+
+        // Return false that the package is currently not installed for the owner
+        Mockito.when(packageSetting.getInstalled(userOwner)).thenReturn(false);
+
+        // Return false that the package is currently not installed for the secondary user
+        Mockito.when(packageSetting.getInstalled(userSecondary)).thenReturn(false);
+
+        assertFalse(settings.shouldPrebundledPackageBeInstalledForUserLPr(packageSetting,
+                userSecondary, expectedPackageToBeInstalled));
+    }
+
+    // Checks if a package that was installed for a secondary user and currently isn't installed
+    // for the user is accepted to be reinstalled
+    public void testPrebundledSecondaryUserReinstallAccept() {
+        final Settings settings = new Settings(getContext().getFilesDir());
+        final String expectedPackageToBeInstalled = "org.cyanogenmod.secondaryuser.package";
+
+        final PackageSetting packageSetting =
+                generateFakePackageSetting(expectedPackageToBeInstalled);
+
+        final int userSecondary = 1000;
+
+        // Return true that the package was installed for the secondary user at some point
+        Mockito.when(settings.wasPrebundledPackageInstalledLPr(userSecondary,
+                expectedPackageToBeInstalled)).thenReturn(true);
+
+        // Return false that the package is currently not installed for the secondary user
+        Mockito.when(packageSetting.getInstalled(userSecondary)).thenReturn(false);
+
+        assertFalse(settings.shouldPrebundledPackageBeInstalledForUserLPr(packageSetting,
+                userSecondary, expectedPackageToBeInstalled));
     }
 }
