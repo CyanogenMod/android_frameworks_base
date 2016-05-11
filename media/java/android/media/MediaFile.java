@@ -47,14 +47,14 @@ public class MediaFile {
     private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_FLAC;
 
     // More audio file types
-    public static final int FILE_TYPE_DTS   = 300;
-    public static final int FILE_TYPE_3GPA  = 301;
-    public static final int FILE_TYPE_AC3   = 302;
-    public static final int FILE_TYPE_QCP   = 303;
-    public static final int FILE_TYPE_PCM   = 304;
-    public static final int FILE_TYPE_EC3   = 305;
-    public static final int FILE_TYPE_AIFF  = 306;
-    public static final int FILE_TYPE_APE   = 307;
+    public static final int FILE_TYPE_DTS   = 210;
+    public static final int FILE_TYPE_3GPA  = 211;
+    public static final int FILE_TYPE_AC3   = 212;
+    public static final int FILE_TYPE_QCP   = 213;
+    public static final int FILE_TYPE_PCM   = 214;
+    public static final int FILE_TYPE_EC3   = 215;
+    public static final int FILE_TYPE_AIFF  = 216;
+    public static final int FILE_TYPE_APE   = 217;
     private static final int FIRST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_DTS;
     private static final int LAST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_APE;
 
