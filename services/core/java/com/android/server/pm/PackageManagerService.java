@@ -5994,16 +5994,17 @@ public class PackageManagerService extends IPackageManager.Stub {
         if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
             synchronized (mPackages) {
                 PackageSetting existingSettings = mSettings.peekPackageLPr(pkg.packageName);
-                boolean isInstalledForUser = (existingSettings != null
-                        && existingSettings.getInstalled(user.getIdentifier()));
-                if (mSettings.wasPrebundledPackageInstalledLPr(user.getIdentifier(),
-                        pkg.packageName) && !isInstalledForUser) {
-                    // The prebundled app was installed at some point for the user and isn't
-                    // currently installed for the user, skip reinstalling it
+
+                if (!mSettings.shouldPrebundledPackageBeInstalledForUserLPr(existingSettings,
+                        user.getIdentifier(), pkg.packageName)) {
+                    // The prebundled app was installed at some point for the owner and isn't
+                    // currently installed for the owner, dont install it for a new user
+                    // OR the prebundled app was installed for the user at some point and isn't
+                    // current installed for the user, so skip reinstalling it
                     throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
                             "skip reinstall for " + pkg.packageName);
-                } else if (!mSettings.shouldPrebundledPackageBeInstalled(mContext.getResources(),
-                                pkg.packageName, mCustomResources)) {
+                } else if (!mSettings.shouldPrebundledPackageBeInstalledForRegion(
+                        mContext.getResources(), pkg.packageName, mCustomResources)) {
                     // The prebundled app is not needed for the default mobile country code,
                     // skip installing it
                     throw new PackageManagerException(INSTALL_FAILED_REGION_LOCKED_PREBUNDLE,
