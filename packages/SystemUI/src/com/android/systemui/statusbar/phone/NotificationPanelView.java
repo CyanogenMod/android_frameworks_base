@@ -264,6 +264,7 @@ public class NotificationPanelView extends PanelView implements
     private LiveLockScreenController mLiveLockscreenController;
     private final GestureDetector mGestureDetector;
     private ViewLinker mViewLinker;
+    private boolean mDetailRequestedScrollLock;
 
     private enum SwipeLockedDirection {
         UNKNOWN,
@@ -413,6 +414,7 @@ public class NotificationPanelView extends PanelView implements
         mKeyguardStatusView = (KeyguardStatusView) findViewById(R.id.keyguard_status_view);
         mQsContainer = (QSContainer) findViewById(R.id.quick_settings_container);
         mQsPanel = (QSDragPanel) findViewById(R.id.quick_settings_panel);
+        mQsPanel.setPanelView(this);
         mClockView = (TextView) findViewById(R.id.clock_view);
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll_view);
         mScrollView.setFocusable(false);
@@ -604,7 +606,7 @@ public class NotificationPanelView extends PanelView implements
         // the desired height so when closing the QS detail, it stays smaller after the size change
         // animation is finished but the detail view is still being animated away (this animation
         // takes longer than the size change animation).
-        if (mQsSizeChangeAnimator == null) {
+        if (mQsSizeChangeAnimator == null && !mDetailRequestedScrollLock) {
             mQsContainer.setHeightOverride(mQsContainer.getDesiredHeight());
         }
         updateMaxHeadsUpTranslation();
@@ -1220,8 +1222,11 @@ public class NotificationPanelView extends PanelView implements
                 mTrackingPointer = -1;
                 trackMovement(event);
                 float fraction = getQsExpansionFraction();
-                if ((fraction != 0f || y >= mInitialTouchY)
-                        && (fraction != 1f || y <= mInitialTouchY)) {
+                final boolean fling = (fraction != 0f || y >= mInitialTouchY)
+                        && (fraction != 1f || y <= mInitialTouchY);
+                final boolean detailFling = mDetailRequestedScrollLock
+                        && ((fraction < 0.2f) || (fraction > 0.9f));
+                if ((fling && !mDetailRequestedScrollLock) || detailFling) {
                     flingQsWithCurrentVelocity(y,
                             event.getActionMasked() == MotionEvent.ACTION_CANCEL);
                 } else {
@@ -1580,10 +1585,10 @@ public class NotificationPanelView extends PanelView implements
                 ? View.VISIBLE
                 : View.INVISIBLE);
         mHeader.setExpanded((mKeyguardShowing && !mHeaderAnimating)
-                || (mQsExpanded && !mStackScrollerOverscrolling));
+                || (mQsExpanded && !mStackScrollerOverscrolling) || mDetailRequestedScrollLock);
         mNotificationStackScroller.setScrollingEnabled(
                 mStatusBarState != StatusBarState.KEYGUARD && (!mQsExpanded
-                        || mQsExpansionFromOverscroll));
+                        || mQsExpansionFromOverscroll || mDetailRequestedScrollLock));
         mQsPanel.setVisibility(expandVisually ? View.VISIBLE : View.INVISIBLE);
         mQsContainer.setVisibility(
                 mKeyguardShowing && !expandVisually ? View.INVISIBLE : View.VISIBLE);
@@ -1799,7 +1804,8 @@ public class NotificationPanelView extends PanelView implements
                 && y >= header.getTop() && y <= header.getBottom();
 
         if (mQsExpanded) {
-            return onHeader || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
+            return mDetailRequestedScrollLock ||
+                    onHeader || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
         } else {
             return onHeader;
         }
@@ -2220,6 +2226,7 @@ public class NotificationPanelView extends PanelView implements
 
     @Override
     public void onScrollChanged() {
+        mQsPanel.setTopOffset(mScrollView.getScrollY(), mQsContainer.getTop());
         if (mQsExpanded) {
             requestScrollerTopPaddingUpdate(false /* animate */);
             requestPanelHeightUpdate();
@@ -2842,6 +2849,10 @@ public class NotificationPanelView extends PanelView implements
         ActivityManager am = getContext().getSystemService(ActivityManager.class);
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         return !tasks.isEmpty() && pkgName.equals(tasks.get(0).topActivity.getPackageName());
+    }
+
+    public void setDetailRequestedScrollLock(boolean detailScrollFlag) {
+        mDetailRequestedScrollLock = detailScrollFlag;
     }
 
     private class SlideInAnimationListener implements ValueAnimator.AnimatorUpdateListener,

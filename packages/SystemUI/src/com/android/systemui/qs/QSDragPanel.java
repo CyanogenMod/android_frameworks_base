@@ -57,6 +57,7 @@ import com.android.systemui.qs.tiles.CustomQSTile;
 import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.settings.BrightnessController;
 import com.android.systemui.settings.ToggleSlider;
+import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.QSTileHost;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.tuner.QsTuner;
@@ -64,11 +65,9 @@ import com.viewpagerindicator.CirclePageIndicator;
 import cyanogenmod.app.StatusBarPanelCustomTile;
 import cyanogenmod.providers.CMSettings;
 import org.cyanogenmod.internal.logging.CMMetricsLogger;
-import org.cyanogenmod.internal.util.QSConstants;
 import org.cyanogenmod.internal.util.QSUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -98,6 +97,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
     private TextView mDetailRemoveButton;
     private DragTileRecord mDraggingRecord, mLastDragRecord;
+    private ViewGroup mDetailButtons;
     private boolean mEditing;
     private boolean mDragging;
     private float mLastTouchLocationX, mLastTouchLocationY;
@@ -127,6 +127,13 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
         }
     };
+    private NotificationPanelView mPanelView;
+    private int mQsContainerTop;
+    private int mMaxHeight;
+    private int mPanelBottom;
+    private int mTopOffset;
+    private int mDrawingOffset;
+    private boolean mNeedsBigDetail;
 
     public QSDragPanel(Context context) {
         this(context, null);
@@ -141,6 +148,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         updateResources();
 
         mDetail = LayoutInflater.from(mContext).inflate(R.layout.qs_detail, this, false);
+        mDetailButtons = (ViewGroup) mDetail.findViewById(R.id.buttons);
         mDetailContent = (ViewGroup) mDetail.findViewById(android.R.id.content);
         mDetailRemoveButton = (TextView) mDetail.findViewById(android.R.id.button3);
         mDetailSettingsButton = (TextView) mDetail.findViewById(android.R.id.button2);
@@ -807,40 +815,55 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         if (mFooter.hasFooter()) {
             h += mFooter.getView().getMeasuredHeight();
         }
+        mGridHeight = h;
+
         mDetail.measure(exactly(width), MeasureSpec.UNSPECIFIED);
-        if (mDetail.getMeasuredHeight() < h) {
-            mDetail.measure(exactly(width), exactly(h));
+        mDetailButtons.measure(exactly(width), MeasureSpec.UNSPECIFIED);
+
+        if (mDisplaySize == null) {
+            mDisplaySize = new Point();
+            getDisplay().getSize(mDisplaySize);
         }
 
-        // Check if the detail view would be overflowing below the physical height of the device
-        // and cutting the content off. If it is, reduce the detail height to fit.
-        if (isShowingDetail()) {
-            if (mDisplaySize == null) {
-                mDisplaySize = new Point();
-                getDisplay().getSize(mDisplaySize);
-            }
-            if (mTmpLoc == null) {
-                mTmpLoc = new int[2];
-                mDetail.getLocationOnScreen(mTmpLoc);
-            }
+        mMaxHeight = Math.max(mDetail.getMeasuredHeight(), mGridHeight);
+        mPanelBottom = mQsContainerTop + mMaxHeight;
 
-            final int containerTop = mTmpLoc[1];
-            final int detailBottom = containerTop + mDetail.getMeasuredHeight();
-            if (detailBottom >= mDisplaySize.y) {
-                // panel is hanging below the screen
-                final int detailMinHeight = mDisplaySize.y - containerTop;
-                mDetail.measure(exactly(width), exactly(detailMinHeight));
-            }
-            setMeasuredDimension(width, mDetail.getMeasuredHeight());
-            mGridHeight = mDetail.getMeasuredHeight();
-        } else {
-            setMeasuredDimension(width, h);
-            mGridHeight = h;
+        if (!mNeedsBigDetail && !isClosingDetail() && (mClipper.isAnimating() || isShowingDetail())) {
+            mNeedsBigDetail = mDetail.getMeasuredHeight() > mGridHeight - mDrawingOffset;
         }
 
+        mDrawingOffset = mTopOffset;
+
+        if (mNeedsBigDetail) {
+            mDrawingOffset = 0;
+
+        } else if (isShowingDetail() && mPanelBottom - mDrawingOffset > mDisplaySize.y) {
+            mDetail.measure(exactly(width), exactly(mMaxHeight - (mPanelBottom - mDisplaySize.y)));
+
+        } else if (isShowingDetail()) {
+            mDetail.measure(exactly(width), exactly(mMaxHeight - mDrawingOffset));
+
+        } else if (!isClosingDetail() && mDetail.getMeasuredHeight() < mMaxHeight) {
+            mDetail.measure(exactly(width), exactly(mMaxHeight));
+        }
+
+        if (isClosingDetail()) {
+            mNeedsBigDetail = false;
+        }
+
+        setMeasuredDimension(width, mMaxHeight);
         for (TileRecord record : mRecords) {
             setupRecord(record);
         }
+    }
+
+    public void setTopOffset(int offset, int containerTop) {
+        mTopOffset = offset;
+        mQsContainerTop = containerTop;
+    }
+
+    public int getTopOffset() {
+        return mTopOffset;
     }
 
     private void setupRecord(TileRecord record) {
@@ -867,11 +890,15 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
             }
             r.tile.setDetailListening(show);
             int x = (int) ((DragTileRecord) r).destination.x + r.tileView.getWidth() / 2;
-            int y = mViewPager.getTop() + (int) ((DragTileRecord) r).destination.y + r.tileView.getHeight() / 2;
+            int y = mViewPager.getTop()
+                    + (int) ((DragTileRecord) r).destination.y + r.tileView.getHeight() / 2
+                    - mDrawingOffset;
             handleShowDetailImpl(r, show, x, y);
         } else {
             super.handleShowDetailTile(r, show);
         }
+        mPageIndicator.setVisibility(!show ? View.VISIBLE : View.INVISIBLE);
+        mPanelView.setDetailRequestedScrollLock(show);
     }
 
     @Override
@@ -884,10 +911,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         // view pager laid out from top of brightness view to bottom to page through settings
         mViewPager.layout(0, 0, w, viewPagerBottom);
 
-        // layout page indicator inside viewpager inset
-        mPageIndicator.layout(0, b - mPageIndicatorHeight, w, b);
-
-        mDetail.layout(0, 0, w, mDetail.getMeasuredHeight());
+        mDetail.layout(0, mDrawingOffset, w, mDetail.getMeasuredHeight() + mDrawingOffset);
 
         if (mFooter.hasFooter()) {
             View footer = mFooter.getView();
@@ -897,7 +921,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
 
         if (!isShowingDetail() && !isClosingDetail()) {
             mQsPanelTop.bringToFront();
+
         }
+        // layout page indicator inside viewpager inset
+        mPageIndicator.layout(0, b - mPageIndicatorHeight, w, b);
     }
 
     protected int getRowTop(int row) {
@@ -1884,6 +1911,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         if (mSettingsObserver != null) {
             mSettingsObserver.unobserve();
         }
+    }
+
+    public void setPanelView(NotificationPanelView panelView) {
+        this.mPanelView = panelView;
     }
 
     public static class TilesListAdapter extends BaseExpandableListAdapter
