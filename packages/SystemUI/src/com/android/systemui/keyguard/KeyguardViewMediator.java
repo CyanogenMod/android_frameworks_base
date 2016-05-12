@@ -1300,6 +1300,15 @@ public class KeyguardViewMediator extends SystemUI {
         if (mStatusBar.isAffordanceSwipeInProgress()) {
             return;
         }
+
+        // Disable edge detector once we're back on lockscreen
+        try {
+            WindowManagerGlobal.getWindowManagerService()
+                    .setLiveLockscreenEdgeDetector(false);
+        } catch (RemoteException e){
+            Log.e(TAG, e.getMessage());
+        }
+
         mHandler.post(new Runnable() {
             @Override
             public void run() {
