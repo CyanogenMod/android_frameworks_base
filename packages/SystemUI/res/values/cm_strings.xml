@@ -260,9 +260,9 @@
    <string name="play_queue_extention">Show play queue</string>
 
     <!-- Path data for portrait battery -->
-    <string name="battery_portrait_path_full" translatable="false">M19,22v-20L5,2V22H19z</string>
-    <string name="battery_portrait_path_empty" translatable="false">M19,22v0.0L5,22V22H19z</string>
-    <string name="battery_portrait_clip_path" translatable="false">M5,22V4h4V2h6v2h4v18L5,22z</string>
+    <string name="battery_portrait_path_full" translatable="false">M 5 2 H 19 V 21 H 5 V 2 Z</string>
+    <string name="battery_portrait_path_empty" translatable="false">M 5 21 H 19 V 21 H 5 V 21 Z</string>
+    <string name="battery_portrait_clip_path" translatable="false">M6,21V4h3V2h6v2h3v17H6z</string>
 
     <!-- Path data for landscape battery -->
     <string name="battery_landscape_path_full" translatable="false">M 1 4 H 25 V 20 H 1 V 4 Z</string>
