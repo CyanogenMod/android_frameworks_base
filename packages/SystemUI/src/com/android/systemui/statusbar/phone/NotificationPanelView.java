@@ -1352,6 +1352,10 @@ public class NotificationPanelView extends PanelView implements
         if (statusBarState == StatusBarState.KEYGUARD) {
             mShowingExternalKeyguard = false;
         }
+        if (mKeyguardBottomArea.getVisibility() != View.VISIBLE && mShowingExternalKeyguard) {
+            mShowingExternalKeyguard = false;
+            slideLockScreenIn();
+        }
         resetVerticalPanelPosition();
         updateQsState();
     }
