@@ -70,6 +70,13 @@
             android:layout_width="wrap_content"
             android:alpha="0.0"
             />
+        <com.android.systemui.statusbar.AlphaOptimizedImageView
+            android:theme="@style/DualToneLightTheme"
+            android:id="@+id/wifi_inout"
+            android:layout_height="17dp"
+            android:layout_width="18.41dp"
+            android:layout_gravity="center|bottom"
+            />
     </FrameLayout>
     <View
         android:id="@+id/wifi_signal_spacer"
