@@ -135,7 +135,7 @@ public class PerfProfileTile extends QSTile<PerfProfileTile.ProfileState> {
 
         public void startObserving() {
             mContext.getContentResolver().registerContentObserver(
-                    Settings.Secure.getUriFor(CMSettings.Secure.PERFORMANCE_PROFILE),
+                    CMSettings.Secure.getUriFor(CMSettings.Secure.PERFORMANCE_PROFILE),
                     false, this);
         }
 
