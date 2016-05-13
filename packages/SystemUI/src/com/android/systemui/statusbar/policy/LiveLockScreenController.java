@@ -10,6 +10,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.EventLog;
 
+import android.util.Log;
 import android.view.View;
 import com.android.systemui.EventLogTags;
 import com.android.systemui.statusbar.StatusBarState;
@@ -27,6 +28,9 @@ import java.util.Objects;
 public class LiveLockScreenController {
     private static final String TAG = LiveLockScreenController.class.getSimpleName();
 
+    private static final long DETACH_VIEW_TIMEOUT = 1000;
+    private static final int MAX_DETACH_RETRY_ATTEMPTS = 5;
+
     private ILiveLockScreenManager mLLSM;
     private Context mContext;
     private PhoneStatusBar mBar;
@@ -42,6 +46,8 @@ public class LiveLockScreenController {
     private boolean mLlsHasFocus = false;
 
     private boolean mScreenOnAndInteractive;
+
+    private boolean mDetachedFromWindowPending;
 
     public LiveLockScreenController(Context context, PhoneStatusBar bar,
             NotificationPanelView panelView) {
@@ -263,8 +269,26 @@ public class LiveLockScreenController {
     }
 
     private Runnable mAddNewLiveLockScreenRunnable = new Runnable() {
+        int retryAttempts = 0;
         @Override
         public void run() {
+            // Make sure the previous LLS is detached before adding a new one
+            if (mLiveLockScreenView != null && mLiveLockScreenView.isAttachedToWindow() &&
+                    mLiveLockScreenComponentName != null && mDetachedFromWindowPending) {
+                if (++retryAttempts < MAX_DETACH_RETRY_ATTEMPTS) {
+                    // still waiting to detach so try again later
+                    mHandler.postDelayed(this, DETACH_VIEW_TIMEOUT);
+                } else {
+                    // something must be seriously wrong so give up and log it
+                    retryAttempts = 0;
+                    Log.e(TAG, "Giving up adding new Live lock screen due to previous Live lock " +
+                            "screen's window not detaching");
+                }
+                return;
+            }
+
+            mDetachedFromWindowPending = false;
+            retryAttempts = 0;
             if (mLiveLockScreenComponentName != null) {
                 mLiveLockScreenView =
                         getExternalKeyguardView(mLiveLockScreenComponentName);
@@ -301,6 +325,7 @@ public class LiveLockScreenController {
 
                                         @Override
                                         public void onDetachedFromWindow() {
+                                            mHandler.removeCallbacks(mAddNewLiveLockScreenRunnable);
                                             mLiveLockScreenView
                                                     .unregisterOnWindowAttachmentChangedListener(
                                                             this);
@@ -308,7 +333,13 @@ public class LiveLockScreenController {
                                         }
                                     }
                             );
+                            mDetachedFromWindowPending = true;
                             mPanelView.removeView(mLiveLockScreenView);
+                            // for LLS using an older implementation that does not provide window
+                            // attach/detach callbacks, we post this runnable.  If the LLS does
+                            // support the callbacks, then this runnable will get removed
+                            mHandler.postDelayed(mAddNewLiveLockScreenRunnable,
+                                    DETACH_VIEW_TIMEOUT);
                         } else {
                             mAddNewLiveLockScreenRunnable.run();
                         }
