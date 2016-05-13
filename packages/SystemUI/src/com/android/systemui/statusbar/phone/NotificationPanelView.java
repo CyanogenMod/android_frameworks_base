@@ -1872,10 +1872,6 @@ public class NotificationPanelView extends PanelView implements
         updateNotificationTranslucency();
         updatePanelExpanded();
         mNotificationStackScroller.setShadeExpanded(!isFullyCollapsed());
-        if (mShowingExternalKeyguard && expandedHeight >= getMaxPanelHeight()) {
-            mStatusBar.unfocusKeyguardExternalView();
-            mShowingExternalKeyguard = false;
-        }
         if (DEBUG) {
             invalidate();
         }
