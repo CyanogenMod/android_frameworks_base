@@ -311,6 +311,7 @@ public class NotificationPanelView extends PanelView implements
             // them to translate content in.
             mLiveLockscreenController.getLiveLockScreenView()
                     .onLockscreenSlideOffsetChanged(swipeProgress);
+            mStatusBar.setBlur(swipeProgress);
 
             // Fade out scrim background
             float alpha = ScrimController.SCRIM_BEHIND_ALPHA_KEYGUARD - (1f - swipeProgress);
