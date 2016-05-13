@@ -146,14 +146,12 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     @Override
     public void setVisibility(int visibility) {
-        if (visibility != getVisibility()) {
-            if (visibility == View.VISIBLE) {
-                if (!mBottomAreaAttached) {
-                    addKeyguardBottomArea(false);
-                }
-            } else if (mBottomAreaAttached) {
-                removeKeyguardBottomArea();
+        if (visibility == View.VISIBLE) {
+            if (!mBottomAreaAttached) {
+                addKeyguardBottomArea(false);
             }
+        } else if (mBottomAreaAttached) {
+            removeKeyguardBottomArea();
         }
         super.setVisibility(visibility);
     }
@@ -776,6 +774,10 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 .setInterpolator(mLinearOutSlowInInterpolator)
                 .setStartDelay(delay)
                 .setDuration(DOZE_ANIMATION_ELEMENT_DURATION);
+    }
+
+    public void cleanup() {
+        removeKeyguardBottomArea();
     }
 
     private final class DevicePolicyBroadcastReceiver extends BroadcastReceiver {
