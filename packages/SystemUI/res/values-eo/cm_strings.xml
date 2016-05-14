@@ -167,4 +167,7 @@
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Play queue -->
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

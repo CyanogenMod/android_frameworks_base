@@ -216,4 +216,7 @@
   <string name="accessibility_dock_battery_level"><xliff:g id="number">%d</xliff:g> odstotkov baterije v postaji.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Prikaži čak. vrsto pred.</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

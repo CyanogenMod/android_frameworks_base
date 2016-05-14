@@ -212,4 +212,7 @@
   <string name="accessibility_dock_battery_level">ডক বেটাৰী <xliff:g id="number">%d</xliff:g> শতাংশ।</string>
   <!-- Play queue -->
   <string name="play_queue_extention">প্লে কিউ প্ৰদৰ্শন কৰক</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

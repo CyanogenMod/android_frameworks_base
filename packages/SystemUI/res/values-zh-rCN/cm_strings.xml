@@ -213,4 +213,7 @@
   <string name="accessibility_dock_battery_level">底座电池百分之 <xliff:g id="number">%d</xliff:g>。</string>
   <!-- Play queue -->
   <string name="play_queue_extention">显示播放队列</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

@@ -168,4 +168,7 @@
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">बैटरी <xliff:g id="number">%d</xliff:g> प्रतिशत को डॉक करें।</string>
   <!-- Play queue -->
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

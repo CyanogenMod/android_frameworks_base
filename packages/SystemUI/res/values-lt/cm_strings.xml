@@ -181,4 +181,7 @@
   <string name="accessibility_dock_battery_level">Doko akumuliatorius <xliff:g id="number">%d</xliff:g> proc.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Rodyti grojimo eilę</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

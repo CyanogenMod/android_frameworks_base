@@ -208,4 +208,7 @@
   <string name="accessibility_dock_battery_level">பொருத்தப்பட்ட மின்கல <xliff:g id="number">%d</xliff:g> சதவிகிதம்.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">இயக்கு சாரை காண்பி</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>
