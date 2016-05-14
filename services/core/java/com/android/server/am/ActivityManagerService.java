@@ -3619,7 +3619,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             StringBuilder buf = mStringBuilder;
             buf.setLength(0);
             if (hostingType.equals("activity")) {
-                mPerf.launchBoost(startResult.pid, app.processName);
+                launchBoost(startResult.pid, app.processName);
             }
             buf.append("Start proc ");
             buf.append(startResult.pid);
