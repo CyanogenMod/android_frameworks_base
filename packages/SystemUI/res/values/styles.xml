@@ -300,4 +300,8 @@
         <item name="android:background">@drawable/btn_borderless_rect</item>
     </style>
 
+    <style name="TextAppearance.StatusBar.Traffic" parent="@*android:style/TextAppearance.StatusBar.Icon">
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+    
 </resources>
