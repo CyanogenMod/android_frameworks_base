@@ -96,6 +96,9 @@
   <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
   <string name="enablePin">مۇۋەپپەقىيەتلىك بولمىدى. SIM/RUIM قۇلۇپى قوزغىتىلدى.</string>
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+  <plurals name="pinpuk_attempts">
+    <item quantity="other">سىزنىڭ SIM كارتىڭىز قۇلۇپلىنىشتىن ئىلگىرى يەنە <xliff:g id="number">%d</xliff:g> قېتىملىق سىناش پۇرسىتىڭىز قالدى.</item>
+  </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <string name="imei">IMEI</string>
   <!-- Title for the dialog used to display the user's MEID number on CDMA network
@@ -450,6 +453,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBar">ئەپنىڭ ھالەت بالداقنى چەكلىشىگە ياكى سىستېما سىنبەلگىسىنى قوشۇش ۋە ئۆچۈرۈشىگە يول قويىدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_statusBarService">ھالەت بالداق</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBarService">ئەپنىڭ ھالەت بالداقتا تۇرۇشىغا يول قويىدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -506,6 +510,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_getTasks">ئەپنىڭ نۆۋەتتىكى ۋە يىقىنقى ئىجرا قىلىنغان ۋەزىپە ئۇچۇرلىرىنى ئىزدىشىگە يول قويىدۇ. بۇ ھوقۇق ئارقىلىق ئەپ بۇ ئۈسكۈنىدە قانداق ئەپلەرنىڭ ئىشلىتىلگەنلىكى ھەققىدىكى ئۇچۇرلارنى بىلەلەيدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_manageProfileAndDeviceOwners">سەپلەنمە ھۆججەت ۋە ئۈسكىنە ئىگىسىنى باشقۇرۇش</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to set the profile/device owners.
      [CHAR LIMIT=NONE] -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -598,9 +603,11 @@
   <string name="permlab_accessLocationExtraCommands">زىيادە ئورۇن ئۇچۇرىغا ئېرىشىش پىروگرامما بۇيرۇق زىيارىتى</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFineLocation">دەل ئورنى (GPS ۋە تور ئاساسىدا)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFineLocation">ئەپنىڭ يەرشارى ئورۇن بەلگىلەش سىستېمىسى (GPS) ياكى تارقىتىش مۇنارى ۋە Wi-Fi غا ئوخشاش تور ئورنى ئۇچۇر مەنبەسى ئارقىلىق دەل ئورنىڭىزنىڭ ئۇچۇرىغا ئېرىشىشىگە يول قويىدۇ. ئۈسكۈنىدە ئورۇن مۇلازىمىتىنى قوزغاتسىڭىز ئاندىن ئەپ سىزنىڭ ئورۇن ئۇچۇرىڭىزغا ئېرىشەلەيدۇ. ئەپ بۇ خىل مۇلازىمەت ئارقىلىق دەل ئورنىڭىزنى جەزملەيدۇ، بۇنداق بولغاندا ئەپ تېخىمۇ كۆپ توك سەرپ قىلىشى مۇمكىن.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessCoarseLocation">تەخمىنىي ئورنى(تور ئاساسىدا) </string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessCoarseLocation">ئەپنىڭ تارقىتىش مۇنارى ۋە Wi-Fi غا ئوخشاش تور ئورنى ئۇچۇر مەنبەسى ئارقىلىق تەخمىنىي ئورنىڭىزنىڭ ئۇچۇرىغا ئېرىشىشىگە يول قويىدۇ. ئۈسكۈنىدە ئورۇن مۇلازىمىتىنى قوزغاتسىڭىز ئاندىن ئەپ سىزنىڭ ئورۇن ئۇچۇرىڭىزغا ئېرىشەلەيدۇ. ئەپ بۇ خىل مۇلازىمەت ئارقىلىق تەخمىنىي ئورنىڭىزنى جەزملەيدۇ، بۇنداق بولغاندا ئەپ تېخىمۇ كۆپ توك سەرپ قىلىشى مۇمكىن.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -612,6 +619,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_recordAudio">ئەپنىڭ مىكروفون ئارقىلىق ئاۋاز ئېلىشىغا يول قويىدۇ. بۇ ھوقۇق ئارقىلىق ئەپ سىز جەزملىمەي تۇرۇپلا خالىغان ۋاقىتتا ئاۋاز ئالالايدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_sim_communication">sim كارتا ئالاقىسى</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_camera">رەسىم تارتىپ ۋە سىنغا ئالىدۇ</string>
@@ -679,6 +687,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessNetworkState">ئەپنىڭ مەۋجۇت ۋە باغلانغان تورغا ئوخشاش تورغا ئائىت ئۇچۇرلىرىنى كۆرۈشىگە يول قويىدۇ. </string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_createNetworkSockets">تورنى تولۇق زىيارەت ھوقۇقى</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_createNetworkSockets">ئەپنىڭ تور socket قۇرۇپ،  ئۆزلەشتۈرگەن تور كېلىشىمى ئىشلىتىشىگە يول قويىدۇ. توركۆرگۈ ۋە باشقا بەزى ئەپلەرگە ئىنتېرنېتقا سانلىق مەلۇمات يوللاش يولى بىلەن تەمىنلەيدۇ شۇڭلاشقا ئەپ بۇ ھوقۇققا ئېرىشمەي تۇتۇپمۇ ئىنتېرنېتقا سانلىق مەلۇمات يوللىيالايدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -712,6 +721,7 @@
   <string name="permdesc_bluetoothAdmin" product="default">ئەپنىڭ تېلېفون كۆكچىشنى سەپلىشىگە، قوشنا ئۈسكۈنىلەرنى بايقىشىغا ۋە يىراق مۇساپىلىق پەرلەشكە يول قويىدۇ.</string>
   <string name="permlab_accessWimaxState">بۇ WiMAX كە باغلاپ ۋە ئۈزىدۇ</string>
   <string name="permdesc_accessWimaxState">ئەپنىڭ WiMAX قوزغالغان ياكى قوزغالمىغانلىقى ۋە باغلانغان خالىغان WiMAX تورىنىڭ مۇناسىۋەتلىك ئۇچۇرلىرىنى جەزملىشىگە يول قويىدۇ.</string>
+  <string name="permlab_changeWimaxState">WiMAX ھالىتىنى ئۆزگەرتىدۇ</string>
   <string name="permdesc_changeWimaxState" product="tablet">ئەپنىڭ تاختا كومپيۇتېرنى WiMAX تورىغا باغلىشى ۋە ئۈزۈشىگە يول قويىدۇ.</string>
   <string name="permdesc_changeWimaxState" product="default">ئەپنىڭ تېلېفوننى WiMAX تورىغا باغلىشى ۋە ئۈزۈشىگە يول قويىدۇ.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -2001,11 +2011,13 @@
   <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
   <string name="activity_list_empty">ماس كەلگۈدەك پائالىيەت تاپالمىدى</string>
   <!-- Title of an application permission that lets an application route media output. -->
+  <string name="permlab_route_media_output">ۋاستە چىقىرىش يولىنى ئۆزگەرت</string>
   <!-- Description of an application permission that lets an application route media output. -->
   <string name="permdesc_route_media_output">ئەپنىڭ ۋاستە چىقىرىش يولىنى ئۆزگەرتىپ باشقا سىرتقى ئۈسكۈنىگە چىقىرىشىغا يول قويىدۇ.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
   <!-- Description of an application permission that lets it read install sessions. -->
   <!-- Title of an application permission that lets it read install sessions. -->
+  <string name="permlab_requestInstallPackages">قاچىلاش بولىقىنى تەلەپ قىلىش</string>
   <!-- Description of an application permission that lets it read install sessions. -->
   <!-- Shown in the tutorial for tap twice for zoom control. -->
   <string name="tutorial_double_tap_to_zoom_message_short">قوش چىكىپ يىراق-يېقىنلىقىنى باشقۇرغىلى بولىدۇ.</string>

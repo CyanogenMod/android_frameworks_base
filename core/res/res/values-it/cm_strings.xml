@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Batteria completamente carica</string>
   <string name="notify_battery_fully_charged_text">Disconnetti il dispositivo dal caricatore per preservare la longevità della batteria.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">reimposta statistiche batteria</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Consente all\'applicazione di reimpostare gli attuali dati di utilizzo della batteria a basso livello.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Le SIM sono cambiate</string>
   <string name="uicc_hot_swapped_event_text">Toccare per impostare le preferenze predefinite della SIM</string>

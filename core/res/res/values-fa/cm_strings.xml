@@ -191,11 +191,5 @@
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <!-- Battery fully charged notification -->
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">تنظیم مجدد آمار کارکرد باتری</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">به برنامه اجازه می‌دهد داده‌های مربوط به استفاده از باتری با سطح شارژ پایین را مجددا تنظیم کند.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

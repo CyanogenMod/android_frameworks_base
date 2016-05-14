@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">电池已完全充满</string>
   <string name="notify_battery_fully_charged_text">请将您的设备从充电器断开，以便获得更长的电池寿命。</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">重置电池统计信息</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">允许应用重置当前低电量电池使用数据。</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM 卡已更换</string>
   <string name="uicc_hot_swapped_event_text">触摸以重置 SIM 卡首选项</string>

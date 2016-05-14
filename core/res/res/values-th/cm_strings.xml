@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">แบตเตอรี่เต็มแล้ว</string>
   <string name="notify_battery_fully_charged_text">ถอดอุปกรณ์ของคุณออกจากที่ชาร์จเพื่อเพิ่มอายุการใช้งานของแบตเตอรี่</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">รีเซ็ตสถิติแบตเตอรี่</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">อนุญาตให้แอปพลิเคชันรีเซ็ตข้อมูลการใช้แบตเตอรี่ระดับต่ำในปัจจุบัน</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">มีการเปลี่ยนซิมการ์ด</string>
   <string name="uicc_hot_swapped_event_text">แตะเพื่อตั้งค่าการกำหนดค่าเริ่มต้นของ SIM การ์ด</string>

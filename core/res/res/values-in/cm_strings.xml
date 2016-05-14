@@ -84,22 +84,22 @@
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">menghentikan memulai aplikasi</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">Memungkinkan aplikasi untuk mengakses layanan tema. Seharusnya tidak diperlukan oleh aplikasi biasa.</string>
+  <string name="permdesc_accessThemeService">Izinkan aplikasi untuk mengakses layanan tema. Seharusnya tidak diperlukan oleh aplikasi biasa.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_readThemes">baca info tema Anda</string>
+  <string name="permlab_readThemes">baca informasi tema Anda</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">Izinkan aplikasi untuk membaca tema anda dan menentukan tema yang telah anda terapkan.</string>
+  <string name="permdesc_readThemesDesc">Izinkan aplikasi untuk membaca tema Anda dan menentukan tema yang telah Anda terapkan.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_writeThemes">modifikasi tema anda</string>
+  <string name="permlab_writeThemes">ubahlah tema Anda</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_writeThemesDesc">Izinkan aplikasi untuk memasukkan tema baru dan mengubah tema yang telah anda terapkan.</string>
+  <string name="permdesc_writeThemesDesc">Izinkan aplikasi untuk memasukkan tema baru dan mengubah tema yang telah Anda terapkan.</string>
   <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Gagal menginstal tema</string>
-  <string name="theme_install_error_message">%s gagal untuk di instal</string>
+  <string name="theme_install_error_message">%s gagal untuk diinstal</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s tidak terinstal</string>
   <string name="theme_reset_notification_title">Set ulang tema</string>
-  <string name="theme_reset_notification_body">Tema sitem dikembalikan karena beberapa aplikasi crash.</string>
+  <string name="theme_reset_notification_body">Tema sistem dikembalikan karena beberapa aplikasi mogok (crash).</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioritas</string>
   <string name="silent_mode_none">Tidak ada</string>
@@ -184,8 +184,19 @@
   <string name="app_ops_wifi_change">ubah status Wi-Fi</string>
   <string name="app_ops_su">dapatkan akses punca (root)</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
-  <!-- LiveDisplay strings -->
   <string name="lock_to_app_toast_no_navbar">Untuk melepas sematan layar ini, sentuh dan tahan tombol Kembali.</string>
+  <!-- LiveDisplay strings -->
+  <string name="live_display_auto">Otomatis</string>
+  <string name="live_display_auto_summary">Secara otomatis menyesuaikan suhu warna layar setelah matahari terbenam dan terbit</string>
+  <string name="live_display_off">Nonaktif</string>
+  <string name="live_display_off_summary">Menonaktifkan semua penyesuaian</string>
+  <string name="live_display_day">Siang</string>
+  <string name="live_display_day_summary">Hanya gunakan pengaturan siang hari</string>
+  <string name="live_display_night">Malam</string>
+  <string name="live_display_night_summary">Hanya gunakan pengaturan malam</string>
+  <string name="live_display_outdoor">Luar ruangan (matahari terang)</string>
+  <string name="live_display_outdoor_summary">Hanya gunakan pengaturan luar ruangan</string>
+  <string name="live_display_hint">LiveDisplay dapat membantu mengurangi kelelahan mata dan membantu Anda tidur di malam hari. Klik di sini untuk mencobanya!</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Tidak ada perangkat yang terhubung</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> perangkat yang terhubung</string>
@@ -199,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Baterai telah terisi penuh</string>
   <string name="notify_battery_fully_charged_text">Cabut pengisi daya dari perangkat Anda untuk meningkatkan umur baterai.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">set ulang statistik baterai</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Mengizinkan aplikasi untuk set ulang data penggunaan baterai rendah yang sekarang.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Kartu SIM telah diganti</string>
   <string name="uicc_hot_swapped_event_text">Ketuk untuk mengatur preferensi standar kartu SIM</string>

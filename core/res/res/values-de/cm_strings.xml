@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Akku vollständig aufgeladen</string>
   <string name="notify_battery_fully_charged_text">Trennen Sie Ihr Gerät jetzt vom Ladegerät, um die Lebensdauer des Akkus nicht zu beeinträchtigen.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">Akku-Verlaufsdetails zurücksetzen</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Ermöglicht einer App, die Akku-Verlaufsdetails zurückzusetzen.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM-Karten haben sich geändert</string>
   <string name="uicc_hot_swapped_event_text">Tippen, um die Standardeinstellungen für die SIM-Karte festzulegen</string>

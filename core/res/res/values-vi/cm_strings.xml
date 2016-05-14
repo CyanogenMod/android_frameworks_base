@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Pin đã được sạc đầy</string>
   <string name="notify_battery_fully_charged_text">Rút cáp sạc ra khỏi thiết bị của bạn để cải thiện tuổi thọ pin.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">đặt lại thống kê pin</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Cho phép ứng dụng thiết lập lại dữ liệu cấp thấp của mức tiêu thụ pin hiện tại.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Thẻ SIM đã thay đổi</string>
   <string name="uicc_hot_swapped_event_text">Chạm để thiết lập các ưu tiên mặc định cho thẻ SIM</string>

@@ -208,11 +208,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Acumulator încărcat complet</string>
   <string name="notify_battery_fully_charged_text">Deconectați aparatul de la încărcător pentru a îmbunătăți longevitatea bateriei.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">resetează statisticile bateriei</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Permite unei aplicații să reseteze datele curente de utilizare a bateriei.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

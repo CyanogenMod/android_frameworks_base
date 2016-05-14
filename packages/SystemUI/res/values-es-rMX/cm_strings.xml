@@ -53,8 +53,6 @@
   <string name="quick_settings_title_show_brightness_slider">Mostrar barra de brillo</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar la primera fila</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_caffeine_label">Cafeína</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -84,10 +82,6 @@
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">Desactivar Cafeína.</string>
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">Activar Cafeína.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -113,9 +107,6 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">La linterna está encendida</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toca para apagarla</string>
-  <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">Sin datos SIM</string>
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <!-- Play queue -->
 </resources>

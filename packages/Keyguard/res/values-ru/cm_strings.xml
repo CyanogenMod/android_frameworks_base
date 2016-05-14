@@ -21,11 +21,6 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Неисправная SIM-карта.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
-  <plurals name="kg_password_default_pin_message">
-    <item quantity="one">Введите PIN-код. У вас осталась <xliff:g id="number">%d</xliff:g> попытка перед тем, как вам придется обратиться к оператору для разблокировки.</item>
-    <item quantity="few">Введите PIN-код. У вас осталось <xliff:g id="number">%d</xliff:g> попытки.</item>
-    <item quantity="other">Введите PIN-код. У вас осталось <xliff:g id="number">%d</xliff:g> попыток.</item>
-  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Ошибка: введено меньше минимальной длины</string>
 </resources>

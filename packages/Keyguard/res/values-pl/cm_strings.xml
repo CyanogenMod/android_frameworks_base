@@ -23,7 +23,7 @@
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałą próbę zanim będziesz musiał skontaktować się z operatorem, by odblokować urządzenie.</item>
-    <item quantity="few">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałe próby.</item>
+    <item quantity="few">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałych prób.</item>
     <item quantity="other">Wprowadź PIN karty SIM, masz <xliff:g id="number">%d</xliff:g> pozostałych prób.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->

@@ -88,9 +88,6 @@
   <string name="quick_settings_profiles_off">تعطيل ملفات التعريف</string>
   <string name="quick_settings_heads_up_label">إنذار مسبق</string>
   <string name="quick_settings_battery_saver_label">موفر البطارية</string>
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_battery_saver_label_charging">حافظ البطارية (شحن)</string>
-  <string name="quick_settings_caffeine_label">وضع الكافيين</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">تعطيل المزامنة. </string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -158,10 +155,6 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">تم تعطيل الإنذار المسبق.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">تم تشغيل الإنذار المسبق.</string>
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">ايقاف وضع الكافيين.</string>
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">تشغيل وضع الكافيين.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">إيقاف موفر البطارية.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -215,11 +208,6 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">ضوء الفلاش مشغل</string>
   <string name="quick_settings_tile_flashlight_not_summary">المس لإيقاف التشغيل</string>
-  <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">لا توجد SIM للبيانات</string>
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">بطارية الإرساء <xliff:g id="number">%d</xliff:g>في المائة.</string>
-  <!-- Play queue -->
-  <string name="play_queue_extention">إظهار قائمة انتظار التشغيل</string>
 </resources>

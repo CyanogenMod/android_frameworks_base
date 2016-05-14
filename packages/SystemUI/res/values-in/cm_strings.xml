@@ -88,9 +88,6 @@
   <string name="quick_settings_profiles_off">Profil dinonaktifkan</string>
   <string name="quick_settings_heads_up_label">Notifikasi mengambang</string>
   <string name="quick_settings_battery_saver_label">Penghemat baterai</string>
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_battery_saver_label_charging">Penghemat baterai (sedang mengisi)</string>
-  <string name="quick_settings_caffeine_label">Kafein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinkronisasi mati.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -157,10 +154,6 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Notifikasi mengambang dinonaktifkan.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Notifikasi mengambang diaktifkan.</string>
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">Kafein nonaktif.</string>
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">Kafein aktif.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Penghemat baterai mati.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -170,11 +163,21 @@
   <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Penghemat baterai dihidupkan.</string>
   <!-- Dynamic tiles -->
-  <!-- LiveDisplay strings -->
   <string name="quick_settings_dynamic_tile_detail_title">Ubin dinamis</string>
   <string name="dynamic_qs_tile_next_alarm_label">Alarm selanjutnya</string>
   <string name="dynamic_qs_tile_ime_selector_label">Pemilih IME</string>
   <string name="dynamic_qs_tile_su_label">Akses punca (root)</string>
+  <!-- LiveDisplay strings -->
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay tidak aktif.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: modus otomatis.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: modus siang.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: modus malam.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: modus luar ruangan.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay dinonaktifkan.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay diubah menjadi modus otomatis.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay diubah menjadi modus siang.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay diubah menjadi modus malam.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay diubah menjadi modus luar ruangan.</string>
   <string name="quick_settings_title_advanced_location">Lokasi Tri-state</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Pelaporan lokasi: modus hemat baterai.</string>
@@ -204,14 +207,6 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Senter aktif</string>
   <string name="quick_settings_tile_flashlight_not_summary">Ketuk untuk menonaktifkan</string>
-  <!-- Wi-Fi hotspot label when enabled -->
-  <plurals name="wifi_hotspot_connected_clients_label">
-    <item quantity="other">%1$d klien</item>
-  </plurals>
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">Tak ada SIM Internet</string>
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">Dok baterai <xliff:g id="number">%d</xliff:g> persen.</string>
-  <!-- Play queue -->
-  <string name="play_queue_extention">Tampilkan antrean</string>
 </resources>

@@ -47,7 +47,14 @@
   <!-- ADB over USB and network notification -->
   <!-- ADB notification message-->
   <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Theme installation error notification -->
   <!-- stylus gestures support -->
   <!-- Zen mode buttons -->
   <!-- Wifi Hotspot disabled due to subscription change -->
@@ -84,10 +91,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Batería completamente cargada</string>
   <string name="notify_battery_fully_charged_text">Desconecte su dispositivo del cargador para mejorar la longevidad de la batería.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Las tarjetas SIM han cambiado</string>
   <string name="uicc_hot_swapped_event_text">Toca para establecer preferencias por defecto de la tarjeta SIM</string>

@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Μπαταρία πλήρως φορτισμένη</string>
   <string name="notify_battery_fully_charged_text">Αποσυνδέστε τη συσκευή από το φορτιστή για να βελτιώσετε τη μακροζωία της μπαταρίας.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">επαναφορά στατιστικών μπαταρίας</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Επιτρέπει σε μια εφαρμογή να κάνει επαναφορά τα χαμηλού επιπέδου δεδομένα χρήσης μπαταρίας.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Οι κάρτες SIM έχουν αλλάξει</string>
   <string name="uicc_hot_swapped_event_text">Πατήστε για να ορίσετε τις προεπιλεγμένες προτιμήσεις των καρτών</string>

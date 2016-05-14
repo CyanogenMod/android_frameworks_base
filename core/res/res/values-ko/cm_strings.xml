@@ -210,11 +210,7 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">배터리가 완전히 충전됨</string>
   <string name="notify_battery_fully_charged_text">배터리 수명을 향상시키기 위해 기기를 충전기에서 분리하세요.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">배터리 통계 재설정</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">앱이 현재의 배터리 사용 데이터를 초기화할 수 있도록 허용합니다.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM 카드가 변경되었습니다</string>
+  <string name="uicc_hot_swapped_event_text">탭하여 SIM 카드를 재설정</string>
 </resources>

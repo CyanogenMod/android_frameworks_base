@@ -47,7 +47,14 @@
   <!-- ADB over USB and network notification -->
   <!-- ADB notification message-->
   <!-- ADB custom tile -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <!-- Theme installation error notification -->
   <!-- stylus gestures support -->
   <!-- Zen mode buttons -->
   <!-- Wifi Hotspot disabled due to subscription change -->
@@ -56,15 +63,12 @@
   <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <!-- App ops requests -->
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <!-- LiveDisplay strings -->
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <!-- Keyguard strings -->
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
   <!-- Battery fully charged notification -->
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

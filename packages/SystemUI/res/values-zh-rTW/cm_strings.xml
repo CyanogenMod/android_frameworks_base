@@ -82,7 +82,6 @@
   <string name="quick_settings_profiles">系統設定檔</string>
   <string name="quick_settings_profiles_off">已停用設定檔</string>
   <string name="quick_settings_heads_up_label">浮動通知</string>
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">同步關閉</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -129,8 +128,6 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">浮動通知已關閉</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">浮動通知已開啟</string>
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -164,8 +161,5 @@
   <string name="quick_settings_tiles_add_tiles">新增瓷磚</string>
   <!-- Hotspot dialog message -->
   <!-- Notification which notifies user flashlight is enabled -->
-  <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <!-- Play queue -->
 </resources>

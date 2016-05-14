@@ -22,7 +22,7 @@
   <string name="lockscreen_sim_error_message_short">Nepareiza karte.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="zero">Ievadiet SIM kartes PIN kodu, jums ir atlicis <xliff:g id="number">%d </xliff:g> mēģinājums.</item>
+    <item quantity="zero">Ievadiet SIM kartes PIN kodu, jums ir atlicis <xliff:g id="number">%d </xliff:g> mēģinājumi.</item>
     <item quantity="one">Ievadiet SIM kartes PIN kodu, jums ir atlicis <xliff:g id="number">%d </xliff:g> mēģinājums.</item>
     <item quantity="other">Ievadiet SIM kartes PIN kodu, jums ir atlikuši <xliff:g id="number">%d </xliff:g> mēģinājumi.</item>
   </plurals>

@@ -20,5 +20,9 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Ongëlteg Kaart.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">SIM-PIN aginn. Du hues nach <xliff:g id="number">%d</xliff:g> Versuch ier s de däi Provider muss kontaktéieren, fir den Apparat z\'entspären.</item>
+    <item quantity="other">SIM-PIN aginn. Du hues nach <xliff:g id="number">%d</xliff:g> Versich.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

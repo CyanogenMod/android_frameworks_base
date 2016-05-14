@@ -82,11 +82,6 @@
   <string name="needPuk2">Для разблакавання SIM-карткі увядзіце код PUK2.</string>
   <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
-  <plurals name="pinpuk_attempts">
-    <item quantity="one">У вас засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як SIM-картка будзе заблакавана.</item>
-    <item quantity="few">У вас засталася <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
-    <item quantity="other">У вас засталася <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
-  </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <!-- Title for the dialog used to display the user's MEID number on CDMA network
          [CHAR LIMIT=10] -->

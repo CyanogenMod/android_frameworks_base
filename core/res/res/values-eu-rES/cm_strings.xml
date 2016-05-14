@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Bateria erabat kargatuta</string>
   <string name="notify_battery_fully_charged_text">Deskonektatu zure gailua kargagailutik bateriaren bizitza luzatzeko.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">ezabatu bateriaren estatistikak</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Bateriaren maila baxuko erabilera datuak leheneratzea ahalbidetzen dio aplikazioari.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM txartelak aldatu dira</string>
   <string name="uicc_hot_swapped_event_text">Sakatu SIM txartelaren lehenetsitako hobespenak ezartzeko</string>

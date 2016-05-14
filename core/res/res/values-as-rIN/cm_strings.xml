@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB আৰু নেটৱৰ্ক</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">নেটৱৰ্ক</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">বিষয়বস্তু সেৱাত প্ৰৱেশ কৰক</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">এপ্প্‌ লান্চ্চ কৰাটো অৱৰুদ্ধ কৰা</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">এটা এপ্প্‌ক বিষয়বস্তু সেৱাত প্ৰৱেশ কৰিবলৈ অনুমতি দিয়ে। সাধাৰণ এপ্প্‌সমূহৰ কাৰণে কেতিয়াও প্ৰয়োজন নহয়৷</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">আপোনাৰ বিষয়বস্তু তথ্য পঢ়া</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">এপ্প্‌ক আপোনাৰ বিষয়বস্তুবোৰ পঢ়িবলৈ আৰু আপুনি কোন বিষয়বস্তুটো প্ৰয়োগ কৰিলে সেইটো নিৰ্ণয় কৰিবলৈ অনুমতি দিয়ে।</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">আপোনাৰ বিষয়বস্তু সংশোধন কৰা</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">এপ্প্‌ক নতুন বিষয়বস্তুবোৰ আন্তঃসংযোগ কৰিবলৈ আৰু আপুনি প্ৰয়োগ কৰা বিষয়বস্তুটো সংশোধন কৰিবলৈ অনুমতি দিয়ে।</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">বিষয়বস্তু ইনষ্টল কৰিবলৈ ব্যৰ্থ হৈছে</string>
+  <string name="theme_install_error_message">%s ইনষ্টল কৰিবলৈ ব্যৰ্থ হৈছে</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ইনষ্টল কৰা নাই</string>
+  <string name="theme_reset_notification_title">বিষয়বস্তু ৰিছেট কৰক</string>
+  <string name="theme_reset_notification_body">একাধিক এপ্প ক্ৰেছ হোৱা বাবে ছিষ্টেম বিষয়বস্তু পুনঃস্থাপন কৰা হৈছে।</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">অগ্ৰাধিকাৰ</string>
   <string name="silent_mode_none">হাল্লা</string>
@@ -193,11 +210,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">বেটেৰী সম্পূৰ্ণৰূপে চাৰ্জ হৈ গ\'ল</string>
   <string name="notify_battery_fully_charged_text">বেটেৰীৰ জীৱ্ন কাল বঢ়াবলৈ আপোনাৰ ডিভাইচটো চাৰ্জাৰৰ পৰা আতৰাই ৰাখক।</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">বেটাৰী পৰিসংখ্যা ৰিছেট কৰক</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">এটা এপ্লিকেচনক চলিত নিম্ন-লেভেলৰ বেটাৰি ব্যৱহাৰ ডাটা ৰিছেট কৰিবলৈ অনুমতি দিয়ে।</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

@@ -20,5 +20,8 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">سیم کارت نامعتبر.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="other">پین سیم کارت را وارد کنید، شما <xliff:g id="number">%d</xliff:g> تلاش باقی‌مانده دارید. پس از آن باید برای باز کردن دستگاه به اپراتور خود مراجعه کنید.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

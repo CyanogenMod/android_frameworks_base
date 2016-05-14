@@ -212,12 +212,6 @@ modifiera det tema som du har tillämpat.</string>
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Batteriet fulladdat</string>
   <string name="notify_battery_fully_charged_text">Koppla bort enheten från laddaren för att förbättra batteriets livslängd.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">återställa batteristatistik</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Tillåter en app att återställa nuvarande lågnivådata för batterianvändning.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM-kort har ändrats</string>
   <string name="uicc_hot_swapped_event_text">Tryck för att ange standardinställningar för SIM-kortet</string>

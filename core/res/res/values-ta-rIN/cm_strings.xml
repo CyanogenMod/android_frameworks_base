@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB &amp; நெட்வொர்க்</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">நெட்வொர்க்</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">கருப்பொருள் சேவையை அணுகு</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">இடைமறிப்பு பயன்பாடு தொடக்கம்</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">கருப்பொருள் சேவையை ஒரு பயன்பாடு அணுக அனுமதிக்கிறது. இயல்பான பயன்பாடுகளுக்கு எப்போதுமே தேவைப்படக் கூடாது.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">உங்கள் கருப்பொருள் தகவலை படிக்கவும்</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">உங்கள் கருப்பொருட்களைப் படிக்கவும் நீங்கள் எந்த கருப்பொருளைப் பயன்படுத்தியுள்ளீர்கள் என்பதை தீர்மானிக்கவும் பயன்பாட்டை அனுமதிக்கிறது.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">உங்கள் கருப்பொருட்களை மாற்றியமைக்கவும்</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">புதிய கருப்பொருட்களை செருகவும் எந்த கருப்பொருளை நீங்கள் பயன்படுத்தியுள்ளீர்களோ அதை மாற்றியமைக்கவும் பயன்பாட்டை அனுமதிக்கிறது.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">கருப்பொருளை நிறுவுவது தோல்வியுற்றது</string>
+  <string name="theme_install_error_message">%s நிறுவுதல் தோல்வியுற்றது</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s நிறுவப்படவில்லை.</string>
+  <string name="theme_reset_notification_title">கருப்பொருளை மீட்டமை</string>
+  <string name="theme_reset_notification_body">பல பயன்பாட்டு பழுதுகளால் கணினி கருப்பொருள் மீட்டெடுக்கப்பட்டது.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">முன்னுரிமை</string>
   <string name="silent_mode_none">ஏதுமில்லை</string>
@@ -193,11 +210,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">மின்கலம் முழுமையாக மின்னூட்டப்பட்டது</string>
   <string name="notify_battery_fully_charged_text">மின்கலத்தின் ஆயுளை மேம்படுத்த சார்ஜரிலிருந்து உங்கள் சாதனத்தின் இணைப்பை துண்டிக்கவும்.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">மின்கல புள்ளிவிவரங்களை மீட்டமை</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">நடப்பு குறைந்த-நிலை மின்கல பயன்பாட்டு தரவை மீட்டமைக்க ஒரு பயன்பாட்டை அனுமதிக்கிறது.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

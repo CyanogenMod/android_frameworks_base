@@ -84,11 +84,11 @@
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">יירוט הפעלת יישום</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_accessThemeService">מאפשר ליישום לגשת לשירות ערכות העיצוב. לא אמור להידרש ליישומים רגילים.</string>
+  <string name="permdesc_accessThemeService">מאפשר ליישום לגשת לשירות ערכות העיצוב. לא אמור להידרש ליישומים רגילים לעולם.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">קריאת פרטי ערכת העיצוב שלך</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permdesc_readThemesDesc">מאפשר ליישום להיות מודע לערכות העיצוב הקיימות, ולקבוע איזו ערכה החלת.</string>
+  <string name="permdesc_readThemesDesc">מאפשר ליישום לקרוא את ערכות העיצוב הקיימות ולקבוע איזו ערכה החלת.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">שינוי ערכות העיצוב שלך</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -98,7 +98,7 @@
   <string name="theme_install_error_message">התקנת %s נכשלה</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s לא מותקן</string>
-  <string name="theme_reset_notification_title">אפס ערכת עיצוב</string>
+  <string name="theme_reset_notification_title">איפוס ערכת עיצוב</string>
   <string name="theme_reset_notification_body">ערכת העיצוב של המערכת שוחזרה עקב קריסות תהליכים מרובות.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">עדיפות</string>
@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">סוללה טעונה במלואה</string>
   <string name="notify_battery_fully_charged_text">נתק את מכשירך מהמטען כדי לשפר את אורך חיי סוללה.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">איפוס סטטיסטיקות סוללה</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">מאפשר ליישום לאפס נתוני רמה-נמוכה נוכחיים של השימוש בסוללה.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">כרטיסי SIM הוחלפו</string>
   <string name="uicc_hot_swapped_event_text">הקש כדי להגדיר את העדפות ברירת המחדל של כרטיס ה-SIM</string>
