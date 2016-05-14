@@ -214,4 +214,7 @@
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g> por ciento.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Mostrar la cola de reproducción</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

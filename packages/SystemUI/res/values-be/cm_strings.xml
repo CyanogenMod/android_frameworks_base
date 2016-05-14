@@ -201,4 +201,7 @@
   <string name="accessibility_dock_battery_level">Зарад батарэі док-станцыі <xliff:g id="number">%d</xliff:g> адсоткаў.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Паказаць чаргу прайгравання</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

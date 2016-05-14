@@ -214,4 +214,7 @@
   <string name="accessibility_dock_battery_level">A bateria do dock tem <xliff:g xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" id="number">%d</xliff:g>%.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Mostrar fila de reprodução</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

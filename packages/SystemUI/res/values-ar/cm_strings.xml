@@ -211,4 +211,7 @@
   <string name="accessibility_dock_battery_level">بطارية الإرساء <xliff:g id="number">%d</xliff:g>في المائة.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">إظهار قائمة انتظار التشغيل</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

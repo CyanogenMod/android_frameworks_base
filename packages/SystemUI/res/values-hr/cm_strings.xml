@@ -215,4 +215,7 @@
   <string name="accessibility_dock_battery_level">Dock baterija <xliff:g id="number">%d</xliff:g> postotak.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Prikaži listu za reprodukciju</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

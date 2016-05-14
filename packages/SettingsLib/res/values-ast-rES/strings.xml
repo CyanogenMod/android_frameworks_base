@@ -20,103 +20,194 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Toast message when Wi-Fi cannot scan for networks -->
+  <string name="wifi_fail_to_scan">Nun puen buscase redes</string>
   <!-- Do not translate.  Concise terminology for wifi with WEP security -->
+  <string name="wifi_security_short_wep">WEP</string>
   <!-- Do not translate.  Concise terminology for wifi with WPA security -->
+  <string name="wifi_security_short_wpa">WPA</string>
   <!-- Do not translate.  Concise terminology for wifi with WPA2 security -->
+  <string name="wifi_security_short_wpa2">WPA2</string>
   <!-- Do not translate.  Concise terminology for wifi with both WPA/WPA2 security -->
+  <string name="wifi_security_short_wpa_wpa2">WPA/WPA2</string>
   <!-- Do not translate.  Concise terminology for wifi with unknown PSK type -->
+  <string name="wifi_security_short_psk_generic">@string/wifi_security_short_wpa_wpa2</string>
   <!-- Do not translate.  Concise terminology for wifi with 802.1x EAP security -->
+  <string name="wifi_security_short_eap">802.1x</string>
   <!-- Used in Wi-Fi settings dialogs when Wi-Fi does not have any security. -->
+  <string name="wifi_security_none">Nenguna</string>
   <!-- Do not translate.  Terminology for wifi with WEP security -->
+  <string name="wifi_security_wep">WEP</string>
   <!-- Do not translate.  Terminology for wifi with WPA security -->
+  <string name="wifi_security_wpa">WPA PSK</string>
   <!-- Do not translate.  Terminology for wifi with WPA2 security -->
+  <string name="wifi_security_wpa2">WPA2 PSK</string>
   <!-- Do not translate.  Terminology for wifi with both WPA/WPA2 security, or unknown -->
+  <string name="wifi_security_wpa_wpa2">WPA/WPA2 PSK</string>
   <!-- Do not translate.  Terminology for wifi with unknown PSK type -->
+  <string name="wifi_security_psk_generic">@string/wifi_security_wpa_wpa2</string>
   <!-- Do not translate.  Concise terminology for wifi with 802.1x EAP security -->
+  <string name="wifi_security_eap">802.1x EAP</string>
   <!-- Do not translate.  Concise terminology for Passpoint network -->
+  <string name="wifi_security_passpoint">Passpoint</string>
   <!-- Summary for the remembered network. -->
+  <string name="wifi_remembered">Guardada</string>
   <!-- Status for networks disabled for unknown reason -->
+  <string name="wifi_disabled_generic">Deshabilitada</string>
   <!-- Status for networked disabled from a DNS or DHCP failure -->
+  <string name="wifi_disabled_network_failure">Fallu de configuración IP</string>
   <!-- Status for networked disabled from a wifi association failure -->
+  <string name="wifi_disabled_wifi_failure">Fallu de conexón Wi-Fi</string>
   <!-- Status for networks disabled from authentication failure (wrong password
          or certificate). -->
+  <string name="wifi_disabled_password_failure">Problema d\'autenticación</string>
   <!-- Summary for the remembered network but currently not in range. -->
+  <string name="wifi_not_in_range">Fuera d\'algame</string>
   <!-- Summary for the remembered network but no internet connection was detected. -->
+  <string name="wifi_no_internet">Nun se deteutó l\'accesu a Internet. Nun va volver a coneutase de mou automáticu.</string>
   <!-- Summary for saved networks -->
+  <string name="saved_network">Guardada por <xliff:g id="name">%1$s</xliff:g></string>
   <!-- Status message of Wi-Fi when it is connected by a Wi-Fi assistant application. [CHAR LIMIT=NONE] -->
+  <string name="connected_via_wfa">Coneutáu por asistente de Wi-Fi</string>
   <!-- Status message of Wi-Fi when it is connected by Passpoint configuration. [CHAR LIMIT=NONE] -->
+  <string name="connected_via_passpoint">Conexón al traviés de %1$s</string>
   <!-- Status message of Wi-Fi when network has matching passpoint credentials. [CHAR LIMIT=NONE] -->
+  <string name="available_via_passpoint">Disponible al traviés de %1$s</string>
   <!-- Package name for Settings app-->
   <!-- Package name for Certinstaller app-->
   <!-- Summary for Connected wifi network without internet -->
+  <string name="wifi_connected_no_internet">Conectáu, ensin Internet</string>
   <!-- Bluetooth settings.  Message when a device is disconnected -->
+  <string name="bluetooth_disconnected">Desconeutáu</string>
   <!-- Bluetooth settings.  Message when disconnecting from a device -->
+  <string name="bluetooth_disconnecting">Desconeutando\u2026</string>
   <!-- Bluetooth settings.  Message when connecting to a device -->
+  <string name="bluetooth_connecting">Coneutando\u2026</string>
   <!-- Bluetooth settings.  Message when connected to a device. [CHAR LIMIT=40] -->
+  <string name="bluetooth_connected">Coneutáu</string>
   <!--Bluetooth settings screen, summary text under individual Bluetooth devices when pairing -->
+  <string name="bluetooth_pairing">Enllazando\u2026</string>
   <!-- Bluetooth settings.  Message when connected to a device, except for phone audio. [CHAR LIMIT=40] -->
+  <string name="bluetooth_connected_no_headset">Coneutáu (ensin tfnu)</string>
   <!-- Bluetooth settings.  Message when connected to a device, except for media audio. [CHAR LIMIT=40] -->
+  <string name="bluetooth_connected_no_a2dp">Coneutáu (ensin multimedia)</string>
   <!-- Bluetooth settings.  Message when connected to a device, except for map. [CHAR LIMIT=40] -->
+  <string name="bluetooth_connected_no_map">Coneutáu (ensin accesu a mensaxes)</string>
   <!-- Bluetooth settings.  Message when connected to a device, except for phone/media audio. [CHAR LIMIT=40] -->
+  <string name="bluetooth_connected_no_headset_no_a2dp">Coneutáu (ensin tel. nin multimedia)</string>
   <!-- Bluetooth settings.  The user-visible string that is used whenever referring to the A2DP profile. -->
+  <string name="bluetooth_profile_a2dp">Audiu multimedia</string>
   <!-- Bluetooth settings.  The user-visible string that is used whenever referring to the headset or handsfree profile. -->
+  <string name="bluetooth_profile_headset">Audiu del preséu</string>
   <!-- Bluetooth settings.  The user-visible string that is used whenever referring to the OPP profile. -->
+  <string name="bluetooth_profile_opp">Tresferencia de ficheros</string>
   <!-- Bluetooth settings. The user-visible string that is used whenever referring to the HID profile. -->
+  <string name="bluetooth_profile_hid">Preséu d\'entrada</string>
   <!-- Bluetooth settings. The user-visible string that is used whenever referring to the PAN profile (accessing Internet through remote device). [CHAR LIMIT=40] -->
+  <string name="bluetooth_profile_pan">Accesu a Internet</string>
   <!-- Bluetooth settings. The user-visible string that is used whenever referring to the PBAP profile. [CHAR LIMIT=40] -->
+  <string name="bluetooth_profile_pbap">Compartir contautos</string>
   <!-- Bluetooth settings. The user-visible summary string that is used whenever referring to the PBAP profile (sharing contacts). [CHAR LIMIT=60] -->
+  <string name="bluetooth_profile_pbap_summary">Usar pa compartir contautos</string>
   <!-- Bluetooth settings. The user-visible string that is used whenever referring to the PAN profile (sharing this device's Internet connection). [CHAR LIMIT=40] -->
+  <string name="bluetooth_profile_pan_nap">Compartir conexón d\'internet</string>
   <!-- Bluetooth settings. The user-visible string that is used whenever referring to the map profile. -->
+  <string name="bluetooth_profile_map">Accesu a mensaxes</string>
   <!-- Bluetooth settings. The user-visible string that is used whenever referring to the SAP profile (sharing SIM card). -->
+  <string name="bluetooth_profile_sap">Accesu SIM</string>
   <!-- Bluetooth settings. The user-visible string that is used whenever referring to the dun profile. -->
+  <string name="bluetooth_profile_dun">Accesu telefónicu a redes</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the A2DP checkbox preference when A2DP is connected. -->
+  <string name="bluetooth_a2dp_profile_summary_connected">Conectáu al audiu multimedia</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the headset checkbox preference when headset is connected. -->
+  <string name="bluetooth_headset_profile_summary_connected">Conectáu al audiu del preséu</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the OPP checkbox preference when OPP is connected. -->
+  <string name="bluetooth_opp_profile_summary_connected">Coneutáu al sirvidor de tresferencia de ficheros</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the map checkbox preference when map is connected. -->
+  <string name="bluetooth_map_profile_summary_connected">Coneutáu a mapa</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the sap checkbox preference when SAP is connected. -->
+  <string name="bluetooth_sap_profile_summary_connected">Coneutáu a SAP</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the OPP checkbox preference when OPP is not connected. -->
+  <string name="bluetooth_opp_profile_summary_not_connected">Ensin conexón col sirvidor de tresferencia de ficheros</string>
   <!-- Bluetooth settings. Connection options screen. The summary for the HID checkbox preference when HID is connected. -->
+  <string name="bluetooth_hid_profile_summary_connected">Coneutáu a preséu d\'entrada</string>
   <!-- Bluetooth settings. Connection options screen. The summary for the checkbox preference when PAN is connected (user role). [CHAR LIMIT=25]-->
+  <string name="bluetooth_pan_user_profile_summary_connected">Coneutáu a preséu p\'accesu a Internet</string>
   <!-- Bluetooth settings. Connection options screen. The summary for the checkbox preference when PAN is connected (NAP role). [CHAR LIMIT=25]-->
+  <string name="bluetooth_pan_nap_profile_summary_connected">Compartiendo conexón a Internet col preséu</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the DUN checkbox preference when DUN is connected. -->
+  <string name="bluetooth_dun_profile_summary_connected">Coneutáu al sirvidor DUN</string>
   <!-- Bluetooth settings. Connection options screen. The summary
          for the PAN checkbox preference that describes how checking it
          will set the PAN profile as preferred. -->
+  <string name="bluetooth_pan_profile_summary_use_for">Usar p\'acceder a Internet</string>
   <!-- Bluetooth settings. Connection options screen.  The summary for the map checkbox preference that describes how checking it will set the map profile as preferred. -->
+  <string name="bluetooth_map_profile_summary_use_for">Usar pa mapa</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the sap checkbox preference that describes how checking it will set the sap profile as preferred. -->
+  <string name="bluetooth_sap_profile_summary_use_for">Usar p\'accesu a SIM</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the A2DP checkbox preference that describes how checking it will set the A2DP profile as preferred. -->
+  <string name="bluetooth_a2dp_profile_summary_use_for">Usar p\'audiu de mediu</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the headset checkbox preference that describes how checking it will set the headset profile as preferred. -->
+  <string name="bluetooth_headset_profile_summary_use_for">Usar p\'audiu del teléfonu</string>
   <!-- Bluetooth settings.  Connection options screen.  The summary for the OPP checkbox preference that describes how checking it will set the OPP profile as preferred. -->
+  <string name="bluetooth_opp_profile_summary_use_for">Usu de la tresferencia de ficheros</string>
   <!-- Bluetooth settings. Connection options screen. The summary
          for the HID checkbox preference that describes how checking it
          will set the HID profile as preferred. -->
+  <string name="bluetooth_hid_profile_summary_use_for">Usar pa entrada</string>
   <!-- Bluetooth settings. Connection options screen.  The summary for the dun checkbox preference that describes how checking it will set the dun profile as preferred. -->
+  <string name="bluetooth_dun_profile_summary_use_for">Usáu pal accesu telefónicu a redes</string>
   <!-- Button text for accepting an incoming pairing request. [CHAR LIMIT=20] -->
+  <string name="bluetooth_pairing_accept">Enllazar</string>
   <!-- Button text for accepting an incoming pairing request in all caps. [CHAR LIMIT=20] -->
+  <string name="bluetooth_pairing_accept_all_caps">ENLLAZAR</string>
   <!-- Button text for declining an incoming pairing request. [CHAR LIMIT=20] -->
+  <string name="bluetooth_pairing_decline">Encaboxar</string>
   <!-- Message in pairing dialogs.  [CHAR LIMIT=NONE] -->
+  <string name="bluetooth_pairing_will_share_phonebook">La vinculación permite acceder a los contautos y al historial de llamaes cuando\'l preséu ta coneutáu.</string>
   <!-- Message for the error dialog when BT pairing fails generically. -->
+  <string name="bluetooth_pairing_error_message">Nun pudo enllazase con <xliff:g id="device_name">%1$s</xliff:g>.</string>
   <!-- Message for the error dialog when BT pairing fails because the PIN /
     Passkey entered is incorrect. -->
+  <string name="bluetooth_pairing_pin_error_message">Nun pudo enllazase con <xliff:g id="device_name">%1$s</xliff:g> porque la clave d\'accesu o el PIN son incorreutos.</string>
   <!-- Message for the error dialog when BT pairing fails because the other device is down. -->
+  <string name="bluetooth_pairing_device_down_error_message">Nun pue afitase comunicación con <xliff:g id="device_name">%1$s</xliff:g>.</string>
   <!-- Message for the error dialog when BT pairing fails because the other device rejected the pairing. -->
+  <string name="bluetooth_pairing_rejected_error_message">Enllaz refugáu por <xliff:g id="device_name">%1$s</xliff:g></string>
   <!-- Content description of the WIFI signal when WIFI is disabled for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_wifi_off">Wi-Fi desactiváu</string>
   <!-- Content description of the WIFI signal when no signal for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_no_wifi">Wi-Fi desconeutáu</string>
   <!-- Content description of the WIFI signal when it is one bar for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_wifi_one_bar">Una barra de Wi-Fi</string>
   <!-- Content description of the WIFI signal when it is two bars for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_wifi_two_bars">Dos barres de Wi-Fi</string>
   <!-- Content description of the WIFI signal when it is three bars for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_wifi_three_bars">Trés barres de Wi-Fi</string>
   <!-- Content description of the WIFI signal when it is full for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_wifi_signal_full">Señal de Wi-Fi al máximu</string>
   <!-- Label for kernel threads in battery usage -->
+  <string name="process_kernel_label">Android OS</string>
   <!-- Title of data usage item that represents all uninstalled applications. [CHAR LIMIT=48] -->
+  <string name="data_usage_uninstalled_apps">Aplicaciones desaniciaes</string>
   <!-- Title of data usage item that represents all uninstalled applications or removed users. [CHAR LIMIT=48] -->
+  <string name="data_usage_uninstalled_apps_users">Usuarios y aplicaciones desaniciaos</string>
   <!-- Tethering controls, item title to go into the tethering settings -->
   <!-- Tethering controls, item title to go into the tethering settings when only USB tethering is available [CHAR LIMIT=25]-->
+  <string name="tether_settings_title_usb">Anclaxe de USB</string>
   <!-- Tethering controls, item title to go into the tethering settings when only Wifi tethering is available [CHAR LIMIT=25]-->
+  <string name="tether_settings_title_wifi">Zona Wi-Fi portátil</string>
   <!-- Tethering controls, item title to go into the tethering settings when only Bluetooth tethering is available [CHAR LIMIT=25]-->
+  <string name="tether_settings_title_bluetooth">Anclaxe de Bluetooth</string>
   <!-- Tethering controls, item title to go into the tethering settings when USB and Bluetooth tethering are available [CHAR LIMIT=25]-->
+  <string name="tether_settings_title_usb_bluetooth">Anclaxe a rede</string>
   <!-- Tethering controls, item title to go into the tethering settings when USB, Bluetooth and Wifi tethering are available [CHAR LIMIT=25]-->
+  <string name="tether_settings_title_all">Anclaxe a rede y zona Wi-Fi</string>
   <!-- Title for a work profile. [CHAR LIMIT=25] -->
+  <string name="managed_user_title">Perfil de trabayu</string>
   <!-- Title for Guest user [CHAR LIMIT=35] -->
+  <string name="user_guest">Convidáu</string>
   <!-- Manage apps, individual app screen, substituted for the application's label when the app's label CAN NOT be determined.-->
+  <string name="unknown">Desconocíu</string>
   <!-- [CHAR LIMIT=NONE] Label of a running process that represents another user -->
+  <string name="running_process_item_user_label">Usuariu: <xliff:g id="user_name">%1$s</xliff:g></string>
 </resources>

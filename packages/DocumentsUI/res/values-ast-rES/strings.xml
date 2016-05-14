@@ -42,7 +42,9 @@
   <!-- Menu item title that deletes the selected documents [CHAR LIMIT=24] -->
   <string name="menu_delete">Desaniciar</string>
   <!-- Menu item title that selects all documents in the current directory [CHAR LIMIT=24] -->
+  <string name="menu_select_all">Esbillalo too</string>
   <!-- Menu item title that copies the selected documents [CHAR LIMIT=24] -->
+  <string name="menu_copy">Copiar a\u2026</string>
   <!-- Menu item that reveals internal storage built into the device [CHAR LIMIT=24] -->
   <string name="menu_advanced_show" product="nosdcard">Amosar almac. internu</string>
   <!-- Menu item that reveals SD cards built into the device [CHAR LIMIT=24] -->
@@ -56,7 +58,9 @@
   <!-- Menu item that hides the sizes of displayed files [CHAR LIMIT=24] -->
   <string name="menu_file_size_hide">Anubrir tamañu de ficheru</string>
   <!-- Button label that select the current directory [CHAR LIMIT=24] -->
+  <string name="button_select">Seleicionar</string>
   <!-- Button label that copies files to the current directory [CHAR LIMIT=24] -->
+  <string name="button_copy">Copiar</string>
   <!-- Mode that sorts documents by their display name alphabetically [CHAR LIMIT=24] -->
   <string name="sort_name">Por nome</string>
   <!-- Mode that sorts documents by their last modified time in descending order; most recent first [CHAR LIMIT=24] -->
@@ -94,11 +98,25 @@
   <!-- Title of dialog when prompting user to select an app to share documents with [CHAR LIMIT=32] -->
   <string name="share_via">Compartir per aciu de</string>
   <!-- Title of the copy notification [CHAR LIMIT=24] -->
+  <string name="copy_notification_title">Copiando ficheros</string>
   <!-- Text shown on the copy notification to indicate remaining time, in minutes [CHAR LIMIT=24] -->
+  <string name="copy_remaining">queden <xliff:g id="duration" example="3 minutes">%s</xliff:g></string>
   <!-- Toast shown when a file copy is kicked off -->
+  <plurals name="copy_begin">
+    <item quantity="one">Copiando <xliff:g id="count" example="1">%1$d</xliff:g> ficheru</item>
+    <item quantity="other">Copiando <xliff:g id="count" example="1">%1$d</xliff:g> ficheros</item>
+  </plurals>
   <!-- Text shown on the copy notification while DocumentsUI performs setup in preparation for copying files [CHAR LIMIT=32] -->
+  <string name="copy_preparing">Tresnando pa copiar\u2026</string>
   <!-- Title of the copy error notification [CHAR LIMIT=48] -->
+  <plurals name="copy_error_notification_title">
+    <item quantity="one">Nun pudo copiase <xliff:g id="count" example="1">%1$d</xliff:g> ficheru</item>
+    <item quantity="other">Nun pudieron copiase <xliff:g id="count" example="2">%1$d</xliff:g> ficheros</item>
+  </plurals>
   <!-- Second line for notifications saying that more information will be shown after touching [CHAR LIMIT=48] -->
+  <string name="notification_touch_for_details">Toca pa ver detalles</string>
   <!-- Label of a dialog button for retrying a failed operation [CHAR LIMIT=24] -->
+  <string name="retry">Reintentar</string>
   <!-- Contents of the copying failure alert dialog. [CHAR LIMIT=48] -->
+  <string name="copy_failure_alert_content">Nun se copiaron estos ficheros: <xliff:g id="list">%1$s</xliff:g></string>
 </resources>
