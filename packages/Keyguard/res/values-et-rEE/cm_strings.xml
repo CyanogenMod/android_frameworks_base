@@ -20,5 +20,9 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Kehtetu kaart.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Sisesta SIM kaardi PIN kood, sul on <xliff:g id="number">%d</xliff:g> katse jäänud, enne kui pead kontakteeruma oma operaatoriga seadme lahtilukustamiseks.</item>
+    <item quantity="other">Sisesta SIM kaardi PIN kood, sul on <xliff:g id="number">%d</xliff:g> katset jäänud.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

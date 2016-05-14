@@ -22,9 +22,9 @@
   <string name="lockscreen_sim_error_message_short">Памылка карты.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">Увядзіце PIN-код. У вас засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як вам давядзецца звярнуцца да аператара дзеля разблакоўкі.</item>
-    <item quantity="few">Увядзіце PIN-код. У вас засталося<xliff:g id="number">%d</xliff:g> спробы.</item>
-    <item quantity="other">Увядзіце PIN-код. У вас засталося <xliff:g id="number">%d</xliff:g> спробы.</item>
+    <item quantity="one">Увядзіце PIN-код. У вас засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як вам давядзецца звярнуцца да аператара для разблакавання.</item>
+    <item quantity="few">Увядзіце PIN-код. У вас засталося <xliff:g id="number">%d</xliff:g> спробаў перад тым, як вам давядзецца звярнуцца да аператара для разблакавання.</item>
+    <item quantity="other">Увядзіце PIN-код. У вас засталося <xliff:g id="number">%d</xliff:g> спробаў перад тым, як вам давядзецца звярнуцца да аператара для разблакавання.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Памылка: маленькая даўжыня</string>

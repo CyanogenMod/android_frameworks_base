@@ -22,7 +22,7 @@
   <string name="lockscreen_sim_error_message_short">無効なカードです。</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="other">SIMのPINを入力してください、残り<xliff:g id="number">%d</xliff:g>回試行することができます。</item>
+    <item quantity="other">SIM PINを入力してください、残り<xliff:g id="number">%d</xliff:g>回試行することができます。</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">エラー: 入力が最小長よりも短いです</string>

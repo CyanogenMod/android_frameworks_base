@@ -54,7 +54,7 @@
   <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Desinstalar</string>
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_notification_brightness">Brilho</string>
+  <string name="accessibility_notification_brightness">Brilho da luz</string>
   <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Perfis desligados.</string>
   <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -65,7 +65,7 @@
   <string name="accessibility_quick_settings_profiles_changed">Perfil alterado para <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Inicializando\u2026</string>
   <!-- Lights settings, LED notification -->
-  <string name="led_notification_title">Configurações de brilho</string>
+  <string name="led_notification_title">Configurações de luz</string>
   <string name="led_notification_text">Luz de LED ativada pelas configurações</string>
   <string name="qs_tile_edit_header_instruction">Pressione e segure os botões para reorganizar</string>
   <string name="quick_settings_edit_label">Editar botões</string>
@@ -74,7 +74,7 @@
   <string name="quick_settings_tile_reset_to_default">Redefinir para a organização padrão</string>
   <string name="quick_settings_title_header">Cabeçalho</string>
   <string name="quick_settings_title_tiles">Botões</string>
-  <string name="quick_settings_title_show_weather">Mostrar tempo</string>
+  <string name="quick_settings_title_show_weather">Mostrar clima</string>
   <string name="quick_settings_title_show_brightness_slider">Mostrar o controle deslizante de brilho</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar a primeira linha</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->

@@ -161,7 +161,7 @@
   <string name="app_ops_read_cell_broadcasts">ler transmissões da rede de celular</string>
   <string name="app_ops_mock_location">simular a sua localização</string>
   <string name="app_ops_read_external_storage">ler o armazenamento externo</string>
-  <string name="app_ops_write_external_storage">escrever no armazenamento externo</string>
+  <string name="app_ops_write_external_storage">gravar no armazenamento externo</string>
   <string name="app_ops_turn_on_screen">ligar a tela</string>
   <string name="app_ops_get_accounts">obter as contas do dispositivo</string>
   <string name="app_ops_wifi_change">alterar o estado do Wi-Fi</string>

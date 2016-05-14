@@ -21,7 +21,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="profile_applist_title">Aplicativos</string>
   <string name="picker_activities">Atividades</string>
-  <string name="select_custom_app_title">Selecione o app personalizado</string>
+  <string name="select_custom_app_title">Selecione aplicativo personalizado</string>
   <string name="select_custom_activity_title">Selecione a atividade personalizada</string>
   <string name="lockscreen_targets_message">Atalhos da tela de bloqueio</string>
 </resources>

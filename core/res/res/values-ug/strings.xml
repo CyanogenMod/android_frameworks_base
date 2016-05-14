@@ -96,6 +96,9 @@
   <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
   <string name="enablePin">مۇۋەپپەقىيەتلىك بولمىدى. SIM/RUIM قۇلۇپى قوزغىتىلدى.</string>
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
+  <plurals name="pinpuk_attempts">
+    <item quantity="other">سىزنىڭ SIM كارتىڭىز قۇلۇپلىنىشتىن ئىلگىرى يەنە <xliff:g id="number">%d</xliff:g> قېتىملىق سىناش پۇرسىتىڭىز قالدى.</item>
+  </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <string name="imei">IMEI</string>
   <!-- Title for the dialog used to display the user's MEID number on CDMA network

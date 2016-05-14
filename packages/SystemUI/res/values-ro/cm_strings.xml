@@ -122,7 +122,7 @@
   <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Modul bateriei a fost schimbat în mod echilibrat.</string>
   <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_perf">Modul bateriei schimbat în modul de performanță.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Modul bateriei a fost schimbat în modul de performanță.</string>
   <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Modul bateriei a fost schimbat în modul de eficiență.</string>
   <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
