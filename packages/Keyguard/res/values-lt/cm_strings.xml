@@ -20,5 +20,10 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Neteisinga kortelė.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Įveskite SIM PIN kodą, turite <xliff:g id="number">%d</xliff:g> likusį bandymą prieš susisiekdami su savo operatoriumi, kad atrakintumėte savo įrenginį.</item>
+    <item quantity="few">Įveskite SIM PIN kodą, turite <xliff:g id="number">%d</xliff:g> likusius bandymus.</item>
+    <item quantity="other">Įveskite SIM PIN kodą, turite <xliff:g id="number">%d</xliff:g> likusių bandymų.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

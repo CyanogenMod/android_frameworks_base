@@ -22,6 +22,58 @@
   <!-- Wi-Fi settings -->
   <!-- Match this with the order of NetworkInfo.DetailedState. -->
   <!-- Wi-Fi settings. The status messages when the network is unknown. -->
+  <string-array name="wifi_status">
+    <!-- Status message of Wi-Fi when it is idle. -->
+    <item/>
+    <!-- Status message of Wi-Fi when it is scanning. -->
+    <item>Esplorando\u2026</item>
+    <!-- Status message of Wi-Fi when it is connecting. -->
+    <item>Coneutando\u2026</item>
+    <!-- Status message of Wi-Fi when it is authenticating. -->
+    <item>Autenticando\u2026</item>
+    <!-- Status message of Wi-Fi when it is obtaining IP address. -->
+    <item>Obteniendo la direición IP\u2026</item>
+    <!-- Status message of Wi-Fi when it is connected. -->
+    <item>Coneutáu</item>
+    <!-- Status message of Wi-Fi when it is suspended. -->
+    <item>Suspendíu</item>
+    <!-- Status message of Wi-Fi when it is disconnecting. -->
+    <item>Desconeutando\u2026</item>
+    <!-- Status message of Wi-Fi when it is disconnected. -->
+    <item>Desconeutáu</item>
+    <!-- Status message of Wi-Fi when it is a failure. -->
+    <item>Incorreutu</item>
+    <!-- Status message of Wi-Fi when it is blocked. -->
+    <item>Bloquiada</item>
+    <!-- Status message of Wi-Fi when connectiong is being verified. -->
+    <item>Desactivando mala conexón temporalmente</item>
+  </string-array>
   <!-- Match this with the order of NetworkInfo.DetailedState. -->
   <!-- Wi-Fi settings. The status messages when the network is known. -->
+  <string-array name="wifi_status_with_ssid">
+    <!-- Status message of Wi-Fi when it is idle. -->
+    <item/>
+    <!-- Status message of Wi-Fi when it is scanning. -->
+    <item>Esplorando\u2026</item>
+    <!-- Status message of Wi-Fi when it is connecting to a network. -->
+    <item>Coneutando a <xliff:g id="network_name">%1$s</xliff:g>\u2026</item>
+    <!-- Status message of Wi-Fi when it is authenticating with a network. -->
+    <item>Autenticando con <xliff:g id="network_name">%1$s</xliff:g>\u2026</item>
+    <!-- Status message of Wi-Fi when it is obtaining IP address from a network. -->
+    <item>Obteniendo direición IP de <xliff:g id="network_name">%1$s</xliff:g>\u2026</item>
+    <!-- Status message of Wi-Fi when it is connected to a network. -->
+    <item>Coneutáu a <xliff:g id="network_name">%1$s</xliff:g></item>
+    <!-- Status message of Wi-Fi when it is suspended. -->
+    <item>Suspendíu</item>
+    <!-- Status message of Wi-Fi when it is disconnecting from a network. -->
+    <item>Desconeutando de <xliff:g id="network_name">%1$s</xliff:g>\u2026</item>
+    <!-- Status message of Wi-Fi when it is disconnected. -->
+    <item>Desconeutáu</item>
+    <!-- Status message of Wi-Fi when it is a failure. -->
+    <item>Incorreutu</item>
+    <!-- Status message of Wi-Fi when it is blocked. -->
+    <item>Bloquiada</item>
+    <!-- Status message of Wi-Fi when connectiong is being verified. -->
+    <item>Desactivando mala conexón  temporalmente</item>
+  </string-array>
 </resources>

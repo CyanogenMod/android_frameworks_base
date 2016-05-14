@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Battery vol gelaai</string>
   <string name="notify_battery_fully_charged_text">Diskonnekteer jou toestel van die laaier om die battery lewe te verleng.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">herstel battery statistieke</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Laat \'n program om die huidige lae-vlak battery gebruik data te herstel.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM kaarte het verander</string>
   <string name="uicc_hot_swapped_event_text">Raak om SIM kaart standaard opsies te stel</string>

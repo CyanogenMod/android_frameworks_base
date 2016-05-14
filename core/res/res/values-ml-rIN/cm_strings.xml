@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB &amp; നെറ്റ്‌വർക്ക്</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">നെറ്റ്‌വർക്ക്</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">ആക്സസ് തീം സേവനം</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ആപ്ലിക്കേഷൻ ആരംഭിക്കുന്നത് തടസപ്പെടുത്തുക</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">തീം സേവനം പ്രവേശനം ചെയ്യാന്‍ ഒരു ആപ്ലിക്കേഷനെ അനുവദിക്കുന്നു. സാധാരണ ആപ്ലിക്കേഷനുകൾക്ക് ഒരിക്കലും ആവശ്യമില്ല.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">നിങ്ങളുടെ തീം വിവരം വായിക്കുക</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">നിങ്ങളുടെ തീമുകൾ റീഡ് ചെയ്യാനും നിങ്ങൾ പ്രയോഗിച്ച തീം ഏതെന്ന് നിർണ്ണയിക്കാനും ആപ്ലിക്കേഷനെ അനുവദിക്കുന്നു.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">നിങ്ങളുടെ തീമുകൾ പരിഷ്ക്കരിക്കുക</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">പുതിയ തീമുകള്‍ ഉള്‍പ്പെടുത്താനും നിങ്ങൾ പ്രയോഗിച്ച തീം പരിഷ്കരിക്കുവാനും ആപ്ലിക്കേഷനെ അനുവദിക്കുന്നു.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">തീം ഇൻസ്റ്റാൾ ചെയ്യുന്നത് പരാജയപ്പെട്ടു</string>
+  <string name="theme_install_error_message">%s ഇൻസ്റ്റാൾ ചെയ്യുന്നത് പരാജയപ്പെട്ടു</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ഇൻസ്റ്റാൾ ചെയ്തിട്ടില്ല</string>
+  <string name="theme_reset_notification_title">തീം പുനക്രമീകരിക്കുക</string>
+  <string name="theme_reset_notification_body">ഒന്നിലധികം ആപ്ലിക്കേഷൻ ക്രാഷ് ആയ കാരണം സിസ്റ്റം തീം പുനഃസ്ഥാപിച്ചു.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">മുന്‍‌ഗണന</string>
   <string name="silent_mode_none">ആരിൽ നിന്നും വേണ്ട</string>
@@ -193,11 +210,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">ബാറ്ററി പൂർണ്ണമായും ചാർജ് ചെയ്തു</string>
   <string name="notify_battery_fully_charged_text">ബാറ്ററി ആയുർദൈർഘ്യം മെച്ചപ്പെടുത്താൻ ചാർജർ നിന്നും നിങ്ങളുടെ ഉപകരണം വിച്ഛേദിക്കുക.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">ബാറ്ററി സ്ഥിതിവിവരക്കണക്ക് പുനക്രമീകരിക്കുക</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">നിലവിലെ ലോ-ലെവല്‍ ബാറ്ററി ഉപയോഗ ഡാറ്റ പുനഃക്രമീകരിക്കാൻ ഒരു ആപ്ലിക്കേഷനെ അനുവദിക്കുന്നു.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

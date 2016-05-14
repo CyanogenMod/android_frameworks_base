@@ -39,16 +39,16 @@
   <string name="navbar_home_button">முகப்பு பட்டன்</string>
   <string name="navbar_recent_button">சமீபத்திய பொத்தான்</string>
   <string name="navbar_search_button">பட்டனை தேடுதல்</string>
-  <string name="navbar_back_button">பின்செல் பொத்தான்</string>
+  <string name="navbar_back_button">கறுப்பு பட்டன்</string>
   <string name="navbar_empty_button">வெறுமை பொத்தான்</string>
-  <string name="navbar_menu_conditional_button">மெனு(autoHide) பொத்தான்</string>
-  <string name="navbar_menu_always_button">மெனு(alwaysShow) பொத்தான்</string>
+  <string name="navbar_menu_conditional_button">மெனு(autoHide)பொத்தான்</string>
+  <string name="navbar_menu_always_button">மெனு(alwaysShow)பொத்தான்</string>
   <string name="navbar_menu_big_button">மெனு பொத்தான்</string>
   <string name="accessibility_dpad_left">இடஞ்சுட்டி இடது</string>
   <string name="accessibility_dpad_right">இடஞ்சுட்டி வலது</string>
   <!-- Development shortcuts -->
   <!-- Title shown in recents popup for wiping application's data -->
-  <string name="advanced_dev_option_wipe_app">பயன்பாட்டு தரவை துடைக்க</string>
+  <string name="advanced_dev_option_wipe_app">பயன்பாட்டு தரவை துடை</string>
   <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">உடனே நிறுத்து</string>
   <!-- Title shown in recents popup for uninstalling the application -->
@@ -58,7 +58,7 @@
   <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">சுயவிவரங்கள் ஆஃப்.</string>
   <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_profiles">சுயவிவரம்: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles">சுயவிவரம்ச <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">சுயவிவரங்கள் ஆஃப் செய்யப்பட்டன.</string>
   <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -88,8 +88,6 @@
   <string name="quick_settings_profiles_off">சுயவிவரங்கள் முடக்கப்பட்டன</string>
   <string name="quick_settings_heads_up_label">ஹெட்ஸ் அப்</string>
   <string name="quick_settings_battery_saver_label">பேட்டரி சேமிப்பான்</string>
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_caffeine_label">கேஃபைன்</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">ஒத்திசைவு ஆஃப்</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -156,10 +154,6 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">ஹெட்ஸ் அப் ஆஃப் செய்யப்பட்டது.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">ஹெட்ஸ் அப் ஆன் செய்யப்பட்டது.</string>
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">கேஃபைன் ஆஃப்.</string>
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">கேஃபைன் ஆன்.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">பேட்டரி பாதுகாப்பான் ஆஃப்</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -213,10 +207,5 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">ஃபிளாஷ்லைட் இயக்கத்தில் உள்ளது</string>
   <string name="quick_settings_tile_flashlight_not_summary">ஆஃப் செய்ய தட்டவும்</string>
-  <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">பொருத்தப்பட்ட மின்கல <xliff:g id="number">%d</xliff:g> சதவிகிதம்.</string>
-  <!-- Play queue -->
-  <string name="play_queue_extention">இயக்கு சாரை காண்பி</string>
 </resources>

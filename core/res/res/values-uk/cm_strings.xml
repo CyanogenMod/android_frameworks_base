@@ -212,11 +212,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Батарея повністю заряджена</string>
   <string name="notify_battery_fully_charged_text">Від’єднайте зарядку задля покращення витривалості батареї.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">скинути статистику акумулятора</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Дозволити програмі скидати дані про використання акумулятора.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

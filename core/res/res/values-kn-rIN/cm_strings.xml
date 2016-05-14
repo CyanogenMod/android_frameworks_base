@@ -212,11 +212,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">ಬ್ಯಾಟರಿ ಸಂಪೂರ್ಣವಾಗಿ ಚಾರ್ಜಾಗಿದೆ</string>
   <string name="notify_battery_fully_charged_text">ಬ್ಯಾಟರಿ ದೀರ್ಘಾಯುಷ್ಯ ಸುಧಾರಿಸಲು ಚಾರ್ಜರ್ ನಿಂದ ನಿಮ್ಮ ಸಾಧನವನ್ನು ಕಡಿತಗೊಳಿಸಿ.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">ಬ್ಯಾಟರಿ ಅಂಕಿಅಂಶಗಳನ್ನು ಮರುಹೊಂದಿಸು</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">ಒಂದು ಅಪ್ಲಿಕೇಶನ್‍ಗೆ ಪ್ರಸ್ತುತ ಕಡಿಮೆ-ಮಟ್ಟದ ಬ್ಯಾಟರಿ ಬಳಕೆ ಡೇಟಾವನ್ನು ಮರುಹೊಂದಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

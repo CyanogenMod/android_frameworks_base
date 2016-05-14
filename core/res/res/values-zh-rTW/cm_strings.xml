@@ -205,11 +205,5 @@
   <string name="notify_package_component_protected_title">已阻止啟動活動</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s </xliff:g> 正被防止啟動。按一下以進行身份驗證並啟動應用程式。</string>
   <!-- Battery fully charged notification -->
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">重設電池統計資訊</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">允許應用程式重設目前低電量的電池使用資料。</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Batteriet er fuldt opladet</string>
   <string name="notify_battery_fully_charged_text">Afbryd din enhed fra opladeren for at forbedre batteriets levetid.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">nulstil batteristatistik</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Tillader en app at nulstille den aktuelle statistik over batteriforbruget.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM-kort er ændret</string>
   <string name="uicc_hot_swapped_event_text">Tryk for at angive standardindstillinger for SIM-kortet</string>

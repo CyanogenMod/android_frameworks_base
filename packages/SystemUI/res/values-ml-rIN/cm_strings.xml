@@ -89,8 +89,6 @@
   <string name="quick_settings_profiles_off">പ്രൊഫൈലുകൾ അപ്രാപ്തമാണ്</string>
   <string name="quick_settings_heads_up_label">മുന്നറിയിപ്പ്</string>
   <string name="quick_settings_battery_saver_label">ബാറ്ററി സേവർ</string>
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_caffeine_label">കഫീൻ</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">പൊരുത്തപ്പെടൽ ഓഫ്.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -157,10 +155,6 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">ഹെഡ്സ് അപ്പ് ഓഫ് ചെയ്തു.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">ഹെഡ്സ് അപ്പ് ഓണ്‍ ചെയ്തു.</string>
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">കഫീൻ ഓഫ്‌.</string>
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">കഫീൻ ഓണ്‍.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">ഓഫ് സേവർ ഓഫ്.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -214,14 +208,5 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">ടോർച്ച് ഓൺ ആണ്</string>
   <string name="quick_settings_tile_flashlight_not_summary">ഓഫാക്കാൻ ടാപ്പുചെയ്യുക</string>
-  <!-- Wi-Fi hotspot label when enabled -->
-  <plurals name="wifi_hotspot_connected_clients_label">
-    <item quantity="one">%1$d കക്ഷി</item>
-    <item quantity="other">%1$d കക്ഷികള്‍</item>
-  </plurals>
   <!-- CellularTile data sim not configured state string -->
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">ഡോക്ക് ബാറ്ററി <xliff:g id="number">%d</xliff:g> ശതമാനം.</string>
-  <!-- Play queue -->
-  <string name="play_queue_extention">പ്ലേ ക്യൂ ദൃശ്യമാക്കുക</string>
 </resources>

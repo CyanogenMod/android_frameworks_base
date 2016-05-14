@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Akkumulátor teljesen feltöltve</string>
   <string name="notify_battery_fully_charged_text">A készüléket vegye le a töltőről, hogy javítsa az akkumulátor élettartamát.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">akkumulátor használati statisztika törlése</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Lehetővé teszi az alkalmazás számára, hogy törölhesse alacsony szintű akkumulátor használatára vonatkozó adatokat.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Megváltoztak a SIM-kártyák</string>
   <string name="uicc_hot_swapped_event_text">Koppintson a SIM-kártya alapértelmezett beállításainak megadásához</string>

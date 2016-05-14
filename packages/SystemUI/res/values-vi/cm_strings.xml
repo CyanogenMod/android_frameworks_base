@@ -88,8 +88,6 @@
   <string name="quick_settings_profiles_off">Cấu hình bị vô hiệu hóa</string>
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Trình tiết kiệm pin</string>
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_caffeine_label">Cafein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Tắt đồng bộ.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -156,10 +154,6 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">Heads up đã tắt.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Heads up đã bật.</string>
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">Đã tắt Cafein.</string>
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">Đã bật Cafein.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Trình tiết kiệm pin: Tắt.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -213,14 +207,6 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Đã bật đèn pin</string>
   <string name="quick_settings_tile_flashlight_not_summary">Chạm vào để tắt</string>
-  <!-- Wi-Fi hotspot label when enabled -->
-  <plurals name="wifi_hotspot_connected_clients_label">
-    <item quantity="other">%1$d máy khách</item>
-  </plurals>
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">Không có SIM dữ liệu</string>
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">Thanh pin <xliff:g id="number">%d</xliff:g> phần trăm.</string>
-  <!-- Play queue -->
-  <string name="play_queue_extention">Hiện danh sách chờ phát</string>
 </resources>

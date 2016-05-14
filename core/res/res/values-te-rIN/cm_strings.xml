@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB మరియు నెట్వర్క్</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">నెట్‌వర్క్</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">థీమ్ సేవకు ప్రాప్యత పొందుము</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ప్రోగ్రాం ప్రారంభానికి అవరోధం కలిగించుము</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">ప్రోగ్రాం సూచనలకు ప్రాప్తి పొందేందుకు ప్రోగ్రాంకి  అనుమతిస్తుంది ఎప్పుడూ కూడా సాధారణ అనువర్తనాలకు అవసరం కాకూడదు.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">మీ యొక్క థీమ్ సమాచారాన్ని చదువుము</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">మీ థీమ్లను చదవడానికి మరియు మీరు ఏ థీమును వర్తింపజేశారో నిర్ధారించడానికి అనువర్తనానికి అనుమతినిస్తుంది.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">మీ థీములను సవరించుము</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">క్రొత్త థీములను చొప్పించడానికి మరియు మీరు వర్తింపజేసిన థీమును సవరించడానికి అనువర్తనానికి అనుమతినిస్తుంది.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">థీమును ఇన్స్టాల్ చేయడంలో విఫలం</string>
+  <string name="theme_install_error_message">%s ఇన్స్టాల్ చేయడంలో విఫలమయింది</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ఇన్స్టాల్ చేయబడలేదు</string>
+  <string name="theme_reset_notification_title">థీమును తిరిగి సెట్ చేయడం</string>
+  <string name="theme_reset_notification_body">బహుళ అనువర్తన క్రాషుల వలన సిస్టమ్ థీమ్ పునరుద్దరించబడింది</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">ప్రాధాన్యత</string>
   <string name="silent_mode_none">ఏదీ లేదు</string>
@@ -193,11 +210,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">బ్యాటరీ పూర్తిగా ఛార్జ్</string>
   <string name="notify_battery_fully_charged_text">బ్యాటరీ దీర్ఘాయువు మెరుగు ఛార్జర్ నుండి మీ పరికరాన్ని డిస్కనెక్ట్ చేయండి.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">బ్యాటరీ గణాంకాలను రీసెట్ చేయడం</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">ప్రస్తుత తక్కువ-స్థాయి బ్యాటరీ నిల్వ డేటాను రీసెట్ చేసేందుకు అప్లికేషనుకు అనుమతినిస్తుంది.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

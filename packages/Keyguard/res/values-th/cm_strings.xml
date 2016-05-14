@@ -22,7 +22,7 @@
   <string name="lockscreen_sim_error_message_short">ซิมการ์ดไม่ถูกต้อง</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="other">ใส่รหัสซิมการ์ด สามารถใส่รหัสได้อีก <xliff:g id="number">%d</xliff:g> ก่อนจะต้องติดต่อติดต่อผู้ให้บริการเพื่อปลดล็อคอุปกรณ์ของคุณ</item>
+    <item quantity="other">โปรดใส่รหัส SIM ของคุณ คุณสามารถใส่รหัสผ่านได้อีก <xliff:g id="number">%d</xliff:g> ครั้งก่อนที่จะต้องติดต่อผู้ให้บริการเพื่อปลดล็อคอุปกรณ์ของคุณ</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">ผิดพลาด: ข้อมูลที่ป้อนสั้นกว่าความยาวขั้นต่ำ</string>

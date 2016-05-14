@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Baterie je nabitá</string>
   <string name="notify_battery_fully_charged_text">Pro zlepšení životnosti baterie odpojte zařízení od nabíječky.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">obnovení statistiky baterie</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Umožní provést obnovení/vyčištění informací o využívání baterie.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Byly vyměněny SIM karty</string>
   <string name="uicc_hot_swapped_event_text">Dotykem nastavit výchozí předvolby SIM karty</string>

@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB आणि नेटवर्क</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">नेटवर्क</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">थीम सेवा ऍक्सेस करा</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">अनुप्रयोग सुरू कराला अटकाव करा</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">अॅप थीम सेवा ऍक्सेस करण्याची परवानगी देते. सामान्य अनुप्रयोगांसाठी कधीही गरज भासू नये.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">तुमची थीम माहिती वाचा</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">अॅप तुमच्या थीम्स वाचू आणि तुम्ही कोणती थीम लागू केली आहे ते ठरवू देते.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">तुमच्या थीम्स सुधारित करा</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">अॅप नवीन थीम्स समाविष्ट करण्याची आणि तुम्ही कोणती थीम लागू केली आहे ती सुधारित करण्याची परवानगी देते.</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">थीम स्थापित करण्यात अपयशी</string>
+  <string name="theme_install_error_message">%s स्थापित करण्यात अपयशी</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s स्थापित केलेले नाही</string>
+  <string name="theme_reset_notification_title">थीम रीसेट</string>
+  <string name="theme_reset_notification_body">अनेक अनुप्रयोग क्रॅश झाल्यामुळे सिस्टिम थीम पुनर्स्थापित केली गेली.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">प्राधान्य</string>
   <string name="silent_mode_none">काहीही नाही</string>
@@ -193,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">बॅटरी पूर्णपणे चार्ज</string>
   <string name="notify_battery_fully_charged_text">बॅटरी फार काळ टिकवण्यासाठी चार्जर मधून आपले डिव्हाइस डिस्कनेक्ट करा.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">बॅटरी आकडेवारी रीसेट करा</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">अॅपला चालू कमी-पातळी बॅटरी वापर डेटा रीसेट करण्याची परवानगी देते.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">सिम कार्डे बदलली</string>
   <string name="uicc_hot_swapped_event_text">सिम कार्ड मुलभूत प्राधान्ये सेट करण्यासाठी टॅप</string>

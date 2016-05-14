@@ -20,5 +20,9 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Nevalida karto.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Tajpu la PIN-kodon de la SIM-karto. Vi havas <xliff:g id="number">%d</xliff:g> restantan provon antaŭ ol vi devos kontakti vian provizanton por malŝlosi vian aparaton.</item>
+    <item quantity="other">Tajpu la PIN-kodon de la SIM-karto. Vi havas <xliff:g id="number">%d</xliff:g> restantajn provojn antaŭ ol vi devos kontakti vian provizanton por malŝlosi vian aparaton.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

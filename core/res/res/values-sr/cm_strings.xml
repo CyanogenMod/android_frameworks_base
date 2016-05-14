@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Батерија пуна</string>
   <string name="notify_battery_fully_charged_text">Искључи пуњач са уређаја да би побољшао трајност батерије.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">ресетуј статистику батерије</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Омогућава апликацији да ресетује актуелне податке ниског нивоа коришћења батерије.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM картица је промењена</string>
   <string name="uicc_hot_swapped_event_text">Додирни да поставиш задане поставке за SIM картицу</string>

@@ -79,10 +79,27 @@
   <string name="adb_active_custom_tile_both">USB ଓ ନେଟ୍‍ୱାର୍କ୍‍</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">ନେଟୱାର୍କ୍</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessThemeService">ଆ‌ସେସ୍‍ ଥିମ୍‍ ସେବା</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">ଆପ୍ଲିକେସନ୍‍ ଲଞ୍ଚ ଇଣ୍ଟରସେପ୍ଟ କରନ୍ତୁ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessThemeService">ଥିମ୍‍ ସେବା ଆ‌ସେ‌ କରିବା ପାଇଁ ଆପ୍ଲିକେସ‌ନକୁ ଅ୍ନୁମତି ଦିଏ। ସାମାନ୍ୟ ଆପ୍ଲିକେସନ ପାଇଁ କଦାପି ଆବଶ୍ୟକ ହେବା ଉଚିତ ନୁହେଁ।</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_readThemes">ଆପଣଙ୍କ ଥିମ୍‍ ସୂଚନା ପଢନ୍ତୁ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readThemesDesc">ଆପ୍ଲିକେସ‌ନକୁ ଆପଣ୍ଙ୍କ ଥି‌ମ୍‍ଗୁଡିକ ପଢିବାକୁ ଓ ଆପଣ କେଉଁ ଥିମ୍‍ ଆପ୍ଲାଏ କରିବେ ନିଧାଦ୍ର୍ରଣ କରିବା ପାଇଁ ଅନୁମତି ଦିଏ।</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_writeThemes">ଆପଣଙ୍କ ଥି‌ଗୁଡିକ ସମ୍ପାଦନା କରନ୍ତୁ</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_writeThemesDesc">ନୂଆ ଥି‌ମ୍‍ ଭର୍ତ୍ତି କରିବା ପାଇଁ ଓ ଆପଣ ଜାରି କରିଥିବା ଥି‌‍ମ୍କୁ ସମ୍ପାଦନା କରିବା ପାଇଁ ଆପ୍ଲିକେସ‌ନକୁ ଅନୁମତି ଦିଏ।</string>
+  <!-- Theme installation error notification -->
+  <string name="theme_install_error_title">ଥିମ୍‍ ସଂ‍ସ୍ଥାପନ କରିବାରେ ବିଫଳ ‌ହୋଇଛି</string>
+  <string name="theme_install_error_message">%s ସଂ‍ସ୍ଥାପନ କରିବାରେ ବିଫଳ ‌ହୋଇଛି</string>
   <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ସଂ‍ସ୍ଥାପିତ ହୋଇନାହିଁ</string>
+  <string name="theme_reset_notification_title">ଥିମ୍‍ ରିସେଟ୍‍ କରନ୍ତୁ</string>
+  <string name="theme_reset_notification_body">ଏକାଧିକ ଆପ୍ଲିକେସନ୍‍ ନଷ୍ଟ ‌ହୋଇଯିବା କାରଣରୁ ସିଷ୍ଟମ୍‍ ଥିମ୍‍ ପୁନଃ-ସଂରଷିତ ହୋଇଛି।</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">ଅଗ୍ରାଧିକାର</string>
   <string name="silent_mode_none">କିଛି ନୁହେଁ</string>
@@ -193,11 +210,5 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">ବ୍ୟାଟେରୀ ସମ୍ପୁର୍ଣ ଚାରଜ୍ ହୋଇସାରିଛି</string>
   <string name="notify_battery_fully_charged_text">ଚାରଜରୁ ଡିଭାଇସ୍ ଅଲଗାକରନ୍ତୁ ବ୍ୟାଟେରୀର ଦୀର୍ଘାୟୁ କରିବା ପାଇଁ</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">ବ୍ୟାଟେରୀ ପରିସଂଖ୍ୟାନ ରିସେଟ୍‍ କରନ୍ତୁ</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">ସମ୍ପ୍ରତି ଲୋ-ଲେବେଲ୍‍ ବ୍ୟାଟେରୀ ବ୍ୟବହାର ତଥ୍ୟକୁ ରିସେଟ୍‍ କରିବା ପାଇଁ ଏକ ଆପ୍ଲିକେସନ୍‍କୁ ଅନୁମତି ଦିଏ।</string>
   <!-- Uicc hotswapped event configuration needed notification -->
 </resources>

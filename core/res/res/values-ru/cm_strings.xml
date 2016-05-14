@@ -210,12 +210,6 @@
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Аккумулятор полностью заряжен</string>
   <string name="notify_battery_fully_charged_text">Отключите устройство от сети для продления срока службы батареи.</string>
-  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">Обнуление статистики батареи</string>
-  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
-         whether they want to allow the application to do this. -->
-  <string name="permdesc_resetBatteryStats">Разрешить приложению очищать данные об использовании аккумуляторной батареи устройства.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">SIM-карты изменились</string>
   <string name="uicc_hot_swapped_event_text">Нажмите, чтобы задать параметры по умолчанию для SIM-карты</string>

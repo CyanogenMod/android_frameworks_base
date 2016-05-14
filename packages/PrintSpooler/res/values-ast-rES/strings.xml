@@ -32,6 +32,7 @@
   <!-- Label of the color mode widget. [CHAR LIMIT=20] -->
   <string name="label_color">Color</string>
   <!-- Label of the printer mode to print on both sides of paper. [CHAR LIMIT=20] -->
+  <string name="label_duplex">Dambos llaos</string>
   <!-- Label of the orientation widget. [CHAR LIMIT=20] -->
   <string name="label_orientation">Orientación</string>
   <!-- Label of the page selection widget. [CHAR LIMIT=20] -->
@@ -139,6 +140,14 @@
     <item>Color</item>
   </string-array>
   <!-- Duplex mode labels. -->
+  <string-array name="duplex_mode_labels">
+    <!-- Duplex mode label: No duplex supported. [CHAR LIMIT=20] -->
+    <item>Nengún</item>
+    <!-- Duplex mode label: Turn page sideways along the long edge like a book. [CHAR LIMIT=20] -->
+    <item>Borde llargu</item>
+    <!-- Duplex mode label: Turn page upwards along the short edge like a notepad. [CHAR LIMIT=20] -->
+    <item>Borde curtiu</item>
+  </string-array>
   <!-- Orientation labels. -->
   <string-array name="orientation_labels">
     <!-- Orientation label: Portrait page orientation. [CHAR LIMIT=30] -->

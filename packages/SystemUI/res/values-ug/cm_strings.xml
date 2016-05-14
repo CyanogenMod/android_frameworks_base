@@ -88,9 +88,6 @@
   <string name="quick_settings_profiles_off">سەپلىمە ھۆججەت چەكلەندى</string>
   <string name="quick_settings_heads_up_label">لەيلىمە ئۇقتۇرۇش</string>
   <string name="quick_settings_battery_saver_label">توكدان ياردەمچىسى</string>
-  <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_battery_saver_label_charging">توك تىجىگۈچى (توك قاچىلاۋاتىدۇ)</string>
-  <string name="quick_settings_caffeine_label">قەھۋەخانە ھالىتى</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">قەدەمداش تاقاق.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -157,10 +154,6 @@
   <string name="accessibility_quick_settings_heads_up_changed_off">لەيلىمە ئۇقتۇرۇش تاقالدى.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">لەيلىمە ئۇقتۇرۇش ئېچىلدى.</string>
-  <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">قەھۋەخانە ھالىتىنى تاقاش.</string>
-  <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">قەھۋەخانە ھالىتىنى ئېچىش.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">توك تىجەش ھالىتى تاقاق.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -214,14 +207,6 @@
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">قولچىراق ئوچۇق</string>
   <string name="quick_settings_tile_flashlight_not_summary">يىنىك بېسىپ ئۆچۈرۈڭ</string>
-  <!-- Wi-Fi hotspot label when enabled -->
-  <plurals name="wifi_hotspot_connected_clients_label">
-    <item quantity="other">%1$d مۇئامىلىدار</item>
-  </plurals>
   <!-- CellularTile data sim not configured state string -->
   <string name="data_sim_not_configured">تورغا ئۇلىنىدىغان SIM كارتا يوق</string>
-  <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_dock_battery_level">لەڭگەر توكدان <xliff:g id="number">%d</xliff:g>%%.</string>
-  <!-- Play queue -->
-  <string name="play_queue_extention">قويۇش تىزىملىكىنى كۆرسىتىش</string>
 </resources>

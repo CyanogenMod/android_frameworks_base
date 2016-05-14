@@ -20,5 +20,8 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">SIM 卡無效。</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="other">輸入 SIM 卡的 PIN 碼，您剩餘 <xliff:g id="number">%d </xliff:g> 次嘗試機會。次數用完後，您必須聯絡您的電訊業者以解鎖裝置。</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

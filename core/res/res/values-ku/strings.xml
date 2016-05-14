@@ -470,6 +470,8 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBar">ڕێ دەدات بە بەرنامە تا شيشەكەى دۆخ پەك دەخات بێت يان زياد دەكات و ئايكۆنى سيستەم لا دەبات.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_statusBarService">تووڵ دۆخ
+</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBarService">ڕێ دەدات بە بەرنامە تا شيشەكەى دۆخ ببێت.
 </string>
@@ -662,9 +664,11 @@
   <string name="permlab_accessLocationExtraCommands">ده‌سته‌ڵاتی شوێنی زیاتر بۆ فرمانی دابینکردن</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFineLocation">شوێنی ورد(GPS و دامه‌زراو له‌سه‌ر خه‌ت)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFineLocation">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ده‌ستکه‌وتنی شوێنی ته‌واوی تۆ به‌ GPS یان خه‌ته‌که‌ت وه‌ک وایه‌رلێس و هێڵ.خزمه‌تگوزاری شوێن پێویسته‌ کاربکات بۆ ئه‌وه‌ی به‌رنامه‌کان شوێن بدۆزنه‌وه‌.به‌رنامه‌کان ده‌توانن بزانن له‌ کوێیت به‌ GPS ، ئه‌م کاره‌ باتری مۆبایله‌که‌ت که‌م ده‌کات.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessCoarseLocation">شوێنی نزیک(له‌سه‌ر خه‌ت)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessCoarseLocation">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ده‌ستکه‌وتنی شوێنی نزیکی تۆ به‌ GPS یان خه‌ته‌که‌ت وه‌ک وایه‌رلێس و هێڵ.خزمه‌تگوزاری شوێن پێویسته‌ کاربکات بۆ ئه‌وه‌ی به‌رنامه‌کان شوێن بدۆزنه‌وه‌.به‌رنامه‌کان ده‌توانن بزانن له‌ کوێیت به‌ GPS ، ئه‌م کاره‌ باتری مۆبایله‌که‌ت که‌م ده‌کات.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -745,6 +749,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessNetworkState">ڕێگه‌دان به‌ به‌رنامه‌ بۆ بینینی زانیاری له‌باره‌ی په‌یوه‌ندی خه‌ت وه‌ک چ خه‌تێک هه‌یه‌ و چی په‌یوه‌ندیپێوه‌کراوه‌.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_createNetworkSockets">پڕاوپڕ ده‌سته‌ڵاتی خه‌ت</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_createNetworkSockets">ڕێگه‌دان به‌ به‌رنامه‌ بۆ دروستکردنی زانیاری خه‌ت و به‌کارهێنانی پرۆتۆکۆڵ.وه‌ وێبگه‌ره‌که‌ و به‌رنامه‌ی تر که‌ مانات ده‌داتێ وه‌ک ناردنی داتا بۆ ئینته‌رنێط.ئه‌م ده‌سته‌ڵاته‌ پێویست نییه‌ بۆ ناردنی داتا بۆ ئینته‌رنێت.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -778,6 +783,7 @@
   <string name="permdesc_bluetoothAdmin" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ ڕێکخستنی بلوتوسی ناوه‌کی مۆبایل.وه‌ دۆزینه‌وه‌ و ناساندنی دووره‌ ئامێر.</string>
   <string name="permlab_accessWimaxState">په‌یوه‌ندی یان پچڕان له‌ وایماکسه‌وه‌</string>
   <string name="permdesc_accessWimaxState">ڕێگه‌دان به‌ به‌رنامه‌ بۆ بڕیاردان که‌ی وایماکس کار بکات و زانیاری له‌باره‌ی وایماکس که‌ په‌یوه‌ندی پێوه‌کراوه‌. </string>
+  <string name="permlab_changeWimaxState">گۆڕینی باری وایماکس</string>
   <string name="permdesc_changeWimaxState" product="tablet">ڕێگه‌دان به‌ به‌رنامه‌ بۆ په‌یوه‌ندی کردنی تابلێت یان پچڕانی تابلێت له‌ وایماکسه‌وه‌.</string>
   <string name="permdesc_changeWimaxState" product="default">ڕێگه‌دان به‌ به‌رنامه‌ بۆ په‌یوه‌ندی کردنی مۆبایل یان پچڕانی مۆبایل له‌ وایماکسه‌وه‌.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -2129,6 +2135,7 @@
   <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
   <string name="activity_list_empty">هیچ چلاکییەکی لەیەک چوو نەدۆزرایەوە.</string>
   <!-- Title of an application permission that lets an application route media output. -->
+  <string name="permlab_route_media_output">ڕێپیشاندەری بەرهەمی میدیا بە</string>
   <!-- Description of an application permission that lets an application route media output. -->
   <string name="permdesc_route_media_output">ڕێگە بە بەرنامەیەک بدە تاکو ڕێپیشاندەری بەرهەمی میدیا بکات بۆ دیکەی ئامێرە دەرەکییەکان.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
