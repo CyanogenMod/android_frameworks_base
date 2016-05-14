@@ -242,6 +242,13 @@ public class KeyguardAffordanceHelper {
         return false;
     }
 
+    public boolean isOnLockIcon(MotionEvent event) {
+        final float x = event.getX();
+        final float y = event.getRawY();
+
+        return isOnIcon(mCenterIcon, x, y);
+    }
+
     public void startHintAnimation(boolean right,
             Runnable onFinishedListener) {
         cancelAnimation();

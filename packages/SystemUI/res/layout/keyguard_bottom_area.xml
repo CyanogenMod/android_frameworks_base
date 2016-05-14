@@ -22,7 +22,6 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:outlineProvider="none"
-    android:visibility="gone"
     android:elevation="5dp" > <!-- Put it above the status bar header -->
 
     <com.android.systemui.statusbar.phone.KeyguardIndicationTextView
