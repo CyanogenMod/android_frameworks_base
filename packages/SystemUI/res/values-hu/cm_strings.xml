@@ -214,4 +214,7 @@
   <string name="accessibility_dock_battery_level">Dokkoló akkumulátor: <xliff:g id="number">%d</xliff:g> százalék.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Lejátszási lista megjelenítése</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

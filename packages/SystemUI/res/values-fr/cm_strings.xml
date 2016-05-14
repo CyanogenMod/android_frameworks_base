@@ -214,4 +214,7 @@
   <string name="accessibility_dock_battery_level">Batterie de la station d\'accueil chargée à <xliff:g id="number">%d</xliff:g> pour cent.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Voir la file d\'attente de lecture</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

@@ -214,4 +214,7 @@
   <string name="accessibility_dock_battery_level">Dok Battery <xliff:g id="number">%d</xliff:g> persent.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Wys speel ry</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>
