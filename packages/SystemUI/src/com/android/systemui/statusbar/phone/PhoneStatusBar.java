@@ -4685,6 +4685,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     public void showBouncer() {
         if (!mRecreating && mNotificationPanel.mCanDismissKeyguard) {
+            // ensure external keyguard view does not have focus
+            unfocusKeyguardExternalView();
             mWaitingForKeyguardExit = mStatusBarKeyguardViewManager.isShowing();
             mStatusBarKeyguardViewManager.dismiss();
         }
