@@ -1353,7 +1353,12 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                                 Log.i(TAG, "drag record was attached");
                             }
                         }
-                        targetP.addView(mDraggingRecord.tileView);
+
+                        if (targetP != null) {
+                            targetP.addView(mDraggingRecord.tileView);
+                        } else {
+                            Log.e(TAG, "Target page was null");
+                        }
                         mDraggingRecord.page = mDraggingRecord.destinationPage;
 
                         mDraggingRecord.tileView.setX(mDraggingRecord.destination.x);
