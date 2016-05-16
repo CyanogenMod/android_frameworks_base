@@ -4799,7 +4799,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void onTrackingStopped(boolean expand) {
-        if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED || mStatusBarWindowManager.keyguardExternalViewHasFocus()) {
+        if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED ||
+                mLiveLockScreenController.getLiveLockScreenHasFocus()) {
             if (!expand && (!mUnlockMethodCache.canSkipBouncer() ||
                     mLiveLockScreenController.isShowingLiveLockScreenView())) {
                 showBouncer();
