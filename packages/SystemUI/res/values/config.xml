@@ -264,5 +264,7 @@
 
     <bool name="quick_settings_show_full_alarm">false</bool>
 
+    <!-- When true, show charging animation -->
+    <bool name="config_show_battery_charging_anim">true</bool>
 </resources>
 
