@@ -3492,6 +3492,12 @@ public final class Settings {
          */
         public static final String NETWORK_TRAFFIC_AUTOHIDE = "network_traffic_autohide";
 
+        /**
+         * Whether to show four tiles per row.
+         * @hide
+         */
+        public static final String QS_USE_FOUR_COLUMNS = "qs_use_four_columns";
+
 
         /**
          * I am the lolrus.
