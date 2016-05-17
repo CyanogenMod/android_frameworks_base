@@ -938,6 +938,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mLiveLockScreenController = new LiveLockScreenController(mContext, this,
                 mNotificationPanel);
         mNotificationPanel.setLiveController(mLiveLockScreenController);
+        if (mStatusBarWindowManager != null) {
+            mStatusBarWindowManager.setLiveLockscreenController(mLiveLockScreenController);
+        }
 
         if (mHeadsUpManager == null) {
             mHeadsUpManager = new HeadsUpManager(context, mStatusBarWindow);
@@ -3471,6 +3474,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mStatusBarWindowManager = new StatusBarWindowManager(mContext, mKeyguardMonitor);
         mStatusBarWindowManager.setShowingMedia(mKeyguardShowingMedia);
         mStatusBarWindowManager.add(mStatusBarWindow, getStatusBarHeight());
+        if (mLiveLockScreenController != null) {
+            mStatusBarWindowManager.setLiveLockscreenController(mLiveLockScreenController);
+        }
     }
 
     // called by makeStatusbar and also by PhoneStatusBarView
@@ -4358,6 +4364,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         mAssistManager.onLockscreenShown();
         mKeyguardBottomArea.requestFocus();
+        try {
+            WindowManagerGlobal.getWindowManagerService()
+                    .setLiveLockscreenEdgeDetector(false);
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
         if (mLiveLockScreenController.isShowingLiveLockScreenView()) {
             mLiveLockScreenController.getLiveLockScreenView().onKeyguardShowing(
                     mStatusBarKeyguardViewManager.isScreenTurnedOn());
@@ -4695,8 +4707,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     public void showBouncer() {
         if (!mRecreating && mNotificationPanel.mCanDismissKeyguard
                 && (mState != StatusBarState.SHADE || mLiveLockScreenController.getLiveLockScreenHasFocus())) {
-            // ensure external keyguard view does not have focus
-            unfocusKeyguardExternalView();
             mWaitingForKeyguardExit = mStatusBarKeyguardViewManager.isShowing();
             mStatusBarKeyguardViewManager.dismiss();
         }
