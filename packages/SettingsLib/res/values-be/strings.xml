@@ -21,16 +21,25 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Toast message when Wi-Fi cannot scan for networks -->
   <!-- Do not translate.  Concise terminology for wifi with WEP security -->
+  <string name="wifi_security_short_wep">WEP</string>
   <!-- Do not translate.  Concise terminology for wifi with WPA security -->
+  <string name="wifi_security_short_wpa">WPA</string>
   <!-- Do not translate.  Concise terminology for wifi with WPA2 security -->
+  <string name="wifi_security_short_wpa2">WPA2</string>
   <!-- Do not translate.  Concise terminology for wifi with both WPA/WPA2 security -->
+  <string name="wifi_security_short_wpa_wpa2">WPA/WPA2</string>
   <!-- Do not translate.  Concise terminology for wifi with unknown PSK type -->
   <!-- Do not translate.  Concise terminology for wifi with 802.1x EAP security -->
+  <string name="wifi_security_short_eap">802.1x</string>
   <!-- Used in Wi-Fi settings dialogs when Wi-Fi does not have any security. -->
+  <string name="wifi_security_none">Нічога</string>
   <!-- Do not translate.  Terminology for wifi with WEP security -->
   <!-- Do not translate.  Terminology for wifi with WPA security -->
+  <string name="wifi_security_wpa">WPA PSK</string>
   <!-- Do not translate.  Terminology for wifi with WPA2 security -->
+  <string name="wifi_security_wpa2">WPA2 PSK</string>
   <!-- Do not translate.  Terminology for wifi with both WPA/WPA2 security, or unknown -->
+  <string name="wifi_security_wpa_wpa2">WPA/WPA2 PSK</string>
   <!-- Do not translate.  Terminology for wifi with unknown PSK type -->
   <!-- Do not translate.  Concise terminology for wifi with 802.1x EAP security -->
   <!-- Do not translate.  Concise terminology for Passpoint network -->
@@ -94,6 +103,7 @@
   <!-- Button text for accepting an incoming pairing request. [CHAR LIMIT=20] -->
   <!-- Button text for accepting an incoming pairing request in all caps. [CHAR LIMIT=20] -->
   <!-- Button text for declining an incoming pairing request. [CHAR LIMIT=20] -->
+  <string name="bluetooth_pairing_decline">Скасаваць</string>
   <!-- Message in pairing dialogs.  [CHAR LIMIT=NONE] -->
   <!-- Message for the error dialog when BT pairing fails generically. -->
   <!-- Message for the error dialog when BT pairing fails because the PIN /
