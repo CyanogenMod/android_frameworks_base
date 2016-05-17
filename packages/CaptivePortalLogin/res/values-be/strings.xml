@@ -4,4 +4,5 @@
   <string name="app_name">CaptivePortalLogin</string>
   <string name="action_use_network">Выкарыстоўваць гэтую сетку</string>
   <string name="action_do_not_use_network">Не выкарыстоўваць гэтую сетку</string>
+  <string name="action_bar_label">Уваход да сеціва</string>
 </resources>
