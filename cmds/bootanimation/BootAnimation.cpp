@@ -414,9 +414,6 @@ status_t BootAnimation::readyToRun() {
             ((access(OEM_BOOTANIMATION_FILE, R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(OEM_BOOTANIMATION_FILE)) != NULL)) ||
 
-            ((access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0) &&
-            ((zipFile = ZipFileRO::open(SYSTEM_BOOTANIMATION_FILE)) != NULL)) ||
-
             ((access(getAnimationFileName(IMG_DATA), R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(getAnimationFileName(IMG_DATA))) != NULL)) ||
 

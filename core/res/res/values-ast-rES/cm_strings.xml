@@ -135,7 +135,9 @@
   <string name="app_ops_start_at_bootup">executase al aniciu</string>
   <string name="app_ops_toast_window">notificaciones emerxentes</string>
   <string name="app_ops_toggle_bluetooth">cambiar Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">conmutar datos móviles</string>
   <string name="app_ops_toggle_nfc">cambiar NFC</string>
+  <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">remanar volume de l\'alarma</string>
   <string name="app_ops_use_audio_focus">remanar el volume de soníu</string>
   <string name="app_ops_use_bluetooth_volume">remanar el volume del Bluetooth</string>
@@ -148,6 +150,21 @@
   <string name="app_ops_use_voice_volume">remanar el volume de la llamada</string>
   <string name="app_ops_write_mms">escribir un mensaxe MMS</string>
   <string name="app_ops_write_sms">escribir un mensaxe SMS</string>
+  <string name="app_ops_use_fingerprint">usar buelga</string>
+  <string name="app_ops_add_voicemail">amestar corréu de voz</string>
+  <string name="app_ops_read_phone_state">estáu d\'accesu al teléfonu</string>
+  <string name="app_ops_scan_wifi">escaniar rede Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">camudar el fondu</string>
+  <string name="app_ops_assist_structure">usar cadarma d\'asistencia</string>
+  <string name="app_ops_assist_screenshot">facer una captura</string>
+  <string name="app_ops_use_body_sensors">usar sensores corporales</string>
+  <string name="app_ops_read_cell_broadcasts">lleer tresmisiones celulares</string>
+  <string name="app_ops_mock_location">simular la llocalización</string>
+  <string name="app_ops_read_external_storage">lleer almacenamientu esternu</string>
+  <string name="app_ops_write_external_storage">escribir almacenamientu esternu</string>
+  <string name="app_ops_turn_on_screen">prender pantalla</string>
+  <string name="app_ops_get_accounts">consiguir cuentes del preséu</string>
+  <string name="app_ops_wifi_change">camudar estáu del Wi-Fi</string>
   <string name="app_ops_su">obtener accesu root</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
@@ -158,10 +175,16 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Bloquióse\'l llanzamientu de l\'actividá</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> protexóse pa nun llanciase. Calca p\'autenticate y llanciar l\'aplicación.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Batería cargada ensembre</string>
+  <string name="notify_battery_fully_charged_text">Desconeuta\'l preséu del cargador p\'ameyorar la vida útil de la batería.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">Les tarxetes SIM camudaron</string>
+  <string name="uicc_hot_swapped_event_text">Toca p\'afitar les preferencies por defeutu de la tarxeta SIM</string>
 </resources>

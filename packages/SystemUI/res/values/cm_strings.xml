@@ -258,4 +258,17 @@
 
    <!-- Play queue -->
    <string name="play_queue_extention">Show play queue</string>
+
+    <!-- Path data for portrait battery -->
+    <string name="battery_portrait_path_full" translatable="false">M19,22v-20L5,2V22H19z</string>
+    <string name="battery_portrait_path_empty" translatable="false">M19,22v0.0L5,22V22H19z</string>
+    <string name="battery_portrait_clip_path" translatable="false">M5,22V4h4V2h6v2h4v18L5,22z</string>
+
+    <!-- Path data for landscape battery -->
+    <string name="battery_landscape_path_full" translatable="false">M 1 4 H 25 V 20 H 1 V 4 Z</string>
+    <string name="battery_landscape_path_empty" translatable="false">M 1 4 H 1 V 20 H 1 V 4 Z</string>
+    <string name="battery_landscape_clip_path" translatable="false">M25,16h-2v4H1V4h22v4h2V16z</string>
+
+    <!-- Path data for circle battery -->
+    <string name="battery_circle_path" translatable="false">M 12 3.5 C 16.6944203736 3.5 20.5 7.30557962644 20.5 12 C 20.5 16.6944203736 16.6944203736 20.5 12 20.5 C 7.30557962644 20.5 3.5 16.6944203736 3.5 12 C 3.5 7.30557962644 7.30557962644 3.5 12 3.5 Z</string>
 </resources>

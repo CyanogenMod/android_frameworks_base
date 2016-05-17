@@ -210,9 +210,12 @@
     <item quantity="other">Подключено %1$d устройств</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
-  <string name="data_sim_not_configured">Нет SIM для моб.данных</string>
+  <string name="data_sim_not_configured">Нет SIM для моб. данных</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Заряд батареи док-станции <xliff:g id="number">%d</xliff:g> процентов.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Показать очередь воспроизведения</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

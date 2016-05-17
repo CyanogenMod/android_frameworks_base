@@ -84,9 +84,13 @@
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- detail header when adding a tile -->
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Unable to connect to mobile networks while Airplane mode is enabled. Disable Airplane mode and try again.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Play queue -->
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

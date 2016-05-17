@@ -89,7 +89,7 @@
   <string name="quick_settings_heads_up_label">התראות קופצות</string>
   <string name="quick_settings_battery_saver_label">שומר סוללה</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_battery_saver_label_charging">שומר סוללה (בטעינה)</string>
+  <string name="quick_settings_battery_saver_label_charging">שומר הסוללה (בטעינה)</string>
   <string name="quick_settings_caffeine_label">קפאין</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">סנכרון כבוי.</string>
@@ -214,4 +214,7 @@
   <string name="accessibility_dock_battery_level">סוללה חיצונית - <xliff:g id="number">%d</xliff:g> אחוז.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">הצג תור השמעה</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

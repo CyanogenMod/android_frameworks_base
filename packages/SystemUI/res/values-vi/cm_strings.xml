@@ -89,6 +89,7 @@
   <string name="quick_settings_heads_up_label">Heads up</string>
   <string name="quick_settings_battery_saver_label">Trình tiết kiệm pin</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Trình tiết kiệm pin (đang sạc)</string>
   <string name="quick_settings_caffeine_label">Cafein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Tắt đồng bộ.</string>
@@ -212,4 +213,7 @@
   <string name="accessibility_dock_battery_level">Thanh pin <xliff:g id="number">%d</xliff:g> phần trăm.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Hiện danh sách chờ phát</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

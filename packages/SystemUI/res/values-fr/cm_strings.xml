@@ -89,6 +89,7 @@
   <string name="quick_settings_heads_up_label">Notifications flottantes</string>
   <string name="quick_settings_battery_saver_label">Économiseur de batterie</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Économiseur de batterie (en charge)</string>
   <string name="quick_settings_caffeine_label">Caféine</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchronisation désactivée.</string>
@@ -213,4 +214,7 @@
   <string name="accessibility_dock_battery_level">Batterie de la station d\'accueil chargée à <xliff:g id="number">%d</xliff:g> pour cent.</string>
   <!-- Play queue -->
   <string name="play_queue_extention">Voir la file d\'attente de lecture</string>
+  <!-- Path data for portrait battery -->
+  <!-- Path data for landscape battery -->
+  <!-- Path data for circle battery -->
 </resources>

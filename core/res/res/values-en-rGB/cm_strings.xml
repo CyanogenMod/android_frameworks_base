@@ -55,6 +55,7 @@
   <!-- Privacy Guard -->
   <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <!-- App ops requests -->
+  <string name="app_ops_toggle_mobile_data">toggle mobile data</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <!-- Keyguard strings -->
