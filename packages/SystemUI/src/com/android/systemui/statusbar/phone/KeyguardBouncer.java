@@ -88,6 +88,8 @@ public class KeyguardBouncer {
         if (mRoot.getVisibility() == View.VISIBLE || mShowingSoon) {
             return;
         }
+        // ensure external keyguard view does not have focus
+        mPhoneStatusBar.unfocusKeyguardExternalView();
         mPhoneStatusBar.getScrimController().forceHideScrims(false);
         // Don't hide bottom area if we are in the middle of a affordance
         // launch transition, since once the animation is finished, NPV
