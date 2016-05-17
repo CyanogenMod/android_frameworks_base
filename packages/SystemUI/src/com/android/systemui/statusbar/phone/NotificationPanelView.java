@@ -472,7 +472,7 @@ public class NotificationPanelView extends PanelView implements
                 boolean intercept = false;
                 if (mLiveLockscreenController.getLiveLockScreenHasFocus()) {
                     intercept = mAfforanceHelper.onTouchEvent(e);
-                    if (isCancelOrUp) {
+                    if (isCancelOrUp && !isAffordanceSwipeInProgress()) {
                         mKeyguardBottomArea.expand(false);
                     }
                     if (!intercept) {
