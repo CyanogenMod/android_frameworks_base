@@ -31,7 +31,6 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.MathUtils;
 import android.util.TypedValue;
@@ -319,18 +318,10 @@ public class QSTileView extends ViewGroup {
 
     private void updateRippleSize(int width, int height) {
         // center the touch feedback on the center of the icon, and dial it down a bit
-        boolean useFourColumns = Settings.Secure.getInt(
-            mContext.getContentResolver(), Settings.Secure.QS_USE_FOUR_COLUMNS,
-                0) == 1;
         final int cx = width / 2;
         final int cy = mDual ? mIcon.getTop() + mIcon.getHeight() : height / 2;
-        if (useFourColumns) {
-            int rad = (int)(mIcon.getHeight() * 1f);
-            mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
-        } else {
-            int rad = (int)(mIcon.getHeight() * 1.25f);
-            mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
-        }
+        final int rad = (int)(mIcon.getHeight() * 1.25f);
+        mRipple.setHotspotBounds(cx - rad, cy - rad, cx + rad, cy + rad);
     }
 
     private static void layout(View child, int left, int top) {
