@@ -20,7 +20,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Suffix added to a number to signify size in bytes. -->
-  <string name="byteShort">Б</string>
+  <string name="byteShort">Біт</string>
   <!-- Suffix added to a number to signify size in kilobytes. -->
   <string name="kilobyteShort">КБ</string>
   <!-- Suffix added to a number to signify size in megabytes. -->
@@ -37,50 +37,84 @@
          the placeholders. -->
   <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in days -->
+  <string name="durationDays"><xliff:g id="days">%1$d</xliff:g> содняў</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one day with hours -->
+  <string name="durationDayHours"><xliff:g id="days">%1$d</xliff:g> содні
+            <xliff:g id="hours">%2$d</xliff:g> гадзінаў</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one day with one hours -->
+  <string name="durationDayHour"><xliff:g id="days">%1$d</xliff:g> содні
+            <xliff:g id="hours">%2$d</xliff:g>гадзін</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in hours -->
+  <string name="durationHours"><xliff:g id="hours">%1$d</xliff:g> гадзінаў</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one hour with minutes -->
+  <string name="durationHourMinutes"><xliff:g id="hours">%1$d</xliff:g> гадзін
+            <xliff:g id="minutes">%2$d</xliff:g> хвілін</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one hour with one minute -->
+  <string name="durationHourMinute"><xliff:g id="hours">%1$d</xliff:g> г
+            <xliff:g id="minutes">%2$d</xliff:g> хв</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in minutes -->
+  <string name="durationMinutes"><xliff:g id="minutes">%1$d</xliff:g> хвілінаў</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute -->
+  <string name="durationMinute"><xliff:g id="minutes">%1$d</xliff:g> хвіліна</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute with seconds -->
+  <string name="durationMinuteSeconds"><xliff:g id="minutes">%1$d</xliff:g> хвілін
+            <xliff:g id="seconds">%2$d</xliff:g> сэкунд</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute with one second -->
+  <string name="durationMinuteSecond"><xliff:g id="minutes">%1$d</xliff:g> хвілін
+            <xliff:g id="seconds">%2$d</xliff:g> сэкунда</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in seconds -->
+  <string name="durationSeconds"><xliff:g id="seconds">%1$d</xliff:g> сэкундаў</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one second -->
+  <string name="durationSecond"><xliff:g id="seconds">%1$d</xliff:g> сэкунд</string>
   <!-- Used in Contacts for a field that has no label and in Note Pad
          for a note with no name. -->
+  <string name="untitled">&lt;Без назвы&gt;</string>
   <!-- How to display the lack of a phone number -->
+  <string name="emptyPhoneNumber">(Няма нумару тэлефону)</string>
   <!-- How to display the lack of a name -->
+  <string name="unknownName">Невядомы</string>
   <!-- What the UI should display for "voice mail" unless overridden by the SIM-->
+  <string name="defaultVoiceMailAlphaTag">Галасавая пошта</string>
   <!-- What the UI should display for "Msisdn" unless overridden by the SIM-->
+  <string name="defaultMsisdnAlphaTag">MSISDN1</string>
   <!-- For GsmMmiCode.java -->
   <!-- Displayed when the user dialed an MMI code whose function
          could not be performed. This will be displayed in a toast. -->
+  <string name="mmiError">Праблема падчас падлучэньня, магчыма памылка коду MMI.</string>
   <!-- Displayed when the user dialed an MMI code whose function
          could not be performed because FDN is enabled. This will be displayed in a toast. -->
+  <string name="mmiFdnError">Абмежаваньне: выкарыстоўваюцца толькі дазволеныя нумары.</string>
   <!-- Displayed when a phone feature such as call barring was activated. -->
+  <string name="serviceEnabled">Служба была ўключана.</string>
   <!-- Displayed in front of the list of a set of service classes
          (voice, data, fax, etc.) that were enabled. -->
+  <string name="serviceEnabledFor">Служба была ўключана для:</string>
   <!-- Displayed when a phone feature such as call forwarding was deactivated. -->
+  <string name="serviceDisabled">Служба была адключана.</string>
   <!-- Displayed when a phone property such as a SIM password was registered. -->
+  <string name="serviceRegistered">Рэгістрацыя прайшла пасьпяхова.</string>
   <!-- Displayed when a phone property such as a SIM password was erased. -->
+  <string name="serviceErased">Пасьпяхова выдалена.</string>
   <!-- Displayed when a SIM password was entered incorrectly. -->
   <string name="passwordIncorrect">Памылковы пароль.</string>
   <!-- Displayed when a phone feature triggered by an MMI code is complete. -->
   <string name="mmiComplete">Запыт MMI завершаны.</string>
   <!-- Displayed when a SIM PIN password is entered incorrectly. -->
+  <string name="badPin">Памылка: неабходны стары PIN-код.</string>
   <!-- Displayed when a SIM PUK password is entered incorrectly. -->
   <string name="badPuk">Уведзены памылковы PUK-код.</string>
   <!-- Displayed when SIM PIN passwords are entered inconsistently. -->
+  <string name="mismatchPin">PIN-коды ня супадаюць.</string>
   <!-- Displayed when a SIM PIN password is too long or too short. -->
-  <string name="invalidPin">Увядзіце PIN-код (ад 4 да 8 лічбаў).</string>
+  <string name="invalidPin">PIN-код (ад 4 да 8 лічбаў).</string>
   <!-- Displayed when a SIM PUK password is too short. -->
-  <string name="invalidPuk">Увядзіце PUK-код з 8 лічбаў ці больш.</string>
+  <string name="invalidPuk">PUK-код ад 8 лічбаў і больш.</string>
   <!-- Displayed to prompt the user to type the PUK password to unlock
          the SIM card. -->
-  <string name="needPuk2">Для разблакавання SIM-карткі увядзіце код PUK2.</string>
+  <string name="needPuk">SIM-картка заблакавана PUK-кодам. Неабходны PUK-код, каб разблакаваць картку.</string>
+  <string name="needPuk2">Для разблакаваньня SIM-карткі неабходны PUK2-код.</string>
   <!-- Displayed when user attempts to change SIM PIN1 without enabling PIN1. -->
+  <string name="enablePin">Памылка. Падлучы блакаваньне SIM-карткі ці карткі RUIM.</string>
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
   <plurals name="pinpuk_attempts">
     <item quantity="one">У вас засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як SIM-картка будзе заблакавана.</item>
@@ -88,18 +122,31 @@
     <item quantity="other">У вас засталася <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
   </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
+  <string name="imei">IMEI</string>
   <!-- Title for the dialog used to display the user's MEID number on CDMA network
          [CHAR LIMIT=10] -->
+  <string name="meid">MEID</string>
   <!-- Displayed as the title for a success/failure report enabling/disabling caller ID. -->
+  <string name="ClipMmi">Уваходны выклік</string>
   <!-- Displayed as the title for a success/failure report enabling/disabling caller ID. -->
+  <string name="ClirMmi">Зыходны выклік</string>
   <!-- Displayed as the title for a success/failure report enabling/disabling connected line ID. -->
   <!-- Displayed as the title for a success/failure report enabling/disabling connected line ID restriction. -->
+  <string name="ColrMmi">Абмежаваньне ідэнтыфікатару падлучанай лініі</string>
   <!-- Displayed as the title for a success/failure report enabling/disabling call forwarding. -->
+  <string name="CfMmi">Пераадрасаваньне выклікаў</string>
   <!-- Displayed as the title for a success/failure report enabling/disabling call waiting. -->
+  <string name="CwMmi">Чаканьне выкліку</string>
   <!-- Displayed as the title for a success/failure report enabling/disabling call barring. -->
   <string name="BaMmi">Забарона выклікаў</string>
   <!-- Displayed as the title for a success/failure report changing the SIM password. -->
+  <string name="PwdMmi">Зьмена пароля</string>
   <!-- Displayed as the title for a success/failure report changing the SIM PIN. -->
+  <string name="PinMmi">Зьмена PIN-коду</string>
+  <string name="CnipMmi">Бягучы нумар выкліку</string>
+  <string name="CnirMmi">Нумар выкліку абмежаваны</string>
+  <string name="ThreeWCMmi">Трохбаковы выклік</string>
+  <string name="RuacMmi">Адмова ад непажаданых выклікаў</string>
   <!-- Displayed to confirm to the user that caller ID will be restricted on the next call as usual. -->
   <!-- Displayed to confirm to the user that caller ID will be not restricted on the next call even though it usually is. -->
   <!-- Displayed to confirm to the user that caller ID will not be restricted on the next call but usually is. -->
@@ -268,6 +315,7 @@
   <!-- status message in phone options dialog for when silent mode is enabled -->
   <!-- status message in phone options dialog for when silent mode is disabled -->
   <!-- label for item that toggles airplane mode -->
+  <string name="global_actions_toggle_airplane_mode">Рэжым лёту</string>
   <!-- status message in phone options dialog for when airplane mode is on -->
   <!-- status message in phone options dialog for when airplane mode is off -->
   <!-- label for item that launches settings in phone options dialog [CHAR LIMIT=15]-->
