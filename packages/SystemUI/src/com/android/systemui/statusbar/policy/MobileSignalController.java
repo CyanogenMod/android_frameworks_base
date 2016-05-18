@@ -395,7 +395,8 @@ public class MobileSignalController extends SignalController<
             mCurrentState.iconGroup = mDefaultIcons;
         }
         mCurrentState.dataConnected = mCurrentState.connected
-                && mDataState == TelephonyManager.DATA_CONNECTED;
+                && mDataState == TelephonyManager.DATA_CONNECTED
+                && mCurrentState.dataSim;
 
         mCurrentState.showSeparateRoaming = false;
         if (isCarrierNetworkChangeActive()) {
