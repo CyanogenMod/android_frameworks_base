@@ -120,6 +120,8 @@ public class Resources {
     public static final int THEME_APP_PKG_ID = 0x61;
     /** @hide */
     public static final int THEME_ICON_PKG_ID = 0x62;
+    /** @hide */
+    public static final int THEME_CM_PKG_ID = 0x63;
     /**
      * The common resource pkg id needs to be less than the THEME_FRAMEWORK_PKG_ID
      * otherwise aapt will complain and fail
