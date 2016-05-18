@@ -62,9 +62,10 @@ namespace android {
 #define APP_PACKAGE_ID      0x7f
 #define CMSDK_PACKAGE_ID    0x3f
 #define SYS_PACKAGE_ID      0x01
-#define OVERLAY_APP_PACKAGE_ID  0x61
-#define OVERLAY_SYS_PACKAGE_ID  0x60
-#define OVERLAY_COMMON_PACKAGE_ID  0x5f
+#define OVERLAY_CMSDK_PACKAGE_ID    0x63
+#define OVERLAY_APP_PACKAGE_ID      0x61
+#define OVERLAY_SYS_PACKAGE_ID      0x60
+#define OVERLAY_COMMON_PACKAGE_ID   0x5f
 
 // Define attributes from android.R.attr to protect from theme changes
 #define ATTR_WINDOW_NO_TITLE 0x01010056 // windowNoTitle
@@ -6391,6 +6392,7 @@ DynamicRefTable::DynamicRefTable(uint8_t packageId)
     mLookupTable[OVERLAY_APP_PACKAGE_ID] = OVERLAY_APP_PACKAGE_ID;
     mLookupTable[OVERLAY_SYS_PACKAGE_ID] = OVERLAY_SYS_PACKAGE_ID;
     mLookupTable[OVERLAY_COMMON_PACKAGE_ID] = OVERLAY_COMMON_PACKAGE_ID;
+    mLookupTable[OVERLAY_CMSDK_PACKAGE_ID] = OVERLAY_CMSDK_PACKAGE_ID;
 }
 
 status_t DynamicRefTable::load(const ResTable_lib_header* const header)
@@ -6470,7 +6472,8 @@ status_t DynamicRefTable::lookupResourceId(uint32_t* resId) const {
     size_t packageId = Res_GETPACKAGE(res) + 1;
 
     if (packageId == APP_PACKAGE_ID || packageId == OVERLAY_APP_PACKAGE_ID ||
-                packageId == OVERLAY_SYS_PACKAGE_ID || packageId == OVERLAY_COMMON_PACKAGE_ID) {
+                packageId == OVERLAY_SYS_PACKAGE_ID || packageId == OVERLAY_COMMON_PACKAGE_ID ||
+                packageId == OVERLAY_CMSDK_PACKAGE_ID) {
         // No lookup needs to be done, app package IDs are absolute.
         return NO_ERROR;
     }
@@ -6801,7 +6804,8 @@ bool ResTable::isResTypeAllowed(const char* type) const {
 bool ResTable::isDynamicPackageId(const uint32_t pkgId) const {
     return pkgId != APP_PACKAGE_ID && pkgId != SYS_PACKAGE_ID
             && pkgId != OVERLAY_APP_PACKAGE_ID && pkgId != OVERLAY_SYS_PACKAGE_ID
-            && pkgId != OVERLAY_COMMON_PACKAGE_ID && pkgId != CMSDK_PACKAGE_ID;
+            && pkgId != OVERLAY_COMMON_PACKAGE_ID && pkgId != CMSDK_PACKAGE_ID
+            && pkgId != OVERLAY_CMSDK_PACKAGE_ID;
 }
 
 status_t ResTable::removeIdmappedTypesFromPackageGroup(PackageGroup* packageGroup) const {
