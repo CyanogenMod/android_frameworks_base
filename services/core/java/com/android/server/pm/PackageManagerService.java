@@ -8324,6 +8324,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         int pkgId;
         if ("android".equals(target)) {
             pkgId = Resources.THEME_FRAMEWORK_PKG_ID;
+        } else if ("cyanogenmod.platform".equals(target)) {
+            pkgId = Resources.THEME_CM_PKG_ID;
         } else if (isCommonResources) {
             pkgId = Resources.THEME_COMMON_PKG_ID;
         } else {
