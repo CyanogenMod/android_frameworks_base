@@ -24,7 +24,7 @@
   <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">ביטול</string>
   <!-- Slot id in SIM pin/puk unlock view -->
-  <string name="kg_slot_name">חריץ <xliff:g id="number">%d </xliff:g>: כרטיס SIM חדש\u0020</string>
+  <string name="kg_slot_name">חריץ <xliff:g id="number">%d </xliff:g>: כרטיס SIM חדשu0020\</string>
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">כרטיס לא חוקי.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->

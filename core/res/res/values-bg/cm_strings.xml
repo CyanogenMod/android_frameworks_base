@@ -283,7 +283,7 @@
   <string name="permdesc_accessFingerprintService">Позволява на приложението достъп до услугата на пръстови отпечатъци. Приложението може да добавя, изтрива, преименува и удостоверява срещу пръстови отпечатъци</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
-  <string name="permlab_resetBatteryStats">Статистиката на батерията ще бъде нулирана</string>
+  <string name="permlab_resetBatteryStats">Нулиране статистиката на батерията</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Позволява заявление да рестартирате текущите данни за използването на ниско ниво на батерията.</string>

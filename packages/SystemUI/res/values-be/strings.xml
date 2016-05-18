@@ -163,6 +163,7 @@
   <!-- Content description of the data connection with no SIM for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the bluetooth tethering icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the airplane mode icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_airplane_mode">Рэжым лёту.</string>
   <!-- Content description of the battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the button for showing a settings panel in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the button for showing a notifications panel in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -207,7 +208,9 @@
   <!-- Content description of zen mode time condition plus button (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of zen mode time condition minus button (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the flashlight tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_flashlight_off">Ліхтарык выключаны.</string>
   <!-- Content description of the flashlight tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_flashlight_on">Ліхтарык уключаны.</string>
   <!-- Announcement made when the flashlight state changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when the flashlight state changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when the color inversion state changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -246,6 +249,7 @@
   <!-- Name of the launcher shortcut icon that allows dreams to be started immediately [CHAR LIMIT=20] -->
   <!-- Textual description of Ethernet connections -->
   <!-- QuickSettings: Airplane mode [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_airplane_mode_label">Рэжым лёту</string>
   <!-- QuickSettings: Battery Charging [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Battery Charged [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Bluetooth [CHAR LIMIT=NONE] -->
@@ -273,6 +277,7 @@
   <!-- QuickSettings: Wifi (No network) [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Wifi (Off) [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Wifi detail panel, text when there are no items [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_wifi_detail_empty_text">Няма захаваных сетак</string>
   <!-- QuickSettings: Cast title [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cast detail panel, status text when casting [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cast detail panel, default device name [CHAR LIMIT=NONE] -->
@@ -289,8 +294,10 @@
   <!-- QuickSettings: Control panel: Label for connecting device. [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Tethering. [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Hotspot. [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_hotspot_label">Кропка доступу</string>
   <!-- QuickSettings: Notifications [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Flashlight [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_flashlight_label">Ліхтарык</string>
   <!-- QuickSettings: Cellular detail panel title [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cellular detail panel, data usage title [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cellular detail panel, remaining data title [CHAR LIMIT=NONE] -->

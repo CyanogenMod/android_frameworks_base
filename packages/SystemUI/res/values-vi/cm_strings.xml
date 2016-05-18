@@ -272,6 +272,7 @@
   <string name="dynamic_qs_tile_su_label">Truy cập root</string>
   <!-- Fingerprint -->
   <string name="fingerprint_try_again_hint">Vui lòng quét một lần nữa</string>
+  <string name="fingerprint_try_again_hint_too_many">Quá nhiều lần thử vân tay. Hãy thử lại sau.</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Thanh pin <xliff:g id="number">%d</xliff:g> phần trăm.</string>
   <!-- Empty view text for CustomQSTile -->
