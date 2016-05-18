@@ -904,7 +904,8 @@ public class MockPackageManager extends PackageManager {
      * @hide
      */
     @Override
-    public boolean isComponentProtected(String callingPackage, ComponentName componentName) {
+    public boolean isComponentProtected(String callingPackage, int callingUid,
+            ComponentName componentName) {
         throw new UnsupportedOperationException();
     }
 

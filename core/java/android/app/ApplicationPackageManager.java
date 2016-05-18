@@ -2048,9 +2048,11 @@ final class ApplicationPackageManager extends PackageManager {
 
     /** @hide */
     @Override
-    public boolean isComponentProtected(String callingPackage, ComponentName componentName) {
+    public boolean isComponentProtected(String callingPackage, int callingUid,
+            ComponentName componentName) {
         try {
-            return mPM.isComponentProtected(callingPackage, componentName, mContext.getUserId());
+            return mPM.isComponentProtected(callingPackage, callingUid, componentName,
+                    mContext.getUserId());
         } catch (RemoteException re) {
             Log.e(TAG, "Failed to get component protected setting", re);
             return false;
