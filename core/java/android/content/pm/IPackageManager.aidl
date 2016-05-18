@@ -521,6 +521,6 @@ interface IPackageManager {
     int processThemeResources(String themePkgName);
 
     /** Protected Apps */
-    boolean isComponentProtected(in String callingPackage, in ComponentName componentName,
-            int userId);
+    boolean isComponentProtected(in String callingPackage, in int callingUid,
+    in ComponentName componentName, int userId);
 }

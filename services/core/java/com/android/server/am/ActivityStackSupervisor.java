@@ -976,7 +976,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 //TODO: This needs to be a flushed out API in the future.
                 boolean isProtected = intent.getComponent() != null
                         && AppGlobals.getPackageManager()
-                        .isComponentProtected(callingPackage, intent.getComponent(), userId) &&
+                        .isComponentProtected(callingPackage, callingUid,
+                                intent.getComponent(), userId) &&
                         (intent.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0;
 
                 if (isProtected) {
@@ -992,6 +993,7 @@ public final class ActivityStackSupervisor implements DisplayListener {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+
             final int realCallingPid = Binder.getCallingPid();
             final int realCallingUid = Binder.getCallingUid();
             int callingPid;
@@ -1888,6 +1890,28 @@ public final class ActivityStackSupervisor implements DisplayListener {
         if (inTask != null && !inTask.inRecents) {
             Slog.w(TAG, "Starting activity in task not in recents: " + inTask);
             inTask = null;
+        }
+
+        try {
+            //TODO: This needs to be a flushed out API in the future.
+            boolean isProtected = intent.getComponent() != null
+                    && AppGlobals.getPackageManager()
+                    .isComponentProtected(null, r.launchedFromUid,
+                            intent.getComponent(), r.userId) &&
+                    (intent.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0;
+
+            if (isProtected) {
+                Message msg = mService.mHandler.obtainMessage(
+                        ActivityManagerService.POST_COMPONENT_PROTECTED_MSG);
+                //Store start flags, userid
+                intent.setFlags(startFlags);
+                intent.putExtra("com.android.settings.PROTECTED_APPS_USER_ID", r.userId);
+                msg.obj = intent;
+                mService.mHandler.sendMessage(msg);
+                return ActivityManager.START_NOT_CURRENT_USER_ACTIVITY;
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
 
         final boolean launchSingleTop = r.launchMode == ActivityInfo.LAUNCH_SINGLE_TOP;
