@@ -17265,10 +17265,12 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     @Override
-    public boolean isComponentProtected(String callingPackage,
+    public boolean isComponentProtected(String callingPackage, int callingUid,
             ComponentName componentName, int userId) {
         if (DEBUG_PROTECTED) Log.d(TAG, "Checking if component is protected "
-                + componentName.flattenToShortString() + " from calling package " + callingPackage);
+                + componentName.flattenToShortString() + " from calling package " + callingPackage
+                + " and callinguid " + callingUid);
+
         enforceCrossUserPermission(Binder.getCallingUid(), userId, false, false, "set protected");
 
         //Allow managers full access
@@ -17289,8 +17291,24 @@ public class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
 
+        //If this component is launched from a validation component, allow it.
         if (TextUtils.equals(PROTECTED_APPS_TARGET_VALIDATION_COMPONENT,
-                componentName.flattenToString())) {
+                componentName.flattenToString()) && callingUid == Process.SYSTEM_UID) {
+            return false;
+        }
+
+        //If this component is launched from the system or a uid of a protected component, allow it.
+        boolean fromProtectedComponentUid = false;
+        for (String protectedComponentManager : protectedComponentManagers) {
+            if (callingUid == getPackageUid(protectedComponentManager, userId)) {
+                fromProtectedComponentUid = true;
+            }
+        }
+
+        if (callingPackage == null && (callingUid == Process.SYSTEM_UID
+                || fromProtectedComponentUid)) {
+            if (DEBUG_PROTECTED) Log.d(TAG, "Calling package is android and from system or " +
+                    "protected manager, allow");
             return false;
         }
 
