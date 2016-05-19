@@ -18,6 +18,7 @@ package com.android.systemui.statusbar;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -199,7 +200,13 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        final int size = Math.min(getMeasuredWidth(), getMeasuredHeight());
+        final int size;
+        if (this.getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_PORTRAIT)
+            size = Math.min(getMeasuredWidth(), getMeasuredHeight());
+        else
+            size = Math.max(getMeasuredWidth(), getMeasuredHeight());
+
         setMeasuredDimension(size, size);
     }
 
