@@ -305,7 +305,14 @@ public class MobileSignalController extends SignalController<
                     return false;
                 case ServiceState.STATE_OUT_OF_SERVICE:
                 case ServiceState.STATE_EMERGENCY_ONLY:
-                    return mServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE;
+                    if (mContext.getResources().getBoolean(R.bool.config_showSignalForIWlan)) {
+                        return mServiceState.getDataRegState() == ServiceState.STATE_IN_SERVICE;
+                    } else {
+                        return ((mServiceState.getDataRegState() ==
+                                      ServiceState.STATE_IN_SERVICE)&&
+                                (mServiceState.getDataNetworkType() !=
+                                      TelephonyManager.NETWORK_TYPE_IWLAN));
+                    }
                 default:
                     return true;
             }
@@ -624,7 +631,8 @@ public class MobileSignalController extends SignalController<
         }
 
         // Update data net type icons
-        if (dataType == TelephonyManager.NETWORK_TYPE_IWLAN) {
+        if (dataType == TelephonyManager.NETWORK_TYPE_IWLAN &&
+                mContext.getResources().getBoolean(R.bool.config_show4gForIWlan)) {
             // wimax is a special 4g network not handled by telephony
             dataTypeIcon = TelephonyIcons.ICON_4G;
             qsDataTypeIcon = TelephonyIcons.QS_DATA_4G;
