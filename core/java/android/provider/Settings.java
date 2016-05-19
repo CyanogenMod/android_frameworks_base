@@ -3505,6 +3505,13 @@ public final class Settings {
          */
         public static final String QS_NUM_TILE_COLUMNS = "sysui_qs_num_tile_columns";
 
+        /**
+         * Number of rows to display on the quick settings panel
+         * Default is 3
+         * @hide
+         */
+        public static final String QS_NUM_TILE_ROWS = "sysui_qs_num_tile_rows";
+
 
         /**
          * I am the lolrus.
