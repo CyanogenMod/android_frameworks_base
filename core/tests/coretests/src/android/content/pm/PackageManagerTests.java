@@ -3854,7 +3854,7 @@ public class PackageManagerTests extends AndroidTestCase {
         ComponentName testComponentName = new ComponentName("com.android.test",
                 "com.android.test.component.protected");
         getPm().setComponentProtectedSetting(testComponentName, true);
-        assertFalse(getPm().isComponentProtected(testComponentName.getPackageName(),
+        assertFalse(getPm().isComponentProtected(testComponentName.getPackageName(), getContext().getUserId(),
                 testComponentName));
     }
 
@@ -3862,7 +3862,7 @@ public class PackageManagerTests extends AndroidTestCase {
         ComponentName testComponentName = new ComponentName("com.android.test",
                 "com.android.test.component.protected");
         getPm().setComponentProtectedSetting(testComponentName, true);
-        assertFalse(getPm().isComponentProtected(testComponentName.getPackageName(),
+        assertFalse(getPm().isComponentProtected(testComponentName.getPackageName(), getContext().getUserId(),
                 testComponentName));
     }
 }
