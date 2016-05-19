@@ -199,7 +199,7 @@ public class VisualizerView extends View implements Palette.PaletteAsyncListener
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        final int size = Math.min(getMeasuredWidth(), getMeasuredHeight());
+        final int size = getMeasuredWidth();
         setMeasuredDimension(size, size);
     }
 
