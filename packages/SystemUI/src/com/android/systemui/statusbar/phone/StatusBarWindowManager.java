@@ -148,7 +148,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         } else {
             mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
-            if (mKeyguardBlurEnabled) {
+            if (mKeyguardBlurEnabled && mKeyguardBlur != null) {
                 mKeyguardBlur.hide();
             }
         }
