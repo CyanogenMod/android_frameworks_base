@@ -20,10 +20,9 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
 
-    <!-- Path will be tinted based on dual tone color -->
     <path
         android:name="frame"
-        android:strokeColor="#000000"
+        android:strokeColor="@color/batterymeter_frame_color"
         android:strokeLineJoin="round"
         android:strokeWidth="3"
         android:pathData="@string/battery_circle_path"/>

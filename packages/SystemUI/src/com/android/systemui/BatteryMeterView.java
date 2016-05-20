@@ -537,9 +537,7 @@ public class BatteryMeterView extends View implements DemoMode,
         @Override
         public void setDarkIntensity(int backgroundColor, int fillColor) {
             mIconTint = fillColor;
-            // make bolt drawable tint fully opaque so it stands out
-            mBoltDrawable.setTint(0xff000000 | fillColor);
-            mFrameDrawable.setTint(backgroundColor);
+            mBoltDrawable.setTint(fillColor);
             updateBoltDrawableLayer(mBatteryDrawable, mBoltDrawable);
             invalidate();
         }
@@ -662,8 +660,7 @@ public class BatteryMeterView extends View implements DemoMode,
                     && (mShowPercent && !(level == 100 && !SHOW_100_PERCENT))) {
                 // draw the percentage text
                 String pctText = String.valueOf(SINGLE_DIGIT_PERCENT ? (level/10) : level);
-                // make paint color fully opaque so text stands out better
-                mTextAndBoltPaint.setColor(0xff000000 | getColorForLevel(level));
+                mTextAndBoltPaint.setColor(getColorForLevel(level));
                 canvas.drawText(pctText, mTextX, mTextY, mTextAndBoltPaint);
             } else if (level <= mCriticalLevel) {
                 // draw the warning text
