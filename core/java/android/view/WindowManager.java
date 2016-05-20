@@ -1154,10 +1154,10 @@ public interface WindowManager extends ViewManager {
         public static final int PRIVATE_FLAG_WAS_NOT_FULLSCREEN = 0x02000000;
 
         /**
-         * Window flag: Overrides default power key behavior
+         * Window flag: Overrides default system key behavior.
          * {@hide}
          */
-        public static final int PRIVATE_FLAG_PREVENT_POWER_KEY = 0x20000000;
+        public static final int PRIVATE_FLAG_PREVENT_SYSTEM_KEYS = 0x20000000;
 
         /**
          * Window flag: adding additional blur layer and set this as masking layer
