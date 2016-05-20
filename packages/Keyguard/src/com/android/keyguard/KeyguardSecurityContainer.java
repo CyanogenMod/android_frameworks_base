@@ -32,6 +32,8 @@ import android.widget.FrameLayout;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardSecurityModel.SecurityMode;
+import cyanogenmod.app.Profile;
+import cyanogenmod.app.ProfileManager;
 
 public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSecurityView {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;
@@ -316,6 +318,10 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         if (DEBUG) Log.d(TAG, "showNextSecurityScreenOrFinish(" + authenticated + ")");
         boolean finish = false;
         boolean strongAuth = false;
+        final ProfileManager profileManager = ProfileManager.getInstance(getContext());
+        final Profile activeProfile = profileManager.getActiveProfile();
+        final boolean lockModeInsecure = activeProfile != null
+                && activeProfile.getScreenLockMode().getValue() == Profile.LockMode.INSECURE;
         if (mUpdateMonitor.getUserCanSkipBouncer(
                 KeyguardUpdateMonitor.getCurrentUser())) {
             finish = true;
@@ -326,6 +332,9 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
             } else {
                 showSecurityScreen(securityMode); // switch to the alternate security view
             }
+        } else if (lockModeInsecure) {
+            //No need to show next security screen
+            finish = true;
         } else if (authenticated) {
             switch (mCurrentSecuritySelection) {
                 case Pattern:
