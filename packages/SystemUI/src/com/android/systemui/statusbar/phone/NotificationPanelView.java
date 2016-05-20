@@ -1807,6 +1807,7 @@ public class NotificationPanelView extends PanelView implements
         if (mQsExpanded) {
             return onHeader || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
         } else {
+            // intercepts initial touch down and not again
             return onHeader;
         }
     }

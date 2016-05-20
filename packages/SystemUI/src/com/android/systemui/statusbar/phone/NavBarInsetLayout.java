@@ -63,10 +63,17 @@ public class NavBarInsetLayout extends FrameLayout {
 
     public NavBarInsetLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setMotionEventSplittingEnabled(false);
         mTransparentSrcPaint.setColor(0);
         mTransparentSrcPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
 
         mSettingsObserver = new SettingsObserver(new Handler());
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        setMotionEventSplittingEnabled(false);
     }
 
     @Override
