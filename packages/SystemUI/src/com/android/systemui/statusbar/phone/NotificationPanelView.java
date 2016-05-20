@@ -39,7 +39,9 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.util.ArraySet;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.MathUtils;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -83,6 +85,7 @@ import com.android.systemui.statusbar.stack.StackStateAnimator;
 import cyanogenmod.providers.CMSettings;
 
 import java.util.List;
+import java.util.Set;
 
 public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener, ObservableScrollView.Listener,
@@ -170,6 +173,7 @@ public class NotificationPanelView extends PanelView implements
     private int mNotificationsHeaderCollideDistance;
     private int mUnlockMoveDistance;
     private float mEmptyDragAmount;
+    private Set<Integer> mActivePointers;
 
     private Interpolator mFastOutSlowInInterpolator;
     private Interpolator mFastOutLinearInterpolator;
@@ -332,6 +336,7 @@ public class NotificationPanelView extends PanelView implements
         super(context, attrs);
         setWillNotDraw(!DEBUG);
 
+        mActivePointers = new ArraySet<>();
         mSettingsObserver = new SettingsObserver(mHandler);
         mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -804,6 +809,7 @@ public class NotificationPanelView extends PanelView implements
         mLockedDirection = SwipeLockedDirection.UNKNOWN;
         mCanDismissKeyguard = true;
 
+        trackPointers(event);
         if (mBlockTouches) {
             return false;
         }
@@ -847,6 +853,13 @@ public class NotificationPanelView extends PanelView implements
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "+ onQsIntercept DOWN");
+                if (mActivePointers.size() > 1 && !shouldQuickSettingsIntercept(x, y, -2)) {
+                    // TODO fix second finger causing jumpiness
+                    Log.e(TAG, "two finger expand on qs intercept down: mIntercepting: "
+                            + mIntercepting + ", mExpanding" + mExpanding);
+                    return true;
+                }
                 mIntercepting = true;
                 mInitialTouchY = y;
                 mInitialTouchX = x;
@@ -861,16 +874,6 @@ public class NotificationPanelView extends PanelView implements
                     mQsTracking = true;
                     mIntercepting = false;
                     mNotificationStackScroller.removeLongPressCallback();
-                }
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                final int upPointer = event.getPointerId(event.getActionIndex());
-                if (mTrackingPointer == upPointer) {
-                    // gesture is ongoing, find a new pointer to track
-                    final int newIndex = event.getPointerId(0) != upPointer ? 0 : 1;
-                    mTrackingPointer = event.getPointerId(newIndex);
-                    mInitialTouchX = event.getX(newIndex);
-                    mInitialTouchY = event.getY(newIndex);
                 }
                 break;
 
@@ -910,6 +913,15 @@ public class NotificationPanelView extends PanelView implements
                     mQsTracking = false;
                 }
                 mIntercepting = false;
+            case MotionEvent.ACTION_POINTER_UP:
+                final int upPointer = event.getPointerId(event.getActionIndex());
+                if (mTrackingPointer == upPointer && mActivePointers.size() > 1) {
+                    // gesture is ongoing, find a new pointer to track
+                    final int newIndex = event.getPointerId(0) != upPointer ? 0 : 1;
+                    mTrackingPointer = event.getPointerId(newIndex);
+                    mInitialTouchX = event.getX(newIndex);
+                    mInitialTouchY = event.getY(newIndex);
+                }
                 break;
         }
         return false;
@@ -985,6 +997,7 @@ public class NotificationPanelView extends PanelView implements
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        trackPointers(event);
         if (mBlockTouches) {
             return false;
         }
@@ -1078,10 +1091,14 @@ public class NotificationPanelView extends PanelView implements
                 return true;
             }
         }
-        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+        if (mActivePointers.size() <= 1 &&
+                (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP)) {
             mConflictingQsExpansionGesture = false;
         }
-        if (action == MotionEvent.ACTION_DOWN && isFullyCollapsed()
+        if (action == MotionEvent.ACTION_DOWN
+                && isFullyCollapsed()
+                && event.getPointerId(event.getActionIndex()) == mTrackingPointer
+                && mActivePointers.size() != 0
                 && mQsExpansionEnabled) {
             mTwoFingerQsExpandPossible = true;
         }
@@ -1113,8 +1130,8 @@ public class NotificationPanelView extends PanelView implements
         final int pointerCount = event.getPointerCount();
         final int action = event.getActionMasked();
 
-        final boolean twoFingerDrag = action == MotionEvent.ACTION_POINTER_DOWN
-                && pointerCount == 2;
+        final boolean twoFingerDrag = (action == MotionEvent.ACTION_POINTER_DOWN
+                && pointerCount == 2) || mActivePointers.size() > 1;
 
         final boolean stylusButtonClickDrag = action == MotionEvent.ACTION_DOWN
                 && (event.isButtonPressed(MotionEvent.BUTTON_STYLUS_PRIMARY)
@@ -1144,6 +1161,7 @@ public class NotificationPanelView extends PanelView implements
 
     private void handleQsDown(MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN
+                && mActivePointers.size() == 1
                 && shouldQuickSettingsIntercept(event.getX(), event.getRawY(), -1)) {
             mQsTracking = true;
             onQsExpansionStarted();
@@ -1198,20 +1216,6 @@ public class NotificationPanelView extends PanelView implements
                 trackMovement(event);
                 break;
 
-            case MotionEvent.ACTION_POINTER_UP:
-                final int upPointer = event.getPointerId(event.getActionIndex());
-                if (mTrackingPointer == upPointer) {
-                    // gesture is ongoing, find a new pointer to track
-                    final int newIndex = event.getPointerId(0) != upPointer ? 0 : 1;
-                    final float newY = event.getY(newIndex);
-                    final float newX = event.getX(newIndex);
-                    mTrackingPointer = event.getPointerId(newIndex);
-                    mInitialHeightOnTouch = mQsExpansionHeight;
-                    mInitialTouchY = newY;
-                    mInitialTouchX = newX;
-                }
-                break;
-
             case MotionEvent.ACTION_MOVE:
                 setQsExpansion(h + mInitialHeightOnTouch);
                 if (h >= getFalsingThreshold()) {
@@ -1238,7 +1242,20 @@ public class NotificationPanelView extends PanelView implements
                     mVelocityTracker.recycle();
                     mVelocityTracker = null;
                 }
+            case MotionEvent.ACTION_POINTER_UP:
+                final int upPointer = event.getPointerId(event.getActionIndex());
+                if (mTrackingPointer == upPointer && mActivePointers.size() > 1) {
+                    // gesture is ongoing, find a new pointer to track
+                    final int newIndex = event.getPointerId(0) != upPointer ? 0 : 1;
+                    final float newY = event.getY(newIndex);
+                    final float newX = event.getX(newIndex);
+                    mTrackingPointer = event.getPointerId(newIndex);
+                    mInitialHeightOnTouch = mQsExpansionHeight;
+                    mInitialTouchY = newY;
+                    mInitialTouchX = newX;
+                }
                 break;
+
         }
     }
 
@@ -1719,6 +1736,22 @@ public class NotificationPanelView extends PanelView implements
         if (mVelocityTracker != null) mVelocityTracker.addMovement(event);
         mLastTouchX = event.getX();
         mLastTouchY = event.getY();
+    }
+
+    private void trackPointers(MotionEvent event) {
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mActivePointers.add(event.getPointerId(event.getActionIndex()));
+                Log.w(TAG, "pointer count now at " + mActivePointers.size());
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_POINTER_UP:
+                mActivePointers.remove(event.getPointerId(event.getActionIndex()));
+                Log.w(TAG, "pointer count now at " + mActivePointers.size());
+                break;
+        }
     }
 
     private void initVelocityTracker() {
@@ -2541,9 +2574,6 @@ public class NotificationPanelView extends PanelView implements
 
         // Hide "No notifications" in QS.
         mNotificationStackScroller.updateEmptyShadeView(mShadeEmpty && !mQsExpanded);
-        if (mStatusBarState == StatusBarState.KEYGUARD) {
-            positionClockAndNotifications();
-        }
     }
 
     public void setQsScrimEnabled(boolean qsScrimEnabled) {
