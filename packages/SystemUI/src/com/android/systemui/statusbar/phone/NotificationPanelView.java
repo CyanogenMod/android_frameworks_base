@@ -39,6 +39,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.RemoteException;
+import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.view.Display;
@@ -83,6 +84,7 @@ import com.android.systemui.statusbar.stack.StackStateAnimator;
 import cyanogenmod.providers.CMSettings;
 
 import java.util.List;
+import java.util.Set;
 
 public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener, ObservableScrollView.Listener,
@@ -170,6 +172,7 @@ public class NotificationPanelView extends PanelView implements
     private int mNotificationsHeaderCollideDistance;
     private int mUnlockMoveDistance;
     private float mEmptyDragAmount;
+    private Set<Integer> mActivePointers;
 
     private Interpolator mFastOutSlowInInterpolator;
     private Interpolator mFastOutLinearInterpolator;
@@ -332,6 +335,7 @@ public class NotificationPanelView extends PanelView implements
         super(context, attrs);
         setWillNotDraw(!DEBUG);
 
+        mActivePointers = new ArraySet<>();
         mSettingsObserver = new SettingsObserver(mHandler);
         mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -923,12 +927,21 @@ public class NotificationPanelView extends PanelView implements
     }
 
     private void initDownStates(MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            mOnlyAffordanceInThisMotion = false;
-            mQsTouchAboveFalsingThreshold = mQsFullyExpanded;
-            mDozingOnDown = isDozing();
-            mCollapsedOnDown = isFullyCollapsed();
-            mListenForHeadsUp = mCollapsedOnDown && mHeadsUpManager.hasPinnedHeadsUp();
+        final int pointerId = event.getPointerId(event.getActionIndex());
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                mActivePointers.add(pointerId);
+
+                mOnlyAffordanceInThisMotion = false;
+                mQsTouchAboveFalsingThreshold = mQsFullyExpanded;
+                mDozingOnDown = isDozing();
+                mCollapsedOnDown = isFullyCollapsed();
+                mListenForHeadsUp = mCollapsedOnDown && mHeadsUpManager.hasPinnedHeadsUp();
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                mActivePointers.remove(pointerId);
+                break;
         }
     }
 
@@ -1078,7 +1091,8 @@ public class NotificationPanelView extends PanelView implements
                 return true;
             }
         }
-        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+        if (mActivePointers.size() <= 1 &&
+                (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP)) {
             mConflictingQsExpansionGesture = false;
         }
         if (action == MotionEvent.ACTION_DOWN && isFullyCollapsed()
@@ -1113,8 +1127,8 @@ public class NotificationPanelView extends PanelView implements
         final int pointerCount = event.getPointerCount();
         final int action = event.getActionMasked();
 
-        final boolean twoFingerDrag = action == MotionEvent.ACTION_POINTER_DOWN
-                && pointerCount == 2;
+        final boolean twoFingerDrag = (action == MotionEvent.ACTION_POINTER_DOWN
+                && pointerCount == 2) || mActivePointers.size() > 1;
 
         final boolean stylusButtonClickDrag = action == MotionEvent.ACTION_DOWN
                 && (event.isButtonPressed(MotionEvent.BUTTON_STYLUS_PRIMARY)
@@ -1807,7 +1821,8 @@ public class NotificationPanelView extends PanelView implements
         if (mQsExpanded) {
             return onHeader || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
         } else {
-            return onHeader;
+            // intercepts initial touch down and not again
+            return onHeader && (y > 0 && yDiff == 0);
         }
     }
 
