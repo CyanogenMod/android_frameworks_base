@@ -94,7 +94,7 @@ public abstract class PanelView extends FrameLayout {
         public void onLayoutChange(View v, int left, int top, int right, int bottom,
                 int oldLeft, int oldTop, int oldRight, int oldBottom) {
             // update expand height
-            if (mHeightAnimator != null && mExpanding && mUpdateExpandOnLayout) {
+            if (mHeightAnimator != null && mExpanding && mUpdateExpandOnLayout && !mJustPeeked) {
                 final int maxPanelHeight = getMaxPanelHeight();
                 final PropertyValuesHolder[] values = mHeightAnimator.getValues();
                 values[0].setFloatValues(maxPanelHeight);

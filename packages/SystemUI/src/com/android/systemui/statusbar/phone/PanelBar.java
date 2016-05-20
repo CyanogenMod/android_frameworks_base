@@ -184,7 +184,7 @@ public abstract class PanelBar extends FrameLayout {
         for (PanelView pv : mPanels) {
             pv.setVisibility(expanded ? View.VISIBLE : View.INVISIBLE);
             // adjust any other panels that may be partially visible
-            if (expanded) {
+            if (expanded && frac > 0) {
                 if (mState == STATE_CLOSED) {
                     go(STATE_OPENING);
                     onPanelPeeked();
