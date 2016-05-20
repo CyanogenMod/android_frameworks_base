@@ -55,6 +55,8 @@ public class BatteryMeterView extends View implements DemoMode,
     public static final String TAG = BatteryMeterView.class.getSimpleName();
     public static final String ACTION_LEVEL_TEST = "com.android.systemui.BATTERY_LEVEL_TEST";
 
+    private static final float DARKNESS_INTENSITY_NOT_SET = -1f;
+
     private final int[] mColors;
 
     protected boolean mShowPercent = true;
@@ -93,6 +95,7 @@ public class BatteryMeterView extends View implements DemoMode,
     protected BatteryTracker mTracker = new BatteryTracker();
     private BatteryMeterDrawable mBatteryMeterDrawable;
     private int mIconTint = Color.WHITE;
+    private float mDarknessIntensisty = DARKNESS_INTENSITY_NOT_SET;
 
     protected class BatteryTracker extends BroadcastReceiver {
         public static final int UNKNOWN_LEVEL = -1;
@@ -361,6 +364,9 @@ public class BatteryMeterView extends View implements DemoMode,
                 mBatteryMeterDrawable.onDispose();
             }
             mBatteryMeterDrawable = createBatteryMeterDrawable(mode);
+            if (mDarknessIntensisty != DARKNESS_INTENSITY_NOT_SET) {
+                setDarkIntensity(mDarknessIntensisty);
+            }
             if (tracker.present) {
                 setVisibility(View.VISIBLE);
                 requestLayout();
@@ -394,6 +400,7 @@ public class BatteryMeterView extends View implements DemoMode,
     }
 
     public void setDarkIntensity(float darkIntensity) {
+        mDarknessIntensisty = darkIntensity;
         if (mBatteryMeterDrawable != null) {
             int backgroundColor = getBackgroundColor(darkIntensity);
             int fillColor = getFillColor(darkIntensity);
@@ -504,7 +511,6 @@ public class BatteryMeterView extends View implements DemoMode,
             } else {
                 mTextGravity = Gravity.CENTER;
             }
-            Log.d(TAG, "mTextGravity=" + mTextGravity);
 
             mTextAndBoltPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             Typeface font = Typeface.create("sans-serif-condensed", Typeface.BOLD);
@@ -544,7 +550,8 @@ public class BatteryMeterView extends View implements DemoMode,
         @Override
         public void setDarkIntensity(int backgroundColor, int fillColor) {
             mIconTint = fillColor;
-            mBoltDrawable.setTint(fillColor);
+            mFrameDrawable.setTint(backgroundColor);
+            mTextAndBoltPaint.setColor(fillColor);
             updateBoltDrawableLayer(mBatteryDrawable, mBoltDrawable);
             invalidate();
         }
