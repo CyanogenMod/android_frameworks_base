@@ -118,7 +118,7 @@ public final class CachedBluetoothDeviceManager {
     public synchronized void clearNonBondedDevices() {
         for (int i = mCachedDevices.size() - 1; i >= 0; i--) {
             CachedBluetoothDevice cachedDevice = mCachedDevices.get(i);
-            if (cachedDevice.getBondState() != BluetoothDevice.BOND_BONDED) {
+            if (cachedDevice.getBondState() == BluetoothDevice.BOND_NONE) {
                 mCachedDevices.remove(i);
             }
         }
