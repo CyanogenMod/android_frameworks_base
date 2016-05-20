@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
 
 #define LOG_TAG "AudioSystem-JNI"
 #include <utils/Log.h>
@@ -860,6 +860,12 @@ static jint convertAudioPortFromNative(JNIEnv *env,
 
     ALOGV("convertAudioPortFromNative id %d role %d type %d name %s",
         nAudioPort->id, nAudioPort->role, nAudioPort->type, nAudioPort->name);
+    ALOGV("convertAudioPortFromNative num_sample_rates %d num_channel_masks %d"
+            " num_formats %d num_gains %d",
+        nAudioPort->num_sample_rates,
+        nAudioPort->num_channel_masks,
+        nAudioPort->num_formats,
+        nAudioPort->num_gains);
 
     jSamplingRates = env->NewIntArray(nAudioPort->num_sample_rates);
     if (jSamplingRates == NULL) {
