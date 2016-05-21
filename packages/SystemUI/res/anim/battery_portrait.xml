@@ -17,6 +17,7 @@
 <objectAnimator
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:propertyName="pathData"
+  android:interpolator="@interpolator/battery_meter_pathdata_interpolator"
   android:valueFrom="@string/battery_portrait_path_empty"
   android:valueTo="@string/battery_portrait_path_full"
   android:valueType="pathType"/>

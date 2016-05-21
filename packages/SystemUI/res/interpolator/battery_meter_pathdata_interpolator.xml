@@ -14,10 +14,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<objectAnimator
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:propertyName="pathData"
-  android:interpolator="@interpolator/battery_meter_pathdata_interpolator"
-  android:valueFrom="@string/battery_landscape_path_empty"
-  android:valueTo="@string/battery_landscape_path_full"
-  android:valueType="pathType"/>
+<pathInterpolator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:controlX1="0"
+    android:controlY1="0.2"
+    android:controlX2="0.33"
+    android:controlY2="0.33"/>
