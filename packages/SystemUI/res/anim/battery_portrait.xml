@@ -16,6 +16,7 @@
 -->
 <objectAnimator
   xmlns:android="http://schemas.android.com/apk/res/android"
+  android:interpolator="@android:interpolator/linear"
   android:propertyName="pathData"
   android:valueFrom="@string/battery_portrait_path_empty"
   android:valueTo="@string/battery_portrait_path_full"
