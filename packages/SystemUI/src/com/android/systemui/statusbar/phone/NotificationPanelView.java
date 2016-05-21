@@ -2541,9 +2541,6 @@ public class NotificationPanelView extends PanelView implements
 
         // Hide "No notifications" in QS.
         mNotificationStackScroller.updateEmptyShadeView(mShadeEmpty && !mQsExpanded);
-        if (mStatusBarState == StatusBarState.KEYGUARD) {
-            positionClockAndNotifications();
-        }
     }
 
     public void setQsScrimEnabled(boolean qsScrimEnabled) {
