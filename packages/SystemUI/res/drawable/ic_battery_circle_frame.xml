@@ -22,7 +22,7 @@
 
     <path
         android:name="frame"
-        android:strokeColor="@color/batterymeter_frame_color"
+        android:strokeColor="#000000"
         android:strokeLineJoin="round"
         android:strokeWidth="3"
         android:pathData="@string/battery_circle_path"/>
