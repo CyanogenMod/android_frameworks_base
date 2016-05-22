@@ -24,8 +24,9 @@
         android:name="mask"
         android:pathData="@string/battery_landscape_clip_path" />
 
+    <!-- Path will be tinted based on light/dark modes -->
     <path
         android:name="frame"
-        android:fillColor="@color/batterymeter_frame_color"
+        android:fillColor="#000000"
         android:pathData="M 1 4 H 25 V 20 H 1 V 4 Z" />
 </vector>
