@@ -5994,16 +5994,17 @@ public class PackageManagerService extends IPackageManager.Stub {
         if ((parseFlags & PackageParser.PARSE_IS_PREBUNDLED_DIR) != 0) {
             synchronized (mPackages) {
                 PackageSetting existingSettings = mSettings.peekPackageLPr(pkg.packageName);
-                boolean isInstalledForUser = (existingSettings != null
-                        && existingSettings.getInstalled(user.getIdentifier()));
-                if (mSettings.wasPrebundledPackageInstalledLPr(user.getIdentifier(),
-                        pkg.packageName) && !isInstalledForUser) {
-                    // The prebundled app was installed at some point for the user and isn't
-                    // currently installed for the user, skip reinstalling it
+
+                if (!mSettings.shouldPrebundledPackageBeInstalledForUserLPr(existingSettings,
+                        user.getIdentifier(), pkg.packageName)) {
+                    // The prebundled app was installed at some point for the owner and isn't
+                    // currently installed for the owner, dont install it for a new user
+                    // OR the prebundled app was installed for the user at some point and isn't
+                    // current installed for the user, so skip reinstalling it
                     throw new PackageManagerException(INSTALL_FAILED_UNINSTALLED_PREBUNDLE,
                             "skip reinstall for " + pkg.packageName);
-                } else if (!mSettings.shouldPrebundledPackageBeInstalled(mContext.getResources(),
-                                pkg.packageName, mCustomResources)) {
+                } else if (!mSettings.shouldPrebundledPackageBeInstalledForRegion(
+                        mContext.getResources(), pkg.packageName, mCustomResources)) {
                     // The prebundled app is not needed for the default mobile country code,
                     // skip installing it
                     throw new PackageManagerException(INSTALL_FAILED_REGION_LOCKED_PREBUNDLE,
@@ -8323,6 +8324,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         int pkgId;
         if ("android".equals(target)) {
             pkgId = Resources.THEME_FRAMEWORK_PKG_ID;
+        } else if ("cyanogenmod.platform".equals(target)) {
+            pkgId = Resources.THEME_CM_PKG_ID;
         } else if (isCommonResources) {
             pkgId = Resources.THEME_COMMON_PKG_ID;
         } else {
@@ -17264,10 +17267,12 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     @Override
-    public boolean isComponentProtected(String callingPackage,
+    public boolean isComponentProtected(String callingPackage, int callingUid,
             ComponentName componentName, int userId) {
         if (DEBUG_PROTECTED) Log.d(TAG, "Checking if component is protected "
-                + componentName.flattenToShortString() + " from calling package " + callingPackage);
+                + componentName.flattenToShortString() + " from calling package " + callingPackage
+                + " and callinguid " + callingUid);
+
         enforceCrossUserPermission(Binder.getCallingUid(), userId, false, false, "set protected");
 
         //Allow managers full access
@@ -17288,8 +17293,24 @@ public class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
 
+        //If this component is launched from a validation component, allow it.
         if (TextUtils.equals(PROTECTED_APPS_TARGET_VALIDATION_COMPONENT,
-                componentName.flattenToString())) {
+                componentName.flattenToString()) && callingUid == Process.SYSTEM_UID) {
+            return false;
+        }
+
+        //If this component is launched from the system or a uid of a protected component, allow it.
+        boolean fromProtectedComponentUid = false;
+        for (String protectedComponentManager : protectedComponentManagers) {
+            if (callingUid == getPackageUid(protectedComponentManager, userId)) {
+                fromProtectedComponentUid = true;
+            }
+        }
+
+        if (callingPackage == null && (callingUid == Process.SYSTEM_UID
+                || fromProtectedComponentUid)) {
+            if (DEBUG_PROTECTED) Log.d(TAG, "Calling package is android and from system or " +
+                    "protected manager, allow");
             return false;
         }
 

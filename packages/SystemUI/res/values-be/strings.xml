@@ -165,6 +165,7 @@
   <!-- Content description of the data connection with no SIM for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the bluetooth tethering icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the airplane mode icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_airplane_mode">Рэжым лёту.</string>
   <!-- Content description of the no sim icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the carrier network changing icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -220,7 +221,9 @@
   <!-- Content description of zen mode time condition plus button (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of zen mode time condition minus button (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the flashlight tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_flashlight_off">Ліхтарык выключаны.</string>
   <!-- Content description of the flashlight tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_flashlight_on">Ліхтарык уключаны.</string>
   <!-- Announcement made when the flashlight state changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when the flashlight state changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when the color inversion state changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -302,8 +305,10 @@
   <!-- QuickSettings: Control panel: Label for connecting device. [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Tethering. [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Hotspot. [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_hotspot_label">Кропка доступу</string>
   <!-- QuickSettings: Notifications [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Flashlight [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_flashlight_label">Ліхтарык</string>
   <!-- QuickSettings: Cellular detail panel title [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cellular detail panel, data usage title [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cellular detail panel, remaining data title [CHAR LIMIT=NONE] -->
@@ -449,6 +454,7 @@
   <!-- Alarm template for far alarms [CHAR LIMIT=25] -->
   <!-- Accessibility label for Quick Settings detail screens [CHAR LIMIT=NONE] -->
   <!-- Accessibility label for hotspot icon [CHAR LIMIT=NONE] -->
+  <string name="accessibility_status_bar_hotspot">Кропка доступу</string>
   <!-- Accessibility label for managed profile icon (not shown on screen) [CHAR LIMIT=NONE] -->
   <!-- Title of warning when entering System UI tuner for first time [CHAR LIMIT=NONE] -->
   <!-- Warning for users entering the System UI tuner for the first time [CHAR LIMIT=NONE]-->

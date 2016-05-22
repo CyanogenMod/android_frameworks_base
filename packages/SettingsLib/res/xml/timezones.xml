@@ -47,6 +47,7 @@
     <timezone id="Africa/Harare"></timezone>
     <timezone id="Asia/Baghdad"></timezone>
     <timezone id="Europe/Moscow"></timezone>
+    <timezone id="Europe/Kiev" localizeInPicker="false"></timezone>
     <timezone id="Asia/Kuwait"></timezone>
     <timezone id="Africa/Nairobi"></timezone>
     <timezone id="Asia/Tehran"></timezone>

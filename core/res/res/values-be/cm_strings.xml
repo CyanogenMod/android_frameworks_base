@@ -135,6 +135,7 @@
   <string name="app_ops_start_at_bootup">прызначыць запуск пры ўлучэнні прылады</string>
   <string name="app_ops_toast_window">адлюстроўваць усплывальныя паведамленні</string>
   <string name="app_ops_toggle_bluetooth">пераключыць стан Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">пераключыць стан сотавай сеткі</string>
   <string name="app_ops_toggle_nfc">пераключыць стан модуля NFC</string>
   <string name="app_ops_toggle_wifi">пераключыць стан Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">атрымаць кіраванне гучнасцю будзільніка</string>
@@ -178,6 +179,8 @@
   <string name="notify_package_component_protected_title">Запуск дадатку забаронены</string>
   <string name="notify_package_component_protected_text">Дадатак <xliff:g id="app_name">%1$s</xliff:g> заблакаваны на запуск. Націсні, каб увесці паролль і запусціць дадатак.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Батарэя цалкам зараджана</string>
+  <string name="notify_battery_fully_charged_text">Адлучы зарадную прыладу каб павялічыць тэрмін жыцця батарэі.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">Абнуленне статыстыкі батарэі</string>
@@ -185,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Дазволіць дадатку чысціць дадзеныя пра выкарыстанне акумулятарнай батарэі прылады.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM-картка змянілася</string>
+  <string name="uicc_hot_swapped_event_text">Націсні, каб усталяваць параметры па змаўчанні</string>
 </resources>

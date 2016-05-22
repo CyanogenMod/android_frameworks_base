@@ -61,6 +61,8 @@ interface ITelephonyRegistry {
     void notifyCellInfo(in List<CellInfo> cellInfo);
     void notifyPreciseCallState(int ringingCallState, int foregroundCallState,
             int backgroundCallState);
+    void notifyPreciseCallStateForSubscriber(int subId, int ringingCallState,
+            int foregroundCallState, int backgroundCallState);
     void notifyDisconnectCause(int disconnectCause, int preciseDisconnectCause);
     void notifyPreciseDataConnectionFailed(String reason, String apnType, String apn,
             String failCause);
