@@ -123,9 +123,9 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
 
         boolean blurSupported = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_ui_blur_enabled);
-        mKeyguardBlurEnabled = CMSettings.Secure.getInt(mContext.getContentResolver(),
-                CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, blurSupported ? 1 : 0) == 1;
         if (blurSupported) {
+            mKeyguardBlurEnabled = CMSettings.Secure.getInt(mContext.getContentResolver(),
+                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, blurSupported ? 1 : 0) == 1;
             Display display = mWindowManager.getDefaultDisplay();
             Point xy = new Point();
             display.getRealSize(xy);
