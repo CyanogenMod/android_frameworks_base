@@ -60,6 +60,11 @@ public class AppOpsPolicy {
 
     public static final int CONTROL_UNKNOWN = 2;
 
+    // Rate limiting thresholds for ask operations
+    public static final int RATE_LIMIT_OP_COUNT = 3;
+    public static final int RATE_LIMIT_OPS_TOTAL_PKG_COUNT = 4;
+    public static final int RATE_LIMIT_OP_DELAY_CEILING = 10;
+
     public static int stringToControl(String show) {
         if ("true".equalsIgnoreCase(show)) {
             return CONTROL_SHOW;
