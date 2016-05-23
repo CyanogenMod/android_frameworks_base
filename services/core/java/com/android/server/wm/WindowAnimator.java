@@ -102,6 +102,7 @@ public class WindowAnimator {
     /** Use one animation for all entering activities after keyguard is dismissed. */
     Animation mPostKeyguardExitAnimation;
 
+    private boolean mBlurSupported;
     private boolean mKeyguardBlurEnabled;
 
     // forceHiding states.
@@ -124,10 +125,10 @@ public class WindowAnimator {
         mContext = service.mContext;
         mPolicy = service.mPolicy;
 
-        boolean blurUiEnabled = mContext.getResources().getBoolean(
+        mBlurSupported = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_ui_blur_enabled);
 
-        if (blurUiEnabled) {
+        if (mBlurSupported) {
             SettingsObserver observer = new SettingsObserver(new Handler());
             observer.observe(mContext);
         }
@@ -232,7 +233,7 @@ public class WindowAnimator {
 
         // Only hide windows if the keyguard is active and not animating away.
         boolean keyguardOn = mPolicy.isKeyguardShowingOrOccluded()
-                && (mForceHiding != KEYGUARD_ANIMATING_OUT && !mKeyguardBlurEnabled);
+                && (mForceHiding != KEYGUARD_ANIMATING_OUT && !mBlurSupported && !mKeyguardBlurEnabled);
         return keyguardOn && !allowWhenLocked && (win.getDisplayId() == Display.DEFAULT_DISPLAY);
     }
 
@@ -241,7 +242,7 @@ public class WindowAnimator {
 
         final WindowList windows = mService.getWindowListLocked(displayId);
 
-        if (mKeyguardGoingAway && !mKeyguardBlurEnabled) {
+        if (mKeyguardGoingAway && !mBlurSupported && !mKeyguardBlurEnabled) {
             for (int i = windows.size() - 1; i >= 0; i--) {
                 WindowState win = windows.get(i);
                 if (!mPolicy.isKeyguardHostWindow(win.mAttrs)) {
