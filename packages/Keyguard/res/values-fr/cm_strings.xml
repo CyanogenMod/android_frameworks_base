@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">La carte SIM/RUIM possède un verrouillage personnel</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"État"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Masquer</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Emplacement <xliff:g id="number">%d</xliff:g> : Nouvelle carte SIM\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Carte SIM incorrecte.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Entrez le code PIN de la carte SIM, il vous reste <xliff:g id="number">%d</xliff:g> tentative avant d\'avoir à contacter votre opérateur pour déverrouiller votre appareil.</item>
     <item quantity="other">Entrez le code PIN de la carte SIM, il vous reste <xliff:g id="number">%d</xliff:g> tentatives.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">Votre carte SIM est désormais désactivée. Entrez le code PUK pour continuer. Il vous reste <xliff:g id="number">%d</xliff:g> tentative avant que la carte SIM devienne complètement inutilisable. Contactez votre opérateur pour plus de détails.</item>
     <item quantity="other">Votre carte SIM est désormais désactivée. Entrez le code PUK pour continuer. Il vous reste <xliff:g id="number">%d</xliff:g> tentatives avant que votre carte SIM soit définitivement inutilisable. Contactez votre opérateur pour plus de détails.</item>

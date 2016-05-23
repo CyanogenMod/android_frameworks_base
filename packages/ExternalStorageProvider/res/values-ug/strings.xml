@@ -15,7 +15,10 @@
      limitations under the License.
 -->
 <resources>
+  <!-- Title of the external storage application [CHAR LIMIT=32] -->
   <string name="app_label">سىرتقى ساقلىغۇچ</string>
+  <!-- Title for documents backend that offers internal storage. [CHAR LIMIT=24] -->
   <string name="root_internal_storage">ئىچىدىكى ساقلىغۇچ</string>
+  <!-- Title for documents backend that offers documents. [CHAR LIMIT=24] -->
   <string name="root_documents">پۈتۈكلەر</string>
 </resources>

@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">La SIM/RUIM té un bloqueig Personal</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Estat"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Omet</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Ranura <xliff:g id="number">%d</xliff:g>: Nova targeta SIM\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Targeta invàlida.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Introdueix el PIN de la SIM, tens <xliff:g id="number">%d</xliff:g> intent restant abans que hagis de contactar amb el teu operador per desbloquejar el teu dispositiu.</item>
     <item quantity="other">Introdueix el PIN de la SIM, tens <xliff:g id="number">%d</xliff:g> intents restants.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">La SIM ara està deshabilitada. Introdueix el codi PUK per continuar. Tens <xliff:g id="number">%d</xliff:g> intent restant abans que la SIM esdevingui inutilitzada permanentment. Contacta amb el teu operador per a més detalls.</item>
     <item quantity="other">La SIM ara està deshabilitada. Introdueix el codi PUK per continuar. Tens <xliff:g id="number">%d</xliff:g> intents restants abans que la SIM esdevingui inutilitzada permanentment. Contacta amb el teu operador per a més detalls.</item>

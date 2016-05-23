@@ -15,7 +15,9 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Dialog title to identify the request from a VPN application. [CHAR LIMIT=60] -->
   <string name="prompt">Запыт на злучэнне</string>
+  <!-- Dialog message to warn about the risk of using a VPN application. [CHAR LIMIT=NONE] -->
   <string name="warning"><xliff:g id="app">%s</xliff:g>хоча ўсталяваць злучэнне VPN
         гэта дазваляе яму кантраляваць сеткавы трафік. Працягвайце, калі вы давяраеце крыніцы.
         <![CDATA[
@@ -24,13 +26,21 @@
         <img src="vpn_icon" />
         ]]>адлюстроўваецца ў верхняй частцы экрана, калі VPN-актыўны.
     </string>
+  <!-- Dialog title for built-in VPN. [CHAR LIMIT=40]  -->
   <string name="legacy_title">VPN падключаны</string>
+  <!-- Button label to configure the current VPN session. [CHAR LIMIT=20] -->
   <string name="configure">Налады</string>
+  <!-- Button label to disconnect the current VPN session. [CHAR LIMIT=20] -->
   <string name="disconnect">Адключыцца</string>
+  <!-- Label for the name of the current VPN session. [CHAR LIMIT=20] -->
   <string name="session">Сэсія:</string>
+  <!-- Label for the duration of the current VPN session. [CHAR LIMIT=20] -->
   <string name="duration">Працягласць:</string>
+  <!-- Label for the network usage of data transmitted over VPN. [CHAR LIMIT=20] -->
   <string name="data_transmitted">Дасланыя:</string>
+  <!-- Label for the network usage of data received over VPN. [CHAR LIMIT=20] -->
   <string name="data_received">Атрымана:</string>
+  <!-- Formatted string for the network usage over VPN. [CHAR LIMIT=40] -->
   <string name="data_value_format">
         <xliff:g id="number">%1$s</xliff:g> байт /
         <xliff:g id="number">%2$s</xliff:g> пакетаў

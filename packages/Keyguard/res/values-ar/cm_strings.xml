@@ -17,11 +17,17 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM مؤمن للإعدادات المخصصة</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"الحالة"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">استبعاد</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">فتحة <xliff:g id="number">%d</xliff:g>: بطاقة SIM جديدة \u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">بطاقة غير صالحة.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="zero">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
     <item quantity="one">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> محاولة متبقية قبل أن يجب عليك الاتصال بشركة الجوال لإلغاء تأمين جهازك.</item>
@@ -30,6 +36,7 @@
     <item quantity="many">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> من المحاولات المتبقية.</item>
     <item quantity="other">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="zero">بطاقة الشريحة غير ممكنة. أدخل رمز PUK للاستمرار. تبقي لديك <xliff:g id="number">%d</xliff:g> من المحاولات قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>
     <item quantity="one">بطاقة الشريحة غير ممكنة. أدخل رمز PUK للاستمرار. لديك <xliff:g id="number">%d</xliff:g> محاولة متبقية قبل أن تصبح بطاقة الشريحة غير قابلة للاستخدام بشكل دائم. اتصل بشركة الجوال للحصول على التفاصيل.</item>

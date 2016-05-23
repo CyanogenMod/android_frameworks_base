@@ -17,56 +17,100 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- The title of the profile picker dialog. -->
   <string name="profile_picker_title">Profiloj</string>
+  <!-- label for item that opens the profile choosing dialog -->
   <string name="global_action_choose_profile">Profilo</string>
+  <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Nenio</string>
+  <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Ekrankopio</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">Alvenis protektita SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_receiveProtectedSms">Permesi al la aplikaĵo ricevi alvenintan protektitan SMS.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyProtectedSmsList">ŝanĝi liston de protektitaj SMS</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyProtectedSmsList">Permesi al la aplikaĵo ŝanĝi la liston de protektitaj SMS.</string>
+  <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgrouplab_security">Sekureco</string>
+  <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permgroupdesc_security">Permesoj rilataj al aparata sekureca informo.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessThemeService">aliri la servon pri etosoj</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessThemeService">Permesas al la aplikaĵo aliri la servon pri etosoj. Ĝi neniam estu bezonata por normalaj aplikaĵoj.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readThemes">legi informon de via etoso</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readThemesDesc">Permesas al la aplikaĵo legi viajn etosojn kaj eltrovi kiun etoson vi aplikis.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_writeThemes">ŝanĝi viajn etosojn</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeThemesDesc">Permesas al la aplikaĵo enmeti novajn etosojn kaj ŝanĝi kiun etoson vi aplikis.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneBlacklist">legi telefonan nigran liston</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readPhoneBlacklist">Permesas al aplikaĵo lefi informon pri telefon-numeroj, kiuj estas blokitaj por alvenantaj alvokoj aŭ mesaĝoj.</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_changePhoneBlacklist">ŝanĝi telefonan nigran liston</string>
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_changePhoneBlacklist">Permesas al aplikaĵo ŝanĝi telefon-numerojn, kiuj estas blokitaj por alvenintaj alvokoj aŭ mesaĝoj.</string>
+  <!-- Privacy Guard -->
   <string name="permlab_changePrivacyGuardState">ŝalti aŭ malsălti protektadon de datumoj</string>
   <string name="permdesc_changePrivacyGuardState">Permesas al la aplikaĵo ŝanĝi ĉu alia aplikaĵo funkcias kun protektado de datumoj. Kiam aplikaĵo funkcias kun protektado de datumoj, ĝi ne rajtos aliri al personaj datumoj kiel kontaktuloj, protokoloj de alvokoj, aŭ mesaĝoj.</string>
   <string name="privacy_guard_notification">Protektado de datumoj aktiva</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne povos aliri personajn datumojn</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">difini la ŝlosan ekranfonon</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Permesas al aplikaĵo ŝanĝi la ŝlosan fonekranon.</string>
   <string name="privacy_guard_dialog_title">Protektado de datumoj</string>
   <string name="privacy_guard_dialog_summary"><xliff:g id="app">%1$s</xliff:g> ŝatus <xliff:g id="op">%2$s</xliff:g>.</string>
+  <!-- label for item that reboots the phone in phone options dialog -->
   <string name="global_action_reboot">Relanĉi</string>
+  <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Nuna</string>
+  <!-- Reboot menu -->
+  <!-- Button to reboot the phone, within the Reboot Options dialog -->
   <string name="reboot_reboot">Relanĉi</string>
+  <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Riparado</string>
+  <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
   <string name="reboot_bootloader">Praŝargilo</string>
+  <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
   <string name="reboot_download">Elŝuti</string>
+  <!-- Button to soft reboot the device, within the Reboot Options dialog -->
   <string name="reboot_soft">Varma relanĉado</string>
+  <!-- Title of dialog to confirm rebooting. -->
   <string name="reboot_title">Relanĉado</string>
+  <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
+         be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">Via tabulo relanĉiĝos.</string>
   <string name="reboot_confirm" product="default">Via telefono relanĉiĝos.</string>
+  <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">Relanĉado\u2026</string>
+  <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplikaĵo mortigita</string>
+  <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">reta ADB ŝaltita</string>
+  <!-- ADB over USB and network notification -->
   <string name="adb_both_active_notification_title">ADB sur USB &amp; reto aktiva</string>
+  <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Tuŝeti por malŝalti sencimigon.</string>
+  <!-- USB_PREFERENCES: Notification for when no USB options chosen.  This is the title -->
   <string name="usb_choose_notification_title">Tuŝetu por elekti USB opciojn.</string>
+  <!-- ADB custom tile -->
   <string name="adb_active_custom_tile">ADB - <xliff:g id="adb_type" example="USB">%1$s</xliff:g></string>
   <string name="adb_active_custom_tile_both">USB &amp; reto</string>
   <string name="adb_active_custom_tile_usb">USB</string>
   <string name="adb_active_custom_tile_net">Reto</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_interceptPackageLaunch">interkapti lanĉadon de aplikaĵo</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptPackageLaunch">Permesas aplikaĵon interkapti lanĉadon de aliaj aplikaĵoj</string>
+  <!-- App ops requests -->
   <string name="app_ops_access_camera">aliri al fotilo</string>
   <string name="app_ops_access_location">aliri al via loko</string>
   <string name="app_ops_access_notifications">legi viajn atentigojn</string>
@@ -119,34 +163,55 @@
   <string name="app_ops_use_voice_volume">kontroli laŭtecon de voĉaj alvokoj</string>
   <string name="app_ops_write_mms">skribi MMS-mesaĝon</string>
   <string name="app_ops_write_sms">skribi SMS-mesaĝon</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Nevalida Karto.</string>
+  <!-- Shown in the lock screen to tell the user that phone is in airplane mode-->
   <string name="lockscreen_airplane_mode_on">Aviadila Reĝimo</string>
+  <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in CHARGING mode.  This is the title -->
   <string name="usb_charging_notification_title">Konektita en sârĝanta reĝimo</string>
+  <!-- Shown when the device is tethered -->
   <string name="tethered_notification_no_device_message">Neniu konektata aparato</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> konektita aparato</string>
   <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> konektitaj aparatoj</string>
+  <!-- Text for progress dialog while formatting SD card [CHAR LIMIT=NONE] -->
   <string name="progress_nomediapresent" product="default">Neniu demetebla datumportilo ĉeestas\u2026</string>
+  <!-- Storage description for UICC storage. [CHAR LIMIT=NONE] -->
   <string name="storage_uicc">memorilo de UICC</string>
+  <!-- Carrier Name -->
   <string name="China_Mobile">China Mobile</string>
   <string name="China_Unicom">China Unicom</string>
   <string name="China_Telecom">China Telecom</string>
+  <!-- Text of the checkbox for the permission confirmation dialog to remember the user's choice. [CHAR LIMIT=40] -->
   <string name="permission_remember_choice">Memori mian elekton</string>
+  <!-- Default wi-fi hotspot ssid -->
+  <!-- Default wi-fi hotspot pass -->
+  <!-- Default wi-fi direct name -->
+  <!-- Performance profile modes -->
   <string name="perf_profile_pwrsv">Ŝparado de energio</string>
   <string name="perf_profile_bal">Meza</string>
   <string name="perf_profile_perf">Rendimento</string>
+  <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Instalado de etoso fiaskis</string>
   <string name="theme_install_error_message">instalado de %s fiaskis</string>
   <string name="theme_reset_notification_title">Restartigi etoson</string>
   <string name="theme_reset_notification_body">La sistema etoso estis restarigita pro multaj kolapsoj de la aplikaĵo.</string>
+  <!-- stylus gestures support -->
   <string name="stylus_app_not_installed">%s ne estas instalita</string>
   <string name="permlab_interceptSmsSent">interkapti elitantajn SMS-ojn</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_interceptSmsSent">Permesas al la aplikaĵo interkapti elirantan SMS-on. Fiaj aplikaĵoj povus uzi tion por malpermesi eliranajn SMS-mesaĝojn.</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessTorchService">aliri al la lampa servo</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessTorchService">Permesas al aplikaĵo aliri al lampa servo. Tio devus neniam esti bezonata por normalaj aplikaĵoj.</string>
   <string name="permlab_preventpower">anstataŭi (mal)ŝaltan klavon</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_preventpower">Permesas aplikaĵon anstataŭi (mal)ŝaltan klavon.</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
   <string name="usb_extmedia_format_message">Ĉiuj datumoj en via USB-memorilo (sub vojo \'%1$s\')  estos forviŝitaj. Tiu ago ne povos esti nuligita!</string>
+  <!-- See EXTMEDIA_FORMAT.   This is the message. -->
   <string name="sd_extmedia_format_message">Ĉiuj datumoj en via karto (sub vojo \'%1$s\')  estos forviŝitaj. Tiu ago ne povos esti nuligita!</string>
+  <!-- Strings for ExternalStorageFormatter service (SD card). -->
   <string name="sd_progress_unmounting">Malalkroĉado de la SD-karto\u2026</string>
   <string name="sd_progress_erasing">Forviŝado de la SD-karto\u2026</string>
   <string name="sd_format_error">Ne sukcesis forviŝi SD-karton.</string>
@@ -154,6 +219,7 @@
   <string name="sd_media_checking">Kontrolado de la SD-karto.</string>
   <string name="sd_media_removed">La SD-karto estas forigita.</string>
   <string name="sd_media_shared">La SD-karto nun estas uzata de komputilo.</string>
+  <!-- Strings for ExternalStorageFormatter service (USB storage). -->
   <string name="usb_progress_unmounting">Malalkroĉado de la USB-memorilo\u2026</string>
   <string name="usb_progress_erasing">Forviŝado de USB-memorilo\u2026</string>
   <string name="usb_format_error">Ne sukcesis forviŝi la USB-memorilon.</string>
@@ -161,6 +227,7 @@
   <string name="usb_media_checking">USB-memorilo estas kontrolata.</string>
   <string name="usb_media_removed">USB-memorilo estis forigita.</string>
   <string name="usb_media_shared">USB-memorilo nun estas uzata de komputilo.</string>
+  <!-- SD card storage notification -->
   <string name="sd_ext_media_checking_notification_title">Pretigado de la SD-karto</string>
   <string name="sd_ext_media_checking_notification_message">Kontrolado de eraroj en la SD-karto.</string>
   <string name="sd_ext_media_nofs_notification_title">Malplena SD-karto</string>
@@ -173,6 +240,7 @@
   <string name="sd_ext_media_safe_unmount_notification_message">Vi povas sekure forigi la SD-karton.</string>
   <string name="sd_ext_media_nomedia_notification_title">SD-memorilo forigita</string>
   <string name="sd_ext_media_nomedia_notification_message">SD-karto forigita. Enmetu novan.</string>
+  <!-- USB storage notification -->
   <string name="usb_ext_media_checking_notification_title">Pretigado de la USB-memorilo</string>
   <string name="usb_ext_media_checking_notification_message">Kontrolado de eraroj en USB-memorilo.</string>
   <string name="usb_ext_media_nofs_notification_title">Malplena USB-memorilo</string>
@@ -185,6 +253,7 @@
   <string name="usb_ext_media_safe_unmount_notification_message">Vi povas sekura forigi la USB-memorilon.</string>
   <string name="usb_ext_media_nomedia_notification_title">Forigita USB-memorilon</string>
   <string name="usb_ext_media_nomedia_notification_message">USB memorilo forigita. Enmetu novan memorilon.</string>
+  <!-- LiveDisplay strings -->
   <string name="live_display_auto">Aŭtomata</string>
   <string name="live_display_auto_summary">Aŭtomate alĝustigi kolortemperaturon de la ekrano post sunsubiro kaj suniĝo</string>
   <string name="live_display_off">For</string>
@@ -196,11 +265,27 @@
   <string name="live_display_outdoor">Ekstere (brila suno)</string>
   <string name="live_display_outdoor_summary">Uzi nur eksterajn parametrojn</string>
   <string name="live_display_hint">LiveDisplay povas helpi vin malgrandigi okulo-streĉon nokte. Alklaku tie por provi!</string>
+  <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Por malŝlosi tiun ekranon, tuŝetu kaj tenu la Reen butonon.</string>
+  <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Poŝlampo ŝaltita</string>
   <string name="quick_settings_tile_flashlight_not_summary">Tuŝetu por malŝalti</string>
+  <!-- Storage description for the SD card on the dock -->
   <string name="storage_sd_dock_card">Doko SD-karto</string>
+  <!-- FINGERPRINT -->
+  <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Fingrospuro <xliff:g id="number">%d</xliff:g></string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessFingerprintService">Aliri al fingrospura servo</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Permesi al aplikaĵo aliri al fingrospura servo. Tiu aplikaĵo povos aldoni, forigi, alinomi kaj rajtigi fingrospurojn</string>
+  <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
+         whether they want to allow the application to do this. -->
+  <!-- Zen mode buttons -->
+  <!-- Wifi Hotspot disabled due to subscription change -->
+  <!-- WiFi turn off notification action text -->
+  <!-- Third party keyguard permission label -->
+  <!-- Third party keyguard permission description -->
 </resources>

@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM on Perso lukustatud</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Olek"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Katkesta</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Pesa <xliff:g id="number">%d</xliff:g>: Uus SIM kaart\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Kehtetu kaart.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Sisesta SIM kaardi PIN kood, sul on <xliff:g id="number">%d</xliff:g> katse jäänud, enne kui pead kontakteeruma oma operaatoriga seadme lahtilukustamiseks.</item>
     <item quantity="other">Sisesta SIM kaardi PIN kood, sul on <xliff:g id="number">%d</xliff:g> katset jäänud.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">SIM on nüüd välja lülitatud. Sisesta PUK kood et jätkata. Sul on <xliff:g id="number">%d</xliff:g> katse jäänud, enne kui SIM kaart muutub püsivalt kasutuskõlbmatuks. Pöörduge oma operaatori poole lisainfo saamiseks.</item>
     <item quantity="other">SIM on nüüd välja lülitatud. Sisesta PUK kood et jätkata. Sul on <xliff:g id="number">%d</xliff:g> katset jäänud, enne kui SIM kaart muutub püsivalt kasutuskõlbmatuks. Pöörduge oma operaatori poole lisainfo saamiseks.</item>

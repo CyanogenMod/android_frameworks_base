@@ -15,12 +15,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Dialog title to identify the request from a VPN application. [CHAR LIMIT=60] -->
+  <!-- Dialog message to warn about the risk of using a VPN application. [CHAR LIMIT=NONE] -->
+  <!-- Dialog title for built-in VPN. [CHAR LIMIT=40]  -->
   <string name="legacy_title">VPN باغلاندى</string>
+  <!-- Button label to configure the current VPN session. [CHAR LIMIT=20] -->
   <string name="configure">سەپلىمە</string>
+  <!-- Button label to disconnect the current VPN session. [CHAR LIMIT=20] -->
   <string name="disconnect">ئۈز</string>
+  <!-- Label for the name of the current VPN session. [CHAR LIMIT=20] -->
   <string name="session">سۆزلىشىش</string>
+  <!-- Label for the duration of the current VPN session. [CHAR LIMIT=20] -->
   <string name="duration">داۋاملىشىش ۋاقتى:</string>
+  <!-- Label for the network usage of data transmitted over VPN. [CHAR LIMIT=20] -->
   <string name="data_transmitted">ئەۋەتىلگىنى:</string>
+  <!-- Label for the network usage of data received over VPN. [CHAR LIMIT=20] -->
   <string name="data_received">تاپشۇرۇۋالغىنى:</string>
+  <!-- Formatted string for the network usage over VPN. [CHAR LIMIT=40] -->
   <string name="data_value_format"><xliff:g id="NUMBER_0">%1$s</xliff:g> بايت/<xliff:g id="NUMBER_1">%2$s</xliff:g> بوغچا</string>
 </resources>

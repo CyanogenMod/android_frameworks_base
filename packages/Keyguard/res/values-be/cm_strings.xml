@@ -17,16 +17,23 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM заблакаваная аператарам</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Радок стану"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Адхіліць</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Слот <xliff:g id="number">%d</xliff:g>: Новая SIM-картка\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Памылка карты.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Увядзіце PIN-код. У вас засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як вам давядзецца звярнуцца да аператара для разблакавання.</item>
     <item quantity="few">Увядзіце PIN-код. У вас засталося <xliff:g id="number">%d</xliff:g> спробаў перад тым, як вам давядзецца звярнуцца да аператара для разблакавання.</item>
     <item quantity="other">Увядзіце PIN-код. У вас засталося <xliff:g id="number">%d</xliff:g> спробаў перад тым, як вам давядзецца звярнуцца да аператара для разблакавання.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">SIM-картка заблакаваная. Увядзіце PUK-код для працягу. У вас ёсць <xliff:g id="number">%d</xliff:g> спроба перад тым, як SIM-картка будзе заблакаваная назаўжды. Звярніцеся да свайго аператара за падрабязнасцямі.</item>
     <item quantity="few">SIM-картка заблакаваная. Увядзіце PUK-код для працягу. У вас ёсць <xliff:g id="number">%d</xliff:g> спроба перад тым, як SIM-картка будзе заблакаваная назаўжды. Звярніцеся да свайго аператара за падрабязнасцямі.</item>

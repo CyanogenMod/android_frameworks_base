@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM is Perso-vergrendeld</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Status"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Sluiten</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">SIM <xliff:g id="number">%d</xliff:g>: Nieuwe simkaart\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Ongeldige simkaart.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">SIM-PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat u contact moet opnemen met uw provider om uw apparaat te ontgrendelen.</item>
     <item quantity="other">SIM-PIN invoeren, u heeft <xliff:g id="number">%d</xliff:g> resterende pogingen.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende poging voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>
     <item quantity="other">SIM is nu uitgeschakeld. Pukcode invoeren om door te gaan. U heeft <xliff:g id="number">%d</xliff:g> resterende pogingen voordat uw SIM permanent onbruikbaar wordt. Neem contact op met uw provider voor meer informatie.</item>

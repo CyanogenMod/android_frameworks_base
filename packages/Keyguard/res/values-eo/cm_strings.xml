@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">La SIM/RUIM-karto havas personan ŝloson</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Stato"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Rezigni</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Kartingo <xliff:g id="number">%d</xliff:g>: Nova SIM-karto\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Nevalida karto.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Tajpu la PIN-kodon de la SIM-karto. Vi havas <xliff:g id="number">%d</xliff:g> restantan provon antaŭ ol vi devos kontakti vian provizanton por malŝlosi vian aparaton.</item>
     <item quantity="other">Tajpu la PIN-kodon de la SIM-karto. Vi havas <xliff:g id="number">%d</xliff:g> restantajn provojn antaŭ ol vi devos kontakti vian provizanton por malŝlosi vian aparaton.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">Sim nun estas malŝaltita. Tajpu la PUK-kodon por daŭrigi. Vi havas <xliff:g id="number">%d</xliff:g> restantan provon antaŭ ol SIM iĝos ĉiame neuzebla. Kontaktu vian provizanton por pli da detaloj.</item>
     <item quantity="other">Sim nun estas malŝaltita. Tajpu la PUK-kodon por daŭrigi. Vi havas <xliff:g id="number">%d</xliff:g> restantajn provojn antaŭ ol SIM iĝos ĉiame neuzebla. Kontaktu vian provizanton por pli da detaloj.</item>

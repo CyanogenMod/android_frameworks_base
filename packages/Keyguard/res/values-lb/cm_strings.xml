@@ -17,15 +17,22 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM huet eng personaliséiert Spärung</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Status"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Verwerfen</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Schlitz <xliff:g id="number">%d</xliff:g>: Nei SIM-Kaart\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Ongëlteg Kaart.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">SIM-PIN aginn. Du hues nach <xliff:g id="number">%d</xliff:g> Versuch ier s de däi Provider muss kontaktéieren, fir den Apparat z\'entspären.</item>
     <item quantity="other">SIM-PIN aginn. Du hues nach <xliff:g id="number">%d</xliff:g> Versich.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">D\'SIM ass elo desaktivéiert. Gëff de PUK-Code a fir weiderzemaachen. Du hues nach <xliff:g id="number">%d</xliff:g> Versuch iwwreg ier d\'SIM definitiv onbenotzbar gëtt. Kontaktéiert däi Provider fir weider Detailer.</item>
     <item quantity="other">D\'SIM ass elo desaktivéiert. Gëff de PUK-Code a fir weiderzemaachen. Du hues nach <xliff:g id="number">%d</xliff:g> Versich iwwreg ier d\'SIM definitiv onbenotzbar gëtt. Kontaktéiert däi Provider fir weider Detailer.</item>
