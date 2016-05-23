@@ -27,9 +27,9 @@
   <string name="advanced_dev_option_force_stop">強制停止</string>
   <string name="advanced_dev_option_uninstall">アンインストール</string>
   <!-- Content description of the mobile data tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_data_off">データ通信はOFFです。</string>
+  <string name="accessibility_quick_settings_data_off">モバイルデータはOFFです。</string>
   <!-- Content description of the mobile data tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_data_on">データ通信はONです。</string>
+  <string name="accessibility_quick_settings_data_on">モバイルデータはONです。</string>
   <!-- Content description of the roaming tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_roaming_off">ローミングはOFFです。</string>
   <!-- Content description of the roaming tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -193,14 +193,14 @@
   <string name="accessibility_dpad_left">カーソルを左へ</string>
   <string name="accessibility_dpad_right">カーソルを右へ</string>
   <!-- QuickSettings: Mobile data [CHAR LIMIT=NONE] -->
-  <string name="quick_settings_mobile_data_label">データ通信</string>
+  <string name="quick_settings_mobile_data_label">モバイルデータ</string>
   <!-- QuickSettings: Roaming [CHAR LIMIT=NONE] -->
   <string name="quick_settings_roaming_label">ローミング</string>
   <!-- QuickSettings: Apn switch button label [CHAR LIMIT=NONE] -->
   <string name="quick_settings_apn_switch_label">APNの切り替え</string>
   <!-- QuickSettings: Dds [CHAR LIMIT=NONE] -->
-  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g>のデータ通信</string>
-  <string name="quick_settings_data_off">データ通信OFF</string>
+  <string name="quick_settings_dds_sub">SIM <xliff:g id="number">%d</xliff:g>のモバイルデータ</string>
+  <string name="quick_settings_data_off">モバイルデータOFF</string>
   <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_detail_title">位置情報モード</string>
   <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->

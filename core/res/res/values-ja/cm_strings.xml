@@ -148,7 +148,7 @@
   <string name="app_ops_start_at_bootup">起動時の実行</string>
   <string name="app_ops_toast_window">トーストメッセージの表示</string>
   <string name="app_ops_toggle_bluetooth">Bluetoothの切り替え</string>
-  <string name="app_ops_toggle_mobile_data">データ通信の切り替え</string>
+  <string name="app_ops_toggle_mobile_data">モバイルデータの切り替え</string>
   <string name="app_ops_toggle_nfc">NFCの切り替え</string>
   <string name="app_ops_toggle_wifi">WiFiの切り替え</string>
   <string name="app_ops_use_alarm_volume">アラームの音量の制御</string>
