@@ -57,6 +57,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private final boolean mKeyguardScreenRotation;
     private final float mScreenBrightnessDoze;
 
+    private boolean mBlurSupported;
     private boolean mKeyguardBlurEnabled;
     private boolean mShowingMedia;
     private BlurLayer mKeyguardBlur;
@@ -121,11 +122,11 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         mLpChanged = new WindowManager.LayoutParams();
         mLpChanged.copyFrom(mLp);
 
-        boolean blurSupported = mContext.getResources().getBoolean(
+        mBlurSupported = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_ui_blur_enabled);
         mKeyguardBlurEnabled = CMSettings.Secure.getInt(mContext.getContentResolver(),
-                CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, blurSupported ? 1 : 0) == 1;
-        if (blurSupported) {
+                CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, mBlurSupported ? 1 : 0) == 1;
+        if (mBlurSupported) {
             Display display = mWindowManager.getDefaultDisplay();
             Point xy = new Point();
             display.getRealSize(xy);
@@ -142,13 +143,13 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private void applyKeyguardFlags(State state) {
         if (state.keyguardShowing) {
             mLpChanged.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
-            if (!mKeyguardBlurEnabled) {
+            if (!mBlurSupported && !mKeyguardBlurEnabled) {
                 mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             }
         } else {
             mLpChanged.flags &= ~WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             mLpChanged.privateFlags &= ~WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
-            if (mKeyguardBlurEnabled && mKeyguardBlur != null) {
+            if (mBlurSupported && mKeyguardBlurEnabled) {
                 mKeyguardBlur.hide();
             }
         }
@@ -264,14 +265,10 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     }
 
     private void applyKeyguardBlurShow(){
-        boolean isblur = false;
-        if (mCurrentState.keyguardShowing && mKeyguardBlurEnabled
-                && !mCurrentState.keyguardOccluded
-                && !mShowingMedia) {
-            isblur = true;
-        }
-        if (mKeyguardBlur != null) {
-            if (isblur) {
+        if (mBlurSupported) {
+            if (mCurrentState.keyguardShowing && mKeyguardBlurEnabled
+                    && !mCurrentState.keyguardOccluded
+                    && !mShowingMedia) {
                 mKeyguardBlur.show();
             } else {
                 mKeyguardBlur.hide();
@@ -330,7 +327,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     }
 
     void setBlur(float b){
-        if (mKeyguardBlurEnabled && mKeyguardBlur != null) {
+        if (mBlurSupported && mKeyguardBlurEnabled) {
             float minBlur = mKeyguardMonitor.isSecure() ? 1.0f : 0.0f;
             if (b < minBlur) {
                 b = minBlur;
