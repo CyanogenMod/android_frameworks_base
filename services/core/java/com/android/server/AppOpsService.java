@@ -184,6 +184,7 @@ public class AppOpsService extends IAppOpsService.Stub {
         final ArrayList<IBinder> clientTokens;
         public int allowedCount;
         public int ignoredCount;
+        public int delayedCount;
 
         public Op(int _uid, String _packageName, int _op, int _mode) {
             uid = _uid;
@@ -1058,8 +1059,45 @@ public class AppOpsService extends IAppOpsService.Stub {
                                     + packageName + ")");
                     return switchOp.mode;
                 }
-                op.noteOpCount++;
-                req = askOperationLocked(code, uid, packageName, switchOp);
+
+                if (DEBUG) {
+                        Log.d(TAG, "Package " + op.packageName + " has " + op.noteOpCount
+                                + " requests and " + op.startOpCount + " start requests with "
+                                + op.ignoredCount + " ignored at " + op.time +
+                                " with a duration of "
+                                + op.duration + " while being delayed " + op.delayedCount +
+                                " times");
+                        Log.d(TAG, "Total pkops for " + ops.packageName + " "
+                                + ops.uidState.pkgOps.size());
+                }
+
+                // First check what the global pkg ops count for the package,
+                // then check op scoped count. High frequency request ops will be delayed until
+                // their delay count ceiling is met. This is to mitigate the overloading the
+                // main activity manager service handler and having watchdog kill our service.
+                // Google play services likes to share its uid with numerous packages to avoid
+                // having to grant permissions from the users perspective and thus is the worst
+                // example of overloading this queue -- so, to not encourage bad behavior,
+                // we move them to the back of the line. NOTE: these values are magic, and may need
+                // tuning. Ideally we'd want a ringbuffer or token bucket here to do proper rate
+                // limiting.
+                if (ops.uidState.pkgOps.size() < AppOpsPolicy.RATE_LIMIT_OPS_TOTAL_PKG_COUNT
+                        && op.noteOpCount < AppOpsPolicy.RATE_LIMIT_OP_COUNT
+                        || op.delayedCount > AppOpsPolicy.RATE_LIMIT_OP_DELAY_CEILING) {
+
+                    // Reset delayed count, most ops will never need this
+                    if (op.delayedCount > 0) {
+                        if (DEBUG) Log.d(TAG, "Resetting delayed count for " + op.packageName);
+                        op.delayedCount = 0;
+                    }
+
+                    op.noteOpCount++;
+                    req = askOperationLocked(code, uid, packageName, switchOp);
+                } else {
+                    op.delayedCount++;
+                    op.ignoredCount++;
+                    return AppOpsManager.MODE_IGNORED;
+                }
             }
         }
 
