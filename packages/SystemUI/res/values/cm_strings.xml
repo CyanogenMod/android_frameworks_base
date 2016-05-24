@@ -52,4 +52,7 @@
     <!-- Play queue -->
     <string name="play_queue_extension">Show play queue</string>
 
+    <!-- Weather string format in keyguard -->
+    <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
+
 </resources>
