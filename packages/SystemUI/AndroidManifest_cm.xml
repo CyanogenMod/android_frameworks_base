@@ -28,6 +28,7 @@
 
      <!-- Weather Provider -->
     <uses-permission android:name="cyanogenmod.permission.READ_WEATHER" />
+    <protected-broadcast android:name="com.cyanogenmod.lockclock.action.FORCE_WEATHER_UPDATE" />
 
     <application>
 
