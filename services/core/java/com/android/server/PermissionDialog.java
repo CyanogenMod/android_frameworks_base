@@ -52,7 +52,11 @@ public class PermissionDialog extends BasePermissionDialog {
 
     // 15s timeout, then we automatically dismiss the permission
     // dialog. Otherwise, it may cause watchdog timeout sometimes.
-    static final long DISMISS_TIMEOUT = 1000 * 15 * 1;
+    static final long DISMISS_TIMEOUT = 1000 * 10 * 1;
+
+    // 5s timeout, so as to not cause  watchdog timeouts from numerous successive
+    // requests (ex: location)
+    static final long FASTER_DISMISS_TIMEOUT = 1000 * 5 * 1;
 
     public PermissionDialog(Context context, AppOpsService service,
             int code, int uid, String packageName) {
@@ -97,9 +101,13 @@ public class PermissionDialog extends BasePermissionDialog {
                 name, mOpLabels[mCode]));
         setView(mView);
 
+        boolean isLocation = mCode == AppOpsManager.OP_COARSE_LOCATION
+                || mCode == AppOpsManager.OP_FINE_LOCATION;
+
         // After the timeout, pretend the user clicked the quit button
         mHandler.sendMessageDelayed(
-                mHandler.obtainMessage(ACTION_IGNORED_TIMEOUT), DISMISS_TIMEOUT);
+                mHandler.obtainMessage(ACTION_IGNORED_TIMEOUT),
+                isLocation ? FASTER_DISMISS_TIMEOUT : DISMISS_TIMEOUT);
     }
 
     private String getAppName(String packageName) {
