@@ -51,7 +51,7 @@ import com.android.internal.telephony.TelephonyIntents;
 public class NetworkTimeUpdateService {
 
     private static final String TAG = "NetworkTimeUpdateService";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     private static final int EVENT_AUTO_TIME_CHANGED = 1;
     private static final int EVENT_POLL_NETWORK_TIME = 2;

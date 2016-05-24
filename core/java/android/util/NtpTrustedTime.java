@@ -34,7 +34,7 @@ import android.text.TextUtils;
  */
 public class NtpTrustedTime implements TrustedTime {
     private static final String TAG = "NtpTrustedTime";
-    private static final boolean LOGD = false;
+    private static final boolean LOGD = true;
 
     private static NtpTrustedTime sSingleton;
     private static Context sContext;

@@ -110,8 +110,8 @@ public class SntpClient
             //             = (transit + skew - transit + skew)/2
             //             = (2 * skew)/2 = skew
             long clockOffset = ((receiveTime - originateTime) + (transmitTime - responseTime))/2;
-            // if (false) Log.d(TAG, "round trip: " + roundTripTime + " ms");
-            // if (false) Log.d(TAG, "clock offset: " + clockOffset + " ms");
+            if (true) Log.d(TAG, "round trip: " + roundTripTime + " ms");
+            if (true) Log.d(TAG, "clock offset: " + clockOffset + " ms");
 
             // save our results - use the times on this side of the network latency
             // (response rather than request time)
