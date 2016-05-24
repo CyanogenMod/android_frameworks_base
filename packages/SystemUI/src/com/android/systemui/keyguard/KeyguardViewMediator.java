@@ -484,21 +484,20 @@ public class KeyguardViewMediator extends SystemUI {
                     // only force lock screen in case of missing sim if user hasn't
                     // gone through setup wizard
                     synchronized (this) {
-                        if (shouldWaitForProvisioning()) {
-                            if (!mShowing) {
-                                if (DEBUG_SIM_STATES) Log.d(TAG, "ICC_ABSENT isn't showing,"
-                                        + " we need to show the keyguard since the "
-                                        + "device isn't provisioned yet.");
-                                doKeyguardLocked(null);
-                            } else {
-                                resetStateLocked();
-                            }
+                        if (shouldWaitForProvisioning() && !mShowing) {
+                            if (DEBUG_SIM_STATES) Log.d(TAG, "ICC_ABSENT isn't showing,"
+                                    + " we need to show the keyguard since the "
+                                    + "device isn't provisioned yet.");
+                            doKeyguardLocked(null);
+                        } else {
+                            resetStateLocked();
                         }
                     }
                     break;
                 case PIN_REQUIRED:
                 case PUK_REQUIRED:
                     synchronized (this) {
+                        mStatusBar.hideHeadsUp();
                         if (!mShowing) {
                             if (DEBUG_SIM_STATES) Log.d(TAG,
                                     "INTENT_VALUE_ICC_LOCKED and keygaurd isn't "
