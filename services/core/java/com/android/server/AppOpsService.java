@@ -39,8 +39,10 @@ import android.app.ActivityThread;
 import android.app.AppGlobals;
 import android.app.AppOpsManager;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
@@ -51,6 +53,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -96,6 +99,7 @@ public class AppOpsService extends IAppOpsService.Stub {
     final Looper mLooper;
     final boolean mStrictEnable;
     AppOpsPolicy mPolicy;
+    private PowerManager mPowerManager;
 
     private static final int[] PRIVACY_GUARD_OP_STATES = new int[] {
         AppOpsManager.OP_COARSE_LOCATION,
@@ -361,7 +365,44 @@ public class AppOpsService extends IAppOpsService.Stub {
                                 || mountMode == Zygote.MOUNT_EXTERNAL_WRITE;
                     }
                 });
+
+        mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        mContext.registerReceiver(mIntentReceiver, filter);
     }
+
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                synchronized (this) {
+                    for (int i = mUidStates.size() - 1; i >= 0; i--) {
+                        UidState uidState = mUidStates.valueAt(i);
+
+                        ArrayMap<String, Ops> packages = uidState.pkgOps;
+                        if (packages == null) {
+                            continue;
+                        }
+
+                        Iterator<Map.Entry<String, Ops>> it = packages.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry<String, Ops> ent = it.next();
+                            Ops pkgOps = ent.getValue();
+                            for (int j = pkgOps.size() - 1; j >= 0; j--) {
+                                Op curOp = pkgOps.valueAt(j);
+                                if (DEBUG)
+                                    Log.d(TAG, "Ignoring " + curOp.packageName + " request "
+                                            + curOp.op);
+                                curOp.dialogReqQueue.ignore();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
 
     public void packageRemoved(int uid, String packageName) {
         synchronized (this) {
@@ -1071,7 +1112,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                                 + ops.uidState.pkgOps.size());
                 }
 
-                // First check what the global pkg ops count for the package,
+                // First drop all request events if the device is not interactive, next
+                // check what the global pkg ops count for the package,
                 // then check op scoped count. High frequency request ops will be delayed until
                 // their delay count ceiling is met. This is to mitigate the overloading the
                 // main activity manager service handler and having watchdog kill our service.
@@ -1081,9 +1123,11 @@ public class AppOpsService extends IAppOpsService.Stub {
                 // we move them to the back of the line. NOTE: these values are magic, and may need
                 // tuning. Ideally we'd want a ringbuffer or token bucket here to do proper rate
                 // limiting.
-                if (ops.uidState.pkgOps.size() < AppOpsPolicy.RATE_LIMIT_OPS_TOTAL_PKG_COUNT
+                final boolean isInteractive = mPowerManager.isInteractive();
+                if (isInteractive &&
+                        (ops.uidState.pkgOps.size() < AppOpsPolicy.RATE_LIMIT_OPS_TOTAL_PKG_COUNT
                         && op.noteOpCount < AppOpsPolicy.RATE_LIMIT_OP_COUNT
-                        || op.delayedCount > AppOpsPolicy.RATE_LIMIT_OP_DELAY_CEILING) {
+                        || op.delayedCount > AppOpsPolicy.RATE_LIMIT_OP_DELAY_CEILING)) {
 
                     // Reset delayed count, most ops will never need this
                     if (op.delayedCount > 0) {
@@ -1094,7 +1138,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                     op.noteOpCount++;
                     req = askOperationLocked(code, uid, packageName, switchOp);
                 } else {
-                    op.delayedCount++;
+                    if (isInteractive) {
+                        op.delayedCount++;
+                    }
                     op.ignoredCount++;
                     return AppOpsManager.MODE_IGNORED;
                 }
