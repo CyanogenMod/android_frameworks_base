@@ -1,21 +1,22 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Copyright (c) 2015, The Linux Foundation. All rights reserved.
- * Not a Contribution.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/******************************************************************************
+  *
+  *  The original Work has been changed by NXP Semiconductors.
+  *
+  *  Copyright (C) 2015 NXP Semiconductors
+  *
+  *  Licensed under the Apache License, Version 2.0 (the "License");
+  *  you may not use this file except in compliance with the License.
+  *  You may obtain a copy of the License at
+  *
+  *  http://www.apache.org/licenses/LICENSE-2.0
+  *
+  *  Unless required by applicable law or agreed to in writing, software
+  *  distributed under the License is distributed on an "AS IS" BASIS,
+  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  *  See the License for the specific language governing permissions and
+  *  limitations under the License.
+  *
+ ******************************************************************************/
 
 package android.nfc.cardemulation;
 
@@ -40,7 +41,7 @@ import android.util.Log;
  *
  * @hide
  */
-public class AidGroup implements Parcelable {
+public final class AidGroup implements Parcelable {
     /**
      * The maximum number of AIDs that can be present in any one group.
      */
@@ -48,9 +49,40 @@ public class AidGroup implements Parcelable {
 
     static final String TAG = "AidGroup";
 
-    protected List<String> aids;
-    protected String category;
-    protected String description;
+    final List<String> aids;
+    final String category;
+    final String description;
+
+    /**
+     * Creates a new AidGroup object.
+     *
+     * @param aids The list of AIDs present in the group
+     * @param category The category of this group, e.g. {@link CardEmulation#CATEGORY_PAYMENT}
+     * @hide
+     */
+    public AidGroup(List<String> aids, String category, String description) {
+        if (aids == null || aids.size() == 0) {
+            throw new IllegalArgumentException("No AIDS in AID group.");
+        }
+        if (aids.size() > MAX_NUM_AIDS) {
+            throw new IllegalArgumentException("Too many AIDs in AID group.");
+        }
+        for (String aid : aids) {
+            if (!CardEmulation.isValidAid(aid)) {
+                throw new IllegalArgumentException("AID " + aid + " is not a valid AID.");
+            }
+        }
+        if (isValidCategory(category)) {
+            this.category = category;
+        } else {
+            this.category = CardEmulation.CATEGORY_OTHER;
+        }
+        this.aids = new ArrayList<String>(aids.size());
+        for (String aid : aids) {
+            this.aids.add(aid.toUpperCase());
+        }
+        this.description = description;
+    }
 
     /**
      * Creates a new AidGroup object.
@@ -82,7 +114,9 @@ public class AidGroup implements Parcelable {
         this.description = null;
     }
 
-    AidGroup(String category, String description) {
+
+
+    public AidGroup(String category, String description) {
         this.aids = new ArrayList<String>();
         this.category = category;
         this.description = description;
@@ -93,6 +127,13 @@ public class AidGroup implements Parcelable {
      */
     public String getCategory() {
         return category;
+    }
+
+    /**
+     * @return the decription of this AID group
+     */
+    public String getDescription() {
+        return description;
     }
 
     /**
@@ -125,6 +166,11 @@ public class AidGroup implements Parcelable {
         if (aids.size() > 0) {
             dest.writeStringList(aids);
         }
+        if(description != null) {
+            dest.writeString(description);
+        } else {
+            dest.writeString(null);
+        }
     }
 
     public static final Parcelable.Creator<AidGroup> CREATOR =
@@ -138,7 +184,13 @@ public class AidGroup implements Parcelable {
             if (listSize > 0) {
                 source.readStringList(aidList);
             }
-            return new AidGroup(aidList, category);
+            String description = source.readString();
+            AidGroup mAidGroup = new AidGroup(category, description);
+            List<String> Aids = mAidGroup.getAids();
+            for(String aid : aidList) {
+               Aids.add(aid);
+            }
+            return mAidGroup;
         }
 
         @Override
@@ -149,6 +201,7 @@ public class AidGroup implements Parcelable {
 
     static public AidGroup createFromXml(XmlPullParser parser) throws XmlPullParserException, IOException {
         String category = null;
+        String description = null;
         ArrayList<String> aids = new ArrayList<String>();
         AidGroup group = null;
         boolean inGroup = false;
@@ -169,6 +222,7 @@ public class AidGroup implements Parcelable {
                     }
                 } else if (tagName.equals("aid-group")) {
                     category = parser.getAttributeValue(null, "category");
+                    description = parser.getAttributeValue(null, "description");
                     if (category == null) {
                         Log.e(TAG, "<aid-group> tag without valid category");
                         return null;
@@ -179,7 +233,7 @@ public class AidGroup implements Parcelable {
                 }
             } else if (eventType == XmlPullParser.END_TAG) {
                 if (tagName.equals("aid-group") && inGroup && aids.size() > 0) {
-                    group = new AidGroup(aids, category);
+                    group = new AidGroup(aids, category, description);
                     break;
                 }
             }
@@ -191,6 +245,8 @@ public class AidGroup implements Parcelable {
     public void writeAsXml(XmlSerializer out) throws IOException {
         out.startTag(null, "aid-group");
         out.attribute(null, "category", category);
+        if(description != null)
+            out.attribute(null, "description", description);
         for (String aid : aids) {
             out.startTag(null, "aid");
             out.attribute(null, "value", aid);

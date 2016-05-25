@@ -40,7 +40,7 @@ import java.util.List;
  * NFC card emulation services.
  *
  * For a general introduction into NFC card emulation,
- * please read the <a href="{@docRoot}guide/topics/connectivity/nfc/hce.html">
+ * please read the <a href="{@docRoot}guide/topics/nfc/ce.html">
  * NFC card emulation developer guide</a>.</p>
  *
  * <p class="note">Use of this class requires the
@@ -639,5 +639,4 @@ public final class CardEmulation {
         NfcAdapter adapter = NfcAdapter.getDefaultAdapter(mContext);
         sService = adapter.getCardEmulationService();
     }
-
 }

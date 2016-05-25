@@ -79,7 +79,7 @@ import java.util.HashMap;
  * type is put in the intent's type field. This allows activities to register to be launched only
  * when data they know how to handle is present on a tag. This is the preferred method of handling
  * data on a tag since NDEF data can be stored on many types of tags and doesn't depend on a
- * specific tag technology. 
+ * specific tag technology.
  * See {@link NfcAdapter#ACTION_NDEF_DISCOVERED} for more detail. If the tag does not contain
  * NDEF data, or if no activity is registered
  * for {@link NfcAdapter#ACTION_NDEF_DISCOVERED} with a matching data URI or MIME type then dispatch

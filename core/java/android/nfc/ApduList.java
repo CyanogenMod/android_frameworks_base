@@ -64,5 +64,3 @@ public class ApduList implements Parcelable {
         }
     }
 }
-
-
