@@ -352,6 +352,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private QSTileHost mQSTileHost;
     private DevForceNavbarObserver mDevForceNavbarObserver;
 
+    // show 4g
+    private boolean mShow4g;
+
     // top bar
     StatusBarHeaderView mHeader;
     KeyguardStatusBarView mKeyguardStatusBar;
@@ -467,8 +470,27 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_NUM_TILE_ROWS), false, this,
                     UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
+
+	@Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.SHOW_FOURG))) {
+                    mShow4G = Settings.System.getIntForUser(
+                            mContext.getContentResolver(),
+                            Settings.System.SHOW_FOURG,
+                            0, UserHandle.USER_CURRENT) == 1;
+                            recreateStatusBar();
+                            updateRowStates();
+                            updateSpeedbump();
+                            updateClearAll();
+                            updateEmptyShadeView();
+            }
+            update();
 
         @Override
         protected void unobserve() {
@@ -488,6 +510,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mBrightnessControl = CMSettings.System.getIntForUser(
                     resolver, CMSettings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0,
                     UserHandle.USER_CURRENT) == 1;
+
+            boolean mShow4G = Settings.System.getIntForUser(resolver,
+                    Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
 
             if (mNavigationBarView != null) {
                 boolean navLeftInLandscape = CMSettings.System.getIntForUser(resolver,
