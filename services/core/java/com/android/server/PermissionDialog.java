@@ -110,6 +110,10 @@ public class PermissionDialog extends BasePermissionDialog {
                 isLocation ? FASTER_DISMISS_TIMEOUT : DISMISS_TIMEOUT);
     }
 
+    public void ignore() {
+        mHandler.sendMessage(mHandler.obtainMessage(ACTION_IGNORED_TIMEOUT));
+    }
+
     private String getAppName(String packageName) {
         ApplicationInfo appInfo = null;
         PackageManager pm = mContext.getPackageManager();
