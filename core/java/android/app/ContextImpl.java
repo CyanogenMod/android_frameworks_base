@@ -465,7 +465,12 @@ class ContextImpl extends Context {
     @Override
     public File getExternalFilesDir(String type) {
         // Operates on primary external storage
-        return getExternalFilesDirs(type)[0];
+        File[] dirs =  getExternalFilesDirs(type);
+        if (dirs.length > 0) {
+            return dirs[0];
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -527,7 +532,12 @@ class ContextImpl extends Context {
     @Override
     public File getExternalCacheDir() {
         // Operates on primary external storage
-        return getExternalCacheDirs()[0];
+        File[] dirs = getExternalCacheDirs();
+        if (dirs.length > 0) {
+            return dirs[0];
+        } else  {
+            return null;
+        }
     }
 
     @Override
