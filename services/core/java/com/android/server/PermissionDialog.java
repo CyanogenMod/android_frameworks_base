@@ -102,6 +102,10 @@ public class PermissionDialog extends BasePermissionDialog {
                 mHandler.obtainMessage(ACTION_IGNORED_TIMEOUT), DISMISS_TIMEOUT);
     }
 
+    public void ignore() {
+        mHandler.sendMessage(mHandler.obtainMessage(ACTION_IGNORED_TIMEOUT));
+    }
+
     private String getAppName(String packageName) {
         ApplicationInfo appInfo = null;
         PackageManager pm = mContext.getPackageManager();
