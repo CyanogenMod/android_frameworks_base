@@ -29,7 +29,6 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -65,7 +64,6 @@ public class BatteryMeterView extends View implements DemoMode,
         BATTERY_METER_ICON_PORTRAIT,
         BATTERY_METER_ICON_LANDSCAPE,
         BATTERY_METER_CIRCLE,
-        BATTERY_METER_DOTTED_CIRCLE,
         BATTERY_METER_TEXT
     }
 
@@ -256,11 +254,6 @@ public class BatteryMeterView extends View implements DemoMode,
     protected BatteryMeterDrawable createBatteryMeterDrawable(BatteryMeterMode mode) {
         Resources res = getResources();
         switch (mode) {
-            case BATTERY_METER_DOTTED_CIRCLE:
-            case BATTERY_METER_CIRCLE:
-                return new CircleBatteryMeterDrawable(res);
-            case BATTERY_METER_ICON_LANDSCAPE:
-                return new NormalBatteryMeterDrawable(res, true);
             case BATTERY_METER_TEXT:
             case BATTERY_METER_GONE:
                 return null;
@@ -274,11 +267,7 @@ public class BatteryMeterView extends View implements DemoMode,
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        if (mMeterMode == BatteryMeterMode.BATTERY_METER_CIRCLE ||
-                mMeterMode == BatteryMeterMode.BATTERY_METER_DOTTED_CIRCLE) {
-            height += (CircleBatteryMeterDrawable.STROKE_WITH / 3);
-            width = height;
-        } else if (mMeterMode == BatteryMeterMode.BATTERY_METER_TEXT) {
+        if (mMeterMode == BatteryMeterMode.BATTERY_METER_TEXT) {
             onSizeChanged(width, height, 0, 0); // Force a size changed event
         }
 
@@ -325,9 +314,6 @@ public class BatteryMeterView extends View implements DemoMode,
         switch (style) {
             case BatteryController.STYLE_CIRCLE:
                 meterMode = BatteryMeterMode.BATTERY_METER_CIRCLE;
-                break;
-            case BatteryController.STYLE_DOTTED_CIRCLE:
-                meterMode = BatteryMeterMode.BATTERY_METER_DOTTED_CIRCLE;
                 break;
             case BatteryController.STYLE_GONE:
                 meterMode = BatteryMeterMode.BATTERY_METER_GONE;
@@ -615,7 +601,6 @@ public class BatteryMeterView extends View implements DemoMode,
             }
         }
 
-
         private void loadBatteryDrawables(Resources res, BatteryMeterMode mode) {
             if (isThemeApplied()) {
                 try {
@@ -632,12 +617,6 @@ public class BatteryMeterView extends View implements DemoMode,
                     }
                 }
             }
-
-        private DashPathEffect mPathEffect;
-
-        private int     mAnimOffset;
-        private boolean mIsAnimating;   // stores charge-animation status to reliably
-        //remove callbacks
 
             int drawableResId = getBatteryDrawableResourceForMode(mode);
             mBatteryDrawable = (LayerDrawable) res.getDrawable(drawableResId);
@@ -699,13 +678,6 @@ public class BatteryMeterView extends View implements DemoMode,
             final float widthDiv2 = mWidth / 2f;
             mTextAndBoltPaint.setTextSize(widthDiv2);
             mWarningTextPaint.setTextSize(widthDiv2);
-
-            mPathEffect = new DashPathEffect(new float[]{3,2},0);
-
-            mBoltPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mBoltPaint.setColor(res.getColor(R.color.batterymeter_bolt_color));
-            mBoltPoints = loadBoltPoints(res);
-        }
 
             int pLeft = getPaddingLeft();
             Rect iconBounds = new Rect(pLeft, 0, pLeft + mWidth, mHeight);
@@ -774,21 +746,8 @@ public class BatteryMeterView extends View implements DemoMode,
             if ((gravity & Gravity.START) == Gravity.START) {
                 return isRtl ? Paint.Align.RIGHT : Paint.Align.LEFT;
             }
-
             if ((gravity & Gravity.END) == Gravity.END) {
                 return isRtl ? Paint.Align.LEFT : Paint.Align.RIGHT;
-
-            if (mMeterMode == BatteryMeterMode.BATTERY_METER_DOTTED_CIRCLE) {
-                paint.setPathEffect(mPathEffect);
-            } else {
-                paint.setPathEffect(null);
-            }
-
-            // draw thin gray ring first
-            canvas.drawArc(drawRect, 270, 360, false, mBackPaint);
-            if (level != 0) {
-                // draw colored arc representing charge level
-                canvas.drawArc(drawRect, 270 + mAnimOffset, 3.6f * level, false, paint);
             }
             if ((gravity & Gravity.LEFT) == Gravity.LEFT) return Paint.Align.LEFT;
             if ((gravity & Gravity.RIGHT) == Gravity.RIGHT) return Paint.Align.RIGHT;
