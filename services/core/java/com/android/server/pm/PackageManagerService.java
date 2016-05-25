@@ -17307,10 +17307,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
         }
 
-        if (callingPackage == null && (callingUid == Process.SYSTEM_UID
-                || fromProtectedComponentUid)) {
-            if (DEBUG_PROTECTED) Log.d(TAG, "Calling package is android and from system or " +
-                    "protected manager, allow");
+        if (TextUtils.equals(callingPackage, "android") && callingUid == Process.SYSTEM_UID
+                || callingPackage == null && fromProtectedComponentUid) {
+            if (DEBUG_PROTECTED) Log.d(TAG, "Calling package is android or manager, allow");
             return false;
         }
 
