@@ -97,6 +97,7 @@ public class BootReceiver extends BroadcastReceiver {
         final DropBoxManager db = (DropBoxManager) ctx.getSystemService(Context.DROPBOX_SERVICE);
         final SharedPreferences prefs = ctx.getSharedPreferences("log_files", Context.MODE_PRIVATE);
         final String headers = new StringBuilder(512)
+            .append("CM Version: ").append(SystemProperties.get("ro.cm.version")).append("\n")
             .append("Build: ").append(Build.FINGERPRINT).append("\n")
             .append("Hardware: ").append(Build.BOARD).append("\n")
             .append("Revision: ")
