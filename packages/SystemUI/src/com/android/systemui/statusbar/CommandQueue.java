@@ -325,14 +325,6 @@ public class CommandQueue extends IStatusBar.Stub {
         }
     }
 
-    public void setAutoRotate(boolean enabled) {
-        synchronized (mList) {
-            mHandler.removeMessages(MSG_SET_AUTOROTATE_STATUS);
-            mHandler.obtainMessage(MSG_SET_AUTOROTATE_STATUS,
-                enabled ? 1 : 0, 0, null).sendToTarget();
-        }
-    }
-
     public void toggleLastApp() {
         synchronized (mList) {
             mHandler.removeMessages(MSG_TOGGLE_LAST_APP);
