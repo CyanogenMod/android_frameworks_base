@@ -829,6 +829,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
     static class Config {
         boolean showAtLeast3G = false;
         boolean alwaysShowCdmaRssi = false;
+        boolean show4gForLte = false;
         boolean hspaDataDistinguishable;
         boolean showRsrpSignalLevelforLTE;
 
@@ -839,6 +840,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
             config.showAtLeast3G = res.getBoolean(R.bool.config_showMin3G);
             config.alwaysShowCdmaRssi =
                     res.getBoolean(com.android.internal.R.bool.config_alwaysUseCdmaRssi);
+            config.show4gForLte = res.getBoolean(R.bool.config_show4GForLTE);
             config.hspaDataDistinguishable =
                     res.getBoolean(R.bool.config_hspa_data_distinguishable);
             config.showRsrpSignalLevelforLTE =
