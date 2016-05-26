@@ -39,4 +39,5 @@
     <dimen name="pie_tab_title_height">24dp</dimen>
     <dimen name="pie_panel_padding">20dp</dimen>
 
+	<dimen name="recents_empty_drawable_padding">25dp</dimen>
 </resources>

@@ -7,4 +7,5 @@
     <string name="pie_hour_format_24">HH:mm</string>
     <string name="pie_am_pm">a</string>
 
+	<string name="no_previous_recents">No recent items</string>
 </resources>
