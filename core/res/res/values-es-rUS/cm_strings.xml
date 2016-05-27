@@ -19,6 +19,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- label for item that screenshots in phone options dialog -->
   <string name="global_action_screenshot">Captura de pantalla</string>
+  <!-- label for item that screenrecord in phone options dialog -->
+  <string name="global_action_screenrecord">Grabar pantalla</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_receiveProtectedSms">recibir SMS protegidos</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
