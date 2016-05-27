@@ -625,10 +625,10 @@ public class ActivityInfo extends ComponentInfo
      * framework call here to get the real value.
      */
     public int getRealConfigChanged() {
-        return applicationInfo.targetSdkVersion < android.os.Build.VERSION_CODES.HONEYCOMB_MR2
-                ? (configChanges | ActivityInfo.CONFIG_SCREEN_SIZE
-                        | ActivityInfo.CONFIG_SMALLEST_SCREEN_SIZE)
-                : configChanges;
+        // If an app doesn't handle screen size changes or layout changes, just ignore it, don't kill them!
+        return configChanges | ActivityInfo.CONFIG_SCREEN_LAYOUT | ActivityInfo.CONFIG_SCREEN_SIZE
+                    | (applicationInfo.targetSdkVersion < android.os.Build.VERSION_CODES.HONEYCOMB_MR2 ?
+                        ActivityInfo.CONFIG_SMALLEST_SCREEN_SIZE : 0);
     }
 
     /**

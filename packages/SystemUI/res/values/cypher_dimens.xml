@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2016 CypherOS
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+
+    <!-- PA Pie controls dimensions -->
+    <dimen name="pie_snap_radius">45dp</dimen>
+    <dimen name="pie_snap_outline">4dp</dimen>
+    <dimen name="pie_item_size">30dp</dimen>
+    <dimen name="pie_outline">2dp</dimen>
+    <dimen name="pie_radius_start">65dp</dimen>
+    <dimen name="pie_radius_increment">80dp</dimen>
+    <dimen name="pie_chevron_start">230dp</dimen>
+    <dimen name="pie_chevron_increment">2dp</dimen>
+    <dimen name="pie_battery_start">155dp</dimen>
+    <dimen name="pie_battery_increment">10dp</dimen>
+    <dimen name="pie_status_start">155dp</dimen>
+    <dimen name="pie_clock_size">54dp</dimen>
+    <dimen name="pie_clock_offset">-20dp</dimen>
+    <dimen name="pie_am_pm_size">14dp</dimen>
+    <dimen name="pie_am_pm_offset">-52dp</dimen>
+    <dimen name="pie_status_size">12dp</dimen>
+    <dimen name="pie_status_offset">-14dp</dimen>
+    <dimen name="pie_snap_thickness">6dp</dimen>
+    <dimen name="pie_touch_offset">15dp</dimen>
+    <dimen name="pie_tab_title_height">24dp</dimen>
+    <dimen name="pie_panel_padding">20dp</dimen>
+
+	<dimen name="recents_empty_drawable_padding">25dp</dimen>
+</resources>
