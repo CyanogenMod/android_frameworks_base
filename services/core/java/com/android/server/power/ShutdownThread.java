@@ -630,7 +630,10 @@ public final class ShutdownThread extends Thread {
             }
         };
 
-        if (mRebootUpdate) {
+        final String cryptoStatus = SystemProperties.get("ro.crypto.state", "unsupported");
+        final boolean isEncrypted = "encrypted".equalsIgnoreCase(cryptoStatus);
+
+        if (mRebootUpdate && isEncrypted) {
             sInstance.setRebootProgress(MOUNT_SERVICE_STOP_PERCENT, null);
 
             // If it's to reboot to install update, invoke uncrypt via init service.
