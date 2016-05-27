@@ -793,7 +793,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
         }
         return QSTileHost.TILES_PER_PAGE + 3 * addRows  + (2 + addRows) * moreSlots;
       }
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
