@@ -91,7 +91,7 @@ public class ResolverActivity extends Activity {
     private ResolveListAdapter mAdapter;
     private PackageManager mPm;
     private boolean mSafeForwardingMode;
-    private boolean mAlwaysUseOption;
+    /*package*/ boolean mAlwaysUseOption;
     private AbsListView mAdapterView;
     private ViewGroup mFilteredItemContainer;
     private Button mAlwaysButton;
@@ -1571,7 +1571,7 @@ public class ResolverActivity extends Activity {
             return mDisplayList.get(index);
         }
 
-        public final View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
             if (view == null) {
                 view = createView(parent);
