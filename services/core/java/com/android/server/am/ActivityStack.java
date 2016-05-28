@@ -1839,7 +1839,7 @@ final class ActivityStack {
                             : AppTransition.TRANSIT_TASK_CLOSE, false);
                     if (prev.task != next.task) {
                         if (mStackSupervisor.mService.mPerf != null) {
-                            mStackSupervisor.mService.mPerf.cpuBoost(2000 * 1000);
+                            mStackSupervisor.mService.mPerf.cpuBoost(600000);
                         }
                     }
                 }
@@ -1859,7 +1859,7 @@ final class ActivityStack {
                                     : AppTransition.TRANSIT_TASK_OPEN, false);
                     if (prev.task != next.task) {
                         if (mStackSupervisor.mService.mPerf != null) {
-                            mStackSupervisor.mService.mPerf.cpuBoost(2000 * 1000);
+                            mStackSupervisor.mService.mPerf.cpuBoost(600000);
                         }
                     }
                 }
