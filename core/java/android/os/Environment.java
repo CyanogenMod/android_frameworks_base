@@ -88,6 +88,7 @@ public class Environment {
             for (int i = 0; i < volumes.length; i++) {
                 files[i] = volumes[i].getPathFile();
             }
+            Log.d(TAG, "getExternalDirs: files.length: " + String.valueOf(files.length));
             return files;
         }
 
