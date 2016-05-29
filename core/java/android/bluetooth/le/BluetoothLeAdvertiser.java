@@ -111,8 +111,7 @@ public final class BluetoothLeAdvertiser {
             if (callback == null) {
                 throw new IllegalArgumentException("callback cannot be null");
             }
-            if (!mBluetoothAdapter.isMultipleAdvertisementSupported() &&
-                    !mBluetoothAdapter.isPeripheralModeSupported()) {
+            if (!mBluetoothAdapter.isPeripheralModeSupported()) {
                 postStartFailure(callback,
                         AdvertiseCallback.ADVERTISE_FAILED_FEATURE_UNSUPPORTED);
                 return;

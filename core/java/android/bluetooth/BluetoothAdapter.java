@@ -575,7 +575,7 @@ public final class BluetoothAdapter {
      */
     public BluetoothLeAdvertiser getBluetoothLeAdvertiser() {
         if (!getLeAccess()) return null;
-        if (!isMultipleAdvertisementSupported() && !isPeripheralModeSupported()) {
+        if (!isPeripheralModeSupported()) {
             Log.e(TAG, "Bluetooth LE advertising not supported");
             return null;
         }
