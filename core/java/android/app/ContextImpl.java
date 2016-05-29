@@ -471,9 +471,7 @@ class ContextImpl extends Context {
     @Override
     public File[] getExternalFilesDirs(String type) {
         synchronized (mSync) {
-            if (mExternalFilesDirs == null) {
-                mExternalFilesDirs = Environment.buildExternalStorageAppFilesDirs(getPackageName());
-            }
+            mExternalFilesDirs = Environment.buildExternalStorageAppFilesDirs(getPackageName());
 
             // Splice in requested type, if any
             File[] dirs = mExternalFilesDirs;
@@ -495,9 +493,7 @@ class ContextImpl extends Context {
     @Override
     public File[] getObbDirs() {
         synchronized (mSync) {
-            if (mExternalObbDirs == null) {
-                mExternalObbDirs = Environment.buildExternalStorageAppObbDirs(getPackageName());
-            }
+            mExternalObbDirs = Environment.buildExternalStorageAppObbDirs(getPackageName());
 
             // Create dirs if needed
             return ensureDirsExistOrFilter(mExternalObbDirs);
@@ -533,9 +529,7 @@ class ContextImpl extends Context {
     @Override
     public File[] getExternalCacheDirs() {
         synchronized (mSync) {
-            if (mExternalCacheDirs == null) {
-                mExternalCacheDirs = Environment.buildExternalStorageAppCacheDirs(getPackageName());
-            }
+            mExternalCacheDirs = Environment.buildExternalStorageAppCacheDirs(getPackageName());
 
             // Create dirs if needed
             return ensureDirsExistOrFilter(mExternalCacheDirs);
@@ -545,9 +539,7 @@ class ContextImpl extends Context {
     @Override
     public File[] getExternalMediaDirs() {
         synchronized (mSync) {
-            if (mExternalMediaDirs == null) {
-                mExternalMediaDirs = Environment.buildExternalStorageAppMediaDirs(getPackageName());
-            }
+            mExternalMediaDirs = Environment.buildExternalStorageAppMediaDirs(getPackageName());
 
             // Create dirs if needed
             return ensureDirsExistOrFilter(mExternalMediaDirs);
