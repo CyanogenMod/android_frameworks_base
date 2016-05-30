@@ -57,6 +57,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private int mBarHeight;
     private boolean mKeyguardScreenRotation;
     private final float mScreenBrightnessDoze;
+    private final boolean mBlurSupported;
 
     private boolean mKeyguardBlurEnabled;
     private boolean mShowingMedia;
@@ -79,6 +80,8 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
         mScreenBrightnessDoze = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_screenBrightnessDoze) / 255f;
+        mBlurSupported = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_ui_blur_enabled);
 
         mKeyguardMonitor = kgm;
         mKeyguardMonitor.addCallback(this);
@@ -127,11 +130,10 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         mLpChanged = new WindowManager.LayoutParams();
         mLpChanged.copyFrom(mLp);
 
-        boolean blurSupported = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_ui_blur_enabled);
-        if (blurSupported) {
-            mKeyguardBlurEnabled = CMSettings.Secure.getInt(mContext.getContentResolver(),
-                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, blurSupported ? 1 : 0) == 1;
+        mKeyguardBlurEnabled = mBlurSupported ?
+                CMSettings.Secure.getInt(mContext.getContentResolver(),
+                CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1 : false;
+        if (mBlurSupported) {
             Display display = mWindowManager.getDefaultDisplay();
             Point xy = new Point();
             display.getRealSize(xy);
@@ -490,9 +492,9 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
 
         @Override
         public void onChange(boolean selfChange) {
-            // default to being enabled since we are here because the blur config was set to true
-            mKeyguardBlurEnabled = CMSettings.Secure.getInt(mContext.getContentResolver(),
-                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1;
+            mKeyguardBlurEnabled = mBlurSupported ?
+                    CMSettings.Secure.getInt(mContext.getContentResolver(),
+                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1 : false;
             mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
             // update the state
             apply(mCurrentState);
