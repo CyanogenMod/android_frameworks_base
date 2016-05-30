@@ -872,15 +872,23 @@ public class StorageManager {
                 String[] packageNames = ActivityThread.getPackageManager().getPackagesForUid(
                         android.os.Process.myUid());
                 if (packageNames == null || packageNames.length <= 0) {
+                    Log.d(TAG, "getVolumeList: packageNames is null or length <= 0");
                     return new StorageVolume[0];
                 }
                 packageName = packageNames[0];
             }
             final int uid = ActivityThread.getPackageManager().getPackageUid(packageName, userId);
             if (uid <= 0) {
+                Log.d(TAG, "getVolumeList:  uid <= 0");
                 return new StorageVolume[0];
             }
-            return mountService.getVolumeList(uid, packageName, flags);
+            StorageVolume[] retVal = mountService.getVolumeList(uid, packageName, flags);
+            if (retVal == null) {
+                Log.d(TAG, "return value will be null");
+            } else {
+                Log.d(TAG, "return value.length: " + String.valueOf(retVal.length));
+            }
+            return retVal;
         } catch (RemoteException e) {
             throw e.rethrowAsRuntimeException();
         }
