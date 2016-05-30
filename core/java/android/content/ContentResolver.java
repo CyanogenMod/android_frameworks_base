@@ -160,8 +160,7 @@ public abstract class ContentResolver {
     public static final String SYNC_EXTRAS_INITIALIZE = "initialize";
 
     /** @hide */
-    public static final Intent ACTION_SYNC_CONN_STATUS_CHANGED =
-            new Intent("com.android.sync.SYNC_CONN_STATUS_CHANGED");
+    public static final String ACTION_SYNC_CONN_STATUS_CHANGED = "com.android.sync.SYNC_CONN_STATUS_CHANGED";
 
     public static final String SCHEME_CONTENT = "content";
     public static final String SCHEME_ANDROID_RESOURCE = "android.resource";

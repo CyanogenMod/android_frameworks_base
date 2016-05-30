@@ -23,6 +23,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ISyncStatusObserver;
+import android.content.Intent;
 import android.content.PeriodicSync;
 import android.content.SyncInfo;
 import android.content.SyncRequest;
@@ -1066,7 +1067,7 @@ public class SyncStorageEngine extends Handler {
                     new Bundle());
         }
         reportChange(ContentResolver.SYNC_OBSERVER_TYPE_SETTINGS);
-        mContext.sendBroadcast(ContentResolver.ACTION_SYNC_CONN_STATUS_CHANGED);
+        mContext.sendBroadcast(new Intent(ContentResolver.ACTION_SYNC_CONN_STATUS_CHANGED));
         queueBackup();
     }
 
