@@ -492,7 +492,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         public void onChange(boolean selfChange) {
             // default to being enabled since we are here because the blur config was set to true
             mKeyguardBlurEnabled = CMSettings.Secure.getInt(mContext.getContentResolver(),
-                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1;
+                    CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, blurSupported ? 1 : 0) == 1;
             mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
             // update the state
             apply(mCurrentState);
