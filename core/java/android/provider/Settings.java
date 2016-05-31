@@ -3281,6 +3281,12 @@ public final class Settings {
         public static final Validator LOCKSCREEN_DISABLED_VALIDATOR = sBooleanValidator;
 
         /**
+         * Whether to show Brightness Icon On Brightness Slider
+         * @hide
+         */
+        public static final String BRIGHTNESS_ICON = "brightness_icon";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
          * instead
          * @hide

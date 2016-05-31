@@ -135,19 +135,28 @@ public class QSPanel extends ViewGroup {
         boolean brightnessSliderEnabled = CMSettings.System.getIntForUser(
             mContext.getContentResolver(), CMSettings.System.QS_SHOW_BRIGHTNESS_SLIDER,
                 1, UserHandle.USER_CURRENT) == 1;
+ 	boolean brightnessIconEnabled = Settings.System.getIntForUser(
+            mContext.getContentResolver(), Settings.System.BRIGHTNESS_ICON,
+                1, UserHandle.USER_CURRENT) == 1;
         ToggleSlider brightnessSlider = (ToggleSlider) findViewById(R.id.brightness_slider);
         ImageView brightnessIcon = (ImageView) findViewById(R.id.brightness_icon);
         if (brightnessSliderEnabled) {
+					 if (brightnessIconEnabled) {
+						brightnessIcon.setVisibility(View.VISIBLE);
+       						 } else {
+            					brightnessIcon.setVisibility(View.GONE);
+       						 }
             mBrightnessView.setVisibility(VISIBLE);
             brightnessSlider.setVisibility(VISIBLE);
-            brightnessIcon.setVisibility(View.VISIBLE);
+            
         } else {
             mBrightnessView.setVisibility(GONE);
             brightnessSlider.setVisibility(GONE);
-            brightnessIcon.setVisibility(View.GONE);
+            
         }
+ 	
         updateResources();
-        return brightnessSliderEnabled;
+        return brightnessSliderEnabled;	
     }
 
     protected void updateDetailText() {
@@ -687,3 +696,4 @@ public class QSPanel extends ViewGroup {
         void onScanStateChanged(boolean state);
     }
 }
+
