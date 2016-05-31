@@ -1879,11 +1879,12 @@ public final class ActivityStackSupervisor implements DisplayListener {
             //TODO: This needs to be a flushed out API in the future.
             boolean isProtected = intent.getComponent() != null
                     && AppGlobals.getPackageManager()
-                    .isComponentProtected(null, r.launchedFromUid,
+                    .isComponentProtected(sourceRecord == null ? "android" :
+                                    sourceRecord.launchedFromPackage, r.launchedFromUid,
                             intent.getComponent(), r.userId) &&
                     (intent.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0;
 
-            if (isProtected) {
+            if (isProtected && r.state == INITIALIZING) {
                 Message msg = mService.mHandler.obtainMessage(
                         ActivityManagerService.POST_COMPONENT_PROTECTED_MSG);
                 //Store start flags, userid
