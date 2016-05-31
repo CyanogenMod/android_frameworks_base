@@ -2205,6 +2205,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
                 try {
                     Intent protectedAppIntent = new Intent();
+                    protectedAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     protectedAppIntent.setComponent(
                             new ComponentName("com.android.settings",
                                     "com.android.settings.applications.ProtectedAppsActivity"));
@@ -2237,6 +2238,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                             .build();
                     try {
                         int[] outId = new int[1];
+                        inm.cancelNotificationWithTag("android", null,
+                                R.string.notify_package_component_protected_title, msg.arg1);
                         inm.enqueueNotificationWithTag("android", "android", null,
                                 R.string.notify_package_component_protected_title,
                                 notification, outId, mCurrentUserId);
