@@ -165,7 +165,8 @@ public final class BatteryService extends SystemService {
 
     private boolean mAdjustableNotificationLedBrightness;
     private int mNotificationLedBrightnessLevel = LIGHT_BRIGHTNESS_MAXIMUM;
-    private boolean mUseSegmentedBatteryLed = false;
+    private boolean mSegmentedBatteryLedAvailable = false;
+    private boolean mSegmentedBatteryLedEnabled = false;
 
     private boolean mMultipleNotificationLeds;
     private boolean mMultipleLedsEnabled = false;
@@ -1052,7 +1053,7 @@ public final class BatteryService extends SystemService {
 
             // Does the Device have segmented battery LED support? In this case, we send the level
             // in the alpha channel of the color and let the HAL sort it out.
-            mUseSegmentedBatteryLed = context.getResources().getBoolean(
+            mSegmentedBatteryLedAvailable = context.getResources().getBoolean(
                     org.cyanogenmod.platform.internal.R.bool.config_useSegmentedBatteryLed);
         }
 
@@ -1095,7 +1096,7 @@ public final class BatteryService extends SystemService {
 
             final int level = mBatteryProps.batteryLevel;
             final int status = mBatteryProps.batteryStatus;
-            mNotificationLedBrightnessLevel = mUseSegmentedBatteryLed ? level :
+            mNotificationLedBrightnessLevel = mSegmentedBatteryLedEnabled ? level :
                     LIGHT_BRIGHTNESS_MAXIMUM;
 
             if (!mLightEnabled) {
@@ -1253,6 +1254,13 @@ public final class BatteryService extends SystemService {
             resolver.registerContentObserver(CMSettings.System.getUriFor(
                     CMSettings.System.BATTERY_LIGHT_PULSE), false, this, UserHandle.USER_ALL);
 
+            // Segmented LEDs enabled
+            if (mSegmentedBatteryLedAvailable) {
+                resolver.registerContentObserver(CMSettings.System.getUriFor(
+                        CMSettings.System.BATTERY_LIGHT_SEGMENTED),
+                        false, this, UserHandle.USER_ALL);
+            }
+
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
                 resolver.registerContentObserver(CMSettings.System.getUriFor(
@@ -1310,6 +1318,12 @@ public final class BatteryService extends SystemService {
             mBatteryFullARGB = CMSettings.System.getInt(resolver,
                     CMSettings.System.BATTERY_LIGHT_FULL_COLOR, res.getInteger(
                     com.android.internal.R.integer.config_notificationsBatteryFullARGB));
+
+            // Segmented LEDs enabled
+            if (mSegmentedBatteryLedAvailable) {
+                mSegmentedBatteryLedEnabled = CMSettings.System.getInt(resolver,
+                        CMSettings.System.BATTERY_LIGHT_SEGMENTED, 1) != 0;
+            }
 
             // Notification LED brightness
             if (mAdjustableNotificationLedBrightness) {
