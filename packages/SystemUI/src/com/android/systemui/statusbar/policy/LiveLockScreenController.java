@@ -84,6 +84,12 @@ public class LiveLockScreenController {
             mBar.getScrimController().forceHideScrims(false);
         }
 
+        // We are going back to keyguard from a non keyguard state. Lets unset focus
+        // so that we are in sync with window manager's focus state
+        if (mStatusBarState != StatusBarState.KEYGUARD && statusBarState == StatusBarState.KEYGUARD) {
+            onLiveLockScreenFocusChanged(false);
+        }
+
         mStatusBarState = statusBarState;
         if (statusBarState == StatusBarState.KEYGUARD ||
                 statusBarState == StatusBarState.SHADE_LOCKED) {
