@@ -84,6 +84,11 @@ public class LiveLockScreenController {
             mBar.getScrimController().forceHideScrims(false);
         }
 
+        // If we have focus and state is KEYGUARD, unset it.
+        if (getLiveLockScreenHasFocus() && statusBarState == StatusBarState.KEYGUARD) {
+            onLiveLockScreenFocusChanged(false);
+        }
+
         mStatusBarState = statusBarState;
         if (statusBarState == StatusBarState.KEYGUARD ||
                 statusBarState == StatusBarState.SHADE_LOCKED) {
