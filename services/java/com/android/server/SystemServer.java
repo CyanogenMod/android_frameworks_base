@@ -447,6 +447,12 @@ public final class SystemServer {
         } else if (ENCRYPTED_STATE.equals(cryptState)) {
             Slog.w(TAG, "Device encrypted - only parsing core apps");
             mOnlyCore = true;
+        } else if (SystemProperties.getBoolean("ro.alarm_boot", false)) {
+            // power off alarm mode is similar to encryption mode. Only power off alarm
+            // applications will be parsed by packageParser. Some services or settings are
+            // not necessary to power off alarm mode. So reuse mOnlyCore for power off alarm
+            // mode.
+            mOnlyCore = true;
         }
 
         if (RegionalizationEnvironment.isSupported()) {

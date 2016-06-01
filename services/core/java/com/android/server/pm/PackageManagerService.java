@@ -108,6 +108,7 @@ import android.annotation.Nullable;
 import android.annotation.UserIdInt;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
+import android.app.AlarmManager;
 import android.app.IActivityManager;
 import android.app.ResourcesManager;
 import android.app.admin.IDevicePolicyManager;
@@ -533,6 +534,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final Context mContext;
     final boolean mFactoryTest;
     final boolean mOnlyCore;
+    private boolean mOnlyPowerOffAlarm = false;
     final DisplayMetrics mMetrics;
     final int mDefParseFlags;
     final String[] mSeparateProcesses;
@@ -2263,6 +2265,28 @@ public class PackageManagerService extends IPackageManager.Stub {
                 ApplicationInfo.FLAG_SYSTEM, ApplicationInfo.PRIVATE_FLAG_PRIVILEGED);
         mSettings.addSharedUserLPw("android.uid.shell", SHELL_UID,
                 ApplicationInfo.FLAG_SYSTEM, ApplicationInfo.PRIVATE_FLAG_PRIVILEGED);
+
+        File setFile = new File(AlarmManager.POWER_OFF_ALARM_SET_FILE);
+        File handleFile = new File(AlarmManager.POWER_OFF_ALARM_HANDLE_FILE);
+        boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
+        if (isAlarmBoot) {
+            mOnlyPowerOffAlarm = true;
+        } else if (setFile.exists() && handleFile.exists()) {
+            // if it is normal boot, check if power off alarm is handled. And set
+            // alarm properties for others to check.
+            if (!mOnlyCore && AlarmManager
+                    .readPowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_HANDLE_FILE)
+                    .equals(AlarmManager.POWER_OFF_ALARM_HANDLED)) {
+                SystemProperties.set("ro.alarm_handled", "true");
+                File instanceFile = new File(AlarmManager.POWER_OFF_ALARM_INSTANCE_FILE);
+                String instanceValue = AlarmManager
+                        .readPowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_INSTANCE_FILE);
+                SystemProperties.set("ro.alarm_instance", instanceValue);
+
+                AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_HANDLE_FILE,
+                        AlarmManager.POWER_OFF_ALARM_NOT_HANDLED);
+            }
+        }
 
         String separateProcesses = SystemProperties.get("debug.separate_processes");
         if (separateProcesses != null && separateProcesses.length() > 0) {
@@ -6897,9 +6921,10 @@ public class PackageManagerService extends IPackageManager.Stub {
     private PackageParser.Package scanPackageLI(File scanFile, int parseFlags, int scanFlags,
             long currentTime, UserHandle user) throws PackageManagerException {
         if (DEBUG_INSTALL) Slog.d(TAG, "Parsing: " + scanFile);
-        PackageParser pp = new PackageParser();
+        PackageParser pp = new PackageParser(mContext);
         pp.setSeparateProcesses(mSeparateProcesses);
         pp.setOnlyCoreApps(mOnlyCore);
+        pp.setOnlyPowerOffAlarmApps(mOnlyPowerOffAlarm);
         pp.setDisplayMetrics(mMetrics);
 
         if ((scanFlags & SCAN_TRUSTED_OVERLAY) != 0) {

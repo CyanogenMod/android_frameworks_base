@@ -533,6 +533,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     private static final String INTENT_REMOTE_BUGREPORT_FINISHED =
             "android.intent.action.REMOTE_BUGREPORT_FINISHED";
 
+    private static final String ACTION_POWER_OFF_ALARM =
+            "org.codeaurora.alarm.action.POWER_OFF_ALARM";
+
     // Delay to disable app launch boost
     static final int APP_BOOST_MESSAGE_DELAY = 3000;
     // Lower delay than APP_BOOST_MESSAGE_DELAY to disable the boost
@@ -3908,6 +3911,15 @@ public final class ActivityManagerService extends ActivityManagerNative
             intent.addCategory(Intent.CATEGORY_HOME);
         }
         return intent;
+    }
+
+    /**
+     * If system is power off alarm boot mode, we need to start alarm UI.
+     */
+    void sendAlarmBroadcast() {
+        Intent intent = new Intent(ACTION_POWER_OFF_ALARM);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);
     }
 
     boolean startHomeActivityLocked(int userId, String reason) {
@@ -13227,6 +13239,12 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
             startHomeActivityLocked(currentUserId, "systemReady");
+
+            // start the power off alarm by boot mode
+            boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
+            if (isAlarmBoot) {
+                sendAlarmBroadcast();
+            }
 
             try {
                 if (AppGlobals.getPackageManager().hasSystemUidErrors()) {

@@ -18,6 +18,7 @@
 package com.android.server.power;
 
 import android.app.ActivityManagerNative;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.IActivityManager;
@@ -506,6 +507,19 @@ public final class ShutdownThread extends Thread {
             // If it's to reboot to install an update and uncrypt hasn't been
             // done yet, trigger it now.
             uncrypt();
+        }
+
+
+        // If it is alarm boot and encryption status, power off alarm status will
+        // be set to handled when device go to shutdown or reboot.
+        boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
+        String cryptState = SystemProperties.get("vold.decrypt");
+
+        if (isAlarmBoot &&
+                ("trigger_restart_min_framework".equals(cryptState) ||
+                "1".equals(cryptState))) {
+            AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_HANDLE_FILE,
+                    AlarmManager.POWER_OFF_ALARM_HANDLED);
         }
 
         rebootOrShutdown(mContext, mReboot, mReason);

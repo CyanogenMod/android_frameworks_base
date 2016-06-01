@@ -28,6 +28,7 @@ import android.app.IAlarmManager;
 import android.app.IUidObserver;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -119,6 +120,11 @@ class AlarmManagerService extends SystemService {
                     .addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
 
     final LocalLog mLog = new LocalLog(TAG);
+
+    private static final String DESKCLOCK_PACKAGE_NAME = "com.android.deskclock";
+
+    private static final String ENCRYPTING_STATE = "trigger_restart_min_framework";
+    private static final String ENCRYPTED_STATE = "1";
 
     AppOpsManager mAppOps;
     DeviceIdleController.LocalService mLocalDeviceIdleController;
@@ -393,13 +399,14 @@ class AlarmManagerService extends SystemService {
             return alarms.get(index);
         }
 
-        long getWhenByElapsedTime(long whenElapsed) {
+        Alarm getAlarmByElapsedTime(long whenElapsed) {
+            Alarm alarm = null;
             for(int i=0;i< alarms.size();i++) {
                 if(alarms.get(i).whenElapsed == whenElapsed) {
-                    return alarms.get(i).when;
+                    alarm = alarms.get(i);
                 }
             }
-            return 0;
+            return alarm;
         }
 
         boolean canHold(long whenElapsed, long maxWhen) {
@@ -1733,7 +1740,6 @@ class AlarmManagerService extends SystemService {
         final int N = mAlarmBatches.size();
         for (int i = 0; i < N; i++) {
             Batch b = mAlarmBatches.get(i);
-            long intervalTime  = b.start - SystemClock.elapsedRealtime();
             if (b.isRtcPowerOffWakeup()) {
                 return b;
             }
@@ -1895,12 +1901,37 @@ class AlarmManagerService extends SystemService {
                 mLastWakeupSet = SystemClock.elapsedRealtime();
                 setLocked(ELAPSED_REALTIME_WAKEUP, firstWakeup.start);
             }
+
+            boolean isEncryptStatus = false;
+            String cryptState = SystemProperties.get("vold.decrypt");
+            if (ENCRYPTING_STATE.equals(cryptState) || ENCRYPTED_STATE.equals(cryptState)) {
+                isEncryptStatus = true;
+            }
+
+            // Set RTC_POWEROFF type alarm to kernel
             if (firstRtcWakeup != null && mNextRtcWakeup != firstRtcWakeup.start) {
                 mNextRtcWakeup = firstRtcWakeup.start;
-                long when = firstRtcWakeup.getWhenByElapsedTime(mNextRtcWakeup);
-                if (when != 0) {
-                    setLocked(RTC_POWEROFF_WAKEUP, when);
+                Alarm alarm = firstRtcWakeup.getAlarmByElapsedTime(mNextRtcWakeup);
+                if (alarm != null) {
+                    // use packageName to check if the alarm is set from deskclock app
+                    // (power off alarm)
+                    String packageName = alarm.packageName;
+                    if (DESKCLOCK_PACKAGE_NAME.equals(packageName)) {
+                        AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_SET_FILE,
+                                AlarmManager.POWER_OFF_ALARM_SET);
+                        if (!isEncryptStatus) {
+                            AlarmManager.writePowerOffAlarmFile(
+                                    AlarmManager.POWER_OFF_ALARM_INSTANCE_FILE, "" + alarm.when);
+                        }
+                    } else {
+                        AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_SET_FILE,
+                                AlarmManager.POWER_OFF_ALARM_NOT_SET);
+                    }
+                    setLocked(RTC_POWEROFF_WAKEUP, alarm.when);
                 }
+            } else if (firstRtcWakeup == null){
+                AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_SET_FILE,
+                        AlarmManager.POWER_OFF_ALARM_NOT_SET);
             }
             if (firstBatch != firstWakeup) {
                 nextNonWakeup = firstBatch.start;
