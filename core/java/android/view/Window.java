@@ -869,6 +869,10 @@ public abstract class Window {
     }
 
     private void setPrivateFlags(int flags, int mask) {
+        if ((flags & mask & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_POWER_KEY) != 0){
+            mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_POWER_KEY",
+                    "No permission to prevent system key");
+        }
         if ((flags & mask & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0){
             mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_SYSTEM_KEYS",
                     "No permission to prevent system key");
