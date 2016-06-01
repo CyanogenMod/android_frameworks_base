@@ -3312,7 +3312,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             if (mTopFullscreenOpaqueWindowState != null &&
                     (mTopFullscreenOpaqueWindowState.getAttrs().privateFlags
-                            & WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS) != 0
+                            & (WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS |
+                                WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_POWER_KEY)) != 0
                     && mScreenOnFully) {
                 return 0;
             }
