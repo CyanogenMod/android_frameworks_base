@@ -104,6 +104,7 @@
   <string name="quick_settings_lockscreen_label">Экран блакіроўкі</string>
   <string name="quick_settings_ambient_display_label">Індыкацыя падзей</string>
   <string name="quick_settings_lockscreen_label_enforced">Блакаванне экрана ўключана</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Адключаны профілем</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Час да выключэння экрана: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -205,9 +206,13 @@
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Дадаць плітку</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Немагчыма падлучыцца да сеткі сотавай сувязі ў той час як рэжым палёту ўключаны. Адключыце рэжым палёту і паспрабуйце ізноў.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">Выбліск уключаны</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Націсніце, каб уключыць</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Няма дадзеных SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Зарад батарэі док-станцыі <xliff:g id="number">%d</xliff:g> адсоткаў.</string>
   <!-- Play queue -->
