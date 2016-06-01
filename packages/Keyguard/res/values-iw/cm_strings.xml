@@ -23,6 +23,8 @@
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">הזן את קוד ה-PIN של כרטיס ה-SIM, נותר לך ניסיון <xliff:g id="number">%d</xliff:g> לפני שתיאלץ לפנות לספק התקשורת שלך על מנת לבטל את נעילת המכשיר.</item>
+    <item quantity="two">הזן את קוד ה-PIN של כרטיס ה-SIM, נותרו לך <xliff:g id="number">%d</xliff:g> ניסיונות.</item>
+    <item quantity="many">הזן את קוד ה-PIN של כרטיס ה-SIM, נותרו לך <xliff:g id="number">%d</xliff:g> ניסיונות.</item>
     <item quantity="other">הזן את קוד ה-PIN של כרטיס ה-SIM, נותרו לך <xliff:g id="number">%d</xliff:g> ניסיונות.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
