@@ -322,6 +322,12 @@ public class WifiManager {
     public static final int WIFI_AP_STATE_FAILED = 14;
 
     /**
+     * Wi-Fi AP is in restarting state
+     * @hide
+     */
+    public static final int WIFI_AP_STATE_RESTART = 15;
+
+    /**
      *  If WIFI AP start failed, this reason code means there is no legal channel exists on
      *  user selected band by regulatory
      *
