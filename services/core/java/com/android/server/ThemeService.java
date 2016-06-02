@@ -600,7 +600,7 @@ public class ThemeService extends IThemeService.Stub {
     private boolean updateAudible(String dirPath, String assetPath, int type, String pkgName) {
         //Clear the dir
         ThemeUtils.clearAudibles(mContext, dirPath);
-        if (pkgName.equals(SYSTEM_DEFAULT)) {
+        if (TextUtils.isEmpty(pkgName) || pkgName.equals(SYSTEM_DEFAULT)) {
             if (!ThemeUtils.setDefaultAudible(mContext, type)) {
                 Log.e(TAG, "There was an error installing the default audio file");
                 return false;
