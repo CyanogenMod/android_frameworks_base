@@ -209,7 +209,9 @@ public class StorageNotification extends SystemUI {
                                 isUsbStorage ?
                                         R.string.usb_ext_media_safe_unmount_notification_message :
                                         R.string.sd_ext_media_safe_unmount_notification_message,
-                                R.drawable.stat_notify_sdcard, true, true, null);
+                                R.drawable.stat_notify_sdcard, true,
+                                !mContext.getResources().getBoolean(
+                                R.bool.config_persistUsbDriveNotification), null);
                     } else {
                         // This device does not have removable storage, so
                         // don't tell the user they can remove it.
