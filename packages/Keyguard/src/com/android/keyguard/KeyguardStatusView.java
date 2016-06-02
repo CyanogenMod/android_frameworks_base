@@ -138,6 +138,25 @@ public class KeyguardStatusView extends GridLayout {
                 getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
     }
 
+    public void hideLockscreenItems() {
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HIDE_LOCKSCREEN_CLOCK, 1) == 1) {
+            mClockView = (TextClock) findViewById(R.id.clock_view);
+            mClockView.setVisibility(View.VISIBLE);
+        } else {
+            mClockView = (TextClock) findViewById(R.id.clock_view);
+            mClockView.setVisibility(View.GONE);
+        }
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.HIDE_LOCKSCREEN_DATE, 1) == 1) {
+            mDateView = (TextClock) findViewById(R.id.date_view);
+            mDateView.setVisibility(View.VISIBLE);
+        } else {
+            mDateView = (TextClock) findViewById(R.id.date_view);
+            mDateView.setVisibility(View.GONE);
+        }
+    }
+
     public void refreshTime() {
         mDateView.setFormat24Hour(Patterns.dateView);
         mDateView.setFormat12Hour(Patterns.dateView);
@@ -153,6 +172,7 @@ public class KeyguardStatusView extends GridLayout {
 
         refreshTime();
         refreshAlarmStatus(nextAlarm);
+        hideLockscreenItems();
     }
 
     void refreshAlarmStatus(AlarmManager.AlarmClockInfo nextAlarm) {
@@ -193,6 +213,7 @@ public class KeyguardStatusView extends GridLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         KeyguardUpdateMonitor.getInstance(mContext).registerCallback(mInfoCallback);
+	hideLockscreenItems();
     }
 
     @Override
