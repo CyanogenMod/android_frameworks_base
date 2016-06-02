@@ -155,6 +155,14 @@ public class KeyguardStatusView extends GridLayout {
             mDateView = (TextClock) findViewById(R.id.date_view);
             mDateView.setVisibility(View.GONE);
         }
+        if (Settings.System.getInt(mContext.getContentResolver(),
+        	Settings.System.HIDE_LOCKSCREEN_ALARM, 1) == 1) {
+             mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
+             mAlarmStatusView.setVisibility(View.VISIBLE);
+         } else {
+             mAlarmStatusView = (TextView) findViewById(R.id.alarm_status);
+             mAlarmStatusView.setVisibility(View.GONE);
+         }
     }
 
     public void refreshTime() {
