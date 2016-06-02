@@ -333,6 +333,27 @@ public class RecoverySystem {
      */
     public static void installPackage(Context context, File packageFile)
         throws IOException {
+        installPackage(context, packageFile, false);
+    }
+
+    /**
+     * Reboots the device in order to install the given update
+     * package.
+     * Requires the {@link android.Manifest.permission#REBOOT} permission.
+     *
+     * @param context      the Context to use
+     * @param packageFile  the update package to install.  Must be on
+     * a partition mountable by recovery.  (The set of partitions
+     * known to recovery may vary from device to device.  Generally,
+     * /cache and /data are safe.)
+     * @param wipeData     whether to wipe data (CAREFUL!)
+     *
+     * @throws IOException  if writing the recovery command file
+     * fails, or if the reboot itself fails.
+     */
+    public static void installPackage(Context context, File packageFile,
+            boolean wipeData)
+            throws IOException {
         String filename = packageFile.getCanonicalPath();
 
         final String cryptoStatus = SystemProperties.get("ro.crypto.state", "unsupported");
@@ -360,7 +381,8 @@ public class RecoverySystem {
 
         final String filenameArg = "--update_package=" + filename;
         final String localeArg = "--locale=" + Locale.getDefault().toString();
-        bootCommand(context, filenameArg, localeArg);
+        final String wipeDataArg = wipeData ? "--wipe_data" : null;
+        bootCommand(context, filenameArg, localeArg, wipeDataArg);
     }
 
     /**
