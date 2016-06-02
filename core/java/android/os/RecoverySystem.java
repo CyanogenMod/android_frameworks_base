@@ -337,8 +337,9 @@ public class RecoverySystem {
 
         final String cryptoStatus = SystemProperties.get("ro.crypto.state", "unsupported");
         final boolean isEncrypted = "encrypted".equalsIgnoreCase(cryptoStatus);
+        final boolean hasAdoptable = SystemProperties.getInt("vold.has_adoptable", 0) == 1;
 
-        if (isEncrypted) {
+        if (isEncrypted || (hasAdoptable && filename.startsWith("/mnt/expand/"))) {
             FileWriter uncryptFile = new FileWriter(UNCRYPT_FILE);
             try {
                 uncryptFile.write(filename + "\n");
@@ -353,7 +354,7 @@ public class RecoverySystem {
 
             // If the package is on the /data partition, write the block map file
             // into COMMAND_FILE instead.
-            if (filename.startsWith("/data/")) {
+            if (filename.startsWith("/data/") || filename.startsWith("/mnt/expand/")) {
                 filename = "@/cache/recovery/block.map";
             }
         }
