@@ -3918,10 +3918,10 @@ public final class PowerManagerService extends SystemService
                 else {
                     mBlockedUids.clear();
                 }
-            }
-            if(changed){
-                mDirty |= DIRTY_WAKE_LOCKS;
-                updatePowerStateLocked();
+                if(changed){
+                    mDirty |= DIRTY_WAKE_LOCKS;
+                    updatePowerStateLocked();
+                }
             }
         }
     }
