@@ -138,7 +138,7 @@ public class KeyguardStatusView extends GridLayout {
                 getResources().getDimensionPixelSize(R.dimen.widget_label_font_size));
     }
 
-    public void hideLockscreenItems() {
+    private void hideLockscreenItems() {
         if (Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.HIDE_LOCKSCREEN_CLOCK, 1) == 1) {
             mClockView = (TextClock) findViewById(R.id.clock_view);
