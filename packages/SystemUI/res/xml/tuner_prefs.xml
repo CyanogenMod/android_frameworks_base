@@ -21,10 +21,6 @@
         android:key="statusbar_icon_blacklist"
         android:title="@string/status_bar" />
 
-   <Preference
-        android:key="qs_tuner"
-        android:title="@string/quick_settings" />
-
     <Preference
         android:key="demo_mode"
         android:title="@string/demo_mode" />
