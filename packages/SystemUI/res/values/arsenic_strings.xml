@@ -36,5 +36,7 @@
     <!-- Screen record notification error title -->
     <string name="screenrecord_notif_error">Unable to record screen</string>
 
+    <!-- Tuner -->
+    <string name="systemui_tuner_qs_title">UI Tuner</string>
 
 </resources>

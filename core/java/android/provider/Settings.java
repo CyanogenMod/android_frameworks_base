@@ -3518,6 +3518,14 @@ public final class Settings {
          */
         public static final String QS_NUM_TILE_ROWS = "sysui_qs_num_tile_rows";
 
+        /**
+         * Use "main" tiles on the first row of the quick settings panel
+         * 0 = no, 1 = yes
+         * @hide
+         */
+         
+        public static final String QS_USE_MAIN_TILES = "qs_use_main_tiles";
+
 
         /**
          * I am the lolrus.

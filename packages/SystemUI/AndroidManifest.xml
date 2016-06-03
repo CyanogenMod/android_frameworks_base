@@ -200,9 +200,21 @@
                   android:excludeFromRecents="true">
         </activity>
 
+	      <activity android:name=".tuner.QsActivity"
+                  android:enabled="true"
+                  android:theme="@android:style/Theme.Material.Settings"
+                  android:label="@string/systemui_tuner_qs_title"
+                  android:process=":tuner"
+                  android:parentActivityName="com.android.settings.Settings$MainSettingsActivity"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".tuner.TunerActivity"
-                  android:enabled="false"
-                  android:icon="@drawable/tuner"
+                  android:enabled="true"
                   android:theme="@android:style/Theme.Material.Settings"
                   android:label="@string/system_ui_tuner"
                   android:process=":tuner"
