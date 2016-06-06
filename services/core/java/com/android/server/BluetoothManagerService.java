@@ -143,6 +143,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private int mErrorRecoveryRetryCounter;
     private final int mSystemUiUid;
     private boolean mIntentPending = false;
+    private int mIBluetoothConnectedMsgQueued = 0;
 
     private void registerForAirplaneMode(IntentFilter filter) {
         final ContentResolver resolver = mContext.getContentResolver();
@@ -886,7 +887,9 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 return;
             }
             msg.obj = service;
-            mHandler.sendMessage(msg);
+            boolean sent = mHandler.sendMessage(msg);
+            if (sent && (msg.arg1 == SERVICE_IBLUETOOTH))
+                mIBluetoothConnectedMsgQueued++;
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -1060,6 +1063,8 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                             break;
                         } // else must be SERVICE_IBLUETOOTH
 
+                        mIBluetoothConnectedMsgQueued--;
+
                         //Remove timeout
                         mHandler.removeMessages(MESSAGE_TIMEOUT_BIND);
 
@@ -1194,7 +1199,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                         mBluetoothLock.writeLock().unlock();
                     }
 
-                    if (mEnable) {
+                    if (mEnable && (mIBluetoothConnectedMsgQueued == 0)) {
                         mEnable = false;
                         // Send a Bluetooth Restart message
                         Message restartMsg = mHandler.obtainMessage(
@@ -1594,6 +1599,20 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         handleDisable();
 
         waitForOnOff(false, true);
+
+        // If there is a MESSAGE_BLUETOOTH_SERVICE_CONNECTED in mHandler queue, we should not
+        // unbindService as below. Otherwise, after unbind, com.android.bluetooth will die, but
+        // later mBluetooth will be assigned to adapterService in handleMessage of
+        // MESSAGE_BLUETOOTH_SERVICE_CONNECTED. From then on, mBluetooth is not null,
+        // and com.android.bluetooth is dead, but doBind will not be triggered again.
+        if (mIBluetoothConnectedMsgQueued > 0) {
+            Slog.e(TAG, "recoverBluetoothServiceFromError: "
+                    + "MESSAGE_BLUETOOTH_SERVICE_CONNECTED exists in mHandler queue, "
+                    + "should not unbindService, return directly.");
+            mHandler.removeMessages(MESSAGE_BLUETOOTH_STATE_CHANGE);
+            mState = BluetoothAdapter.STATE_OFF;
+            return;
+        }
 
         sendBluetoothServiceDownCallback();
 
