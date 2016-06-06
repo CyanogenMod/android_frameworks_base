@@ -164,15 +164,11 @@ interface IAudioService {
 
     oneway void unregisterRecordingCallback(in IRecordingConfigDispatcher rcdb);
 
-<<<<<<< HEAD
     List<AudioRecordingConfiguration> getActiveRecordingConfigurations();
-=======
-    AudioRecordingConfiguration[] getActiveRecordingConfigurations();
 
     void updateRemoteControllerOnExistingMediaPlayers();
 
     void addMediaPlayerAndUpdateRemoteController(String packageName);
 
     void removeMediaPlayerAndUpdateRemoteController(String packageName);
->>>>>>> 810a57e... AVRCP 1.5 implementation
 }
