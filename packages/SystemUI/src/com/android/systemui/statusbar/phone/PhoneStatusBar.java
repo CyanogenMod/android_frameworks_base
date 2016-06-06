@@ -54,12 +54,14 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.InputMethodService;
+import android.net.Uri;
 import android.media.AudioAttributes;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -352,8 +354,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private QSTileHost mQSTileHost;
     private DevForceNavbarObserver mDevForceNavbarObserver;
 
-    // show 4g
-    private boolean mShow4g;
+    private boolean mShow4G;
+    private boolean mShow3G;	
 
     // top bar
     StatusBarHeaderView mHeader;
@@ -471,26 +473,31 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.System.QS_NUM_TILE_ROWS), false, this,
                     UserHandle.USER_ALL);
 	    resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SHOW_FOURG),
-                    false, this, UserHandle.USER_ALL);
-            update();
+		    Settings.System.SHOW_FOURG),
+		    false, this, UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+		    Settings.System.SHOW_THREEG),
+		    false, this, UserHandle.USER_ALL);
+            	    update();
         }
 
 	@Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.SHOW_FOURG))) {
-                    mShow4G = Settings.System.getIntForUser(
-                            mContext.getContentResolver(),
-                            Settings.System.SHOW_FOURG,
-                            0, UserHandle.USER_CURRENT) == 1;
-                            recreateStatusBar();
-                            updateRowStates();
-                            updateSpeedbump();
-                            updateClearAll();
-                            updateEmptyShadeView();
+	if (uri.equals(Settings.System.getUriFor(
+		Settings.System.SHOW_FOURG))) {
+		mShow4G = Settings.System.getIntForUser(
+		mContext.getContentResolver(),
+		Settings.System.SHOW_FOURG,
+		0, UserHandle.USER_CURRENT) == 1;
+		} else if (uri.equals(Settings.System.getUriFor(
+		Settings.System.SHOW_THREEG))) {
+		mShow3G = Settings.System.getIntForUser(
+		mContext.getContentResolver(),
+		Settings.System.SHOW_THREEG,
+		0, UserHandle.USER_CURRENT) == 1;
             }
-            update();
+         update();
+	}
 
         @Override
         protected void unobserve() {
@@ -513,6 +520,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             boolean mShow4G = Settings.System.getIntForUser(resolver,
                     Settings.System.SHOW_FOURG, 0, UserHandle.USER_CURRENT) == 1;
+	  
+	    boolean mShow3G = Settings.System.getIntForUser(resolver,
+                    Settings.System.SHOW_THREEG, 0, UserHandle.USER_CURRENT) == 1;
 
             if (mNavigationBarView != null) {
                 boolean navLeftInLandscape = CMSettings.System.getIntForUser(resolver,

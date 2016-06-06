@@ -3615,6 +3615,12 @@ public final class Settings {
          */
         public static final String SHOW_FOURG = "show_fourg";
 
+	/**
+         * Show 3g instead of H+
+         * @hide
+         */
+        public static final String SHOW_THREEG = "show_threeg";
+
         /**
          * whether to enable /disable showing charging current on lockscreen
          * @hide
