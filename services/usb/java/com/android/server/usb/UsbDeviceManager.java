@@ -349,6 +349,7 @@ public class UsbDeviceManager {
                 // Restore default functions.
                 mCurrentFunctions = SystemProperties.get(USB_CONFIG_PROPERTY,
                         UsbManager.USB_FUNCTION_NONE);
+                mCurrentFunctions = removeDataFunctions(mCurrentFunctions);
                 if (UsbManager.USB_FUNCTION_NONE.equals(mCurrentFunctions)) {
                     mCurrentFunctions = UsbManager.USB_FUNCTION_MTP;
                 }
@@ -472,7 +473,9 @@ public class UsbDeviceManager {
                 // Due to the persist.sys.usb.config property trigger, changing adb state requires
                 // persisting default function
                 String oldFunctions = getDefaultFunctions();
-                String newFunctions = applyAdbFunction(oldFunctions);
+                String newFunctions;
+                newFunctions = applyAdbFunction(oldFunctions);
+                newFunctions = removeDataFunctions(newFunctions);
                 if (!oldFunctions.equals(newFunctions)) {
                     SystemProperties.set(USB_PERSISTENT_CONFIG_PROPERTY, newFunctions);
                 }
@@ -562,6 +565,12 @@ public class UsbDeviceManager {
             } else {
                 functions = UsbManager.removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
             }
+            return functions;
+        }
+
+        private String removeDataFunctions(String functions) {
+            functions = UsbManager.removeFunction(functions, UsbManager.USB_FUNCTION_MTP);
+            functions = UsbManager.removeFunction(functions, UsbManager.USB_FUNCTION_PTP);
             return functions;
         }
 
