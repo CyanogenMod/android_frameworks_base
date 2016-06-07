@@ -489,12 +489,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 		mContext.getContentResolver(),
 		Settings.System.SHOW_FOURG,
 		0, UserHandle.USER_CURRENT) == 1;
+		recreateStatusBar();
 		} else if (uri.equals(Settings.System.getUriFor(
 		Settings.System.SHOW_THREEG))) {
 		mShow3G = Settings.System.getIntForUser(
 		mContext.getContentResolver(),
 		Settings.System.SHOW_THREEG,
 		0, UserHandle.USER_CURRENT) == 1;
+		recreateStatusBar();
             }
          update();
 	}
