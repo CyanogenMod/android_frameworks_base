@@ -162,7 +162,7 @@
     <integer name="def_download_manager_recommended_max_bytes_over_mobile">-1</integer>
 
     <!-- Default for Settings.Secure.LONG_PRESS_TIMEOUT_MILLIS -->
-    <integer name="def_long_press_timeout_millis">500</integer>
+    <integer name="def_long_press_timeout_millis">400</integer>
 
     <!-- Default for Settings.System.POINTER_SPEED -->
     <integer name="def_pointer_speed">0</integer>

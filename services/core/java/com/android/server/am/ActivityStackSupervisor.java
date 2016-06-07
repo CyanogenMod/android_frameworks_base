@@ -2457,7 +2457,14 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 return ActivityManager.START_RETURN_LOCK_TASK_MODE_VIOLATION;
             }
             targetStack = inTask.stack;
-            targetStack.moveTaskToFrontLocked(inTask, noAnimation, options, r.appTimeTracker,
+
+            // When there is no activity in the stack, the focusedStack will be set to
+            // home stack when we try to move the task to front. So, to set the focus
+            // on the correct stack, we check for running activities in the targetStack
+            if (targetStack.topRunningActivityLocked(null) == null)
+                targetStack.moveToFront("restartingTaskFromRecents");
+            else
+                targetStack.moveTaskToFrontLocked(inTask, noAnimation, options, r.appTimeTracker,
                     "inTaskToFront");
 
             // Check whether we should actually launch the new activity in to the task,

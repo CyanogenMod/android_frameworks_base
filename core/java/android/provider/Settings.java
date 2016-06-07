@@ -3281,6 +3281,12 @@ public final class Settings {
         public static final Validator LOCKSCREEN_DISABLED_VALIDATOR = sBooleanValidator;
 
         /**
+         * Whether to show Brightness Icon On Brightness Slider
+         * @hide
+         */
+        public static final String BRIGHTNESS_ICON = "brightness_icon";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
          * instead
          * @hide
@@ -3471,6 +3477,49 @@ public final class Settings {
         public static final Validator LOCK_TO_APP_ENABLED_VALIDATOR = sBooleanValidator;
 
         /**
+         * Network traffic indicator, goes from least to greatest significant bitwise
+         * 0 = Display up-stream traffic if set
+         * 1 = Display down-stream traffic if set
+         * 2 = Show as Byte/s if set
+         * 16-31 = Refresh interval(ms)  min: 250  max: 32750  default: 1000
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_STATE = "network_traffic_state";
+
+         /**
+         * Network traffic inactivity threshold (default is 10 kBs)
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
+
+        /**
+         * Whether or not to hide the network traffic indicator when there is no activity
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_AUTOHIDE = "network_traffic_autohide";
+
+        /**
+         * Whether to show four tiles per row.
+         * @hide
+         */
+        public static final String QS_USE_FOUR_COLUMNS = "qs_use_four_columns";
+
+ 	/**
+         * Number of columns to display on the quick settings panel
+         * Default is 3
+         * @hide
+         */
+        public static final String QS_NUM_TILE_COLUMNS = "sysui_qs_num_tile_columns";
+
+        /**
+         * Number of rows to display on the quick settings panel
+         * Default is 3
+         * @hide
+         */
+        public static final String QS_NUM_TILE_ROWS = "sysui_qs_num_tile_rows";
+
+
+        /**
          * I am the lolrus.
          * <p>
          * Nonzero values indicate that the user has a bukkit.
@@ -3490,6 +3539,30 @@ public final class Settings {
                 }
             }
         };
+
+       /**
+        * Network stats Color style
+        * @hide
+        */
+       public static final String NETWORK_TRAFFIC_COLOR = "network_traffic_color";
+
+	/*
+         * Hide lockscreen date
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_DATE = "hide_lockscreen_date";
+
+        /**
+         * Hide lockscreen clock
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_CLOCK = "hide_lockscreen_clock";
+
+        /**
+         * Hide lockscreen alarm
+         * @hide
+         */
+        public static final String HIDE_LOCKSCREEN_ALARM = "hide_lockscreen_alarm";
 
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
@@ -3535,6 +3608,24 @@ public final class Settings {
          */
         public static final String VOLUME_KEYS_CONTROL_RING_STREAM =
                 "volume_keys_control_ring_stream";
+
+	/**
+         * Show four g instead of lte
+         * @hide
+         */
+        public static final String SHOW_FOURG = "show_fourg";
+
+	/**
+         * Show 3g instead of H+
+         * @hide
+         */
+        public static final String SHOW_THREEG = "show_threeg";
+
+        /**
+         * whether to enable /disable showing charging current on lockscreen
+         * @hide
+         */
+        public static final String LOCK_SCREEN_SHOW_CURRENT = "lock_screen_show_current";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

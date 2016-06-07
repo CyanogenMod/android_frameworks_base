@@ -21,8 +21,12 @@
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
-    <style name="WallpaperCropperActionBar" parent="android:style/Widget.DeviceDefault.ActionBar">
+    <style name="WallpaperCropperActionBar" parent="@android:style/Widget.DeviceDefault.ActionBar">
         <item name="android:displayOptions">showCustom</item>
         <item name="android:background">#88000000</item>
+    </style>
+
+    <style name="ActionBarSetWallpaperStyle" parent="@android:style/Widget.DeviceDefault.ActionButton">
+        <item name="android:textColor">#ffffffff</item>
     </style>
 </resources>

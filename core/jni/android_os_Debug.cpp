@@ -380,6 +380,8 @@ static void read_mapinfo(FILE *fp, stats_t* stats)
                 /* referenced = temp; */
             } else if (line[0] == 'S' && sscanf(line, "Swap: %d kB", &temp) == 1) {
                 swapped_out = temp;
+            } else if (line[0] == 'A' || line[0] == 'K' || line[0] == 'M' || line[0] == 'L') {
+                continue;
             } else if (sscanf(line, "%" SCNx64 "-%" SCNx64 " %*s %*x %*x:%*x %*d", &start, &end) == 2) {
                 // looks like a new mapping
                 // example: "10000000-10001000 ---p 10000000 00:00 0"

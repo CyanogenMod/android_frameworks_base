@@ -91,5 +91,11 @@
     <declare-styleable name="AlphaOptimizedImageView">
         <attr name="hasOverlappingRendering" format="boolean" />
     </declare-styleable>
+
+    <!-- QS tiles column count size scale factors -->
+    <item name="qs_tile_three_column_scale" format="float" type="dimen">1.0</item>
+    <item name="qs_tile_four_column_scale" format="float" type="dimen">0.9</item>
+    <item name="qs_tile_five_column_scale" format="float" type="dimen">0.85</item>
+
 </resources>
 

@@ -75,6 +75,7 @@ public class WallpaperCropActivity extends Activity {
     protected CropView mCropView;
     protected Uri mUri;
     private View mSetWallpaperButton;
+    private boolean mKeyguardMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,8 @@ public class WallpaperCropActivity extends Activity {
         mCropView = (CropView) findViewById(R.id.cropView);
 
         Intent cropIntent = getIntent();
+        String keyguardModeString = cropIntent.getStringExtra("keyguardMode");
+        mKeyguardMode = keyguardModeString != null && keyguardModeString.equals("1");
         final Uri imageUri = cropIntent.getData();
 
         if (imageUri == null) {
@@ -98,11 +101,15 @@ public class WallpaperCropActivity extends Activity {
             finish();
             return;
         }
+		
+	getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+		| View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         // Action bar
         // Show the custom action bar view
         final ActionBar actionBar = getActionBar();
-        actionBar.setCustomView(R.layout.actionbar_set_wallpaper);
+        actionBar.setCustomView(mKeyguardMode ? R.layout.actionbar_set_keyguard_wallpaper : R.layout.actionbar_set_wallpaper);
         actionBar.getCustomView().setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -310,7 +317,7 @@ public class WallpaperCropActivity extends Activity {
     protected void setWallpaper(String filePath, final boolean finishActivityWhenDone) {
         int rotation = getRotationFromExif(filePath);
         BitmapCropTask cropTask = new BitmapCropTask(
-                this, filePath, null, rotation, 0, 0, true, false, null);
+                this, filePath, null, rotation, 0, 0, true, false, mKeyguardMode, null);
         final Point bounds = cropTask.getImageBounds();
         Runnable onEndCrop = new Runnable() {
             public void run() {
@@ -344,7 +351,7 @@ public class WallpaperCropActivity extends Activity {
             }
         };
         BitmapCropTask cropTask = new BitmapCropTask(this, res, resId,
-                crop, rotation, outSize.x, outSize.y, true, false, onEndCrop);
+                crop, rotation, outSize.x, outSize.y, true, false, mKeyguardMode, onEndCrop);
         cropTask.execute();
     }
 
@@ -437,7 +444,7 @@ public class WallpaperCropActivity extends Activity {
             }
         };
         BitmapCropTask cropTask = new BitmapCropTask(this, uri,
-                cropRect, cropRotation, outWidth, outHeight, true, false, onEndCrop);
+                cropRect, cropRotation, outWidth, outHeight, true, false, mKeyguardMode, onEndCrop);
         if (onBitmapCroppedHandler != null) {
             cropTask.setOnBitmapCropped(onBitmapCroppedHandler);
         }
@@ -465,45 +472,46 @@ public class WallpaperCropActivity extends Activity {
         Resources mResources;
         OnBitmapCroppedHandler mOnBitmapCroppedHandler;
         boolean mNoCrop;
+        boolean mKeyguardMode;
 
         public BitmapCropTask(Context c, String filePath,
                 RectF cropBounds, int rotation, int outWidth, int outHeight,
-                boolean setWallpaper, boolean saveCroppedBitmap, Runnable onEndRunnable) {
+                boolean setWallpaper, boolean saveCroppedBitmap, boolean keyguardMode, Runnable onEndRunnable) {
             mContext = c;
             mInFilePath = filePath;
             init(cropBounds, rotation,
-                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, onEndRunnable);
+                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, keyguardMode, onEndRunnable);
         }
 
         public BitmapCropTask(byte[] imageBytes,
                 RectF cropBounds, int rotation, int outWidth, int outHeight,
-                boolean setWallpaper, boolean saveCroppedBitmap, Runnable onEndRunnable) {
+                boolean setWallpaper, boolean saveCroppedBitmap, boolean keyguardMode, Runnable onEndRunnable) {
             mInImageBytes = imageBytes;
             init(cropBounds, rotation,
-                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, onEndRunnable);
+                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, keyguardMode, onEndRunnable);
         }
 
         public BitmapCropTask(Context c, Uri inUri,
                 RectF cropBounds, int rotation, int outWidth, int outHeight,
-                boolean setWallpaper, boolean saveCroppedBitmap, Runnable onEndRunnable) {
+                boolean setWallpaper, boolean saveCroppedBitmap, boolean keyguardMode, Runnable onEndRunnable) {
             mContext = c;
             mInUri = inUri;
             init(cropBounds, rotation,
-                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, onEndRunnable);
+                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, keyguardMode, onEndRunnable);
         }
 
         public BitmapCropTask(Context c, Resources res, int inResId,
                 RectF cropBounds, int rotation, int outWidth, int outHeight,
-                boolean setWallpaper, boolean saveCroppedBitmap, Runnable onEndRunnable) {
+                boolean setWallpaper, boolean saveCroppedBitmap, boolean keyguardMode, Runnable onEndRunnable) {
             mContext = c;
             mInResId = inResId;
             mResources = res;
             init(cropBounds, rotation,
-                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, onEndRunnable);
+                    outWidth, outHeight, setWallpaper, saveCroppedBitmap, keyguardMode, onEndRunnable);
         }
 
         private void init(RectF cropBounds, int rotation, int outWidth, int outHeight,
-                boolean setWallpaper, boolean saveCroppedBitmap, Runnable onEndRunnable) {
+                boolean setWallpaper, boolean saveCroppedBitmap, boolean keyguardMode, Runnable onEndRunnable) {
             mCropBounds = cropBounds;
             mRotation = rotation;
             mOutWidth = outWidth;
@@ -511,6 +519,7 @@ public class WallpaperCropActivity extends Activity {
             mSetWallpaper = setWallpaper;
             mSaveCroppedBitmap = saveCroppedBitmap;
             mOnEndRunnable = onEndRunnable;
+            mKeyguardMode = keyguardMode;
         }
 
         public void setOnBitmapCropped(OnBitmapCroppedHandler handler) {
@@ -584,7 +593,11 @@ public class WallpaperCropActivity extends Activity {
                 try {
                     InputStream is = regenerateInputStream();
                     if (is != null) {
-                        wallpaperManager.setStream(is);
+                        if (mKeyguardMode) {
+                            wallpaperManager.setKeyguardStream(is);
+                        } else {
+                            wallpaperManager.setStream(is);
+                        }
                         Utils.closeSilently(is);
                     }
                 } catch (IOException e) {
@@ -780,7 +793,11 @@ public class WallpaperCropActivity extends Activity {
                     if (mSetWallpaper && wallpaperManager != null) {
                         try {
                             byte[] outByteArray = tmpOut.toByteArray();
-                            wallpaperManager.setStream(new ByteArrayInputStream(outByteArray));
+                            if (mKeyguardMode) {
+                                wallpaperManager.setKeyguardStream(new ByteArrayInputStream(outByteArray));
+                            } else {
+                                wallpaperManager.setStream(new ByteArrayInputStream(outByteArray));
+                            }
                             if (mOnBitmapCroppedHandler != null) {
                                 mOnBitmapCroppedHandler.onBitmapCropped(outByteArray);
                             }

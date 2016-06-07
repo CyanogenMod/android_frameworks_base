@@ -649,9 +649,9 @@ public class WindowManagerService extends IWindowManager.Stub
     PowerManager mPowerManager;
     PowerManagerInternal mPowerManagerInternal;
 
-    float mWindowAnimationScaleSetting = 1.0f;
-    float mTransitionAnimationScaleSetting = 1.0f;
-    float mAnimatorDurationScaleSetting = 1.0f;
+    float mWindowAnimationScaleSetting = 0.7f;
+    float mTransitionAnimationScaleSetting = 0.7f;
+    float mAnimatorDurationScaleSetting = 0.7f;
     boolean mAnimationsDisabled = false;
 
     final InputManagerService mInputManager;
@@ -12068,6 +12068,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         @Override
         public void waitForAllWindowsDrawn(Runnable callback, long timeout) {
+            boolean allWindowsDrawn = false;
             synchronized (mWindowMap) {
                 mWaitingForDrawnCallback = callback;
                 final WindowList windows = getDefaultWindowListLocked();
@@ -12088,13 +12089,16 @@ public class WindowManagerService extends IWindowManager.Stub
                     }
                 }
                 requestTraversalLocked();
+                mH.removeMessages(H.WAITING_FOR_DRAWN_TIMEOUT);
+                if (mWaitingForDrawn.isEmpty()) {
+                    allWindowsDrawn = true;
+                } else {
+                    mH.sendEmptyMessageDelayed(H.WAITING_FOR_DRAWN_TIMEOUT, timeout);
+                    checkDrawnWindowsLocked();
+                }
             }
-            mH.removeMessages(H.WAITING_FOR_DRAWN_TIMEOUT);
-            if (mWaitingForDrawn.isEmpty()) {
+            if (allWindowsDrawn) {
                 callback.run();
-            } else {
-                mH.sendEmptyMessageDelayed(H.WAITING_FOR_DRAWN_TIMEOUT, timeout);
-                checkDrawnWindowsLocked();
             }
         }
 
