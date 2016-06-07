@@ -35,6 +35,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.ContentObserver;
 import android.os.Binder;
 import android.os.Handler;
@@ -56,6 +57,8 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import android.app.AppOpsManager;
+import android.os.SystemProperties;
 
 class BluetoothManagerService extends IBluetoothManager.Stub {
     private static final String TAG = "BluetoothManagerService";
@@ -615,6 +618,10 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         return true;
     }
 
+    private boolean isStrictOpEnable() {
+        return SystemProperties.getBoolean("persist.sys.strict_op_enable", false);
+    }
+
     public boolean enable() {
         if ((Binder.getCallingUid() != Process.SYSTEM_UID) &&
             (!checkIfCallerIsForegroundUser())) {
@@ -624,6 +631,20 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
 
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
                                                 "Need BLUETOOTH ADMIN permission");
+        if(isStrictOpEnable()){
+            AppOpsManager mAppOpsManager = mContext.getSystemService(AppOpsManager.class);
+            String packageName = mContext.getPackageManager().getNameForUid(Binder.getCallingUid());
+
+            if ((Binder.getCallingUid() > 10000)
+                    && (packageName.indexOf("android.uid.systemui") != 0)
+                    && (packageName.indexOf("android.uid.system") != 0)) {
+                int result = mAppOpsManager.noteOp(AppOpsManager.OP_BLUETOOTH_ADMIN,
+                        Binder.getCallingUid(), packageName);
+                if (result == AppOpsManager.MODE_IGNORED) {
+                    return false;
+                }
+            }
+        }
         if (DBG) {
             Slog.d(TAG,"enable():  mBluetooth =" + mBluetooth +
                     " mBinding = " + mBinding + " mState = " + mState);
