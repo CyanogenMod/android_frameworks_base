@@ -279,7 +279,7 @@ public class MobileSignalController extends SignalController<
     }
 
     private boolean isRoaming() {
-        if (mServiceState == null) {
+        if (mServiceState == null) {
             return false;
         } else if (isCdma()) {
             final int iconMode = mServiceState.getCdmaEriIconMode();
