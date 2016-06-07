@@ -245,10 +245,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         mCallbackHandler.setEmergencyCallsOnly(isEmergencyOnly());
     }
 
-    public void removeEmergencyListener(EmergencyListener listener) {
-        mCallbackHandler.setListening(listener, false);
-    }
-
     public boolean hasMobileDataFeature() {
         return mHasMobileDataFeature;
     }
@@ -827,16 +823,16 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
     @VisibleForTesting
     static class Config {
-        boolean showAtLeast3G = false;
         boolean alwaysShowCdmaRssi = false;
+	boolean showAtLeast3G = false;
         boolean hspaDataDistinguishable;
         boolean showRsrpSignalLevelforLTE;
 
         static Config readConfig(Context context) {
             Config config = new Config();
             Resources res = context.getResources();
-
-            config.showAtLeast3G = res.getBoolean(R.bool.config_showMin3G);
+	
+	    config.showAtLeast3G = res.getBoolean(R.bool.config_showMin3G);       
             config.alwaysShowCdmaRssi =
                     res.getBoolean(com.android.internal.R.bool.config_alwaysUseCdmaRssi);
             config.hspaDataDistinguishable =
