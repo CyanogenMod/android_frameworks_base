@@ -2018,6 +2018,11 @@ class ContextImpl extends Context {
             }
             result.add(dir);
         }
+
+        // Make sure there is at least one element, let the callers handle that
+        if (result.size() == 0) {
+            result.add(null);
+        }
         return result.toArray(new File[result.size()]);
     }
 
