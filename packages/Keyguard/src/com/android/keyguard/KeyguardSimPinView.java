@@ -348,8 +348,12 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
         } else {
             SubscriptionInfo info = KeyguardUpdateMonitor.getInstance(mContext).
                     getSubscriptionInfoForSubId(mSubId);
-            CharSequence displayName = info != null ? info.getDisplayName() : ""; // don't crash
-            msg = rez.getString(R.string.kg_sim_pin_instructions_multi, displayName);
+            if (rez.getBoolean(R.bool.kg_sim_display_name)) {
+                CharSequence displayName = info != null ? info.getDisplayName() : ""; // don't crash
+                msg = rez.getString(R.string.kg_sim_pin_instructions_multi, displayName);
+            } else {
+                msg = rez.getString(R.string.kg_sim_pin_instructions);
+            }
             if (info != null) {
                 color = info.getIconTint();
             }
@@ -358,4 +362,3 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
         mSimImageView.setImageTintList(ColorStateList.valueOf(color));
     }
 }
-
