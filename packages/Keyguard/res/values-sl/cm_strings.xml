@@ -17,17 +17,24 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- When the user inserts a sim card with some personalization enabled -->
   <string name="keyguard_perso_locked_message">SIM/RUIM je zaklenjen v načinu Perso</string>
+  <!-- Status -->
   <string name="keyguard_accessibility_status">"Stanje"</string>
+  <!-- Dismiss button text in SIM pin/puk unlock view -->
   <string name="kg_dismiss">Opusti</string>
+  <!-- Slot id in SIM pin/puk unlock view -->
   <string name="kg_slot_name">Reža <xliff:g id="number">%d</xliff:g>: nova kartica SIM\u0020</string>
+  <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Neveljavna kartica.</string>
+  <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Vnesite PIN, imate še <xliff:g id="number">%d</xliff:g> preostali poskus, preden boste morali stopiti v stik s svojim ponudnikom, da vam odklene napravo.</item>
     <item quantity="two">Vnesite PIN, imate še <xliff:g id="number">%d</xliff:g> preostala poskusa, preden boste morali stopiti v stik s svojim ponudnikom, da vam odklene napravo.</item>
     <item quantity="few">Vnesite PIN, imate še <xliff:g id="number">%d</xliff:g> preostale poskuse, preden boste morali stopiti v stik s svojim ponudnikom, da vam odklene napravo.</item>
     <item quantity="other">Vnesite PIN, imate še <xliff:g id="number">%d</xliff:g> preostalih poskusov, preden boste morali stopiti v stik s svojim ponudnikom, da vam odklene napravo.</item>
   </plurals>
+  <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
   <plurals name="kg_password_default_puk_message">
     <item quantity="one">Kartica SIM je sedaj onemogočena. Za nadaljevanje vnesite kodo PUK. Imate še <xliff:g id="number">%d</xliff:g> poskus, preden postane kartica SIM trajno neuporabna. Za podrobnosti stopite v stik s svojim ponudnikom.</item>
     <item quantity="two">Kartica SIM je sedaj onemogočena. Za nadaljevanje vnesite kodo PUK. Imate še <xliff:g id="number">%d</xliff:g> poskusa, preden postane kartica SIM trajno neuporabna. Za podrobnosti stopite v stik s svojim ponudnikom.</item>

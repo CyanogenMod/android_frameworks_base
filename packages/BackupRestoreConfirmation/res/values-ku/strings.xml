@@ -15,24 +15,44 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <!-- Title of the activity when a full backup has been requested and must be confirmed -->
   <string name="backup_confirm_title">پاراستنی گشت</string>
+  <!-- Title of the activity when a full restore has been requested and must be confirmed -->
   <string name="restore_confirm_title">گه‌ڕاندنه‌وه‌ی گشت</string>
+  <!-- Text for message to user that a full backup has been requested, and must be confirmed. -->
   <string name="backup_confirm_text">پاراستنێکی گشتیی بۆ هه‌موو ئه‌و داتایانه‌ی که‌ په‌یوه‌ست کراوه‌ به‌ کۆمپیوته‌ره‌وه‌ داواکراوه‌. ده‌ته‌وێت ئه‌مه‌ ڕووبدات؟\n\n ئه‌گه‌ر خۆت ئه‌م داواکارییه‌ت نه‌کردووه‌، مه‌هێڵه‌ ئه‌م کاره‌ ڕووبدات.</string>
+  <!-- Button to allow a requested full backup to occur -->
   <string name="allow_backup_button_label">داتاکانم بپارێزه‌</string>
+  <!-- Button to refuse to allow the requested full backup -->
   <string name="deny_backup_button_label">مه‌یپارێزه‌</string>
+  <!-- Text for message to user that a full restore has been requested, and must be confirmed. -->
   <string name="restore_confirm_text">گه‌ڕانه‌وه‌ی ته‌واوی داتاکان بۆ په‌یوه‌ندی کردن به‌ ڕوونمای کۆمپیوته‌ره‌وه‌ داواکراوه‌ ، ئه‌ته‌وێ ئه‌مه‌ ڕووبدات؟\n\n ئه‌گه‌ر خۆت داوای ئه‌م پاراستنه‌ت نه‌کردووه‌، مه‌هێڵه‌ ئه‌م کاره‌ ڕووبدات. ئه‌گه‌رنا شوێنی هه‌موو ئه‌و داتایانه‌ ده‌گرێته‌وه‌ که‌ ئێستا له‌ ئامێره‌که‌دایه‌!</string>
+  <!-- Button to allow a requested full restore to occur -->
   <string name="allow_restore_button_label">داتاکانم بگه‌ڕێنه‌ره‌وه‌</string>
+  <!-- Button to refuse to allow the requested full restore -->
   <string name="deny_restore_button_label">مه‌یگه‌ڕێنه‌ره‌وه‌</string>
+  <!-- Text for message to user that they must enter their predefined backup password in order to perform this operation. -->
   <string name="current_password_text">تکایه‌ تێپه‌ڕه‌وشه‌ی پاراستن بنوسه‌ له‌ خواره‌وه‌:</string>
+  <!-- Text for message to user that they must enter their device encryption password in order to perform this restore operation. -->
   <string name="device_encryption_restore_text">تکایه تێپه‌ڕه‌وشه‌ی ئامێره‌ به‌ هێماکراوه‌که‌ت بنوسه‌.</string>
+  <!-- Text for message to user that they must enter their device encryption password in order to perform this backup operation. -->
   <string name="device_encryption_backup_text">تکایه تێپه‌ڕه‌وشه‌ی ئامێره‌ ڕه‌مزکراوه‌که‌ت له‌ خواره‌وه‌بنوسه‌. ئه‌مه‌ ده‌توانرێت بۆ ڕه‌مزکردنی ئه‌رشیفی پاراستنیش به‌کار بهێنرێت.</string>
+  <!-- Text for message to user that they must enter an encryption password to use for the full backup operation. -->
   <string name="backup_enc_password_text">تکایه‌ تێپه‌ڕه‌وشه‌یه‌ک بنوسه‌ بۆ به‌کارهێنانی به‌ هێماکردنی پاراستنی ته‌واوی داتاکان. ئه‌گه‌ر ئه‌مه‌ به‌ به‌تاڵیی جێ بهێڵرێت، دوایین تێپه‌ڕه‌وشه‌ی پاراستنت به‌کارده‌هێنرێت:</string>
+  <!-- Text for message to user that they may optionally supply an encryption password to use for a full backup operation. -->
   <string name="backup_enc_password_optional">ئه‌گه‌ر ده‌ته‌وێت ته‌واوی پاراستنی داتاکان به‌ هێما بکه‌یت، تێپه‌ڕه‌وشه‌یه‌ک له‌ خواره‌وه‌ بنوسه‌:</string>
+  <!-- Text for message to user that they must supply an encryption password to use for a full backup operation because their phone is locked. -->
   <string name="backup_enc_password_required">لەوەتەی ئامێرەکەت پارێزراوە، تۆ پێویستیت بە هەڵگرتنی داتاکانتە. تکایە ژمارەی تێپەڕەوشە لێبدە:</string>
+  <!-- Text for message to user when performing a full restore operation, explaining that they must enter the password originally used to encrypt the full backup data. -->
   <string name="restore_enc_password_text">ئه‌گه‌ر داتای گه‌ڕاندنه‌وه‌ به‌ هێما کراوه‌، تکایه‌ تێپه‌ڕه‌وشه‌که‌ له‌ خواره‌وه‌ بنوسه‌:</string>
+  <!-- Text of a toast telling the user that a full backup operation has begun -->
   <string name="toast_backup_started">پاراستن ده‌ستپێده‌کات...</string>
+  <!-- Text of a toast telling the user that a full backup operation has ended -->
   <string name="toast_backup_ended">پاراستن ته‌واو بوو</string>
+  <!-- Text of a toast telling the user that a full restore operation has begun -->
   <string name="toast_restore_started">گه‌ڕاندنه‌وه‌ ده‌ستپێده‌کات...</string>
+  <!-- Text of a toast telling the user that a full restore operation has ended -->
   <string name="toast_restore_ended">گه‌ڕاندنه‌وه‌ کۆتایی هات</string>
+  <!-- Text of a toast telling the user that the operation has timed out -->
   <string name="toast_timeout">کاتی کرداره‌که‌ ته‌واو بوو</string>
 </resources>
