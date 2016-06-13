@@ -1296,6 +1296,20 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected boolean inflateViews(Entry entry, ViewGroup parent) {
+        final StatusBarNotification sbn = entry.notification;
+        String themePackageName = mCurrentTheme != null
+                ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName()) : null;
+        boolean inflated = inflateViews(entry, parent, true);
+        if (!inflated && themePackageName != null
+                && !ThemeConfig.SYSTEM_DEFAULT.equals(themePackageName)) {
+            Log.w(TAG, "Couldn't expand themed RemoteViews, trying unthemed for: " + sbn);
+            inflated = inflateViews(entry, mStackScroller, false);
+        }
+
+        return inflated;
+    }
+
+    protected boolean inflateViews(Entry entry, ViewGroup parent, boolean isThemeable) {
         PackageManager pmUser = getPackageManagerForUser(
                 entry.notification.getUser().getIdentifier());
 
@@ -1372,10 +1386,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         View contentViewLocal = null;
         View bigContentViewLocal = null;
         View headsUpContentViewLocal = null;
-        String themePackageName = mCurrentTheme != null
-                ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName()) : null;
-        String statusBarThemePackageName = mCurrentTheme != null
-                ? mCurrentTheme.getOverlayForStatusBar() : null;
+        String themePackageName = (isThemeable && mCurrentTheme != null)
+                ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName())
+                : ThemeConfig.SYSTEM_DEFAULT;
+        String statusBarThemePackageName = (isThemeable && mCurrentTheme != null)
+                ? mCurrentTheme.getOverlayForStatusBar()
+                : ThemeConfig.SYSTEM_DEFAULT;
 
         try {
             contentViewLocal = contentView.apply(
@@ -1466,8 +1482,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
 
         if (publicViewLocal == null) {
+            final Context layoutContext = isThemeable ? mContext
+                    : maybeGetThemedContext(mContext, ThemeConfig.SYSTEM_DEFAULT);
             // Add a basic notification template
-            publicViewLocal = LayoutInflater.from(mContext).inflate(
+            publicViewLocal = LayoutInflater.from(layoutContext).inflate(
                     R.layout.notification_public_default,
                     contentContainerPublic, false);
             publicViewLocal.setIsRootNamespace(true);
@@ -2323,5 +2341,25 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mAssistManager != null) {
             mAssistManager.startAssist(args);
         }
+    }
+
+    /**
+     * Returns a context with the given theme applied or the original context if we fail to get a
+     * themed context.
+     */
+    private Context maybeGetThemedContext(Context context, String themePkg) {
+        Context themedContext;
+        try {
+            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(
+                    context.getPackageName(), 0);
+            themedContext = context.createApplicationContext(ai, themePkg,
+                    0);
+        } catch (PackageManager.NameNotFoundException e) {
+            themedContext = null;
+        }
+        if (themedContext == null) {
+            themedContext = context;
+        }
+        return themedContext;
     }
 }
