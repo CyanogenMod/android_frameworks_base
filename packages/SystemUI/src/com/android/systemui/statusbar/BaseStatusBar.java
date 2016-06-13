@@ -73,7 +73,6 @@ import android.util.SparseBooleanArray;
 import android.view.Display;
 import android.view.IWindowManager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -1296,6 +1295,10 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected boolean inflateViews(Entry entry, ViewGroup parent) {
+        return inflateViews(entry, parent, true);
+    }
+
+    protected boolean inflateViews(Entry entry, ViewGroup parent, boolean isThemeable) {
         PackageManager pmUser = getPackageManagerForUser(
                 entry.notification.getUser().getIdentifier());
 
@@ -1372,10 +1375,12 @@ public abstract class BaseStatusBar extends SystemUI implements
         View contentViewLocal = null;
         View bigContentViewLocal = null;
         View headsUpContentViewLocal = null;
-        String themePackageName = mCurrentTheme != null
-                ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName()) : null;
-        String statusBarThemePackageName = mCurrentTheme != null
-                ? mCurrentTheme.getOverlayForStatusBar() : null;
+        String themePackageName = (isThemeable && mCurrentTheme != null)
+                ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName())
+                : ThemeConfig.SYSTEM_DEFAULT;
+        String statusBarThemePackageName = (isThemeable && mCurrentTheme != null)
+                ? mCurrentTheme.getOverlayForStatusBar()
+                : ThemeConfig.SYSTEM_DEFAULT;
 
         try {
             contentViewLocal = contentView.apply(
@@ -1466,8 +1471,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         }
 
         if (publicViewLocal == null) {
+            final Context layoutContext = isThemeable ? mContext
+                    : getThemedContext(mContext, ThemeConfig.SYSTEM_DEFAULT);
             // Add a basic notification template
-            publicViewLocal = LayoutInflater.from(mContext).inflate(
+            publicViewLocal = LayoutInflater.from(layoutContext).inflate(
                     R.layout.notification_public_default,
                     contentContainerPublic, false);
             publicViewLocal.setIsRootNamespace(true);
@@ -1800,8 +1807,19 @@ public abstract class BaseStatusBar extends SystemUI implements
         // Construct the expanded view.
         NotificationData.Entry entry = new NotificationData.Entry(sbn, iconView);
         if (!inflateViews(entry, mStackScroller)) {
-            handleNotificationError(sbn, "Couldn't expand RemoteViews for: " + sbn);
-            return null;
+            String themePackageName = mCurrentTheme != null
+                    ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName()) : null;
+            if (themePackageName != null && !ThemeConfig.SYSTEM_DEFAULT.equals(themePackageName)) {
+                Log.w(TAG, "Couldn't expand themed RemoteViews, trying unthemed for: " + sbn);
+                removeNotification(sbn.getKey(), null);
+                if (!inflateViews(entry, mStackScroller, false)) {
+                    handleNotificationError(sbn, "Couldn't expand RemoteViews for: " + sbn);
+                    return null;
+                }
+            } else {
+                handleNotificationError(sbn, "Couldn't expand RemoteViews for: " + sbn);
+                return null;
+            }
         }
         return entry;
     }
@@ -2323,5 +2341,21 @@ public abstract class BaseStatusBar extends SystemUI implements
         if (mAssistManager != null) {
             mAssistManager.startAssist(args);
         }
+    }
+
+    private Context getThemedContext(Context context, String themePkg) {
+        Context themedContext;
+        try {
+            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(
+                    context.getPackageName(), PackageManager.GET_UNINSTALLED_PACKAGES);
+            themedContext = context.createApplicationContext(ai, themePkg,
+                    0);
+        } catch (PackageManager.NameNotFoundException e) {
+            themedContext = null;
+        }
+        if (themedContext == null) {
+            themedContext = context;
+        }
+        return themedContext;
     }
 }
