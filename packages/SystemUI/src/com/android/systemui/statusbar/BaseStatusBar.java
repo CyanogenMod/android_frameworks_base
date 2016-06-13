@@ -1296,6 +1296,10 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     protected boolean inflateViews(Entry entry, ViewGroup parent) {
+        return inflateViews(entry, parent, true);
+    }
+
+    protected boolean inflateViews(Entry entry, ViewGroup parent, boolean isThemeable) {
         PackageManager pmUser = getPackageManagerForUser(
                 entry.notification.getUser().getIdentifier());
 
@@ -1372,9 +1376,9 @@ public abstract class BaseStatusBar extends SystemUI implements
         View contentViewLocal = null;
         View bigContentViewLocal = null;
         View headsUpContentViewLocal = null;
-        String themePackageName = mCurrentTheme != null
+        String themePackageName = (isThemeable && mCurrentTheme != null)
                 ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName()) : null;
-        String statusBarThemePackageName = mCurrentTheme != null
+        String statusBarThemePackageName = (isThemeable && mCurrentTheme != null)
                 ? mCurrentTheme.getOverlayForStatusBar() : null;
 
         try {
@@ -1800,8 +1804,19 @@ public abstract class BaseStatusBar extends SystemUI implements
         // Construct the expanded view.
         NotificationData.Entry entry = new NotificationData.Entry(sbn, iconView);
         if (!inflateViews(entry, mStackScroller)) {
-            handleNotificationError(sbn, "Couldn't expand RemoteViews for: " + sbn);
-            return null;
+            String themePackageName = mCurrentTheme != null
+                    ? mCurrentTheme.getOverlayPkgNameForApp(sbn.getPackageName()) : null;
+            if (themePackageName != null && !ThemeConfig.SYSTEM_DEFAULT.equals(themePackageName)) {
+                Log.w(TAG, "Couldn't expand themed RemoteViews, trying unthemed for: " + sbn);
+                removeNotification(sbn.getKey(), null);
+                if (!inflateViews(entry, mStackScroller, false)) {
+                    handleNotificationError(sbn, "Couldn't expand RemoteViews for: " + sbn);
+                    return null;
+                }
+            } else {
+                handleNotificationError(sbn, "Couldn't expand RemoteViews for: " + sbn);
+                return null;
+            }
         }
         return entry;
     }
