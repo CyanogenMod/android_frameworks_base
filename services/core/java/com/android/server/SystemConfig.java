@@ -17,6 +17,7 @@
 package com.android.server;
 
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.pm.FeatureInfo;
 import android.content.pm.Signature;
 import android.os.*;
@@ -89,6 +90,9 @@ public class SystemConfig {
     // These are the app package names that should not allow IME switching.
     final ArraySet<String> mFixedImeApps = new ArraySet<>();
 
+    // These are the permitted backup transport service components
+    final ArraySet<ComponentName> mBackupTransportWhitelist = new ArraySet<>();
+
     final ArrayMap<Signature, ArraySet<String>> mSignatureAllowances
             = new ArrayMap<Signature, ArraySet<String>>();
 
@@ -131,6 +135,10 @@ public class SystemConfig {
 
     public ArrayMap<Signature, ArraySet<String>> getSignatureAllowances() {
         return mSignatureAllowances;
+    }
+
+    public ArraySet<ComponentName> getBackupTransportWhitelist() {
+        return mBackupTransportWhitelist;
     }
 
     SystemConfig() {
@@ -387,6 +395,24 @@ public class SystemConfig {
                     }
                     XmlUtils.skipCurrentTag(parser);
                     continue;
+
+                } else if ("backup-transport-whitelisted-service".equals(name)) {
+                    String serviceName = parser.getAttributeValue(null, "service");
+                    if (serviceName == null) {
+                        Slog.w(TAG, "<backup-transport-whitelisted-service> without service in "
+                                + permFile + " at " + parser.getPositionDescription());
+                    } else {
+                        ComponentName cn = ComponentName.unflattenFromString(serviceName);
+                        if (cn == null) {
+                            Slog.w(TAG,
+                                    "<backup-transport-whitelisted-service> with invalid service name "
+                                    + serviceName + " in "+ permFile
+                                    + " at " + parser.getPositionDescription());
+                        } else {
+                            mBackupTransportWhitelist.add(cn);
+                        }
+                    }
+                    XmlUtils.skipCurrentTag(parser);
 
                 } else {
                     XmlUtils.skipCurrentTag(parser);
