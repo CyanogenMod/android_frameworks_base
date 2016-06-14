@@ -386,8 +386,8 @@ public class AppOpsManager {
      */
     private static int[] sOpToSwitch = new int[] {
             OP_COARSE_LOCATION,
-            OP_COARSE_LOCATION,
-            OP_COARSE_LOCATION,
+            OP_FINE_LOCATION,
+            OP_GPS,
             OP_VIBRATE,
             OP_READ_CONTACTS,
             OP_WRITE_CONTACTS,
@@ -426,8 +426,8 @@ public class AppOpsManager {
             OP_AUDIO_NOTIFICATION_VOLUME,
             OP_AUDIO_BLUETOOTH_VOLUME,
             OP_WAKE_LOCK,
-            OP_COARSE_LOCATION,
-            OP_COARSE_LOCATION,
+            OP_FINE_LOCATION,
+            OP_FINE_LOCATION,
             OP_GET_USAGE_STATS,
             OP_MUTE_MICROPHONE,
             OP_TOAST_WINDOW,
