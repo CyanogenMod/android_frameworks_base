@@ -94,6 +94,9 @@ import java.util.Properties;
 
 import libcore.io.IoUtils;
 
+// MTK
+import com.mediatek.location.LocationExt;
+import com.mediatek.location.LocationExt.GnssSvStatusHolder;
 /**
  * A GPS implementation of LocationProvider used by LocationManager.
  *
@@ -504,6 +507,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     }
 
     private void checkWapSuplInit(Intent intent) {
+        if (!LocationExt.checkWapSuplInit(intent)) return; // mtk add: SUPL_2.0 TC_001
         byte[] supl_init = (byte[]) intent.getExtra("data");
         native_agps_ni_message(supl_init,supl_init.length);
     }
@@ -732,6 +736,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 return isEnabled();
             }
         };
+         initLocationExt();
     }
 
     /**
@@ -1271,7 +1276,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             native_delete_aiding_data(flags);
             return true;
         }
-
+        LocationExt.deleteAidingData(extras, flags); // mtk add: log for bad data
         return false;
     }
 
@@ -1283,6 +1288,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             mStarted = true;
             mSingleShot = singleShot;
             mPositionMode = GPS_POSITION_MODE_STANDALONE;
+            LocationExt.startNavigating(singleShot); // mtk add: System Time Sync by GPS
 
             boolean agpsEnabled =
                     (Settings.Global.getInt(mContext.getContentResolver(),
@@ -1421,7 +1427,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             // notify status listeners
             mListenerHelper.onFirstFix(mTimeToFirstFix);
         }
-
+         LocationExt.doSystemTimeSyncByGps(flags, timestamp); // mtk add
         if (mSingleShot) {
             stopNavigating();
         }
@@ -1535,8 +1541,12 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 // Set mAGpsDataConnectionState before calling startUsingNetworkFeature
                 //  to avoid a race condition with handleUpdateNetworkState()
                 mAGpsDataConnectionState = AGPS_DATA_CONNECTION_OPENING;
-                int result = mConnMgr.startUsingNetworkFeature(
+                int result = LocationExt.doStartUsingNetwork(mConnMgr, // mtk change: IR.92 IMS
                         ConnectivityManager.TYPE_MOBILE, Phone.FEATURE_ENABLE_SUPL);
+                         if (-1 == result) {
+                    result = mConnMgr.startUsingNetworkFeature(
+                            ConnectivityManager.TYPE_MOBILE, Phone.FEATURE_ENABLE_SUPL);
+                }
                 if (ipaddr != null) {
                     try {
                         mAGpsDataConnectionIpAddr = InetAddress.getByAddress(ipaddr);
@@ -2194,7 +2204,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         }
 
         boolean result = mConnMgr.requestRouteToHostAddress(
-                ConnectivityManager.TYPE_MOBILE_SUPL,
+                LocationExt.getRouteNetworkType(), // mtk change: IR.92 IMS
                 mAGpsDataConnectionIpAddr);
 
         if (!result) {
@@ -2203,6 +2213,38 @@ public class GpsLocationProvider implements LocationProviderInterface {
             Log.d(TAG, "Successfully requested route to host: " + mAGpsDataConnectionIpAddr);
         }
     }
+    
+     // MTK
+    /**
+     * locationExt creation function.
+     */
+    public void initLocationExt() {
+        boolean mtkGpsSupport = SystemProperties.get("ro.mtk_gps_support").equals("1");
+
+        if (mtkGpsSupport) {
+            mInjectNtpTimePending = mDownloadXtraDataPending = STATE_IDLE; // no download
+            LocationExt.getInstance(this, mContext, mHandler, mConnMgr);
+            Log.d(TAG, "LocationExt is created");
+        }
+    }
+
+    /**
+     * called from native code to update GNSS SV info
+     */
+    private void reportGnssSvStatus() {
+        GnssSvStatusHolder h = LocationExt.getGnssSvStatusHolder();
+        if (null == h) return;
+        int svCount = native_read_gnss_sv_status(h.mGnssSvs, h.mGnssSnrs, h.mGnssSvElevations,
+                h.mGnssSvAzimuths, h.mGnssSvEphemeris, h.mGnssSvAlmanac, h.mGnssSvInFix);
+        mListenerHelper.onGnssSvStatusChanged(svCount, h.mGnssSvs, h.mGnssSnrs, h.mGnssSvElevations,
+                h.mGnssSvAzimuths, h.mGnssSvEphemeris, h.mGnssSvAlmanac, h.mGnssSvInFix);
+        int svFixCount = h.reportGnssSvStatusStep2(svCount);
+        updateStatus(mStatus, svFixCount);
+        if (h.reportGnssSvStatusStep3(mNavigating, mStatus, mLastFixTime, RECENT_FIX_TIMEOUT)) {
+            updateStatus(LocationProvider.TEMPORARILY_UNAVAILABLE, mSvCount);
+        }
+    }
+
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
@@ -2286,6 +2328,10 @@ public class GpsLocationProvider implements LocationProviderInterface {
             float[] elevations, float[] azimuths, int[] masks);
     private native int native_read_nmea(byte[] buffer, int bufferSize);
     private native void native_inject_location(double latitude, double longitude, float accuracy);
+    /// M: added to support multiple Gnss
+    private native int native_read_gnss_sv_status(int[] svs, float[] snrs,
+            float[] elevations, float[] azimuths, boolean[] ephemeris, boolean[] almanac,
+            boolean[] infix);
 
     // XTRA Support
     private native void native_inject_time(long time, long timeReference, int uncertainty);
