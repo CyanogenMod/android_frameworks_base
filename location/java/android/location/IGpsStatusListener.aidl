@@ -29,5 +29,9 @@ oneway interface IGpsStatusListener
     void onSvStatusChanged(int svCount, in int[] prns, in float[] snrs, 
             in float[] elevations, in float[] azimuths, 
             int ephemerisMask, int almanacMask, int usedInFixMask);
+            /// M: added to support multiple Gnss systems
+    void onGnssSvStatusChanged(int svCount, in int[] prns, in float[] snrs,
+            in float[] elevations, in float[] azimuths,
+            in boolean[] ephemeris, in boolean[] almanac, in boolean[] usedInFix);
     void onNmeaReceived(long timestamp, String nmea);
 }
