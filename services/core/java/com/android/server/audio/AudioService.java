@@ -4798,8 +4798,9 @@ public class AudioService extends IAudioService.Stub {
                         Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
                 if (linkNotificationWithVolume != mLinkNotificationWithVolume) {
                     mLinkNotificationWithVolume = linkNotificationWithVolume;
-                    createStreamStates();
-                    updateStreamVolumeAlias(true, TAG);
+                    mStreamVolumeAlias[AudioSystem.STREAM_NOTIFICATION] =
+                        (linkNotificationWithVolume && mVoiceCapable) ?
+                            AudioSystem.STREAM_RING : AudioSystem.STREAM_NOTIFICATION;
                 }
                 mVolumeKeysControlRingStream = CMSettings.System.getIntForUser(mContentResolver,
                         CMSettings.System.VOLUME_KEYS_CONTROL_RING_STREAM, 1,
