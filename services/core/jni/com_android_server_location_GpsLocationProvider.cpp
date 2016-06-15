@@ -21,7 +21,7 @@
 #include "JNIHelp.h"
 #include "jni.h"
 #include "hardware/hardware.h"
-#include "hardware/gps.h"
+#include "hardware/gps_mtk.h"
 #include "hardware_legacy/power.h"
 #include "utils/Log.h"
 #include "utils/misc.h"
@@ -39,6 +39,7 @@ static jobject mCallbacksObj = NULL;
 static jmethodID method_reportLocation;
 static jmethodID method_reportStatus;
 static jmethodID method_reportSvStatus;
+static jmethodID method_reportGnssSvStatus;
 static jmethodID method_reportAGpsStatus;
 static jmethodID method_reportNmea;
 static jmethodID method_setEngineCapabilities;
@@ -69,6 +70,7 @@ static const GnssConfigurationInterface* sGnssConfigurationInterface = NULL;
 
 // temporary storage for GPS callbacks
 static GpsSvStatus  sGpsSvStatus;
+static GnssSvStatus  sGnssSvStatus;
 static const char* sNmeaString;
 static int sNmeaStringLength;
 
@@ -109,6 +111,15 @@ static void sv_status_callback(GpsSvStatus* sv_status)
     env->CallVoidMethod(mCallbacksObj, method_reportSvStatus);
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
 }
+
+static void gnss_sv_status_callback(GnssSvStatus* sv_status)
+{
+    JNIEnv* env = AndroidRuntime::getJNIEnv();
+    memcpy(&sGnssSvStatus, sv_status, sizeof(sGnssSvStatus));
+    env->CallVoidMethod(mCallbacksObj, method_reportGnssSvStatus);
+    checkAndClearExceptionFromCallback(env, __FUNCTION__);
+}
+
 
 static void nmea_callback(GpsUtcTime timestamp, const char* nmea, int length)
 {
@@ -151,8 +162,8 @@ static pthread_t create_thread_callback(const char* name, void (*start)(void *),
     return (pthread_t)AndroidRuntime::createJavaThread(name, start, arg);
 }
 
-GpsCallbacks sGpsCallbacks = {
-    sizeof(GpsCallbacks),
+GpsCallbacks_mtk sGpsCallbacks = {
+    sizeof(GpsCallbacks_mtk),
     location_callback,
     status_callback,
     sv_status_callback,
@@ -162,6 +173,7 @@ GpsCallbacks sGpsCallbacks = {
     release_wakelock_callback,
     create_thread_callback,
     request_utc_time_callback,
+    gnss_sv_status_callback,
 };
 
 static void xtra_download_request_callback()
@@ -446,6 +458,7 @@ static void android_location_GpsLocationProvider_class_init_native(JNIEnv* env, 
     method_reportLocation = env->GetMethodID(clazz, "reportLocation", "(IDDDFFFJ)V");
     method_reportStatus = env->GetMethodID(clazz, "reportStatus", "(I)V");
     method_reportSvStatus = env->GetMethodID(clazz, "reportSvStatus", "()V");
+    method_reportGnssSvStatus = env->GetMethodID(clazz, "reportGnssSvStatus", "()V");
     method_reportAGpsStatus = env->GetMethodID(clazz, "reportAGpsStatus", "(II[B)V");
     method_reportNmea = env->GetMethodID(clazz, "reportNmea", "(J)V");
     method_setEngineCapabilities = env->GetMethodID(clazz, "setEngineCapabilities", "(I)V");
@@ -534,7 +547,7 @@ static jboolean android_location_GpsLocationProvider_init(JNIEnv* env, jobject o
         mCallbacksObj = env->NewGlobalRef(obj);
 
     // fail if the main interface fails to initialize
-    if (!sGpsInterface || sGpsInterface->init(&sGpsCallbacks) != 0)
+        if (!sGpsInterface || sGpsInterface->init((GpsCallbacks*)&sGpsCallbacks) != 0)
         return JNI_FALSE;
 
     // if XTRA initialization fails we will disable it by sGpsXtraInterface to NULL,
@@ -639,6 +652,49 @@ static jint android_location_GpsLocationProvider_read_sv_status(JNIEnv* env, job
     env->ReleaseIntArrayElements(maskArray, mask, 0);
     return (jint) num_svs;
 }
+
+static jint android_location_GpsLocationProvider_read_gnss_sv_status(JNIEnv* env, jobject obj,
+        jintArray prnArray, jfloatArray snrArray, jfloatArray elevArray, jfloatArray azumArray,
+        jbooleanArray ephmArray,jbooleanArray almArray,jbooleanArray fixArray)
+{
+    // this should only be called from within a call to reportGnssSvStatus
+    size_t status_size = sGnssSvStatus.size;
+    if (status_size != sizeof(GnssSvStatus)) {
+        jniThrowException(env, "java/lang/IllegalArgumentException ", "size wrong");
+        return (jint)0;
+    }
+
+    jint* prns = env->GetIntArrayElements(prnArray, 0);
+    jfloat* snrs = env->GetFloatArrayElements(snrArray, 0);
+    jfloat* elev = env->GetFloatArrayElements(elevArray, 0);
+    jfloat* azim = env->GetFloatArrayElements(azumArray, 0);
+    jboolean* ephm = env->GetBooleanArrayElements(ephmArray, 0);
+    jboolean* alm = env->GetBooleanArrayElements(almArray, 0);
+    jboolean* fix = env->GetBooleanArrayElements(fixArray, 0);
+
+    int num_svs = sGnssSvStatus.num_svs;
+    for (int i = 0; i < num_svs; i++) {
+        prns[i] = sGnssSvStatus.sv_list[i].prn;
+        snrs[i] = sGnssSvStatus.sv_list[i].snr;
+        elev[i] = sGnssSvStatus.sv_list[i].elevation;
+        azim[i] = sGnssSvStatus.sv_list[i].azimuth;
+        ephm[i] = sGnssSvStatus.sv_list[i].has_ephemeris;
+        alm[i] = sGnssSvStatus.sv_list[i].has_almanac;
+        fix[i] = sGnssSvStatus.sv_list[i].used_in_fix;
+    }
+
+    env->ReleaseIntArrayElements(prnArray, prns, 0);
+    env->ReleaseFloatArrayElements(snrArray, snrs, 0);
+    env->ReleaseFloatArrayElements(elevArray, elev, 0);
+    env->ReleaseFloatArrayElements(azumArray, azim, 0);
+    env->ReleaseBooleanArrayElements(ephmArray, ephm, 0);
+    env->ReleaseBooleanArrayElements(almArray, alm, 0);
+    env->ReleaseBooleanArrayElements(fixArray, fix, 0);
+
+    return (jint) num_svs;
+}
+
+
 
 static void android_location_GpsLocationProvider_agps_set_reference_location_cellid(
         JNIEnv* /* env */, jobject /* obj */, jint type, jint mcc, jint mnc, jint lac, jint cid, jint psc)
@@ -1533,6 +1589,9 @@ static JNINativeMethod sMethods[] = {
     {"native_configuration_update",
             "(Ljava/lang/String;)V",
             (void*)android_location_GpsLocationProvider_configuration_update},
+            {"native_read_gnss_sv_status",
+            "([I[F[F[F[Z[Z[Z)I",
+            (void*) android_location_GpsLocationProvider_read_gnss_sv_status},
 };
 
 int register_android_server_location_GpsLocationProvider(JNIEnv* env)
