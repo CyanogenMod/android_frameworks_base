@@ -77,6 +77,32 @@ public class NetPluginDelegate {
         return ret_val;
     }
 
+    public static void natStarted(String intIface, String extIface) {
+        if (LOGV) Slog.v(TAG, "natStarted() E");
+        if(!loadTetherExtJar()) return;
+        try {
+            tetherExtensionClass.getMethod("natStarted", String.class, String.class).invoke(
+                    tetherExtensionObj, intIface, extIface);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w(TAG, "Error calling natStarted Method on extension jar");
+        }
+        if (LOGV) Slog.v(TAG, "natStarted() X");
+    }
+
+    public static void natStopped(String intIface, String extIface) {
+        if (LOGV) Slog.v(TAG, "natStopped() E");
+        if(!loadTetherExtJar()) return;
+        try {
+            tetherExtensionClass.getMethod("natStopped", String.class, String.class).invoke(
+                    tetherExtensionObj, intIface, extIface);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w(TAG, "Error calling natStopped Method on extension jar");
+        }
+        if (LOGV) Slog.v(TAG, "natStopped() X");
+    }
+
     public static void setQuota(String iface, long quota) {
         if (LOGV) Slog.v(TAG, "setQuota(" + iface + ", " + quota + ") E");
         if(!loadTetherExtJar()) return;

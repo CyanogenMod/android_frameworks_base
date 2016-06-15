@@ -94,6 +94,7 @@ import com.android.internal.util.HexDump;
 import com.android.internal.util.Preconditions;
 import com.android.server.NativeDaemonConnector.Command;
 import com.android.server.NativeDaemonConnector.SensitiveArg;
+import com.android.server.NetPluginDelegate;
 import com.android.server.net.LockdownVpnTracker;
 import com.google.android.collect.Maps;
 
@@ -1410,6 +1411,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         } catch (SocketException e) {
             throw new IllegalStateException(e);
         }
+        NetPluginDelegate.natStarted(internalInterface,externalInterface);
     }
 
     @Override
@@ -1420,6 +1422,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         } catch (SocketException e) {
             throw new IllegalStateException(e);
         }
+        NetPluginDelegate.natStopped(internalInterface,externalInterface);
     }
 
     @Override
