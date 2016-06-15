@@ -27,6 +27,7 @@ import android.os.SystemProperties;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.Display;
+import android.view.OrientationEventListener;
 import android.view.SurfaceSession;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private final SurfaceSession mFxSession;
 
     private final KeyguardMonitor mKeyguardMonitor;
+    private OrientationEventListener mOrientationEventListener;
 
     private static final int TYPE_LAYER_MULTIPLIER = 10000; // refer to WindowManagerService.TYPE_LAYER_MULTIPLIER
     private static final int TYPE_LAYER_OFFSET = 1000;      // refer to WindowManagerService.TYPE_LAYER_OFFSET
@@ -138,6 +140,16 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
             Point xy = new Point();
             display.getRealSize(xy);
             mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
+
+            mOrientationEventListener = new OrientationEventListener(mContext) {
+                @Override
+                public void onOrientationChanged(int orientation) {
+                    if (orientation != -1)
+                        resizeBlurLayer();
+                }
+            };
+            mOrientationEventListener.enable();
+
             if (mKeyguardBlur != null) {
                 mKeyguardBlur.setLayer(STATUS_BAR_LAYER - 2);
             }
@@ -165,6 +177,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private void adjustScreenOrientation(State state) {
         if (state.isKeyguardShowingAndNotOccluded()) {
             if (mKeyguardScreenRotation) {
+                resizeBlurLayer();
                 mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
             } else {
                 mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
@@ -172,6 +185,13 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         } else {
             mLpChanged.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
         }
+    }
+
+    private void resizeBlurLayer() {
+        Display display = mWindowManager.getDefaultDisplay();
+        Point xy = new Point();
+        display.getRealSize(xy);
+        mKeyguardBlur.setSize(xy.x, xy.y);
     }
 
     private void applyFocusableFlag(State state) {
