@@ -1478,6 +1478,22 @@ public class LocationManager {
             }
         }
 
+/// M: added to support multiple Gnss
+        @Override
+        public void onGnssSvStatusChanged(int svCount, int[] prns, float[] snrs,
+                float[] elevations, float[] azimuths, boolean[] ephemeris,
+                boolean[]  almanac, boolean[]  usedInFix) {
+            if (mListener != null) {
+                mGpsStatus.setGnssStatus(svCount, prns, snrs, elevations, azimuths,
+                        ephemeris, almanac, usedInFix);
+
+                Message msg = Message.obtain();
+                msg.what = GpsStatus.GPS_EVENT_SATELLITE_STATUS;
+                // remove any SV status messages already in the queue
+                mGpsHandler.removeMessages(GpsStatus.GPS_EVENT_SATELLITE_STATUS);
+                mGpsHandler.sendMessage(msg);
+            }
+        }
         @Override
         public void onNmeaReceived(long timestamp, String nmea) {
             if (mNmeaListener != null) {
