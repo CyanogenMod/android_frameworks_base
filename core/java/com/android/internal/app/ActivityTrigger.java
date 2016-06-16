@@ -106,10 +106,16 @@ public class ActivityTrigger
         native_at_stopActivity(activity);
     }
 
+    /** &hide */
+    public float animationScalesCheck(String activity, int scaleType) {
+        return native_at_animationScalesCheck(activity, scaleType);
+    }
+
     private native int native_at_startActivity(String activity, int flags);
     private native void native_at_resumeActivity(String activity);
     private native void native_at_pauseActivity(String activity);
     private native void native_at_stopActivity(String activity);
     private native void native_at_deinit();
     private native void native_at_startProcessActivity(String process, int pid);
+    private native float native_at_animationScalesCheck(String activity, int scaleType);
 }
