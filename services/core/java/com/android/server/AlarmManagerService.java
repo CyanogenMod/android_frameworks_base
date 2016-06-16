@@ -133,7 +133,7 @@ class AlarmManagerService extends SystemService {
     private long mLastWakeup;
     int mBroadcastRefCount = 0;
     PowerManager.WakeLock mWakeLock;
-    private QCNsrmAlarmExtension qcNsrmExt = new QCNsrmAlarmExtension();
+    private QCNsrmAlarmExtension qcNsrmExt = new QCNsrmAlarmExtension(this);
     boolean mLastWakeLockUnimportantForLogging;
     ArrayList<Alarm> mPendingNonWakeupAlarms = new ArrayList<>();
     ArrayList<InFlight> mInFlight = new ArrayList<>();

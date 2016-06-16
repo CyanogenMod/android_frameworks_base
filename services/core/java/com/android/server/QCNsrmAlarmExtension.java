@@ -41,13 +41,15 @@ import java.util.TimerTask;
 public final class QCNsrmAlarmExtension {
     static final String TAG = "QCNsrmAlarmExtn";
     static final boolean localLOGV = false;
+    private AlarmManagerService almHandle;
 
     //track the blocked and triggered uids in AlarmManagerService
     private static final ArrayList<Integer> mTriggeredUids = new ArrayList<Integer>();
     private static final ArrayList<Integer> mBlockedUids = new ArrayList<Integer>();
     private static final int BLOCKED_UID_CHECK_INTERVAL = 1000; // 1 sec.
 
-    public QCNsrmAlarmExtension() {
+    public QCNsrmAlarmExtension(AlarmManagerService handle) {
+        almHandle = handle;
     }
 
     //AlarmManagerService extension Methods
@@ -65,9 +67,9 @@ public final class QCNsrmAlarmExtension {
             mBlockedUids.add(new Integer(uid));
             Timer checkBlockedUidTimer = new Timer();
             checkBlockedUidTimer.schedule( new CheckBlockedUidTimerTask(
-                uid,
-                mWakeLock
-                ),BLOCKED_UID_CHECK_INTERVAL);
+                                                   uid,
+                                                   mWakeLock),
+                                           BLOCKED_UID_CHECK_INTERVAL);
         } else {
             if (localLOGV) Slog.v(TAG, "clearing alarmMgr mBlockedUids ");
             mBlockedUids.clear();
@@ -103,14 +105,16 @@ public final class QCNsrmAlarmExtension {
         @Override
         public void run(){
             if (mBlockedUids.contains(mUid) && mTriggeredUids.contains(mUid)) {
-                if (mWakeLock.isHeld()) {
-                    mWakeLock.release();
-                    if (localLOGV)
-                        Slog.v(TAG, "CheckBlockedUidTimerTask: AM WakeLock "+
-                                    "Released Internally!!");
+                synchronized(almHandle.mLock) {
+                    if (mWakeLock.isHeld()) {
+                        mWakeLock.release();
+                        if (localLOGV)
+                            Slog.v(TAG, "CheckBlockedUidTimerTask: AM "+
+                                   "WakeLock Released Internally!!");
+                    }
                 }
+                return;
             }
-            return;
         }
     }
 }
