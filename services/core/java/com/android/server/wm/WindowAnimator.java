@@ -220,9 +220,7 @@ public class WindowAnimator {
         // Show SHOW_WHEN_LOCKED windows that turn on the screen
         allowWhenLocked |= (win.mAttrs.flags & FLAG_SHOW_WHEN_LOCKED) != 0 && win.mTurnOnScreen;
         // Show windows that use TYPE_STATUS_BAR_SUB_PANEL when locked
-        allowWhenLocked |= win.mAttrs.type == WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL &&
-                winShowWhenLocked == null;
-
+        allowWhenLocked |= win.mAttrs.type == WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL;
 
         if (appShowWhenLocked != null) {
             allowWhenLocked |= appShowWhenLocked == win.mAppToken
