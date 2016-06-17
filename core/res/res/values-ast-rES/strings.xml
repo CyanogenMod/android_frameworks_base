@@ -55,6 +55,7 @@
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in minutes -->
   <string name="durationMinutes"><xliff:g id="minutes">%1$d</xliff:g> mins</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute -->
+  <string name="durationMinute"><xliff:g id="minutes">%1$d</xliff:g> min</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute with seconds -->
   <string name="durationMinuteSeconds"><xliff:g id="minutes">%1$d</xliff:g> min
             <xliff:g id="seconds">%2$d</xliff:g> segs</string>
@@ -71,6 +72,7 @@
   <!-- How to display the lack of a phone number -->
   <string name="emptyPhoneNumber">(Ensin númberu de teléfonu)</string>
   <!-- How to display the lack of a name -->
+  <string name="unknownName">Desconocíu</string>
   <!-- What the UI should display for "voice mail" unless overridden by the SIM-->
   <string name="defaultVoiceMailAlphaTag">Buzón de voz</string>
   <!-- What the UI should display for "Msisdn" unless overridden by the SIM-->
@@ -178,6 +180,10 @@
   <!-- Displayed to tell the user that all service is blocked by access control. -->
   <string name="RestrictedOnAll">Tán bloquiaos tolos servicios de voz, de datos y de SMS.</string>
   <!-- Displayed to tell the user that peer changed TTY mode -->
+  <string name="peerTtyModeFull">El preséu solicitó\'l mou TTY FULL.</string>
+  <string name="peerTtyModeHco">El preséu solicitó\'l mou TTY HCO.</string>
+  <string name="peerTtyModeVco">El preséu solicitó\'l mou TTY VCO.</string>
+  <string name="peerTtyModeOff">El preséu solicitó\'l mou TTY OFF.</string>
   <!-- Mappings between TS 27.007 +CFCC/+CLCK "service classes" and human-readable strings-->
   <!-- Example: Service was enabled for: Voice, Data -->
   <string name="serviceClassVoice">Voz</string>
@@ -302,6 +308,7 @@
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
   <string name="low_memory" product="watch">Escosó l\'espaciu d\'almacenamientu de la tablet. Desanicia dalgunos ficheros pa lliberar espaciu.</string>
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
+  <string name="low_memory" product="tv">L\'almacenamientu de la TV ta completu. Desanicia dalgunos ficheros pa lliberar espaciu.</string>
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
   <string name="low_memory" product="default">Escosó l\'espaciu d\'almacenamientu del teléfonu. Desanicia dalgunos ficheros pa lliberar espaciu.</string>
   <!-- SSL CA cert notification -->
@@ -315,31 +322,40 @@
   <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning",
         i.e. "Network may be monitored". This indicates that an unspecified administrator is doing
         the monitoring. [CHAR LIMIT=100]-->
+  <string name="ssl_ca_cert_noti_by_administrator">Pol alministrador del perfil de trabayu</string>
   <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning",
          i.e. "Network may be monitored". This indicates who is doing the monitoring.
          [CHAR LIMIT=100]-->
   <string name="ssl_ca_cert_noti_managed">Por <xliff:g id="MANAGING_DOMAIN">%s</xliff:g></string>
   <!-- Work profile deleted notification-->
   <!-- Shows up in the notification's title when the system deletes the work profile. [CHAR LIMIT=NONE] -->
+  <string name="work_profile_deleted">Perfil de trabayu desaniciáu</string>
   <!-- Content text for a notification. The Title of the notification is "work_profile_deleted",
          i.e. "Work profile deleted". This says that the profile is deleted by the system as a result of
          the current profile owner gone missing. [CHAR LIMIT=100]-->
+  <string name="work_profile_deleted_description">Desanicióse\'l perfil de trabayu por mor de la falta d\'una app d\'alministración.</string>
   <!-- Content text for an expanded notification. The Title of the notification is "work_profile_deleted",
          i.e. "Work profile deleted". This further explains that the profile is deleted by the system
          as a result of the current profile admin gone missing. [CHAR LIMIT=NONE]-->
+  <string name="work_profile_deleted_details">L\'app d\'alministración de perfil de trabayu nun s\'atopa o ta frañada.
+         Desaniciáronse\'l perfil de trabayu y datos. Contauta col alministrador p\'asistencia.</string>
   <!-- Content text for a notification. The Title of the notification is "work_profile_deleted",
         This indicates that a work profile has been deleted. [CHAR LIMIT=NONE]-->
   <string name="work_profile_deleted_description_dpm_wipe">El to perfil de trabayu yá nun ta disponible nesti preséu.</string>
   <!-- Factory reset warning dialog strings-->
   <!-- Shows up in the dialog's title to warn about an impeding factory reset. [CHAR LIMIT=NONE] -->
+  <string name="factory_reset_warning">Van desaniciase los datos del preséu</string>
   <!-- Text message in the factory reset warning dialog. This says that the the device admin app
          is missing or corrupted. As a result the device will be erased. [CHAR LIMIT=NONE]-->
+  <string name="factory_reset_message">L\'app alministración nun s\'atopa o ta dañada, y nun pue usase.
+         Van desaniciase los datos del preséu. Contauta col alministrador pa más ayuda.</string>
   <!-- Display name for any time a piece of data refers to the owner of the phone. For example, this could be used in place of the phone's phone number. -->
   <string name="me">Yo</string>
   <!-- Power Dialog -->
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
   <string name="power_dialog" product="tablet">Opciones de la tablet</string>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
+  <string name="power_dialog" product="tv">Opciones de TV</string>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
   <string name="power_dialog" product="default">Opciones del teléfonu</string>
   <!-- Button to turn on silent mode, within the Phone Options dialog -->
@@ -373,6 +389,7 @@
   <string name="shutdown_confirm" product="tablet">La tablet va apagase.</string>
   <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the TV, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="shutdown_confirm" product="tv">Va apagase la TV.</string>
   <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the watch, there will
          be a confirmation dialog.  This is the message. -->
   <string name="shutdown_confirm" product="watch">El reló va apagase</string>
@@ -402,6 +419,7 @@
   <!-- Title of the Global Actions Dialog -->
   <string name="global_actions" product="tablet">Opciones de la tablet</string>
   <!-- Title of the Global Actions Dialog -->
+  <string name="global_actions" product="tv">Opciones de TV</string>
   <!-- Title of the Global Actions Dialog -->
   <string name="global_actions" product="default">Opciones del teléfonu</string>
   <!-- label for item that locks the phone in the phone options dialog -->
@@ -507,6 +525,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBar">Permite que l\'aplicación inhabilite la barra d\'estáu o amieste y desanicie iconos del sistema.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_statusBarService">ser la barra d\'estáu</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_statusBarService">Permite que l\'aplicación apaeza na barra d\'estáu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -558,6 +577,9 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readSms" product="tablet">Permite que l\'aplicación llea mensaxes SMS almacenaos na tablet o na tarxeta SIM. L\'aplicación pue usar esti permisu pa lleer tolos mensaxes SMS, independientemente de cuál seya\'l so conteníu o\'l so nivel de confidencialidá.</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readSms" product="tv">Permite que l\'app llea mensaxes SMS
+      na TV o na tarxeta SIM. Esta opción permite que l\'app llea tolos
+      mensaxes SMS, independientemente del conteníu o de la confidencialidá.</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readSms" product="default">Permite que l\'aplicación llea mensaxes SMS almacenaos nel teléfonu o na tarxeta SIM. L\'aplicación pue usar esti permisu pa lleer tolos mensaxes SMS, independientemente de cuál seya\'l so conteníu o\'l so nivel de confidencialidá.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -569,6 +591,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_getTasks">Permite que l\'aplicación recupere información sobre xeres que se tán executando nesi momentu o que s\'executaren de recién. L\'aplicación pue usar esti permisu pa descubrir cuáles son les aplicaciones que s\'usen nel preséu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_manageProfileAndDeviceOwners">remanar perfiles y propietariu del preséu</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to set the profile/device owners.
      [CHAR LIMIT=NONE] -->
   <string name="permdesc_manageProfileAndDeviceOwners">Permite que les apps configuren los perfiles de propietarios y el propietariu del preséu.</string>
@@ -645,6 +668,8 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_writeCallLog" product="default">Permite que l\'aplicación modifique\'l rexistru de llamaes del teléfonu, incluyíos datos sobre llamaes entrantes y salientes. Les aplicaciones malintencionaes puen usar esti permisu pa desaniciar o modificar el rexistru de llamaes.</string>
   <!-- Title of the body sensors permission, listed so the user can decide whether to allow the application to access body sensor data. [CHAR LIMIT=30] -->
+  <string name="permlab_bodySensors">acceder a sensores corporales (como mon. frec. card)
+    </string>
   <!-- Description of the body sensors permission, listed so the user can decide whether to allow the application to access data from body sensors. [CHAR LIMIT=NONE] -->
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readCalendar">lleer eventos de calendariu ya información confidencial</string>
@@ -661,10 +686,17 @@
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessLocationExtraCommands">acceder a comandos de fornidor de llocalización adicional</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessLocationExtraCommands">Permite a l\'app acceder
+      a comandos estres del fornidor de llocalización. Esto pue permiti-y interferir
+      nel funcionamientu del GPS o d\'otres fontes de llocalización.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFineLocation">accesu a llocalización precisa
+      (basada en rede y GPS)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFineLocation">Permite que l\'aplicación obtenga la to llocalización precisa per duana del Sistema de posicionamientu global (GPS) o fontes de llocalización de rede, como torres de telefonía y redes Wi-Fi. Estos servicios de llocalización tienen de tar activaos y disponibles pa que l\'aplicación pueda usalos. Les aplicaciones puen usar esti permisu pa determinar la to llocalización y ye dable que\'l preséu consuma más batería.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessCoarseLocation">accesu a llocalización aproximada
+      (basada en rede)</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessCoarseLocation">Permite que l\'aplicación obtenga la to llocalización aproximada. Esta llocalización remanez de los servicios de llocalización qu\'usen fontes de llocalización de rede, como torres de telefonía y redes Wi-Fi. Estos servicios de llocalización tienen de tar activaos y disponibles pa que l\'aplicación pueda usalos. Les aplicaciones puen usar esti permisu pa determinar la to llocalización de mou aproximáu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -676,6 +708,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_recordAudio">Permite que l\'aplicación grabe audiu col micrófonu. L\'aplicación pue usar esti permisu pa grabar audiu en cualquier momentu ensin tener la confirmación del usuariu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_sim_communication">unviar comandos a la SIM</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_sim_communication">Permite que l\'aplicación unvie comandos a la tarxeta SIM. Esti permisu YE MUI PELIGROSU.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -697,6 +730,7 @@
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_accessImsCallService">acceder al serviciu IMS pa facer llamaes</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_accessImsCallService">Permite a l\'app usar el serviciu IMS pa facer llamaes ensin la to intervención.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readPhoneState">consultar la identidá y l\'estáu del teléfonu</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -745,6 +779,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessNetworkState">Permite que l\'aplicación vea información sobre conexones de rede (por exemplu, qué redes esisten y tán coneutaes).</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_createNetworkSockets">tener accesu completu a rede</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_createNetworkSockets">Permite que l\'aplicación cree sockets de rede y use protocolos de rede personalizaos. El restolador web y otres aplicaciones proporcionen los medios necesarios pal unviu de datos a Internet, polo que nun fai falta usar esti permisu pa eso.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -778,6 +813,7 @@
   <string name="permdesc_bluetoothAdmin" product="default">Permite que l\'aplicación configure\'l teléfonu Bluetooth local y que deteute preseos remotos y s\'emparexe con ellos.</string>
   <string name="permlab_accessWimaxState">coneutase a WiMAX y desconeutase d\'esta red</string>
   <string name="permdesc_accessWimaxState">Permite que l\'aplicación determine si ta habilitada la conexón WiMAX y obtenga información sobre les redes WiMAX que tán coneutaes.</string>
+  <string name="permlab_changeWimaxState">camudar estáu WiMAX</string>
   <string name="permdesc_changeWimaxState" product="tablet">Permite que l\'aplicación coneute la tablet a redes WiMAX y la desconeute d\'elles.</string>
   <string name="permdesc_changeWimaxState" product="default">Permite que l\'aplicación coneute\'l teléfonu a redes WiMAX y lu desconeute d\'elles.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -796,25 +832,41 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_disableKeyguard">Permite que l\'aplicación inhabilite\'l bloquéu del tecláu y cualquier proteición con contraseña asociada. Por exemplu, el teléfonu pue inhabilitar el bloquéu del tecláu cuando se recibe una llamada telefónica y volver a habilitalu cuando fina la llamada.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_manageFingerprint">remanar hardware de buelgues dixitales</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_manageFingerprint">Permite que l\'app emplegue métodos p\'amestar y desaniciar plantíes de buelgues dixitales pal so usu.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_useFingerprint">Usar hardware de buelgues dixitales</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useFingerprint">Permite que l\'app use\'l hardware de buelgues dixitales pa facer l\'autenticación</string>
   <!-- Message shown during fingerprint acquisision when the fingerprint cannot be recognized -->
+  <string name="fingerprint_acquired_partial">La buelga dixital deteutóse parcialmente. Vuelvi a intentalo.</string>
   <!-- Message shown during fingerprint acquisision when the fingerprint cannot be recognized -->
+  <string name="fingerprint_acquired_insufficient">Nun pudo procesase la buelga dixital. Vuelvi intentalo.</string>
   <!-- Message shown during fingerprint acquisision when the fingerprint sensor needs cleaning -->
+  <string name="fingerprint_acquired_imager_dirty">El sensor de buelgues dixitales ta suciu. Llimpia\'l sensor y vuelvi intentalo.</string>
   <!-- Message shown during fingerprint acquisision when the user removes their finger from the sensor too quickly -->
+  <string name="fingerprint_acquired_too_fast">Movisti\'l deu enforma rápido. Vuelvi intentalo.</string>
   <!-- Message shown during fingerprint acquisision when the user moves their finger too slowly -->
+  <string name="fingerprint_acquired_too_slow">Movisti\'l deu mui lento. Vuelvi intentalo.</string>
   <!-- Array containing custom messages shown during fingerprint acquisision from vendor.  Vendor is expected to add and translate these strings -->
   <!-- Error message shown when the fingerprint hardware can't be accessed -->
+  <string name="fingerprint_error_hw_not_available">El hardware pa buelgues dixitales nun ta disponible.</string>
   <!-- Error message shown when the fingerprint hardware has run out of room for storing fingerprints -->
+  <string name="fingerprint_error_no_space">Nun pue atroxase la buelga dixital. Desanicia una de les esistentes.</string>
   <!-- Error message shown when the fingerprint hardware timer has expired and the user needs to restart the operation. -->
+  <string name="fingerprint_error_timeout">Finó\'l tiempu d\'espera pa la buelga dixital. Vuelvi intentalo.</string>
   <!-- Generic error message shown when the fingerprint operation (e.g. enrollment or authentication) is canceled. Generally not shown to the user-->
+  <string name="fingerprint_error_canceled">Encaboxóse la operación de buelga dixital.</string>
   <!-- Generic error message shown when the fingerprint operation fails because too many attempts have been made. -->
+  <string name="fingerprint_error_lockout">Milenta intentos. Volvi tentalo más sero.</string>
   <!-- Generic error message shown when the fingerprint hardware can't recognize the fingerprint -->
   <string name="fingerprint_error_unable_to_process">Vuelvi intentalo.</string>
   <!-- Template to be used to name enrolled fingerprints by default. -->
+  <string name="fingerprint_name_template">Deu <xliff:g id="fingerId" example="1">%d</xliff:g></string>
   <!-- Array containing custom error messages from vendor.  Vendor is expected to add and translate these strings -->
   <!-- Content description which should be used for the fingerprint icon. -->
+  <string name="fingerprint_icon_content_description">Iconu de buelga</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_readSyncSettings">lleer la configuración de sincronización</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -908,6 +960,7 @@
   <string name="permlab_accessDrmCertificates">acceder a certificaos DRM</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessDrmCertificates">Permite a la app dar y usar certificaos DRM. Nun tendría de ser necesario pa les aplicaciones normales.</string>
+  <string name="permlab_handoverStatus">recibir estáu de tresferencies d\'Android Beam</string>
   <string name="permdesc_handoverStatus">Permite qu\'esta app reciba información tocante a les tresferencies actuales d\'Android Beam</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_removeDrmCertificates">desaniciar certificaos DRM</string>
@@ -935,8 +988,19 @@
   <!-- Description of policy access to watch user login attempts -->
   <!-- Description of policy access to watch user login attempts -->
   <string name="policydesc_watchLogin" product="default">Remana\'l númberu de contraseñes incorreutes introducíes al desbloquiar la pantalla y bloquia\'l teléfonu o desanicia tolos datos si s\'inxerten munches contraseñes incorreutes.</string>
+  <string name="policydesc_watchLogin_secondaryUser" product="tablet">Remana\'l númberu de contraseñes incorreutes
+    introducíes al desbloquiar la pantalla y bloquia la tablet o desanicia tolos datos
+    si s\'inxerten munches contraseñes incorreutes.</string>
+  <string name="policydesc_watchLogin_secondaryUser" product="TV">Remana\'l númberu de contraseñes incorreutes
+    introducíes al desbloquiar la pantalla y bloquia la TV o desanicia tolos datos
+    si s\'inxerten munches contraseñes incorreutes.</string>
+  <string name="policydesc_watchLogin_secondaryUser" product="default">Remana\'l númberu de contraseñes incorreutes
+    introducíes al desbloquiar la pantalla y bloquia\'l tefnu o desanicia tolos datos
+    si s\'inxerten munches contraseñes incorreutes.</string>
   <!-- Title of policy access to reset user's password -->
+  <string name="policylab_resetPassword">Camudar el bloquéu de pantalla</string>
   <!-- Description of policy access to reset user's password -->
+  <string name="policydesc_resetPassword">Camudar el bloquéu de pantalla</string>
   <!-- Title of policy access to force lock the device -->
   <string name="policylab_forceLock">Bloquéu de pantalla</string>
   <!-- Description of policy access to limiting the user's password choices -->
@@ -1346,6 +1410,8 @@
   <string name="lockscreen_access_pattern_cell_added">Amestóse una caxella.</string>
   <!-- Accessibility description sent when user adds a dot to the pattern. Announces the 
     actual cell when headphones are connected [CHAR LIMIT=NONE]  -->
+  <string name="lockscreen_access_pattern_cell_added_verbose">
+            Amestóse la caxella <xliff:g id="cell_index" example="3">%1$s</xliff:g></string>
   <!-- Accessibility description sent when user completes drawing a pattern. [CHAR LIMIT=NONE] -->
   <string name="lockscreen_access_pattern_detected">Patrón completáu</string>
   <!-- Accessibility description of the unlock pattern area. [CHAR_LIMIT=none] -->
@@ -1570,15 +1636,28 @@
   <string name="permlab_writeHistoryBookmarks">escribir nel historial y nos marcadores web</string>
   <!-- Description of an application permission, listed so the user can choose whether
         they want to allow the application to do this. -->
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">Permite que l\'app
+        modifique l\'historial o los marcadores del restolador almacenaos na
+        tablet. L\'aplicación pue usar esti permisu pa desaniciar o modificar datos
+        del restolador. Nota: Esti permisu nun pue usase por restoladores
+        esternos nin otres apps que tengan funciones de navegación per Internet.</string>
   <!-- Description of an application permission, listed so the user can choose whether
         they want to allow the application to do this. -->
   <!-- Description of an application permission, listed so the user can choose whether
         they want to allow the application to do this. -->
+  <string name="permdesc_writeHistoryBookmarks" product="default">Permite que l\'app
+        modifique l\'historial o los marcadores del restolador almacenaos nel
+        tefnu. L\'aplicación pue usar esti permisu pa desaniciar o modificar datos
+        del restolador. Nota: Esti permisu nun pue usase por restoladores
+        esternos nin otres apps que tengan funciones de navegación per Internet.</string>
   <!-- Title of an application permission, listed so the user can choose whether
     they want to allow the application to do this. -->
   <string name="permlab_setAlarm">afitar una alarma</string>
   <!-- Description of an application permission, listed so the user can choose whether
         they want to allow the application to do this. -->
+  <string name="permdesc_setAlarm">Permite que l\'app afite una alarma
+        nuna app instalada d\'alarmes. Ye dable que dalgunes apps
+        d\'alarma nun incluyan esta función.</string>
   <!-- Title of an application permission, listed so the user can choose whether
         they want to allow the application to do this. [CHAR LIMIT=NONE] -->
   <string name="permlab_addVoicemail">amestar buzón de voz</string>
@@ -1645,6 +1724,10 @@
   <!-- String used to display the date. This is the string to say something happened more than 1 month ago. -->
   <string name="beforeOneMonthDurationPast">hai más d\'un mes</string>
   <!-- This is used to express that something occurred within the last X days (e.g., Last 7 days). -->
+  <plurals name="last_num_days">
+    <item quantity="one">Últimu <xliff:g id="count">%d</xliff:g> día</item>
+    <item quantity="other">Últimos <xliff:g id="count">%d</xliff:g> díes</item>
+  </plurals>
   <!-- This is used to express that something has occurred within the last month -->
   <string name="last_month">el mes pasáu</string>
   <!-- This is used to express that something happened longer ago than the previous options -->
@@ -1858,6 +1941,7 @@
   <!-- [CHAR LIMIT=NONE] Message shown in upgrading dialog for each .apk that is optimized. -->
   <string name="android_upgrading_apk">Optimizando aplicación <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>\u2026</string>
   <!-- [CHAR LIMIT=NONE] Message shown in upgrading dialog for each .apk pre boot broadcast -->
+  <string name="android_preparing_apk">Preparando <xliff:g id="appname">%1$s</xliff:g>.</string>
   <!-- [CHAR LIMIT=NONE] Message to show in upgrading dialog when reached the point of starting apps. -->
   <string name="android_upgrading_starting_apps">Aniciando aplicaciones</string>
   <!-- [CHAR LIMIT=NONE] Message to show in upgrading dialog when the bulk of the upgrade work is done. -->
@@ -1875,9 +1959,18 @@
   <string name="new_app_action">Aniciar <xliff:g id="OLD_APP">%1$s</xliff:g></string>
   <string name="new_app_description">Detener l\'aplicación anterior ensin guardar</string>
   <!-- Notification text to tell the user that a process has exceeded its memory limit. -->
+  <string name="dump_heap_notification"><xliff:g id="proc">%1$s</xliff:g> perpasó la llende de
+        memoria</string>
   <!-- Notification details to tell the user that a process has exceeded its memory limit. -->
+  <string name="dump_heap_notification_detail">Recopilóse\'l volcáu de pila;
+        toca pa compartir</string>
   <!-- Title of dialog prompting the user to share a heap dump. -->
+  <string name="dump_heap_title">¿Compartir volcáu de pila?</string>
   <!-- Text of dialog prompting the user to share a heap dump. -->
+  <string name="dump_heap_text">El procesu <xliff:g id="proc">%1$s</xliff:g> perpasó la llende
+        de memoria de procesu de <xliff:g id="size">%2$s</xliff:g>. Hai un volcáu de pila disponible
+        pa que puedas compartilu col programador. Curiáu, esti volcáu de pila
+        pue contener información personal a la que pue acceder l\'app.</string>
   <!-- Displayed in the title of the chooser for things to do with text that
          is to be sent to another application. For example, I can send
          text through SMS or IM.  A dialog with those choices would be shown,
@@ -1933,11 +2026,15 @@
     <item quantity="other">Redes Wi-Fi abiertes disponibles</item>
   </plurals>
   <!-- A notification is shown when a wifi captive portal network is detected.  This is the notification's title. -->
+  <string name="wifi_available_sign_in">Coneutase a una rede Wi-Fi.</string>
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's title. -->
+  <string name="network_available_sign_in">Acceder a la rede</string>
   <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
   <string name="network_available_sign_in_detailed"><xliff:g id="network_ssid">%1$s</xliff:g></string>
   <!-- A notification is shown when the user connects to a Wi-Fi network and the system detects that that network has no Internet access. This is the notification's title. -->
+  <string name="wifi_no_internet">La rede Wi-Fi nun tiene accesu a Internet</string>
   <!-- A notification is shown when the user connects to a Wi-Fi network and the system detects that that network has no Internet access. This is the notification's message. -->
+  <string name="wifi_no_internet_detailed">Toca pa opciones</string>
   <!-- A notification is shown when a user's selected SSID is later disabled due to connectivity problems.  This is the notification's title / ticker. -->
   <string name="wifi_watchdog_network_disabled">Nun pudo afitase conexón cola rede Wi-Fi.</string>
   <!-- A notification is shown when a user's selected SSID is later disabled due to connectivity problems.  The complete alert msg is: <hotspot name> + this string, i.e. "Linksys has a poor internet connection" -->
@@ -1945,8 +2042,11 @@
   <!-- Do not translate. Default access point SSID used for tethering -->
   <!-- A notification is shown the first time a connection is attempted on an app owned AP -->
   <!-- title for this message -->
+  <string name="wifi_connect_alert_title">¿Permitir conexón?</string>
   <!-- message explaining who is connecting to what -->
+  <string name="wifi_connect_alert_message">L\'app %1$s quier coneutase a la rede Wi-Fi %2$s</string>
   <!-- default application in case name can not be found -->
+  <string name="wifi_connect_default_application">Una aplicación</string>
   <string name="wifi_p2p_dialog_title">Wi-Fi Direutu</string>
   <string name="wifi_p2p_turnon_message">Aniciar Wi-Fi Direct. Va desactivase\'l funcionamientu de la zona o del cliente Wi-Fi.</string>
   <string name="wifi_p2p_failed_message">Nun pudo aniciase Wi-Fi Direct.</string>
@@ -2067,6 +2167,7 @@
   <!-- USB_STORAGE_ERROR dialog  ok button-->
   <string name="dlg_ok">Aceutar</string>
   <!-- USB_PREFERENCES: Notification for when the user connected to the charger only.  This is the title -->
+  <string name="usb_charging_notification_title">USB pa cargar</string>
   <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in MTP mode.  This is the title -->
   <string name="usb_mtp_notification_title">USB pa tresferir ficheros</string>
   <!-- USB_PREFERENCES: Notification for when the user connects the phone to a computer via USB in PTP mode.  This is the title -->
@@ -2178,12 +2279,15 @@
   <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
   <string name="activity_list_empty">Nun s\'atopó nenguna actividá coincidente.</string>
   <!-- Title of an application permission that lets an application route media output. -->
+  <string name="permlab_route_media_output">route media output</string>
   <!-- Description of an application permission that lets an application route media output. -->
   <string name="permdesc_route_media_output">Permite que l\'aplicación dirixa salides de medios a otros preseos esternos.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
+  <string name="permlab_readInstallSessions">lleer sesiones instalaes</string>
   <!-- Description of an application permission that lets it read install sessions. -->
   <string name="permdesc_readInstallSessions">Permite qu\'una aplicación consulte sesiones d\'instalación pa ver detalles tocante a instalaciones de paquetes activos.</string>
   <!-- Title of an application permission that lets it read install sessions. -->
+  <string name="permlab_requestInstallPackages">solicitar paquetes instalaos</string>
   <!-- Description of an application permission that lets it read install sessions. -->
   <string name="permdesc_requestInstallPackages">Permite qu\'una app solicite la instalación de paquetes.</string>
   <!-- Shown in the tutorial for tap twice for zoom control. -->
@@ -2995,30 +3099,44 @@
   <!-- Zen mode condition: no exit criteria, includes the name of the feature for emphasis. [CHAR LIMIT=NONE] -->
   <string name="zen_mode_forever_dnd">Hasta que desactives Nun molestar</string>
   <!-- Zen mode active automatic rule name separator. [CHAR LIMIT=NONE] -->
+  <string name="zen_mode_rule_name_combination"><xliff:g id="first" example="Weeknights">%1$s</xliff:g> / <xliff:g id="rest" example="Meetings">%2$s</xliff:g></string>
   <!-- Content description for the Toolbar icon used to collapse an expanded action mode. [CHAR LIMIT=NONE] -->
   <!-- Zen mode - feature name. [CHAR LIMIT=40] -->
   <string name="zen_mode_feature_name">Nun molestar</string>
   <!-- Zen mode - downtime legacy feature name. [CHAR LIMIT=40] -->
+  <string name="zen_mode_downtime_feature_name">Tiempu d\'inactividá</string>
   <!-- Zen mode - name of default automatic schedule for weeknights. [CHAR LIMIT=40] -->
+  <string name="zen_mode_default_weeknights_name">Nueche, na selmana</string>
   <!-- Zen mode - name of default automatic schedule for weekends. [CHAR LIMIT=40] -->
+  <string name="zen_mode_default_weekends_name">Fin de selmana</string>
   <!-- Zen mode - name of default automatic calendar event-based rule. [CHAR LIMIT=40] -->
+  <string name="zen_mode_default_events_name">Eventu</string>
   <!-- Indication that the current volume and other effects (vibration) are being suppressed by a third party, such as a notification listener. [CHAR LIMIT=30] -->
   <!-- Error message shown when there is a system error which can be solved by user performing factory reset. [CHAR LIMIT=NONE] -->
   <!-- Error message shown when there is a system error which can be solved by the manufacturer. [CHAR LIMIT=NONE] -->
   <!-- Displayed when the USSD/SS request is modified by STK CC to a
     different request. This will be displayed in a toast. -->
   <!-- Content description of the work profile icon in the notification. -->
+  <string name="notification_work_profile_content_description">Perfil de trabayu</string>
   <!-- User visible name for USB MIDI Peripheral port -->
+  <string name="usb_midi_peripheral_name">Puertu USB de periféricos Android</string>
   <!-- Manufacturer name for USB MIDI Peripheral port -->
+  <string name="usb_midi_peripheral_manufacturer_name">Android</string>
   <!-- Product name for USB MIDI Peripheral port -->
+  <string name="usb_midi_peripheral_product_name">Puertu USB de periféricos</string>
   <!-- Floating toolbar strings -->
   <!-- Content description for the button that opens the floating toolbar overflow. [CHAR LIMIT=NONE] -->
   <string name="floating_toolbar_open_overflow_description">Más opciones</string>
   <!-- Content description for the button that closes the floating toolbar overflow. [CHAR LIMIT=NONE] -->
+  <string name="floating_toolbar_close_overflow_description">Zarrar la barra de ferramientes flotante</string>
   <!-- Ellipsis character to appear in notification templates, e.g.
          notification_template_material_inbox.xml.
          DO NOT TRANSLATE -->
   <!-- Label describing the number of selected items [CHAR LIMIT=48] -->
+  <plurals name="selected_count">
+    <item quantity="one"><xliff:g id="count" example="1">%1$d</xliff:g> elementu esbilláu</item>
+    <item quantity="other"><xliff:g id="count" example="3">%1$d</xliff:g> elementos esbillaos</item>
+  </plurals>
   <!-- Used to replace a range of characters in text that is too wide
          for the space allocated to it (three dots). -->
   <!-- Used to replace a range of characters in text that is too wide
