@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">Domyślny</string>
+  <string name="profileNameWork">Praca</string>
+  <string name="profileNameHome">Dom</string>
+  <string name="profileNameSilent">Cichy</string>
   <string name="profileNameNight">Noc</string>
+  <string name="profileNameAutomobile">Samochód</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">Telefon</string>
+  <string name="profileGroupCalendar">Kalendarz</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">E-mail</string>
+  <string name="profileGroupSMS">SMS</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">Inny</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Brak</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,8 +78,12 @@
   <string name="privacy_guard_notification">Ochrona prywatności aktywna</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nie będzie mieć dostępu do osobistych danych</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">używa sprzętowego frameworka</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">Umożliwia aplikacji na dostęp do frameworka CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">zarządza trwałą pamięcią</string>
+  <string name="permdesc_managePersistentStorage">Umożliwia aplikacji odczyt lub zapis właściwości, które mogą przetrwać reset do ustawień fabrycznych.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Ustawianie tła ekranu blokady</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -284,4 +299,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Umożliwia aplikacji dostęp do usługi odcisku palca. Aplikacja może dodać, usunąć, zmienić nazwę i uwierzytelnić odcisk palca</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Wyłączono hotspot WiFi z powodu zmiany karty SIM</string>
 </resources>

@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">Стандартен</string>
+  <string name="profileNameWork">Работен</string>
+  <string name="profileNameHome">Вкъщи</string>
+  <string name="profileNameSilent">Безшумен</string>
   <string name="profileNameNight">Нощен</string>
+  <string name="profileNameAutomobile">Автомобилен</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">Телефон</string>
+  <string name="profileGroupCalendar">Календар</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">Имейл</string>
+  <string name="profileGroupSMS">SMS</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">Друго</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Без</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,8 +78,12 @@
   <string name="privacy_guard_notification">Защитен режим е активиран</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s </xliff:g> няма да можете да получите достъп до лични данни</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">Използване на framework хардуер</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">Разрешава на приложението достъп до framework хардуера на CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">управлявате места за съхранение на данни</string>
+  <string name="permdesc_managePersistentStorage">Позволява на приложенията да четат или пишат свойства, които могат да се запазят и след връщане на първоначални настройки.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Задаване на тапет за заключен екран</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -284,4 +299,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Позволява на приложението достъп до услугата на пръстови отпечатъци. Приложението може да добавя, изтрива, преименува и удостоверява срещу пръстови отпечатъци</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Изключена Wi-Fi точка за достъп, поради промяна в абонаментна на СИМ</string>
 </resources>

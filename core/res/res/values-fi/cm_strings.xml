@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">Oletus</string>
+  <string name="profileNameWork">Työ</string>
+  <string name="profileNameHome">Koti</string>
+  <string name="profileNameSilent">Äänetön</string>
   <string name="profileNameNight">Yö</string>
+  <string name="profileNameAutomobile">Auto</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">Puhelin</string>
+  <string name="profileGroupCalendar">Kalenteri</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">Sähköposti</string>
+  <string name="profileGroupSMS">Tekstiviesti</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">Muu</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Ei mitään</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,8 +78,12 @@
   <string name="privacy_guard_notification">Yksityisyyden suojaus käytössä</string>
   <string name="privacy_guard_notification_detail">Sovelluksella <xliff:g id="app">%1$s</xliff:g> ei ole pääsyä henkilökohtaisiin tietoihin</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">käytä laitteiston kehystä</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">Sallii sovelluksen pääsyn CM-laitteiston kehykseen.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">hallitse pysyvää tallennustilaa</string>
+  <string name="permdesc_managePersistentStorage">Sallii sovelluksen lukea tai kirjoittaa ominaisuuksia jotka voivat säilyä tehdasasetusten palautuksen jälkeen.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">aseta näppäinlukon taustakuva</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -284,4 +299,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Sallii sovelluksen käyttää sormenjälkipalvelua. Sovellus voi lisätä, poistaa, uudelleennimetä ja todentaa sormenjälkiä</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Wi-Fi-tukiasema poistettiin käytöstä SIMin vaihdon vuoksi</string>
 </resources>

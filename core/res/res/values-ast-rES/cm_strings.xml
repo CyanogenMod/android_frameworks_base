@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">Por defeutu</string>
+  <string name="profileNameWork">Trabayu</string>
+  <string name="profileNameHome">Casa</string>
+  <string name="profileNameSilent">Silenciu</string>
   <string name="profileNameNight">Nueche</string>
+  <string name="profileNameAutomobile">Automóvil</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">Teléfonu</string>
+  <string name="profileGroupCalendar">Calendariu</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">Corréu-e</string>
+  <string name="profileGroupSMS">SMS</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">Otros</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Darréu</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,8 +78,12 @@
   <string name="privacy_guard_notification">Privacidá activada</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> nun va poder acceder a los datos personales</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">usar hardware framework</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">Permite a l\'aplicación accesu al marcu de hardware de CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">remanar l\'almacenamientu persistente</string>
+  <string name="permdesc_managePersistentStorage">Permite a una aplicación lleer o escribir propiedaes que puen persistir dempués d\'un reaniciu a los axustes de fábrica.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Afita\'l fondu de pantalla de bloquéu</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -192,6 +207,8 @@
   <string name="perf_profile_pwrsv">Aforru d\'enerxía</string>
   <string name="perf_profile_bal">Equilibráu</string>
   <string name="perf_profile_perf">Rindimientu</string>
+  <string name="perf_profile_bias_power">Eficiencia</string>
+  <string name="perf_profile_bias_perf">Rápidu</string>
   <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Falló al instalar el tema</string>
   <string name="theme_install_error_message">%s falló al instalar</string>
@@ -268,15 +285,19 @@
   <string name="live_display_outdoor_summary">Usar namái axustes del esterior</string>
   <string name="live_display_hint">LiveDisplay pue amenorgar reducir la fatiga visual y ayudar a dormir pela nueche. ¡Toca equí pa probalu!</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">Pa desfixar esta pantalla, ten primíu\'l botón Atrás.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">La llinterna ta prendida</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toca p\'apagar</string>
   <!-- Storage description for the SD card on the dock -->
+  <string name="storage_sd_dock_card">Anclaxe de tarxeta SD</string>
   <!-- FINGERPRINT -->
   <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Buelga <xliff:g id="number">%d</xliff:g></string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFingerprintService">accesu al serviciu de buelgues</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Permite a un aplicación acceder el serviciu de buelgues dixitales. L\'aplicación pue amestar, desaniciar, renomar y autenticase escontra les buelgues dixitales</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Desactivóse\'l puntu d\'accesu WiFi pola mor d\'un cambéu na soscripción de la SIM</string>
 </resources>

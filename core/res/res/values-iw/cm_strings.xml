@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">ברירת מחדל</string>
+  <string name="profileNameWork">עבודה</string>
+  <string name="profileNameHome">בית</string>
+  <string name="profileNameSilent">שקט</string>
   <string name="profileNameNight">לילה</string>
+  <string name="profileNameAutomobile">רכב</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">טלפון</string>
+  <string name="profileGroupCalendar">לוח שנה</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">דוא״ל</string>
+  <string name="profileGroupSMS">SMS</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">אחר</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">ללא</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,6 +78,7 @@
   <string name="privacy_guard_notification">שומר הפרטיות פעיל</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> לא יוכל לגשת למידע אישי</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">השתמש במסגרת חומרה</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->

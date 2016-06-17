@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">Privzeti</string>
+  <string name="profileNameWork">Služba</string>
+  <string name="profileNameHome">Doma</string>
+  <string name="profileNameSilent">Tihi</string>
   <string name="profileNameNight">Noč</string>
+  <string name="profileNameAutomobile">Avto</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">Telefon</string>
+  <string name="profileGroupCalendar">Koledar</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">E-pošta</string>
+  <string name="profileGroupSMS">SMS</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">Drugo</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Brez</string>
   <!-- The title of the profile picker dialog. -->
@@ -69,8 +80,12 @@
   <string name="privacy_guard_notification">Privacy Guard dejaven</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> ne bo imel dostopa do osebnih podatkov</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">uporaba strojnega ogrodja</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">Dovoli aplikaciji dostop do strojnega ogrodja CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">upravljanje vztrajne pom. naprave</string>
+  <string name="permdesc_managePersistentStorage">Dovoli aplikaciji branje ali pisanje lastnosti, ki se ohranijo po ponastavitvi na tovarniške vrednosti.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">nastavitev slike ozadja keyguard</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -286,4 +301,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Dovoli aplikaciji dostop do storitve prstnih odtisov. Aplikacija lahko doda, izbriše preimenuje ali overi s prstnimi odtisi</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Dostopna točka Wi-Fi je bila onemogočena zaradi spremembe naročnine SIM</string>
 </resources>
