@@ -69,6 +69,8 @@ public class WifiConfiguration implements Parcelable {
 
     /** {@hide} */
     private String mPasspointManagementObjectTree;
+    /** {@hide} */
+    public static final String SIMNumVarName = "sim_num";
 
     /**
      * Recognized key management schemes.
@@ -445,6 +447,12 @@ public class WifiConfiguration implements Parcelable {
      */
     @SystemApi
     public String lastUpdateName;
+
+    /**
+     * @hide
+     * sim number selected
+     */
+    public int SIMNum;
 
     /**
      * @hide
@@ -1350,6 +1358,7 @@ public class WifiConfiguration implements Parcelable {
         creatorUid = -1;
         shared = true;
         dtimInterval = 0;
+        SIMNum = 0;
     }
 
     /**
@@ -1509,6 +1518,10 @@ public class WifiConfiguration implements Parcelable {
         }
         sbuf.append('\n').append(" PSK: ");
         if (this.preSharedKey != null) {
+            sbuf.append('*');
+        }
+        sbuf.append('\n').append(" sim_num ");
+        if (this.SIMNum > 0 ) {
             sbuf.append('*');
         }
         sbuf.append("\nEnterprise config:\n");
@@ -1907,6 +1920,7 @@ public class WifiConfiguration implements Parcelable {
             creationTime = source.creationTime;
             updateTime = source.updateTime;
             shared = source.shared;
+            SIMNum = source.SIMNum;
         }
     }
 
@@ -1977,6 +1991,7 @@ public class WifiConfiguration implements Parcelable {
         dest.writeInt(noInternetAccessExpected ? 1 : 0);
         dest.writeInt(shared ? 1 : 0);
         dest.writeString(mPasspointManagementObjectTree);
+        dest.writeInt(SIMNum);
     }
 
     /** Implement the Parcelable interface {@hide} */
@@ -2048,6 +2063,7 @@ public class WifiConfiguration implements Parcelable {
                 config.noInternetAccessExpected = in.readInt() != 0;
                 config.shared = in.readInt() != 0;
                 config.mPasspointManagementObjectTree = in.readString();
+                config.SIMNum = in.readInt();
                 return config;
             }
 
