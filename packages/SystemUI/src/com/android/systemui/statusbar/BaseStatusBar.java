@@ -207,6 +207,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     protected int mRowMinHeight;
     protected int mRowMaxHeight;
+    private boolean mProtectNotificationActions;
 
     // public mode, private notifications, etc
     private boolean mLockscreenPublicMode = false;
@@ -299,6 +300,19 @@ public abstract class BaseStatusBar extends SystemUI implements
         return mOnClickHandler;
     }
 
+    private boolean isNotificationPublic(View view) {
+        ViewGroup parent = (ViewGroup) view.getParent();
+        while (parent != null) {
+            if (parent instanceof ExpandableNotificationRow) {
+                StatusBarNotification notification = ((ExpandableNotificationRow) parent)
+                        .getStatusBarNotification();
+                return notification.getNotification().visibility == Notification.VISIBILITY_PUBLIC;
+            }
+            parent = (ViewGroup) parent.getParent();
+        }
+        return false;
+    }
+
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
         @Override
         public boolean onClickHandler(
@@ -315,9 +329,15 @@ public abstract class BaseStatusBar extends SystemUI implements
                 ActivityManagerNative.getDefault().resumeAppSwitches();
             } catch (RemoteException e) {
             }
+            final boolean keyguardShowing = mStatusBarKeyguardViewManager.isShowing();
             final boolean isActivity = pendingIntent.isActivity();
-            if (isActivity) {
-                final boolean keyguardShowing = mStatusBarKeyguardViewManager.isShowing();
+            boolean shouldProtectAction = isActivity;
+            if (!shouldProtectAction && mProtectNotificationActions && keyguardShowing
+                    && isKeyguardSecure() && !shouldHideSensitiveContents(mCurrentUserId)
+                    && !isNotificationPublic(view)) {
+                shouldProtectAction = true;
+            }
+            if (shouldProtectAction) {
                 final boolean afterKeyguardGone = PreviewInflater.wouldLaunchResolverActivity(
                         mContext, pendingIntent.getIntent(), mCurrentUserId);
                 dismissKeyguardThenExecute(new OnDismissAction() {
@@ -591,6 +611,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                 Settings.Secure.getUriFor(Settings.Secure.LOCK_SCREEN_SHOW_NOTIFICATIONS), false,
                 mSettingsObserver,
                 UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                CMSettings.Secure.getUriFor(
+                        CMSettings.Secure.LOCK_SCREEN_PROTECT_NOTIFICATION_ACTIONS), false,
+                mSettingsObserver, UserHandle.USER_ALL);
 
         mContext.getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS),
@@ -1955,6 +1979,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         final boolean allowedByDpm = (dpmFlags
                 & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_NOTIFICATIONS) == 0;
         setShowLockscreenNotifications(show && allowedByDpm);
+        mProtectNotificationActions = CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.LOCK_SCREEN_PROTECT_NOTIFICATION_ACTIONS,
+                0,
+                mCurrentUserId) != 0;
     }
 
     protected abstract void setAreThereNotifications();
