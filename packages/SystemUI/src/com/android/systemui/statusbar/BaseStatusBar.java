@@ -207,6 +207,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     protected int mRowMinHeight;
     protected int mRowMaxHeight;
+    private boolean mProtectNotificationActions;
 
     // public mode, private notifications, etc
     private boolean mLockscreenPublicMode = false;
@@ -316,7 +317,7 @@ public abstract class BaseStatusBar extends SystemUI implements
             } catch (RemoteException e) {
             }
             final boolean isActivity = pendingIntent.isActivity();
-            if (isActivity) {
+            if (isActivity || mProtectNotificationActions) {
                 final boolean keyguardShowing = mStatusBarKeyguardViewManager.isShowing();
                 final boolean afterKeyguardGone = PreviewInflater.wouldLaunchResolverActivity(
                         mContext, pendingIntent.getIntent(), mCurrentUserId);
@@ -589,6 +590,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mSettingsObserver);
         mContext.getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.LOCK_SCREEN_SHOW_NOTIFICATIONS), false,
+                mSettingsObserver,
+                UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                CMSettings.Secure.getUriFor(CMSettings.Secure.LOCK_SCREEN_PROTECT_NOTIFICATION_ACTIONS), false,
                 mSettingsObserver,
                 UserHandle.USER_ALL);
 
@@ -1937,6 +1942,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         final boolean allowedByDpm = (dpmFlags
                 & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_NOTIFICATIONS) == 0;
         setShowLockscreenNotifications(show && allowedByDpm);
+        mProtectNotificationActions = CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.LOCK_SCREEN_PROTECT_NOTIFICATION_ACTIONS,
+                0,
+                mCurrentUserId) != 0;
     }
 
     protected abstract void setAreThereNotifications();
