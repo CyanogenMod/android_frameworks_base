@@ -207,6 +207,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     protected StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
     protected int mRowMinHeight;
     protected int mRowMaxHeight;
+    private boolean mProtectNotificationActions;
 
     // public mode, private notifications, etc
     private boolean mLockscreenPublicMode = false;
@@ -316,7 +317,13 @@ public abstract class BaseStatusBar extends SystemUI implements
             } catch (RemoteException e) {
             }
             final boolean isActivity = pendingIntent.isActivity();
-            if (isActivity) {
+            boolean shouldProtectAction = isActivity;
+            if (!shouldProtectAction && mProtectNotificationActions) {
+                // Only protect actions if keyguard is secure and the notification is not
+                // the active media player
+                shouldProtectAction = isKeyguardSecure() && !isMediaNotification(view);
+            }
+            if (shouldProtectAction) {
                 final boolean keyguardShowing = mStatusBarKeyguardViewManager.isShowing();
                 final boolean afterKeyguardGone = PreviewInflater.wouldLaunchResolverActivity(
                         mContext, pendingIntent.getIntent(), mCurrentUserId);
@@ -377,21 +384,25 @@ public abstract class BaseStatusBar extends SystemUI implements
             }
         }
 
-        private String getNotificationKeyForParent(ViewParent parent) {
-            while (parent != null) {
-                if (parent instanceof ExpandableNotificationRow) {
-                    return ((ExpandableNotificationRow) parent).getStatusBarNotification().getKey();
-                }
-                parent = parent.getParent();
-            }
-            return null;
-        }
-
         private boolean superOnClickHandler(View view, PendingIntent pendingIntent,
                 Intent fillInIntent) {
             return super.onClickHandler(view, pendingIntent, fillInIntent);
         }
     };
+
+    protected boolean isMediaNotification(View view) {
+        return false;
+    }
+
+    public String getNotificationKeyForParent(ViewParent parent) {
+        while (parent != null) {
+            if (parent instanceof ExpandableNotificationRow) {
+                return ((ExpandableNotificationRow) parent).getStatusBarNotification().getKey();
+            }
+            parent = parent.getParent();
+        }
+        return null;
+    }
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -589,6 +600,10 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mSettingsObserver);
         mContext.getContentResolver().registerContentObserver(
                 Settings.Secure.getUriFor(Settings.Secure.LOCK_SCREEN_SHOW_NOTIFICATIONS), false,
+                mSettingsObserver,
+                UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                CMSettings.Secure.getUriFor(CMSettings.Secure.LOCK_SCREEN_PROTECT_NOTIFICATION_ACTIONS), false,
                 mSettingsObserver,
                 UserHandle.USER_ALL);
 
@@ -1937,6 +1952,10 @@ public abstract class BaseStatusBar extends SystemUI implements
         final boolean allowedByDpm = (dpmFlags
                 & DevicePolicyManager.KEYGUARD_DISABLE_SECURE_NOTIFICATIONS) == 0;
         setShowLockscreenNotifications(show && allowedByDpm);
+        mProtectNotificationActions = CMSettings.Secure.getIntForUser(mContext.getContentResolver(),
+                CMSettings.Secure.LOCK_SCREEN_PROTECT_NOTIFICATION_ACTIONS,
+                0,
+                mCurrentUserId) != 0;
     }
 
     protected abstract void setAreThereNotifications();

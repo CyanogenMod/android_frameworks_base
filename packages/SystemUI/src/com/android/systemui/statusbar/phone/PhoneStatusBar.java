@@ -199,6 +199,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeSet;
 
 import static android.app.StatusBarManager.NAVIGATION_HINT_BACK_ALT;
@@ -2123,6 +2124,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             updateNotifications();
         }
         updateMediaMetaData(metaDataChanged);
+    }
+
+    @Override
+    protected boolean isMediaNotification(View view) {
+        return Objects.equals(getCurrentMediaNotificationKey(),
+                getNotificationKeyForParent(view.getParent()));
     }
 
     private int getMediaControllerPlaybackState(MediaController controller) {
