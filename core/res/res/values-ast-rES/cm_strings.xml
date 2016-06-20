@@ -184,6 +184,7 @@
   <string name="app_ops_wifi_change">camudar estáu del Wi-Fi</string>
   <string name="app_ops_su">obtener accesu root</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">Pa desfixar esta pantalla, ten primíu\'l botón Atrás.</string>
   <!-- LiveDisplay strings -->
   <string name="live_display_auto">Automáticu</string>
   <string name="live_display_auto_summary">Axustar automáticamente la temperatura del color de pantalla col alborecer y l\'atapecer</string>
