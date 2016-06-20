@@ -55,6 +55,7 @@
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in minutes -->
   <string name="durationMinutes"><xliff:g id="minutes">%1$d</xliff:g> mins</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute -->
+  <string name="durationMinute"><xliff:g id="minutes">%1$d</xliff:g> min</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one minute with seconds -->
   <string name="durationMinuteSeconds"><xliff:g id="minutes">%1$d</xliff:g> min
             <xliff:g id="seconds">%2$d</xliff:g> segs</string>
@@ -71,6 +72,7 @@
   <!-- How to display the lack of a phone number -->
   <string name="emptyPhoneNumber">(Ensin númberu de teléfonu)</string>
   <!-- How to display the lack of a name -->
+  <string name="unknownName">Desconocíu</string>
   <!-- What the UI should display for "voice mail" unless overridden by the SIM-->
   <string name="defaultVoiceMailAlphaTag">Buzón de voz</string>
   <!-- What the UI should display for "Msisdn" unless overridden by the SIM-->
@@ -178,6 +180,10 @@
   <!-- Displayed to tell the user that all service is blocked by access control. -->
   <string name="RestrictedOnAll">Tán bloquiaos tolos servicios de voz, de datos y de SMS.</string>
   <!-- Displayed to tell the user that peer changed TTY mode -->
+  <string name="peerTtyModeFull">El preséu solicitó\'l mou TTY FULL.</string>
+  <string name="peerTtyModeHco">El preséu solicitó\'l mou TTY HCO.</string>
+  <string name="peerTtyModeVco">El preséu solicitó\'l mou TTY VCO.</string>
+  <string name="peerTtyModeOff">El preséu solicitó\'l mou TTY OFF.</string>
   <!-- Mappings between TS 27.007 +CFCC/+CLCK "service classes" and human-readable strings-->
   <!-- Example: Service was enabled for: Voice, Data -->
   <string name="serviceClassVoice">Voz</string>
@@ -285,6 +291,7 @@
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
   <string name="low_memory" product="watch">Escosó l\'espaciu d\'almacenamientu de la tablet. Desanicia dalgunos ficheros pa lliberar espaciu.</string>
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
+  <string name="low_memory" product="tv">L\'almacenamientu de la TV ta completu. Desanicia dalgunos ficheros pa lliberar espaciu.</string>
   <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
   <string name="low_memory" product="default">Escosó l\'espaciu d\'almacenamientu del teléfonu. Desanicia dalgunos ficheros pa lliberar espaciu.</string>
   <!-- SSL CA cert notification -->
@@ -298,28 +305,37 @@
   <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning",
         i.e. "Network may be monitored". This indicates that an unspecified administrator is doing
         the monitoring. [CHAR LIMIT=100]-->
+  <string name="ssl_ca_cert_noti_by_administrator">Pol alministrador del perfil de trabayu</string>
   <!-- Content text for a notification. The Title of the notification is "ssl_ca_cert_warning",
          i.e. "Network may be monitored". This indicates who is doing the monitoring.
          [CHAR LIMIT=100]-->
   <string name="ssl_ca_cert_noti_managed">Por <xliff:g id="MANAGING_DOMAIN">%s</xliff:g></string>
   <!-- Work profile deleted notification-->
   <!-- Shows up in the notification's title when the system deletes the work profile. [CHAR LIMIT=NONE] -->
+  <string name="work_profile_deleted">Perfil de trabayu desaniciáu</string>
   <!-- Content text for a notification. The Title of the notification is "work_profile_deleted",
          i.e. "Work profile deleted". This says that the profile is deleted by the system as a result of
          the current profile owner gone missing. [CHAR LIMIT=100]-->
+  <string name="work_profile_deleted_description">Desanicióse\'l perfil de trabayu por mor de la falta d\'una app d\'alministración.</string>
   <!-- Content text for an expanded notification. The Title of the notification is "work_profile_deleted",
          i.e. "Work profile deleted". This further explains that the profile is deleted by the system
          as a result of the current profile admin gone missing. [CHAR LIMIT=NONE]-->
+  <string name="work_profile_deleted_details">L\'app d\'alministración de perfil de trabayu nun s\'atopa o ta frañada.
+         Desaniciáronse\'l perfil de trabayu y datos. Contauta col alministrador p\'asistencia.</string>
   <!-- Factory reset warning dialog strings-->
   <!-- Shows up in the dialog's title to warn about an impeding factory reset. [CHAR LIMIT=NONE] -->
+  <string name="factory_reset_warning">Van desaniciase los datos del preséu</string>
   <!-- Text message in the factory reset warning dialog. This says that the the device admin app
          is missing or corrupted. As a result the device will be erased. [CHAR LIMIT=NONE]-->
+  <string name="factory_reset_message">L\'app alministración nun s\'atopa o ta dañada, y nun pue usase.
+         Van desaniciase los datos del preséu. Contauta col alministrador pa más ayuda.</string>
   <!-- Display name for any time a piece of data refers to the owner of the phone. For example, this could be used in place of the phone's phone number. -->
   <string name="me">Yo</string>
   <!-- Power Dialog -->
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
   <string name="power_dialog" product="tablet">Opciones de la tablet</string>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
+  <string name="power_dialog" product="tv">Opciones de TV</string>
   <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
   <string name="power_dialog" product="default">Opciones del teléfonu</string>
   <!-- Button to turn on silent mode, within the Phone Options dialog -->
@@ -345,6 +361,7 @@
   <string name="shutdown_confirm" product="tablet">La tablet va apagase.</string>
   <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the TV, there will
          be a confirmation dialog.  This is the message. -->
+  <string name="shutdown_confirm" product="tv">Va apagase la TV.</string>
   <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the watch, there will
          be a confirmation dialog.  This is the message. -->
   <string name="shutdown_confirm" product="watch">El reló va apagase</string>
@@ -374,6 +391,7 @@
   <!-- Title of the Global Actions Dialog -->
   <string name="global_actions" product="tablet">Opciones de la tablet</string>
   <!-- Title of the Global Actions Dialog -->
+  <string name="global_actions" product="tv">Opciones de TV</string>
   <!-- Title of the Global Actions Dialog -->
   <string name="global_actions" product="default">Opciones del teléfonu</string>
   <!-- label for item that locks the phone in the phone options dialog -->
@@ -617,6 +635,9 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readSms" product="tablet">Permite que l\'aplicación llea mensaxes SMS almacenaos na tablet o na tarxeta SIM. L\'aplicación pue usar esti permisu pa lleer tolos mensaxes SMS, independientemente de cuál seya\'l so conteníu o\'l so nivel de confidencialidá.</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_readSms" product="tv">Permite que l\'app llea mensaxes SMS
+      na TV o na tarxeta SIM. Esta opción permite que l\'app llea tolos
+      mensaxes SMS, independientemente del conteníu o de la confidencialidá.</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_readSms" product="default">Permite que l\'aplicación llea mensaxes SMS almacenaos nel teléfonu o na tarxeta SIM. L\'aplicación pue usar esti permisu pa lleer tolos mensaxes SMS, independientemente de cuál seya\'l so conteníu o\'l so nivel de confidencialidá.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
