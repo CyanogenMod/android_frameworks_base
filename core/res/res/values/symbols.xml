@@ -2373,7 +2373,7 @@
   <java-symbol type="bool" name="config_sms_ringtone_incall" />
 
   <!-- IpReachability Monitor -->
-  <java-symbol type="bool" name="config_wifi_ipreachability_monitor" />
+  <java-symbol type="bool" name="config_wifi_ipreachability_monitor_disabled" />
 
   <!-- Data Connectivity Error Configurations -->
   <java-symbol type="bool" name="config_reject_ggsn_perm_failure" />
