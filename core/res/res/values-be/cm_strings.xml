@@ -286,4 +286,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Дазвол доступу да службы адбіткаў пальцаў. Дадатак зможа дадаваць, выдаляць, рэдагаваць і выкарыстоўваць для аўтарызацыі адбіткі пальцаў</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Выключаныя Wi-Fi кропкі доступу ў сувязі са зменай падпіскі SIM</string>
 </resources>

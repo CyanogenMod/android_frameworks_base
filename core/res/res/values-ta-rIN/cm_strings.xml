@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">கைரேகை சேவையை ஒரு பயன்பாடு அணுக அனுமதிக்கிறது. இந்த பயன்பாட்டினால் கைரேகைக்கு எதிராக சேர்க்க, நீக்க, மறுபெயரிட மற்றும் அதிகாரமளிக்க முடியும்</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM சந்தா மாற்றத்தின் காரணமாக wi-fi ஹாட்ஸ்பாட் முடக்கப்பட்டது.</string>
 </resources>

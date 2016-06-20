@@ -83,7 +83,6 @@
   <string name="permdesc_useHardwareFramework">Erlaubt einer App, auf das CM-Hardware-Framework zuzugreifen.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">permanenten Speicher verwalten</string>
-  <string name="permdesc_managePersistentStorage">Ermöglicht der App, Eigenschaften auszulesen oder zu speichern, die auch beim Zurücksetzen auf die Werkseinstellungen erhalten bleiben können.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Sperrbildschirm-Hintergrund ändern</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

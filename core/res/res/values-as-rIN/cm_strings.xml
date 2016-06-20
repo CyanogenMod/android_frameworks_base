@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">এটা এপ্প্‌ক আঙুলিৰছাপ সেৱাত প্ৰৱেশ কৰিবলৈ অনুমতি দিয়ে। এপ্প্‌টোৱে আঙুলিৰছাপৰ বিপৰীতে যোগ কৰিব, বিলোপ কৰিব, পুনঃনাম কৰিব আৰু প্ৰমাণীকৰণ কৰিব পাৰে</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM গ্ৰাহকভুক্তি পৰিৱৰ্তন হোৱা বাবে Wi-Fi হটস্পট অক্ষম কৰা হৈছে</string>
 </resources>

@@ -283,4 +283,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">अॅपला बोटाचा ठसा सेवेमध्ये ऍक्सेस करण्याची परवानगी देते. अॅप बोटांच्या ठशांविरुध्द जोडू, हटवू, पुनर्नामित आणि प्रमाणित करू शकते</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">सिम सदस्यत्व बदलामुळे अक्षम केलेला Wi-Fi हॉटस्पॉट</string>
 </resources>

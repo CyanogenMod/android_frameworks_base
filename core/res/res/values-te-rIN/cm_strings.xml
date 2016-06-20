@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">వేలిముద్ర సేవకు ప్రాప్యత పొందేందుకు అనువర్తనానికి అనుమతినిస్తుంది. అనువర్తనం వేలిముద్రలకు వ్యతిరేకంగా  జోడించగలదు, తొలగించగలదు, తిరిగి పేరు పెట్టగలదు మరియు ప్రామాణీకరించగలదు</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM సభ్యత్వ మార్పు కారణంగా Wi-Fi హాట్ స్పాట్ నిలిపివేయబడింది</string>
 </resources>

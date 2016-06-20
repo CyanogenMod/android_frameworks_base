@@ -82,7 +82,7 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_useHardwareFramework">Permite que uma aplicação aceda à framework de hardware CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
-  <string name="permdesc_managePersistentStorage">Permite que uma aplicação leia ou escreva propriedades que possam persistir mesmo após a reposição dos dados de fábrica.</string>
+  <string name="permlab_managePersistentStorage">faça a gestão do armazenamento persistente</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Definir a imagem de fundo do ecrã de bloqueio</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -298,5 +298,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Permite que uma aplicação aceda ao serviço de impressões digitais. A aplicação pode adicionar, eliminar, mudar o nome e autenticar através de impressões digitais</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
-  <string name="subscription_change_disabled_wifi_ap">Zona Wi-Fi portátil desligada devido à alteração da assinatura do cartão SIM</string>
+  <string name="subscription_change_disabled_wifi_ap">Zona Wi-Fi portátil desligada devido à alteração da assinatura SIM</string>
 </resources>

@@ -282,4 +282,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Tətbiqetməyə barmaq izi xidmətinə müraciət etməsinə icazə verər. Tətbiqetmə barmaq izlərini əlavə edə, silə, yenidən adlandıra və kimliyinizi təsdiqləyə bilər</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM abunəliyini dəyişmə ilə əlaqədar Wi-Fi internet paylaşma ləğv edildi</string>
 </resources>

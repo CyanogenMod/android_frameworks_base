@@ -83,7 +83,6 @@
   <string name="permdesc_useHardwareFramework">CM hardware markoa atzitzea ahalbidetzen dio aplikazioari.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">kudeatu behin betiko biltegiratzea</string>
-  <string name="permdesc_managePersistentStorage">Gailua lantegiko ezarpenetara leheneratuta ere mantenduko diren ezaugarriak irakurri edo idaztea ahalbidetzen dio aplikazioari.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Ezarri blokeo-pantailarako horma-papera</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

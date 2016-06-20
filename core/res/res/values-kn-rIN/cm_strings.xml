@@ -286,4 +286,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">ಆಪ್‍ಗೆ ಫಿಂಗರ್‍ಪ್ರಿಂಟ್ ಸೇವೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಅನುಮತಿಸುತ್ತದೆ. ಆಪ್ ಫಿಂಗರ್‍ಪ್ರಿಂಟ್ಸ್  ಬಲದ ಮೇಲೆ ಸೇರಿಸಬಹುದು, ಅಳಿಸಬಹುದು, ಮರುಹೆಸರಿಸಬಹುದು ಹಾಗು ದೃಢೀಕರಿಸಬಹುದು</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">ಸಿಮ್ ಚಂದಾದಾರಿಕೆ ಬದಲಾದ ಕಾರಣ ವೈ-ಫೈ ಹಾಟ್‍ಸ್ಪಾಟನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</string>
 </resources>

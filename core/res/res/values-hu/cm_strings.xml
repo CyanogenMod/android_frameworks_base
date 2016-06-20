@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Lehetővé teszi az alkalmazás számára, hogy hozzáférjen az ujjlenyomat szolgáltatáshoz. Az alkalmazás hozzáadhat, törölhet, átnevezhet és újra hitelesíthet ujjlenyomatokat</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Wi\u2011Fi hotspot kikapcsolva a SIM előfizetés módosítása miatt</string>
 </resources>

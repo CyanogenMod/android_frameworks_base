@@ -285,4 +285,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">يسمح للتطبيق بالوصول إلى خدمة بصمات الأصابع. ويمكن للتطبيق إضافة وحذف وإعادة تسمية ومصادقة بصمات الأصابع</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">ايقاف بث تقنية واي فاي بسبب تغيير اشتراك SIM</string>
 </resources>

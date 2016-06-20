@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Leidžia programai pasiekti pirštų atspaudų paslaugą. Programa gali pridėti, ištrinti, pervardyti ir autentikuoti prieš pirštų atspaudus</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Wi-Fi saitvietė išjungta dėl SIM prenumeratos kaitos</string>
 </resources>

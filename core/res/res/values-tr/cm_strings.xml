@@ -286,4 +286,5 @@ uyguladığınız temayı değiştirmesine izin verir.</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Uygulamanın parmak izi hizmetine erişimini sağlar. Uygulama parmak izlerini ekleyebilir, silebilir, yeniden adlandırabilir ve yetkilendirebilir</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM abonelik değişikliği nedeniyle Wi-Fi internet paylaşımı devre dışı bırakıldı</string>
 </resources>

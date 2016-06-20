@@ -83,7 +83,6 @@
   <string name="permdesc_useHardwareFramework">Umožní přistupovat k hardware pomocí CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">spravovat trvalé úložiště</string>
-  <string name="permdesc_managePersistentStorage">Umožňuje číst a zapisovat vlastnosti, které mohou přetrvat při tovární obnově.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">nastavit tapetu zámku kláves</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

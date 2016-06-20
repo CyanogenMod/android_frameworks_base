@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">ഒരു ഫിംഗർപ്രിന്റ് സേവനം ആക്സസ് ചെയ്യാന്‍ ആപ്ലിക്കേഷനെ അനുവദിക്കുന്നു. ഫിംഗർപ്രിന്റിന് വിധേയമായി ചേര്‍ക്കാന്‍, ഇല്ലാതാക്കാന്‍, പുനർനാമകരണം, പ്രമാണീകരണം ചെയ്യാന്‍ ആപ്ലിക്കേഷന് സാധിക്കുന്നതാണ്</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIM സബ്സ്ക്രിപ്ഷൻ മാറ്റം കാരണം Wi-Fi ഹോട്ട്സ്പോട്ട് അപ്രാപ്തമാക്കി</string>
 </resources>

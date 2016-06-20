@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Cho phép ứng dụng truy cập dịch vụ dấu vân tay. Ứng dụng có thể thêm, xoá, đổi tên và xác thực dấu vân tay</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Đã vô hiệu hóa điểm truy cập WiFi vì thay đổi đăng ký SIM</string>
 </resources>

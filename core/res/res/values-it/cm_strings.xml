@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">Predefinito</string>
+  <string name="profileNameWork">Lavoro</string>
+  <string name="profileNameHome">Casa</string>
+  <string name="profileNameSilent">Silenzioso</string>
   <string name="profileNameNight">Notte</string>
+  <string name="profileNameAutomobile">Automobile</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">Telefono</string>
+  <string name="profileGroupCalendar">Calendario</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">Email</string>
+  <string name="profileGroupSMS">SMS</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">Altro</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Nessuno</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,8 +78,11 @@
   <string name="privacy_guard_notification">Privacy Guard attiva</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> non sarà in grado di accedere ai dati personali</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">utilizza framework hardware</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">Consenti ad un\'app di accedere al framework hardware di CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">gestione archivio persistente</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">imposta sfondo sblocco schermo</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -284,4 +298,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Consenti ad un\'app di accedere al servizio di impronte digitali. L\'app può aggiungere, eliminale, rinominare e riautenticare impronte digitali</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Hotspot WiFi disattivato in seguito al cambio di SIM</string>
 </resources>

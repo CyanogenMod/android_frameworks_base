@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">指紋サービスへのアクセスをアプリに許可します。アプリは指紋を追加、削除および認証することができます。</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">SIMサブスクリプションの変更によってWi-Fiアクセスポイントが無効になりました</string>
 </resources>

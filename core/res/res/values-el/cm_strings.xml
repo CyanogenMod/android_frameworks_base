@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">Προεπιλογή</string>
+  <string name="profileNameWork">Εργασία</string>
+  <string name="profileNameHome">Σπίτι</string>
+  <string name="profileNameSilent">Αθόρυβο</string>
   <string name="profileNameNight">Νύχτα</string>
+  <string name="profileNameAutomobile">Αυτοκίνητο</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">Τηλέφωνο</string>
+  <string name="profileGroupCalendar">Ημερολόγιο</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">Ηλεκτρονικό ταχυδρομείο</string>
+  <string name="profileGroupSMS">SMS</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">Άλλο</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">Κανένα</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,8 +78,11 @@
   <string name="privacy_guard_notification">Προστασία Απορρήτου ενεργή</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> δεν θα μπορεί να έχει πρόσβαση στα προσωπικά σας δεδομένα</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">χρήση του πλαισίου υλικού</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">Επιτρέπει σε μια εφαρμογή την πρόσβαση στο πλαίσιο υλικού του CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">διαχείριση επίμονου χώρου αποθήκευσης</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">ορισμός ταπετσαρίας οθόνης κλειδώματος</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -284,4 +298,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Επιτρέπει σε μια εφαρμογή την πρόσβαση στην υπηρεσία δακτυλικών αποτυπωμάτων. Η εφαρμογή μπορεί να προσθέσει, να διαγράψει, να μετονομάσει και να ταυτοποιήσει δακτυλικά αποτυπώματα</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Το Wi-Fi hotspot απενεργοποιήθηκε λόγω αλλαγής συνδρομής SIM</string>
 </resources>

@@ -85,7 +85,6 @@
   <string name="permdesc_useHardwareFramework">Permite a um app acessar o framework do hardware CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">gerenciar o armazenamento persistente</string>
-  <string name="permdesc_managePersistentStorage">Permite a um app ler ou escrever propriedades que podem persistir mesmo após uma restauração ao padrão de fábrica.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">definir papel de parede da tela de bloqueio</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

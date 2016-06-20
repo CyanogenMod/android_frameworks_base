@@ -286,4 +286,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">به برنامه اجازه می‌دهد به سرویس اثر انگشت دسترسی داشته باشد. برنامه می‌تواند افزودن، حذف، تغییرنام و تایید اثرهای انگشت را انجام دهد</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">نقطه اتصال قابل حمل وای‌فای به دلیل تغییر تعرفه سیم کارت، غیرفعال شد</string>
 </resources>

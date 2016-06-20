@@ -18,9 +18,20 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Names of default profiles. -->
+  <string name="profileNameDefault">默认</string>
+  <string name="profileNameWork">工作</string>
+  <string name="profileNameHome">家</string>
+  <string name="profileNameSilent">静音</string>
   <string name="profileNameNight">夜晚</string>
+  <string name="profileNameAutomobile">汽车</string>
   <!-- Names of application groups. -->
+  <string name="profileGroupPhone">电话</string>
+  <string name="profileGroupCalendar">日历</string>
+  <string name="profileGroupGmail">Gmail</string>
+  <string name="profileGroupEmail">电子邮件</string>
+  <string name="profileGroupSMS">短信</string>
   <!-- Name of wildcard profile. -->
+  <string name="wildcardProfile">其他</string>
   <!-- The item label for the no profile selection item. -->
   <string name="profile_none">无</string>
   <!-- The title of the profile picker dialog. -->
@@ -67,8 +78,11 @@
   <string name="privacy_guard_notification">隐私防护激活</string>
   <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> 将不能访问个人数据</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
+  <string name="permlab_useHardwareFramework">使用硬件框架</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_useHardwareFramework">允许应用访问 CM 硬件框架。</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
+  <string name="permlab_managePersistentStorage">管理永久存储</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">设置锁屏壁纸</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -284,4 +298,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">允许应用访问指纹服务。应用可以添加、 删除、 重命名指纹，使用指纹进行身份验证</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">由于 SIM 卡订阅改变，已禁用 Wi-Fi 热点。</string>
 </resources>

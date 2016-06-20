@@ -286,4 +286,5 @@ modifiera det tema som du har tillämpat.</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Tillåter en app att komma åt fingeravtryckstjänst. Appen kan lägga till, ta bort, byta namn och autentisera mot fingeravtryck</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Wi\u2011Fi hotspot avaktiverad på grund av ändrat SIM-abonnemang</string>
 </resources>

@@ -284,4 +284,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Permite que una aplicación acceda al servicio de huella digital. La aplicación puede añadir, eliminar, renombrar y autenticar huellas digitales</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
+  <string name="subscription_change_disabled_wifi_ap">Zona Wi-Fi desactivada debido a un cambio de suscripción en la SIM</string>
 </resources>

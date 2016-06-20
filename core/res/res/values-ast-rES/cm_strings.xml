@@ -83,7 +83,6 @@
   <string name="permdesc_useHardwareFramework">Permite a l\'aplicación accesu al marcu de hardware de CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">remanar l\'almacenamientu persistente</string>
-  <string name="permdesc_managePersistentStorage">Permite a una aplicación lleer o escribir propiedaes que puen persistir dempués d\'un reaniciu a los axustes de fábrica.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Afita\'l fondu de pantalla de bloquéu</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
@@ -299,5 +298,5 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Permite a un aplicación acceder el serviciu de buelgues dixitales. L\'aplicación pue amestar, desaniciar, renomar y autenticase escontra les buelgues dixitales</string>
   <!-- Wifi Hotspot disabled due to subscription change -->
-  <string name="subscription_change_disabled_wifi_ap">Desactivóse\'l puntu d\'accesu WiFi pola mor d\'un cambéu na soscripción de la SIM</string>
+  <string name="subscription_change_disabled_wifi_ap">Deshabilitóse\'l puntu Wi-Fi pola mor del cambéu de la soscripción de la SIM</string>
 </resources>
