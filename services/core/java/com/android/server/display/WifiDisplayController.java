@@ -42,11 +42,14 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.GroupInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Handler;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Slog;
 import android.view.Surface;
 
 import java.io.PrintWriter;
+import java.lang.StackTraceElement;
+import java.lang.Thread;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -70,8 +73,10 @@ import libcore.util.Objects;
  */
 final class WifiDisplayController implements DumpUtils.Dump {
     private static final String TAG = "WifiDisplayController";
-    private static final boolean DEBUG = false;
-
+    private static final boolean DEBUG =
+            SystemProperties.getBoolean("persist.debug.wfdcdbg",false);
+    private static final boolean DEBUGV =
+            SystemProperties.getBoolean("persist.debug.wfdcdbgv",false);
     private static final int DEFAULT_CONTROL_PORT = 7236;
     private static final int MAX_THROUGHPUT = 50;
     private static final int CONNECTION_TIMEOUT_SECONDS = 30;
@@ -242,6 +247,35 @@ final class WifiDisplayController implements DumpUtils.Dump {
         }
     }
 
+    private void dump() {
+        Slog.d(TAG,"mWifiDisplayOnSetting=" + mWifiDisplayOnSetting);
+        Slog.d(TAG,"mWifiP2pEnabled=" + mWifiP2pEnabled);
+        Slog.d(TAG,"mWfdEnabled=" + mWfdEnabled);
+        Slog.d(TAG,"mWfdEnabling=" + mWfdEnabling);
+        Slog.d(TAG,"mNetworkInfo=" + mNetworkInfo);
+        Slog.d(TAG,"mScanRequested=" + mScanRequested);
+        Slog.d(TAG,"mDiscoverPeersInProgress=" + mDiscoverPeersInProgress);
+        Slog.d(TAG,"mDesiredDevice=" + describeWifiP2pDevice(mDesiredDevice));
+        Slog.d(TAG,"mConnectingDisplay=" + describeWifiP2pDevice(mConnectingDevice));
+        Slog.d(TAG,"mDisconnectingDisplay=" + describeWifiP2pDevice(mDisconnectingDevice));
+        Slog.d(TAG,"mCancelingDisplay=" + describeWifiP2pDevice(mCancelingDevice));
+        Slog.d(TAG,"mConnectedDevice=" + describeWifiP2pDevice(mConnectedDevice));
+        Slog.d(TAG,"mConnectionRetriesLeft=" + mConnectionRetriesLeft);
+        Slog.d(TAG,"mRemoteDisplay=" + mRemoteDisplay);
+        Slog.d(TAG,"mRemoteDisplayInterface=" + mRemoteDisplayInterface);
+        Slog.d(TAG,"mRemoteDisplayConnected=" + mRemoteDisplayConnected);
+        Slog.d(TAG,"mAdvertisedDisplay=" + mAdvertisedDisplay);
+        Slog.d(TAG,"mAdvertisedDisplaySurface=" + mAdvertisedDisplaySurface);
+        Slog.d(TAG,"mAdvertisedDisplayWidth=" + mAdvertisedDisplayWidth);
+        Slog.d(TAG,"mAdvertisedDisplayHeight=" + mAdvertisedDisplayHeight);
+        Slog.d(TAG,"mAdvertisedDisplayFlags=" + mAdvertisedDisplayFlags);
+
+        Slog.d(TAG,"mAvailableWifiDisplayPeers: size=" + mAvailableWifiDisplayPeers.size());
+        for (WifiP2pDevice device : mAvailableWifiDisplayPeers) {
+            Slog.d(TAG,"  " + describeWifiP2pDevice(device));
+        }
+    }
+
     public void requestStartScan() {
         if (!mScanRequested) {
             mScanRequested = true;
@@ -363,7 +397,9 @@ final class WifiDisplayController implements DumpUtils.Dump {
     }
 
     private void updateScanState() {
-        if (mScanRequested && mWfdEnabled && mDesiredDevice == null) {
+        if (mScanRequested && mWfdEnabled &&
+            (mDesiredDevice == null) && (mConnectedDevice == null)
+                && (mDisconnectingDevice == null)) {
             if (!mDiscoverPeersInProgress) {
                 Slog.i(TAG, "Starting Wifi display scan.");
                 mDiscoverPeersInProgress = true;
@@ -563,6 +599,14 @@ final class WifiDisplayController implements DumpUtils.Dump {
      * connection is established (or not).
      */
     private void updateConnection() {
+        if(DEBUGV) {
+            //new Throwable("WFD_DBG").printStackTrace();
+            StackTraceElement[] st = Thread.currentThread().getStackTrace();
+            for(int i = 2 ; i < st.length && i < 5; i++) {
+                Slog.i(TAG,st[i].toString());
+            }
+            dump();
+        }
         // Step 0. Stop scans if necessary to prevent interference while connected.
         // Resume scans later when no longer attempting to connect.
         updateScanState();
@@ -570,10 +614,10 @@ final class WifiDisplayController implements DumpUtils.Dump {
         // Step 1. Before we try to connect to a new device, tell the system we
         // have disconnected from the old one.
         if ((mRemoteDisplay != null || mExtRemoteDisplay != null) &&
-                mConnectedDevice != mDesiredDevice) {
+            (mConnectedDevice != mDesiredDevice)||
+            (mRemoteDisplayInterface != null && mConnectedDevice == null)) {
             Slog.i(TAG, "Stopped listening for RTSP connection on "
-                    + mRemoteDisplayInterface
-                    + " from Wifi display: " + mConnectedDevice.deviceName);
+                    + mRemoteDisplayInterface);
 
             if(mRemoteDisplay != null) {
                 mRemoteDisplay.dispose();
@@ -584,7 +628,6 @@ final class WifiDisplayController implements DumpUtils.Dump {
             mExtRemoteDisplay = null;
             mRemoteDisplay = null;
             mRemoteDisplayInterface = null;
-            mRemoteDisplayConnected = false;
             mHandler.removeCallbacks(mRtspTimeout);
 
             mWifiP2pManager.setMiracastMode(WifiP2pManager.MIRACAST_DISABLED);
@@ -594,7 +637,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
         }
 
         // Step 2. Before we try to connect to a new device, disconnect from the old one.
-        if (mDisconnectingDevice != null) {
+        if (mRemoteDisplayConnected || mDisconnectingDevice != null) {
             return; // wait for asynchronous callback
         }
         if (mConnectedDevice != null && mConnectedDevice != mDesiredDevice) {
@@ -678,6 +721,51 @@ final class WifiDisplayController implements DumpUtils.Dump {
             return; // done
         }
 
+        //Before we connect, we need to set the oldDevice to the desiredDevice to check
+        //the device on receiving callbacks from the Remote display modules
+        final WifiP2pDevice oldDevice = mDesiredDevice;
+        RemoteDisplay.Listener listener = new RemoteDisplay.Listener() {
+        @Override
+            public void onDisplayConnected(Surface surface,
+                        int width, int height, int flags, int session) {
+                 if (mConnectedDevice == oldDevice && !mRemoteDisplayConnected) {
+                    Slog.i(TAG, "Opened RTSP connection with Wifi display: "
+                        + mConnectedDevice.deviceName);
+                    mRemoteDisplayConnected = true;
+                    mHandler.removeCallbacks(mRtspTimeout);
+
+                 if (mWifiDisplayCertMode) {
+                     mListener.onDisplaySessionInfo(
+                     getSessionInfo(mConnectedDeviceGroupInfo, session));
+                 }
+
+                 final WifiDisplay display = createWifiDisplay(mConnectedDevice);
+                 advertiseDisplay(display, surface, width, height, flags);
+                 }
+            }
+
+            @Override
+            public void onDisplayDisconnected() {
+                if (mConnectedDevice == oldDevice) {
+                    Slog.i(TAG, "Closed RTSP connection with Wifi display: "
+                        + mConnectedDevice.deviceName);
+                    mHandler.removeCallbacks(mRtspTimeout);
+                    mRemoteDisplayConnected = false;
+                    disconnect();
+                }
+            }
+
+            @Override
+            public void onDisplayError(int error) {
+                if (mConnectedDevice == oldDevice) {
+                    Slog.i(TAG, "Lost RTSP connection with Wifi display due to error "
+                        + error + ": " + mConnectedDevice.deviceName);
+                    mHandler.removeCallbacks(mRtspTimeout);
+                    handleConnectionFailure(false);
+                }
+            }
+        };
+
         // Step 5. Try to connect.
         if (mConnectedDevice == null && mConnectingDevice == null) {
             Slog.i(TAG, "Connecting to Wifi display: " + mDesiredDevice.deviceName);
@@ -702,6 +790,19 @@ final class WifiDisplayController implements DumpUtils.Dump {
 
             WifiDisplay display = createWifiDisplay(mConnectingDevice);
             advertiseDisplay(display, null, 0, 0, 0);
+
+            if(ExtendedRemoteDisplayHelper.isAvailable()&&
+                   mExtRemoteDisplay == null){
+               final int port = getPortNumber(mDesiredDevice);
+               //IP is superfluous for WFD source, and we don't have one at this stage anyway since
+               //P2P connection hasn't been established yet
+               final String iface = "255.255.255.255:" + port;
+               mRemoteDisplayInterface = iface;
+               Slog.i(TAG, "Listening for RTSP connection on " + iface
+                   + " from Wifi display: " + mDesiredDevice.deviceName);
+               mExtRemoteDisplay = ExtendedRemoteDisplayHelper.listen(iface,
+                        listener, mHandler, mContext);
+            }
 
             final WifiP2pDevice newDevice = mDesiredDevice;
             mWifiP2pManager.connect(mWifiP2pChannel, config, new ActionListener() {
@@ -729,8 +830,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
         }
 
         // Step 6. Listen for incoming RTSP connection.
-        if (mConnectedDevice != null && mRemoteDisplay == null &&
-                                        mExtRemoteDisplay== null) {
+        if (mConnectedDevice != null && mRemoteDisplay == null) {
             Inet4Address addr = getInterfaceAddress(mConnectedDeviceGroupInfo);
             if (addr == null) {
                 Slog.i(TAG, "Failed to get local interface address for communicating "
@@ -741,60 +841,15 @@ final class WifiDisplayController implements DumpUtils.Dump {
 
             mWifiP2pManager.setMiracastMode(WifiP2pManager.MIRACAST_SOURCE);
 
-            final WifiP2pDevice oldDevice = mConnectedDevice;
             final int port = getPortNumber(mConnectedDevice);
             final String iface = addr.getHostAddress() + ":" + port;
             mRemoteDisplayInterface = iface;
 
-            Slog.i(TAG, "Listening for RTSP connection on " + iface
-                    + " from Wifi display: " + mConnectedDevice.deviceName);
-
-            RemoteDisplay.Listener listener = new RemoteDisplay.Listener() {
-                @Override
-                public void onDisplayConnected(Surface surface,
-                        int width, int height, int flags, int session) {
-                    if (mConnectedDevice == oldDevice && !mRemoteDisplayConnected) {
-                        Slog.i(TAG, "Opened RTSP connection with Wifi display: "
-                                + mConnectedDevice.deviceName);
-                        mRemoteDisplayConnected = true;
-                        mHandler.removeCallbacks(mRtspTimeout);
-
-                        if (mWifiDisplayCertMode) {
-                            mListener.onDisplaySessionInfo(
-                                    getSessionInfo(mConnectedDeviceGroupInfo, session));
-                        }
-
-                        final WifiDisplay display = createWifiDisplay(mConnectedDevice);
-                        advertiseDisplay(display, surface, width, height, flags);
-                    }
-                }
-
-                @Override
-                public void onDisplayDisconnected() {
-                    if (mConnectedDevice == oldDevice) {
-                        Slog.i(TAG, "Closed RTSP connection with Wifi display: "
-                                + mConnectedDevice.deviceName);
-                        mHandler.removeCallbacks(mRtspTimeout);
-                        disconnect();
-                    }
-                }
-
-                @Override
-                public void onDisplayError(int error) {
-                    if (mConnectedDevice == oldDevice) {
-                        Slog.i(TAG, "Lost RTSP connection with Wifi display due to error "
-                                + error + ": " + mConnectedDevice.deviceName);
-                        mHandler.removeCallbacks(mRtspTimeout);
-                        handleConnectionFailure(false);
-                    }
-                }
-            };
-            if(ExtendedRemoteDisplayHelper.isAvailable()){
-                mExtRemoteDisplay = ExtendedRemoteDisplayHelper.listen(iface,
-                        listener, mHandler, mContext);
-            } else {
-                mRemoteDisplay = RemoteDisplay.listen(iface, listener,
-                        mHandler, mContext.getOpPackageName());
+            if(!ExtendedRemoteDisplayHelper.isAvailable()){
+               Slog.i(TAG, "Listening for RTSP connection on " + iface
+                   + " from Wifi display: " + mConnectedDevice.deviceName);
+               mRemoteDisplay = RemoteDisplay.listen(iface, listener,
+                       mHandler, mContext.getOpPackageName());
             }
 
             // Use extended timeout value for certification, as some tests require user inputs
@@ -806,7 +861,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
     }
 
     private WifiDisplaySessionInfo getSessionInfo(WifiP2pGroup info, int session) {
-        if (info == null) {
+        if (info == null || info.getOwner() == null) {
             return null;
         }
         Inet4Address addr = getInterfaceAddress(info);
@@ -840,6 +895,10 @@ final class WifiDisplayController implements DumpUtils.Dump {
                 mWifiP2pManager.requestGroupInfo(mWifiP2pChannel, new GroupInfoListener() {
                     @Override
                     public void onGroupInfoAvailable(WifiP2pGroup info) {
+                        if(info == null) {
+                           return;
+                        }
+
                         if (DEBUG) {
                             Slog.d(TAG, "Received group info: " + describeWifiP2pGroup(info));
                         }
@@ -859,8 +918,9 @@ final class WifiDisplayController implements DumpUtils.Dump {
                         }
 
                         if (mWifiDisplayCertMode) {
-                            boolean owner = info.getOwner().deviceAddress
-                                    .equals(mThisDevice.deviceAddress);
+                            boolean owner = (info.getOwner() != null)?
+                                      info.getOwner().deviceAddress
+                                    .equals(mThisDevice.deviceAddress):false;
                             if (owner && info.getClientList().isEmpty()) {
                                 // this is the case when we started Autonomous GO,
                                 // and no client has connected, save group info
