@@ -337,7 +337,7 @@ public class NotificationManagerService extends SystemService {
     private ConditionProviders mConditionProviders;
     private NotificationUsageStats mUsageStats;
     private boolean mDisableDuckingWhileMedia;
-    private boolean mActiveMedia;
+    private Map<MediaController, ActiveMediaCallback> mMediaControllers;
 
     private boolean mMultiColorNotificationLed;
 
@@ -1103,6 +1103,7 @@ public class NotificationManagerService extends SystemService {
         final MediaSessionManager mediaSessionManager = (MediaSessionManager) getContext()
                 .getSystemService(Context.MEDIA_SESSION_SERVICE);
         mediaSessionManager.removeOnActiveSessionsChangedListener(mSessionListener);
+        resetControllerCallbacks();
         if (mDisableDuckingWhileMedia) {
             mediaSessionManager.addOnActiveSessionsChangedListener(mSessionListener, null);
         }
@@ -1135,6 +1136,7 @@ public class NotificationManagerService extends SystemService {
     public NotificationManagerService(Context context) {
         super(context);
         mSpamCache = new SparseIntArray();
+        mMediaControllers = new HashMap<MediaController, ActiveMediaCallback>();
     }
 
     @Override
@@ -2645,18 +2647,45 @@ public class NotificationManagerService extends SystemService {
         return false;
     }
 
+    private class ActiveMediaCallback extends MediaController.Callback {
+        MediaController controller;
+        boolean activeMedia;
+        ActiveMediaCallback(MediaController controller) {
+            this.controller = controller;
+        }
+        @Override
+        public void onPlaybackStateChanged(PlaybackState state) {
+            activeMedia = state.getState() == PlaybackState.STATE_PLAYING;
+        }
+    }
+
+    private boolean hasActiveMediaSessions() {
+        for (ActiveMediaCallback callback : mMediaControllers.values()) {
+            if (callback.activeMedia) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void resetControllerCallbacks() {
+        for (MediaController session : mMediaControllers.keySet()) {
+            session.unregisterCallback(mMediaControllers.get(session));
+        }
+        mMediaControllers.clear();
+    }
+
     private MediaSessionManager.OnActiveSessionsChangedListener mSessionListener =
             new MediaSessionManager.OnActiveSessionsChangedListener() {
         @Override
         public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
+            resetControllerCallbacks();
             for (MediaController activeSession : controllers) {
                 PlaybackState playbackState = activeSession.getPlaybackState();
-                if (playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING) {
-                    mActiveMedia = true;
-                    return;
-                }
+                ActiveMediaCallback callback = new ActiveMediaCallback(activeSession);
+                activeSession.registerCallback(callback);
+                mMediaControllers.put(activeSession, callback);
             }
-            mActiveMedia = false;
         }
     };
 
@@ -2728,7 +2757,7 @@ public class NotificationManagerService extends SystemService {
                 hasValidSound = (soundUri != null);
             }
 
-            if (hasValidSound && (!mDisableDuckingWhileMedia || !mActiveMedia)) {
+            if (hasValidSound && (!mDisableDuckingWhileMedia || !hasActiveMediaSessions())) {
                 boolean looping =
                         (notification.flags & Notification.FLAG_INSISTENT) != 0;
                 AudioAttributes audioAttributes = audioAttributesForNotification(notification);
