@@ -8780,6 +8780,21 @@ public final class ActivityManagerService extends ActivityManagerNative
                                 "Skipping, unavail real act: " + tr);
                         continue;
                     }
+                    IPackageManager pm = AppGlobals.getPackageManager();
+                    try {
+                        if (tr.origActivity != null) {
+                            if (pm.getApplicationInfo(tr.origActivity.getPackageName(),
+                                    STOCK_PM_FLAGS, userId).protect) {
+                                if (DEBUG_RECENTS) Slog.d(TAG_RECENTS,
+                                        "Skipping, protected app: " + tr);
+                                continue;
+                            }
+                        } else {
+                            Slog.d(TAG_RECENTS, "null component: " + tr);
+                        }
+                    } catch (RemoteException ex) {
+                        // pm is in same process, this will never happen.
+                    }
 
                     ActivityManager.RecentTaskInfo rti = createRecentTaskInfoFromTaskRecord(tr);
                     if (!detailed) {
