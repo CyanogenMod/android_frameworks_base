@@ -272,6 +272,7 @@
   <string name="dynamic_qs_tile_su_label">Acceso administrativo</string>
   <!-- Fingerprint -->
   <string name="fingerprint_try_again_hint">Por favor, escanea otra vez</string>
+  <string name="fingerprint_try_again_hint_too_many">Demasiados intentos de huellas dactilares. Inténtalo más tarde.</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Batería de la base al <xliff:g id="number">%d</xliff:g> por ciento.</string>
   <!-- Empty view text for CustomQSTile -->

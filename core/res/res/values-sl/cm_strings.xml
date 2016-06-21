@@ -239,7 +239,7 @@
   <string name="sd_ext_media_unmountable_notification_title">Poškodovana kartica SD</string>
   <string name="sd_ext_media_unmountable_notification_message">Kartica SD je poškodovana. Poskusite jo ponovno formatirati.</string>
   <string name="sd_ext_media_badremoval_notification_title">SD kartica nepričakovano odstranjena</string>
-  <string name="sd_ext_media_badremoval_notification_message">Odklopite kartico SD pred odstranitvijo, da preprečite izgubo podatkov.</string>
+  <string name="sd_ext_media_badremoval_notification_message">Odklopite kartico SD pred odstranjevanjem, da preprečite izgubo podatkov.</string>
   <string name="sd_ext_media_safe_unmount_notification_title">SD kartico lahko varno odstranite</string>
   <string name="sd_ext_media_safe_unmount_notification_message">SD kartico lahko varno odstranite.</string>
   <string name="sd_ext_media_nomedia_notification_title">Odstranjena SD kartica</string>
@@ -252,7 +252,7 @@
   <string name="usb_ext_media_unmountable_notification_title">Poškodovana pomnilniška naprava USB</string>
   <string name="usb_ext_media_unmountable_notification_message">Pomnilniška naprava USB je poškodovana. Poskusite jo ponovno formatirati.</string>
   <string name="usb_ext_media_badremoval_notification_title">Pomnilniška naprava USB nepričakovano odstranjena</string>
-  <string name="usb_ext_media_badremoval_notification_message">Odklopite pomnilniško napravo USB pred odstranitvijo, da preprečite izgubo podatkov.</string>
+  <string name="usb_ext_media_badremoval_notification_message">Odklopite pomnilniško napravo USB pred odstranjevanjem, da preprečite izgubo podatkov.</string>
   <string name="usb_ext_media_safe_unmount_notification_title">Pomnilniško napravo USB lahko varno odstranite</string>
   <string name="usb_ext_media_safe_unmount_notification_message">Pomnilniško napravo USB lahko varno odstranite.</string>
   <string name="usb_ext_media_nomedia_notification_title">Odstranjena pomnilniška naprava USB</string>

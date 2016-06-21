@@ -190,6 +190,8 @@
   <string name="perf_profile_pwrsv">Aforru d\'enerxía</string>
   <string name="perf_profile_bal">Equilibráu</string>
   <string name="perf_profile_perf">Rindimientu</string>
+  <string name="perf_profile_bias_power">Eficiencia</string>
+  <string name="perf_profile_bias_perf">Rápidu</string>
   <!-- Theme installation error notification -->
   <string name="theme_install_error_title">Falló al instalar el tema</string>
   <string name="theme_install_error_message">%s falló al instalar</string>
@@ -266,20 +268,25 @@
   <string name="live_display_outdoor_summary">Usar namái axustes del esterior</string>
   <string name="live_display_hint">LiveDisplay pue amenorgar reducir la fatiga visual y ayudar a dormir pela nueche. ¡Toca equí pa probalu!</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">Pa desfixar esta pantalla, ten primíu\'l botón Atrás.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">La llinterna ta prendida</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toca p\'apagar</string>
   <!-- Storage description for the SD card on the dock -->
+  <string name="storage_sd_dock_card">Anclaxe de tarxeta SD</string>
   <!-- FINGERPRINT -->
   <!-- Default fingerprint name when a new fingerprint is added -->
   <string name="fingerprint_default_name">Buelga <xliff:g id="number">%d</xliff:g></string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_accessFingerprintService">accesu al serviciu de buelgues</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_accessFingerprintService">Permite a un aplicación acceder el serviciu de buelgues dixitales. L\'aplicación pue amestar, desaniciar, renomar y autenticase escontra les buelgues dixitales</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">reafitar estadístiques de batería</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Permite qu\'una aplicación reafite los datos actuales d\'usu de batería a nivel baxu.</string>
   <!-- Zen mode buttons -->
   <string name="silent_mode_priority">Prioridá</string>
   <string name="silent_mode_none">Dengún</string>
@@ -288,5 +295,7 @@
   <!-- WiFi turn off notification action text -->
   <string name="notify_turn_wifi_off_title">Apagar Wi-Fi</string>
   <!-- Third party keyguard permission label -->
+  <string name="permlab_thirdPartyKeyguard">pantalla de bloquéu de terceres partes</string>
   <!-- Third party keyguard permission description -->
+  <string name="permdesc_thirdPartyKeyguard">Permite qu\'una aplicación s\'use como una pantalla de bloquéu insegura.</string>
 </resources>
