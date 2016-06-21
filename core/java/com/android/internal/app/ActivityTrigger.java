@@ -111,6 +111,11 @@ public class ActivityTrigger
         return native_at_animationScalesCheck(activity, scaleType);
     }
 
+    /** &hide */
+    public void networkOptsCheck (int flag, int netType, String packageName) {
+        native_at_networkOptsCheck(flag, netType, packageName);
+    }
+
     private native int native_at_startActivity(String activity, int flags);
     private native void native_at_resumeActivity(String activity);
     private native void native_at_pauseActivity(String activity);
@@ -118,4 +123,5 @@ public class ActivityTrigger
     private native void native_at_deinit();
     private native void native_at_startProcessActivity(String process, int pid);
     private native float native_at_animationScalesCheck(String activity, int scaleType);
+    private native void native_at_networkOptsCheck(int flag, int netType, String packageName);
 }

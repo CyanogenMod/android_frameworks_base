@@ -57,6 +57,7 @@ typedef struct dlLibHandler {
     void (*pauseActivity)(const char *);
     void (*stopActivity)(const char *);
     void (*animationScalesCheck)(const char *, int, float *);
+    void (*networkOptsCheck)(int, int, const char *);
     void (*init)(void);
     void (*deinit)(void);
     void (*startProcessActivity)(const char *, int);
@@ -68,9 +69,9 @@ typedef struct dlLibHandler {
  * library -both handlers for Start and Resume events.
  */
 static dlLibHandler mDlLibHandlers[] = {
-    {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
      "ro.vendor.at_library"},
-    {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+    {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
      "ro.vendor.gt_library"},
 };
 
@@ -149,7 +150,12 @@ com_android_internal_app_ActivityTrigger_native_at_init()
                 errored = true;
             }
         }
-
+        if (!errored) {
+            *(void **) (&mDlLibHandlers[i].networkOptsCheck) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_networkOptsCheck");
+            if ((rc = dlerror()) != NULL) {
+                errored = true;
+            }
+        }
         if (errored) {
             mDlLibHandlers[i].startActivity  = NULL;
             mDlLibHandlers[i].resumeActivity = NULL;
@@ -157,6 +163,7 @@ com_android_internal_app_ActivityTrigger_native_at_init()
             mDlLibHandlers[i].stopActivity = NULL;
             mDlLibHandlers[i].startProcessActivity = NULL;
             mDlLibHandlers[i].animationScalesCheck = NULL;
+            mDlLibHandlers[i].networkOptsCheck = NULL;
             if (mDlLibHandlers[i].dlhandle) {
                 dlclose(mDlLibHandlers[i].dlhandle);
                 mDlLibHandlers[i].dlhandle = NULL;
@@ -181,6 +188,7 @@ com_android_internal_app_ActivityTrigger_native_at_deinit(JNIEnv *env, jobject c
             mDlLibHandlers[i].stopActivity = NULL;
             mDlLibHandlers[i].startProcessActivity = NULL;
             mDlLibHandlers[i].animationScalesCheck = NULL;
+            mDlLibHandlers[i].networkOptsCheck = NULL;
 
             *(void **) (&mDlLibHandlers[i].deinit) = dlsym(mDlLibHandlers[i].dlhandle, "activity_trigger_deinit");
             if (mDlLibHandlers[i].deinit) {
@@ -285,6 +293,22 @@ com_android_internal_app_ActivityTrigger_native_at_animationScalesCheck(JNIEnv *
     }
     return scaleValue;
 }
+
+static void
+com_android_internal_app_ActivityTrigger_native_at_networkOptsCheck(JNIEnv *env, jobject clazz, jint flag, jint netType, jstring packageName)
+{
+    size_t numlibs = sizeof (mDlLibHandlers) / sizeof (*mDlLibHandlers);
+
+    for (size_t i = 0; i < numlibs; i++) {
+        if (mDlLibHandlers[i].networkOptsCheck && packageName) {
+            const char *actStr = env->GetStringUTFChars(packageName, NULL);
+            if (actStr) {
+                (*mDlLibHandlers[i].networkOptsCheck)(flag, netType, actStr);
+                env->ReleaseStringUTFChars(packageName, actStr);
+            }
+        }
+    }
+}
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
@@ -295,6 +319,7 @@ static JNINativeMethod gMethods[] = {
     {"native_at_deinit",         "()V",                   (void *)com_android_internal_app_ActivityTrigger_native_at_deinit},
     {"native_at_startProcessActivity", "(Ljava/lang/String;I)V", (void *)com_android_internal_app_ActivityTrigger_native_at_startProcessActivity},
     {"native_at_animationScalesCheck", "(Ljava/lang/String;I)F", (void *)com_android_internal_app_ActivityTrigger_native_at_animationScalesCheck},
+    {"native_at_networkOptsCheck", "(IILjava/lang/String;)V", (void *)com_android_internal_app_ActivityTrigger_native_at_networkOptsCheck},
 };
 
 
