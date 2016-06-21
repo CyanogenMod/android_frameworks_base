@@ -338,6 +338,7 @@ public class NotificationManagerService extends SystemService {
     private NotificationUsageStats mUsageStats;
     private boolean mDisableDuckingWhileMedia;
     private boolean mActiveMedia;
+    private List<MediaController> mMediaControllers;
 
     private boolean mMultiColorNotificationLed;
 
@@ -1103,6 +1104,7 @@ public class NotificationManagerService extends SystemService {
         final MediaSessionManager mediaSessionManager = (MediaSessionManager) getContext()
                 .getSystemService(Context.MEDIA_SESSION_SERVICE);
         mediaSessionManager.removeOnActiveSessionsChangedListener(mSessionListener);
+        resetControllerCallbacks();
         if (mDisableDuckingWhileMedia) {
             mediaSessionManager.addOnActiveSessionsChangedListener(mSessionListener, null);
         }
@@ -2645,20 +2647,37 @@ public class NotificationManagerService extends SystemService {
         return false;
     }
 
+    private MediaController.Callback mSessionCallback = new MediaController.Callback() {
+        @Override
+        public void onPlaybackStateChanged(PlaybackState state) {
+            if (state.getState() == PlaybackState.STATE_PLAYING) {
+                mActiveMedia = true;
+            }
+        }
+    };
+
     private MediaSessionManager.OnActiveSessionsChangedListener mSessionListener =
             new MediaSessionManager.OnActiveSessionsChangedListener() {
         @Override
         public void onActiveSessionsChanged(@Nullable List<MediaController> controllers) {
+            mActiveMedia = false;
+            resetControllerCallbacks();
             for (MediaController activeSession : controllers) {
                 PlaybackState playbackState = activeSession.getPlaybackState();
-                if (playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING) {
-                    mActiveMedia = true;
-                    return;
-                }
+                activeSession.registerCallback(mSessionCallback);
             }
-            mActiveMedia = false;
+            mMediaControllers = controllers;
         }
     };
+
+    private void resetControllerCallbacks() {
+        if (mMediaControllers != null) {
+            for (MediaController session : mMediaControllers) {
+                session.unregisterCallback(mSessionCallback);
+            }
+        }
+        mMediaControllers.clear();
+    }
 
     private void buzzBeepBlinkLocked(NotificationRecord record) {
         boolean buzz = false;
