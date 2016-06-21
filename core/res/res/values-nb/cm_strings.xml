@@ -83,6 +83,7 @@
   <string name="permdesc_useHardwareFramework">Gir en app tilgang til CM maskinvare rammeverket.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">administrere permanent lager</string>
+  <string name="permdesc_managePersistentStorage">Gir en app tilgang til å lese eller skrive egenskaper, som kan overleve gjenoppretting av fabrikkinnstillinger.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Angi tastaturbakgrunn</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

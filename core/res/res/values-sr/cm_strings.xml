@@ -83,6 +83,7 @@
   <string name="permdesc_useHardwareFramework">Дозвољава апликацији приступ CM хардверском оквиру.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">управљај сталним складиштем</string>
+  <string name="permdesc_managePersistentStorage">Омогући апликацији да чита и пише својства која остају трајна и после фабричког ресета.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">постави позадину закључаног екрана</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

@@ -83,6 +83,7 @@
   <string name="permdesc_useHardwareFramework">Consenti ad un\'app di accedere al framework hardware di CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">gestione archivio persistente</string>
+  <string name="permdesc_managePersistentStorage">Consenti ad un\'app di leggere o scrivere proprietà che possono persistere ad un ripristino di fabbrica.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">imposta sfondo sblocco schermo</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

@@ -85,6 +85,7 @@
   <string name="permdesc_useHardwareFramework">Dovoli aplikaciji dostop do strojnega ogrodja CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">upravljanje vztrajne pom. naprave</string>
+  <string name="permdesc_managePersistentStorage">Dovoli aplikaciji branje ali pisanje lastnosti, ki se ohranijo po ponastavitvi na tovarniške vrednosti.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">nastavitev slike ozadja keyguard</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

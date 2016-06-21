@@ -83,6 +83,7 @@
   <string name="permdesc_useHardwareFramework">Разрешава на приложението достъп до framework хардуера на CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">управлявате места за съхранение на данни</string>
+  <string name="permdesc_managePersistentStorage">Позволява на приложенията да четат или пишат свойства, които могат да се запазят и след връщане на първоначални настройки.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">Задаване на тапет за заключен екран</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

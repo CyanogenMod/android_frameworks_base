@@ -83,6 +83,7 @@
   <string name="permdesc_useHardwareFramework">Permet a una aplicació accedir al marc de hardware de CM.</string>
   <!-- Labels for the MANAGE_PERSISTENT_STORAGE permission. -->
   <string name="permlab_managePersistentStorage">gestiona l\'emmagatzematge persistent</string>
+  <string name="permdesc_managePersistentStorage">Permet a una aplicació llegir o escriure propietats que poden persistir després d\'un reinici als ajustaments de fàbrica.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want the application to do this. -->
   <string name="permlab_setKeyguardWallpaper">estableix el fons de la pantalla de bloqueig</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
