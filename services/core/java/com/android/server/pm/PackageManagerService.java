@@ -17302,7 +17302,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         //If this component is launched from the system or a uid of a protected component, allow it.
         boolean fromProtectedComponentUid = false;
         for (String protectedComponentManager : protectedComponentManagers) {
-            if (callingUid == getPackageUid(protectedComponentManager, userId)) {
+            int packageUid = getPackageUid(protectedComponentManager, userId);
+            if (packageUid != -1 && callingUid == packageUid) {
                 fromProtectedComponentUid = true;
             }
         }
