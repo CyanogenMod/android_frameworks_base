@@ -9069,6 +9069,27 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
+    private void cleanupProtectedComponentTasksLocked() {
+        for (int i = mRecentTasks.size() - 1; i >= 0; i--) {
+            TaskRecord tr = mRecentTasks.get(i);
+
+            for (int j = tr.mActivities.size() - 1; j >= 0; j--) {
+                ActivityRecord r = tr.mActivities.get(j);
+                ComponentName cn = r.realActivity;
+
+                try {
+                    boolean isProtected = AppGlobals.getPackageManager()
+                        .isComponentProtected(null, -1, cn, getCurrentUserIdLocked());
+                    if (isProtected) {
+                        removeTaskByIdLocked(tr.taskId, false);
+                    }
+                } catch (RemoteException re) {
+
+                }
+            }
+        }
+    }
+
     /**
      * Removes the task with the specified task id.
      *
@@ -12068,6 +12089,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
             mRecentTasks.clear();
             mRecentTasks.addAll(mTaskPersister.restoreTasksLocked());
+            cleanupProtectedComponentTasksLocked();
             mRecentTasks.cleanupLocked(UserHandle.USER_ALL);
             mTaskPersister.startPersisting();
 
@@ -17110,6 +17132,14 @@ public final class ActivityManagerService extends ActivityManagerNative
                 case Proxy.PROXY_CHANGE_ACTION:
                     ProxyInfo proxy = intent.getParcelableExtra(Proxy.EXTRA_PROXY_INFO);
                     mHandler.sendMessage(mHandler.obtainMessage(UPDATE_HTTP_PROXY_MSG, proxy));
+                    break;
+                case cyanogenmod.content.Intent.ACTION_PROTECTED_CHANGED:
+                    final boolean state =
+                            intent.getBooleanExtra(
+                                    cyanogenmod.content.Intent.EXTRA_PROTECTED_STATE, false);
+                    if (state == PackageManager.COMPONENT_PROTECTED_STATUS) {
+                        cleanupProtectedComponentTasksLocked();
+                    }
                     break;
             }
         }
