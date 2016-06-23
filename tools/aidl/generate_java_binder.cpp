@@ -194,6 +194,36 @@ ProxyClass::~ProxyClass()
 }
 
 // =================================================
+class DefaultNoOpClass : public Class {
+public:
+    DefaultNoOpClass(Type* type, InterfaceType* interfaceType);
+    virtual ~DefaultNoOpClass();
+};
+
+DefaultNoOpClass::DefaultNoOpClass(Type* type, InterfaceType* interfaceType)
+    :Class()
+{
+    this->comment = "/** No-Op implementation  */";
+    this->modifiers = PUBLIC | STATIC;
+    this->what = Class::CLASS;
+    this->type = type;
+    this->interfaces.push_back(interfaceType);
+
+    // IBinder asBinder()
+    Method* asBinder = new Method;
+        asBinder->modifiers = PUBLIC | OVERRIDE;
+        asBinder->returnType = IBINDER_TYPE;
+        asBinder->name = "asBinder";
+        asBinder->statements = new StatementBlock;
+    asBinder->statements->Add(new ReturnStatement(NULL_VALUE));
+    this->elements.push_back(asBinder);
+
+}
+
+DefaultNoOpClass::~DefaultNoOpClass() {
+}
+
+// =================================================
 static void
 generate_new_array(Type* t, StatementBlock* addTo, Variable* v,
                             Variable* parcel)
@@ -248,7 +278,8 @@ generate_read_from_parcel(Type* t, StatementBlock* addTo, Variable* v,
 
 static void
 generate_method(const method_type* method, Class* interface,
-                    StubClass* stubClass, ProxyClass* proxyClass, int index)
+                    StubClass* stubClass, ProxyClass* proxyClass, DefaultNoOpClass* noOpClass,
+                    int index)
 {
     arg_type* arg;
     int i;
@@ -293,6 +324,45 @@ generate_method(const method_type* method, Class* interface,
     decl->exceptions.push_back(REMOTE_EXCEPTION_TYPE);
 
     interface->elements.push_back(decl);
+
+    // == the no-op method ===================================================
+    Method* noOpMethod = new Method;
+        noOpMethod->comment = gather_comments(method->comments_token->extra);
+        noOpMethod->modifiers = OVERRIDE | PUBLIC;
+        noOpMethod->returnType = NAMES.Search(method->type.type.data);
+        noOpMethod->returnTypeDimension = method->type.dimension;
+        noOpMethod->name = method->name.data;
+        noOpMethod->statements = new StatementBlock;
+
+    arg = method->args;
+    while (arg != NULL) {
+        noOpMethod->parameters.push_back(new Variable(
+                            NAMES.Search(arg->type.type.data), arg->name.data,
+                            arg->type.dimension));
+        arg = arg->next;
+    }
+
+    if (0 != strcmp(method->type.type.data, "void")) {
+        bool isNumeric = 0 == strcmp(method->type.type.data, "int")
+            || 0 == strcmp(method->type.type.data, "byte")
+            || 0 == strcmp(method->type.type.data, "char")
+            || 0 == strcmp(method->type.type.data, "float")
+            || 0 == strcmp(method->type.type.data, "double")
+            || 0 == strcmp(method->type.type.data, "short")
+            || 0 == strcmp(method->type.type.data, "long");
+        bool isBoolean = 0 == strcmp(method->type.type.data, "boolean");
+
+        if (isNumeric && method->type.dimension == 0) {
+            noOpMethod->statements->Add(new ReturnStatement(new LiteralExpression("0")));
+        } else if (isBoolean && method->type.dimension == 0) {
+            noOpMethod->statements->Add(new ReturnStatement(FALSE_VALUE));
+        } else {
+            noOpMethod->statements->Add(new ReturnStatement(NULL_VALUE));
+        }
+    }
+
+    noOpMethod->exceptions.push_back(REMOTE_EXCEPTION_TYPE);
+    noOpClass->elements.push_back(noOpMethod);
 
     // == the stub method ====================================================
 
@@ -533,6 +603,12 @@ generate_binder_interface_class(const interface_type* iface)
         interface->type = interfaceType;
         interface->interfaces.push_back(IINTERFACE_TYPE);
 
+    // the No-Op inner class
+    DefaultNoOpClass* noOpClass = new DefaultNoOpClass(
+        NAMES.Find(iface->package, append(iface->name.data, ".NoOp").c_str()),
+        interfaceType);
+    interface->elements.push_back(noOpClass);
+
     // the stub inner class
     StubClass* stub = new StubClass(
         NAMES.Find(iface->package, append(iface->name.data, ".Stub").c_str()),
@@ -555,7 +631,8 @@ generate_binder_interface_class(const interface_type* iface)
     while (item != NULL) {
         if (item->item_type == METHOD_TYPE) {
             method_type * method_item = (method_type*) item;
-            generate_method(method_item, interface, stub, proxy, method_item->assigned_id);
+            generate_method(method_item, interface, stub, proxy, noOpClass,
+                method_item->assigned_id);
         }
         item = item->next;
         index++;

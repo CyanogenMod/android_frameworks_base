@@ -345,6 +345,13 @@ gather_types(const char* filename, document_item_type* items)
                                         name, Type::GENERATED, false, false, false,
                                         filename, c->name.lineno);
                 NAMES.Add(proxy);
+
+                name = c->name.data;
+                name += ".NoOp";
+                Type* noOp = new Type(c->package ? c->package : "",
+                                        name, Type::GENERATED, false, false, false,
+                                        filename, c->name.lineno);
+                NAMES.Add(noOp);
             }
             else if (items->item_type == INTERFACE_TYPE_RPC) {
                 // for interfaces, also add the service base type, we don't
