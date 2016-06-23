@@ -51,6 +51,7 @@ parse_options(int argc, const char* const* argv, Options *options)
     options->task = COMPILE_AIDL;
     options->failOnParcelable = false;
     options->autoDepFile = false;
+    options->generateNoOpMethods = false;
 
     // OPTIONS
     while (i < argc) {
@@ -96,6 +97,9 @@ parse_options(int argc, const char* const* argv, Options *options)
                 }
                 else if (len == 2 && s[1] == 'b') {
                     options->failOnParcelable = true;
+                }
+                else if (s[1] == 'n') {
+                    options->generateNoOpMethods = true;
                 }
                 else {
                     // s[1] is not known
