@@ -345,6 +345,13 @@ gather_types(const char* filename, document_item_type* items)
                                         name, Type::GENERATED, false, false, false,
                                         filename, c->name.lineno);
                 NAMES.Add(proxy);
+
+                name = c->name.data;
+                name += ".NoOp";
+                Type* noOp = new Type(c->package ? c->package : "",
+                                        name, Type::GENERATED, false, false, false,
+                                        filename, c->name.lineno);
+                NAMES.Add(noOp);
             }
             else if (items->item_type == INTERFACE_TYPE_RPC) {
                 // for interfaces, also add the service base type, we don't
@@ -1064,8 +1071,13 @@ compile_aidl(Options& options)
     // make sure the folders of the output file all exists
     check_outputFilePath(options.outputFileName);
 
+    int flags = 0;
+    if (options.generateNoOpMethods) {
+        flags |= GENERATE_NO_OP_CLASS;
+    }
+
     err = generate_java(options.outputFileName, options.inputFileName.c_str(),
-                        (interface_type*)mainDoc);
+                        (interface_type*)mainDoc, flags);
 
     return err;
 }

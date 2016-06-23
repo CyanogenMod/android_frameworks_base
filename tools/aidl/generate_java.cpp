@@ -59,12 +59,12 @@ append(const char* a, const char* b)
 // =================================================
 int
 generate_java(const string& filename, const string& originalSrc,
-                interface_type* iface)
+                interface_type* iface, int flags)
 {
     Class* cl;
 
     if (iface->document_item.item_type == INTERFACE_TYPE_BINDER) {
-        cl = generate_binder_interface_class(iface);
+        cl = generate_binder_interface_class(iface, flags);
     }
     else if (iface->document_item.item_type == INTERFACE_TYPE_RPC) {
         cl = generate_rpc_interface_class(iface);
