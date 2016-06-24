@@ -167,6 +167,7 @@
   <string name="app_ops_wifi_change">camudar estáu del Wi-Fi</string>
   <string name="app_ops_su">obtener accesu root</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
+  <string name="lock_to_app_toast_no_navbar">Pa desfixar esta pantalla, ten primíu\'l botón Atrás.</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">Nun hai dengún preséu coneutáu</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> preséu coneutáu</string>
@@ -182,8 +183,10 @@
   <string name="notify_battery_fully_charged_text">Desconeuta\'l preséu del cargador p\'ameyorar la vida útil de la batería.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
+  <string name="permlab_resetBatteryStats">reafitar estadístiques de batería</string>
   <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
+  <string name="permdesc_resetBatteryStats">Permite qu\'una aplicación reafite los datos actuales d\'usu de batería a nivel baxu.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Les tarxetes SIM camudaron</string>
   <string name="uicc_hot_swapped_event_text">Toca p\'afitar les preferencies por defeutu de la tarxeta SIM</string>
