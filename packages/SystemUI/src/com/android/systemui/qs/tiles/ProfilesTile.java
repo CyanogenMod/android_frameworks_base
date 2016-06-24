@@ -232,6 +232,7 @@ public class ProfilesTile extends QSTile<QSTile.State> implements KeyguardMonito
                     mProfilesList.add(profiles[i]);
                     if (activeUuid != null && activeUuid.equals(profiles[i].getUuid())) {
                         selected = i;
+                        mProfileManager.setActiveProfile(activeUuid);
                     }
                 }
                 mDetails.getListView().setItemChecked(selected, true);
