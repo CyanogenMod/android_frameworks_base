@@ -30,6 +30,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -48,6 +50,9 @@ import java.io.PrintWriter;
 public abstract class PanelView extends FrameLayout {
     public static final boolean DEBUG = PanelBar.DEBUG;
     public static final String TAG = PanelView.class.getSimpleName();
+
+    private static final long ANIMATION_FADE_DURATION = 1000L;
+    private static final long HINT_DELAY_DURATION = 1500L;
 
     private final void logf(String fmt, Object... args) {
         Log.v(TAG, (mViewName != null ? (mViewName + ": ") : "") + String.format(fmt, args));
@@ -121,6 +126,9 @@ public abstract class PanelView extends FrameLayout {
 
     private boolean mPeekPending;
     private boolean mCollapseAfterPeek;
+    private boolean mShowExpandHint;
+    private boolean mShowUnlockHint;
+    private boolean mScreenOnHintAnimationRunning;
 
     /**
      * Speed-up factor to be used when {@link #mFlingCollapseRunnable} runs the next time.
@@ -928,6 +936,7 @@ public abstract class PanelView extends FrameLayout {
     private void abortAnimations() {
         cancelPeek();
         cancelHeightAnimator();
+        mKeyguardBottomArea.getIndicationView().animate().cancel();
         removeCallbacks(mPostCollapseRunnable);
         removeCallbacks(mFlingCollapseRunnable);
     }
@@ -946,6 +955,8 @@ public abstract class PanelView extends FrameLayout {
         }
         cancelPeek();
         notifyExpandingStarted();
+        mKeyguardBottomArea.getIndicationView().animate().cancel();
+        mStatusBar.onUnlockHintStarted();
         startUnlockHintAnimationPhase1(new Runnable() {
             @Override
             public void run() {
@@ -954,8 +965,8 @@ public abstract class PanelView extends FrameLayout {
                 mHintAnimationRunning = false;
             }
         });
-        mStatusBar.onUnlockHintStarted();
         mHintAnimationRunning = true;
+        mShowExpandHint = false;
     }
 
     /**
@@ -989,6 +1000,7 @@ public abstract class PanelView extends FrameLayout {
         mKeyguardBottomArea.getIndicationView().animate()
                 .translationY(-mHintDistance)
                 .setDuration(250)
+                .setStartDelay(0)
                 .setInterpolator(mFastOutSlowInInterpolator)
                 .withEndAction(new Runnable() {
                     @Override
@@ -1011,15 +1023,158 @@ public abstract class PanelView extends FrameLayout {
         animator.setDuration(450);
         animator.setInterpolator(mBounceInterpolator);
         animator.addListener(new AnimatorListenerAdapter() {
+            private boolean mCancelled;
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                mCancelled = true;
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 mHeightAnimator = null;
-                onAnimationFinished.run();
-                notifyBarPanelExpansionChanged();
+                if (mCancelled) {
+                    onAnimationFinished.run();
+                } else {
+                    if (mShowExpandHint) {
+                        startUnlockHintAnimationPhase3(onAnimationFinished);
+                    } else {
+                        onAnimationFinished.run();
+                        notifyBarPanelExpansionChanged();
+                    }
+                }
             }
         });
         animator.start();
         mHeightAnimator = animator;
+    }
+
+    /**
+     * Phase 3: fade out.
+     */
+    private void startUnlockHintAnimationPhase3(final Runnable onAnimationFinished) {
+        mKeyguardBottomArea.getIndicationView().animate()
+                .alpha(0)
+                .setDuration(ANIMATION_FADE_DURATION)
+                .setStartDelay(HINT_DELAY_DURATION)
+                .setInterpolator(null)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        startExpandHintAnimation(onAnimationFinished);
+                    }
+                })
+                .start();
+    }
+
+    /**
+     * Phase 1: Fade in.
+     */
+    private void startUnlockHintAnimationFadeInPhase(final Runnable onAnimationFinished) {
+        mStatusBar.onUnlockHintStarted();
+        mKeyguardBottomArea.getIndicationView().animate()
+                .alpha(1)
+                .setDuration(ANIMATION_FADE_DURATION)
+                .setStartDelay(0)
+                .setInterpolator(null)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mShowExpandHint) {
+                            startUnlockHintAnimationPhase3(onAnimationFinished);
+                        } else {
+                            onAnimationFinished.run();
+                            notifyBarPanelExpansionChanged();
+                        }
+                    }
+                })
+                .start();
+    }
+
+    private void startLlsHintAnimationPhase1(final Runnable onAnimationFinished) {
+        mKeyguardBottomArea.getIndicationView().setAlpha(0);
+        mKeyguardBottomArea.getIndicationView().animate()
+                .alpha(1)
+                .setDuration(ANIMATION_FADE_DURATION)
+                .setStartDelay(0)
+                .setInterpolator(null)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mShowUnlockHint || mShowExpandHint) {
+                            startLlsHintAnimationPhase2(onAnimationFinished);
+                        } else {
+                            onAnimationFinished.run();;
+                        }
+                    }
+                })
+                .start();
+    }
+
+    private void startLlsHintAnimationPhase2(final Runnable onAnimationFinished) {
+        mKeyguardBottomArea.getIndicationView().animate()
+                .alpha(0)
+                .setDuration(ANIMATION_FADE_DURATION)
+                .setStartDelay(HINT_DELAY_DURATION)
+                .setInterpolator(null)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mShowUnlockHint) {
+                            startUnlockHintAnimationFadeInPhase(onAnimationFinished);
+                        } else if (mShowExpandHint) {
+                            startExpandHintAnimation(onAnimationFinished);
+                        } else {
+                            onAnimationFinished.run();
+                        }
+                    }
+                })
+                .start();
+    }
+
+    private void startExpandHintAnimation(final Runnable onAnimationFinished) {
+        mStatusBar.onExpandHintStarted();
+        mKeyguardBottomArea.getIndicationView().animate()
+                .alpha(1)
+                .setDuration(ANIMATION_FADE_DURATION)
+                .setStartDelay(0)
+                .setInterpolator(null)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                onAnimationFinished.run();
+                            }
+                        }, HINT_DELAY_DURATION);
+                    }
+                })
+                .start();
+    }
+
+    protected void startShowNotificationsHintAnimation() {
+        cancelPeek();
+        mStatusBar.onNotificationsHintStarted();
+        mHintAnimationRunning = true;
+        mKeyguardBottomArea.getIndicationView().setAlpha(0);
+        mKeyguardBottomArea.getIndicationView().animate()
+                .alpha(1)
+                .setDuration(ANIMATION_FADE_DURATION)
+                .setInterpolator(null)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mStatusBar.onHintFinished();
+                                mHintAnimationRunning = false;
+                            }
+                        }, HINT_DELAY_DURATION);
+                    }
+                })
+                .start();
     }
 
     private ValueAnimator createHeightAnimator(float targetHeight) {
@@ -1031,6 +1186,57 @@ public abstract class PanelView extends FrameLayout {
             }
         });
         return animator;
+    }
+
+    protected void startScreenOnHintAnimation(boolean showSwipeLeftHint, boolean showUnlockHint,
+            boolean showExpandHint) {
+        // We don't need to hint the user if an animation is already running or the user is changing
+        // the expansion.
+        if (mHintAnimationRunning || mScreenOnHintAnimationRunning) return;
+
+        final View indicationView = mKeyguardBottomArea.getIndicationView();
+        indicationView.animate().cancel();
+        indicationView.animate().setListener(
+                new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) { }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) { }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        mScreenOnHintAnimationRunning = false;
+                        indicationView.setAlpha(1f);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) { }
+                });
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                mStatusBar.onHintFinished();
+                mScreenOnHintAnimationRunning = false;
+            }
+        };
+        if (showSwipeLeftHint) {
+            mStatusBar.onLlsHintStarted();
+            startLlsHintAnimationPhase1(r);
+        } else if (showUnlockHint) {
+            mStatusBar.onUnlockHintStarted();
+            startUnlockHintAnimationFadeInPhase(r);
+        } else if (showExpandHint) {
+            mStatusBar.onExpandHintStarted();
+            startExpandHintAnimation(r);
+        } else {
+            return;
+        }
+        indicationView.setAlpha(0);
+        mShowUnlockHint = showUnlockHint;
+        mShowExpandHint = showExpandHint;
+        mScreenOnHintAnimationRunning = true;
     }
 
     protected void notifyBarPanelExpansionChanged() {
