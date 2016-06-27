@@ -179,7 +179,7 @@
   <string name="live_display_night_summary">夜の設定のみを使用する</string>
   <string name="live_display_outdoor">屋外（日光）</string>
   <string name="live_display_outdoor_summary">屋外の設定のみを使用する</string>
-  <string name="live_display_hint">LiveDisplayは目を疲れにくくし、夜の睡眠を邪魔しません。ここをタップして試してみてください。</string>
+  <string name="live_display_hint">LiveDisplayは目の疲れを軽減し、夜の睡眠を邪魔しません。ここをタップして試してみてください。</string>
   <!-- Template for showing cellular network operator name while LTE calling is enabled -->
   <string name="tethered_notification_no_device_message">接続しているデバイスはありません</string>
   <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g>台のデバイスが接続しています</string>
