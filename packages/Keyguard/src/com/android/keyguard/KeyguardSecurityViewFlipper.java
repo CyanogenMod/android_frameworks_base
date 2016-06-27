@@ -202,25 +202,10 @@ public class KeyguardSecurityViewFlipper extends ViewFlipper implements Keyguard
 
         final int widthSize = MeasureSpec.getSize(widthSpec);
         final int heightSize = MeasureSpec.getSize(heightSpec);
-        int maxWidth = widthSize;
-        int maxHeight = heightSize;
         final int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            final View child = getChildAt(i);
-            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-
-            if (lp.maxWidth > 0 && lp.maxWidth < maxWidth) {
-                maxWidth = lp.maxWidth;
-            }
-            if (lp.maxHeight > 0 && lp.maxHeight < maxHeight) {
-                maxHeight = lp.maxHeight;
-            }
-        }
 
         final int wPadding = getPaddingLeft() + getPaddingRight();
         final int hPadding = getPaddingTop() + getPaddingBottom();
-        maxWidth = Math.max(0, maxWidth - wPadding);
-        maxHeight = Math.max(0, maxHeight - hPadding);
 
         int width = widthMode == MeasureSpec.EXACTLY ? widthSize : 0;
         int height = heightMode == MeasureSpec.EXACTLY ? heightSize : 0;
@@ -228,6 +213,8 @@ public class KeyguardSecurityViewFlipper extends ViewFlipper implements Keyguard
             final View child = getChildAt(i);
             final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
+            int maxWidth = Math.max(0, lp.maxWidth - wPadding);
+            int maxHeight = Math.max(0, lp.maxHeight - hPadding);
             final int childWidthSpec = makeChildMeasureSpec(maxWidth, lp.width);
             final int childHeightSpec = makeChildMeasureSpec(maxHeight, lp.height);
 
