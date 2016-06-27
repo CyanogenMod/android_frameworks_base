@@ -276,4 +276,8 @@
     <!-- Weather string format in keyguard -->
     <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
 
+    <string name="expand_hint">Swipe down to expand</string>
+    <string name="swipe_left_hint">Swipe left to <xliff:g id="app_name">%1$s</xliff:g></string>
+    <string name="swipe_right_hint">Swipe right to notifications</string>
+
 </resources>
