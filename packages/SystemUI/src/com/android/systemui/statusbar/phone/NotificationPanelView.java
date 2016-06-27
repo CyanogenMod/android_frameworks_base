@@ -273,6 +273,8 @@ public class NotificationPanelView extends PanelView implements
     private TextView mKeyguardWeatherInfo;
     private WeatherControllerImpl mWeatherController;
 
+    private boolean mNotificationsExpandedInKeyguard;
+
     private enum SwipeLockedDirection {
         UNKNOWN,
         HORIZONTAL,
@@ -301,6 +303,7 @@ public class NotificationPanelView extends PanelView implements
             mCanDismissKeyguard = false;
             mStatusBar.focusKeyguardExternalView();
             mLiveLockscreenController.onLiveLockScreenFocusChanged(true /* hasFocus */);
+            startShowNotificationsHintAnimation();
             resetAlphaTranslation();
             // Enables the left edge gesture to allow user
             // to return to keyguard
@@ -1354,8 +1357,10 @@ public class NotificationPanelView extends PanelView implements
             mCanDismissKeyguard = true;
         }
 
-        if (goingToFullShade || (oldState == StatusBarState.KEYGUARD
-                && statusBarState == StatusBarState.SHADE_LOCKED)) {
+        boolean keyguardToShadeLocked = oldState == StatusBarState.KEYGUARD
+                && statusBarState == StatusBarState.SHADE_LOCKED;
+        if (goingToFullShade || keyguardToShadeLocked) {
+            if (keyguardToShadeLocked) mNotificationsExpandedInKeyguard = true;
             animateKeyguardStatusBarOut();
             animateHeaderSlidingIn();
         } else if (oldState == StatusBarState.SHADE_LOCKED
@@ -2336,7 +2341,8 @@ public class NotificationPanelView extends PanelView implements
     @Override
     protected void startUnlockHintAnimation() {
         mKeyguardBottomArea.expand(true);
-        super.startUnlockHintAnimation();
+        super.startUnlockHintAnimation(mLiveLockscreenController.isLiveLockScreenInteractive(),
+                !mNotificationsExpandedInKeyguard);
         startHighlightIconAnimation(getCenterIcon());
     }
 
