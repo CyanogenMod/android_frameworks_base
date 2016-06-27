@@ -1101,4 +1101,8 @@ public abstract class PanelView extends FrameLayout {
     public void setHeadsUpManager(HeadsUpManager headsUpManager) {
         mHeadsUpManager = headsUpManager;
     }
+
+    private class KeyguardHintCoordinator {
+
+    }
 }
