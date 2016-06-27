@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
@@ -74,12 +75,14 @@ public class KeyguardIndicationController {
     private int mChargingSpeed;
     private int mChargingCurrent;
     private String mMessageToShowOnScreenOn;
+    private IndicationDirection mIndicationDirection;
 
     public KeyguardIndicationController(Context context, KeyguardIndicationTextView textView,
                                         LockIcon lockIcon) {
         mContext = context;
         mTextView = textView;
         mLockIcon = lockIcon;
+        mIndicationDirection = IndicationDirection.NONE;
 
         Resources res = context.getResources();
         mSlowThreshold = res.getInteger(R.integer.config_chargingSlowlyThreshold);
@@ -121,6 +124,20 @@ public class KeyguardIndicationController {
     /**
      * Shows {@param transientIndication} until it is hidden by {@link #hideTransientIndication}.
      */
+    public void showTransientIndication(int transientIndication, IndicationDirection direction) {
+        showTransientIndication(mContext.getResources().getString(transientIndication), direction);
+    }
+
+    /**
+     * Shows {@param transientIndication} until it is hidden by {@link #hideTransientIndication}.
+     */
+    public void showTransientIndication(String transientIndication, IndicationDirection direction) {
+        showTransientIndication(transientIndication, Color.WHITE, direction);
+    }
+
+    /**
+     * Shows {@param transientIndication} until it is hidden by {@link #hideTransientIndication}.
+     */
     public void showTransientIndication(int transientIndication) {
         showTransientIndication(mContext.getResources().getString(transientIndication));
     }
@@ -129,15 +146,24 @@ public class KeyguardIndicationController {
      * Shows {@param transientIndication} until it is hidden by {@link #hideTransientIndication}.
      */
     public void showTransientIndication(String transientIndication) {
-        showTransientIndication(transientIndication, Color.WHITE);
+        showTransientIndication(transientIndication, Color.WHITE, IndicationDirection.NONE);
     }
 
     /**
      * Shows {@param transientIndication} until it is hidden by {@link #hideTransientIndication}.
      */
     public void showTransientIndication(String transientIndication, int textColor) {
+        showTransientIndication(transientIndication, textColor, IndicationDirection.NONE);
+    }
+
+    /**
+     * Shows {@param transientIndication} until it is hidden by {@link #hideTransientIndication}.
+     */
+    public void showTransientIndication(String transientIndication, int textColor,
+            IndicationDirection direction) {
         mTransientIndication = transientIndication;
         mTransientTextColor = textColor;
+        mIndicationDirection = direction;
         mHandler.removeMessages(MSG_HIDE_TRANSIENT);
         updateIndication();
     }
@@ -160,8 +186,30 @@ public class KeyguardIndicationController {
 
     private void updateIndication() {
         if (mVisible) {
+            final int color = computeColor();
             mTextView.switchIndication(computeIndication());
-            mTextView.setTextColor(computeColor());
+            mTextView.setTextColor(color);
+            // pad the bottom using ic_empty_space to keep text vertically aligned
+            int top = 0, bottom = R.drawable.ic_empty_space, left = 0, right = 0;
+            switch (mIndicationDirection) {
+                case UP:
+                    top = R.drawable.ic_keyboard_arrow_up;
+                    break;
+                case DOWN:
+                    bottom = R.drawable.ic_keyboard_arrow_down;
+                    break;
+                case LEFT:
+                    left = R.drawable.ic_keyboard_arrow_left;
+                    break;
+                case RIGHT:
+                    right = R.drawable.ic_keyboard_arrow_right;
+                    break;
+                case NONE:
+                default:
+                    break;
+            }
+            mTextView.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
+            mTextView.setCompoundDrawableTintList(ColorStateList.valueOf(color));
         }
     }
 
@@ -176,6 +224,7 @@ public class KeyguardIndicationController {
         if (!TextUtils.isEmpty(mTransientIndication)) {
             return mTransientIndication;
         }
+        mIndicationDirection = IndicationDirection.NONE;
         if (mPowerPluggedIn) {
             String indication = computePowerIndication();
             if (DEBUG_CHARGING_CURRENT) {
@@ -325,5 +374,13 @@ public class KeyguardIndicationController {
     public void setStatusBarKeyguardViewManager(
             StatusBarKeyguardViewManager statusBarKeyguardViewManager) {
         mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
+    }
+
+    public enum IndicationDirection {
+        NONE,
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
     }
 }

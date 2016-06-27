@@ -4795,7 +4795,25 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void onUnlockHintStarted() {
-        mKeyguardIndicationController.showTransientIndication(R.string.keyguard_unlock);
+        mKeyguardIndicationController.showTransientIndication(R.string.keyguard_unlock,
+                KeyguardIndicationController.IndicationDirection.UP);
+    }
+
+    public void onLlsHintStarted() {
+        String llsName = mLiveLockScreenController.getLiveLockScreenName();
+        mKeyguardIndicationController.showTransientIndication(
+                mContext.getString(R.string.swipe_left_hint, llsName),
+                KeyguardIndicationController.IndicationDirection.LEFT);
+    }
+
+    public void onExpandHintStarted() {
+        mKeyguardIndicationController.showTransientIndication(R.string.expand_hint,
+                KeyguardIndicationController.IndicationDirection.DOWN);
+    }
+
+    public void onNotificationsHintStarted() {
+        mKeyguardIndicationController.showTransientIndication(R.string.swipe_right_hint,
+                KeyguardIndicationController.IndicationDirection.RIGHT);
     }
 
     public void onHintFinished() {
