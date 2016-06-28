@@ -57,6 +57,7 @@
                 android:id="@+id/edit_text_instruction"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="16dp"
                 android:gravity="center_vertical"
                 android:layout_weight="1"
                 android:textColor="@color/qs_edit_header_instruction_text_color"

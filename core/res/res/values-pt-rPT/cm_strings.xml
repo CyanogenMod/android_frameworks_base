@@ -63,7 +63,7 @@
   <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the device, there will
          be a confirmation dialog.  This is the message. -->
   <string name="reboot_confirm" product="tablet">O seu tablet vai reiniciar.</string>
-  <string name="reboot_confirm" product="default">O seu telemóvel irá reiniciar.</string>
+  <string name="reboot_confirm" product="default">O seu telefone irá reiniciar.</string>
   <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
   <string name="reboot_progress">A reiniciar\u2026</string>
   <!-- Long-press back kill application -->
@@ -134,7 +134,7 @@
   <string name="app_ops_send_sms">Enviar uma mensagem SMS</string>
   <string name="app_ops_start_at_bootup">iniciar no arranque</string>
   <string name="app_ops_toast_window">exibir avisos no ecrã</string>
-  <string name="app_ops_toggle_bluetooth">alternar bluetooth</string>
+  <string name="app_ops_toggle_bluetooth">ligar/desligar o bluetooth</string>
   <string name="app_ops_toggle_mobile_data">alternar o estado dos dados móveis</string>
   <string name="app_ops_toggle_nfc">alternar NFC</string>
   <string name="app_ops_toggle_wifi">alternar Wi-Fi</string>
