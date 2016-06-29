@@ -121,9 +121,10 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     private Runnable mResetPage = new Runnable() {
         @Override
         public void run() {
-            if (!mListening) {
+            if (!mExpanded) {
                 // only reset when the user isn't interacting at all
                 mViewPager.setCurrentItem(0);
+                mPagerAdapter.notifyDataSetChanged();
             }
         }
     };
@@ -386,12 +387,6 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     public void setListening(boolean listening) {
         if (mListening == listening) return;
         mListening = listening;
-        // reset the page when inactive for a while
-        if (listening) {
-            removeCallbacks(mResetPage);
-        } else {
-            postDelayed(mResetPage, PAGE_RESET_DELAY);
-        }
         for (TileRecord r : mRecords) {
             r.tile.setListening(mListening);
         }
@@ -1824,6 +1819,12 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
     @Override
     public void setExpanded(boolean expanded) {
         super.setExpanded(expanded);
+        // reset the page when inactive for a while
+        if (expanded) {
+            removeCallbacks(mResetPage);
+        } else {
+            postDelayed(mResetPage, PAGE_RESET_DELAY);
+        }
         if (!expanded) {
             if (mEditing) {
                 mHost.setEditing(false);
