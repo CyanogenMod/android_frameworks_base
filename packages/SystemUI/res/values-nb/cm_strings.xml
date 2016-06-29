@@ -142,13 +142,13 @@
   <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Låseskjerm slått på.</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_off">Ambient visning av.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Ambient skjerm av.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_on">Ambient visning på.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Ambient skjerm på.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient visning er skrudd av.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Ambient skjerm er skrudd av.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient visning er skrudd på.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Ambient skjerm er skrudd på.</string>
   <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Heads up notifikasjoner er av.</string>
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
