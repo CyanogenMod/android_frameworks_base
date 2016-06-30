@@ -405,7 +405,7 @@
     <bool translatable="false" name="config_wifi_dual_band_support">false</bool>
 
     <!-- Boolean indicating whether Hotspot 2.0/Passpoint and ANQP queries is enabled -->
-    <bool translatable="false" name="config_wifi_hotspot2_enabled">false</bool>
+    <bool translatable="false" name="config_wifi_hotspot2_enabled">true</bool>
 
     <!-- Device type information conforming to Annex B format in WiFi Direct specification.
          The default represents a dual-mode smartphone -->
@@ -2586,4 +2586,43 @@
     <string name="operator_ping_url" translatable="false"></string>
     <!-- Zero Balance feature enable config -->
     <bool name="config_zero_balance_operator">false</bool>
+     <!-- Keypress Optimization -->
+    <bool name="config_enableKeypressOptimization">false</bool>
+    <integer-array name="keypress_param_value"/>
+
+    <bool name="config_enableDataSwitch">false</bool>
+    <!-- Whether to use TMO MCC MNC roaming setting -->
+    <bool name="config_regional_mcc_mnc_roaming_setting">false</bool>
+
+    <!-- Whether to use TMO LTE singnal strength threshold -->
+    <bool name="config_regional_lte_singnal_threshold">false</bool>
+    <!-- Whether to use TMO UMTS singnal strength threshold -->
+    <bool name="config_regional_umts_singnal_threshold">false</bool>
+
+    <integer-array name="umts_signal_strength_threshold">
+        <item>-140</item>
+        <item>-113</item>
+        <item>-103</item>
+        <item>-97</item>
+        <item>-89</item>
+        <item>-44</item>
+    </integer-array>
+    <integer-array name="lte_signal_strength_threshold">
+        <item>-140</item>
+        <item>-120</item>
+        <item>-115</item>
+        <item>-110</item>
+        <item>-100</item>
+        <item>-44</item>
+    </integer-array>
+
+    <!-- Enables the feature that can show/hide the operator name in statusbar.
+        When true, the user can select to show/hide operator name through a
+        checkbox in Settings. When false, there is no option to show operator
+        name (no checkbox in Settings). -->
+    <bool name="config_showOperatorNameInStatusBar">false</bool>
+    <bool name="config_regional_hotspot_show_maximum_connection_enable">false</bool>
+    <bool name="config_regional_hotspot_show_broadcast_ssid_checkbox">false</bool>
+    <bool name="config_regional_hotspot_show_notification_when_turn_on">false</bool>
+    <bool name="config_passpoint_setting_on">false</bool>
 </resources>

@@ -4153,6 +4153,7 @@ public final class Settings {
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_ON);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_P2P_DEVICE_NAME);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SAVED_STATE);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_HOTSPOT2_ENABLED);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUPPLICANT_SCAN_INTERVAL_MS);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_VERBOSE_LOGGING_ENABLED);
@@ -7452,6 +7453,14 @@ public final class Settings {
         * @hide
         */
        public static final String WIFI_SAVED_STATE = "wifi_saved_state";
+
+       /**
+        * Used to save the hotspot2 on/off state.
+        * This state will be used to open/close passpoint functions
+        *
+        * @hide
+        */
+       public static final String WIFI_HOTSPOT2_ENABLED = "wifi_hotspot2_enabled";
 
        /**
         * The interval in milliseconds to scan as used by the wifi supplicant
