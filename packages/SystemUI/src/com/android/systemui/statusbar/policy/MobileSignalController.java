@@ -538,6 +538,12 @@ public class MobileSignalController extends SignalController<
             mCurrentState.networkName = mServiceState.getOperatorAlphaShort();
         }
 
+        if (!showLongOperatorName()) {
+            mCurrentState.networkNameData = TextUtils.isEmpty(mServiceState.
+                    getOperatorAlphaShort()) ? mCurrentState.networkNameData : mServiceState.
+                    getOperatorAlphaShort() + " " + getNetworkClassString(mServiceState);
+        }
+
         if (mConfig.readIconsFromXml) {
             mCurrentState.voiceLevel = getVoiceSignalLevel();
         }
@@ -545,9 +551,17 @@ public class MobileSignalController extends SignalController<
         notifyListenersIfNecessary();
     }
 
-
     private boolean isDataDisabled() {
         return !mPhone.getDataEnabled(mSubscriptionInfo.getSubscriptionId());
+    }
+
+    private boolean showLongOperatorName() {
+        if (mContext.getResources().getBoolean(R.bool.config_show_long_operator_name) || (mContext.
+                getResources().getBoolean(R.bool.config_show_long_operator_name_when_roaming) &&
+                isRoaming())) {
+            return true;
+        }
+        return false;
     }
 
     private void generateIconGroup() {
