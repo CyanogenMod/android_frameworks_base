@@ -2691,4 +2691,25 @@
   <java-symbol type="string" name="operator_config_url" />
   <java-symbol type="string" name="operator_ping_url" />
   <java-symbol type="bool" name="config_zero_balance_operator"/>
+  <!-- Symbols/Overlays for carrier hotspot -->
+  <java-symbol type="bool" name="config_regional_hotspot_show_maximum_connection_enable" />
+
+  <!-- keypress optimization -->
+  <java-symbol type="bool" name="config_enableKeypressOptimization" />
+  <java-symbol type="array" name="keypress_param_value" />
+  <java-symbol type="bool" name="config_enableDataSwitch" />
+  <!-- Symbols/Overlays for Network settings -->
+  <java-symbol type="bool" name="config_regional_mcc_mnc_roaming_setting" />
+  <!-- Symbols/Overlays for Network settings start -->
+  <java-symbol type="bool" name="config_regional_lte_singnal_threshold" />
+  <java-symbol type="bool" name="config_regional_umts_singnal_threshold" />
+
+  <java-symbol type="array" name="umts_signal_strength_threshold" />
+  <java-symbol type="array" name="lte_signal_strength_threshold" />
+
+  <java-symbol type="bool" name="config_regional_hotspot_show_broadcast_ssid_checkbox" />
+  <java-symbol type="bool" name="config_regional_hotspot_show_notification_when_turn_on" />
+
+  <java-symbol type="bool" name="config_showOperatorNameInStatusBar" />
+  <java-symbol type="bool" name="config_passpoint_setting_on" />
 </resources>

@@ -1503,9 +1503,28 @@ public class NetworkManagementService extends INetworkManagementService.Stub
             if (wifiConfig == null) {
                 args = new Object[] {"set", wlanIface};
             } else {
-                args = new Object[] {"set", wlanIface, wifiConfig.SSID,
-                        "broadcast", Integer.toString(wifiConfig.apChannel),
-                        getSecurityType(wifiConfig), new SensitiveArg(wifiConfig.preSharedKey)};
+                String ssid_mode = "broadcast";
+                if (mContext.getResources().getBoolean(
+                        com.android.internal.R.bool
+                        .config_regional_hotspot_show_broadcast_ssid_checkbox)
+                        && wifiConfig.hiddenSSID) {
+                    ssid_mode = "hidden";
+                }
+                if (mContext.getResources().getBoolean(
+                        com.android.internal.R.bool
+                        .config_regional_hotspot_show_maximum_connection_enable)) {
+                    int clientNum = Settings.System.getInt(mContext.getContentResolver(),
+                            "WIFI_HOTSPOT_MAX_CLIENT_NUM", 8);
+                    if (DBG) Slog.d(TAG, "clientNum: " + clientNum);
+                    args = new Object[] {"set", wlanIface, wifiConfig.SSID,
+                            ssid_mode, Integer.toString(wifiConfig.apChannel),
+                            getSecurityType(wifiConfig),
+                            new SensitiveArg(wifiConfig.preSharedKey), clientNum};
+                } else {
+                    args = new Object[] {"set", wlanIface, wifiConfig.SSID,
+                            ssid_mode, Integer.toString(wifiConfig.apChannel),
+                            getSecurityType(wifiConfig), new SensitiveArg(wifiConfig.preSharedKey)};
+                }
             }
             executeOrLogWithMessage(SOFT_AP_COMMAND, args, NetdResponseCode.SoftapStatusResult,
                     SOFT_AP_COMMAND_SUCCESS, logMsg);
