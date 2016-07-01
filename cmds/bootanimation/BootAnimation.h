@@ -87,6 +87,13 @@ private:
         ZipFileRO* zip;
     };
 
+    /**
+     *IMG_OEM: bootanimation file from oem/media
+     *IMG_SYS: bootanimation file from system/media
+     *IMG_ENC: encrypted bootanimation file from system/media
+     */
+    enum ImageID { IMG_OEM = 0, IMG_SYS = 1, IMG_ENC = 2 };
+    const char *getAnimationFileName(ImageID image);
     status_t initTexture(Texture* texture, AssetManager& asset, const char* name);
     status_t initTexture(const Animation::Frame& frame);
     bool android();
