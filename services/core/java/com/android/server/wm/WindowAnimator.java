@@ -220,7 +220,9 @@ public class WindowAnimator {
         // Show SHOW_WHEN_LOCKED windows that turn on the screen
         allowWhenLocked |= (win.mAttrs.flags & FLAG_SHOW_WHEN_LOCKED) != 0 && win.mTurnOnScreen;
         // Show windows that use TYPE_STATUS_BAR_SUB_PANEL when locked
-        allowWhenLocked |= win.mAttrs.type == WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL;
+        allowWhenLocked |= win.mAttrs.type == WindowManager.LayoutParams.TYPE_KEYGUARD_PANEL &&
+                winShowWhenLocked == null;
+
 
         if (appShowWhenLocked != null) {
             allowWhenLocked |= appShowWhenLocked == win.mAppToken
@@ -232,7 +234,14 @@ public class WindowAnimator {
 
         // Only hide windows if the keyguard is active and not animating away.
         boolean keyguardOn = mPolicy.isKeyguardShowingOrOccluded()
-                && (mForceHiding != KEYGUARD_ANIMATING_OUT && !mKeyguardBlurEnabled);
+                && mForceHiding != KEYGUARD_ANIMATING_OUT;
+
+        final WindowState winKeyguardPanel = (WindowState) mPolicy.getWinKeyguardPanelLw();
+        // If a keyguard panel is currently being shown, we should
+        // continue to hide the windows as if blur is disabled.
+        if (winKeyguardPanel == null) {
+            keyguardOn &= !mKeyguardBlurEnabled;
+        }
         return keyguardOn && !allowWhenLocked && (win.getDisplayId() == Display.DEFAULT_DISPLAY);
     }
 
