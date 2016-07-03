@@ -363,6 +363,8 @@
   <java-symbol type="integer" name="config_wifi_framework_max_auth_errors_to_blacklist" />
   <java-symbol type="integer" name="config_wifi_framework_network_black_list_min_time_milli" />
   <java-symbol type="integer" name="config_wifi_framework_current_network_boost" />
+  <java-symbol type="integer" name="config_max_initial_scans_on_selective_channels" />
+  <java-symbol type="integer" name="config_initial_saved_channel_scan_interval"/>
   <java-symbol type="bool" name="config_send_sms1x_on_voice_call" />
   <java-symbol type="integer" name="config_bluetooth_max_advertisers" />
   <java-symbol type="integer" name="config_bluetooth_max_scan_filters" />

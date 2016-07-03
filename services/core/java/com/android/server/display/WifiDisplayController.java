@@ -78,6 +78,9 @@ final class WifiDisplayController implements DumpUtils.Dump {
     private static final int RTSP_TIMEOUT_SECONDS = 30;
     private static final int RTSP_TIMEOUT_SECONDS_CERT_MODE = 120;
 
+    // time given for RTSP teardown sequence to complete.
+    private static final int RTSP_TEARDOWN_TIMEOUT = 3;
+
     // We repeatedly issue calls to discover peers every so often for a few reasons.
     // 1. The initial request may fail and need to retried.
     // 2. Discovery will self-abort after any group is initiated, which may not necessarily
@@ -150,6 +153,12 @@ final class WifiDisplayController implements DumpUtils.Dump {
 
     // True if RTSP has connected.
     private boolean mRemoteDisplayConnected;
+
+    // Waiting for displayDisconnected from ERD.
+    private boolean mRemoteDisplayTearingDown;
+
+    // Timed out waiting for RTSP teardown to complete.
+    private boolean mRemoteDisplayRtspTeardownTimedOut;
 
     // The information we have most recently told WifiDisplayAdapter about.
     private WifiDisplay mAdvertisedDisplay;
@@ -363,7 +372,15 @@ final class WifiDisplayController implements DumpUtils.Dump {
     }
 
     private void updateScanState() {
-        if (mScanRequested && mWfdEnabled && mDesiredDevice == null) {
+
+        if (true == mRemoteDisplayTearingDown) {
+            // when rtsp teardown sequence is completed or timed out, this
+            // function will be called again.
+            Slog.i(TAG, "updateScanState no-op as rtsp teardown sequence is in progress");
+            return;
+        }
+
+        if (mScanRequested && mWfdEnabled && (mDesiredDevice == null)) {
             if (!mDiscoverPeersInProgress) {
                 Slog.i(TAG, "Starting Wifi display scan.");
                 mDiscoverPeersInProgress = true;
@@ -570,7 +587,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
         // Step 1. Before we try to connect to a new device, tell the system we
         // have disconnected from the old one.
         if ((mRemoteDisplay != null || mExtRemoteDisplay != null) &&
-                mConnectedDevice != mDesiredDevice) {
+                mConnectedDevice != mDesiredDevice && false == mRemoteDisplayTearingDown) {
             Slog.i(TAG, "Stopped listening for RTSP connection on "
                     + mRemoteDisplayInterface
                     + " from Wifi display: " + mConnectedDevice.deviceName);
@@ -581,16 +598,25 @@ final class WifiDisplayController implements DumpUtils.Dump {
                 ExtendedRemoteDisplayHelper.dispose(mExtRemoteDisplay);
             }
 
-            mExtRemoteDisplay = null;
-            mRemoteDisplay = null;
-            mRemoteDisplayInterface = null;
-            mRemoteDisplayConnected = false;
             mHandler.removeCallbacks(mRtspTimeout);
+            mRemoteDisplayTearingDown = true;
 
-            mWifiP2pManager.setMiracastMode(WifiP2pManager.MIRACAST_DISABLED);
-            unadvertiseDisplay();
+            // Use extended timeout value for certification, as some tests require user inputs
+            int rtspTimeout = mWifiDisplayCertMode ?
+                RTSP_TIMEOUT_SECONDS_CERT_MODE : RTSP_TIMEOUT_SECONDS;
 
-            // continue to next step
+            Slog.i(TAG, "Starting wait for rtsp teardown sequence for " +
+                   rtspTimeout + " secs");
+
+            mHandler.postDelayed(mRtspTimeout, rtspTimeout * 1000);
+
+            return;
+        }
+
+        if (true == mRemoteDisplayTearingDown && false == mRemoteDisplayRtspTeardownTimedOut) {
+            // Need to wait for ERD to notify that p2p connection is no longer needed.
+            Slog.i(TAG, "updateConnection - return as rtsp teardown sequence in progress");
+            return;
         }
 
         // Step 2. Before we try to connect to a new device, disconnect from the old one.
@@ -628,6 +654,11 @@ final class WifiDisplayController implements DumpUtils.Dump {
                 }
             });
             return; // wait for asynchronous callback
+        }
+
+        if (true == mRemoteDisplayTearingDown) {
+            Slog.i(TAG, "rtsp teardown sequence in progress");
+            return;
         }
 
         // Step 3. Before we try to connect to a new device, stop trying to connect
@@ -771,10 +802,11 @@ final class WifiDisplayController implements DumpUtils.Dump {
 
                 @Override
                 public void onDisplayDisconnected() {
+                    Slog.i(TAG, "onDisplayDisconnected called");
                     if (mConnectedDevice == oldDevice) {
                         Slog.i(TAG, "Closed RTSP connection with Wifi display: "
                                 + mConnectedDevice.deviceName);
-                        mHandler.removeCallbacks(mRtspTimeout);
+                        FinishRtspTeardown();
                         disconnect();
                     }
                 }
@@ -907,6 +939,21 @@ final class WifiDisplayController implements DumpUtils.Dump {
         }
     }
 
+    private void FinishRtspTeardown()
+    {
+        Slog.i(TAG, "Wait for rtsp teardown sequence completed");
+        mRemoteDisplayTearingDown = false;
+
+        mExtRemoteDisplay = null;  // callbacks no longer needed
+        mRemoteDisplay = null;
+        mRemoteDisplayInterface = null;
+        mRemoteDisplayConnected = false;
+        mHandler.removeCallbacks(mRtspTimeout);
+
+        mWifiP2pManager.setMiracastMode(WifiP2pManager.MIRACAST_DISABLED);
+        unadvertiseDisplay();
+    }
+
     private final Runnable mDiscoverPeers = new Runnable() {
         @Override
         public void run() {
@@ -929,13 +976,31 @@ final class WifiDisplayController implements DumpUtils.Dump {
     private final Runnable mRtspTimeout = new Runnable() {
         @Override
         public void run() {
+            Slog.i(TAG, "mRtspTimeout triggerred");
             if (mConnectedDevice != null
-                    && (mRemoteDisplay != null || mExtRemoteDisplay != null)
-                    && !mRemoteDisplayConnected) {
-                Slog.i(TAG, "Timed out waiting for Wifi display RTSP connection after "
-                        + RTSP_TIMEOUT_SECONDS + " seconds: "
-                        + mConnectedDevice.deviceName);
-                handleConnectionFailure(true);
+                    && (mRemoteDisplay != null || mExtRemoteDisplay != null)) {
+                if (true == mRemoteDisplayTearingDown) {
+                    // rtsp teardown sequence timed out
+                    Slog.i(TAG, "Timed out waiting for RTSP teardown sequence after "
+                           + RTSP_TEARDOWN_TIMEOUT + " seconds: "
+                           + mConnectedDevice.deviceName);
+                    mRemoteDisplayRtspTeardownTimedOut = true;
+
+                    // this should close P2P
+                    disconnect();
+
+                    FinishRtspTeardown();
+
+                    // Ok to resume wifi-scans
+                    updateConnection();
+                } else if (!mRemoteDisplayConnected) {
+                    Slog.i(TAG, "Timed out waiting for Wifi display RTSP connection after "
+                           + RTSP_TIMEOUT_SECONDS + " seconds: "
+                           + mConnectedDevice.deviceName);
+                    handleConnectionFailure(true);
+                } else {
+                    Slog.i(TAG, "Timed out. no-op");
+                }
             }
         }
     };

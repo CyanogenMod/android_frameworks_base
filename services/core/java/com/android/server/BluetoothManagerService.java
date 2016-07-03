@@ -763,6 +763,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     }  catch (RemoteException e) {
                         Log.e(TAG, "Unable to call onBluetoothServiceUp() on callback #" + i, e);
                     }
+                    Log.d(TAG, "Broadcasted onBluetoothServiceUp() to " + mCallbacks.getBroadcastItem(i));
                 }
             } finally {
                 mCallbacks.finishBroadcast();
@@ -784,6 +785,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     }  catch (RemoteException e) {
                         Log.e(TAG, "Unable to call onBluetoothServiceDown() on callback #" + i, e);
                     }
+                    Log.d(TAG, "Broadcasted onBluetoothServiceDown() to " + mCallbacks.getBroadcastItem(i));
                 }
             } finally {
                 mCallbacks.finishBroadcast();
@@ -1145,8 +1147,13 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                         recoverBluetoothServiceFromError();
                     }
                     if ((prevState == BluetoothAdapter.STATE_TURNING_ON) &&
-                        (newState == BluetoothAdapter.STATE_BLE_ON) &&
-                        (mBluetooth != null) && mEnable) {
+                            (newState == BluetoothAdapter.STATE_OFF) &&
+                            (mBluetooth != null) && mEnable) {
+                        persistBluetoothSetting(BLUETOOTH_OFF);
+                    }
+                    if ((prevState == BluetoothAdapter.STATE_TURNING_ON) &&
+                            (newState == BluetoothAdapter.STATE_BLE_ON) &&
+                            (mBluetooth != null) && mEnable) {
                         recoverBluetoothServiceFromError();
                     }
                     if (newState == BluetoothAdapter.STATE_ON ||
@@ -1646,7 +1653,11 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
             if (mBluetooth != null) {
                 mBluetooth = null;
                 //Unbind
-                mContext.unbindService(mConnection);
+                try {
+                    mContext.unbindService(mConnection);
+                } catch (Exception e) {
+                    Log.e(TAG, "Unable to unbind",e);
+                }
             }
             mBluetoothGatt = null;
         }
