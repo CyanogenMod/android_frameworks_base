@@ -22,7 +22,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -33,6 +36,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.android.internal.telephony.IExtTelephony;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
@@ -497,6 +501,9 @@ public class SignalClusterView
         private ImageView mMobile, mMobileDark, mMobileType;
         private ImageView mMobileRoaming;
 
+        IExtTelephony mExtTelephony = IExtTelephony.Stub.
+                asInterface(ServiceManager.getService("extphone"));
+
         public PhoneState(int subId, Context context) {
             ViewGroup root = (ViewGroup) LayoutInflater.from(context)
                     .inflate(R.layout.mobile_signal_group, null);
@@ -513,6 +520,17 @@ public class SignalClusterView
         }
 
         public boolean apply(boolean isSecondaryIcon) {
+            int slotId = SubscriptionManager.getSlotId(mSubId);
+
+            try {
+                if (mExtTelephony != null &&
+                        mExtTelephony.getCurrentUiccCardProvisioningStatus(slotId) == 0) {
+                    mMobileVisible = false;
+                }
+            } catch (RemoteException e) {
+                // Do nothing, we don't want log spam or anything.
+            }
+
             if (mMobileVisible && !mIsAirplaneMode) {
                 if (mLastMobileStrengthId != mMobileStrengthId) {
                     updateAnimatableIcon(mMobile, mMobileStrengthId);
