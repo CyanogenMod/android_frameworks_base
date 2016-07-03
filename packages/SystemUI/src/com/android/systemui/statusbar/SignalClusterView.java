@@ -22,7 +22,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -33,6 +36,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.android.internal.telephony.IExtTelephony;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
@@ -93,6 +97,9 @@ public class SignalClusterView
     private boolean mBlockMobile;
     private boolean mBlockWifi;
     private boolean mBlockEthernet;
+
+    IExtTelephony mExtTelephony = IExtTelephony.Stub.
+            asInterface(ServiceManager.getService("extphone"));
 
     public SignalClusterView(Context context) {
         this(context, null);
@@ -225,11 +232,23 @@ public class SignalClusterView
     public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
             int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
             String description, boolean isWide, boolean showRoamingIndicator, int subId) {
+        boolean hideSim = false;
+        int slotId = SubscriptionManager.getSlotId(subId);
         PhoneState state = getState(subId);
         if (state == null) {
             return;
         }
-        state.mMobileVisible = statusIcon.visible && !mBlockMobile;
+
+        try {
+            if (mExtTelephony != null &&
+                    mExtTelephony.getCurrentUiccCardProvisioningStatus(slotId) == 0) {
+                hideSim = true;
+            }
+        } catch (RemoteException e) {
+            // Do nothing, we don't want log spam or anything.
+        }
+
+        state.mMobileVisible = !hideSim && statusIcon.visible && !mBlockMobile;
         state.mMobileStrengthId = statusIcon.icon;
         state.mMobileTypeId = statusType;
         state.mMobileDescription = statusIcon.contentDescription;
