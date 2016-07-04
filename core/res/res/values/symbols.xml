@@ -2686,4 +2686,7 @@
 
   <java-symbol type="array" name="origin_carrier_names" />
   <java-symbol type="array" name="locale_carrier_names" />
+  <java-symbol type="string" name="operator_config_url" />
+  <java-symbol type="string" name="operator_ping_url" />
+  <java-symbol type="bool" name="config_zero_balance_operator"/>
 </resources>

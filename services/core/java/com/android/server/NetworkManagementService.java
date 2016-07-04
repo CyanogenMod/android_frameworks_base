@@ -47,8 +47,11 @@ import static com.android.server.NetworkManagementService.NetdResponseCode.TtyLi
 import static com.android.server.NetworkManagementSocketTagger.PROP_QTAGUID_ENABLED;
 import android.annotation.NonNull;
 import android.app.ActivityManagerNative;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.INetd;
 import android.net.INetworkManagementEventObserver;
@@ -90,6 +93,7 @@ import android.util.SparseIntArray;
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.net.NetworkStatsFactory;
+import com.android.internal.R;
 import com.android.internal.util.HexDump;
 import com.android.internal.util.Preconditions;
 import com.android.server.NativeDaemonConnector.Command;
@@ -349,6 +353,13 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         } else {
             prepareNativeDaemon();
         }
+        //Registering the receiver for Zerobalance blocking/unblocking
+        if (mContext.getResources().getBoolean(R.bool.config_zero_balance_operator)) {
+            final IntentFilter restrictFilter = new IntentFilter();
+            restrictFilter.addAction("org.codeaurora.restrictData");
+            mContext.registerReceiver(mZeroBalanceReceiver, restrictFilter);
+        }
+        if (DBG) Slog.d(TAG, "ZeroBalance registering receiver");
     }
 
     private IBatteryStats getBatteryStats() {
@@ -2786,4 +2797,29 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     public void removeInterfaceFromLocalNetwork(String iface) {
         modifyInterfaceInNetwork("remove", "local", iface);
     }
+
+    private BroadcastReceiver mZeroBalanceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isBlockAllData = false;
+            if(intent != null
+                    && intent.getAction().equals("org.codeaurora.restrictData")) {
+                isBlockAllData = intent.getBooleanExtra("Restrict",false);
+                Log.wtf("ZeroBalance", "Intent value to block unblock data"+isBlockAllData);
+            }
+            mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
+
+            // silently discard when control disabled
+            // TODO: eventually migrate to be always enabled
+            if (!mBandwidthControlEnabled) return;
+            try {
+                Log.wtf("ZeroBalance", "before calling connector Intent"
+                        +"value to block unblock data"+isBlockAllData);
+                mConnector.execute("bandwidth",
+                        isBlockAllData ? "blockAllData" : "unblockAllData");
+            } catch (NativeDaemonConnectorException e) {
+                throw e.rethrowAsParcelableException();
+            }
+        }
+    };
 }
