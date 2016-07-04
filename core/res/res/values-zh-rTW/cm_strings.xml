@@ -133,6 +133,7 @@
   <string name="app_ops_start_at_bootup">開機時啟動</string>
   <string name="app_ops_toast_window">顯示彈出信息</string>
   <string name="app_ops_toggle_bluetooth">開關藍牙</string>
+  <string name="app_ops_toggle_mobile_data">切換數據用量</string>
   <string name="app_ops_toggle_nfc">開關 NFC</string>
   <string name="app_ops_toggle_wifi">切換 Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">控制鬧鐘音量</string>
@@ -176,6 +177,8 @@
   <string name="notify_package_component_protected_title">已阻止啟動活動</string>
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s </xliff:g> 正被防止啟動。按一下以進行身份驗證並啟動應用程式。</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">電池完全充滿</string>
+  <string name="notify_battery_fully_charged_text">請將設備與充電線拔除，以提高電池壽命。</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">重設電池統計資訊</string>
@@ -183,4 +186,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">允許應用程式重設目前低電量的電池使用資料。</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM 卡已變更</string>
+  <string name="uicc_hot_swapped_event_text">點按以設定SIM卡預設選項</string>
 </resources>
