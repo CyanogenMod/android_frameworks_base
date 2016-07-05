@@ -5048,7 +5048,9 @@ public class AudioService extends IAudioService.Stub {
             DeviceListSpec deviceSpec = mConnectedDevices.get(key);
             boolean isConnected = deviceSpec != null;
 
-            if (isConnected && state != BluetoothProfile.STATE_CONNECTED) {
+            if ((isConnected && state != BluetoothProfile.STATE_CONNECTED) ||
+                ((mConnectedBTDevicesList.size() == 0) &&
+                 (state == BluetoothProfile.STATE_DISCONNECTED))) {
                 if (btDevice.isBluetoothDock()) {
                     if (state == BluetoothProfile.STATE_DISCONNECTED) {
                         // introduction of a delay for transient disconnections of docks when
