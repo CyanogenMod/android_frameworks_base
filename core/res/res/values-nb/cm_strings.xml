@@ -176,7 +176,7 @@
   <string name="live_display_day">Dag</string>
   <string name="live_display_day_summary">Bruk kun dag innstillinger</string>
   <string name="live_display_night">Natt</string>
-  <string name="live_display_night_summary">Bruk kun natt instillinger</string>
+  <string name="live_display_night_summary">Bruk kun natt innstillinger</string>
   <string name="live_display_outdoor">Utendørs (sterkt sollys)</string>
   <string name="live_display_outdoor_summary">Bruk kun utendørs innstillinger</string>
   <string name="live_display_hint">LiveDisplay kan hjelpe deg med å redusere belastningen på øynene og hjelpe deg med å sove om natten. Trykk her for å prøve det ut!</string>
