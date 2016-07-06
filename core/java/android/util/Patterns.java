@@ -305,6 +305,7 @@ public class Patterns {
 
     /* A word boundary or end of input.  This is to stop foo.sure from matching as foo.su */
     private static final String WORD_BOUNDARY = "(?:\\b|$|^)";
+    private static final String WORD_BOUNDARY_WWW = "(?:\\b|$|^|www\\.)";
 
     private static final String USER_INFO = "(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
             + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
@@ -355,14 +356,18 @@ public class Patterns {
     private static final String RELAXED_DOMAIN_NAME =
             "(?:" + "(?:" + IRI_LABEL + "(?:\\.(?=\\S))" +"?)+" + "|" + IP_ADDRESS + ")";
 
+    private static final String CJK_UNIFIED = "["
+            + "\u4E00-\u9FFF"
+              + "]";
     /**
      * Regular expression to match strings that do not start with a supported protocol. The TLDs
      * are expected to be one of the known TLDs.
      */
     private static final String WEB_URL_WITHOUT_PROTOCOL = "("
-            + WORD_BOUNDARY
+            + WORD_BOUNDARY_WWW
             + "(?<!:\\/\\/)"
             + "("
+            + "(?!.*" + CJK_UNIFIED + "www\\.)"
             + "(?:" + STRICT_DOMAIN_NAME + ")"
             + "(?:" + PORT_NUMBER + ")?"
             + ")"
