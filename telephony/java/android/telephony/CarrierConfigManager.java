@@ -507,6 +507,15 @@ public class CarrierConfigManager {
     public static final String KEY_MMS_USER_AGENT_STRING = "userAgent";
 
     /**
+     * @hide
+     */
+    public static final String KEY_SMS_SINGLE_SHIFT_TABLES = "single_shift_tables";
+    /**
+     * @hide
+     */
+    public static final String KEY_SMS_LOCKING_SHIFT_TABLES = "locking_shift_tables";
+
+    /**
      * Determines whether the carrier supports making non-emergency phone calls while the phone is
      * in emergency callback mode.  Default value is {@code true}, meaning that non-emergency calls
      * are allowed in emergency callback mode.
@@ -621,6 +630,9 @@ public class CarrierConfigManager {
         sDefaults.putString(KEY_MMS_UA_PROF_URL_STRING, "");
         sDefaults.putString(KEY_MMS_USER_AGENT_STRING, "");
         sDefaults.putBoolean(KEY_ALLOW_NON_EMERGENCY_CALLS_IN_ECM_BOOL, true);
+
+        sDefaults.putIntArray(KEY_SMS_LOCKING_SHIFT_TABLES, new int[]{});
+        sDefaults.putIntArray(KEY_SMS_SINGLE_SHIFT_TABLES, new int[]{});
     }
 
     /**
