@@ -2875,17 +2875,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
                         Integer.toString(recommendedMaxBytes));
             }
 
-            // Mobile Data default, based on build
-            loadRegionLockedBooleanSetting(stmt, Settings.Global.MOBILE_DATA,
-                    R.bool.def_enable_mobile_data);
+            // Data defaults not loaded here to allow fallback to CarrierConfig.
 
             int phoneCount = TelephonyManager.getDefault().getPhoneCount();
             // SUB specific flags for Multisim devices
             for (int phoneId = 0; phoneId < MAX_PHONE_COUNT; phoneId++) {
-                // Mobile Data default, based on build
-                loadRegionLockedBooleanSetting(stmt, Settings.Global.MOBILE_DATA + phoneId,
-                        R.bool.def_enable_mobile_data);
-
                 // Data roaming default, based on build
                 loadRegionLockedBooleanSetting(stmt, Settings.Global.DATA_ROAMING + phoneId,
                         R.bool.def_enable_data_roaming);

@@ -472,6 +472,14 @@ public class CarrierConfigManager {
     public static final String KEY_BROADCAST_EMERGENCY_CALL_STATE_CHANGES_BOOL =
             "broadcast_emergency_call_state_changes_bool";
 
+    /**
+     * Boolean indicating whether data should be turned on by default.
+     *
+     * @hide
+     */
+    public static final String KEY_DATA_ENABLED_BY_DEFAULT =
+            "data_enabled_by_default";
+
     // These variables are used by the MMS service and exposed through another API, {@link
     // SmsManager}. The variable names and string values are copied from there.
     public static final String KEY_MMS_ALIAS_ENABLED_BOOL = "aliasEnabled";
@@ -520,6 +528,8 @@ public class CarrierConfigManager {
 
     static {
         sDefaults = new PersistableBundle();
+        sDefaults.putBoolean(KEY_DATA_ENABLED_BY_DEFAULT, true /* default from DcTrackerBase */);
+
         sDefaults.putBoolean(KEY_ADDITIONAL_CALL_SETTING_BOOL, true);
         sDefaults.putBoolean(KEY_ALLOW_EMERGENCY_NUMBERS_IN_CALL_LOG_BOOL, false);
         sDefaults.putBoolean(KEY_ALLOW_LOCAL_DTMF_TONES_BOOL, true);
