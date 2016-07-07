@@ -16,7 +16,11 @@
 
 package com.android.internal.telephony;
 
+import android.app.AppGlobals;
+import android.content.Context;
 import android.content.res.Resources;
+import android.os.PersistableBundle;
+import android.telephony.CarrierConfigManager;
 import android.text.TextUtils;
 import android.util.SparseIntArray;
 
@@ -823,10 +827,10 @@ public class GsmAlphabet {
      *     or null if there are no suitable language tables to encode the string.
      */
     public static TextEncodingDetails
-    countGsmSeptets(CharSequence s, boolean use7bitOnly) {
+    countGsmSeptets(CharSequence s, boolean use7bitOnly, int subId) {
         // Load enabled language tables from config.xml, including any MCC overlays
         if (!sDisableCountryEncodingCheck) {
-            enableCountrySpecificEncodings();
+            enableCountrySpecificEncodings(subId);
         }
         // fast path for common case where no national language shift tables are enabled
         if (sEnabledSingleShiftTables.length + sEnabledLockingShiftTables.length == 0) {
@@ -1061,12 +1065,16 @@ public class GsmAlphabet {
      * Enable country-specific language tables from MCC-specific overlays.
      * @context the context to use to get the TelephonyManager
      */
-    private static void enableCountrySpecificEncodings() {
+    private static void enableCountrySpecificEncodings(int subId) {
         Resources r = Resources.getSystem();
         // See comments in frameworks/base/core/res/res/values/config.xml for allowed values
-        sEnabledSingleShiftTables = r.getIntArray(R.array.config_sms_enabled_single_shift_tables);
-        sEnabledLockingShiftTables = r.getIntArray(R.array.config_sms_enabled_locking_shift_tables);
-
+        Context context = AppGlobals.getInitialApplication();
+        CarrierConfigManager carrierConfigManager = (CarrierConfigManager)
+                context.getSystemService(Context.CARRIER_CONFIG_SERVICE);
+        PersistableBundle config = carrierConfigManager.getConfigForSubId(subId);
+        sEnabledSingleShiftTables = config.getIntArray(CarrierConfigManager.KEY_SMS_SINGLE_SHIFT_TABLES);
+        sEnabledLockingShiftTables = config.getIntArray(CarrierConfigManager.KEY_SMS_LOCKING_SHIFT_TABLES);
+System.out.println("SUBID " + subId + " " + sEnabledLockingShiftTables.length + " " + sEnabledSingleShiftTables.length);
         if (sEnabledSingleShiftTables.length > 0) {
             sHighestEnabledSingleShiftCode =
                     sEnabledSingleShiftTables[sEnabledSingleShiftTables.length-1];
@@ -1456,7 +1464,7 @@ public class GsmAlphabet {
     };
 
     static {
-        enableCountrySpecificEncodings();
+        enableCountrySpecificEncodings(0);
         int numTables = sLanguageTables.length;
         int numShiftTables = sLanguageShiftTables.length;
         if (numTables != numShiftTables) {
