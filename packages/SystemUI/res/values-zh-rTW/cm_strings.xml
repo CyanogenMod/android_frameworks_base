@@ -83,6 +83,8 @@
   <string name="quick_settings_profiles_off">已停用設定檔</string>
   <string name="quick_settings_heads_up_label">浮動通知</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">省電模式（充電中）</string>
+  <string name="quick_settings_caffeine_label">暫停休眠</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">同步關閉</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -97,6 +99,7 @@
   <string name="quick_settings_lockscreen_label">鎖定畫面</string>
   <string name="quick_settings_ambient_display_label">環境顯示</string>
   <string name="quick_settings_lockscreen_label_enforced">強制執行鎖定畫面</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">已由設定檔禁用</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -130,7 +133,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">浮動通知已開啟</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">暫停休眠關閉</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">暫停休眠開啟</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when battery saver changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -162,9 +167,16 @@
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">新增瓷磚</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">飛航模式啟用時無法連接行動網路，請停用飛航模式後再嘗試。</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">手電筒已經開啟</string>
+  <string name="quick_settings_tile_flashlight_not_summary">點擊關閉</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="other">%1$d 用戶</item>
+  </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">沒有數據資料傳輸的 SIM 卡</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Play queue -->
   <!-- Path data for portrait battery -->

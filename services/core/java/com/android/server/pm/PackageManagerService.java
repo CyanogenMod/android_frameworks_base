@@ -248,6 +248,7 @@ import com.android.server.IntentResolver;
 import com.android.server.LocalServices;
 import com.android.server.ServiceThread;
 import com.android.server.SystemConfig;
+import com.android.server.SystemConfig.AppLink;
 import com.android.server.Watchdog;
 import com.android.server.pm.PermissionsState.PermissionState;
 import com.android.server.pm.Settings.DatabaseVersion;
@@ -2637,10 +2638,11 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         SystemConfig systemConfig = SystemConfig.getInstance();
-        ArraySet<String> packages = systemConfig.getLinkedApps();
+        ArraySet<AppLink> links = systemConfig.getLinkedApps();
         ArraySet<String> domains = new ArraySet<String>();
 
-        for (String packageName : packages) {
+        for (AppLink link : links) {
+            String packageName = link.pkgname;
             PackageParser.Package pkg = mPackages.get(packageName);
             if (pkg != null) {
                 if (!pkg.isSystemApp()) {
@@ -2665,11 +2667,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                     // state w.r.t. the formal app-linkage "no verification attempted" state;
                     // and then 'always' in the per-user state actually used for intent resolution.
                     final IntentFilterVerificationInfo ivi;
-                    ivi = mSettings.createIntentFilterVerificationIfNeededLPw(packageName,
-                            new ArrayList<String>(domains));
+                    ivi = mSettings.createIntentFilterVerificationIfNeededLPw(
+                            packageName, new ArrayList<String>(domains));
                     ivi.setStatus(INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED);
-                    mSettings.updateIntentFilterVerificationStatusLPw(packageName,
-                            INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS, userId);
+                    mSettings.updateIntentFilterVerificationStatusLPw(
+                            packageName, link.state, userId);
                 } else {
                     Slog.w(TAG, "Sysconfig <app-link> package '" + packageName
                             + "' does not handle web links");
@@ -17302,7 +17304,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         //If this component is launched from the system or a uid of a protected component, allow it.
         boolean fromProtectedComponentUid = false;
         for (String protectedComponentManager : protectedComponentManagers) {
-            if (callingUid == getPackageUid(protectedComponentManager, userId)) {
+            int packageUid = getPackageUid(protectedComponentManager, userId);
+            if (packageUid != -1 && callingUid == packageUid) {
                 fromProtectedComponentUid = true;
             }
         }
