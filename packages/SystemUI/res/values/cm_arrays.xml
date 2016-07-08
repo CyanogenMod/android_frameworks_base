@@ -62,6 +62,7 @@
         <item>@string/dynamic_qs_tile_su_label</item>
         <item>@string/dynamic_qs_tile_adb_label</item>
         <item>@string/dynamic_qs_tile_live_display_label</item>
+        <item>@string/dynamic_qs_tile_themes_label</item>
     </string-array>
     <string-array name="dynamic_qs_tiles_icons_resources_ids" translatable="false">
         <item>ic_dynamic_qs_next_alarm</item>
@@ -69,6 +70,7 @@
         <item>ic_dynamic_qs_su</item>
         <item>ic_dynamic_qs_adb</item>
         <item>ic_dynamic_qs_live_display</item>
+        <item>ic_dynamic_qs_themes</item>
     </string-array>
     <string-array name="dynamic_qs_tiles_values" translatable="false">
         <item>next_alarm</item>
@@ -76,6 +78,7 @@
         <item>su</item>
         <item>adb</item>
         <item>live_display</item>
+        <item>themes</item>
     </string-array>
 
     <array name="dockbatterymeter_bolt_points" translatable="false">
