@@ -18,10 +18,14 @@ package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.android.systemui.DejankUtils;
@@ -32,6 +36,19 @@ public class PhoneStatusBarView extends PanelBar {
     private static final String TAG = "PhoneStatusBarView";
     private static final boolean DEBUG = PhoneStatusBar.DEBUG;
     private static final boolean DEBUG_GESTURES = false;
+
+    private int mHorizontalShift = 0;
+    private int mVerticalShift = 0;
+    private int mHorizontalDirection = 1;
+    private int mVerticalDirection = 1;
+    private int mBasePaddingBottom;
+    private int mBasePaddingLeft;
+    private int mBasePaddingRight;
+    private int mBasePaddingTop;
+    private int mHorizontalMaxShift = getContext().getResources().getDimensionPixelSize(R.dimen.horizontal_max_swift);
+    // total of ((vertical_max_swift - 1) * 2) pixels can be moved
+    private int mVerticalMaxShift = getContext().getResources().getDimensionPixelSize(R.dimen.vertical_max_swift) - 1;
+    ViewGroup mStatusBarContents;
 
     PhoneStatusBar mBar;
 
@@ -67,9 +84,63 @@ public class PhoneStatusBarView extends PanelBar {
         mScrimController = scrimController;
     }
 
+    public void swiftStatusBarItems()
+    {
+        if (mStatusBarContents == null)
+            return;
+
+        mHorizontalShift += mHorizontalDirection;
+        if ((mHorizontalShift >=  mHorizontalMaxShift) ||
+            (mHorizontalShift <= -mHorizontalMaxShift))
+            mHorizontalDirection *= -1;
+
+        mVerticalShift += mVerticalDirection;
+        if ((mVerticalShift >=  mVerticalMaxShift) ||
+            (mVerticalShift <= -mVerticalMaxShift))
+            mVerticalDirection *= -1;
+
+        mStatusBarContents.setPaddingRelative(mBasePaddingLeft   + mHorizontalShift,
+                                              mBasePaddingTop    + mVerticalShift,
+                                              mBasePaddingRight  + mHorizontalShift,
+                                              mBasePaddingBottom - mVerticalShift);
+        invalidate();
+    }
+
+    private Handler mSwiftHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            clearSwiftHandlerCallbacks();
+            mSwiftHandler.postDelayed(mRunnable, 30 * 1000);
+            swiftStatusBarItems();
+        }
+    };
+
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mSwiftHandler.sendEmptyMessage(0);
+        }
+    };
+
+    public boolean shouldEnableSwift() {
+        return SystemProperties.getBoolean("ro.systemui.burn_in_protection", false);
+    }
+    public void initSwiftHandlerCallbacks() {
+        mSwiftHandler.postDelayed(mRunnable, 0);
+    }
+    public void clearSwiftHandlerCallbacks() {
+        mSwiftHandler.removeCallbacks(mRunnable);
+        mSwiftHandler.removeMessages(0);
+    }
+
     @Override
     public void onFinishInflate() {
         mBarTransitions.init();
+        mStatusBarContents = ((ViewGroup)findViewById(R.id.status_bar_contents));
+        mBasePaddingLeft   = mStatusBarContents.getPaddingStart();
+        mBasePaddingTop    = mStatusBarContents.getPaddingTop();
+        mBasePaddingRight  = mStatusBarContents.getPaddingEnd();
+        mBasePaddingBottom = mStatusBarContents.getPaddingBottom();
     }
 
     @Override
