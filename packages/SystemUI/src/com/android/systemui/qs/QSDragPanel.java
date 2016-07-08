@@ -1953,6 +1953,7 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                 if (split != null && split.length > 2) {
                     return split[1];
                 }
+                return spec;
             }
             return null;
         }
@@ -1967,15 +1968,15 @@ public class QSDragPanel extends QSPanel implements View.OnDragListener, View.On
                     /** for {@link cyanogenmod.app.StatusBarPanelCustomTile#persistableKey()} **/
                     return split[2];
                 }
+                return spec;
             }
             return null;
         }
 
         private Drawable getQSTileIcon(String spec) {
-            if (QSUtils.isDynamicQsTile(spec)) {
-                return QSTile.ResourceIcon.get(
-                        QSUtils.getDynamicQSTileResIconId(mContext, UserHandle.myUserId(), spec))
-                        .getDrawable(mContext);
+            if (QSUtils.isDynamicQsTile(extractTileTagFromSpec(spec))) {
+                return QSTile.ResourceIcon.get(QSUtils.getDynamicQSTileResIconId(mContext,
+                        UserHandle.myUserId(), extractTileTagFromSpec(spec))).getDrawable(mContext);
             } else if (QSUtils.isStaticQsTile(spec)) {
                 final int res = QSTileHost.getIconResource(spec);
                 if (res != 0) {
