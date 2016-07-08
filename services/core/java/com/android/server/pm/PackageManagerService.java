@@ -9446,12 +9446,15 @@ public class PackageManagerService extends IPackageManager.Stub {
             mFlags = flags;
             List<ResolveInfo> list = super.queryIntent(intent, resolvedType,
                     (flags & PackageManager.MATCH_DEFAULT_ONLY) != 0, userId);
-            // Remove protected Application components
+            // Remove protected Application components if they're explicitly queried for.
+            // Implicit intent queries will be gated when the returned component is acted upon.
             int callingUid = Binder.getCallingUid();
             String[] pkgs = getPackagesForUid(callingUid);
             List<String> packages = (pkgs != null) ? Arrays.asList(pkgs) : Collections.EMPTY_LIST;
-            if (callingUid != Process.SYSTEM_UID &&
-                    (getFlagsForUid(callingUid) & ApplicationInfo.FLAG_SYSTEM) == 0) {
+            final boolean isNotSystem = callingUid != Process.SYSTEM_UID &&
+                    (getFlagsForUid(callingUid) & ApplicationInfo.FLAG_SYSTEM) == 0;
+
+            if (isNotSystem && intent.getComponent() != null) {
                Iterator<ResolveInfo> itr = list.iterator();
                 while (itr.hasNext()) {
                     ActivityInfo activityInfo = itr.next().activityInfo;
