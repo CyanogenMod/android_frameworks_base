@@ -25,6 +25,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
 import android.app.AppGlobals;
@@ -3901,7 +3902,10 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         if (!mHasFeature) {
             return false;
         }
-        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USERS, null);
+        if (ActivityManager.checkComponentPermission(android.Manifest.permission.CREATE_USERS,
+              Binder.getCallingUid(), -1, true) == PackageManager.PERMISSION_DENIED) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.MANAGE_USERS, null);
+        }
 
         UserInfo info = mUserManager.getUserInfo(userHandle);
         if (info == null) {
