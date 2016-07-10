@@ -50,6 +50,7 @@ enum {
     TRANSACTION_isExternalStorageEmulated,
     TRANSACTION_decryptStorage,
     TRANSACTION_encryptStorage,
+    TRANSACTION_encryptWipeStorage = IBinder::FIRST_CALL_TRANSACTION + 72,
 };
 
 class BpMountService: public BpInterface<IMountService>
@@ -547,6 +548,23 @@ public:
         int32_t err = reply.readExceptionCode();
         if (err < 0) {
             ALOGD("encryptStorage caught exception %d\n", err);
+            return err;
+        }
+        return reply.readInt32();
+    }
+
+    int32_t encryptWipeStorage(const String16& password)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IMountService::getInterfaceDescriptor());
+        data.writeString16(password);
+        if (remote()->transact(TRANSACTION_encryptWipeStorage, data, &reply) != NO_ERROR) {
+            ALOGD("encryptWipeStorage could not contact remote\n");
+            return -1;
+        }
+        int32_t err = reply.readExceptionCode();
+        if (err < 0) {
+            ALOGD("encryptWipeStorage caught exception %d\n", err);
             return err;
         }
         return reply.readInt32();
