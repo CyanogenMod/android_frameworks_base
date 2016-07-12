@@ -136,4 +136,11 @@ interface IVoiceInteractionManagerService {
      * Called when the lockscreen got shown.
      */
     void onLockscreenShown();
+
+
+    /**
+     *    @hide
+     */
+    IVoiceInteractor requestCurrentSession(in Bundle args, int sourceFlags,
+                    IVoiceInteractionSessionShowCallback showCallback,IBinder token);
 }

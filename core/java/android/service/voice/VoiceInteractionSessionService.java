@@ -119,6 +119,9 @@ public abstract class VoiceInteractionSessionService extends Service {
             mSession.doDestroy();
             mSession = null;
         }
+        if (args == null) {
+            args = new Bundle();
+        }
         mSession = onNewSession(args);
         try {
             mSystemService.deliverNewSession(token, mSession.mSession, mSession.mInteractor);
