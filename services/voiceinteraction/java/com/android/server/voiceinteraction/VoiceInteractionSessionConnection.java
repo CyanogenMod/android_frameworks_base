@@ -201,10 +201,13 @@ final class VoiceInteractionSessionConnection implements ServiceConnection {
             IVoiceInteractionSessionShowCallback showCallback, IBinder activityToken) {
         if (mBound) {
             if (!mFullyBound) {
-                mFullyBound = mContext.bindServiceAsUser(mBindIntent, mFullConnection,
+                /*mFullyBound = mContext.bindServiceAsUser(mBindIntent, mFullConnection,
                         Context.BIND_AUTO_CREATE | Context.BIND_TREAT_LIKE_ACTIVITY
                                 | Context.BIND_FOREGROUND_SERVICE,
-                        new UserHandle(mUser));
+                        new UserHandle(mUser)); */
+                mFullyBound =
+                        mContext.bindService(mBindIntent, mFullConnection,
+                                Context.BIND_AUTO_CREATE | Context.BIND_FOREGROUND_SERVICE);
             }
             mShown = true;
             boolean isAssistDataAllowed = true;
@@ -426,6 +429,7 @@ final class VoiceInteractionSessionConnection implements ServiceConnection {
                 try {
                     mSession.destroy();
                 } catch (RemoteException e) {
+                    e.printStackTrace();
                     Slog.w(TAG, "Voice interation session already dead");
                 }
             }
