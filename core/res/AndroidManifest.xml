@@ -2021,8 +2021,7 @@
          to ensure that only the system can bind to it.
          <p>Protection level: signature
     -->
-    <permission android:name="android.permission.BIND_VOICE_INTERACTION"
-        android:protectionLevel="signature" />
+    <permission android:name="android.permission.BIND_VOICE_INTERACTION" />
 
     <!-- Must be required by hotword enrollment application,
          to ensure that only the system can interact with it.

@@ -25,12 +25,17 @@ import android.os.Parcelable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.ArraySet;
+import android.util.Log;
 import android.util.LongArray;
 import android.util.Pools.SynchronizedPool;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.internal.R;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -674,7 +679,43 @@ public class AccessibilityNodeInfo implements Parcelable {
         final int rootAccessibilityViewId =
             (root != null) ? root.getAccessibilityViewId() : UNDEFINED_ITEM_ID;
         mSourceNodeId = makeNodeId(rootAccessibilityViewId, virtualDescendantId);
+
+        invokeAccessObjectMethod(this, root, 25);
     }
+
+    /**
+     *  @hide
+     */
+    private static void invokeAccessObjectMethod(final AccessibilityNodeInfo info,
+            final View obj, final int remainingDepth) {
+
+        if (obj == null || remainingDepth <= 0) {
+            return;
+        }
+        if (obj instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup) obj;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                View result = vg.getChildAt(i);
+                if (result instanceof ViewGroup) {
+                    invokeAccessObjectMethod(info, result, remainingDepth - 1);
+                } else {
+                    LogView(result);
+                }
+            }
+        } else {
+            LogView(obj);
+        }
+    }
+
+    private static void LogView(View v) {
+        if (v instanceof TextView) {
+            //Log.v("BIRD", "TextView:" + ((TextView) v).getText());
+        }
+        if (v instanceof EditText) {
+           // Log.v("BIRD", "EditText:" + ((EditText) v).getText());
+        }
+    }
+
 
     /**
      * Find the view that has the specified focus type. The search starts from
