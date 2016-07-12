@@ -195,7 +195,7 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">Lokasjonsmodus endret til bare sensorer.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Lokasjonsmodus endret til høy nøyaktighet.</string>
-  <string name="quick_settings_tiles_category_system">Systemet fliser</string>
+  <string name="quick_settings_tiles_category_system">Systemfliser</string>
   <!-- detail header when adding a tile -->
   <string name="quick_settings_tiles_add_tiles">Legge til en flis</string>
   <!-- Hotspot dialog message -->
