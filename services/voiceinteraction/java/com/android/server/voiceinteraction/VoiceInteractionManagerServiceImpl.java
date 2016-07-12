@@ -36,6 +36,7 @@ import android.service.voice.IVoiceInteractionService;
 import android.service.voice.IVoiceInteractionSession;
 import android.service.voice.VoiceInteractionService;
 import android.service.voice.VoiceInteractionServiceInfo;
+import android.service.voice.VoiceInteractionSession;
 import android.util.PrintWriterPrinter;
 import android.util.Slog;
 import android.view.IWindowManager;
@@ -150,6 +151,20 @@ class VoiceInteractionManagerServiceImpl implements VoiceInteractionSessionConne
         }
         return mActiveSession.showLocked(args, flags, mDisabledShowContext, showCallback,
                 activityToken);
+    }
+
+    /*
+     * @hide
+     */
+    public VoiceInteractionSessionConnection setActiveSession(Bundle args, int flags,
+            IVoiceInteractionSessionShowCallback showCallback, IBinder token) {
+        if (mActiveSession == null) {
+            mActiveSession = new VoiceInteractionSessionConnection(mLock, mSessionComponentName,
+                    mUser, mContext, this, mInfo.getServiceInfo().applicationInfo.uid, mHandler);
+        }
+        mActiveSession.showLocked(new Bundle(), VoiceInteractionSession.SHOW_WITH_ASSIST,
+                mDisabledShowContext, null, token);
+        return mActiveSession;
     }
 
     public boolean hideSessionLocked() {

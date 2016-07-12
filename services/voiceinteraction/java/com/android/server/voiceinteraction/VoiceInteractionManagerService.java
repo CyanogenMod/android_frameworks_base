@@ -915,6 +915,29 @@ public class VoiceInteractionManagerService extends SystemService {
             }
         }
 
+
+        @Override
+        public IVoiceInteractor requestCurrentSession(Bundle args, int sourceFlags,
+                IVoiceInteractionSessionShowCallback showCallback,
+                IBinder token) throws RemoteException {
+            if (mImpl != null
+                    && mContext.checkCallingOrSelfPermission(Manifest.permission.BIND_VOICE_INTERACTION) == PackageManager.PERMISSION_GRANTED) {
+                Log.v("BIRD", "feels good man");
+                VoiceInteractionSessionConnection visc = mImpl.setActiveSession(args, sourceFlags
+                        , showCallback, token);
+                if (visc != null) {
+                    Log.v("BIRD", "feels real good man");
+                    return visc.mInteractor;
+                } else {
+                    Log.v("BIRD", "feels real sad man");
+                    return null;
+                }
+            } else {
+                Log.v("BIRD", "feels bad man");
+                return null;
+            }
+        }
+
         @Override
         public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
             if (mContext.checkCallingOrSelfPermission(Manifest.permission.DUMP)
