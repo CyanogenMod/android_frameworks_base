@@ -129,6 +129,7 @@ public class VoiceInteractionSession implements KeyEvent.Callback, ComponentCall
     final WeakReference<VoiceInteractionSession> mWeakRef
             = new WeakReference<VoiceInteractionSession>(this);
 
+
     final IVoiceInteractor mInteractor = new IVoiceInteractor.Stub() {
         @Override
         public IVoiceInteractorRequest startConfirmation(String callingPackage,
