@@ -26,12 +26,18 @@ import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.annotation.StyleRes;
 import android.os.PersistableBundle;
+import android.os.ServiceManager;
+import android.service.voice.VoiceInteractionSession;
+import android.service.voice.VoiceInteractionSessionService;
 import android.transition.Scene;
 import android.transition.TransitionManager;
 import android.util.ArrayMap;
 import android.util.SuperNotCalledException;
+import android.voice.VoiceManager;
 import android.widget.Toolbar;
 
+import com.android.internal.app.IVoiceInteractionManagerService;
+import com.android.internal.app.IVoiceInteractionSessionShowCallback;
 import com.android.internal.app.IVoiceInteractor;
 import com.android.internal.app.WindowDecorActionBar;
 import com.android.internal.app.ToolbarActionBar;
@@ -748,6 +754,7 @@ public class Activity extends ContextThemeWrapper
     private boolean mEnableDefaultActionBarUp;
 
     private VoiceInteractor mVoiceInteractor;
+    private Boolean isPreCreatedVoiceInteractor = false;
 
     private CharSequence mTitle;
     private int mTitleColor = 0;
@@ -1237,9 +1244,12 @@ public class Activity extends ContextThemeWrapper
      * Check whether this activity is running as part of a voice interaction with the user.
      * If true, it should perform its interaction with the user through the
      * {@link VoiceInteractor} returned by {@link #getVoiceInteractor}.
+     *
+     * Please note: This is only for actions that were given a voice interactor at launch, other
+     * activities can get a voiceInteractor without this.
      */
     public boolean isVoiceInteraction() {
-        return mVoiceInteractor != null;
+        return isPreCreatedVoiceInteractor;
     }
 
     /**
@@ -6179,6 +6189,27 @@ public class Activity extends ContextThemeWrapper
         mParent = parent;
     }
 
+
+    private class VoiceCallback implements IVoiceInteractionSessionShowCallback {
+
+        @Override
+        public void onFailed() throws RemoteException {
+            Log.v("BIRD", "failed");
+
+        }
+
+        @Override
+        public void onShown() throws RemoteException {
+            Log.v("BIRD", "shown");
+        }
+
+        @Override
+        public IBinder asBinder() {
+            Log.v("BIRD", "binded");
+            return null;
+        }
+    }
+
     final void attach(Context context, ActivityThread aThread,
             Instrumentation instr, IBinder token, int ident,
             Application application, Intent intent, ActivityInfo info,
@@ -6187,6 +6218,7 @@ public class Activity extends ContextThemeWrapper
             Configuration config, String referrer, IVoiceInteractor voiceInteractor) {
         attachBaseContext(context);
 
+        Log.v("BIRD", "got attach", new Exception());
         mFragments.attachHost(null /*parent*/);
 
         mWindow = new PhoneWindow(this);
@@ -6221,6 +6253,11 @@ public class Activity extends ContextThemeWrapper
                 mVoiceInteractor = new VoiceInteractor(voiceInteractor, this, this,
                         Looper.myLooper());
             }
+            isPreCreatedVoiceInteractor = true;
+        } else {
+            VoiceManager manager = (VoiceManager) context
+                    .getSystemService(Context.VOICE_INTERACTION_MANAGER_SERVICE);
+            mVoiceInteractor = manager.getVoiceInteractorSession(getActivityToken(), this);
         }
 
         mWindow.setWindowManager(

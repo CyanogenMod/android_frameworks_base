@@ -889,6 +889,16 @@ public final class VoiceInteractor {
         mHandlerCaller = new HandlerCaller(context, looper, mHandlerCallerCallback, true);
     }
 
+    /**
+     * @hide
+     */
+    public VoiceInteractor(IVoiceInteractor interactor, Activity activity, Looper looper) {
+        mInteractor = interactor;
+        mContext = activity;
+        mActivity = activity;
+        mHandlerCaller = new HandlerCaller(mContext, looper, mHandlerCallerCallback, true);
+    }
+
     Request pullRequest(IVoiceInteractorRequest request, boolean complete) {
         synchronized (mActiveRequests) {
             Request req = mActiveRequests.get(request.asBinder());

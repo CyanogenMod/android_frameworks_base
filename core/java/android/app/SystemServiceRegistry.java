@@ -17,6 +17,7 @@
 package android.app;
 
 import com.android.internal.app.IAppOpsService;
+import com.android.internal.app.IVoiceInteractionManagerService;
 import com.android.internal.appwidget.IAppWidgetService;
 import com.android.internal.os.IDropBoxManagerService;
 
@@ -116,6 +117,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.CaptioningManager;
 import android.view.inputmethod.InputMethodManager;
 import android.view.textservice.TextServicesManager;
+import android.voice.VoiceManager;
 
 import java.util.HashMap;
 
@@ -706,6 +708,16 @@ final class SystemServiceRegistry {
             public RadioManager createService(ContextImpl ctx) {
                 return new RadioManager(ctx);
             }});
+
+        registerService(Context.VOICE_INTERACTION_MANAGER_SERVICE, VoiceManager.class,
+                new CachedServiceFetcher<VoiceManager>() {
+                    @Override
+                    public VoiceManager createService(ContextImpl ctx) {
+                        IBinder iBinder = ServiceManager.getService(Context.VOICE_INTERACTION_MANAGER_SERVICE);
+                        IVoiceInteractionManagerService service = IVoiceInteractionManagerService.Stub.asInterface(iBinder);
+                        return new VoiceManager(ctx, service, iBinder);
+                    }});
+
     }
 
     /**
