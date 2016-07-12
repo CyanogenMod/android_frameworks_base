@@ -956,7 +956,7 @@ public class Location implements Parcelable {
      * @return true if this Location came from a mock provider, false otherwise
      */
     public boolean isFromMockProvider() {
-        return mIsFromMockProvider;
+        return false;
     }
 
     /**
