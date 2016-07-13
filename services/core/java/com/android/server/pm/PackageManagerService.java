@@ -7481,6 +7481,25 @@ public class PackageManagerService extends IPackageManager.Stub {
         KeySetManagerService ksms = mSettings.mKeySetManagerService;
         ksms.assertScannedPackageValid(pkg);
 
+        // Get the current theme config. We do this outside the lock
+        // since ActivityManager might be waiting on us already
+        // and a deadlock would result.
+        final boolean isBootScan = (scanFlags & SCAN_BOOTING) != 0;
+        ThemeConfig config = mBootThemeConfig;
+        if (!isBootScan) {
+            final IActivityManager am = ActivityManagerNative.getDefault();
+            try {
+                if (am != null) {
+                    config = am.getConfiguration().themeConfig;
+                } else {
+                    Log.w(TAG, "ActivityManager getDefault() " +
+                            "returned null, cannot compile app's theme");
+                }
+            } catch(RemoteException e) {
+                Log.w(TAG, "Failed to get the theme config from ActivityManager");
+            }
+        }
+
         // writer
         synchronized (mPackages) {
             // We don't expect installation to fail beyond this point
@@ -7828,7 +7847,6 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             pkgSetting.setTimeStamp(scanFileTime);
 
-            final boolean isBootScan = (scanFlags & SCAN_BOOTING) != 0;
             // Generate resources & idmaps if pkg is NOT a theme
             // We must compile resources here because during the initial boot process we may get
             // here before a default theme has had a chance to compile its resources
@@ -7836,21 +7854,6 @@ public class PackageManagerService extends IPackageManager.Stub {
             // in background)
             if (pkg.mOverlayTargets.isEmpty() && mOverlays.containsKey(pkg.packageName)) {
                 ArrayMap<String, PackageParser.Package> themes = mOverlays.get(pkg.packageName);
-
-                final IActivityManager am = ActivityManagerNative.getDefault();
-                ThemeConfig themeConfig = null;
-                try {
-                    if (am != null) {
-                        themeConfig = am.getConfiguration().themeConfig;
-                    } else {
-                        Log.e(TAG, "ActivityManager getDefault() " +
-                                "returned null, cannot compile app's theme");
-                    }
-                } catch(RemoteException e) {
-                    Log.e(TAG, "Failed to get the theme config ", e);
-                }
-
-                ThemeConfig config = isBootScan ? mBootThemeConfig : themeConfig;
 
                 if (config != null) {
                     for(PackageParser.Package themePkg : themes.values()) {
