@@ -17,7 +17,6 @@
 
 package com.android.server.pm;
 
-import static android.Manifest.permission.ACCESS_THEME_MANAGER;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_MEDIA_STORAGE;
@@ -92,6 +91,7 @@ import android.content.res.Configuration;
 
 import android.Manifest;
 
+import cyanogenmod.app.CMContextConstants;
 import cyanogenmod.app.suggest.AppSuggestManager;
 
 import android.app.ActivityManager;
@@ -156,14 +156,12 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
 import android.content.pm.UserInfo;
 import android.content.pm.ManifestDigest;
-import android.content.pm.ThemeUtils;
 import android.content.pm.VerificationParams;
 import android.content.pm.VerifierDeviceIdentity;
 import android.content.pm.VerifierInfo;
 import android.content.res.Resources;
 import android.content.res.AssetManager;
 import android.content.res.ThemeConfig;
-import android.content.res.ThemeManager;
 import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Debug;
@@ -222,6 +220,8 @@ import android.util.Xml;
 import android.view.Display;
 
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.themes.IThemeService;
+
 import dalvik.system.DexFile;
 import dalvik.system.VMRuntime;
 
@@ -248,12 +248,14 @@ import com.android.server.IntentResolver;
 import com.android.server.LocalServices;
 import com.android.server.ServiceThread;
 import com.android.server.SystemConfig;
+import com.android.server.SystemConfig.AppLink;
 import com.android.server.Watchdog;
 import com.android.server.pm.PermissionsState.PermissionState;
 import com.android.server.pm.Settings.DatabaseVersion;
 import com.android.server.pm.Settings.VersionInfo;
 import com.android.server.storage.DeviceStorageMonitorInternal;
 
+import org.cyanogenmod.internal.util.ThemeUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
@@ -303,8 +305,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  * Keep track of all those .apks everywhere.
@@ -1465,7 +1465,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                             }
                             String category = null;
                             if(res.pkg.mIsThemeApk) {
-                                category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                                category = cyanogenmod.content.Intent
+                                        .CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
                             }
                             sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED,
                                     packageName, null, extras, null, null, updateUsers);
@@ -1491,6 +1492,17 @@ public class PackageManagerService extends IPackageManager.Stub {
                             // if this was a theme, send it off to the theme service for processing
                             if(res.pkg.mIsThemeApk || res.pkg.mIsLegacyIconPackApk) {
                                 processThemeResourcesInThemeService(res.pkg.packageName);
+                            } else if (mOverlays.containsKey(res.pkg.packageName)) {
+
+                                // if this was an app and is themed send themes that theme it
+                                // for processing
+                                ArrayMap<String, PackageParser.Package> themes =
+                                        mOverlays.get(res.pkg.packageName);
+
+                                for (PackageParser.Package themePkg : themes.values()) {
+                                    processThemeResourcesInThemeService(themePkg.packageName);
+                                }
+
                             }
                             if (res.removedInfo.args != null) {
                                 // Remove the replaced package's older resources safely now
@@ -1899,7 +1911,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         mContext = context;
         mFactoryTest = factoryTest;
         mOnlyCore = onlyCore;
-        mLazyDexOpt = "eng".equals(SystemProperties.get("ro.build.type"));
+        mLazyDexOpt = "eng".equals(SystemProperties.get("ro.build.type")) ||
+                ("userdebug".equals(SystemProperties.get("ro.build.type")) &&
+                SystemProperties.getBoolean("persist.sys.lazy.dexopt", false));
         mMetrics = new DisplayMetrics();
         mSettings = new Settings(mPackages);
         mSettings.addSharedUserLPw("android.uid.system", Process.SYSTEM_UID,
@@ -2624,10 +2638,11 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         SystemConfig systemConfig = SystemConfig.getInstance();
-        ArraySet<String> packages = systemConfig.getLinkedApps();
+        ArraySet<AppLink> links = systemConfig.getLinkedApps();
         ArraySet<String> domains = new ArraySet<String>();
 
-        for (String packageName : packages) {
+        for (AppLink link : links) {
+            String packageName = link.pkgname;
             PackageParser.Package pkg = mPackages.get(packageName);
             if (pkg != null) {
                 if (!pkg.isSystemApp()) {
@@ -2652,11 +2667,11 @@ public class PackageManagerService extends IPackageManager.Stub {
                     // state w.r.t. the formal app-linkage "no verification attempted" state;
                     // and then 'always' in the per-user state actually used for intent resolution.
                     final IntentFilterVerificationInfo ivi;
-                    ivi = mSettings.createIntentFilterVerificationIfNeededLPw(packageName,
-                            new ArrayList<String>(domains));
+                    ivi = mSettings.createIntentFilterVerificationIfNeededLPw(
+                            packageName, new ArrayList<String>(domains));
                     ivi.setStatus(INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_UNDEFINED);
-                    mSettings.updateIntentFilterVerificationStatusLPw(packageName,
-                            INTENT_FILTER_DOMAIN_VERIFICATION_STATUS_ALWAYS, userId);
+                    mSettings.updateIntentFilterVerificationStatusLPw(
+                            packageName, link.state, userId);
                 } else {
                     Slog.w(TAG, "Sysconfig <app-link> package '" + packageName
                             + "' does not handle web links");
@@ -4699,9 +4714,14 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     private boolean shouldIncludeResolveActivity(Intent intent) {
+        // Don't call into AppSuggestManager before it comes up later in the SystemServer init!
+        if (!mSystemReady) {
+            return false;
+        }
         synchronized(mPackages) {
             AppSuggestManager suggest = AppSuggestManager.getInstance(mContext);
-            return mResolverReplaced && (suggest != null) ? suggest.handles(intent) : false;
+            return mResolverReplaced && (suggest.getService() != null) ?
+                    suggest.handles(intent) : false;
         }
     }
 
@@ -7461,6 +7481,25 @@ public class PackageManagerService extends IPackageManager.Stub {
         KeySetManagerService ksms = mSettings.mKeySetManagerService;
         ksms.assertScannedPackageValid(pkg);
 
+        // Get the current theme config. We do this outside the lock
+        // since ActivityManager might be waiting on us already
+        // and a deadlock would result.
+        final boolean isBootScan = (scanFlags & SCAN_BOOTING) != 0;
+        ThemeConfig config = mBootThemeConfig;
+        if (!isBootScan) {
+            final IActivityManager am = ActivityManagerNative.getDefault();
+            try {
+                if (am != null) {
+                    config = am.getConfiguration().themeConfig;
+                } else {
+                    Log.w(TAG, "ActivityManager getDefault() " +
+                            "returned null, cannot compile app's theme");
+                }
+            } catch(RemoteException e) {
+                Log.w(TAG, "Failed to get the theme config from ActivityManager");
+            }
+        }
+
         // writer
         synchronized (mPackages) {
             // We don't expect installation to fail beyond this point
@@ -7808,26 +7847,29 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             pkgSetting.setTimeStamp(scanFileTime);
 
-            final boolean isBootScan = (scanFlags & SCAN_BOOTING) != 0;
             // Generate resources & idmaps if pkg is NOT a theme
             // We must compile resources here because during the initial boot process we may get
             // here before a default theme has had a chance to compile its resources
+            // During app installation we only compile applied theme here (rest will be compiled
+            // in background)
             if (pkg.mOverlayTargets.isEmpty() && mOverlays.containsKey(pkg.packageName)) {
                 ArrayMap<String, PackageParser.Package> themes = mOverlays.get(pkg.packageName);
-                for(PackageParser.Package themePkg : themes.values()) {
-                    if (!isBootScan || (mBootThemeConfig != null &&
-                            (themePkg.packageName.equals(mBootThemeConfig.getOverlayPkgName()) ||
+
+                if (config != null) {
+                    for(PackageParser.Package themePkg : themes.values()) {
+                        if (themePkg.packageName.equals(config.getOverlayPkgName()) ||
                             themePkg.packageName.equals(
-                                    mBootThemeConfig.getOverlayPkgNameForApp(pkg.packageName))))) {
-                        try {
-                            compileResourcesAndIdmapIfNeeded(pkg, themePkg);
-                        } catch (Exception e) {
-                            // Do not stop a pkg installation just because of one bad theme
-                            // Also we don't break here because we should try to compile other
-                            // themes
-                            Slog.w(TAG, "Unable to compile " + themePkg.packageName
-                                    + " for target " + pkg.packageName, e);
-                            themePkg.mOverlayTargets.remove(pkg.packageName);
+                                     config.getOverlayPkgNameForApp(pkg.packageName))) {
+                            try {
+                                compileResourcesAndIdmapIfNeeded(pkg, themePkg);
+                            } catch (Exception e) {
+                                // Do not stop a pkg installation just because of one bad theme
+                                // Also we don't break here because we should try to compile other
+                                // themes
+                                Slog.w(TAG, "Unable to compile " + themePkg.packageName
+                                        + " for target " + pkg.packageName, e);
+                                themePkg.mOverlayTargets.remove(pkg.packageName);
+                            }
                         }
                     }
                 }
@@ -7861,10 +7903,22 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
 
                     if (failedException != null) {
-                        Slog.w(TAG, "Unable to process theme " + pkgName + " for " + target,
-                                failedException);
-                        // remove target from mOverlayTargets
-                        iterator.remove();
+                        if (failedException instanceof AaptException &&
+                                ((AaptException) failedException).isCommon) {
+                            Slog.e(TAG, "Unable to process common resources for " + pkgName +
+                                    ", uninstalling theme.", failedException);
+                            uninstallThemeForAllApps(pkg);
+                            deletePackageLI(pkg.packageName, null, true, null, null, 0, null,
+                                    false);
+                            throw new PackageManagerException(
+                                    PackageManager.INSTALL_FAILED_THEME_AAPT_ERROR,
+                                    "Unable to process theme " + pkgName, failedException);
+                        } else {
+                            Slog.w(TAG, "Unable to process theme " + pkgName + " for " + target,
+                                    failedException);
+                            // remove target from mOverlayTargets
+                            iterator.remove();
+                        }
                     }
                 }
             }
@@ -8237,8 +8291,15 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     public class AaptException extends Exception {
+        boolean isCommon;
+
         public AaptException(String message) {
+            this(message, false);
+        }
+
+        public AaptException(String message, boolean isCommon) {
             super(message);
+            this.isCommon = isCommon;
         }
     }
 
@@ -8264,25 +8325,29 @@ public class PackageManagerService extends IPackageManager.Stub {
         String internalPath = APK_PATH_TO_OVERLAY + target + File.separator;
         String resPath = ThemeUtils.getTargetCacheDir(target, pkg);
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
+        final boolean isCommonResources = COMMON_OVERLAY.equals(target);
         int pkgId;
         if ("android".equals(target)) {
             pkgId = Resources.THEME_FRAMEWORK_PKG_ID;
-        } else if (COMMON_OVERLAY.equals(target)) {
+        } else if ("cyanogenmod.platform".equals(target)) {
+            pkgId = Resources.THEME_CM_PKG_ID;
+        } else if (isCommonResources) {
             pkgId = Resources.THEME_COMMON_PKG_ID;
         } else {
             pkgId = Resources.THEME_APP_PKG_ID;
         }
 
-        boolean hasCommonResources = (hasCommonResources(pkg) && !COMMON_OVERLAY.equals(target));
+        boolean hasCommonResources = (hasCommonResources(pkg) && !isCommonResources);
         PackageParser.Package targetPkg = mPackages.get(target);
-        String appPath = targetPkg != null ? targetPkg.baseCodePath : "";
+        String appPath = targetPkg != null ? targetPkg.baseCodePath :
+                Environment.getRootDirectory() + "/framework/framework-res.apk";
 
         if (mInstaller.aapt(pkg.baseCodePath, internalPath, resPath, sharedGid, pkgId,
                 pkg.applicationInfo.targetSdkVersion,
                 appPath,
                 hasCommonResources ? ThemeUtils.getTargetCacheDir(COMMON_OVERLAY, pkg)
                         + File.separator + "resources.apk" : "") != 0) {
-            throw new AaptException("Failed to run aapt");
+            throw new AaptException("Failed to run aapt", isCommonResources);
         }
     }
 
@@ -9386,12 +9451,15 @@ public class PackageManagerService extends IPackageManager.Stub {
             mFlags = flags;
             List<ResolveInfo> list = super.queryIntent(intent, resolvedType,
                     (flags & PackageManager.MATCH_DEFAULT_ONLY) != 0, userId);
-            // Remove protected Application components
+            // Remove protected Application components if they're explicitly queried for.
+            // Implicit intent queries will be gated when the returned component is acted upon.
             int callingUid = Binder.getCallingUid();
             String[] pkgs = getPackagesForUid(callingUid);
             List<String> packages = (pkgs != null) ? Arrays.asList(pkgs) : Collections.EMPTY_LIST;
-            if (callingUid != Process.SYSTEM_UID &&
-                    (getFlagsForUid(callingUid) & ApplicationInfo.FLAG_SYSTEM) == 0) {
+            final boolean isNotSystem = callingUid != Process.SYSTEM_UID &&
+                    (getFlagsForUid(callingUid) & ApplicationInfo.FLAG_SYSTEM) == 0;
+
+            if (isNotSystem && intent.getComponent() != null) {
                Iterator<ResolveInfo> itr = list.iterator();
                 while (itr.hasNext()) {
                     ActivityInfo activityInfo = itr.next().activityInfo;
@@ -13544,7 +13612,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
                 String category = null;
                 if (info.isThemeApk) {
-                    category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                    category = cyanogenmod.content.Intent
+                            .CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
                 }
 
                 sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, packageName, category,
@@ -13589,7 +13658,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (removedPackage != null) {
                 String category = null;
                 if (isThemeApk) {
-                    category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                    category = cyanogenmod.content.Intent
+                            .CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
                 }
                 sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED, removedPackage, category,
                         extras, null, null, removedUsers);
@@ -17205,10 +17275,12 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     @Override
-    public boolean isComponentProtected(String callingPackage,
+    public boolean isComponentProtected(String callingPackage, int callingUid,
             ComponentName componentName, int userId) {
         if (DEBUG_PROTECTED) Log.d(TAG, "Checking if component is protected "
-                + componentName.flattenToShortString() + " from calling package " + callingPackage);
+                + componentName.flattenToShortString() + " from calling package " + callingPackage
+                + " and callinguid " + callingUid);
+
         enforceCrossUserPermission(Binder.getCallingUid(), userId, false, false, "set protected");
 
         //Allow managers full access
@@ -17229,8 +17301,24 @@ public class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
 
+        //If this component is launched from a validation component, allow it.
         if (TextUtils.equals(PROTECTED_APPS_TARGET_VALIDATION_COMPONENT,
-                componentName.flattenToString())) {
+                componentName.flattenToString()) && callingUid == Process.SYSTEM_UID) {
+            return false;
+        }
+
+        //If this component is launched from the system or a uid of a protected component, allow it.
+        boolean fromProtectedComponentUid = false;
+        for (String protectedComponentManager : protectedComponentManagers) {
+            int packageUid = getPackageUid(protectedComponentManager, userId);
+            if (packageUid != -1 && callingUid == packageUid) {
+                fromProtectedComponentUid = true;
+            }
+        }
+
+        if (TextUtils.equals(callingPackage, "android") && callingUid == Process.SYSTEM_UID
+                || callingPackage == null && fromProtectedComponentUid) {
+            if (DEBUG_PROTECTED) Log.d(TAG, "Calling package is android or manager, allow");
             return false;
         }
 
@@ -17703,8 +17791,11 @@ public class PackageManagerService extends IPackageManager.Stub {
     @Override
     public int processThemeResources(String themePkgName) {
         mContext.enforceCallingOrSelfPermission(
-                Manifest.permission.ACCESS_THEME_MANAGER, null);
-        PackageParser.Package pkg = mPackages.get(themePkgName);
+                cyanogenmod.platform.Manifest.permission.ACCESS_THEME_MANAGER, null);
+        PackageParser.Package pkg;
+        synchronized (mPackages) {
+            pkg = mPackages.get(themePkgName);
+        }
         if (pkg == null) {
             Log.w(TAG, "Unable to get pkg for processing " + themePkgName);
             return 0;
@@ -17725,11 +17816,15 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         // Generate Idmaps and res tables if pkg is a theme
         Iterator<String> iterator = pkg.mOverlayTargets.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             String target = iterator.next();
             Exception failedException = null;
+            PackageParser.Package targetPkg;
+            synchronized (mPackages) {
+                targetPkg = mPackages.get(target);
+            }
             try {
-                compileResourcesAndIdmapIfNeeded(mPackages.get(target), pkg);
+                compileResourcesAndIdmapIfNeeded(targetPkg, pkg);
             } catch (IdmapException e) {
                 failedException = e;
             } catch (AaptException e) {
@@ -17739,10 +17834,20 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
 
             if (failedException != null) {
-                Slog.w(TAG, "Unable to process theme " + pkg.packageName + " for " + target,
-                      failedException);
-                // remove target from mOverlayTargets
-                iterator.remove();
+                if (failedException instanceof AaptException &&
+                        ((AaptException) failedException).isCommon) {
+                    Slog.e(TAG, "Unable to process common resources for " + pkg.packageName +
+                            ", uninstalling theme.", failedException);
+                    uninstallThemeForAllApps(pkg);
+                    deletePackageX(pkg.packageName, getCallingUid(),
+                            PackageManager.DELETE_ALL_USERS);
+                    return PackageManager.INSTALL_FAILED_THEME_AAPT_ERROR;
+                } else {
+                    Slog.w(TAG, "Unable to process theme " + pkg.packageName + " for " + target,
+                            failedException);
+                    // remove target from mOverlayTargets
+                    iterator.remove();
+                }
             }
         }
 
@@ -17750,10 +17855,16 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     private void processThemeResourcesInThemeService(String pkgName) {
-        ThemeManager tm =
-                (ThemeManager) mContext.getSystemService(Context.THEME_SERVICE);
-        if (tm != null) {
-            tm.processThemeResources(pkgName);
+        IThemeService ts = IThemeService.Stub.asInterface(ServiceManager.getService(
+                CMContextConstants.CM_THEME_SERVICE));
+        if (ts == null) {
+            Slog.e(TAG, "Theme service not available");
+            return;
+        }
+        try {
+            ts.processThemeResources(pkgName);
+        } catch (RemoteException e) {
+            /* ignore */
         }
     }
 
@@ -17793,6 +17904,8 @@ public class PackageManagerService extends IPackageManager.Stub {
         for (String themePkgName : themesToProcess) {
             processThemeResources(themePkgName);
         }
+
+        updateIconMapping(themeConfig.getIconPackPkgName());
     }
 
     private void createAndSetCustomResources() {
