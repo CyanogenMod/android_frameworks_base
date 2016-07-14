@@ -2648,9 +2648,11 @@ class AlarmManagerService extends SystemService {
                     }
 
                 } else {
-                    // Just in case -- even though no wakeup flag was set, make sure
-                    // we have updated the kernel to the next alarm time.
-                    rescheduleKernelAlarmsLocked();
+                    synchronized (mLock) {
+                        // Just in case -- even though no wakeup flag was set, make sure
+                        // we have updated the kernel to the next alarm time.
+                        rescheduleKernelAlarmsLocked();
+                    }
                 }
             }
         }
