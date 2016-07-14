@@ -586,6 +586,18 @@ public class AudioService extends IAudioService.Stub {
     // If absolute volume is supported in AVRCP device
     private boolean mAvrcpAbsVolSupported = false;
 
+    // First step percentage in Bluetooth Absolute Volume (1-50)
+    private final double mAvrcpAbsVolFirstStepPct;
+    private static final int ABS_VOL_FIRST_STEP_MIN = 1;
+    private static final int ABS_VOL_FIRST_STEP_MAX = 50;
+    private static final int ABS_VOL_FIRST_STEP_DEFAULT = 50;
+
+    // Step count for Bluetooth Absolute Volume (2-10)
+    private final int mAvrcpAbsVolSteps;
+    private static final int ABS_VOL_STEP_COUNT_MIN = 2;
+    private static final int ABS_VOL_STEP_COUNT_MAX = 10;
+    private static final int ABS_VOL_STEP_COUNT_DEFAULT = 2;
+
     private boolean mLinkNotificationWithVolume;
     private final boolean mVoiceCapable;
     private static Long mLastDeviceConnectMsgTime = new Long(0);
@@ -626,6 +638,24 @@ public class AudioService extends IAudioService.Stub {
 
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = vibrator == null ? false : vibrator.hasVibrator();
+
+        // Read step settings for Bluetooth Absolute Volume
+        int avrcpAbsVolVal = SystemProperties.getInt(
+            "ro.config.bt_abs_vol_first_pct", ABS_VOL_FIRST_STEP_DEFAULT);
+        if(avrcpAbsVolVal < ABS_VOL_FIRST_STEP_MIN) {
+            avrcpAbsVolVal = ABS_VOL_FIRST_STEP_MIN;
+        } else if(avrcpAbsVolVal > ABS_VOL_FIRST_STEP_MAX) {
+            avrcpAbsVolVal = ABS_VOL_FIRST_STEP_MAX;
+        }
+        mAvrcpAbsVolFirstStepPct = avrcpAbsVolVal * 0.01d;
+        avrcpAbsVolVal = SystemProperties.getInt(
+            "ro.config.bt_abs_vol_steps", ABS_VOL_STEP_COUNT_DEFAULT);
+        if(avrcpAbsVolVal < ABS_VOL_STEP_COUNT_MIN) {
+            avrcpAbsVolVal = ABS_VOL_STEP_COUNT_MIN;
+        } else if(avrcpAbsVolVal > ABS_VOL_STEP_COUNT_MAX) {
+            avrcpAbsVolVal = ABS_VOL_STEP_COUNT_MAX;
+        }
+        mAvrcpAbsVolSteps = avrcpAbsVolVal;
 
         // Initialize volume
         int maxVolume = SystemProperties.getInt("ro.config.vc_call_vol_steps",
@@ -4014,19 +4044,20 @@ public class AudioService extends IAudioService.Stub {
                  * If we send full audio gain, some accessories are too loud even at its lowest
                  * volume. We are not able to enumerate all such accessories, so here is the
                  * workaround from phone side.
-                 * For the lowest volume steps 1 and 2, restrict audio gain to 50% and 75%.
+                 * For the lowest volume steps restrict audio gain by values defined in
+                 * ro.config.bt_abs_vol_first_pct and ro.config.bt_abs_vol_steps. Be default
+                 * steps 1 and 2 restrict volume to 50% and 75%.
                  * For volume step 0, set audio gain to 0 as some accessories won't mute on their end.
                  */
                 int i = (getIndex(device) + 5)/10;
                 if (i == 0) {
                     // 0% for volume 0
                     index = 0;
-                } else if (i == 1) {
-                    // 50% for volume 1
-                    index = (int)(mIndexMax * 0.5) /10;
-                } else if (i == 2) {
-                    // 75% for volume 2
-                    index = (int)(mIndexMax * 0.75) /10;
+                } else if (i >=1 && i <= mAvrcpAbsVolSteps && i < (mIndexMax + 5)/10) {
+                    // Calculate value based on step settings.
+                    double pct = mAvrcpAbsVolFirstStepPct +
+                        ((1.0f - mAvrcpAbsVolFirstStepPct) / (double)mAvrcpAbsVolSteps) * (i - 1);
+                    index = (int)(mIndexMax * pct) /10;
                 } else {
                     // otherwise, full gain
                     index = (mIndexMax + 5)/10;
