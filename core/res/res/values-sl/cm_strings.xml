@@ -214,5 +214,5 @@
   <string name="notify_battery_fully_charged_text">Odklopite napravo iz polnilca za izboljšanje življenjske dobe baterije.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Kartice SIM so se spremenile</string>
-  <string name="uicc_hot_swapped_event_text">Tapnite, da nastavite privzete nastavitve kartice SIM</string>
+  <string name="uicc_hot_swapped_event_text">Tapnite, da nastavite privzete možnosti kartice SIM</string>
 </resources>

@@ -38,7 +38,7 @@
   <string name="navbar_dialog_title">Izberite dejanje za dodelitev</string>
   <string name="navbar_home_button">Gumb Domov</string>
   <string name="navbar_recent_button">Gumb Nedavno</string>
-  <string name="navbar_search_button">Gumb Iskanje</string>
+  <string name="navbar_search_button">Gumb Išči</string>
   <string name="navbar_back_button">Gumb Nazaj</string>
   <string name="navbar_empty_button">Gumb Prazno</string>
   <string name="navbar_menu_conditional_button">Menijski gumb (sam. skrivanje)</string>
