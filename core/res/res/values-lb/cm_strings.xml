@@ -135,6 +135,7 @@
   <string name="app_ops_start_at_bootup">automatesch starten</string>
   <string name="app_ops_toast_window">Kuerzzäit-Notifikatiounen uweisen</string>
   <string name="app_ops_toggle_bluetooth">Bluetooth un-/ausschalten</string>
+  <string name="app_ops_toggle_mobile_data">Mobil Daten un-/ausschalten</string>
   <string name="app_ops_toggle_nfc">NFC un-/ausschalten</string>
   <string name="app_ops_toggle_wifi">WLAN un-/ausschalten</string>
   <string name="app_ops_use_alarm_volume">d\'Lautstäerkt vum Wecker änneren</string>
@@ -149,6 +150,21 @@
   <string name="app_ops_use_voice_volume">d\'Sproochlautstäerkt änneren</string>
   <string name="app_ops_write_mms">eng MMS schreiwen</string>
   <string name="app_ops_write_sms">eng SMS schreiwen</string>
+  <string name="app_ops_use_fingerprint">Fangerofdrock benotzen</string>
+  <string name="app_ops_add_voicemail">eng Sproochnoriicht bäisetzen</string>
+  <string name="app_ops_read_phone_state">op Telefon-Status zougräifen</string>
+  <string name="app_ops_scan_wifi">WLAN-Netzwierker scannen</string>
+  <string name="app_ops_change_wallpaper">Hannergrondbild änneren</string>
+  <string name="app_ops_assist_structure">Ënnerstëtzungsstruktur benotzen</string>
+  <string name="app_ops_assist_screenshot">Schiermfoto maachen</string>
+  <string name="app_ops_use_body_sensors">Kierpersensore benotzen</string>
+  <string name="app_ops_read_cell_broadcasts">Cell-Broadcasts liesen</string>
+  <string name="app_ops_mock_location">Standuert simuléieren</string>
+  <string name="app_ops_read_external_storage">externe Späicher ausliesen</string>
+  <string name="app_ops_write_external_storage">op externe Späicher schreiwen</string>
+  <string name="app_ops_turn_on_screen">Schierm uschalten</string>
+  <string name="app_ops_get_accounts">Konte vum Apparat opruffen</string>
+  <string name="app_ops_wifi_change">WLAN-Status änneren</string>
   <string name="app_ops_su">Root-Accès kréien</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Fir dëse Schierm lasszeléisen, dréck den Zréck-Knäppchen an hal e gedréckt.</string>
@@ -160,7 +176,11 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Start vun der Aktivitéit blockéiert</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> ass vum Starten ofgehale ginn. Klick, fir d\'App ze authentifizéieren an nei ze starten.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Akku ganz opgelueden</string>
+  <string name="notify_battery_fully_charged_text">Stecker aus dem Apparat zéien, fir d\'Liewensdauer vum Akku ze verlängeren.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">Akkustatistiken zrécksetzen</string>
@@ -168,4 +188,5 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Erlaabt enger App, den Detail vun der Akkubenotzung zréckzesetzen.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">D\'SIM-Kaarte goufe gewiesselt</string>
 </resources>
