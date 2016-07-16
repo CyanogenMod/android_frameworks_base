@@ -212,4 +212,5 @@
   <string name="notify_battery_fully_charged_text">Stecker aus dem Apparat zéien, fir d\'Liewensdauer vum Akku ze verlängeren.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">D\'SIM-Kaarte goufe gewiesselt</string>
+  <string name="uicc_hot_swapped_event_text">Dréck, fir d\'Standardastellunge fir d\'SIM-Kaart festzeleeën</string>
 </resources>
