@@ -189,4 +189,5 @@
   <string name="permdesc_resetBatteryStats">Erlaabt enger App, den Detail vun der Akkubenotzung zréckzesetzen.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">D\'SIM-Kaarte goufe gewiesselt</string>
+  <string name="uicc_hot_swapped_event_text">Dréck, fir d\'Standardastellunge fir d\'SIM-Kaart festzeleeën</string>
 </resources>
