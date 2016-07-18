@@ -194,6 +194,36 @@ ProxyClass::~ProxyClass()
 }
 
 // =================================================
+class DefaultNoOpClass : public Class {
+public:
+    DefaultNoOpClass(Type* type, InterfaceType* interfaceType);
+    virtual ~DefaultNoOpClass();
+};
+
+DefaultNoOpClass::DefaultNoOpClass(Type* type, InterfaceType* interfaceType)
+    :Class()
+{
+    this->comment = "/** No-Op implementation  */";
+    this->comment += "\n/** @hide */";
+    this->modifiers = PUBLIC | STATIC;
+    this->what = Class::CLASS;
+    this->type = type;
+    this->interfaces.push_back(interfaceType);
+
+    // IBinder asBinder()
+    Method* asBinder = new Method;
+        asBinder->modifiers = PUBLIC | OVERRIDE;
+        asBinder->returnType = IBINDER_TYPE;
+        asBinder->name = "asBinder";
+        asBinder->statements = new StatementBlock;
+    asBinder->statements->Add(new ReturnStatement(NULL_VALUE));
+    this->elements.push_back(asBinder);
+}
+
+DefaultNoOpClass::~DefaultNoOpClass() {
+}
+
+// =================================================
 static void
 generate_new_array(Type* t, StatementBlock* addTo, Variable* v,
                             Variable* parcel)
@@ -245,10 +275,24 @@ generate_read_from_parcel(Type* t, StatementBlock* addTo, Variable* v,
     }
 }
 
+static bool
+is_numeric_java_type(const char* str) {
+    static const char* KEYWORDS[] = { "int", "byte", "char", "float", "double",
+        "short", "long", NULL };
+    const char** k = KEYWORDS;
+    while (*k) {
+        if (0 == strcmp(str, *k)) {
+            return true;
+        }
+        k++;
+    }
+    return false;
+}
 
 static void
 generate_method(const method_type* method, Class* interface,
-                    StubClass* stubClass, ProxyClass* proxyClass, int index)
+                    StubClass* stubClass, ProxyClass* proxyClass, DefaultNoOpClass* noOpClass,
+                    int index)
 {
     arg_type* arg;
     int i;
@@ -294,6 +338,39 @@ generate_method(const method_type* method, Class* interface,
 
     interface->elements.push_back(decl);
 
+    // == the no-op method ===================================================
+    if (noOpClass != NULL) {
+        Method* noOpMethod = new Method;
+            noOpMethod->comment = gather_comments(method->comments_token->extra);
+            noOpMethod->modifiers = OVERRIDE | PUBLIC;
+            noOpMethod->returnType = NAMES.Search(method->type.type.data);
+            noOpMethod->returnTypeDimension = method->type.dimension;
+            noOpMethod->name = method->name.data;
+            noOpMethod->statements = new StatementBlock;
+
+        arg = method->args;
+        while (arg != NULL) {
+            noOpMethod->parameters.push_back(new Variable(
+                                NAMES.Search(arg->type.type.data), arg->name.data,
+                                arg->type.dimension));
+            arg = arg->next;
+        }
+
+        if (0 != strcmp(method->type.type.data, "void")) {
+            bool isNumeric = is_numeric_java_type(method->type.type.data);
+            bool isBoolean = 0 == strcmp(method->type.type.data, "boolean");
+
+            if (isNumeric && method->type.dimension == 0) {
+                noOpMethod->statements->Add(new ReturnStatement(new LiteralExpression("0")));
+            } else if (isBoolean && method->type.dimension == 0) {
+                noOpMethod->statements->Add(new ReturnStatement(FALSE_VALUE));
+            } else {
+                noOpMethod->statements->Add(new ReturnStatement(NULL_VALUE));
+            }
+        }
+    noOpMethod->exceptions.push_back(REMOTE_EXCEPTION_TYPE);
+    noOpClass->elements.push_back(noOpMethod);
+    }
     // == the stub method ====================================================
 
     Case* c = new Case(transactCodeName);
@@ -520,7 +597,7 @@ generate_interface_descriptors(StubClass* stub, ProxyClass* proxy)
 }
 
 Class*
-generate_binder_interface_class(const interface_type* iface)
+generate_binder_interface_class(const interface_type* iface, int flags)
 {
     InterfaceType* interfaceType = static_cast<InterfaceType*>(
         NAMES.Find(iface->package, iface->name.data));
@@ -532,6 +609,15 @@ generate_binder_interface_class(const interface_type* iface)
         interface->what = Class::INTERFACE;
         interface->type = interfaceType;
         interface->interfaces.push_back(IINTERFACE_TYPE);
+
+    // the No-Op inner class
+    DefaultNoOpClass* noOpClass = NULL;
+    if ((flags & GENERATE_NO_OP_CLASS) != 0) {
+        noOpClass = new DefaultNoOpClass(
+            NAMES.Find(iface->package, append(iface->name.data, ".NoOp").c_str()),
+            interfaceType);
+        interface->elements.push_back(noOpClass);
+    }
 
     // the stub inner class
     StubClass* stub = new StubClass(
@@ -555,7 +641,8 @@ generate_binder_interface_class(const interface_type* iface)
     while (item != NULL) {
         if (item->item_type == METHOD_TYPE) {
             method_type * method_item = (method_type*) item;
-            generate_method(method_item, interface, stub, proxy, method_item->assigned_id);
+            generate_method(method_item, interface, stub, proxy, noOpClass,
+                method_item->assigned_id);
         }
         item = item->next;
         index++;

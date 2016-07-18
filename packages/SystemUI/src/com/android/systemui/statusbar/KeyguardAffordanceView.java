@@ -283,7 +283,7 @@ public class KeyguardAffordanceView extends ImageView implements Palette.Palette
         });
         animatorToRadius.start();
         setImageAlpha(0, true);
-        if (mPreviewView != null) {
+        if (mPreviewView != null && mPreviewView.getVisibility() == View.VISIBLE) {
             mPreviewView.setVisibility(View.VISIBLE);
             mPreviewClipper = ViewAnimationUtils.createCircularReveal(
                     mPreviewView, getLeft() + mCenterX, getTop() + mCenterY, mCircleRadius,

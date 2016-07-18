@@ -102,7 +102,7 @@
   <!-- App ops requests -->
   <string name="app_ops_access_camera">tilgang til kameraet</string>
   <string name="app_ops_access_location">tilgang til din plassering</string>
-  <string name="app_ops_access_notifications">lese dine notifikasjoner</string>
+  <string name="app_ops_access_notifications">lese dine varsler</string>
   <string name="app_ops_activate_vpn">aktiver en VPN</string>
   <string name="app_ops_auto_start">start under oppstart</string>
   <string name="app_ops_delete_call_log">Slett samtaleloggen</string>

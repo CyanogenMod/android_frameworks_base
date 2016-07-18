@@ -189,5 +189,5 @@
   <string name="permdesc_resetBatteryStats">Dovoli aplikaciji ponastavitev trenutnih podatkov uporabe baterije ob nizkem stanju.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
   <string name="uicc_hot_swapped_event_title">Kartice SIM so se spremenile</string>
-  <string name="uicc_hot_swapped_event_text">Tapnite, da nastavite privzete nastavitve kartice SIM</string>
+  <string name="uicc_hot_swapped_event_text">Tapnite, da nastavite privzete možnosti kartice SIM</string>
 </resources>

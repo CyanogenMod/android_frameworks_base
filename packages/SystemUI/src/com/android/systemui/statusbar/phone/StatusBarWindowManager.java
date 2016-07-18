@@ -153,7 +153,7 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
     private void applyKeyguardFlags(State state) {
         if (state.keyguardShowing) {
             mLpChanged.privateFlags |= WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
-            if (!mKeyguardBlurEnabled) {
+            if (!mKeyguardBlurEnabled || mShowingMedia) {
                 mLpChanged.flags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
             }
         } else {
