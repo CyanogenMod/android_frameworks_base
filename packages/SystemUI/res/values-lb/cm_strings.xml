@@ -75,6 +75,7 @@
   <string name="quick_settings_title_header">Entête</string>
   <string name="quick_settings_title_tiles">Kachelen</string>
   <string name="quick_settings_title_show_weather">Wieder uweisen</string>
+  <string name="quick_settings_title_show_brightness_slider">Hellegkeetsregeler uweisen</string>
   <string name="quick_settings_title_enlarge_first_row">Éischt Rei vergréisseren</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Doduerch bleift d\'App visibel bis se lassgeléist gëtt. Dréck den Zréck-Knäppchen an hal e gedréckt fir d\'App lasszeléisen.</string>
@@ -207,4 +208,5 @@
   <string name="quick_settings_tile_flashlight_not_title">D\'Täscheluucht ass un</string>
   <string name="quick_settings_tile_flashlight_not_summary">Drécke fir s\'auszeschalten</string>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Keng Date-SIM</string>
 </resources>
