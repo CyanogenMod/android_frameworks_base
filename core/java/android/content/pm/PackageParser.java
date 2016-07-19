@@ -1877,14 +1877,18 @@ public class PackageParser {
                 String name = sa.getNonResourceString(
                         com.android.internal.R.styleable.AndroidManifestProtectedBroadcast_name);
 
+                String permission = sa.getNonResourceString(
+                        com.android.internal.R.styleable.AndroidManifestProtectedBroadcast_permission);
+
                 sa.recycle();
 
                 if (name != null && (flags&PARSE_IS_SYSTEM) != 0) {
                     if (pkg.protectedBroadcasts == null) {
-                        pkg.protectedBroadcasts = new ArrayList<String>();
+                        pkg.protectedBroadcasts = new ArrayMap<>();
                     }
-                    if (!pkg.protectedBroadcasts.contains(name)) {
-                        pkg.protectedBroadcasts.add(name.intern());
+                    if (!pkg.protectedBroadcasts.containsKey(name)) {
+                        pkg.protectedBroadcasts.put(name.intern(),
+                                permission != null ? permission.intern() : null);
                     }
                 }
 
@@ -4519,7 +4523,10 @@ public class PackageParser {
 
         public final ArrayList<String> requestedPermissions = new ArrayList<String>();
 
-        public ArrayList<String> protectedBroadcasts;
+        /**
+         * Maps from package -> permission, null for system (default behavior)
+         */
+        public ArrayMap<String,String> protectedBroadcasts;
 
         public ArrayList<String> libraryNames = null;
         public ArrayList<String> usesLibraries = null;

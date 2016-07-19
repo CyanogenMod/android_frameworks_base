@@ -1595,6 +1595,7 @@
          {@link #AndroidManifest manifest} tag. -->
     <declare-styleable name="AndroidManifestProtectedBroadcast" parent="AndroidManifest">
         <attr name="name" />
+        <attr name="permission" />
     </declare-styleable>
 
     <!-- Private tag to declare the original package name that this package is
