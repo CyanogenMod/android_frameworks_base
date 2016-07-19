@@ -698,7 +698,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final ArraySet<String> mTransferedPackages = new ArraySet<String>();
 
     // Broadcast actions that are only available to the system.
-    final ArraySet<String> mProtectedBroadcasts = new ArraySet<String>();
+    final ArrayMap<String, String> mProtectedBroadcasts = new ArrayMap<>();
 
     /** List of packages waiting for verification. */
     final SparseArray<PackageVerificationState> mPendingVerification
@@ -4654,7 +4654,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     @Override
     public boolean isProtectedBroadcast(String actionName) {
         synchronized (mPackages) {
-            if (mProtectedBroadcasts.contains(actionName)) {
+            if (mProtectedBroadcasts.containsKey(actionName)) {
                 return true;
             } else if (actionName != null) {
                 // TODO: remove these terrible hacks
@@ -4664,6 +4664,18 @@ public class PackageManagerService extends IPackageManager.Stub {
                         || actionName.startsWith("android.net.netmon.launchCaptivePortalApp")) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isProtectedBroadcastAllowed(String actionName, int callingUid) {
+        synchronized (mPackages) {
+            if (mProtectedBroadcasts.containsKey(actionName)) {
+               final int result = checkUidPermission(mProtectedBroadcasts.get(actionName),
+                        callingUid);
+                return result == PackageManager.PERMISSION_GRANTED;
             }
         }
         return false;
@@ -9126,7 +9138,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             if (pkg.protectedBroadcasts != null) {
                 N = pkg.protectedBroadcasts.size();
                 for (i=0; i<N; i++) {
-                    mProtectedBroadcasts.add(pkg.protectedBroadcasts.get(i));
+                    mProtectedBroadcasts.put(pkg.protectedBroadcasts.keyAt(i),
+                            pkg.protectedBroadcasts.valueAt(i));
                 }
             }
 
