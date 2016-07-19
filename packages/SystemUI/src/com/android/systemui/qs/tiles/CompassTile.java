@@ -126,10 +126,7 @@ public class CompassTile extends QSTile<QSTile.BooleanState> implements SensorEv
 
     @Override
     public void setListening(boolean listening) {
-        if (!listening) {
-            setListeningSensors(false);
-            mActive = false;
-        }
+        // do nothing
     }
 
     private String formatValueWithCardinalDirection(float degree) {
