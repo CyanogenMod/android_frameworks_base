@@ -75,6 +75,7 @@
   <string name="quick_settings_title_header">Entête</string>
   <string name="quick_settings_title_tiles">Kachelen</string>
   <string name="quick_settings_title_show_weather">Wieder uweisen</string>
+  <string name="quick_settings_title_show_brightness_slider">Hellegkeetsregeler uweisen</string>
   <string name="quick_settings_title_enlarge_first_row">Éischt Rei vergréisseren</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Doduerch bleift d\'App visibel bis se lassgeléist gëtt. Dréck den Zréck-Knäppchen an hal e gedréckt fir d\'App lasszeléisen.</string>
@@ -88,6 +89,8 @@
   <string name="quick_settings_heads_up_label">Pop-Up-Notifikatiounen</string>
   <string name="quick_settings_battery_saver_label">Akkuschouner</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Akku-Schouner (gëtt gelueden)</string>
+  <string name="quick_settings_caffeine_label">Koffein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Synchronisatioun aus.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -155,7 +158,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Pop-Up-Notifikatiounen ugeschalt.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Koffein aus.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Koffein un.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Akkuschouner aus.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -199,7 +204,12 @@
   <string name="quick_settings_tile_flashlight_not_title">D\'Täscheluucht ass un</string>
   <string name="quick_settings_tile_flashlight_not_summary">Drécke fir s\'auszeschalten</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d Client</item>
+    <item quantity="other">%1$d Clients</item>
+  </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Keng Date-SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dockakku <xliff:g id="number">%d</xliff:g> Prozent.</string>
   <!-- Play queue -->
@@ -208,4 +218,5 @@
   <!-- Path data for landscape battery -->
   <!-- Path data for circle battery -->
   <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
 </resources>
