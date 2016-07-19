@@ -16962,7 +16962,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         } else if (callerApp == null || !callerApp.persistent) {
             try {
                 if (AppGlobals.getPackageManager().isProtectedBroadcast(
-                        intent.getAction())) {
+                        intent.getAction()) && !AppGlobals.getPackageManager()
+                        .isProtectedBroadcastAllowed(intent.getAction(), callingUid)) {
                     String msg = "Permission Denial: not allowed to send broadcast "
                             + intent.getAction() + " from pid="
                             + callingPid + ", uid=" + callingUid;

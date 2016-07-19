@@ -523,4 +523,7 @@ interface IPackageManager {
     /** Protected Apps */
     boolean isComponentProtected(in String callingPackage, in int callingUid,
     in ComponentName componentName, int userId);
+
+    /** protected broadcast ext */
+    boolean isProtectedBroadcastAllowed(in String actionName, in int callingUid);
 }
