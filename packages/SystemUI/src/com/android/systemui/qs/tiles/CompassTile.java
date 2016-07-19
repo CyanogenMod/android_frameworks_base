@@ -32,6 +32,7 @@ public class CompassTile extends QSTile<QSTile.BooleanState> implements SensorEv
     private final static float ALPHA = 0.97f;
 
     private boolean mActive = false;
+    private boolean mListening = false;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerationSensor;
@@ -95,7 +96,7 @@ public class CompassTile extends QSTile<QSTile.BooleanState> implements SensorEv
         Float degrees = arg == null ? 0 :(float) arg;
 
         state.visible = true;
-        state.value = mActive;
+        state.value = mActive && mListening;
 
         if (state.value) {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_compass_on);
@@ -126,10 +127,10 @@ public class CompassTile extends QSTile<QSTile.BooleanState> implements SensorEv
 
     @Override
     public void setListening(boolean listening) {
-        if (!listening) {
-            setListeningSensors(false);
-            mActive = false;
-        }
+        // setListening might get called multiple times with the same value, we check for it
+        // in setListeningSensors
+        mListening = listening;
+        setListeningSensors(mListening && mActive);
     }
 
     private String formatValueWithCardinalDirection(float degree) {
