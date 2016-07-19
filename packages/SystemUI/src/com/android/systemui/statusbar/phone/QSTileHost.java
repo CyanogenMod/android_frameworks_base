@@ -318,10 +318,12 @@ public class QSTileHost implements QSTile.Host, Tunable {
                 if (DEBUG) Log.d(TAG, "Creating tile: " + tileSpec);
                 try {
                     if (mCustomTileData.get(tileSpec) != null) {
-                        newTiles.put(tileSpec, new CustomQSTile(this,
-                                mCustomTileData.get(tileSpec).sbc));
+                        final CustomQSTile value = new CustomQSTile(this,
+                                mCustomTileData.get(tileSpec).sbc);
+                        newTiles.put(tileSpec, value);
                     } else {
-                        newTiles.put(tileSpec, createTile(tileSpec));
+                        final QSTile<?> tile = createTile(tileSpec);
+                        newTiles.put(tileSpec, tile);
                     }
                 } catch (Throwable t) {
                     Log.w(TAG, "Error creating tile for spec: " + tileSpec, t);
