@@ -17974,8 +17974,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         // and that system code is only sending protected broadcasts.
         final String action = intent.getAction();
         final boolean isProtectedBroadcast;
+        final IPackageManager pm = AppGlobals.getPackageManager();
         try {
-            isProtectedBroadcast = AppGlobals.getPackageManager().isProtectedBroadcast(action);
+            isProtectedBroadcast = pm.isProtectedBroadcast(action);
         } catch (RemoteException e) {
             Slog.w(TAG, "Remote exception", e);
             return ActivityManager.BROADCAST_SUCCESS;
@@ -18027,11 +18028,19 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         } else {
             if (isProtectedBroadcast) {
-                String msg = "Permission Denial: not allowed to send broadcast "
-                        + action + " from pid="
-                        + callingPid + ", uid=" + callingUid;
-                Slog.w(TAG, msg);
-                throw new SecurityException(msg);
+                boolean allowed = false;
+                try {
+                    allowed = pm.isProtectedBroadcastAllowed(action, callingUid);
+                } catch (RemoteException e) {
+                    Log.wtf(TAG, e.getMessage(), e);
+                }
+                if (!allowed) {
+                    String msg = "Permission Denial: not allowed to send broadcast "
+                            + action + " from pid="
+                            + callingPid + ", uid=" + callingUid;
+                    Slog.w(TAG, msg);
+                    throw new SecurityException(msg);
+                }
             } else if (AppWidgetManager.ACTION_APPWIDGET_CONFIGURE.equals(action)
                     || AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action)) {
                 // Special case for compatibility: we don't want apps to send this,
