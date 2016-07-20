@@ -650,6 +650,7 @@ public class VolumeDialog {
 
     private void updateNotificationRowH() {
         VolumeRow notificationRow = findRow(AudioManager.STREAM_NOTIFICATION);
+        System.out.println(notificationRow + " " + mState.linkedNotification);
         if (notificationRow != null) {
             if (mState.linkedNotification) {
                 removeRow(notificationRow);
