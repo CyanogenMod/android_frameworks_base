@@ -26,6 +26,7 @@ import android.bluetooth.BluetoothInputDevice;
 import android.bluetooth.BluetoothPan;
 import android.bluetooth.BluetoothPbapClient;
 import android.bluetooth.BluetoothDun;
+import android.bluetooth.BluetoothPbap;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothUuid;
 import android.content.Context;
@@ -133,15 +134,17 @@ public final class LocalBluetoothProfileManager {
         addProfile(mMapProfile, MapProfile.NAME,
                 BluetoothMap.ACTION_CONNECTION_STATE_CHANGED);
 
-       // enable DUN only if the property is set
+        // enable DUN only if the property is set
         if (SystemProperties.getBoolean("ro.bluetooth.dun", false) == true) {
             mDunProfile = new DunServerProfile(context);
             addProfile(mDunProfile, DunServerProfile.NAME,
                     BluetoothDun.ACTION_CONNECTION_STATE_CHANGED);
         }
-       //Create PBAP server profile, but do not add it to list of profiles
-       // as we do not need to monitor the profile as part of profile list
+
+        //Create PBAP server profile
         mPbapProfile = new PbapServerProfile(context);
+        addProfile(mPbapProfile, PbapServerProfile.NAME,
+             BluetoothPbap.PBAP_STATE_CHANGED_ACTION);
 
         if (DEBUG) Log.d(TAG, "LocalBluetoothProfileManager construction complete");
     }
@@ -479,6 +482,13 @@ public final class LocalBluetoothProfileManager {
             removedProfiles.remove(mPbapClientProfile);
             profiles.remove(mPbapProfile);
             removedProfiles.add(mPbapProfile);
+        }
+
+        if ((mPbapProfile != null) &&
+            (mPbapProfile.getConnectionStatus(device) == BluetoothProfile.STATE_CONNECTED)) {
+            profiles.add(mPbapProfile);
+            removedProfiles.remove(mPbapProfile);
+            mPbapProfile.setPreferred(device, true);
         }
 
         if (DEBUG) {
