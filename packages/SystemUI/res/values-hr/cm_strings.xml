@@ -29,7 +29,7 @@
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Kliznite desno za %1$s</string>
   <string name="right_shortcut_hint">Kliznite lijevo za %1$s</string>
-  <string name="lockscreen_message">Dodirnite ikonu na lijevo ili desno kako bi preraspodijelili prečac zaključanog zaslona.</string>
+  <string name="lockscreen_message">Dodirnite ikonu na lijevoj ili desnoj strani da biste postavili prečac zaključanog zaslona.</string>
   <string name="lockscreen_default_target">Zadano</string>
   <string name="select_application">Odaberite aplikaciju</string>
   <string name="lockscreen_choose_action_title">Odaberite radnju</string>
