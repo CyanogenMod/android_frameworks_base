@@ -371,9 +371,10 @@ void JNICameraContext::postDataTimestamp(nsecs_t timestamp, int32_t msgType, con
     postData(msgType, dataPtr, NULL);
 }
 
-void JNICameraContext::postRecordingFrameHandleTimestamp(nsecs_t, native_handle_t*) {
+void JNICameraContext::postRecordingFrameHandleTimestamp(nsecs_t, native_handle_t* handle) {
     // This is not needed at app layer. This should not be called because JNICameraContext cannot
     // start video recording.
+    mCamera->releaseRecordingFrameHandle(handle);
 }
 
 void JNICameraContext::postMetadata(JNIEnv *env, int32_t msgType, camera_frame_metadata_t *metadata)
