@@ -324,8 +324,11 @@
     <protected-broadcast android:name="android.internal.policy.action.BURN_IN_PROTECTION" />
     <protected-broadcast android:name="android.app.action.SYSTEM_UPDATE_POLICY_CHANGED" />
     <protected-broadcast android:name="android.app.action.DEVICE_OWNER_CHANGED" />
-    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
-    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED" />
+
+    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED"
+                         android:permission="cyanogenmod.permission.SEND_PROTECTED_THEME_BROADCAST" />
+    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED"
+                         android:permission="cyanogenmod.permission.SEND_PROTECTED_THEME_BROADCAST" />
 
     <protected-broadcast android:name="android.net.action.SHOW_NETWORK_POLICY_NOTIFICATION" />
 
