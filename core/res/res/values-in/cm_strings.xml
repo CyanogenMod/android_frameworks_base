@@ -44,12 +44,12 @@
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_setKeyguardWallpaper">Izinkan aplikasi untuk mengubah gambar latar layar kunci.</string>
   <!-- label for item that reboots the phone in phone options dialog -->
-  <string name="global_action_reboot">But ulang</string>
+  <string name="global_action_reboot">Mulai Ulang</string>
   <!-- label for current user in phone options dialog -->
   <string name="global_action_current_user">Saat ini</string>
   <!-- Reboot menu -->
   <!-- Button to reboot the phone, within the Reboot Options dialog -->
-  <string name="reboot_reboot">But ulang</string>
+  <string name="reboot_reboot">Mulai Ulang</string>
   <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
   <string name="reboot_recovery">Pemulihan</string>
   <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
@@ -65,7 +65,7 @@
   <string name="reboot_confirm" product="tablet">Tablet Anda akan dibut ulang.</string>
   <string name="reboot_confirm" product="default">Ponsel Anda akan dibut ulang.</string>
   <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
-  <string name="reboot_progress">Membut ulang\u2026</string>
+  <string name="reboot_progress">Memulai ulang\u2026</string>
   <!-- Long-press back kill application -->
   <string name="app_killed_message">Aplikasi dimatikan</string>
   <!-- ADB over network notification -->
