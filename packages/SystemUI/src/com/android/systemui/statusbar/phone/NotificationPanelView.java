@@ -2629,9 +2629,11 @@ public class NotificationPanelView extends PanelView implements
 
     public void onScreenTurningOn() {
         mKeyguardStatusView.refreshTime();
-        startScreenOnHintAnimation(mLiveLockscreenController.isLiveLockScreenInteractive() &&
-                !mUserInteractedWithLiveLockScreen,
-                !mUserUnlocked, !mUserExpandedNotifications);
+        if (mStatusBar.isDeviceProvisioned()) {
+            startScreenOnHintAnimation(mLiveLockscreenController.isLiveLockScreenInteractive() &&
+                            !mUserInteractedWithLiveLockScreen,
+                    !mUserUnlocked, !mUserExpandedNotifications);
+        }
     }
 
     @Override
