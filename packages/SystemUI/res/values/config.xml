@@ -300,5 +300,8 @@
     <!-- Allow Flashlight service to use wakelock -->
     <bool name="flashlight_use_wakelock">false</bool>
 
+    <!-- Allow device to be configured to show screen on hints on the lock screen -->
+    <bool name="config_showScreenOnLockScreenHints">false</bool>
+
 </resources>
 
