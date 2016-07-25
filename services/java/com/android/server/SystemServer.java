@@ -988,8 +988,8 @@ public final class SystemServer {
             if (!disableNonCoreServices) {
                 mSystemServiceManager.startService(DockObserver.class);
 
-                if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
-                    mSystemServiceManager.startService(THERMAL_OBSERVER_CLASS);
+		if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
+                    //#Fixme:mSystemServiceManager.startService(THERMAL_OBSERVER_CLASS);
                 }
             }
 
@@ -1205,7 +1205,7 @@ public final class SystemServer {
         }
 
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
-            mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
+            //#Fixme:mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
         }
 
         // Before things start rolling, be sure we have decided whether
