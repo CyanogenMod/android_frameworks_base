@@ -830,12 +830,7 @@ public final class CachedBluetoothDevice implements Comparable<CachedBluetoothDe
             // The pairing dialog now warns of phone-book access for paired devices.
             // No separate prompt is displayed after pairing.
             if (getPhonebookPermissionChoice() == CachedBluetoothDevice.ACCESS_UNKNOWN) {
-                if (mDevice.getBluetoothClass().getDeviceClass()
-                        == BluetoothClass.Device.AUDIO_VIDEO_HANDSFREE) {
-                    setPhonebookPermissionChoice(CachedBluetoothDevice.ACCESS_ALLOWED);
-                } else {
-                    setPhonebookPermissionChoice(CachedBluetoothDevice.ACCESS_REJECTED);
-                }
+                setPhonebookPermissionChoice(CachedBluetoothDevice.ACCESS_ALLOWED);
             }
         }
     }
