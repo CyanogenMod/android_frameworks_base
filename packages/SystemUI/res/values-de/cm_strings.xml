@@ -219,4 +219,7 @@
   <!-- Path data for circle battery -->
   <!-- Weather string format in keyguard -->
   <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> – <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="expand_hint">Zum Erweitern nach unten wischen</string>
+  <string name="swipe_left_hint">Für <xliff:g id="app_name">%1$s</xliff:g> nach links wischen</string>
+  <string name="swipe_right_hint">Für Benachrichtigungen nach rechts wischen</string>
 </resources>
