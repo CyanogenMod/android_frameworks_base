@@ -185,7 +185,7 @@
   <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay changé en mode jour.</string>
   <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay changé en mode nuit.</string>
   <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay changé en mode plein air.</string>
-  <string name="quick_settings_title_advanced_location">Localisation par triangulation</string>
+  <string name="quick_settings_title_advanced_location">Localisation à trois états</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Localisation : mode économie de batterie.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
