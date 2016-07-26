@@ -36,7 +36,7 @@
   <string name="lockscreen_none_target">Nijedan</string>
   <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Odaberi radnju</string>
-  <string name="navbar_home_button">Home tipka</string>
+  <string name="navbar_home_button">Gumb za početni zaslon</string>
   <string name="navbar_recent_button">Tipka nedavno</string>
   <string name="navbar_search_button">Tipka za pretraživanje</string>
   <string name="navbar_back_button">Tipka nazad</string>
@@ -86,7 +86,7 @@
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profili sustava</string>
   <string name="quick_settings_profiles_off">Profili onemogućeni</string>
-  <string name="quick_settings_heads_up_label">Heads up</string>
+  <string name="quick_settings_heads_up_label">Plutajuće obavijesti</string>
   <string name="quick_settings_battery_saver_label">Ušteda baterije</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
   <string name="quick_settings_battery_saver_label_charging">Štednja baterije (punjenje)</string>
@@ -150,13 +150,13 @@
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_ambient_display_changed_on">Ambijentni zaslon je uključen.</string>
   <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_off">Heads up isključen.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Plutajuće su obavijesti isključene.</string>
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_on">Heads up uključen.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Plutajuće su obavijesti uključene.</string>
   <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up je isključen.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Plutajuće su obavijesti isključene.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up je uključen.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Plutajuće su obavijesti uključene.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_caffeine_off">Kofein isključen.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
