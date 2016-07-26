@@ -263,32 +263,101 @@ status_t BootAnimation::initTexture(Texture* texture, AssetManager& assets,
     return NO_ERROR;
 }
 
+void BootAnimation::prefetchBitmap(const Animation::Frame& frame)
+{
+    pthread_mutex_lock(&mPrefetchLock);
+    mPrefetchBitmap->reset();
+    mPrefetchFrame = &frame;
+    pthread_cond_signal(&mPrefetchCond);
+    pthread_mutex_unlock(&mPrefetchLock);
+}
+
+void BootAnimation::createPrefetchThread()
+{
+    mLoadThreadExit = false;
+    mPrefetchFrame = NULL;
+    mPrefetchBitmap = new SkBitmap();
+    pthread_mutex_init(&mPrefetchLock, NULL);
+    pthread_cond_init(&mPrefetchCond, NULL);
+    pthread_create(&mTid, NULL, loadBitmapThread, (void *)this);
+}
+
+void BootAnimation::terminatePrefetchThread()
+{
+    pthread_mutex_lock(&mPrefetchLock);
+    mPrefetchBitmap->reset();
+    mPrefetchFrame = NULL;
+    mLoadThreadExit = true;
+    pthread_cond_signal(&mPrefetchCond);
+    pthread_mutex_unlock(&mPrefetchLock);
+    pthread_join(mTid, NULL);
+    delete mPrefetchBitmap;
+    mPrefetchBitmap = NULL;
+}
+
+void* BootAnimation::loadBitmapThread(void *p)
+{
+    BootAnimation *b = (BootAnimation*)p;
+
+    pthread_mutex_lock(&b->mPrefetchLock);
+    pthread_cond_wait(&b->mPrefetchCond, &b->mPrefetchLock);
+
+    while (!b->mLoadThreadExit) {
+        SkMemoryStream  stream(b->mPrefetchFrame->map->getDataPtr(),
+                b->mPrefetchFrame->map->getDataLength());
+        SkImageDecoder* codec = SkImageDecoder::Factory(&stream);
+        if (codec != NULL) {
+            codec->setDitherImage(false);
+            codec->decode(&stream, b->mPrefetchBitmap,
+                    #ifdef USE_565
+                    kRGB_565_SkColorType,
+                    #else
+                    kN32_SkColorType,
+                    #endif
+                    SkImageDecoder::kDecodePixels_Mode);
+            delete codec;
+        }
+        pthread_cond_wait(&b->mPrefetchCond, &b->mPrefetchLock);
+    }
+    pthread_mutex_unlock(&b->mPrefetchLock);
+    return NULL;
+}
+
 status_t BootAnimation::initTexture(const Animation::Frame& frame)
 {
     //StopWatch watch("blah");
 
-    SkBitmap bitmap;
-    SkMemoryStream  stream(frame.map->getDataPtr(), frame.map->getDataLength());
-    SkImageDecoder* codec = SkImageDecoder::Factory(&stream);
-    if (codec != NULL) {
-        codec->setDitherImage(false);
-        codec->decode(&stream, &bitmap,
-                #ifdef USE_565
-                kRGB_565_SkColorType,
-                #else
-                kN32_SkColorType,
-                #endif
-                SkImageDecoder::kDecodePixels_Mode);
-        delete codec;
-    }
+    SkBitmap *bitmap = NULL;
 
+    /* Use prefetched bitmap if available */
+    pthread_mutex_lock(&mPrefetchLock);
+    if (&frame == mPrefetchFrame) {
+        bitmap = mPrefetchBitmap;
+    }
+    pthread_mutex_unlock(&mPrefetchLock);
+    if (bitmap == NULL) {
+        bitmap = new SkBitmap();
+        SkMemoryStream  stream(frame.map->getDataPtr(), frame.map->getDataLength());
+        SkImageDecoder* codec = SkImageDecoder::Factory(&stream);
+        if (codec != NULL) {
+            codec->setDitherImage(false);
+            codec->decode(&stream, bitmap,
+                    #ifdef USE_565
+                    kRGB_565_SkColorType,
+                    #else
+                    kN32_SkColorType,
+                    #endif
+                    SkImageDecoder::kDecodePixels_Mode);
+            delete codec;
+        }
+    }
     // ensure we can call getPixels(). No need to call unlock, since the
     // bitmap will go out of scope when we return from this method.
-    bitmap.lockPixels();
+    bitmap->lockPixels();
 
-    const int w = bitmap.width();
-    const int h = bitmap.height();
-    const void* p = bitmap.getPixels();
+    const int w = bitmap->width();
+    const int h = bitmap->height();
+    const void* p = bitmap->getPixels();
 
     GLint crop[4] = { 0, h, w, -h };
     int tw = 1 << (31 - __builtin_clz(w));
@@ -296,7 +365,7 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
     if (tw < w) tw <<= 1;
     if (th < h) th <<= 1;
 
-    switch (bitmap.colorType()) {
+    switch (bitmap->colorType()) {
         case kN32_SkColorType:
             if (tw != w || th != h) {
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA,
@@ -326,6 +395,13 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
 
     glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, crop);
 
+    if (bitmap != mPrefetchBitmap) {
+        delete bitmap;
+    } else {
+        mPrefetchBitmap->unlockPixels();
+        mPrefetchBitmap->reset();
+        mPrefetchFrame = NULL;
+    }
     return NO_ERROR;
 }
 
@@ -731,6 +807,8 @@ bool BootAnimation::movie()
     pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
     pthread_cond_init(&mp_cond, &attr);
 
+    createPrefetchThread();
+
     for (size_t i=0 ; i<pcount ; i++) {
         const Animation::Part& part(animation.parts[i]);
         const size_t fcount = part.frames.size();
@@ -794,6 +872,9 @@ bool BootAnimation::movie()
                         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                     }
                     initTexture(frame);
+                    if (j != (fcount - 1)) {
+                        prefetchBitmap(part.frames[j + 1]);
+                    }
                 }
 
                 if (!clearReg.isEmpty()) {
@@ -878,6 +959,8 @@ bool BootAnimation::movie()
 
     pthread_cond_destroy(&mp_cond);
     pthread_mutex_destroy(&mp_lock);
+
+    terminatePrefetchThread();
 
     return false;
 }

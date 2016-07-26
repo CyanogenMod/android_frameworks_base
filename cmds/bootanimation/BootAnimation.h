@@ -113,6 +113,18 @@ private:
     sp<SurfaceControl> mFlingerSurfaceControl;
     sp<Surface> mFlingerSurface;
     ZipFileRO   *mZip;
+
+    // For prefetch bitmap
+    void prefetchBitmap(const Animation::Frame& frame);
+    void createPrefetchThread();
+    void terminatePrefetchThread();
+    static void* loadBitmapThread(void *p);
+    pthread_mutex_t         mPrefetchLock;
+    pthread_cond_t          mPrefetchCond;
+    const Animation::Frame *mPrefetchFrame;
+    bool                    mLoadThreadExit;
+    SkBitmap                *mPrefetchBitmap;
+    pthread_t               mTid;
 };
 
 // ---------------------------------------------------------------------------
