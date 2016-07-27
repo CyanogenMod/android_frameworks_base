@@ -174,7 +174,7 @@
   <string name="dynamic_qs_tile_next_alarm_label">Prochaine alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Mode de saisie</string>
   <string name="dynamic_qs_tile_su_label">Accès root</string>
-  <string name="quick_settings_title_advanced_location">Localisation par triangulation</string>
+  <string name="quick_settings_title_advanced_location">Localisation à trois états</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Localisation : mode économie de batterie.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->

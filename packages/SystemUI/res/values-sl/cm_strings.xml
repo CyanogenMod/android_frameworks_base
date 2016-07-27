@@ -221,4 +221,7 @@
   <!-- Path data for circle battery -->
   <!-- Weather string format in keyguard -->
   <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="expand_hint">Za razširitev potegnite navzdol</string>
+  <string name="swipe_left_hint">Za <xliff:g id="app_name">%1$s</xliff:g> potegnite levo</string>
+  <string name="swipe_right_hint">Za obvestila potegnite desno</string>
 </resources>

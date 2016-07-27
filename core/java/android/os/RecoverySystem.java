@@ -377,18 +377,18 @@ public class RecoverySystem {
      * @throws SecurityException if the current user is not allowed to wipe data.
      */
     public static void rebootWipeUserData(Context context) throws IOException {
-        rebootWipeUserData(context, false, context.getPackageName(), false);
+        rebootWipeUserData(context, false, context.getPackageName(), true);
     }
 
     /** {@hide} */
     public static void rebootWipeUserData(Context context, String reason) throws IOException {
-        rebootWipeUserData(context, false, reason, false);
+        rebootWipeUserData(context, false, reason, true);
     }
 
     /** {@hide} */
     public static void rebootWipeUserData(Context context, boolean shutdown)
             throws IOException {
-        rebootWipeUserData(context, shutdown, context.getPackageName(), false);
+        rebootWipeUserData(context, shutdown, context.getPackageName(), true);
     }
 
    /**

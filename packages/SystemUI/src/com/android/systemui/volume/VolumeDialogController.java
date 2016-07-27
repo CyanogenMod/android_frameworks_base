@@ -371,6 +371,7 @@ public class VolumeDialogController {
         updateZenModeW();
         updateEffectsSuppressorW(mNoMan.getEffectsSuppressor());
         updateZenModeConfigW();
+        updateLinkNotificationConfigW();
         mCallbacks.onStateChanged(mState);
     }
 
