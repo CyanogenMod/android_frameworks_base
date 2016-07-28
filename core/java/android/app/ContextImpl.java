@@ -1864,7 +1864,9 @@ class ContextImpl extends Context {
         // is created.
         mContentResolver = new ApplicationContentResolver(this, mainThread, user);
 
+	Log.i(TAG,"ContextImpl calling getResources");
         Resources resources = packageInfo.getResources(mainThread);
+	Log.i(TAG,"ContextImpl resources "+resources+" will call getTopLevelResources");
         if (resources != null) {
             if (displayId != Display.DEFAULT_DISPLAY
                     || themePackageName != null

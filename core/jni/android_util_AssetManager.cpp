@@ -530,7 +530,7 @@ static jint android_content_AssetManager_addOverlayPath(JNIEnv* env, jobject cla
         return 0;
     }
 
-    ScopedUtfChars packagePath8(env, packagePath);
+    /*ScopedUtfChars packagePath8(env, packagePath);
     if (packagePath8.c_str() == NULL) {
         return 0;
     }
@@ -548,7 +548,7 @@ static jint android_content_AssetManager_addOverlayPath(JNIEnv* env, jobject cla
     ScopedUtfChars targetPkgPath8(env, targetPkgPath);
     if (targetPkgPath8.c_str() == NULL) {
         return 0;
-    }
+    }*/
 
     AssetManager* am = assetManagerForJavaObject(env, clazz);
     if (am == NULL) {
@@ -556,13 +556,12 @@ static jint android_content_AssetManager_addOverlayPath(JNIEnv* env, jobject cla
     }
 
     int32_t cookie;
-    bool res = am->addOverlayPath(
-            String8(idmapPath8.c_str()),
-            String8(packagePath8.c_str()),
-            &cookie,
-            String8(resApkPath8.c_str()),
-            String8(targetPkgPath8.c_str()),
-            String8(prefixPath8.c_str()));
+    bool res = am->addOverlayPath(String8(idmapPath8.c_str()),
+            &cookie);
+            //packagePath,
+            //resApkPath,
+            //targetPkgPath,
+            //prefixPath);
 
     return (res) ? (jint)cookie : 0;
 }

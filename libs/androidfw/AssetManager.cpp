@@ -99,6 +99,33 @@ const char* AssetManager::IDMAP_DIR = "/data/resource-cache";
 const char* AssetManager::APK_EXTENSION = ".apk";
 
 namespace {
+    String8 idmapPathForPackagePath(const String8& pkgPath)
+    {
+        //const char* root = getenv("ANDROID_DATA");
+        //LOG_ALWAYS_FATAL_IF(root == NULL, "ANDROID_DATA not set");
+        String8 path(AssetManager::IDMAP_DIR);
+        //path.appendPath(kResourceCache);
+
+        char buf[256]; // 256 chars should be enough for anyone...
+        strncpy(buf, pkgPath.string(), 255);
+        buf[255] = '\0';
+        char* filename = buf;
+        while (*filename && *filename == '/') {
+            ++filename;
+        }
+        char* p = filename;
+        while (*p) {
+            if (*p == '/') {
+                *p = '@';
+            }
+            ++p;
+        }
+        path.appendPath(filename);
+        path.append("@idmap");
+
+        return path;
+    }
+
     /*
      * Like strdup(), but uses C++ "new" operator instead of malloc.
      */
@@ -243,16 +270,16 @@ bool AssetManager::addAssetPath(const String8& path, int32_t* cookie)
  * Our resources.arsc will reference foo.png's path as "res/drawable/foo.png"
  * so we need "assets/com.android.launcher/" as a prefix
  */
-bool AssetManager::addOverlayPath(const String8& idmapPath, const String8& overlayPackagePath,
+/*bool AssetManager::addOverlayPath(const String8& idmapPath, const String8& overlayPackagePath,
         int32_t* cookie, const String8& resApkPath, const String8& targetPkgPath,
-        const String8& prefixPath)
+        const String8& prefixPath)*/
+bool AssetManager::addOverlayPath(const String8& packagePath, int32_t* cookie)
 {
+    const String8 idmapPath = idmapPathForPackagePath(packagePath);
+
     AutoMutex _l(mLock);
 
-    ALOGV("overlayApkPath: %s, idmap Path: %s, resApkPath %s, targetPkgPath: %s",
-           overlayPackagePath.string(), idmapPath.string(),
-           resApkPath.string(),
-           targetPkgPath.string());
+    ALOGD("idmap Path: %s", idmapPath.string());
 
     for (size_t i = 0; i < mAssetPaths.size(); ++i) {
         if (mAssetPaths[i].idmap == idmapPath) {
@@ -277,9 +304,9 @@ bool AssetManager::addOverlayPath(const String8& idmapPath, const String8& overl
     }
     delete idmap;
 
-    if (overlayPath != overlayPackagePath) {
+    if (overlayPath != packagePath) {
         ALOGW("idmap file %s inconcistent: expected path %s does not match actual path %s\n",
-                idmapPath.string(), overlayPackagePath.string(), overlayPath.string());
+                idmapPath.string(), packagePath.string(), overlayPath.string());
         return false;
     }
     if (access(targetPath.string(), R_OK) != 0) {
@@ -299,12 +326,12 @@ bool AssetManager::addOverlayPath(const String8& idmapPath, const String8& overl
     oap.path = overlayPath;
     oap.type = ::getFileType(overlayPath.string());
     oap.idmap = idmapPath;
-    oap.resApkPath = resApkPath;
-#if 0
+    //oap.resApkPath = resApkPath;
+#if 1
     ALOGD("Overlay added: targetPath=%s overlayPath=%s idmapPath=%s\n",
             targetPath.string(), overlayPath.string(), idmapPath.string());
 #endif
-    oap.prefixPath = prefixPath; //ex: assets/com.foo.bar
+    //oap.prefixPath = prefixPath; //ex: assets/com.foo.bar
     mAssetPaths.add(oap);
     *cookie = static_cast<int32_t>(mAssetPaths.size());
 
@@ -482,13 +509,7 @@ bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApk
         asset_path ap;
         ap.type = kFileTypeRegular;
         ap.path = paths[i];
-        Asset* ass;
-        if (i == 1 && access(resPath.string(), R_OK) != -1) {
-            ap.path = resPath;
-            ass = openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap);
-        } else {
-            ass = openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap);
-        }
+        Asset* ass = openNonAssetInPathLocked("resources.arsc", Asset::ACCESS_BUFFER, ap);
         if (ass == NULL) {
             ALOGW("failed to find resources.arsc in %s\n", ap.path.string());
             return false;

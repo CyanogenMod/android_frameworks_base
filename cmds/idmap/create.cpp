@@ -158,11 +158,16 @@ fail:
     {
         uint32_t target_crc, overlay_crc;
 
-        // In the original implementation, crc of the res tables are generated
-        // theme apks however do not need a restable, everything is in assets/
-        // instead timestamps are used
-        target_crc = 0;
-        overlay_crc = 0;
+        if (get_zip_entry_crc(target_apk_path, AssetManager::RESOURCES_FILENAME,
+                                &target_crc) == -1) {
+            return -1;
+        }
+        if (get_zip_entry_crc(overlay_apk_path, AssetManager::RESOURCES_FILENAME,
+                                &overlay_crc) == -1) {
+            return -1;
+        }
+
+        ALOGD("create_idmap new crc values %x %x", target_crc, overlay_crc);
 
         AssetManager am;
         bool b = am.createIdmap(target_apk_path, overlay_apk_path, cache_path, target_crc,

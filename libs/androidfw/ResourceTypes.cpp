@@ -77,7 +77,7 @@ static const bool kDebugTableNoisy = false;
 static const bool kDebugTableGetEntry = false;
 static const bool kDebugTableSuperNoisy = false;
 static const bool kDebugLoadTableNoisy = false;
-static const bool kDebugLoadTableSuperNoisy = false;
+static const bool kDebugLoadTableSuperNoisy = true;
 static const bool kDebugTableTheme = false;
 static const bool kDebugResXMLTree = false;
 static const bool kDebugLibNoisy = false;
@@ -330,6 +330,7 @@ public:
         uint16_t entryCount = dtohs(mData[2]);
         uint16_t offset = dtohs(mData[3]);
 
+	ALOGD("lookup called");
         if (entryId < offset) {
             // The entry is not present in this idmap
             return BAD_INDEX;
@@ -351,6 +352,7 @@ public:
             return BAD_INDEX;
         }
         *outEntryId = static_cast<uint16_t>(mappedEntry);
+	ALOGD("lookup outEntryId %u", *outEntryId);
         return NO_ERROR;
     }
 
@@ -743,7 +745,7 @@ const char16_t* ResStringPool::stringAt(size_t idx, size_t* u16len) const
                         }
 #else
                         // We do not want to be in this case when actually running Android.
-                        ALOGV("CREATING STRING CACHE OF %zu bytes",
+                        ALOGW("CREATING STRING CACHE OF %zu bytes",
                                 static_cast<size_t>(mHeader->stringCount*sizeof(char16_t**)));
 #endif
                         mCache = (char16_t**)calloc(mHeader->stringCount, sizeof(char16_t**));
@@ -3548,6 +3550,7 @@ ResTable::ResTable(const void* data, size_t size, const int32_t cookie, bool cop
 {
     memset(&mParams, 0, sizeof(mParams));
     memset(mPackageMap, 0, sizeof(mPackageMap));
+    ALOGD("ResTable calls addInternal idmap NULL");
     addInternal(data, size, NULL, 0, cookie, copyData, 0);
     LOG_FATAL_IF(mError != NO_ERROR, "Error parsing resource table");
     if (kDebugTableSuperNoisy) {
@@ -3569,11 +3572,13 @@ inline ssize_t ResTable::getResourcePackageIndex(uint32_t resID) const
 }
 
 status_t ResTable::add(const void* data, size_t size, const int32_t cookie, bool copyData) {
+    ALOGD("add1 calls addInternal idmap NULL");
     return addInternal(data, size, NULL, 0, cookie, copyData, 0);
 }
 
 status_t ResTable::add(const void* data, size_t size, const void* idmapData, size_t idmapDataSize,
         const int32_t cookie, bool copyData, const uint32_t pkgIdOverride) {
+    ALOGD("add2 calls addInternal idmap something");
     return addInternal(data, size, idmapData, idmapDataSize, cookie, copyData, pkgIdOverride);
 }
 
@@ -3584,6 +3589,7 @@ status_t ResTable::add(Asset* asset, const int32_t cookie, bool copyData) {
         return UNKNOWN_ERROR;
     }
 
+    ALOGD("add3 calls addInternal idmap NULL");
     return addInternal(data, static_cast<size_t>(asset->getLength()), NULL, 0, cookie, copyData, 0);
 }
 
@@ -3606,6 +3612,7 @@ status_t ResTable::add(Asset* asset, Asset* idmapAsset, const int32_t cookie, bo
         idmapSize = static_cast<size_t>(idmapAsset->getLength());
     }
 
+    ALOGD("add4 calls addInternal idmap with something");
     return addInternal(data, static_cast<size_t>(asset->getLength()),
             idmapData, idmapSize, cookie, copyData, pkgIdOverride);
 }
@@ -3663,6 +3670,7 @@ status_t ResTable::addEmpty(const int32_t cookie) {
 status_t ResTable::addInternal(const void* data, size_t dataSize, const void* idmapData, size_t idmapDataSize,
         const int32_t cookie, bool copyData, const uint32_t pkgIdOverride)
 {
+	ALOGE("addInternal called");
     if (!data) {
         return NO_ERROR;
     }
@@ -3679,9 +3687,11 @@ status_t ResTable::addInternal(const void* data, size_t dataSize, const void* id
     if (idmapData != NULL) {
         header->resourceIDMap = (uint32_t*) malloc(idmapDataSize);
         if (header->resourceIDMap == NULL) {
+            ALOGE("addInternal resourceIDMap creation failed");
             delete header;
             return (mError = NO_MEMORY);
         }
+    ALOGE("addInternal resourceIDMap creation done");
         memcpy(header->resourceIDMap, idmapData, idmapDataSize);
         header->resourceIDMapSize = idmapDataSize;
     }
@@ -3690,7 +3700,7 @@ status_t ResTable::addInternal(const void* data, size_t dataSize, const void* id
     const bool notDeviceEndian = htods(0xf0) != 0xf0;
 
     if (kDebugLoadTableNoisy) {
-        ALOGV("Adding resources to ResTable: data=%p, size=%zu, cookie=%d, copy=%d "
+        ALOGW("Adding resources to ResTable: data=%p, size=%zu, cookie=%d, copy=%d "
                 "idmap=%p\n", data, dataSize, cookie, copyData, idmapData);
     }
 
@@ -3710,7 +3720,7 @@ status_t ResTable::addInternal(const void* data, size_t dataSize, const void* id
                 dtohl(header->header->header.size), header->header->header.size);
     }
     if (kDebugLoadTableNoisy) {
-        ALOGV("Loading ResTable @%p:\n", header->header);
+        ALOGW("Loading ResTable @%p:\n", header->header);
     }
     if (dtohs(header->header->header.headerSize) > header->size
             || header->size > dataSize) {
@@ -3740,7 +3750,7 @@ status_t ResTable::addInternal(const void* data, size_t dataSize, const void* id
             return (mError=err);
         }
         if (kDebugTableNoisy) {
-            ALOGV("Chunk: type=0x%x, headerSize=0x%x, size=0x%x, pos=%p\n",
+            ALOGW("Chunk: type=0x%x, headerSize=0x%x, size=0x%x, pos=%p\n",
                     dtohs(chunk->type), dtohs(chunk->headerSize), dtohl(chunk->size),
                     (void*)(((const uint8_t*)chunk) - ((const uint8_t*)header->header)));
         }
@@ -3924,6 +3934,7 @@ ssize_t ResTable::getResource(uint32_t resID, Res_value* outValue, bool mayBeBag
     }
 
     Entry entry;
+    ALOGD("getResource for resID %x calling getEntry", resID);
     status_t err = getEntry(grp, t, e, &desiredConfig, &entry);
     if (err != NO_ERROR) {
         // Only log the failure when we're not running on the host as
@@ -5923,6 +5934,7 @@ status_t ResTable::getEntry(
 
     // Iterate over the Types of each package.
     const size_t typeCount = typeList.size();
+    ALOGD("getEntry performMapping is %d %u", performMapping, (uint32_t)typeCount);
     for (size_t i = 0; i < typeCount; i++) {
         const Type* const typeSpec = typeList[i];
 
@@ -5932,12 +5944,15 @@ status_t ResTable::getEntry(
 
         // Runtime overlay packages provide a mapping of app resource
         // ID to package resource ID.
+	ALOGD("getEntry performMapping in loop entryIndex %d hasentries %d", entryIndex, typeSpec->idmapEntries.hasEntries());
         if (performMapping && typeSpec->idmapEntries.hasEntries()) {
             uint16_t overlayEntryIndex;
             if (typeSpec->idmapEntries.lookup(entryIndex, &overlayEntryIndex) != NO_ERROR) {
                 // No such mapping exists
+		ALOGD("no mapping found");
                 continue;
             }
+
             realEntryIndex = overlayEntryIndex;
             realTypeIndex = typeSpec->idmapEntries.overlayTypeId() - 1;
             currentTypeIsOverlay = true;
@@ -6050,10 +6065,13 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
     const uint8_t* base = (const uint8_t*)pkg;
     status_t err = validate_chunk(&pkg->header, sizeof(*pkg) - sizeof(pkg->typeIdOffset),
                                   header->dataEnd, "ResTable_package");
+   ALOGE("parsepackage entry pkg->name %s", (char*)pkg->name);
     if (err != NO_ERROR) {
         return (mError=err);
     }
 
+   ALOGE("parsepackage entry 1 pkg->name %s", (char*)pkg->name);
+   
     const uint32_t pkgSize = dtohl(pkg->header.size);
 
     if (dtohl(pkg->typeStrings) >= pkgSize) {
@@ -6081,12 +6099,16 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
     KeyedVector<uint8_t, IdmapEntries> idmapEntries;
     uint8_t targetPackageId = 0;
 
+   ALOGE("parsepackage resourceidmap check");
     if (header->resourceIDMap != NULL) {
         status_t err = parseIdmap(header->resourceIDMap, header->resourceIDMapSize, &targetPackageId, &idmapEntries);
+	ALOGE("parsepackage resourceidmap not null got before error check");
         if (err != NO_ERROR) {
             ALOGW("Overlay is broken");
             return (mError=err);
         }
+	ALOGE("parsepackage resourceidmap not null got targetPackageId %u no error", targetPackageId);
+	id = targetPackageId;
     }
 
     if (id >= 256) {
@@ -6098,7 +6120,7 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
     }
 
     if (pkgIdOverride != 0) {
-        ALOGV("Overriding pkg id %d with %d", id, pkgIdOverride);
+        ALOGE("Overriding pkg id %d with %d", id, pkgIdOverride);
         id = pkgIdOverride;
     }
 
@@ -6546,7 +6568,9 @@ status_t ResTable::createIdmap(const ResTable& overlay,
     // Overlaid packages are assumed to contain only one package group or two package group
     // as one is "system package(android)", and another is "application package". So we need
     // to use the last package group to create idmap.
-    const PackageGroup* pg = mPackageGroups[mPackageGroups.size() - 1];
+    ALOGD("idmap: group size is %d \n", (uint32_t)mPackageGroups.size());
+
+    const PackageGroup* pg = mPackageGroups[0];
 
     // starting size is header
     *outSize = ResTable::IDMAP_HEADER_SIZE_BYTES;
@@ -6564,12 +6588,14 @@ status_t ResTable::createIdmap(const ResTable& overlay,
     uint32_t pkg_id;
 
     const uint32_t groupCount = mPackageGroups.size();
+	ALOGE("create_idmap resourcetypes.cpp groupCount %u", groupCount);
     for (int groupIdx = groupCount - 1; groupIdx >= 0; groupIdx--) {
         pg = mPackageGroups[groupIdx];
         pkg = pg->packages[0];
         typeCount = pg->types.size();
         pkg_id = pkg->package->id << 24;
 
+	ALOGD("idmap tyepcount %u", (uint32_t)typeCount);
         for (size_t typeIndex = 0; typeIndex < typeCount; ++typeIndex) {
             const TypeList& typeList = pg->types[typeIndex];
             if (typeList.isEmpty()) {
@@ -6582,6 +6608,7 @@ status_t ResTable::createIdmap(const ResTable& overlay,
             typeMap.overlayTypeId = -1;
             typeMap.entryOffset = 0;
 
+	   ALOGD("entrycount %u", (uint32_t)typeConfigs->entryCount);
             for (size_t entryIndex = 0; entryIndex < typeConfigs->entryCount; ++entryIndex) {
                     uint32_t resID = Res_MAKEID(pg->id - 1, typeIndex, entryIndex);
                 resource_name resName;
@@ -6593,7 +6620,7 @@ status_t ResTable::createIdmap(const ResTable& overlay,
                 }
 
                 // check if resource type is "allowed", if not continue
-                String8 type8;
+                /*String8 type8;
                 if (resName.type8 != NULL) {
                     type8 = String8(resName.type8, resName.typeLen);
                 } else {
@@ -6604,10 +6631,14 @@ status_t ResTable::createIdmap(const ResTable& overlay,
                         typeMap.entryOffset++;
                     }
                     continue;
-                }
+                }*/
 
                 const String16 overlayType(resName.type, resName.typeLen);
                 const String16 overlayName(resName.name, resName.nameLen);
+		ALOGE("idmap overlay data name %s type %s package %s ",String8(overlayName.string(),overlayName.size()).string(),
+                                                                  String8(overlayType.string(),overlayType.size()).string(),
+                                                                  String8(overlayPackage.string(), overlayPackage.size()).string());
+
                 uint32_t overlayResID = overlay.identifierForName(overlayName.string(),
                                                                   overlayName.size(),
                                                                   overlayType.string(),
@@ -6618,9 +6649,12 @@ status_t ResTable::createIdmap(const ResTable& overlay,
                     if (typeMap.entryMap.isEmpty()) {
                         typeMap.entryOffset++;
                     }
+		ALOGE("idmap overlayResID is 0");
                     continue;
                 } else {
+			ALOGE("idmap overlayResID  before %x", overlayResID);
                     overlayResID = pkg_id | (0x00ffffff & overlayResID);
+		ALOGE("idmap overlayResID after %x", overlayResID);
                 }
 
                 if (typeMap.overlayTypeId == -1) {
@@ -6643,12 +6677,14 @@ status_t ResTable::createIdmap(const ResTable& overlay,
                     }
                 }
                 typeMap.entryMap.add(Res_GETENTRY(overlayResID));
+		ALOGE("idmap added in entryMap");
             }
 
             if (!typeMap.entryMap.isEmpty()) {
                 if (map.add(static_cast<uint8_t>(typeIndex), typeMap) < 0) {
                     return NO_MEMORY;
                 }
+		ALOGE("idmap added in map");
                 *outSize += (4 * sizeof(uint16_t)) + (typeMap.entryMap.size() * sizeof(uint32_t));
             }
         }
@@ -6658,6 +6694,7 @@ status_t ResTable::createIdmap(const ResTable& overlay,
         ALOGW("idmap: no resources in overlay package present in base package");
     }
 
+	ALOGE("idmap map is non empty");
     if ((*outData = malloc(*outSize)) == NULL) {
         return NO_MEMORY;
     }
@@ -6684,6 +6721,7 @@ status_t ResTable::createIdmap(const ResTable& overlay,
         data += 256 / sizeof(uint32_t);
     }
     const size_t mapSize = map.size();
+    ALOGD("idmap writing map size %u", (uint32_t)mapSize);
     uint16_t* typeData = reinterpret_cast<uint16_t*>(data);
     *typeData++ = htods(pg->id);
     *typeData++ = htods(mapSize);

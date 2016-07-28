@@ -215,7 +215,6 @@ NOTES \n\
 
 int main(int argc, char **argv)
 {
-#if 0
     {
         char buf[1024];
         buf[0] = '\0';
@@ -225,7 +224,6 @@ int main(int argc, char **argv)
         }
         ALOGD("%s:%d: uid=%d gid=%d argv=%s\n", __FILE__, __LINE__, getuid(), getgid(), buf);
     }
-#endif
 
     if (argc == 2 && !strcmp(argv[1], "--help")) {
         printf("%s\n", usage);
