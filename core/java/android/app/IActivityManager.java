@@ -408,7 +408,8 @@ public interface IActivityManager extends IInterface {
 
     public long[] getProcessPss(int[] pids) throws RemoteException;
 
-    public void showBootMessage(CharSequence msg, boolean always) throws RemoteException;
+    public void updateBootProgress(int stage, ApplicationInfo optimizedApp,
+            int currentAppPos, int totalAppCount, boolean always) throws RemoteException;
 
     public void keyguardWaitingForActivityDrawn() throws RemoteException;
 
@@ -622,6 +623,11 @@ public interface IActivityManager extends IInterface {
         }
     }
 
+    public static final int BOOT_STAGE_STARTING_APPS = 1;
+    public static final int BOOT_STAGE_FSTRIM = 2;
+    public static final int BOOT_STAGE_PREPARING_APPS = 3;
+    public static final int BOOT_STAGE_COMPLETE = 4;
+
     String descriptor = "android.app.IActivityManager";
 
     // Please keep these transaction codes the same -- they are also
@@ -757,7 +763,7 @@ public interface IActivityManager extends IInterface {
     int IS_INTENT_SENDER_TARGETED_TO_PACKAGE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+134;
     int UPDATE_PERSISTENT_CONFIGURATION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+135;
     int GET_PROCESS_PSS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+136;
-    int SHOW_BOOT_MESSAGE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+137;
+    int UPDATE_BOOT_PROGRESS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+137;
     int KILL_ALL_BACKGROUND_PROCESSES_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+139;
     int GET_CONTENT_PROVIDER_EXTERNAL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+140;
     int REMOVE_CONTENT_PROVIDER_EXTERNAL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+141;
