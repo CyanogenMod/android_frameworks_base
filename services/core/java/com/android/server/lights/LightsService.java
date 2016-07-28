@@ -113,9 +113,10 @@ public class LightsService extends SystemService {
 
         private void setLightLocked(int color, int mode, int onMS, int offMS, int brightnessMode) {
             if (mModesUpdate || color != mColor || mode != mMode || onMS != mOnMS ||
-                    offMS != mOffMS) {
+                    offMS != mOffMS || mReset) {
                 if (DEBUG) Slog.v(TAG, "setLight #" + mId + ": color=#"
                         + Integer.toHexString(color));
+                mReset = false;
                 mColor = color;
                 mMode = mode;
                 mOnMS = onMS;
@@ -141,6 +142,7 @@ public class LightsService extends SystemService {
         private boolean mFlashing;
         private boolean mModesUpdate;
         private boolean mMultipleLeds;
+        private boolean mReset = true;
     }
 
     public LightsService(Context context) {
