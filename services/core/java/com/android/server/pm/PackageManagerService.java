@@ -6364,9 +6364,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (doTrim) {
                     if (!isFirstBoot()) {
                         try {
-                            ActivityManagerNative.getDefault().showBootMessage(
-                                    mContext.getResources().getString(
-                                            R.string.android_upgrading_fstrim), true);
+                            ActivityManagerNative.getDefault().updateBootProgress(
+                                    IActivityManager.BOOT_STAGE_FSTRIM, null, 0, 0, true);
                         } catch (RemoteException e) {
                         }
                     }
@@ -6493,9 +6492,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             Log.i(TAG, "Optimizing app " + curr + " of " + total + ": " + pkg.packageName);
         }
         try {
-            ActivityManagerNative.getDefault().showBootMessage(
-                    mContext.getResources().getString(R.string.android_upgrading_apk,
-                            curr, total), true);
+            ActivityManagerNative.getDefault().updateBootProgress(
+                    IActivityManager.BOOT_STAGE_PREPARING_APPS,
+                    pkg.applicationInfo, curr, total, true);
         } catch (RemoteException e) {
         }
         PackageParser.Package p = pkg;

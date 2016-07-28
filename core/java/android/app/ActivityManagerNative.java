@@ -2097,11 +2097,14 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
-        case SHOW_BOOT_MESSAGE_TRANSACTION: {
+        case UPDATE_BOOT_PROGRESS_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
-            CharSequence msg = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(data);
+            int stage = data.readInt();
+            ApplicationInfo info = ApplicationInfo.CREATOR.createFromParcel(data);
+            int current = data.readInt();
+            int total = data.readInt();
             boolean always = data.readInt() != 0;
-            showBootMessage(msg, always);
+            updateBootProgress(stage, info, current, total, always);
             reply.writeNoException();
             return true;
         }
@@ -5285,13 +5288,17 @@ class ActivityManagerProxy implements IActivityManager
         return res;
     }
 
-    public void showBootMessage(CharSequence msg, boolean always) throws RemoteException {
+    public void updateBootProgress(int stage, ApplicationInfo optimizedApp,
+            int currentAppPos, int totalAppCount, boolean always) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken(IActivityManager.descriptor);
-        TextUtils.writeToParcel(msg, data, 0);
+        data.writeInt(stage);
+        optimizedApp.writeToParcel(data, 0);
+        data.writeInt(currentAppPos);
+        data.writeInt(totalAppCount);
         data.writeInt(always ? 1 : 0);
-        mRemote.transact(SHOW_BOOT_MESSAGE_TRANSACTION, data, reply, 0);
+        mRemote.transact(UPDATE_BOOT_PROGRESS_TRANSACTION, data, reply, 0);
         reply.readException();
         data.recycle();
         reply.recycle();
