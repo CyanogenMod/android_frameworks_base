@@ -44,6 +44,7 @@ import android.app.ApplicationThreadNative;
 import android.app.BroadcastOptions;
 import android.app.IActivityContainer;
 import android.app.IActivityContainerCallback;
+import android.app.IActivityManager;
 import android.app.IAppTask;
 import android.app.ITaskStackListener;
 import android.app.ProfilerInfo;
@@ -6558,12 +6559,14 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     @Override
-    public void showBootMessage(final CharSequence msg, final boolean always) {
+    public void updateBootProgress(final int stage, final ApplicationInfo optimizedApp,
+            final int currentAppPos, final int totalAppCount, final boolean always) {
         if (Binder.getCallingUid() != Process.myUid()) {
             // These days only the core system can call this, so apps can't get in
             // the way of what we show about running them.
         }
-        mWindowManager.showBootMessage(msg, always);
+        mWindowManager.updateBootProgress(stage, optimizedApp,
+                currentAppPos, totalAppCount, always);
     }
 
     @Override
@@ -11985,8 +11988,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                 intent.setComponent(comp);
                 doneReceivers.add(comp);
                 lastRi = curRi;
-                CharSequence label = ai.loadLabel(mContext.getPackageManager());
-                showBootMessage(mContext.getString(R.string.android_preparing_apk, label), false);
+                updateBootProgress(IActivityManager.BOOT_STAGE_PREPARING_APPS,
+                        ai.applicationInfo, 0, 0, false);
             }
             Slog.i(TAG, "Pre-boot of " + intent.getComponent().toShortString()
                     + " for user " + users[curUser]);
@@ -12109,9 +12112,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                         synchronized (ActivityManagerService.this) {
                             mDidUpdate = true;
                         }
-                        showBootMessage(mContext.getText(
-                                R.string.android_upgrading_complete),
-                                false);
+                        updateBootProgress(IActivityManager.BOOT_STAGE_COMPLETE,
+                                null, 0, 0, false);
                         writeLastDonePreBootReceivers(doneReceivers);
                         systemReady(goingCallback);
                     }
