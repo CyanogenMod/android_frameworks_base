@@ -20,6 +20,7 @@ import android.annotation.IntDef;
 import android.annotation.SystemApi;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -1171,9 +1172,10 @@ public interface WindowManagerPolicy {
     public void systemBooted();
 
     /**
-     * Show boot time message to the user.
+     * Update UI for boot-up progress.
      */
-    public void showBootMessage(final CharSequence msg, final boolean always);
+    public void updateBootProgress(final int stage, final ApplicationInfo optimizedApp,
+            final int currentAppPos, final int totalAppCount);
 
     /**
      * Hide the UI for showing boot messages, never to be displayed again.
