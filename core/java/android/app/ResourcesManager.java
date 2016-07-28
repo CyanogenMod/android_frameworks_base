@@ -229,8 +229,16 @@ public class ResourcesManager {
             }
         }
 
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+	for(int i=0;i<trace.length;i++) {
+        	Log.d(TAG, trace[i].toString());
+	}
+
+	Log.d(TAG,"getTopLevelResources overlayDirs "+overlayDirs);	
         if (overlayDirs != null) {
+		Log.d(TAG,"getTopLevelResources inside if");
             for (String idmapPath : overlayDirs) {
+		Log.d(TAG,"getTopLevelResources  idmapPath "+idmapPath);
                 assets.addOverlayPath(idmapPath, null, null, null, null);
             }
         }
@@ -634,6 +642,7 @@ public class ResourcesManager {
                     piTheme.packageName);
             String resApkPath = resCachePath + "/resources.apk";
             String idmapPath = ThemeUtils.getIdmapPath(piTarget.packageName, piTheme.packageName);
+		Log.d(TAG,"addOverlayPath called in attachThemeAssets 1 idmap "+idmapPath);
             int cookie = assets.addOverlayPath(idmapPath, themePath, resApkPath,
                     targetPackagePath, prefixPath);
 
@@ -652,6 +661,7 @@ public class ResourcesManager {
             String targetPackagePath = piCm.applicationInfo.publicSourceDir;
             String resApkPath = resCachePath + "/resources.apk";
             String idmapPath = ThemeUtils.getIdmapPath(piCm.packageName, piTheme.packageName);
+		Log.d(TAG,"addOverlayPath called in attachThemeAssets 2 idmap "+idmapPath);
             int cookie = assets.addOverlayPath(idmapPath, themePath,
                     resApkPath, targetPackagePath, prefixPath);
             if (cookie != 0) {
@@ -669,6 +679,7 @@ public class ResourcesManager {
             String targetPackagePath = piAndroid.applicationInfo.publicSourceDir;
             String resApkPath = resCachePath + "/resources.apk";
             String idmapPath = ThemeUtils.getIdmapPath("android", piTheme.packageName);
+		Log.d(TAG,"addOverlayPath called in attachThemeAssets 3 idmap "+idmapPath);
             int cookie = assets.addOverlayPath(idmapPath, themePath,
                     resApkPath, targetPackagePath, prefixPath);
             if (cookie != 0) {

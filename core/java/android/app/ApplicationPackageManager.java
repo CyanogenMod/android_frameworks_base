@@ -1030,6 +1030,7 @@ final class ApplicationPackageManager extends PackageManager {
             return mContext.mMainThread.getSystemContext().getResources();
         }
 
+	Log.i(TAG, "mContext.mMainThread.getTopLevelResources process & class "+app.processName+" "+app.className);	
         final boolean sameUid = (app.uid == Process.myUid());
         final Resources r = mContext.mMainThread.getTopLevelResources(
                 sameUid ? app.sourceDir : app.publicSourceDir,

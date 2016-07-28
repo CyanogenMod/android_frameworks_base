@@ -101,9 +101,7 @@ public:
      * newly-added asset source.
      */
     bool addAssetPath(const String8& path, int32_t* cookie);
-    bool addOverlayPath(const String8& idmapPath, const String8& overlayApkpath, int32_t* cookie,
-                 const String8& resApkPath, const String8& targetPkgPath,
-                 const String8& prefixPath);
+    bool addOverlayPath(const String8& idmapPath, int32_t* cookie);
     bool addCommonOverlayPath(const String8& path, int32_t* cookie,
                  const String8& resApkPath, const String8& prefixPath);
     bool addIconPath(const String8& path, int32_t* cookie,

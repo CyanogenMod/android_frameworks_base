@@ -5818,14 +5818,35 @@ public class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
         final int sharedGid = UserHandle.getSharedAppGid(pkg.applicationInfo.uid);
-        final String cachePath =
+        final String cachePath = 
                 ThemeUtils.getTargetCacheDir(pkgName, opkg.packageName);
-        if (mInstaller.idmap(pkg.baseCodePath, opkg.baseCodePath, cachePath, sharedGid,
+
+        if (mInstaller.idmap(pkg.baseCodePath, opkg.baseCodePath, "/data/resource-cache/", sharedGid,
                 pkg.manifestHashCode, opkg.manifestHashCode) != 0) {
             Slog.e(TAG, "Failed to generate idmap for " + pkg.baseCodePath +
                     " and " + opkg.baseCodePath);
             return false;
         }
+
+	Log.d(TAG, "populate resourceDirs");
+
+        PackageParser.Package[] overlayArray =
+            overlaySet.values().toArray(new PackageParser.Package[0]);
+        Comparator<PackageParser.Package> cmp = new Comparator<PackageParser.Package>() {
+            public int compare(PackageParser.Package p1, PackageParser.Package p2) { 
+                return p1.mOverlayPriority - p2.mOverlayPriority;
+            }
+        };
+        Arrays.sort(overlayArray, cmp); 
+
+        pkg.applicationInfo.resourceDirs = new String[overlayArray.length];
+        int i = 0;
+        for (PackageParser.Package p : overlayArray) {
+            pkg.applicationInfo.resourceDirs[i++] = p.baseCodePath;
+        }
+
+	Log.d(TAG,"populate resourceDirs done");
+
         return true;
     }
 
@@ -7982,6 +8003,31 @@ public class PackageManagerService extends IPackageManager.Stub {
                                 "Unable to process theme " + pkgName);
                     }
                 }
+            }
+
+	Log.d(TAG, "****pkg.mOverlayTarget new code");
+
+            // Create idmap files for pairs of (packages, overlay packages).
+            // Note: "android", ie framework-res.apk, is handled by native layers.
+            if (pkg.mOverlayTarget != null) {
+                // This is an overlay package.
+                if (pkg.mOverlayTarget != null && !pkg.mOverlayTarget.equals("android")) {
+                    if (!mOverlays.containsKey(pkg.mOverlayTarget)) {
+                        mOverlays.put(pkg.mOverlayTarget,
+                                new ArrayMap<String, PackageParser.Package>());
+                    }
+                    ArrayMap<String, PackageParser.Package> map = mOverlays.get(pkg.mOverlayTarget);
+                    map.put(pkg.packageName, pkg); 
+                    PackageParser.Package orig = mPackages.get(pkg.mOverlayTarget);
+                    if (orig != null && !createIdmapForPackagePairLI(orig, pkg)) {
+                        throw new PackageManagerException(INSTALL_FAILED_UPDATE_INCOMPATIBLE,
+                                "scanPackageLI failed to createIdmap");
+                    }
+                }
+            } else if (mOverlays.containsKey(pkg.packageName) &&
+                    !pkg.packageName.equals("android")) {
+                // This is a regular package, with one or more known overlay packages.
+                createIdmapsForPackageLI(pkg);
             }
         }
 

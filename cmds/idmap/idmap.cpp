@@ -215,7 +215,7 @@ NOTES \n\
 
 int main(int argc, char **argv)
 {
-#if 0
+#if 1
     {
         char buf[1024];
         buf[0] = '\0';

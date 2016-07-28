@@ -650,6 +650,7 @@ public final class AssetManager implements AutoCloseable {
      public final int addOverlayPath(String idmapPath, String themeApkPath,
              String resApkPath, String targetPkgPath, String prefixPath) {
         synchronized (this) {
+	Log.d(TAG, "Calling addOverlayPathNative idmappath "+idmapPath+" themepath "+themeApkPath+" resapkpath "+resApkPath+" targetPkgPath "+targetPkgPath+" prefixPath "+prefixPath);
             int res = addOverlayPathNative(idmapPath, themeApkPath, resApkPath, targetPkgPath,
                     prefixPath);
             if (mStringBlocks != null) {
