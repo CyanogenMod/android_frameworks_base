@@ -2563,6 +2563,7 @@ class MountService extends IMountService.Stub
                 mHandler.postDelayed(new Runnable() {
                     public void run() {
                         try {
+                            mConnector.execute("volume", "shutdown");
                             mCryptConnector.execute("cryptfs", "restart");
                         } catch (NativeDaemonConnectorException e) {
                             Slog.e(TAG, "problem executing in background", e);
