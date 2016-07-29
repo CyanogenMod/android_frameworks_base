@@ -736,6 +736,13 @@ public class CarrierConfigManager {
      */
     public static final String KEY_PROTOCOL_ERRORS_PERM_FAILURE = "protocol_errors_perm_failure";
 
+    /**
+     * Key that determines if anonymous users to be mapped to presentation restricted
+     * @hide
+     */
+    public static final String KEY_MAP_ANONYMOUS_TO_RESTRICTED_BOOL =
+            "carrier_map_anonymous_to_restricted";
+
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
@@ -880,6 +887,7 @@ public class CarrierConfigManager {
         // Used for Sim card State detection app
         sDefaults.putStringArray(KEY_SIM_PROVISIONING_STATUS_DETECTION_CARRIER_APP_STRING_ARRAY,
                 null);
+        sDefaults.putBoolean(KEY_MAP_ANONYMOUS_TO_RESTRICTED_BOOL, true);
     }
 
     /**
