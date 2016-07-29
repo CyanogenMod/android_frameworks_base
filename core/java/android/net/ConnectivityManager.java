@@ -472,11 +472,41 @@ public class ConnectivityManager {
      */
     public static final int TYPE_VPN = 17;
 
+    // MTK
+    /**
+     * Device Managment purpose.
+     * {@hide}
+     * @internal
+     */
+    public static final int TYPE_MOBILE_DM = 34;
+    /** {@hide} */
+    public static final int TYPE_MOBILE_WAP = 35;
+    /** {@hide} */
+    public static final int TYPE_MOBILE_NET = 36;
+    /** {@hide} */
+    public static final int TYPE_MOBILE_CMMAIL = 37;
+    /** {@hide} */
+    public static final int TYPE_MOBILE_TETHERING = 38;
+    /** {@hide} */
+    public static final int TYPE_MOBILE_RCSE = 39;
+    /** {@hide} */
+    public static final int TYPE_MOBILE_XCAP = 40;
+    /** {@hide} */
+    public static final int TYPE_MOBILE_RCS = 41;
+    /** M: end */
+
+    ///M @add  for 3gdongle
+    /** {@hide} */
+    public static final int TYPE_TEDONGLE = 49;
+
     /** {@hide} */
     public static final int MAX_RADIO_TYPE   = TYPE_VPN;
 
     /** {@hide} */
-    public static final int MAX_NETWORK_TYPE = TYPE_VPN;
+    public static final int MAX_AOSP_NETWORK_TYPE = TYPE_VPN;
+
+    /** {@hide} */
+    public static final int MAX_NETWORK_TYPE = TYPE_TEDONGLE;
 
     /**
      * If you want to set the default network preference,you can directly
@@ -525,7 +555,9 @@ public class ConnectivityManager {
      *             validate a network type.
      */
     public static boolean isNetworkTypeValid(int networkType) {
-        return networkType >= 0 && networkType <= MAX_NETWORK_TYPE;
+        // MTK
+        return (networkType >= 0 && networkType <= MAX_AOSP_NETWORK_TYPE)
+            || (networkType >= TYPE_MOBILE_DM && networkType <= MAX_NETWORK_TYPE);
     }
 
     /**
@@ -598,6 +630,9 @@ public class ConnectivityManager {
             case TYPE_MOBILE_CBS:
             case TYPE_MOBILE_IA:
             case TYPE_MOBILE_EMERGENCY:
+            // MTK
+            case TYPE_MOBILE_XCAP:
+            case TYPE_MOBILE_RCS:
                 return true;
             default:
                 return false;
@@ -1010,6 +1045,13 @@ public class ConnectivityManager {
                 cap = NetworkCapabilities.NET_CAPABILITY_IMS;
             } else if ("enableCBS".equals(feature)) {
                 cap = NetworkCapabilities.NET_CAPABILITY_CBS;
+            // MTK
+            } else if ("enableEmergency".equals(feature)) {
+                cap = NetworkCapabilities.NET_CAPABILITY_EIMS;
+            } else if ("enableXCAP".equals(feature)) {
+                cap = NetworkCapabilities.NET_CAPABILITY_XCAP;
+            } else if ("enableRCS".equals(feature)) {
+                cap = NetworkCapabilities.NET_CAPABILITY_RCS;
             } else {
                 return null;
             }
@@ -1077,6 +1119,16 @@ public class ConnectivityManager {
         } else if (netCap.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
             type = "enableHIPRI";
             result = TYPE_MOBILE_HIPRI;
+        // MTK
+        } else if (netCap.hasCapability(NetworkCapabilities.NET_CAPABILITY_EIMS)) {
+            type = "enableEmergency";
+            result = TYPE_MOBILE_EMERGENCY;
+        } else if (netCap.hasCapability(NetworkCapabilities.NET_CAPABILITY_XCAP)) {
+            type = "enableXCAP";
+            result = TYPE_MOBILE_XCAP;
+        } else if (netCap.hasCapability(NetworkCapabilities.NET_CAPABILITY_RCS)) {
+            type = "enableRCS";
+            result = TYPE_MOBILE_RCS;
         }
         if (type != null) {
             NetworkCapabilities testCap = networkCapabilitiesForFeature(TYPE_MOBILE, type);
@@ -1112,6 +1164,10 @@ public class ConnectivityManager {
         }
         if (netCap.hasCapability(NetworkCapabilities.NET_CAPABILITY_WIFI_P2P)) {
             return TYPE_WIFI_P2P;
+        }
+        // MTK
+        if (netCap.hasCapability(NetworkCapabilities.NET_CAPABILITY_EIMS)) {
+            return TYPE_MOBILE_EMERGENCY;
         }
         return TYPE_NONE;
     }
@@ -1885,6 +1941,22 @@ public class ConnectivityManager {
     public static final int TETHER_ERROR_DISABLE_NAT_ERROR    = 9;
     /** {@hide} */
     public static final int TETHER_ERROR_IFACE_CFG_ERROR      = 10;
+
+    // MTK
+    /** M: ipv6 tethering @{ */
+    /** {@hide}
+     * @internal
+     */
+    public static final int TETHER_ERROR_IPV6_NO_ERROR      = 0x10;
+    /** {@hide}
+     * @internal
+     */
+    public static final int TETHER_ERROR_IPV6_AVAIABLE      = 0x20;
+    /** {@hide}
+     * @internal
+     */
+    public static final int TETHER_ERROR_IPV6_UNAVAIABLE      = 0x30;
+    /** @} */
 
     /**
      * Get a more detailed error code after a Tethering or Untethering
@@ -2943,5 +3015,55 @@ public class ConnectivityManager {
     public static boolean setProcessDefaultNetworkForHostResolution(Network network) {
         return NetworkUtils.bindProcessToNetworkForHostResolution(
                 network == null ? NETID_UNSET : network.netId);
+    }
+
+    // MTK
+
+    /**
+     * support Tether dediated APN feature  for OP03APNSettingExt
+     * @internal
+     * @return true if tethering is completed or false
+     * @hide
+     */
+    public boolean isTetheringChangeDone() {
+        /*
+        try {
+            return mService.isTetheringChangeDone();
+        } catch (RemoteException e) {
+            return false;
+        }
+        */
+        return false;
+    }
+
+    /**
+     * Ipv6 Tethering Feature
+     * @internal
+     * @param enable to set ipv6 tethering function
+     * @hide
+     */
+    public void setTetheringIpv6Enable(boolean enable) {
+        /*
+        try {
+            mService.setTetheringIpv6Enable(enable);
+        } catch (RemoteException e) { }
+        */
+    }
+
+    /**
+     * Ipv6 Tethering Feature
+     * @internal
+     * @return the value to latest set by setTetheringIpv6Enable
+     * @hide
+     */
+    public boolean getTetheringIpv6Enable() {
+        /*
+        try {
+            return mService.getTetheringIpv6Enable();
+        } catch (RemoteException e) {
+            return false;
+        }
+        */
+        return false;
     }
 }

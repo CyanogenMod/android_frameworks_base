@@ -95,6 +95,63 @@ public class SubscriptionManager {
     /** @hide */
     public static final Uri CONTENT_URI = Uri.parse("content://telephony/siminfo");
 
+    // MTK
+    /** @hide */
+    public static final int LTE_DC_PHONE_ID = TelephonyManager.getDefault().getPhoneCount();
+
+    /**
+     * M: Indicates the specified phone id for slot1 LteDcPhone.
+     */
+    /** @hide */
+    public static final int LTE_DC_PHONE_ID_1 = 10;
+
+    /**
+     * M: Indicates the specified phone id for slot2 LteDcPhone.
+     */
+    /** @hide */
+    public static final int LTE_DC_PHONE_ID_2 = 11;
+
+    /**
+     * M: Indicates the specified subscription identifier for LteDcPhone.
+     */
+    /** @hide */
+    public static final int LTE_DC_SUB_ID = -999;
+
+    /**
+     * M: Indicates the specified subscription identifier for slot1 LteDcPhone.
+     */
+    /** @hide */
+    public static final int LTE_DC_SUB_ID_1 = -10;
+
+    /**
+     * M: Indicates the specified subscription identifier for slot2 LteDcPhone.
+     */
+    /** @hide */
+    public static final int LTE_DC_SUB_ID_2 = -11;
+
+    private static final boolean MTK_LTEDC_SUPPORT =
+                        "1".equals(android.os.SystemProperties.get("ro.mtk_svlte_support"))
+                        || "1".equals(android.os.SystemProperties.get("ro.mtk_srlte_support"));
+
+    /** @hide */
+    public static final int EXTRA_VALUE_NEW_SIM = 1;
+    /** @hide */
+    public static final int EXTRA_VALUE_REMOVE_SIM = 2;
+    /** @hide */
+    public static final int EXTRA_VALUE_REPOSITION_SIM = 3;
+    /** @hide */
+    public static final int EXTRA_VALUE_NOCHANGE = 4;
+
+    /** @hide */
+    public static final String INTENT_KEY_DETECT_STATUS = "simDetectStatus";
+    /** @hide */
+    public static final String INTENT_KEY_SIM_COUNT = "simCount";
+    /** @hide */
+    public static final String INTENT_KEY_NEW_SIM_SLOT = "newSIMSlot";
+    /** @hide */
+    public static final String INTENT_KEY_NEW_SIM_STATUS = "newSIMStatus";
+    // MTK-END
+
     /**
      * TelephonyProvider unique key column name is the subscription id.
      * <P>Type: TEXT (String)</P>
@@ -915,6 +972,12 @@ public class SubscriptionManager {
             if (DBG) {
                 logd("[getPhoneId]- fail");
             }
+            // MTK
+            if (subId > DUMMY_SUBSCRIPTION_ID_BASE - TelephonyManager.getDefault().getSimCount()) {
+                logd("[getPhoneId]- return dummy value, subId = " + subId);
+                return (DUMMY_SUBSCRIPTION_ID_BASE  - subId);
+            }
+            // MTK-END
             return INVALID_PHONE_INDEX;
         }
 
@@ -1136,6 +1199,13 @@ public class SubscriptionManager {
      * @hide
      */
     public static boolean isValidSubscriptionId(int subId) {
+        // MTK-START
+        // Add the special handle for LTEDC
+        if (MTK_LTEDC_SUPPORT) {
+            return subId > INVALID_SUBSCRIPTION_ID || subId == LTE_DC_SUB_ID_1
+                    || subId == LTE_DC_SUB_ID_2;
+        }
+        // MTK-END
         return subId > INVALID_SUBSCRIPTION_ID ;
     }
 
@@ -1155,6 +1225,13 @@ public class SubscriptionManager {
 
     /** @hide */
     public static boolean isValidPhoneId(int phoneId) {
+        // MTK-START
+        // Add the special handle for LTEDC
+        if (MTK_LTEDC_SUPPORT) {
+            return (phoneId >= 0 && phoneId < TelephonyManager.getDefault().getPhoneCount())
+                    || phoneId == LTE_DC_PHONE_ID_1 || phoneId == LTE_DC_PHONE_ID_2;
+        }
+        // MTK-END
         return phoneId >= 0 && phoneId < TelephonyManager.getDefault().getPhoneCount();
     }
 
@@ -1420,4 +1497,148 @@ public class SubscriptionManager {
         }
         return false;
     }
+
+    // MTK
+
+    /**
+     * Get subId associated with the slotId.
+     * @param phoneId the specified phoneId
+     * @return subId as a positive integer
+     * INVALID_SUBSCRIPTION_ID if an invalid phone index
+     * @hide
+     */
+    public static int getSubIdUsingPhoneId(int phoneId) {
+        if (VDBG) logd("[getSubIdUsingPhoneId]+ phoneId:" + phoneId);
+
+        int subId = INVALID_SUBSCRIPTION_ID;
+
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                subId = iSub.getSubIdUsingPhoneId(phoneId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return subId;
+    }
+
+    // xen0n: MTK TODO
+    /**
+     * Set subId as default SubId.
+     * @param subId the specified subId
+     * @hide
+     */
+    /*
+    public static void setDefaultSubId(int subId) {
+        if (VDBG) logd("setDefaultSubId sub id = " + subId);
+
+        if (subId <= 0) {
+            printStackTrace("setDefaultSubId subId 0");
+        }
+
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                iSub.setDefaultFallbackSubId(subId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+    */
+
+    // MTK-START
+    // FIXME: getSubscriptionInfo and getSubscriptionInfoForIccId seem could be removed.
+    // It could be replace by AOSP API. It seems only for simple usage.
+    // xen0n: What, you know it already? Then why do you write and use them in the first place? :-/
+    /**
+     * Get the SubscriptionInfo with the subId key.
+     * @param subId The unique SubscriptionInfo key in database
+     * @return SubscriptionInfo, maybe null if not found
+     * @hide
+     */
+    /*
+    public SubscriptionInfo getSubscriptionInfo(int subId) {
+        if (VDBG) {
+            logd("[getSubscriptionInfo]+ subId=" + subId);
+        }
+
+        if (!isValidSubscriptionId(subId)) {
+            logd("[getSubscriptionInfo]- invalid subId, subId = " + subId);
+            return null;
+        }
+
+        SubscriptionInfo subInfo = null;
+
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                subInfo = iSub.getSubscriptionInfo(subId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return subInfo;
+    }
+    */
+
+    /**
+     * Get the SubscriptionInfo associated with the iccId.
+     * @param iccId the IccId of SIM card
+     * @return SubscriptionInfo, maybe null if not found
+     * @hide
+     */
+    /*
+    public SubscriptionInfo getSubscriptionInfoForIccId(String iccId) {
+        if (VDBG) {
+            logd("[getSubscriptionInfoForIccId]+ iccId=" + iccId);
+        }
+
+        if (iccId == null) {
+            logd("[getSubscriptionInfoForIccId]- null iccid");
+            return null;
+        }
+
+        SubscriptionInfo result = null;
+
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                result = iSub.getSubscriptionInfoForIccId(iccId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+
+        return result;
+    }
+    */
+
+    /**
+     * Set deafult data sub ID without invoking capability switch.
+     * @param subId the default data sub ID
+     * @hide
+     */
+    /*
+    public void setDefaultDataSubIdWithoutCapabilitySwitch(int subId) {
+        if (VDBG) { logd("setDefaultDataSubIdWithoutCapabilitySwitch sub id = " + subId); }
+
+        if (subId <= 0) {
+            printStackTrace("setDefaultDataSubIdWithoutCapabilitySwitch subId 0");
+        }
+
+        try {
+            ISub iSub = ISub.Stub.asInterface(ServiceManager.getService("isub"));
+            if (iSub != null) {
+                iSub.setDefaultDataSubIdWithoutCapabilitySwitch(subId);
+            }
+        } catch (RemoteException ex) {
+            // ignore it
+        }
+    }
+    */
+    // MTK-END
 }

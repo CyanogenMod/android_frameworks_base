@@ -116,4 +116,19 @@ interface IImsUt {
      * Retrieves the configuration of the call forward for specified service class.
      */
     int queryCFForServiceClass(int condition, String number, int serviceClass);
+
+    // MTK
+
+    /// M: SS OP01 Ut @{
+    /**
+     * Retrieves the configuration of the call forward in time slot.
+     */
+    int queryCallForwardInTimeSlot(int condition);
+
+    /**
+     * Updates the configuration of the call forward in time slot.
+     */
+    int updateCallForwardInTimeSlot(int action, int condition,
+            String number, int timeSeconds, in long[] timeSlot);
+    /// @}
 }

@@ -17,6 +17,7 @@
 package com.android.ims.internal;
 
 import android.os.Message;
+import android.os.Messenger;
 import com.android.ims.ImsCallProfile;
 import com.android.ims.ImsStreamMediaProfile;
 import com.android.ims.internal.IImsCallSessionListener;
@@ -255,4 +256,33 @@ interface IImsCallSession {
      * @return {@code True} if the session is multiparty.
      */
     boolean isMultiparty();
+
+    // MTK
+
+    /// M: For one-key conference MT displayed as incoming conference call. @{
+    /**
+     * Determines if the current incoming session is multiparty.
+     * @return {@code True} if the incoming session is multiparty.
+     * @hide
+     */
+    boolean isIncomingCallMultiparty();
+    /// @}
+
+    /// M: ALPS02321477 @{
+    /// Google issue. Original sendDtmf could not pass Message.target to another process, because
+    /// Message.writeToParcel didn't write target. Workaround this issue by adding a new API
+    /// which passes target by Messenger.
+    /**
+     * Sends a DTMF code. According to <a href="http://tools.ietf.org/html/rfc2833">RFC 2833</a>,
+     * event 0 ~ 9 maps to decimal value 0 ~ 9, '*' to 10, '#' to 11, event 'A' ~ 'D' to 12 ~ 15,
+     * and event flash to 16. Currently, event flash is not supported. For usage of passing Message
+     * across processes.
+     *
+     * @param c the DTMF to send. '0' ~ '9', 'A' ~ 'D', '*', '#' are valid inputs.
+     * @param result.
+     * @param target Message target handler.
+     * @hide
+     */
+    void sendDtmfbyTarget(char c, in Message result, in Messenger target);
+    /// @}
 }

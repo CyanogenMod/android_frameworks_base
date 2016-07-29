@@ -262,4 +262,84 @@ public interface TelephonyProperties
     static final String EXTRA_IS_CALL_PULL =
             "org.codeaurora.extra.IS_CALL_PULL";
 
+    // MTK
+
+    /**
+    * Indicate Modem version for stack 2.
+    */
+    static final String PROPERTY_BASEBAND_VERSION_2 = "gsm.version.baseband.2";
+
+    //[ALPS01804936]-start:fix JE when change system language to "Burmese"
+    static final String PROPERTY_OPERATOR_ALPHA_2 = "gsm.operator.alpha.2";
+    static final String PROPERTY_OPERATOR_ALPHA_3 = "gsm.operator.alpha.3";
+    static final String PROPERTY_OPERATOR_ALPHA_4 = "gsm.operator.alpha.4";
+    //[ALPS01804936]-end
+
+    // Added by M begin
+    /** The IMSI of the SIM
+     *  Availability: SIM state must be "READY"
+     */
+    static String PROPERTY_ICC_OPERATOR_IMSI   = "gsm.sim.operator.imsi";
+
+    /**
+    * Indicate if chaneing to SIM locale is processing
+    */
+    static final String PROPERTY_SIM_LOCALE_SETTINGS = "gsm.sim.locale.waiting";
+
+    /** PROPERTY_ICC_OPERATOR_DEFAULT_NAME is the operator name for plmn which origins the SIM.
+     *  Availablity: SIM state must be "READY"
+     */
+    static String PROPERTY_ICC_OPERATOR_DEFAULT_NAME = "gsm.sim.operator.default-name";
+    // Added by M end
+
+    static final String PROPERTY_ACTIVE_MD = "ril.active.md";
+
+ /**
+    * Indicate the highest radio access capability(ex: UMTS,LTE,etc.) of modem
+    */
+    static String PROPERTY_BASEBAND_CAPABILITY = "gsm.baseband.capability";
+    static String PROPERTY_BASEBAND_CAPABILITY_MD2 = "gsm.baseband.capability.md2";
+
+ /**
+    * NITZ operator long name,short name, numeric (if ever received from MM information)
+    */
+    static String PROPERTY_NITZ_OPER_CODE = "persist.radio.nitz_oper_code";
+    static String PROPERTY_NITZ_OPER_LNAME = "persist.radio.nitz_oper_lname";
+    static String PROPERTY_NITZ_OPER_SNAME = "persist.radio.nitz_oper_sname";
+
+    /** PROPERTY_TERMINAL_BASED_CALL_WAITING_MODE is the mode for the terminal-based call waiting
+     *  possible values: "disabled_tbcw", "enabled_tbcw_on" and "enabled_tbcw_off".
+     */
+    static String PROPERTY_TERMINAL_BASED_CALL_WAITING_MODE = "persist.radio.terminal-based.cw";
+    static String TERMINAL_BASED_CALL_WAITING_DISABLED = "disabled_tbcw";
+    static String TERMINAL_BASED_CALL_WAITING_ENABLED_ON = "enabled_tbcw_on";
+    static String TERMINAL_BASED_CALL_WAITING_ENABLED_OFF = "enabled_tbcw_off";
+
+    /** PROPERTY_UT_CFU_NOTIFICATION_MODE is the mode for the UT/XCAP CFU notification
+     * possible values: "disabled_ut_cfu_notification", "enabled_ut_cfu_notification_on"
+     * and "enabled_ut_cfu_notification_off".
+     */
+    static String PROPERTY_UT_CFU_NOTIFICATION_MODE = "persist.radio.ut.cfu.mode";
+    static String UT_CFU_NOTIFICATION_MODE_DISABLED = "disabled_ut_cfu_mode";
+    static String UT_CFU_NOTIFICATION_MODE_ON = "enabled_ut_cfu_mode_on";
+    static String UT_CFU_NOTIFICATION_MODE_OFF = "enabled_ut_cfu_mode_off";
+
+     /**
+     * Property to set/get svlte mode
+     * Type:  String(svlte, csfb)
+     */
+    static final String PROPERTY_RADIO_SVLTE_MODE = "persist.radio.svlte.mode";
+
+
+    /**
+     * External SIM enabled properties.
+     */
+    static final String PROPERTY_EXTERNAL_SIM_ENABLED = "gsm.external.sim.enabled";
+
+    /**
+     * External SIM inserted properties.
+     * 1: local SIM inserted, 2: remote sim inserted
+     */
+    static final String PROPERTY_EXTERNAL_SIM_INSERTED = "gsm.external.sim.inserted";
+
 }

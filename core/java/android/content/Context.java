@@ -3017,6 +3017,19 @@ public abstract class Context {
      */
     public static final String TELEPHONY_SERVICE = "phone";
 
+    // MTK
+    /**
+     * Use with {@link #getSystemService} to retrieve a
+     * {@link android.telephony.TelephonyManagerEx} for handling management the
+     * telephony features of the device.
+     *
+     * @see #getSystemService
+     * @see android.telephony.TelephonyManagerEx
+     * @hide
+     * @internal
+     */
+    public static final String TELEPHONY_SERVICE_EX = "phoneEx";
+
     /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.telephony.SubscriptionManager} for handling management the

@@ -130,4 +130,17 @@ interface IImsCallSessionListener {
      */
     void callSessionSuppServiceReceived(in IImsCallSession session,
          in ImsSuppServiceNotification suppSrvNotification);
+
+    // MTK
+
+    /// M: ALPS02256671. PAU update. @{
+    /**
+     * Notifies of a change to the PAU information for this {@code ImsCallSession}.
+     *
+     * @param session The call session.
+     * @param profile The call profile.
+     * @hide
+     */
+    void callSessionPauInfoChanged(in IImsCallSession session, in ImsCallProfile profile);
+    /// @}
 }
