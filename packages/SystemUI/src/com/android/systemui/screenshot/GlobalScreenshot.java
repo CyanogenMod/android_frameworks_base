@@ -385,7 +385,11 @@ class DeleteImageInBackgroundTask extends AsyncTask<Uri, Void, Void> {
 
         Uri screenshotUri = params[0];
         ContentResolver resolver = mContext.getContentResolver();
-        resolver.delete(screenshotUri, null, null);
+        try{
+            resolver.delete(screenshotUri, null, null);
+        } catch (UnsupportedOperationException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }
