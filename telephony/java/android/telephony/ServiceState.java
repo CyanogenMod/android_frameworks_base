@@ -159,6 +159,35 @@ public class ServiceState implements Parcelable {
      */
     public static final int RIL_RADIO_TECHNOLOGY_LTE_CA = 19;
 
+    // MTK
+    // For HSPAP detail radio technology
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_MTK = 128;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_HSDPAP = RIL_RADIO_TECHNOLOGY_MTK + 1;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_HSDPAP_UPA = RIL_RADIO_TECHNOLOGY_MTK + 2;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_HSUPAP = RIL_RADIO_TECHNOLOGY_MTK + 3;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_HSUPAP_DPA = RIL_RADIO_TECHNOLOGY_MTK + 4;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_DC_DPA = RIL_RADIO_TECHNOLOGY_MTK + 5;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_DC_UPA = RIL_RADIO_TECHNOLOGY_MTK + 6;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_DC_HSDPAP = RIL_RADIO_TECHNOLOGY_MTK + 7;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_DC_HSDPAP_UPA = RIL_RADIO_TECHNOLOGY_MTK + 8;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_DC_HSDPAP_DPA = RIL_RADIO_TECHNOLOGY_MTK + 9;
+    /** @hide */
+    public static final int RIL_RADIO_TECHNOLOGY_DC_HSPAP = RIL_RADIO_TECHNOLOGY_MTK + 10;
+
+    // for LTEA (carrier aggregation)
+    /** @hide*/
+    public static final int RIL_RADIO_TECHNOLOGY_LTEA = RIL_RADIO_TECHNOLOGY_MTK + 11;
+
     /**
      * Available registration states for GSM, UMTS and CDMA.
      */
@@ -174,6 +203,17 @@ public class ServiceState implements Parcelable {
     public static final int REGISTRATION_STATE_UNKNOWN = 4;
     /** @hide */
     public static final int REGISTRATION_STATE_ROAMING = 5;
+    // MTK
+    /** @hide */
+    public static final int
+            REGISTRATION_STATE_NOT_REGISTERED_AND_NOT_SEARCHING_EMERGENCY_CALL_ENABLED = 10;
+    /** @hide */
+    public static final int REGISTRATION_STATE_NOT_REGISTERED_AND_SEARCHING_EMERGENCY_CALL_ENABLED
+            = 12;
+    /** @hide */
+    public static final int REGISTRATION_STATE_REGISTRATION_DENIED_EMERGENCY_CALL_ENABLED = 13;
+    /** @hide */
+    public static final int REGISTRATION_STATE_UNKNOWN_EMERGENCY_CALL_ENABLED = 14;
 
     private int mVoiceRegState = STATE_OUT_OF_SERVICE;
     private int mDataRegState = STATE_OUT_OF_SERVICE;
@@ -227,6 +267,30 @@ public class ServiceState implements Parcelable {
     private int mCdmaEriIconMode;
 
     private boolean mIsDataRoamingFromRegistration;
+
+    // MTK
+    //MTK-START
+    private int mRilVoiceRegState = REGISTRATION_STATE_NOT_REGISTERED_AND_NOT_SEARCHING;
+    private int mRilDataRegState  = REGISTRATION_STATE_NOT_REGISTERED_AND_NOT_SEARCHING;
+    //[ALPS01675318] -START
+    private int mProprietaryDataRadioTechnology;
+    //[ALPS01675318] -END
+    private int mVoiceRejectCause = -1;
+    private int mDataRejectCause = -1;
+    //MTK-END
+
+    //support by via start [ALPS00421033]
+    /** @hide */
+    public static final int RIL_CDMA_NETWORK_MODE_UNKOWN    = 0;
+    /** @hide */
+    public static final int RIL_CDMA_NETWORK_MODE_1X_ONLY   = 2;
+    /** @hide */
+    public static final int RIL_CDMA_NETWORK_MODE_EVDO_ONLY = 4;
+    /** @hide */
+    public static final int RIL_CDMA_NETWORK_MODE_1X_EVDO   = 8;
+    /** @hide */
+    protected int mCdmaNetWorkMode = RIL_CDMA_NETWORK_MODE_UNKOWN;
+    //support by via end. [ALPS00421033]
 
     /**
      * get String description of roaming type
@@ -306,6 +370,13 @@ public class ServiceState implements Parcelable {
         mCdmaEriIconMode = s.mCdmaEriIconMode;
         mIsEmergencyOnly = s.mIsEmergencyOnly;
         mIsDataRoamingFromRegistration = s.mIsDataRoamingFromRegistration;
+        // MTK
+        mRilVoiceRegState = s.mRilVoiceRegState;
+        mRilDataRegState = s.mRilDataRegState;
+        mProprietaryDataRadioTechnology = s.mProprietaryDataRadioTechnology;
+        mVoiceRejectCause = s.mVoiceRejectCause;
+        mDataRejectCause = s.mDataRejectCause;
+        mCdmaNetWorkMode = s.mCdmaNetWorkMode;
     }
 
     /**
@@ -333,6 +404,16 @@ public class ServiceState implements Parcelable {
         mCdmaEriIconIndex = in.readInt();
         mCdmaEriIconMode = in.readInt();
         mIsEmergencyOnly = in.readInt() != 0;
+        // MTK
+        // xen0n: keep the order consistent with MTK sources to prevent some
+        // external components making assumptions about the parcel layout
+        mRilVoiceRegState = in.readInt();
+        mRilDataRegState = in.readInt();
+        mProprietaryDataRadioTechnology = in.readInt();
+        mVoiceRejectCause = in.readInt();
+        mDataRejectCause = in.readInt();
+        mCdmaNetWorkMode = in.readInt();
+        // MTK-END
         mIsDataRoamingFromRegistration = in.readInt() != 0;
     }
 
@@ -358,6 +439,16 @@ public class ServiceState implements Parcelable {
         out.writeInt(mCdmaEriIconIndex);
         out.writeInt(mCdmaEriIconMode);
         out.writeInt(mIsEmergencyOnly ? 1 : 0);
+        // MTK
+        // xen0n: keep the order consistent with MTK sources to prevent some
+        // external components making assumptions about the parcel layout
+        out.writeInt(mRilVoiceRegState);
+        out.writeInt(mRilDataRegState);
+        out.writeInt(mProprietaryDataRadioTechnology);
+        out.writeInt(mVoiceRejectCause);
+        out.writeInt(mDataRejectCause);
+        out.writeInt(mCdmaNetWorkMode);
+        // MTK-END
         out.writeInt(mIsDataRoamingFromRegistration ? 1 : 0);
     }
 
@@ -631,6 +722,13 @@ public class ServiceState implements Parcelable {
                 + mCdmaRoamingIndicator
                 + mCdmaDefaultRoamingIndicator
                 + (mIsEmergencyOnly ? 1 : 0)
+                // xen0n: MTK impl didn't take their additions into account
+                + mRilVoiceRegState
+                + mRilDataRegState
+                + mProprietaryDataRadioTechnology
+                + mVoiceRejectCause
+                + mDataRejectCause
+                // xen0n end
                 + (mIsDataRoamingFromRegistration ? 1 : 0));
     }
 
@@ -668,6 +766,15 @@ public class ServiceState implements Parcelable {
                 && equalsHandlesNulls(mCdmaDefaultRoamingIndicator,
                         s.mCdmaDefaultRoamingIndicator)
                 && mIsEmergencyOnly == s.mIsEmergencyOnly
+                // MTK
+                && mRilVoiceRegState == s.mRilVoiceRegState
+                && mRilDataRegState == s.mRilDataRegState
+                && equalsHandlesNulls(mProprietaryDataRadioTechnology,
+                        s.mProprietaryDataRadioTechnology)
+                && mVoiceRejectCause == s.mVoiceRejectCause
+                && mDataRejectCause == s.mDataRejectCause
+                && mCdmaNetWorkMode == s.mCdmaNetWorkMode
+                // MTK-END
                 && mIsDataRoamingFromRegistration == s.mIsDataRoamingFromRegistration);
     }
 
@@ -776,6 +883,14 @@ public class ServiceState implements Parcelable {
                 + " RoamInd=" + mCdmaRoamingIndicator
                 + " DefRoamInd=" + mCdmaDefaultRoamingIndicator
                 + " EmergOnly=" + mIsEmergencyOnly
+                // MTK
+                + " Ril Voice Regist state: " + mRilVoiceRegState
+                + " Ril Data Regist state: " + mRilDataRegState
+                + " mProprietaryDataRadioTechnology: " + mProprietaryDataRadioTechnology
+                + " VoiceRejectCause: " + mVoiceRejectCause
+                + " DataRejectCause: " + mDataRejectCause
+                + " mCdmaNetWorkMode: " + mCdmaNetWorkMode
+                // MTK-END
                 + " IsDataRoamingFromRegistration=" + mIsDataRoamingFromRegistration);
     }
 
@@ -803,6 +918,12 @@ public class ServiceState implements Parcelable {
         mCdmaEriIconMode = -1;
         mIsEmergencyOnly = false;
         mIsDataRoamingFromRegistration = false;
+        // MTK
+        mRilVoiceRegState = REGISTRATION_STATE_NOT_REGISTERED_AND_NOT_SEARCHING;
+        mRilDataRegState  = REGISTRATION_STATE_NOT_REGISTERED_AND_NOT_SEARCHING;
+        mProprietaryDataRadioTechnology = 0;
+        mVoiceRejectCause = -1;
+        mDataRejectCause = -1;
     }
 
     public void setStateOutOfService() {
@@ -976,6 +1097,13 @@ public class ServiceState implements Parcelable {
         mCdmaDefaultRoamingIndicator = m.getInt("cdmaDefaultRoamingIndicator");
         mIsEmergencyOnly = m.getBoolean("emergencyOnly");
         mIsDataRoamingFromRegistration = m.getBoolean("isDataRoamingFromRegistration");
+        // MTK
+        mRilVoiceRegState = m.getInt("RilVoiceRegState");
+        mRilDataRegState = m.getInt("RilDataRegState");
+        mProprietaryDataRadioTechnology = m.getInt("proprietaryDataRadioTechnology");
+        mVoiceRejectCause= m.getInt("VoiceRejectCause");
+        mDataRejectCause= m.getInt("DataRejectCause");
+        mCdmaNetWorkMode = m.getInt("cdmaNetWorkMode");
     }
 
     /**
@@ -1005,6 +1133,13 @@ public class ServiceState implements Parcelable {
         m.putInt("cdmaDefaultRoamingIndicator", mCdmaDefaultRoamingIndicator);
         m.putBoolean("emergencyOnly", Boolean.valueOf(mIsEmergencyOnly));
         m.putBoolean("isDataRoamingFromRegistration", Boolean.valueOf(mIsDataRoamingFromRegistration));
+        // MTK
+        m.putInt("RilVoiceRegState", mRilVoiceRegState);
+        m.putInt("RilDataRegState", mRilDataRegState);
+        m.putInt("proprietaryDataRadioTechnology", mProprietaryDataRadioTechnology);
+        m.putInt("VoiceRejectCause", mVoiceRejectCause);
+        m.putInt("DataRejectCause", mDataRejectCause);
+        m.putInt("cdmaNetWorkMode", mCdmaNetWorkMode);
     }
 
     /** @hide */
@@ -1223,4 +1358,169 @@ public class ServiceState implements Parcelable {
 
         return newSs;
     }
+
+    // MTK
+
+    /**
+     * Get current voice network registration reject cause.
+     * See 3GPP TS 24.008,section 10.5.3.6 and Annex G.
+     * @return registration reject cause or INVALID value (-1)
+     * @hide
+     */
+    public int getVoiceRejectCause() {
+        return mVoiceRejectCause;
+    }
+
+    /**
+     * Get current data network registration reject cause.
+     * See 3GPP TS 24.008 Annex G.6 "Additional cause codes for GMM".
+     * @return registration reject cause or INVALID value (-1)
+     * @hide
+     */
+    public int getDataRejectCause() {
+        return mDataRejectCause;
+    }
+
+    /** @hide */
+    public void setVoiceRejectCause(int cause) {
+        mVoiceRejectCause = cause;
+    }
+
+    /** @hide */
+    public void setDataRejectCause(int cause) {
+        mDataRejectCause = cause;
+    }
+
+    //[ALPS01675318] -START
+    /** @hide */
+    public int getProprietaryDataRadioTechnology() {
+        return this.mProprietaryDataRadioTechnology;
+    }
+
+    /** @hide */
+    public void setProprietaryDataRadioTechnology(int rt) {
+        if (rt > ServiceState.RIL_RADIO_TECHNOLOGY_MTK) {
+            if (DBG) Rlog.d(LOG_TAG, "[ServiceState] setProprietaryDataRadioTechnology =" + rt);
+            mProprietaryDataRadioTechnology = rt;
+            //carrier aggregation
+            if (rt == ServiceState.RIL_RADIO_TECHNOLOGY_LTEA) {
+                // xen0n: for CM CAF code
+                // rt = ServiceState.RIL_RADIO_TECHNOLOGY_LTE;
+                rt = ServiceState.RIL_RADIO_TECHNOLOGY_LTE_CA;
+            } else {
+                rt = ServiceState.RIL_RADIO_TECHNOLOGY_HSPAP;
+            }
+        } else {
+            if (DBG) Rlog.d(LOG_TAG, "[ServiceState] setProprietaryDataRadioTechnology=0");
+            mProprietaryDataRadioTechnology = 0;
+        }
+        setRilDataRadioTechnology(rt);
+    }
+
+    /** @hide */
+    public int getRegState() {
+        return getRilVoiceRegState();
+    }
+
+   /** @hide */
+    public int getRilVoiceRegState() {
+        return mRilVoiceRegState;
+    }
+
+   /** @hide */
+    public int getRilDataRegState() {
+        return mRilDataRegState;
+    }
+
+    /**
+     * @hide
+     */
+    public void setRegState(int nRegState) {
+        setRilVoiceRegState(nRegState);
+    }
+
+    /**
+     * @hide
+     */
+    public void setRilVoiceRegState(int nRegState) {
+        mRilVoiceRegState = nRegState;
+    }
+
+    /**
+     * @hide
+     */
+    public void setRilDataRegState(int nDataRegState) {
+        mRilDataRegState = nDataRegState;
+    }
+
+    /**
+     * @hide
+     */
+    public boolean isVoiceRadioTechnologyHigher(int nRadioTechnology) {
+        return compareTwoRadioTechnology(mRilVoiceRadioTechnology, nRadioTechnology);
+    }
+
+    /**
+     * @hide
+     */
+     public boolean isDataRadioTechnologyHigher(int nRadioTechnology) {
+        return compareTwoRadioTechnology(mRilDataRadioTechnology, nRadioTechnology);
+    }
+
+    /**
+     * @hide
+     */
+     public boolean compareTwoRadioTechnology(int nRadioTechnology1, int nRadioTechnology2) {
+         if (nRadioTechnology1 == nRadioTechnology2) {
+             return false;
+         } else if (nRadioTechnology1 == RIL_RADIO_TECHNOLOGY_LTE) {
+             return true;
+         } else if (nRadioTechnology2 == RIL_RADIO_TECHNOLOGY_LTE) {
+             return false;
+         // xen0n: take CAF constant into consideration
+         // reason for not using or expressions is just for cleaner diff
+         } else if (nRadioTechnology1 == RIL_RADIO_TECHNOLOGY_LTE_CA) {
+             return true;
+         } else if (nRadioTechnology2 == RIL_RADIO_TECHNOLOGY_LTE_CA) {
+             return false;
+         // xen0n end
+         } else if (nRadioTechnology1 == RIL_RADIO_TECHNOLOGY_GSM) {
+             // ALPS02230032-START
+             if (nRadioTechnology2 == RIL_RADIO_TECHNOLOGY_UNKNOWN) {
+                 return true;
+             }
+             // ALPS00230032-END
+             return false;
+         } else if (nRadioTechnology2 == RIL_RADIO_TECHNOLOGY_GSM) {
+             // ALPS02230032-START
+             if (nRadioTechnology1 == RIL_RADIO_TECHNOLOGY_UNKNOWN) {
+                 return false;
+             }
+             // ALPS00230032-END
+             return true;
+         } else if (nRadioTechnology1 > nRadioTechnology2) {
+             return true;
+         } else {
+             return false;
+         }
+     }
+
+     //M: MTK Added methods END
+
+
+    //support by via start [ALPS00421033]
+    /**
+     * @hide
+     */
+    public int getCdmaNetworkMode() {
+        return mCdmaNetWorkMode;
+    }
+
+    /**
+     * @hide
+     */
+    public void setCdmaNetworkMode(int networkMode) {
+        mCdmaNetWorkMode = networkMode;
+    }
+    //support by via end. [ALPS00421033]
 }

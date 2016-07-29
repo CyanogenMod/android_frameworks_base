@@ -352,4 +352,20 @@ public class ImsReasonInfo implements Parcelable {
             return new ImsReasonInfo[size];
         }
     };
+
+    // MTK
+
+    /// M: @{
+    public static final int CODE_SIP_REDIRECTED_EMERGENCY = 329;
+    /// @}
+
+    public static final int CODE_UT_XCAP_403_FORBIDDEN = 830;
+    public static final int CODE_UT_UNKNOWN_HOST = 831;
+
+    ///M: ALPS02112553. For WFC @{
+    public static final int CODE_SIP_WIFI_SIGNAL_LOST = 905;
+    public static final int CODE_SIP_WFC_ISP_PROBLEM = 906;
+    public static final int CODE_SIP_HANDOVER_WIFI_FAIL = 907;
+    public static final int CODE_SIP_HANDOVER_LTE_FAIL = 908;
+    ///@}
 }

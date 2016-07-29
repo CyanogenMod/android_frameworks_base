@@ -45,4 +45,11 @@ oneway interface IImsVideoCallCallback {
     void changeCameraCapabilities(in VideoProfile.CameraCapabilities cameraCapabilities);
 
     void changeVideoQuality(int videoQuality);
+
+    // MTK
+
+    /* M: ViLTE part start */
+    /* Different from AOSP, additional parameter "rotation" is added. */
+    void changePeerDimensionsWithAngle(int width, int height, int rotation);
+    /* M: ViLTE part end */
 }

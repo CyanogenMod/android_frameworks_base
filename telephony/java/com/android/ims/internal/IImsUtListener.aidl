@@ -19,6 +19,8 @@ package com.android.ims.internal;
 import android.os.Bundle;
 
 import com.android.ims.ImsCallForwardInfo;
+/// M: SS OP01 Ut
+import com.android.ims.ImsCallForwardInfoEx;
 import com.android.ims.ImsSsInfo;
 import com.android.ims.internal.IImsUt;
 import com.android.ims.ImsReasonInfo;
@@ -56,4 +58,14 @@ interface IImsUtListener {
      */
     void utConfigurationCallWaitingQueried(in IImsUt ut,
             int id, in ImsSsInfo[] cwInfo);
+
+    // MTK
+
+    /// M: SS OP01 Ut @{
+    /**
+     * Notifies the status of the call forwarding in a time slot supplementary service.
+     */
+    void utConfigurationCallForwardInTimeSlotQueried(in IImsUt ut,
+            int id, in ImsCallForwardInfoEx[] cfInfo);
+    /// @}
 }
