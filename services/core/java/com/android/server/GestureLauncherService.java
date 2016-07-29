@@ -28,12 +28,14 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.MutableBoolean;
 import android.util.Slog;
 import android.view.KeyEvent;
@@ -41,6 +43,8 @@ import android.view.KeyEvent;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.server.statusbar.StatusBarManagerInternal;
+
+import java.util.Arrays;
 
 /**
  * The service that listens for gestures detected in sensor firmware and starts the intent
@@ -106,6 +110,20 @@ public class GestureLauncherService extends SystemService {
     private boolean mCameraDoubleTapPowerEnabled;
     private long mLastPowerDown;
 
+     /**
+     * Whether EmergencyCall on power button tap gesture is currently enabled;
+     */
+    private boolean mIsEmergencyOnPowerKeyTapEnabled;
+    private long[] mHits;
+    private long mDuration;
+    private String mEmergencyNumber;
+
+    /**
+    * Time in milliseconds in which interval power tap must be pressed to make
+    * an emergency call.
+    */
+    private static final long EMERGENCY_CALL_POWER_KEY_TAP_INTERVAL = 400;
+
     public GestureLauncherService(Context context) {
         super(context);
         mContext = context;
@@ -129,7 +147,7 @@ public class GestureLauncherService extends SystemService {
                     "GestureLauncherService");
             updateCameraRegistered();
             updateCameraDoubleTapPowerEnabled();
-
+            updateEmergencyCallTapPowerEnabled();
             mUserId = ActivityManager.getCurrentUser();
             mContext.registerReceiver(mUserReceiver, new IntentFilter(Intent.ACTION_USER_SWITCHED));
             registerContentObservers();
@@ -244,11 +262,33 @@ public class GestureLauncherService extends SystemService {
                 com.android.internal.R.bool.config_cameraDoubleTapPowerGestureEnabled);
     }
 
+    public static boolean isEmergencyOnpowerButtonTapEnabled(Resources resources) {
+        return SystemProperties.getBoolean(
+                "persist.sys.ecall_pwr_key_press", false) ||
+                resources.getBoolean(
+                com.android.internal.R.bool.config_emergencyCallOnPowerkeyTapGestureEnabled);
+    }
+
     /**
      * Whether GestureLauncherService should be enabled according to system properties.
      */
     public static boolean isGestureLauncherEnabled(Resources resources) {
-        return isCameraLaunchEnabled(resources) || isCameraDoubleTapPowerEnabled(resources);
+        return isCameraLaunchEnabled(resources) || isCameraDoubleTapPowerEnabled(resources) ||
+                isEmergencyOnpowerButtonTapEnabled(resources);
+    }
+
+    private void updateEmergencyCallTapPowerEnabled() {
+        Resources resources = mContext.getResources();
+        mIsEmergencyOnPowerKeyTapEnabled =
+                isEmergencyOnpowerButtonTapEnabled(resources);
+        mEmergencyNumber = resources.getString(
+                com.android.internal.R.string.power_key_emergency_number);
+        int hits = resources.getInteger(
+                com.android.internal.R.integer.power_key_hits_emergency);
+        mDuration = hits * EMERGENCY_CALL_POWER_KEY_TAP_INTERVAL;
+        mHits = new long[hits];
+        Slog.d(TAG, "Gesture launcher mEmergencyNumber = " +
+                mEmergencyNumber + " hits = " + hits);
     }
 
     public boolean interceptPowerKeyDown(KeyEvent event, boolean interactive,
@@ -258,7 +298,19 @@ public class GestureLauncherService extends SystemService {
         long doubleTapInterval;
         synchronized (this) {
             doubleTapInterval = event.getEventTime() - mLastPowerDown;
-            if (mCameraDoubleTapPowerEnabled
+            if (mIsEmergencyOnPowerKeyTapEnabled) {
+                System.arraycopy(mHits, 1, mHits, 0, mHits.length-1);
+                mHits[mHits.length-1] = SystemClock.uptimeMillis();
+                for (int i = 0 ; i < mHits.length ; i++) {
+                    Slog.i(TAG, "mHits[" + i + "] = " + mHits[i] + "ms");
+                }
+                if (mHits[0] >=
+                        (SystemClock.uptimeMillis()-mDuration)) {
+                     launched = true;
+                     intercept = interactive;
+                     Arrays.fill(mHits,0);
+                }
+            } else if (mCameraDoubleTapPowerEnabled
                     && doubleTapInterval < CAMERA_POWER_DOUBLE_TAP_MAX_TIME_MS) {
                 launched = true;
                 intercept = interactive;
@@ -266,13 +318,22 @@ public class GestureLauncherService extends SystemService {
             mLastPowerDown = event.getEventTime();
         }
         if (launched) {
-            Slog.i(TAG, "Power button double tap gesture detected, launching camera. Interval="
-                    + doubleTapInterval + "ms");
-            launched = handleCameraLaunchGesture(false /* useWakelock */,
-                    StatusBarManager.CAMERA_LAUNCH_SOURCE_POWER_DOUBLE_TAP);
-            if (launched) {
-                MetricsLogger.action(mContext, MetricsEvent.ACTION_DOUBLE_TAP_POWER_CAMERA_GESTURE,
-                        (int) doubleTapInterval);
+            if (mIsEmergencyOnPowerKeyTapEnabled &&
+                    !TextUtils.isEmpty(mEmergencyNumber)) {
+                Slog.i(TAG, "Power button Triple tap gesture detected, launching Emergency Call");
+                Intent intent = new Intent(Intent.ACTION_CALL_PRIVILEGED,
+                        Uri.fromParts("tel", mEmergencyNumber, null));
+                getContext().startActivity(intent);
+            } else {
+                Slog.i(TAG, "Power button double tap gesture detected, launching camera. Interval="
+                        + doubleTapInterval + "ms");
+                launched = handleCameraLaunchGesture(false /* useWakelock */,
+                        StatusBarManager.CAMERA_LAUNCH_SOURCE_POWER_DOUBLE_TAP);
+                if (launched) {
+                    MetricsLogger.action(mContext,
+                            MetricsEvent.ACTION_DOUBLE_TAP_POWER_CAMERA_GESTURE,
+                            (int) doubleTapInterval);
+                }
             }
         }
         MetricsLogger.histogram(mContext, "power_double_tap_interval", (int) doubleTapInterval);
