@@ -179,6 +179,7 @@ public class ImsCallProfile implements Parcelable {
      *  DisplayText: Display text for the call.
      *  AdditionalCallInfo: Additional call info.
      *  CallRadioTech: The radio tech on which the call is placed.
+     *  pau : Additional user identity information
      */
     public static final String EXTRA_OI = "oi";
     public static final String EXTRA_CNA = "cna";
@@ -189,6 +190,15 @@ public class ImsCallProfile implements Parcelable {
     public static final String EXTRA_DISPLAY_TEXT = "DisplayText";
     public static final String EXTRA_ADDITIONAL_CALL_INFO = "AdditionalCallInfo";
     public static final String EXTRA_IS_CALL_PULL = "CallPull";
+    // MTK
+    public static final String EXTRA_PAU = "pau";
+
+    /// M: @{
+    public static final String EXTRA_MPTY = "mpty";
+    public static final String EXTRA_INCOMING_MPTY = "incoming_mpty";
+    public static final String EXTRA_CONF_PARTICIPANT_INDEX = "conf_participant_index";
+    public static final String EXTRA_CONF_PARTICIPANT_STATE = "conf_participant_state";
+    /// @}
 
     /**
      * Extra key which the RIL can use to indicate the radio technology used for a call.

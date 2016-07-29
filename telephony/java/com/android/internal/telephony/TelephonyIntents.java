@@ -417,4 +417,370 @@ public class TelephonyIntents {
      */
     public static final String ACTION_SET_RADIO_CAPABILITY_FAILED =
             "android.intent.action.ACTION_SET_RADIO_CAPABILITY_FAILED";
+
+    // MTK
+
+// M: [LTE][Low Power][UL traffic shaping] Start
+    /**
+     * Broadcast Action: The LTE access stratum state has changed.
+     * The intent will have the following extra values:</p>
+     * <dl>
+     *   <dt>phoneName</dt><dd>A string version of the phone name.</dd>
+     *   <dt>state</dt><dd>One of {@code UNKNOWN}, {@code IDLE},
+     *      or {@code CONNECTED}.</dd>
+     * </dl>
+     *
+     * <p class="note">
+     * Requires the READ_PHONE_STATE permission.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     */
+    public static final String ACTION_LTE_ACCESS_STRATUM_STATE_CHANGED
+            = "android.intent.action.LTE_ACCESS_STRATUM_STATE_CHANGED";
+
+    /**
+     * Broadcast Action: The PS network type has changed for low power feature on.
+     * The intent will have the following extra values:</p>
+     * <dl>
+     *   <dt>phoneName</dt><dd>A string version of the phone name.</dd>
+     *   <dt>nwType</dt><dd>One of
+     *          {@code NETWORK_TYPE_UNKNOWN},
+     *          {@code NETWORK_TYPE_GPRS},
+     *          {@code NETWORK_TYPE_EDGE},
+     *          {@code NETWORK_TYPE_UMTS},
+     *          {@code NETWORK_TYPE_HSDPA},
+     *          {@code NETWORK_TYPE_HSUPA},
+     *          {@code NETWORK_TYPE_HSPA} or
+     *          {@code NETWORK_TYPE_LTE}.</dd>
+     * </dl>
+     *
+     * <p class="note">
+     * Requires the READ_PHONE_STATE permission.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     */
+    public static final String ACTION_PS_NETWORK_TYPE_CHANGED
+            = "android.intent.action.PS_NETWORK_TYPE_CHANGED";
+
+    /**
+     * Broadcast Action: The shared default apn state has changed.
+     * The intent will have the following extra values:</p>
+     * <dl>
+     *   <dt>phoneName</dt><dd>A string version of the phone name.</dd>
+     *   <dt>state</dt><dd>One of {@code TRUE} or {@code FALSE}.</dd>
+     * </dl>
+     *
+     * <p class="note">
+     * Requires the READ_PHONE_STATE permission.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     */
+    public static final String ACTION_SHARED_DEFAULT_APN_STATE_CHANGED
+            = "android.intent.action.SHARED_DEFAULT_APN_STATE_CHANGED";
+// M: [LTE][Low Power][UL traffic shaping] End
+
+    /**
+     * Broadcast Action: An attempt to set phone RAT family has changed.  This has the following
+     * extra values:</p>
+     * <ul>
+     *   <li><em>phones RAT family</em> - A PhoneRatFamily array,
+     *          contain phone ID and new RAT family for each phone.</li>
+     * </ul>
+     * @internal
+     */
+    public static final String ACTION_SET_PHONE_RAT_FAMILY_DONE =
+            "android.intent.action.ACTION_SET_PHONE_RAT_FAMILY_DONE";
+    /**
+     * @internal
+     */
+    public static final String EXTRA_PHONES_RAT_FAMILY = "phonesRatFamily";
+
+    /**
+     * Broadcast Action: An attempt to set phone RAT family has failed.
+     * <ul>
+     *   <li><em>phone ID</em> - A int, indicates the failed phone.</li>
+     * </ul>
+     * @internal
+     */
+    public static final String ACTION_SET_PHONE_RAT_FAMILY_FAILED =
+            "android.intent.action.ACTION_SET_PHONE_RAT_FAMILY_FAILED";
+    /**
+     * @internal
+     */
+    public static final String EXTRA_PHONES_ID = "phoneId";
+
+    // Added by M begin
+
+    /**
+     * <p>Broadcast Action: To activate an application to unlock SIM lock.
+     * The intent will have the following extra value:</p>
+     * <dl>
+     *   <dt>reason</dt><dd>The reason why ss is {@code LOCKED}; null otherwise.</dd>
+     *   <dl>
+     *       <dt>{@code PIN}</dt><dd>locked on PIN1</dd>
+     *       <dt>{@code PUK}</dt><dd>locked on PUK1</dd>
+     *       <dt>{@code NETWORK}</dt><dd>locked on network personalization</dd>
+     *       <dt>{@code NETWORK_SUBSET}</dt><dd>locked on network subset personalization</dd>
+     *       <dt>{@code CORPORATE}</dt><dd>locked on corporate personalization</dd>
+     *       <dt>{@code SERVICE_PROVIDER}</dt><dd>locked on service proiver personalization</dd>
+     *       <dt>{@code SIM}</dt><dd>locked on SIM personalization</dd>
+     *   </dl>
+     * </dl>
+     * @internal
+     */
+     // FIXME: need to add subId, slotId, phoneId extra value comments.
+     public static final String ACTION_UNLOCK_SIM_LOCK
+            = "mediatek.intent.action.ACTION_UNLOCK_SIM_LOCK";
+
+
+     /**
+      * Broadcast Action: The sim card application state has changed. (only support ISIM currently)
+      * The intent will have the following extra values:</p>
+      * <dl>
+      *   <dt>phoneName</dt><dd>A string version of the phone name.</dd>
+      *   <dt>ss</dt><dd>The sim state. One of:
+      *     <dl>
+      *       <dt>{@code ABSENT}</dt><dd>SIM card not found</dd>
+      *       <dt>{@code LOCKED}</dt><dd>SIM card locked (see {@code reason})</dd>
+      *       <dt>{@code READY}</dt><dd>SIM card ready</dd>
+      *       <dt>{@code IMSI}</dt><dd>FIXME: what is this state?</dd>
+      *       <dt>{@code LOADED}</dt><dd>SIM card data loaded</dd>
+      *     </dl></dd>
+      *   <dt>reason</dt><dd>The reason why ss is {@code LOCKED}; null otherwise.</dd>
+      *   <dl>
+      *       <dt>{@code PIN}</dt><dd>locked on PIN1</dd>
+      *       <dt>{@code PUK}</dt><dd>locked on PUK1</dd>
+      *       <dt>{@code NETWORK}</dt><dd>locked on network personalization</dd>
+      *   </dl>
+      *   <dt>appid</dt><dd>The application id.</dd>
+      * </dl>
+      *
+      * <p class="note">This is a protected intent that can only be sent
+      * by the system.
+      */
+      // FIXME: need to add subId, slotId, phoneId extra value comments.
+     public static final String ACTION_SIM_STATE_CHANGED_MULTI_APPLICATION
+             = "mediatek.intent.action.ACTION_SIM_STATE_CHANGED_MULTI_APPLICATION";
+
+    /**
+    * Do SIM Recovery Done.
+    */
+    public static final String ACTION_SIM_RECOVERY_DONE = "com.android.phone.ACTION_SIM_RECOVERY_DONE";
+
+    // ALPS00302698 ENS
+    /**
+       * This event is broadcasted when CSP PLMN is changed
+       * @internal
+       */
+    public static final String ACTION_EF_CSP_CONTENT_NOTIFY = "android.intent.action.ACTION_EF_CSP_CONTENT_NOTIFY";
+    public static final String EXTRA_PLMN_MODE_BIT = "plmn_mode_bit";
+
+    // ALPS00302702 RAT balancing
+    /**
+       * This event is broadcasted when EF-RAT Mode is changed.
+       * @internal
+       */
+    public static final String ACTION_EF_RAT_CONTENT_NOTIFY = "android.intent.action.ACTION_EF_RAT_CONTENT_NOTIFY";
+    /**
+       * To notify the content of EF-RAT
+       * @internal
+       */
+    public static final String EXTRA_EF_RAT_CONTENT = "ef_rat_content";
+    /**
+       * To notify the status of EF-RAT
+       * @internal
+       */
+    public static final String EXTRA_EF_RAT_STATUS = "ef_rat_status";
+
+    public static final String ACTION_COMMON_SLOT_NO_CHANGED = "com.mediatek.phone.ACTION_COMMON_SLOT_NO_CHANGED";
+
+
+  /**
+      * Broadcast Action: ACMT Network Service Status Indicator
+      * The intent will have the following extra values:</p>
+      * <ul>
+      * <li><em>CauseCode</em> - specify the reject cause code from MM/GMM/EMM</li>
+      * <li><em>Cause</em> - the reject cause<li>
+      * </ul>
+      */
+    public static final String ACTION_ACMT_NETWORK_SERVICE_STATUS_INDICATOR
+            = "mediatek.intent.action.acmt_nw_service_status";
+
+    //MTK-START [mtk80589][121026][ALPS00376525] STK dialog pop up caused ISVR
+    public static final String ACTION_IVSR_NOTIFY
+        = "mediatek.intent.action.IVSR_NOTIFY";
+
+    public static final String INTENT_KEY_IVSR_ACTION = "action";
+    //MTK-END [mtk80589][121026][ALPS00376525] STK dialog pop up caused ISVR
+
+   /* ALPS01139189 */
+   /**
+     * This event is broadcasted when frmework start/stop hiding network state update
+     * @internal
+     */
+    public static final String ACTION_HIDE_NETWORK_STATE = "mediatek.intent.action.ACTION_HIDE_NETWORK_STATE";
+    public static final String EXTRA_ACTION = "action";
+    public static final String EXTRA_REAL_SERVICE_STATE = "state";
+
+    /**
+     * This event is broadcasted when the located PLMN is changed
+     * @internal
+     */
+    public static final String ACTION_LOCATED_PLMN_CHANGED = "mediatek.intent.action.LOCATED_PLMN_CHANGED";
+    public static final String EXTRA_ISO = "iso";
+
+  /**
+     * This extra value is the IMS registeration state
+     */
+    public static final String EXTRA_IMS_REG_STATE_KEY = "regState"; // 0: not registered  , 1: registered
+
+    // Femtocell (CSG) START
+    public static final String EXTRA_HNB_NAME   = "hnbName";
+    public static final String EXTRA_CSG_ID     = "csgId";
+    public static final String EXTRA_DOMAIN     = "domain";
+    // Femtocell (CSG) END
+
+    /**
+     * Broadcast Action: The PHB state has changed.
+     * The intent will have the following extra values:</p>
+     * <ul>
+     *   <li><em>ready</em> - The PHB ready state.  True for ready, false for not ready</li>
+     *   <li><em>simId</em> - The SIM ID</li>
+     * </ul>
+     *
+     * <p class="note">
+     * Requires the READ_PHONE_STATE permission.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     * @internal
+     */
+    public static final String ACTION_PHB_STATE_CHANGED
+            = "android.intent.action.PHB_STATE_CHANGED";
+
+    /* SIM switch start */
+    /**
+     * To notify the capability switch procedure start
+     */
+    public static String EVENT_PRE_CAPABILITY_SWITCH = "com.mediatek.PRE_CAPABILITY_SWITCH";
+    /**
+     * To notify the capability switch procedure end
+     */
+    public static String EVENT_CAPABILITY_SWITCH_DONE = "com.mediatek.CAPABILITY_SWITCH_DONE";
+    /**
+     * The target SIM Id where capability is going to set to.
+     * This is an extra information comes with EVENT_CAPABILITY_PRE_SWITCH event.
+     */
+    public static String EXTRA_MAIN_PROTOCOL_SIM = "MAIN_PROTOCOL_SIM";
+    // Added by M end
+
+    /**
+     * Broadcast Action: The modem type changed.
+     * @internal
+     * The intent will have the following extra values:</p>
+     * <ul>
+     *   <li><em>ready</em> - The modem type after switched.</li>
+     * </ul>
+     */
+    public static final String ACTION_MD_TYPE_CHANGE
+            = "android.intent.action.ACTION_MD_TYPE_CHANGE";
+    /** @internal */
+    public static final String EXTRA_MD_TYPE = "mdType";
+
+    /**
+    * This event is broadcasted when Stk Refresh with type REFRESH_RESULT_INIT,
+    * REFRESH_RESULT_RESET, REFRESH_INIT_FULL_FILE_UPDATED, REFRESH_INIT_FILE_UPDATED
+    * @internal
+    */
+    public static final String ACTION_REMOVE_IDLE_TEXT = "android.intent.aciton.stk.REMOVE_IDLE_TEXT";
+
+    /**
+    * @hide
+    */
+    public static final String ACTION_REMOVE_IDLE_TEXT_2 = "android.intent.aciton.stk.REMOVE_IDLE_TEXT_2";
+
+    /// M: IMS feature for SS Runtime  Indication. @{
+    public static final String ACTION_LTE_MESSAGE_WAITING_INDICATION = "android.intent.action.lte.mwi";
+    public static final String EXTRA_LTE_MWI_BODY = "lte_mwi_body";
+    /// @}
+
+    /// M: c2k modify, intents. @{
+    // MCC MNC Change
+    public static final String ACTION_MCC_MNC_CHANGED = "android.intent.action.MCC_MNC_CHANGED";
+    public static final String EXTRA_MCC_MNC_CHANGED_MCC = "mcc";
+    public static final String EXTRA_MCC_MNC_CHANGED_MNC = "mnc";
+    // RADIO AVAILABLE
+    public static final String ACTION_RADIO_AVAILABLE = "android.intent.action.RADIO_AVAILABLE";
+    public static final String EXTRA_RADIO_AVAILABLE_STATE = "radio_available_state";
+    /// @}
+
+    /**
+     * This event is for abnormal event for logger
+    */
+    public static final String ACTION_EXCEPTION_HAPPENED
+        = "com.mediatek.log2server.EXCEPTION_HAPPEND";
+    /**
+    * To identify CDMA card  type.
+    * For CT request, this type used for CDMA modem identify card type and report to framework
+    * <P>Type: int</P>
+    */
+    // MTK START
+    public static final String ACTION_CDMA_CARD_TYPE = "android.intent.action.CDMA_CARD_TYPE";
+    public static final String INTENT_KEY_CDMA_CARD_TYPE = "cdma_card_type";
+    public static final String INTENT_KEY_CDMA_CARD_NEW = "cdma_card_new";
+
+    public static final String ACTION_CDMA_CARD_IMSI = "android.intent.action.CDMA_CARD_IMSI";
+    public static final String INTENT_KEY_CDMA_CARD_CSIM_IMSI = "cdma_card_csim_imsi";
+    public static final String INTENT_KEY_CDMA_CARD_USIM_IMSI = "cdma_card_usim_imsi";
+    public static final String INTENT_KEY_SVLTE_MODE_SLOT_ID = "svlte_mode_slot_id";
+
+    public static final String ACTION_SVLTE_CARD_TYPE = "android.intent.action.SVLTE_CARD_TYPE";
+    public static final String INTENT_KEY_SVLTE_CARD_TYPE = "svlte_card_type";
+    // MTK END
+    /**
+     * Broadcast Action: The modem rat changed.
+     * @hide
+     * The intent will have the following extra values:</p>
+     * <ul>
+     *   <li><em>ready</em> - The modem rat after changed.</li>
+     * </ul>
+     */
+    public static final String ACTION_RAT_CHANGED
+            = "android.intent.action.ACTION_RAT_CHANGED";
+    /** @hide */
+    public static final String EXTRA_RAT = "rat";
+
+    ///M: C2k WP s2 @{
+    /**
+     * Broadcast after all Radio technology switch done.
+     */
+    public static final String ACTION_SET_RADIO_TECHNOLOGY_DONE =
+                    "com.mediatek.phone.ACTION_SET_RADIO_TECHNOLOGY_DONE";
+
+    /**
+     * Broadcast Radio technology switch start.
+     */
+    public static final String ACTION_SET_RADIO_TECHNOLOGY_START =
+                    "com.mediatek.phone.ACTION_SET_RADIO_TECHNOLOGY_START";
+    ///@}
+
+    /**
+     * Broadcast Action: The world mode changed.
+     * The intent will have the following extra values:</p>
+     * <ul>
+     *   <li><em>worldModeState</em> - An int with one of the following values:
+     *          {@link com.mediatek.internal.telephony.worldphone.WorldMode#MD_WM_CHANGED_START} or
+     *          {@link com.mediatek.internal.telephony.worldphone.WorldMode#MD_WM_CHANGED_END}
+     *   </li>
+     * </ul>
+     */
+    public static final String ACTION_WORLD_MODE_CHANGED
+            = "android.intent.action.ACTION_WORLD_MODE_CHANGED";
+    /**
+     * Broadcast world mode change state.
+     */
+    public static final String EXTRA_WORLD_MODE_CHANGE_STATE = "worldModeState";
 }

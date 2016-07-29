@@ -29,5 +29,10 @@ oneway interface IGpsStatusListener
     void onSvStatusChanged(int svCount, in int[] prns, in float[] snrs, 
             in float[] elevations, in float[] azimuths, 
             int ephemerisMask, int almanacMask, int usedInFixMask);
+    void onGnssSvStatusChanged(int gnssSvCount, in int[] prns, in float[] snrs,
+            in float[] elevations, in float[] azimuths,
+            in boolean[] ephemerisPresences,
+            in boolean[] almanacPresences,
+            in boolean[] usedInFix);
     void onNmeaReceived(long timestamp, String nmea);
 }

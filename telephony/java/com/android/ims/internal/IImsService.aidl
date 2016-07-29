@@ -75,4 +75,38 @@ interface IImsService {
      * Used to set current TTY Mode.
      */
     void setUiTTYMode(int serviceId, int uiTtyMode, in Message onComplete);
+
+    // MTK
+
+    /**
+     * call interface for allowing/refusing the incoming call indication send to App.
+     */
+    void setCallIndication(String callId, int seqNum, boolean isAllow);
+
+    /**
+     * Use to query ims enable/disable status.
+     */
+    int getImsState();
+
+    /**
+     * Use to query ims registration information.
+     */
+    boolean getImsRegInfo(int phoneId);
+
+    /**
+     * Use to query ims registration extension information.
+     */
+    String getImsExtInfo();
+
+    /**
+     * Use to hang up all calls.
+     */
+    void hangupAllCall();
+
+    ///M: WFC: Use to get WFC registration status @ {
+    /**
+     * Use to get registration status.
+     */
+    int getRegistrationStatus();
+    /// @}
 }
