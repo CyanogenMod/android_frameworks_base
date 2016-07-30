@@ -304,6 +304,23 @@
         This is displayed if the phone is not connected to a carrier.-->
     <string name="keyguard_carrier_default">No service.</string>
 
+    <string name="kg_remaining_attempts">Remaining attempts: <xliff:g id="number">%d</xliff:g></string>
+    <string name="kg_failed_pin_attempts_now_wiping">
+        You entered the wrong PIN <xliff:g id="number">%d</xliff:g> times,
+        do you want to reset your phone to factory settings?
+    </string>
+    <string name="kg_failed_password_attempts_now_wiping">
+        You entered the wrong Password <xliff:g id="number">%d</xliff:g> times,
+        do you want to reset your phone to factory settings?
+    </string>
+    <string name="kg_failed_pattern_attempts_now_wiping">
+        You entered the wrong Pattern <xliff:g id="number">%d</xliff:g> times,
+        do you want to reset your phone to factory settings?
+    </string>
+    <string name="kg_failed_attempts_now_wiping_confirm">
+        This will erase all data from your device\'s internal storage and your device will be back to factory settings.
+    </string>
+
     <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_ime_switch_button" msgid="5032926134740456424">Switch input method</string>
 
