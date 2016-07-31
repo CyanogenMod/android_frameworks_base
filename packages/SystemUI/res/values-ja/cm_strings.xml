@@ -218,4 +218,7 @@
   <!-- Path data for circle battery -->
   <!-- Weather string format in keyguard -->
   <string name="keyguard_status_view_weather_format"><xliff:g id="condition">%2$s</xliff:g> <xliff:g id="temp">%1$s</xliff:g></string>
+  <string name="expand_hint">下にスワイプして拡張</string>
+  <string name="swipe_left_hint">左にスワイプして<xliff:g id="app_name">%1$s</xliff:g>を起動</string>
+  <string name="swipe_right_hint">左にスワイプして通知を表示</string>
 </resources>
