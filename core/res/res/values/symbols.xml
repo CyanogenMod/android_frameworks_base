@@ -2413,6 +2413,8 @@
   <java-symbol type="bool" name="config_cameraDoubleTapPowerGestureEnabled" />
 
   <java-symbol type="drawable" name="platlogo_m" />
+  <!-- language/locale picker extention feature -->
+  <java-symbol type="string" name="locale_codes" />
 
   <java-symbol type="string" name="config_iccHotswapPromptForRestartDialogComponent" />
 
