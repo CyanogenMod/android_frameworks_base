@@ -17824,6 +17824,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                             !values.themeConfig.equals(mConfiguration.themeConfig));
                 }
 
+                if ((changes & ActivityInfo.CONFIG_THEME_FONT) != 0) {
+                    // Notify zygote that themes need a refresh
+                    SystemProperties.set(PROP_REFRESH_THEME, "1");
+                }
+
                 mConfigurationSeq++;
                 if (mConfigurationSeq <= 0) {
                     mConfigurationSeq = 1;
