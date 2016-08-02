@@ -9417,7 +9417,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
     boolean canProcessText() {
         if (!getContext().canStartActivityForResult() || getId() == View.NO_ID
-                || hasPasswordTransformationMethod()) {
+                || hasPasswordTransformationMethod() || !isProvisioned()) {
             return false;
         }
 
@@ -9431,6 +9431,11 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     boolean canSelectAllText() {
         return canSelectText() && !hasPasswordTransformationMethod()
                 && !(getSelectionStart() == 0 && getSelectionEnd() == mText.length());
+    }
+
+    private boolean isProvisioned() {
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 0) != 0;
     }
 
     boolean selectAllText() {
