@@ -957,6 +957,15 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 return ActivityManager.START_CANCELED;
             }
 
+            if (intent.getAction() != null && !isProvisioned()) {
+                switch (intent.getAction()) {
+                    case Intent.ACTION_PROCESS_TEXT:
+                    case Intent.ACTION_ASSIST:
+                    case Intent.ACTION_VOICE_ASSIST:
+                        Slog.w(TAG, "not starting assist intent while not provisioned");
+                        return ActivityManager.START_NOT_CURRENT_USER_ACTIVITY;
+                }
+            }
             try {
                 //TODO: This needs to be a flushed out API in the future.
                 boolean isProtected = intent.getComponent() != null
@@ -4676,5 +4685,10 @@ public final class ActivityStackSupervisor implements DisplayListener {
         }
 
         return onLeanbackOnly;
+    }
+
+    private boolean isProvisioned() {
+        return Settings.Global.getInt(mService.mContext.getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 0) == 1;
     }
 }
