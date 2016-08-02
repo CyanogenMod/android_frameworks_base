@@ -2488,6 +2488,17 @@
     <integer name="launchboost_timeout_param">0</integer>
     <integer-array name="launchboost_param_value"/>
 
+    <!-- Whether cpu freq aggr is enabled for AppLaunch -->
+    <bool name="config_enableLaunchBoostv2">false</bool>
+    <integer name="lboostv2_timeout_param">0</integer>
+    <integer-array name="lboostv2_param_value"/>
+
+    <!-- Whether cpu freq aggr is enabled for AppLaunch -->
+    <bool name="config_enableFreqAggr">false</bool>
+    <integer name="freqaggr_timeout_param">0</integer>
+    <integer-array name="freqaggr_init_param_value"/>
+    <integer-array name="freqaggr_param_value"/>
+
     <!-- Whether disablepacking is enabled or not -->
     <bool name="config_disablePacking">false</bool>
     <integer name="disablepacking_timeout_param">0</integer>

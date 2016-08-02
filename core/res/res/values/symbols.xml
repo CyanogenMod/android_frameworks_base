@@ -2638,6 +2638,17 @@
   <java-symbol type="integer" name="launchboost_timeout_param" />
   <java-symbol type="array" name="launchboost_param_value" />
 
+  <!-- cpu boost v2 for Applaunch -->
+  <java-symbol type="bool" name="config_enableLaunchBoostv2" />
+  <java-symbol type="integer" name="lboostv2_timeout_param" />
+  <java-symbol type="array" name="lboostv2_param_value" />
+
+  <!-- freq aggr for Applaunch -->
+  <java-symbol type="bool" name="config_enableFreqAggr" />
+  <java-symbol type="integer" name="freqaggr_timeout_param" />
+  <java-symbol type="array" name="freqaggr_init_param_value" />
+  <java-symbol type="array" name="freqaggr_param_value" />
+
   <!-- cpu boost for AppLaunch -->
   <java-symbol type="bool" name="config_disablePacking" />
   <java-symbol type="integer" name="disablepacking_timeout_param" />
