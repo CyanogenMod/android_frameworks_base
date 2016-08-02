@@ -205,6 +205,9 @@ public class KeyguardIndicationController {
                     right = R.drawable.ic_keyboard_arrow_right;
                     break;
                 case NONE:
+                    // not showing an indicator, no padding needed
+                    bottom = 0;
+                    break;
                 default:
                     break;
             }
