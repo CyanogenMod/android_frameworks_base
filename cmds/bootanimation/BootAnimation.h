@@ -26,6 +26,8 @@
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 
+#include <utils/Thread.h>
+
 class SkBitmap;
 
 namespace android {
@@ -34,11 +36,13 @@ class AudioPlayer;
 class Surface;
 class SurfaceComposerClient;
 class SurfaceControl;
+class FrameManager;
 
 // ---------------------------------------------------------------------------
 
 class BootAnimation : public Thread, public IBinder::DeathRecipient
 {
+    friend class FrameManager;
 public:
     enum {
         eOrientationDefault     = 0,
@@ -89,6 +93,7 @@ private:
 
     status_t initTexture(Texture* texture, AssetManager& asset, const char* name);
     status_t initTexture(const Animation::Frame& frame);
+    status_t initTexture(SkBitmap *bitmap);
     bool android();
     bool readFile(const char* name, String8& outString);
     bool movie();
@@ -100,6 +105,8 @@ private:
     bool checkBootState();
     void checkExit();
     void checkShowAndroid();
+
+    static SkBitmap *decode(const Animation::Frame& frame);
 
     sp<SurfaceComposerClient>       mSession;
     sp<AudioPlayer>                 mAudioPlayer;
@@ -113,6 +120,47 @@ private:
     sp<SurfaceControl> mFlingerSurfaceControl;
     sp<Surface> mFlingerSurface;
     ZipFileRO   *mZip;
+};
+
+
+class FrameManager {
+public:
+    struct DecodeWork {
+        const BootAnimation::Animation::Frame *frame;
+        SkBitmap *bitmap;
+        int idx;
+    };
+
+    FrameManager(int numThreads, size_t maxSize, const Vector<const BootAnimation::Animation::Frame*>& frames);
+    virtual ~FrameManager();
+
+    SkBitmap* next();
+
+protected:
+    DecodeWork getWork();
+    void completeWork(DecodeWork work);
+
+private:
+
+    class DecodeThread : public Thread {
+    public:
+        DecodeThread(FrameManager* manager);
+        virtual ~DecodeThread() {}
+    private:
+        virtual bool threadLoop();
+        FrameManager *mManager;
+    };
+
+    size_t mMaxSize;
+    size_t mFrameCounter;
+    size_t mNextIdx;
+    Vector<const BootAnimation::Animation::Frame*> mFrames;
+    Vector<DecodeWork> mDecodedFrames;
+    pthread_mutex_t mBitmapsMutex;
+    pthread_cond_t mSpaceAvailableCondition;
+    pthread_cond_t mBitmapReadyCondition;
+    bool mExit;
+    Vector<sp<DecodeThread> > mThreads;
 };
 
 // ---------------------------------------------------------------------------

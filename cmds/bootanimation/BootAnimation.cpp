@@ -263,16 +263,16 @@ status_t BootAnimation::initTexture(Texture* texture, AssetManager& assets,
     return NO_ERROR;
 }
 
-status_t BootAnimation::initTexture(const Animation::Frame& frame)
+SkBitmap* BootAnimation::decode(const Animation::Frame& frame)
 {
-    //StopWatch watch("blah");
 
-    SkBitmap bitmap;
+    SkBitmap *bitmap = NULL;
     SkMemoryStream  stream(frame.map->getDataPtr(), frame.map->getDataLength());
     SkImageDecoder* codec = SkImageDecoder::Factory(&stream);
     if (codec != NULL) {
+        bitmap = new SkBitmap();
         codec->setDitherImage(false);
-        codec->decode(&stream, &bitmap,
+        codec->decode(&stream, bitmap,
                 #ifdef USE_565
                 kRGB_565_SkColorType,
                 #else
@@ -282,13 +282,23 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
         delete codec;
     }
 
-    // ensure we can call getPixels(). No need to call unlock, since the
-    // bitmap will go out of scope when we return from this method.
-    bitmap.lockPixels();
+    return bitmap;
+}
 
-    const int w = bitmap.width();
-    const int h = bitmap.height();
-    const void* p = bitmap.getPixels();
+status_t BootAnimation::initTexture(const Animation::Frame& frame)
+{
+    //StopWatch watch("blah");
+    return initTexture(decode(frame));
+}
+
+status_t BootAnimation::initTexture(SkBitmap *bitmap)
+{
+    // ensure we can call getPixels().
+    bitmap->lockPixels();
+
+    const int w = bitmap->width();
+    const int h = bitmap->height();
+    const void* p = bitmap->getPixels();
 
     GLint crop[4] = { 0, h, w, -h };
     int tw = 1 << (31 - __builtin_clz(w));
@@ -296,7 +306,7 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
     if (tw < w) tw <<= 1;
     if (th < h) th <<= 1;
 
-    switch (bitmap.colorType()) {
+    switch (bitmap->colorType()) {
         case kN32_SkColorType:
             if (tw != w || th != h) {
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA,
@@ -326,6 +336,8 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
 
     glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, crop);
 
+    bitmap->unlockPixels();
+    delete bitmap;
     return NO_ERROR;
 }
 
@@ -780,6 +792,12 @@ bool BootAnimation::movie()
                     part.backgroundColor[2],
                     1.0f);
 
+            Vector<const Animation::Frame *> frames;
+            for (size_t j=0 ; j<fcount; j++) {
+                frames.add(&part.frames[j]);
+            }
+            FrameManager fm(2, 3, frames);
+
             for (size_t j=0 ; j<fcount && (!exitPending() || part.playUntilComplete) ; j++) {
                 const Animation::Frame& frame(part.frames[j]);
                 nsecs_t lastFrame = systemTime();
@@ -793,7 +811,7 @@ bool BootAnimation::movie()
                         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                     }
-                    initTexture(frame);
+                    initTexture(fm.next());
                 }
 
                 if (!clearReg.isEmpty()) {
@@ -1009,6 +1027,113 @@ bool BootAnimation::checkBootState(void)
     }
 
     return ret;
+}
+
+FrameManager::FrameManager(int numThreads, size_t maxSize, const Vector<const BootAnimation::Animation::Frame *>& frames) :
+    mMaxSize(maxSize),
+    mFrameCounter(0),
+    mNextIdx(0),
+    mFrames(frames),
+    mExit(false)
+{
+    pthread_mutex_init(&mBitmapsMutex, NULL);
+    pthread_cond_init(&mSpaceAvailableCondition, NULL);
+    pthread_cond_init(&mBitmapReadyCondition, NULL);
+    for (int i = 0; i < numThreads; i++) {
+        DecodeThread *thread = new DecodeThread(this);
+        thread->run("bootanimation", PRIORITY_URGENT_DISPLAY);
+        mThreads.add(thread);
+    }
+}
+
+FrameManager::~FrameManager()
+{
+    ALOGI("Destroying frame manager");
+
+    mExit = true;
+    pthread_cond_broadcast(&mSpaceAvailableCondition);
+    pthread_cond_broadcast(&mBitmapReadyCondition);
+    for (size_t i = 0; i < mThreads.size(); i++) {
+        mThreads.itemAt(i)->requestExitAndWait();
+    }
+
+    // Any bitmap left in the queue won't get cleaned up by
+    // the consumer.  Clean up now.
+    for(size_t i = 0; i < mDecodedFrames.size(); i++) {
+        delete mDecodedFrames[i].bitmap;
+    }
+}
+
+SkBitmap* FrameManager::next()
+{
+    pthread_mutex_lock(&mBitmapsMutex);
+
+    while(mDecodedFrames.size() == 0 ||
+            mDecodedFrames.itemAt(0).idx % mFrames.size() != mNextIdx) {
+        pthread_cond_wait(&mBitmapReadyCondition, &mBitmapsMutex);
+    }
+    DecodeWork work = mDecodedFrames.itemAt(0);
+    mDecodedFrames.removeAt(0);
+    mNextIdx = (mNextIdx + 1) % mFrames.size();
+    pthread_cond_signal(&mSpaceAvailableCondition);
+    pthread_mutex_unlock(&mBitmapsMutex);
+    return work.bitmap;
+}
+
+FrameManager::DecodeWork FrameManager::getWork()
+{
+    DecodeWork work;
+    work.idx = -1;
+
+    pthread_mutex_lock(&mBitmapsMutex);
+
+    while(mDecodedFrames.size() >= mMaxSize && !mExit) {
+        pthread_cond_wait(&mSpaceAvailableCondition, &mBitmapsMutex);
+    }
+
+    if (!mExit) {
+        work.frame = mFrames.itemAt(mFrameCounter % mFrames.size());
+        work.idx = mFrameCounter;
+        mFrameCounter++;
+    }
+
+    pthread_mutex_unlock(&mBitmapsMutex);
+    return work;
+}
+
+void FrameManager::completeWork(DecodeWork work) {
+    size_t insertIdx;
+    pthread_mutex_lock(&mBitmapsMutex);
+
+    for(insertIdx = 0; insertIdx < mDecodedFrames.size(); insertIdx++) {
+        if (work.idx < mDecodedFrames.itemAt(insertIdx).idx) {
+            break;
+        }
+    }
+
+    mDecodedFrames.insertAt(work, insertIdx);
+    pthread_cond_signal(&mBitmapReadyCondition);
+
+    pthread_mutex_unlock(&mBitmapsMutex);
+}
+
+FrameManager::DecodeThread::DecodeThread(FrameManager* manager) :
+    Thread(false),
+    mManager(manager)
+{
+
+}
+
+bool FrameManager::DecodeThread::threadLoop()
+{
+    DecodeWork work = mManager->getWork();
+    if (work.idx >= 0) {
+        work.bitmap = BootAnimation::decode(*work.frame);
+        mManager->completeWork(work);
+        return true;
+    }
+
+    return false;
 }
 
 // ---------------------------------------------------------------------------
