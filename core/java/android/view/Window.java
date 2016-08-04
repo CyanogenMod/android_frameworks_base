@@ -869,13 +869,6 @@ public abstract class Window {
     }
 
     private void setPrivateFlags(int flags, int mask) {
-        int preventFlags = WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_POWER_KEY |
-                WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS;
-
-        if ((flags & mask & preventFlags) != 0) {
-            mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_SYSTEM_KEYS",
-                    "No permission to prevent system key");
-        }
         final WindowManager.LayoutParams attrs = getAttributes();
         attrs.privateFlags = (attrs.privateFlags & ~mask) | (flags & mask);
         dispatchWindowAttributesChanged(attrs);
@@ -895,6 +888,13 @@ public abstract class Window {
      */
     protected void dispatchWindowAttributesChanged(WindowManager.LayoutParams attrs) {
         if (mCallback != null) {
+            int preventFlags = WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_POWER_KEY |
+                    WindowManager.LayoutParams.PRIVATE_FLAG_PREVENT_SYSTEM_KEYS;
+
+            if ((attrs.privateFlags & preventFlags) != 0) {
+                mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_SYSTEM_KEYS",
+                        "No permission to prevent system keys");
+            }
             mCallback.onWindowAttributesChanged(attrs);
         }
     }
