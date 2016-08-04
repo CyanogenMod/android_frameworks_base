@@ -324,8 +324,11 @@
     <protected-broadcast android:name="android.internal.policy.action.BURN_IN_PROTECTION" />
     <protected-broadcast android:name="android.app.action.SYSTEM_UPDATE_POLICY_CHANGED" />
     <protected-broadcast android:name="android.app.action.DEVICE_OWNER_CHANGED" />
-    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED" />
-    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED" />
+
+    <protected-broadcast android:name="org.cyanogenmod.intent.action.THEME_CHANGED"
+                         android:permission="cyanogenmod.permission.SEND_PROTECTED_THEME_BROADCAST" />
+    <protected-broadcast android:name="android.intent.action.THEME_RESOURCES_CACHED"
+                         android:permission="cyanogenmod.permission.SEND_PROTECTED_THEME_BROADCAST" />
 
     <protected-broadcast android:name="android.net.action.SHOW_NETWORK_POLICY_NOTIFICATION" />
 
@@ -1414,6 +1417,14 @@
          third party applications. -->
     <permission android:name="android.permission.MANAGE_USERS"
         android:protectionLevel="signature|privileged" />
+
+    <!-- @hide Allows an application to create, remove users and get the list of
+         users on the device. Applications holding this permission can only create restricted,
+         guest, and managed users. For creating other kind of users,
+         {@link android.Manifest.permission#MANAGE_USERS} is needed.
+         This permission is not available to third party applications. -->
+    <permission android:name="android.permission.CREATE_USERS"
+        android:protectionLevel="signature" />
 
     <!-- @hide Allows an application to set the profile owners and the device owner.
          This permission is not available to third party applications.-->
