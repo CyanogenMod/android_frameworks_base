@@ -959,6 +959,8 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
             if (intent.getAction() != null && !isProvisioned()) {
                 switch (intent.getAction()) {
+                    case Intent.ACTION_SEARCH:
+                    case Intent.ACTION_WEB_SEARCH:
                     case Intent.ACTION_PROCESS_TEXT:
                     case Intent.ACTION_ASSIST:
                     case Intent.ACTION_VOICE_ASSIST:
