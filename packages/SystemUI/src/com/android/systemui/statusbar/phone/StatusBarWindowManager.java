@@ -132,14 +132,17 @@ public class StatusBarWindowManager implements KeyguardMonitor.Callback {
         mLpChanged = new WindowManager.LayoutParams();
         mLpChanged.copyFrom(mLp);
 
+        Resources res = mContext.getResources();
         mKeyguardBlurEnabled = mBlurSupported ?
                 CMSettings.Secure.getInt(mContext.getContentResolver(),
-                CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED, 1) == 1 : false;
+                CMSettings.Secure.LOCK_SCREEN_BLUR_ENABLED,
+                res.getBoolean(org.cyanogenmod.platform.internal.
+                R.bool.config_lock_screen_blur_default) ? 1 : 0) == 1 : false;
         if (mBlurSupported) {
             Display display = mWindowManager.getDefaultDisplay();
             Point xy = new Point();
             display.getRealSize(xy);
-            mCurrentOrientation = mContext.getResources().getConfiguration().orientation;
+            mCurrentOrientation = res.getConfiguration().orientation;
             mKeyguardBlur = new BlurLayer(mFxSession, xy.x, xy.y, "KeyGuard");
             if (mKeyguardBlur != null) {
                 mKeyguardBlur.setLayer(STATUS_BAR_LAYER - 2);
