@@ -77,6 +77,9 @@
   <!-- Title of the menu item to forget a printer. [CHAR LIMIT=25] -->
   <string name="print_forget_printer">پىرىنتېرنى ئەستە تۇتما</string>
   <!-- Utterance to announce a change in the number of matches during a search. This is spoken to a blind user. [CHAR LIMIT=none] -->
+  <plurals name="print_search_result_count_utterance">
+    <item quantity="other">تاپقان پىرىنتېر <xliff:g id="COUNT">%1$s</xliff:g></item>
+  </plurals>
   <!-- Add printer dialog  -->
   <!-- Title for the alert dialog for selecting a print service. [CHAR LIMIT=50] -->
   <string name="choose_print_service">بېسىش مۇلازىمىتىنى تاللاڭ</string>
@@ -94,6 +97,9 @@
   <!-- Template for the notification label for a blocked print job. [CHAR LIMIT=25] -->
   <string name="blocked_notification_title_template">پىرىنتېر <xliff:g id="PRINT_JOB_NAME">%1$s</xliff:g> نى بېسىشنى توستى</string>
   <!-- Template for the notification label for a composite (multiple items) print jobs notification. [CHAR LIMIT=25] -->
+  <plurals name="composite_notification_title_template">
+    <item quantity="other"><xliff:g id="PRINT_JOB_NAME">%1$d</xliff:g> بېسىش ۋەزىپىسى</item>
+  </plurals>
   <!-- Label for the notification button for cancelling a print job. [CHAR LIMIT=25] -->
   <string name="cancel">ۋاز كەچ</string>
   <!-- Label for the notification button for restarting a filed print job. [CHAR LIMIT=25] -->

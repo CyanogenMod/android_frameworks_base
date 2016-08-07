@@ -22,8 +22,8 @@
   <string name="lockscreen_sim_error_message_short">Tarjeta no válida.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">Introduce el código PIN. Tienes <xliff:g id="number">%d</xliff:g> intento restante antes de tener que contactar a tu operador para desbloquear el dispositivo.</item>
-    <item quantity="other">Introduce el código PIN. Tienes <xliff:g id="number">%d</xliff:g> intentos restantes antes de tener que contactar a tu operador para desbloquear el dispositivo.</item>
+    <item quantity="one">Introduce el código PIN de SIM. Tienes <xliff:g id="number">%d</xliff:g> intento restante antes de tener que contactarte con tu operador para desbloquear el dispositivo.</item>
+    <item quantity="other">Introduce el código PIN de SIM. Tienes <xliff:g id="number">%d</xliff:g> intentos restantes antes de tener que contactarte con tu operador para desbloquear el dispositivo.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Error: La entrada es más corta que la longitud mínima</string>

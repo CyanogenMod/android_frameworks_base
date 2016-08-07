@@ -20,5 +20,9 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">अमान्य कार्ड।</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">सिम पिन दर्ज करें, आप <xliff:g id="number">%d</xliff:g> बार और कोशिश कर सकते हैं, जिसके बाद आपको अपने उपकरण को अनलॉक करने के लिए अपने वाहक से संपर्क करना होगा।</item>
+    <item quantity="other">सिम पिन दर्ज करें, आप <xliff:g id="number">%d</xliff:g> बार और कोशिश कर सकते हैं।</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
 </resources>

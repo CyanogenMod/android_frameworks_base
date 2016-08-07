@@ -39,16 +39,16 @@
   <string name="navbar_home_button">முகப்பு பட்டன்</string>
   <string name="navbar_recent_button">சமீபத்திய பொத்தான்</string>
   <string name="navbar_search_button">பட்டனை தேடுதல்</string>
-  <string name="navbar_back_button">பின்செல் பொத்தான்</string>
+  <string name="navbar_back_button">கறுப்பு பட்டன்</string>
   <string name="navbar_empty_button">வெறுமை பொத்தான்</string>
-  <string name="navbar_menu_conditional_button">மெனு(autoHide) பொத்தான்</string>
-  <string name="navbar_menu_always_button">மெனு(alwaysShow) பொத்தான்</string>
+  <string name="navbar_menu_conditional_button">மெனு(autoHide)பொத்தான்</string>
+  <string name="navbar_menu_always_button">மெனு(alwaysShow)பொத்தான்</string>
   <string name="navbar_menu_big_button">மெனு பொத்தான்</string>
   <string name="accessibility_dpad_left">இடஞ்சுட்டி இடது</string>
   <string name="accessibility_dpad_right">இடஞ்சுட்டி வலது</string>
   <!-- Development shortcuts -->
   <!-- Title shown in recents popup for wiping application's data -->
-  <string name="advanced_dev_option_wipe_app">பயன்பாட்டு தரவை துடைக்க</string>
+  <string name="advanced_dev_option_wipe_app">பயன்பாட்டு தரவை துடை</string>
   <!-- Title shown in recents popup for force stopping the application -->
   <string name="advanced_dev_option_force_stop">உடனே நிறுத்து</string>
   <!-- Title shown in recents popup for uninstalling the application -->
@@ -58,7 +58,7 @@
   <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">சுயவிவரங்கள் ஆஃப்.</string>
   <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_profiles">சுயவிவரம்: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_profiles">சுயவிவரம்ச <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <!-- Announcement made when the profiles tile changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_changed_off">சுயவிவரங்கள் ஆஃப் செய்யப்பட்டன.</string>
   <!-- Announcement made when the profiles tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->

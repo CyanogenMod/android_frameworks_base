@@ -23,7 +23,7 @@
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
     <item quantity="one">Sartu SIM txartelaren PIN kodea, saiakera  <xliff:g id="number">%d</xliff:g> geratzen zaizu gailua desblokeatzeko zure operadorearekin kontaktuan jarri behar aurretik.</item>
-    <item quantity="other">Sartu SIM txartelaren PIN kodea, <xliff:g id="number">%d</xliff:g> saiakera geratzen zaizkizu.</item>
+    <item quantity="other">Sartu SIM txartelaren PIN kodea, saiakera  <xliff:g id="number">%d</xliff:g> geratzen zaizu gailua desblokeatzeko zure operadorearekin kontaktuan jarri behar aurretik.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Errorea: Sarrera gutxieneko luzera baino laburragoa da</string>

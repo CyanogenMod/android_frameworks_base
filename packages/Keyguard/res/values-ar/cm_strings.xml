@@ -21,6 +21,14 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">بطاقة غير صالحة.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="zero">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
+    <item quantity="one">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> محاولة متبقية قبل أن يجب عليك الاتصال بشركة الجوال لإلغاء تأمين جهازك.</item>
+    <item quantity="two">أدخل رمز PIN لبطاقة سيم، لديك <xliff:g id="number">%d</xliff:g> من المحاولات المتبقية.</item>
+    <item quantity="few">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
+    <item quantity="many">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> من المحاولات المتبقية.</item>
+    <item quantity="other">أدخل رمز PIN لبطاقة سيم، سيكون لديك <xliff:g id="number">%d</xliff:g> محاولات متبقية.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">خطأ: المدخل أقصر من الحد الأدنى للطول</string>
 </resources>

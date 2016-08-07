@@ -172,6 +172,9 @@
   <string name="kg_password_wrong_puk_code_dead">SIM كارتىنى ئىشلەتكىلى بولمايدۇ. مۇلازىمەت سودىگىرىڭىز بىلەن ئالاقە قىلىڭ.</string>
   <!-- Instructions telling the user that they entered the wrong puk while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
+  <plurals name="kg_password_wrong_puk_code">
+    <item quantity="other">SIM كارتا PUK كودى توغرا ئەمەس؛ سىزنىڭ <xliff:g id="NUMBER">%d</xliff:g> قېتىم سىناش پۇرسىتىڭىز بار. ئەگەر يەنىلا مەغلۇپ بولسىڭىز SIM كارتىنى مەڭگۈ ئىشلەتكىلى بولمايدۇ.</item>
+  </plurals>
   <!-- Instructions telling the user that the operation to unlock the keyguard
          with SIM PIN failed. Displayed in one line in a large font.  -->
   <string name="kg_password_pin_failed">SIM كارتا PIN مەشغۇلاتى مەغلۇپ بولدى!</string>

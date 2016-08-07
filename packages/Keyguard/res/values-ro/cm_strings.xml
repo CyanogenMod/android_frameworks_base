@@ -20,6 +20,11 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Cartelă SIM incorectă.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Introduceți PIN-ul pentru SIM, mai aveți <xliff:g id="number">%d</xliff:g> încercare rămasă înainte de a trebui să contactați compania de mobil pentru a debloca dispozitivul.</item>
+    <item quantity="few">Introduceți PIN-ul pentru SIM, mai aveți <xliff:g id="number">%d</xliff:g> încercări rămase înainte de a trebui să contactați compania de mobil pentru a debloca dispozitivul.</item>
+    <item quantity="other">Introduceți PIN-ul pentru SIM, mai aveți <xliff:g id="number">%d</xliff:g> de încercări rămase înainte de a trebui să contactați compania de mobil pentru a debloca dispozitivul.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Eroare: Introducere mai scurtă decât lungimea minimă</string>
 </resources>

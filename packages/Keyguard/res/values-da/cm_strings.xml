@@ -21,6 +21,10 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Ugyldigt SIM-kort.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Angiv SIM-pinkode, du har <xliff:g id="number">%d</xliff:g> forsøg tilbage, før du må kontakte din udbyder for at låse enheden op.</item>
+    <item quantity="other">Angiv SIM-pinkode, du har <xliff:g id="number">%d</xliff:g> forsøg tilbage.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Fejl: Input er kortere end minimumslængden</string>
 </resources>

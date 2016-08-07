@@ -117,9 +117,9 @@
   <string name="enablePin">Памылка. Падлучы блакаваньне SIM-карткі ці карткі RUIM.</string>
   <!-- Displayed when a SIM PIN/PUK is entered incorrectly. -->
   <plurals name="pinpuk_attempts">
-    <item quantity="one">У вас засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як SIM-картка будзе заблакавана.</item>
-    <item quantity="few">У вас засталася <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
-    <item quantity="other">У вас засталася <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
+    <item quantity="one">Засталася <xliff:g id="number">%d</xliff:g> спроба перад тым, як SIM-картка будзе заблакавана.</item>
+    <item quantity="few">Засталіся <xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
+    <item quantity="other"><xliff:g id="number">%d</xliff:g> спробы перад тым, як SIM-картка будзе заблакавана.</item>
   </plurals>
   <!-- Title for the dialog used to display the user's IMEI number [CHAR LIMIT=10] -->
   <string name="imei">IMEI</string>
