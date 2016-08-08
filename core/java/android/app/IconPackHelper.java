@@ -607,7 +607,7 @@ public class IconPackHelper {
 
         public static Drawable getComposedIconDrawable(Drawable icon, Resources res,
                 ComposedIconInfo iconInfo) {
-            if (iconInfo == null) return icon;
+            if (iconInfo == null || iconInfo.defaultSwatchColors == null) return icon;
             int back = 0;
             int defaultSwatchColor = 0;
             if (iconInfo.swatchType != ComposedIconInfo.SwatchType.None) {
@@ -627,7 +627,7 @@ public class IconPackHelper {
                 Drawable baseIcon) {
             final String pkgName = res.getAssets().getAppName();
             final ComposedIconInfo iconInfo = res.getComposedIconInfo();
-            if (iconInfo == null) {
+            if (iconInfo == null || iconInfo.defaultSwatchColors == null) {
                 // No composed icon info available so return, keeping original value
                 return;
             }
