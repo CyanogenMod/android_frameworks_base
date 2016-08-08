@@ -22,8 +22,8 @@
   <string name="lockscreen_sim_error_message_short">Невалидна карта.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">Въведете ПИН кода на СИМ картата, имате още <xliff:g id="number">%d </xliff:g> останал опит, преди да трябва да се свържете с вашия оператор за отключване на устройството.</item>
-    <item quantity="other">Въведете ПИН кода на СИМ картата, имате още <xliff:g id="number">%d </xliff:g> останали опити.</item>
+    <item quantity="one">Въведете ПИН кода на СИМ картата, имате <xliff:g id="number">%d </xliff:g> останал опит, преди да трябва да се свържете с вашия оператор за отключване на устройството.</item>
+    <item quantity="other">Въведете ПИН кода на СИМ картата, имате <xliff:g id="number">%d </xliff:g> останали опити, преди да трябва да се свържете с вашия оператор за отключване на устройството.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Грешка: Въведеното е по-късо от минималната дължина</string>

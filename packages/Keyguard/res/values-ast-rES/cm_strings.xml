@@ -21,6 +21,10 @@
   <!-- Shown in the lock screen when there is SIM card IO error. -->
   <string name="lockscreen_sim_error_message_short">Tarxeta inválida.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+  <plurals name="kg_password_default_pin_message">
+    <item quantity="one">Introduz PIN de la SIM. Tienes <xliff:g id="number">%d</xliff:g> intentu enantes de que tengas que contautar cola operadora pa desbloquiar el tefnu.</item>
+    <item quantity="other">Introduz PIN de la SIM PIN. Quédente <xliff:g id="number">%d</xliff:g> intentos más.</item>
+  </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">Fallu: La entrada ye más curtia que\'l llargor mínimu</string>
 </resources>

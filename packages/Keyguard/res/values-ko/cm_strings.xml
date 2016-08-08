@@ -22,7 +22,7 @@
   <string name="lockscreen_sim_error_message_short">올바르지 않은 카드입니다.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="other">SIM PIN을 입력하십시오. <xliff:g id="number">%d</xliff:g>회 후에는 이동통신사에 연락하여 기기를 잠금 해제해야 합니다.</item>
+    <item quantity="other">SIM PIN을 입력하십시오. 잠금까지 <xliff:g id="number">%d</xliff:g>회 남았습니다.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">오류: 입력한 값이 최소 길이보다 짧음</string>

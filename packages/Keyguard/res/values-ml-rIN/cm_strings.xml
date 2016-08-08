@@ -22,8 +22,9 @@
   <string name="lockscreen_sim_error_message_short">അസാധുവായ കാർഡ്.</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="one">സിം പിൻ നൽകുക,നിങ്ങളുടെ ഉപകരണം അൺലോക്കുചെയ്യുന്നതിന് നിങ്ങളുടെ കാരിയർ ബന്ധപ്പെടണം അവശേഷിക്കെ <xliff:g id="number">%d</xliff:g>ശ്രമം നിങ്ങളെ ഉണ്ടു.</item>
-    <item quantity="other">സിം പിൻ നൽകുക,നിങ്ങളുടെ ഉപകരണം അൺലോക്കുചെയ്യുന്നതിന് <xliff:g id="number">%d</xliff:g>ശ്രമം നിങ്ങളെ ഉണ്ടു.</item>
+    <item quantity="one">SIM PIN നൽകുക, നിങ്ങളുടെ ഉപകരണം അൺലോക്കുചെയ്യാൻ നിങ്ങളുടെ 
+സേവനദാതാവുമായി ബന്ധപ്പെടുന്നതിന് മുമ്പായി <xliff:g id="number">%d</xliff:g> ശ്രമം കൂടി ബാക്കിയുണ്ട്.</item>
+    <item quantity="other">SIM PIN നൽകുക, നിങ്ങൾക്ക് <xliff:g id="number">%d</xliff:g> ശ്രമങ്ങൾ കൂടി ബാക്കി ഉണ്ട്.</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">പിശക്: മിനിമം കാരക്ടറുകൾ ഇല്ല</string>

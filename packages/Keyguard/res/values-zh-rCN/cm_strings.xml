@@ -22,7 +22,7 @@
   <string name="lockscreen_sim_error_message_short">无效的 SIM 卡。</string>
   <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
   <plurals name="kg_password_default_pin_message">
-    <item quantity="other">输入 SIM 卡 PIN。您还有 <xliff:g id="number">%d</xliff:g> 次尝试机会；若超出此次数，则必须联系运营商以解锁 SIM 卡。</item>
+    <item quantity="other">输入 SIM 卡的 PIN，您还可尝试 <xliff:g id="number">%d</xliff:g> 次。</item>
   </plurals>
   <!-- Shown in the KeyguardSimPinView when entry length is too short. -->
   <string name="kg_invalid_sim_length">错误：输入长度小于最小长度</string>
