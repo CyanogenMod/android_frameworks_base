@@ -646,7 +646,10 @@ public class IconPackHelper {
                     int back = 0;
                     if (iconInfo.swatchType != ComposedIconInfo.SwatchType.None) {
                         back = iconInfo.iconPaletteBack;
-                        if (iconInfo.defaultSwatchColors.length > 0) {
+                        if(iconInfo.defaultSwatchColors==null) {
+                            defaultSwatchColor = iconInfo.iconPaletteBack;
+                        }
+                        else if (iconInfo.defaultSwatchColors.length > 0) {
                             defaultSwatchColor = iconInfo.defaultSwatchColors[
                                     hashCode % iconInfo.defaultSwatchColors.length];
                         }
