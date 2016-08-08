@@ -74,11 +74,9 @@ public class ComposedIconInfo implements Parcelable {
         iconPaletteBack = source.readInt();
         swatchType = SwatchType.values()[source.readInt()];
         int numDefaultColors = source.readInt();
-        if (numDefaultColors > 0) {
-            defaultSwatchColors = new int[numDefaultColors];
-            for (int i = 0; i < numDefaultColors; i++) {
-                defaultSwatchColors[i] = source.readInt();
-            }
+        defaultSwatchColors = new int[numDefaultColors];
+        for (int i = 0; i < numDefaultColors; i++) {
+            defaultSwatchColors[i] = source.readInt();
         }
     }
 
