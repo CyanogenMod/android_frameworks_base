@@ -64,7 +64,7 @@ public class ActionUtils {
                         ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                     if (appInfo.pkgList != null && (appInfo.pkgList.length > 0)) {
                         for (String pkg : appInfo.pkgList) {
-                            if (!pkg.equals("com.android.systemui")
+                            if (!pkg.equals(SYSTEMUI_PACKAGE)
                                     && !pkg.equals(defaultHomePackage)) {
                                 am.forceStopPackage(pkg, UserHandle.USER_CURRENT);
                                 return true;
@@ -122,28 +122,18 @@ public class ActionUtils {
         final String defaultHomePackage = resolveCurrentLauncherPackage(context, userId);
         final IActivityManager am = ActivityManagerNative.getDefault();
         final List<ActivityManager.RecentTaskInfo> tasks = am.getRecentTasks(5,
-                ActivityManager.RECENT_IGNORE_UNAVAILABLE, userId);
+                ActivityManager.RECENT_IGNORE_UNAVAILABLE,
+                | ActivityManager.RECENT_IGNORE_HOME_STACK_TASKS, userId);
 
         for (int i = 1; i < tasks.size(); i++) {
             ActivityManager.RecentTaskInfo task = tasks.get(i);
             if (task.origActivity != null) {
                 task.baseIntent.setComponent(task.origActivity);
             }
-            String packageName = task.baseIntent.getComponent().getPackageName();
-            if (!packageName.equals(defaultHomePackage)
-                    && !packageName.equals(SYSTEMUI_PACKAGE)) {
-                return tasks.get(i);
+            return tasks.get(i);
             }
         }
 
         return null;
-    }
-
-    private static String resolveCurrentLauncherPackage(Context context, int userId) {
-        final Intent launcherIntent = new Intent(Intent.ACTION_MAIN)
-                .addCategory(Intent.CATEGORY_HOME);
-        final PackageManager pm = context.getPackageManager();
-        final ResolveInfo launcherInfo = pm.resolveActivityAsUser(launcherIntent, 0, userId);
-        return launcherInfo.activityInfo.packageName;
     }
 }
