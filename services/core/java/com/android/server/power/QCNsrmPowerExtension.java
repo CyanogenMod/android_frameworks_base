@@ -45,7 +45,7 @@ public final class QCNsrmPowerExtension {
     private final ArrayList<Integer> mPmsBlockedUids = new ArrayList<Integer>();
 
     public QCNsrmPowerExtension (PowerManagerService handle) {
-        PowerManagerService pmHandle = handle ;
+       pmHandle = handle ;
     }
 
     protected void checkPmsBlockedWakelocks (
@@ -139,8 +139,9 @@ public final class QCNsrmPowerExtension {
         if (wakeLock != null && ((wakeLock.mFlags &
                                   PowerManager.WAKE_LOCK_LEVEL_MASK
                                   ) == PowerManager.PARTIAL_WAKE_LOCK )) {
-            if (wakeLock.mDisabled != update) {
+            if (wakeLock.mDisabled != update && pmHandle != null) {
                 wakeLock.mDisabled = update;
+                  if (localLOGV) Slog.v(TAG, "updatePmsBlockWakelock pmHandle "+pmHandle);
                 if (wakeLock.mDisabled) {
                     // This wake lock is no longer being respected.
                     pmHandle.notifyWakeLockReleasedLocked(wakeLock);
@@ -148,6 +149,9 @@ public final class QCNsrmPowerExtension {
                     pmHandle.notifyWakeLockAcquiredLocked(wakeLock);
                 }
                 return true;
+            }
+            else {
+               if (localLOGV) Slog.v(TAG, "updatePmsBlockWakelock pmHandle "+pmHandle );
             }
         }
         return false;
