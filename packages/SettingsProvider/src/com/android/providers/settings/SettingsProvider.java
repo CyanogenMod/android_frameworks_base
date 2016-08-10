@@ -2368,6 +2368,54 @@ public class SettingsProvider extends ContentProvider {
                         final SettingsState systemSettings = getSystemSettingsLocked(userId);
                         loadCustomizedVolumeLevels(systemSettings);
                     }
+                    // Allow OEMs to set date format, time format and enable/disable accessibility
+                    // services in resource.
+                    final SettingsState dateAndTimeSettings = getSystemSettingsLocked(userId);
+                    String defaultStringComponent;
+                    int defaultIntComponent;
+                    defaultStringComponent = getContext().getResources().getString(
+                            R.string.def_date_format);
+                    if (!TextUtils.isEmpty(defaultStringComponent)) {
+                        dateAndTimeSettings.insertSettingLocked(Settings.System.DATE_FORMAT,
+                                defaultStringComponent,SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    defaultStringComponent = getContext().getResources().getString(
+                            R.string.def_time_format);
+                    if (!TextUtils.isEmpty(defaultStringComponent)) {
+                        dateAndTimeSettings.insertSettingLocked(Settings.System.TIME_12_24,
+                                defaultStringComponent,SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    defaultIntComponent = getContext().getResources().getInteger(
+                            R.integer.def_enable_accessibility);
+                    if (defaultIntComponent != 0) {
+                        secureSettings.insertSettingLocked(Settings.Secure.ACCESSIBILITY_ENABLED,
+                                String.valueOf(defaultIntComponent), SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    defaultStringComponent = getContext().getResources().getString(
+                            R.string.def_enable_accessibility_services);
+                    if (!TextUtils.isEmpty(defaultStringComponent)) {
+                        secureSettings.insertSettingLocked(Settings.Secure.
+                                ENABLED_ACCESSIBILITY_SERVICES,defaultStringComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    // Allow openmarket OEMs to set default customized
+                    defaultComponent
+                            = getContext().getResources().getString(R.string.def_input_method);
+                    if (!TextUtils.isEmpty(defaultComponent)) {
+                        secureSettings.insertSettingLocked(
+                                Settings.Secure.DEFAULT_INPUT_METHOD,
+                                defaultComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+
+                    defaultComponent = getContext().getResources()
+                            .getString(R.string.def_enable_input_methods);
+                    if (!TextUtils.isEmpty(defaultComponent)) {
+                        secureSettings.insertSettingLocked(
+                                Settings.Secure.ENABLED_INPUT_METHODS,
+                                defaultComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
                     currentVersion = 122;
                 }
 
