@@ -139,6 +139,9 @@
         3: Show data activity with data type at the left side
            of signal icon, and do not show two stacked icon on
            one slot.
+        4: Show LTE, LTE+ symbols on top of signal icon,
+           and shows IMS and embms icons on the left side
+           of the signal icon.
     -->
     <integer name="status_bar_style">0</integer>
 

@@ -29,6 +29,22 @@
     android:layout_height="wrap_content"
     >
     <ImageView
+        android:id="@+id/embms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="4dp"
+        android:visibility="gone"
+        />
+    <ImageView
+        android:id="@+id/dataNetwork_type_in_roaming"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginEnd="5dp"
+        android:visibility="gone"
+        />
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"

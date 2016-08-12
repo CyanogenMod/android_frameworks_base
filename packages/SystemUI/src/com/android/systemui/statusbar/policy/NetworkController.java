@@ -59,6 +59,14 @@ public interface NetworkController {
         void setMobileDataEnabled(boolean enabled);
     }
 
+    public interface SignalCallbackExtended extends SignalCallback {
+        void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
+                int qsType, boolean activityIn, boolean activityOut, int dataActivityId,
+                int mobileActivityId, int stackedDataIcon, int stackedVoiceIcon,
+                String typeContentDescription, String description, boolean isWide,
+                int subId, int dataNetworkTypeInRoamingId, int embmsIconId);
+    }
+
     public interface EmergencyListener {
         void setEmergencyCallsOnly(boolean emergencyOnly);
     }
