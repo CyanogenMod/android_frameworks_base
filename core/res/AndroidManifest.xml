@@ -2770,7 +2770,8 @@
         android:permissionGroup="android.permission-group.SECURITY"
         android:protectionLevel="signature|system"
         android:label="@string/permlab_readPhoneBlacklist"
-        android:description="@string/permdesc_readPhoneBlacklist" />
+        android:description="@string/permdesc_readPhoneBlacklist"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- Allows an application to change the phone blacklist data.
          @hide This is not a third-party API (intended for system apps). -->
@@ -2778,7 +2779,8 @@
         android:permissionGroup="android.permission-group.SECURITY"
         android:protectionLevel="signature|system"
         android:label="@string/permlab_changePhoneBlacklist"
-        android:description="@string/permdesc_changePhoneBlacklist" />
+        android:description="@string/permdesc_changePhoneBlacklist"
+        androidprv:allowViaWhitelist="true" />
 
     <!-- The system process is explicitly the only one allowed to launch the
          confirmation UI for full backup/restore -->
