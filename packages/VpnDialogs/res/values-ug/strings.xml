@@ -16,7 +16,10 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Dialog title to identify the request from a VPN application. [CHAR LIMIT=60] -->
+  <string name="prompt">باغلىنىش ئىلتىماسى</string>
   <!-- Dialog message to warn about the risk of using a VPN application. [CHAR LIMIT=NONE] -->
+  <string name="warning"><xliff:g id="app">%s</xliff:g> سىزنىڭ  VPN ئۇلىنىشىنى بېكىتىشىڭىزنى تەلەپ قىلىدۇ، تورنى نازارەت قىلدۇ. ئەگەر سىز ئىشەنسىڭىز يول قويۇڭ.
+<![CDATA[<br /><br /><img src="vpn_icon" />]]> ئېكراننىڭ چوققىسىدا كۆرۈنسە، VPN نىڭ ئاكتىپ ئىكەنلىكىنى بىلدۈرىدۇ.    </string>
   <!-- Dialog title for built-in VPN. [CHAR LIMIT=40]  -->
   <string name="legacy_title">VPN باغلاندى</string>
   <!-- Button label to configure the current VPN session. [CHAR LIMIT=20] -->
