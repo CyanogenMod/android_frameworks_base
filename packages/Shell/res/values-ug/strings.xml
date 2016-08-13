@@ -19,6 +19,7 @@
   <!-- Title of notification indicating a bugreport has been successfully captured. [CHAR LIMIT=50] -->
   <string name="bugreport_finished_title">خاتالىق دوكلاتى تۇتۇلدى</string>
   <!-- Text of notification indicating that swipe left will share the captured bugreport. [CHAR LIMIT=100] -->
+  <string name="bugreport_finished_text" product="watch">سولغا سىيرىسىڭىز خاتالىق دوكلاتىڭىزنى ھەمبەھىرلەيدۇ</string>
   <!-- Text of notification indicating that touching will share the captured bugreport. [CHAR LIMIT=100] -->
   <string name="bugreport_finished_text" product="default">چېكىپلا خاتالىق دوكلاتىنى ھەمبەھىرلىيەلەيسىز</string>
   <!-- Body of dialog informing user about contents of a bugreport. [CHAR LIMIT=NONE] -->
@@ -26,4 +27,5 @@
   <!-- Checkbox that indicates this dialog should be shown again when the next bugreport is taken. [CHAR LIMIT=50] -->
   <string name="bugreport_confirm_repeat">بۇ ئۇچۇرنى كېيىنكى قېتىم كۆرسەت</string>
   <!-- Title for documents backend that offers bugreports. -->
+  <string name="bugreport_storage_title">مەسىلە مەلۇم قىلىش</string>
 </resources>

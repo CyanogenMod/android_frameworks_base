@@ -22,6 +22,32 @@
   <!-- Wi-Fi settings -->
   <!-- Match this with the order of NetworkInfo.DetailedState. -->
   <!-- Wi-Fi settings. The status messages when the network is unknown. -->
+  <string-array name="wifi_status">
+    <!-- Status message of Wi-Fi when it is idle. -->
+    <item/>
+    <!-- Status message of Wi-Fi when it is scanning. -->
+    <item>تەكشۈرۈۋاتىدۇ\u2026</item>
+    <!-- Status message of Wi-Fi when it is connecting. -->
+    <item>باغلىنىۋاتىدۇ\u2026</item>
+    <!-- Status message of Wi-Fi when it is authenticating. -->
+    <item>دەلىللەۋاتىدۇ\u2026</item>
+    <!-- Status message of Wi-Fi when it is obtaining IP address. -->
+    <item>IP ئادرېسقا ئېرىشىۋاتىدۇ\u2026</item>
+    <!-- Status message of Wi-Fi when it is connected. -->
+    <item>باغلاندى</item>
+    <!-- Status message of Wi-Fi when it is suspended. -->
+    <item>ۋاقىتلىق توختىتىلدى</item>
+    <!-- Status message of Wi-Fi when it is disconnecting. -->
+    <item>ئۈزۈۋاتىدۇ\u2026</item>
+    <!-- Status message of Wi-Fi when it is disconnected. -->
+    <item>Disconnected</item>
+    <!-- Status message of Wi-Fi when it is a failure. -->
+    <item>Unsuccessful</item>
+    <!-- Status message of Wi-Fi when it is blocked. -->
+    <item>Blocked</item>
+    <!-- Status message of Wi-Fi when connectiong is being verified. -->
+    <item>Temporarily avoiding poor connection</item>
+  </string-array>
   <!-- Match this with the order of NetworkInfo.DetailedState. -->
   <!-- Wi-Fi settings. The status messages when the network is known. -->
 </resources>

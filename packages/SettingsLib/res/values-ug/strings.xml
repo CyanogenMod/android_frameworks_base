@@ -20,13 +20,21 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Toast message when Wi-Fi cannot scan for networks -->
+  <string name="wifi_fail_to_scan">تورنى تەكشۈرەلمەيدۇ</string>
   <!-- Do not translate.  Concise terminology for wifi with WEP security -->
+  <string name="wifi_security_short_wep">WEP</string>
   <!-- Do not translate.  Concise terminology for wifi with WPA security -->
+  <string name="wifi_security_short_wpa">WPA</string>
   <!-- Do not translate.  Concise terminology for wifi with WPA2 security -->
+  <string name="wifi_security_short_wpa2">WPA2</string>
   <!-- Do not translate.  Concise terminology for wifi with both WPA/WPA2 security -->
+  <string name="wifi_security_short_wpa_wpa2">WPA/WPA2</string>
   <!-- Do not translate.  Concise terminology for wifi with unknown PSK type -->
+  <string name="wifi_security_short_psk_generic">@string/wifi_security_short_wpa_wpa2</string>
   <!-- Do not translate.  Concise terminology for wifi with 802.1x EAP security -->
+  <string name="wifi_security_short_eap">802.1x</string>
   <!-- Used in Wi-Fi settings dialogs when Wi-Fi does not have any security. -->
+  <string name="wifi_security_none">يوق</string>
   <!-- Do not translate.  Terminology for wifi with WEP security -->
   <!-- Do not translate.  Terminology for wifi with WPA security -->
   <!-- Do not translate.  Terminology for wifi with WPA2 security -->
