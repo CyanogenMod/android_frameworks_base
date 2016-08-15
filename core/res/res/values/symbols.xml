@@ -2726,4 +2726,7 @@
 
   <java-symbol type="bool" name="config_showOperatorNameInStatusBar" />
   <java-symbol type="bool" name="config_passpoint_setting_on" />
+  <java-symbol type="integer" name="wifi_hotspot_security_type" />
+  <java-symbol type="string" name="def_wifi_wifihotspot_pass" />
+  <java-symbol type="string" name="def_wifi_direct_name" />
 </resources>

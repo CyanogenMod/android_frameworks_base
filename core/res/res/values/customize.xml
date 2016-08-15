@@ -33,4 +33,14 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <!-- Used in LocalePicker, default language must be contained -->
     <string name="locale_codes" translatable="false"></string>
 
+    <!-- Set Wifi hotspot security type
+    NONE : 0
+    WPA2 PSK: 4
+    -->
+    <integer name="wifi_hotspot_security_type">4</integer>
+    <!-- Default wi-fi hotspot pass -->
+    <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
+    <!-- Default wi-fi direct name -->
+    <string name="def_wifi_direct_name" translatable="false"></string>
+
 </resources>
