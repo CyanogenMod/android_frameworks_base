@@ -134,10 +134,10 @@
   <string name="app_ops_send_sms">sende en tekstmelding</string>
   <string name="app_ops_start_at_bootup">starte under oppstart</string>
   <string name="app_ops_toast_window">vis toast meldinger</string>
-  <string name="app_ops_toggle_bluetooth">aktivere/deaktivere bluetooth</string>
-  <string name="app_ops_toggle_mobile_data">veksle mobildata</string>
-  <string name="app_ops_toggle_nfc">NFC av/på</string>
-  <string name="app_ops_toggle_wifi">veksle Wi-Fi</string>
+  <string name="app_ops_toggle_bluetooth">slå av/på Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">slå av/på mobildata</string>
+  <string name="app_ops_toggle_nfc">slå av/på NFC</string>
+  <string name="app_ops_toggle_wifi">slå av/på Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">styre alarmvolum</string>
   <string name="app_ops_use_audio_focus">styre lydfokus</string>
   <string name="app_ops_use_bluetooth_volume">styre bluetooth volum</string>

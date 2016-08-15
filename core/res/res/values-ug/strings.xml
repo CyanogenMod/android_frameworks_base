@@ -35,7 +35,9 @@
          to display a size in kilobytes, megabytes, or other size units.
          Some languages (like French) will want to add a space between
          the placeholders. -->
+  <string name="fileSizeSuffix"><xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g></string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in days -->
+  <string name="durationDays"><xliff:g id="days">%1$d</xliff:g> كۈن</string>
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one day with hours -->
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration of one day with one hours -->
   <!-- [CHAR_LIMIT=10] Suffix added to signify duration in hours -->
