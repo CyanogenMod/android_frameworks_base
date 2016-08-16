@@ -106,7 +106,7 @@ public class LiveLockScreenController {
                 }
             }
         } else {
-            if (isShowingLiveLockScreenView() && !mBar.isKeyguardInputRestricted()) {
+            if (isShowingLiveLockScreenView()) {
                 mPanelView.removeView(mLiveLockScreenView);
             }
             mLlsHasFocus = false;
