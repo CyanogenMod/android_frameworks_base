@@ -50,7 +50,7 @@
   <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Hapus data aplikasi</string>
   <!-- Title shown in recents popup for force stopping the application -->
-  <string name="advanced_dev_option_force_stop">Paksa untuk berhenti</string>
+  <string name="advanced_dev_option_force_stop">Paksa berhenti</string>
   <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Hapus instalasi</string>
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -139,13 +139,13 @@
   <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_on">Kunci layar diaktifkan.</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_off">Tampilan kala takaktif mati.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Tampilan ambien mati.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_on">Tampilan kala takaktif nyala.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Tampilan ambien hidup.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Tampilan kala takaktif dimatikan.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Tampilan ambien dimatikan.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Tampilan kala takaktif dinyalakan.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Tampilan ambien dihidupkan.</string>
   <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_off">Notifikasi mengambang tidak aktif.</string>
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
