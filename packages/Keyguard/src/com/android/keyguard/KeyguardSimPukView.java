@@ -56,7 +56,7 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     private String mPinText;
     private StateMachine mStateMachine = new StateMachine();
     private AlertDialog mRemainingAttemptsDialog;
-    private int mSubId;
+    private int mSubId = SubscriptionManager.INVALID_SUBSCRIPTION_ID;
     private ImageView mSimImageView;
 
     KeyguardUpdateMonitorCallback mUpdateMonitorCallback = new KeyguardUpdateMonitorCallback() {
@@ -118,10 +118,21 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
+            handleSubInfoChangeIfNeeded();
             if (mShowDefaultMessage) {
                 showDefaultMessage();
             }
             mPasswordEntry.requestFocus();
+        }
+    }
+
+    private void handleSubInfoChangeIfNeeded() {
+        KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
+        int subId = monitor.getNextSubIdForState(IccCardConstants.State.PUK_REQUIRED);
+        if (subId != mSubId && SubscriptionManager.isValidSubscriptionId(subId)) {
+            mSubId = subId;
+            mShowDefaultMessage = true;
+            mRemainingAttempts = -1;
         }
     }
 
@@ -377,11 +388,6 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
     }
 
     private void showDefaultMessage() {
-        KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
-        mSubId = monitor.getNextSubIdForState(IccCardConstants.State.PUK_REQUIRED);
-        if (!SubscriptionManager.isValidSubscriptionId(mSubId)) {
-            return;
-        }
         if (mRemainingAttempts >= 0) {
             mSecurityMessageDisplay.setMessage(getPukPasswordErrorMessage(
                     mRemainingAttempts, true), true);
@@ -395,7 +401,8 @@ public class KeyguardSimPukView extends KeyguardPinBasedInputView {
         if (count < 2) {
             msg = rez.getString(R.string.kg_puk_enter_puk_hint);
         } else {
-            SubscriptionInfo info = monitor.getSubscriptionInfoForSubId(mSubId);
+            SubscriptionInfo info = KeyguardUpdateMonitor.getInstance(mContext).
+                    getSubscriptionInfoForSubId(mSubId);
             CharSequence displayName = info != null ? info.getDisplayName() : "";
             msg = rez.getString(R.string.kg_puk_enter_puk_hint_multi, displayName);
             if (info != null) {
