@@ -378,15 +378,6 @@ public class PackageHelper {
             installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
         }
 
-        // If app expresses strong desire for internal space, honor it
-        if (installLocation == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
-            if (fitsOnInternal) {
-                return null;
-            } else {
-                throw new IOException("Requested internal only, but not enough space");
-            }
-        }
-
         // If app already exists somewhere, prefer to stay on that volume
         if (existingInfo != null) {
             if (existingInfo.volumeUuid == null && fitsOnInternal) {
@@ -394,6 +385,15 @@ public class PackageHelper {
             }
             if (allCandidates.contains(existingInfo.volumeUuid)) {
                 return existingInfo.volumeUuid;
+            }
+        }
+
+        // If app expresses strong desire for internal space, honor it
+        if (installLocation == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
+            if (fitsOnInternal) {
+                return null;
+            } else {
+                throw new IOException("Requested internal only, but not enough space");
             }
         }
 

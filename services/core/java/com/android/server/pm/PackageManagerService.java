@@ -11505,7 +11505,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         final IPackageInstallObserver2 observer;
         int installFlags;
         final String installerPackageName;
-        final String volumeUuid;
+        String volumeUuid;
         final VerificationParams verificationParams;
         private InstallArgs mArgs;
         private int mRet;
@@ -11705,6 +11705,28 @@ public class PackageManagerService extends IPackageManager.Stub {
                         }
                         if (pkgLite.isTheme) {
                             installFlags &= ~PackageManager.INSTALL_FORWARD_LOCK;
+                        }
+                    }
+                }
+            }
+
+            // Check whether we're replacing an existing package that's
+            // installed on adopted storage.  If yes, override the new
+            // package location to match.
+            if (move == null && (installFlags & PackageManager.INSTALL_REPLACE_EXISTING) != 0) {
+                synchronized (mPackages) {
+                    PackageParser.Package pkg = mPackages.get(pkgLite.packageName);
+                    if (pkg != null && isExternalAdopted(pkg)) {
+                        // Check whether anything will actually change
+                        // so that we log only when a fixup was needed
+                        if (!((installFlags & PackageManager.INSTALL_INTERNAL) != 0
+                                && (installFlags & PackageManager.INSTALL_EXTERNAL) == 0
+                                && Objects.equals(volumeUuid, pkg.volumeUuid))) {
+                            installFlags |= PackageManager.INSTALL_INTERNAL;
+                            installFlags &= ~PackageManager.INSTALL_EXTERNAL;
+                            volumeUuid = pkg.volumeUuid;
+                            Slog.w(TAG, "Replacing package on adopted storage, updating "
+                                    +"new package destination to volumeUuid "+volumeUuid);
                         }
                     }
                 }
@@ -13659,6 +13681,14 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private static boolean isExternal(ApplicationInfo info) {
         return (info.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0;
+    }
+
+    // Package is assumed to be on adopted storage if:
+    //   FLAG_EXTERNAL_STORAGE is set
+    //   volumeUuid is neither private internal (null) nor primary physical
+    private static boolean isExternalAdopted(PackageParser.Package pkg) {
+        return isExternal(pkg) && !TextUtils.isEmpty(pkg.volumeUuid)
+                && !Objects.equals(pkg.volumeUuid, StorageManager.UUID_PRIMARY_PHYSICAL);
     }
 
     private static boolean isSystemApp(PackageParser.Package pkg) {
