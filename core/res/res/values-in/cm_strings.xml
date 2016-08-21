@@ -154,9 +154,9 @@
   <string name="app_ops_add_voicemail">menambahkan pesan suara</string>
   <string name="app_ops_read_phone_state">akses status ponsel</string>
   <string name="app_ops_scan_wifi">memindai jaringan Wi-Fi</string>
-  <string name="app_ops_change_wallpaper">mengubah gambar latar</string>
+  <string name="app_ops_change_wallpaper">mengubah wallpaper</string>
   <string name="app_ops_assist_structure">gunakan struktur bantuan</string>
-  <string name="app_ops_assist_screenshot">ambil cuplikan layar</string>
+  <string name="app_ops_assist_screenshot">ambil tangkapan layar</string>
   <string name="app_ops_use_body_sensors">menggunakan sensor badan</string>
   <string name="app_ops_read_cell_broadcasts">baca siaran seluler</string>
   <string name="app_ops_mock_location">memalsukan lokasi Anda</string>
@@ -180,7 +180,7 @@
   <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> dilindungi dari peluncuran. Ketuk untuk mengautentikasi dan meluncurkan aplikasi.</string>
   <!-- Battery fully charged notification -->
   <string name="notify_battery_fully_charged_title">Baterai telah terisi penuh</string>
-  <string name="notify_battery_fully_charged_text">Cabut pengisi daya dari perangkat Anda untuk meningkatkan umur baterai.</string>
+  <string name="notify_battery_fully_charged_text">Lepaskan perangkat dari pengisi daya agar meningkatkan umur baterai.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">set ulang statistik baterai</string>
