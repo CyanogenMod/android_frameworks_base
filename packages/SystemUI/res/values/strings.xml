@@ -1717,4 +1717,7 @@
     <!-- accessibility label for paging indicator in quick settings [CHAR LIMITi=NONE] -->
     <string name="accessibility_quick_settings_page">Page <xliff:g name="current_page" example="1">%1$d</xliff:g> of <xliff:g name="num_pages" example="2">%2$d</xliff:g></string>
 
+    <string name="sim1">SIM 1</string>
+    <string name="sim2">SIM 2</string>
+
 </resources>
