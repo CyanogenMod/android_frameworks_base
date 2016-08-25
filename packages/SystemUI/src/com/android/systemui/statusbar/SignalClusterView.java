@@ -23,6 +23,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -229,7 +231,12 @@ public class SignalClusterView
         if (state == null) {
             return;
         }
-        state.mMobileVisible = statusIcon.visible && !mBlockMobile;
+
+        final int slotId = SubscriptionManager.getSlotId(subId);
+        final int simState = SubscriptionManager.getSimStateForSlotIdx(slotId);
+
+        state.mMobileVisible = statusIcon.visible && !mBlockMobile &&
+            simState != TelephonyManager.SIM_STATE_NOT_READY;
         state.mMobileStrengthId = statusIcon.icon;
         state.mMobileTypeId = statusType;
         state.mMobileDescription = statusIcon.contentDescription;
