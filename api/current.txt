@@ -75,6 +75,7 @@ package android {
     field public static final java.lang.String INSTALL_SHORTCUT = "com.android.launcher.permission.INSTALL_SHORTCUT";
     field public static final java.lang.String INTERNET = "android.permission.INTERNET";
     field public static final java.lang.String KILL_BACKGROUND_PROCESSES = "android.permission.KILL_BACKGROUND_PROCESSES";
+    field public static final java.lang.String LIVE_LOCK_SCREEN_MANAGER_ACCESS_PRIVATE = "cyanogenmod.permission.LIVE_LOCK_SCREEN_MANAGER_ACCESS_PRIVATE";
     field public static final java.lang.String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
     field public static final java.lang.String MANAGE_DOCUMENTS = "android.permission.MANAGE_DOCUMENTS";
     field public static final java.lang.String MASTER_CLEAR = "android.permission.MASTER_CLEAR";
@@ -124,6 +125,7 @@ package android {
     field public static final java.lang.String SIGNAL_PERSISTENT_PROCESSES = "android.permission.SIGNAL_PERSISTENT_PROCESSES";
     field public static final java.lang.String STATUS_BAR = "android.permission.STATUS_BAR";
     field public static final java.lang.String SYSTEM_ALERT_WINDOW = "android.permission.SYSTEM_ALERT_WINDOW";
+    field public static final java.lang.String THIRD_PARTY_KEYGUARD = "cyanogenmod.permission.THIRD_PARTY_KEYGUARD";
     field public static final java.lang.String TRANSMIT_IR = "android.permission.TRANSMIT_IR";
     field public static final java.lang.String UNINSTALL_SHORTCUT = "com.android.launcher.permission.UNINSTALL_SHORTCUT";
     field public static final java.lang.String UPDATE_DEVICE_STATS = "android.permission.UPDATE_DEVICE_STATS";

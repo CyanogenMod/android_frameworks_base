@@ -305,6 +305,10 @@ public class StatusBarWindowManager {
         pw.println(mCurrentState);
     }
 
+    public boolean keyguardExternalViewHasFocus() {
+        return mCurrentState.keyguardExternalViewHasFocus;
+    }
+
     private static class State {
         boolean keyguardShowing;
         boolean keyguardOccluded;
@@ -319,6 +323,7 @@ public class StatusBarWindowManager {
         boolean forceStatusBarVisible;
         boolean forceCollapsed;
         boolean forceDozeBrightness;
+        boolean keyguardExternalViewHasFocus;
 
         /**
          * The {@link BaseStatusBar} state from the status bar.
@@ -354,5 +359,11 @@ public class StatusBarWindowManager {
 
             return result.toString();
         }
+    }
+
+    public void setKeyguardExternalViewFocus(boolean hasFocus) {
+        mCurrentState.keyguardExternalViewHasFocus = hasFocus;
+        // make the keyguard occluded so the external view gets full focus
+        setKeyguardOccluded(hasFocus);
     }
 }

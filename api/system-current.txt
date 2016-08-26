@@ -115,6 +115,7 @@ package android {
     field public static final java.lang.String INTERNET = "android.permission.INTERNET";
     field public static final java.lang.String INVOKE_CARRIER_SETUP = "android.permission.INVOKE_CARRIER_SETUP";
     field public static final java.lang.String KILL_BACKGROUND_PROCESSES = "android.permission.KILL_BACKGROUND_PROCESSES";
+    field public static final java.lang.String LIVE_LOCK_SCREEN_MANAGER_ACCESS_PRIVATE = "cyanogenmod.permission.LIVE_LOCK_SCREEN_MANAGER_ACCESS_PRIVATE";
     field public static final java.lang.String LOCAL_MAC_ADDRESS = "android.permission.LOCAL_MAC_ADDRESS";
     field public static final java.lang.String LOCATION_HARDWARE = "android.permission.LOCATION_HARDWARE";
     field public static final java.lang.String LOOP_RADIO = "android.permission.LOOP_RADIO";
@@ -209,6 +210,7 @@ package android {
     field public static final java.lang.String STATUS_BAR = "android.permission.STATUS_BAR";
     field public static final java.lang.String STOP_APP_SWITCHES = "android.permission.STOP_APP_SWITCHES";
     field public static final java.lang.String SYSTEM_ALERT_WINDOW = "android.permission.SYSTEM_ALERT_WINDOW";
+    field public static final java.lang.String THIRD_PARTY_KEYGUARD = "cyanogenmod.permission.THIRD_PARTY_KEYGUARD";
     field public static final java.lang.String TRANSMIT_IR = "android.permission.TRANSMIT_IR";
     field public static final java.lang.String TV_INPUT_HARDWARE = "android.permission.TV_INPUT_HARDWARE";
     field public static final java.lang.String UNINSTALL_SHORTCUT = "com.android.launcher.permission.UNINSTALL_SHORTCUT";

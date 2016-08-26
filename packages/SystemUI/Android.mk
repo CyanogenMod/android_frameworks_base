@@ -25,9 +25,24 @@ ifneq ($(SYSTEM_UI_INCREMENTAL_BUILDS),)
     LOCAL_JACK_ENABLED := incremental
 endif
 
+LOCAL_PROGUARD_FLAGS += -dontwarn
+
+LOCAL_STATIC_JAVA_LIBRARIES += cmsdk
+LOCAL_FULL_LIBS_MANIFEST_FILES := $(LOCAL_PATH)/AndroidManifest_extra.xml
+
 include frameworks/base/packages/SettingsLib/common.mk
 
 include $(BUILD_PACKAGE)
+
+
+# CMSDK
+include $(CLEAR_VARS)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
+	cmsdk:libs/platform.sdk-5.0.1.jar
+
+include $(BUILD_MULTI_PREBUILT)
+
 
 ifeq ($(EXCLUDE_SYSTEMUI_TESTS),)
     include $(call all-makefiles-under,$(LOCAL_PATH))

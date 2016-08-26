@@ -23,6 +23,7 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.app.StatusBarManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -35,6 +36,7 @@ import android.util.MathUtils;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityEvent;
@@ -66,6 +68,8 @@ import com.android.systemui.statusbar.stack.StackStateAnimator;
 
 import java.util.List;
 
+import cyanogenmod.externalviews.KeyguardExternalView;
+
 public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener, ObservableScrollView.Listener,
         View.OnClickListener, NotificationStackScrollLayout.OnOverscrollTopChangedListener,
@@ -89,6 +93,12 @@ public class NotificationPanelView extends PanelView implements
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
     public static final long DOZE_ANIMATION_DURATION = 700;
+
+
+    // Layout params for external keyguard view
+    private static final FrameLayout.LayoutParams EXTERNAL_KEYGUARD_VIEW_PARAMS =
+            new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
 
     private KeyguardAffordanceHelper mAfforanceHelper;
     private StatusBarHeaderView mHeader;
@@ -205,6 +215,9 @@ public class NotificationPanelView extends PanelView implements
     private boolean mLaunchingAffordance;
     private String mLastCameraLaunchSource = KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE;
 
+    private ComponentName mThirdPartyKeyguardViewComponent;
+    private KeyguardExternalView mKeyguardExternalView;
+
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
         public void run() {
@@ -271,6 +284,12 @@ public class NotificationPanelView extends PanelView implements
                 }
             }
         });
+
+//        CmLockPatternUtils lockPatternUtils = new CmLockPatternUtils(getContext());
+//        if (lockPatternUtils.isThirdPartyKeyguardEnabled()) {
+//            mThirdPartyKeyguardViewComponent = lockPatternUtils.getThirdPartyKeyguardComponent();
+//        }
+        mThirdPartyKeyguardViewComponent = new ComponentName("org.cyanogenmod.samples.keyguardextview", "org.cyanogenmod.samples.keyguardextview.SampleKeyguardProviderService");
     }
 
     @Override
@@ -1014,6 +1033,19 @@ public class NotificationPanelView extends PanelView implements
         }
         if (keyguardShowing) {
             updateDozingVisibilities(false /* animate */);
+            if (mThirdPartyKeyguardViewComponent != null) {
+                if (mKeyguardExternalView == null) {
+                    mKeyguardExternalView =
+                            getExternalKeyguardView(mThirdPartyKeyguardViewComponent);
+                }
+                if (mKeyguardExternalView != null && !mKeyguardExternalView.isAttachedToWindow()) {
+                    addView(mKeyguardExternalView, 0, EXTERNAL_KEYGUARD_VIEW_PARAMS);
+                }
+            }
+        } else {
+            if (mKeyguardExternalView != null && mKeyguardExternalView.isAttachedToWindow()) {
+                removeView(mKeyguardExternalView);
+            }
         }
         resetVerticalPanelPosition();
         updateQsState();
@@ -2450,5 +2482,18 @@ public class NotificationPanelView extends PanelView implements
         ActivityManager am = getContext().getSystemService(ActivityManager.class);
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         return !tasks.isEmpty() && pkgName.equals(tasks.get(0).topActivity.getPackageName());
+    }
+
+    public boolean hasExternalKeyguardView() {
+        return mKeyguardExternalView != null && mKeyguardExternalView.isAttachedToWindow();
+    }
+
+    private KeyguardExternalView getExternalKeyguardView(ComponentName componentName) {
+        try {
+            return new KeyguardExternalView(getContext(), null, componentName);
+        } catch (Exception e) {
+            // just return null below and move on
+        }
+        return null;
     }
 }
