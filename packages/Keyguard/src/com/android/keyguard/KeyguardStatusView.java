@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
@@ -236,8 +237,13 @@ public class KeyguardStatusView extends GridLayout {
             final String clockView24Skel = res.getString(R.string.clock_24hr_format);
             final String key = locale.toString() + dateViewSkel + clockView12Skel + clockView24Skel;
             if (key.equals(cacheKey)) return;
-
-            dateView = DateFormat.getBestDateTimePattern(locale, dateViewSkel);
+            if (res.getBoolean(com.android.internal.R.bool.config_dateformat)) {
+                final String dateformat = Settings.System.getString(context.getContentResolver(),
+                        Settings.System.DATE_FORMAT);
+                dateView = dateformat;
+            } else {
+                dateView = DateFormat.getBestDateTimePattern(locale, dateViewSkel);
+            }
 
             clockView12 = DateFormat.getBestDateTimePattern(locale, clockView12Skel);
             if(!context.getResources().getBoolean(R.bool.config_showAmpm)){
