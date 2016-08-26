@@ -175,11 +175,13 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
         mCast.addCallback(mCastCallback);
 
         // hotspot
-        mIconController.setIcon(mSlotHotspot, R.drawable.stat_sys_hotspot,
-                mContext.getString(R.string.accessibility_status_bar_hotspot));
-        mIconController.setIconVisibility(mSlotHotspot, mHotspot.isHotspotEnabled());
-        mHotspot.addCallback(mHotspotCallback);
-
+        if (!mContext.getResources().getBoolean(com.android.internal.R.bool
+               .config_regional_hotspot_show_notification_when_turn_on)) {
+            mIconController.setIcon(mSlotHotspot, R.drawable.stat_sys_hotspot,
+                    mContext.getString(R.string.accessibility_status_bar_hotspot));
+            mIconController.setIconVisibility(mSlotHotspot, mHotspot.isHotspotEnabled());
+            mHotspot.addCallback(mHotspotCallback);
+        }
         // managed profile
         mIconController.setIcon(mSlotManagedProfile, R.drawable.stat_sys_managed_profile_status,
                 mContext.getString(R.string.accessibility_managed_profile));
