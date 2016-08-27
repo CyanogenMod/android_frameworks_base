@@ -19,9 +19,9 @@
 */
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="profile_applist_title">Aplikasi</string>
-  <string name="picker_activities">Aktivitas</string>
-  <string name="select_custom_app_title">Pilih aplikasi khusus</string>
-  <string name="select_custom_activity_title">Pilih aktivitas khusus</string>
-  <string name="lockscreen_targets_message">Pintasan kunci layar</string>
+  <string name="profile_applist_title">Rakendused</string>
+  <string name="picker_activities">Tegevused</string>
+  <string name="select_custom_app_title">Vali kohandatud rakendus</string>
+  <string name="select_custom_activity_title">Vali kohandatud tegevus</string>
+  <string name="lockscreen_targets_message">Lukustuskuva otseteed</string>
 </resources>

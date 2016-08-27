@@ -27,17 +27,17 @@
          values/config.xml) and must be truncated.
          [CHAR LIMIT=4] -->
   <!-- Strings for lockscreen shortcut hints -->
-  <string name="left_shortcut_hint">Usap ke kanan untuk %1$s</string>
-  <string name="right_shortcut_hint">Usap ke kiri untuk %1$s</string>
+  <string name="left_shortcut_hint">Geser ke kanan untuk %1$s</string>
+  <string name="right_shortcut_hint">Geser ke kiri untuk %1$s</string>
   <string name="lockscreen_message">Ketuk ikon di sebelah kiri atau kanan untuk menugaskan kembali pintasan layar kunci.</string>
-  <string name="lockscreen_default_target">Baku</string>
+  <string name="lockscreen_default_target">Standar</string>
   <string name="select_application">Pilih aplikasi</string>
   <string name="lockscreen_choose_action_title">Pilih tindakan</string>
   <string name="lockscreen_none_target">Tidak Ada</string>
   <!-- Dialog title for navigation bar button selection -->
   <string name="navbar_dialog_title">Pilih tindakan untuk ditambahkan</string>
   <string name="navbar_home_button">Tombol beranda</string>
-  <string name="navbar_recent_button">Tombol terbaru</string>
+  <string name="navbar_recent_button">Tombol riwayat</string>
   <string name="navbar_search_button">Tombol penelusuran</string>
   <string name="navbar_back_button">Tombol kembali</string>
   <string name="navbar_empty_button">Tombol kosong</string>
@@ -50,7 +50,7 @@
   <!-- Title shown in recents popup for wiping application's data -->
   <string name="advanced_dev_option_wipe_app">Hapus data aplikasi</string>
   <!-- Title shown in recents popup for force stopping the application -->
-  <string name="advanced_dev_option_force_stop">Paksa untuk berhenti</string>
+  <string name="advanced_dev_option_force_stop">Paksa berhenti</string>
   <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Hapus instalasi</string>
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -67,100 +67,100 @@
   <!-- Lights settings, LED notification -->
   <string name="led_notification_title">Pengaturan cahaya</string>
   <string name="led_notification_text">Lampu LED diaktifkan oleh pengaturan</string>
-  <string name="qs_tile_edit_header_instruction">Tekan dan tahan petak untuk mengatur ulang</string>
-  <string name="quick_settings_edit_label">Edit petak</string>
-  <string name="quick_settings_cannot_delete_edit_tile">Tidak dapat menghapus ubin Edit</string>
-  <string name="qs_tiles_reset_confirmation">Mengatur ulang petak pengaturan cepat ke konfigurasi baku?</string>
-  <string name="quick_settings_tile_reset_to_default">Mengatur ulang ke tata letak baku</string>
+  <string name="qs_tile_edit_header_instruction">Tekan dan tahan tile untuk mengatur ulang</string>
+  <string name="quick_settings_edit_label">Edit tile</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Tidak dapat menghapus tile</string>
+  <string name="qs_tiles_reset_confirmation">Setel ulang pengaturan tile ke konfigurasi standar?</string>
+  <string name="quick_settings_tile_reset_to_default">Atur ulang ke standar</string>
   <string name="quick_settings_title_header">Kepala</string>
-  <string name="quick_settings_title_tiles">Petak</string>
+  <string name="quick_settings_title_tiles">Tiles</string>
   <string name="quick_settings_title_show_weather">Tampilkan cuaca</string>
-  <string name="quick_settings_title_show_brightness_slider">Tampilkan penyalindra kecerahan</string>
+  <string name="quick_settings_title_show_brightness_slider">Tampilkan panel kecerahan</string>
   <string name="quick_settings_title_enlarge_first_row">Perbesar baris pertama</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Hal ini membuatnya tetap dalam pandangan sampai Anda melepas sematan. Sentuh dan tahan tombol kembali untuk melepas sematan.</string>
-  <string name="quick_settings_custom_tile_detail_title">Ubin khusus</string>
-  <string name="quick_settings_remove">Hapus ubin</string>
+  <string name="quick_settings_custom_tile_detail_title">Tile kustom</string>
+  <string name="quick_settings_remove">Hapus tile</string>
   <string name="quick_settings_network_adb_label">ADB melalui jaringan</string>
   <string name="quick_settings_compass_label">Kompas</string>
   <string name="quick_settings_nfc_label">NFC</string>
   <string name="quick_settings_profiles">Profil sistem</string>
-  <string name="quick_settings_profiles_off">Profil dinonaktifkan</string>
+  <string name="quick_settings_profiles_off">Profil dimatikan</string>
   <string name="quick_settings_heads_up_label">Notifikasi mengambang</string>
   <string name="quick_settings_battery_saver_label">Penghemat baterai</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
-  <string name="quick_settings_battery_saver_label_charging">Penghemat baterai (sedang mengisi)</string>
+  <string name="quick_settings_battery_saver_label_charging">Penghemat baterai (mengisi)</string>
   <string name="quick_settings_caffeine_label">Kafein</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sinkronisasi mati.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_sync_on">Singkron aktif.</string>
+  <string name="accessibility_quick_settings_sync_on">Sinkronisasi hidup.</string>
   <!-- Announcement made when sync changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_changed_off">Sinkronisasi dimatikan.</string>
   <!-- Announcement made when sync changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_sync_changed_on">Sinkronisasi diaktifkan.</string>
+  <string name="accessibility_quick_settings_sync_changed_on">Sinkronisasi dihidupkan.</string>
   <string name="quick_settings_sync_label">Sinkronisasi</string>
   <string name="quick_settings_volume_panel_label">Panel volume</string>
-  <string name="quick_settings_usb_tether_label">Peranggitan USB</string>
-  <string name="quick_settings_screen_timeout_detail_title">Waktu pejam layar</string>
+  <string name="quick_settings_usb_tether_label">Tethering USB</string>
+  <string name="quick_settings_screen_timeout_detail_title">Waktu layar mati</string>
   <string name="quick_settings_lockscreen_label">Kunci layar</string>
-  <string name="quick_settings_ambient_display_label">Tampilan kala takaktif</string>
+  <string name="quick_settings_ambient_display_label">Tampilan ambien</string>
   <string name="quick_settings_lockscreen_label_enforced">Kunci layar diterapkan</string>
-  <string name="quick_settings_lockscreen_label_locked_by_profile">Dinonaktifkan oleh profil</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Dimatikan oleh profil</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_screen_timeout">Waktu pejam layar: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="accessibility_quick_settings_screen_timeout">Batas waktu layar: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_screen_timeout_changed">Waktu pejam layar diubah menjadi <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
-  <string name="qs_tile_performance">Modus Baterai</string>
+  <string name="accessibility_quick_settings_screen_timeout_changed">Batas waktu layar diubah menjadi <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
+  <string name="qs_tile_performance">Mode Baterai</string>
   <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modus baterai: modus hemat daya.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Mode baterai: hemat daya.</string>
   <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_bal">Modus Baterai: modus seimbang.</string>
+  <string name="accessibility_quick_settings_perf_profile_bal">Mode Baterai: seimbang.</string>
   <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_perf">Modus Baterai: Modus Performa.</string>
+  <string name="accessibility_quick_settings_perf_profile_perf">Mode Baterai: Performa.</string>
   <!-- Content description of the battery mode tile in quick settings when on, efficiency mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_bias_power">Modus baterai: modus efisien.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_power">Mode baterai: efisien.</string>
   <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_bias_perf">Modus baterai: modus cepat.</string>
+  <string name="accessibility_quick_settings_perf_profile_bias_perf">Mode baterai: mode cepat.</string>
   <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modus baterai diubah menjadi modus hemat daya.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Mode baterai diubah menjadi mode hemat daya.</string>
   <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_bal">Modus baterai diubah menjadi modus seimbang.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bal">Mode baterai diubah menjadi mode seimbang.</string>
   <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_perf">Modus baterai diubah menjadi modus performa.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_perf">Mode baterai diubah menjadi mode performa.</string>
   <!-- Announcement made when the battery mode tile changes to efficiency (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Modus baterai diubah ke modus efisien.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_power">Mode baterai diubah menjadi mode efisien.</string>
   <!-- Announcement made when the battery mode tile changes to quick (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Modus baterai diubah ke modus cepat.</string>
-  <string name="quick_settings_performance_profile_detail_title">Modus Baterai</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_bias_perf">Mode baterai diubah menjadi mode cepat.</string>
+  <string name="quick_settings_performance_profile_detail_title">Mode Baterai</string>
   <!-- Content description of the lock screen tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_off">Kunci layar mati.</string>
   <!-- Content description of the lock screen tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_lock_screen_on">Kunci layar aktif.</string>
+  <string name="accessibility_quick_settings_lock_screen_on">Kunci layar hidup.</string>
   <!-- Announcement made when lock screen changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_lock_screen_changed_off">Kunci layar dimatikan.</string>
   <!-- Announcement made when lock screen changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_lock_screen_changed_on">Kunci layar diaktifkan.</string>
+  <string name="accessibility_quick_settings_lock_screen_changed_on">Kunci layar dihidupkan.</string>
   <!-- Content description of the ambient display tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_off">Tampilan kala takaktif mati.</string>
+  <string name="accessibility_quick_settings_ambient_display_off">Tampilan ambien mati.</string>
   <!-- Content description of the ambient display tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_on">Tampilan kala takaktif nyala.</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Tampilan ambien hidup.</string>
   <!-- Announcement made when ambient display changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_off">Tampilan kala takaktif dimatikan.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Tampilan ambien dimatikan.</string>
   <!-- Announcement made when ambient display changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_ambient_display_changed_on">Tampilan kala takaktif dinyalakan.</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Tampilan ambien dihidupkan.</string>
   <!-- Content description of the heads up tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_off">Notifikasi mengambang tidak aktif.</string>
+  <string name="accessibility_quick_settings_heads_up_off">Notifikasi mengambang mati.</string>
   <!-- Content description of the heads up tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_on">Notifikasi mengambang aktif.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Notifikasi mengambang hidup.</string>
   <!-- Announcement made when heads up changes to off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_changed_off">Notifikasi mengambang dinonaktifkan.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Notifikasi mengambang dimatikan.</string>
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_heads_up_changed_on">Notifikasi mengambang diaktifkan.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Notifikasi mengambang dihidupkan.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_off">Kafein nonaktif.</string>
+  <string name="accessibility_quick_settings_caffeine_off">Kafein mati.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_caffeine_on">Kafein aktif.</string>
+  <string name="accessibility_quick_settings_caffeine_on">Kafein hidup.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Penghemat baterai mati.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -170,19 +170,19 @@
   <!-- Announcement made when battery saver changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_changed_on">Penghemat baterai dihidupkan.</string>
   <!-- Dynamic tiles -->
-  <string name="quick_settings_dynamic_tile_detail_title">Ubin dinamis</string>
+  <string name="quick_settings_dynamic_tile_detail_title">Tile Dinamis</string>
   <string name="dynamic_qs_tile_next_alarm_label">Alarm selanjutnya</string>
   <string name="dynamic_qs_tile_ime_selector_label">Pemilih IME</string>
-  <string name="dynamic_qs_tile_su_label">Akses punca (root)</string>
+  <string name="dynamic_qs_tile_su_label">Akses root</string>
   <string name="quick_settings_title_advanced_location">Lokasi Tri-state</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_battery_saving">Pelaporan lokasi: modus hemat baterai.</string>
+  <string name="accessibility_quick_settings_location_battery_saving">Laporan Lokasi: mode hemat baterai.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_gps_only">Pelaporan lokasi: modus hanya sensor.</string>
+  <string name="accessibility_quick_settings_location_gps_only">Laporan Lokasi: mode hanya sensor.</string>
   <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_high_accuracy">Pelaporan lokasi: modus akurasi tinggi.</string>
+  <string name="accessibility_quick_settings_location_high_accuracy">Laporan Lokasi: mode akurasi tinggi.</string>
   <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
-  <string name="quick_settings_location_detail_title">Modus lokasi</string>
+  <string name="quick_settings_location_detail_title">Mode lokasi</string>
   <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Hemat baterai</string>
   <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
@@ -190,25 +190,25 @@
   <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Akurasi tinggi</string>
   <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_battery_saving">Pelaporan lokasi diubah menjadi modus hemat baterai.</string>
+  <string name="accessibility_quick_settings_location_changed_battery_saving">Laporan lokasi diubah menjadi mode hemat baterai.</string>
   <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_gps_only">Pelaporan lokasi diubah menjadi modus hanya sensor.</string>
+  <string name="accessibility_quick_settings_location_changed_gps_only">Laporan lokasi diubah menjadi mode hanya sensor.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_location_changed_high_accuracy">Pelaporan lokasi diubah menjadi modus akurasi tinggi.</string>
-  <string name="quick_settings_tiles_category_system">Petak sistem</string>
+  <string name="accessibility_quick_settings_location_changed_high_accuracy">Laporan lokasi diubah menjadi mode akurasi tinggi.</string>
+  <string name="quick_settings_tiles_category_system">Tiles sistem</string>
   <!-- detail header when adding a tile -->
-  <string name="quick_settings_tiles_add_tiles">Tambahkan petak</string>
+  <string name="quick_settings_tiles_add_tiles">Tambahkan tile</string>
   <!-- Hotspot dialog message -->
-  <string name="hotspot_apm_message">Tidak dapat tersambung ke jaringan seluler ketika modus Pesawat diaktifkan. Nonaktifkan modus Pesawat lalu coba lagi.</string>
+  <string name="hotspot_apm_message">Tidak dapat tersambung ke jaringan seluler ketika mode Pesawat diaktifkan. Nonaktifkan mode Pesawat dan coba lagi.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">Senter aktif</string>
-  <string name="quick_settings_tile_flashlight_not_summary">Ketuk untuk menonaktifkan</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Ketuk untuk mematikan</string>
   <!-- Wi-Fi hotspot label when enabled -->
   <plurals name="wifi_hotspot_connected_clients_label">
     <item quantity="other">%1$d klien</item>
   </plurals>
   <!-- CellularTile data sim not configured state string -->
-  <string name="data_sim_not_configured">Tak ada SIM Internet</string>
+  <string name="data_sim_not_configured">Tidak ada data SIM</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Dok baterai <xliff:g id="number">%d</xliff:g> persen.</string>
   <!-- Play queue -->
@@ -217,4 +217,8 @@
   <!-- Path data for landscape battery -->
   <!-- Path data for circle battery -->
   <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g><xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="expand_hint">Geser ke bawah untuk memperluas</string>
+  <string name="swipe_left_hint">Geser ke kiri untuk <xliff:g id="app_name">%1$s</xliff:g></string>
+  <string name="swipe_right_hint">Geser ke kanan untuk notifikasi</string>
 </resources>
