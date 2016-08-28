@@ -108,10 +108,18 @@ public class DateView extends TextView {
 
         mCurrentTime.setTime(System.currentTimeMillis());
 
-        final String text = mDateFormat.format(mCurrentTime);
+        final String text = getDateFormat();
         if (!text.equals(mLastText)) {
             setText(text);
             mLastText = text;
+        }
+    }
+
+    private String getDateFormat() {
+        if (getContext().getResources().getBoolean(com.android.internal.R.bool.config_dateformat)) {
+            return android.text.format.DateFormat.getDateFormat(getContext()).format(mCurrentTime);
+        } else {
+            return mDateFormat.format(mCurrentTime);
         }
     }
 }

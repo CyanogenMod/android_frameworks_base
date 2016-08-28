@@ -428,6 +428,9 @@
     <!-- Boolean indicating whether or not wifi firmware debugging is enabled -->
     <bool translatable="false" name="config_wifi_enable_wifi_firmware_debugging">true</bool>
 
+    <!-- IpReachability monitor enable/Disable -->
+    <bool translatable="false" name="config_wifi_ipreachability_monitor">false</bool>
+
     <!-- Integer size limit, in KB, for a single WifiLogger ringbuffer -->
     <integer translatable="false" name="config_wifi_logger_ring_buffer_size_limit_kb">32</integer>
 
@@ -2637,4 +2640,14 @@
     <bool name="config_regional_hotspot_show_broadcast_ssid_checkbox">false</bool>
     <bool name="config_regional_hotspot_show_notification_when_turn_on">false</bool>
     <bool name="config_passpoint_setting_on">false</bool>
+    <!-- Emergency Number to be invoked when Power key is pressed.
+         Default value is set to 112 as this FR is mainly intended
+         for Indian market-->
+    <string name="power_key_emergency_number">112</string>
+    <!-- Number of power key hits to invoke emergency call -->
+    <integer name="power_key_hits_emergency">3</integer>
+
+    <!-- Allow the gesture to tap the power button N times to start
+         the Emergency Call while the device is non-interactive. -->
+    <bool name="config_emergencyCallOnPowerkeyTapGestureEnabled">false</bool>
 </resources>
