@@ -102,7 +102,7 @@ public class LiveLockScreenController {
                 }
                 if (mLiveLockScreenView != null && !mLiveLockScreenView.isAttachedToWindow()) {
                     mBar.updateRowStates();
-                    mPanelView.addView(mLiveLockScreenView, 0);
+                    addExternalKeyguardViewToPanel();
                 }
             }
         } else {
@@ -146,6 +146,25 @@ public class LiveLockScreenController {
             // just return null below and move on
         }
         return null;
+    }
+
+    private void addExternalKeyguardViewToPanel() {
+        if (mLiveLockScreenView != null) {
+            mLiveLockScreenView.registerOnWindowAttachmentChangedListener(
+                    new KeyguardExternalView.OnWindowAttachmentChangedListener() {
+                        @Override
+                        public void onAttachedToWindow() {
+                            mBar.unfocusKeyguardExternalView();
+                            mLiveLockScreenView.unregisterOnWindowAttachmentChangedListener(this);
+                        }
+
+                        @Override
+                        public void onDetachedFromWindow() {
+
+                        }
+                    });
+            mPanelView.addView(mLiveLockScreenView);
+        }
     }
 
     private KeyguardExternalView.KeyguardExternalViewCallbacks mExternalKeyguardViewCallbacks =
@@ -292,7 +311,7 @@ public class LiveLockScreenController {
                 mLiveLockScreenView.registerKeyguardExternalViewCallback(
                         mExternalKeyguardViewCallbacks);
                 if (mStatusBarState != StatusBarState.SHADE) {
-                    mPanelView.addView(mLiveLockScreenView);
+                    addExternalKeyguardViewToPanel();
                     mLiveLockScreenView.onKeyguardShowing(true);
                 }
             } else {
