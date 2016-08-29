@@ -79,7 +79,8 @@ public class LiveLockScreenController {
     }
 
     public void setBarState(int statusBarState) {
-        if (mStatusBarState != StatusBarState.SHADE && statusBarState == StatusBarState.SHADE) {
+        if (mStatusBarState != StatusBarState.SHADE && statusBarState == StatusBarState.SHADE
+                && !mBar.isKeyguardInputRestricted()) {
             // going from KEYGUARD or SHADE_LOCKED to SHADE so device has been unlocked
             onKeyguardDismissed();
         }
@@ -106,7 +107,8 @@ public class LiveLockScreenController {
                 }
             }
         } else {
-            if (isShowingLiveLockScreenView() && !mBar.isKeyguardInputRestricted()) {
+            if (isShowingLiveLockScreenView() && (!mBar.isKeyguardInputRestricted()
+                    || mBar.isInLaunchTransition())) {
                 mPanelView.removeView(mLiveLockScreenView);
             }
             mLlsHasFocus = false;
@@ -215,7 +217,7 @@ public class LiveLockScreenController {
     }
 
     public boolean isLiveLockScreenInteractive() {
-        return mLiveLockScreenView != null && mLiveLockScreenView.isInteractive();
+        return mLiveLockScreenView != null && mLiveLockScreenView.isInteractive() && mLlsHasFocus;
     }
 
     public KeyguardExternalView getLiveLockScreenView() {
