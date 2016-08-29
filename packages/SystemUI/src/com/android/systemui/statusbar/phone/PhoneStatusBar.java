@@ -495,6 +495,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void setStatusBarViewVisibility(boolean visible) {
+        mStatusBarWindowManager.setPanelVisible(visible);
         mStatusBarView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
