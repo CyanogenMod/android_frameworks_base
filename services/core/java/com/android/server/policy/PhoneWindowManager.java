@@ -543,9 +543,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mVolBtnMusicControls;
     boolean mIsLongPress;
 
-    // Volume wake control flag
-    boolean mVolumeWakeScreen;
-
     PointerLocationView mPointerLocationView;
 
     // The current size of the screen; really; extends into the overscan area of
