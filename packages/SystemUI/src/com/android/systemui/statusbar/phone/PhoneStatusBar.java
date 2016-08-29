@@ -495,7 +495,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     }
 
     public void setStatusBarViewVisibility(boolean visible) {
-        mStatusBarView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+        boolean currentlyVisible = mStatusBarView.getVisibility() == View.VISIBLE;
+        if (visible != currentlyVisible) {
+            mStatusBarView.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
     class DevForceNavbarObserver extends UserContentObserver {
