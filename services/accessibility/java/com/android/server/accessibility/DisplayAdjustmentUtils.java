@@ -26,7 +26,6 @@ import android.os.ServiceManager;
 import android.provider.Settings;
 import android.util.Slog;
 import android.view.accessibility.AccessibilityManager;
-import cyanogenmod.providers.CMSettings;
 
 /**
  * Utility methods for performing accessibility display adjustments.
