@@ -602,7 +602,12 @@ abstract class DhcpPacket {
     protected void addCommonClientTlvs(ByteBuffer buf) {
         addTlv(buf, DHCP_MAX_MESSAGE_SIZE, (short) MAX_LENGTH);
         addTlv(buf, DHCP_VENDOR_CLASS_ID, "android-dhcp-" + Build.VERSION.RELEASE);
-        addTlv(buf, DHCP_HOST_NAME, SystemProperties.get("net.hostname"));
+
+        /* the default 'android-dhcp' is there to make sure the hostname is
+         * never empty, because the DHCP standard forbids it (RFC2132, section
+         * 3.14) and certain DHCP forwarders and servers ignore such malformed
+         * requests */
+        addTlv(buf, DHCP_HOST_NAME, SystemProperties.get("net.hostname", "android-dhcp"));
     }
 
     /**
