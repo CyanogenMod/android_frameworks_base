@@ -4724,7 +4724,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
     }
 
-    protected void unfocusKeyguardExternalView() {
+    public void unfocusKeyguardExternalView() {
         mStatusBarKeyguardViewManager.setKeyguardExternalViewFocus(false);
     }
 
