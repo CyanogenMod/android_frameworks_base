@@ -495,10 +495,15 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
         return alpha * expandFactor;
     }
 
-    public void forceHideScrims(boolean hide) {
-        mForceHideScrims = hide;
-        mAnimateChange = false;
-        scheduleUpdate();
+    public void forceHideScrims(final boolean hide) {
+        mScrimBehind.post(new Runnable() {
+            @Override
+            public void run() {
+                mForceHideScrims = hide;
+                mAnimateChange = false;
+                scheduleUpdate();
+            }
+        });
     }
 
     public void dontAnimateBouncerChangesUntilNextFrame() {
