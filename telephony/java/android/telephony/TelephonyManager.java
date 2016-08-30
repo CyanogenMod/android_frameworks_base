@@ -93,6 +93,16 @@ public class TelephonyManager {
         static final int NEVER_USE = 2;
     }
 
+    /**
+     * Allow custom RIL to define the way it stores telephony properties.
+     **/
+    /** @hide */
+    public interface TelephonyPropertyProvider {
+        void setTelephonyProperty(int phoneId, String property, String value);
+        String getTelephonyProperty(int phoneId, String property, String defaultVal);
+    }
+    private static final TelephonyPropertyProvider sTelephonyProvider = instantiateTelephonyPropertyProvider();
+
     private final Context mContext;
     private SubscriptionManager mSubscriptionManager;
 
@@ -3385,49 +3395,7 @@ public class TelephonyManager {
      * @hide
      */
     public static void setTelephonyProperty(int phoneId, String property, String value) {
-        String propVal = "";
-        String p[] = null;
-        String prop = SystemProperties.get(property);
-
-        if (value == null) {
-            value = "";
-        }
-
-        if (prop != null) {
-            p = prop.split(",");
-        }
-
-        if (!SubscriptionManager.isValidPhoneId(phoneId)) {
-            Rlog.d(TAG, "setTelephonyProperty: invalid phoneId=" + phoneId +
-                    " property=" + property + " value: " + value + " prop=" + prop);
-            return;
-        }
-
-        for (int i = 0; i < phoneId; i++) {
-            String str = "";
-            if ((p != null) && (i < p.length)) {
-                str = p[i];
-            }
-            propVal = propVal + str + ",";
-        }
-
-        propVal = propVal + value;
-        if (p != null) {
-            for (int i = phoneId + 1; i < p.length; i++) {
-                propVal = propVal + "," + p[i];
-            }
-        }
-
-        if (property.length() > SystemProperties.PROP_NAME_MAX
-                || propVal.length() > SystemProperties.PROP_VALUE_MAX) {
-            Rlog.d(TAG, "setTelephonyProperty: property to long phoneId=" + phoneId +
-                    " property=" + property + " value: " + value + " propVal=" + propVal);
-            return;
-        }
-
-        Rlog.d(TAG, "setTelephonyProperty: success phoneId=" + phoneId +
-                " property=" + property + " value: " + value + " propVal=" + propVal);
-        SystemProperties.set(property, propVal);
+        sTelephonyProvider.setTelephonyProperty(phoneId, property, value);
     }
 
     /**
@@ -3524,15 +3492,91 @@ public class TelephonyManager {
      * @hide
      */
     public static String getTelephonyProperty(int phoneId, String property, String defaultVal) {
-        String propVal = null;
-        String prop = SystemProperties.get(property);
-        if ((prop != null) && (prop.length() > 0)) {
-            String values[] = prop.split(",");
-            if ((phoneId >= 0) && (phoneId < values.length) && (values[phoneId] != null)) {
-                propVal = values[phoneId];
+        return sTelephonyProvider.getTelephonyProperty(phoneId, property, defaultVal);
+    }
+
+    private static class DefaultTelephonyPropertyProvider implements TelephonyPropertyProvider {
+
+        public DefaultTelephonyPropertyProvider() { }
+
+        @Override
+        public void setTelephonyProperty(int phoneId, String property, String value) {
+            String propVal = "";
+            String p[] = null;
+            String prop = SystemProperties.get(property);
+
+            if (value == null) {
+                value = "";
+            }
+
+            if (prop != null) {
+                p = prop.split(",");
+            }
+
+            if (!SubscriptionManager.isValidPhoneId(phoneId)) {
+                Rlog.d(TAG, "setTelephonyProperty: invalid phoneId=" + phoneId +
+                        " property=" + property + " value: " + value + " prop=" + prop);
+                return;
+            }
+
+            for (int i = 0; i < phoneId; i++) {
+                String str = "";
+                if ((p != null) && (i < p.length)) {
+                    str = p[i];
+                }
+                propVal = propVal + str + ",";
+            }
+
+            propVal = propVal + value;
+            if (p != null) {
+                for (int i = phoneId + 1; i < p.length; i++) {
+                    propVal = propVal + "," + p[i];
+                }
+            }
+
+            if (property.length() > SystemProperties.PROP_NAME_MAX
+                    || propVal.length() > SystemProperties.PROP_VALUE_MAX) {
+                Rlog.d(TAG, "setTelephonyProperty: property to long phoneId=" + phoneId +
+                        " property=" + property + " value: " + value + " propVal=" + propVal);
+                return;
+            }
+
+            Rlog.d(TAG, "setTelephonyProperty: success phoneId=" + phoneId +
+                    " property=" + property + " value: " + value + " propVal=" + propVal);
+            SystemProperties.set(property, propVal);
+        }
+
+        @Override
+        public String getTelephonyProperty(int phoneId, String property, String defaultVal) {
+            String propVal = null;
+            String prop = SystemProperties.get(property);
+            if ((prop != null) && (prop.length() > 0)) {
+                String values[] = prop.split(",");
+                if ((phoneId >= 0) && (phoneId < values.length) && (values[phoneId] != null)) {
+                    propVal = values[phoneId];
+                }
+            }
+            return propVal == null ? defaultVal : propVal;
+        }
+    }
+
+    private static TelephonyPropertyProvider instantiateTelephonyPropertyProvider() {
+        String classSimpleName = SystemProperties.get("ro.telephony.prop_class").trim();
+        TelephonyPropertyProvider result;
+        if (classSimpleName.isEmpty())
+            result = new DefaultTelephonyPropertyProvider();
+        else {
+            try {
+                result = (TelephonyPropertyProvider) Class
+                        .forName("com.android.internal.telephony." + classSimpleName)
+                        .newInstance();
+            } catch (Exception e) {
+                Rlog.e(TAG, "Unable to construct custom TelephonyPropertyProvider class", e);
+                Rlog.e(TAG, "Fallback to DefaultTelephonyPropertyProvider");
+                result = new DefaultTelephonyPropertyProvider();
             }
         }
-        return propVal == null ? defaultVal : propVal;
+        return result;
     }
 
     /** @hide */
