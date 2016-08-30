@@ -117,7 +117,7 @@
   <string name="app_ops_modify_call_log">dei erregistroa eguneratu</string>
   <string name="app_ops_modify_clipboard">arbela aldatu</string>
   <string name="app_ops_modify_contacts">zure kontaktuak eguneratu</string>
-  <string name="app_ops_modify_settings">sistema ezarpenak aldatu</string>
+  <string name="app_ops_modify_settings">eguneratu sistemaren ezarpenak</string>
   <string name="app_ops_mute_unmute_microphone">mikrofonoa mututu/desmututu</string>
   <string name="app_ops_play_audio">soinua erreproduzitu</string>
   <string name="app_ops_post_notification">jakinarazpen bat argitaratu</string>
