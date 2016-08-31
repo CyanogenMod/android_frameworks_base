@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.policy.MobileSignalController;
 
 import java.util.Objects;
 
@@ -35,9 +36,19 @@ public class QSIconView extends ViewGroup {
     protected final int mTilePaddingBelowIconPx;
     private boolean mAnimationEnabled = true;
 
+    private final int STATUS_BAR_STYLE_ANDROID_DEFAULT = 0;
+    protected final int STATUS_BAR_STYLE_EXTENDED = 4;
+
+    protected int mStyle = STATUS_BAR_STYLE_ANDROID_DEFAULT;
+
     public QSIconView(Context context) {
         super(context);
 
+        if (MobileSignalController.isCarrierOneSupported()) {
+            mStyle = STATUS_BAR_STYLE_EXTENDED;
+        } else {
+            mStyle = mContext.getResources().getInteger(R.integer.status_bar_style);
+        }
         final Resources res = context.getResources();
         mIconSizePx = res.getDimensionPixelSize(R.dimen.qs_tile_icon_size);
         mTilePaddingBelowIconPx =  res.getDimensionPixelSize(R.dimen.qs_tile_padding_below_icon);
