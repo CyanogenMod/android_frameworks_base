@@ -117,7 +117,7 @@
     <bool name="config_show4GForLTE">true</bool>
 
     <!-- Whether or not we also show rsrp level for LTE. -->
-    <bool name="config_showRsrpSignalLevelforLTE">false</bool>
+    <bool name="config_showRsrpSignalLevelforLTE">true</bool>
 
     <!-- Whether or not we show carrier label in notification panel. -->
     <bool name="config_showCarrierLabel">false</bool>
