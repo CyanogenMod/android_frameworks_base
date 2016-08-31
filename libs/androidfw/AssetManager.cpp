@@ -323,10 +323,16 @@ bool AssetManager::addDefaultAssets()
     String8 path(root);
     path.appendPath(kSystemAssets);
 
-    String8 pathCM(root);
-    pathCM.appendPath(kCMSDKAssets);
+    bool ret = addAssetPath(path, NULL, false /* appAsLib */, true /* isSystemAsset */);
+    if (ret) {
+        String8 pathCM(root);
+        pathCM.appendPath(kCMSDKAssets);
 
-    return addAssetPath(path, NULL, false /* appAsLib */, true /* isSystemAsset */);
+        if (!addAssetPath(pathCM, NULL, false /* appAsLib */, false /* isSystemAsset */)) {
+            ALOGE("Failed to load CMSDK resources!");
+        }
+    }
+    return ret;
 }
 
 int32_t AssetManager::nextAssetPath(const int32_t cookie) const
