@@ -74,6 +74,8 @@ import com.android.systemui.tuner.TunerService;
 
 import java.text.NumberFormat;
 
+import cyanogenmod.providers.CMSettings;
+
 /**
  * The view to manage the header area in the expanded status bar.
  */
@@ -319,6 +321,7 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         mNextAlarmController = nextAlarmController;
     }
 
+    @Override
     public void setWeatherController(WeatherController weatherController) {
         mWeatherController = weatherController;
     }
