@@ -2655,4 +2655,5 @@
     <!-- Allow the gesture to tap the power button N times to start
          the Emergency Call while the device is non-interactive. -->
     <bool name="config_emergencyCallOnPowerkeyTapGestureEnabled">false</bool>
+    <bool name="config_volte_preferred">false</bool>
 </resources>

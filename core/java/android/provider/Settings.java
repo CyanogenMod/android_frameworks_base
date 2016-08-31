@@ -6561,6 +6561,12 @@ public final class Settings {
         public static final String AIRPLANE_MODE_ON = "airplane_mode_on";
 
         /**
+         * Whether VoLTE Preferred is on
+         * @hide
+         */
+        public static final String VOLTE_PREFERRED_ON = "volte_preferred_on";
+
+        /**
          * Whether Theater Mode is on.
          * {@hide}
          */

@@ -2736,4 +2736,5 @@
   <java-symbol type="integer" name="power_key_hits_emergency" />
   <java-symbol type="bool" name="config_emergencyCallOnPowerkeyTapGestureEnabled" />
   <java-symbol type="bool" name="config_usb_data_unlock" />
+  <java-symbol type="bool" name="config_volte_preferred" />
 </resources>
