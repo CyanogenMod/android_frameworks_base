@@ -38,6 +38,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.util.*;
 
@@ -892,6 +893,12 @@ public class SyncStorageEngine extends Handler {
      * active accounts.
      */
     public void doDatabaseCleanup(Account[] accounts, int userId) {
+        // It is not necessary to clean up database during alarm boot as
+        // only power off alarm apps are installed. The applications with
+        // sync accounts won't be installed during alarm boot.
+        if (SystemProperties.getBoolean("ro.alarm_boot", false)) {
+            return;
+        }
         synchronized (mAuthorities) {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
                 Slog.v(TAG, "Updating for new accounts...");
