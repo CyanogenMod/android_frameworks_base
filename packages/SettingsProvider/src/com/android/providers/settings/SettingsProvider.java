@@ -129,6 +129,11 @@ public class SettingsProvider extends ContentProvider {
     private static final String TABLE_BOOKMARKS = "bookmarks";
     private static final String TABLE_ANDROID_METADATA = "android_metadata";
 
+    private static final String HEADSET = "_headset";
+    private static final String HEADPHONE = "_headphone";
+    private static final String SPEAKER = "_speaker";
+    private static final String EARPIECE = "_earpiece";
+
     // The set of removed legacy tables.
     private static final Set<String> REMOVED_LEGACY_TABLES = new ArraySet<>();
     static {
@@ -2144,6 +2149,139 @@ public class SettingsProvider extends ContentProvider {
                 return getSettingsLocked(SETTINGS_TYPE_SYSTEM, userId);
             }
 
+            private void loadCustomizedVolumeLevels(SettingsState systemSettings) {
+
+                systemSettings.updateSettingLocked(Settings.System.VOLUME_MUSIC,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_music_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.updateSettingLocked(Settings.System.VOLUME_RING,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_ringtone_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.updateSettingLocked(Settings.System.VOLUME_VOICE,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_voice_call_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.updateSettingLocked(Settings.System.VOLUME_ALARM,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_alarm_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.updateSettingLocked(Settings.System.VOLUME_NOTIFICATION,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_notification_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                // set headset default volume
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_MUSIC + HEADSET,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_music_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_RING + HEADSET,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_ringtone_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_VOICE + HEADSET,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_voice_call_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_ALARM + HEADSET,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_alarm_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_NOTIFICATION + HEADSET,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_notification_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                // set headphone default volume
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_MUSIC + HEADPHONE,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_music_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_RING + HEADPHONE,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_ringtone_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_VOICE + HEADPHONE,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_voice_call_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_ALARM + HEADPHONE,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_alarm_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_NOTIFICATION + HEADPHONE,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_notification_headset_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                // set speaker default volume
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_MUSIC + SPEAKER,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_music_speaker_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_RING + SPEAKER,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_ringtone_speaker_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_VOICE + SPEAKER,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_voice_call_speaker_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_ALARM + SPEAKER,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_alarm_speaker_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_NOTIFICATION + SPEAKER,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_notification_speaker_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+
+                // set earpiece default volume
+                systemSettings.insertSettingLocked(Settings.System.VOLUME_VOICE + EARPIECE,
+                        Integer.toString(
+                                getContext().getResources().getInteger(
+                                        R.integer.def_voice_call_earpiece_volume)),
+                        SettingsState.SYSTEM_PACKAGE_NAME);
+            }
+
             /**
              * You must perform all necessary mutations to bring the settings
              * for this user from the old to the new version. When you add a new
@@ -2221,6 +2359,60 @@ public class SettingsProvider extends ContentProvider {
                         currentSetting.isNull()) {
                         secureSettings.insertSettingLocked(
                                 Settings.Secure.NFC_PAYMENT_DEFAULT_COMPONENT,
+                                defaultComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+
+                    // Allow OEMs to set volumes in resources.
+                    if (getContext().getResources().getBoolean(R.bool.def_custom_sys_volume)) {
+                        final SettingsState systemSettings = getSystemSettingsLocked(userId);
+                        loadCustomizedVolumeLevels(systemSettings);
+                    }
+                    // Allow OEMs to set date format, time format and enable/disable accessibility
+                    // services in resource.
+                    final SettingsState dateAndTimeSettings = getSystemSettingsLocked(userId);
+                    String defaultStringComponent;
+                    int defaultIntComponent;
+                    defaultStringComponent = getContext().getResources().getString(
+                            R.string.def_date_format);
+                    if (!TextUtils.isEmpty(defaultStringComponent)) {
+                        dateAndTimeSettings.insertSettingLocked(Settings.System.DATE_FORMAT,
+                                defaultStringComponent,SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    defaultStringComponent = getContext().getResources().getString(
+                            R.string.def_time_format);
+                    if (!TextUtils.isEmpty(defaultStringComponent)) {
+                        dateAndTimeSettings.insertSettingLocked(Settings.System.TIME_12_24,
+                                defaultStringComponent,SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    defaultIntComponent = getContext().getResources().getInteger(
+                            R.integer.def_enable_accessibility);
+                    if (defaultIntComponent != 0) {
+                        secureSettings.insertSettingLocked(Settings.Secure.ACCESSIBILITY_ENABLED,
+                                String.valueOf(defaultIntComponent), SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    defaultStringComponent = getContext().getResources().getString(
+                            R.string.def_enable_accessibility_services);
+                    if (!TextUtils.isEmpty(defaultStringComponent)) {
+                        secureSettings.insertSettingLocked(Settings.Secure.
+                                ENABLED_ACCESSIBILITY_SERVICES,defaultStringComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    // Allow openmarket OEMs to set default customized
+                    defaultComponent
+                            = getContext().getResources().getString(R.string.def_input_method);
+                    if (!TextUtils.isEmpty(defaultComponent)) {
+                        secureSettings.insertSettingLocked(
+                                Settings.Secure.DEFAULT_INPUT_METHOD,
+                                defaultComponent,
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+
+                    defaultComponent = getContext().getResources()
+                            .getString(R.string.def_enable_input_methods);
+                    if (!TextUtils.isEmpty(defaultComponent)) {
+                        secureSettings.insertSettingLocked(
+                                Settings.Secure.ENABLED_INPUT_METHODS,
                                 defaultComponent,
                                 SettingsState.SYSTEM_PACKAGE_NAME);
                     }

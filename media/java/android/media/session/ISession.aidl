@@ -45,6 +45,10 @@ interface ISession {
     void setQueueTitle(CharSequence title);
     void setExtras(in Bundle extras);
     void setRatingType(int type);
+    void playItemResponse(boolean success);
+    void updateNowPlayingEntries(in long[] playList);
+    void updateFolderInfoBrowsedPlayer(String stringUri);
+    void updateNowPlayingContentChange();
 
     // These commands relate to volume handling
     void setPlaybackToLocal(in AudioAttributes attributes);

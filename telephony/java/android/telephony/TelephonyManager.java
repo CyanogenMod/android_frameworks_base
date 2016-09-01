@@ -744,6 +744,9 @@ public class TelephonyManager {
      */
     public static final String VVM_TYPE_CVVM = "vvm_type_cvvm";
 
+    /** {@hide} */
+    public static final String EMR_DIAL_ACCOUNT = "emr_dial_account";
+
     //
     //
     // Device Info
@@ -816,6 +819,7 @@ public class TelephonyManager {
      * @param slotId of which deviceID is returned
      */
     public String getDeviceId(int slotId) {
+        android.util.SeempLog.record_str(8, ""+slotId);
         // FIXME this assumes phoneId == slotId
         try {
             IPhoneSubInfo info = getSubscriberInfo();
@@ -911,6 +915,7 @@ public class TelephonyManager {
      * {@link android.Manifest.permission#ACCESS_COARSE_LOCATION ACCESS_FINE_LOCATION}.
      */
     public CellLocation getCellLocation() {
+        android.util.SeempLog.record(49);
         try {
             ITelephony telephony = getITelephony();
             if (telephony == null) {
@@ -1008,6 +1013,7 @@ public class TelephonyManager {
      */
     @Deprecated
     public List<NeighboringCellInfo> getNeighboringCellInfo() {
+        android.util.SeempLog.record(50);
         try {
             ITelephony telephony = getITelephony();
             if (telephony == null)
@@ -1457,7 +1463,8 @@ public class TelephonyManager {
     public static final int NETWORK_TYPE_TD_SCDMA = 17;
    /** Current network is IWLAN {@hide} */
     public static final int NETWORK_TYPE_IWLAN = 18;
-
+    /** Current network is LTE_CA {@hide} */
+    public static final int NETWORK_TYPE_LTE_CA = 19;
     /**
      * @return the NETWORK_TYPE_xxxx for current data connection.
      */
@@ -1553,7 +1560,7 @@ public class TelephonyManager {
      *   {@link android.Manifest.permission#READ_PHONE_STATE READ_PHONE_STATE}
      */
     public int getDataNetworkType() {
-        return getDataNetworkType(getSubId());
+        return getDataNetworkType(getDefaultDataSubscriptionId());
     }
 
     /**
@@ -1660,6 +1667,7 @@ public class TelephonyManager {
                 return NETWORK_CLASS_3_G;
             case NETWORK_TYPE_LTE:
             case NETWORK_TYPE_IWLAN:
+            case NETWORK_TYPE_LTE_CA:
                 return NETWORK_CLASS_4_G;
             default:
                 return NETWORK_CLASS_UNKNOWN;
@@ -1723,6 +1731,8 @@ public class TelephonyManager {
                 return "TD_SCDMA";
             case NETWORK_TYPE_IWLAN:
                 return "IWLAN";
+            case NETWORK_TYPE_LTE_CA:
+                return "LTE_CA";
             default:
                 return "UNKNOWN";
         }
@@ -2016,6 +2026,7 @@ public class TelephonyManager {
      * @hide
      */
     public String getSimSerialNumber(int subId) {
+        android.util.SeempLog.record_str(388, ""+subId);
         try {
             IPhoneSubInfo info = getSubscriberInfo();
             if (info == null)
@@ -2120,6 +2131,7 @@ public class TelephonyManager {
      * @hide
      */
     public String getSubscriberId(int subId) {
+        android.util.SeempLog.record_str(389, ""+subId);
         try {
             IPhoneSubInfo info = getSubscriberInfo();
             if (info == null)
@@ -2208,6 +2220,7 @@ public class TelephonyManager {
      * @hide
      */
     public String getLine1Number(int subId) {
+        android.util.SeempLog.record_str(9, ""+subId);
         String number = null;
         try {
             ITelephony telephony = getITelephony();
@@ -3088,6 +3101,28 @@ public class TelephonyManager {
     }
 
     /**
+     * Opens a logical channel to the ICC card for the given subId
+     *
+     * @param subId subid to send the command to
+     * @param AID applcation id. See ETSI 102.221 and 101.220.
+     * @param p2 byte P2 parameter
+     * @return an IccOpenLogicalChannelResponse object
+     * @hide
+     */
+    public IccOpenLogicalChannelResponse iccOpenLogicalChannel(int subId,
+                String AID, byte p2) {
+        try {
+            ITelephony telephony = getITelephony();
+            if (telephony != null) {
+                return telephony.iccOpenLogicalChannelWithP2(subId, AID, p2);
+            }
+        } catch (RemoteException ex) {
+        } catch (NullPointerException ex) {
+        }
+        return null;
+    }
+
+    /**
      * Closes a previously opened logical channel to the ICC card.
      *
      * Input parameters equivalent to TS 27.007 AT+CCHC command.
@@ -3470,6 +3505,13 @@ public class TelephonyManager {
      */
     private static int getDefaultSubscription() {
         return SubscriptionManager.getDefaultSubscriptionId();
+    }
+
+    /**
+     * Returns Default Data subscription.
+     */
+    private static int getDefaultDataSubscriptionId() {
+        return SubscriptionManager.getDefaultDataSubscriptionId();
     }
 
     /**
@@ -4552,7 +4594,7 @@ public class TelephonyManager {
     /** @hide */
     @SystemApi
     public void setDataEnabled(boolean enable) {
-        setDataEnabled(SubscriptionManager.getDefaultDataSubscriptionId(), enable);
+        setDataEnabled(getDefaultDataSubscriptionId(), enable);
     }
 
     /** @hide */
@@ -4571,7 +4613,7 @@ public class TelephonyManager {
     /** @hide */
     @SystemApi
     public boolean getDataEnabled() {
-        return getDataEnabled(SubscriptionManager.getDefaultDataSubscriptionId());
+        return getDataEnabled(getDefaultDataSubscriptionId());
     }
 
     /** @hide */
@@ -4780,7 +4822,7 @@ public class TelephonyManager {
        } catch (NullPointerException ex) {
            return false;
        }
-   }
+    }
 
     /**
      * Returns the Status of video telephony (VT)
@@ -4809,6 +4851,37 @@ public class TelephonyManager {
            return false;
        }
    }
+
+    /**
+     * Returns the Status of VOWIFI calling
+     * using subId
+     * @hide
+     */
+    public boolean isVoWifiCallingAvailableForSubscriber(int subId) {
+       try {
+           return getITelephony().isVoWifiCallingAvailableForSubscriber(subId);
+       } catch (RemoteException ex) {
+           return false;
+       } catch (NullPointerException ex) {
+           return false;
+       }
+    }
+
+    /**
+     * Returns the Status of Video telephony wifi calling
+     * using subId
+     * @hide
+     */
+    public boolean isVideoTelephonyWifiCallingAvailableForSubscriber(int subId) {
+       try {
+           return getITelephony()
+                       .isVideoTelephonyWifiCallingAvailableForSubscriber(subId);
+       } catch (RemoteException ex) {
+           return false;
+       } catch (NullPointerException ex) {
+           return false;
+       }
+    }
 
    /**
     * Set TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC for the default phone.

@@ -405,7 +405,7 @@
     <bool translatable="false" name="config_wifi_dual_band_support">false</bool>
 
     <!-- Boolean indicating whether Hotspot 2.0/Passpoint and ANQP queries is enabled -->
-    <bool translatable="false" name="config_wifi_hotspot2_enabled">false</bool>
+    <bool translatable="false" name="config_wifi_hotspot2_enabled">true</bool>
 
     <!-- Device type information conforming to Annex B format in WiFi Direct specification.
          The default represents a dual-mode smartphone -->
@@ -416,6 +416,7 @@
          scan and wake the host when a configured SSID is detected by the dongle. This chipset
          capability can provide power savings when wifi needs to be always kept on. -->
     <bool translatable="false" name="config_wifi_background_scan_support">false</bool>
+    <bool translatable="false" name="wifi_autocon">true</bool>
 
     <!-- Boolean indicating we re-try re-associating once upon disconnection and RSSI is high failure  -->
     <bool translatable="true" name="config_wifi_enable_disconnection_debounce">true</bool>
@@ -1331,6 +1332,9 @@
         -->
     </string-array>
 
+    <!-- Component name of the combo network location provider. -->
+    <string name="config_comboNetworkLocationProvider" translatable="false">com.qualcomm.location</string>
+
     <!-- Boolean indicating if current platform supports bluetooth SCO for off call
     use cases -->
     <bool name="config_bluetooth_sco_off_call">true</bool>
@@ -1869,6 +1873,9 @@
     <!-- Configure wifi tcp buffersizes in the form:
          rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max -->
     <string name="config_wifi_tcp_buffers" translatable="false">524288,1048576,2097152,262144,524288,1048576</string>
+    <!-- Configuration to send sms on 1x when UE is attached to eHRPD and there is an active
+         1xRTT voice call, irrespective of IMS registration state  -->
+    <bool name="config_send_sms1x_on_voice_call">true</bool>
 
     <!-- Whether WiFi display is supported by this device.
          There are many prerequisites for this feature to work correctly.
@@ -2577,6 +2584,59 @@
     <!-- Package of the unbundled tv remote service which can connect to tv
          remote provider -->
     <string name="config_tvRemoteServicePackage" translatable="false"></string>
+    <!-- Whether cpu boost is enabled for AppLaunch -->
+    <bool name="config_enableCpuBoostForAppLaunch">false</bool>
+    <integer name="launchboost_timeout_param">0</integer>
+    <integer-array name="launchboost_param_value"/>
+
+    <!-- Whether cpu freq aggr is enabled for AppLaunch -->
+    <bool name="config_enableLaunchBoostv2">false</bool>
+    <integer name="lboostv2_timeout_param">0</integer>
+    <integer-array name="lboostv2_param_value"/>
+
+    <!-- Whether cpu freq aggr is enabled for AppLaunch -->
+    <bool name="config_enableFreqAggr">false</bool>
+    <integer name="freqaggr_timeout_param">0</integer>
+    <integer-array name="freqaggr_init_param_value"/>
+    <integer-array name="freqaggr_param_value"/>
+
+    <!-- Whether disablepacking is enabled or not -->
+    <bool name="config_disablePacking">false</bool>
+    <integer name="disablepacking_timeout_param">0</integer>
+    <integer-array name="launchboost_packing_param_value"/>
+
+    <!-- Whether cpu boost is enabled for animation. -->
+    <bool name="config_enablePerfBoostForAnimation">false</bool>
+    <integer name="animationboost_timeout_param">0</integer>
+    <integer-array name="animationboost_param_value"/>
+
+    <!-- Whether cpu boost is enabled for overscroller fling. -->
+    <bool name="config_enableCpuBoostForOverScrollerFling">false</bool>
+    <integer name="flingboost_timeout_param">0</integer>
+    <integer-array name="flingboost_param_value"/>
+
+    <!-- Whether cpu boost is enabled for horizontal scroll. -->
+    <bool name="config_enableCpuBoostForScroller">false</bool>
+    <integer name="scrollboost_timeout_param">0</integer>
+    <integer-array name="scrollboost_param_value"/>
+
+    <!-- Activities list for boost -->
+    <string-array translatable="false" name="boost_activityList">
+    </string-array>
+
+    <!-- Activity scroll boost params -->
+    <integer name="ascrollboost_timeout">0</integer>
+    <integer-array name="ascrollboost_param_value"/>
+
+    <!-- SSDOU scroll boost optimization -->
+    <bool name="config_debugBoost">false</bool>
+    <string-array  translatable="false" name="debugBoost_activityList"></string-array>
+    <integer name="debugBoost_timeout">0</integer>
+    <integer-array name="debugBoost_param_value"/>
+
+    <!-- cpu boost for PanelView fling -->
+    <bool name="config_enableCpuBoostForPanelViewFling">false</bool>
+    <integer-array name="panelview_flingboost_param_value" />
 
     <!-- True if the device supports persisting security logs across reboots.
          This requires the device's kernel to have pstore and pmsg enabled,
@@ -2594,4 +2654,95 @@
     <!-- Setting to false will disable CM's IME switcher implementation for tablets -->
     <bool name="config_show_cmIMESwitcher">true</bool>
 
+    <!-- Configuartion to support SIM contact batch operation.-->
+    <bool name="config_sim_phonebook_batch_operation">true</bool>
+    <string-array name="origin_carrier_names">
+        <item>CHINA\u0020\u0020MOBILE</item>
+        <item>CMCC</item>
+        <item>CHN-UNICOM</item>
+        <item>China Mobile</item>
+        <item>China Unicom</item>
+        <item>China Telecom</item>
+        <item>中国移动</item>
+        <item>中国联通</item>
+        <item>中国电信</item>
+        <item>中國移動</item>
+        <item>中國聯通</item>
+        <item>中國電信</item>
+        <item>Searching for Service</item>
+    </string-array>
+
+    <string-array name="locale_carrier_names">
+        <item>China_Mobile</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Telecom</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Telecom</item>
+        <item>China_Mobile</item>
+        <item>China_Unicom</item>
+        <item>China_Telecom</item>
+        <item>roamingTextSearching</item>
+    </string-array>
+
+    <!-- monitor locale change -->
+    <bool name="config_monitor_locale_change">false</bool>
+
+    <!-- display for radio tech -->
+    <bool name="config_display_rat">false</bool>
+
+    <!-- config 2G/3G/4G RAT strings for carriers -->
+    <string name="config_rat_unknown" translatable="false">""</string>
+    <string name="config_rat_2g" translatable="false">2G</string>
+    <string name="config_rat_3g" translatable="false">3G</string>
+    <string name="config_rat_4g" translatable="false">4G</string>
+
+    <!-- Zero Balance redirect URL config -->
+    <string name="operator_config_url" translatable="false"></string>
+    <!-- Zero Balance ping URL config -->
+    <string name="operator_ping_url" translatable="false"></string>
+    <!-- Zero Balance feature enable config -->
+    <bool name="config_zero_balance_operator">false</bool>
+     <!-- Keypress Optimization -->
+    <bool name="config_enableKeypressOptimization">false</bool>
+    <integer-array name="keypress_param_value"/>
+
+    <bool name="config_enableDataSwitch">false</bool>
+    <!-- Whether to use TMO MCC MNC roaming setting -->
+    <bool name="config_regional_mcc_mnc_roaming_setting">false</bool>
+
+    <!-- Whether to use TMO LTE singnal strength threshold -->
+    <bool name="config_regional_lte_singnal_threshold">false</bool>
+    <!-- Whether to use TMO UMTS singnal strength threshold -->
+    <bool name="config_regional_umts_singnal_threshold">false</bool>
+
+    <integer-array name="umts_signal_strength_threshold">
+        <item>-140</item>
+        <item>-113</item>
+        <item>-103</item>
+        <item>-97</item>
+        <item>-89</item>
+        <item>-44</item>
+    </integer-array>
+    <integer-array name="lte_signal_strength_threshold">
+        <item>-140</item>
+        <item>-120</item>
+        <item>-115</item>
+        <item>-110</item>
+        <item>-100</item>
+        <item>-44</item>
+    </integer-array>
+
+    <!-- Enables the feature that can show/hide the operator name in statusbar.
+        When true, the user can select to show/hide operator name through a
+        checkbox in Settings. When false, there is no option to show operator
+        name (no checkbox in Settings). -->
+    <bool name="config_showOperatorNameInStatusBar">false</bool>
+    <bool name="config_regional_hotspot_show_maximum_connection_enable">false</bool>
+    <bool name="config_regional_hotspot_show_broadcast_ssid_checkbox">false</bool>
+    <bool name="config_regional_hotspot_show_notification_when_turn_on">false</bool>
+    <bool name="config_passpoint_setting_on">false</bool>
 </resources>

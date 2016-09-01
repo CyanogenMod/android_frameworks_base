@@ -25,6 +25,7 @@ package com.android.internal.telephony;
  */
 
 import android.os.SystemProperties;
+import android.telephony.TelephonyManager;
 
 /**
  * {@hide}
@@ -105,6 +106,7 @@ public interface RILConstants {
     int DEVICE_IN_USE = 64;                   /* Operation cannot be performed because the device
                                                  is currently in use */
     int ABORTED = 65;                         /* Operation aborted */
+    int INVALID_PARAMETER = 66;
     // Below is list of OEM specific error codes which can by used by OEMs in case they don't want to
     // reveal particular replacement for Generic failure
     int OEM_ERROR_1 = 501;
@@ -160,8 +162,10 @@ public interface RILConstants {
     int NETWORK_MODE_LTE_TDSCDMA_GSM_WCDMA   = 20; /* TD-SCDMA, GSM/WCDMA and LTE */
     int NETWORK_MODE_TDSCDMA_CDMA_EVDO_GSM_WCDMA  = 21; /*TD-SCDMA,EvDo,CDMA,GSM/WCDMA*/
     int NETWORK_MODE_LTE_TDSCDMA_CDMA_EVDO_GSM_WCDMA = 22; /* TD-SCDMA/LTE/GSM/WCDMA, CDMA, and EvDo */
-    int PREFERRED_NETWORK_MODE      = SystemProperties.getInt("ro.telephony.default_network",
-            NETWORK_MODE_WCDMA_PREF);
+
+    int PREFERRED_NETWORK_MODE = Integer.parseInt(TelephonyManager.getTelephonyProperty(0,
+                "ro.telephony.default_network",
+                Integer.toString(NETWORK_MODE_WCDMA_PREF)));
 
     int BAND_MODE_UNSPECIFIED = 0;      //"unspecified" (selected by baseband automatically)
     int BAND_MODE_EURO = 1;             //"EURO band" (GSM-900 / DCS-1800 / WCDMA-IMT-2000)
@@ -409,6 +413,10 @@ cat include/telephony/ril.h | \
     int RIL_REQUEST_STOP_LCE = 133;
     int RIL_REQUEST_PULL_LCEDATA = 134;
     int RIL_REQUEST_GET_ACTIVITY_INFO = 135;
+    int RIL_REQUEST_SIM_GET_ATR = 136;
+    int RIL_REQUEST_CAF_SIM_OPEN_CHANNEL_WITH_P2 = 137;
+    int RIL_REQUEST_GET_ADN_RECORD = 138;
+    int RIL_REQUEST_UPDATE_ADN_RECORD = 139;
 
     int RIL_RESPONSE_ACKNOWLEDGEMENT = 800;
 
@@ -459,4 +467,6 @@ cat include/telephony/ril.h | \
     int RIL_UNSOL_ON_SS = 1043;
     int RIL_UNSOL_STK_CC_ALPHA_NOTIFY = 1044;
     int RIL_UNSOL_LCEDATA_RECV = 1045;
+    int RIL_UNSOL_RESPONSE_ADN_INIT_DONE = 1046;
+    int RIL_UNSOL_RESPONSE_ADN_RECORDS = 1047;
 }

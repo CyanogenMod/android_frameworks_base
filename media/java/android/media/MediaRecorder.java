@@ -499,8 +499,10 @@ public class MediaRecorder
         setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
         setVideoEncodingBitRate(profile.videoBitRate);
         setVideoEncoder(profile.videoCodec);
-        if (profile.quality >= CamcorderProfile.QUALITY_TIME_LAPSE_LOW &&
-             profile.quality <= CamcorderProfile.QUALITY_TIME_LAPSE_QVGA) {
+        if ((profile.quality >= CamcorderProfile.QUALITY_TIME_LAPSE_LOW &&
+             profile.quality <= CamcorderProfile.QUALITY_TIME_LAPSE_2160P) ||
+            (profile.quality >= CamcorderProfile.QUALITY_TIME_LAPSE_VGA &&
+             profile.quality <= CamcorderProfile.QUALITY_TIME_LAPSE_4KDCI)) {
             // Nothing needs to be done. Call to setCaptureRate() enables
             // time lapse video recording.
         } else {

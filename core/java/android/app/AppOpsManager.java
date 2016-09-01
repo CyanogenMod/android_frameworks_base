@@ -239,8 +239,12 @@ public class AppOpsManager {
     public static final int OP_GET_ACCOUNTS = 62;
     /** @hide Control whether an application is allowed to run in the background. */
     public static final int OP_RUN_IN_BACKGROUND = 63;
+    /** @hide CHANGE_WIFI_STATE . */
+    public static final int OP_CHANGE_WIFI_STATE = 64;
+    /** @hide BLUETOOTH_ADMIN . */
+    public static final int OP_BLUETOOTH_ADMIN = 65;
     /** @hide */
-    public static final int _NUM_OP = 64;
+    public static final int _NUM_OP = 66;
 
     /** Access to coarse location information. */
     public static final String OPSTR_COARSE_LOCATION = "android:coarse_location";
@@ -338,6 +342,12 @@ public class AppOpsManager {
     /** @hide Get device accounts. */
     public static final String OPSTR_GET_ACCOUNTS
             = "android:get_accounts";
+    /** @hide CHANGE_WIFI_STATE . */
+    public static final String OPSTR_CHANGE_WIFI_STATE
+            = "android:change_wifi_state";
+    /** @hide BLUETOOTH_ADMIN . */
+    public static final String OPSTR_BLUETOOTH_ADMIN
+            = "android:bluetooth_admin";
 
     private static final int[] RUNTIME_PERMISSIONS_OPS = {
             // Contacts
@@ -386,8 +396,8 @@ public class AppOpsManager {
      */
     private static int[] sOpToSwitch = new int[] {
             OP_COARSE_LOCATION,
-            OP_COARSE_LOCATION,
-            OP_COARSE_LOCATION,
+            OP_FINE_LOCATION,
+            OP_GPS,
             OP_VIBRATE,
             OP_READ_CONTACTS,
             OP_WRITE_CONTACTS,
@@ -426,8 +436,8 @@ public class AppOpsManager {
             OP_AUDIO_NOTIFICATION_VOLUME,
             OP_AUDIO_BLUETOOTH_VOLUME,
             OP_WAKE_LOCK,
-            OP_COARSE_LOCATION,
-            OP_COARSE_LOCATION,
+            OP_FINE_LOCATION,
+            OP_FINE_LOCATION,
             OP_GET_USAGE_STATS,
             OP_MUTE_MICROPHONE,
             OP_TOAST_WINDOW,
@@ -449,6 +459,8 @@ public class AppOpsManager {
             OP_TURN_SCREEN_ON,
             OP_GET_ACCOUNTS,
             OP_RUN_IN_BACKGROUND,
+            OP_CHANGE_WIFI_STATE,
+            OP_BLUETOOTH_ADMIN,
     };
 
     /**
@@ -520,6 +532,8 @@ public class AppOpsManager {
             null,
             OPSTR_GET_ACCOUNTS,
             null,
+            OPSTR_CHANGE_WIFI_STATE,
+            OPSTR_BLUETOOTH_ADMIN,
     };
 
     /**
@@ -591,6 +605,8 @@ public class AppOpsManager {
             "TURN_ON_SCREEN",
             "GET_ACCOUNTS",
             "RUN_IN_BACKGROUND",
+            "CHANGE_WIFI_STATE",
+            "BLUETOOTH_ADMIN",
     };
 
     /**
@@ -662,6 +678,8 @@ public class AppOpsManager {
             null, // no permission for turning the screen on
             Manifest.permission.GET_ACCOUNTS,
             null, // no permission for running in background
+            android.Manifest.permission.CHANGE_WIFI_STATE,
+            android.Manifest.permission.BLUETOOTH_ADMIN,
     };
 
     /**
@@ -734,6 +752,8 @@ public class AppOpsManager {
             null, // TURN_ON_SCREEN
             null, // GET_ACCOUNTS
             null, // RUN_IN_BACKGROUND
+            null, // OP_CHANGE_WIFI_STATE
+            null, // OP_BLUETOOTH_ADMIN
     };
 
     /**
@@ -805,6 +825,8 @@ public class AppOpsManager {
             false, // TURN_ON_SCREEN
             false, // GET_ACCOUNTS
             false, // RUN_IN_BACKGROUND
+            false, // OP_CHANGE_WIFI_STATE
+            false, // OP_BLUETOOTH_ADMIN
     };
 
     /**
@@ -875,6 +897,8 @@ public class AppOpsManager {
             AppOpsManager.MODE_ALLOWED,  // OP_TURN_ON_SCREEN
             AppOpsManager.MODE_ALLOWED,
             AppOpsManager.MODE_ALLOWED,  // OP_RUN_IN_BACKGROUND
+            AppOpsManager.MODE_ALLOWED,  //OP_CHANGE_WIFI_STATE
+            AppOpsManager.MODE_ALLOWED,  //OP_BLUETOOTH_ADMIN
     };
 
     /**
@@ -949,6 +973,8 @@ public class AppOpsManager {
             false,
             false,
             false,
+            false, //OP_CHANGE_WIFI_STATE
+            false, //OP_BLUETOOTH_ADMIN
     };
 
     /**

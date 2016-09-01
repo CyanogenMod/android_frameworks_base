@@ -227,4 +227,78 @@
     <!-- Default for Settings.System.STATUS_BAR_NOTIF_COUNT. -->
     <integer name="def_notif_count">0</integer>
 
+    <!-- custom system sound or not -->
+    <bool name="def_custom_sys_volume">false</bool>
+
+    <!-- Ringtone Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_ringtone_volume" translatable="false">5</integer>
+
+    <!-- Music Volume,its value is from 0 to 15,default value is 11 -->
+    <integer name="def_music_volume" translatable="false">11</integer>
+
+    <!-- Voice Call Volume,its value is from 0 to 5,default value is 4 -->
+    <integer name="def_voice_call_volume" translatable="false">4</integer>
+
+    <!-- Alarm Volume,its value is from 0 to 7,default value is 6 -->
+    <integer name="def_alarm_volume" translatable="false">6</integer>
+
+    <!-- Notification Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_notification_volume" translatable="false">5</integer>
+
+    <!-- Ringtone headset Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_ringtone_headset_volume" translatable="false">5</integer>
+
+    <!-- Music headset Volume,its value is from 0 to 15,default value is 11 -->
+    <integer name="def_music_headset_volume" translatable="false">11</integer>
+
+    <!-- Voice Call headset Volume,its value is from 0 to 5,default value is 4 -->
+    <integer name="def_voice_call_headset_volume" translatable="false">4</integer>
+
+    <!-- Alarm headset Volume,its value is from 0 to 7,default value is 6 -->
+    <integer name="def_alarm_headset_volume" translatable="false">6</integer>
+
+    <!-- Notification headset Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_notification_headset_volume" translatable="false">5</integer>
+
+    <!-- Ringtone speaker Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_ringtone_speaker_volume" translatable="false">5</integer>
+
+    <!-- Music speaker Volume,its value is from 0 to 15,default value is 11 -->
+    <integer name="def_music_speaker_volume" translatable="false">11</integer>
+
+    <!-- Voice Call speaker Volume,its value is from 0 to 5,default value is 4 -->
+    <integer name="def_voice_call_speaker_volume" translatable="false">4</integer>
+
+    <!-- Alarm speaker Volume,its value is from 0 to 7,default value is 6 -->
+    <integer name="def_alarm_speaker_volume" translatable="false">6</integer>
+
+    <!-- Notification speaker Volume,its value is from 0 to 7,default value is 5 -->
+    <integer name="def_notification_speaker_volume" translatable="false">5</integer>
+
+    <!-- Voice Call earpiece Volume,its value is from 0 to 5,default value is 4 -->
+    <integer name="def_voice_call_earpiece_volume" translatable="false">4</integer>
+
+    <!-- Date format,yyyy-MM-dd: 2013/07/30; MM-dd-yyyy:07/30/2013; dd-MM-yyyy:30/07/2013 -->
+    <string name="def_date_format" translatable="false"></string>
+
+    <!-- Time format,default value is 24 : 24 format,other value is 12 format -->
+    <string name="def_time_format" translatable="false"></string>
+
+    <!-- enable accessibility or not,1:enable;0:disable -->
+    <integer name="def_enable_accessibility">0</integer>
+
+    <!-- for enable accessibility services,split by ":" ,
+         example "com.google.android.marvin.talkback/
+         com.google.android.marvin.talkback.TalkBackService" -->
+    <string name="def_enable_accessibility_services" translatable="false"></string>
+    <!-- Default Input Method, its value is from inputmethod's package name and main class name
+        such as "com.android.inputmethod.pinyin/.PinyinIME"
+    -->
+    <string name="def_input_method" translatable="false"></string>
+    <!--
+        Default Enable InputMethods, its value is from inputmethod's package name and main class
+        name such as "com.android.inputmethod.pinyin/.PinyinIME" ;This is a string
+        containing the IDs of all enabled input methods, each ID separated by ':'.
+    -->
+    <string name="def_enable_input_methods" translatable="false"></string>
 </resources>

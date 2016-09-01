@@ -104,6 +104,12 @@
       <item quantity="other">SIM 卡 PUK 码不正确，您还可尝试 <xliff:g id="NUMBER_1">%d</xliff:g> 次。如果仍不正确，SIM 卡将永远无法使用。</item>
       <item quantity="one">SIM 卡 PUK 码不正确，您还可尝试 <xliff:g id="NUMBER_0">%d</xliff:g> 次。如果仍不正确，SIM 卡将永远无法使用。</item>
     </plurals>
+    <string name="kg_remaining_attempts">剩余次数: <xliff:g id="number">%d</xliff:g></string>
+    <string name="kg_failed_pin_attempts_now_wiping">您输入了<xliff:g id="number">%d</xliff:g>次错误的PIN, 是否重启并恢复出厂设置?</string>
+    <string name="kg_failed_password_attempts_now_wiping">您输入了<xliff:g id="number">%d</xliff:g>次错误的密码, 是否重启并恢复出厂设置?</string>
+    <string name="kg_failed_pattern_attempts_now_wiping">您输入了<xliff:g id="number">%d</xliff:g>次错误图案, 是否重启并恢复出厂设置?</string>
+    <string name="kg_failed_attempts_now_wiping_confirm">将要清除您设备上的全部用户数据并且设备恢复成出厂设置。</string>
+
     <string name="kg_password_pin_failed" msgid="6268288093558031564">"SIM卡PIN码操作失败！"</string>
     <string name="kg_password_puk_failed" msgid="2838824369502455984">"SIM卡PUK码操作失败！"</string>
     <string name="kg_pin_accepted" msgid="1448241673570020097">"代码正确！"</string>
@@ -134,4 +140,9 @@
       <item quantity="one">设备已保持锁定状态达 <xliff:g id="NUMBER_0">%d</xliff:g> 小时。请确认密码。</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="2690661881608146617">"无法识别"</string>
+    <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+    <plurals name="kg_password_default_pin_message">
+        <item quantity="one">"输入 SIM<xliff:g id="slotid">%d</xliff:g> PIN, 您还有 <xliff:g id="number">%d</xliff:g> 次尝试机会。如果仍然失败，则必须联系运营商帮您解锁设备。"</item>
+        <item quantity="other">"输入 SIM<xliff:g id="slotid">%d</xliff:g> PIN, 您还有 <xliff:g id="number">%d</xliff:g> 次尝试机会。"</item>
+    </plurals>
 </resources>

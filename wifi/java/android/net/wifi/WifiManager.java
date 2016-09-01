@@ -322,6 +322,12 @@ public class WifiManager {
     public static final int WIFI_AP_STATE_FAILED = 14;
 
     /**
+     * Wi-Fi AP is in restarting state
+     * @hide
+     */
+    public static final int WIFI_AP_STATE_RESTART = 15;
+
+    /**
      *  If WIFI AP start failed, this reason code means there is no legal channel exists on
      *  user selected band by regulatory
      *
@@ -514,6 +520,14 @@ public class WifiManager {
      */
     public static final String LINK_CONFIGURATION_CHANGED_ACTION =
         "android.net.wifi.LINK_CONFIGURATION_CHANGED";
+
+    /**
+     * Broadcast intent action indicating that the user initiated Wifi OFF
+     * or APM ON and Wifi disconnection is in progress
+     * Actual Wifi disconnection happens after mDisconnectDelayDuration seconds.
+     * @hide
+     */
+    public static final String  ACTION_WIFI_DISCONNECT_IN_PROGRESS = "wifi_disconnect_in_progress";
 
     /**
      * The lookup key for a {@link android.net.LinkProperties} object associated with the
@@ -1299,6 +1313,7 @@ public class WifiManager {
      * returned.
      */
     public List<ScanResult> getScanResults() {
+        android.util.SeempLog.record(55);
         try {
             return mService.getScanResults(mContext.getOpPackageName());
         } catch (RemoteException e) {
@@ -2665,6 +2680,21 @@ public class WifiManager {
             return mService.getAllowScansWithTraffic();
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * get concurrency support
+     *
+     * @return true if concurrency is allowed.
+     *
+     * @hide no intent to publish
+     */
+    public boolean getWifiStaSapConcurrency() {
+        try {
+            return mService.getWifiStaSapConcurrency();
+        } catch (RemoteException e) {
+             throw e.rethrowFromSystemServer();
         }
     }
 

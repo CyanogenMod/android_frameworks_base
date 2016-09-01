@@ -540,7 +540,9 @@ public class UsbDeviceManager {
         }
 
         private String applyAdbFunction(String functions) {
-            if (mAdbEnabled) {
+            //Not enable adb when it s charging mode
+            if (mAdbEnabled &&
+                !UsbManager.containsFunction(functions, UsbManager.USB_FUNCTION_CHARGING)) {
                 functions = UsbManager.addFunction(functions, UsbManager.USB_FUNCTION_ADB);
             } else {
                 functions = UsbManager.removeFunction(functions, UsbManager.USB_FUNCTION_ADB);

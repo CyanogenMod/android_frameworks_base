@@ -204,6 +204,12 @@ static void android_view_DisplayListCanvas_drawLayer(JNIEnv* env, jobject clazz,
 
 static jboolean android_view_DisplayListCanvas_isAvailable(JNIEnv* env, jobject clazz) {
     char prop[PROPERTY_VALUE_MAX];
+
+    property_get("persist.sys.force_sw_gles", prop, "0");
+    if (atoi(prop) == 1) {
+        return JNI_FALSE;
+    }
+
     if (property_get("ro.kernel.qemu", prop, NULL) == 0) {
         // not in the emulator
         return JNI_TRUE;

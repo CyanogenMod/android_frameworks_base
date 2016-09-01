@@ -48,6 +48,9 @@
          to unlock the keyguard.  Displayed in one line in a large font.  -->
     <string name="keyguard_password_wrong_pin_code">Incorrect PIN code.</string>
 
+    <!-- Shown in the lock screen when there is SIM card IO error. -->
+    <string name="lockscreen_sim_error_message_short">Invalid Card.</string>
+
     <!-- When the lock screen is showing, the phone is plugged in and the battery is fully
          charged, say that it is charged. -->
     <string name="keyguard_charged">Charged</string>
@@ -275,8 +278,8 @@
     <!-- Instructions telling the user that they entered the wrong SIM PIN while trying
          to unlock the keyguard.  Displayed in a dialog box.  -->
     <plurals name="kg_password_wrong_pin_code">
-        <item quantity="one">Incorrect SIM PIN code, you have <xliff:g id="number">%d</xliff:g> remaining attempt before you must contact your carrier to unlock your device.</item>
-        <item quantity="other">Incorrect SIM PIN code, you have <xliff:g id="number">%d</xliff:g> remaining attempts.</item>
+        <item quantity="one">Incorrect SIM<xliff:g id="slotid">%d</xliff:g> PIN code, you have <xliff:g id="number">%d</xliff:g> remaining attempt before you must contact your carrier to unlock your device.</item>
+        <item quantity="other">Incorrect SIM<xliff:g id="slotid">%d</xliff:g> PIN code, you have <xliff:g id="number">%d</xliff:g> remaining attempts.</item>
     </plurals>
 
     <!-- Instructions telling the user that they have exhausted SIM PUK retries and the SIM is now unusable.
@@ -300,6 +303,23 @@
     <!-- On the keyguard screen, it shows the carrier the phone is connected to.
         This is displayed if the phone is not connected to a carrier.-->
     <string name="keyguard_carrier_default">No service.</string>
+
+    <string name="kg_remaining_attempts">Remaining attempts: <xliff:g id="number">%d</xliff:g></string>
+    <string name="kg_failed_pin_attempts_now_wiping">
+        You entered the wrong PIN <xliff:g id="number">%d</xliff:g> times,
+        do you want to reset your phone to factory settings?
+    </string>
+    <string name="kg_failed_password_attempts_now_wiping">
+        You entered the wrong Password <xliff:g id="number">%d</xliff:g> times,
+        do you want to reset your phone to factory settings?
+    </string>
+    <string name="kg_failed_pattern_attempts_now_wiping">
+        You entered the wrong Pattern <xliff:g id="number">%d</xliff:g> times,
+        do you want to reset your phone to factory settings?
+    </string>
+    <string name="kg_failed_attempts_now_wiping_confirm">
+        This will erase all data from your device\'s internal storage and your device will be back to factory settings.
+    </string>
 
     <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_ime_switch_button" msgid="5032926134740456424">Switch input method</string>
@@ -362,5 +382,21 @@
 
     <!-- Fingerprint hint message when finger was not recognized.-->
     <string name="fingerprint_not_recognized">Not recognized</string>
+
+    <!-- Instructions telling the user remaining times when enter SIM PIN view.  -->
+    <plurals name="kg_password_default_pin_message">
+        <item quantity="one">Enter SIM<xliff:g id="slotid">%d</xliff:g> PIN, you have <xliff:g id="number">%d</xliff:g> remaining
+attempt before you must contact your carrier to unlock your device.</item>
+        <item quantity="other">Enter SIM<xliff:g id="slotid">%d</xliff:g> PIN, you have <xliff:g id="number">%d</xliff:g> remaining
+attempts.</item>
+    </plurals>
+
+    <!-- Instructions telling the user remaining times when enter SIM PUK view.  -->
+    <plurals name="kg_password_default_puk_message">
+        <item quantity="one">SIM is now disabled. Enter PUK code to continue. You have <xliff:g id="
+number">%d</xliff:g> remaining attempt before SIM becomes permanently unusable. Contact carrier for details.</item>
+        <item quantity="other">SIM is now disabled. Enter PUK code to continue. You have <xliff:g id="
+number">%d</xliff:g> remaining attempts before SIM becomes permanently unusable. Contact carrier for details.</item>
+    </plurals>
 
 </resources>

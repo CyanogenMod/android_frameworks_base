@@ -100,7 +100,9 @@ public final class BluetoothHeadsetClient implements BluetoothProfile {
      * {@link #EXTRA_BATTERY_LEVEL},
      * {@link #EXTRA_OPERATOR_NAME},
      * {@link #EXTRA_VOICE_RECOGNITION},
-     * {@link #EXTRA_IN_BAND_RING}</p>
+     * {@link #EXTRA_IN_BAND_RING}
+     * {@link #EXTRA_MANF_ID}
+     * {@link #EXTRA_MANF_MODEL}</p>
      */
     public static final String ACTION_AG_EVENT =
             "android.bluetooth.headsetclient.profile.action.AG_EVENT";
@@ -204,6 +206,21 @@ public final class BluetoothHeadsetClient implements BluetoothProfile {
      */
     public static final String EXTRA_SUBSCRIBER_INFO =
             "android.bluetooth.headsetclient.extra.SUBSCRIBER_INFO";
+
+    /**
+     * Extra for AG_EVENT intent indicates manufacturer identification.
+     * <p>Value: <code>String</code> containing manufacturer identification.</p>
+     */
+    public static final String EXTRA_MANF_ID =
+            "android.bluetooth.headsetclient.extra.MANF_ID";
+
+    /**
+     * Extra for AG_EVENT intent indicates manufacturer model.
+     * <p>Value: <code>String</code> containing manufacturer model.</p>
+     */
+    public static final String EXTRA_MANF_MODEL =
+            "android.bluetooth.headsetclient.extra.MANF_MODEL";
+
 
     /**
      *  Extra for AG_CALL_CHANGED intent indicates the

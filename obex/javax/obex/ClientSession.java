@@ -48,6 +48,7 @@ import android.util.Log;
 public final class ClientSession extends ObexSession {
 
     private static final String TAG = "ClientSession";
+    private static final boolean V = Log.isLoggable(ObexHelper.LOG_TAG, Log.VERBOSE);
 
     private boolean mOpen;
 

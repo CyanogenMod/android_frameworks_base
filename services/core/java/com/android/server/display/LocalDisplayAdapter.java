@@ -57,6 +57,7 @@ final class LocalDisplayAdapter extends DisplayAdapter {
     private static final int[] BUILT_IN_DISPLAY_IDS_TO_SCAN = new int[] {
             SurfaceControl.BUILT_IN_DISPLAY_ID_MAIN,
             SurfaceControl.BUILT_IN_DISPLAY_ID_HDMI,
+            SurfaceControl.BUILT_IN_DISPLAY_ID_TERTIARY,
     };
 
     private final SparseArray<LocalDisplayDevice> mDevices =
@@ -192,6 +193,9 @@ final class LocalDisplayAdapter extends DisplayAdapter {
                 for (int j = 0; j < colorTransforms.size(); j++) {
                     if (colorTransforms.get(j).getColorTransform() == info.colorTransform) {
                         existingMode = true;
+                        if (i == activeDisplayInfo) {
+                            activeColorTransform = colorTransforms.get(j);
+                        }
                         break;
                     }
                 }

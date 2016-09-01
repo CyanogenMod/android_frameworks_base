@@ -97,6 +97,32 @@ public class DeviceInfoUtils {
                 m.group(4);                            // Thu Jun 28 11:02:39 PDT 2012
     }
 
+    public static String customizeFormatKernelVersion(boolean hideVersionName){
+        if (hideVersionName) {
+            try {
+                String strVersion = readLine(FILENAME_PROC_VERSION);
+                final String PROC_VERSION_REGEX = "Linux version (\\S+) " + "\\((\\S+?)\\) "
+                        + "(?:\\(gcc.+? \\)) " + "(#\\d+) " + "(?:.*?)?"
+                        + "((Sun|Mon|Tue|Wed|Thu|Fri|Sat).+)";
+                Matcher m = Pattern.compile(PROC_VERSION_REGEX).matcher(strVersion);
+                if (!m.matches()) {
+                    Log.e(TAG, "Regex did not match on /proc/version: " + strVersion);
+                    return "Unavailable";
+                } else if (m.groupCount() < 4) {
+                    Log.e(TAG, "Regex match on /proc/version only returned "
+                            + m.groupCount() + " groups");
+                    return "Unavailable";
+                }
+                return m.group(1) + "\n" + m.group(4);
+            } catch (IOException e) {
+                Log.e(TAG, "IO Exception when getting kernel version for Device Info screen", e);
+                return "Unavailable";
+            }
+        } else {
+            return getFormattedKernelVersion();
+        }
+    }
+
     /**
      * Returns " (ENGINEERING)" if the msv file has a zero value, else returns "".
      * @return a string to append to the model number description.

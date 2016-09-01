@@ -47,16 +47,17 @@ public class MediaFile {
     private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_FLAC;
 
     // More audio file types
-    public static final int FILE_TYPE_DTS   = 300;
-    public static final int FILE_TYPE_3GPA  = 301;
-    public static final int FILE_TYPE_AC3   = 302;
-    public static final int FILE_TYPE_QCP   = 303;
-    public static final int FILE_TYPE_PCM   = 304;
-    public static final int FILE_TYPE_EC3   = 305;
-    public static final int FILE_TYPE_AIFF  = 306;
-    public static final int FILE_TYPE_APE   = 307;
+    public static final int FILE_TYPE_DTS   = 210;
+    public static final int FILE_TYPE_3GPA  = 211;
+    public static final int FILE_TYPE_AC3   = 212;
+    public static final int FILE_TYPE_QCP   = 213;
+    public static final int FILE_TYPE_PCM   = 214;
+    public static final int FILE_TYPE_EC3   = 215;
+    public static final int FILE_TYPE_AIFF  = 216;
+    public static final int FILE_TYPE_APE   = 217;
+    public static final int FILE_TYPE_DSD   = 218;
     private static final int FIRST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_DTS;
-    private static final int LAST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_APE;
+    private static final int LAST_AUDIO_FILE_TYPE_EXT = FILE_TYPE_DSD;
 
     // MIDI file types
     public static final int FILE_TYPE_MID     = 11;
@@ -115,9 +116,10 @@ public class MediaFile {
     public static final int FILE_TYPE_PLS      = 42;
     public static final int FILE_TYPE_WPL      = 43;
     public static final int FILE_TYPE_HTTPLIVE = 44;
+    public static final int FILE_TYPE_DASH     = 45;
 
     private static final int FIRST_PLAYLIST_FILE_TYPE = FILE_TYPE_M3U;
-    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_HTTPLIVE;
+    private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_DASH;
 
     // Drm file types
     public static final int FILE_TYPE_FL      = 51;
@@ -281,12 +283,16 @@ public class MediaFile {
         addFileType("MPEG", FILE_TYPE_MP2PS, "video/mp2p");
         addFileType("DIVX", FILE_TYPE_DIVX, "video/divx");
         addFileType("FLV", FILE_TYPE_FLV, "video/flv");
+        addFileType("MPD", FILE_TYPE_DASH, "application/dash+xml");
         addFileType("QCP", FILE_TYPE_QCP, "audio/qcelp");
         addFileType("AC3", FILE_TYPE_AC3, "audio/ac3");
         addFileType("EC3", FILE_TYPE_EC3, "audio/eac3");
         addFileType("AIF", FILE_TYPE_AIFF, "audio/x-aiff");
         addFileType("AIFF", FILE_TYPE_AIFF, "audio/x-aiff");
         addFileType("APE", FILE_TYPE_APE, "audio/x-ape");
+        addFileType("DSF", FILE_TYPE_DSD, "audio/x-dsf");
+        addFileType("DFF", FILE_TYPE_DSD, "audio/x-dff");
+        addFileType("DSD", FILE_TYPE_DSD, "audio/dsd");
     }
 
     public static boolean isAudioFileType(int fileType) {

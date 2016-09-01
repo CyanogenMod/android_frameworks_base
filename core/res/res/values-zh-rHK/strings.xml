@@ -1625,6 +1625,7 @@
       <item quantity="other">已選取 <xliff:g id="COUNT_1">%1$d</xliff:g> 個項目</item>
       <item quantity="one">已選取 <xliff:g id="COUNT_0">%1$d</xliff:g> 個項目</item>
     </plurals>
+
     <string name="importance_from_user" msgid="7318955817386549931">"您可以設定這些通知的重要性。"</string>
     <string name="importance_from_person" msgid="9160133597262938296">"列為重要的原因：涉及的人。"</string>
     <string name="user_creation_account_exists" msgid="1942606193570143289">"要允許 <xliff:g id="APP">%1$s</xliff:g> 使用 <xliff:g id="ACCOUNT">%2$s</xliff:g> 建立新使用者嗎？"</string>
@@ -1654,4 +1655,9 @@
     <string name="audit_safemode_notification" msgid="6416076898350685856">"將此裝置回復至原廠設定後，使用將不受限制"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"輕觸以瞭解詳情。"</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"「<xliff:g id="LABEL">%1$s</xliff:g>」已停用"</string>
+
+    <!-- Carrier Name -->
+    <string name="China_Mobile">中國移動</string>
+    <string name="China_Unicom">中國聯通</string>
+    <string name="China_Telecom">中國電信</string>
 </resources>

@@ -28,4 +28,10 @@
 
     <!-- Threshold in micro watts above which a charger is rated as "fast"; 1.5A @ 5V  -->
     <integer name="config_chargingFastThreshold">7500000</integer>
+
+    <!-- Guide user to wipe data after fail to unlock for the max times -->
+    <integer name="config_max_unlock_countdown_times">0</integer>
+
+    <!-- config for showing AM/PM on lock screen in 12hour format -->
+    <bool name="config_showAmpm">true</bool>
 </resources>

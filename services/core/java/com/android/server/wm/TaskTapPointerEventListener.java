@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.WindowManagerPolicy.PointerEventListener;
 
 import com.android.server.wm.WindowManagerService.H;
+import com.android.server.am.ActivityManagerService;
 
 import static android.view.PointerIcon.TYPE_NOT_SPECIFIED;
 import static android.view.PointerIcon.TYPE_DEFAULT;
@@ -62,6 +63,17 @@ public class TaskTapPointerEventListener implements PointerEventListener {
     @Override
     public void onPointerEvent(MotionEvent motionEvent) {
         doGestureDetection(motionEvent);
+
+        if (ActivityManagerService.sIsFreqAggrBoostSet) {
+            ActivityManagerService.sFreqAggr_init.perfLockRelease();
+            ActivityManagerService.sFreqAggr.perfLockRelease();
+            ActivityManagerService.sIsFreqAggrBoostSet = false;
+        }
+
+        if (ActivityManagerService.sIsLaunchBoostv2_set) {
+            ActivityManagerService.sPerfBoost_v2.perfLockRelease();
+            ActivityManagerService.sIsLaunchBoostv2_set = false;
+        }
 
         final int action = motionEvent.getAction();
         switch (action & MotionEvent.ACTION_MASK) {

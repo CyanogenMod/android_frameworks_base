@@ -549,6 +549,27 @@ public class MediaSessionLegacyHelper {
                     mRccListener.onSetRating(rating);
                 }
             }
+
+            @Override
+            public void setBrowsedPlayer() {
+                if (mRccListener != null) {
+                    mRccListener.setBrowsedPlayer();
+                }
+            }
+
+            @Override
+            public void setPlayItem(int scope, long uid) {
+                if (mRccListener != null) {
+                    mRccListener.setPlayItem(scope, uid);
+                }
+            }
+
+            @Override
+            public void getNowPlayingEntries() {
+                if (mRccListener != null) {
+                    mRccListener.getNowPlayingEntries();
+                }
+            }
         }
     }
 }

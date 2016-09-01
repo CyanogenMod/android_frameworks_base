@@ -1189,6 +1189,18 @@ public class DeviceIdleController extends SystemService
             return isPowerSaveWhitelistAppInternal(name);
         }
 
+        @Override public int getIdleStateDetailed() {
+            getContext().enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER,
+                    null);
+            return mState;
+        }
+
+        @Override public int getLightIdleStateDetailed() {
+            getContext().enforceCallingOrSelfPermission(android.Manifest.permission.DEVICE_POWER,
+                    null);
+            return mLightState;
+        }
+
         @Override public void addPowerSaveTempWhitelistApp(String packageName, long duration,
                 int userId, String reason) throws RemoteException {
             addPowerSaveTempWhitelistAppChecked(packageName, duration, userId, reason);

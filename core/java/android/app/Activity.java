@@ -127,6 +127,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import android.util.BoostFramework;
 
 /**
  * An activity is a single, focused thing that the user can do.  Almost all
@@ -689,6 +690,10 @@ public class Activity extends ContextThemeWrapper
         OnCreateContextMenuListener, ComponentCallbacks2,
         Window.OnWindowDismissedCallback, WindowControllerCallback {
     private static final String TAG = "Activity";
+    private static BoostFramework mPerf = null;
+    private static int mDragBoostPossible = -1;
+    private static int mPerfLockDuration = -1;
+    private static int mAsParamVal[];
     private static final boolean DEBUG_LIFECYCLE = false;
 
     /** Standard activity result: operation canceled. */
@@ -3055,6 +3060,42 @@ public class Activity extends ContextThemeWrapper
      * @return boolean Return true if this event was consumed.
      */
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(mDragBoostPossible == -1) {
+            mDragBoostPossible = 0;
+            String currentActivity = getPackageName();
+            String[] activityList = getResources().getStringArray(
+                com.android.internal.R.array.boost_activityList);
+            if(activityList != null){
+                for (String match : activityList) {
+                    if (currentActivity.indexOf(match) != -1){
+                        mDragBoostPossible = 1;
+                        break;
+                    }
+                }
+            }
+        }
+
+       Context context = getApplicationContext();
+       if (mPerf == null){
+           mPerf = new BoostFramework();
+       }
+       boolean override = mPerf.boostOverride(context, ev, getResources().getDisplayMetrics());
+
+       if (mDragBoostPossible == 1 && override != true) {
+            if (mPerf == null){
+                mPerf = new BoostFramework();
+            }
+            if(mPerfLockDuration == -1){
+                mPerfLockDuration = getResources().getInteger(
+                    com.android.internal.R.integer.ascrollboost_timeout);
+                mAsParamVal = getResources().getIntArray(
+                    com.android.internal.R.array.ascrollboost_param_value);
+            }
+            mPerf.perfLockAcquireTouch(ev,
+                getResources().getDisplayMetrics(),
+                mPerfLockDuration, mAsParamVal);
+        }
+
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             onUserInteraction();
         }

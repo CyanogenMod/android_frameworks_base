@@ -52,6 +52,14 @@
             android:alpha="0.0"
             />
     </FrameLayout>
+     <ImageView android:id="@+id/ims_over_wifi"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_gravity="start|bottom"
+        android:layout_marginRight="2dp"
+        android:src="@drawable/vowifi"
+        />
     <FrameLayout
         android:id="@+id/wifi_combo"
         android:layout_height="wrap_content"
@@ -69,6 +77,13 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:alpha="0.0"
+            />
+        <com.android.systemui.statusbar.AlphaOptimizedImageView
+            android:theme="@style/DualToneLightTheme"
+            android:id="@+id/wifi_inout"
+            android:layout_height="17dp"
+            android:layout_width="18.41dp"
+            android:layout_gravity="center|bottom"
             />
     </FrameLayout>
     <View

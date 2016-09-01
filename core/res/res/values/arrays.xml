@@ -234,5 +234,22 @@
         <item>@string/unpin_target</item>
         <item>@string/app_info</item>
     </string-array>
+    <string-array name="app_ops_labels">
+        <item>Trying to enable WLAN</item>
+        <item>Trying to enable BT</item>
+    </string-array>
+
+    <string-array name="power_off_alarm_apps">
+        <item>android</item>
+        <item>com.android.location.fused</item>
+        <item>com.android.settings</item>
+        <item>com.android.defcontainer</item>
+        <item>com.android.poweronalert</item>
+        <item>com.android.shell</item>
+        <item>com.android.deskclock</item>
+        <item>com.android.providers.media</item>
+        <item>com.android.inputdevices</item>
+        <item>com.android.providers.settings</item>
+    </string-array>
 
 </resources>

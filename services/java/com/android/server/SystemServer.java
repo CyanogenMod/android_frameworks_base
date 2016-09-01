@@ -32,6 +32,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.FactoryTest;
 import android.os.FileUtils;
+import android.os.IBinder;
 import android.os.IPowerManager;
 import android.os.Looper;
 import android.os.PowerManager;
@@ -50,6 +51,7 @@ import android.view.WindowManager;
 
 import com.android.internal.R;
 import com.android.internal.os.BinderInternal;
+import com.android.internal.os.RegionalizationEnvironment;
 import com.android.internal.os.SamplingProfilerIntegration;
 import com.android.internal.os.ZygoteInit;
 import com.android.internal.widget.ILockSettings;
@@ -75,6 +77,7 @@ import com.android.server.media.projection.MediaProjectionManagerService;
 import com.android.server.net.NetworkPolicyManagerService;
 import com.android.server.net.NetworkStatsService;
 import com.android.server.notification.NotificationManagerService;
+import com.android.server.os.RegionalizationService;
 import com.android.server.os.SchedulingPolicyService;
 import com.android.server.pm.BackgroundDexOptService;
 import com.android.server.pm.Installer;
@@ -101,6 +104,9 @@ import com.android.server.wm.WindowManagerService;
 
 import cyanogenmod.providers.CMSettings;
 import dalvik.system.VMRuntime;
+import dalvik.system.PathClassLoader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 import java.io.File;
 import java.io.IOException;
@@ -446,6 +452,18 @@ public final class SystemServer {
         } else if (ENCRYPTED_STATE.equals(cryptState)) {
             Slog.w(TAG, "Device encrypted - only parsing core apps");
             mOnlyCore = true;
+        } else if (SystemProperties.getBoolean("ro.alarm_boot", false)) {
+            // power off alarm mode is similar to encryption mode. Only power off alarm
+            // applications will be parsed by packageParser. Some services or settings are
+            // not necessary to power off alarm mode. So reuse mOnlyCore for power off alarm
+            // mode.
+            mOnlyCore = true;
+        }
+
+        if (RegionalizationEnvironment.isSupported()) {
+            Slog.i(TAG, "Regionalization Service");
+            RegionalizationService regionalizationService = new RegionalizationService();
+            ServiceManager.addService("regionalization", regionalizationService);
         }
 
         // Start the package manager.
@@ -528,6 +546,8 @@ public final class SystemServer {
         ConsumerIrService consumerIr = null;
         MmsServiceBroker mmsService = null;
         HardwarePropertiesManagerService hardwarePropertiesService = null;
+        Object wigigP2pService = null;
+        Object wigigService = null;
 
         boolean disableStorage = SystemProperties.getBoolean("config.disable_storage", false);
         boolean disableBluetooth = SystemProperties.getBoolean("config.disable_bluetooth", false);
@@ -548,6 +568,7 @@ public final class SystemServer {
         boolean disableSamplingProfiler = SystemProperties.getBoolean("config.disable_samplingprof",
                 false);
         boolean isEmulator = SystemProperties.get("ro.kernel.qemu").equals("1");
+        boolean enableWigig = SystemProperties.getBoolean("persist.wigig.enable", false);
 
         String externalServer = context.getResources().getString(
                 org.cyanogenmod.platform.internal.R.string.config_externalSystemServer);
@@ -841,6 +862,31 @@ public final class SystemServer {
                     mSystemServiceManager.startService("com.android.server.wifi.RttService");
                 }
 
+                if (enableWigig) {
+                    try {
+                        Slog.i(TAG, "Wigig Service");
+                        PathClassLoader wigigClassLoader =
+                                new PathClassLoader("/system/framework/wigig-service.jar",
+                                        "/system/lib64:/system/vendor/lib64",
+                                        getClass().getClassLoader());
+                        Class wigigP2pClass = wigigClassLoader.loadClass(
+                            "com.qualcomm.qti.server.wigig.p2p.WigigP2pServiceImpl");
+                        Constructor<Class> ctor = wigigP2pClass.getConstructor(Context.class);
+                        wigigP2pService = ctor.newInstance(context);
+                        Slog.i(TAG, "Successfully loaded WigigP2pServiceImpl class");
+                        ServiceManager.addService("wigigp2p", (IBinder) wigigP2pService);
+
+                        Class wigigClass = wigigClassLoader.loadClass(
+                            "com.qualcomm.qti.server.wigig.WigigService");
+                        ctor = wigigClass.getConstructor(Context.class);
+                        wigigService = ctor.newInstance(context);
+                        Slog.i(TAG, "Successfully loaded WigigService class");
+                        ServiceManager.addService("wigig", (IBinder) wigigService);
+                    } catch (Throwable e) {
+                        reportWtf("starting WigigService", e);
+                    }
+                }
+
                 if (mPackageManager.hasSystemFeature(PackageManager.FEATURE_ETHERNET) ||
                     mPackageManager.hasSystemFeature(PackageManager.FEATURE_USB_HOST)) {
                     mSystemServiceManager.startService(ETHERNET_SERVICE_CLASS);
@@ -951,8 +997,8 @@ public final class SystemServer {
             if (!disableNonCoreServices) {
                 mSystemServiceManager.startService(DockObserver.class);
 
-                if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
-                    mSystemServiceManager.startService(THERMAL_OBSERVER_CLASS);
+		if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
+                    //#Fixme:mSystemServiceManager.startService(THERMAL_OBSERVER_CLASS);
                 }
             }
 
@@ -1179,7 +1225,7 @@ public final class SystemServer {
         }
 
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
-            mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
+            //#Fixme:mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
         }
 
         // Before things start rolling, be sure we have decided whether
@@ -1241,6 +1287,26 @@ public final class SystemServer {
         mSystemServiceManager.startBootPhase(SystemService.PHASE_SYSTEM_SERVICES_READY);
 
         Trace.traceBegin(Trace.TRACE_TAG_SYSTEM_SERVER, "MakeWindowManagerServiceReady");
+
+        // Wigig services are not registered as system services because of class loader
+        // limitations, send boot phase notification separately
+        if (enableWigig) {
+            try {
+                Slog.i(TAG, "calling onBootPhase for Wigig Services");
+                Class wigigP2pClass = wigigP2pService.getClass();
+                Method m = wigigP2pClass.getMethod("onBootPhase", int.class);
+                m.invoke(wigigP2pService, new Integer(
+                    SystemService.PHASE_SYSTEM_SERVICES_READY));
+
+                Class wigigClass = wigigService.getClass();
+                m = wigigClass.getMethod("onBootPhase", int.class);
+                m.invoke(wigigService, new Integer(
+                    SystemService.PHASE_SYSTEM_SERVICES_READY));
+            } catch (Throwable e) {
+                reportWtf("Wigig services ready", e);
+            }
+        }
+
         try {
             wm.systemReady();
         } catch (Throwable e) {

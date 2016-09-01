@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.util.BoostFramework;
 
 /**
  * This class encapsulates scrolling with the ability to overshoot the bounds
@@ -599,6 +600,18 @@ public class OverScroller {
         private static final int CUBIC = 1;
         private static final int BALLISTIC = 2;
 
+        /*
+         * Perf boost related variables
+         * Enabled/Disabled using config_enableCpuBoostForOverScrollerFling
+         * true value turns it on, by default will be turned off
+         */
+        private BoostFramework mPerf = null;
+        private boolean mIsPerfLockAcquired = false;
+        private boolean mIsPerfBoostEnabled = false;
+        private int fBoostTimeOut = 0;
+        private int flingBoostTimeOut = 0;
+        private int fBoostParamVal[];
+
         static {
             float x_min = 0.0f;
             float y_min = 0.0f;
@@ -643,6 +656,19 @@ public class OverScroller {
                     * 39.37f // inch/meter
                     * ppi
                     * 0.84f; // look and feel tuning
+
+            mIsPerfBoostEnabled = context.getResources().getBoolean(
+                   com.android.internal.R.bool.config_enableCpuBoostForOverScrollerFling);
+            if (mIsPerfBoostEnabled) {
+            fBoostTimeOut = context.getResources().getInteger(
+                   com.android.internal.R.integer.flingboost_timeout_param);
+            fBoostParamVal = context.getResources().getIntArray(
+                        com.android.internal.R.array.flingboost_param_value);
+            }
+
+            if (mPerf == null && mIsPerfBoostEnabled) {
+                mPerf = new BoostFramework();
+            }
         }
 
         void updateScroll(float q) {
@@ -690,6 +716,11 @@ public class OverScroller {
         }
 
         void finish() {
+            if (mIsPerfLockAcquired && mPerf != null) {
+                mPerf.perfLockRelease();
+                mIsPerfLockAcquired = false;
+            }
+
             mCurrentPosition = mFinal;
             // Not reset since WebView relies on this value for fast fling.
             // TODO: restore when WebView uses the fast fling implemented in this class.
@@ -748,6 +779,11 @@ public class OverScroller {
             mDuration = mSplineDuration = 0;
             mStartTime = AnimationUtils.currentAnimationTimeMillis();
             mCurrentPosition = mStart = start;
+
+            if (mIsPerfLockAcquired && mPerf != null) {
+                mPerf.perfLockRelease();
+                mIsPerfLockAcquired = false;
+            }
 
             if (start > max || start < min) {
                 startAfterEdge(start, min, max, velocity);
@@ -911,6 +947,18 @@ public class OverScroller {
             }
             if (currentTime > mDuration) {
                 return false;
+            }
+
+            if (mPerf != null && !mIsPerfLockAcquired) {
+                mIsPerfLockAcquired = true;
+                if (0 == fBoostTimeOut) {
+                    //config value is not defined
+                    flingBoostTimeOut = mDuration;
+                } else {
+                    //config value is present
+                    flingBoostTimeOut = fBoostTimeOut;
+                }
+                mPerf.perfLockAcquire(flingBoostTimeOut, fBoostParamVal);
             }
 
             double distance = 0.0;

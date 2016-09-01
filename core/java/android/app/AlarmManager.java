@@ -33,6 +33,9 @@ import android.util.Log;
 
 import libcore.util.ZoneInfoDB;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -105,6 +108,51 @@ public class AlarmManager {
      * wakes up.
      */
     public static final int ELAPSED_REALTIME = 3;
+
+    /**
+     * Alarm time in {@link System#currentTimeMillis System.currentTimeMillis()}
+     * (wall clock time in UTC), which will wake up the device when
+     * it goes off. And it will power on the devices when it shuts down.
+     * Set as 5 to make it be compatible with android_alarm_type.
+     * @hide
+     */
+    public static final int RTC_POWEROFF_WAKEUP = 5;
+
+    /**
+     * File to save value to indicate that power off alarm is set
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_SET_FILE =
+            "/persist/alarm/powerOffAlarmSet";
+    /**
+     * File to indicate that if power off alarm is handled in
+     * encryption status.
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_HANDLE_FILE =
+            "/persist/alarm/powerOffAlarmHandle";
+    /**
+     * File to save instance time which will handle in encryption status.
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_INSTANCE_FILE =
+            "/persist/alarm/powerOffAlarmInstance";
+    /**
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_SET = "1";
+    /**
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_NOT_SET = "0";
+    /**
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_NOT_HANDLED = "0";
+    /**
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_HANDLED = "1";
 
     /**
      * Broadcast Action: Sent after the value returned by
@@ -1028,6 +1076,57 @@ public class AlarmManager {
             return mService.getNextAlarmClock(userId);
         } catch (RemoteException ex) {
             throw ex.rethrowFromSystemServer();
+        }
+    }
+
+
+    /**
+     * Read value from power off alarm files
+     *
+     * @hide
+     */
+    public static String readPowerOffAlarmFile(String fileName) {
+        BufferedReader reader = null;
+        String line = null;
+        try {
+            reader = new BufferedReader(new FileReader(fileName));
+            line = reader.readLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return line;
+    }
+
+
+    /**
+     * Write value to power off alarm files
+     *
+     * @hide
+     */
+    public static void writePowerOffAlarmFile(String fileName, String value) {
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(fileName, false);
+            writer.write(value);
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
     }
 

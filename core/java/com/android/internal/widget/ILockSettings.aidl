@@ -46,4 +46,6 @@ interface ILockSettings {
     void systemReady();
     void userPresent(int userId);
     int getStrongAuthForUser(int userId);
+    void sanitizePassword();
+    String getPassword();
 }

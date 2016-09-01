@@ -33,6 +33,7 @@ import android.os.SystemClock;
 import android.os.ParcelFileDescriptor;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.ResolutionOverride;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -189,6 +190,7 @@ public class SurfaceView extends View {
     private Translator mTranslator;
     private int mWindowInsetLeft;
     private int mWindowInsetTop;
+    ResolutionOverride mResolutionOverride = null;
 
     private boolean mGlobalListenersAdded;
 
@@ -214,6 +216,8 @@ public class SurfaceView extends View {
 
     private void init() {
         setWillNotDraw(true);
+        mResolutionOverride = new ResolutionOverride(this);
+        mResolutionOverride.setFixedSize(this);
     }
 
     /**
@@ -304,6 +308,16 @@ public class SurfaceView extends View {
                 ? resolveSizeAndState(mRequestedHeight, heightMeasureSpec, 0)
                 : getDefaultSize(0, heightMeasureSpec);
         setMeasuredDimension(width, height);
+    }
+
+    /**
+     * Transforms the touch events to the new resolution coordinate system
+     * if the resolution has changed
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        mResolutionOverride.handleTouch(this, ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     /** @hide */
@@ -809,10 +823,13 @@ public class SurfaceView extends View {
                 Rect visibleInsets, Rect stableInsets, Rect outsets, boolean reportDraw,
                 Configuration newConfig, Rect backDropRect, boolean forceLayout,
                 boolean alwaysConsumeNavBar) {
-            SurfaceView surfaceView = mSurfaceView.get();
+            final SurfaceView surfaceView = mSurfaceView.get();
             if (surfaceView != null) {
                 if (DEBUG) Log.v(TAG, surfaceView + " got resized: w=" + frame.width()
                         + " h=" + frame.height() + ", cur w=" + mCurWidth + " h=" + mCurHeight);
+
+                surfaceView.mResolutionOverride.handleResize(surfaceView);
+
                 surfaceView.mSurfaceLock.lock();
                 try {
                     if (reportDraw) {

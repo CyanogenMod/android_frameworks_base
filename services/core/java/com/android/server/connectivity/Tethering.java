@@ -70,6 +70,7 @@ import com.android.internal.util.Protocol;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
 import com.android.server.IoThread;
+import com.android.server.NetPluginDelegate;
 import com.android.server.net.BaseNetworkObserver;
 
 import java.io.FileDescriptor;
@@ -220,10 +221,16 @@ public class Tethering extends BaseNetworkObserver {
     void updateConfiguration() {
         String[] tetherableUsbRegexs = mContext.getResources().getStringArray(
                 com.android.internal.R.array.config_tether_usb_regexs);
-        String[] tetherableWifiRegexs = mContext.getResources().getStringArray(
-                com.android.internal.R.array.config_tether_wifi_regexs);
+        String[] tetherableWifiRegexs;
         String[] tetherableBluetoothRegexs = mContext.getResources().getStringArray(
                 com.android.internal.R.array.config_tether_bluetooth_regexs);
+
+        if (SystemProperties.getInt("persist.fst.rate.upgrade.en", 0) == 1) {
+            tetherableWifiRegexs = new String[] {"bond0"};
+        } else {
+            tetherableWifiRegexs = mContext.getResources().getStringArray(
+                com.android.internal.R.array.config_tether_wifi_regexs);
+        }
 
         int ifaceTypes[] = mContext.getResources().getIntArray(
                 com.android.internal.R.array.config_tether_upstream_types);
@@ -250,6 +257,8 @@ public class Tethering extends BaseNetworkObserver {
         if (VDBG) Log.d(TAG, "interfaceStatusChanged " + iface + ", " + up);
         boolean found = false;
         boolean usb = false;
+        WifiManager mWifiManager =
+           (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
         synchronized (mPublicSync) {
             if (isWifi(iface)) {
                 found = true;
@@ -273,6 +282,25 @@ public class Tethering extends BaseNetworkObserver {
                     // ignore usb0 down after enabling RNDIS
                     // we will handle disconnect in interfaceRemoved instead
                     if (VDBG) Log.d(TAG, "ignore interface down for " + iface);
+                } else if (isWifi(iface) && (mWifiManager != null) &&
+                              mWifiManager.getWifiStaSapConcurrency()) {
+                    int wifiApState = 0;
+                    wifiApState = mWifiManager.getWifiApState();
+
+                    // Ignore AP interface down after enabling STA connection.
+                    // If STA connects to same  band the SAP is enabled, the
+                    // driver stops SAP before it proceeds for STA connection
+                    // hence ignore interface down. After STA connection,
+                    // driver starts SAP on STA channel.
+
+                    if ((wifiApState == WifiManager.WIFI_AP_STATE_DISABLING) ||
+                       (wifiApState == WifiManager.WIFI_AP_STATE_DISABLED)) {
+                        if (VDBG) Log.d(TAG, "Got interface down for " + iface);
+                        sm.sendMessage(TetherInterfaceSM.CMD_INTERFACE_DOWN);
+                        mIfaces.remove(iface);
+                    } else {
+                        if (VDBG) Log.d(TAG, "ignore interface down for " + iface);
+                    }
                 } else if (sm != null) {
                     sm.sendMessage(TetherInterfaceSM.CMD_INTERFACE_DOWN);
                     mIfaces.remove(iface);
@@ -694,6 +722,11 @@ public class Tethering extends BaseNetworkObserver {
             } else {
                 /* We now have a status bar icon for WifiTethering, so drop the notification */
                 clearTetheredNotification();
+                if (mContext.getResources().getBoolean(
+                        com.android.internal.R.bool
+                        .config_regional_hotspot_show_notification_when_turn_on)) {
+                    showTetheredNotification(com.android.internal.R.drawable.stat_sys_tether_wifi);
+                }
             }
         } else if (bluetoothTethered) {
             showTetheredNotification(com.android.internal.R.drawable.stat_sys_tether_bluetooth);
@@ -1724,6 +1757,8 @@ public class Tethering extends BaseNetworkObserver {
                 }
 
                 if (upType != ConnectivityManager.TYPE_NONE) {
+                    Network network = getConnectivityManager().getNetworkForType(upType);
+                    NetPluginDelegate.setUpstream(network);
                     LinkProperties linkProperties =
                             getConnectivityManager().getLinkProperties(upType);
                     if (linkProperties != null) {
@@ -1742,7 +1777,6 @@ public class Tethering extends BaseNetworkObserver {
                     }
 
                     if (iface != null) {
-                        Network network = getConnectivityManager().getNetworkForType(upType);
                         if (network == null) {
                             Log.e(TAG, "No Network for upstream type " + upType + "!");
                         }

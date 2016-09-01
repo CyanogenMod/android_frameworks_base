@@ -24,6 +24,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.ActivityManager;
+import android.content.Context;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -161,6 +162,8 @@ public class PackageParser {
     private static final String TAG_PACKAGE = "package";
     private static final String TAG_RESTRICT_UPDATE = "restrict-update";
 
+    private Context mContext;
+
     // These are the tags supported by child packages
     private static final Set<String> CHILD_PACKAGE_TAGS = new ArraySet<>();
     static {
@@ -254,6 +257,7 @@ public class PackageParser {
     private String[] mSeparateProcesses;
     private boolean mOnlyCoreApps;
     private DisplayMetrics mMetrics;
+    private boolean mOnlyPowerOffAlarmApps;
 
     private static final int SDK_VERSION = Build.VERSION.SDK_INT;
     private static final String[] SDK_CODENAMES = Build.VERSION.ACTIVE_CODENAMES;
@@ -426,6 +430,11 @@ public class PackageParser {
         mMetrics.setToDefaults();
     }
 
+    public PackageParser(Context context) {
+        this();
+        mContext = context;
+    }
+
     public void setSeparateProcesses(String[] procs) {
         mSeparateProcesses = procs;
     }
@@ -441,6 +450,10 @@ public class PackageParser {
 
     public void setDisplayMetrics(DisplayMetrics metrics) {
         mMetrics = metrics;
+    }
+
+    public void setOnlyPowerOffAlarmApps(boolean onlyPowerOffAlarmApps) {
+        mOnlyPowerOffAlarmApps = onlyPowerOffAlarmApps;
     }
 
     public static final boolean isApkFile(File file) {
@@ -797,6 +810,27 @@ public class PackageParser {
         }
     }
 
+
+    /*
+     * Check if the package belongs to power off alarm packages
+     */
+    private boolean isPowerOffAlarmPackage(String packageName) {
+        if (mContext != null) {
+            String[] packageArray =
+                    mContext.getResources().getStringArray(R.array.power_off_alarm_apps);
+            if(packageArray.length ==0) {
+                Slog.w(TAG, "power off alarm app array is empty " + packageName);
+                return false;
+            } else {
+                List<String> tempList = Arrays.asList(packageArray);
+                if (tempList.contains(packageName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Parse all APKs contained in the given directory, treating them as a
      * single package. This also performs sanity checking, such as requiring
@@ -808,8 +842,15 @@ public class PackageParser {
      */
     private Package parseClusterPackage(File packageDir, int flags) throws PackageParserException {
         final PackageLite lite = parseClusterPackageLite(packageDir, 0);
+        // When mOnlyPowerOffAlarmApps is true, only parse power off alarm packages
+        if (mOnlyPowerOffAlarmApps) {
+            if (!isPowerOffAlarmPackage(lite.packageName)) {
+                throw new PackageParserException(INSTALL_PARSE_FAILED_MANIFEST_MALFORMED,
+                        "Not a powerOffAlarmApp: " + packageDir);
+            }
+        }
 
-        if (mOnlyCoreApps && !lite.coreApp) {
+        if (!mOnlyPowerOffAlarmApps && mOnlyCoreApps && !lite.coreApp) {
             throw new PackageParserException(INSTALL_PARSE_FAILED_MANIFEST_MALFORMED,
                     "Not a coreApp: " + packageDir);
         }
@@ -867,7 +908,15 @@ public class PackageParser {
     @Deprecated
     public Package parseMonolithicPackage(File apkFile, int flags) throws PackageParserException {
         final PackageLite lite = parseMonolithicPackageLite(apkFile, flags);
-        if (mOnlyCoreApps) {
+        // When mOnlyPowerOffAlarmApps is true, only parse power off alarm packages
+        if (mOnlyPowerOffAlarmApps) {
+            if (!isPowerOffAlarmPackage(lite.packageName)) {
+                throw new PackageParserException(INSTALL_PARSE_FAILED_MANIFEST_MALFORMED,
+                   "Not a powerOffAlarmApp: " + apkFile);
+            }
+        }
+
+        if (!mOnlyPowerOffAlarmApps && mOnlyCoreApps) {
             if (!lite.coreApp) {
                 throw new PackageParserException(INSTALL_PARSE_FAILED_MANIFEST_MALFORMED,
                         "Not a coreApp: " + apkFile);

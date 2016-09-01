@@ -923,9 +923,9 @@ static jint CameraMetadata_setupGlobalVendorTagDescriptor(JNIEnv *env, jobject t
         VendorTagDescriptor::clearGlobalVendorTagDescriptor();
         return OK;
     } else if (!res.isOk()) {
-        VendorTagDescriptor::clearGlobalVendorTagDescriptor();
-        ALOGE("%s: Failed to setup vendor tag descriptors: %s",
-                __FUNCTION__, res.toString8().string());
+        ALOGE("%s: Failed to setup vendor tag descriptors: %d: %s",
+                __FUNCTION__, res.serviceSpecificErrorCode(),
+                res.toString8().string());
         return res.serviceSpecificErrorCode();
     }
 

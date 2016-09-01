@@ -158,7 +158,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
     private String[] mDataConnectionApn;
 
-    private ArrayList<String> mConnectedApns;
+    private ArrayList<String>[] mConnectedApns;
 
     private LinkProperties[] mDataConnectionLinkProperties;
 
@@ -290,11 +290,11 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
         mContext = context;
         mBatteryStats = BatteryStatsService.getService();
-        mConnectedApns = new ArrayList<String>();
 
         int numPhones = TelephonyManager.getDefault().getPhoneCount();
         if (DBG) log("TelephonyRegistor: ctor numPhones=" + numPhones);
         mNumPhones = numPhones;
+        mConnectedApns = new ArrayList[numPhones];
         mCallState = new int[numPhones];
         mDataActivity = new int[numPhones];
         mDataConnectionState = new int[numPhones];
@@ -312,6 +312,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         mDataConnectionNetworkCapabilities = new NetworkCapabilities[numPhones];
         mCellInfo = new ArrayList<List<CellInfo>>();
         for (int i = 0; i < numPhones; i++) {
+            mConnectedApns[i] = new ArrayList<String>();
             mCallState[i] =  TelephonyManager.CALL_STATE_IDLE;
             mDataActivity[i] = TelephonyManager.DATA_ACTIVITY_NONE;
             mDataConnectionState[i] = TelephonyManager.DATA_UNKNOWN;
@@ -334,7 +335,6 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 location.fillInNotifierBundle(mCellLocation[i]);
             }
         }
-        mConnectedApns = new ArrayList<String>();
 
         mAppOps = mContext.getSystemService(AppOpsManager.class);
     }
@@ -1023,18 +1023,21 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         synchronized (mRecords) {
             int phoneId = SubscriptionManager.getPhoneId(subId);
             if (validatePhoneId(phoneId)) {
+                if (VDBG) {
+                    log(" mConnectedApns[" + phoneId + "]="  + mConnectedApns[phoneId].toString());
+                }
                 boolean modified = false;
                 if (state == TelephonyManager.DATA_CONNECTED) {
-                    if (!mConnectedApns.contains(apnType)) {
-                        mConnectedApns.add(apnType);
+                    if (!mConnectedApns[phoneId].contains(apnType)) {
+                        mConnectedApns[phoneId].add(apnType);
                         if (mDataConnectionState[phoneId] != state) {
                             mDataConnectionState[phoneId] = state;
                             modified = true;
                         }
                     }
                 } else {
-                    if (mConnectedApns.remove(apnType)) {
-                        if (mConnectedApns.isEmpty()) {
+                    if (mConnectedApns[phoneId].remove(apnType)) {
+                        if (mConnectedApns[phoneId].isEmpty()) {
                             mDataConnectionState[phoneId] = state;
                             modified = true;
                         } else {

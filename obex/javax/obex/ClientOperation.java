@@ -52,7 +52,7 @@ public final class ClientOperation implements Operation, BaseStream {
 
     private static final String TAG = "ClientOperation";
 
-    private static final boolean V = ObexHelper.VDBG;
+    private static final boolean V = Log.isLoggable(ObexHelper.LOG_TAG, Log.VERBOSE);
 
     private ClientSession mParent;
 

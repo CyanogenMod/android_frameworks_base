@@ -153,6 +153,17 @@ public class TelecomManager {
             "android.telecom.action.DEFAULT_DIALER_CHANGED";
 
     /**
+     *@hide Broadcast intent action indicating the call type(CS call or Non-CS call).
+     * The string extra {@link #EXTRA_CALL_TYPE_CS} will contain the
+     * boolean value true if call is CS call else false.
+     *
+     * @see #EXTRA_CALL_TYPE_CS
+     */
+    public static final String ACTION_CALL_TYPE =
+            "codeaurora.telecom.action.CALL_TYPE";
+
+
+    /**
      * Extra value used to provide the package name for {@link #ACTION_CHANGE_DEFAULT_DIALER}.
      */
     public static final String EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME =
@@ -278,6 +289,13 @@ public class TelecomManager {
      */
     public static final String EXTRA_CALL_TECHNOLOGY_TYPE =
             "android.telecom.extra.CALL_TECHNOLOGY_TYPE";
+
+    /**
+     *@hide  Extra value used to provide the call type for {@link #ACTION_CALL_TYPE}.
+     */
+    public static final String EXTRA_CALL_TYPE_CS =
+            "codeaurora.telecom.extra.CALL_TYPE_CS";
+
 
     /**
      * An optional {@link android.content.Intent#ACTION_CALL} intent extra denoting the

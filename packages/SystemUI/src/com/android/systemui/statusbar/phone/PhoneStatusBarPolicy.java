@@ -452,6 +452,8 @@ public class PhoneStatusBarPolicy implements Callback, RotationLockController.Ro
     private final HotspotController.Callback mHotspotCallback = new HotspotController.Callback() {
         @Override
         public void onHotspotChanged(boolean enabled) {
+            mIconController.setIcon(mSlotHotspot, R.drawable.stat_sys_hotspot,
+                    mContext.getString(R.string.accessibility_status_bar_hotspot));
             mIconController.setIconVisibility(mSlotHotspot, enabled);
         }
     };

@@ -615,6 +615,12 @@ public class CarrierConfigManager {
     public static final String KEY_BROADCAST_EMERGENCY_CALL_STATE_CHANGES_BOOL =
             "broadcast_emergency_call_state_changes_bool";
 
+    /**
+     * Flag specifying whether CDMA call waiting and call forwarding are enabled
+     * @hide
+     */
+    public static final String KEY_CDMA_CW_CF_ENABLED_BOOL = "cdma_cw_cf_enabled_bool";
+
     // These variables are used by the MMS service and exposed through another API, {@link
     // SmsManager}. The variable names and string values are copied from there.
     public static final String KEY_MMS_ALIAS_ENABLED_BOOL = "aliasEnabled";
@@ -718,6 +724,25 @@ public class CarrierConfigManager {
     /** @hide */
     public static final int CDMA_ROAMING_MODE_ANY = 2;
 
+     /**
+     * Key that determines if ACTIVATE_REJECT_GGSN is to be treated as a permanent error.
+     * @hide
+     */
+    public static final String KEY_REJECT_GGSN_PERM_FAILURE = "reject_ggsn_perm_failure";
+
+    /**
+     * Key that determines if PROTOCOL_ERRORS is  treated as permanent error.
+     * @hide
+     */
+    public static final String KEY_PROTOCOL_ERRORS_PERM_FAILURE = "protocol_errors_perm_failure";
+
+    /**
+     * Key that determines if anonymous users to be mapped to presentation restricted
+     * @hide
+     */
+    public static final String KEY_MAP_ANONYMOUS_TO_RESTRICTED_BOOL =
+            "carrier_map_anonymous_to_restricted";
+
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
@@ -756,8 +781,8 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_IGNORE_SIM_NETWORK_LOCKED_EVENTS_BOOL, false);
         sDefaults.putBoolean(KEY_OPERATOR_SELECTION_EXPAND_BOOL, true);
         sDefaults.putBoolean(KEY_PREFER_2G_BOOL, true);
-        sDefaults.putBoolean(KEY_SHOW_APN_SETTING_CDMA_BOOL, false);
-        sDefaults.putBoolean(KEY_SHOW_CDMA_CHOICES_BOOL, false);
+        sDefaults.putBoolean(KEY_SHOW_APN_SETTING_CDMA_BOOL, true);
+        sDefaults.putBoolean(KEY_SHOW_CDMA_CHOICES_BOOL, true);
         sDefaults.putBoolean(KEY_SHOW_ONSCREEN_DIAL_BUTTON_BOOL, true);
         sDefaults.putBoolean(KEY_SIM_NETWORK_UNLOCK_ALLOW_DISMISS_BOOL, true);
         sDefaults.putBoolean(KEY_SUPPORT_PAUSE_IMS_VIDEO_CALLS_BOOL, false);
@@ -766,7 +791,7 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_USE_OTASP_FOR_PROVISIONING_BOOL, false);
         sDefaults.putBoolean(KEY_VOICEMAIL_NOTIFICATION_PERSISTENT_BOOL, false);
         sDefaults.putBoolean(KEY_VOICE_PRIVACY_DISABLE_UI_BOOL, false);
-        sDefaults.putBoolean(KEY_WORLD_PHONE_BOOL, false);
+        sDefaults.putBoolean(KEY_WORLD_PHONE_BOOL, true);
         sDefaults.putBoolean(KEY_REQUIRE_ENTITLEMENT_CHECKS_BOOL, true);
         sDefaults.putInt(KEY_VOLTE_REPLACEMENT_RAT_INT, 0);
         sDefaults.putString(KEY_DEFAULT_SIM_CALL_MANAGER_STRING, "");
@@ -798,6 +823,7 @@ public class CarrierConfigManager {
                 new String[]{"default", "mms", "dun", "supl"});
         sDefaults.putStringArray(KEY_CARRIER_METERED_ROAMING_APN_TYPES_STRINGS,
                 new String[]{"default", "mms", "dun", "supl"});
+        sDefaults.putBoolean(KEY_CDMA_CW_CF_ENABLED_BOOL, false);
 
         sDefaults.putStringArray(KEY_GSM_ROAMING_NETWORKS_STRING_ARRAY, null);
         sDefaults.putStringArray(KEY_GSM_NONROAMING_NETWORKS_STRING_ARRAY, null);
@@ -819,6 +845,8 @@ public class CarrierConfigManager {
         sDefaults.putBoolean(KEY_CONFIG_WIFI_DISABLE_IN_ECBM, false);
         sDefaults.putBoolean(KEY_CARRIER_NAME_OVERRIDE_BOOL, false);
         sDefaults.putString(KEY_CARRIER_NAME_STRING, "");
+        sDefaults.putBoolean(KEY_REJECT_GGSN_PERM_FAILURE,true);
+        sDefaults.putBoolean(KEY_PROTOCOL_ERRORS_PERM_FAILURE,true);
 
         // MMS defaults
         sDefaults.putBoolean(KEY_MMS_ALIAS_ENABLED_BOOL, false);
@@ -859,6 +887,7 @@ public class CarrierConfigManager {
         // Used for Sim card State detection app
         sDefaults.putStringArray(KEY_SIM_PROVISIONING_STATUS_DETECTION_CARRIER_APP_STRING_ARRAY,
                 null);
+        sDefaults.putBoolean(KEY_MAP_ANONYMOUS_TO_RESTRICTED_BOOL, true);
     }
 
     /**

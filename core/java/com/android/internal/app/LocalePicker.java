@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.os.LocaleList;
 import android.os.RemoteException;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LocalePicker extends ListFragment {
     private static final String TAG = "LocalePicker";
@@ -97,13 +99,39 @@ public class LocalePicker extends ListFragment {
         return pseudoLocales;
     }
 
+    /*
+    * Get the customize locale codes and get the language list
+    */
+    private static ArrayList<String> getLocaleArray(String[] locales, Resources resources) {
+        String localeCodes = resources.getString(R.string.locale_codes);
+        String[] localeCodesArray = null;
+        if (localeCodes != null && !TextUtils.isEmpty(localeCodes.trim())) {
+            localeCodes = localeCodes.replace('_', '-');
+            // ICU use "fil" instead of "tl"
+            localeCodes = localeCodes.replaceAll("tl-", "fil-");
+            localeCodesArray = localeCodes.split(",");
+        }
+        ArrayList<String> localeList = new ArrayList<String>(
+            Arrays.asList((localeCodesArray == null || localeCodesArray.length == 0) ? locales
+                : localeCodesArray));
+        return localeList;
+    }
+
     public static List<LocaleInfo> getAllAssetLocales(Context context, boolean isInDeveloperMode) {
         final Resources resources = context.getResources();
 
-        final String[] locales = getSystemAssetLocales();
-        List<String> localeList = new ArrayList<String>(locales.length);
-        Collections.addAll(localeList, locales);
-
+        String[] locales = null;
+        ArrayList<String> localeList = new ArrayList<String>();
+        if (resources.getString(R.string.locale_codes) != null){
+            locales = Resources.getSystem().getAssets().getLocales();
+            // Check the locale_codes if the locales list is customized in data package overlay.
+            // If locale_codes is customized, use the customized list instead of built-in locales.
+            localeList = getLocaleArray(locales, resources);
+        } else {
+            locales = getSystemAssetLocales();
+            localeList = new ArrayList<String>(locales.length);
+            Collections.addAll(localeList, locales);
+        }
         // Don't show the pseudolocales unless we're in developer mode. http://b/17190407.
         if (!isInDeveloperMode) {
             for (String locale : pseudoLocales) {

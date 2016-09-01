@@ -40,6 +40,7 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -2619,6 +2620,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
                             SystemProperties.get("ro.com.android.dataroaming",
                                     "false")) ? 1 : 0);
 
+            int phoneCount = TelephonyManager.getDefault().getPhoneCount();
+            for (int phoneId = 0; phoneId < phoneCount; phoneId++) {
+                loadSetting(stmt, Settings.Global.DATA_ROAMING + phoneId,
+                        "true".equalsIgnoreCase(SystemProperties.get(
+                        "ro.com.android.dataroaming", "true")) ? 1 : 0);
+            }
+
             loadBooleanSetting(stmt, Settings.Global.DEVICE_PROVISIONED,
                     R.bool.def_device_provisioned);
 
@@ -2641,6 +2649,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     "true".equalsIgnoreCase(
                             SystemProperties.get("ro.com.android.mobiledata",
                                     "true")) ? 1 : 0);
+
+            // SUB specific flags for Multisim devices
+            for (int phoneId = 0; phoneId < phoneCount; phoneId++) {
+                // Mobile Data default, based on build
+                loadSetting(stmt, Settings.Global.MOBILE_DATA + phoneId,
+                        "true".equalsIgnoreCase(SystemProperties.get(
+                        "ro.com.android.mobiledata", "true")) ? 1 : 0);
+            }
 
             loadBooleanSetting(stmt, Settings.Global.NETSTATS_ENABLED,
                     R.bool.def_netstats_enabled);
@@ -2691,13 +2707,24 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadSetting(stmt, Settings.Global.CALL_AUTO_RETRY, 0);
 
             // Set the preferred network mode to target desired value or Default
-            // value defined in RILConstants
-            int type;
-            type = RILConstants.PREFERRED_NETWORK_MODE;
-            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, type);
+            // value defined in system property
+            String val = "";
+            String mode = "";
+            for (int phoneId = 0; phoneId < phoneCount; phoneId++) {
+                mode = TelephonyManager.getTelephonyProperty(phoneId,
+                         "ro.telephony.default_network",
+                         Integer.toString(RILConstants.NETWORK_MODE_GSM_ONLY));
+                if (phoneId == 0) {
+                    val = mode;
+                } else {
+                    val = val + "," + mode;
+                }
+            }
+            loadSetting(stmt, Settings.Global.PREFERRED_NETWORK_MODE, val);
 
             // Set the preferred cdma subscription source to target desired value or default
             // value defined in CdmaSubscriptionSourceManager
+            int type;
             type = SystemProperties.getInt("ro.telephony.default_cdma_sub",
                         CdmaSubscriptionSourceManager.PREFERRED_CDMA_SUBSCRIPTION);
             loadSetting(stmt, Settings.Global.CDMA_SUBSCRIPTION_MODE, type);

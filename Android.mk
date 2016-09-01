@@ -107,7 +107,6 @@ LOCAL_SRC_FILES += \
 	core/java/android/bluetooth/IBluetoothA2dpSink.aidl \
 	core/java/android/bluetooth/IBluetoothAvrcpController.aidl \
 	core/java/android/bluetooth/IBluetoothCallback.aidl \
-	core/java/android/bluetooth/IBluetoothProfileServiceConnection.aidl \
 	core/java/android/bluetooth/IBluetoothHeadset.aidl \
 	core/java/android/bluetooth/IBluetoothHeadsetPhone.aidl \
 	core/java/android/bluetooth/IBluetoothHealth.aidl \
@@ -125,6 +124,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/bluetooth/IBluetoothGatt.aidl \
 	core/java/android/bluetooth/IBluetoothGattCallback.aidl \
 	core/java/android/bluetooth/IBluetoothGattServerCallback.aidl \
+	core/java/android/bluetooth/IBluetoothDun.aidl \
 	core/java/android/content/IClipboard.aidl \
 	core/java/android/content/IContentService.aidl \
 	core/java/android/content/IIntentReceiver.aidl \
@@ -326,6 +326,7 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/policy/IShortcutService.aidl \
 	core/java/com/android/internal/os/IDropBoxManagerService.aidl \
 	core/java/com/android/internal/os/IParcelFileDescriptorFactory.aidl \
+	core/java/com/android/internal/os/IRegionalizationService.aidl \
 	core/java/com/android/internal/os/IResultReceiver.aidl \
 	core/java/com/android/internal/statusbar/IStatusBar.aidl \
 	core/java/com/android/internal/statusbar/IStatusBarService.aidl \

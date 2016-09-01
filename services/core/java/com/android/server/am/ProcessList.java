@@ -32,6 +32,7 @@ import com.android.server.wm.WindowManagerService;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.SystemProperties;
+import android.os.Process;
 import android.net.LocalSocketAddress;
 import android.net.LocalSocket;
 import android.util.Slog;
@@ -144,7 +145,18 @@ final class ProcessList {
     // we have no limit on the number of service, visible, foreground, or other such
     // processes and the number of those processes does not count against the cached
     // process limit.
-    static final int MAX_CACHED_APPS = 32;
+    static final int MAX_CACHED_APPS = SystemProperties.getInt("ro.sys.fw.bg_apps_limit",32);
+
+    static final boolean USE_TRIM_SETTINGS =
+            SystemProperties.getBoolean("ro.sys.fw.use_trim_settings",true);
+    static final int EMPTY_APP_PERCENT = SystemProperties.getInt("ro.sys.fw.empty_app_percent",50);
+    static final int TRIM_EMPTY_PERCENT =
+            SystemProperties.getInt("ro.sys.fw.trim_empty_percent",100);
+    static final int TRIM_CACHE_PERCENT =
+            SystemProperties.getInt("ro.sys.fw.trim_cache_percent",100);
+    static final long TRIM_ENABLE_MEMORY =
+            SystemProperties.getLong("ro.sys.fw.trim_enable_memory",1073741824);
+    public static boolean allowTrim() { return Process.getTotalMemory() < TRIM_ENABLE_MEMORY ; }
 
     // We allow empty processes to stick around for at most 30 minutes.
     static final long MAX_EMPTY_TIME = 30*60*1000;
@@ -154,11 +166,25 @@ final class ProcessList {
 
     // The number of empty apps at which we don't consider it necessary to do
     // memory trimming.
-    static final int TRIM_EMPTY_APPS = MAX_EMPTY_APPS/2;
+    public static int computeTrimEmptyApps() {
+        if (USE_TRIM_SETTINGS && allowTrim()) {
+            return MAX_EMPTY_APPS*TRIM_EMPTY_PERCENT/100;
+        } else {
+            return MAX_EMPTY_APPS/2;
+        }
+    }
+    static final int TRIM_EMPTY_APPS = computeTrimEmptyApps();
 
     // The number of cached at which we don't consider it necessary to do
     // memory trimming.
-    static final int TRIM_CACHED_APPS = (MAX_CACHED_APPS-MAX_EMPTY_APPS)/3;
+    public static int computeTrimCachedApps() {
+        if (USE_TRIM_SETTINGS && allowTrim()) {
+            return MAX_CACHED_APPS*TRIM_CACHE_PERCENT/100;
+        } else {
+            return (MAX_CACHED_APPS-MAX_EMPTY_APPS)/3;
+        }
+    }
+    static final int TRIM_CACHED_APPS = computeTrimCachedApps();
 
     // Threshold of number of cached+empty where we consider memory critical.
     static final int TRIM_CRITICAL_THRESHOLD = 3;
@@ -319,7 +345,11 @@ final class ProcessList {
     }
 
     public static int computeEmptyProcessLimit(int totalProcessLimit) {
-        return totalProcessLimit/2;
+        if(USE_TRIM_SETTINGS && allowTrim()) {
+            return totalProcessLimit*EMPTY_APP_PERCENT/100;
+        } else {
+            return totalProcessLimit/2;
+        }
     }
 
     private static String buildOomTag(String prefix, String space, int val, int base) {

@@ -647,6 +647,24 @@ public interface IMountService extends IInterface {
                 return _result;
             }
 
+            public int encryptWipeStorage(int type, String password) throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
+                int _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeInt(type);
+                    _data.writeString(password);
+                    mRemote.transact(Stub.TRANSACTION_encryptWipeStorage, _data, _reply, 0);
+                    _reply.readException();
+                    _result = _reply.readInt();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
+
             public int changeEncryptionPassword(int type, String password) throws RemoteException {
                 Parcel _data = Parcel.obtain();
                 Parcel _reply = Parcel.obtain();
@@ -1507,6 +1525,8 @@ public interface IMountService extends IInterface {
 
         static final int TRANSACTION_fixateNewestUserKeyAuth = IBinder.FIRST_CALL_TRANSACTION + 71;
 
+        static final int TRANSACTION_encryptWipeStorage = IBinder.FIRST_CALL_TRANSACTION + 72;
+
         /**
          * Cast an IBinder object into an IMountService interface, generating a
          * proxy if needed.
@@ -1805,6 +1825,15 @@ public interface IMountService extends IInterface {
                     int type = data.readInt();
                     String password = data.readString();
                     int result = encryptStorage(type, password);
+                    reply.writeNoException();
+                    reply.writeInt(result);
+                    return true;
+                }
+                case TRANSACTION_encryptWipeStorage: {
+                    data.enforceInterface(DESCRIPTOR);
+                    int type = data.readInt();
+                    String password = data.readString();
+                    int result = encryptWipeStorage(type, password);
                     reply.writeNoException();
                     reply.writeInt(result);
                     return true;
@@ -2320,7 +2349,8 @@ public interface IMountService extends IInterface {
      * Returns whether or not the external storage is emulated.
      */
     public boolean isExternalStorageEmulated() throws RemoteException;
-
+    /** The volume has been encrypted succesfully and MDTP state is 'activated'. */
+    static final int ENCRYPTION_STATE_OK_MDTP_ACTIVATED = 2;
     /** The volume is not encrypted. */
     static final int ENCRYPTION_STATE_NONE = 1;
     /** The volume has been encrypted succesfully. */
@@ -2333,6 +2363,8 @@ public interface IMountService extends IInterface {
     static final int ENCRYPTION_STATE_ERROR_INCONSISTENT = -3;
     /** Underlying data is corrupt */
     static final int ENCRYPTION_STATE_ERROR_CORRUPT = -4;
+    /** The volume is in a bad state and MDTP state is 'activated'.*/
+    static final int ENCRYPTION_STATE_ERROR_MDTP_ACTIVATED = -5;
 
     /**
      * Determines the encryption state of the volume.
@@ -2354,6 +2386,11 @@ public interface IMountService extends IInterface {
      * Encrypts storage.
      */
     public int encryptStorage(int type, String password) throws RemoteException;
+
+    /**
+     * Encrypts and wipes storage.
+     */
+    public int encryptWipeStorage(int type, String password) throws RemoteException;
 
     /**
      * Changes the encryption password.

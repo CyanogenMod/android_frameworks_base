@@ -493,6 +493,58 @@ public final class MediaSession {
     }
 
     /**
+    * @hide
+    */
+    public void playItemResponse(boolean success) {
+        Log.d(TAG, "MediaSession: playItemResponse");
+
+        try {
+            mBinder.playItemResponse(success);
+        } catch (RemoteException e) {
+            Log.wtf(TAG, "Dead object in playItemResponse.", e);
+        }
+    }
+
+    /**
+    * @hide
+    */
+    public void updateNowPlayingEntries(long[] playList) {
+        Log.d(TAG, "MediaSession: updateNowPlayingEntries");
+
+        try {
+            mBinder.updateNowPlayingEntries(playList);
+        } catch (RemoteException e) {
+            Log.wtf(TAG, "Dead object in updateNowPlayingEntries.", e);
+        }
+    }
+
+    /**
+    * @hide
+    */
+    public void updateFolderInfoBrowsedPlayer(String stringUri) {
+        Log.d(TAG, "MediaSession: updateFolderInfoBrowsedPlayer");
+
+        try {
+            mBinder.updateFolderInfoBrowsedPlayer(stringUri);
+        } catch (RemoteException e) {
+            Log.wtf(TAG, "Dead object in updateFolderInfoBrowsedPlayer.", e);
+        }
+    }
+
+    /**
+    * @hide
+    */
+    public void updateNowPlayingContentChange() {
+        Log.d(TAG, "MediaSession: updateNowPlayingContentChange");
+
+        try {
+            mBinder.updateNowPlayingContentChange();
+        } catch (RemoteException e) {
+            Log.wtf(TAG, "Dead object in updateNowPlayingContentChange.", e);
+        }
+    }
+
+    /**
      * Notify the system that the remote volume changed.
      *
      * @param provider The provider that is handling volume changes.
@@ -602,6 +654,34 @@ public final class MediaSession {
 
     private void dispatchMediaButton(Intent mediaButtonIntent) {
         postToCallback(CallbackMessageHandler.MSG_MEDIA_BUTTON, mediaButtonIntent);
+    }
+
+    private void dispatchSetBrowsedPlayerCommand() {
+        postToCallback(CallbackMessageHandler.MSG_SET_BROWSED_PLAYER);
+    }
+
+    private void dispatchSetPlayItemCommand(long uid, int scope) {
+        PlayItemToken playItemToken = new PlayItemToken(uid, scope);
+        postToCallback(CallbackMessageHandler.MSG_SET_PLAY_ITEM, playItemToken);
+    }
+
+    private class PlayItemToken {
+        private long mUid;
+        private int mScope;
+        public PlayItemToken(long uid, int scope) {
+            mUid = uid;
+            mScope = scope;
+        }
+        public int getScope() {
+            return mScope;
+        }
+        public long getUid() {
+            return mUid;
+        }
+    }
+
+    private void dispatchGetNowPlayingItemsCommand() {
+        postToCallback(CallbackMessageHandler.MSG_GET_NOW_PLAYING_ITEMS);
     }
 
     private void dispatchAdjustVolume(int direction) {
@@ -971,6 +1051,25 @@ public final class MediaSession {
          */
         public void onCustomAction(@NonNull String action, @Nullable Bundle extras) {
         }
+
+        /**
+         * @hide
+         */
+        public void setBrowsedPlayer() {
+        }
+
+        /**
+         * @hide
+         */
+        public void setPlayItem(int scope, long uid) {
+        }
+
+        /**
+         * @hide
+         */
+        public void getNowPlayingEntries() {
+        }
+
     }
 
     /**
@@ -1143,6 +1242,33 @@ public final class MediaSession {
         }
 
         @Override
+        public void setRemoteControlClientBrowsedPlayer() throws RemoteException {
+            Log.d(TAG, "setRemoteControlClientBrowsedPlayer in CallbackStub");
+            MediaSession session = mMediaSession.get();
+            if (session != null) {
+                session.dispatchSetBrowsedPlayerCommand();
+            }
+        }
+
+        @Override
+        public void setRemoteControlClientPlayItem(long uid, int scope) throws RemoteException {
+            Log.d(TAG, "setRemoteControlClientPlayItem in CallbackStub");
+            MediaSession session = mMediaSession.get();
+            if (session != null) {
+                session.dispatchSetPlayItemCommand(uid, scope);
+            }
+        }
+
+        @Override
+        public void getRemoteControlClientNowPlayingEntries() throws RemoteException {
+            Log.d(TAG, "getRemoteControlClientNowPlayingEntries in CallbackStub");
+            MediaSession session = mMediaSession.get();
+            if (session != null) {
+                session.dispatchGetNowPlayingItemsCommand();
+            }
+        }
+
+        @Override
         public void onCustomAction(String action, Bundle args) {
             MediaSession session = mMediaSession.get();
             if (session != null) {
@@ -1286,6 +1412,9 @@ public final class MediaSession {
         private static final int MSG_CUSTOM_ACTION = 20;
         private static final int MSG_ADJUST_VOLUME = 21;
         private static final int MSG_SET_VOLUME = 22;
+        private static final int MSG_SET_BROWSED_PLAYER = 23;
+        private static final int MSG_SET_PLAY_ITEM = 24;
+        private static final int MSG_GET_NOW_PLAYING_ITEMS = 25;
 
         private MediaSession.Callback mCallback;
 
@@ -1392,6 +1521,18 @@ public final class MediaSession {
                     if (vp != null) {
                         vp.onSetVolumeTo((int) msg.obj);
                     }
+                case MSG_SET_BROWSED_PLAYER:
+                    Log.d(TAG, "MSG_SET_BROWSED_PLAYER received in CallbackMessageHandler");
+                    mCallback.setBrowsedPlayer();
+                    break;
+                case MSG_SET_PLAY_ITEM:
+                    Log.d(TAG, "MSG_SET_PLAY_ITEM received in CallbackMessageHandler");
+                    PlayItemToken playItemToken = (PlayItemToken) msg.obj;
+                    mCallback.setPlayItem(playItemToken.getScope(), playItemToken.getUid());
+                    break;
+                case MSG_GET_NOW_PLAYING_ITEMS:
+                    Log.d(TAG, "MSG_GET_NOW_PLAYING_ITEMS received in CallbackMessageHandler");
+                    mCallback.getNowPlayingEntries();
                     break;
             }
         }

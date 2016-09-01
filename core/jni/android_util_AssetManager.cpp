@@ -27,6 +27,7 @@
 #include <sys/stat.h>
 
 #include <private/android_filesystem_config.h> // for AID_SYSTEM
+#include <private/regionalization/Environment.h>
 
 #include "androidfw/Asset.h"
 #include "androidfw/AssetManager.h"
@@ -129,7 +130,7 @@ jint copyValue(JNIEnv* env, jobject outValue, const ResTable* table,
 }
 
 // This is called by zygote (running as user root) as part of preloadResources.
-static void verifySystemIdmaps()
+static void verifySystemIdmaps(const char* overlay_dir)
 {
     pid_t pid;
     char system_id[10];
@@ -186,9 +187,10 @@ static void verifySystemIdmaps()
 
                 // Directories to scan for overlays
                 // /vendor/overlay
-                if (stat(AssetManager::OVERLAY_DIR, &st) == 0) {
-                    argv[argc++] = AssetManager::OVERLAY_DIR;
-                 }
+
+               if (stat(overlay_dir, &st) == 0) {
+                   argv[argc++] = overlay_dir;
+                }
 
                 // Finally, invoke idmap (if any overlay directory exists)
                 if (argc > 5) {
@@ -2077,7 +2079,20 @@ static jintArray android_content_AssetManager_getStyleAttributes(JNIEnv* env, jo
 static void android_content_AssetManager_init(JNIEnv* env, jobject clazz, jboolean isSystem)
 {
     if (isSystem) {
-        verifySystemIdmaps();
+        // Load frameworks-res.apk's overlay through regionalization environment
+        if (Environment::isSupported()) {
+            Environment* environment = new Environment();
+            if (environment != NULL) {
+                const char* overlay_dir = environment->getOverlayDir();
+                if (overlay_dir != NULL && strcmp(overlay_dir, "") != 0) {
+                    ALOGD("Regionalization - getOverlayDir:%s", overlay_dir);
+                    verifySystemIdmaps(overlay_dir);
+                }
+                delete environment;
+            }
+        }
+
+        verifySystemIdmaps(AssetManager::OVERLAY_DIR);
     }
     AssetManager* am = new AssetManager();
     if (am == NULL) {
