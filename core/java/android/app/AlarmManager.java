@@ -1118,13 +1118,13 @@ public class AlarmManager {
             writer.write(value);
             writer.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            // may not exist
         } finally {
             if (writer != null) {
                 try {
                     writer.close();
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    // ignore
                 }
             }
         }
