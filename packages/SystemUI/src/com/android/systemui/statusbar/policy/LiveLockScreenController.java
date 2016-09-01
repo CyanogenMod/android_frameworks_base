@@ -11,7 +11,10 @@ import android.os.ServiceManager;
 import android.util.EventLog;
 
 import android.view.View;
+import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.systemui.EventLogTags;
+import com.android.systemui.SystemUIApplication;
+import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.statusbar.phone.NotificationPanelView;
 import com.android.systemui.statusbar.phone.PhoneStatusBar;
@@ -43,6 +46,8 @@ public class LiveLockScreenController {
 
     private boolean mScreenOnAndInteractive;
 
+    private KeyguardViewMediator mKeyguardViewMediator;
+
     public LiveLockScreenController(Context context, PhoneStatusBar bar,
             NotificationPanelView panelView) {
         mContext = context;
@@ -53,6 +58,8 @@ public class LiveLockScreenController {
         mBar = bar;
         mPanelView = panelView;
         mPowerManager = context.getSystemService(PowerManager.class);
+        mKeyguardViewMediator = ((SystemUIApplication)
+                mContext.getApplicationContext()).getComponent(KeyguardViewMediator.class);
         registerListener();
         try {
             LiveLockScreenInfo llsInfo = mLLSM.getCurrentLiveLockScreen();
@@ -237,6 +244,7 @@ public class LiveLockScreenController {
     }
 
     public void onLiveLockScreenFocusChanged(boolean hasFocus) {
+        mKeyguardViewMediator.notifyKeyguardPanelFocusChanged(hasFocus);
         if (mLiveLockScreenView != null) {
             // make sure the LLS knows where the notification panel is
             mLiveLockScreenView.onLockscreenSlideOffsetChanged(hasFocus ? 0f : 1f);
