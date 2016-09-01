@@ -435,4 +435,11 @@ public class KeyguardServiceDelegate {
     public void showKeyguard() {
         mKeyguardService.showKeyguard();
     }
+
+    public boolean isKeyguardPanelFocused() {
+        if (mKeyguardService != null) {
+           return mKeyguardService.isKeyguardPanelFocused();
+        }
+        return false;
+    }
 }
