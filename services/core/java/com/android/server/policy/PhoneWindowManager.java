@@ -5066,7 +5066,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if ((attrs.privateFlags & PRIVATE_FLAG_FORCE_STATUS_BAR_VISIBLE_TRANSPARENT) != 0) {
                 mForceStatusBarTransparent = true;
             }
-        }
+        } else if (attrs.type == TYPE_KEYGUARD_PANEL) {
+            if (mKeyguardDelegate.isKeyguardPanelFocused()) {
+                attrs.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+                attrs.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            } else {
+                attrs.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+                attrs.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            }
+       }
 
         boolean appWindow = attrs.type >= FIRST_APPLICATION_WINDOW
                 && attrs.type < FIRST_SYSTEM_WINDOW;
