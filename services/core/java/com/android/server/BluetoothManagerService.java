@@ -1525,6 +1525,10 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     // Show prevState of BLE_ON as OFF to standard users
                     prevState = BluetoothAdapter.STATE_OFF;
                 }
+                else if (prevState == BluetoothAdapter.STATE_BLE_TURNING_OFF) {
+                    // show prevState to TURNING_OFF
+                    prevState = BluetoothAdapter.STATE_TURNING_OFF;
+                }
                 Intent intent = new Intent(BluetoothAdapter.ACTION_STATE_CHANGED);
                 intent.putExtra(BluetoothAdapter.EXTRA_PREVIOUS_STATE, prevState);
                 intent.putExtra(BluetoothAdapter.EXTRA_STATE, newState);
