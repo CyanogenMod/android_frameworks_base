@@ -234,10 +234,6 @@
         <item>@string/unpin_target</item>
         <item>@string/app_info</item>
     </string-array>
-    <string-array name="app_ops_labels">
-        <item>Trying to enable WLAN</item>
-        <item>Trying to enable BT</item>
-    </string-array>
 
     <string-array name="power_off_alarm_apps">
         <item>android</item>
