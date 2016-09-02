@@ -70,8 +70,8 @@
   <string name="qs_tile_edit_header_instruction">Prem i aguanta les cel·les per reordenar-les</string>
   <string name="quick_settings_edit_label">Edita cel·les</string>
   <string name="quick_settings_cannot_delete_edit_tile">No s\'ha pogut esborrar la cel·la Edita</string>
-  <string name="qs_tiles_reset_confirmation">Vols restaurar les cel·les d\'ajustaments ràpids a la configuració predeterminada?</string>
-  <string name="quick_settings_tile_reset_to_default">Restaura la disposició per defecte</string>
+  <string name="qs_tiles_reset_confirmation">Vols restablir les cel·les d\'ajustaments ràpids a la configuració predeterminada?</string>
+  <string name="quick_settings_tile_reset_to_default">Restableix la disposició per defecte</string>
   <string name="quick_settings_title_header">Capçalera</string>
   <string name="quick_settings_title_tiles">Cel·les</string>
   <string name="quick_settings_title_show_weather">Mostra el temps</string>
