@@ -34,6 +34,9 @@ import android.os.PowerManager.WakeLock;
 import android.text.TextUtils;
 import android.util.Log;
 
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
+
 import com.android.systemui.R;
 
 import java.lang.ref.WeakReference;
@@ -66,6 +69,12 @@ public class FlashlightController {
 
     /** Lock on {@code this} when accessing */
     private boolean mFlashlightEnabled;
+
+    /** Legacy Hardware */
+    private boolean isLegacyHW=false;
+    private Camera camera;
+    private boolean isFlashOn;
+    Parameters params;
 
     private final String mCameraId;
     private boolean mTorchAvailable;
@@ -129,15 +138,23 @@ public class FlashlightController {
                     }
                 }
 
-                try {
-                    mCameraManager.setTorchMode(mCameraId, enabled);
-                } catch (CameraAccessException e) {
-                    Log.e(TAG, "Couldn't set torch mode", e);
-                    mFlashlightEnabled = false;
-                    pendingError = true;
+                if (!isLegacyHW) {
+                    try {
+                        mCameraManager.setTorchMode(mCameraId, enabled);
+                    } catch (CameraAccessException e) {
+                        Log.e(TAG, "Couldn't set torch mode", e);
+                        mFlashlightEnabled = false;
+                        pendingError = true;
 
-                    if (mUseWakeLock && mWakeLock.isHeld()) {
-                        mWakeLock.release();
+                        if (mUseWakeLock && mWakeLock.isHeld()) {
+                            mWakeLock.release();
+                        }
+                    }
+                } else {
+                    if (enabled) {
+                        legacyTurnOnFlash();
+                    } else {
+                        legacyTurnOffFlash();
                     }
                 }
             }
@@ -147,6 +164,45 @@ public class FlashlightController {
             dispatchError();
         }
     }
+
+        public void legacyTurnOnFlash() {
+            if (!isFlashOn) {
+                if (camera == null || params == null) {
+                    legacyGetCamera();
+                }
+                params = camera.getParameters();
+                params.setFlashMode("torch");
+                camera.setParameters(params);
+                camera.startPreview();
+                isFlashOn = true;
+            }
+        }
+
+        public void legacyTurnOffFlash() {
+            if (isFlashOn) {
+                if (camera == null || params == null) {
+                    return;
+                }
+                params = camera.getParameters();
+                params.setFlashMode("off");
+                camera.setParameters(params);
+                camera.stopPreview();
+                camera.release();
+                camera = null;
+                isFlashOn = false;
+            }
+        }
+
+        public void legacyGetCamera() {
+            if (camera == null) {
+                try {
+                    camera = Camera.open();
+                    params = camera.getParameters();
+                } catch (Exception e) {
+                    Log.e(TAG, "Couldn't open camera. Error " + e);
+                }
+            }
+        }
 
     private void setNotificationShown(boolean showNotification) {
         NotificationManager nm = (NotificationManager)
@@ -231,6 +287,10 @@ public class FlashlightController {
         String[] ids = mCameraManager.getCameraIdList();
         for (String id : ids) {
             CameraCharacteristics c = mCameraManager.getCameraCharacteristics(id);
+            /* CHECK INFO_SUPPORTED_HARDWARE_LEVEL:  0=LIMITED, 1=FULL, 2=LEGACY, 3=LEVEL_3 */
+                if(c.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)==2){
+                     isLegacyHW=true;
+    	        }
             Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
             Integer lensFacing = c.get(CameraCharacteristics.LENS_FACING);
             if (flashAvailable != null && flashAvailable
@@ -291,9 +351,11 @@ public class FlashlightController {
 
         @Override
         public void onTorchModeUnavailable(String cameraId) {
-            if (TextUtils.equals(cameraId, mCameraId)) {
-                setCameraAvailable(false);
-                setListenForScreenOff(false);
+            if (!isLegacyHW) {
+                if (TextUtils.equals(cameraId, mCameraId)) {
+                    setCameraAvailable(false);
+                    setListenForScreenOff(false);
+                }
             }
         }
 
