@@ -15,48 +15,39 @@
  */
 
 package com.android.systemui.statusbar.policy;
-
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import java.security.Policy;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Process;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.android.systemui.R;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
  * Manages the flashlight.
  */
-public class FlashlightController {
 
+public class FlashlightController {
     private static final String TAG = "FlashlightController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-
     private static final int DISPATCH_ERROR = 0;
     private static final int DISPATCH_CHANGED = 1;
     private static final int DISPATCH_AVAILABILITY_CHANGED = 2;
-
-    private static boolean mUseWakeLock;
-
-    private static final String ACTION_TURN_FLASHLIGHT_OFF =
-            "com.android.systemui.action.TURN_FLASHLIGHT_OFF";
-
-    private Context mContext;
+	private Camera camera;
+	private boolean isFlashOn;
+	private boolean hasFlash;
+	Parameters params;
     private final CameraManager mCameraManager;
     /** Call {@link #ensureHandler()} before using */
     private Handler mHandler;
@@ -66,144 +57,87 @@ public class FlashlightController {
 
     /** Lock on {@code this} when accessing */
     private boolean mFlashlightEnabled;
-
-    private final String mCameraId;
+	private boolean flashlightAvailable;
+    private final String mCameraId="0";
     private boolean mTorchAvailable;
 
-    private WakeLock mWakeLock;
-
-    private Notification mNotification = null;
-    private boolean mReceiverRegistered;
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (ACTION_TURN_FLASHLIGHT_OFF.equals(intent.getAction())) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setFlashlight(false);
-                    }
-                });
-            } else if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
-                setNotificationShown(true);
-            }
-        }
-    };
-
     public FlashlightController(Context mContext) {
-        this.mContext = mContext;
-        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+	    
+		mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+    	ensureHandler();
+    	mCameraManager.registerTorchCallback(mTorchCallback, mHandler);
 
-        String cameraId = null;
-        try {
-            cameraId = getCameraId();
-        } catch (Throwable e) {
-            Log.e(TAG, "Couldn't initialize.", e);
-            return;
-        } finally {
-            mCameraId = cameraId;
-        }
-
-        mUseWakeLock = mContext.getResources().getBoolean(R.bool.flashlight_use_wakelock);
-
-        PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
-
-        if (mCameraId != null) {
-            ensureHandler();
-            mCameraManager.registerTorchCallback(mTorchCallback, mHandler);
-        }
     }
 
     public void setFlashlight(boolean enabled) {
         boolean pendingError = false;
         synchronized (this) {
+			mFlashlightEnabled = enabled;
+	
+			if(enabled==true){
+				turnOnFlash();
+			}
+			else{
+				turnOffFlash();
+			}
+
             if (mFlashlightEnabled != enabled) {
                 mFlashlightEnabled = enabled;
-
-                if (mUseWakeLock) {
-                    if (enabled) {
-                        if (!mWakeLock.isHeld()) mWakeLock.acquire();
-                    } else {
-                        if (mWakeLock.isHeld()) mWakeLock.release();
-                    }
-                }
-
-                try {
-                    mCameraManager.setTorchMode(mCameraId, enabled);
-                } catch (CameraAccessException e) {
-                    Log.e(TAG, "Couldn't set torch mode", e);
-                    mFlashlightEnabled = false;
-                    pendingError = true;
-
-                    if (mUseWakeLock && mWakeLock.isHeld()) {
-                        mWakeLock.release();
-                    }
-                }
             }
         }
+
         dispatchModeChanged(mFlashlightEnabled);
+
         if (pendingError) {
             dispatchError();
         }
     }
-
-    private void setNotificationShown(boolean showNotification) {
-        NotificationManager nm = (NotificationManager)
-                mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (showNotification) {
-            nm.notify(R.string.quick_settings_tile_flashlight_not_title, buildNotification());
-        } else {
-            nm.cancel(R.string.quick_settings_tile_flashlight_not_title);
-            mNotification = null;
-        }
-    }
-
-    private void setListenForScreenOff(boolean listen) {
-        if (listen && !mReceiverRegistered) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ACTION_TURN_FLASHLIGHT_OFF);
-            filter.addAction(Intent.ACTION_SCREEN_ON);
-            mContext.registerReceiver(mReceiver, filter);
-            mReceiverRegistered = true;
-        } else if (!listen) {
-            if (mReceiverRegistered) {
-                mContext.unregisterReceiver(mReceiver);
-                mReceiverRegistered = false;
+	
+    public void getCamera(){
+		if (camera == null) {
+	        try {
+              camera = Camera.open();
+              params = camera.getParameters();
+            }catch (Exception e) {
+				Log.e(TAG, "Couldn't open camera. Error " + e);
             }
-            setNotificationShown(false);
+		}
+	}
+ 
+	public void turnOnFlash(){
+		if(!isFlashOn) {
+	        if(camera == null || params == null) {
+	            getCamera();
+            }
+			params = camera.getParameters();
+            params.setFlashMode("torch");
+            camera.setParameters(params);
+            camera.startPreview();
+            isFlashOn = true;
         }
-    }
+   }
 
-    private Notification buildNotification() {
-        if (mNotification == null) {
-            Intent fireMe = new Intent(ACTION_TURN_FLASHLIGHT_OFF);
-            fireMe.addFlags(Intent.FLAG_FROM_BACKGROUND);
-            fireMe.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-            fireMe.setPackage(mContext.getPackageName());
-
-            final PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, fireMe, 0);
-            mNotification = new Notification.Builder(mContext)
-                    .setContentTitle(
-                            mContext.getString(R.string.quick_settings_tile_flashlight_not_title))
-                    .setContentText(
-                            mContext.getString(R.string.quick_settings_tile_flashlight_not_summary))
-                    .setAutoCancel(false)
-                    .setOngoing(true)
-                    .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setSmallIcon(R.drawable.ic_signal_flashlight_disable)
-                    .setContentIntent(pendingIntent)
-                    .build();
+	public void turnOffFlash(){
+		if (isFlashOn) {
+			if (camera == null || params == null) {
+				return;
+            }
+            params = camera.getParameters();
+			params.setFlashMode("off");
+			camera.setParameters(params);
+			camera.stopPreview();
+			camera.release();
+			camera = null;
+			isFlashOn = false;
         }
-        return mNotification;
-    }
-
-    public synchronized boolean isEnabled() {
+	}
+	
+	public synchronized boolean isEnabled() {
         return mFlashlightEnabled;
     }
 
     public synchronized boolean isAvailable() {
-        return mTorchAvailable;
+		return mTorchAvailable;
     }
 
     public void addListener(FlashlightListener l) {
@@ -225,20 +159,6 @@ public class FlashlightController {
             thread.start();
             mHandler = new Handler(thread.getLooper());
         }
-    }
-
-    private String getCameraId() throws CameraAccessException {
-        String[] ids = mCameraManager.getCameraIdList();
-        for (String id : ids) {
-            CameraCharacteristics c = mCameraManager.getCameraCharacteristics(id);
-            Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
-            Integer lensFacing = c.get(CameraCharacteristics.LENS_FACING);
-            if (flashAvailable != null && flashAvailable
-                    && lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
-                return id;
-            }
-        }
-        return null;
     }
 
     private void dispatchModeChanged(boolean enabled) {
@@ -290,19 +210,13 @@ public class FlashlightController {
             new CameraManager.TorchCallback() {
 
         @Override
-        public void onTorchModeUnavailable(String cameraId) {
-            if (TextUtils.equals(cameraId, mCameraId)) {
-                setCameraAvailable(false);
-                setListenForScreenOff(false);
-            }
-        }
+        public void onTorchModeUnavailable(String cameraId) {}
 
         @Override
         public void onTorchModeChanged(String cameraId, boolean enabled) {
             if (TextUtils.equals(cameraId, mCameraId)) {
                 setCameraAvailable(true);
                 setTorchMode(enabled);
-                setListenForScreenOff(enabled);
             }
         }
 
@@ -311,11 +225,6 @@ public class FlashlightController {
             synchronized (FlashlightController.this) {
                 changed = mTorchAvailable != available;
                 mTorchAvailable = available;
-
-                if (mUseWakeLock && !available) {
-                    if (mWakeLock.isHeld())
-                        mWakeLock.release();
-                }
             }
             if (changed) {
                 if (DEBUG) Log.d(TAG, "dispatchAvailabilityChanged(" + available + ")");
@@ -324,15 +233,10 @@ public class FlashlightController {
         }
 
         private void setTorchMode(boolean enabled) {
-            boolean changed;
+			boolean changed;
             synchronized (FlashlightController.this) {
                 changed = mFlashlightEnabled != enabled;
                 mFlashlightEnabled = enabled;
-
-                if (mUseWakeLock && !enabled) {
-                    if (mWakeLock.isHeld())
-                        mWakeLock.release();
-                }
             }
             if (changed) {
                 if (DEBUG) Log.d(TAG, "dispatchModeChanged(" + enabled + ")");
@@ -342,19 +246,17 @@ public class FlashlightController {
     };
 
     public interface FlashlightListener {
-
         /**
          * Called when the flashlight was turned off or on.
          * @param enabled true if the flashlight is currently turned on.
          */
         void onFlashlightChanged(boolean enabled);
-
-
+        
         /**
          * Called when there is an error that turns the flashlight off.
          */
         void onFlashlightError();
-
+        
         /**
          * Called when there is a change in availability of the flashlight functionality
          * @param available true if the flashlight is currently available.
