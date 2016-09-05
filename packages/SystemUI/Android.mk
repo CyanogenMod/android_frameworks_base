@@ -30,7 +30,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     framework-protos \
     SystemUI-proto-tags
 
-LOCAL_JAVA_LIBRARIES := telephony-common
+LOCAL_JAVA_LIBRARIES := telephony-common telephony-ext
 
 LOCAL_PACKAGE_NAME := SystemUI
 LOCAL_CERTIFICATE := platform
