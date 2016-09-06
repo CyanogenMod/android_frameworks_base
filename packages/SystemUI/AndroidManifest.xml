@@ -168,6 +168,10 @@
     <!-- Weather -->
     <uses-permission android:name="com.cyanogenmod.lockclock.permission.READ_WEATHER" />
 
+    <!-- manage cmsettings -->
+    <uses-permission android:name="cyanogenmod.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="cyanogenmod.permission.WRITE_SECURE_SETTINGS" />
+
     <application
         android:name=".SystemUIApplication"
         android:persistent="true"
