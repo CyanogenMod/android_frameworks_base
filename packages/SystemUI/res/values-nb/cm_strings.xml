@@ -168,16 +168,16 @@
   <string name="dynamic_qs_tile_ime_selector_label">IME-velger</string>
   <string name="dynamic_qs_tile_su_label">Root-tilgang</string>
   <!-- LiveDisplay strings -->
-  <string name="accessibility_quick_settings_live_display_off">Direkteskjerm av.</string>
-  <string name="accessibility_quick_settings_live_display_auto">Direkteskjerm: automatisk.</string>
-  <string name="accessibility_quick_settings_live_display_day">Direkteskjerm: dagsmodus.</string>
-  <string name="accessibility_quick_settings_live_display_night">Direkteskjerm: nattmodus.</string>
-  <string name="accessibility_quick_settings_live_display_outdoor">Direkteskjerm: utendørs.</string>
-  <string name="accessibility_quick_settings_live_display_changed_off">Direkteskjerm deaktivert.</string>
-  <string name="accessibility_quick_settings_live_display_changed_auto">Direkteskjerm endret til automatisk.</string>
-  <string name="accessibility_quick_settings_live_display_changed_day">Direkteskjerm endret til dagsmodus.</string>
-  <string name="accessibility_quick_settings_live_display_changed_night">Direkteskjerm endret til nattmodus.</string>
-  <string name="accessibility_quick_settings_live_display_changed_outdoor">Direkteskjerm endret til utendørs.</string>
+  <string name="accessibility_quick_settings_live_display_off">LiveDisplay av.</string>
+  <string name="accessibility_quick_settings_live_display_auto">LiveDisplay: automatisk.</string>
+  <string name="accessibility_quick_settings_live_display_day">LiveDisplay: dagmodus.</string>
+  <string name="accessibility_quick_settings_live_display_night">LiveDisplay: nattmodus.</string>
+  <string name="accessibility_quick_settings_live_display_outdoor">LiveDisplay: utendørs modus.</string>
+  <string name="accessibility_quick_settings_live_display_changed_off">LiveDisplay slått av.</string>
+  <string name="accessibility_quick_settings_live_display_changed_auto">LiveDisplay endret til automatisk modus.</string>
+  <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay endret til dagsmodus.</string>
+  <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay endret til nattmodus.</string>
+  <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay endret til utendørs modus.</string>
   <string name="quick_settings_title_advanced_location">Tre nivåer stedsangivelse</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Lokasjonsmodus: strømsparemodus.</string>
