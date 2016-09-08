@@ -73,6 +73,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.net.DataUsageRequest;
 import android.net.IConnectivityManager;
 import android.net.INetworkManagementEventObserver;
@@ -243,6 +244,7 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
     /** Must be set in factory by calling #setHandler. */
     private Handler mHandler;
     private Handler.Callback mHandlerCallback;
+    private Handler mStatsHandler = null;
 
     private boolean mSystemReady;
     private long mPersistThreshold = 2 * MB_IN_BYTES;
@@ -275,6 +277,11 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
         handlerThread.start();
         Handler handler = new Handler(handlerThread.getLooper(), callback);
         service.setHandler(handler, callback);
+
+        HandlerThread mStatsThread = new HandlerThread("StatsObserver");
+        mStatsThread.start();
+        Handler mStatsHandler = new Handler(mStatsThread.getLooper());
+
         return service;
     }
 
@@ -293,6 +300,10 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
         mStatsObservers = checkNotNull(statsObservers, "missing NetworkStatsObservers");
         mSystemDir = checkNotNull(systemDir, "missing systemDir");
         mBaseDir = checkNotNull(baseDir, "missing baseDir");
+
+        ContentResolver contentResolver = context.getContentResolver();
+        contentResolver.registerContentObserver(Settings.Global.getUriFor(
+               NETSTATS_GLOBAL_ALERT_BYTES), false, mGlobalAlertBytesObserver);
     }
 
     @VisibleForTesting
@@ -455,6 +466,18 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
             // ignored; service lives in system_server
         }
     }
+
+    private final ContentObserver mGlobalAlertBytesObserver =
+        new ContentObserver(mStatsHandler) {
+        public void onChange(boolean selfChange) {
+            long GlobalAlertBytes = mSettings.getGlobalAlertBytes(mPersistThreshold);
+            if (GlobalAlertBytes > 0) {
+                mGlobalAlertBytes = GlobalAlertBytes;
+            } else {
+                mGlobalAlertBytes = mPersistThreshold;
+            }
+        };
+    };
 
     @Override
     public INetworkStatsSession openSession() {
