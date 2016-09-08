@@ -307,5 +307,8 @@
 
     <bool name="config_show_long_operator_name">false</bool>
     <bool name="config_show_long_operator_name_when_roaming">false</bool>
+
+    <!-- Use legacy setParameters() for flashlight -->
+    <bool name="use_legacy_flashlight">false</bool>
 </resources>
 
