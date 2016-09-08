@@ -2636,59 +2636,6 @@
   <java-symbol type="layout" name="unsupported_display_size_dialog_content" />
   <java-symbol type="string" name="unsupported_display_size_message" />
 
-  <!-- cpu boost for AppLaunch -->
-  <java-symbol type="bool" name="config_enableCpuBoostForAppLaunch" />
-  <java-symbol type="integer" name="launchboost_timeout_param" />
-  <java-symbol type="array" name="launchboost_param_value" />
-
-  <!-- cpu boost v2 for Applaunch -->
-  <java-symbol type="bool" name="config_enableLaunchBoostv2" />
-  <java-symbol type="integer" name="lboostv2_timeout_param" />
-  <java-symbol type="array" name="lboostv2_param_value" />
-
-  <!-- freq aggr for Applaunch -->
-  <java-symbol type="bool" name="config_enableFreqAggr" />
-  <java-symbol type="integer" name="freqaggr_timeout_param" />
-  <java-symbol type="array" name="freqaggr_init_param_value" />
-  <java-symbol type="array" name="freqaggr_param_value" />
-
-  <!-- cpu boost for AppLaunch -->
-  <java-symbol type="bool" name="config_disablePacking" />
-  <java-symbol type="integer" name="disablepacking_timeout_param" />
-  <java-symbol type="array" name="launchboost_packing_param_value" />
-
-  <!-- cpu boost for Animationboost -->
-  <java-symbol type="bool" name="config_enablePerfBoostForAnimation" />
-  <java-symbol type="integer" name="animationboost_timeout_param" />
-  <java-symbol type="array" name="animationboost_param_value" />
-
-  <!-- cpu boost for overscroller fling -->
-  <java-symbol type="bool" name="config_enableCpuBoostForOverScrollerFling" />
-  <java-symbol type="integer" name="flingboost_timeout_param" />
-  <java-symbol type="array" name="flingboost_param_value" />
-
-  <!-- cpu boost for horizontal scroll -->
-  <java-symbol type="bool" name="config_enableCpuBoostForScroller" />
-  <java-symbol type="integer" name="scrollboost_timeout_param" />
-  <java-symbol type="array" name="scrollboost_param_value" />
-
-  <!-- Activities list for boost -->
-  <java-symbol type="array"  name="boost_activityList" />
-
-  <!-- Activity scroll boost params -->
-  <java-symbol type="integer" name="ascrollboost_timeout" />
-  <java-symbol type="array" name="ascrollboost_param_value" />
-
-  <!-- SSDOU scroll boost optimization -->
-  <java-symbol type="bool" name="config_debugBoost" />
-  <java-symbol type="array" name="debugBoost_activityList" />
-  <java-symbol type="integer" name="debugBoost_timeout" />
-  <java-symbol type="array" name="debugBoost_param_value" />
-
-  <!-- cpu boost for PanelView fling -->
-  <java-symbol type="bool" name="config_enableCpuBoostForPanelViewFling" />
-  <java-symbol type="array" name="panelview_flingboost_param_value" />
-
   <!-- SIM contact batch operation -->
   <java-symbol type="bool" name="config_sim_phonebook_batch_operation" />
   <!-- config 2G/3G/4G RAT strings for carriers -->
