@@ -33,5 +33,5 @@
     <integer name="config_max_unlock_countdown_times">0</integer>
 
     <!-- config for showing AM/PM on lock screen in 12hour format -->
-    <bool name="config_showAmpm">true</bool>
+    <bool name="config_showAmpm">false</bool>
 </resources>
