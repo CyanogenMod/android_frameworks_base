@@ -23,6 +23,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Camera;
+import android.hardware.Camera.Parameters;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
@@ -72,6 +74,10 @@ public class FlashlightController {
 
     private WakeLock mWakeLock;
 
+    /** Legacy torch support */
+    private boolean mNeedsLegacyTorch;
+    private Camera mLegacyCamera;
+
     private Notification mNotification = null;
     private boolean mReceiverRegistered;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -104,12 +110,13 @@ public class FlashlightController {
             mCameraId = cameraId;
         }
 
+        mNeedsLegacyTorch = mContext.getResources.getBoolean(R.bool.use_legacy_flashlight);
         mUseWakeLock = mContext.getResources().getBoolean(R.bool.flashlight_use_wakelock);
 
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 
-        if (mCameraId != null) {
+        if (mCameraId != null && !mNeedsLegacyTorch) {
             ensureHandler();
             mCameraManager.registerTorchCallback(mTorchCallback, mHandler);
         }
@@ -122,21 +129,28 @@ public class FlashlightController {
                 mFlashlightEnabled = enabled;
 
                 if (mUseWakeLock) {
-                    if (enabled) {
-                        if (!mWakeLock.isHeld()) mWakeLock.acquire();
-                    } else {
-                        if (mWakeLock.isHeld()) mWakeLock.release();
+                    if (mFlashlightEnabled && !mWakeLock.isHeld()) {
+                        mWakeLock.acquire();
                     }
                 }
 
-                try {
-                    mCameraManager.setTorchMode(mCameraId, enabled);
-                } catch (CameraAccessException e) {
-                    Log.e(TAG, "Couldn't set torch mode", e);
-                    mFlashlightEnabled = false;
-                    pendingError = true;
+                if (!mNeedsLegacyTorch) {
+                    try {
+                        mCameraManager.setTorchMode(mCameraId, enabled);
+                    } catch (CameraAccessException e) {
+                        Log.e(TAG, "Couldn't set torch mode", e);
+                        mFlashlightEnabled = false;
+                        pendingError = true;
+                    }
+                } else {
+                    boolean success = setTorchModeLegacy(enabled);
+                    if (!success) {
+                        mFlashlightEnabled = false;
+                    }
+                }
 
-                    if (mUseWakeLock && mWakeLock.isHeld()) {
+                if (mUseWakeLock) {
+                    if (!mFlashlightEnabled && mWakeLock.isHeld()) {
                         mWakeLock.release();
                     }
                 }
@@ -146,6 +160,32 @@ public class FlashlightController {
         if (pendingError) {
             dispatchError();
         }
+    }
+
+    private boolean setTorchModeLegacy(boolean on) {
+        if (mLegacyCamera == null) {
+            try {
+                mLegacyCamera = Camera.open(mCameraId);
+            } catch (RuntimeException e) {
+                Log.e(TAG, "Camera is in use", e);
+                return false;
+            }
+        }
+
+        Camera.Parameters params = mLegacyCamera.getParameters();
+        params.setFlashMode(on ?
+                Camera.Parameters.FLASH_MODE_TORCH : Camera.Parameters.FLASH_MODE_OFF);
+        mLegacyCamera.setParameters(params);
+
+        if (on) {
+            mLegacyCamera.startPreview();
+        } else {
+            mLegacyCamera.stopPreview();
+            mLegacyCamera.release();
+            mLegacyCamera = null;
+        }
+
+        return true;
     }
 
     private void setNotificationShown(boolean showNotification) {
