@@ -245,14 +245,6 @@ public class UsbManager {
     public static final String USB_FUNCTION_ACCESSORY = "accessory";
 
     /**
-     * Name of the charging USB function.
-     * Used in extras for the {@link #ACTION_USB_STATE} broadcast
-     *
-     * {@hide}
-     */
-    public static final String USB_FUNCTION_CHARGING = "charging";
-
-    /**
      * Name of extra for {@link #ACTION_USB_PORT_CHANGED}
      * containing the {@link UsbPort} object for the port.
      *

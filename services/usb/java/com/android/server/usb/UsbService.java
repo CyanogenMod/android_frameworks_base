@@ -313,7 +313,6 @@ public class UsbService extends IUsbManager.Stub {
             case UsbManager.USB_FUNCTION_MTP:
             case UsbManager.USB_FUNCTION_PTP:
             case UsbManager.USB_FUNCTION_RNDIS:
-            case UsbManager.USB_FUNCTION_CHARGING:
                 return true;
         }
 
