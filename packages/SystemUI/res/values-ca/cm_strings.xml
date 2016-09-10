@@ -174,6 +174,7 @@
   <string name="dynamic_qs_tile_next_alarm_label">Propera alarma</string>
   <string name="dynamic_qs_tile_ime_selector_label">Selector de l\'IME</string>
   <string name="dynamic_qs_tile_su_label">Accés Superusuari</string>
+  <string name="dynamic_qs_tile_themes_label">Temes</string>
   <string name="quick_settings_title_advanced_location">Localització per triangulació</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Informes d\'ubicació: Mode d\'estalvi de bateria.</string>
