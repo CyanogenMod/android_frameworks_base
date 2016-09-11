@@ -5095,7 +5095,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
 
         boolean legacyApp = false;
-        if (ai.targetSdkVersion <= Build.VERSION_CODES.M) {
+        if (ai != null && ai.targetSdkVersion <= Build.VERSION_CODES.M) {
             legacyApp = true;
         } else if ("com.google.android.apps.enterprise.dmagent".equals(ai.packageName)
                 && ai.versionCode == 697) {
