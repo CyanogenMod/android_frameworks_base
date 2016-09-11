@@ -275,6 +275,7 @@ class TelephonyIcons {
     static final int DATA_TYPE_HP = 7;
     static final int DATA_TYPE_1X = 8;
     static final int DATA_TYPE_LTE = 9;
+    static final int DATA_TYPE_4G_PLUS = 10;
 
     static final int SIGNAL_STRENGTH_TYPE_G = 0;
     static final int SIGNAL_STRENGTH_TYPE_E = 1;
@@ -537,15 +538,18 @@ class TelephonyIcons {
                     mSelectedDataTypeDesc[slot] = mDataTypeDescriptionArray[type];
                     mSelectedSignalStreagthIndex[slot] = SIGNAL_STRENGTH_TYPE_4G;
                 } else {
-                    mSelectedDataActivityIndex[slot] = DATA_TYPE_4G;
-                    mSelectedDataTypeIcon[slot] = mRes.getIdentifier(
-                        mDataTypeGenerationArray[1], null, NS);
                     if ( type == TelephonyManager.NETWORK_TYPE_LTE_CA) {
+                        mSelectedDataActivityIndex[slot] = DATA_TYPE_4G_PLUS;
                         //Select 4G+ icon.
                         mSelectedDataTypeIcon[slot] = mRes.getIdentifier(
                                 mDataTypeGenerationArray[2], null, NS);
+                        mSelectedQSDataTypeIcon[slot] = QS_DATA_4G_PLUS;
+                    } else {
+                        mSelectedDataActivityIndex[slot] = DATA_TYPE_4G;
+                        mSelectedDataTypeIcon[slot] = mRes.getIdentifier(
+                                mDataTypeGenerationArray[1], null, NS);
+                        mSelectedQSDataTypeIcon[slot] = QS_DATA_4G;
                     }
-                    mSelectedQSDataTypeIcon[slot] = QS_DATA_4G;
                     mSelectedDataTypeDesc[slot] = mDataTypeGenerationDescArray[1];
                     mSelectedSignalStreagthIndex[slot] = SIGNAL_STRENGTH_TYPE_4G;
                 }
