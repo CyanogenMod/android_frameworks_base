@@ -20,7 +20,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="profile_applist_title">Aplikasi</string>
-  <string name="picker_activities">Kegiatan</string>
+  <string name="picker_activities">Aktivitas</string>
   <string name="select_custom_app_title">Pilih aplikasi khusus</string>
   <string name="select_custom_activity_title">Pilih aktivitas khusus</string>
   <string name="lockscreen_targets_message">Pintasan kunci layar</string>

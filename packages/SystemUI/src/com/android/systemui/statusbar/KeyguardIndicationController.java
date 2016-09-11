@@ -76,6 +76,7 @@ public class KeyguardIndicationController {
     private int mChargingCurrent;
     private String mMessageToShowOnScreenOn;
     private IndicationDirection mIndicationDirection;
+    private boolean mScreenOnHintsEnabled;
 
     public KeyguardIndicationController(Context context, KeyguardIndicationTextView textView,
                                         LockIcon lockIcon) {
@@ -87,6 +88,7 @@ public class KeyguardIndicationController {
         Resources res = context.getResources();
         mSlowThreshold = res.getInteger(R.integer.config_chargingSlowlyThreshold);
         mFastThreshold = res.getInteger(R.integer.config_chargingFastThreshold);
+        mScreenOnHintsEnabled = res.getBoolean(R.bool.config_showScreenOnLockScreenHints);
 
 
         mBatteryInfo = IBatteryStats.Stub.asInterface(
@@ -189,8 +191,9 @@ public class KeyguardIndicationController {
             final int color = computeColor();
             mTextView.switchIndication(computeIndication());
             mTextView.setTextColor(color);
-            // pad the bottom using ic_empty_space to keep text vertically aligned
-            int top = 0, bottom = R.drawable.ic_empty_space, left = 0, right = 0;
+            int top = 0, left = 0, right = 0;
+            // pad the bottom using ic_empty_space to keep text vertically aligned if needed
+            int bottom = mScreenOnHintsEnabled ? R.drawable.ic_empty_space : 0;
             switch (mIndicationDirection) {
                 case UP:
                     top = R.drawable.ic_keyboard_arrow_up;

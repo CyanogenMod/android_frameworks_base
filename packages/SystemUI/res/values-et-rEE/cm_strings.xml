@@ -17,7 +17,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <!-- Content description of the data connection type HSPA+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_hspap">HSPA+</string>
   <!-- Content description of the data connection type 4G+ for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_data_connection_4g_plus">4G+</string>
   <!-- Weather string format in expanded statusbar header -->
   <string name="status_bar_expanded_header_weather_format"><xliff:g id="temp">%1$s</xliff:g> - <xliff:g id="condition">%2$s</xliff:g></string>
   <!-- Text to use when the number in a notification info is too large
@@ -27,6 +29,8 @@
   <!-- Strings for lockscreen shortcut hints -->
   <string name="left_shortcut_hint">Libista paremale et käivitada %1$s</string>
   <string name="right_shortcut_hint">Libista vasakule et käivitada %1$s</string>
+  <string name="lockscreen_message">Koputage vasaku või parema ikooni peale, et muuta lukustusekraani lühiteid.</string>
+  <string name="lockscreen_default_target">Vaikimisi</string>
   <string name="select_application">Valige rakendus</string>
   <string name="lockscreen_choose_action_title">Valige toiming</string>
   <string name="lockscreen_none_target">Puudub</string>
@@ -50,6 +54,7 @@
   <!-- Title shown in recents popup for uninstalling the application -->
   <string name="advanced_dev_option_uninstall">Eemalda</string>
   <!-- Content description of the light brightness slider (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_notification_brightness">Teavitustule heledus</string>
   <!-- Content description of the profiles tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_profiles_off">Profiilid väljas.</string>
   <!-- Content description of the profiles tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -60,6 +65,18 @@
   <string name="accessibility_quick_settings_profiles_changed">Profiil muudetud: <xliff:g id="profile" example="Default">%s</xliff:g>.</string>
   <string name="quick_settings_compass_init">Määratlen\u2026</string>
   <!-- Lights settings, LED notification -->
+  <string name="led_notification_title">Teavitustule sätted</string>
+  <string name="led_notification_text">LED tule lubamine</string>
+  <string name="qs_tile_edit_header_instruction">Hoia plaatide ümber paigutamiseks</string>
+  <string name="quick_settings_edit_label">Redigeeri plaate</string>
+  <string name="quick_settings_cannot_delete_edit_tile">Ei saa kustutada Redigeerimise plaati</string>
+  <string name="qs_tiles_reset_confirmation">Taasta kiirseadistuse plaatide vaikekonfoguratsioon?</string>
+  <string name="quick_settings_tile_reset_to_default">Taasta plaatide vaikeseadistus</string>
+  <string name="quick_settings_title_header">Päis</string>
+  <string name="quick_settings_title_tiles">Plaadid</string>
+  <string name="quick_settings_title_show_weather">Näita Ilmateadet</string>
+  <string name="quick_settings_title_show_brightness_slider">Kuva heleduse liugur</string>
+  <string name="quick_settings_title_enlarge_first_row">Suurenda esimene rida</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">See hoiab vaate kuni vabastamiseni. Vajuta ja hoia tagasi nuppu vabastamiseks.</string>
   <string name="quick_settings_custom_tile_detail_title">Kohandatud plaat</string>
@@ -72,6 +89,8 @@
   <string name="quick_settings_heads_up_label">Etteteavitus</string>
   <string name="quick_settings_battery_saver_label">Akusäästja</string>
   <!-- quick settings battery saver label to show when device is charging and tile is disabled -->
+  <string name="quick_settings_battery_saver_label_charging">Akusäästja (laadimine)</string>
+  <string name="quick_settings_caffeine_label">Kofeiin</string>
   <!-- Content description of the sync tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_sync_off">Sünk väljas.</string>
   <!-- Content description of the sync tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -87,6 +106,7 @@
   <string name="quick_settings_lockscreen_label">Lukustusekraan</string>
   <string name="quick_settings_ambient_display_label">Ambient kuva</string>
   <string name="quick_settings_lockscreen_label_enforced">Lukustusekraan sunnitud</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Profiili poolt keelatud</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Ekraani ajalõpp: <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -138,7 +158,9 @@
   <!-- Announcement made when heads up changes to on (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_heads_up_changed_on">Etteteavitus on sisselülitatud.</string>
   <!-- Content description of the caffeine tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_off">Kofeiin välja.</string>
   <!-- Content description of the caffeine tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_caffeine_on">Kofeiin sisse.</string>
   <!-- Content description of the battery saver tile in quick settings when off (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_battery_saver_off">Akusäästja väljas.</string>
   <!-- Content description of the battery saver tile in quick settings when on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -172,11 +194,21 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">Asukoha teavitus muudetud vaid sensorite režiimi.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Asukoha teavitus muudetud kõrge täpsusega režiimi.</string>
+  <string name="quick_settings_tiles_category_system">Süsteemi plaadid</string>
   <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">Lisa plaat</string>
   <!-- Hotspot dialog message -->
+  <string name="hotspot_apm_message">Ei saa ühenduda mobiilsidevõrguga kuni lennukirežiim on lubatud. Lülita lennukirežiim välja ja proovi uuesti.</string>
   <!-- Notification which notifies user flashlight is enabled -->
+  <string name="quick_settings_tile_flashlight_not_title">Taskulamp põleb</string>
+  <string name="quick_settings_tile_flashlight_not_summary">Väljalülitamiseks koputage</string>
   <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+    <item quantity="one">%1$d seade</item>
+    <item quantity="other">%1$d seadmed</item>
+  </plurals>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">Andmeside puudub</string>
   <!-- Content description of the dock battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_dock_battery_level">Doki aku <xliff:g id="number">%d</xliff:g> protsenti.</string>
   <!-- Play queue -->
@@ -185,4 +217,8 @@
   <!-- Path data for landscape battery -->
   <!-- Path data for circle battery -->
   <!-- Weather string format in keyguard -->
+  <string name="keyguard_status_view_weather_format"><xliff:g id="temp">%1$s</xliff:g> <xliff:g id="condition">%2$s</xliff:g></string>
+  <string name="expand_hint">Laiendamiseks tõmmake alla</string>
+  <string name="swipe_left_hint">Tõmmake vasakule. et avada rakendus <xliff:g id="app_name">%1$s </xliff:g></string>
+  <string name="swipe_right_hint">Teadete nägemiseks tõmmake paremale</string>
 </resources>

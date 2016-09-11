@@ -135,7 +135,9 @@
   <string name="app_ops_start_at_bootup">käivitada sisselülitamisel</string>
   <string name="app_ops_toast_window">näidata lühisõnumeid</string>
   <string name="app_ops_toggle_bluetooth">lülitada Bluetooth\'i</string>
+  <string name="app_ops_toggle_mobile_data">lülita mobiilne andmeside sisse-välja</string>
   <string name="app_ops_toggle_nfc">lülitada NFC</string>
+  <string name="app_ops_toggle_wifi">lülita Wi-Fi sisse-välja</string>
   <string name="app_ops_use_alarm_volume">muuta alarmi helitugevust</string>
   <string name="app_ops_use_audio_focus">muuta audio fookust</string>
   <string name="app_ops_use_bluetooth_volume">muuta Bluetooth heli tugevust</string>
@@ -148,6 +150,21 @@
   <string name="app_ops_use_voice_volume">muuta telefoni kõne helitugevust</string>
   <string name="app_ops_write_mms">kirjutada MMS sõnumit</string>
   <string name="app_ops_write_sms">kirjutada SMS sõnumit</string>
+  <string name="app_ops_use_fingerprint">kasuta sõrmejälge</string>
+  <string name="app_ops_add_voicemail">lisa kõnepost</string>
+  <string name="app_ops_read_phone_state">juurdepääs telefoni olekule</string>
+  <string name="app_ops_scan_wifi">otsida Wi-Fi võrke</string>
+  <string name="app_ops_change_wallpaper">muuta taustapilti</string>
+  <string name="app_ops_assist_structure">kasuta assisteeritud struktuuri</string>
+  <string name="app_ops_assist_screenshot">kuvatõmmise tegemine</string>
+  <string name="app_ops_use_body_sensors">kasutada biosensoreid</string>
+  <string name="app_ops_read_cell_broadcasts">lugeda võrguteateid</string>
+  <string name="app_ops_mock_location">teeskle asukohta</string>
+  <string name="app_ops_read_external_storage">lugeda väliselt andmekandjalt</string>
+  <string name="app_ops_write_external_storage">kirjutada välisele andmekandjale</string>
+  <string name="app_ops_turn_on_screen">lülitada ekraan sisse</string>
+  <string name="app_ops_get_accounts">lugeda seadme kasutajaid</string>
+  <string name="app_ops_wifi_change">muuta Wi-Fi olekut</string>
   <string name="app_ops_su">saada root ligipääsu</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Selle ekraani vabastamiseks puudutage ja hoidke all Tagasi nuppu.</string>
@@ -159,7 +176,11 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Tegevuse käivitamine blokeeriti</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> keelati käivitamast. Koputage rakenduse autentimiseks ja käivitamiseks.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Aku täis</string>
+  <string name="notify_battery_fully_charged_text">Ühenda telefon laadijast, et parandada aku eluiga.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">nullida aku statistikat</string>
@@ -167,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Lubab rakendusel nullida aku praeguse madala-tasemelise kasutuse andmed.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">SIM-kaardid on muutunud</string>
+  <string name="uicc_hot_swapped_event_text">Koputa, et muuta SIM-kaardi vaikesätteid</string>
 </resources>

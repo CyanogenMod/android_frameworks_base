@@ -159,6 +159,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Random;
 
 /**
  * @hide
@@ -646,18 +647,23 @@ public class ConnectivityService extends IConnectivityManager.Stub
         mTrackerHandler = new NetworkStateTrackerHandler(mHandlerThread.getLooper());
 
         // setup our unique device name
-        String hostname = CMSettings.Secure.getString(context.getContentResolver(),
-                CMSettings.Secure.DEVICE_HOSTNAME);
-        if (TextUtils.isEmpty(hostname) &&
-                TextUtils.isEmpty(SystemProperties.get("net.hostname"))) {
+        // either to (in order): current net.hostname
+        //                       DEVICE_HOSTNAME
+        //                       android-ANDROID_ID
+        //                       android-r-RANDOM_NUMBER
+        if (TextUtils.isEmpty(SystemProperties.get("net.hostname"))) {
+            String hostname = CMSettings.Secure.getString(context.getContentResolver(),
+                    CMSettings.Secure.DEVICE_HOSTNAME);
             String id = Settings.Secure.getString(context.getContentResolver(),
                     Settings.Secure.ANDROID_ID);
-            if (id != null && id.length() > 0) {
+            if (!TextUtils.isEmpty(hostname)) {
+                SystemProperties.set("net.hostname", hostname);
+            } else if (!TextUtils.isEmpty(id)) {
                 String name = new String("android-").concat(id);
                 SystemProperties.set("net.hostname", name);
+            } else {
+                SystemProperties.set("net.hostname", "android-r-" + new Random().nextInt());
             }
-        } else {
-            SystemProperties.set("net.hostname", hostname);
         }
 
         // read our default dns server ip
