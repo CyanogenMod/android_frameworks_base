@@ -321,7 +321,7 @@ public final class Call {
          */
         public static final int PROPERTY_IS_EXTERNAL_CALL = 0x00000040;
 
-        /*
+        /**
          * Whether the call was forwarded from another party (GSM only)
          * @hide
          */
