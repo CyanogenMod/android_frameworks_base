@@ -19,7 +19,9 @@ package com.android.systemui.statusbar.phone;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.view.Gravity;
@@ -32,6 +34,7 @@ import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.RemoteInputController;
 import com.android.systemui.statusbar.StatusBarState;
+import cyanogenmod.providers.CMSettings;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -418,7 +421,7 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
         }
 
         public void unobserve(Context context) {
-            context.getContentResolver().unregisterContentObserver(this);
+            context.getContentResolver().unregisterContentObserver((ContentObserver) this);
         }
 
         @Override
