@@ -29,6 +29,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
 <resources>
+    <!-- custom date format or not  -->
+    <bool name="config_dateformat">false</bool>
 
     <!-- Used in LocalePicker, default language must be contained -->
     <string name="locale_codes" translatable="false"></string>

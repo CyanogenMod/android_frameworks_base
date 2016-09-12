@@ -83,12 +83,14 @@ public class ScheduleConditionProvider extends SystemConditionProviderService {
         pw.print("      mRegistered="); pw.println(mRegistered);
         pw.println("      mSubscriptions=");
         final long now = System.currentTimeMillis();
-        for (Uri conditionId : mSubscriptions.keySet()) {
-            pw.print("        ");
-            pw.print(meetsSchedule(mSubscriptions.get(conditionId), now) ? "* " : "  ");
-            pw.println(conditionId);
-            pw.print("            ");
-            pw.println(mSubscriptions.get(conditionId).toString());
+        synchronized (mSubscriptions) {
+            for (Uri conditionId : mSubscriptions.keySet()) {
+                pw.print("        ");
+                pw.print(meetsSchedule(mSubscriptions.get(conditionId), now) ? "* " : "  ");
+                pw.println(conditionId);
+                pw.print("            ");
+                pw.println(mSubscriptions.get(conditionId).toString());
+            }
         }
         dumpUpcomingTime(pw, "mNextAlarmTime", mNextAlarmTime, now);
     }
@@ -118,14 +120,18 @@ public class ScheduleConditionProvider extends SystemConditionProviderService {
             notifyCondition(conditionId, Condition.STATE_FALSE, "badCondition");
             return;
         }
-        mSubscriptions.put(conditionId, toScheduleCalendar(conditionId));
+        synchronized (mSubscriptions) {
+            mSubscriptions.put(conditionId, toScheduleCalendar(conditionId));
+        }
         evaluateSubscriptions();
     }
 
     @Override
     public void onUnsubscribe(Uri conditionId) {
         if (DEBUG) Slog.d(TAG, "onUnsubscribe " + conditionId);
-        mSubscriptions.remove(conditionId);
+        synchronized (mSubscriptions) {
+            mSubscriptions.remove(conditionId);
+        }
         evaluateSubscriptions();
     }
 
@@ -143,26 +149,28 @@ public class ScheduleConditionProvider extends SystemConditionProviderService {
         if (mAlarmManager == null) {
             mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         }
-        setRegistered(!mSubscriptions.isEmpty());
         final long now = System.currentTimeMillis();
-        mNextAlarmTime = 0;
-        long nextUserAlarmTime = getNextAlarm();
-        for (Uri conditionId : mSubscriptions.keySet()) {
-            final ScheduleCalendar cal = mSubscriptions.get(conditionId);
-            if (cal != null && cal.isInSchedule(now)) {
-                notifyCondition(conditionId, Condition.STATE_TRUE, "meetsSchedule");
-                cal.maybeSetNextAlarm(now, nextUserAlarmTime);
-            } else {
-                notifyCondition(conditionId, Condition.STATE_FALSE, "!meetsSchedule");
-                if (nextUserAlarmTime == 0) {
+        synchronized (mSubscriptions) {
+            setRegistered(!mSubscriptions.isEmpty());
+            mNextAlarmTime = 0;
+            long nextUserAlarmTime = getNextAlarm();
+            for (Uri conditionId : mSubscriptions.keySet()) {
+                final ScheduleCalendar cal = mSubscriptions.get(conditionId);
+                if (cal != null && cal.isInSchedule(now)) {
+                    notifyCondition(conditionId, Condition.STATE_TRUE, "meetsSchedule");
                     cal.maybeSetNextAlarm(now, nextUserAlarmTime);
+                } else {
+                    notifyCondition(conditionId, Condition.STATE_FALSE, "!meetsSchedule");
+                    if ((cal != null) && (nextUserAlarmTime == 0)) {
+                        cal.maybeSetNextAlarm(now, nextUserAlarmTime);
+                    }
                 }
-            }
-            if (cal != null) {
-                final long nextChangeTime = cal.getNextChangeTime(now);
-                if (nextChangeTime > 0 && nextChangeTime > now) {
-                    if (mNextAlarmTime == 0 || nextChangeTime < mNextAlarmTime) {
-                        mNextAlarmTime = nextChangeTime;
+                if (cal != null) {
+                    final long nextChangeTime = cal.getNextChangeTime(now);
+                    if (nextChangeTime > 0 && nextChangeTime > now) {
+                        if (mNextAlarmTime == 0 || nextChangeTime < mNextAlarmTime) {
+                            mNextAlarmTime = nextChangeTime;
+                        }
                     }
                 }
             }
@@ -241,11 +249,13 @@ public class ScheduleConditionProvider extends SystemConditionProviderService {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (DEBUG) Slog.d(TAG, "onReceive " + intent.getAction());
-            if (Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())) {
-                for (Uri conditionId : mSubscriptions.keySet()) {
-                    final ScheduleCalendar cal = mSubscriptions.get(conditionId);
-                    if (cal != null) {
-                        cal.setTimeZone(Calendar.getInstance().getTimeZone());
+            synchronized (mSubscriptions) {
+                if (Intent.ACTION_TIMEZONE_CHANGED.equals(intent.getAction())) {
+                    for (Uri conditionId : mSubscriptions.keySet()) {
+                        final ScheduleCalendar cal = mSubscriptions.get(conditionId);
+                        if (cal != null) {
+                            cal.setTimeZone(Calendar.getInstance().getTimeZone());
+                        }
                     }
                 }
             }
