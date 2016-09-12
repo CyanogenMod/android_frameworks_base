@@ -261,6 +261,19 @@
             </intent-filter>
         </activity-alias>
 
+        <activity-alias android:name=".tuner.NavBarTuner"
+                  android:targetActivity=".tuner.TunerActivity"
+                  android:icon="@drawable/tuner"
+                  android:theme="@style/TunerSettings"
+                  android:label="@string/nav_bar"
+                  android:process=":tuner"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.settings.action.NAV_BAR_TUNER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
         <!-- Service used by secondary users to register themselves with the system user. -->
         <service android:name=".recents.RecentsSystemUserService"
             android:exported="false"
