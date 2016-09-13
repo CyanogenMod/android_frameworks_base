@@ -120,6 +120,12 @@ public final class BluetoothEventManager {
         registerProfileIntentReceiver();
     }
 
+    public void setDefaultReceiverHandler() {
+        mContext.unregisterReceiver(mBroadcastReceiver);
+        mContext.registerReceiver(mBroadcastReceiver, mAdapterIntentFilter, null, mReceiverHandler);
+        registerProfileIntentReceiver();
+    }
+
     /** Register to start receiving callbacks for Bluetooth events. */
     public void registerCallback(BluetoothCallback callback) {
         synchronized (mCallbacks) {
