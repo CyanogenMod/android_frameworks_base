@@ -32,22 +32,34 @@ public class TunerActivity extends SettingsDrawerActivity implements
 
     private static final String TAG_TUNER = "tuner";
 
+    private String mInitialTitle;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getFragmentManager().findFragmentByTag(TAG_TUNER) == null) {
             final String action = getIntent().getAction();
-            boolean showDemoMode = action != null && action.equals(
-                    "com.android.settings.action.DEMO_MODE");
-            boolean showNightMode = getIntent().getBooleanExtra(
-                    NightModeFragment.EXTRA_SHOW_NIGHT_MODE, false);
-            boolean showNavBar = action != null && action.equals(
-                    "com.android.settings.action.NAV_BAR_TUNER");
-            final Fragment fragment = showNightMode ? new NightModeFragment()
-                    : showDemoMode ? new DemoModeFragment()
-                    : showNavBar ? new NavBarTuner() : new TunerFragment();
+            final Fragment fragment;
+            if ("com.android.settings.action.DEMO_MODE".equals(action)) {
+                fragment = new DemoModeFragment();
+            } else if (getIntent().getBooleanExtra(
+                    NightModeFragment.EXTRA_SHOW_NIGHT_MODE, false)) {
+                fragment = new NightModeFragment();
+            } else if ("com.android.settings.action.NAV_BAR_TUNER".equals(action)) {
+                fragment = new NavBarTuner();
+            } else {
+                fragment = new TunerFragment();
+            }
+
             getFragmentManager().beginTransaction().replace(R.id.content_frame,
                     fragment, TAG_TUNER).commit();
+
+            mInitialTitle = String.valueOf(getActionBar().getTitle());
+
+            String extra = getIntent().getStringExtra(TAG_TUNER);
+            if (extra != null) {
+                startPreferenceScreen((PreferenceFragment)fragment, extra, false);
+            }
         }
     }
 
@@ -55,6 +67,8 @@ public class TunerActivity extends SettingsDrawerActivity implements
     public void onBackPressed() {
         if (!getFragmentManager().popBackStackImmediate()) {
             super.onBackPressed();
+        } else {
+            getActionBar().setTitle(mInitialTitle);
         }
     }
 
@@ -64,7 +78,7 @@ public class TunerActivity extends SettingsDrawerActivity implements
             Class<?> cls = Class.forName(pref.getFragment());
             Fragment fragment = (Fragment) cls.newInstance();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            setTitle(pref.getTitle());
+            getActionBar().setTitle(pref.getTitle());
             transaction.replace(R.id.content_frame, fragment);
             transaction.addToBackStack("PreferenceFragment");
             transaction.commit();
@@ -75,26 +89,34 @@ public class TunerActivity extends SettingsDrawerActivity implements
         }
     }
 
-    @Override
-    public boolean onPreferenceStartScreen(PreferenceFragment caller, PreferenceScreen pref) {
+    private boolean startPreferenceScreen(PreferenceFragment caller, String key, boolean backStack) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         SubSettingsFragment fragment = new SubSettingsFragment();
         final Bundle b = new Bundle(1);
-        b.putString(PreferenceFragment.ARG_PREFERENCE_ROOT, pref.getKey());
+        b.putString(PreferenceFragment.ARG_PREFERENCE_ROOT, key);
         fragment.setArguments(b);
         fragment.setTargetFragment(caller, 0);
         transaction.replace(R.id.content_frame, fragment);
-        transaction.addToBackStack("PreferenceFragment");
+        if (backStack) {
+            transaction.addToBackStack("PreferenceFragment");
+        }
         transaction.commit();
+
         return true;
+    }
+
+    @Override
+    public boolean onPreferenceStartScreen(PreferenceFragment caller, PreferenceScreen pref) {
+        return startPreferenceScreen(caller, pref.getKey(), true);
     }
 
     public static class SubSettingsFragment extends PreferenceFragment {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferenceScreen((PreferenceScreen) ((PreferenceFragment) getTargetFragment())
-                    .getPreferenceScreen().findPreference(rootKey));
+            PreferenceScreen p = (PreferenceScreen) ((PreferenceFragment) getTargetFragment())
+                    .getPreferenceScreen().findPreference(rootKey);
+            setPreferenceScreen(p);
+            getActivity().getActionBar().setTitle(p.getTitle());
         }
     }
-
 }
