@@ -66,12 +66,16 @@ public class TunerFragment extends PreferenceFragment {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.tuner_prefs);
 
+        /**
+         * OHAI
         if (Settings.Secure.getInt(getContext().getContentResolver(), SETTING_SEEN_TUNER_WARNING,
                 0) == 0) {
             if (getFragmentManager().findFragmentByTag(WARNING_TAG) == null) {
                 new TunerWarningFragment().show(getFragmentManager(), WARNING_TAG);
             }
         }
+         */
+
     }
 
     @Override
