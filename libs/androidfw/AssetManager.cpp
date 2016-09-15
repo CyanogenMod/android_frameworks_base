@@ -293,7 +293,9 @@ bool AssetManager::addOverlayPath(const String8& packagePath, int32_t* cookie)
  }
 
 bool AssetManager::createIdmap(const char* targetApkPath, const char* overlayApkPath,
-        uint32_t targetCrc, uint32_t overlayCrc, uint32_t** outData, size_t* outSize)
+        const char *cache_path __attribute__((unused)), uint32_t targetCrc, uint32_t overlayCrc,
+        time_t targetMtime __attribute__((unused)), time_t overlayMtime __attribute__((unused)),
+        uint32_t** outData, size_t* outSize)
 {
     AutoMutex _l(mLock);
     const String8 paths[2] = { String8(targetApkPath), String8(overlayApkPath) };

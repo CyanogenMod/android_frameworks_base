@@ -232,8 +232,10 @@ public:
      * Generate idmap data to translate resources IDs between a package and a
      * corresponding overlay package.
      */
-    bool createIdmap(const char* targetApkPath, const char* overlayApkPath,
-        uint32_t targetCrc, uint32_t overlayCrc, uint32_t** outData, size_t* outSize);
+    bool createIdmap(const char* targetApkPath, const char* overlayApkPath, const char* cache_path,
+        uint32_t targetCrc, uint32_t overlayCrc,
+        time_t targetMtime, time_t overlayMtime,
+        uint32_t** outData, size_t* outSize);
 
 private:
     struct asset_path
