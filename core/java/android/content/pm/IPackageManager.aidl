@@ -584,4 +584,7 @@ interface IPackageManager {
 
     /** protected broadcast ext */
     boolean isProtectedBroadcastAllowed(in String actionName, in int callingUid);
+
+    /** Themes */
+    int processThemeResources(String themePkgName);
 }

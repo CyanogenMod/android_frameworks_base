@@ -20,6 +20,7 @@ import android.annotation.Nullable;
 import android.content.Context;
 import android.content.pm.PackageStats;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Slog;
 
 import com.android.internal.os.InstallerConnection;
@@ -165,6 +166,12 @@ public final class Installer extends SystemService {
         return mInstaller.dumpProfiles(gid, packageName, codePaths);
     }
 
+    public void idmap(String targetApkPath, String overlayApkPath, String cachePath,
+            int uid, int targetHash, int overlayHash) throws InstallerException {
+        mInstaller.execute("idmap", targetApkPath, overlayApkPath, cachePath, uid,
+                targetHash, overlayHash);
+    }
+
     public void idmap(String targetApkPath, String overlayApkPath, int uid)
             throws InstallerException {
         mInstaller.execute("idmap", targetApkPath, overlayApkPath, uid);
@@ -228,6 +235,18 @@ public final class Installer extends SystemService {
     public void moveAb(String apkPath, String instructionSet, String outputPath)
             throws InstallerException {
         mInstaller.execute("move_ab", apkPath, instructionSet, outputPath);
+    }
+
+    public void aapt(String themeApkPath, String internalPath, String resTablePath, int uid,
+            int pkgId, int minSdkVersion, String appResourcesPath, String commonResourcesPath)
+            throws InstallerException {
+        if (TextUtils.isEmpty(commonResourcesPath)) {
+            mInstaller.execute("aapt", themeApkPath, internalPath, resTablePath, uid, pkgId,
+                    minSdkVersion, appResourcesPath);
+        } else {
+            mInstaller.execute("aapt_with_common", themeApkPath, internalPath, resTablePath, uid,
+                    pkgId, minSdkVersion, appResourcesPath, commonResourcesPath);
+        }
     }
 
     private static void assertValidInstructionSet(String instructionSet)

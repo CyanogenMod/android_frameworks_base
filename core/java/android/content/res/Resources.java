@@ -38,19 +38,17 @@ import android.annotation.StringRes;
 import android.annotation.StyleRes;
 import android.annotation.StyleableRes;
 import android.annotation.XmlRes;
+import android.app.ComposedIconInfo;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageItemInfo;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Drawable.ConstantState;
 import android.graphics.drawable.DrawableInflater;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.LongSparseArray;
+import android.util.*;
 import android.util.Pools.SynchronizedPool;
-import android.util.TypedValue;
 import android.view.DisplayAdjustments;
 import android.view.ViewDebug;
 import android.view.ViewHierarchyEncoder;
@@ -94,6 +92,22 @@ import java.util.ArrayList;
  */
 public class Resources {
     static final String TAG = "Resources";
+
+    // Package IDs for themes. Aapt will compile the res table with this id.
+    /** @hide */
+    public static final int THEME_FRAMEWORK_PKG_ID = 0x60;
+    /** @hide */
+    public static final int THEME_APP_PKG_ID = 0x61;
+    /** @hide */
+    public static final int THEME_ICON_PKG_ID = 0x62;
+    /** @hide */
+    public static final int THEME_CM_PKG_ID = 0x63;
+    /**
+     * The common resource pkg id needs to be less than the THEME_FRAMEWORK_PKG_ID
+     * otherwise aapt will complain and fail
+     * @hide
+     */
+    public static final int THEME_COMMON_PKG_ID = THEME_FRAMEWORK_PKG_ID - 1;
 
     private static final Object sSync = new Object();
 
@@ -764,6 +778,12 @@ public class Resources {
      */
     public Drawable getDrawable(@DrawableRes int id, @Nullable Theme theme)
             throws NotFoundException {
+        return getDrawable(id, theme, true);
+    }
+
+    /** {@hide} */
+    public Drawable getDrawable(@DrawableRes int id, @Nullable Theme theme, boolean supportComposedIcons)
+            throws NotFoundException {
         final TypedValue value = obtainTempTypedValue();
         try {
             final ResourcesImpl impl = mResourcesImpl;
@@ -821,6 +841,12 @@ public class Resources {
      *             not exist.
      */
     public Drawable getDrawableForDensity(@DrawableRes int id, int density, @Nullable Theme theme) {
+        return getDrawableForDensity(id, density, theme, true);
+    }
+
+    /** {@hide} */
+    public Drawable getDrawableForDensity(@DrawableRes int id, int density, @Nullable Theme theme,
+            boolean supportComposedIcons) {
         final TypedValue value = obtainTempTypedValue();
         try {
             final ResourcesImpl impl = mResourcesImpl;
@@ -2147,5 +2173,20 @@ public class Resources {
             return res.obtainAttributes(set, attrs);
         }
         return theme.obtainStyledAttributes(set, attrs, 0, 0);
+    }
+
+    /** @hide */
+    public void setIconResources(SparseArray<PackageItemInfo> icons) {
+        mResourcesImpl.setIconResources(icons);
+    }
+
+    /** @hide */
+    public void setComposedIconInfo(ComposedIconInfo iconInfo) {
+        mResourcesImpl.setComposedIconInfo(iconInfo);
+    }
+
+    /** @hide */
+    public ComposedIconInfo getComposedIconInfo() {
+        return mResourcesImpl.getComposedIconInfo();
     }
 }
