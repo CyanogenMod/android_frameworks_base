@@ -1847,7 +1847,7 @@ public final class ActivityThread {
     Resources getTopLevelResources(String resDir, String[] splitResDirs, String[] overlayDirs,
             String[] libDirs, int displayId, LoadedApk pkgInfo) {
         return mResourcesManager.getResources(null, resDir, splitResDirs, overlayDirs, libDirs,
-                displayId, null, pkgInfo.getCompatibilityInfo(), pkgInfo.getClassLoader());
+                displayId, null, pkgInfo.getCompatibilityInfo(), pkgInfo.getClassLoader(), null, false);
     }
 
     final Handler getHandler() {

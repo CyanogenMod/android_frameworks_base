@@ -564,6 +564,9 @@ public abstract class Context {
     @ViewDebug.ExportedProperty(deepExport = true)
     public abstract Resources.Theme getTheme();
 
+    /** @hide */
+    public abstract void recreateTheme();
+
     /**
      * Retrieve styled attribute information in this Context's theme.  See
      * {@link android.content.res.Resources.Theme#obtainStyledAttributes(int[])}
@@ -4148,6 +4151,26 @@ public abstract class Context {
      */
     public abstract Context createApplicationContext(ApplicationInfo application,
             int flags) throws PackageManager.NameNotFoundException;
+
+    /**
+     * Similar to {@link #createPackageContext(String, int)}, but with a
+     * different {@link UserHandle}. For example, {@link #getContentResolver()}
+     * will open any {@link Uri} as the given user.  A theme package can be
+     * specified which will be used when adding resources to this context
+     *
+     * @hide
+     */
+    public abstract Context createPackageContextAsUser(
+            String packageName, String themePackageName, int flags, UserHandle user)
+            throws PackageManager.NameNotFoundException;
+
+    /**
+     * Creates a context given an {@link android.content.pm.ApplicationInfo}.
+     *
+     * @hide
+     */
+    public abstract Context createApplicationContext(ApplicationInfo application,
+            String themePackageName, int flags) throws PackageManager.NameNotFoundException;
 
     /**
      * Get the userId associated with this context

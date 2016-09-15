@@ -98,6 +98,12 @@ public class MockContext extends Context {
         throw new UnsupportedOperationException();
     }
 
+    /** @hide */
+    @Override
+    public void recreateTheme() {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public ClassLoader getClassLoader() {
         throw new UnsupportedOperationException();
@@ -672,6 +678,19 @@ public class MockContext extends Context {
     @Override
     public Context createPackageContextAsUser(String packageName, int flags, UserHandle user)
             throws PackageManager.NameNotFoundException {
+        throw new UnsupportedOperationException();
+    }
+
+    /** {@hide} */
+    @Override
+    public Context createPackageContextAsUser(String packageName, String themePackageName,
+            int flags, UserHandle user) throws PackageManager.NameNotFoundException {
+        throw new UnsupportedOperationException();
+    }
+
+    /** {@hide} */
+    public Context createApplicationContext(ApplicationInfo application,
+            String themePackageName, int flags) throws PackageManager.NameNotFoundException {
         throw new UnsupportedOperationException();
     }
 

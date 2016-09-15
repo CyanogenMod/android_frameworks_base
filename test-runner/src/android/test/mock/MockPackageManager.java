@@ -1077,4 +1077,33 @@ public class MockPackageManager extends PackageManager {
     public Drawable loadUnbadgedItemIcon(PackageItemInfo itemInfo, ApplicationInfo appInfo) {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * @hide
+     */
+    @Override
+    public int processThemeResources(String themePkgName) {
+        throw new UnsupportedOperationException();
+    }
+
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplication(ApplicationInfo app, String themePkgName)
+            throws NameNotFoundException {
+        return null;
+    }
+
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplication(String appPackageName, String themePkgName)
+            throws NameNotFoundException {
+        return null;
+    }
+
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePkgName, int userId) throws NameNotFoundException {
+        return null;
+    }
 }
