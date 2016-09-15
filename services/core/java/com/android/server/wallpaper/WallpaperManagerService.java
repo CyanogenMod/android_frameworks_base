@@ -1004,7 +1004,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                     final WallpaperData fallback = new WallpaperData(wallpaper.userId,
                             WALLPAPER_LOCK_ORIG, WALLPAPER_LOCK_CROP);
                     ensureSaneWallpaperData(fallback);
-                    bindWallpaperComponentLocked(mImageWallpaper, true, false, fallback, reply);
+                    bindWallpaperComponentLocked(cname, true, false, fallback, reply);
                     mWaitingForUnlock = true;
                 }
             }
