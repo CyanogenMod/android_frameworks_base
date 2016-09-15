@@ -200,6 +200,18 @@ namespace {
         }
         print("", "overlay crc", i, "");
 
+        err = buf.nextUint32(&i);
+		if (err != NO_ERROR) {
+			return err;
+		}
+		print("", "base mtime", i, "");
+
+        err = buf.nextUint32(&i);
+		if (err != NO_ERROR) {
+			return err;
+		}
+		print("", "overlay mtime", i, "");
+
         err = buf.nextPath(path);
         if (err != NO_ERROR) {
             // printe done from IdmapBuffer::nextPath
