@@ -221,6 +221,24 @@ bool isValidResourceType(const String8& type)
         || type == "color" || type == "menu" || type == "mipmap";
 }
 
+sp<AaptFile> getResourceFile(const sp<AaptAssets>& assets, bool makeIfNecessary)
+{
+    sp<AaptGroup> group = assets->getFiles().valueFor(String8("resources.arsc"));
+    sp<AaptFile> file;
+    if (group != NULL) {
+        file = group->getFiles().valueFor(AaptGroupEntry());
+        if (file != NULL) {
+            return file;
+        }
+    }
+
+    if (!makeIfNecessary) {
+        return NULL;
+    }
+    return assets->addFile(String8("resources.arsc"), AaptGroupEntry(), String8(),
+                            NULL, String8());
+}
+
 static status_t parsePackage(Bundle* bundle, const sp<AaptAssets>& assets,
     const sp<AaptGroup>& grp)
 {
@@ -1269,7 +1287,7 @@ status_t buildResources(Bundle* bundle, const sp<AaptAssets>& assets, sp<ApkBuil
     bool hasErrors = false;
 
     if (drawables != NULL) {
-        if (bundle->getOutputAPKFile() != NULL) {
+        if (bundle->getOutputAPKFile() != NULL || bundle->getOutputResApk()) {
             err = preProcessImages(bundle, assets, drawables, "drawable");
         }
         if (err == NO_ERROR) {

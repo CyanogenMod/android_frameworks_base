@@ -65,6 +65,8 @@ public:
           mProduct(NULL), mUseCrunchCache(false), mErrorOnFailedInsert(false),
           mErrorOnMissingConfigEntry(false), mOutputTextSymbols(NULL),
           mSingleCrunchInputFile(NULL), mSingleCrunchOutputFile(NULL),
+          mOutputResourcesApkFile(NULL),
+          mInternalZipPath(NULL), mInputAPKFile(NULL),
           mBuildSharedLibrary(false),
           mBuildAppAsSharedLibrary(false),
           mArgc(0), mArgv(NULL)
@@ -112,6 +114,10 @@ public:
     void setJunkPath(bool val) { mJunkPath = val; }
     const char* getOutputAPKFile() const { return mOutputAPKFile; }
     void setOutputAPKFile(const char* val) { mOutputAPKFile = val; }
+    const char* getOutputResApk() { return mOutputResourcesApkFile; }
+    const char* getInputAPKFile() { return mInputAPKFile; }
+    void setInputAPKFile(const char* val) { mInputAPKFile = val; }
+    void setOutputResApk(const char* val) { mOutputResourcesApkFile = val; }
     const char* getManifestPackageNameOverride() const { return mManifestPackageNameOverride; }
     void setManifestPackageNameOverride(const char * val) { mManifestPackageNameOverride = val; }
     const char* getInstrumentationPackageNameOverride() const { return mInstrumentationPackageNameOverride; }
@@ -215,6 +221,8 @@ public:
     void setSingleCrunchInputFile(const char* val) { mSingleCrunchInputFile = val; }
     const char* getSingleCrunchOutputFile() const { return mSingleCrunchOutputFile; }
     void setSingleCrunchOutputFile(const char* val) { mSingleCrunchOutputFile = val; }
+    void setInternalZipPath(const char* val) { mInternalZipPath = val; }
+    const char* getInternalZipPath() const { return mInternalZipPath; }
     bool getBuildSharedLibrary() const { return mBuildSharedLibrary; }
     void setBuildSharedLibrary(bool val) { mBuildSharedLibrary = val; }
     bool getBuildAppAsSharedLibrary() const { return mBuildAppAsSharedLibrary; }
@@ -341,6 +349,9 @@ private:
     const char* mOutputTextSymbols;
     const char* mSingleCrunchInputFile;
     const char* mSingleCrunchOutputFile;
+    const char* mOutputResourcesApkFile;
+    const char* mInternalZipPath;
+    const char* mInputAPKFile;
     bool        mBuildSharedLibrary;
     bool        mBuildAppAsSharedLibrary;
     android::String8 mPlatformVersionCode;
