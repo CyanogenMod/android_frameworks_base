@@ -15,6 +15,9 @@
  */
 package android.content.res;
 
+import android.app.ComposedIconInfo;
+import android.content.pm.PackageItemInfo;
+import android.util.*;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -37,13 +40,6 @@ import android.icu.text.PluralRules;
 import android.os.Build;
 import android.os.LocaleList;
 import android.os.Trace;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.LongSparseArray;
-import android.util.Slog;
-import android.util.TypedValue;
-import android.util.Xml;
 import android.view.Display;
 import android.view.DisplayAdjustments;
 
@@ -1015,6 +1011,18 @@ public class ResourcesImpl {
         }
     }
 
+    /** @hide */
+    public void setIconResources(SparseArray<PackageItemInfo> icons) {
+    }
+
+    /** @hide */
+    public void setComposedIconInfo(ComposedIconInfo iconInfo) {
+    }
+
+    /** @hide */
+    public ComposedIconInfo getComposedIconInfo() {
+        return null;
+    }
     /**
      * Called by zygote when it is done preloading resources, to change back
      * to normal Resources operation.

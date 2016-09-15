@@ -188,4 +188,10 @@
          regardless of the SIM inserted. These applications will be granted phone and
          location permissions, and must obtain user content through other means -->
     <string-array name="config_enabledPreinstalledCarrierApps" translatable="false" />
+
+    <!-- List of packages that should not be themed.
+         Note: These strings are checked using String.startsWith() so include as much of the
+         package name as possible to avoid other packages being un-themed unintentionally -->
+    <string-array name="non_themeable_packages" translatable="false">
+    </string-array>
 </resources>
