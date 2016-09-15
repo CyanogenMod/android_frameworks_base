@@ -466,6 +466,7 @@ LOCAL_SRC_FILES += \
 	packages/services/Proxy/com/android/net/IProxyPortListener.aidl \
 	core/java/android/service/quicksettings/IQSService.aidl \
 	core/java/android/service/quicksettings/IQSTileService.aidl \
+	../../vendor/cmsdk/sdk/src/java/org/cyanogenmod/internal/themes/IIconCacheManager.aidl \
 
 # The following are native binders that need to go with the native component
 # at system/update_engine/binder_bindings/. Use relative path to refer to them.

@@ -19,6 +19,8 @@ package android.content.pm;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Overall information about the contents of a package.  This corresponds
  * to all of the information collected from AndroidManifest.xml.
@@ -271,6 +273,34 @@ public class PackageInfo implements Parcelable {
      */
     public String overlayTarget;
 
+    // Is Theme Apk
+    /**
+     * {@hide}
+     */
+    public boolean isThemeApk = false;
+
+    /**
+     * {@hide}
+     */
+    public boolean hasIconPack = false;
+
+    /**
+     * {@hide}
+     */
+    public ArrayList<String> overlayTargets;
+
+    // Is Legacy Icon Apk
+    /**
+     * {@hide}
+     */
+    public boolean isLegacyIconPackApk = false;
+
+    // ThemeInfo
+    /**
+     * {@hide}
+     */
+    public ThemeInfo themeInfo;
+
     public PackageInfo() {
     }
 
@@ -323,6 +353,13 @@ public class PackageInfo implements Parcelable {
         dest.writeString(restrictedAccountType);
         dest.writeString(requiredAccountType);
         dest.writeString(overlayTarget);
+
+        /* theme related info */
+        dest.writeInt((isThemeApk) ? 1 : 0);
+        dest.writeStringList(overlayTargets);
+        dest.writeParcelable(themeInfo, parcelableFlags);
+        dest.writeInt(hasIconPack ? 1 : 0);
+        dest.writeInt((isLegacyIconPackApk) ? 1 : 0);
     }
 
     public static final Parcelable.Creator<PackageInfo> CREATOR
@@ -372,6 +409,13 @@ public class PackageInfo implements Parcelable {
         restrictedAccountType = source.readString();
         requiredAccountType = source.readString();
         overlayTarget = source.readString();
+
+        /* theme related info */
+        isThemeApk = (source.readInt() != 0);
+        overlayTargets = source.createStringArrayList();
+        themeInfo = source.readParcelable(null);
+        hasIconPack = source.readInt() == 1;
+        isLegacyIconPackApk = source.readInt() == 1;
 
         // The component lists were flattened with the redundant ApplicationInfo
         // instances omitted.  Distribute the canonical one here as appropriate.

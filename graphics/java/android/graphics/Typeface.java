@@ -326,10 +326,24 @@ public class Typeface {
     private static void init() {
         // Load font config and initialize Minikin state
         File systemFontConfigLocation = getSystemFontConfigLocation();
-        File configFilename = new File(systemFontConfigLocation, FONTS_CONFIG);
+        File themeFontConfigLocation = getThemeFontConfigLocation();
+
+        File systemConfigFilename = new File(systemFontConfigLocation, FONTS_CONFIG);
+        File themeConfigFilename = new File(themeFontConfigLocation, FONTS_CONFIG);
+        File configFilename = null;
+        File fontDir;
+
+        if (themeConfigFilename.exists()) {
+            configFilename = themeConfigFilename;
+            fontDir = getThemeFontConfigLocation();
+        } else {
+            configFilename = systemConfigFilename;
+            fontDir = getSystemFontDirLocation();
+        }
+
         try {
-            FileInputStream fontsIn = new FileInputStream(configFilename);
-            FontListParser.Config fontConfig = FontListParser.parse(fontsIn);
+            FontListParser.Config fontConfig = FontListParser.parse(configFilename,
+                    fontDir.getAbsolutePath());
 
             Map<String, ByteBuffer> bufferForPath = new HashMap<String, ByteBuffer>();
 
@@ -385,6 +399,33 @@ public class Typeface {
         }
     }
 
+    /**
+     * Clears caches in java and skia.
+     * Skia will then reparse font config
+     * @hide
+     */
+    public static void recreateDefaults() {
+        sTypefaceCache.clear();
+        sSystemFontMap.clear();
+        init();
+
+        long newDefault = create((String) null, 0).native_instance;
+        long newDefaultBold = create((String) null, Typeface.BOLD).native_instance;
+        long newSansSerif = create("sans-serif", 0).native_instance;
+        long newSerif = create("serif", 0).native_instance;
+        long newMonoSpace = create("monospace", 0).native_instance;
+        long newItalic = create((String) null, Typeface.ITALIC).native_instance;
+        long newBoldItalic = create((String) null, Typeface.BOLD_ITALIC).native_instance;
+
+        DEFAULT.native_instance = newDefault;
+        DEFAULT_BOLD.native_instance = newDefaultBold;
+        SANS_SERIF.native_instance = newSansSerif;
+        SERIF.native_instance = newSerif;
+        MONOSPACE.native_instance = newMonoSpace;
+        sDefaults[2].native_instance = newItalic;
+        sDefaults[3].native_instance = newBoldItalic;
+    }
+
     static {
         init();
         // Set up defaults and typefaces exposed in public API
@@ -405,6 +446,18 @@ public class Typeface {
 
     private static File getSystemFontConfigLocation() {
         return new File("/system/etc/");
+    }
+
+    private static File getSystemFontDirLocation() {
+        return new File("/system/fonts/");
+    }
+
+    private static File getThemeFontConfigLocation() {
+        return new File("/data/system/theme/fonts/");
+    }
+
+    private static File getThemeFontDir() {
+        return new File("/data/system/theme/fonts/");
     }
 
     @Override
