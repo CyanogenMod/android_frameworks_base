@@ -54,6 +54,12 @@ aaptTests := \
     tests/ResourceFilter_test.cpp \
     tests/ResourceTable_test.cpp
 
+aaptCIncludes := \
+    system/core/base/include \
+    external/libpng \
+    external/zlib
+
+aaptHostLdLibs :=
 aaptHostStaticLibs := \
     libandroidfw \
     libpng \
@@ -128,5 +134,30 @@ LOCAL_STATIC_LIBRARIES_windows := $(aaptHostStaticLibs_windows)
 
 include $(BUILD_HOST_NATIVE_TEST)
 
+# ==========================================================
+# Build the device executable: aapt
+# ==========================================================
+ifneq ($(SDK_ONLY),true)
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := aapt
+LOCAL_CFLAGS += $(aaptCFlags)
+LOCAL_SRC_FILES := $(aaptSources) $(aaptMain)
+LOCAL_C_INCLUDES += \
+    $(aaptCIncludes) \
+    bionic
+LOCAL_SHARED_LIBRARIES := \
+    libandroidfw \
+    libutils \
+    libcutils \
+    libpng \
+    liblog \
+    libz
+LOCAL_STATIC_LIBRARIES := \
+    libexpat_static
+
+include $(BUILD_EXECUTABLE)
+
+endif # Not SDK_ONLY
 
 endif # No TARGET_BUILD_APPS or TARGET_BUILD_PDK
