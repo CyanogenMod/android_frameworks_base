@@ -70,10 +70,12 @@
 #define OEM_BOOTANIMATION_FILE "/oem/media/bootanimation.zip"
 #define SYSTEM_BOOTANIMATION_FILE "/system/media/bootanimation.zip"
 #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE "/system/media/bootanimation-encrypted.zip"
+#define THEME_BOOTANIMATION_FILE "/data/system/theme/bootanimation.zip"
 
 #define OEM_SHUTDOWN_ANIMATION_FILE "/oem/media/shutdownanimation.zip"
 #define SYSTEM_SHUTDOWN_ANIMATION_FILE "/system/media/shutdownanimation.zip"
 #define SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE "/system/media/shutdownanimation-encrypted.zip"
+#define THEME_SHUTDOWN_ANIMATION_FILE "/data/system/theme/shutdownanimation.zip"
 
 #define OEM_BOOT_MUSIC_FILE "/oem/media/boot.wav"
 #define SYSTEM_BOOT_MUSIC_FILE "/system/media/boot.wav"
@@ -344,16 +346,18 @@ status_t BootAnimation::initTexture(SkBitmap *bitmap)
 
 
 // Get bootup Animation File
-// Parameter: ImageID: IMG_OEM IMG_SYS IMG_ENC
+// Parameter: ImageID: IMG_OEM IMG_SYS IMG_ENC IMG_THM
 // Return Value : File path
 const char *BootAnimation::getAnimationFileName(ImageID image)
 {
-    const char *fileName[2][3] = { { OEM_BOOTANIMATION_FILE,
+    const char *fileName[2][4] = { { OEM_BOOTANIMATION_FILE,
             SYSTEM_BOOTANIMATION_FILE,
-            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE }, {
+            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE,
+            THEME_BOOTANIMATION_FILE }, {
             OEM_SHUTDOWN_ANIMATION_FILE,
             SYSTEM_SHUTDOWN_ANIMATION_FILE,
-            SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE } };
+            SYSTEM_ENCRYPTED_SHUTDOWN_ANIMATION_FILE
+            THEME_SHUTDOWN_ANIMATION_FILE } };
     int state;
 
     // Load animations of Carrier through regionalization environment
@@ -544,6 +548,9 @@ status_t BootAnimation::readyToRun() {
     if (encryptedAnimation && (access(getAnimationFileName(IMG_ENC), R_OK) == 0)) {
         mZipFileName = getAnimationFileName(IMG_ENC);
     }
+    else if (access(getAnimationFileName(IMG_THM), R_OK) == 0) {
+        mZipFileName = getAnimationFileName(IMG_THM);
+    }
     else if (access(getAnimationFileName(IMG_OEM), R_OK) == 0) {
         mZipFileName = getAnimationFileName(IMG_OEM);
     }
@@ -559,6 +566,8 @@ status_t BootAnimation::readyToRun() {
         fd = fopen(getAnimationFileName(IMG_ENC), "r");
     else if (access(getAnimationFileName(IMG_OEM), R_OK) == 0)
         fd = fopen(getAnimationFileName(IMG_OEM), "r");
+    else if (access(getAnimationFileName(IMG_THM), R_OK) == 0)
+        fd = fopen(getAnimationFileName(IMG_THM), "r");
     else if (access(getAnimationFileName(IMG_SYS), R_OK) == 0)
         fd = fopen(getAnimationFileName(IMG_SYS), "r");
     else
