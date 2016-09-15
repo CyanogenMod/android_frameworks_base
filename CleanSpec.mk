@@ -242,6 +242,15 @@ $(call add-clean-step, rm -f $(OUT_DIR)/target/common/obj/APPS/FeatureSplit1_int
 $(call add-clean-step, rm -f $(OUT_DIR)/target/common/obj/APPS/FeatureSplit2_intermediates/src/com/android/test/split/feature/R.java)
 $(call add-clean-step, rm -rf $(OUT_DIR)/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/core/java/android/hardware)
 
+# clean steps for aapt
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/bin/aapt)
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/obj32/EXECUTABLES/aapt_intermediates)
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/bin/libaapt_tests)
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/obj/EXECUTABLES/aapt_intermediates)
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/system/bin/aapt)
+$(call add-clean-step, rm -rf $(PRODUCT_OUT)/symbols/system/bin/aapt)
+$(call add-clean-step, rm -rf $(OUT_DIR)/host/$(HOST_PREBUILT_TAG)/obj32/STATIC_LIBRARIES/libaapt_intermediates)
+
 # ******************************************************************
 # NEWER CLEAN STEPS MUST BE AT THE END OF THE LIST ABOVE THIS BANNER
 # ******************************************************************
