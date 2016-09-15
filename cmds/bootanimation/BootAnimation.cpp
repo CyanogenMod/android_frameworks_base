@@ -62,6 +62,7 @@
 #define OEM_BOOTANIMATION_FILE "/oem/media/bootanimation.zip"
 #define SYSTEM_BOOTANIMATION_FILE "/system/media/bootanimation.zip"
 #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE "/system/media/bootanimation-encrypted.zip"
+#define THEME_BOOTANIMATION_FILE "/data/system/theme/bootanimation.zip"
 
 #define EXIT_PROP_NAME "service.bootanim.exit"
 
@@ -229,13 +230,14 @@ status_t BootAnimation::initTexture(const Animation::Frame& frame)
 
 
 // Get bootup Animation File
-// Parameter: ImageID: IMG_OEM IMG_SYS IMG_ENC
+// Parameter: ImageID: IMG_OEM IMG_SYS IMG_ENC IMG_THM
 // Return Value : File path
 const char *BootAnimation::getAnimationFileName(ImageID image)
 {
-    const char *fileName[3] = { OEM_BOOTANIMATION_FILE,
+    const char *fileName[4] = { OEM_BOOTANIMATION_FILE,
             SYSTEM_BOOTANIMATION_FILE,
-            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE };
+            SYSTEM_ENCRYPTED_BOOTANIMATION_FILE,
+            THEME_BOOTANIMATION_FILE };
 
     // Load animations of Carrier through regionalization environment
     if (Environment::isSupported()) {
@@ -319,6 +321,9 @@ status_t BootAnimation::readyToRun() {
 
     if (encryptedAnimation && (access(getAnimationFileName(IMG_ENC), R_OK) == 0)) {
         mZipFileName = getAnimationFileName(IMG_ENC);
+    }
+    else if (access(getAnimationFileName(IMG_THM), R_OK) == 0) {
+        mZipFileName = getAnimationFileName(IMG_THM);
     }
     else if (access(getAnimationFileName(IMG_OEM), R_OK) == 0) {
         mZipFileName = getAnimationFileName(IMG_OEM);
