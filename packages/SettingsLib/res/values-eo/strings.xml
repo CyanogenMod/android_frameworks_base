@@ -35,6 +35,7 @@
   <!-- Do not translate.  Concise terminology for wifi with 802.1x EAP security -->
   <!-- Do not translate.  Concise terminology for Passpoint network -->
   <!-- Summary for the remembered network. -->
+  <string name="wifi_remembered">Konservita</string>
   <!-- Status for networks disabled for unknown reason -->
   <!-- Status for networked disabled from a DNS or DHCP failure -->
   <!-- Status for networked disabled from a wifi association failure -->
@@ -50,9 +51,11 @@
   <!-- Package name for Certinstaller app-->
   <!-- Summary for Connected wifi network without internet -->
   <!-- Bluetooth settings.  Message when a device is disconnected -->
+  <string name="bluetooth_disconnected">Malkonektita</string>
   <!-- Bluetooth settings.  Message when disconnecting from a device -->
   <!-- Bluetooth settings.  Message when connecting to a device -->
   <!-- Bluetooth settings.  Message when connected to a device. [CHAR LIMIT=40] -->
+  <string name="bluetooth_connected">Konektita</string>
   <!--Bluetooth settings screen, summary text under individual Bluetooth devices when pairing -->
   <!-- Bluetooth settings.  Message when connected to a device, except for phone audio. [CHAR LIMIT=40] -->
   <!-- Bluetooth settings.  Message when connected to a device, except for media audio. [CHAR LIMIT=40] -->
@@ -94,6 +97,7 @@
   <!-- Button text for accepting an incoming pairing request. [CHAR LIMIT=20] -->
   <!-- Button text for accepting an incoming pairing request in all caps. [CHAR LIMIT=20] -->
   <!-- Button text for declining an incoming pairing request. [CHAR LIMIT=20] -->
+  <string name="bluetooth_pairing_decline">Nuligi</string>
   <!-- Message in pairing dialogs.  [CHAR LIMIT=NONE] -->
   <!-- Message for the error dialog when BT pairing fails generically. -->
   <!-- Message for the error dialog when BT pairing fails because the PIN /
@@ -108,7 +112,9 @@
   <!-- Content description of the WIFI signal when it is full for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Label for kernel threads in battery usage -->
   <!-- Title of data usage item that represents all uninstalled applications. [CHAR LIMIT=48] -->
+  <string name="data_usage_uninstalled_apps">Forigitaj aplikaĵoj</string>
   <!-- Title of data usage item that represents all uninstalled applications or removed users. [CHAR LIMIT=48] -->
+  <string name="data_usage_uninstalled_apps_users">Forigitaj aplikaĵoj kaj uzantoj</string>
   <!-- Tethering controls, item title to go into the tethering settings -->
   <!-- Tethering controls, item title to go into the tethering settings when only USB tethering is available [CHAR LIMIT=25]-->
   <!-- Tethering controls, item title to go into the tethering settings when only Wifi tethering is available [CHAR LIMIT=25]-->
@@ -117,6 +123,7 @@
   <!-- Tethering controls, item title to go into the tethering settings when USB, Bluetooth and Wifi tethering are available [CHAR LIMIT=25]-->
   <!-- Title for a work profile. [CHAR LIMIT=25] -->
   <!-- Title for Guest user [CHAR LIMIT=35] -->
+  <string name="user_guest">Gasto</string>
   <!-- Manage apps, individual app screen, substituted for the application's label when the app's label CAN NOT be determined.-->
   <!-- [CHAR LIMIT=NONE] Label of a running process that represents another user -->
 </resources>

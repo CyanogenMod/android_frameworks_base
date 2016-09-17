@@ -35,6 +35,7 @@
   <!-- Title for the temporary dialog show while an app is generating a print job. [CHAR LIMIT=30] -->
   <!-- Title for the save as PDF option in the printer list. [CHAR LIMIT=30] -->
   <!-- Title for the open all printers UI option in the printer list. [CHAR LIMIT=30] -->
+  <string name="all_printers">Ĉiuj presiloj&#8230;</string>
   <!-- Title for the print dialog announced to the user for accessibility. Not shown in the UI. [CHAR LIMIT=none] -->
   <!-- Template for the message that shows the current page out of the total number of pages [CHAR LIMIT=none] -->
   <!-- Description of the current page - spoken to the user [CHAR LIMIT=none] -->
@@ -42,6 +43,7 @@
   <!-- Description for the handle to expand all print options - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Description for the handle to collapse all print options - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Description for the print button - spoken to the user. [CHAR LIMIT=none] -->
+  <string name="print_button">Presi</string>
   <!-- Description for the save to PDF button - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Message to announce print options are expanded - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Message to announce print options are collapsed - spoken to the user. [CHAR LIMIT=none] -->
@@ -66,9 +68,11 @@
   <!-- Template for the notification label for a blocked print job. [CHAR LIMIT=25] -->
   <!-- Template for the notification label for a composite (multiple items) print jobs notification. [CHAR LIMIT=25] -->
   <!-- Label for the notification button for cancelling a print job. [CHAR LIMIT=25] -->
+  <string name="cancel">Nuligi</string>
   <!-- Label for the notification button for restarting a filed print job. [CHAR LIMIT=25] -->
   <!-- Message that there is no connection to a printer. [CHAR LIMIT=40] -->
   <!-- Label for an unknown reason for failed or blocked print job. [CHAR LIMIT=25] -->
+  <string name="reason_unknown">nekonata</string>
   <!-- Label for a printer that is not available. [CHAR LIMIT=25] -->
   <!-- Arrays -->
   <!-- Color mode labels. -->

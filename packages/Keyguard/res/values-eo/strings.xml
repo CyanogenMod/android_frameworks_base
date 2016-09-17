@@ -37,7 +37,6 @@
          charged, say that it is charged. -->
   <!-- When the lock screen is showing and the phone plugged in, and the battery
          is not fully charged, say that it's charging.  -->
-  <string name="keyguard_plugged_in">Ŝarĝado</string>
   <!-- When the lock screen is showing and the phone plugged in, and the battery
          is not fully charged, and it's plugged into a fast charger, say that it's charging fast.  -->
   <!-- When the lock screen is showing and the phone plugged in, and the battery
