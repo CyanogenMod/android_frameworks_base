@@ -20,6 +20,7 @@
   <!-- Label of the destination widget. [CHAR LIMIT=20] -->
   <!-- Label of the copies count widget. [CHAR LIMIT=20] -->
   <!-- Label of the copies count for the print options summary. [CHAR LIMIT=20] -->
+  <string name="label_copies_summary">Kopioj:</string>
   <!-- Label of the paper size widget. [CHAR LIMIT=20] -->
   <!-- Label of the paper size for the print options summary. [CHAR LIMIT=20] -->
   <!-- Label of the color mode widget. [CHAR LIMIT=20] -->
@@ -35,6 +36,7 @@
   <!-- Title for the temporary dialog show while an app is generating a print job. [CHAR LIMIT=30] -->
   <!-- Title for the save as PDF option in the printer list. [CHAR LIMIT=30] -->
   <!-- Title for the open all printers UI option in the printer list. [CHAR LIMIT=30] -->
+  <string name="all_printers">Ĉiuj presiloj&#8230;</string>
   <!-- Title for the print dialog announced to the user for accessibility. Not shown in the UI. [CHAR LIMIT=none] -->
   <!-- Template for the message that shows the current page out of the total number of pages [CHAR LIMIT=none] -->
   <!-- Description of the current page - spoken to the user [CHAR LIMIT=none] -->
@@ -42,18 +44,25 @@
   <!-- Description for the handle to expand all print options - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Description for the handle to collapse all print options - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Description for the print button - spoken to the user. [CHAR LIMIT=none] -->
+  <string name="print_button">Presi</string>
   <!-- Description for the save to PDF button - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Message to announce print options are expanded - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Message to announce print options are collapsed - spoken to the user. [CHAR LIMIT=none] -->
   <!-- Select printer activity -->
   <!-- Title for the share action bar menu item. [CHAR LIMIT=20] -->
+  <string name="search">Serĉi</string>
   <!-- Title for the select printer activity. [CHAR LIMIT=30] -->
+  <string name="all_printers_label">Ĉiuj presiloj</string>
   <!-- Title of the button to install a print service. [CHAR LIMIT=25] -->
+  <string name="add_print_service_label">Aldoni servon</string>
   <!-- Utterance to announce that the search box is shown. This is spoken to a blind user. [CHAR LIMIT=none] -->
   <!-- Utterance to announce that the search box is hidden. This is spoken to a blind user. [CHAR LIMIT=none] -->
   <!-- Title of the action bar button to got to add a printer. [CHAR LIMIT=25] -->
+  <string name="print_add_printer">Aldoni presilon</string>
   <!-- Title of the menu item to select a printer. [CHAR LIMIT=25] -->
+  <string name="print_select_printer">Elekti presilon</string>
   <!-- Title of the menu item to forget a printer. [CHAR LIMIT=25] -->
+  <string name="print_forget_printer">Forgesi presilon</string>
   <!-- Utterance to announce a change in the number of matches during a search. This is spoken to a blind user. [CHAR LIMIT=none] -->
   <!-- Add printer dialog  -->
   <!-- Title for the alert dialog for selecting a print service. [CHAR LIMIT=50] -->
@@ -66,12 +75,20 @@
   <!-- Template for the notification label for a blocked print job. [CHAR LIMIT=25] -->
   <!-- Template for the notification label for a composite (multiple items) print jobs notification. [CHAR LIMIT=25] -->
   <!-- Label for the notification button for cancelling a print job. [CHAR LIMIT=25] -->
+  <string name="cancel">Nuligi</string>
   <!-- Label for the notification button for restarting a filed print job. [CHAR LIMIT=25] -->
   <!-- Message that there is no connection to a printer. [CHAR LIMIT=40] -->
   <!-- Label for an unknown reason for failed or blocked print job. [CHAR LIMIT=25] -->
+  <string name="reason_unknown">nekonata</string>
   <!-- Label for a printer that is not available. [CHAR LIMIT=25] -->
   <!-- Arrays -->
   <!-- Color mode labels. -->
+  <string-array name="color_mode_labels">
+    <!-- Color mode label: Monochrome color scheme, e.g. one color is used. [CHAR LIMIT=20] -->
+    <item>Black &amp; White</item>
+    <!-- Color mode label: Color color scheme, e.g. many colors are used. [CHAR LIMIT=20] -->
+    <item>Koloro</item>
+  </string-array>
   <!-- Duplex mode labels. -->
   <!-- Orientation labels. -->
   <!-- Permissions -->
