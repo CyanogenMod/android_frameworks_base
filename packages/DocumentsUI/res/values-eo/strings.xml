@@ -20,6 +20,7 @@
   <!-- Action bar title prompting user to choose a location to open a document from [CHAR LIMIT=32] -->
   <!-- Action bar title prompting user to choose a location to save a document to [CHAR LIMIT=32] -->
   <!-- Menu item that creates a new directory/folder at the current location [CHAR LIMIT=24] -->
+  <string name="menu_create_dir">Krei dosierujon</string>
   <!-- Menu item that switches view to show documents as a large-format grid of thumbnails [CHAR LIMIT=24] -->
   <!-- Menu item that switches view to show documents as a list [CHAR LIMIT=24] -->
   <!-- Menu item that switches the criteria with which documents are sorted [CHAR LIMIT=24] -->
@@ -33,7 +34,7 @@
   <!-- Menu item title that saves the current document [CHAR LIMIT=24] -->
   <string name="menu_save">Konservi</string>
   <!-- Menu item title that shares the selected documents [CHAR LIMIT=24] -->
-  <string name="menu_share">Komunigi</string>
+  <string name="menu_share">Konigi</string>
   <!-- Menu item title that deletes the selected documents [CHAR LIMIT=24] -->
   <string name="menu_delete">Forigi</string>
   <!-- Menu item title that selects all documents in the current directory [CHAR LIMIT=24] -->
@@ -45,7 +46,9 @@
   <!-- Menu item that reveals the sizes of displayed files [CHAR LIMIT=24] -->
   <!-- Menu item that hides the sizes of displayed files [CHAR LIMIT=24] -->
   <!-- Button label that select the current directory [CHAR LIMIT=24] -->
+  <string name="button_select">Elekti</string>
   <!-- Button label that copies files to the current directory [CHAR LIMIT=24] -->
+  <string name="button_copy">Kopii</string>
   <!-- Mode that sorts documents by their display name alphabetically [CHAR LIMIT=24] -->
   <string name="sort_name">Laŭ nomo</string>
   <!-- Mode that sorts documents by their last modified time in descending order; most recent first [CHAR LIMIT=24] -->
@@ -56,7 +59,6 @@
   <!-- Toast shown when creating a folder failed with an error [CHAR LIMIT=48] -->
   <!-- Error message shown when querying for a list of documents failed [CHAR LIMIT=48] -->
   <!-- Title of storage root location that contains recently modified or used documents [CHAR LIMIT=24] -->
-  <string name="root_recent">Lasttempaj</string>
   <!-- Subtitle of storage root indicating the total free space available, in bytes [CHAR LIMIT=24] -->
   <!-- Header title for list of storage roots that contains cloud services [CHAR LIMIT=24] -->
   <!-- Header title for list of storage roots that contains shortcuts to documents that may be available elsewhere [CHAR LIMIT=24] -->
@@ -67,6 +69,7 @@
   <!-- Toast shown when no app can be found to open the selected document [CHAR LIMIT=48] -->
   <!-- Toast shown when some of the selected documents failed to be deleted [CHAR LIMIT=48] -->
   <!-- Title of dialog when prompting user to select an app to share documents with [CHAR LIMIT=32] -->
+  <string name="share_via">Konigi per</string>
   <!-- Title of the copy notification [CHAR LIMIT=24] -->
   <!-- Text shown on the copy notification to indicate remaining time, in minutes [CHAR LIMIT=24] -->
   <!-- Toast shown when a file copy is kicked off -->
@@ -74,5 +77,6 @@
   <!-- Title of the copy error notification [CHAR LIMIT=48] -->
   <!-- Second line for notifications saying that more information will be shown after touching [CHAR LIMIT=48] -->
   <!-- Label of a dialog button for retrying a failed operation [CHAR LIMIT=24] -->
+  <string name="retry">Reprovi</string>
   <!-- Contents of the copying failure alert dialog. [CHAR LIMIT=48] -->
 </resources>

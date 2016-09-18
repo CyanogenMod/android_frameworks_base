@@ -75,6 +75,7 @@
   <string name="quick_settings_title_header">Cabeceira</string>
   <string name="quick_settings_title_tiles">Baldosas</string>
   <string name="quick_settings_title_show_weather">Amosar o prognóstico</string>
+  <string name="quick_settings_title_show_brightness_slider">Amosar barra de brillo</string>
   <string name="quick_settings_title_enlarge_first_row">Ampliar a primeira fila</string>
   <!-- Screen pinning dialog description (for devices without navbar) -->
   <string name="screen_pinning_description_no_navbar">Amosarase mentres esté fixado. Para deixar de fixalo, mantén tocado o botón Atrás.</string>
@@ -102,6 +103,7 @@
   <string name="quick_settings_lockscreen_label">Bloqueo de pantalla</string>
   <string name="quick_settings_ambient_display_label">Visualización de ambiente</string>
   <string name="quick_settings_lockscreen_label_enforced">Bloqueo de pantalla estabelecido</string>
+  <string name="quick_settings_lockscreen_label_locked_by_profile">Desactivado polo perfil</string>
   <!-- Content description of the screen timeout tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_screen_timeout">Tempo de espera da pantalla: <xliff:g id="timeout" example="30 segundos">%s</xliff:g>.</string>
   <!-- Announcement made when the screen timeout tile changes (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -197,11 +199,14 @@
   <string name="accessibility_quick_settings_location_changed_gps_only">Informe de localización cambiado a modo sensores.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Informe de localización cambiado a modo alta precisión.</string>
+  <string name="quick_settings_tiles_category_system">Baldosas do sistema</string>
   <!-- detail header when adding a tile -->
+  <string name="quick_settings_tiles_add_tiles">Engadir unha baldosa</string>
   <!-- Hotspot dialog message -->
   <string name="hotspot_apm_message">Non é posíbel conectar a rede móbil mentres o modo Avión está activado. Desactívao e téntao de novo.</string>
   <!-- Notification which notifies user flashlight is enabled -->
   <string name="quick_settings_tile_flashlight_not_title">A lanterna está acesa</string>
   <string name="quick_settings_tile_flashlight_not_summary">Toca para apagala</string>
   <!-- CellularTile data sim not configured state string -->
+  <string name="data_sim_not_configured">SIM sen datos</string>
 </resources>
