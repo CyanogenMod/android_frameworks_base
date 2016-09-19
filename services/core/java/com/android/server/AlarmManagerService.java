@@ -933,14 +933,31 @@ class AlarmManagerService extends SystemService {
     long mTotalDelayTime = 0;
     long mMaxDelayTime = 0;
 
+    boolean mIsEncryptStatus = false;
+    boolean mIsPowerOffAlarmSet = false;
     @Override
     public void onStart() {
         mNativeData = init();
         mNextWakeup = mNextRtcWakeup = mNextNonWakeup = 0;
 
+        AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_SET_FILE,
+                AlarmManager.POWER_OFF_ALARM_NOT_SET);
+
         // We have to set current TimeZone info to kernel
         // because kernel doesn't keep this after reboot
-        setTimeZoneImpl(SystemProperties.get(TIMEZONE_PROPERTY));
+
+        String cryptState = SystemProperties.get("vold.decrypt");
+        if (ENCRYPTING_STATE.equals(cryptState) || ENCRYPTED_STATE.equals(cryptState)) {
+            mIsEncryptStatus = true;
+        }
+
+        if (mIsEncryptStatus) {
+            String tz =  AlarmManager
+                        .readPowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_TIMEZONE_FILE);
+            setTimeZoneImpl(tz);
+        } else {
+            setTimeZoneImpl(SystemProperties.get(TIMEZONE_PROPERTY));
+        }
 
         PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "*alarm*");
@@ -1026,7 +1043,7 @@ class AlarmManagerService extends SystemService {
 
         TimeZone.setDefault(null);
 
-        if (timeZoneWasChanged) {
+        if (timeZoneWasChanged && !mIsEncryptStatus) {
             Intent intent = new Intent(Intent.ACTION_TIMEZONE_CHANGED);
             intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
             intent.putExtra("time-zone", zone.getID());
@@ -1902,12 +1919,6 @@ class AlarmManagerService extends SystemService {
                 setLocked(ELAPSED_REALTIME_WAKEUP, firstWakeup.start);
             }
 
-            boolean isEncryptStatus = false;
-            String cryptState = SystemProperties.get("vold.decrypt");
-            if (ENCRYPTING_STATE.equals(cryptState) || ENCRYPTED_STATE.equals(cryptState)) {
-                isEncryptStatus = true;
-            }
-
             // Set RTC_POWEROFF type alarm to kernel
             if (firstRtcWakeup != null && mNextRtcWakeup != firstRtcWakeup.start) {
                 mNextRtcWakeup = firstRtcWakeup.start;
@@ -1917,19 +1928,22 @@ class AlarmManagerService extends SystemService {
                     // (power off alarm)
                     String packageName = alarm.packageName;
                     if (DESKCLOCK_PACKAGE_NAME.equals(packageName)) {
+                        mIsPowerOffAlarmSet = true;
                         AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_SET_FILE,
                                 AlarmManager.POWER_OFF_ALARM_SET);
-                        if (!isEncryptStatus) {
+                        if (!mIsEncryptStatus) {
                             AlarmManager.writePowerOffAlarmFile(
                                     AlarmManager.POWER_OFF_ALARM_INSTANCE_FILE, "" + alarm.when);
                         }
-                    } else {
+                    } else if (mIsPowerOffAlarmSet){
+                        mIsPowerOffAlarmSet = false;
                         AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_SET_FILE,
                                 AlarmManager.POWER_OFF_ALARM_NOT_SET);
                     }
                     setLocked(RTC_POWEROFF_WAKEUP, alarm.when);
                 }
-            } else if (firstRtcWakeup == null){
+            } else if (firstRtcWakeup == null && mIsPowerOffAlarmSet){
+                mIsPowerOffAlarmSet = false;
                 AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_SET_FILE,
                         AlarmManager.POWER_OFF_ALARM_NOT_SET);
             }

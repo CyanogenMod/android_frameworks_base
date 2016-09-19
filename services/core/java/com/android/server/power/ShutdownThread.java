@@ -524,6 +524,8 @@ public final class ShutdownThread extends Thread {
                     AlarmManager.POWER_OFF_ALARM_HANDLED);
         }
 
+        AlarmManager.writePowerOffAlarmFile(AlarmManager.POWER_OFF_ALARM_TIMEZONE_FILE,
+                SystemProperties.get("persist.sys.timezone"));
         rebootOrShutdown(mContext, mReboot, mReason);
     }
 
