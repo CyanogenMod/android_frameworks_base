@@ -137,6 +137,12 @@ public class AlarmManager {
      */
     public static final String POWER_OFF_ALARM_INSTANCE_FILE =
             "/persist/alarm/powerOffAlarmInstance";
+
+    /**
+     * @hide
+     */
+    public static final String POWER_OFF_ALARM_TIMEZONE_FILE =
+            "/persist/alarm/timezone";
     /**
      * @hide
      */
