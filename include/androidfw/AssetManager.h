@@ -75,6 +75,7 @@ public:
     static const char* TARGET_PACKAGE_NAME;
     static const char* TARGET_APK_PATH;
     static const char* IDMAP_DIR;
+    static const char* APK_EXTENSION;
 
     typedef enum CacheMode {
         CACHE_UNKNOWN = 0,
@@ -103,6 +104,11 @@ public:
     bool addAssetPath(const String8& path, int32_t* cookie,
         bool appAsLib=false, bool isSystemAsset=false);
     bool addOverlayPath(const String8& path, int32_t* cookie);
+    bool addOverlayPath(const String8& packagePath, int32_t* cookie, const String8& idmapPath,
+        const String8& resApkPath=String8 (""), const String8& prefixPath=String8 (""));
+    bool addCommonOverlayPath(const String8& path, int32_t* cookie,
+                 const String8& resApkPath, const String8& prefixPath);
+    bool removeOverlayPath(const String8& path, int32_t cookie);
 
     /*
      * Convenience for adding the standard system assets.  Uses the
@@ -237,21 +243,29 @@ public:
         time_t targetMtime, time_t overlayMtime,
         uint32_t** outData, size_t* outSize);
 
+    String8 getBasePackageName(uint32_t index);
+
 private:
     struct asset_path
     {
         asset_path() : path(""), type(kFileTypeRegular), idmap(""),
-                       isSystemOverlay(false), isSystemAsset(false) {}
+                       isSystemOverlay(false), isSystemAsset(false),
+                       prefixPath(""), resApkPath(""), pkgIdOverride(0) {}
         String8 path;
         FileType type;
         String8 idmap;
         bool isSystemOverlay;
         bool isSystemAsset;
+        String8 prefixPath;
+        String8 resApkPath;
+        uint32_t pkgIdOverride;
     };
 
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openNonAssetInPathLocked(const char* fileName, AccessMode mode,
+        const asset_path& path, bool usePrefix = true);
+    Asset* openNonAssetInExactPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openInLocaleVendorLocked(const char* fileName, AccessMode mode,
         const asset_path& path, const char* locale, const char* vendor);
@@ -262,6 +276,7 @@ private:
         const String8& dirName, const String8& fileName);
 
     ZipFileRO* getZipFileLocked(const asset_path& path);
+    ZipFileRO* getZipFileLocked(const String8& path);
     Asset* openAssetFromFileLocked(const String8& fileName, AccessMode mode);
     Asset* openAssetFromZipLocked(const ZipFileRO* pZipFile,
         const ZipEntryRO entry, AccessMode mode, const String8& entryName);
@@ -292,6 +307,10 @@ private:
 
     void addSystemOverlays(const char* pathOverlaysList, const String8& targetPackagePath,
             ResTable* sharedRes, size_t offset) const;
+
+    String8 getPkgName(const char *apkPath);
+
+    String8 getOverlayResPath(const char* cachePath);
 
     class SharedZip : public RefBase {
     public:
@@ -361,6 +380,8 @@ private:
 
         void addOverlay(const String8& path, const asset_path& overlay);
         bool getOverlay(const String8& path, size_t idx, asset_path* out) const;
+
+        void closeZip(const String8& zip);
         
     private:
         void closeZip(int idx);
@@ -394,6 +415,9 @@ private:
     CacheMode       mCacheMode;         // is the cache enabled?
     bool            mCacheValid;        // clear when locale or vendor changes
     SortedVector<AssetDir::FileInfo> mCache;
+
+    String8 mBasePackageName;
+    uint32_t mBasePackageIndex;
 };
 
 }; // namespace android
