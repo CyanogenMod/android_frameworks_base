@@ -64,6 +64,10 @@ namespace android {
 #define APP_PACKAGE_ID      0x7f
 #define CMSDK_PACKAGE_ID    0x3f
 #define SYS_PACKAGE_ID      0x01
+#define OVERLAY_CMSDK_PACKAGE_ID    0x63
+#define OVERLAY_APP_PACKAGE_ID      0x61
+#define OVERLAY_SYS_PACKAGE_ID      0x60
+#define OVERLAY_COMMON_PACKAGE_ID   0x5f
 
 static const bool kDebugStringPoolNoisy = false;
 static const bool kDebugXMLNoisy = false;
@@ -3166,7 +3170,8 @@ struct ResTable::Type
 struct ResTable::Package
 {
     Package(ResTable* _owner, const Header* _header, const ResTable_package* _package)
-        : owner(_owner), header(_header), package(_package), typeIdOffset(0) {
+        : owner(_owner), header(_header), package(_package), typeIdOffset(0),
+          pkgIdOverride(0) {
         if (dtohs(package->header.headerSize) == sizeof(package)) {
             // The package structure is the same size as the definition.
             // This means it contains the typeIdOffset field.
@@ -3182,6 +3187,7 @@ struct ResTable::Package
     ResStringPool                   keyStrings;
 
     size_t                          typeIdOffset;
+    uint32_t                        pkgIdOverride;
 };
 
 // A group of objects describing a particular resource package.
@@ -3198,6 +3204,7 @@ struct ResTable::PackageGroup
         , largestTypeId(0)
         , dynamicRefTable(static_cast<uint8_t>(_id), appAsLib)
         , isSystemAsset(_isSystemAsset)
+        , overlayPackage(NULL)
     { }
 
     ~PackageGroup() {
@@ -3300,6 +3307,8 @@ struct ResTable::PackageGroup
     // If the package group comes from a system asset. Used in
     // determining non-system locales.
     const bool                      isSystemAsset;
+
+    Package*                        overlayPackage;
 };
 
 ResTable::Theme::Theme(const ResTable& table)
@@ -3671,8 +3680,9 @@ status_t ResTable::add(const void* data, size_t size, const int32_t cookie, bool
 }
 
 status_t ResTable::add(const void* data, size_t size, const void* idmapData, size_t idmapDataSize,
-        const int32_t cookie, bool copyData, bool appAsLib) {
-    return addInternal(data, size, idmapData, idmapDataSize, appAsLib, cookie, copyData);
+        const int32_t cookie, bool copyData, bool appAsLib, const uint32_t pkgIdOverride) {
+    return addInternal(data, size, idmapData, idmapDataSize, appAsLib, cookie, copyData,
+                pkgIdOverride);
 }
 
 status_t ResTable::add(Asset* asset, const int32_t cookie, bool copyData) {
@@ -3688,7 +3698,7 @@ status_t ResTable::add(Asset* asset, const int32_t cookie, bool copyData) {
 
 status_t ResTable::add(
         Asset* asset, Asset* idmapAsset, const int32_t cookie, bool copyData,
-        bool appAsLib, bool isSystemAsset) {
+        bool appAsLib, bool isSystemAsset, const uint32_t pkgIdOverride) {
     const void* data = asset->getBuffer(true);
     if (data == NULL) {
         ALOGW("Unable to get buffer of resource asset file");
@@ -3707,7 +3717,7 @@ status_t ResTable::add(
     }
 
     return addInternal(data, static_cast<size_t>(asset->getLength()),
-            idmapData, idmapSize, appAsLib, cookie, copyData, isSystemAsset);
+            idmapData, idmapSize, appAsLib, cookie, copyData, isSystemAsset, pkgIdOverride);
 }
 
 status_t ResTable::add(ResTable* src, bool isSystemAsset)
@@ -3762,7 +3772,8 @@ status_t ResTable::addEmpty(const int32_t cookie) {
 }
 
 status_t ResTable::addInternal(const void* data, size_t dataSize, const void* idmapData, size_t idmapDataSize,
-        bool appAsLib, const int32_t cookie, bool copyData, bool isSystemAsset)
+        bool appAsLib, const int32_t cookie, bool copyData, bool isSystemAsset,
+        const uint32_t pkgIdOverride __attribute__((unused)))
 {
     if (!data) {
         return NO_ERROR;
@@ -3865,8 +3876,12 @@ status_t ResTable::addInternal(const void* data, size_t dataSize, const void* id
                 return (mError=BAD_TYPE);
             }
 
+            // Warning: If the pkg id will be overriden and there is more than one package in the
+            // resource table then the caller should make sure there are enough unique ids above
+            // pkgIdOverride.
+            uint32_t idOverride = (pkgIdOverride == 0) ? 0 : pkgIdOverride + curPackage;
             if (parsePackage(
-                    (ResTable_package*)chunk, header, appAsLib, isSystemAsset) != NO_ERROR) {
+                    (ResTable_package*)chunk, header, appAsLib, isSystemAsset, idOverride) != NO_ERROR) {
                 return mError;
             }
             curPackage++;
@@ -5190,8 +5205,7 @@ bool ResTable::stringToValue(Res_value* outValue, String16* outString,
                 }
 
                 uint32_t packageId = Res_GETPACKAGE(rid) + 1;
-                if (packageId != APP_PACKAGE_ID && packageId != SYS_PACKAGE_ID &&
-                        packageId != CMSDK_PACKAGE_ID) {
+                if (isDynamicPackageId(packageId)) {
                     outValue->dataType = Res_value::TYPE_DYNAMIC_REFERENCE;
                 }
                 outValue->data = rid;
@@ -5212,8 +5226,7 @@ bool ResTable::stringToValue(Res_value* outValue, String16* outString,
                         outValue->data = rid;
                         outValue->dataType = Res_value::TYPE_DYNAMIC_REFERENCE;
                         return true;
-                    } else if (packageId == APP_PACKAGE_ID || packageId == SYS_PACKAGE_ID ||
-                            packageId == CMSDK_PACKAGE_ID) {
+                    } else if (!isDynamicPackageId(packageId)) {
                         // We accept packageId's generated as 0x01 in order to support
                         // building the android system resources
                         outValue->data = rid;
@@ -6131,7 +6144,8 @@ status_t ResTable::getEntry(
 }
 
 status_t ResTable::parsePackage(const ResTable_package* const pkg,
-                                const Header* const header, bool appAsLib, bool isSystemAsset)
+                                const Header* const header, bool appAsLib, bool isSystemAsset,
+                                const uint32_t pkgIdOverride)
 {
     const uint8_t* base = (const uint8_t*)pkg;
     status_t err = validate_chunk(&pkg->header, sizeof(*pkg) - sizeof(pkg->typeIdOffset),
@@ -6184,11 +6198,17 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
         id = mNextPackageId++;
     }
 
+    if (pkgIdOverride != 0) {
+        ALOGV("Overriding pkg id %d with %d", id, pkgIdOverride);
+        id = pkgIdOverride;
+    }
+
     PackageGroup* group = NULL;
     Package* package = new Package(this, header, pkg);
     if (package == NULL) {
         return (mError=NO_MEMORY);
     }
+    package->pkgIdOverride = pkgIdOverride;
 
     err = package->typeStrings.setTo(base+dtohl(pkg->typeStrings),
                                    header->dataEnd-(base+dtohl(pkg->typeStrings)));
@@ -6434,6 +6454,10 @@ DynamicRefTable::DynamicRefTable(uint8_t packageId, bool appAsLib)
     mLookupTable[APP_PACKAGE_ID] = APP_PACKAGE_ID;
     mLookupTable[SYS_PACKAGE_ID] = SYS_PACKAGE_ID;
     mLookupTable[CMSDK_PACKAGE_ID] = CMSDK_PACKAGE_ID;
+    mLookupTable[OVERLAY_APP_PACKAGE_ID] = OVERLAY_APP_PACKAGE_ID;
+    mLookupTable[OVERLAY_SYS_PACKAGE_ID] = OVERLAY_SYS_PACKAGE_ID;
+    mLookupTable[OVERLAY_COMMON_PACKAGE_ID] = OVERLAY_COMMON_PACKAGE_ID;
+    mLookupTable[OVERLAY_CMSDK_PACKAGE_ID] = OVERLAY_CMSDK_PACKAGE_ID;
 }
 
 status_t DynamicRefTable::load(const ResTable_lib_header* const header)
@@ -6512,7 +6536,9 @@ status_t DynamicRefTable::lookupResourceId(uint32_t* resId) const {
     uint32_t res = *resId;
     size_t packageId = Res_GETPACKAGE(res) + 1;
 
-    if (packageId == APP_PACKAGE_ID && !mAppAsLib) {
+    if ((packageId == APP_PACKAGE_ID || packageId == OVERLAY_APP_PACKAGE_ID ||
+                packageId == OVERLAY_SYS_PACKAGE_ID || packageId == OVERLAY_COMMON_PACKAGE_ID ||
+                packageId == OVERLAY_CMSDK_PACKAGE_ID)  && !mAppAsLib) {
         // No lookup needs to be done, app package IDs are absolute.
         return NO_ERROR;
     }
@@ -6584,6 +6610,7 @@ struct IdmapTypeMap {
 
 status_t ResTable::createIdmap(const ResTable& overlay,
         uint32_t targetCrc, uint32_t overlayCrc,
+        time_t targetMtime, time_t overlayMtime,
         const char* targetPath, const char* overlayPath,
         void** outData, size_t* outSize) const
 {
@@ -6601,8 +6628,10 @@ status_t ResTable::createIdmap(const ResTable& overlay,
 
     KeyedVector<uint8_t, IdmapTypeMap> map;
 
-    // overlaid packages are assumed to contain only one package group
-    const PackageGroup* pg = mPackageGroups[0];
+    // Overlaid packages are assumed to contain only one package group or two package group
+    // as one is "system package(android)", and another is "application package". So we need
+    // to use the last package group to create idmap.
+    const PackageGroup* pg = mPackageGroups[mPackageGroups.size() - 1];
 
     // starting size is header
     *outSize = ResTable::IDMAP_HEADER_SIZE_BYTES;
@@ -6615,77 +6644,103 @@ status_t ResTable::createIdmap(const ResTable& overlay,
     char16_t tmpName[sizeof(overlayPackageStruct->name)/sizeof(overlayPackageStruct->name[0])];
     strcpy16_dtoh(tmpName, overlayPackageStruct->name, sizeof(overlayPackageStruct->name)/sizeof(overlayPackageStruct->name[0]));
     const String16 overlayPackage(tmpName);
+    Package* pkg;
+    size_t typeCount;
+    uint32_t pkg_id;
 
-    for (size_t typeIndex = 0; typeIndex < pg->types.size(); ++typeIndex) {
-        const TypeList& typeList = pg->types[typeIndex];
-        if (typeList.isEmpty()) {
-            continue;
-        }
+    const uint32_t groupCount = mPackageGroups.size();
+    for (int groupIdx = groupCount - 1; groupIdx >= 0; groupIdx--) {
+        pg = mPackageGroups[groupIdx];
+        pkg = pg->packages[0];
+        typeCount = pg->types.size();
+        pkg_id = pkg->package->id << 24;
 
-        const Type* typeConfigs = typeList[0];
-
-        IdmapTypeMap typeMap;
-        typeMap.overlayTypeId = -1;
-        typeMap.entryOffset = 0;
-
-        for (size_t entryIndex = 0; entryIndex < typeConfigs->entryCount; ++entryIndex) {
-            uint32_t resID = Res_MAKEID(pg->id - 1, typeIndex, entryIndex);
-            resource_name resName;
-            if (!this->getResourceName(resID, false, &resName)) {
-                if (typeMap.entryMap.isEmpty()) {
-                    typeMap.entryOffset++;
-                }
+        for (size_t typeIndex = 0; typeIndex < typeCount; ++typeIndex) {
+            const TypeList& typeList = pg->types[typeIndex];
+            if (typeList.isEmpty()) {
                 continue;
             }
 
-            const String16 overlayType(resName.type, resName.typeLen);
-            const String16 overlayName(resName.name, resName.nameLen);
-            uint32_t overlayResID = overlay.identifierForName(overlayName.string(),
-                                                              overlayName.size(),
-                                                              overlayType.string(),
-                                                              overlayType.size(),
-                                                              overlayPackage.string(),
-                                                              overlayPackage.size());
-            if (overlayResID == 0) {
-                if (typeMap.entryMap.isEmpty()) {
-                    typeMap.entryOffset++;
+            const Type* typeConfigs = typeList[0];
+
+            IdmapTypeMap typeMap;
+            typeMap.overlayTypeId = -1;
+            typeMap.entryOffset = 0;
+
+            for (size_t entryIndex = 0; entryIndex < typeConfigs->entryCount; ++entryIndex) {
+                    uint32_t resID = Res_MAKEID(pg->id - 1, typeIndex, entryIndex);
+                resource_name resName;
+                if (!this->getResourceName(resID, false, &resName)) {
+                    if (typeMap.entryMap.isEmpty()) {
+                        typeMap.entryOffset++;
+                    }
+                    continue;
                 }
-                continue;
+
+                // check if resource type is "allowed", if not continue
+                String8 type8;
+                if (resName.type8 != NULL) {
+                    type8 = String8(resName.type8, resName.typeLen);
+                } else {
+                    type8 = String8(resName.type, resName.typeLen);
+                }
+                if (!isResTypeAllowed(type8.string())) {
+                    if (typeMap.entryMap.isEmpty()) {
+                        typeMap.entryOffset++;
+                    }
+                    continue;
+                }
+
+                const String16 overlayType(resName.type, resName.typeLen);
+                const String16 overlayName(resName.name, resName.nameLen);
+                uint32_t overlayResID = overlay.identifierForName(overlayName.string(),
+                                                                  overlayName.size(),
+                                                                  overlayType.string(),
+                                                                  overlayType.size(),
+                                                                  overlayPackage.string(),
+                                                                  overlayPackage.size());
+                if (overlayResID == 0) {
+                    if (typeMap.entryMap.isEmpty()) {
+                        typeMap.entryOffset++;
+                    }
+                    continue;
+                } else {
+                    overlayResID = pkg_id | (0x00ffffff & overlayResID);
+                }
+
+                if (typeMap.overlayTypeId == -1) {
+                    typeMap.overlayTypeId = Res_GETTYPE(overlayResID) + 1;
+                }
+
+                if (Res_GETTYPE(overlayResID) + 1 != static_cast<size_t>(typeMap.overlayTypeId)) {
+                    ALOGE("idmap: can't mix type ids in entry map. Resource 0x%08x maps to 0x%08x"
+                            " but entries should map to resources of type %02zx",
+                            resID, overlayResID, typeMap.overlayTypeId);
+                    return BAD_TYPE;
+                }
+
+                if (typeMap.entryOffset + typeMap.entryMap.size() < entryIndex) {
+                    // pad with 0xffffffff's (indicating non-existing entries) before adding this entry
+                    size_t index = typeMap.entryMap.size();
+                    size_t numItems = entryIndex - (typeMap.entryOffset + index);
+                    if (typeMap.entryMap.insertAt(0xffffffff, index, numItems) < 0) {
+                        return NO_MEMORY;
+                    }
+                }
+                typeMap.entryMap.add(Res_GETENTRY(overlayResID));
             }
 
-            if (typeMap.overlayTypeId == -1) {
-                typeMap.overlayTypeId = Res_GETTYPE(overlayResID) + 1;
-            }
-
-            if (Res_GETTYPE(overlayResID) + 1 != static_cast<size_t>(typeMap.overlayTypeId)) {
-                ALOGE("idmap: can't mix type ids in entry map. Resource 0x%08x maps to 0x%08x"
-                        " but entries should map to resources of type %02zx",
-                        resID, overlayResID, typeMap.overlayTypeId);
-                return BAD_TYPE;
-            }
-
-            if (typeMap.entryOffset + typeMap.entryMap.size() < entryIndex) {
-                // pad with 0xffffffff's (indicating non-existing entries) before adding this entry
-                size_t index = typeMap.entryMap.size();
-                size_t numItems = entryIndex - (typeMap.entryOffset + index);
-                if (typeMap.entryMap.insertAt(0xffffffff, index, numItems) < 0) {
+            if (!typeMap.entryMap.isEmpty()) {
+                if (map.add(static_cast<uint8_t>(typeIndex), typeMap) < 0) {
                     return NO_MEMORY;
                 }
+                *outSize += (4 * sizeof(uint16_t)) + (typeMap.entryMap.size() * sizeof(uint32_t));
             }
-            typeMap.entryMap.add(Res_GETENTRY(overlayResID));
-        }
-
-        if (!typeMap.entryMap.isEmpty()) {
-            if (map.add(static_cast<uint8_t>(typeIndex), typeMap) < 0) {
-                return NO_MEMORY;
-            }
-            *outSize += (4 * sizeof(uint16_t)) + (typeMap.entryMap.size() * sizeof(uint32_t));
         }
     }
 
     if (map.isEmpty()) {
         ALOGW("idmap: no resources in overlay package present in base package");
-        return UNKNOWN_ERROR;
     }
 
     if ((*outData = malloc(*outSize)) == NULL) {
@@ -6697,6 +6752,8 @@ status_t ResTable::createIdmap(const ResTable& overlay,
     *data++ = htodl(IDMAP_CURRENT_VERSION);
     *data++ = htodl(targetCrc);
     *data++ = htodl(overlayCrc);
+    *data++ = htodl(targetMtime);
+    *data++ = htodl(overlayMtime);
     const char* paths[] = { targetPath, overlayPath };
     for (int j = 0; j < 2; ++j) {
         char* p = (char*)data;
@@ -6759,6 +6816,101 @@ bool ResTable::getIdmapInfo(const void* idmap, size_t sizeBytes,
         pOverlayPath->setTo(reinterpret_cast<const char*>(map + 4 + 256 / sizeof(uint32_t)));
     }
     return true;
+}
+
+void ResTable::removeAssetsByCookie(const String8& /* packageName */, int32_t cookie)
+{
+    mError = NO_ERROR;
+    size_t pgCount = mPackageGroups.size();
+    for (size_t pgIndex = 0; pgIndex < pgCount; pgIndex++) {
+        PackageGroup* pg = mPackageGroups[pgIndex];
+        size_t pkgCount = pg->packages.size();
+        size_t index = pkgCount;
+        for (size_t pkgIndex = 0; pkgIndex < pkgCount; pkgIndex++) {
+            const Package* pkg = pg->packages[pkgIndex];
+            if (pkg->header->cookie == cookie) {
+                index = pkgIndex;
+                break;
+            }
+        }
+        if (index < pkgCount) {
+            const Package* pkg = pg->packages[index];
+            uint32_t id = dtohl(pkg->package->id);
+            if (pkg->pkgIdOverride != 0) {
+                id = pkg->pkgIdOverride;
+            }
+            if (id != 0 && id < 256 && pkgCount == 1) {
+                mPackageMap[id] = 0;
+            }
+            // Check if this package is being reference in any other groups and remove it
+            size_t N = mPackageGroups.size();
+            for (size_t i = 0; i < N; i++) {
+                PackageGroup* grp = mPackageGroups.itemAt(i);
+                if (grp->overlayPackage == pkg) {
+                    removeIdmappedTypesFromPackageGroup(grp);
+                    grp->clearBagCache();
+                    grp->overlayPackage = NULL;
+                }
+            }
+            if (pkgCount == 1) {
+                mPackageGroups.removeAt(pgIndex);
+                delete pg;
+            } else {
+                pg->packages.removeAt(index);
+                delete pkg;
+            }
+            break;
+        }
+    }
+    size_t N = mHeaders.size();
+    for (size_t i = 0; i < N; i++) {
+        Header* header = mHeaders[i];
+        if (header->cookie == cookie) {
+            if (header->ownedData != NULL) {
+                free(header->ownedData);
+            }
+            mHeaders.removeAt(i);
+            break;
+        }
+    }
+}
+
+bool ResTable::isResTypeAllowed(const char* type) const {
+    if (type == NULL) return false;
+    const char* allowedResources[] = { "color", "dimen", "drawable", "mipmap", "style", "anim" };
+    // ALLOWED_RESOURCE_COUNT should match the number of elements in allowedResources
+    const uint32_t ALLOWED_RESOURCE_COUNT = 6;
+    for (uint32_t i = 0; i < ALLOWED_RESOURCE_COUNT; i++) {
+        if (strstr(type, allowedResources[i]) != NULL) return true;
+    }
+    return false;
+}
+
+bool ResTable::isDynamicPackageId(const uint32_t pkgId) const {
+    return pkgId != APP_PACKAGE_ID && pkgId != SYS_PACKAGE_ID
+            && pkgId != OVERLAY_APP_PACKAGE_ID && pkgId != OVERLAY_SYS_PACKAGE_ID
+            && pkgId != OVERLAY_COMMON_PACKAGE_ID && pkgId != CMSDK_PACKAGE_ID
+            && pkgId != OVERLAY_CMSDK_PACKAGE_ID;
+}
+
+status_t ResTable::removeIdmappedTypesFromPackageGroup(PackageGroup* packageGroup) const {
+    for (size_t idx = 0; idx < Res_MAXTYPE; idx++) {
+        const TypeList& typeList = packageGroup->types[idx];
+        if (!typeList.isEmpty()) {
+            TypeList& editTypeList = packageGroup->types.editItemAt(idx);
+            // Iterate over the Types of each package.
+            for (Vector<Type*>::iterator iter = editTypeList.begin();
+                 iter != editTypeList.end();) {
+                Type* type = *iter;
+                if (type->idmapEntries.hasEntries()) {
+                    iter = editTypeList.erase(iter);
+                } else {
+                    ++iter;
+                }
+            }
+        }
+    }
+    return NO_ERROR;
 }
 
 #define CHAR16_TO_CSTR(c16, len) (String8(String16(c16,len)).string())
