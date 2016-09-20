@@ -1845,6 +1845,12 @@ public final class ActivityStackSupervisor implements DisplayListener {
 
     void findTaskToMoveToFrontLocked(TaskRecord task, int flags, ActivityOptions options,
             String reason, boolean forceNonResizeable) {
+        ActivityRecord top = task.stack.topRunningActivityLocked();
+        /* App is launching from recent apps and it's a new process */
+        if (top != null && top.state == ActivityState.DESTROYED) {
+            mService.launchBoost(-1, top.packageName);
+        }
+
         if ((flags & ActivityManager.MOVE_TASK_NO_USER_ACTION) == 0) {
             mUserLeaving = true;
         }
@@ -2635,11 +2641,18 @@ public final class ActivityStackSupervisor implements DisplayListener {
                 // If the match we found was based on root affinity we keep on looking to see if
                 // there is a better match in another stack. We eventually return the match based
                 // on root affinity if we don't find a better match.
-                if (mTmpFindTaskResult.r != null && !mTmpFindTaskResult.matchedByRootAffinity) {
-                    return mTmpFindTaskResult.r;
+                if (mTmpFindTaskResult.r != null) {
+                    if (mTmpFindTaskResult.r.state == ActivityState.DESTROYED) {
+                        mService.launchBoost(-1, r.packageName);
+                    }
+                    if (!mTmpFindTaskResult.matchedByRootAffinity) {
+                        return mTmpFindTaskResult.r;
+                    }
                 }
             }
         }
+        mService.launchBoost(-1, r.packageName);
+
         if (DEBUG_TASKS && mTmpFindTaskResult.r == null) Slog.d(TAG_TASKS, "No task found");
         return mTmpFindTaskResult.r;
     }
