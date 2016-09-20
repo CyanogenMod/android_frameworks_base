@@ -1573,11 +1573,12 @@ public:
 
     status_t add(const void* data, size_t size, const int32_t cookie=-1, bool copyData=false);
     status_t add(const void* data, size_t size, const void* idmapData, size_t idmapDataSize,
-            const int32_t cookie=-1, bool copyData=false, bool appAsLib=false);
+            const int32_t cookie=-1, bool copyData=false, bool appAsLib=false,
+            const uint32_t pkgIdOverride=0);
 
     status_t add(Asset* asset, const int32_t cookie=-1, bool copyData=false);
     status_t add(Asset* asset, Asset* idmapAsset, const int32_t cookie=-1, bool copyData=false,
-            bool appAsLib=false, bool isSystemAsset=false);
+            bool appAsLib=false, bool isSystemAsset=false, const uint32_t pkgIdOverride=0);
 
     status_t add(ResTable* src, bool isSystemAsset=false);
     status_t addEmpty(const int32_t cookie);
@@ -1858,10 +1859,11 @@ public:
     // NO_ERROR; the caller should not free outData.
     status_t createIdmap(const ResTable& overlay,
             uint32_t targetCrc, uint32_t overlayCrc,
+            time_t targetMtime, time_t overlayMtime,
             const char* targetPath, const char* overlayPath,
             void** outData, size_t* outSize) const;
 
-    static const size_t IDMAP_HEADER_SIZE_BYTES = 4 * sizeof(uint32_t) + 2 * 256;
+    static const size_t IDMAP_HEADER_SIZE_BYTES = 6 * sizeof(uint32_t) + 2 * 256;
 
     // Retrieve idmap meta-data.
     //
@@ -1871,6 +1873,8 @@ public:
             uint32_t* pVersion,
             uint32_t* pTargetCrc, uint32_t* pOverlayCrc,
             String8* pTargetPath, String8* pOverlayPath);
+
+    void removeAssetsByCookie(const String8 &packageName, int32_t cookie);
 
     void print(bool inclValues) const;
     static String8 normalizeForOutput(const char* input);
@@ -1906,7 +1910,8 @@ private:
     };
 
     status_t addInternal(const void* data, size_t size, const void* idmapData, size_t idmapDataSize,
-            bool appAsLib, const int32_t cookie, bool copyData, bool isSystemAsset=false);
+            bool appAsLib, const int32_t cookie, bool copyData, bool isSystemAsset=false,
+            const uint32_t pkgIdOverride=0);
 
     ssize_t getResourcePackageIndex(uint32_t resID) const;
 
@@ -1920,13 +1925,18 @@ private:
 
     status_t parsePackage(
         const ResTable_package* const pkg, const Header* const header,
-        bool appAsLib, bool isSystemAsset);
+        bool appAsLib, bool isSystemAsset, const uint32_t pkgIdOverride);
 
     void print_value(const Package* pkg, const Res_value& value) const;
 
     template <typename Func>
     void forEachConfiguration(bool ignoreMipmap, bool ignoreAndroidPackage,
                               bool includeSystemConfigs, const Func& f) const;
+
+    bool isResTypeAllowed(const char* type) const;
+    bool isDynamicPackageId(const uint32_t pkgId) const;
+
+    status_t removeIdmappedTypesFromPackageGroup(PackageGroup* packageGroup) const;
 
     mutable Mutex               mLock;
 
