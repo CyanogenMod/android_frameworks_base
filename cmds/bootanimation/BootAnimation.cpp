@@ -429,7 +429,6 @@ status_t BootAnimation::readyToRun() {
             ((access(getAnimationFileName(IMG_THM), R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(getAnimationFileName(IMG_THM))) != NULL)) ||
 
-
             ((access(getAnimationFileName(IMG_DATA), R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(getAnimationFileName(IMG_DATA))) != NULL)) ||
 
@@ -442,12 +441,14 @@ status_t BootAnimation::readyToRun() {
     // Preload the bootanimation zip on memory, so we don't stutter
     // when showing the animation
     FILE* fd;
-    if (encryptedAnimation && access(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, R_OK) == 0)
-        fd = fopen(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, "r");
-    else if (access(OEM_BOOTANIMATION_FILE, R_OK) == 0)
-        fd = fopen(OEM_BOOTANIMATION_FILE, "r");
-    else if (access(SYSTEM_BOOTANIMATION_FILE, R_OK) == 0)
-        fd = fopen(SYSTEM_BOOTANIMATION_FILE, "r");
+    if (encryptedAnimation && access(getAnimationFileName(IMG_ENC), R_OK) == 0)
+        fd = fopen(getAnimationFileName(IMG_ENC), "r");
+    else if (access(getAnimationFileName(IMG_THM), R_OK) == 0)
+        fd = fopen(getAnimationFileName(IMG_THM), "r");
+    else if (access(getAnimationFileName(IMG_DATA), R_OK) == 0)
+        fd = fopen(getAnimationFileName(IMG_DATA), "r");
+    else if (access(getAnimationFileName(IMG_SYS), R_OK) == 0)
+        fd = fopen(getAnimationFileName(IMG_SYS), "r");
     else
         return NO_ERROR;
 
