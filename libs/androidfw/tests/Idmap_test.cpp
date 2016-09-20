@@ -50,7 +50,7 @@ protected:
         ASSERT_EQ(NO_ERROR, mTargetTable.add(basic_arsc, basic_arsc_len));
         ASSERT_EQ(NO_ERROR, mOverlayTable.add(overlay_arsc, overlay_arsc_len));
         char targetName[256] = "com.android.test.basic";
-        ASSERT_EQ(NO_ERROR, mTargetTable.createIdmap(mOverlayTable, 0, 0,
+        ASSERT_EQ(NO_ERROR, mTargetTable.createIdmap(mOverlayTable, 0, 0, 0, 0,
                     targetName, targetName, &mData, &mDataSize));
     }
 
