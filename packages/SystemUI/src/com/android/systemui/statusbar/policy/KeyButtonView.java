@@ -43,6 +43,8 @@ import android.widget.ImageView;
 
 import com.android.systemui.R;
 
+import cyanogenmod.power.PerformanceManager;
+
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_LONG_CLICK;
 
@@ -56,6 +58,8 @@ public class KeyButtonView extends ImageView {
     private AudioManager mAudioManager;
     private boolean mGestureAborted;
     private boolean mLongClicked;
+
+    private PerformanceManager mPerf;
 
     private final Runnable mCheckLongPress = new Runnable() {
         public void run() {
@@ -100,6 +104,7 @@ public class KeyButtonView extends ImageView {
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         setBackground(new KeyButtonRipple(context, this));
+        mPerf = PerformanceManager.getInstance(context);
     }
 
     public void setCode(int code) {
@@ -175,6 +180,9 @@ public class KeyButtonView extends ImageView {
         if (mGestureAborted) {
             return false;
         }
+
+        // A lot of stuff is about to happen. Lets get ready.
+        mPerf.cpuBoost(750000);
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
