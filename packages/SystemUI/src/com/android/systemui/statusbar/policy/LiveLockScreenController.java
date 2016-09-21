@@ -184,7 +184,8 @@ public class LiveLockScreenController {
         public void providerDied() {
             mLiveLockScreenView.unregisterKeyguardExternalViewCallback(
                     mExternalKeyguardViewCallbacks);
-            mLiveLockScreenView = null;
+            mPanelView.removeView(mLiveLockScreenView);
+            cleanup();
             // make sure we're showing the notification panel if the LLS crashed while it had focus
             if (mLlsHasFocus) {
                 mLlsHasFocus = false;
