@@ -79,6 +79,7 @@ public class MobileSignalController extends SignalController<
     private MobileIconGroup mDefaultIcons;
     private Config mConfig;
     private int mNewCellIdentity = Integer.MAX_VALUE;
+    private CallbackHandler mCallbackHandler;
 
     private final int STATUS_BAR_STYLE_ANDROID_DEFAULT = 0;
     private final int STATUS_BAR_STYLE_CDMA_1X_COMBINED = 1;
@@ -96,6 +97,7 @@ public class MobileSignalController extends SignalController<
         super("MobileSignalController(" + info.getSubscriptionId() + ")", context,
                 NetworkCapabilities.TRANSPORT_CELLULAR, callbackHandler,
                 networkController);
+        mCallbackHandler = callbackHandler;
         mNetworkToIconLookup = new SparseArray<>();
         mConfig = config;
         mPhone = phone;
@@ -344,8 +346,7 @@ public class MobileSignalController extends SignalController<
                     dataContentDescription, description, icons.mIsWide,
                     mSubscriptionInfo.getSubscriptionId());
         }
-        CallbackHandler callbackHandler = (CallbackHandler) callback;
-        callbackHandler.post(new Runnable() {
+        mCallbackHandler.post(new Runnable() {
             @Override
             public void run() {
                 mNetworkController.updateNetworkLabelView();
