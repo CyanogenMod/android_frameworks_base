@@ -946,10 +946,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mBackdropFront = (ImageView) mBackdrop.findViewById(R.id.backdrop_front);
         mBackdropBack = (ImageView) mBackdrop.findViewById(R.id.backdrop_back);
 
-        FrameLayout scrimView = (FrameLayout) mStatusBarWindow.findViewById(R.id.scrimview);
-        ScrimView scrimBehind = (ScrimView) scrimView.findViewById(R.id.scrim_behind);
-        ScrimView scrimInFront =
-                (ScrimView) mStatusBarWindow.findViewById(R.id.scrim_in_front);
+        ScrimView scrimBehind = (ScrimView) mStatusBarWindow.findViewById(R.id.scrim_behind);
+        ScrimView scrimInFront = (ScrimView) mStatusBarWindow.findViewById(R.id.scrim_in_front);
 
         View headsUpScrim = mStatusBarWindow.findViewById(R.id.heads_up_scrim);
         mScrimController = SystemUIFactory.getInstance().createScrimController(
@@ -970,7 +968,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mStackScroller.setScrimController(mScrimController);
         mStatusBarView.setScrimController(mScrimController);
         mDozeScrimController = new DozeScrimController(mScrimController, context);
-        mVisualizerView = (VisualizerView) scrimView.findViewById(R.id.visualizerview);
+        mVisualizerView = (VisualizerView) mStatusBarWindow.findViewById(R.id.visualizerview);
 
         mKeyguardStatusBar = (KeyguardStatusBarView) mStatusBarWindow.findViewById(R.id.keyguard_header);
         mKeyguardStatusView = mStatusBarWindow.findViewById(R.id.keyguard_status_view);
