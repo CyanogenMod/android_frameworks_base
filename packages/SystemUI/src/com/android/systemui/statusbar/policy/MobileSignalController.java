@@ -337,6 +337,13 @@ public class MobileSignalController extends SignalController<
                     dataContentDescription, description, icons.mIsWide,
                     mSubscriptionInfo.getSubscriptionId(), dataNetworkTypeInRoamingId,
                     getEmbmsIconId(), getImsIconId(), isImsRegisteredInWifi());
+            CallbackHandler callbackHandler = (CallbackHandler) callback;
+            callbackHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mNetworkController.updateNetworkLabelView();
+                }
+            });
         } else {
             callback.setMobileDataIndicators(statusIcon, qsIcon, typeIcon, qsTypeIcon,
                     activityIn, activityOut, dataActivityId, mobileActivityId,
@@ -344,13 +351,6 @@ public class MobileSignalController extends SignalController<
                     dataContentDescription, description, icons.mIsWide,
                     mSubscriptionInfo.getSubscriptionId());
         }
-        CallbackHandler callbackHandler = (CallbackHandler) callback;
-        callbackHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mNetworkController.updateNetworkLabelView();
-            }
-       });
     }
 
     private int getEmbmsIconId() {
