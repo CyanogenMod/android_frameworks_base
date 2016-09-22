@@ -2394,6 +2394,11 @@ public class KeyEvent extends InputEvent implements Parcelable {
      * @return The key code of the event.
      */
     public final int getKeyCode() {
+        Log.e(TAG, "Original wakeup key code: " + mKeyCode + ", injecting"
+            + " KEYCODE_HOME instead!");
+        if (mKeyCode == KEYCODE_WAKEUP) {
+            return KEYCODE_HOME;
+        }
         return mKeyCode;
     }
 
