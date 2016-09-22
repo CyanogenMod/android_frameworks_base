@@ -1922,6 +1922,22 @@ public class StateMachine {
     }
 
     /**
+     * Check if there are any pending messages with code 'what' in deferred messages queue.
+     */
+    protected final boolean hasDeferredMessages(int what, Object obj) {
+        SmHandler smh = mSmHandler;
+        if (smh == null) return false;
+
+        Iterator<Message> iterator = smh.mDeferredMessages.iterator();
+        while (iterator.hasNext()) {
+            Message msg = iterator.next();
+            if ((msg.what == what) && (msg.obj == obj)) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Check if there are any pending posts of messages with code 'what' in
      * the message queue. This does NOT check messages in deferred message queue.
      */

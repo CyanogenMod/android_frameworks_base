@@ -2166,6 +2166,13 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         // TODO: Move somewhere sane. This doesn't belong in onLayout().
         if (mFastScroll != null) {
             mFastScroll.onItemCountChanged(getChildCount(), mItemCount);
+            //This may call internalSetPadding and cause children dirty.
+            //So need to layout children again.
+            if(isLayoutRequested()){
+                mInLayout = true;
+                layoutChildren();
+                mInLayout = false;
+            }
         }
     }
 

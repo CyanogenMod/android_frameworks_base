@@ -25,6 +25,7 @@ import android.icu.text.DateFormat;
 import android.icu.text.DisplayContext;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import android.provider.Settings;
 
 import com.android.systemui.R;
 
@@ -117,7 +118,9 @@ public class DateView extends TextView {
 
     private String getDateFormat() {
         if (getContext().getResources().getBoolean(com.android.internal.R.bool.config_dateformat)) {
-            return android.text.format.DateFormat.getDateFormat(getContext()).format(mCurrentTime);
+            String dateformat = Settings.System.getString(getContext().getContentResolver(),
+                    Settings.System.DATE_FORMAT);
+            return android.text.format.DateFormat.format(dateformat, mCurrentTime).toString();
         } else {
             return mDateFormat.format(mCurrentTime);
         }

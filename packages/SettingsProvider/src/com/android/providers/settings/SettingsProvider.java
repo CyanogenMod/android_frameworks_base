@@ -804,7 +804,8 @@ public class SettingsProvider extends ContentProvider {
 
         // If this is a setting that is currently restricted for this user, do not allow
         // unrestricting changes.
-        if (isGlobalOrSecureSettingRestrictedForUser(name, callingUserId, value)) {
+        if (isGlobalOrSecureSettingRestrictedForUser(name, callingUserId, value,
+                Binder.getCallingUid())) {
             return false;
         }
 
@@ -935,7 +936,8 @@ public class SettingsProvider extends ContentProvider {
 
         // If this is a setting that is currently restricted for this user, do not allow
         // unrestricting changes.
-        if (isGlobalOrSecureSettingRestrictedForUser(name, callingUserId, value)) {
+        if (isGlobalOrSecureSettingRestrictedForUser(name, callingUserId, value,
+                Binder.getCallingUid())) {
             return false;
         }
 
@@ -1158,7 +1160,7 @@ public class SettingsProvider extends ContentProvider {
      * @return true if the change is prohibited, false if the change is allowed.
      */
     private boolean isGlobalOrSecureSettingRestrictedForUser(String setting, int userId,
-            String value) {
+            String value, int callingUid) {
         String restriction;
         switch (setting) {
             case Settings.Secure.LOCATION_MODE:
@@ -1194,6 +1196,20 @@ public class SettingsProvider extends ContentProvider {
 
             case Settings.Global.PREFERRED_NETWORK_MODE:
                 restriction = UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS;
+                break;
+
+            case Settings.Secure.ALWAYS_ON_VPN_APP:
+            case Settings.Secure.ALWAYS_ON_VPN_LOCKDOWN:
+                // Whitelist system uid (ConnectivityService) and root uid to change always-on vpn
+                if (callingUid == Process.SYSTEM_UID || callingUid == Process.ROOT_UID) {
+                    return false;
+                }
+                restriction = UserManager.DISALLOW_CONFIG_VPN;
+                break;
+
+            case Settings.Global.SAFE_BOOT_DISALLOWED:
+                if ("1".equals(value)) return false;
+                restriction = UserManager.DISALLOW_SAFE_BOOT;
                 break;
 
             default:
