@@ -297,7 +297,7 @@
     <bool name="quick_settings_show_full_alarm">false</bool>
 
     <!-- When true, show charging animation -->
-    <bool name="config_show_battery_charging_anim">true</bool>
+    <bool name="config_show_battery_charging_anim">false</bool>
 
     <!-- Whether or not to show battery level text. -->
     <bool name="config_showBatteryPercentage">false</bool>
