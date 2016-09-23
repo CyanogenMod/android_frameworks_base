@@ -293,4 +293,6 @@
         containing the IDs of all enabled input methods, each ID separated by ':'.
     -->
     <string name="def_enable_input_methods" translatable="false"></string>
+    <!-- Default for Settings.Global.CAPTIVE_PORTAL_DETECTION_ENABLED -->
+    <integer name="def_captive_portal_detection_enabled" translatable="false">1</integer>
 </resources>
