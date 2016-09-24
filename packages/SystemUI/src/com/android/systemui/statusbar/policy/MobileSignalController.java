@@ -316,7 +316,7 @@ public class MobileSignalController extends SignalController<
                         && mCurrentState.activityOut;
         if (!mContext.getResources().getBoolean(R.bool.show_roaming_and_network_icons)) {
               showDataIcon &= mCurrentState.isDefault
-                || mCurrentState.iconGroup == TelephonyIcons.ROAMING
+                || (mCurrentState.iconGroup == TelephonyIcons.ROAMING || isRoaming())
                 || dataDisabled;
         }
         showDataIcon &= (mStyle == STATUS_BAR_STYLE_ANDROID_DEFAULT
@@ -337,6 +337,13 @@ public class MobileSignalController extends SignalController<
                     dataContentDescription, description, icons.mIsWide,
                     mSubscriptionInfo.getSubscriptionId(), dataNetworkTypeInRoamingId,
                     getEmbmsIconId(), getImsIconId(), isImsRegisteredInWifi());
+            CallbackHandler callbackHandler = (CallbackHandler) callback;
+            callbackHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mNetworkController.updateNetworkLabelView();
+                }
+            });
         } else {
             callback.setMobileDataIndicators(statusIcon, qsIcon, typeIcon, qsTypeIcon,
                     activityIn, activityOut, dataActivityId, mobileActivityId,
@@ -344,13 +351,6 @@ public class MobileSignalController extends SignalController<
                     dataContentDescription, description, icons.mIsWide,
                     mSubscriptionInfo.getSubscriptionId());
         }
-        CallbackHandler callbackHandler = (CallbackHandler) callback;
-        callbackHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mNetworkController.updateNetworkLabelView();
-            }
-       });
     }
 
     private int getEmbmsIconId() {
