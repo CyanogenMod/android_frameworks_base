@@ -304,8 +304,5 @@
 
     <bool name="config_show4gForIWlan">false</bool>
     <bool name="config_showSignalForIWlan">false</bool>
-
-    <bool name="config_show_long_operator_name">false</bool>
-    <bool name="config_show_long_operator_name_when_roaming">false</bool>
 </resources>
 
