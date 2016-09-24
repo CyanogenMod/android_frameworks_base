@@ -299,9 +299,6 @@
     <!-- When true, show charging animation -->
     <bool name="config_show_battery_charging_anim">false</bool>
 
-    <!-- Whether or not to show battery level text. -->
-    <bool name="config_showBatteryPercentage">false</bool>
-
     <bool name="config_show4gForIWlan">false</bool>
     <bool name="config_showSignalForIWlan">false</bool>
 
