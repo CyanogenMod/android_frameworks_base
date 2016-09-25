@@ -52,7 +52,7 @@ public class SettingsButton extends AlphaOptimizedImageButton {
     }
 
     public boolean isTunerClick() {
-        return mUpToSpeed;
+        return false;
     }
 
     @Override
