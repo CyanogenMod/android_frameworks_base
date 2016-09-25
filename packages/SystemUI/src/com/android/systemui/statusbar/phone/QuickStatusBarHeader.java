@@ -304,8 +304,7 @@ public class QuickStatusBarHeader extends BaseStatusBarHeader implements
         mEmergencyOnly.setVisibility(mExpanded && mShowEmergencyCallsOnly
                 ? View.VISIBLE : View.INVISIBLE);
         mSettingsContainer.setVisibility(mExpanded ? View.VISIBLE : View.INVISIBLE);
-        mSettingsContainer.findViewById(R.id.tuner_icon).setVisibility(
-                TunerService.isTunerEnabled(mContext) ? View.VISIBLE : View.INVISIBLE);
+        mSettingsContainer.findViewById(R.id.tuner_icon).setVisibility(View.INVISIBLE);
         mMultiUserSwitch.setVisibility(mExpanded && mMultiUserSwitch.hasMultipleUsers()
                 ? View.VISIBLE : View.INVISIBLE);
     }
