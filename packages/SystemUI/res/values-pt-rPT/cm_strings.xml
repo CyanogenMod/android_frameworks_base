@@ -113,7 +113,7 @@
   <string name="accessibility_quick_settings_screen_timeout_changed">Tempo limite do ecrã alterado para <xliff:g id="timeout" example="30 seconds">%s</xliff:g>.</string>
   <string name="qs_tile_performance">Modo de bateria</string>
   <!-- Content description of the battery mode tile in quick settings when on, power save mode (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de bateria: modo de poupança de energia.</string>
+  <string name="accessibility_quick_settings_perf_profile_pwrsv">Modo de bateria: modo de poupança de bateria.</string>
   <!-- Content description of the battery mode tile in quick settings when on, balanced mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bal">Modo de bateria: modo equilibrado.</string>
   <!-- Content description of the battery mode tile in quick settings when on, performance mode (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -123,7 +123,7 @@
   <!-- Content description of the battery mode tile in quick settings when on, quick mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_bias_perf">Modo de bateria: modo rápido.</string>
   <!-- Announcement made when the battery mode tile changes to power save (not shown on the screen). [CHAR LIMIT=NONE] -->
-  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modo de bateria alterado para o modo de poupança de energia.</string>
+  <string name="accessibility_quick_settings_perf_profile_changed_pwrsv">Modo de bateria alterado para o modo de poupança de bateria.</string>
   <!-- Announcement made when the battery mode tile changes to balanced (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_perf_profile_changed_bal">Modo de bateria alterado para o modo equilibrado.</string>
   <!-- Announcement made when the battery mode tile changes to performance (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -174,10 +174,12 @@
   <string name="dynamic_qs_tile_next_alarm_label">Próximo alarme</string>
   <string name="dynamic_qs_tile_ime_selector_label">Seletor de método de entrada</string>
   <string name="dynamic_qs_tile_su_label">Acesso root</string>
+  <string name="dynamic_qs_tile_themes_label">Temas</string>
   <string name="quick_settings_title_advanced_location">Localização com 3 estados</string>
   <!-- Content description of the location tile in quick settings when on, battery saving mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_battery_saving">Localização: poupança de bateria.</string>
   <!-- Content description of the location tile in quick settings when on, sensors only mode (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_gps_only">Localização: apenas no dispositivo.</string>
   <!-- Content description of the location tile in quick settings when on, high accuracy mode (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_high_accuracy">Localização: alta precisão.</string>
   <!-- QuickSettings: Location detail panel title [CHAR LIMIT=NONE] -->
@@ -185,12 +187,13 @@
   <!-- QuickSettings: Location (On, low-power) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_battery_saving_label">Poupança de bateria</string>
   <!-- QuickSettings: Location (On, gps-only) [CHAR LIMIT=NONE] -->
-  <string name="quick_settings_location_gps_only_label">Apenas dispositivo</string>
+  <string name="quick_settings_location_gps_only_label">Apenas no dispositivo</string>
   <!-- QuickSettings: Location (On, high-accuracy) [CHAR LIMIT=NONE] -->
   <string name="quick_settings_location_high_accuracy_label">Alta precisão</string>
   <!-- Announcement made when the location tile changes to battery saving (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_battery_saving">Modo de localização alterado para poupança de bateria.</string>
   <!-- Announcement made when the location tile changes to sensors only (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_quick_settings_location_changed_gps_only">Modo de localização alterado para apenas no dispositivo.</string>
   <!-- Announcement made when the location tile changes to high accuracy (not shown on the screen). [CHAR LIMIT=NONE] -->
   <string name="accessibility_quick_settings_location_changed_high_accuracy">Modo de localização alterado para alta precisão.</string>
   <string name="quick_settings_tiles_category_system">Mosaicos do sistema</string>

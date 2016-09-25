@@ -36,6 +36,7 @@
   <!-- The label for the group of notifications for recent events in the opened version of
          the status bar.  Recently received text messsages (SMS), emails, calendar alerts, etc.
          [CHAR LIMIT=40] -->
+  <string name="status_bar_latest_events_title">Sciigoj</string>
   <!-- When the battery is low, this is displayed to the user in a dialog.  The title of the low battery alert.  [CHAR LIMIT=NONE]-->
   <!-- A message that appears when the battery level is getting low in a dialog.  This is
         appened to the subtitle of the low battery alert.  "percentage" is the percentage of battery
@@ -49,15 +50,18 @@
   <!-- Second line of invalid_charger, used in the notification form.  [CHAR LIMIT=NONE]-->
   <!-- When the battery is low, this is the label of the button to go to the
          power usage activity to find out what drained the battery.  [CHAR LIMIT=30] -->
+  <string name="battery_low_why">Agordoj</string>
   <!-- Battery saver confirmation dialog title [CHAR LIMIT=NONE]-->
   <!-- Battery saver confirmation dialog ok text [CHAR LIMIT=40]-->
   <!-- Battery saver notification action [CHAR LIMIT=NONE]-->
   <!-- Name of the button that links to the Settings app. [CHAR LIMIT=NONE] -->
+  <string name="status_bar_settings_settings_button">Agordoj</string>
   <!-- Name of the button that links to the Wifi settings screen. [CHAR LIMIT=NONE] -->
   <!-- Label in system panel saying the device will use the orientation sensor to rotate [CHAR LIMIT=30] -->
   <!-- Abbreviation / label for mute brightness mode button. Should be all caps. [CHAR LIMIT=6] -->
   <!-- Abbreviation / label for automatic brightness mode button. Should be all caps. [CHAR LIMIT=6] -->
   <!-- Label in system panel saying the device will show notifications [CHAR LIMIT=30] -->
+  <string name="status_bar_settings_notifications">Sciigoj</string>
   <!-- Separator for PLMN and SPN in network name. -->
   <!-- Network connection string for Bluetooth Reverse Tethering -->
   <!-- Title of a button to open the settings for input methods [CHAR LIMIT=30] -->
@@ -96,8 +100,10 @@
   <!-- Content description of the menu button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the recents button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the search button for accessibility. [CHAR LIMIT=NONE] -->
+  <string name="accessibility_search_light">Serĉi</string>
   <!-- Content description of the camera button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the phone button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_phone_button">Telefono</string>
   <!-- Content description of the phone button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the unlock button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the unlock button when fingerpint is on (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -108,6 +114,7 @@
   <!-- Click action label for accessibility for the phone button. [CHAR LIMIT=NONE] -->
   <!-- Caption for "Recents resize" developer debug feature. [CHAR LIMIT=NONE] -->
   <!-- Button name for "Cancel". [CHAR LIMIT=NONE] -->
+  <string name="cancel">Nuligi</string>
   <!-- Content description of the compatibility zoom button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of picture of the compatibility zoom example for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the bluetooth icon when connected for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -161,11 +168,13 @@
   <!-- Content description of the data connection with no SIM for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the bluetooth tethering icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the airplane mode icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_airplane_mode">Aviadila reĝimo.</string>
   <!-- Content description of the no sim icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the carrier network changing icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the battery level icon for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the button for showing a settings panel in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the button for showing a notifications panel in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+  <string name="accessibility_notifications_button">Sciigoj.</string>
   <!-- Content description of the button for removing a notification in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the enabled GPS icon in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the acquiring GPS icon in the notification panel for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -183,8 +192,10 @@
   <!-- Content description for the quick settings panel (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description for the lock screen (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description for the settings button in the status bar header. [CHAR LIMIT=NONE] -->
+  <string name="accessibility_desc_settings">Agordoj</string>
   <!-- Content description for the recent apps panel (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description for the close button in the zen mode panel introduction message. [CHAR LIMIT=NONE] -->
+  <string name="accessibility_desc_close">Fermi</string>
   <!-- Content description of the user tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Content description of the wifi tile in quick settings (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Announcement made when the wifi is turned off (not shown on the screen). [CHAR LIMIT=NONE] -->
@@ -269,14 +280,18 @@
   <!-- QuickSettings: Locked to Landscape [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: IME [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Location [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_location_label">Loko</string>
   <!-- QuickSettings: Location (Off) [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Media device [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: RSSI [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: RSSI (No network) [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Settings [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_settings_label">Agordoj</string>
   <!-- QuickSettings: Time [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: User [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_user_label">Mi</string>
   <!-- QuickSettings: Title of the user detail panel [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_user_title">Uzanto</string>
   <!-- QuickSettings: Label on the item for adding a new user [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Wifi [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Wifi (Not connected) [CHAR LIMIT=NONE] -->
@@ -299,6 +314,7 @@
   <!-- QuickSettings: Tethering. [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Hotspot. [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Notifications [CHAR LIMIT=NONE] -->
+  <string name="quick_settings_notifications_label">Sciigoj</string>
   <!-- QuickSettings: Flashlight [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cellular detail panel title [CHAR LIMIT=NONE] -->
   <!-- QuickSettings: Cellular detail panel, data usage title [CHAR LIMIT=NONE] -->
@@ -326,6 +342,7 @@
          If the text fits on one line (~14 chars), it should start with a
          linebreak to position it correctly.  [CHAR LIMIT=45] -->
   <!-- Description of the unlock target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
+  <string name="description_target_search">Serĉi</string>
   <!-- Description of the up direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <!-- Description of the left direction in which one can to slide the handle in the Slide unlock screen. [CHAR LIMIT=NONE] -->
   <!-- Zen mode: Priority only introduction message on first use -->
@@ -356,12 +373,17 @@
   <!-- Accessibility label for the button that opens the quick contact of the user. -->
   <!-- Label for the adding a new user in the user switcher [CHAR LIMIT=35] -->
   <!-- Name for a freshly added user [CHAR LIMIT=30] -->
+  <string name="user_new_user_name">Nova uzanto</string>
   <!-- Name for the guest user [CHAR LIMIT=35] -->
+  <string name="guest_nickname">Gasto</string>
   <!-- Label for adding a new guest in the user switcher [CHAR LIMIT=35] -->
+  <string name="guest_new_guest">Aldoni gaston</string>
   <!-- Label for exiting and removing the  guest session in the user switcher [CHAR LIMIT=35] -->
+  <string name="guest_exit_guest">Forigi gaston</string>
   <!-- Title of the confirmation dialog when exiting guest session [CHAR LIMIT=NONE] -->
   <!-- Message of the confirmation dialog when exiting guest session [CHAR LIMIT=NONE] -->
   <!-- Label for button in confirmation dialog when exiting guest session [CHAR LIMIT=35] -->
+  <string name="guest_exit_guest_dialog_remove">Forigi</string>
   <!-- Title of the notification when resuming an existing guest session [CHAR LIMIT=NONE] -->
   <!-- Message of the notification when resuming an existing guest session [CHAR LIMIT=NONE] -->
   <!-- Notification when resuming an existing guest session: Action that starts a new session [CHAR LIMIT=35] -->
@@ -369,6 +391,7 @@
   <!-- Title of the notification shown to a new guest user [CHAR LIMIT=60] -->
   <!-- Text of the notification shown to a new guest user [CHAR LIMIT=60] -->
   <!-- Remove action in the notification shown to a new guest user [CHAR LIMIT=30] -->
+  <string name="guest_notification_remove_action">FORIGI GASTON</string>
   <!-- Title for add user confirmation dialog [CHAR LIMIT=30] -->
   <!-- Message for add user confirmation dialog - short version. [CHAR LIMIT=none] -->
   <!-- Battery saver notification title. [CHAR LIMIT=60]-->
@@ -435,6 +458,7 @@
   <!-- Name of the alarm status bar icon. -->
   <!-- Name of the work status bar icon. -->
   <!-- Name of the airplane status bar icon. -->
+  <string name="status_bar_airplane">Aviadila reĝimo</string>
   <!-- Description for adding  a quick settings tile -->
   <!-- Name of a quick settings tile controlled by broadcast -->
   <!-- For preview release. DO NOT TRANSLATE -->

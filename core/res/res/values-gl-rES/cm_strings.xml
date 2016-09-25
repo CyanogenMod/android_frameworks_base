@@ -135,7 +135,9 @@
   <string name="app_ops_start_at_bootup">iniciar ao arrancar</string>
   <string name="app_ops_toast_window">amosar notificacións emerxentes</string>
   <string name="app_ops_toggle_bluetooth">trocar o Bluetooth</string>
+  <string name="app_ops_toggle_mobile_data">mudar os datos móbeis</string>
   <string name="app_ops_toggle_nfc">trocar o NFC</string>
+  <string name="app_ops_toggle_wifi">trocar o Wi-Fi</string>
   <string name="app_ops_use_alarm_volume">controlar o volume da alarma</string>
   <string name="app_ops_use_audio_focus">controlar o foco de son</string>
   <string name="app_ops_use_bluetooth_volume">controlar o volume do Bluetooth</string>
@@ -148,11 +150,21 @@
   <string name="app_ops_use_voice_volume">controlar o volume das chamadas de voz</string>
   <string name="app_ops_write_mms">escribir unha mensaxe MMS</string>
   <string name="app_ops_write_sms">escribir unha mensaxe SMS</string>
+  <string name="app_ops_use_fingerprint">empregar pegada dixital</string>
+  <string name="app_ops_add_voicemail">engadir ó correo de voz</string>
   <string name="app_ops_read_phone_state">acceder ao estado do móbil</string>
+  <string name="app_ops_scan_wifi">buscar redes Wi-Fi</string>
+  <string name="app_ops_change_wallpaper">mudar o fondo de pantalla</string>
   <string name="app_ops_assist_structure">usar a estrutura de asistencia</string>
   <string name="app_ops_assist_screenshot">realizar captura de pantalla</string>
+  <string name="app_ops_use_body_sensors">usar os sensores do corpo</string>
+  <string name="app_ops_read_cell_broadcasts">ler as transmisións de celulares</string>
+  <string name="app_ops_mock_location">simular a miña localización</string>
+  <string name="app_ops_read_external_storage">ler do almacenamento externo</string>
+  <string name="app_ops_write_external_storage">escribir no almacenamento externo</string>
   <string name="app_ops_turn_on_screen">acender a pantalla</string>
   <string name="app_ops_get_accounts">obter as contas do dispositivo</string>
+  <string name="app_ops_wifi_change">mudar o estado da Wi-Fi</string>
   <string name="app_ops_su">Obter acceso como superusuario</string>
   <!-- Notify user that they are in Lock-to-app (for devices without navbar) -->
   <string name="lock_to_app_toast_no_navbar">Para deixar de fixar esta pantalla, mantén tocado o botón Atrás.</string>
@@ -164,7 +176,11 @@
   <!-- Sequence of characters used to separate carrier message strings in keyguard. Typically just vertical line
          with spaces on either side. [CHAR LIMIT=3] -->
   <!-- Protected Apps Notification -->
+  <string name="notify_package_component_protected_title">Inicio da actividade bloqueado</string>
+  <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> esta protexido de ser lanzado.Toque para auntentificar e iniciar o aplicativo.</string>
   <!-- Battery fully charged notification -->
+  <string name="notify_battery_fully_charged_title">Batería cargada</string>
+  <string name="notify_battery_fully_charged_text">Desconecta o teu dispositivo do cargador para mellorar a lonxevidade da batería.</string>
   <!-- [CHAR LIMIT=NONE] Title of an application permission, listed so the user can choose
          whether they want to allow the application to do this. -->
   <string name="permlab_resetBatteryStats">reiniciar estatísticas da bateria</string>
@@ -172,4 +188,6 @@
          whether they want to allow the application to do this. -->
   <string name="permdesc_resetBatteryStats">Permite que un aplicativo poida reiniciar os datos de uso actual de batería a baixo nivel.</string>
   <!-- Uicc hotswapped event configuration needed notification -->
+  <string name="uicc_hot_swapped_event_title">As tarxetas SIM cambiaron</string>
+  <string name="uicc_hot_swapped_event_text">Tocar para definir as preferencias predefinidas da tarxeta SIM</string>
 </resources>

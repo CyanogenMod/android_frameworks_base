@@ -37,7 +37,6 @@
          charged, say that it is charged. -->
   <!-- When the lock screen is showing and the phone plugged in, and the battery
          is not fully charged, say that it's charging.  -->
-  <string name="keyguard_plugged_in">Ŝarĝado</string>
   <!-- When the lock screen is showing and the phone plugged in, and the battery
          is not fully charged, and it's plugged into a fast charger, say that it's charging fast.  -->
   <!-- When the lock screen is showing and the phone plugged in, and the battery
@@ -129,6 +128,7 @@
   <string name="keyguard_carrier_default">Neniu servo.</string>
   <!-- Content description of the switch input method button for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
   <!-- Description of airplane mode -->
+  <string name="airplane_mode">Aviadila reĝimo</string>
   <!-- An explanation text that the pattern needs to be solved since the device has just been restarted. [CHAR LIMIT=80] -->
   <!-- An explanation text that the pin needs to be entered since the device has just been restarted. [CHAR LIMIT=80] -->
   <!-- An explanation text that the password needs to be entered since the device has just been restarted. [CHAR LIMIT=80] -->
