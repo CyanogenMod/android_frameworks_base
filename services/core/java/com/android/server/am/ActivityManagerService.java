@@ -4040,15 +4040,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         return intent;
     }
 
-    /**
-     * If system is power off alarm boot mode, we need to start alarm UI.
-     */
-    void sendAlarmBroadcast() {
-        Intent intent = new Intent(ACTION_POWER_OFF_ALARM);
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        mContext.sendBroadcastAsUser(intent, UserHandle.CURRENT);
-    }
-
     boolean startHomeActivityLocked(int userId, String reason) {
         if (mFactoryTest == FactoryTest.FACTORY_TEST_LOW_LEVEL
                 && mTopAction == null) {
@@ -13342,12 +13333,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
             startHomeActivityLocked(currentUserId, "systemReady");
-
-            // start the power off alarm by boot mode
-            boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
-            if (isAlarmBoot) {
-                sendAlarmBroadcast();
-            }
 
             try {
                 if (AppGlobals.getPackageManager().hasSystemUidErrors()) {

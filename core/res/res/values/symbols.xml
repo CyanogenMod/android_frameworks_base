@@ -297,6 +297,7 @@
   <java-symbol type="bool" name="config_wifi_enable_disconnection_debounce" />
   <java-symbol type="bool" name="config_wifi_revert_country_code_on_cellular_loss" />
   <java-symbol type="bool" name="config_wifi_enable_wifi_firmware_debugging" />
+  <java-symbol type="bool" name="config_wifi_ipreachability_monitor" />
   <java-symbol type="integer" name="config_wifi_logger_ring_buffer_size_limit_kb" />
   <java-symbol type="bool" name="config_wifi_turn_off_during_emergency_call" />
   <java-symbol type="bool" name="config_supportMicNearUltrasound" />
@@ -2419,7 +2420,7 @@
   <java-symbol type="drawable" name="platlogo_m" />
   <!-- language/locale picker extention feature -->
   <java-symbol type="string" name="locale_codes" />
-
+  <java-symbol type="bool" name="config_dateformat" />
   <java-symbol type="string" name="config_iccHotswapPromptForRestartDialogComponent" />
 
   <java-symbol type="string" name="config_packagedKeyboardName" />
@@ -2704,4 +2705,9 @@
   <java-symbol type="string" name="adb_active_generic_notification_message" />
 
   <java-symbol type="bool" name="config_useSystemClockforRotationSensor" />
+
+  <java-symbol type="string" name="power_key_emergency_number" />
+  <java-symbol type="integer" name="power_key_hits_emergency" />
+  <java-symbol type="bool" name="config_emergencyCallOnPowerkeyTapGestureEnabled" />
+  <java-symbol type="bool" name="config_usb_data_unlock" />
 </resources>

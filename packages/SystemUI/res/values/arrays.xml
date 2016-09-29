@@ -93,7 +93,7 @@
         <!--NETWORK_TYPE_EVDO_B-->
         <item>drawable/stat_sys_data_fully_connected_3g</item>
         <!--NETWORK_TYPE_LTE-->
-        <item>drawable/stat_sys_data_fully_connected_3g</item>
+        <item>drawable/stat_sys_data_fully_connected_lte</item>
         <!--NETWORK_TYPE_EHRPD-->
         <item>drawable/stat_sys_data_fully_connected_3g</item>
         <!--NETWORK_TYPE_HSPAP-->
@@ -104,6 +104,8 @@
         <item>drawable/stat_sys_data_fully_connected_3g</item>
         <!--NETWORK_TYPE_IWLAN-->
         <item>0</item>
+        <!--NETWORK_TYPE_LTE_CA-->
+        <item>drawable/stat_sys_data_fully_connected_lte_plus</item>
     </string-array>
 
     <!--reserved for overlay-->
@@ -163,6 +165,8 @@
         <item>string/accessibility_data_connection_3g</item>
         <!--NETWORK_TYPE_IWLAN-->
         <item>0</item>
+        <!--NETWORK_TYPE_LTE_CA-->
+        <item>string/accessibility_data_connection_lte_plus</item>
     </string-array>
 
     <string-array name="telephony_data_type_generation_description">
@@ -191,6 +195,7 @@
         <item>array/telephony_data_activity_hp_sim1</item>
         <item>array/telephony_data_activity_1x_sim1</item>
         <item>array/telephony_data_activity_lte_sim1</item>
+        <item>array/telephony_data_activity_4g_plus_sim1</item>
     </string-array>
 
     <!--reserved for overlay-->
@@ -276,6 +281,14 @@
     </string-array>
 
     <string-array name="telephony_data_activity_4g_sim1">
+        <item>0</item>
+        <item>drawable/stat_sys_signal_in_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_out_auto_mirrored</item>
+        <item>drawable/stat_sys_signal_inout_auto_mirrored</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="telephony_data_activity_4g_plus_sim1">
         <item>0</item>
         <item>drawable/stat_sys_signal_in_auto_mirrored</item>
         <item>drawable/stat_sys_signal_out_auto_mirrored</item>

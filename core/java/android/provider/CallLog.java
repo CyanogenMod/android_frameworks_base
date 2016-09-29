@@ -208,6 +208,24 @@ public class CallLog {
          */
         public static final int BLACKLIST_TYPE = 8;
 
+        /** Call log type for missed IMS calls. */
+        private static final int MISSED_IMS_TYPE = 10;
+        /**
+         * Call log type for incoming WiFi calls.
+         * @hide
+         */
+        public static final int INCOMING_WIFI_TYPE = 20;
+        /**
+         * Call log type for outgoing WiFi calls.
+         * @hide
+         */
+        public static final int OUTGOING_WIFI_TYPE = 21;
+        /**
+         * Call log type for missed WiFi calls.
+         * @hide
+         */
+        public static final int MISSED_WIFI_TYPE = 22;
+
         /**
          * Bit-mask describing features of the call (e.g. video).
          *
@@ -652,7 +670,8 @@ public class CallLog {
             values.put(NEW, Integer.valueOf(1));
             values.put(ADD_FOR_ALL_USERS, addForAllUsers ? 1 : 0);
 
-            if (callType == MISSED_TYPE) {
+            if (callType == MISSED_TYPE || callType == MISSED_IMS_TYPE
+                    || callType == MISSED_WIFI_TYPE) {
                 values.put(IS_READ, Integer.valueOf(is_read ? 1 : 0));
             }
 

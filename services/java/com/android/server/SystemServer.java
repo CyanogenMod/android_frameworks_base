@@ -210,6 +210,7 @@ public final class SystemServer {
 
     private boolean mOnlyCore;
     private boolean mFirstBoot;
+    private boolean mIsAlarmBoot;
 
     /**
      * Start the sensor service.
@@ -462,13 +463,15 @@ public final class SystemServer {
 
         // Only run "core" apps if we're encrypting the device.
         String cryptState = SystemProperties.get("vold.decrypt");
+
+        mIsAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
         if (ENCRYPTING_STATE.equals(cryptState)) {
             Slog.w(TAG, "Detected encryption in progress - only parsing core apps");
             mOnlyCore = true;
         } else if (ENCRYPTED_STATE.equals(cryptState)) {
             Slog.w(TAG, "Device encrypted - only parsing core apps");
             mOnlyCore = true;
-        } else if (SystemProperties.getBoolean("ro.alarm_boot", false)) {
+        } else if (mIsAlarmBoot) {
             // power off alarm mode is similar to encryption mode. Only power off alarm
             // applications will be parsed by packageParser. Some services or settings are
             // not necessary to power off alarm mode. So reuse mOnlyCore for power off alarm
@@ -1000,7 +1003,7 @@ public final class SystemServer {
             mSystemServiceManager.startService(DropBoxManagerService.class);
 
             if (!disableNonCoreServices && context.getResources().getBoolean(
-                        R.bool.config_enableWallpaperService)) {
+                        R.bool.config_enableWallpaperService) && !mIsAlarmBoot) {
                 traceBeginAndSlog("StartWallpaperManagerService");
                 mSystemServiceManager.startService(WALLPAPER_SERVICE_CLASS);
                 Trace.traceEnd(Trace.TRACE_TAG_SYSTEM_SERVER);

@@ -37,20 +37,20 @@
         android:visibility="gone"
         />
     <ImageView
-        android:id="@+id/dataNetwork_type_in_roaming"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="start|bottom"
-        android:layout_marginEnd="5dp"
-        android:visibility="gone"
-        />
-    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_gravity="start|bottom"
         android:layout_marginEnd="2dp"
         android:id="@+id/volte_vowifi"
+        android:visibility="gone"
+        />
+    <ImageView
+        android:id="@+id/dataNetwork_type_in_roaming"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_marginEnd="5dp"
         android:visibility="gone"
         />
     <ImageView
@@ -64,6 +64,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        >
+        <ImageView
+            android:id="@+id/mobile_roaming"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            />
         <FrameLayout
             android:id="@+id/mobile_signal_single"
             android:layout_width="wrap_content"
@@ -113,6 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
+        </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

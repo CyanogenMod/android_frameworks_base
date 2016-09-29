@@ -743,6 +743,12 @@ public class CarrierConfigManager {
     public static final String KEY_MAP_ANONYMOUS_TO_RESTRICTED_BOOL =
             "carrier_map_anonymous_to_restricted";
 
+    /**
+     * Configuration to play sms ringtone during MO/MT call.
+     * @hide
+     */
+    public static final String KEY_CONFIG_SMS_RINGTONE_INCALL = "config_sms_ringtone_incall";
+
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
@@ -888,6 +894,7 @@ public class CarrierConfigManager {
         sDefaults.putStringArray(KEY_SIM_PROVISIONING_STATUS_DETECTION_CARRIER_APP_STRING_ARRAY,
                 null);
         sDefaults.putBoolean(KEY_MAP_ANONYMOUS_TO_RESTRICTED_BOOL, true);
+        sDefaults.putBoolean(KEY_CONFIG_SMS_RINGTONE_INCALL, true);
     }
 
     /**

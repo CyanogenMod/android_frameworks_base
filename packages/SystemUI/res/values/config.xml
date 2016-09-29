@@ -117,7 +117,7 @@
     <bool name="config_show4GForLTE">true</bool>
 
     <!-- Whether or not we also show rsrp level for LTE. -->
-    <bool name="config_showRsrpSignalLevelforLTE">false</bool>
+    <bool name="config_showRsrpSignalLevelforLTE">true</bool>
 
     <!-- Whether or not we show carrier label in notification panel. -->
     <bool name="config_showCarrierLabel">false</bool>
@@ -295,6 +295,19 @@
     <string name="config_navBarLayout" translatable="false">space,back;home;recent,menu_ime</string>
 
     <bool name="quick_settings_show_full_alarm">false</bool>
+
+    <!-- Show 4G for HSPAP -->
+    <bool name="config_show4gForHspap">false</bool>
+
+    <!-- Maximum length of operator name to be shown in status bar  -->
+    <integer name="config_operatorNameMaxLength">20</integer>
+    <!-- show different network indicators -->
+    <bool name="show_network_indicators">false</bool>
+    <!-- Show roaming and network icons -->
+    <bool name="show_roaming_and_network_icons">false</bool>
+
+    <!-- Show 4GLTE for LTE -->
+    <bool name="show_4glte_icon_for_lte">false</bool>
 
     <!-- When true, show charging animation -->
     <bool name="config_show_battery_charging_anim">false</bool>

@@ -2394,6 +2394,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
             loadBooleanSetting(stmt, Settings.System.NOTIFICATION_LIGHT_PULSE,
                     R.bool.def_notification_pulse);
 
+            final boolean isShowPassword =
+                    mContext.getResources().getBoolean(R.bool.config_show_password_on);
+            if (isShowPassword) {
+                loadBooleanSetting(stmt, Settings.System.TEXT_SHOW_PASSWORD,
+                        R.bool.def_show_password_on);
+            }
+
+
             loadUISoundEffectsSettings(stmt);
 
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,

@@ -545,6 +545,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final String[] mSeparateProcesses;
     final boolean mIsUpgrade;
     final boolean mIsPreNUpgrade;
+    final boolean mIsAlarmBoot;
 
     /** The location for ASEC container files on internal storage. */
     final String mAsecInternalPath;
@@ -2278,8 +2279,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         File setFile = new File(AlarmManager.POWER_OFF_ALARM_SET_FILE);
         File handleFile = new File(AlarmManager.POWER_OFF_ALARM_HANDLE_FILE);
-        boolean isAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
-        if (isAlarmBoot) {
+        mIsAlarmBoot = SystemProperties.getBoolean("ro.alarm_boot", false);
+        if (mIsAlarmBoot) {
             mOnlyPowerOffAlarm = true;
         } else if (setFile.exists() && handleFile.exists()) {
             // if it is normal boot, check if power off alarm is handled. And set
@@ -18193,32 +18194,34 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
         int[] grantPermissionsUserIds = EMPTY_INT_ARRAY;
 
         synchronized (mPackages) {
-            // Verify that all of the preferred activity components actually
-            // exist.  It is possible for applications to be updated and at
-            // that point remove a previously declared activity component that
-            // had been set as a preferred activity.  We try to clean this up
-            // the next time we encounter that preferred activity, but it is
-            // possible for the user flow to never be able to return to that
-            // situation so here we do a sanity check to make sure we haven't
-            // left any junk around.
-            ArrayList<PreferredActivity> removed = new ArrayList<PreferredActivity>();
-            for (int i=0; i<mSettings.mPreferredActivities.size(); i++) {
-                PreferredIntentResolver pir = mSettings.mPreferredActivities.valueAt(i);
-                removed.clear();
-                for (PreferredActivity pa : pir.filterSet()) {
-                    if (mActivities.mActivities.get(pa.mPref.mComponent) == null) {
-                        removed.add(pa);
+            if (!mIsAlarmBoot) {
+                // Verify that all of the preferred activity components actually
+                // exist.  It is possible for applications to be updated and at
+                // that point remove a previously declared activity component that
+                // had been set as a preferred activity.  We try to clean this up
+                // the next time we encounter that preferred activity, but it is
+                // possible for the user flow to never be able to return to that
+                // situation so here we do a sanity check to make sure we haven't
+                // left any junk around.
+                ArrayList<PreferredActivity> removed = new ArrayList<PreferredActivity>();
+                for (int i=0; i<mSettings.mPreferredActivities.size(); i++) {
+                    PreferredIntentResolver pir = mSettings.mPreferredActivities.valueAt(i);
+                    removed.clear();
+                    for (PreferredActivity pa : pir.filterSet()) {
+                        if (mActivities.mActivities.get(pa.mPref.mComponent) == null) {
+                            removed.add(pa);
+                        }
                     }
-                }
-                if (removed.size() > 0) {
-                    for (int r=0; r<removed.size(); r++) {
-                        PreferredActivity pa = removed.get(r);
-                        Slog.w(TAG, "Removing dangling preferred activity: "
-                                + pa.mPref.mComponent);
-                        pir.removeFilter(pa);
+                    if (removed.size() > 0) {
+                        for (int r=0; r<removed.size(); r++) {
+                            PreferredActivity pa = removed.get(r);
+                            Slog.w(TAG, "Removing dangling preferred activity: "
+                                    + pa.mPref.mComponent);
+                            pir.removeFilter(pa);
+                        }
+                        mSettings.writePackageRestrictionsLPr(
+                                mSettings.mPreferredActivities.keyAt(i));
                     }
-                    mSettings.writePackageRestrictionsLPr(
-                            mSettings.mPreferredActivities.keyAt(i));
                 }
             }
 

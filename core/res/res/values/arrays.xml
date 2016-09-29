@@ -246,6 +246,8 @@
         <item>com.android.providers.media</item>
         <item>com.android.inputdevices</item>
         <item>com.android.providers.settings</item>
+        <item>com.android.externalstorage</item>
+        <item>com.android.providers.downloads.ui</item>
     </string-array>
 
 </resources>

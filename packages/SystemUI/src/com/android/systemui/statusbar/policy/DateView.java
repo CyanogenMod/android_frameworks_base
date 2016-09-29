@@ -25,6 +25,7 @@ import android.icu.text.DateFormat;
 import android.icu.text.DisplayContext;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import android.provider.Settings;
 
 import com.android.systemui.R;
 
@@ -108,10 +109,20 @@ public class DateView extends TextView {
 
         mCurrentTime.setTime(System.currentTimeMillis());
 
-        final String text = mDateFormat.format(mCurrentTime);
+        final String text = getDateFormat();
         if (!text.equals(mLastText)) {
             setText(text);
             mLastText = text;
+        }
+    }
+
+    private String getDateFormat() {
+        if (getContext().getResources().getBoolean(com.android.internal.R.bool.config_dateformat)) {
+            String dateformat = Settings.System.getString(getContext().getContentResolver(),
+                    Settings.System.DATE_FORMAT);
+            return android.text.format.DateFormat.format(dateformat, mCurrentTime).toString();
+        } else {
+            return mDateFormat.format(mCurrentTime);
         }
     }
 }

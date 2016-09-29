@@ -26,6 +26,7 @@ import android.content.pm.Signature;
 import android.os.Environment;
 import android.os.Process;
 import android.os.storage.StorageManager;
+import android.os.SystemProperties;
 import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.Slog;
@@ -209,6 +210,11 @@ public class SystemConfig {
                 Environment.getOemDirectory(), "etc", "sysconfig"), ALLOW_FEATURES);
         readPermissions(Environment.buildPath(
                 Environment.getOemDirectory(), "etc", "permissions"), ALLOW_FEATURES);
+        //Remove vulkan specific features
+        if (SystemProperties.getBoolean("persist.graphics.vulkan.disable", false)) {
+            removeFeature(PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL);
+            removeFeature(PackageManager.FEATURE_VULKAN_HARDWARE_VERSION);
+        }
     }
 
     void readPermissions(File libraryDir, int permissionFlag) {
