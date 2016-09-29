@@ -112,7 +112,9 @@ public class TunerFragment extends PreferenceFragment {
                 TunerService.showResetRequest(getContext(), new Runnable() {
                     @Override
                     public void run() {
-                        getActivity().finish();
+                        if (getActivity() != null) {
+                            getActivity().finish();
+                        }
                     }
                 });
                 return true;
