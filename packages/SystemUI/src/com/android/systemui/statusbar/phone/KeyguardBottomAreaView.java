@@ -843,10 +843,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             } else {
                 label = mContext.getString(R.string.phone_hint);
 
-    private void updateEmergencyButton() {
-        if(mContext.getResources().getBoolean(R.bool.config_showEmergencyButton)){
-            if (mEmergencyButton != null) {
-                mEmergencyButton.updateEmergencyCallButton();
             }
         }
         return label;

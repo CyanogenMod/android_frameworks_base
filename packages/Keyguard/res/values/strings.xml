@@ -399,5 +399,4 @@ number">%d</xliff:g> remaining attempt before SIM becomes permanently unusable. 
 number">%d</xliff:g> remaining attempts before SIM becomes permanently unusable. Contact carrier for details.</item>
     </plurals>
 
-    <string name="button_lockscreen_emergency_call">Emergency call</string>
 </resources>

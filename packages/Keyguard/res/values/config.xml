@@ -34,7 +34,4 @@
 
     <!-- config for showing AM/PM on lock screen in 12hour format -->
     <bool name="config_showAmpm">true</bool>
-
-    <!-- whether to show emergency button in lock screen -->
-    <bool name="config_showEmergencyButton">true</bool>
 </resources>
