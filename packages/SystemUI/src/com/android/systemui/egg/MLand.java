@@ -1087,7 +1087,7 @@ public class MLand extends FrameLayout {
         public Player(Context context) {
             super(context);
 
-            setBackgroundResource(R.drawable.android);
+            setBackgroundResource(R.drawable.cid);
             getBackground().setTintMode(PorterDuff.Mode.SRC_ATOP);
             color = sColors[(sNextColor++%sColors.length)];
             getBackground().setTint(color);
