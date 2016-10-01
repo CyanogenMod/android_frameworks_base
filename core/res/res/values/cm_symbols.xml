@@ -72,4 +72,6 @@
     <!-- Automatic brightness enhancements -->
     <java-symbol type="integer" name="config_autoBrightnessBrighteningLightFastDebounce"/>
 
+    <!-- PlatLogo -->
+    <java-symbol type="drawable" name="platlogo_cm" />
 </resources>

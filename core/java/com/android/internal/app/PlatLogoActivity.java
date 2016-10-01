@@ -61,12 +61,16 @@ public class PlatLogoActivity extends Activity {
     int mKeyCount;
     PathInterpolator mInterpolator = new PathInterpolator(0f, 0f, 0.5f, 1f);
 
+    private boolean mIsCm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mLayout = new FrameLayout(this);
         setContentView(mLayout);
+
+        mIsCm = getIntent().hasExtra("is_cm");
     }
 
     @Override
@@ -86,7 +90,8 @@ public class PlatLogoActivity extends Activity {
 
         im.setBackground(new RippleDrawable(
                 ColorStateList.valueOf(0xFFFFFFFF),
-                getDrawable(com.android.internal.R.drawable.platlogo),
+                getDrawable(mIsCm ? com.android.internal.R.drawable.platlogo_cm :
+                        com.android.internal.R.drawable.platlogo),
                 null));
 //        im.setOutlineProvider(new ViewOutlineProvider() {
 //            @Override
@@ -135,7 +140,9 @@ public class PlatLogoActivity extends Activity {
                                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                                     | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                                     | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                                            .addCategory("com.android.internal.category.PLATLOGO"));
+                                            .addCategory(mIsCm ?
+                                                    "com.android.internal.category.PLATLOGO_CM" :
+                                                    "com.android.internal.category.PLATLOGO"));
                                 } catch (ActivityNotFoundException ex) {
                                     Log.e("PlatLogoActivity", "No more eggs.");
                                 }
