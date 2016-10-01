@@ -78,4 +78,6 @@
     <!-- Blur effects -->
     <java-symbol type="bool" name="config_ui_blur_enabled" />
 
+    <!-- PlatLogo -->
+    <java-symbol type="drawable" name="platlogo_cm" />
 </resources>
