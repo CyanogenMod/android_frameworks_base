@@ -102,6 +102,13 @@ public class PackageItemInfo {
      */
     public int showUserIcon;
 
+    /**
+     * A drawable resource identifier in the icon pack's resources
+     * If there isn't an icon pack or not set, then 0.
+     * @hide
+     */
+    public int themedIcon;
+
     public PackageItemInfo() {
         showUserIcon = UserHandle.USER_NULL;
     }
@@ -118,6 +125,7 @@ public class PackageItemInfo {
         logo = orig.logo;
         metaData = orig.metaData;
         showUserIcon = orig.showUserIcon;
+        themedIcon = orig.themedIcon;
     }
 
     /**
@@ -388,6 +396,7 @@ public class PackageItemInfo {
         dest.writeBundle(metaData);
         dest.writeInt(banner);
         dest.writeInt(showUserIcon);
+        dest.writeInt(themedIcon);
     }
     
     protected PackageItemInfo(Parcel source) {
@@ -401,6 +410,7 @@ public class PackageItemInfo {
         metaData = source.readBundle();
         banner = source.readInt();
         showUserIcon = source.readInt();
+        themedIcon = source.readInt();
     }
 
     /**
