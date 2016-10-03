@@ -54,6 +54,7 @@ import android.util.jar.StrictJarFile;
 import android.view.Gravity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -70,11 +71,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import libcore.io.IoUtils;
 
@@ -132,6 +138,10 @@ public class PackageParser {
 
     /** File name in an APK for the Android manifest. */
     private static final String ANDROID_MANIFEST_FILENAME = "AndroidManifest.xml";
+    /** Path to overlay directory in a theme APK */
+    private static final String OVERLAY_PATH = "assets/overlays/";
+    /** Path to icon directory in a theme APK */
+    private static final String ICON_PATH = "assets/icons/";
 
     /** Path prefix for apps on expanded storage */
     private static final String MNT_EXPAND = "/mnt/expand/";
@@ -161,6 +171,7 @@ public class PackageParser {
     private static final String TAG_EAT_COMMENT = "eat-comment";
     private static final String TAG_PACKAGE = "package";
     private static final String TAG_RESTRICT_UPDATE = "restrict-update";
+    private static final String TAG_META_DATA = "meta-data";
 
     private Context mContext;
 
@@ -324,6 +335,7 @@ public class PackageParser {
         public final int versionCode;
         public final int installLocation;
         public final VerifierInfo[] verifiers;
+        public boolean isTheme;
 
         /** Names of any split APKs, ordered by parsed splitName */
         public final String[] splitNames;
@@ -366,6 +378,7 @@ public class PackageParser {
             this.multiArch = baseApk.multiArch;
             this.use32bitAbi = baseApk.use32bitAbi;
             this.extractNativeLibs = baseApk.extractNativeLibs;
+            this.isTheme = baseApk.isTheme;
         }
 
         public List<String> getAllCodePaths() {
@@ -395,11 +408,13 @@ public class PackageParser {
         public final boolean multiArch;
         public final boolean use32bitAbi;
         public final boolean extractNativeLibs;
+        public final boolean isTheme;
 
         public ApkLite(String codePath, String packageName, String splitName, int versionCode,
                 int revisionCode, int installLocation, List<VerifierInfo> verifiers,
                 Signature[] signatures, Certificate[][] certificates, boolean coreApp,
-                boolean multiArch, boolean use32bitAbi, boolean extractNativeLibs) {
+                boolean multiArch, boolean use32bitAbi, boolean extractNativeLibs,
+                boolean isTheme) {
             this.codePath = codePath;
             this.packageName = packageName;
             this.splitName = splitName;
@@ -413,6 +428,7 @@ public class PackageParser {
             this.multiArch = multiArch;
             this.use32bitAbi = use32bitAbi;
             this.extractNativeLibs = extractNativeLibs;
+            this.isTheme = isTheme;
         }
     }
 
@@ -638,6 +654,13 @@ public class PackageParser {
                 pi.signatures = new Signature[N];
                 System.arraycopy(p.mSignatures, 0, pi.signatures, 0, N);
             }
+        }
+        pi.isThemeApk = p.mIsThemeApk;
+        pi.hasIconPack = p.hasIconPack;
+        pi.isLegacyIconPackApk = p.mIsLegacyIconPackApk;
+        if (pi.isThemeApk) {
+            pi.overlayTargets = p.mOverlayTargets;
+            pi.themeInfo = p.mThemeInfo;
         }
         return pi;
     }
@@ -993,6 +1016,18 @@ public class PackageParser {
             pkg.setApplicationVolumeUuid(volumeUuid);
             pkg.setBaseCodePath(apkPath);
             pkg.setSignatures(null);
+
+            // If the pkg is a theme, we need to know what themes it overlays
+            // and determine if it has an icon pack
+            if (pkg.mIsThemeApk) {
+                //Determine existance of Overlays
+                ArrayList<String> overlayTargets = scanPackageOverlays(apkFile);
+                for(String overlay : overlayTargets) {
+                    pkg.mOverlayTargets.add(overlay);
+                }
+
+                pkg.hasIconPack = packageHasIconPack(apkFile);
+            }
 
             return pkg;
 
@@ -1510,6 +1545,9 @@ public class PackageParser {
         // Only search the tree when the tag is directly below <manifest>
         int type;
         final int searchDepth = parser.getDepth() + 1;
+        // Search for category and actions inside <intent-filter>
+        final int iconPackSearchDepth = parser.getDepth() + 4;
+        boolean isTheme = false;
 
         final List<VerifierInfo> verifiers = new ArrayList<VerifierInfo>();
         while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
@@ -1539,11 +1577,32 @@ public class PackageParser {
                     }
                 }
             }
+
+            if (parser.getDepth() == searchDepth && "meta-data".equals(parser.getName())) {
+                for (int i=0; i < parser.getAttributeCount(); i++) {
+                    if ("name".equals(parser.getAttributeName(i)) &&
+                                    ThemeInfo.META_TAG_NAME.equals(parser.getAttributeValue(i))) {
+                        isTheme = true;
+                        installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
+                        break;
+                    }
+                }
+            }
+
+            if (parser.getDepth() == searchDepth && "theme".equals(parser.getName())) {
+                isTheme = true;
+                installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
+            }
+
+            if (parser.getDepth() == iconPackSearchDepth && isLegacyIconPack(parser)) {
+                isTheme = true;
+                installLocation = PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY;
+            }
         }
 
         return new ApkLite(codePath, packageSplit.first, packageSplit.second, versionCode,
                 revisionCode, installLocation, verifiers, signatures, certificates, coreApp,
-                multiArch, use32bitAbi, extractNativeLibs);
+                multiArch, use32bitAbi, extractNativeLibs, isTheme);
     }
 
     /**
@@ -1723,6 +1782,8 @@ public class PackageParser {
 
         TypedArray sa = res.obtainAttributes(parser,
                 com.android.internal.R.styleable.AndroidManifest);
+
+        Bundle metaDataBundle = new Bundle();
 
         String str = sa.getNonConfigurationString(
                 com.android.internal.R.styleable.AndroidManifest_sharedUserId, 0);
@@ -2179,6 +2240,11 @@ public class PackageParser {
                 mParseError = PackageManager.INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
                 return null;
 
+            } else if (parser.getName().equals(TAG_META_DATA)) {
+                if ((metaDataBundle=parseMetaData(res, parser, metaDataBundle,
+                        outError)) == null) {
+                    return null;
+                }
             } else {
                 Slog.w(TAG, "Unknown element under <manifest>: " + parser.getName()
                         + " at " + mArchiveSourcePath + " "
@@ -2260,6 +2326,17 @@ public class PackageParser {
                 && pkg.applicationInfo.targetSdkVersion
                         >= android.os.Build.VERSION_CODES.DONUT)) {
             pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES;
+        }
+        if (pkg.mIsThemeApk || pkg.mIsLegacyIconPackApk) {
+            pkg.applicationInfo.isThemeable = false;
+        }
+
+        //Is this pkg a theme?
+        if (metaDataBundle.containsKey(ThemeInfo.META_TAG_NAME)) {
+            pkg.mIsThemeApk = true;
+            pkg.mTrustedOverlay = true;
+            pkg.mOverlayPriority = 1;
+            pkg.mThemeInfo = new ThemeInfo(metaDataBundle);
         }
 
         return pkg;
@@ -2790,6 +2867,10 @@ public class PackageParser {
         throws XmlPullParserException, IOException {
         final ApplicationInfo ai = owner.applicationInfo;
         final String pkgName = owner.applicationInfo.packageName;
+
+        String[] nonThemeablePackages =
+                res.getStringArray(com.android.internal.R.array.non_themeable_packages);
+        ai.isThemeable = isPackageThemeable(pkgName, nonThemeablePackages);
 
         TypedArray sa = res.obtainAttributes(parser,
                 com.android.internal.R.styleable.AndroidManifestApplication);
@@ -3693,6 +3774,26 @@ public class PackageParser {
                 if (!parseIntent(res, parser, true, true, intent, outError)) {
                     return null;
                 }
+
+                // Check if package is a legacy icon pack
+                if (!owner.mIsLegacyIconPackApk) {
+                    for(String action : ThemeUtils.sSupportedActions) {
+                        if (intent.hasAction(action)) {
+                            owner.mIsLegacyIconPackApk = true;
+                            break;
+                        }
+
+                    }
+                }
+                if (!owner.mIsLegacyIconPackApk) {
+                    for(String category : ThemeUtils.sSupportedCategories) {
+                        if (intent.hasCategory(category)) {
+                            owner.mIsLegacyIconPackApk = true;
+                            break;
+                        }
+                    }
+                }
+
                 if (intent.countActions() == 0) {
                     Slog.w(TAG, "No actions in intent filter at "
                             + mArchiveSourcePath + " "
@@ -4941,6 +5042,24 @@ public class PackageParser {
 
         public byte[] restrictUpdateHash;
 
+        // Is Theme Apk
+        public boolean mIsThemeApk;
+        public final ArrayList<String> mOverlayTargets = new ArrayList<String>(0);
+        // Theme info
+        public ThemeInfo mThemeInfo = null;
+
+        // Legacy icon pack
+        public boolean mIsLegacyIconPackApk = false;
+
+        public boolean hasIconPack;
+
+        /**
+         * Digest suitable for comparing whether this package's manifest is the
+         * same as another.
+         */
+        public ManifestDigest manifestDigest;
+        public int manifestHashCode;
+
         public Package(String packageName) {
             this.packageName = packageName;
             applicationInfo.packageName = packageName;
@@ -5833,5 +5952,130 @@ public class PackageParser {
             super(detailMessage, throwable);
             this.error = error;
         }
+    }
+
+    private ArrayList<String> scanPackageOverlays(File originalFile) {
+        Set<String> overlayTargets = new HashSet<String>();
+        ZipFile privateZip = null;
+        try {
+            privateZip = new ZipFile(originalFile.getPath());
+            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
+            while (privateZipEntries.hasMoreElements()) {
+                final ZipEntry zipEntry = privateZipEntries.nextElement();
+                final String zipEntryName = zipEntry.getName();
+
+                if (zipEntryName.startsWith(OVERLAY_PATH) && zipEntryName.length() > 16) {
+                    String[] subdirs = zipEntryName.split("/");
+                    overlayTargets.add(subdirs[2]);
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            overlayTargets.clear();
+        } finally {
+            if (privateZip != null) {
+                try {
+                    privateZip.close();
+                } catch (Exception e) {
+                    //Ignore
+                }
+            }
+        }
+
+        ArrayList<String> overlays = new ArrayList<String>();
+        overlays.addAll(overlayTargets);
+        return overlays;
+    }
+
+    private boolean packageHasIconPack(File originalFile) {
+        ZipFile privateZip = null;
+        try {
+            privateZip = new ZipFile(originalFile.getPath());
+            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
+            while (privateZipEntries.hasMoreElements()) {
+                final ZipEntry zipEntry = privateZipEntries.nextElement();
+                final String zipEntryName = zipEntry.getName();
+
+                if (zipEntryName.startsWith(ICON_PATH) &&
+                        zipEntryName.length() > ICON_PATH.length()) {
+                    return true;
+                }
+            }
+        } catch(Exception e) {
+            Log.e(TAG, "Could not read zip entries while checking if apk has icon pack", e);
+        } finally {
+            if (privateZip != null) {
+                try {
+                    privateZip.close();
+                } catch (Exception e) {
+                    //Ignore
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isLegacyIconPack(XmlPullParser parser) {
+        boolean isAction = "action".equals(parser.getName());
+        boolean isCategory = "category".equals(parser.getName());
+        String[] items = isAction ? ThemeUtils.sSupportedActions
+                : (isCategory ? ThemeUtils.sSupportedCategories : null);
+
+        if (items != null) {
+            for (int i = 0; i < parser.getAttributeCount(); i++) {
+                if ("name".equals(parser.getAttributeName(i))) {
+                    final String value = parser.getAttributeValue(i);
+                    for (String item : items) {
+                        if (item.equals(value)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gathers the {@link ManifestDigest} for {@code pkg} if it exists in the
+     * APK. If it successfully scanned the package and found the
+     * {@code AndroidManifest.xml}, {@code true} is returned.
+     */
+    public void collectManifestDigest(Package pkg) throws PackageParserException {
+        pkg.manifestDigest = null;
+        pkg.manifestHashCode = 0;
+
+        // TODO: extend to gather digest for split APKs
+        try {
+            final StrictJarFile jarFile = new StrictJarFile(pkg.baseCodePath);
+            try {
+                final ZipEntry je = jarFile.findEntry(ANDROID_MANIFEST_FILENAME);
+                if (je != null) {
+                    pkg.manifestDigest = ManifestDigest.fromInputStream(jarFile.getInputStream(je));
+                    pkg.manifestHashCode = ThemeUtils.getPackageHashCode(pkg, jarFile);
+                }
+            } finally {
+                jarFile.close();
+            }
+        } catch (IOException | RuntimeException e) {
+            throw new PackageParserException(INSTALL_PARSE_FAILED_MANIFEST_MALFORMED,
+                    "Failed to collect manifest digest");
+        }
+    }
+
+    /**
+     * Returns whether the specified package is themeable
+     * @param packageName Name of package to check
+     * @param nonThemeablePackages Array of packages that are declared as non-themeable
+     * @return True if the package is themeable, false otherwise
+     */
+    private static boolean isPackageThemeable(String packageName, String[] nonThemeablePackages) {
+        for (String pkg : nonThemeablePackages) {
+            if (packageName.startsWith(pkg)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
