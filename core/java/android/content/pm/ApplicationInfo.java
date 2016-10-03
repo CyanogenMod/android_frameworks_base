@@ -777,6 +777,12 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      */
     public boolean protect = false;
 
+    /**
+     * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
+     * @hide
+     */
+    public boolean isThemeable = false;
+
     public void dump(Printer pw, String prefix) {
         dump(pw, prefix, DUMP_FLAG_ALL);
     }
@@ -940,6 +946,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         fullBackupContent = orig.fullBackupContent;
         networkSecurityConfigRes = orig.networkSecurityConfigRes;
         protect = orig.protect;
+        isThemeable = orig.isThemeable;
     }
 
     public String toString() {
@@ -997,6 +1004,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeInt(fullBackupContent);
         dest.writeInt(networkSecurityConfigRes);
         dest.writeInt(protect ? 1 : 0);
+        dest.writeInt(isThemeable ? 1 : 0);
     }
 
     public static final Parcelable.Creator<ApplicationInfo> CREATOR
@@ -1054,6 +1062,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         fullBackupContent = source.readInt();
         networkSecurityConfigRes = source.readInt();
         protect = source.readInt() != 0;
+        isThemeable = source.readInt() != 0;
     }
 
     /**

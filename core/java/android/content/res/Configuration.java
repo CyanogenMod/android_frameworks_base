@@ -95,6 +95,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     private LocaleList mLocaleList;
 
     /**
+     * @hide
+     */
+    public ThemeConfig themeConfig;
+
+   /**
      * Locale should persist on setting.  This is hidden because it is really
      * questionable whether this is the right way to expose the functionality.
      * @hide
@@ -773,6 +778,9 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         compatScreenHeightDp = o.compatScreenHeightDp;
         compatSmallestScreenWidthDp = o.compatSmallestScreenWidthDp;
         seq = o.seq;
+        if (o.themeConfig != null) {
+            themeConfig = (ThemeConfig) o.themeConfig.clone();
+        }
     }
 
     public String toString() {
@@ -910,6 +918,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             sb.append(" s.");
             sb.append(seq);
         }
+        sb.append(" themeConfig=");
+        sb.append(themeConfig);
         sb.append('}');
         return sb.toString();
     }
@@ -937,6 +947,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         smallestScreenWidthDp = compatSmallestScreenWidthDp = SMALLEST_SCREEN_WIDTH_DP_UNDEFINED;
         densityDpi = DENSITY_DPI_UNDEFINED;
         seq = 0;
+        themeConfig = null;
     }
 
     /** {@hide} */
@@ -1083,6 +1094,17 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             seq = delta.seq;
         }
 
+        if (delta.themeConfig != null
+                && (themeConfig == null || !themeConfig.equals(delta.themeConfig))) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            final String fontPkgName = delta.themeConfig.getFontPkgName();
+            if (themeConfig == null ||
+                    (fontPkgName != null && !fontPkgName.equals(themeConfig.getFontPkgName()))) {
+                changed |= ActivityInfo.CONFIG_THEME_FONT;
+            }
+            themeConfig = (ThemeConfig)delta.themeConfig.clone();
+        }
+
         return changed;
     }
 
@@ -1193,7 +1215,15 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 && densityDpi != delta.densityDpi) {
             changed |= ActivityInfo.CONFIG_DENSITY;
         }
-
+        if (delta.themeConfig != null &&
+                (themeConfig == null || !themeConfig.equals(delta.themeConfig))) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            final String fontPkgName = delta.themeConfig.getFontPkgName();
+            if (themeConfig == null ||
+                    (fontPkgName != null && !fontPkgName.equals(themeConfig.getFontPkgName()))) {
+                changed |= ActivityInfo.CONFIG_THEME_FONT;
+            }
+        }
         return changed;
     }
 
@@ -1285,6 +1315,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(compatScreenHeightDp);
         dest.writeInt(compatSmallestScreenWidthDp);
         dest.writeInt(seq);
+        dest.writeParcelable(themeConfig, flags);
     }
 
     public void readFromParcel(Parcel source) {
@@ -1318,6 +1349,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         compatScreenHeightDp = source.readInt();
         compatSmallestScreenWidthDp = source.readInt();
         seq = source.readInt();
+        themeConfig = source.readParcelable(ThemeConfig.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Configuration> CREATOR
@@ -1400,7 +1432,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         n = this.smallestScreenWidthDp - that.smallestScreenWidthDp;
         if (n != 0) return n;
         n = this.densityDpi - that.densityDpi;
-        //if (n != 0) return n;
+        if (n != 0) return n;
+        if (this.themeConfig == null) {
+            if (that.themeConfig != null) return 1;
+        } else {
+            n = this.themeConfig.compareTo(that.themeConfig);
+        }
         return n;
     }
 
@@ -1437,6 +1474,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         result = 31 * result + screenHeightDp;
         result = 31 * result + smallestScreenWidthDp;
         result = 31 * result + densityDpi;
+        result = 31 * result + (this.themeConfig != null ?
+                                  this.themeConfig.hashCode() : 0);
         return result;
     }
 
