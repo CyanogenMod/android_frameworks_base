@@ -79,4 +79,7 @@
     <java-symbol type="bool" name="config_forceAnalogCarDock" />
     <java-symbol type="bool" name="config_forceAnalogDeskDock" />
 
+    <!-- Non-themeable packages -->
+    <java-symbol type="array" name="non_themeable_packages" />
+
 </resources>

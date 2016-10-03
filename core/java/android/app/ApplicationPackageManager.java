@@ -2477,4 +2477,51 @@ public class ApplicationPackageManager extends PackageManager {
             return false;
         }
     }
+
+    /**
+     * @hide
+     */
+    @Override
+    public int processThemeResources(String themePkgName) {
+        try {
+            return mPM.processThemeResources(themePkgName);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Unable to process theme resources for " + themePkgName, e);
+        }
+
+        return 0;
+    }
+
+    /** @hide */
+    @Override public Resources getThemedResourcesForApplication(
+            ApplicationInfo app, String themePkgName) throws NameNotFoundException {
+        // TODO: Add implementation
+        throw new NameNotFoundException("Unable to open " + app.publicSourceDir);
+    }
+
+    /** @hide */
+    @Override public Resources getThemedResourcesForApplication(
+            String appPackageName, String themePkgName) throws NameNotFoundException {
+        return getThemedResourcesForApplication(
+                getApplicationInfo(appPackageName, 0), themePkgName);
+    }
+
+    /** @hide */
+    @Override
+    public Resources getThemedResourcesForApplicationAsUser(String appPackageName,
+            String themePackageName, int userId) throws NameNotFoundException {
+        if (userId < 0) {
+            throw new IllegalArgumentException(
+                    "Call does not support special user #" + userId);
+        }
+        try {
+            ApplicationInfo ai = mPM.getApplicationInfo(appPackageName, 0, userId);
+            if (ai != null) {
+                return getThemedResourcesForApplication(ai, themePackageName);
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException("Package manager has died", e);
+        }
+        throw new NameNotFoundException("Package " + appPackageName + " doesn't exist");
+    }
 }
