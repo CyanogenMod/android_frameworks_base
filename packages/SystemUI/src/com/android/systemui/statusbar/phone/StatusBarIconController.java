@@ -112,6 +112,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
 
     public StatusBarIconController(Context context, View statusBar, View keyguardStatusBar,
             PhoneStatusBar phoneStatusBar) {
+        super(context.getResources().getStringArray(
+                com.android.internal.R.array.config_statusBarIcons));
         mContext = context;
         mPhoneStatusBar = phoneStatusBar;
         mSystemIconArea = (LinearLayout) statusBar.findViewById(R.id.system_icon_area);
@@ -138,7 +140,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mHandler = new Handler();
         mClockController = new ClockController(statusBar, mNotificationIconAreaController, mHandler);
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
-        defineSlots();
         loadDimens();
 
         TunerService.get(mContext).addTunable(this, ICON_BLACKLIST);
@@ -201,11 +202,6 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mIconHPadding = mContext.getResources().getDimensionPixelSize(
                 R.dimen.status_bar_icon_padding);
         mClockController.updateFontSize();
-    }
-
-    public void defineSlots() {
-        defineSlots(mContext.getResources().getStringArray(
-                com.android.internal.R.array.config_statusBarIcons));
     }
 
     private void addSystemIcon(int index, StatusBarIcon icon) {

@@ -150,7 +150,7 @@ public class LocationManagerService extends ILocationManager.Stub {
     // used internally for synchronization
     private final Object mLock = new Object();
 
-    // --- fields below are final after systemReady() ---
+    // --- fields below are final after systemRunning() ---
     private LocationFudger mLocationFudger;
     private GeofenceManager mGeofenceManager;
     private PackageManager mPackageManager;
@@ -171,6 +171,7 @@ public class LocationManagerService extends ILocationManager.Stub {
 
     // --- fields below are protected by mLock ---
     // Set of providers that are explicitly enabled
+    // Only used by passive, fused & test.  Network & GPS are controlled separately, and not listed.
     private final Set<String> mEnabledProviders = new HashSet<String>();
 
     // Set of providers that are explicitly disabled
@@ -239,12 +240,12 @@ public class LocationManagerService extends ILocationManager.Stub {
 
         if (D) Log.d(TAG, "Constructed");
 
-        // most startup is deferred until systemReady()
+        // most startup is deferred until systemRunning()
     }
 
     public void systemRunning() {
         synchronized (mLock) {
-            if (D) Log.d(TAG, "systemReady()");
+            if (D) Log.d(TAG, "systemRunning()");
 
             // fetch package manager
             mPackageManager = mContext.getPackageManager();
@@ -324,7 +325,11 @@ public class LocationManagerService extends ILocationManager.Stub {
                         || Intent.ACTION_MANAGED_PROFILE_REMOVED.equals(action)) {
                     updateUserProfiles(mCurrentUserId);
                 } else if (Intent.ACTION_SHUTDOWN.equals(action)) {
-                    shutdownComponents();
+                    // shutdown only if UserId indicates whole system, not just one user
+                    if(D) Log.d(TAG, "Shutdown received with UserId: " + getSendingUserId());
+                    if (getSendingUserId() == UserHandle.USER_ALL) {
+                        shutdownComponents();
+                    }
                 }
             }
         }, UserHandle.ALL, intentFilter, null, mLocationHandler);

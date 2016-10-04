@@ -359,7 +359,7 @@ public class LockPatternUtils {
                 return false;
             }
         } catch (RemoteException re) {
-            return true;
+            return false;
         }
     }
 
@@ -440,7 +440,7 @@ public class LockPatternUtils {
                 return false;
             }
         } catch (RemoteException re) {
-            return true;
+            return false;
         }
     }
 
