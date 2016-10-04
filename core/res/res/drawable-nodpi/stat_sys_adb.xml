@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2016 The Android Open Source Project
+Copyright (C) 2016 The CyanogenMod Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,23 +14,14 @@ Copyright (C) 2016 The Android Open Source Project
     limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="48.0"
-        android:viewportHeight="48.0">
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="96"
+    android:viewportHeight="90">
+
     <path
-        android:fillColor="#A0FFFFFF"
-        android:pathData="M32.0,12.5l0.0,28.0l12.0,-5.0l0.0,-28.0z"/>
-    <path
-        android:fillColor="#A0FFFFFF"
-        android:pathData="M4.0,40.5l12.0,-5.0l0.0,-11.0l-12.0,-12.0z"/>
-    <path
-        android:fillColor="#40000000"
-        android:pathData="M44.0,35.5l-12.0,-12.0l0.0,-4.0z"/>
-    <path
-        android:fillColor="#40000000"
-        android:pathData="M4.0,12.5l12.0,12.0l0.0,4.0z"/>
-    <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M32.0,23.5l-16.0,-16.0l-12.0,5.0l0.0,0.0l12.0,12.0l16.0,16.0l12.0,-5.0l0.0,0.0z"/>
+        android:fillColor="#FFFFFF"
+        android:pathData="M96,38.58V67.64c0,16.8-16.21,21.74-45.22,22H43.6v0c-28-.46-43.6-5.52-43.6-22V38.58c0-9,4.64-14.55,13.37-17.86L6.79,4.65A3.14,3.14,0,1,1,12.6,2.27l6.82,16.65c6.54-1.5,14.64-2.19,24.18-2.35h0c1.43,0,2.89,0,4.39,0v0h0v0c11.47,0,21.06
+.66
+,28.58,2.38L83.4,2.27a3.14,3.14,0,1,1,5.81,2.38L82.63,20.72C91.36,24,96,29.61,96,38.58ZM42.47,73.13c0,.08,0,.16,0,.24a4,4,0,0,0,4,4h3a4,4,0,0,0,4-4c0-.08,0-.16,0-.24ZM10,50.68a14.36,14.36,0,1,0,28.35,1L11.45,46.54A14.36,14.36,0,0,0,10,50.68Zm74.59-4.15L57.69,51.72a14.36,14.36,0,1,0,26.86-5.18Z" />
 </vector>
