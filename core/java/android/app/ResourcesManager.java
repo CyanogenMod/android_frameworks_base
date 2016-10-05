@@ -335,18 +335,6 @@ public class ResourcesManager {
         ResourcesKey key = new ResourcesKey(resDir, displayId, null, compatInfo.applicationScale,
                 isThemeable, themeConfig);
 
-        synchronized (this) {
-            WeakReference<Resources> wr = mActiveResources.get(key);
-            r = wr != null ? wr.get() : null;
-            if (r != null && r.getAssets().isUpToDate()) {
-                if (false) {
-                    Slog.w(TAG, "Returning cached resources " + r + " " + resDir
-                            + ": appScale=" + r.getCompatibilityInfo().applicationScale);
-                }
-                return r;
-            }
-        }
-
         AssetManager assets = new AssetManager();
         assets.setAppName(packageName);
         assets.setThemeSupport(isThemeable);
@@ -387,20 +375,7 @@ public class ResourcesManager {
                     + r.getCompatibilityInfo().applicationScale);
         }
 
-        synchronized (this) {
-            WeakReference<Resources> wr = mActiveResources.get(key);
-            Resources existing = wr != null ? wr.get() : null;
-            if (existing != null && existing.getAssets().isUpToDate()) {
-                // Someone else already created the resources while we were
-                // unlocked; go ahead and use theirs.
-                r.getAssets().close();
-                return existing;
-            }
-
-            // XXX need to remove entries when weak references go away
-            mActiveResources.put(key, new WeakReference<Resources>(r));
-            return r;
-        }
+        return r;
     }
 
     /**
