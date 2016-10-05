@@ -17,9 +17,15 @@
 package com.android.systemui;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 
+import android.util.Log;
+import com.android.systemui.cm.HeadsetStatusCallback;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
@@ -29,6 +35,14 @@ public class SystemUIService extends Service {
     public void onCreate() {
         super.onCreate();
         ((SystemUIApplication) getApplication()).startServicesIfNeeded();
+
+        // Starting the headset status handler
+        // TODO: Move this in an other Service ? (May be not battery friendly)
+        HandlerThread handlerThread = new HandlerThread("Headset-Status-Listener");
+        handlerThread.start();
+
+        AudioManager audioManager = ((AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE));
+        audioManager.registerAudioDeviceCallback(new HeadsetStatusCallback(this), new Handler(handlerThread.getLooper()));
     }
 
     @Override

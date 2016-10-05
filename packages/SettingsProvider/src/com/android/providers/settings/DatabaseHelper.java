@@ -60,6 +60,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.LockPatternView;
 
 import cyanogenmod.providers.CMSettings;
+import cyanogenmod.providers.CMSettings.System;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -2603,6 +2604,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
             loadUISoundEffectsSettings(stmt);
 
+            loadMiscSoundSettings(stmt);
+
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
 
@@ -2641,6 +2644,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         loadIntegerSetting(stmt, Settings.System.LOCKSCREEN_SOUNDS_ENABLED,
             R.integer.def_lockscreen_sounds_enabled);
+    }
+
+    private void loadMiscSoundSettings(SQLiteStatement stmt) {
+        loadBooleanSetting(stmt, System.HEADSET_NOTIFICATION,
+                           R.bool.def_headset_notification_enabled);
     }
 
     private void loadDefaultAnimationSettings(SQLiteStatement stmt) {
