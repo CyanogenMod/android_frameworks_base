@@ -4003,6 +4003,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return oldTheme == null ||
                 (overlay != null && !overlay.equals(oldTheme.getOverlayForNavBar()) ||
                         isNewThemeChange);
+        //return !(overlay.equals(oldTheme.getOverlayForNavBar()));
     }
 
     protected void loadDimens() {
