@@ -3645,6 +3645,12 @@ public final class Settings {
         /** @hide */
         public static final Validator LOCK_TO_APP_ENABLED_VALIDATOR = sBooleanValidator;
 
+ 	/**
+         * Three Finger Gesture from Oppo
+         * @hide
+         */
+        public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+
         /**
          * I am the lolrus.
          * <p>
