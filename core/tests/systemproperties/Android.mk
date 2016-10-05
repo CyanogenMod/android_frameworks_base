@@ -12,7 +12,6 @@ LOCAL_DX_FLAGS := --core-library
 LOCAL_STATIC_JAVA_LIBRARIES := android-common frameworks-core-util-lib
 LOCAL_JAVA_LIBRARIES := android.test.runner
 LOCAL_PACKAGE_NAME := FrameworksCoreSystemPropertiesTests
-LOCAL_JAVA_LANGUAGE_VERSION := 1.8
 
 LOCAL_CERTIFICATE := platform
 
