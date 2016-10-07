@@ -118,8 +118,12 @@ public class TunerService extends SystemUI {
         return key.startsWith("cmsecure:");
     }
 
+    private boolean isCMGlobal(String key) {
+        return key.startsWith("cmglobal:");
+    }
+
     private String chomp(String key) {
-        return key.replaceFirst("^cms(ecure|ystem):", "");
+        return key.replaceFirst("^cm(secure|system|global):", "");
     }
 
     public String getValue(String setting) {
@@ -131,6 +135,10 @@ public class TunerService extends SystemUI {
             return CMSettings.System.getStringForUser(
                     mContentResolver, chomp(setting), mCurrentUser);
         }
+        if (isCMGlobal(setting)) {
+            return CMSettings.Global.getStringForUser(
+                    mContentResolver, chomp(setting), mCurrentUser);
+        }
         return Settings.Secure.getStringForUser(mContentResolver, setting, mCurrentUser);
     }
 
@@ -140,6 +148,9 @@ public class TunerService extends SystemUI {
                     mContentResolver, chomp(setting), value, mCurrentUser);
         } else if (isCMSystem(setting)) {
             CMSettings.System.putStringForUser(
+                    mContentResolver, chomp(setting), value, mCurrentUser);
+        } else if (isCMGlobal(setting)) {
+            CMSettings.Global.putStringForUser(
                     mContentResolver, chomp(setting), value, mCurrentUser);
         } else {
             Settings.Secure.putStringForUser(mContentResolver, setting, value, mCurrentUser);
@@ -155,6 +166,10 @@ public class TunerService extends SystemUI {
             return CMSettings.System.getIntForUser(
                     mContentResolver, chomp(setting), def, mCurrentUser);
         }
+        if (isCMGlobal(setting)) {
+            return CMSettings.Global.getIntForUser(
+                    mContentResolver, chomp(setting), def, mCurrentUser);
+        }
         return Settings.Secure.getIntForUser(mContentResolver, setting, def, mCurrentUser);
     }
 
@@ -164,6 +179,9 @@ public class TunerService extends SystemUI {
                     mContentResolver, chomp(setting), value, mCurrentUser);
         } else if (isCMSystem(setting)) {
             CMSettings.System.putIntForUser(
+                    mContentResolver, chomp(setting), value, mCurrentUser);
+        } else if (isCMGlobal(setting)) {
+            CMSettings.Global.putIntForUser(
                     mContentResolver, chomp(setting), value, mCurrentUser);
         } else {
             Settings.Secure.putIntForUser(mContentResolver, setting, value, mCurrentUser);
@@ -186,6 +204,8 @@ public class TunerService extends SystemUI {
             uri = CMSettings.Secure.getUriFor(chomp(key));
         } else if (isCMSystem(key)) {
             uri = CMSettings.System.getUriFor(chomp(key));
+        } else if (isCMGlobal(key)) {
+            uri = CMSettings.Global.getUriFor(chomp(key));
         } else {
             uri = Settings.Secure.getUriFor(key);
         }
@@ -328,9 +348,7 @@ public class TunerService extends SystemUI {
 
         @Override
         public void onChange(boolean selfChange, Uri uri, int userId) {
-            if (userId == ActivityManager.getCurrentUser()) {
-                reloadSetting(uri);
-            }
+            reloadSetting(uri);
         }
     }
 
