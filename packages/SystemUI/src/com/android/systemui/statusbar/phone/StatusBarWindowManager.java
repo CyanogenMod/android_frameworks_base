@@ -19,9 +19,7 @@ package com.android.systemui.statusbar.phone;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.database.ContentObserver;
 import android.graphics.PixelFormat;
-import android.os.Handler;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.view.Gravity;
@@ -34,6 +32,7 @@ import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.statusbar.BaseStatusBar;
 import com.android.systemui.statusbar.RemoteInputController;
 import com.android.systemui.statusbar.StatusBarState;
+import com.android.systemui.tuner.TunerService;
 
 import cyanogenmod.providers.CMSettings;
 
@@ -44,7 +43,11 @@ import java.lang.reflect.Field;
 /**
  * Encapsulates all logic for the status bar window state management.
  */
-public class StatusBarWindowManager implements RemoteInputController.Callback {
+public class StatusBarWindowManager
+        implements RemoteInputController.Callback, TunerService.Tunable {
+
+    private static final String LOCKSCREEN_ROTATION =
+            "cmsystem:" + CMSettings.System.LOCKSCREEN_ROTATION;
 
     private final Context mContext;
     private final WindowManager mWindowManager;
@@ -107,8 +110,8 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
         mLpChanged = new WindowManager.LayoutParams();
         mLpChanged.copyFrom(mLp);
 
-        SettingsObserver observer = new SettingsObserver(new Handler());
-        observer.observe(mContext);
+        TunerService.get(mContext).addTunable(this,
+                LOCKSCREEN_ROTATION, Settings.System.ACCELEROMETER_ROTATION);
     }
 
     private void applyKeyguardFlags(State state) {
@@ -405,31 +408,14 @@ public class StatusBarWindowManager implements RemoteInputController.Callback {
         }
     }
 
-    private class SettingsObserver extends ContentObserver {
-        public SettingsObserver(Handler handler) {
-            super(handler);
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        if (!LOCKSCREEN_ROTATION.equals(key) &&
+                !Settings.System.ACCELEROMETER_ROTATION.equals(key)) {
+            return;
         }
-
-        public void observe(Context context) {
-            context.getContentResolver().registerContentObserver(
-                    Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION),
-                    false,
-                    this);
-            context.getContentResolver().registerContentObserver(
-                    CMSettings.System.getUriFor(CMSettings.System.LOCKSCREEN_ROTATION),
-                    false,
-                    this);
-        }
-
-        public void unobserve(Context context) {
-            context.getContentResolver().unregisterContentObserver(this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
-            // update the state
-            apply(mCurrentState);
-        }
+        mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
+        // Update the state
+        apply(mCurrentState);
     }
 }
