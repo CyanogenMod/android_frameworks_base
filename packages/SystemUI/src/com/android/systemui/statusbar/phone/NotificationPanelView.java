@@ -22,19 +22,14 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.app.StatusBarManager;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.net.Uri;
-import android.os.Handler;
 import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.view.GestureDetector;
@@ -69,7 +64,7 @@ import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
-import cyanogenmod.providers.CMSettings;
+import com.android.systemui.tuner.TunerService;
 
 import java.util.List;
 
@@ -79,7 +74,7 @@ public class NotificationPanelView extends PanelView implements
         ExpandableView.OnHeightChangedListener,
         View.OnClickListener, NotificationStackScrollLayout.OnOverscrollTopChangedListener,
         KeyguardAffordanceHelper.Callback, NotificationStackScrollLayout.OnEmptySpaceClickListener,
-        HeadsUpManager.OnHeadsUpChangedListener {
+        HeadsUpManager.OnHeadsUpChangedListener, TunerService.Tunable {
 
     private static final boolean DEBUG = false;
 
@@ -94,6 +89,11 @@ public class NotificationPanelView extends PanelView implements
     private static final String COUNTER_PANEL_OPEN = "panel_open";
     private static final String COUNTER_PANEL_OPEN_QS = "panel_open_qs";
     private static final String COUNTER_PANEL_OPEN_PEEK = "panel_open_peek";
+
+    private static final String STATUS_BAR_QUICK_QS_PULLDOWN =
+            "cmsystem:" + CMSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN;
+    private static final String DOUBLE_TAP_SLEEP_GESTURE =
+            "cmsystem:" + CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE;
 
     private static final Rect mDummyDirtyRect = new Rect(0, 0, 1, 1);
 
@@ -215,9 +215,6 @@ public class NotificationPanelView extends PanelView implements
     };
     private NotificationGroupManager mGroupManager;
 
-    private Handler mHandler = new Handler();
-    private SettingsObserver mSettingsObserver;
-
     private int mOneFingerQuickSettingsIntercept;
     private boolean mDoubleTapToSleepEnabled;
     private int mStatusBarHeaderHeight;
@@ -228,7 +225,6 @@ public class NotificationPanelView extends PanelView implements
         setWillNotDraw(!DEBUG);
         mFalsingManager = FalsingManager.getInstance(context);
 
-        mSettingsObserver = new SettingsObserver(mHandler);
         mDoubleTapGesture = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
@@ -372,13 +368,29 @@ public class NotificationPanelView extends PanelView implements
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mSettingsObserver.observe();
+        TunerService.get(mContext).addTunable(this,
+                STATUS_BAR_QUICK_QS_PULLDOWN, DOUBLE_TAP_SLEEP_GESTURE);
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        TunerService.get(mContext).removeTunable(this);
         super.onDetachedFromWindow();
-        mSettingsObserver.unobserve();
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        final int value = newValue == null ? 1 : Integer.parseInt(newValue);
+        switch (key) {
+            case DOUBLE_TAP_SLEEP_GESTURE:
+                mDoubleTapToSleepEnabled = value == 1;
+                break;
+            case STATUS_BAR_QUICK_QS_PULLDOWN:
+                mOneFingerQuickSettingsIntercept = value;
+                break;
+            default:
+                break;
+        }
     }
 
     private void startQsSizeChangeAnimation(int oldHeight, final int newHeight) {
@@ -2402,43 +2414,5 @@ public class NotificationPanelView extends PanelView implements
 
     public void setGroupManager(NotificationGroupManager groupManager) {
         mGroupManager = groupManager;
-    }
-
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(CMSettings.System.getUriFor(
-                    CMSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN), false, this);
-            resolver.registerContentObserver(CMSettings.System.getUriFor(
-                    CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE), false, this);
-            update();
-        }
-
-        void unobserve() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.unregisterContentObserver(this);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            update();
-        }
-
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            update();
-        }
-
-        public void update() {
-            ContentResolver resolver = mContext.getContentResolver();
-            mOneFingerQuickSettingsIntercept = CMSettings.System.getInt(
-                    resolver, CMSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN, 1);
-            mDoubleTapToSleepEnabled = CMSettings.System.getInt(
-                    resolver, CMSettings.System.DOUBLE_TAP_SLEEP_GESTURE, 1) == 1;
-        }
     }
 }
