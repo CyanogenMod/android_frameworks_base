@@ -35,7 +35,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import com.android.systemui.R;
-import com.android.systemui.cm.UserContentObserver;
 
 import java.util.ArrayList;
 import java.util.List;
