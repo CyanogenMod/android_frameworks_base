@@ -348,9 +348,7 @@ public class TunerService extends SystemUI {
 
         @Override
         public void onChange(boolean selfChange, Uri uri, int userId) {
-            if (userId == ActivityManager.getCurrentUser()) {
-                reloadSetting(uri);
-            }
+            reloadSetting(uri);
         }
     }
 
