@@ -3248,7 +3248,8 @@ final class ActivityStack {
     }
 
     private void adjustFocusedActivityLocked(ActivityRecord r, String reason) {
-        if (!mStackSupervisor.isFocusedStack(this) || mService.mFocusedActivity != r) {
+        if (!mStackSupervisor.isFocusedStack(this) || (mService.mFocusedActivity != r
+                && mService.mFocusedActivity != null)) {
             return;
         }
 
