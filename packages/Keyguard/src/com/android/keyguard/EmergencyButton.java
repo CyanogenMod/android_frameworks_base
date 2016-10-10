@@ -27,6 +27,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.telecom.TelecomManager;
+import android.telephony.ServiceState;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
@@ -62,6 +63,11 @@ public class EmergencyButton extends Button {
 
         @Override
         public void onPhoneStateChanged(int phoneState) {
+            updateEmergencyCallButton();
+        }
+
+        @Override
+        public void onServiceStateChanged(int subId, ServiceState state) {
             updateEmergencyCallButton();
         }
     };
@@ -167,6 +173,11 @@ public class EmergencyButton extends Button {
                     // Only show if there is a secure screen (pin/pattern/SIM pin/SIM puk);
                     visible = mLockPatternUtils.isSecure(KeyguardUpdateMonitor.getCurrentUser()) ||
                               mContext.getResources().getBoolean(R.bool.config_showEmergencyButton);
+                }
+
+                if (mContext.getResources().getBoolean(R.bool.kg_hide_emgcy_btn_when_oos)) {
+                    KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
+                    visible = visible && !monitor.isOOS();
                 }
             }
         }
