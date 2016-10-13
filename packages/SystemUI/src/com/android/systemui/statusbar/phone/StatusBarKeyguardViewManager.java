@@ -236,6 +236,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
             updateStates();
         }
         mPhoneStatusBar.onScreenTurnedOn();
+        mStatusBarWindowManager.onKeyguardChanged();
         Trace.endSection();
     }
 
