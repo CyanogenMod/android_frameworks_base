@@ -77,4 +77,7 @@
     <!-- config softap extention feature -->
     <java-symbol type="bool" name="config_softap_extention" />
 
+    <!-- Blur effects -->
+    <java-symbol type="bool" name="config_ui_blur_enabled" />
+
 </resources>
