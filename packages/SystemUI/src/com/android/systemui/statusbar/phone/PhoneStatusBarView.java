@@ -181,6 +181,7 @@ public class PhoneStatusBarView extends PanelBar {
         super.panelExpansionChanged(frac, expanded);
         mPanelFraction = frac;
         updateScrimFraction();
+        mBar.setBlur(frac);
     }
 
     private void updateScrimFraction() {
