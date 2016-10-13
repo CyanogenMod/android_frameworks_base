@@ -19,8 +19,8 @@
     android:layout_width="match_parent"
     android:background="@drawable/queue_bg"
     android:layout_height="@dimen/queue_row_height"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
     android:paddingStart="16dp"
     android:paddingEnd="16dp">
 
@@ -41,13 +41,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.NotificationGuts.Primary"
+            style="@style/TextAppearance.MediaQueue.Title"
             android:id="@+id/title"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.NotificationGuts.Header"
+            style="@style/TextAppearance.MediaQueue.Subtitle"
             android:id="@+id/summary"/>
     </LinearLayout>
 
