@@ -30,6 +30,9 @@
     <uses-permission android:name="cyanogenmod.permission.READ_WEATHER" />
     <protected-broadcast android:name="com.cyanogenmod.lockclock.action.FORCE_WEATHER_UPDATE" />
 
+    <!-- Blur surface -->
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
+
     <application>
 
         <activity-alias
