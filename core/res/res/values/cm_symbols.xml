@@ -75,8 +75,12 @@
     <java-symbol type="string" name="global_action_current_user" />
     <java-symbol type="dimen" name="global_actions_avatar_size" />
 
+<<<<<<< HEAD
     <!-- Support Samsung docks -->
     <java-symbol type="bool" name="config_forceAnalogCarDock" />
     <java-symbol type="bool" name="config_forceAnalogDeskDock" />
+
+    <!-- Blur effects -->
+    <java-symbol type="bool" name="config_ui_blur_enabled" />
 
 </resources>
