@@ -47,7 +47,7 @@ public class AppOpsCommand extends BaseCommand {
                 + "       appops reset [--user <USER_ID>] [<PACKAGE>]\n"
                 + "  <PACKAGE> an Android package name.\n"
                 + "  <OP>      an AppOps operation.\n"
-                + "  <MODE>    one of allow, ignore, deny, or default\n"
+                + "  <MODE>    one of allow, ignore, deny, default, or ask\n"
                 + "  <USER_ID> the user id under which the package is installed. If --user is not\n"
                 + "            specified, the current user is assumed.\n");
     }
@@ -85,6 +85,7 @@ public class AppOpsCommand extends BaseCommand {
     private static final String MODE_DENY = "deny";
     private static final String MODE_IGNORE = "ignore";
     private static final String MODE_DEFAULT = "default";
+    private static final String MODE_ASK = "ask";
 
     private int strOpToOp(String op) {
         try {
@@ -153,6 +154,9 @@ public class AppOpsCommand extends BaseCommand {
                 break;
             case MODE_DEFAULT:
                 modeInt = AppOpsManager.MODE_DEFAULT;
+                break;
+            case MODE_ASK:
+                modeInt = AppOpsManager.MODE_ASK;
                 break;
             default:
                 System.err.println("Error: Mode " + mode + " is not valid,");
@@ -241,6 +245,9 @@ public class AppOpsCommand extends BaseCommand {
                         break;
                     case AppOpsManager.MODE_DEFAULT:
                         System.out.print("default");
+                        break;
+                    case AppOpsManager.MODE_ASK:
+                        System.out.print("ask");
                         break;
                     default:
                         System.out.print("mode=");
