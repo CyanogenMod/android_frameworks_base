@@ -1933,6 +1933,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                     return AppOpsManager.MODE_IGNORED;
                 case "default":
                     return AppOpsManager.MODE_DEFAULT;
+                case "ask":
+                    return AppOpsManager.MODE_ASK;
             }
             try {
                 return Integer.parseInt(modeStr);
@@ -2048,7 +2050,7 @@ public class AppOpsService extends IAppOpsService.Stub {
         pw.println("  options:");
         pw.println("    <PACKAGE> an Android package name.");
         pw.println("    <OP>      an AppOps operation.");
-        pw.println("    <MODE>    one of allow, ignore, deny, or default");
+        pw.println("    <MODE>    one of allow, ignore, deny, default or ask");
         pw.println("    <USER_ID> the user id under which the package is installed. If --user is not");
         pw.println("              specified, the current user is assumed.");
     }
@@ -2112,6 +2114,9 @@ public class AppOpsService extends IAppOpsService.Stub {
                                     break;
                                 case AppOpsManager.MODE_DEFAULT:
                                     pw.print("default");
+                                    break;
+                                case AppOpsManager.MODE_ASK:
+                                    pw.print("ask");
                                     break;
                                 default:
                                     pw.print("mode=");
