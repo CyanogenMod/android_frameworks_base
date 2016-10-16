@@ -30,6 +30,9 @@
     <uses-permission android:name="cyanogenmod.permission.READ_WEATHER" />
     <protected-broadcast android:name="com.cyanogenmod.lockclock.action.FORCE_WEATHER_UPDATE" />
 
+    <!-- CM Performance Manager -->
+    <uses-permission android:name="cyanogenmod.permission.PERFORMANCE_ACCESS" />
+
     <application>
 
         <activity-alias
