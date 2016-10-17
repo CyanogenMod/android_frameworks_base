@@ -20,4 +20,6 @@
     <color name="status_bar_temperature_text_color">#FFFFFFFF</color>
     <color name="status_bar_temperature_location_text_color">#FFFFFFFF</color>
 
+    <!-- Status Bar Battery Level Text Color -->
+    <color name="status_bar_battery_level_text_color">#ffffff</color>
 </resources>
