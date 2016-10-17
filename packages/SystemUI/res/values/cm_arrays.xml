@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2016 The CyanogenMod Project
+     Copyright (C) 2012-2016 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-
-    <!-- Expanded Status Bar Weather Text Colors -->
-    <color name="status_bar_temperature_text_color">#FFFFFFFF</color>
-    <color name="status_bar_temperature_location_text_color">#FFFFFFFF</color>
-
-    <!-- Status Bar Battery Level Text Color -->
-    <color name="status_bar_battery_level_text_color">#ffffff</color>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <array name="batterymeter_inverted_bolt_points" translatable="false">
+        <item>743</item><item>73</item>
+        <item>743</item><item>292</item>
+        <item>442</item><item>201</item>
+        <item>442</item><item>400</item>
+        <item>0</item><item>20</item>
+        <item>369</item><item>157</item>
+        <item>369</item><item>0</item>
+    </array>
 </resources>

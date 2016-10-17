@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.keyguard.KeyguardStatusView;
+import com.android.systemui.BatteryLevelTextView;
 import com.android.systemui.BatteryMeterView;
 import com.android.systemui.FontSizeUtils;
 import com.android.systemui.R;
@@ -95,7 +96,7 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
     private Switch mQsDetailHeaderSwitch;
     private ImageView mQsDetailHeaderProgress;
     private TextView mEmergencyCallsOnly;
-    private TextView mBatteryLevel;
+    private BatteryLevelTextView mBatteryLevel;
     private TextView mAlarmStatus;
     private TextView mWeatherLine1, mWeatherLine2;
 
@@ -145,8 +146,12 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
 
     private boolean mAllowExpand = true;
 
+    private boolean mShowBatteryText;
+
     public StatusBarHeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mShowBatteryText = CMSettings.System.getInt(getContext().getContentResolver(),
+                CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT, 0) == 2;
     }
 
     @Override
@@ -174,7 +179,7 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         mQsDetailHeaderSwitch = (Switch) mQsDetailHeader.findViewById(android.R.id.toggle);
         mQsDetailHeaderProgress = (ImageView) findViewById(R.id.qs_detail_header_progress);
         mEmergencyCallsOnly = (TextView) findViewById(R.id.header_emergency_calls_only);
-        mBatteryLevel = (TextView) findViewById(R.id.battery_level);
+        mBatteryLevel = (BatteryLevelTextView) findViewById(R.id.battery_level);
         mAlarmStatus = (TextView) findViewById(R.id.alarm_status);
         mAlarmStatus.setOnClickListener(this);
         mSignalCluster = findViewById(R.id.signal_cluster);
@@ -372,7 +377,7 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
             updateSignalClusterDetachment();
         }
         mEmergencyCallsOnly.setVisibility(mExpanded && mShowEmergencyCallsOnly ? VISIBLE : GONE);
-        mBatteryLevel.setVisibility(mExpanded ? View.VISIBLE : View.GONE);
+        mBatteryLevel.setVisibility(mExpanded || mShowBatteryText ? View.VISIBLE : View.GONE);
         mSettingsContainer.findViewById(R.id.tuner_icon).setVisibility(View.INVISIBLE);
     }
 
@@ -407,7 +412,8 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
     private void updateListeners() {
         if (mListening) {
             TunerService.get(getContext()).addTunable(this,
-                    "cmsystem:" + CMSettings.System.STATUS_BAR_SHOW_WEATHER);
+                    "cmsystem:" + CMSettings.System.STATUS_BAR_SHOW_WEATHER,
+                    "cmsystem:" + CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT);
             mBatteryController.addStateChangedCallback(this);
             mNextAlarmController.addStateChangedCallback(this);
             mWeatherController.addCallback(this);
@@ -923,6 +929,8 @@ public class StatusBarHeaderView extends BaseStatusBarHeader implements View.OnC
         if (key.endsWith(CMSettings.System.STATUS_BAR_SHOW_WEATHER)) {
             mShowWeather = newValue == null || "1".equals(newValue);
             updateVisibilities();
+        } else if (key.endsWith(CMSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT)) {
+            mShowBatteryText = newValue == null ? false : Integer.parseInt(newValue) == 2;
         }
     }
 }
