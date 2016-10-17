@@ -341,12 +341,12 @@ public class NotificationManager
     /**
      * @hide
      */
-    public boolean matchesCallFilter(Bundle extras) {
+    public boolean[] matchesCallFilter(Bundle extras) {
         INotificationManager service = getService();
         try {
             return service.matchesCallFilter(extras);
         } catch (RemoteException e) {
-            return false;
+            return null;
         }
     }
 

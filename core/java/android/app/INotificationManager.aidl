@@ -80,7 +80,7 @@ interface INotificationManager
     void setInterruptionFilter(String pkg, int interruptionFilter);
 
     ComponentName getEffectsSuppressor();
-    boolean matchesCallFilter(in Bundle extras);
+    boolean[] matchesCallFilter(in Bundle extras);
     boolean isSystemConditionProviderEnabled(String path);
 
     int getZenMode();

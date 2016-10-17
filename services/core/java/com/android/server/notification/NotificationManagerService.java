@@ -1264,6 +1264,7 @@ public class NotificationManagerService extends SystemService {
         }
         mZenModeHelper.initZenMode();
         mZenModeHelper.readAllowLightsFromSettings();
+        mZenModeHelper.readVibrationModeFromSettings();
         mInterruptionFilter = mZenModeHelper.getZenModeListenerInterruptionFilter();
 
         mUserProfiles.updateCache(getContext());
@@ -2031,7 +2032,7 @@ public class NotificationManagerService extends SystemService {
         }
 
         @Override
-        public boolean matchesCallFilter(Bundle extras) {
+        public boolean[] matchesCallFilter(Bundle extras) {
             enforceSystemOrSystemUI("INotificationManager.matchesCallFilter");
             return mZenModeHelper.matchesCallFilter(
                     UserHandle.getCallingUserHandle(),
@@ -2698,21 +2699,28 @@ public class NotificationManagerService extends SystemService {
             ZenLog.traceDisableEffects(record, disableEffects);
         }
 
-        if ((disableEffects == null)
+        boolean readyForBeepOrBuzz = disableEffects == null
                 && (!(record.isUpdate
                     && (notification.flags & Notification.FLAG_ONLY_ALERT_ONCE) != 0 ))
                 && (record.getUserId() == UserHandle.USER_ALL ||
                     record.getUserId() == currentUser ||
                     mUserProfiles.isCurrentProfile(record.getUserId()))
-                && canInterrupt
                 && mSystemReady
-                && mAudioManager != null) {
+                && mAudioManager != null;
+
+        boolean canBeep = readyForBeepOrBuzz && canInterrupt;
+        boolean canBuzz = readyForBeepOrBuzz &&
+            (canInterrupt || mZenModeHelper.allowVibrationForNotifications());
+        boolean hasValidSound = false;
+
+        if (canBeep || canBuzz) {
             if (DBG) Slog.v(TAG, "Interrupting!");
 
             sendAccessibilityEvent(notification, record.sbn.getPackageName());
+        }
 
-            // sound
-
+        // sound
+        if (canBeep) {
             // should we use the default notification sound? (indicated either by
             // DEFAULT_SOUND or because notification.sound is pointing at
             // Settings.System.NOTIFICATION_SOUND)
@@ -2722,7 +2730,6 @@ public class NotificationManagerService extends SystemService {
                                    .equals(notification.sound);
 
             Uri soundUri = null;
-            boolean hasValidSound = false;
 
             if (useDefaultSound) {
                 soundUri = Settings.System.DEFAULT_NOTIFICATION_URI;
@@ -2763,15 +2770,17 @@ public class NotificationManagerService extends SystemService {
                     }
                 }
             }
+        }
 
-            // vibrate
+
+        // vibrate
+        if (canBuzz) {
             // Does the notification want to specify its own vibration?
             final boolean hasCustomVibrate = notification.vibrate != null;
 
             // new in 4.2: if there was supposed to be a sound and we're in vibrate
             // mode, and no other vibration is specified, we fall back to vibration
-            final boolean convertSoundToVibration =
-                       !hasCustomVibrate
+            final boolean convertSoundToVibration = !hasCustomVibrate
                     && hasValidSound
                     && (mAudioManager.getRingerModeInternal()
                                == AudioManager.RINGER_MODE_VIBRATE);
