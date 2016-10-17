@@ -85,7 +85,7 @@ interface INotificationManager
     void applyAdjustmentsFromRankerService(in INotificationListener token, in List<Adjustment> adjustments);
 
     ComponentName getEffectsSuppressor();
-    boolean matchesCallFilter(in Bundle extras);
+    boolean[] matchesCallFilter(in Bundle extras);
     boolean isSystemConditionProviderEnabled(String path);
 
     int getZenMode();
