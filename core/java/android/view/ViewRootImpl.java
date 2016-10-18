@@ -3386,6 +3386,7 @@ public final class ViewRootImpl implements ViewParent,
     private final static int MSG_DISPATCH_WINDOW_SHOWN = 25;
     private final static int MSG_REQUEST_KEYBOARD_SHORTCUTS = 26;
     private final static int MSG_UPDATE_POINTER_ICON = 27;
+    private final static int MSG_HIGHTEXT_CONTRAST_CHANGED = 28;
 
     final class ViewRootHandler extends Handler {
         @Override
@@ -3435,6 +3436,8 @@ public final class ViewRootImpl implements ViewParent,
                     return "MSG_DISPATCH_WINDOW_SHOWN";
                 case MSG_UPDATE_POINTER_ICON:
                     return "MSG_UPDATE_POINTER_ICON";
+                case MSG_HIGHTEXT_CONTRAST_CHANGED:
+                    return "MSG_HIGHTEXT_CONTRAST_CHANGED";
             }
             return super.getMessageName(message);
         }
@@ -3692,6 +3695,9 @@ public final class ViewRootImpl implements ViewParent,
             case MSG_UPDATE_POINTER_ICON: {
                 MotionEvent event = (MotionEvent) msg.obj;
                 resetPointerIcon(event);
+            } break;
+            case MSG_HIGHTEXT_CONTRAST_CHANGED: {
+                handleHighTextContrastChange(msg.arg1 != 0);
             } break;
             }
         }
@@ -7272,19 +7278,27 @@ public final class ViewRootImpl implements ViewParent,
         }
     }
 
+    void handleHighTextContrastChange(boolean enabled) {
+        mAttachInfo.mHighContrastText = enabled;
+        // Destroy Displaylists so they can be recreated with high contrast recordings
+        destroyHardwareResources();
+        // Schedule redraw, which will rerecord + redraw all text
+        invalidate();
+    }
+
+    public void dispatchHighTextContrastChange(boolean enabled) {
+        Message msg = mHandler.obtainMessage(MSG_HIGHTEXT_CONTRAST_CHANGED);
+        msg.arg1 = enabled ? 1 : 0;
+        mHandler.sendMessage(msg);
+    }
+
     final class HighContrastTextManager implements HighTextContrastChangeListener {
         HighContrastTextManager() {
             mAttachInfo.mHighContrastText = mAccessibilityManager.isHighTextContrastEnabled();
         }
         @Override
         public void onHighTextContrastStateChanged(boolean enabled) {
-            mAttachInfo.mHighContrastText = enabled;
-
-            // Destroy Displaylists so they can be recreated with high contrast recordings
-            destroyHardwareResources();
-
-            // Schedule redraw, which will rerecord + redraw all text
-            invalidate();
+            dispatchHighTextContrastChange(enabled);
         }
     }
 

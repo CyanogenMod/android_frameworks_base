@@ -208,6 +208,8 @@ public class CallLog {
          */
         public static final int BLACKLIST_TYPE = 8;
 
+        /** Call log type for outgoing IMS calls. */
+        private static final int OUTGOING_IMS_TYPE = 9;
         /** Call log type for missed IMS calls. */
         private static final int MISSED_IMS_TYPE = 10;
         /**
@@ -831,7 +833,8 @@ public class CallLog {
                 c = resolver.query(
                     CONTENT_URI,
                     new String[] {NUMBER},
-                    TYPE + " = " + OUTGOING_TYPE,
+                    TYPE + " = " + OUTGOING_TYPE + " OR " + TYPE + " = " + OUTGOING_IMS_TYPE +
+                            " OR " + TYPE + " = " + OUTGOING_WIFI_TYPE,
                     null,
                     DEFAULT_SORT_ORDER + " LIMIT 1");
                 if (c == null || !c.moveToFirst()) {
