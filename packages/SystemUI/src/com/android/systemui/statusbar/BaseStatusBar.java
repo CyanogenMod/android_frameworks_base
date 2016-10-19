@@ -118,6 +118,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_HIGH;
+import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_VERY_LOW;
 
 public abstract class BaseStatusBar extends SystemUI implements
         CommandQueue.Callbacks, ActivatableNotificationView.OnActivatedListener,
@@ -2303,7 +2304,8 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     public boolean shouldShowOnKeyguard(StatusBarNotification sbn) {
-        return mShowLockscreenNotifications && !mNotificationData.isAmbient(sbn.getKey());
+        return mShowLockscreenNotifications && !mNotificationData.isAmbient(sbn.getKey())
+            && mNotificationData.getImportance(sbn.getKey()) > IMPORTANCE_VERY_LOW;
     }
 
     protected void setZenMode(int mode) {
