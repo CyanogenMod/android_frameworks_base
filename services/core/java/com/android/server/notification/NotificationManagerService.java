@@ -41,6 +41,7 @@ import static android.service.notification.NotificationListenerService.TRIM_FULL
 import static android.service.notification.NotificationListenerService.TRIM_LIGHT;
 import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_DEFAULT;
 import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_NONE;
+import static android.service.notification.NotificationListenerService.Ranking.importanceToLevel;
 
 import static org.xmlpull.v1.XmlPullParser.END_DOCUMENT;
 
@@ -2950,7 +2951,8 @@ public class NotificationManagerService extends SystemService {
         final String key = record.getKey();
 
         // Should this notification make noise, vibe, or use the LED?
-        final boolean aboveThreshold = record.getImportance() >= IMPORTANCE_DEFAULT;
+        final boolean aboveThreshold = importanceToLevel(record.getImportance())
+          >= importanceToLevel(IMPORTANCE_DEFAULT);
         final boolean canInterrupt = aboveThreshold && !record.isIntercepted();
         if (DBG || record.isIntercepted())
             Slog.v(TAG,

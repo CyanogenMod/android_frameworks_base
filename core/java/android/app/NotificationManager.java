@@ -182,7 +182,7 @@ public class NotificationManager
 
     /** @hide */
     @IntDef({VISIBILITY_NO_OVERRIDE, IMPORTANCE_UNSPECIFIED, IMPORTANCE_NONE,
-            IMPORTANCE_MIN, IMPORTANCE_LOW, IMPORTANCE_DEFAULT, IMPORTANCE_HIGH,
+            IMPORTANCE_MIN, IMPORTANCE_VERY_LOW, IMPORTANCE_LOW, IMPORTANCE_DEFAULT, IMPORTANCE_HIGH,
             IMPORTANCE_MAX})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Importance {}
@@ -207,6 +207,13 @@ public class NotificationManager
      * Min notification importance: only shows in the shade, below the fold.
      */
     public static final int IMPORTANCE_MIN = 1;
+
+    /**
+     * Very low notification importance: shows on the status bar, but never
+     * on the lock screen and is not intrusive.
+     */
+    /** @hide */
+    public static final int IMPORTANCE_VERY_LOW = 6;
 
     /**
      * Low notification importance: shows everywhere, but is not intrusive.

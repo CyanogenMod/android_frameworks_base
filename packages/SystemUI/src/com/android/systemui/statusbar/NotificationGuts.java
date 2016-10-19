@@ -50,6 +50,9 @@ import com.android.systemui.R;
 import com.android.systemui.statusbar.stack.StackStateAnimator;
 import com.android.systemui.tuner.TunerService;
 
+import static android.service.notification.NotificationListenerService.Ranking.importanceToLevel;
+import static android.service.notification.NotificationListenerService.Ranking.levelToImportance;
+
 /**
  * The guts of a notification revealed when performing a long press.
  */
@@ -210,11 +213,11 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
     }
 
     void saveImportance(final StatusBarNotification sbn) {
-        int progress = getSelectedImportance();
+        int importance = getSelectedImportance();
         MetricsLogger.action(mContext, MetricsEvent.ACTION_SAVE_IMPORTANCE,
-                progress - mStartingUserImportance);
+                importance - mStartingUserImportance);
         try {
-            mINotificationManager.setImportance(sbn.getPackageName(), sbn.getUid(), progress);
+            mINotificationManager.setImportance(sbn.getPackageName(), sbn.getUid(), importance);
         } catch (RemoteException e) {
             // :(
         }
@@ -223,7 +226,7 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
     private int getSelectedImportance() {
         if (mSeekBar!= null && mSeekBar.isShown()) {
             if (mSeekBar.isEnabled()) {
-                return mSeekBar.getProgress();
+                return levelToImportance(mSeekBar.getProgress());
             } else {
                 return Ranking.IMPORTANCE_UNSPECIFIED;
             }
@@ -276,7 +279,7 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
         final int minProgress = systemApp ?
                 NotificationListenerService.Ranking.IMPORTANCE_MIN
                 : NotificationListenerService.Ranking.IMPORTANCE_NONE;
-        mSeekBar.setMax(NotificationListenerService.Ranking.IMPORTANCE_MAX);
+        mSeekBar.setMax(importanceToLevel(Ranking.IMPORTANCE_MAX));
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -285,7 +288,7 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
                     seekBar.setProgress(minProgress);
                     progress = minProgress;
                 }
-                updateTitleAndSummary(progress);
+                updateTitleAndSummary(levelToImportance(progress));
                 if (fromUser) {
                     MetricsLogger.action(mContext, MetricsEvent.ACTION_MODIFY_IMPORTANCE_SLIDER);
                 }
@@ -303,7 +306,7 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
 
 
         });
-        mSeekBar.setProgress(mNotificationImportance);
+        mSeekBar.setProgress(importanceToLevel(mNotificationImportance));
 
         mAutoButton = (ImageView) importanceSlider.findViewById(R.id.auto_importance);
         mAutoButton.setOnClickListener(new OnClickListener() {
@@ -317,6 +320,7 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
         applyAuto();
     }
 
+
     private void applyAuto() {
         mSeekBar.setEnabled(!mAuto);
 
@@ -328,48 +332,48 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
         mSeekBar.setAlpha(alpha);
 
         if (mAuto) {
-            mSeekBar.setProgress(mNotificationImportance);
+            mSeekBar.setProgress(importanceToLevel(mNotificationImportance));
             mImportanceSummary.setText(mContext.getString(
                     R.string.notification_importance_user_unspecified));
             mImportanceTitle.setText(mContext.getString(
                     R.string.user_unspecified_importance));
         } else {
-            updateTitleAndSummary(mSeekBar.getProgress());
+            updateTitleAndSummary(levelToImportance(mSeekBar.getProgress()));
         }
     }
 
-    private void updateTitleAndSummary(int progress) {
-        switch (progress) {
+    private void updateTitleAndSummary(int importance) {
+        mImportanceTitle.setText(String.format(mContext.getString(
+           R.string.importance_level_title), importanceToLevel(importance)));
+        switch (importance) {
             case Ranking.IMPORTANCE_NONE:
                 mImportanceSummary.setText(mContext.getString(
                         R.string.notification_importance_blocked));
-                mImportanceTitle.setText(mContext.getString(R.string.blocked_importance));
                 break;
             case Ranking.IMPORTANCE_MIN:
                 mImportanceSummary.setText(mContext.getString(
                         R.string.notification_importance_min));
-                mImportanceTitle.setText(mContext.getString(R.string.min_importance));
+                break;
+            case Ranking.IMPORTANCE_VERY_LOW:
+                mImportanceSummary.setText(mContext.getString(
+                        R.string.notification_importance_very_low));
                 break;
             case Ranking.IMPORTANCE_LOW:
                 mImportanceSummary.setText(mContext.getString(
                         R.string.notification_importance_low));
-                mImportanceTitle.setText(mContext.getString(R.string.low_importance));
                 break;
             case Ranking.IMPORTANCE_DEFAULT:
                 mImportanceSummary.setText(mContext.getString(
                         R.string.notification_importance_default));
-                mImportanceTitle.setText(mContext.getString(R.string.default_importance));
                 break;
             case Ranking.IMPORTANCE_HIGH:
                 mImportanceSummary.setText(mContext.getString(
                         R.string.notification_importance_high));
-                mImportanceTitle.setText(mContext.getString(R.string.high_importance));
                 break;
             case Ranking.IMPORTANCE_MAX:
                 mImportanceSummary.setText(mContext.getString(
                         R.string.notification_importance_max));
-                mImportanceTitle.setText(mContext.getString(R.string.max_importance));
-                break;
+                            break;
         }
     }
 
