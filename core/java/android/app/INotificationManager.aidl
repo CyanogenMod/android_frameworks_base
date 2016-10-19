@@ -56,6 +56,8 @@ interface INotificationManager
     void setImportance(String pkg, int uid, int importance);
     int getImportance(String pkg, int uid);
     int getPackageImportance(String pkg);
+    void setNotificationSoundTimeout(String pkg, int uid, long timeout);
+    long getNotificationSoundTimeout(String pkg, int uid);
 
     // TODO: Remove this when callers have been migrated to the equivalent
     // INotificationListener method.

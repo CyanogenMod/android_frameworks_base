@@ -57,6 +57,7 @@ public class RankingHelper implements RankingConfig {
     private static final String ATT_IMPORTANCE = "importance";
     private static final String ATT_TOPIC_ID = "id";
     private static final String ATT_TOPIC_LABEL = "label";
+    private static final String ATT_SOUND_TIMEOUT = "sound-timeout";
 
     private static final int DEFAULT_PRIORITY = Notification.PRIORITY_DEFAULT;
     private static final int DEFAULT_VISIBILITY = Ranking.VISIBILITY_NO_OVERRIDE;
@@ -166,6 +167,7 @@ public class RankingHelper implements RankingConfig {
                         r.importance = safeInt(parser, ATT_IMPORTANCE, DEFAULT_IMPORTANCE);
                         r.priority = safeInt(parser, ATT_PRIORITY, DEFAULT_PRIORITY);
                         r.visibility = safeInt(parser, ATT_VISIBILITY, DEFAULT_VISIBILITY);
+                        r.soundTimeout = safeInt(parser, ATT_SOUND_TIMEOUT, 0);
                     }
                 }
             }
@@ -201,7 +203,9 @@ public class RankingHelper implements RankingConfig {
                 continue;
             }
             final boolean hasNonDefaultSettings = r.importance != DEFAULT_IMPORTANCE
-                    || r.priority != DEFAULT_PRIORITY || r.visibility != DEFAULT_VISIBILITY;
+                    || r.priority != DEFAULT_PRIORITY
+                    || r.visibility != DEFAULT_VISIBILITY
+                    || r.soundTimeout != 0;
             if (hasNonDefaultSettings) {
                 out.startTag(null, TAG_PACKAGE);
                 out.attribute(null, ATT_NAME, r.pkg);
@@ -213,6 +217,9 @@ public class RankingHelper implements RankingConfig {
                 }
                 if (r.visibility != DEFAULT_VISIBILITY) {
                     out.attribute(null, ATT_VISIBILITY, Integer.toString(r.visibility));
+                }
+                if (r.soundTimeout != 0) {
+                    out.attribute(null, ATT_SOUND_TIMEOUT, Long.toString(r.soundTimeout));
                 }
 
                 if (!forBackup) {
@@ -373,6 +380,15 @@ public class RankingHelper implements RankingConfig {
         setImportance(packageName, uid, enabled ? DEFAULT_IMPORTANCE : Ranking.IMPORTANCE_NONE);
     }
 
+    public long getNotificationSoundTimeout(String packageName, int uid) {
+        return getOrCreateRecord(packageName, uid).soundTimeout;
+    }
+
+    public void setNotificationSoundTimeout(String packageName, int uid, long timeout) {
+        getOrCreateRecord(packageName, uid).soundTimeout = timeout;
+        updateConfig();
+    }
+
     public void dump(PrintWriter pw, String prefix, NotificationManagerService.DumpFilter filter) {
         if (filter == null) {
             final int N = mSignalExtractors.length;
@@ -419,6 +435,11 @@ public class RankingHelper implements RankingConfig {
                     pw.print(" visibility=");
                     pw.print(Notification.visibilityToString(r.visibility));
                 }
+                if (r.soundTimeout != 0) {
+                    pw.print(" soundTimeout=");
+                    pw.print(r.soundTimeout);
+                    pw.print("ms");
+                }
                 pw.println();
             }
         }
@@ -448,6 +469,9 @@ public class RankingHelper implements RankingConfig {
                     }
                     if (r.visibility != DEFAULT_VISIBILITY) {
                         record.put("visibility", Notification.visibilityToString(r.visibility));
+                    }
+                    if (r.soundTimeout != 0) {
+                        record.put("soundTimeout", r.soundTimeout);
                     }
                 } catch (JSONException e) {
                    // pass
@@ -538,5 +562,6 @@ public class RankingHelper implements RankingConfig {
         int importance = DEFAULT_IMPORTANCE;
         int priority = DEFAULT_PRIORITY;
         int visibility = DEFAULT_VISIBILITY;
+        long soundTimeout = 0;
    }
 }

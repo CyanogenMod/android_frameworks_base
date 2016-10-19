@@ -124,6 +124,7 @@ import android.util.AtomicFile;
 import android.util.Log;
 import android.util.Slog;
 import android.util.SparseArray;
+import android.util.TimeUtils;
 import android.util.Xml;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
@@ -302,6 +303,7 @@ public class NotificationManagerService extends SystemService {
     final ArrayMap<Integer, ArrayMap<String, String>> mAutobundledSummaries = new ArrayMap<>();
     final ArrayList<ToastRecord> mToastQueue = new ArrayList<ToastRecord>();
     final ArrayMap<String, NotificationRecord> mSummaryByGroupKey = new ArrayMap<>();
+    final ArrayMap<String, Long> mLastSoundTimestamps = new ArrayMap<>();
     final PolicyAccess mPolicyAccess = new PolicyAccess();
 
     // The last key in this list owns the hardware.
@@ -1631,6 +1633,19 @@ public class NotificationManagerService extends SystemService {
             return mRankingHelper.getImportance(pkg, uid);
         }
 
+        @Override
+        public void setNotificationSoundTimeout(String pkg, int uid, long timeout) {
+            checkCallerIsSystem();
+            mRankingHelper.setNotificationSoundTimeout(pkg, uid, timeout);
+            savePolicyFile();
+        }
+
+        @Override
+        public long getNotificationSoundTimeout(String pkg, int uid) {
+            checkCallerIsSystem();
+            return mRankingHelper.getNotificationSoundTimeout(pkg, uid);
+        }
+
         /**
          * System-only API for getting a list of current (i.e. not cleared) notifications.
          *
@@ -2624,6 +2639,14 @@ public class NotificationManagerService extends SystemService {
                     r.dump(pw, "      ", getContext(), filter.redact);
                 }
             }
+
+            long now = SystemClock.elapsedRealtime();
+            pw.println("\n  Last notification sound timestamps:");
+            for (Map.Entry<String, Long> entry: mLastSoundTimestamps.entrySet()) {
+                pw.print("    " + entry.getKey() + " -> ");
+                TimeUtils.formatDuration(entry.getValue(), now, pw);
+                pw.println(" ago");
+            }
         }
     }
 
@@ -2979,6 +3002,7 @@ public class NotificationManagerService extends SystemService {
                 && (record.getUserId() == UserHandle.USER_ALL ||
                     record.getUserId() == currentUser ||
                     mUserProfiles.isCurrentProfile(record.getUserId()))
+                && !isInSoundTimeoutPeriod(record)
                 && mSystemReady
                 && mAudioManager != null;
 
@@ -3119,6 +3143,11 @@ public class NotificationManagerService extends SystemService {
         } else if (wasShowLights) {
             updateLightsLocked();
         }
+
+        if (buzz || beep) {
+            mLastSoundTimestamps.put(generateLastSoundTimeoutKey(record),
+                    SystemClock.elapsedRealtime());
+        }
         if (buzz || beep || blink) {
             if (((record.getSuppressedVisualEffects()
                     & NotificationListenerService.SUPPRESSED_EFFECT_SCREEN_OFF) != 0)) {
@@ -3129,6 +3158,24 @@ public class NotificationManagerService extends SystemService {
                 mHandler.post(mBuzzBeepBlinked);
             }
         }
+    }
+
+    private boolean isInSoundTimeoutPeriod(NotificationRecord record) {
+        long timeoutMillis = mRankingHelper.getNotificationSoundTimeout(
+                record.sbn.getPackageName(), record.sbn.getUid());
+        if (timeoutMillis == 0) {
+            return false;
+        }
+
+        Long value = mLastSoundTimestamps.get(generateLastSoundTimeoutKey(record));
+        if (value == null) {
+            return false;
+        }
+        return SystemClock.elapsedRealtime() - value < timeoutMillis;
+    }
+
+    private String generateLastSoundTimeoutKey(NotificationRecord record) {
+        return record.sbn.getPackageName() + "|" + record.sbn.getUid();
     }
 
     private static AudioAttributes audioAttributesForNotification(Notification n) {
