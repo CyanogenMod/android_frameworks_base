@@ -25,6 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="@string/power_notification_controls_description"/>
+            android:text="@string/cm_power_notification_controls_description"/>
 
 </LinearLayout>
