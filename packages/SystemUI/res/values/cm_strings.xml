@@ -39,6 +39,44 @@
     <string name="quick_settings_tile_flashlight_not_title">Flashlight is on</string>
     <string name="quick_settings_tile_flashlight_not_summary">Tap to turn off</string>
 
+    <!-- [CHAR LIMIT=NONE] Importance Tuner setting title -->
+    <string name="cm_power_notification_controls_description">With power notification controls, you can set an importance level from 0 to 6 for an app\'s notifications.
+        \n\n<b>Level 6</b>
+        \n- Show at the top of the notification list
+        \n- Allow full screen interruption
+        \n- Always peek
+        \n\n<b>Level 5</b>
+        \n- Prevent full screen interruption
+        \n- Always peek
+        \n\n<b>Level 4</b>
+        \n- Prevent full screen interruption
+        \n- Never peek
+        \n\n<b>Level 3</b>
+        \n- Prevent full screen interruption
+        \n- Never peek
+        \n- Never make sound and vibration
+        \n\n<b>Level 2</b>
+        \n- Prevent full screen interruption
+        \n- Never peek
+        \n- Never make sound or vibrate
+        \n- Hide from lock screen
+        \n- Show at the bottom of the notification list
+        \n\n<b>Level 1</b>
+        \n- Prevent full screen interruption
+        \n- Never peek
+        \n- Never make sound or vibrate
+        \n- Hide from lock screen and status bar
+        \n- Show at the bottom of the notification list
+        \n\n<b>Level 0</b>
+        \n- Block all notifications from the app
+    </string>
+
+    <!-- Notification importance level title-->
+    <string name="importance_level_title">Importance: Level %1$d</string>
+
+    <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
+    <string name="notification_importance_very_low">No full screen interruption, peeking, sound, or vibration. Hide from lock screen.</string>
+
     <!-- Screen pinning dialog description (for devices without navbar) -->
     <string name="screen_pinning_description_no_navbar">This keeps it in view until you unpin. Touch and hold the Back button to unpin.</string>
 

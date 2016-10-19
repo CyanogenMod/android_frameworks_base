@@ -17,6 +17,7 @@
 package com.android.server.notification;
 
 import static android.service.notification.NotificationListenerService.Ranking.IMPORTANCE_HIGH;
+import static android.service.notification.NotificationListenerService.Ranking.importanceToLevel;
 
 import android.app.Notification;
 import android.content.ContentValues;
@@ -699,9 +700,9 @@ public class NotificationUsageStats {
 
     private static class ImportanceHistogram {
         // TODO define these somewhere else
-        private static final int NUM_IMPORTANCES = 6;
+        private static final int NUM_IMPORTANCES = 7;
         private static final String[] IMPORTANCE_NAMES =
-                {"none", "min", "low", "default", "high", "max"};
+                {"none", "min", "very-low", "low", "default", "high", "max"};
         private final Context mContext;
         private final String[] mCounterNames;
         private final String mPrefix;
@@ -1250,7 +1251,7 @@ public class NotificationUsageStats {
             outCv.put(COL_IMPORTANCE_FINAL, after);
             outCv.put(COL_DEMOTED, after < before ? 1 : 0);
             outCv.put(COL_NOISY, noisy);
-            if (noisy && after < IMPORTANCE_HIGH) {
+            if (noisy && importanceToLevel(after) < importanceToLevel(IMPORTANCE_HIGH)) {
                 outCv.put(COL_MUTED, 1);
             } else {
                 outCv.put(COL_MUTED, 0);
