@@ -52,6 +52,13 @@ public class BatteryMeterDrawable extends Drawable implements
 
     private static final float BOLT_LEVEL_THRESHOLD = 0.3f;  // opaque bolt below this fraction
 
+    // Values for the different battery styles
+    public static final int BATTERY_STYLE_PORTRAIT  = 0;
+    public static final int BATTERY_STYLE_CIRCLE    = 2;
+    public static final int BATTERY_STYLE_HIDDEN    = 4;
+    public static final int BATTERY_STYLE_LANDSCAPE = 5;
+    public static final int BATTERY_STYLE_TEXT      = 6;
+
     private final int[] mColors;
     private final int mIntrinsicWidth;
     private final int mIntrinsicHeight;
@@ -103,9 +110,12 @@ public class BatteryMeterDrawable extends Drawable implements
     private boolean mPluggedIn;
     private boolean mListening;
 
-    public BatteryMeterDrawable(Context context, Handler handler, int frameColor) {
+    private int mStyle;
+
+    public BatteryMeterDrawable(Context context, Handler handler, int frameColor, int style) {
         mContext = context;
         mHandler = handler;
+        mStyle = style;
         final Resources res = context.getResources();
         TypedArray levels = res.obtainTypedArray(R.array.batterymeter_color_levels);
         TypedArray colors = res.obtainTypedArray(R.array.batterymeter_color_values);
@@ -326,6 +336,11 @@ public class BatteryMeterDrawable extends Drawable implements
 
     @Override
     public void draw(Canvas c) {
+        if (mStyle == BATTERY_STYLE_HIDDEN
+                || mStyle == BATTERY_STYLE_TEXT) {
+            return;
+        }
+
         final int level = mLevel;
 
         if (level == -1) return;
@@ -521,4 +536,11 @@ public class BatteryMeterDrawable extends Drawable implements
         }
     }
 
+    void updateDrawable(int style) {
+        if (mStyle == style) {
+            return;
+        }
+        mStyle = style;
+        postInvalidate();
+    }
 }

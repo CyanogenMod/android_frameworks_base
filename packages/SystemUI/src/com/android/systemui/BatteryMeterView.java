@@ -29,12 +29,19 @@ import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.tuner.TunerService;
 
+import cyanogenmod.providers.CMSettings;
+
 public class BatteryMeterView extends ImageView implements
         BatteryController.BatteryStateChangeCallback, TunerService.Tunable {
+
+    private static final String STATUS_BAR_BATTERY_STYLE =
+            "cmsystem:" + CMSettings.System.STATUS_BAR_BATTERY_STYLE;
 
     private final BatteryMeterDrawable mDrawable;
     private final String mSlotBattery;
     private BatteryController mBatteryController;
+
+    private int mBatteryStyle = BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT;
 
     public BatteryMeterView(Context context) {
         this(context, null, 0);
@@ -51,7 +58,7 @@ public class BatteryMeterView extends ImageView implements
                 defStyle, 0);
         final int frameColor = atts.getColor(R.styleable.BatteryMeterView_frameColor,
                 context.getColor(R.color.batterymeter_frame_color));
-        mDrawable = new BatteryMeterDrawable(context, new Handler(), frameColor);
+        mDrawable = new BatteryMeterDrawable(context, new Handler(), frameColor, mBatteryStyle);
         atts.recycle();
 
         mSlotBattery = context.getString(
@@ -69,6 +76,8 @@ public class BatteryMeterView extends ImageView implements
         if (StatusBarIconController.ICON_BLACKLIST.equals(key)) {
             ArraySet<String> icons = StatusBarIconController.getIconBlacklist(newValue);
             setVisibility(icons.contains(mSlotBattery) ? View.GONE : View.VISIBLE);
+        } else if (STATUS_BAR_BATTERY_STYLE.equals(key)) {
+            updateBatteryStyle(newValue);
         }
     }
 
@@ -77,7 +86,8 @@ public class BatteryMeterView extends ImageView implements
         super.onAttachedToWindow();
         mBatteryController.addStateChangedCallback(this);
         mDrawable.startListening();
-        TunerService.get(getContext()).addTunable(this, StatusBarIconController.ICON_BLACKLIST);
+        TunerService.get(getContext()).addTunable(this, StatusBarIconController.ICON_BLACKLIST,
+                STATUS_BAR_BATTERY_STYLE);
     }
 
     @Override
@@ -107,5 +117,29 @@ public class BatteryMeterView extends ImageView implements
 
     public void setDarkIntensity(float f) {
         mDrawable.setDarkIntensity(f);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+
+        switch (mBatteryStyle) {
+            case BatteryMeterDrawable.BATTERY_STYLE_TEXT:
+            case BatteryMeterDrawable.BATTERY_STYLE_HIDDEN:
+                width = height = 0;
+                break;
+            default:
+                break;
+        }
+        setMeasuredDimension(width, height);
+    }
+
+    private void updateBatteryStyle(String styleStr) {
+        final int style = styleStr == null ?
+                BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT : Integer.parseInt(styleStr);
+        mBatteryStyle = style;
+        mDrawable.updateDrawable(style);
+        requestLayout();
     }
 }
