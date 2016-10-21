@@ -519,10 +519,6 @@ public class SignalClusterView
         }
 
         mNoSimsCombo.setVisibility(mNoSimsVisible ? View.VISIBLE : View.GONE);
-
-        boolean anythingVisible = mNoSimsVisible || mWifiVisible || mIsAirplaneMode
-                || anyMobileVisible || mVpnVisible || mEthernetVisible;
-        setPaddingRelative(0, 0, anythingVisible ? mEndPadding : mEndPaddingNothingVisible, 0);
     }
 
     /**
