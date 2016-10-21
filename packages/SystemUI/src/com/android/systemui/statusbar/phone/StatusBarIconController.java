@@ -118,6 +118,9 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mPhoneStatusBar = phoneStatusBar;
         mSystemIconArea = (LinearLayout) statusBar.findViewById(R.id.system_icon_area);
         mStatusIcons = (LinearLayout) statusBar.findViewById(R.id.statusIcons);
+        // Set the start margin of the battery view instead of
+        // the end padding of the signal cluster to prevent
+        // excess padding when the battery view is hidden
         mSignalCluster = (SignalClusterView) statusBar.findViewById(R.id.signal_cluster);
 
         mNotificationIconAreaController = SystemUIFactory.getInstance()
@@ -162,10 +165,12 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         int batteryHeight = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_height);
         int batteryWidth = res.getDimensionPixelSize(R.dimen.status_bar_battery_icon_width);
         int marginBottom = res.getDimensionPixelSize(R.dimen.battery_margin_bottom);
+        int marginStart = res.getDimensionPixelSize(R.dimen.signal_cluster_battery_padding);
 
         LinearLayout.LayoutParams scaledLayoutParams = new LinearLayout.LayoutParams(
                 (int) (batteryWidth * iconScaleFactor), (int) (batteryHeight * iconScaleFactor));
-        scaledLayoutParams.setMarginsRelative(0, 0, 0, marginBottom);
+
+        scaledLayoutParams.setMarginsRelative(marginStart, 0, 0, marginBottom);
 
         mBatteryMeterView.setLayoutParams(scaledLayoutParams);
         mBatteryMeterViewKeyguard.setLayoutParams(scaledLayoutParams);
