@@ -490,11 +490,14 @@
     <!-- Starting margin before the signal cluster -->
     <dimen name="signal_cluster_margin_start">2.5dp</dimen>
 
+    <!-- Set the start margin of the battery view instead of
+         the end padding of the signal cluster to prevent
+         excess padding when the battery view is hidden -->
     <!-- Padding between signal cluster and battery icon -->
-    <dimen name="signal_cluster_battery_padding">7dp</dimen>
+    <dimen name="signal_cluster_battery_padding">0dp</dimen>
 
     <!-- Padding for signal cluster and battery icon when there are not icons in signal cluster -->
-    <dimen name="no_signal_cluster_battery_padding">3dp</dimen>
+    <dimen name="no_signal_cluster_battery_padding">0dp</dimen>
 
     <!-- Screen pinning request width -->
     <dimen name="screen_pinning_request_width">@dimen/match_parent</dimen>
