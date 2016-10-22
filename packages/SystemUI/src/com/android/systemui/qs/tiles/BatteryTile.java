@@ -118,7 +118,8 @@ public class BatteryTile extends QSTile<QSTile.State> implements BatteryControll
             public Drawable getDrawable(Context context) {
                 BatteryMeterDrawable drawable =
                         new BatteryMeterDrawable(context, new Handler(Looper.getMainLooper()),
-                        context.getColor(R.color.batterymeter_frame_color));
+                        context.getColor(R.color.batterymeter_frame_color),
+                        BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT);
                 drawable.onBatteryLevelChanged(mLevel, mPluggedIn, mCharging);
                 drawable.onPowerSaveChanged(mPowerSave);
                 return drawable;
@@ -164,7 +165,8 @@ public class BatteryTile extends QSTile<QSTile.State> implements BatteryControll
     private final class BatteryDetail implements DetailAdapter, OnClickListener,
             OnAttachStateChangeListener {
         private final BatteryMeterDrawable mDrawable = new BatteryMeterDrawable(mHost.getContext(),
-                new Handler(), mHost.getContext().getColor(R.color.batterymeter_frame_color));
+                new Handler(), mHost.getContext().getColor(R.color.batterymeter_frame_color),
+                BatteryMeterDrawable.BATTERY_STYLE_PORTRAIT);
         private View mCurrentView;
 
         @Override
