@@ -62,7 +62,7 @@ public class BatteryMeterView extends ImageView implements
                 defStyle, 0);
         final int frameColor = atts.getColor(R.styleable.BatteryMeterView_frameColor,
                 context.getColor(R.color.batterymeter_frame_color));
-        mDrawable = new BatteryMeterDrawable(context, new Handler(), frameColor);
+        mDrawable = new BatteryMeterDrawable(context, new Handler(), frameColor, mBatteryStyle);
         atts.recycle();
 
         mSlotBattery = context.getString(
@@ -139,7 +139,7 @@ public class BatteryMeterView extends ImageView implements
                 setImageDrawable(null);
                 break;
             default:
-                mDrawable = new BatteryMeterDrawable(mContext, new Handler(), mFrameColor);
+                mDrawable = new BatteryMeterDrawable(mContext, new Handler(), mFrameColor, style);
                 setImageDrawable(mDrawable);
                 setVisibility(View.VISIBLE);
                 break;
