@@ -203,10 +203,6 @@ public class CallLog {
          * @hide
          */
         public static final int ANSWERED_EXTERNALLY_TYPE = 7;
-        /** Call log type for blacklisted calls
-         * @hide
-         */
-        public static final int BLACKLIST_TYPE = 8;
 
         /** Call log type for outgoing IMS calls. */
         private static final int OUTGOING_IMS_TYPE = 9;
