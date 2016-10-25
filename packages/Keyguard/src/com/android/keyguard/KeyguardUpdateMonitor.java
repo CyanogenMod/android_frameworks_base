@@ -137,7 +137,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
     private static final int MSG_SERVICE_STATE_CHANGE = 330;
     private static final int MSG_SCREEN_TURNED_ON = 331;
     private static final int MSG_SCREEN_TURNED_OFF = 332;
-    private static final int MSG_LOCALE_CHANGED = 500;
 
     /** Fingerprint state: Not listening to fingerprint. */
     private static final int FINGERPRINT_STATE_STOPPED = 0;
@@ -277,8 +276,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                     break;
                 case MSG_SCREEN_TURNED_OFF:
                     handleScreenTurnedOff();
-                case MSG_LOCALE_CHANGED:
-                    handleLocaleChanged();
                     break;
             }
         }
@@ -385,36 +382,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
             mSubscriptionInfo = sil;
         }
         return mSubscriptionInfo;
-    }
-
-    public boolean isEmergencyOnly() {
-        boolean isEmerg = false;
-        ServiceState state;
-        for (int slotId = 0; slotId < TelephonyManager.getDefault().getPhoneCount(); slotId++) {
-            state = null;
-            int[] subId = mSubscriptionManager.getSubId(slotId);
-            if (subId != null && subId.length > 0) {
-                state = mServiceStates.get(subId[0]);
-            }
-            if (state != null) {
-                if (state.getVoiceRegState() == ServiceState.STATE_IN_SERVICE)
-                    return false;
-                else if (state.isEmergencyOnly()) {
-                    isEmerg = true;
-                }
-            }
-        }
-        return isEmerg;
-    }
-
-    public int getPresentSubId() {
-        for (int slotId = 0; slotId < TelephonyManager.getDefault().getPhoneCount(); slotId++) {
-            int[] subId = mSubscriptionManager.getSubId(slotId);
-            if (subId != null && subId.length > 0 && getSimState(subId[0]) != State.ABSENT) {
-                return subId[0];
-            }
-        }
-        return -1;
     }
 
     @Override
@@ -706,8 +673,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 }
                 mHandler.sendMessage(
                         mHandler.obtainMessage(MSG_SERVICE_STATE_CHANGE, subId, 0, serviceState));
-            } else if (Intent.ACTION_LOCALE_CHANGED.equals(action)) {
-                mHandler.sendEmptyMessage(MSG_LOCALE_CHANGED);
             }
         }
     };
@@ -1043,7 +1008,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-        filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SERVICE_STATE_CHANGED);
         filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
@@ -1386,18 +1350,6 @@ public class KeyguardUpdateMonitor implements TrustManager.TrustListener {
                 if (cb != null) {
                     cb.onSimStateChanged(subId, slotId, state);
                 }
-            }
-        }
-    }
-
-    /**
-     * Handle {@link #MSG_LOCALE_CHANGED}
-     */
-    private void handleLocaleChanged() {
-        for (int j = 0; j < mCallbacks.size(); j++) {
-            KeyguardUpdateMonitorCallback cb = mCallbacks.get(j).get();
-            if (cb != null) {
-                cb.onRefreshCarrierInfo();
             }
         }
     }

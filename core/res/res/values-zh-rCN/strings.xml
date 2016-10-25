@@ -1625,7 +1625,6 @@
       <item quantity="other">已选择 <xliff:g id="COUNT_1">%1$d</xliff:g> 项</item>
       <item quantity="one">已选择 <xliff:g id="COUNT_0">%1$d</xliff:g> 项</item>
     </plurals>
-
     <string name="importance_from_user" msgid="7318955817386549931">"这些通知的重要程度由您来设置。"</string>
     <string name="importance_from_person" msgid="9160133597262938296">"这条通知涉及特定的人，因此被归为重要通知。"</string>
     <string name="user_creation_account_exists" msgid="1942606193570143289">"允许<xliff:g id="APP">%1$s</xliff:g>使用 <xliff:g id="ACCOUNT">%2$s</xliff:g> 创建新用户吗？"</string>
@@ -1655,14 +1654,4 @@
     <string name="audit_safemode_notification" msgid="6416076898350685856">"恢复出厂设置即可正常使用此设备，不受任何限制"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"触摸即可了解详情。"</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"已停用的<xliff:g id="LABEL">%1$s</xliff:g>"</string>
-
-    <!-- Carrier Name -->
-    <string name="China_Mobile">中国移动</string>
-    <string name="China_Unicom">中国联通</string>
-    <string name="China_Telecom">中国电信</string>
-    <string name="other_permissions">其他权限</string>
-    <string name="permission_remember_choice">永远记住</string>
-    <string name="permission_title">权限</string>
-    <string name="allow_button">允许</string>
-    <string name="deny_button">拒绝</string>
 </resources>

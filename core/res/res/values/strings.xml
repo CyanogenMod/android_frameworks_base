@@ -4378,8 +4378,4 @@
     <!-- Accessibilty string added to a widget that has been suspended [CHAR LIMIT=20] -->
     <string name="suspended_widget_accessibility">Disabled <xliff:g id="label" example="Calendar">%1$s</xliff:g></string>
 
-    <!-- Carrier Name -->
-    <string name="China_Mobile">China Mobile</string>
-    <string name="China_Unicom">China Unicom</string>
-    <string name="China_Telecom">China Telecom</string>
 </resources>
