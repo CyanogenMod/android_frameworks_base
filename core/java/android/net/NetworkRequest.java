@@ -19,6 +19,8 @@ package android.net;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Defines a request for a network, made through {@link NetworkRequest.Builder} and used
  * to request a network via {@link ConnectivityManager#requestNetwork} or listen for changes
@@ -47,15 +49,55 @@ public class NetworkRequest implements Parcelable {
     public final int legacyType;
 
     /**
+     * A NetworkRequest as used by the system can be one of three types:
+     *
+     *     - LISTEN, for which the framework will issue callbacks about any
+     *       and all networks that match the specified NetworkCapabilities,
+     *
+     *     - REQUEST, capable of causing a specific network to be created
+     *       first (e.g. a telephony DUN request), the framework will issue
+     *       callbacks about the single, highest scoring current network
+     *       (if any) that matches the specified NetworkCapabilities, or
+     *
+     *     - TRACK_DEFAULT, a hybrid of the two designed such that the
+     *       framework will issue callbacks for the single, highest scoring
+     *       current network (if any) that matches the capabilities of the
+     *       default Internet request (mDefaultRequest), but which cannot cause
+     *       the framework to either create or retain the existence of any
+     *       specific network.
+     *
+     *     - The value NONE is used only by applications. When an application
+     *       creates a NetworkRequest, it does not have a type; the type is set
+     *       by the system depending on the method used to file the request
+     *       (requestNetwork, registerNetworkCallback, etc.).
+     *
      * @hide
      */
-    public NetworkRequest(NetworkCapabilities nc, int legacyType, int rId) {
+    public static enum Type {
+        NONE,
+        LISTEN,
+        TRACK_DEFAULT,
+        REQUEST
+    };
+
+    /**
+     * The type of the request. This is only used by the system and is always NONE elsewhere.
+     *
+     * @hide
+     */
+    public final Type type;
+
+    /**
+     * @hide
+     */
+    public NetworkRequest(NetworkCapabilities nc, int legacyType, int rId, Type type) {
         if (nc == null) {
             throw new NullPointerException();
         }
         requestId = rId;
         networkCapabilities = nc;
         this.legacyType = legacyType;
+        this.type = type;
     }
 
     /**
@@ -65,6 +107,7 @@ public class NetworkRequest implements Parcelable {
         networkCapabilities = new NetworkCapabilities(that.networkCapabilities);
         requestId = that.requestId;
         this.legacyType = that.legacyType;
+        this.type = that.type;
     }
 
     /**
@@ -90,7 +133,7 @@ public class NetworkRequest implements Parcelable {
             final NetworkCapabilities nc = new NetworkCapabilities(mNetworkCapabilities);
             nc.maybeMarkCapabilitiesRestricted();
             return new NetworkRequest(nc, ConnectivityManager.TYPE_NONE,
-                    ConnectivityManager.REQUEST_ID_UNSET);
+                    ConnectivityManager.REQUEST_ID_UNSET, Type.NONE);
         }
 
         /**
@@ -223,6 +266,7 @@ public class NetworkRequest implements Parcelable {
         dest.writeParcelable(networkCapabilities, flags);
         dest.writeInt(legacyType);
         dest.writeInt(requestId);
+        dest.writeString(type.name());
     }
     public static final Creator<NetworkRequest> CREATOR =
         new Creator<NetworkRequest>() {
@@ -230,7 +274,8 @@ public class NetworkRequest implements Parcelable {
                 NetworkCapabilities nc = (NetworkCapabilities)in.readParcelable(null);
                 int legacyType = in.readInt();
                 int requestId = in.readInt();
-                NetworkRequest result = new NetworkRequest(nc, legacyType, requestId);
+                Type type = Type.valueOf(in.readString());  // IllegalArgumentException if invalid.
+                NetworkRequest result = new NetworkRequest(nc, legacyType, requestId, type);
                 return result;
             }
             public NetworkRequest[] newArray(int size) {
@@ -238,8 +283,36 @@ public class NetworkRequest implements Parcelable {
             }
         };
 
+    /**
+     * Returns true iff. the contained NetworkRequest is of type LISTEN.
+     *
+     * @hide
+     */
+    public boolean isListen() {
+        return type == Type.LISTEN;
+    }
+
+    /**
+     * Returns true iff. the contained NetworkRequest is one that:
+     *
+     *     - should be associated with at most one satisfying network
+     *       at a time;
+     *
+     *     - should cause a network to be kept up if it is the best network
+     *       which can satisfy the NetworkRequest.
+     *
+     * For full detail of how isRequest() is used for pairing Networks with
+     * NetworkRequests read rematchNetworkAndRequests().
+     *
+     * @hide
+     */
+    public boolean isRequest() {
+        return type == Type.TRACK_DEFAULT || type == Type.REQUEST;
+    }
+
     public String toString() {
-        return "NetworkRequest [ id=" + requestId + ", legacyType=" + legacyType +
+        return "NetworkRequest [ " + type + " id=" + requestId +
+                (legacyType != ConnectivityManager.TYPE_NONE ? ", legacyType=" + legacyType : "") +
                 ", " + networkCapabilities.toString() + " ]";
     }
 
@@ -248,13 +321,11 @@ public class NetworkRequest implements Parcelable {
         NetworkRequest that = (NetworkRequest)obj;
         return (that.legacyType == this.legacyType &&
                 that.requestId == this.requestId &&
-                ((that.networkCapabilities == null && this.networkCapabilities == null) ||
-                 (that.networkCapabilities != null &&
-                  that.networkCapabilities.equals(this.networkCapabilities))));
+                that.type == this.type &&
+                Objects.equals(that.networkCapabilities, this.networkCapabilities));
     }
 
     public int hashCode() {
-        return requestId + (legacyType * 1013) +
-                (networkCapabilities.hashCode() * 1051);
+        return Objects.hash(requestId, legacyType, networkCapabilities, type);
     }
 }

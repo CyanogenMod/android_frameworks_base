@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Atļaujiet/neatļaujiet Wi‑Fi meklēšanu, pamatojoties uz saskarnē saņemto datplūsmas apjomu."</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Reģistrētāja buferu lielumi"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Atlasīt reģistrētāja bufera liel."</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Vai notīrīt reģistrētāja pastāvīgo krātuvi?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Kad uzraudzībai vairs neizmantojam pastāvīgo reģistrētāju, mums ir jāizdzēš reģistrētāja dati, kas tiek glabāti jūsu ierīcē."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Pastāvīgi glabāt ierīcē reģistrētāja datus"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Atlasiet reģistra buferus, ko pastāvīgi glabāt ierīcē"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Atlasīt USB konfigurāciju"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Atlasīt USB konfigurāciju"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Atļaut neīstas vietas"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Atļaut neīstas vietas"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Iespējot atribūtu pārbaudi"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Lietot DHCP klientu no operētājsistēmas Lollipop, nevis jauno Android DHCP klientu."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Mobilo datu savienojums būs vienmēr aktīvs, pat ja būs aktīvs Wi-Fi savienojums (ātrai ierīces pārslēgšanai uz citu tīklu)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Vai atļaut USB atkļūdošanu?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB atkļūdošana ir paredzēta tikai ar izstrādi saistītām darbībām. Izmantojiet to datu kopēšanai no datora uz ierīci un pretēji, lietotņu instalēšanai ierīcē bez paziņojumiem un žurnāla datu lasīšanai."</string>

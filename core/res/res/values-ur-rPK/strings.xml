@@ -678,6 +678,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"صحیح!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"دوبارہ کوشش کریں"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"دوبارہ کوشش کریں"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"تمام خصوصیات اور ڈیٹا کیلئے غیر مقفل کریں"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"چہرہ کے ذریعے غیر مقفل کریں کی زیادہ سے زیادہ کوششوں سے تجاوز کرگیا"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"‏کوئی SIM کارڈ نہیں ہے"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"‏ٹیبلیٹ میں کوئی SIM کارڈ نہیں ہے۔"</string>
@@ -1022,8 +1023,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"‏Android اپ گریڈ ہو رہا ہے…"</string>
     <string name="android_start_title" msgid="8418054686415318207">"‏Android شروع ہو رہا ہے…"</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"اسٹوریج کو بہترین بنایا جا رہا ہے۔"</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"‏Android اپ گریڈ ہو رہا ہے"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"‏Android اپ ڈیٹ ختم ہو رہی ہے…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"اپ گریڈ ختم ہونے تک شاید کچھ ایپس ٹھیک طرح سے کام نہ کریں"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"<xliff:g id="APPLICATION">%1$s</xliff:g> اپ گریڈ ہو رہی ہے…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"ایپ <xliff:g id="NUMBER_0">%1$d</xliff:g> از <xliff:g id="NUMBER_1">%2$d</xliff:g> کو بہتر بنایا جا رہا ہے۔"</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"<xliff:g id="APPNAME">%1$s</xliff:g> تیار ہو رہی ہے۔"</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"ایپس شروع ہو رہی ہیں۔"</string>
@@ -1651,7 +1653,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"پن ہٹائیں"</string>
     <string name="app_info" msgid="6856026610594615344">"ایپ کی معلومات"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"آلہ ری سیٹ کریں؟"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"آلہ ری سیٹ کرنے کیلئے تھپتھپائیں"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"ڈیمو شروع ہو رہا ہے…"</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"آلہ ری سیٹ ہو رہا ہے…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"آلہ ری سیٹ کریں؟"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"آپ کی تمام تبدیلیاں ضائع ہو جائیں گی اور ڈیمو <xliff:g id="TIMEOUT">%1$s</xliff:g> سیکنڈز میں دوبارہ شروع ہوگا…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"منسوخ کریں"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"ابھی ری سیٹ کریں"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"بغیر کسی حدود کے استعمال کرنے کیلئے اس آلے کو فیکٹری ری سیٹ کریں"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"مزید جاننے کیلئے ٹچ کریں۔"</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"غیر فعال کردہ <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="conference_call" msgid="3751093130790472426">"کانفرنس کال"</string>
 </resources>

@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Roamingscans voor wifi (niet) toestaan op basis van de hoeveelheid dataverkeer die aanwezig is bij de interface"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Logger-buffergrootten"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Kies Logger-grootten per logbuffer"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Persistente loggeropslag wissen?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Wanneer we niet meer controleren met de persistente logger, zijn we verplicht de logger-gegevens op je apparaat te wissen."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Logger-gegev. persistent opslaan"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Logboekbuffers selecteren die persistent op het apparaat worden opgeslagen"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB-configuratie selecteren"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB-configuratie selecteren"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Neplocaties toestaan"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Neplocaties toestaan"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Inspectie van weergavekenmerk inschakelen"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"De DHCP-client van Lollipop gebruiken in plaats van de nieuwe Android DHCP-client."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Mobiele gegevens altijd actief houden, ook als wifi actief is (voor sneller schakelen tussen netwerken)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB-foutopsporing toestaan?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB-foutopsporing is alleen bedoeld voor ontwikkeldoeleinden. Het kan worden gebruikt om gegevens te kopiëren tussen je computer en je apparaat, apps zonder melding op je apparaat te installeren en loggegevens te lezen."</string>

@@ -45,6 +45,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Trace;
 import android.os.UserHandle;
+import android.os.UserManager;
 import android.os.storage.IMountService;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
@@ -53,6 +54,7 @@ import android.util.Slog;
 import android.view.WindowManager;
 
 import com.android.internal.R;
+import com.android.internal.app.NightDisplayController;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.RegionalizationEnvironment;
 import com.android.internal.os.SamplingProfilerIntegration;
@@ -66,6 +68,7 @@ import com.android.server.clipboard.ClipboardService;
 import com.android.server.connectivity.MetricsLoggerService;
 import com.android.server.devicepolicy.DevicePolicyManagerService;
 import com.android.server.display.DisplayManagerService;
+import com.android.server.display.NightDisplayService;
 import com.android.server.dreams.DreamManagerService;
 import com.android.server.fingerprint.FingerprintService;
 import com.android.server.hdmi.HdmiControlService;
@@ -92,6 +95,7 @@ import com.android.server.pm.UserManagerService;
 import com.android.server.power.PowerManagerService;
 import com.android.server.power.ShutdownThread;
 import com.android.server.restrictions.RestrictionsManagerService;
+import com.android.server.retaildemo.RetailDemoModeService;
 import com.android.server.soundtrigger.SoundTriggerService;
 import com.android.server.statusbar.StatusBarManagerService;
 import com.android.server.storage.DeviceStorageMonitorService;
@@ -168,6 +172,10 @@ public final class SystemServer {
             "com.google.android.clockwork.ThermalObserver";
     private static final String WEAR_BLUETOOTH_SERVICE_CLASS =
             "com.google.android.clockwork.bluetooth.WearBluetoothService";
+    private static final String WEAR_WIFI_MEDIATOR_SERVICE_CLASS =
+            "com.google.android.clockwork.wifi.WearWifiMediatorService";
+    private static final String WEAR_TIME_SERVICE_CLASS =
+            "com.google.android.clockwork.time.WearTimeService";
     private static final String ACCOUNT_SERVICE_CLASS =
             "com.android.server.accounts.AccountManagerService$Lifecycle";
     private static final String CONTENT_SERVICE_CLASS =
@@ -190,7 +198,7 @@ public final class SystemServer {
      * visual content.
      */
     private static final int DEFAULT_SYSTEM_THEME =
-            com.android.internal.R.style.Theme_DeviceDefault_Light_DarkActionBar;
+            com.android.internal.R.style.Theme_DeviceDefault_System;
 
     private final int mFactoryTestMode;
     private Timer mProfilerSnapshotTimer;
@@ -768,14 +776,6 @@ public final class SystemServer {
         }
         Trace.traceEnd(Trace.TRACE_TAG_SYSTEM_SERVER);
 
-        try {
-            ActivityManagerNative.getDefault().showBootMessage(
-                    context.getResources().getText(
-                            com.android.internal.R.string.android_upgrading_starting_apps),
-                    false);
-        } catch (RemoteException e) {
-        }
-
         if (mFactoryTestMode != FactoryTest.FACTORY_TEST_LOW_LEVEL) {
             if (!disableNonCoreServices) {
                 traceBeginAndSlog("StartLockSettingsService");
@@ -857,10 +857,8 @@ public final class SystemServer {
 
                 traceBeginAndSlog("StartNetworkPolicyManagerService");
                 try {
-                    networkPolicy = new NetworkPolicyManagerService(
-                            context, mActivityManagerService,
-                            (IPowerManager)ServiceManager.getService(Context.POWER_SERVICE),
-                            networkStats, networkManagement);
+                    networkPolicy = new NetworkPolicyManagerService(context,
+                            mActivityManagerService, networkStats, networkManagement);
                     ServiceManager.addService(Context.NETWORK_POLICY_SERVICE, networkPolicy);
                 } catch (Throwable e) {
                     reportWtf("starting NetworkPolicy Service", e);
@@ -1072,6 +1070,10 @@ public final class SystemServer {
 
             mSystemServiceManager.startService(TwilightService.class);
 
+            if (NightDisplayController.isAvailable(context)) {
+                mSystemServiceManager.startService(NightDisplayService.class);
+            }
+
             mSystemServiceManager.startService(JobSchedulerService.class);
 
             mSystemServiceManager.startService(SoundTriggerService.class);
@@ -1244,7 +1246,11 @@ public final class SystemServer {
         }
 
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
-            //#Fixme:mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
+            mSystemServiceManager.startService(WEAR_BLUETOOTH_SERVICE_CLASS);
+            mSystemServiceManager.startService(WEAR_WIFI_MEDIATOR_SERVICE_CLASS);
+          if (!disableNonCoreServices) {
+              mSystemServiceManager.startService(WEAR_TIME_SERVICE_CLASS);
+          }
         }
 
         // make sure the ADB_ENABLED setting value matches the secure property value
@@ -1287,6 +1293,11 @@ public final class SystemServer {
                 | NoSuchMethodException e) {
             Slog.wtf(TAG, "Unable to start  " + externalServer);
             Slog.wtf(TAG, e);
+        }
+
+        if (Settings.Global.getInt(mContentResolver, Settings.Global.DEVICE_PROVISIONED, 0) == 0 ||
+                UserManager.isDeviceInDemoMode(mSystemContext)) {
+            mSystemServiceManager.startService(RetailDemoModeService.class);
         }
 
         // It is now time to start up the app processes...

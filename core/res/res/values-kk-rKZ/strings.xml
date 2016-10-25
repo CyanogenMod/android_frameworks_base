@@ -678,6 +678,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Дұрыс!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Қайталап көріңіз"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Қайталап көріңіз"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Мүмкіндіктер мен деректер үшін құлыпты ашыңыз"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Бет-әлпет арқылы ашу әрекеттері анықталған шегінен асып кетті"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"SIM картасы жоқ"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Планшетте SIM картасы жоқ."</string>
@@ -1022,8 +1023,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"Android жаңартылуда…"</string>
     <string name="android_start_title" msgid="8418054686415318207">"Android іске қосылуда…"</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"Қойманы оңтайландыру."</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android жаңартылуда"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Android жүйесін жаңарту аяқталуда…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"Жаңарту аяқталғанға дейін кейбір қолданбалар дұрыс жұмыс істемеуі мүмкін"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"<xliff:g id="APPLICATION">%1$s</xliff:g> жаңартылуда…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"<xliff:g id="NUMBER_1">%2$d</xliff:g> ішінен <xliff:g id="NUMBER_0">%1$d</xliff:g> қолданба оңтайландырылуда."</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"<xliff:g id="APPNAME">%1$s</xliff:g> дайындалуда."</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Қолданбалар іске қосылуда."</string>
@@ -1217,7 +1219,7 @@
     <string name="forward_intent_to_work" msgid="621480743856004612">"Осы қолданбаны жұмыс профиліңізде пайдаланып жатырсыз"</string>
     <string name="input_method_binding_label" msgid="1283557179944992649">"Енгізу әдісі"</string>
     <string name="sync_binding_label" msgid="3687969138375092423">"Синх"</string>
-    <string name="accessibility_binding_label" msgid="4148120742096474641">"Қол жетімділік"</string>
+    <string name="accessibility_binding_label" msgid="4148120742096474641">"Арнайы мүмкіндіктер"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Артқы фоны"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Артқы фонын өзгерту"</string>
     <string name="notification_listener_binding_label" msgid="2014162835481906429">"Хабар бақылағыш"</string>
@@ -1226,7 +1228,7 @@
     <string name="notification_ranker_binding_label" msgid="774540592299064747">"Хабарландыруларды жіктеу қызметі"</string>
     <string name="vpn_title" msgid="19615213552042827">"VPN белсенді"</string>
     <string name="vpn_title_long" msgid="6400714798049252294">"ВЖЭ <xliff:g id="APP">%s</xliff:g> арқылы қосылған"</string>
-    <string name="vpn_text" msgid="1610714069627824309">"Желіні басқару үшін түртіңіз"</string>
+    <string name="vpn_text" msgid="1610714069627824309">"Желіні басқару үшін түртіңіз."</string>
     <string name="vpn_text_long" msgid="4907843483284977618">"<xliff:g id="SESSION">%s</xliff:g> жүйесіне жалғанған. Желіні басқару үшін түріңіз."</string>
     <string name="vpn_lockdown_connecting" msgid="6443438964440960745">"Әрқашан қосылған ВЖЖ жалғануда…"</string>
     <string name="vpn_lockdown_connected" msgid="8202679674819213931">"Әрқашан қосылған ВЖЖ жалғанған"</string>
@@ -1651,7 +1653,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"Босату"</string>
     <string name="app_info" msgid="6856026610594615344">"Қолданба ақпараты"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"Құрылғыны бастапқы күйге қайтару керек пе?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"Құрылғыны бастапқы күйге келтіру үшін түртіңіз"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"Демо нұсқасы іске қосылуда..."</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"Құрылғы бастапқы күйге қайтарылуда..."</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"Құрылғыны басқапқы күйге қайтару керек пе?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"Барлық өзгеріс жоғалады және демо нұсқасы <xliff:g id="TIMEOUT">%1$s</xliff:g> секундтан кейін қайта қосылады…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"Бас тарту"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"Қазір бастапқы күйге қайтару"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"Осы құрылғыны шектеусіз пайдалану үшін зауыттық параметрлерді қалпына келтіріңіз"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"Қосымша мәліметтер алу үшін түртіңіз."</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"<xliff:g id="LABEL">%1$s</xliff:g> өшірулі"</string>
+    <string name="conference_call" msgid="3751093130790472426">"Конференциялық қоңырау"</string>
 </resources>

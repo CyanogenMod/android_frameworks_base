@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Включать или отключать поиск сетей Wi-Fi во время передачи данных в зависимости от объема трафика"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Размер буфера журнала"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Выберите размер буфера журнала"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Очистить постоянный диск журнала?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Прекратив отслеживание постоянного журнала, мы будем обязаны удалить его данные, сохраненные на устройстве."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Постоянно хранить данные журнала на устройстве"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Выберите буферы журнала, которые будут постоянно храниться на устройстве"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Конфигурация USB"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Конфигурация USB"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Фиктивные местоположения"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Разрешить использование фиктивных местоположений"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Включить проверку атрибутов"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Использовать DHCP-клиент для Android 5.0, а не для новой версии."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Не отключать передачу данных по мобильной сети даже при активном Wi-Fi-подключении (для быстрого переключения между сетями)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Разрешить отладку USB?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"Отладка по USB – это режим, который позволяет использовать ваше устройство как внешний накопитель: перемещать файлы (с компьютера и на компьютер), напрямую устанавливать приложения, а также просматривать системные журналы."</string>

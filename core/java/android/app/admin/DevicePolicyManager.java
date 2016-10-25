@@ -1315,7 +1315,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current minimum password quality for a particular admin or all admins that set
-     * retrictions on this user and its participating profiles. Restrictions on profiles that have
+     * restrictions on this user and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account.
      *
      * <p>This method can be called on the {@link DevicePolicyManager} instance
@@ -1379,7 +1379,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current minimum password length for a particular admin or all admins that set
-     * retrictions on this user and its participating profiles. Restrictions on profiles that have
+     * restrictions on this user and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account.
      *
      * <p>This method can be called on the {@link DevicePolicyManager} instance
@@ -1442,7 +1442,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current number of upper case letters required in the password
-     * for a particular admin or all admins that set retrictions on this user and
+     * for a particular admin or all admins that set restrictions on this user and
      * its participating profiles. Restrictions on profiles that have a separate challenge
      * are not taken into account.
      * This is the same value as set by
@@ -1511,7 +1511,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current number of lower case letters required in the password
-     * for a particular admin or all admins that set retrictions on this user
+     * for a particular admin or all admins that set restrictions on this user
      * and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account.
      * This is the same value as set by
@@ -1580,7 +1580,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current number of letters required in the password
-     * for a particular admin or all admins that set retrictions on this user
+     * for a particular admin or all admins that set restrictions on this user
      * and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account.
      * This is the same value as set by
@@ -1648,7 +1648,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current number of numerical digits required in the password
-     * for a particular admin or all admins that set retrictions on this user
+     * for a particular admin or all admins that set restrictions on this user
      * and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account.
      * This is the same value as set by
@@ -1716,7 +1716,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current number of symbols required in the password
-     * for a particular admin or all admins that set retrictions on this user
+     * for a particular admin or all admins that set restrictions on this user
      * and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account. This is the same value as
      * set by {@link #setPasswordMinimumSymbols(ComponentName, int)}
@@ -1783,7 +1783,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current number of non-letter characters required in the password
-     * for a particular admin or all admins that set retrictions on this user
+     * for a particular admin or all admins that set restrictions on this user
      * and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account.
      * This is the same value as set by
@@ -1915,7 +1915,7 @@ public class DevicePolicyManager {
 
     /**
      * Get the current password expiration time for a particular admin or all admins that set
-     * retrictions on this user and its participating profiles. Restrictions on profiles that have
+     * restrictions on this user and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account. If admin is {@code null}, then a composite
      * of all expiration times is returned - which will be the minimum of all of them.
      *
@@ -1939,7 +1939,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current password history length for a particular admin or all admins that
-     * set retrictions on this user and its participating profiles. Restrictions on profiles that
+     * set restrictions on this user and its participating profiles. Restrictions on profiles that
      * have a separate challenge are not taken into account.
      *
      * <p>This method can be called on the {@link DevicePolicyManager} instance
@@ -2121,7 +2121,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current maximum number of login attempts that are allowed before the device
-     * or profile is wiped, for a particular admin or all admins that set retrictions on this user
+     * or profile is wiped, for a particular admin or all admins that set restrictions on this user
      * and its participating profiles. Restrictions on profiles that have a separate challenge are
      * not taken into account.
      *
@@ -2262,7 +2262,7 @@ public class DevicePolicyManager {
 
     /**
      * Retrieve the current maximum time to unlock for a particular admin or all admins that set
-     * retrictions on this user and its participating profiles. Restrictions on profiles that have
+     * restrictions on this user and its participating profiles. Restrictions on profiles that have
      * a separate challenge are not taken into account.
      *
      * <p>This method can be called on the {@link DevicePolicyManager} instance
@@ -2510,6 +2510,8 @@ public class DevicePolicyManager {
     /**
      * Result code for {@link #setStorageEncryption} and {@link #getStorageEncryptionStatus}:
      * indicating that encryption is active.
+     * <p>
+     * Also see {@link #ENCRYPTION_STATUS_ACTIVE_PER_USER}.
      */
     public static final int ENCRYPTION_STATUS_ACTIVE = 3;
 
@@ -2522,7 +2524,11 @@ public class DevicePolicyManager {
 
     /**
      * Result code for {@link #getStorageEncryptionStatus}:
-     * indicating that encryption is active and the encryption key is tied to the user.
+     * indicating that encryption is active and the encryption key is tied to the user or profile.
+     * <p>
+     * This value is only returned to apps targeting API level 24 and above. For apps targeting
+     * earlier API levels, {@link #ENCRYPTION_STATUS_ACTIVE} is returned, even if the
+     * encryption key is specific to the user or profile.
      */
     public static final int ENCRYPTION_STATUS_ACTIVE_PER_USER = 5;
 
@@ -2649,7 +2655,7 @@ public class DevicePolicyManager {
     /**
      * Called by an application that is administering the device to
      * determine the current encryption status of the device.
-     *
+     * <p>
      * Depending on the returned status code, the caller may proceed in different
      * ways.  If the result is {@link #ENCRYPTION_STATUS_UNSUPPORTED}, the
      * storage system does not support encryption.  If the
@@ -2657,13 +2663,14 @@ public class DevicePolicyManager {
      * #ACTION_START_ENCRYPTION} to begin the process of encrypting or decrypting the
      * storage.  If the result is {@link #ENCRYPTION_STATUS_ACTIVE_DEFAULT_KEY}, the
      * storage system has enabled encryption but no password is set so further action
-     * may be required.  If the result is {@link #ENCRYPTION_STATUS_ACTIVATING} or
-     * {@link #ENCRYPTION_STATUS_ACTIVE}, no further action is required.
+     * may be required.  If the result is {@link #ENCRYPTION_STATUS_ACTIVATING},
+     * {@link #ENCRYPTION_STATUS_ACTIVE} or {@link #ENCRYPTION_STATUS_ACTIVE_PER_USER},
+     * no further action is required.
      *
      * @return current status of encryption. The value will be one of
      * {@link #ENCRYPTION_STATUS_UNSUPPORTED}, {@link #ENCRYPTION_STATUS_INACTIVE},
      * {@link #ENCRYPTION_STATUS_ACTIVATING}, {@link #ENCRYPTION_STATUS_ACTIVE_DEFAULT_KEY},
-     * or {@link #ENCRYPTION_STATUS_ACTIVE}.
+     * {@link #ENCRYPTION_STATUS_ACTIVE}, or {@link #ENCRYPTION_STATUS_ACTIVE_PER_USER}.
      */
     public int getStorageEncryptionStatus() {
         throwIfParentInstance("getStorageEncryptionStatus");
@@ -3341,7 +3348,7 @@ public class DevicePolicyManager {
 
     /**
      * Determine whether or not features have been disabled in keyguard either by the calling
-     * admin, if specified, or all admins that set retrictions on this user and its participating
+     * admin, if specified, or all admins that set restrictions on this user and its participating
      * profiles. Restrictions on profiles that have a separate challenge are not taken into account.
      *
      * <p>This method can be called on the {@link DevicePolicyManager} instance
@@ -6411,6 +6418,43 @@ public class DevicePolicyManager {
     public void forceRemoveActiveAdmin(ComponentName adminReceiver, int userHandle) {
         try {
             mService.forceRemoveActiveAdmin(adminReceiver, userHandle);
+        } catch (RemoteException re) {
+            throw re.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * @hide
+     * @return whether {@link android.provider.Settings.Global#DEVICE_PROVISIONED} has ever been set
+     * to 1.
+     */
+    public boolean isDeviceProvisioned() {
+        try {
+            return mService.isDeviceProvisioned();
+        } catch (RemoteException re) {
+            throw re.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * @hide
+     * Writes that the provisioning configuration has been applied.
+     */
+    public void setDeviceProvisioningConfigApplied() {
+        try {
+            mService.setDeviceProvisioningConfigApplied();
+        } catch (RemoteException re) {
+            throw re.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * @hide
+     * @return whether the provisioning configuration has been applied.
+     */
+    public boolean isDeviceProvisioningConfigApplied() {
+        try {
+            return mService.isDeviceProvisioningConfigApplied();
         } catch (RemoteException re) {
             throw re.rethrowFromSystemServer();
         }

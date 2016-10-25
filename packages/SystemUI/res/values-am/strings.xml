@@ -143,7 +143,9 @@
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
+    <string name="accessibility_data_connection_4g_plus" msgid="3032226872470658661">"4G+"</string>
     <string name="accessibility_data_connection_lte" msgid="5413468808637540658">"ኤል ቲ ኢ"</string>
+    <string name="accessibility_data_connection_lte_plus" msgid="361876866906946007">"LTE+"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"ውሂብን በማዛወር ላይ"</string>
     <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
@@ -317,6 +319,9 @@
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"<xliff:g id="DATA_LIMIT">%s</xliff:g> ገደብ"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"የ<xliff:g id="DATA_LIMIT">%s</xliff:g> ማስጠንቀቂያ"</string>
     <string name="quick_settings_work_mode_label" msgid="6244915274350490429">"የሥራ ሁነታ"</string>
+    <string name="quick_settings_night_display_label" msgid="3577098011487644395">"የምሽት ብርሃን"</string>
+    <string name="quick_settings_night_display_summary_on" msgid="1814901757887526769">"የምሽት ብርሃን በርቷል፣ ለማጥፋት መታ ያድርጉ"</string>
+    <string name="quick_settings_night_display_summary_off" msgid="7892102914128777905">"የምሽት ብርሃን ጠፍቷል፣ ለማብራት መታ ያድርጉ"</string>
     <string name="recents_empty_message" msgid="808480104164008572">"ምንም የቅርብ ጊዜ ንጥሎች የሉም"</string>
     <string name="recents_empty_message_dismissed_all" msgid="2791312568666558651">"ሁሉንም ነገር አጽድተዋል"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"የመተግበሪያ መረጃ"</string>
@@ -330,6 +335,8 @@
     <string name="recents_multistack_add_stack_dialog_split_horizontal" msgid="8848514474543427332">"አግድም ክፈል"</string>
     <string name="recents_multistack_add_stack_dialog_split_vertical" msgid="9075292233696180813">"ቁልቁል ክፈል"</string>
     <string name="recents_multistack_add_stack_dialog_split_custom" msgid="4177837597513701943">"በብጁ ክፈል"</string>
+  <string-array name="recents_blacklist_array">
+  </string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"ባትሪ ሞልቷል"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"ኃይል በመሙላት ላይ"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"<xliff:g id="CHARGING_TIME">%s</xliff:g> እስኪሞላ ድረስ"</string>
@@ -434,6 +441,18 @@
     <string name="volumeui_notification_title" msgid="4906770126345910955">"<xliff:g id="APP_NAME">%1$s</xliff:g> የድምጽ መጠን መገናኛው ነው"</string>
     <string name="volumeui_notification_text" msgid="8819536904234337445">"የመጀመሪያውን ወደነበረበት ለመመለስ መታ ያድርጉ።"</string>
     <string name="managed_profile_foreground_toast" msgid="5421487114739245972">"የስራ መገለጫዎን እየተጠቀሙ ነው"</string>
+  <string-array name="volume_stream_titles">
+    <item msgid="5841843895402729630">"ደውል"</item>
+    <item msgid="5997713001067658559">"ሥርዓት"</item>
+    <item msgid="7858983209929864160">"ጥሪ"</item>
+    <item msgid="1850038478268896762">"ማህደረመረጃ"</item>
+    <item msgid="8265110906352372092">"ማንቂያ"</item>
+    <item msgid="5339394737636839168"></item>
+    <item msgid="2951313578278086204">"ብሉቱዝ"</item>
+    <item msgid="2919807739709798970"></item>
+    <item msgid="150349973435223405"></item>
+    <item msgid="6761963760295549099"></item>
+  </string-array>
     <string name="volume_stream_content_description_unmute" msgid="4436631538779230857">"%1$s። ድምጸ-ከል ለማድረግ መታ ያድርጉ"</string>
     <string name="volume_stream_content_description_vibrate" msgid="1187944970457807498">"%1$s። ወደ ንዝረት ለማቀናበር መታ ያድርጉ። የተደራሽነት አገልግሎቶች ድምጸ-ከል ሊደረግባቸው ይችላል።"</string>
     <string name="volume_stream_content_description_mute" msgid="3625049841390467354">"%1$s። ድምጸ-ከል ለማድረግ መታ ያድርጉ። የተደራሽነት አገልግሎቶች ድምጸ-ከል ሊደረግባቸው ይችላል።"</string>
@@ -504,21 +523,6 @@
     <string name="notification_more_settings" msgid="816306283396553571">"ተጨማሪ ቅንብሮች"</string>
     <string name="notification_done" msgid="5279426047273930175">"ተከናውኗል"</string>
     <string name="notification_gear_accessibility" msgid="94429150213089611">"<xliff:g id="APP_NAME">%1$s</xliff:g> ማሳወቂያ ቁጥጥሮች"</string>
-    <string name="color_and_appearance" msgid="1254323855964993144">"ቀለም እና መልክ"</string>
-    <string name="night_mode" msgid="3540405868248625488">"የሌሊት ሁነታ"</string>
-    <string name="calibrate_display" msgid="5974642573432039217">"ማሳያን ይለኩ"</string>
-    <string name="night_mode_on" msgid="5597545513026541108">"በርቷል"</string>
-    <string name="night_mode_off" msgid="8035605276956057508">"ጠፍቷል"</string>
-    <string name="turn_on_automatically" msgid="4167565356762016083">"በራስ-ሰር አብራ"</string>
-    <string name="turn_on_auto_summary" msgid="2190994512406701520">"ለአካባቢው እና ለሰዓቱ ተገቢ በሆነ መልኩ ወደ የማታ ሁነታ ለውጥ"</string>
-    <string name="when_night_mode_on" msgid="2969436026899172821">"የማታ ሁነታ  ሲበራ"</string>
-    <string name="use_dark_theme" msgid="2900938704964299312">"ለAndroid ስርዓተ ክወና ጨለማ ገጽታን ተጠቀም"</string>
-    <string name="adjust_tint" msgid="3398569573231409878">"ቅልም አስተካክል"</string>
-    <string name="adjust_brightness" msgid="980039329808178246">"ብሩህነት አስተካክል"</string>
-    <string name="night_mode_disclaimer" msgid="598914896926759578">"ጨለማ ገጽታው እንደ ቅንብሮች ያሉ በመደበኛነት በብርሃን ገጽታ በሚታዩ የAndroid ስርዓተ ክወና ዋና ክፍሎች ላይ ይተገበራል።"</string>
-    <string name="color_apply" msgid="9212602012641034283">"ተግብር"</string>
-    <string name="color_revert_title" msgid="4746666545480534663">"ቅንብሮችን ያረጋግጡ"</string>
-    <string name="color_revert_message" msgid="9116001069397996691">"አንዳንድ የቀለም ቅንብሮች ይህን መሣሪያ የማይጠቅም ሊያደርጉት ይችላሉ። እነዚህን የቀለም ቅንብሮች ለማረጋገጥ እሺ የሚለውን ጠቅ ያድርጉ፣ አለበለዚያ እነዚህ ቅንብሮች ከ10 ሰከንዶች በኋላ ዳግም ይጀምራሉ።"</string>
     <string name="battery_panel_title" msgid="7944156115535366613">"የባትሪ አጠቃቀም"</string>
     <string name="battery_detail_charging_summary" msgid="1279095653533044008">"ኃይል በሚሞላበት ጊዜ ባትሪ ቆጣቢ አይገኝም"</string>
     <string name="battery_detail_switch_title" msgid="6285872470260795421">"ባትሪ ቆጣቢ"</string>

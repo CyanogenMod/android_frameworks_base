@@ -16,6 +16,7 @@
 
 package com.android.server.wm;
 
+import static android.view.WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
 import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 import static android.view.WindowManager.LayoutParams.PRIVATE_FLAG_KEYGUARD;
@@ -119,6 +120,8 @@ public class WindowAnimator {
     // check if some got replaced and can be removed.
     private boolean mRemoveReplacedWindows = false;
 
+    private final AppTokenList mTmpExitingAppTokens = new AppTokenList();
+
     private String forceHidingToString() {
         switch (mForceHiding) {
             case KEYGUARD_NOT_SHOWN:    return "KEYGUARD_NOT_SHOWN";
@@ -189,10 +192,19 @@ public class WindowAnimator {
                 }
             }
 
-            final AppTokenList exitingAppTokens = stack.mExitingAppTokens;
-            final int exitingCount = exitingAppTokens.size();
+            mTmpExitingAppTokens.clear();
+            mTmpExitingAppTokens.addAll(stack.mExitingAppTokens);
+
+            final int exitingCount = mTmpExitingAppTokens.size();
             for (int i = 0; i < exitingCount; i++) {
-                final AppWindowAnimator appAnimator = exitingAppTokens.get(i).mAppAnimator;
+                final AppWindowAnimator appAnimator = mTmpExitingAppTokens.get(i).mAppAnimator;
+                // stepAnimation can trigger finishExit->removeWindowInnerLocked
+                // ->performSurfacePlacement
+                // performSurfacePlacement will directly manipulate the mExitingAppTokens list
+                // so we need to iterate over a copy and check for modifications.
+                if (!stack.mExitingAppTokens.contains(appAnimator)) {
+                    continue;
+                }
                 appAnimator.wasAnimating = appAnimator.animating;
                 if (appAnimator.stepAnimationLocked(mCurrentTime, displayId)) {
                     setAnimating(true);
@@ -235,6 +247,12 @@ public class WindowAnimator {
                     // Show error dialogs over apps that dismiss keyguard.
                     || (win.mAttrs.privateFlags & PRIVATE_FLAG_SYSTEM_ERROR) != 0;
         }
+
+        // Allow showing a window that dismisses Keyguard if the policy allows it. This is used for
+        // when the policy knows that the Keyguard can be dismissed without user interaction to
+        // provide a smooth transition in that case.
+        allowWhenLocked |= (win.mAttrs.flags & FLAG_DISMISS_KEYGUARD) != 0
+                && mPolicy.canShowDismissingWindowWhileLockedLw();
 
         // Only hide windows if the keyguard is active and not animating away.
         boolean keyguardOn = mPolicy.isKeyguardShowingOrOccluded()

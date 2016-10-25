@@ -143,7 +143,9 @@
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
+    <string name="accessibility_data_connection_4g_plus" msgid="3032226872470658661">"4G+"</string>
     <string name="accessibility_data_connection_lte" msgid="5413468808637540658">"LTE"</string>
+    <string name="accessibility_data_connection_lte_plus" msgid="361876866906946007">"LTE+"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"Roaming"</string>
     <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
@@ -317,6 +319,9 @@
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"<xliff:g id="DATA_LIMIT">%s</xliff:g> ang limitasyon"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Babala sa <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_work_mode_label" msgid="6244915274350490429">"Work mode"</string>
+    <string name="quick_settings_night_display_label" msgid="3577098011487644395">"Night Light"</string>
+    <string name="quick_settings_night_display_summary_on" msgid="1814901757887526769">"Naka-on ang Night Light, i-tap upang i-off"</string>
+    <string name="quick_settings_night_display_summary_off" msgid="7892102914128777905">"Naka-off ang Night Light, i-tap upang i-on"</string>
     <string name="recents_empty_message" msgid="808480104164008572">"Walang mga kamakailang item"</string>
     <string name="recents_empty_message_dismissed_all" msgid="2791312568666558651">"Na-clear mo ang lahat"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Impormasyon ng Application"</string>
@@ -330,6 +335,8 @@
     <string name="recents_multistack_add_stack_dialog_split_horizontal" msgid="8848514474543427332">"Split Horizontal"</string>
     <string name="recents_multistack_add_stack_dialog_split_vertical" msgid="9075292233696180813">"Split Vertical"</string>
     <string name="recents_multistack_add_stack_dialog_split_custom" msgid="4177837597513701943">"Split Custom"</string>
+  <string-array name="recents_blacklist_array">
+  </string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Nasingil na"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"Nagcha-charge"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"<xliff:g id="CHARGING_TIME">%s</xliff:g> hanggang mapuno"</string>
@@ -434,6 +441,18 @@
     <string name="volumeui_notification_title" msgid="4906770126345910955">"Ang <xliff:g id="APP_NAME">%1$s</xliff:g> ang volume dialog"</string>
     <string name="volumeui_notification_text" msgid="8819536904234337445">"I-tap upang i-restore ang orihinal."</string>
     <string name="managed_profile_foreground_toast" msgid="5421487114739245972">"Ginagamit mo ang iyong profile sa trabaho"</string>
+  <string-array name="volume_stream_titles">
+    <item msgid="5841843895402729630">"Tawag"</item>
+    <item msgid="5997713001067658559">"System"</item>
+    <item msgid="7858983209929864160">"Ipa-ring"</item>
+    <item msgid="1850038478268896762">"Media"</item>
+    <item msgid="8265110906352372092">"Alarm"</item>
+    <item msgid="5339394737636839168"></item>
+    <item msgid="2951313578278086204">"Bluetooth"</item>
+    <item msgid="2919807739709798970"></item>
+    <item msgid="150349973435223405"></item>
+    <item msgid="6761963760295549099"></item>
+  </string-array>
     <string name="volume_stream_content_description_unmute" msgid="4436631538779230857">"%1$s. I-tap upang i-unmute."</string>
     <string name="volume_stream_content_description_vibrate" msgid="1187944970457807498">"%1$s. I-tap upang itakda na mag-vibrate. Maaaring i-mute ang mga serbisyo sa Accessibility."</string>
     <string name="volume_stream_content_description_mute" msgid="3625049841390467354">"%1$s. I-tap upang i-mute. Maaaring i-mute ang mga serbisyo sa Accessibility."</string>
@@ -504,21 +523,6 @@
     <string name="notification_more_settings" msgid="816306283396553571">"Higit pang mga setting"</string>
     <string name="notification_done" msgid="5279426047273930175">"Tapos Na"</string>
     <string name="notification_gear_accessibility" msgid="94429150213089611">"Mga kontrol sa notification ng <xliff:g id="APP_NAME">%1$s</xliff:g>"</string>
-    <string name="color_and_appearance" msgid="1254323855964993144">"Kulay at hitsura"</string>
-    <string name="night_mode" msgid="3540405868248625488">"Night mode"</string>
-    <string name="calibrate_display" msgid="5974642573432039217">"I-calibrate ang display"</string>
-    <string name="night_mode_on" msgid="5597545513026541108">"Naka-on"</string>
-    <string name="night_mode_off" msgid="8035605276956057508">"Naka-off"</string>
-    <string name="turn_on_automatically" msgid="4167565356762016083">"Awtomatikong i-on"</string>
-    <string name="turn_on_auto_summary" msgid="2190994512406701520">"Lumipat sa Night Mode kapag naaangkop sa lokasyon at oras"</string>
-    <string name="when_night_mode_on" msgid="2969436026899172821">"Kapag naka-on ang Night Mode"</string>
-    <string name="use_dark_theme" msgid="2900938704964299312">"Gumamit ng madilim na tema para sa Android OS"</string>
-    <string name="adjust_tint" msgid="3398569573231409878">"Isaayos ang tint"</string>
-    <string name="adjust_brightness" msgid="980039329808178246">"Isaayos ang liwanag"</string>
-    <string name="night_mode_disclaimer" msgid="598914896926759578">"Ilalapat ang madilim na tema sa mga mahalagang bahagi ng Android OS na karaniwang ipinapakita nang may maliwanag na tema, gaya ng Mga Setting."</string>
-    <string name="color_apply" msgid="9212602012641034283">"Ilapat"</string>
-    <string name="color_revert_title" msgid="4746666545480534663">"Kumpirmahin ang mga setting"</string>
-    <string name="color_revert_message" msgid="9116001069397996691">"Maaaring hindi magamit ang device na ito dahil sa ilang setting ng kulay. I-click ang OK upang kumpirmahin ang mga setting ng kulay na ito, kung hindi ay mare-reset ang mga setting na ito pagkatapos ng 10 segundo."</string>
     <string name="battery_panel_title" msgid="7944156115535366613">"Paggamit ng baterya"</string>
     <string name="battery_detail_charging_summary" msgid="1279095653533044008">"Hindi available ang Pangtipid sa Baterya kapag nagcha-charge"</string>
     <string name="battery_detail_switch_title" msgid="6285872470260795421">"Pangtipid sa Baterya"</string>

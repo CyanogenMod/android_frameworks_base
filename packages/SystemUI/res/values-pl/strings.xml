@@ -145,7 +145,9 @@
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
+    <string name="accessibility_data_connection_4g_plus" msgid="3032226872470658661">"4G+"</string>
     <string name="accessibility_data_connection_lte" msgid="5413468808637540658">"LTE"</string>
+    <string name="accessibility_data_connection_lte_plus" msgid="361876866906946007">"LTE+"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"Roaming"</string>
     <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
@@ -321,6 +323,9 @@
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Limit <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"Ostrzeżenie: <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_work_mode_label" msgid="6244915274350490429">"Tryb pracy"</string>
+    <string name="quick_settings_night_display_label" msgid="3577098011487644395">"Podświetlenie nocne"</string>
+    <string name="quick_settings_night_display_summary_on" msgid="1814901757887526769">"Podświetlenie nocne włączone – kliknij, by wyłączyć"</string>
+    <string name="quick_settings_night_display_summary_off" msgid="7892102914128777905">"Podświetlenie nocne wyłączone – kliknij, by włączyć"</string>
     <string name="recents_empty_message" msgid="808480104164008572">"Brak ostatnich elementów"</string>
     <string name="recents_empty_message_dismissed_all" msgid="2791312568666558651">"Wszystko zostało wyczyszczone"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Informacje o aplikacji"</string>
@@ -334,6 +339,8 @@
     <string name="recents_multistack_add_stack_dialog_split_horizontal" msgid="8848514474543427332">"Podziel poziomo"</string>
     <string name="recents_multistack_add_stack_dialog_split_vertical" msgid="9075292233696180813">"Podziel pionowo"</string>
     <string name="recents_multistack_add_stack_dialog_split_custom" msgid="4177837597513701943">"Podziel niestandardowo"</string>
+  <string-array name="recents_blacklist_array">
+  </string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Naładowana"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"Ładowanie"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"<xliff:g id="CHARGING_TIME">%s</xliff:g> do pełnego naładowania"</string>
@@ -438,6 +445,18 @@
     <string name="volumeui_notification_title" msgid="4906770126345910955">"<xliff:g id="APP_NAME">%1$s</xliff:g> steruje głośnością"</string>
     <string name="volumeui_notification_text" msgid="8819536904234337445">"Kliknij, by przywrócić ustawienie początkowe."</string>
     <string name="managed_profile_foreground_toast" msgid="5421487114739245972">"Używasz profilu do pracy"</string>
+  <string-array name="volume_stream_titles">
+    <item msgid="5841843895402729630">"Połączenie"</item>
+    <item msgid="5997713001067658559">"System"</item>
+    <item msgid="7858983209929864160">"Dzwonek"</item>
+    <item msgid="1850038478268896762">"Multimedia"</item>
+    <item msgid="8265110906352372092">"Alarm"</item>
+    <item msgid="5339394737636839168"></item>
+    <item msgid="2951313578278086204">"Bluetooth"</item>
+    <item msgid="2919807739709798970"></item>
+    <item msgid="150349973435223405"></item>
+    <item msgid="6761963760295549099"></item>
+  </string-array>
     <string name="volume_stream_content_description_unmute" msgid="4436631538779230857">"%1$s. Kliknij, by wyłączyć wyciszenie."</string>
     <string name="volume_stream_content_description_vibrate" msgid="1187944970457807498">"%1$s. Kliknij, by włączyć wibracje. Ułatwienia dostępu mogą być wyciszone."</string>
     <string name="volume_stream_content_description_mute" msgid="3625049841390467354">"%1$s. Kliknij, by wyciszyć. Ułatwienia dostępu mogą być wyciszone."</string>
@@ -508,21 +527,6 @@
     <string name="notification_more_settings" msgid="816306283396553571">"Więcej ustawień"</string>
     <string name="notification_done" msgid="5279426047273930175">"Gotowe"</string>
     <string name="notification_gear_accessibility" msgid="94429150213089611">"<xliff:g id="APP_NAME">%1$s</xliff:g> – ustawienia powiadomień"</string>
-    <string name="color_and_appearance" msgid="1254323855964993144">"Kolor i wygląd"</string>
-    <string name="night_mode" msgid="3540405868248625488">"Tryb nocny"</string>
-    <string name="calibrate_display" msgid="5974642573432039217">"Kalibracja wyświetlacza"</string>
-    <string name="night_mode_on" msgid="5597545513026541108">"Wł."</string>
-    <string name="night_mode_off" msgid="8035605276956057508">"Wył."</string>
-    <string name="turn_on_automatically" msgid="4167565356762016083">"Włącz automatycznie"</string>
-    <string name="turn_on_auto_summary" msgid="2190994512406701520">"Przełączaj na tryb nocny odpowiednio do lokalizacji i pory dnia"</string>
-    <string name="when_night_mode_on" msgid="2969436026899172821">"Gdy jest włączony tryb nocny"</string>
-    <string name="use_dark_theme" msgid="2900938704964299312">"Użyj motywu ciemnego dla Androida"</string>
-    <string name="adjust_tint" msgid="3398569573231409878">"Dostosuj odcień"</string>
-    <string name="adjust_brightness" msgid="980039329808178246">"Dostosuj jasność"</string>
-    <string name="night_mode_disclaimer" msgid="598914896926759578">"Motyw ciemny zostanie zastosowany do głównych obszarów Androida, które normalnie są jasne, takich jak Ustawienia."</string>
-    <string name="color_apply" msgid="9212602012641034283">"Zastosuj"</string>
-    <string name="color_revert_title" msgid="4746666545480534663">"Potwierdź ustawienia"</string>
-    <string name="color_revert_message" msgid="9116001069397996691">"Niektóre ustawienia kolorów mogą utrudniać korzystanie z urządzenia. Kliknij OK, by potwierdzić te ustawienia kolorów. Jeśli tego nie zrobisz, zostaną one zresetowane po 10 sekundach."</string>
     <string name="battery_panel_title" msgid="7944156115535366613">"Wykorzystanie baterii"</string>
     <string name="battery_detail_charging_summary" msgid="1279095653533044008">"Oszczędzanie baterii nie jest dostępne podczas ładowania"</string>
     <string name="battery_detail_switch_title" msgid="6285872470260795421">"Oszczędzanie baterii"</string>

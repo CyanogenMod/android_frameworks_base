@@ -59,6 +59,7 @@ public class KeyguardServiceDelegate {
             showingAndNotOccluded = true;
             secure = true;
             deviceHasKeyguard = true;
+            currentUser = UserHandle.USER_NULL;
         }
         boolean showing;
         boolean showingAndNotOccluded;
@@ -157,6 +158,10 @@ public class KeyguardServiceDelegate {
             if (mKeyguardState.systemIsReady) {
                 // If the system is ready, it means keyguard crashed and restarted.
                 mKeyguardService.onSystemReady();
+                if (mKeyguardState.currentUser != UserHandle.USER_NULL) {
+                    // There has been a user switch earlier
+                    mKeyguardService.setCurrentUser(mKeyguardState.currentUser);
+                }
                 // This is used to hide the scrim once keyguard displays.
                 if (mKeyguardState.interactiveState == INTERACTIVE_STATE_AWAKE) {
                     mKeyguardService.onStartedWakingUp();
@@ -194,6 +199,20 @@ public class KeyguardServiceDelegate {
         return mKeyguardState.showing;
     }
 
+    public boolean isTrusted() {
+        if (mKeyguardService != null) {
+            return mKeyguardService.isTrusted();
+        }
+        return false;
+    }
+
+    public boolean hasLockscreenWallpaper() {
+        if (mKeyguardService != null) {
+            return mKeyguardService.hasLockscreenWallpaper();
+        }
+        return false;
+    }
+
     public boolean isInputRestricted() {
         if (mKeyguardService != null) {
             mKeyguardState.inputRestricted = mKeyguardService.isInputRestricted();
@@ -215,14 +234,15 @@ public class KeyguardServiceDelegate {
 
     public void setOccluded(boolean isOccluded) {
         if (mKeyguardService != null) {
+            if (DEBUG) Log.v(TAG, "setOccluded(" + isOccluded + ")");
             mKeyguardService.setOccluded(isOccluded);
         }
         mKeyguardState.occluded = isOccluded;
     }
 
-    public void dismiss() {
+    public void dismiss(boolean allowWhileOccluded) {
         if (mKeyguardService != null) {
-            mKeyguardService.dismiss();
+            mKeyguardService.dismiss(allowWhileOccluded);
         }
     }
 

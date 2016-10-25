@@ -146,7 +146,9 @@ public class QSContainer extends FrameLayout {
             return getHeight();
         }
         if (mQSDetail.isClosingDetail()) {
-            return mQSPanel.getGridHeight() + mHeader.getCollapsedHeight() + getPaddingBottom();
+            int panelHeight = ((LayoutParams) mQSPanel.getLayoutParams()).topMargin
+                    + mQSPanel.getMeasuredHeight();
+            return panelHeight + getPaddingBottom();
         } else {
             return getMeasuredHeight();
         }
@@ -233,6 +235,10 @@ public class QSContainer extends FrameLayout {
         mListening = listening;
         mHeader.setListening(listening);
         mQSPanel.setListening(mListening && mQsExpanded);
+    }
+
+    public void setHeaderListening(boolean listening) {
+        mHeader.setListening(listening);
     }
 
     public void setQsExpansion(float expansion, float headerTranslation) {

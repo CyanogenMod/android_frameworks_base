@@ -549,7 +549,7 @@ public class SettingsProvider extends ContentProvider {
                 final int userCount = users.size();
                 for (int i = 0; i < userCount; i++) {
                     UserInfo user = users.get(i);
-                    dumpForUser(user.id, pw);
+                    dumpForUserLocked(user.id, pw);
                 }
             } finally {
                 Binder.restoreCallingIdentity(identity);
@@ -557,12 +557,16 @@ public class SettingsProvider extends ContentProvider {
         }
     }
 
-    private void dumpForUser(int userId, PrintWriter pw) {
+    private void dumpForUserLocked(int userId, PrintWriter pw) {
         if (userId == UserHandle.USER_SYSTEM) {
             pw.println("GLOBAL SETTINGS (user " + userId + ")");
             Cursor globalCursor = getAllGlobalSettings(ALL_COLUMNS);
             dumpSettings(globalCursor, pw);
             pw.println();
+
+            SettingsState globalSettings = mSettingsRegistry.getSettingsLocked(
+                    SETTINGS_TYPE_GLOBAL, UserHandle.USER_SYSTEM);
+            globalSettings.dumpHistoricalOperations(pw);
         }
 
         pw.println("SECURE SETTINGS (user " + userId + ")");
@@ -570,10 +574,18 @@ public class SettingsProvider extends ContentProvider {
         dumpSettings(secureCursor, pw);
         pw.println();
 
+        SettingsState secureSettings = mSettingsRegistry.getSettingsLocked(
+                SETTINGS_TYPE_SECURE, userId);
+        secureSettings.dumpHistoricalOperations(pw);
+
         pw.println("SYSTEM SETTINGS (user " + userId + ")");
         Cursor systemCursor = getAllSystemSettings(userId, ALL_COLUMNS);
         dumpSettings(systemCursor, pw);
         pw.println();
+
+        SettingsState systemSettings = mSettingsRegistry.getSettingsLocked(
+                SETTINGS_TYPE_SYSTEM, userId);
+        systemSettings.dumpHistoricalOperations(pw);
     }
 
     private void dumpSettings(Cursor cursor, PrintWriter pw) {
@@ -2095,7 +2107,7 @@ public class SettingsProvider extends ContentProvider {
         }
 
         private final class UpgradeController {
-            private static final int SETTINGS_VERSION = 127;
+            private static final int SETTINGS_VERSION = 130;
 
             private final int mUserId;
 
@@ -2535,6 +2547,68 @@ public class SettingsProvider extends ContentProvider {
                         }
                     }
                     currentVersion = 127;
+                }
+
+                if (currentVersion == 127) {
+                    // version 127 is no longer used.
+                    currentVersion = 128;
+                }
+
+                if (currentVersion == 128) {
+                    // Version 128: Allow OEMs to grant DND access to default apps. Note that
+                    // the new apps are appended to the list of already approved apps.
+                    final SettingsState systemSecureSettings =
+                            getSecureSettingsLocked(userId);
+
+                    final Setting policyAccess = systemSecureSettings.getSettingLocked(
+                            Settings.Secure.ENABLED_NOTIFICATION_POLICY_ACCESS_PACKAGES);
+                    String defaultPolicyAccess = getContext().getResources().getString(
+                            com.android.internal.R.string.config_defaultDndAccessPackages);
+                    if (!TextUtils.isEmpty(defaultPolicyAccess)) {
+                        if (policyAccess.isNull()) {
+                            systemSecureSettings.insertSettingLocked(
+                                    Settings.Secure.ENABLED_NOTIFICATION_POLICY_ACCESS_PACKAGES,
+                                    defaultPolicyAccess,
+                                    SettingsState.SYSTEM_PACKAGE_NAME);
+                        } else {
+                            StringBuilder currentSetting =
+                                    new StringBuilder(policyAccess.getValue());
+                            currentSetting.append(":");
+                            currentSetting.append(defaultPolicyAccess);
+                            systemSecureSettings.updateSettingLocked(
+                                    Settings.Secure.ENABLED_NOTIFICATION_POLICY_ACCESS_PACKAGES,
+                                    currentSetting.toString(),
+                                    SettingsState.SYSTEM_PACKAGE_NAME);
+                        }
+                    }
+
+                    currentVersion = 129;
+                }
+
+                if (currentVersion == 129) {
+                    // default longpress timeout changed from 500 to 400. If unchanged from the old
+                    // default, update to the new default.
+                    final SettingsState systemSecureSettings =
+                            getSecureSettingsLocked(userId);
+                    final String oldValue = systemSecureSettings.getSettingLocked(
+                            Settings.Secure.LONG_PRESS_TIMEOUT).getValue();
+                    if (TextUtils.equals("500", oldValue)) {
+                        systemSecureSettings.insertSettingLocked(
+                                Settings.Secure.LONG_PRESS_TIMEOUT,
+                                String.valueOf(getContext().getResources().getInteger(
+                                        R.integer.def_long_press_timeout_millis)),
+                                SettingsState.SYSTEM_PACKAGE_NAME);
+                    }
+                    currentVersion = 130;
+                }
+
+                if (currentVersion != newVersion) {
+                    Slog.w("SettingsProvider", "warning: upgrading settings database to version "
+                            + newVersion + " left it at "
+                            + currentVersion + " instead; this is probably a bug", new Throwable());
+                    if (DEBUG) {
+                        throw new RuntimeException("db upgrade error");
+                    }
                 }
 
                 // vXXX: Add new settings above this point.

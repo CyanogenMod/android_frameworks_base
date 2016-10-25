@@ -664,10 +664,10 @@ public class DirectoryFragment extends Fragment
                     return true;
 
                 case R.id.menu_copy_to:
-                    transferDocuments(selection, FileOperationService.OPERATION_COPY);
                     // TODO: Only finish selection mode if copy-to is not canceled.
                     // Need to plum down into handling the way we do with deleteDocuments.
                     mode.finish();
+                    transferDocuments(selection, FileOperationService.OPERATION_COPY);
                     return true;
 
                 case R.id.menu_move_to:
@@ -1393,7 +1393,7 @@ public class DirectoryFragment extends Fragment
                 return mIconHelper.getDocumentIcon(mContext, doc.authority, doc.documentId,
                         doc.mimeType, doc.icon);
             }
-            return mContext.getDrawable(R.drawable.ic_doc_generic);
+            return mContext.getDrawable(com.android.internal.R.drawable.ic_doc_generic);
         }
 
         private String getTitle(List<DocumentInfo> docs) {

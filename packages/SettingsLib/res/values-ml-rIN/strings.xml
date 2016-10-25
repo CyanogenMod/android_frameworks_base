@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"ഇന്റർഫേസിലെ ഡാറ്റ ട്രാഫിക്ക് സാന്നിദ്ധ്യത്തിന്റെ കണക്ക് അടിസ്ഥാനമാക്കി വൈഫൈ റോം സ്‌കാനുകൾ അനുവദിക്കുക/അനുവദിക്കാതിരിക്കുക"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"ലോഗർ ബഫർ വലുപ്പം"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"ഓരോ ലോഗ് ബഫറിനും വലുപ്പം തിരഞ്ഞെടുക്കൂ"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"ലോഗർ സ്ഥിര സ്റ്റോറേജ് മായ്ക്കണോ?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"സ്ഥിര ലോഗർ ഉപയോഗിച്ച് ഞങ്ങൾ തുടർന്നങ്ങോട്ട് നിരീക്ഷിക്കാത്ത സാഹചര്യത്തിൽ, നിങ്ങളുടെ ഉപകരണത്തിൽ നിലവിലുള്ള ലോഗർ വിവരങ്ങൾ ഞങ്ങൾ മായ്ക്കേണ്ടതുണ്ട്."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"ഉപകരണത്തിൽ സ്ഥിരമായി ലോഗർ വിവരങ്ങൾ സംഭരിക്കുക"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"ഉപകരണത്തിൽ സ്ഥിരമായി സംഭരിക്കുന്നതിനുള്ള ലോഗ് ബഫറുകൾ തിരഞ്ഞെടുക്കുക"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB കോൺഫിഗറേഷൻ തിരഞ്ഞെടുക്കൂ"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB കോൺഫിഗറേഷൻ തിരഞ്ഞെടുക്കൂ"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"വ്യാജ ലൊക്കേഷനുകൾ അനുവദിക്കുക"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"വ്യാജ ലൊക്കേഷനുകൾ അനുവദിക്കുക"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"ആട്രിബ്യൂട്ട് പരിശോധന കാണൽ സജീവമാക്കൂ"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"പുതിയ Android DHCP ക്ലയന്റിനുപകരം Lollipop-ൽ നിന്ന് DHCP ക്ലയന്റ് ഉപയോഗിക്കുക."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"വൈഫൈ സജീവമാണെങ്കിലും, മൊബൈൽ ഡാറ്റ സജീവമായി നിർത്തുക (വേഗത്തിൽ നെറ്റ്‌വർക്ക് മാറുന്നതിനായി)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB ഡീബഗ്ഗുചെയ്യാൻ അനുവദിക്കണോ?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB ഡീബഗ്ഗിംഗ് വികസന ആവശ്യകതകൾക്ക് മാത്രമുള്ളതാണ്. നിങ്ങളുടെ കമ്പ്യൂട്ടറിനും ഉപകരണത്തിനുമിടയിൽ ഡാറ്റ പകർത്തുന്നതിനും അറിയിപ്പില്ലാതെ തന്നെ നിങ്ങളുടെ ഉപകരണത്തിൽ അപ്ലിക്കേഷനുകൾ ഇൻസ്‌റ്റാളുചെയ്യുന്നതിനും ലോഗ് ഡാറ്റ റീഡുചെയ്യുന്നതിനും ഇത് ഉപയോഗിക്കുക."</string>

@@ -18,6 +18,7 @@ package com.android.server;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 import com.android.internal.content.PackageMonitor;
+import com.android.internal.inputmethod.IInputContentUriToken;
 import com.android.internal.inputmethod.InputMethodSubtypeSwitchingController;
 import com.android.internal.inputmethod.InputMethodSubtypeSwitchingController.ImeSubtypeListItem;
 import com.android.internal.inputmethod.InputMethodUtils;
@@ -138,6 +139,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -178,6 +180,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     static final int MSG_SWITCH_IME = 3050;
 
     static final int MSG_HARD_KEYBOARD_SWITCH_CHANGED = 4000;
+
+    static final int MSG_SYSTEM_UNLOCK_USER = 5000;
 
     static final long TIME_TO_RECONNECT = 3 * 1000;
 
@@ -828,14 +832,14 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
 
         @Override
         public void onSwitchUser(@UserIdInt int userHandle) {
-            // Called on the system server's main looper thread.
+            // Called on ActivityManager thread.
             // TODO: Dispatch this to a worker thread as needed.
             mService.onSwitchUser(userHandle);
         }
 
         @Override
         public void onBootPhase(int phase) {
-            // Called on the system server's main looper thread.
+            // Called on ActivityManager thread.
             // TODO: Dispatch this to a worker thread as needed.
             if (phase == SystemService.PHASE_ACTIVITY_MANAGER_READY) {
                 StatusBarManagerService statusBarService = (StatusBarManagerService) ServiceManager
@@ -845,10 +849,10 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         }
 
         @Override
-        public void onUnlockUser(@UserIdInt int userHandle) {
-            // Called on the system server's main looper thread.
-            // TODO: Dispatch this to a worker thread as needed.
-            mService.onUnlockUser(userHandle);
+        public void onUnlockUser(final @UserIdInt int userHandle) {
+            // Called on ActivityManager thread.
+            mService.mHandler.sendMessage(mService.mHandler.obtainMessage(MSG_SYSTEM_UNLOCK_USER,
+                    userHandle /* arg1 */, 0 /* arg2 */));
         }
     }
 
@@ -3030,6 +3034,10 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             case MSG_HARD_KEYBOARD_SWITCH_CHANGED:
                 mHardKeyboardListener.handleHardKeyboardStatusChange(msg.arg1 == 1);
                 return true;
+            case MSG_SYSTEM_UNLOCK_USER:
+                final int userId = msg.arg1;
+                onUnlockUser(userId);
+                return true;
         }
         return false;
     }
@@ -3970,6 +3978,52 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             sb.append("Visible");
         }
         return sb.toString();
+    }
+
+    @Override
+    public IInputContentUriToken createInputContentUriToken(@Nullable IBinder token,
+            @Nullable Uri contentUri, @Nullable String packageName) {
+        if (!calledFromValidUser()) {
+            return null;
+        }
+
+        if (token == null) {
+            throw new NullPointerException("token");
+        }
+        if (packageName == null) {
+            throw new NullPointerException("packageName");
+        }
+        if (contentUri == null) {
+            throw new NullPointerException("contentUri");
+        }
+        final String contentUriScheme = contentUri.getScheme();
+        if (!"content".equals(contentUriScheme)) {
+            throw new InvalidParameterException("contentUri must have content scheme");
+        }
+
+        synchronized (mMethodMap) {
+            final int uid = Binder.getCallingUid();
+            if (mCurMethodId == null) {
+                return null;
+            }
+            if (mCurToken != token) {
+                Slog.e(TAG, "Ignoring createInputContentUriToken mCurToken=" + mCurToken
+                        + " token=" + token);
+                return null;
+            }
+            // We cannot simply distinguish a bad IME that reports an arbitrary package name from
+            // an unfortunate IME whose internal state is already obsolete due to the asynchronous
+            // nature of our system.  Let's compare it with our internal record.
+            if (!TextUtils.equals(mCurAttribute.packageName, packageName)) {
+                Slog.e(TAG, "Ignoring createInputContentUriToken mCurAttribute.packageName="
+                    + mCurAttribute.packageName + " packageName=" + packageName);
+                return null;
+            }
+            final int imeUserId = UserHandle.getUserId(uid);
+            final int appUserId = UserHandle.getUserId(mCurClient.uid);
+            return new InputContentUriTokenHandler(contentUri, uid, packageName, imeUserId,
+                    appUserId);
+        }
     }
 
     @Override

@@ -16,12 +16,17 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.app.ActivityManagerNative;
+import android.app.IActivityManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
+import android.os.RemoteException;
 import android.os.SystemProperties;
+import android.os.Trace;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,11 +56,16 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
     private static final String LOCKSCREEN_ROTATION =
             "cmsystem:" + CMSettings.System.LOCKSCREEN_ROTATION;
 
+    private static final String TAG = "StatusBarWindowManager";
+
     private final Context mContext;
     private final WindowManager mWindowManager;
+    private final IActivityManager mActivityManager;
     private View mStatusBarView;
     private WindowManager.LayoutParams mLp;
     private WindowManager.LayoutParams mLpChanged;
+    private boolean mHasTopUi;
+    private boolean mHasTopUiChanged;
     private int mBarHeight;
     private boolean mKeyguardScreenRotation;
     private final float mScreenBrightnessDoze;
@@ -64,6 +74,7 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
     public StatusBarWindowManager(Context context) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        mActivityManager = ActivityManagerNative.getDefault();
         mKeyguardScreenRotation = shouldEnableKeyguardScreenRotation();
         mScreenBrightnessDoze = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_screenBrightnessDoze) / 255f;
@@ -176,7 +187,11 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
     }
 
     private void applyFitsSystemWindows(State state) {
-        mStatusBarView.setFitsSystemWindows(!state.isKeyguardShowingAndNotOccluded());
+        boolean fitsSystemWindows = !state.isKeyguardShowingAndNotOccluded();
+        if (mStatusBarView.getFitsSystemWindows() != fitsSystemWindows) {
+            mStatusBarView.setFitsSystemWindows(fitsSystemWindows);
+            mStatusBarView.requestApplyInsets();
+        }
     }
 
     private void applyUserActivityTimeout(State state) {
@@ -212,8 +227,17 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
         applyFitsSystemWindows(state);
         applyModalFlag(state);
         applyBrightness(state);
+        applyHasTopUi(state);
         if (mLp.copyFrom(mLpChanged) != 0) {
             mWindowManager.updateViewLayout(mStatusBarView, mLp);
+        }
+        if (mHasTopUi != mHasTopUiChanged) {
+            try {
+                mActivityManager.setHasTopUi(mHasTopUiChanged);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Failed to call setHasTopUi", e);
+            }
+            mHasTopUi = mHasTopUiChanged;
         }
     }
 
@@ -241,6 +265,10 @@ public class StatusBarWindowManager implements RemoteInputController.Callback,
         } else {
             mLpChanged.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
         }
+    }
+
+    private void applyHasTopUi(State state) {
+        mHasTopUiChanged = isExpanded(state);
     }
 
     public void setKeyguardShowing(boolean showing) {

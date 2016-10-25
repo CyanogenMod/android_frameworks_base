@@ -103,6 +103,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManagerInternal;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.UserHandle;
@@ -174,6 +175,7 @@ class ActivityStarter {
     private boolean mNoAnimation;
     private boolean mKeepCurTransition;
     private boolean mAvoidMoveToFront;
+    private boolean mPowerHintSent;
 
     private IVoiceInteractionSession mVoiceSession;
     private IVoiceInteractor mVoiceInteractor;
@@ -939,13 +941,15 @@ class ActivityStarter {
             throw new IllegalArgumentException("intents are length different than resolvedTypes");
         }
 
+        final int realCallingPid = Binder.getCallingPid();
+        final int realCallingUid = Binder.getCallingUid();
 
         int callingPid;
         if (callingUid >= 0) {
             callingPid = -1;
         } else if (caller == null) {
-            callingPid = Binder.getCallingPid();
-            callingUid = Binder.getCallingUid();
+            callingPid = realCallingPid;
+            callingUid = realCallingUid;
         } else {
             callingPid = callingUid = -1;
         }
@@ -986,7 +990,8 @@ class ActivityStarter {
                             i == intents.length - 1 ? bOptions : null);
                     int res = startActivityLocked(caller, intent, null /*ephemeralIntent*/,
                             resolvedTypes[i], aInfo, null /*rInfo*/, null, null, resultTo, null, -1,
-                            callingPid, callingUid, callingPackage, callingPid, callingUid, 0,
+                            callingPid, callingUid, callingPackage,
+                            realCallingPid, realCallingUid, 0,
                             options, false, componentSpecified, outActivity, null, null);
                     if (res < 0) {
                         return res;
@@ -1000,6 +1005,28 @@ class ActivityStarter {
         }
 
         return START_SUCCESS;
+    }
+
+    void sendPowerHintForLaunchStartIfNeeded(boolean forceSend) {
+        // Trigger launch power hint if activity being launched is not in the current task
+        final ActivityStack focusStack = mSupervisor.getFocusedStack();
+        final ActivityRecord curTop = (focusStack == null)
+            ? null : focusStack.topRunningNonDelayedActivityLocked(mNotTop);
+        if ((forceSend || (!mPowerHintSent && curTop != null &&
+                curTop.task != null && mStartActivity != null &&
+                curTop.task != mStartActivity.task )) &&
+                mService.mLocalPowerManager != null) {
+            mService.mLocalPowerManager.powerHint(PowerManagerInternal.POWER_HINT_LAUNCH, 1);
+            mPowerHintSent = true;
+        }
+    }
+
+    void sendPowerHintForLaunchEndIfNeeded() {
+        // Trigger launch power hint if activity is launched
+        if (mPowerHintSent && mService.mLocalPowerManager != null) {
+            mService.mLocalPowerManager.powerHint(PowerManagerInternal.POWER_HINT_LAUNCH, 0);
+            mPowerHintSent = false;
+        }
     }
 
     private int startActivityUnchecked(final ActivityRecord r, ActivityRecord sourceRecord,
@@ -1062,6 +1089,8 @@ class ActivityStarter {
                             mStartActivity.launchedFromPackage);
                 }
             }
+
+            sendPowerHintForLaunchStartIfNeeded(false /* forceSend */);
 
             mReusedActivity = setTargetStackAndMoveToFrontIfNeeded(mReusedActivity);
 
@@ -1141,7 +1170,11 @@ class ActivityStarter {
                 return START_RETURN_LOCK_TASK_MODE_VIOLATION;
             }
             if (!mMovedOtherTask) {
-                updateTaskReturnToType(mStartActivity.task, mLaunchFlags, topStack);
+                // If stack id is specified in activity options, usually it means that activity is
+                // launched not from currently focused stack (e.g. from SysUI or from shell) - in
+                // that case we check the target stack.
+                updateTaskReturnToType(mStartActivity.task, mLaunchFlags,
+                        preferredLaunchStackId != INVALID_STACK_ID ? mTargetStack : topStack);
             }
         } else if (mSourceRecord != null) {
             if (mSupervisor.isLockTaskModeViolation(mSourceRecord.task)) {
@@ -1184,6 +1217,9 @@ class ActivityStarter {
         ActivityStack.logStartActivity(
                 EventLogTags.AM_CREATE_ACTIVITY, mStartActivity, mStartActivity.task);
         mTargetStack.mLastPausedActivity = null;
+
+        sendPowerHintForLaunchStartIfNeeded(false /* forceSend */);
+
         mTargetStack.startActivityLocked(mStartActivity, newTask, mKeepCurTransition, mOptions);
         if (mDoResume) {
             if (!mLaunchTaskBehind) {

@@ -38,7 +38,6 @@ import static android.content.pm.PackageManager.FLAG_PERMISSION_USER_SET;
 import static android.content.pm.PackageManager.INSTALL_EXTERNAL;
 import static android.content.pm.PackageManager.INSTALL_FAILED_ALREADY_EXISTS;
 import static android.content.pm.PackageManager.INSTALL_FAILED_CONFLICTING_PROVIDER;
-import static android.content.pm.PackageManager.INSTALL_FAILED_DEXOPT;
 import static android.content.pm.PackageManager.INSTALL_FAILED_DUPLICATE_PACKAGE;
 import static android.content.pm.PackageManager.INSTALL_FAILED_DUPLICATE_PERMISSION;
 import static android.content.pm.PackageManager.INSTALL_FAILED_EPHEMERAL_INVALID;
@@ -79,8 +78,6 @@ import static android.content.pm.PackageManager.PERMISSION_DENIED;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.content.pm.PackageParser.PARSE_IS_PRIVILEGED;
 import static android.content.pm.PackageParser.isApkFile;
-import static android.os.Process.PACKAGE_INFO_GID;
-import static android.os.Process.SYSTEM_UID;
 import static android.os.Trace.TRACE_TAG_PACKAGE_MANAGER;
 import static android.system.OsConstants.O_CREAT;
 import static android.system.OsConstants.O_RDWR;
@@ -98,6 +95,7 @@ import static com.android.server.pm.InstructionSets.getPreferredInstructionSet;
 import static com.android.server.pm.InstructionSets.getPrimaryInstructionSet;
 import static com.android.server.pm.PackageManagerServiceCompilerMapping.getCompilerFilterForReason;
 import static com.android.server.pm.PackageManagerServiceCompilerMapping.getFullCompilerFilter;
+import static com.android.server.pm.PackageManagerServiceCompilerMapping.getNonProfileGuidedCompilerFilter;
 import static com.android.server.pm.PermissionsState.PERMISSION_OPERATION_FAILURE;
 import static com.android.server.pm.PermissionsState.PERMISSION_OPERATION_SUCCESS;
 import static com.android.server.pm.PermissionsState.PERMISSION_OPERATION_SUCCESS_GIDS_CHANGED;
@@ -105,7 +103,6 @@ import static com.android.server.pm.PermissionsState.PERMISSION_OPERATION_SUCCES
 import android.Manifest;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
-import android.annotation.UserIdInt;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.AlarmManager;
@@ -130,6 +127,7 @@ import android.content.pm.AppsQueryHelper;
 import android.content.pm.ComponentInfo;
 import android.content.pm.EphemeralApplicationInfo;
 import android.content.pm.EphemeralResolveInfo;
+import android.content.pm.EphemeralResolveInfo.EphemeralDigest;
 import android.content.pm.EphemeralResolveInfo.EphemeralResolveIntentInfo;
 import android.content.pm.FeatureInfo;
 import android.content.pm.IOnPermissionsChangeListener;
@@ -202,6 +200,7 @@ import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
 import android.os.storage.VolumeInfo;
 import android.os.storage.VolumeRecord;
+import android.provider.Settings.Global;
 import android.security.KeyStore;
 import android.security.SystemKeyStore;
 import android.system.ErrnoException;
@@ -210,7 +209,6 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
-import android.util.AtomicFile;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.ExceptionUtils;
@@ -272,7 +270,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -285,7 +282,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.DigestInputStream;
@@ -311,7 +307,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Keep track of all those APKs everywhere.
@@ -369,14 +364,14 @@ public class PackageManagerService extends IPackageManager.Stub {
     static final boolean DEBUG_DEXOPT = false;
 
     private static final boolean DEBUG_ABI_SELECTION = false;
-    private static final boolean DEBUG_EPHEMERAL = false;
+    private static final boolean DEBUG_EPHEMERAL = Build.IS_DEBUGGABLE;
     private static final boolean DEBUG_TRIAGED_MISSING = false;
     private static final boolean DEBUG_APP_DATA = false;
     private static final boolean DEBUG_PROTECTED = false;
 
     static final boolean CLEAR_RUNTIME_PERMISSIONS_ON_UPGRADE = false;
 
-    private static final boolean DISABLE_EPHEMERAL_APPS = true;
+    private static final boolean DISABLE_EPHEMERAL_APPS = !Build.IS_DEBUGGABLE;
 
     private static final int RADIO_UID = Process.PHONE_UID;
     private static final int LOG_UID = Process.LOG_UID;
@@ -469,6 +464,9 @@ public class PackageManagerService extends IPackageManager.Stub {
     private static final String PACKAGE_MIME_TYPE = "application/vnd.android.package-archive";
 
     private static final String VENDOR_OVERLAY_DIR = "/vendor/overlay";
+
+    private static int DEFAULT_EPHEMERAL_HASH_PREFIX_MASK = 0xFFFFF000;
+    private static int DEFAULT_EPHEMERAL_HASH_PREFIX_COUNT = 5;
 
     /** Permission grant: not grant the permission. */
     private static final int GRANT_DENIED = 1;
@@ -638,9 +636,9 @@ public class PackageManagerService extends IPackageManager.Stub {
     @GuardedBy("mPackages")
     final ArraySet<String> mFrozenPackages = new ArraySet<>();
 
-    final ProtectedPackages mProtectedPackages = new ProtectedPackages();
+    final ProtectedPackages mProtectedPackages;
 
-    boolean mRestoredSettings;
+    boolean mFirstBoot;
 
     // System configuration read by SystemConfig.
     final int[] mGlobalGids;
@@ -754,8 +752,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final SparseArray<IntentFilterVerificationState> mIntentFilterVerificationStates
             = new SparseArray<IntentFilterVerificationState>();
 
-    final DefaultPermissionGrantPolicy mDefaultPermissionPolicy =
-            new DefaultPermissionGrantPolicy(this);
+    final DefaultPermissionGrantPolicy mDefaultPermissionPolicy;
 
     // List of packages names to keep cached, even if they are uninstalled for all users
     private List<String> mKeepUninstalledPackages;
@@ -1146,204 +1143,7 @@ public class PackageManagerService extends IPackageManager.Stub {
     final @NonNull String mSharedSystemSharedLibraryPackageName;
 
     private final PackageUsage mPackageUsage = new PackageUsage();
-
-    private class PackageUsage {
-        private static final int WRITE_INTERVAL
-            = (DEBUG_DEXOPT) ? 0 : 30*60*1000; // 30m in ms
-
-        private final Object mFileLock = new Object();
-        private final AtomicLong mLastWritten = new AtomicLong(0);
-        private final AtomicBoolean mBackgroundWriteRunning = new AtomicBoolean(false);
-
-        private boolean mIsHistoricalPackageUsageAvailable = true;
-
-        boolean isHistoricalPackageUsageAvailable() {
-            return mIsHistoricalPackageUsageAvailable;
-        }
-
-        void write(boolean force) {
-            if (force) {
-                writeInternal();
-                return;
-            }
-            if (SystemClock.elapsedRealtime() - mLastWritten.get() < WRITE_INTERVAL
-                && !DEBUG_DEXOPT) {
-                return;
-            }
-            if (mBackgroundWriteRunning.compareAndSet(false, true)) {
-                new Thread("PackageUsage_DiskWriter") {
-                    @Override
-                    public void run() {
-                        try {
-                            writeInternal();
-                        } finally {
-                            mBackgroundWriteRunning.set(false);
-                        }
-                    }
-                }.start();
-            }
-        }
-
-        private void writeInternal() {
-            synchronized (mPackages) {
-                synchronized (mFileLock) {
-                    AtomicFile file = getFile();
-                    FileOutputStream f = null;
-                    try {
-                        f = file.startWrite();
-                        BufferedOutputStream out = new BufferedOutputStream(f);
-                        FileUtils.setPermissions(file.getBaseFile().getPath(),
-                                0640, SYSTEM_UID, PACKAGE_INFO_GID);
-                        StringBuilder sb = new StringBuilder();
-
-                        sb.append(USAGE_FILE_MAGIC_VERSION_1);
-                        sb.append('\n');
-                        out.write(sb.toString().getBytes(StandardCharsets.US_ASCII));
-
-                        for (PackageParser.Package pkg : mPackages.values()) {
-                            if (pkg.getLatestPackageUseTimeInMills() == 0L) {
-                                continue;
-                            }
-                            sb.setLength(0);
-                            sb.append(pkg.packageName);
-                            for (long usageTimeInMillis : pkg.mLastPackageUsageTimeInMills) {
-                                sb.append(' ');
-                                sb.append(usageTimeInMillis);
-                            }
-                            sb.append('\n');
-                            out.write(sb.toString().getBytes(StandardCharsets.US_ASCII));
-                        }
-                        out.flush();
-                        file.finishWrite(f);
-                    } catch (IOException e) {
-                        if (f != null) {
-                            file.failWrite(f);
-                        }
-                        Log.e(TAG, "Failed to write package usage times", e);
-                    }
-                }
-            }
-            mLastWritten.set(SystemClock.elapsedRealtime());
-        }
-
-        void readLP() {
-            synchronized (mFileLock) {
-                AtomicFile file = getFile();
-                BufferedInputStream in = null;
-                try {
-                    in = new BufferedInputStream(file.openRead());
-                    StringBuffer sb = new StringBuffer();
-
-                    String firstLine = readLine(in, sb);
-                    if (firstLine == null) {
-                        // Empty file. Do nothing.
-                    } else if (USAGE_FILE_MAGIC_VERSION_1.equals(firstLine)) {
-                        readVersion1LP(in, sb);
-                    } else {
-                        readVersion0LP(in, sb, firstLine);
-                    }
-                } catch (FileNotFoundException expected) {
-                    mIsHistoricalPackageUsageAvailable = false;
-                } catch (IOException e) {
-                    Log.w(TAG, "Failed to read package usage times", e);
-                } finally {
-                    IoUtils.closeQuietly(in);
-                }
-            }
-            mLastWritten.set(SystemClock.elapsedRealtime());
-        }
-
-        private void readVersion0LP(InputStream in, StringBuffer sb, String firstLine)
-                throws IOException {
-            // Initial version of the file had no version number and stored one
-            // package-timestamp pair per line.
-            // Note that the first line has already been read from the InputStream.
-            for (String line = firstLine; line != null; line = readLine(in, sb)) {
-                String[] tokens = line.split(" ");
-                if (tokens.length != 2) {
-                    throw new IOException("Failed to parse " + line +
-                            " as package-timestamp pair.");
-                }
-
-                String packageName = tokens[0];
-                PackageParser.Package pkg = mPackages.get(packageName);
-                if (pkg == null) {
-                    continue;
-                }
-
-                long timestamp = parseAsLong(tokens[1]);
-                for (int reason = 0;
-                        reason < PackageManager.NOTIFY_PACKAGE_USE_REASONS_COUNT;
-                        reason++) {
-                    pkg.mLastPackageUsageTimeInMills[reason] = timestamp;
-                }
-            }
-        }
-
-        private void readVersion1LP(InputStream in, StringBuffer sb) throws IOException {
-            // Version 1 of the file started with the corresponding version
-            // number and then stored a package name and eight timestamps per line.
-            String line;
-            while ((line = readLine(in, sb)) != null) {
-                String[] tokens = line.split(" ");
-                if (tokens.length != PackageManager.NOTIFY_PACKAGE_USE_REASONS_COUNT + 1) {
-                    throw new IOException("Failed to parse " + line + " as a timestamp array.");
-                }
-
-                String packageName = tokens[0];
-                PackageParser.Package pkg = mPackages.get(packageName);
-                if (pkg == null) {
-                    continue;
-                }
-
-                for (int reason = 0;
-                        reason < PackageManager.NOTIFY_PACKAGE_USE_REASONS_COUNT;
-                        reason++) {
-                    pkg.mLastPackageUsageTimeInMills[reason] = parseAsLong(tokens[reason + 1]);
-                }
-            }
-        }
-
-        private long parseAsLong(String token) throws IOException {
-            try {
-                return Long.parseLong(token);
-            } catch (NumberFormatException e) {
-                throw new IOException("Failed to parse " + token + " as a long.", e);
-            }
-        }
-
-        private String readLine(InputStream in, StringBuffer sb) throws IOException {
-            return readToken(in, sb, '\n');
-        }
-
-        private String readToken(InputStream in, StringBuffer sb, char endOfToken)
-                throws IOException {
-            sb.setLength(0);
-            while (true) {
-                int ch = in.read();
-                if (ch == -1) {
-                    if (sb.length() == 0) {
-                        return null;
-                    }
-                    throw new IOException("Unexpected EOF");
-                }
-                if (ch == endOfToken) {
-                    return sb.toString();
-                }
-                sb.append((char)ch);
-            }
-        }
-
-        private AtomicFile getFile() {
-            File dataDir = Environment.getDataDirectory();
-            File systemDir = new File(dataDir, "system");
-            File fname = new File(systemDir, "package-usage.list");
-            return new AtomicFile(fname);
-        }
-
-        private static final String USAGE_FILE_MAGIC = "PACKAGE_USAGE__VERSION_";
-        private static final String USAGE_FILE_MAGIC_VERSION_1 = USAGE_FILE_MAGIC + "1";
-    }
+    private final CompilerStats mCompilerStats = new CompilerStats();
 
     class PackageHandler extends Handler {
         private boolean mBound = false;
@@ -2193,10 +1993,6 @@ public class PackageManagerService extends IPackageManager.Stub {
         PackageManagerService m = new PackageManagerService(context, installer,
                 factoryTest, onlyCore);
         m.enableSystemUserPackages();
-        // Disable any carrier apps. We do this very early in boot to prevent the apps from being
-        // disabled after already being started.
-        CarrierAppUtils.disableCarrierAppsUntilPrivileged(context.getOpPackageName(), m,
-                UserHandle.USER_SYSTEM);
         ServiceManager.addService("package", m);
         return m;
     }
@@ -2248,6 +2044,34 @@ public class PackageManagerService extends IPackageManager.Stub {
         DisplayManager displayManager = (DisplayManager) context.getSystemService(
                 Context.DISPLAY_SERVICE);
         displayManager.getDisplay(Display.DEFAULT_DISPLAY).getMetrics(metrics);
+    }
+
+    /**
+     * Requests that files preopted on a secondary system partition be copied to the data partition
+     * if possible.  Note that the actual copying of the files is accomplished by init for security
+     * reasons. This simply requests that the copy takes place and awaits confirmation of its
+     * completion. See platform/system/extras/cppreopt/ for the implementation of the actual copy.
+     */
+    private static void requestCopyPreoptedFiles() {
+        final int WAIT_TIME_MS = 100;
+        final String CP_PREOPT_PROPERTY = "sys.cppreopt";
+        if (SystemProperties.getInt("ro.cp_system_other_odex", 0) == 1) {
+            SystemProperties.set(CP_PREOPT_PROPERTY, "requested");
+            // We will wait for up to 100 seconds.
+            final long timeEnd = SystemClock.uptimeMillis() + 100 * 1000;
+            while (!SystemProperties.get(CP_PREOPT_PROPERTY).equals("finished")) {
+                try {
+                    Thread.sleep(WAIT_TIME_MS);
+                } catch (InterruptedException e) {
+                    // Do nothing
+                }
+                if (SystemClock.uptimeMillis() > timeEnd) {
+                    SystemProperties.set(CP_PREOPT_PROPERTY, "timed-out");
+                    Slog.wtf(TAG, "cppreopt did not finish!");
+                    break;
+                }
+            }
+        }
     }
 
     public PackageManagerService(Context context, Installer installer,
@@ -2333,6 +2157,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         mSystemPermissions = systemConfig.getSystemPermissions();
         mAvailableFeatures = systemConfig.getAvailableFeatures();
         mSignatureAllowances = systemConfig.getSignatureAllowances();
+        mProtectedPackages = new ProtectedPackages(mContext);
 
 //        synchronized (mInstallLock) {
         // writer
@@ -2343,6 +2168,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             mHandler = new PackageHandler(mHandlerThread.getLooper());
             mProcessLoggingHandler = new ProcessLoggingHandler();
             Watchdog.getInstance().addThread(mHandler, WATCHDOG_TIMEOUT);
+
+            mDefaultPermissionPolicy = new DefaultPermissionGrantPolicy(this);
 
             File dataDir = Environment.getDataDirectory();
             mAppInstallDir = new File(dataDir, "app");
@@ -2377,7 +2204,11 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             mFoundPolicyFile = SELinuxMMAC.readInstallPolicy();
 
-            mRestoredSettings = mSettings.readLPw(sUserManager.getUsers(false));
+            mFirstBoot = !mSettings.readLPw(sUserManager.getUsers(false));
+
+            if (mFirstBoot) {
+                requestCopyPreoptedFiles();
+            }
 
             String customResolverActivity = Resources.getSystem().getString(
                     R.string.config_customResolverActivity);
@@ -2761,7 +2592,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             // Now that we know all the packages we are keeping,
             // read and update their last usage times.
-            mPackageUsage.readLP();
+            mPackageUsage.read(mPackages);
+            mCompilerStats.read();
 
             EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SCAN_END,
                     SystemClock.uptimeMillis());
@@ -2787,7 +2619,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             // If this is the first boot or an update from pre-M, and it is a normal
             // boot, then we need to initialize the default preferred apps across
             // all defined users.
-            if (!onlyCore && (mPromoteSystemApps || !mRestoredSettings)) {
+            if (!onlyCore && (mPromoteSystemApps || mFirstBoot)) {
                 for (UserInfo user : sUserManager.getUsers(true)) {
                     mSettings.applyDefaultPreferredAppsLPw(this, user.id);
                     applyFactoryDefaultBrowserLPw(user.id);
@@ -2885,7 +2717,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
 
-                int[] stats = performDexOpt(coreApps, false,
+                int[] stats = performDexOptUpgrade(coreApps, false,
                         getCompilerFilterForReason(REASON_CORE_APP));
 
                 final int elapsedTimeSeconds =
@@ -2977,7 +2809,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     @Override
     public boolean isFirstBoot() {
-        return !mRestoredSettings;
+        return mFirstBoot;
     }
 
     @Override
@@ -3064,17 +2896,20 @@ public class PackageManagerService extends IPackageManager.Stub {
     private @Nullable ComponentName getEphemeralResolverLPr() {
         final String[] packageArray =
                 mContext.getResources().getStringArray(R.array.config_ephemeralResolverPackage);
-        if (packageArray.length == 0) {
+        if (packageArray.length == 0 && !Build.IS_DEBUGGABLE) {
             if (DEBUG_EPHEMERAL) {
                 Slog.d(TAG, "Ephemeral resolver NOT found; empty package list");
             }
             return null;
         }
 
+        final int resolveFlags =
+                MATCH_DIRECT_BOOT_AWARE
+                | MATCH_DIRECT_BOOT_UNAWARE
+                | (!Build.IS_DEBUGGABLE ? MATCH_SYSTEM_ONLY : 0);
         final Intent resolverIntent = new Intent(Intent.ACTION_RESOLVE_EPHEMERAL_PACKAGE);
         final List<ResolveInfo> resolvers = queryIntentServicesInternal(resolverIntent, null,
-                MATCH_SYSTEM_ONLY | MATCH_DIRECT_BOOT_AWARE | MATCH_DIRECT_BOOT_UNAWARE,
-                UserHandle.USER_SYSTEM);
+                resolveFlags, UserHandle.USER_SYSTEM);
 
         final int N = resolvers.size();
         if (N == 0) {
@@ -3093,7 +2928,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
 
             final String packageName = info.serviceInfo.packageName;
-            if (!possiblePackages.contains(packageName)) {
+            if (!possiblePackages.contains(packageName) && !Build.IS_DEBUGGABLE) {
                 if (DEBUG_EPHEMERAL) {
                     Slog.d(TAG, "Ephemeral resolver not in allowed package list;"
                             + " pkg: " + packageName + ", info:" + info);
@@ -3118,9 +2953,12 @@ public class PackageManagerService extends IPackageManager.Stub {
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.setDataAndType(Uri.fromFile(new File("foo.apk")), PACKAGE_MIME_TYPE);
 
+        final int resolveFlags =
+                MATCH_DIRECT_BOOT_AWARE
+                | MATCH_DIRECT_BOOT_UNAWARE
+                | (!Build.IS_DEBUGGABLE ? MATCH_SYSTEM_ONLY : 0);
         final List<ResolveInfo> matches = queryIntentActivitiesInternal(intent, PACKAGE_MIME_TYPE,
-                MATCH_SYSTEM_ONLY | MATCH_DIRECT_BOOT_AWARE | MATCH_DIRECT_BOOT_UNAWARE,
-                UserHandle.USER_SYSTEM);
+                resolveFlags, UserHandle.USER_SYSTEM);
         if (matches.size() == 0) {
             return null;
         } else if (matches.size() == 1) {
@@ -3295,8 +3133,12 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         final PermissionsState permissionsState = ps.getPermissionsState();
 
-        final int[] gids = permissionsState.computeGids(userId);
-        final Set<String> permissions = permissionsState.getPermissions(userId);
+        // Compute GIDs only if requested
+        final int[] gids = (flags & PackageManager.GET_GIDS) == 0
+                ? EMPTY_INT_ARRAY : permissionsState.computeGids(userId);
+        // Compute granted permissions only if package has requested permissions
+        final Set<String> permissions = ArrayUtils.isEmpty(p.requestedPermissions)
+                ? Collections.<String>emptySet() : permissionsState.getPermissions(userId);
         final PackageUserState state = ps.readUserState(userId);
 
         return PackageParser.generatePackageInfo(p, gids, flags,
@@ -5132,48 +4974,45 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     private EphemeralResolveInfo getEphemeralResolveInfo(Intent intent, String resolvedType,
             int userId) {
-        MessageDigest digest = null;
-        try {
-            digest = MessageDigest.getInstance(EphemeralResolveInfo.SHA_ALGORITHM);
-        } catch (NoSuchAlgorithmException e) {
-            // If we can't create a digest, ignore ephemeral apps.
-            return null;
-        }
-
-        final byte[] hostBytes = intent.getData().getHost().getBytes();
-        final byte[] digestBytes = digest.digest(hostBytes);
-        int shaPrefix =
-                digestBytes[0] << 24
-                | digestBytes[1] << 16
-                | digestBytes[2] << 8
-                | digestBytes[3] << 0;
+        final int ephemeralPrefixMask = Global.getInt(mContext.getContentResolver(),
+                Global.EPHEMERAL_HASH_PREFIX_MASK, DEFAULT_EPHEMERAL_HASH_PREFIX_MASK);
+        final int ephemeralPrefixCount = Global.getInt(mContext.getContentResolver(),
+                Global.EPHEMERAL_HASH_PREFIX_COUNT, DEFAULT_EPHEMERAL_HASH_PREFIX_COUNT);
+        final EphemeralDigest digest = new EphemeralDigest(intent.getData(), ephemeralPrefixMask,
+                ephemeralPrefixCount);
+        final int[] shaPrefix = digest.getDigestPrefix();
+        final byte[][] digestBytes = digest.getDigestBytes();
         final List<EphemeralResolveInfo> ephemeralResolveInfoList =
-                mEphemeralResolverConnection.getEphemeralResolveInfoList(shaPrefix);
+                mEphemeralResolverConnection.getEphemeralResolveInfoList(
+                        shaPrefix, ephemeralPrefixMask);
         if (ephemeralResolveInfoList == null || ephemeralResolveInfoList.size() == 0) {
             // No hash prefix match; there are no ephemeral apps for this domain.
             return null;
         }
-        for (int i = ephemeralResolveInfoList.size() - 1; i >= 0; --i) {
-            EphemeralResolveInfo ephemeralApplication = ephemeralResolveInfoList.get(i);
-            if (!Arrays.equals(digestBytes, ephemeralApplication.getDigestBytes())) {
-                continue;
-            }
-            final List<IntentFilter> filters = ephemeralApplication.getFilters();
-            // No filters; this should never happen.
-            if (filters.isEmpty()) {
-                continue;
-            }
-            // We have a domain match; resolve the filters to see if anything matches.
-            final EphemeralIntentResolver ephemeralResolver = new EphemeralIntentResolver();
-            for (int j = filters.size() - 1; j >= 0; --j) {
-                final EphemeralResolveIntentInfo intentInfo =
-                        new EphemeralResolveIntentInfo(filters.get(j), ephemeralApplication);
-                ephemeralResolver.addFilter(intentInfo);
-            }
-            List<EphemeralResolveInfo> matchedResolveInfoList = ephemeralResolver.queryIntent(
-                    intent, resolvedType, false /*defaultOnly*/, userId);
-            if (!matchedResolveInfoList.isEmpty()) {
-                return matchedResolveInfoList.get(0);
+
+        // Go in reverse order so we match the narrowest scope first.
+        for (int i = shaPrefix.length - 1; i >= 0 ; --i) {
+            for (EphemeralResolveInfo ephemeralApplication : ephemeralResolveInfoList) {
+                if (!Arrays.equals(digestBytes[i], ephemeralApplication.getDigestBytes())) {
+                    continue;
+                }
+                final List<IntentFilter> filters = ephemeralApplication.getFilters();
+                // No filters; this should never happen.
+                if (filters.isEmpty()) {
+                    continue;
+                }
+                // We have a domain match; resolve the filters to see if anything matches.
+                final EphemeralIntentResolver ephemeralResolver = new EphemeralIntentResolver();
+                for (int j = filters.size() - 1; j >= 0; --j) {
+                    final EphemeralResolveIntentInfo intentInfo =
+                            new EphemeralResolveIntentInfo(filters.get(j), ephemeralApplication);
+                    ephemeralResolver.addFilter(intentInfo);
+                }
+                List<EphemeralResolveInfo> matchedResolveInfoList = ephemeralResolver.queryIntent(
+                        intent, resolvedType, false /*defaultOnly*/, userId);
+                if (!matchedResolveInfoList.isEmpty()) {
+                    return matchedResolveInfoList.get(0);
+                }
             }
         }
         // Hash or filter mis-match; no ephemeral apps for this domain.
@@ -6933,11 +6772,26 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
+    private long getLastModifiedTime(PackageParser.Package pkg, File srcFile) {
+        if (srcFile.isDirectory()) {
+            final File baseFile = new File(pkg.baseCodePath);
+            long maxModifiedTime = baseFile.lastModified();
+            if (pkg.splitCodePaths != null) {
+                for (int i = pkg.splitCodePaths.length - 1; i >=0; --i) {
+                    final File splitFile = new File(pkg.splitCodePaths[i]);
+                    maxModifiedTime = Math.max(maxModifiedTime, splitFile.lastModified());
+                }
+            }
+            return maxModifiedTime;
+        }
+        return srcFile.lastModified();
+    }
+
     private void collectCertificatesLI(PackageSetting ps, PackageParser.Package pkg, File srcFile,
             final int policyFlags) throws PackageManagerException {
         if (ps != null
                 && ps.codePath.equals(srcFile)
-                && ps.timeStamp == srcFile.lastModified()
+                && ps.timeStamp == getLastModifiedTime(pkg, srcFile)
                 && !isCompatSignatureUpdateNeeded(pkg)
                 && !isRecoverSignatureUpdateNeeded(pkg)) {
             long mSigningKeySetId = ps.keySetData.getProperSigningKeySet();
@@ -7385,22 +7239,17 @@ public class PackageManagerService extends IPackageManager.Stub {
         try {
             IMountService ms = PackageHelper.getMountService();
             if (ms != null) {
-                final boolean isUpgrade = isUpgrade();
-                boolean doTrim = isUpgrade;
-                if (doTrim) {
-                    Slog.w(TAG, "Running disk maintenance immediately due to system update");
-                } else {
-                    final long interval = android.provider.Settings.Global.getLong(
-                            mContext.getContentResolver(),
-                            android.provider.Settings.Global.FSTRIM_MANDATORY_INTERVAL,
-                            DEFAULT_MANDATORY_FSTRIM_INTERVAL);
-                    if (interval > 0) {
-                        final long timeSinceLast = System.currentTimeMillis() - ms.lastMaintenance();
-                        if (timeSinceLast > interval) {
-                            doTrim = true;
-                            Slog.w(TAG, "No disk maintenance in " + timeSinceLast
-                                    + "; running immediately");
-                        }
+                boolean doTrim = false;
+                final long interval = android.provider.Settings.Global.getLong(
+                        mContext.getContentResolver(),
+                        android.provider.Settings.Global.FSTRIM_MANDATORY_INTERVAL,
+                        DEFAULT_MANDATORY_FSTRIM_INTERVAL);
+                if (interval > 0) {
+                    final long timeSinceLast = System.currentTimeMillis() - ms.lastMaintenance();
+                    if (timeSinceLast > interval) {
+                        doTrim = true;
+                        Slog.w(TAG, "No disk maintenance in " + timeSinceLast
+                                + "; running immediately");
                     }
                 }
                 if (doTrim) {
@@ -7447,7 +7296,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         final long startTime = System.nanoTime();
-        final int[] stats = performDexOpt(pkgs, mIsPreNUpgrade /* showDialog */,
+        final int[] stats = performDexOptUpgrade(pkgs, mIsPreNUpgrade /* showDialog */,
                     getCompilerFilterForReason(causeFirstBoot ? REASON_FIRST_BOOT : REASON_BOOT));
 
         final int elapsedTimeSeconds =
@@ -7466,7 +7315,7 @@ public class PackageManagerService extends IPackageManager.Stub {
      * which are (in order) {@code numberOfPackagesOptimized}, {@code numberOfPackagesSkipped}
      * and {@code numberOfPackagesFailed}.
      */
-    private int[] performDexOpt(List<PackageParser.Package> pkgs, boolean showDialog,
+    private int[] performDexOptUpgrade(List<PackageParser.Package> pkgs, boolean showDialog,
             String compilerFilter) {
 
         int numberOfPackagesVisited = 0;
@@ -7498,6 +7347,19 @@ public class PackageManagerService extends IPackageManager.Stub {
                                     numberOfPackagesVisited, numberOfPackagesToDexopt), true);
                 } catch (RemoteException e) {
                 }
+            }
+
+            // If the OTA updates a system app which was previously preopted to a non-preopted state
+            // the app might end up being verified at runtime. That's because by default the apps
+            // are verify-profile but for preopted apps there's no profile.
+            // Do a hacky check to ensure that if we have no profiles (a reasonable indication
+            // that before the OTA the app was preopted) the app gets compiled with a non-profile
+            // filter (by default interpret-only).
+            // Note that at this stage unused apps are already filtered.
+            if (isSystemApp(pkg) &&
+                    DexFile.isProfileGuidedCompilerFilter(compilerFilter) &&
+                    !Environment.getReferenceProfile(pkg.packageName).exists()) {
+                compilerFilter = getNonProfileGuidedCompilerFilter(compilerFilter);
             }
 
             // checkProfiles is false to avoid merging profiles during boot which
@@ -7586,7 +7448,8 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // Package could not be found. Report failure.
                 return PackageDexOptimizer.DEX_OPT_FAILED;
             }
-            mPackageUsage.write(false);
+            mPackageUsage.maybeWriteAsync(mPackages);
+            mCompilerStats.maybeWriteAsync();
         }
         long callingId = Binder.clearCallingIdentity();
         try {
@@ -7631,11 +7494,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                 // Currently this will do a full compilation of the library by default.
                 pdo.performDexOpt(depPackage, null /* sharedLibraries */, instructionSets,
                         false /* checkProfiles */,
-                        getCompilerFilterForReason(REASON_NON_SYSTEM_LIBRARY));
+                        getCompilerFilterForReason(REASON_NON_SYSTEM_LIBRARY),
+                        getOrCreateCompilerPackageStats(depPackage));
             }
         }
         return pdo.performDexOpt(p, p.usesLibraryFiles, instructionSets, checkProfiles,
-                targetCompilerFilter);
+                targetCompilerFilter, getOrCreateCompilerPackageStats(p));
     }
 
     Collection<PackageParser.Package> findSharedNonSystemLibraries(PackageParser.Package p) {
@@ -7689,7 +7553,8 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     public void shutdown() {
-        mPackageUsage.write(true);
+        mPackageUsage.writeNow(mPackages);
+        mCompilerStats.writeNow();
     }
 
     @Override
@@ -8140,7 +8005,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         } catch (IOException ignore) {
         } finally {
             try {
-                jarFile.close();
+                if (jarFile != null) {
+                    jarFile.close();
+                }
             } catch (IOException ignore) {}
         }
         return false;
@@ -8588,7 +8455,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         final String pkgName = pkg.packageName;
 
-        final long scanFileTime = scanFile.lastModified();
+        final long scanFileTime = getLastModifiedTime(pkg, scanFile);
         final boolean forceDex = (scanFlags & SCAN_FORCE_DEX) != 0;
         pkg.applicationInfo.processName = fixProcessName(
                 pkg.applicationInfo.packageName,
@@ -11858,6 +11725,18 @@ public class PackageManagerService extends IPackageManager.Stub {
                 if (pkgSetting == null) {
                     return false;
                 }
+                // Do not allow "android" is being disabled
+                if ("android".equals(packageName)) {
+                    Slog.w(TAG, "Cannot hide package: android");
+                    return false;
+                }
+                // Only allow protected packages to hide themselves.
+                if (hidden && !UserHandle.isSameApp(uid, pkgSetting.appId)
+                        && mProtectedPackages.isPackageStateProtected(userId, packageName)) {
+                    Slog.w(TAG, "Not hiding protected package: " + packageName);
+                    return false;
+                }
+
                 if (pkgSetting.getHidden(userId) != hidden) {
                     pkgSetting.setHidden(hidden, userId);
                     mSettings.writePackageRestrictionsLPr(userId);
@@ -12095,6 +11974,12 @@ public class PackageManagerService extends IPackageManager.Stub {
         if (packageName.equals(getDefaultDialerPackageName(userId))) {
             Slog.w(TAG, "Cannot suspend/un-suspend package \"" + packageName
                     + "\": is the default dialer");
+            return false;
+        }
+
+        if (mProtectedPackages.isPackageStateProtected(userId, packageName)) {
+            Slog.w(TAG, "Cannot suspend/un-suspend package \"" + packageName
+                    + "\": protected package");
             return false;
         }
 
@@ -12631,6 +12516,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             public void run() {
                 for (int i = 0; i < mRunningInstalls.size(); i++) {
                     final PostInstallData data = mRunningInstalls.valueAt(i);
+                    if (data.res.returnCode != PackageManager.INSTALL_SUCCEEDED) {
+                        continue;
+                    }
                     if (pkgName.equals(data.res.pkg.applicationInfo.packageName)) {
                         // right package; but is it for the right user?
                         for (int uIndex = 0; uIndex < data.res.newUsers.length; uIndex++) {
@@ -15362,7 +15250,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             // Also, don't fail application installs if the dexopt step fails.
             mPackageDexOptimizer.performDexOpt(pkg, pkg.usesLibraryFiles,
                     null /* instructionSets */, false /* checkProfiles */,
-                    getCompilerFilterForReason(REASON_INSTALL));
+                    getCompilerFilterForReason(REASON_INSTALL),
+                    getOrCreateCompilerPackageStats(pkg));
             Trace.traceEnd(TRACE_TAG_PACKAGE_MANAGER);
 
             // Notify BackgroundDexOptService that the package has been changed.
@@ -16635,8 +16524,9 @@ public class PackageManagerService extends IPackageManager.Stub {
         enforceCrossUserPermission(Binder.getCallingUid(), userId,
                 true /* requireFullPermission */, false /* checkShell */, "clear application data");
 
-        if (mProtectedPackages.canPackageBeWiped(userId, packageName)) {
-            throw new SecurityException("Cannot clear data for a device owner or a profile owner");
+        if (mProtectedPackages.isPackageDataProtected(userId, packageName)) {
+            throw new SecurityException("Cannot clear data for a protected package: "
+                    + packageName);
         }
         // Queue up an async operation since the package deletion may take a little while.
         mHandler.post(new Runnable() {
@@ -17028,7 +16918,26 @@ public class PackageManagerService extends IPackageManager.Stub {
             filter.dump(new LogPrinter(Log.INFO, TAG), "  ");
             pir.addFilter(new PreferredActivity(filter, match, set, activity, always));
             scheduleWritePackageRestrictionsLocked(userId);
+            postPreferredActivityChangedBroadcast(userId);
         }
+    }
+
+    private void postPreferredActivityChangedBroadcast(int userId) {
+        mHandler.post(() -> {
+            final IActivityManager am = ActivityManagerNative.getDefault();
+            if (am == null) {
+                return;
+            }
+
+            final Intent intent = new Intent(Intent.ACTION_PREFERRED_ACTIVITY_CHANGED);
+            intent.putExtra(Intent.EXTRA_USER_HANDLE, userId);
+            try {
+                am.broadcastIntent(null, intent, null, null,
+                        0, null, null, null, android.app.AppOpsManager.OP_NONE,
+                        null, false, false, userId);
+            } catch (RemoteException e) {
+            }
+        });
     }
 
     @Override
@@ -17182,6 +17091,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 changed = true;
             }
         }
+        if (changed) {
+            postPreferredActivityChangedBroadcast(userId);
+        }
         return changed;
     }
 
@@ -17295,6 +17207,7 @@ public class PackageManagerService extends IPackageManager.Stub {
             mSettings.editPersistentPreferredActivitiesLPw(userId).addFilter(
                     new PersistentPreferredActivity(filter, activity));
             scheduleWritePackageRestrictionsLocked(userId);
+            postPreferredActivityChangedBroadcast(userId);
         }
     }
 
@@ -17337,6 +17250,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             if (changed) {
                 scheduleWritePackageRestrictionsLocked(userId);
+                postPreferredActivityChangedBroadcast(userId);
             }
         }
     }
@@ -17822,6 +17736,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
     private Intent getHomeIntent() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
         return intent;
     }
 
@@ -17969,9 +17884,9 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                         + Binder.getCallingPid()
                         + ", uid=" + uid + ", package uid=" + pkgSetting.appId);
             }
-            // Don't allow changing profile and device owners.
-            if (mProtectedPackages.canPackageStateBeChanged(userId, packageName)) {
-                throw new SecurityException("Cannot disable a device owner or a profile owner");
+            // Don't allow changing protected packages.
+            if (mProtectedPackages.isPackageStateProtected(userId, packageName)) {
+                throw new SecurityException("Cannot disable a protected package: " + packageName);
             }
         }
 
@@ -18188,6 +18103,11 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
     public void systemReady() {
         mSystemReady = true;
 
+        // Disable any carrier apps. We do this very early in boot to prevent the apps from being
+        // disabled after already being started.
+        CarrierAppUtils.disableCarrierAppsUntilPrivileged(mContext.getOpPackageName(), this,
+                mContext.getContentResolver(), UserHandle.USER_SYSTEM);
+
         // Read the compatibilty setting when the system is ready.
         boolean compatibilityModeEnabled = android.provider.Settings.Global.getInt(
                 mContext.getContentResolver(),
@@ -18243,6 +18163,13 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
         // If we upgraded grant all default permissions before kicking off.
         for (int userId : grantPermissionsUserIds) {
             mDefaultPermissionPolicy.grantDefaultPermissions(userId);
+        }
+
+        // If we did not grant default permissions, we preload from this the
+        // default permission exceptions lazily to ensure we don't hit the
+        // disk on a new user creation.
+        if (grantPermissionsUserIds == EMPTY_INT_ARRAY) {
+            mDefaultPermissionPolicy.scheduleReadDefaultPermissionExceptions();
         }
 
         // Kick off any messages waiting for system ready
@@ -18337,6 +18264,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
         public static final int DUMP_DOMAIN_PREFERRED = 1 << 18;
         public static final int DUMP_FROZEN = 1 << 19;
         public static final int DUMP_DEXOPT = 1 << 20;
+        public static final int DUMP_COMPILER_STATS = 1 << 21;
 
         public static final int OPTION_SHOW_FILTERS = 1 << 0;
 
@@ -18454,6 +18382,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                 pw.println("    installs: details about install sessions");
                 pw.println("    check-permission <permission> <package> [<user>]: does pkg hold perm?");
                 pw.println("    dexopt: dump dexopt state");
+                pw.println("    compiler-stats: dump compiler statistics");
                 pw.println("    <package.name>: info about given package");
                 return;
             } else if ("--checkin".equals(opt)) {
@@ -18575,6 +18504,8 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                 dumpState.setDump(DumpState.DUMP_FROZEN);
             } else if ("dexopt".equals(cmd)) {
                 dumpState.setDump(DumpState.DUMP_DEXOPT);
+            } else if ("compiler-stats".equals(cmd)) {
+                dumpState.setDump(DumpState.DUMP_COMPILER_STATS);
             } else if ("write".equals(cmd)) {
                 synchronized (mPackages) {
                     mSettings.writeLPr();
@@ -18937,6 +18868,11 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                 dumpDexoptStateLPr(pw, packageName);
             }
 
+            if (!checkin && dumpState.isDumping(DumpState.DUMP_COMPILER_STATS)) {
+                if (dumpState.onTitlePrinted()) pw.println();
+                dumpCompilerStatsLPr(pw, packageName);
+            }
+
             if (!checkin && dumpState.isDumping(DumpState.DUMP_MESSAGES) && packageName == null) {
                 if (dumpState.onTitlePrinted()) pw.println();
                 mSettings.dumpReadMessagesLPr(pw, dumpState);
@@ -18997,6 +18933,38 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
             ipw.println("[" + pkg.packageName + "]");
             ipw.increaseIndent();
             mPackageDexOptimizer.dumpDexoptState(ipw, pkg);
+            ipw.decreaseIndent();
+        }
+    }
+
+    private void dumpCompilerStatsLPr(PrintWriter pw, String packageName) {
+        final IndentingPrintWriter ipw = new IndentingPrintWriter(pw, "  ", 120);
+        ipw.println();
+        ipw.println("Compiler stats:");
+        ipw.increaseIndent();
+        Collection<PackageParser.Package> packages = null;
+        if (packageName != null) {
+            PackageParser.Package targetPackage = mPackages.get(packageName);
+            if (targetPackage != null) {
+                packages = Collections.singletonList(targetPackage);
+            } else {
+                ipw.println("Unable to find package: " + packageName);
+                return;
+            }
+        } else {
+            packages = mPackages.values();
+        }
+
+        for (PackageParser.Package pkg : packages) {
+            ipw.println("[" + pkg.packageName + "]");
+            ipw.increaseIndent();
+
+            CompilerStats.PackageStats stats = getCompilerPackageStats(pkg.packageName);
+            if (stats == null) {
+                ipw.println("(No recorded stats)");
+            } else {
+                stats.dump(ipw);
+            }
             ipw.decreaseIndent();
         }
     }
@@ -20599,12 +20567,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
         }
     }
 
-    void onBeforeUserStartUninitialized(final int userId) {
-        synchronized (mPackages) {
-            if (mSettings.areDefaultRuntimePermissionsGrantedLPr(userId)) {
-                return;
-            }
-        }
+    void onNewUserCreated(final int userId) {
         mDefaultPermissionPolicy.grantDefaultPermissions(userId);
         // If permission review for legacy apps is required, we represent
         // dagerous permissions for such apps as always granted runtime
@@ -21239,9 +21202,8 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
         }
 
         @Override
-        public boolean canPackageBeWiped(int userId, String packageName) {
-            return mProtectedPackages.canPackageBeWiped(userId,
-                    packageName);
+        public boolean isPackageDataProtected(int userId, String packageName) {
+            return mProtectedPackages.isPackageDataProtected(userId, packageName);
         }
     }
 
@@ -21301,5 +21263,21 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                 ProcessLoggingHandler.LOG_APP_PROCESS_START_MSG);
         msg.setData(data);
         mProcessLoggingHandler.sendMessage(msg);
+    }
+
+    public CompilerStats.PackageStats getCompilerPackageStats(String pkgName) {
+        return mCompilerStats.getPackageStats(pkgName);
+    }
+
+    public CompilerStats.PackageStats getOrCreateCompilerPackageStats(PackageParser.Package pkg) {
+        return getOrCreateCompilerPackageStats(pkg.packageName);
+    }
+
+    public CompilerStats.PackageStats getOrCreateCompilerPackageStats(String pkgName) {
+        return mCompilerStats.getOrCreatePackageStats(pkgName);
+    }
+
+    public void deleteCompilerPackageStats(String pkgName) {
+        mCompilerStats.deletePackageStats(pkgName);
     }
 }

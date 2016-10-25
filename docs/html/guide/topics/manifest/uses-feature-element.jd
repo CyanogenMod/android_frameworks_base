@@ -33,7 +33,7 @@ page.tags=filtering,features,google play filters,permissions
     <p style="color:#669999;padding-top:1em;">Google Play Filtering</p>
     <p style="padding-top:1em;">Google Play uses the <code>&lt;uses-feature&gt;</code>
     elements declared in your app manifest to filter your app from devices
-    that do not meet it's hardware and software feature requirements. </p>
+    that do not meet its hardware and software feature requirements. </p>
 
 <p style="margin-top:1em;">By specifying the features that your application requires,
 you enable Google Play to present your application only to users whose
@@ -150,23 +150,21 @@ device compatibility.</p>
   <dd>
     Boolean value that indicates whether the application requires the feature
     specified in <code>android:name</code>.
-  </dd>
-</dl>
-<ul>
-<li>When you declare <code>android:required="true"</code> for a feature,
-you are specifying that the application <em>cannot function, or is not
-designed to function</em>, when the specified feature is not present on the
-device. </li>
+    <ul>
+    <li>When you declare <code>android:required="true"</code> for a feature,
+    you are specifying that the application <em>cannot function, or is not
+    designed to function</em>, when the specified feature is not present on the
+    device. </li>
 
-<li>When you declare <code>android:required="false"</code> for a feature, it
-means that the application <em>prefers to use the feature</em> if present on
-the device, but that it <em>is designed to function without the specified
-feature</em>, if necessary. </li>
+    <li>When you declare <code>android:required="false"</code> for a feature, it
+    means that the application <em>prefers to use the feature</em> if present on
+    the device, but that it <em>is designed to function without the specified
+    feature</em>, if necessary. </li>
 
-</ul>
+    </ul>
 
-<p>The default value for <code>android:required</code> if not declared is
-<code>"true"</code>.</p>
+    <p>The default value for <code>android:required</code> if not declared is
+    <code>"true"</code>.</p>
   </dd>
 
   <dt><a name="glEsVersion"></a><code>android:glEsVersion</code></dt>
@@ -1151,12 +1149,12 @@ densities: '160'
 
     <p>
       As a best practice, you should still declare your requirement for this
-      orientation using a {@code &lt;uses-feature&gt;} element. If you declare
+      orientation using a {@code <uses-feature>} element. If you declare
       an orientation for your activity using <a href=
       "{@docRoot}guide/topics/manifest/activity-element.html#screen">{@code
       android:screenOrientation}</a>, but don't actually require it, you can
       disable the requirement by declaring the orientation with a {@code
-      &lt;uses-feature&gt;} element and include {@code
+      <uses-feature>} element and include {@code
       android:required="false"}.
     </p>
 
@@ -1232,7 +1230,7 @@ densities: '160'
     </p>
 
     <p>
-      When declared as required, this feature indicates that the app is
+      By default, your app requires this feature. This feature indicates that the app is
       compatible with a device only if that device emulates a touchscreen
       ("fake touch" interface) or has an actual touchscreen.
     </p>
@@ -1242,19 +1240,12 @@ densities: '160'
       that emulates a subset of a touchscreen's capabilities. For example, a
       mouse or remote control could drive an on-screen cursor. If your app
       requires basic point and click interaction (in other words, it won't work
-      with only a d-pad controller), you should declare this feature. Because
+      with only a d-pad controller), you should declare this feature or simply
+      avoid declaring any {@code android.hardware.touchscreen.*} features. Because
       this is the minimum level of touch interaction, you can also use an app
       that declares this feature on devices that offer more complex touch
       interfaces.
     </p>
-
-    <p class="note">
-      <strong>Note:</strong> Apps require the {@code android.hardware.touchscreen}
-      feature by default. If you want your app to be available to devices that
-      provide a fake touch interface, you must also explicitly declare that a
-      touchscreen is not required as follows:
-    </p>
-    <pre>&lt;uses-feature android:name="android.hardware.touchscreen" <strong>android:required="false"</strong> /&gt;</pre>
   </dd>
 
   <dt>
@@ -1329,21 +1320,9 @@ densities: '160'
     </p>
 
     <p>
-      By default, your app requires this feature. As such, your app is not
-      available to devices that provide only an emulated touch interface ("fake
-      touch") by default. If you want to make your app available on devices
-      that provide a fake touch interface (or even on devices that provide only
-      a d-pad controller), you must explicitly declare that a touchscreen is
-      not required by declaring {@code android.hardware.touchscreen} with
-      {@code android:required="false"}. You should add this declaration if your
-      app uses—but does not require—a real touchscreen interface.
-    </p>
-
-    <p>
       If your app in fact requires a touch interface (to perform more advanced
-      touch gestures such as fling), then you don't need to declare any touch
-      interface features because they're required by default. However, it's
-      best if you explicitly declare all features that your app uses.
+      touch gestures such as fling), then you must explicitly declare this feature
+      or any advanced touchscreen features.
     </p>
 
     <p>

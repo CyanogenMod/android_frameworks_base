@@ -684,6 +684,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Poprawnie!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Spróbuj ponownie."</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Spróbuj ponownie."</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Odblokowanie wszystkich funkcji i danych"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Przekroczono maksymalną liczbę prób rozpoznania twarzy."</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Brak karty SIM"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Brak karty SIM w tablecie."</string>
@@ -1068,8 +1069,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"Android jest uaktualniany..."</string>
     <string name="android_start_title" msgid="8418054686415318207">"Android się uruchamia…"</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"Optymalizacja pamięci."</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android jest uaktualniany"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Kończę aktualizowanie Androida…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"Niektóre aplikacje mogą nie działać prawidłowo, dopóki nie zakończy się aktualizacja."</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"Uaktualniam aplikację <xliff:g id="APPLICATION">%1$s</xliff:g>…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"Optymalizowanie aplikacji <xliff:g id="NUMBER_0">%1$d</xliff:g> z <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"Przygotowuję aplikację <xliff:g id="APPNAME">%1$s</xliff:g>."</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Uruchamianie aplikacji."</string>
@@ -1723,7 +1725,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"Odepnij"</string>
     <string name="app_info" msgid="6856026610594615344">"O aplikacji"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"Zresetować urządzenie?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"Kliknij, by zresetować urządzenie"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"Uruchamiam tryb demo…"</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"Resetuję urządzenie…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"Zresetować urządzenie?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"Stracisz wszystkie wprowadzone zmiany, a tryb demo uruchomi się ponownie za <xliff:g id="TIMEOUT">%1$s</xliff:g> s…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"Anuluj"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"Resetuj teraz"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"Aby używać tego urządzenia bez ograniczeń, przywróć ustawienia fabryczne"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"Kliknij, by dowiedzieć się więcej."</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"Wyłączono: <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="conference_call" msgid="3751093130790472426">"Połączenie konferencyjne"</string>
 </resources>

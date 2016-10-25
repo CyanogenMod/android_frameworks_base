@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Omogoči/onemogoči iskanje omrežij Wi-Fi za gostovanje glede na količino podatkovnega prometa pri vmesniku"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Velikosti medpomn. zapisov. dnevnika"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Izberite velikost medpomnilnika dnevnika"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Želite izbrisati trajno shranjevanje dnevniškega orodja?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Ko prenehamo spremljanje s trajnim dnevniškim orodjem, moramo podatke tega orodja, shranjene v napravi, izbrisati."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Trajno shranjevanje podatkov dnevniškega orodja v napravi"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Izberite, katere medpomnilnike dnevnika želite trajno shraniti v napravi"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Izbira konfiguracije USB"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Izbira konfiguracije USB"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Dovoli lažne lokacije"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Dovoli lažne lokacije"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Omogoči pregled atributa pogleda"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Uporaba odjemalca DHCP za Lollipop namesto novega odjemalca DHCP za Android."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Prenos podatkov v mobilnih omrežjih je vedno aktiven – tudi ko je aktivna povezava Wi-Fi (za hiter preklop med omrežji)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Ali dovolite odpravljanje težav s povezavo USB?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"Odpravljanje težav s povezavo USB je namenjeno samo za razvoj. Lahko ga uporabljate za kopiranje podatkov med računalnikom in napravo, nameščanje aplikacij v napravo brez obveščanja in branje podatkov v dnevniku."</string>

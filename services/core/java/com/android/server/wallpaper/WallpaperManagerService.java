@@ -85,6 +85,7 @@ import android.view.WindowManager;
 
 import com.android.internal.R;
 import com.android.internal.content.PackageMonitor;
+import com.android.internal.os.BackgroundThread;
 import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.JournaledFile;
 import com.android.server.EventLogTags;
@@ -166,7 +167,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
      * Observes the wallpaper for changes and notifies all IWallpaperServiceCallbacks
      * that the wallpaper has changed. The CREATE is triggered when there is no
      * wallpaper set and is created for the first time. The CLOSE_WRITE is triggered
-     * everytime the wallpaper is changed.
+     * every time the wallpaper is changed.
      */
     private class WallpaperObserver extends FileObserver {
 
@@ -175,7 +176,6 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
         final File mWallpaperDir;
         final File mWallpaperFile;
         final File mWallpaperLockFile;
-        final File mWallpaperInfoFile;
 
         public WallpaperObserver(WallpaperData wallpaper) {
             super(getWallpaperDir(wallpaper.userId).getAbsolutePath(),
@@ -185,7 +185,6 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
             mWallpaper = wallpaper;
             mWallpaperFile = new File(mWallpaperDir, WALLPAPER);
             mWallpaperLockFile = new File(mWallpaperDir, WALLPAPER_LOCK_ORIG);
-            mWallpaperInfoFile = new File(mWallpaperDir, WALLPAPER_INFO);
         }
 
         private WallpaperData dataForEvent(boolean sysChanged, boolean lockChanged) {
@@ -253,6 +252,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                             if (DEBUG) {
                                 Slog.v(TAG, "Wallpaper written; generating crop");
                             }
+                            SELinux.restorecon(changedFile);
                             if (moved) {
                                 // This is a restore, so generate the crop using any just-restored new
                                 // crop guidelines, making sure to preserve our local dimension hints.
@@ -353,9 +353,17 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                         (cropHint.right > options.outWidth ? options.outWidth - cropHint.right : 0),
                         (cropHint.bottom > options.outHeight ? options.outHeight - cropHint.bottom : 0));
 
+                // If the crop hint was larger than the image we just overshot. Patch things up.
+                if (cropHint.left < 0) {
+                    cropHint.left = 0;
+                }
+                if (cropHint.top < 0) {
+                    cropHint.top = 0;
+                }
+
                 // Don't bother cropping if what we're left with is identity
-                needCrop = (options.outHeight >= cropHint.height()
-                        && options.outWidth >= cropHint.width());
+                needCrop = (options.outHeight > cropHint.height()
+                        || options.outWidth > cropHint.width());
             }
 
             // scale if the crop height winds up not matching the recommended metrics
@@ -488,6 +496,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     final SparseArray<WallpaperData> mWallpaperMap = new SparseArray<WallpaperData>();
     final SparseArray<WallpaperData> mLockWallpaperMap = new SparseArray<WallpaperData>();
 
+    final SparseArray<Boolean> mUserRestorecon = new SparseArray<Boolean>();
     int mCurrentUserId;
 
     static class WallpaperData {
@@ -910,10 +919,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                         public void onForegroundProfileSwitch(int newProfileId) {
                             // Ignore.
                         }
-                    });
+                    }, TAG);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            e.rethrowAsRuntimeException();
         }
     }
 
@@ -944,10 +952,34 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
         mLockWallpaperMap.remove(userId);
     }
 
-    void onUnlockUser(int userId) {
+    void onUnlockUser(final int userId) {
         synchronized (mLock) {
-            if (mCurrentUserId == userId && mWaitingForUnlock) {
-                switchUser(userId, null);
+            if (mCurrentUserId == userId) {
+                if (mWaitingForUnlock) {
+                    // If we're switching users, now is when we transition the wallpaper
+                    switchUser(userId, null);
+                }
+
+                // Make sure that the SELinux labeling of all the relevant files is correct.
+                // This corrects for mislabeling bugs that might have arisen from move-to
+                // operations involving the wallpaper files.  This isn't timing-critical,
+                // so we do it in the background to avoid holding up the user unlock operation.
+                if (mUserRestorecon.get(userId) != Boolean.TRUE) {
+                    mUserRestorecon.put(userId, Boolean.TRUE);
+                    Runnable relabeler = new Runnable() {
+                        @Override
+                        public void run() {
+                            final File wallpaperDir = getWallpaperDir(userId);
+                            for (String filename : sPerUserFiles) {
+                                File f = new File(wallpaperDir, filename);
+                                if (f.exists()) {
+                                    SELinux.restorecon(f);
+                                }
+                            }
+                        }
+                    };
+                    BackgroundThread.getHandler().post(relabeler);
+                }
             }
         }
     }
@@ -1283,8 +1315,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     }
 
     @Override
-    public WallpaperInfo getWallpaperInfo() {
-        int userId = UserHandle.getCallingUserId();
+    public WallpaperInfo getWallpaperInfo(int userId) {
+        userId = ActivityManager.handleIncomingUser(Binder.getCallingPid(),
+                Binder.getCallingUid(), userId, false, true, "getWallpaperIdForUser", null);
         synchronized (mLock) {
             WallpaperData wallpaper = mWallpaperMap.get(userId);
             if (wallpaper != null && wallpaper.connection != null) {
@@ -1326,7 +1359,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     @Override
     public ParcelFileDescriptor setWallpaper(String name, String callingPackage,
             Rect cropHint, boolean allowBackup, Bundle extras, int which,
-            IWallpaperManagerCallback completion) {
+            IWallpaperManagerCallback completion, int userId) {
+        userId = ActivityManager.handleIncomingUser(getCallingPid(), getCallingUid(), userId,
+                false /* all */, true /* full */, "changing wallpaper", null /* pkg */);
         checkPermission(android.Manifest.permission.SET_WALLPAPER);
 
         if ((which & (FLAG_LOCK|FLAG_SYSTEM)) == 0) {
@@ -1349,8 +1384,6 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                 throw new IllegalArgumentException("Invalid crop rect supplied: " + cropHint);
             }
         }
-
-        final int userId = UserHandle.getCallingUserId();
 
         synchronized (mLock) {
             if (DEBUG) Slog.v(TAG, "setWallpaper which=0x" + Integer.toHexString(which));
@@ -1376,9 +1409,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
                     wallpaper.whichPending = which;
                     wallpaper.setComplete = completion;
                     wallpaper.cropHint.set(cropHint);
-                    if ((which & FLAG_SYSTEM) != 0) {
-                        wallpaper.allowBackup = allowBackup;
-                    }
+                    wallpaper.allowBackup = allowBackup;
                 }
                 return pfd;
             } finally {
@@ -1453,19 +1484,27 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     }
 
     @Override
-    public void setWallpaperComponentChecked(ComponentName name, String callingPackage) {
+    public void setWallpaperComponentChecked(ComponentName name, String callingPackage,
+            int userId) {
+
         if (isWallpaperSupported(callingPackage) && isSetWallpaperAllowed(callingPackage)) {
-            setWallpaperComponent(name);
+            setWallpaperComponent(name, userId);
         }
     }
 
     // ToDo: Remove this version of the function
     @Override
     public void setWallpaperComponent(ComponentName name) {
+        setWallpaperComponent(name, UserHandle.getCallingUserId());
+    }
+
+    private void setWallpaperComponent(ComponentName name, int userId) {
+        userId = ActivityManager.handleIncomingUser(getCallingPid(), getCallingUid(), userId,
+                false /* all */, true /* full */, "changing live wallpaper", null /* pkg */);
         checkPermission(android.Manifest.permission.SET_WALLPAPER_COMPONENT);
+
         synchronized (mLock) {
             if (DEBUG) Slog.v(TAG, "setWallpaperComponent name=" + name);
-            int userId = UserHandle.getCallingUserId();
             WallpaperData wallpaper = mWallpaperMap.get(userId);
             if (wallpaper == null) {
                 throw new IllegalStateException("Wallpaper not yet initialized for user " + userId);
@@ -1721,12 +1760,14 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
     }
 
     @Override
-    public boolean isWallpaperBackupEligible(int userId) {
+    public boolean isWallpaperBackupEligible(int which, int userId) {
         if (Binder.getCallingUid() != Process.SYSTEM_UID) {
             throw new SecurityException("Only the system may call isWallpaperBackupEligible");
         }
 
-        WallpaperData wallpaper = getWallpaperSafeLocked(userId, FLAG_SYSTEM);
+        WallpaperData wallpaper = (which == FLAG_LOCK)
+                ? mLockWallpaperMap.get(userId)
+                : mWallpaperMap.get(userId);
         return (wallpaper != null) ? wallpaper.allowBackup : false;
     }
 

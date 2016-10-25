@@ -41,8 +41,10 @@ import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Region;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.DisplayManagerInternal;
@@ -191,6 +193,7 @@ import static android.view.WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
 import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION;
 import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING;
 import static android.view.WindowManager.LayoutParams.TYPE_BASE_APPLICATION;
+import static android.view.WindowManager.LayoutParams.TYPE_DRAWN_APPLICATION;
 import static android.view.WindowManager.LayoutParams.TYPE_BOOT_PROGRESS;
 import static android.view.WindowManager.LayoutParams.TYPE_DOCK_DIVIDER;
 import static android.view.WindowManager.LayoutParams.TYPE_DREAM;
@@ -292,6 +295,9 @@ public class WindowManagerService extends IWindowManager.Stub
 
     /** Amount of time (in milliseconds) to delay before declaring a window freeze timeout. */
     static final int WINDOW_FREEZE_TIMEOUT_DURATION = 2000;
+
+    /** Amount of time (in milliseconds) to delay before declaring a seamless rotation timeout. */
+    static final int SEAMLESS_ROTATION_TIMEOUT_DURATION = 2000;
 
     /** Amount of time (in milliseconds) to delay before declaring a window replacement timeout. */
     static final int WINDOW_REPLACEMENT_TIMEOUT_DURATION = 2000;
@@ -520,6 +526,9 @@ public class WindowManagerService extends IWindowManager.Stub
     final Rect mTmpRect = new Rect();
     final Rect mTmpRect2 = new Rect();
     final Rect mTmpRect3 = new Rect();
+    final RectF mTmpRectF = new RectF();
+
+    final Matrix mTmpTransform = new Matrix();
 
     boolean mDisplayReady;
     boolean mSafeMode;
@@ -541,7 +550,7 @@ public class WindowManagerService extends IWindowManager.Stub
     SparseArray<DisplayContent> mDisplayContents = new SparseArray<>(2);
 
     int mRotation = 0;
-    int mForcedAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+    int mLastOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean mAltOrientation = false;
 
     private boolean mKeyguardWaitingForActivityDrawn;
@@ -2906,9 +2915,23 @@ public class WindowManagerService extends IWindowManager.Stub
                     }
                     result |= RELAYOUT_RES_SURFACE_CHANGED;
                 }
+                final WindowSurfaceController surfaceController = winAnimator.mSurfaceController;
+                if (viewVisibility == View.VISIBLE && surfaceController != null) {
+                    // We already told the client to go invisible, but the message may not be
+                    // handled yet, or it might want to draw a last frame. If we already have a
+                    // surface, let the client use that, but don't create new surface at this point.
+                    surfaceController.getSurface(outSurface);
+                } else {
+                    if (DEBUG_VISIBILITY) Slog.i(TAG_WM, "Releasing surface in: " + win);
 
-                outSurface.release();
-                if (DEBUG_VISIBILITY) Slog.i(TAG_WM, "Releasing surface in: " + win);
+                    try {
+                        Trace.traceBegin(Trace.TRACE_TAG_WINDOW_MANAGER, "wmReleaseOutSurface_"
+                                + win.mAttrs.getTitle());
+                        outSurface.release();
+                    } finally {
+                        Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
+                    }
+                }
             }
 
             if (focusMayChange) {
@@ -3043,6 +3066,7 @@ public class WindowManagerService extends IWindowManager.Stub
         } else {
             // For some reason there isn't a surface.  Clear the
             // caller's object so they see the same state.
+            Slog.w(TAG_WM, "Failed to create surface control for " + win);
             outSurface.release();
         }
         return result;
@@ -3065,6 +3089,9 @@ public class WindowManagerService extends IWindowManager.Stub
         if (oldVisibility == View.GONE) {
             winAnimator.mEnterAnimationPending = true;
         }
+
+        win.mLastVisibleLayoutRotation = mRotation;
+
         winAnimator.mEnteringAnimation = true;
         if ((result & WindowManagerGlobal.RELAYOUT_RES_FIRST_TIME) != 0) {
             win.prepareWindowToDisplayDuringRelayout(outConfig);
@@ -3168,6 +3195,7 @@ public class WindowManagerService extends IWindowManager.Stub
         // frozen, there is no reason to animate and it can cause strange
         // artifacts when we unfreeze the display if some different animation
         // is running.
+        Trace.traceBegin(Trace.TRACE_TAG_WINDOW_MANAGER, "WM#applyAnimationLocked");
         if (okToDisplay()) {
             DisplayInfo displayInfo = getDefaultDisplayInfoLocked();
             final int width = displayInfo.appWidth;
@@ -3219,6 +3247,7 @@ public class WindowManagerService extends IWindowManager.Stub
         } else {
             atoken.mAppAnimator.clearAnimation();
         }
+        Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
 
         return atoken.mAppAnimator.animation != null;
     }
@@ -3427,7 +3456,7 @@ public class WindowManagerService extends IWindowManager.Stub
             int requestedOrientation, boolean fullscreen, boolean showForAllUsers, int userId,
             int configChanges, boolean voiceInteraction, boolean launchTaskBehind,
             Rect taskBounds, Configuration config, int taskResizeMode, boolean alwaysFocusable,
-            boolean homeTask, int targetSdkVersion) {
+            boolean homeTask, int targetSdkVersion, int rotationAnimationHint) {
         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
                 "addAppToken()")) {
             throw new SecurityException("Requires MANAGE_APP_TOKENS permission");
@@ -3465,6 +3494,7 @@ public class WindowManagerService extends IWindowManager.Stub
             atoken.mAlwaysFocusable = alwaysFocusable;
             if (DEBUG_TOKEN_MOVEMENT || DEBUG_ADD_REMOVE) Slog.v(TAG_WM, "addAppToken: " + atoken
                     + " to stack=" + stackId + " task=" + taskId + " at " + addPos);
+            atoken.mRotationAnimationHint = rotationAnimationHint;
 
             Task task = mTaskIdToTask.get(taskId);
             if (task == null) {
@@ -3517,6 +3547,16 @@ public class WindowManagerService extends IWindowManager.Stub
                 // can re-appear and inflict its own orientation on us.  Keep the
                 // orientation stable until this all settles down.
                 return mLastWindowForcedOrientation;
+            } else if (mPolicy.isKeyguardLocked()) {
+                // Use the last orientation the while the display is frozen with the
+                // keyguard locked. This could be the keyguard forced orientation or
+                // from a SHOW_WHEN_LOCKED window. We don't want to check the show when
+                // locked window directly though as things aren't stable while
+                // the display is frozen, for example the window could be momentarily unavailable
+                // due to activity relaunch.
+                if (DEBUG_ORIENTATION) Slog.v(TAG_WM, "Display is frozen while keyguard locked, "
+                        + "return " + mLastOrientation);
+                return mLastOrientation;
             }
         } else {
             // TODO(multidisplay): Change to the correct display.
@@ -3646,12 +3686,12 @@ public class WindowManagerService extends IWindowManager.Stub
             }
         }
         if (DEBUG_ORIENTATION) Slog.v(TAG_WM,
-                "No app is requesting an orientation, return " + mForcedAppOrientation);
+                "No app is requesting an orientation, return " + mLastOrientation);
         // The next app has not been requested to be visible, so we keep the current orientation
         // to prevent freezing/unfreezing the display too early unless we are in multi-window, in
         // which we don't let the app customize the orientation unless it was the home task that
         // is handled above.
-        return inMultiWindow ? SCREEN_ORIENTATION_UNSPECIFIED : mForcedAppOrientation;
+        return inMultiWindow ? SCREEN_ORIENTATION_UNSPECIFIED : mLastOrientation;
     }
 
     @Override
@@ -3734,8 +3774,8 @@ public class WindowManagerService extends IWindowManager.Stub
         long ident = Binder.clearCallingIdentity();
         try {
             int req = getOrientationLocked();
-            if (req != mForcedAppOrientation) {
-                mForcedAppOrientation = req;
+            if (req != mLastOrientation) {
+                mLastOrientation = req;
                 //send a message to Policy indicating orientation change to take
                 //action like disabling/enabling sensors etc.,
                 mPolicy.setCurrentOrientationLw(req);
@@ -4447,7 +4487,25 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     @Override
-    public void notifyAppStopped(IBinder token, boolean stopped) {
+    public void notifyAppResumed(IBinder token, boolean wasStopped, boolean allowSavedSurface) {
+        if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
+                "notifyAppResumed()")) {
+            throw new SecurityException("Requires MANAGE_APP_TOKENS permission");
+        }
+
+        synchronized(mWindowMap) {
+            final AppWindowToken wtoken;
+            wtoken = findAppWindowToken(token);
+            if (wtoken == null) {
+                Slog.w(TAG_WM, "Attempted to notify resumed of non-existing app token: " + token);
+                return;
+            }
+            wtoken.notifyAppResumed(wasStopped, allowSavedSurface);
+        }
+    }
+
+    @Override
+    public void notifyAppStopped(IBinder token) {
         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
                 "notifyAppStopped()")) {
             throw new SecurityException("Requires MANAGE_APP_TOKENS permission");
@@ -4457,10 +4515,10 @@ public class WindowManagerService extends IWindowManager.Stub
             final AppWindowToken wtoken;
             wtoken = findAppWindowToken(token);
             if (wtoken == null) {
-                Slog.w(TAG_WM, "Attempted to set visibility of non-existing app token: " + token);
+                Slog.w(TAG_WM, "Attempted to notify stopped of non-existing app token: " + token);
                 return;
             }
-            wtoken.notifyAppStopped(stopped);
+            wtoken.notifyAppStopped();
         }
     }
 
@@ -4997,18 +5055,32 @@ public class WindowManagerService extends IWindowManager.Stub
         try {
             synchronized (mWindowMap) {
                 final DisplayContent displayContent = mDisplayContents.get(displayId);
+                boolean attachedToDisplay = false;
                 if (displayContent != null) {
                     TaskStack stack = mStackIdToStack.get(stackId);
                     if (stack == null) {
                         if (DEBUG_STACK) Slog.d(TAG_WM, "attachStack: stackId=" + stackId);
-                        stack = new TaskStack(this, stackId);
+
+                        stack = displayContent.getStackById(stackId);
+                        if (stack != null) {
+                            // It's already attached to the display. Detach and re-attach
+                            // because onTop might change, and be sure to clear mDeferDetach!
+                            displayContent.detachStack(stack);
+                            stack.mDeferDetach = false;
+                            attachedToDisplay = true;
+                        } else {
+                            stack = new TaskStack(this, stackId);
+                        }
+
                         mStackIdToStack.put(stackId, stack);
                         if (stackId == DOCKED_STACK_ID) {
                             getDefaultDisplayContentLocked().mDividerControllerLocked
                                     .notifyDockedStackExistsChanged(true);
                         }
                     }
-                    stack.attachDisplayContent(displayContent);
+                    if (!attachedToDisplay) {
+                        stack.attachDisplayContent(displayContent);
+                    }
                     displayContent.attachStack(stack, onTop);
                     if (stack.getRawFullscreen()) {
                         return null;
@@ -5664,6 +5736,12 @@ public class WindowManagerService extends IWindowManager.Stub
 
     // Called by window manager policy.  Not exposed externally.
     @Override
+    public void reboot(boolean confirm) {
+        ShutdownThread.reboot(mContext, PowerManager.SHUTDOWN_USER_REQUESTED, confirm);
+    }
+
+    // Called by window manager policy.  Not exposed externally.
+    @Override
     public void rebootSafeMode(boolean confirm) {
         ShutdownThread.rebootSafeMode(mContext, confirm);
     }
@@ -5821,7 +5899,8 @@ public class WindowManagerService extends IWindowManager.Stub
             if (w.isDrawnLw()) {
                 if (w.mAttrs.type == TYPE_BOOT_PROGRESS) {
                     haveBootMsg = true;
-                } else if (w.mAttrs.type == TYPE_APPLICATION) {
+                } else if (w.mAttrs.type == TYPE_APPLICATION
+                        || w.mAttrs.type == TYPE_DRAWN_APPLICATION) {
                     haveApp = true;
                 } else if (w.mAttrs.type == TYPE_WALLPAPER) {
                     haveWallpaper = true;
@@ -6164,6 +6243,21 @@ public class WindowManagerService extends IWindowManager.Stub
         }
     }
 
+    @Override
+    public Bitmap screenshotWallpaper() {
+        if (!checkCallingPermission(Manifest.permission.READ_FRAME_BUFFER,
+                "screenshotWallpaper()")) {
+            throw new SecurityException("Requires READ_FRAME_BUFFER permission");
+        }
+        try {
+            Trace.traceBegin(Trace.TRACE_TAG_WINDOW_MANAGER, "screenshotWallpaper");
+            return screenshotApplicationsInner(null, Display.DEFAULT_DISPLAY, -1, -1, true, 1f,
+                    Bitmap.Config.ARGB_8888, true);
+        } finally {
+            Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
+        }
+    }
+
     /**
      * Takes a snapshot of the screen.  In landscape mode this grabs the whole screen.
      * In portrait mode, it grabs the upper region of the screen based on the vertical dimension
@@ -6180,7 +6274,7 @@ public class WindowManagerService extends IWindowManager.Stub
             @Override
             public void run() {
                 Bitmap bm = screenshotApplicationsInner(null, Display.DEFAULT_DISPLAY, -1, -1,
-                        true, 1f, Bitmap.Config.ARGB_8888);
+                        true, 1f, Bitmap.Config.ARGB_8888, false);
                 try {
                     receiver.send(bm);
                 } catch (RemoteException e) {
@@ -6210,14 +6304,27 @@ public class WindowManagerService extends IWindowManager.Stub
         try {
             Trace.traceBegin(Trace.TRACE_TAG_WINDOW_MANAGER, "screenshotApplications");
             return screenshotApplicationsInner(appToken, displayId, width, height, false,
-                    frameScale, Bitmap.Config.RGB_565);
+                    frameScale, Bitmap.Config.RGB_565, false);
         } finally {
             Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
         }
     }
 
+    /**
+     * Takes a snapshot of the screen.  In landscape mode this grabs the whole screen.
+     * In portrait mode, it grabs the full screenshot.
+     *
+     * @param displayId the Display to take a screenshot of.
+     * @param width the width of the target bitmap
+     * @param height the height of the target bitmap
+     * @param includeFullDisplay true if the screen should not be cropped before capture
+     * @param frameScale the scale to apply to the frame, only used when width = -1 and height = -1
+     * @param config of the output bitmap
+     * @param wallpaperOnly true if only the wallpaper layer should be included in the screenshot
+     */
     Bitmap screenshotApplicationsInner(IBinder appToken, int displayId, int width, int height,
-            boolean includeFullDisplay, float frameScale, Bitmap.Config config) {
+            boolean includeFullDisplay, float frameScale, Bitmap.Config config,
+            boolean wallpaperOnly) {
         final DisplayContent displayContent;
         synchronized(mWindowMap) {
             displayContent = getDisplayContentLocked(displayId);
@@ -6244,7 +6351,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         boolean screenshotReady;
         int minLayer;
-        if (appToken == null) {
+        if (appToken == null && !wallpaperOnly) {
             screenshotReady = true;
             minLayer = 0;
         } else {
@@ -6284,11 +6391,20 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (ws.mLayer >= aboveAppLayer) {
                     continue;
                 }
+                if (wallpaperOnly && !ws.mIsWallpaper) {
+                    continue;
+                }
                 if (ws.mIsImWindow) {
                     if (!includeImeInScreenshot) {
                         continue;
                     }
                 } else if (ws.mIsWallpaper) {
+                    // If this is the wallpaper layer and we're only looking for the wallpaper layer
+                    // then the target window state is this one.
+                    if (wallpaperOnly) {
+                        appWin = ws;
+                    }
+
                     if (appWin == null) {
                         // We have not ran across the target window yet, so it is probably
                         // behind the wallpaper. This can happen when the keyguard is up and
@@ -6336,8 +6452,10 @@ public class WindowManagerService extends IWindowManager.Stub
                     }
                 }
 
-                if (ws.mAppToken != null && ws.mAppToken.token == appToken &&
-                        ws.isDisplayedLw() && winAnim.getShown()) {
+                final boolean foundTargetWs =
+                        (ws.mAppToken != null && ws.mAppToken.token == appToken)
+                        || (appWin != null && wallpaperOnly);
+                if (foundTargetWs && ws.isDisplayedLw() && winAnim.getShown()) {
                     screenshotReady = true;
                 }
 
@@ -6592,6 +6710,7 @@ public class WindowManagerService extends IWindowManager.Stub
         Binder.restoreCallingIdentity(origId);
     }
 
+
     // TODO(multidisplay): Rotate any display?
     /**
      * Updates the current rotation.
@@ -6628,13 +6747,13 @@ public class WindowManagerService extends IWindowManager.Stub
         //       an orientation that has different metrics than it expected.
         //       eg. Portrait instead of Landscape.
 
-        int rotation = mPolicy.rotationForOrientationLw(mForcedAppOrientation, mRotation);
+        int rotation = mPolicy.rotationForOrientationLw(mLastOrientation, mRotation);
         boolean altOrientation = !mPolicy.rotationHasCompatibleMetricsLw(
-                mForcedAppOrientation, rotation);
+                mLastOrientation, rotation);
 
         if (DEBUG_ORIENTATION) {
-            Slog.v(TAG_WM, "Application requested orientation "
-                    + mForcedAppOrientation + ", got rotation " + rotation
+            Slog.v(TAG_WM, "Selected orientation "
+                    + mLastOrientation + ", got rotation " + rotation
                     + " which has " + (altOrientation ? "incompatible" : "compatible")
                     + " metrics");
         }
@@ -6648,8 +6767,10 @@ public class WindowManagerService extends IWindowManager.Stub
             Slog.v(TAG_WM,
                 "Rotation changed to " + rotation + (altOrientation ? " (alt)" : "")
                 + " from " + mRotation + (mAltOrientation ? " (alt)" : "")
-                + ", forceApp=" + mForcedAppOrientation);
+                + ", lastOrientation=" + mLastOrientation);
         }
+
+        int oldRotation = mRotation;
 
         mRotation = rotation;
         mAltOrientation = altOrientation;
@@ -6667,10 +6788,46 @@ public class WindowManagerService extends IWindowManager.Stub
         } else {
             mPolicy.selectRotationAnimationLw(anim);
         }
-        startFreezingDisplayLocked(inTransaction, anim[0], anim[1]);
-        // startFreezingDisplayLocked can reset the ScreenRotationAnimation.
-        screenRotationAnimation =
+        boolean rotateSeamlessly = mPolicy.shouldRotateSeamlessly(oldRotation, mRotation);
+        final WindowList windows = displayContent.getWindowList();
+        // We can't rotate seamlessly while an existing seamless rotation is still
+        // waiting on windows to finish drawing.
+        if (rotateSeamlessly) {
+            for (int i = windows.size() - 1; i >= 0; i--) {
+                WindowState w = windows.get(i);
+                if (w.mSeamlesslyRotated) {
+                    rotateSeamlessly = false;
+                    break;
+                }
+                // In what can only be called an unfortunate workaround we require
+                // seamlessly rotated child windows to have the TRANSFORM_TO_DISPLAY_INVERSE
+                // flag. Due to limitations in the client API, there is no way for
+                // the client to set this flag in a race free fashion. If we seamlessly rotate
+                // a window which does not have this flag, but then gains it, we will get
+                // an incorrect visual result (rotated viewfinder). This means if we want to
+                // support seamlessly rotating windows which could gain this flag, we can't
+                // rotate windows without it. This limits seamless rotation in N to camera framework
+                // users, windows without children, and native code. This is unfortunate but
+                // having the camera work is our primary goal.
+                if (w.isChildWindow() & w.isVisibleNow() &&
+                        !w.mWinAnimator.mSurfaceController.getTransformToDisplayInverse()) {
+                    rotateSeamlessly = false;
+                }
+            }
+        }
+
+        if (!rotateSeamlessly) {
+            startFreezingDisplayLocked(inTransaction, anim[0], anim[1]);
+            // startFreezingDisplayLocked can reset the ScreenRotationAnimation.
+            screenRotationAnimation =
                 mAnimator.getScreenRotationAnimationLocked(Display.DEFAULT_DISPLAY);
+        } else {
+            // The screen rotation animation uses a screenshot to freeze the screen
+            // while windows resize underneath.
+            // When we are rotating seamlessly, we allow the elements to transition
+            // to their rotated state independently and without a freeze required.
+            screenRotationAnimation = null;
+        }
 
         // We need to update our screen size information to match the new rotation. If the rotation
         // has actually changed then this method will return true and, according to the comment at
@@ -6699,6 +6856,13 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
             }
 
+            if (rotateSeamlessly) {
+                for (int i = windows.size() - 1; i >= 0; i--) {
+                    WindowState w = windows.get(i);
+                    w.mWinAnimator.seamlesslyRotateWindow(oldRotation, mRotation);
+                }
+            }
+
             mDisplayManagerInternal.performTraversalInTransactionFromWindowManager();
         } finally {
             if (!inTransaction) {
@@ -6709,19 +6873,22 @@ public class WindowManagerService extends IWindowManager.Stub
             }
         }
 
-        final WindowList windows = displayContent.getWindowList();
         for (int i = windows.size() - 1; i >= 0; i--) {
             WindowState w = windows.get(i);
             // Discard surface after orientation change, these can't be reused.
             if (w.mAppToken != null) {
                 w.mAppToken.destroySavedSurfaces();
             }
-            if (w.mHasSurface) {
+            if (w.mHasSurface && !rotateSeamlessly) {
                 if (DEBUG_ORIENTATION) Slog.v(TAG_WM, "Set mOrientationChanging of " + w);
                 w.mOrientationChanging = true;
                 mWindowPlacerLocked.mOrientationChangeComplete = false;
+                w.mLastFreezeDuration = 0;
             }
-            w.mLastFreezeDuration = 0;
+        }
+        if (rotateSeamlessly) {
+            mH.removeMessages(H.SEAMLESS_ROTATION_TIMEOUT);
+            mH.sendEmptyMessageDelayed(H.SEAMLESS_ROTATION_TIMEOUT, SEAMLESS_ROTATION_TIMEOUT_DURATION);
         }
 
         for (int i=mRotationWatchers.size()-1; i>=0; i--) {
@@ -6731,7 +6898,7 @@ public class WindowManagerService extends IWindowManager.Stub
             }
         }
 
-        //TODO (multidisplay): Magnification is supported only for the default display.
+        // TODO (multidisplay): Magnification is supported only for the default display.
         // Announce rotation only if we will not animate as we already have the
         // windows in final state. Otherwise, we make this call at the rotation end.
         if (screenRotationAnimation == null && mAccessibilityController != null
@@ -8019,8 +8186,8 @@ public class WindowManagerService extends IWindowManager.Stub
         public static final int NOTIFY_STARTING_WINDOW_DRAWN = 50;
         public static final int UPDATE_ANIMATION_SCALE = 51;
         public static final int WINDOW_REMOVE_TIMEOUT = 52;
-
         public static final int NOTIFY_DOCKED_STACK_MINIMIZED_CHANGED = 53;
+        public static final int SEAMLESS_ROTATION_TIMEOUT = 54;
 
         /**
          * Used to denote that an integer field in a message will not be used.
@@ -8658,6 +8825,27 @@ public class WindowManagerService extends IWindowManager.Stub
                 break;
                 case NOTIFY_DOCKED_STACK_MINIMIZED_CHANGED: {
                     mAmInternal.notifyDockedStackMinimizedChanged(msg.arg1 == 1);
+                }
+                break;
+                case SEAMLESS_ROTATION_TIMEOUT: {
+                    // Rotation only supported on primary display.
+                    // TODO(multi-display)
+                    synchronized(mWindowMap) {
+                        final DisplayContent displayContent = getDefaultDisplayContentLocked();
+                        final WindowList windows = displayContent.getWindowList();
+                        boolean layoutNeeded = false;
+                        for (int i = windows.size() - 1; i >= 0; i--) {
+                            WindowState w = windows.get(i);
+                            if (w.mSeamlesslyRotated) {
+                                layoutNeeded = true;
+                                w.setDisplayLayoutNeeded();
+                            }
+                            w.mSeamlesslyRotated = false;
+                        }
+                        if (layoutNeeded) {
+                            mWindowPlacerLocked.performSurfacePlacement();
+                        }
+                    }
                 }
                 break;
             }
@@ -9319,7 +9507,7 @@ public class WindowManagerService extends IWindowManager.Stub
             if (task != null && task.mStack.getBoundsAnimating()) {
                 return;
             }
-            w.setInsetsChanged();
+            w.setReportResizeHints();
             boolean configChanged = w.isConfigChanged();
             if (DEBUG_CONFIGURATION && configChanged) {
                 Slog.v(TAG_WM, "Win " + w + " config changed: "
@@ -9327,15 +9515,22 @@ public class WindowManagerService extends IWindowManager.Stub
             }
             final boolean dragResizingChanged = w.isDragResizeChanged()
                     && !w.isDragResizingChangeReported();
+
             if (localLOGV) Slog.v(TAG_WM, "Resizing " + w
                     + ": configChanged=" + configChanged
                     + " dragResizingChanged=" + dragResizingChanged
                     + " last=" + w.mLastFrame + " frame=" + w.mFrame);
+
+            // We update mLastFrame always rather than in the conditional with the
+            // last inset variables, because mFrameSizeChanged only tracks the
+            // width and height changing.
             w.mLastFrame.set(w.mFrame);
+
             if (w.mContentInsetsChanged
                     || w.mVisibleInsetsChanged
                     || winAnimator.mSurfaceResized
                     || w.mOutsetsChanged
+                    || w.mFrameSizeChanged
                     || configChanged
                     || dragResizingChanged
                     || !w.isResizedWhileNotDragResizingReported()) {
@@ -10173,6 +10368,15 @@ public class WindowManagerService extends IWindowManager.Stub
         }
     }
 
+    public void notifyAppRelaunchesCleared(IBinder token) {
+        synchronized (mWindowMap) {
+            final AppWindowToken appWindow = findAppWindowToken(token);
+            if (appWindow != null) {
+                appWindow.clearRelaunching();
+            }
+        }
+    }
+
     @Override
     public int getDockedDividerInsetsLw() {
         return getDefaultDisplayContentLocked().getDockedDividerController().getContentInsets();
@@ -10434,7 +10638,7 @@ public class WindowManagerService extends IWindowManager.Stub
             pw.print("  mRotation="); pw.print(mRotation);
                     pw.print(" mAltOrientation="); pw.println(mAltOrientation);
             pw.print("  mLastWindowForcedOrientation="); pw.print(mLastWindowForcedOrientation);
-                    pw.print(" mForcedAppOrientation="); pw.println(mForcedAppOrientation);
+                    pw.print(" mLastOrientation="); pw.println(mLastOrientation);
             pw.print("  mDeferredRotationPauseCount="); pw.println(mDeferredRotationPauseCount);
             pw.print("  Animation settings: disabled="); pw.print(mAnimationsDisabled);
                     pw.print(" window="); pw.print(mWindowAnimationScaleSetting);
@@ -11313,8 +11517,9 @@ public class WindowManagerService extends IWindowManager.Stub
                 for (int winNdx = windows.size() - 1; winNdx >= 0; --winNdx) {
                     final WindowState win = windows.get(winNdx);
                     final boolean isForceHiding = mPolicy.isForceHiding(win.mAttrs);
+                    final boolean keyguard = mPolicy.isKeyguardHostWindow(win.mAttrs);
                     if (win.isVisibleLw()
-                            && (win.mAppToken != null || isForceHiding)) {
+                            && (win.mAppToken != null || isForceHiding || keyguard)) {
                         win.mWinAnimator.mDrawState = DRAW_PENDING;
                         // Force add to mResizingWindows.
                         win.mLastContentInsets.set(-1, -1, -1, -1);

@@ -670,7 +670,7 @@
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"Արտակարգ իրավիճակների հեռախոսահամար"</string>
     <string name="lockscreen_carrier_default" msgid="6169005837238288522">"Ծառայություն չկա"</string>
     <string name="lockscreen_screen_locked" msgid="7288443074806832904">"Էկրանը կողպված է:"</string>
-    <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Սեղմեք Ցանկ` ապակողպելու համար, կամ կատարեք արտակարգ իրավիճակների զանգ:"</string>
+    <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Ապակողպելու կամ շտապ կանչ անելու համար սեղմեք «Ընտրացանկ»"</string>
     <string name="lockscreen_instructions_when_pattern_disabled" msgid="686260028797158364">"Ապակողպելու համար սեղմեք Ցանկը:"</string>
     <string name="lockscreen_pattern_instructions" msgid="7478703254964810302">"Հավաքեք սխեման` ապակողպելու համար"</string>
     <string name="lockscreen_emergency_call" msgid="5298642613417801888">"Արտակարգ իրավիճակ"</string>
@@ -678,6 +678,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Ճիշտ է:"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Կրկին փորձեք"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Կրկին փորձեք"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Ապակողպեք՝ բոլոր գործառույթներն ու տվյալներն օգտագործելու համար"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Առավելագույն Դեմքով ապակողպման փորձերը գերազանցված են"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"SIM քարտ չկա"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Գրասալիկում SIM քարտ չկա:"</string>
@@ -967,7 +968,7 @@
     <string name="whichApplicationNamed" msgid="8260158865936942783">"Եզրափակել գործողությունը՝ օգտագործելով %1$s"</string>
     <string name="whichApplicationLabel" msgid="7425855495383818784">"Ավարտել գործողությունը"</string>
     <string name="whichViewApplication" msgid="3272778576700572102">"Բացել հետևյալ ծրագրով՝"</string>
-    <string name="whichViewApplicationNamed" msgid="2286418824011249620">"Բացել հետևյալով՝ %1$s"</string>
+    <string name="whichViewApplicationNamed" msgid="2286418824011249620">"Բացել ծրագրով՝ %1$s"</string>
     <string name="whichViewApplicationLabel" msgid="2666774233008808473">"Բացել"</string>
     <string name="whichEditApplication" msgid="144727838241402655">"Խմբագրել հետևյալ ծրագրով՝"</string>
     <string name="whichEditApplicationNamed" msgid="1775815530156447790">"Խմբագրել հետևյալով՝ %1$s"</string>
@@ -1022,8 +1023,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"Android-ը նորացվում է..."</string>
     <string name="android_start_title" msgid="8418054686415318207">"Android-ը մեկնարկում է…"</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"Պահեստի օպտիմալացում:"</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android-ը նորացվում է"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Android-ի թարմացումն ավարտվում է…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"Հնարավոր է՝ որոշ հավելվածներ մինչև նորացման ավարտը ճիշտ չաշխատեն"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"<xliff:g id="APPLICATION">%1$s</xliff:g> հավելվածը նորացվում է…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"Օպտիմալացվում է հավելված <xliff:g id="NUMBER_0">%1$d</xliff:g>-ը <xliff:g id="NUMBER_1">%2$d</xliff:g>-ից:"</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"<xliff:g id="APPNAME">%1$s</xliff:g> հավելվածը պատրաստվում է:"</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Հավելվածները մեկնարկում են:"</string>
@@ -1636,7 +1638,7 @@
     <string name="language_picker_section_all" msgid="3097279199511617537">"Բոլոր լեզուները"</string>
     <string name="locale_search_menu" msgid="2560710726687249178">"Որոնում"</string>
     <string name="work_mode_off_title" msgid="8954725060677558855">"Աշխատանքային ռեժիմն ԱՆՋԱՏՎԱԾ Է"</string>
-    <string name="work_mode_off_message" msgid="3286169091278094476">"Թույլատրել աշխատանքային պրոֆիլի (այդ թվում նաև հավելվածների, ֆոնային համաժամացման և առնչվող գործառական հնարավորությունների) աշխատանքը:"</string>
+    <string name="work_mode_off_message" msgid="3286169091278094476">"Միացնել աշխատանքային պրոֆիլը՝ հավելվածները, ֆոնային համաժամեցումը և առնչվող գործառույթները"</string>
     <string name="work_mode_turn_on" msgid="2062544985670564875">"Միացնել"</string>
     <string name="new_sms_notification_title" msgid="8442817549127555977">"Դուք ունեք նոր հաղորդագրություններ"</string>
     <string name="new_sms_notification_content" msgid="7002938807812083463">"Դիտելու համար բացել SMS հավելվածը"</string>
@@ -1651,7 +1653,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"Ապամրացնել"</string>
     <string name="app_info" msgid="6856026610594615344">"Հավելվածի տվյալներ"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"Վերակայե՞լ սարքը:"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"Հպեք՝ սարքը վերակայելու համար"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"Ցուցադրական օգտվողը գործարկվում է…"</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"Սարաքը վերակայվում է…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"Վերակայե՞լ սարքը:"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"Կատարված փոփոխությունները չեն պահվի, իսկ ցուցադրական նյութը կրկին կգործարկվի <xliff:g id="TIMEOUT">%1$s</xliff:g> վայրկյանից…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"Չեղարկել"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"Վերակայել հիմա"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"Սարքն առանց սահմանափակումների օգտագործելու համար կատարեք գործարանային վերակայում"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"Հպեք՝ ավելին իմանալու համար:"</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"Անջատած <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="conference_call" msgid="3751093130790472426">"Կոնֆերանս զանգ"</string>
 </resources>

@@ -2371,7 +2371,8 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             data.enforceInterface(IActivityManager.descriptor);
             IUserSwitchObserver observer = IUserSwitchObserver.Stub.asInterface(
                     data.readStrongBinder());
-            registerUserSwitchObserver(observer);
+            String name = data.readString();
+            registerUserSwitchObserver(observer, name);
             reply.writeNoException();
             return true;
         }
@@ -2993,6 +2994,27 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
                     requiredPermission, options);
             reply.writeNoException();
             reply.writeInt(result);
+            return true;
+        }
+        case SET_VR_THREAD_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            final int tid = data.readInt();
+            setVrThread(tid);
+            reply.writeNoException();
+            return true;
+        }
+        case SET_RENDER_THREAD_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            final int tid = data.readInt();
+            setRenderThread(tid);
+            reply.writeNoException();
+            return true;
+        }
+        case SET_HAS_TOP_UI: {
+            data.enforceInterface(IActivityManager.descriptor);
+            final boolean hasTopUi = data.readInt() != 0;
+            setHasTopUi(hasTopUi);
+            reply.writeNoException();
             return true;
         }
         }
@@ -6060,11 +6082,13 @@ class ActivityManagerProxy implements IActivityManager
         return result;
     }
 
-    public void registerUserSwitchObserver(IUserSwitchObserver observer) throws RemoteException {
+    public void registerUserSwitchObserver(IUserSwitchObserver observer,
+            String name) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken(IActivityManager.descriptor);
         data.writeStrongBinder(observer != null ? observer.asBinder() : null);
+        data.writeString(name);
         mRemote.transact(REGISTER_USER_SWITCH_OBSERVER_TRANSACTION, data, reply, 0);
         reply.readException();
         data.recycle();
@@ -7026,6 +7050,46 @@ class ActivityManagerProxy implements IActivityManager
         data.recycle();
         reply.recycle();
         return res;
+    }
+
+    @Override
+    public void setVrThread(int tid)
+        throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(tid);
+        mRemote.transact(SET_VR_THREAD_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+        return;
+    }
+
+    public void setRenderThread(int tid)
+        throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(tid);
+        mRemote.transact(SET_RENDER_THREAD_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+        return;
+    }
+
+    public void setHasTopUi(boolean hasTopUi)
+            throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(hasTopUi ? 1 : 0);
+        mRemote.transact(SET_HAS_TOP_UI, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+        return;
     }
 
     private IBinder mRemote;

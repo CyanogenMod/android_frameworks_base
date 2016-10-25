@@ -18,7 +18,9 @@ package com.android.server.input;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
+import android.os.Build;
 import android.os.LocaleList;
+import android.util.Log;
 import android.view.Display;
 import com.android.internal.inputmethod.InputMethodSubtypeHandle;
 import com.android.internal.os.SomeArgs;
@@ -98,8 +100,11 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,6 +115,8 @@ import java.util.List;
 import java.util.Locale;
 
 import cyanogenmod.providers.CMSettings;
+
+import libcore.io.IoUtils;
 import libcore.io.Streams;
 import libcore.util.Objects;
 
@@ -136,6 +143,8 @@ public class InputManagerService extends IInputManager.Stub
 
     private final Context mContext;
     private final InputManagerHandler mHandler;
+
+    private final File mDoubleTouchGestureEnableFile;
 
     private WindowManagerCallbacks mWindowManagerCallbacks;
     private WiredAccessoryCallbacks mWiredAccessoryCallbacks;
@@ -304,6 +313,11 @@ public class InputManagerService extends IInputManager.Stub
         Slog.i(TAG, "Initializing input manager, mUseDevInputEventForAudioJack="
                 + mUseDevInputEventForAudioJack);
         mPtr = nativeInit(this, mContext, mHandler.getLooper().getQueue());
+
+        String doubleTouchGestureEnablePath = context.getResources().getString(
+                R.string.config_doubleTouchGestureEnableFile);
+        mDoubleTouchGestureEnableFile = TextUtils.isEmpty(doubleTouchGestureEnablePath) ? null :
+            new File(doubleTouchGestureEnablePath);
 
         LocalServices.addService(InputManagerInternal.class, new LocalService());
     }
@@ -2444,6 +2458,21 @@ public class InputManagerService extends IInputManager.Stub
         @Override
         public void toggleCapsLock(int deviceId) {
             nativeToggleCapsLock(mPtr, deviceId);
+        }
+
+        @Override
+        public void setPulseGestureEnabled(boolean enabled) {
+            if (mDoubleTouchGestureEnableFile != null) {
+                FileWriter writer = null;
+                try {
+                    writer = new FileWriter(mDoubleTouchGestureEnableFile);
+                    writer.write(enabled ? "1" : "0");
+                } catch (IOException e) {
+                    Log.wtf(TAG, "Unable to setPulseGestureEnabled", e);
+                } finally {
+                    IoUtils.closeQuietly(writer);
+                }
+            }
         }
     }
 }

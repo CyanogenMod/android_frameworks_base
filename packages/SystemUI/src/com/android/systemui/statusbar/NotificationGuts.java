@@ -186,7 +186,7 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
         try {
             final PackageInfo info =
                     pm.getPackageInfo(sbn.getPackageName(), PackageManager.GET_SIGNATURES);
-            systemApp = Utils.isSystemPackage(pm, info);
+            systemApp = Utils.isSystemPackage(getResources(), pm, info);
         } catch (PackageManager.NameNotFoundException e) {
             // unlikely.
         }
@@ -266,7 +266,7 @@ public class NotificationGuts extends LinearLayout implements TunerService.Tunab
     }
 
     private void bindSlider(final View importanceSlider, final boolean systemApp) {
-        mActiveSliderTint = loadColorStateList(R.color.notification_guts_slider_color);
+        mActiveSliderTint = ColorStateList.valueOf(Utils.getColorAccent(mContext));
         mInactiveSliderTint = loadColorStateList(R.color.notification_guts_disabled_slider_color);
 
         mImportanceSummary = ((TextView) importanceSlider.findViewById(R.id.summary));

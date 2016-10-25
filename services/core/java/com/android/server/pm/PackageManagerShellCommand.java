@@ -1099,8 +1099,9 @@ class PackageManagerShellCommand extends ShellCommand {
 
         try {
             mInterface.setHomeActivity(componentName, userId);
+            pw.println("Success");
             return 0;
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             pw.println(e.toString());
             return 1;
         }
@@ -1235,7 +1236,7 @@ class PackageManagerShellCommand extends ShellCommand {
                     PackageInstaller.STATUS_FAILURE);
             if (status == PackageInstaller.STATUS_SUCCESS) {
                 if (logSuccess) {
-                    System.out.println("Success");
+                    pw.println("Success");
                 }
             } else {
                 pw.println("Failure ["

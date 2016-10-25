@@ -221,6 +221,13 @@ final class ActivityRecord {
     boolean pendingVoiceInteractionStart;   // Waiting for activity-invoked voice session
     IVoiceInteractionSession voiceSession;  // Voice interaction session for this activity
 
+    // A hint to override the window specified rotation animation, or -1
+    // to use the window specified value. We use this so that
+    // we can select the right animation in the cases of starting
+    // windows, where the app hasn't had time to set a value
+    // on the window.
+    int mRotationAnimationHint = -1;
+
     private static String startingWindowStateToString(int state) {
         switch (state) {
             case STARTING_WINDOW_NOT_SHOWN:
@@ -635,6 +642,7 @@ final class ActivityRecord {
         if (options != null) {
             pendingOptions = options;
             mLaunchTaskBehind = pendingOptions.getLaunchTaskBehind();
+            mRotationAnimationHint = pendingOptions.getRotationAnimationHint();
             PendingIntent usageReport = pendingOptions.getUsageTimeReport();
             if (usageReport != null) {
                 appTimeTracker = new AppTimeTracker(usageReport);
@@ -737,6 +745,14 @@ final class ActivityRecord {
     private boolean isHomeIntent(Intent intent) {
         return Intent.ACTION_MAIN.equals(intent.getAction())
                 && intent.hasCategory(Intent.CATEGORY_HOME)
+                && intent.getCategories().size() == 1
+                && intent.getData() == null
+                && intent.getType() == null;
+    }
+
+    static boolean isMainIntent(Intent intent) {
+        return Intent.ACTION_MAIN.equals(intent.getAction())
+                && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
                 && intent.getCategories().size() == 1
                 && intent.getData() == null
                 && intent.getType() == null;

@@ -18,15 +18,21 @@ package android.net.apf;
 
 import static android.system.OsConstants.*;
 
+import android.os.SystemClock;
 import android.net.LinkProperties;
 import android.net.NetworkUtils;
 import android.net.apf.ApfGenerator;
 import android.net.apf.ApfGenerator.IllegalInstructionException;
 import android.net.apf.ApfGenerator.Register;
 import android.net.ip.IpManager;
+import android.net.metrics.ApfProgramEvent;
+import android.net.metrics.ApfStats;
+import android.net.metrics.IpConnectivityLog;
+import android.net.metrics.RaEvent;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.system.PacketSocketAddress;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.Pair;
 
@@ -69,12 +75,33 @@ import libcore.io.IoBridge;
  * @hide
  */
 public class ApfFilter {
+
+    // Enums describing the outcome of receiving an RA packet.
+    private static enum ProcessRaResult {
+        MATCH,          // Received RA matched a known RA
+        DROPPED,        // Received RA ignored due to MAX_RAS
+        PARSE_ERROR,    // Received RA could not be parsed
+        ZERO_LIFETIME,  // Received RA had 0 lifetime
+        UPDATE_NEW_RA,  // APF program updated for new RA
+        UPDATE_EXPIRY   // APF program updated for expiry
+    }
+
     // Thread to listen for RAs.
     @VisibleForTesting
     class ReceiveThread extends Thread {
         private final byte[] mPacket = new byte[1514];
         private final FileDescriptor mSocket;
         private volatile boolean mStopped;
+
+        // Starting time of the RA receiver thread.
+        private final long mStart = SystemClock.elapsedRealtime();
+
+        private int mReceivedRas;     // Number of received RAs
+        private int mMatchingRas;     // Number of received RAs matching a known RA
+        private int mDroppedRas;      // Number of received RAs ignored due to the MAX_RAS limit
+        private int mParseErrors;     // Number of received RAs that could not be parsed
+        private int mZeroLifetimeRas; // Number of received RAs with a 0 lifetime
+        private int mProgramUpdates;  // Number of APF program updates triggered by receiving a RA
 
         public ReceiveThread(FileDescriptor socket) {
             mSocket = socket;
@@ -94,13 +121,46 @@ public class ApfFilter {
             while (!mStopped) {
                 try {
                     int length = Os.read(mSocket, mPacket, 0, mPacket.length);
-                    processRa(mPacket, length);
+                    updateStats(processRa(mPacket, length));
                 } catch (IOException|ErrnoException e) {
                     if (!mStopped) {
                         Log.e(TAG, "Read error", e);
                     }
                 }
             }
+            logStats();
+        }
+
+        private void updateStats(ProcessRaResult result) {
+            mReceivedRas++;
+            switch(result) {
+                case MATCH:
+                    mMatchingRas++;
+                    return;
+                case DROPPED:
+                    mDroppedRas++;
+                    return;
+                case PARSE_ERROR:
+                    mParseErrors++;
+                    return;
+                case ZERO_LIFETIME:
+                    mZeroLifetimeRas++;
+                    return;
+                case UPDATE_EXPIRY:
+                    mMatchingRas++;
+                    mProgramUpdates++;
+                    return;
+                case UPDATE_NEW_RA:
+                    mProgramUpdates++;
+                    return;
+            }
+        }
+
+        private void logStats() {
+            long durationMs = SystemClock.elapsedRealtime() - mStart;
+            int maxSize = mApfCapabilities.maximumApfProgramSize;
+            mMetricsLog.log(new ApfStats(durationMs, mReceivedRas, mMatchingRas, mDroppedRas,
+                     mZeroLifetimeRas, mParseErrors, mProgramUpdates, maxSize));
         }
     }
 
@@ -120,6 +180,7 @@ public class ApfFilter {
     private static final int IPV4_FRAGMENT_OFFSET_MASK = 0x1fff;
     private static final int IPV4_PROTOCOL_OFFSET = ETH_HEADER_LEN + 9;
     private static final int IPV4_DEST_ADDR_OFFSET = ETH_HEADER_LEN + 16;
+    private static final int IPV4_ANY_HOST_ADDRESS = 0;
 
     private static final int IPV6_NEXT_HEADER_OFFSET = ETH_HEADER_LEN + 6;
     private static final int IPV6_SRC_ADDR_OFFSET = ETH_HEADER_LEN + 8;
@@ -141,19 +202,22 @@ public class ApfFilter {
     // NOTE: this must be added to the IPv4 header length in IPV4_HEADER_SIZE_MEMORY_SLOT
     private static final int DHCP_CLIENT_MAC_OFFSET = ETH_HEADER_LEN + UDP_HEADER_LEN + 28;
 
-    private static int ARP_HEADER_OFFSET = ETH_HEADER_LEN;
-    private static final byte[] ARP_IPV4_REQUEST_HEADER = new byte[]{
+    private static final int ARP_HEADER_OFFSET = ETH_HEADER_LEN;
+    private static final int ARP_OPCODE_OFFSET = ARP_HEADER_OFFSET + 6;
+    private static final short ARP_OPCODE_REQUEST = 1;
+    private static final short ARP_OPCODE_REPLY = 2;
+    private static final byte[] ARP_IPV4_HEADER = new byte[]{
             0, 1, // Hardware type: Ethernet (1)
             8, 0, // Protocol type: IP (0x0800)
             6,    // Hardware size: 6
             4,    // Protocol size: 4
-            0, 1  // Opcode: request (1)
     };
-    private static int ARP_TARGET_IP_ADDRESS_OFFSET = ETH_HEADER_LEN + 24;
+    private static final int ARP_TARGET_IP_ADDRESS_OFFSET = ETH_HEADER_LEN + 24;
 
     private final ApfCapabilities mApfCapabilities;
     private final IpManager.Callback mIpManagerCallback;
     private final NetworkInterface mNetworkInterface;
+    private final IpConnectivityLog mMetricsLog;
     @VisibleForTesting
     byte[] mHardwareAddress;
     @VisibleForTesting
@@ -168,11 +232,12 @@ public class ApfFilter {
 
     @VisibleForTesting
     ApfFilter(ApfCapabilities apfCapabilities, NetworkInterface networkInterface,
-            IpManager.Callback ipManagerCallback, boolean multicastFilter) {
+            IpManager.Callback ipManagerCallback, boolean multicastFilter, IpConnectivityLog log) {
         mApfCapabilities = apfCapabilities;
         mIpManagerCallback = ipManagerCallback;
         mNetworkInterface = networkInterface;
         mMulticastFilter = multicastFilter;
+        mMetricsLog = log;
 
         maybeStartFilter();
     }
@@ -213,8 +278,9 @@ public class ApfFilter {
     }
 
     // Returns seconds since Unix Epoch.
+    // TODO: use SystemClock.elapsedRealtime() instead
     private static long curTime() {
-        return System.currentTimeMillis() / 1000L;
+        return System.currentTimeMillis() / DateUtils.SECOND_IN_MILLIS;
     }
 
     // A class to hold information about an RA.
@@ -297,7 +363,7 @@ public class ApfFilter {
         }
 
         // Can't be static because it's in a non-static inner class.
-        // TODO: Make this final once RA is its own class.
+        // TODO: Make this static once RA is its own class.
         private int uint8(byte b) {
             return b & 0xff;
         }
@@ -306,12 +372,16 @@ public class ApfFilter {
             return s & 0xffff;
         }
 
-        private long uint32(int s) {
-            return s & 0xffffffffL;
+        private long uint32(int i) {
+            return i & 0xffffffffL;
         }
 
         private long getUint16(ByteBuffer buffer, int position) {
             return uint16(buffer.getShort(position));
+        }
+
+        private long getUint32(ByteBuffer buffer, int position) {
+            return uint32(buffer.getInt(position));
         }
 
         private void prefixOptionToString(StringBuffer sb, int offset) {
@@ -360,7 +430,7 @@ public class ApfFilter {
          * @param lifetimeOffset offset from mPacket.position() to the next lifetime data.
          * @param lifetimeLength length of the next lifetime data.
          * @return offset within packet of where the next binary range of data not including
-         *         a lifetime.  This can be passed into the next invocation of this function
+         *         a lifetime. This can be passed into the next invocation of this function
          *         via {@code lastNonLifetimeStart}.
          */
         private int addNonLifetime(int lastNonLifetimeStart, int lifetimeOffset,
@@ -371,13 +441,17 @@ public class ApfFilter {
             return lifetimeOffset + lifetimeLength;
         }
 
+        private int addNonLifetimeU32(int lastNonLifetimeStart) {
+            return addNonLifetime(lastNonLifetimeStart,
+                    ICMP6_4_BYTE_LIFETIME_OFFSET, ICMP6_4_BYTE_LIFETIME_LEN);
+        }
+
         // Note that this parses RA and may throw IllegalArgumentException (from
         // Buffer.position(int) or due to an invalid-length option) or IndexOutOfBoundsException
         // (from ByteBuffer.get(int) ) if parsing encounters something non-compliant with
         // specifications.
         Ra(byte[] packet, int length) {
-            mPacket = ByteBuffer.allocate(length).put(ByteBuffer.wrap(packet, 0, length));
-            mPacket.clear();
+            mPacket = ByteBuffer.wrap(Arrays.copyOf(packet, length));
             mLastSeen = curTime();
 
             // Sanity check packet in case a packet arrives before we attach RA filter
@@ -389,6 +463,8 @@ public class ApfFilter {
             }
 
 
+            RaEvent.Builder builder = new RaEvent.Builder();
+
             // Ignore the checksum.
             int lastNonLifetimeStart = addNonLifetime(0,
                     ICMP6_RA_CHECKSUM_OFFSET,
@@ -398,35 +474,50 @@ public class ApfFilter {
             lastNonLifetimeStart = addNonLifetime(lastNonLifetimeStart,
                     ICMP6_RA_ROUTER_LIFETIME_OFFSET,
                     ICMP6_RA_ROUTER_LIFETIME_LEN);
+            builder.updateRouterLifetime(getUint16(mPacket, ICMP6_RA_ROUTER_LIFETIME_OFFSET));
 
             // Ensures that the RA is not truncated.
             mPacket.position(ICMP6_RA_OPTION_OFFSET);
             while (mPacket.hasRemaining()) {
-                int optionType = ((int)mPacket.get(mPacket.position())) & 0xff;
-                int optionLength = (((int)mPacket.get(mPacket.position() + 1)) & 0xff) * 8;
+                final int position = mPacket.position();
+                final int optionType = uint8(mPacket.get(position));
+                final int optionLength = uint8(mPacket.get(position + 1)) * 8;
+                long lifetime;
                 switch (optionType) {
                     case ICMP6_PREFIX_OPTION_TYPE:
                         // Parse valid lifetime
                         lastNonLifetimeStart = addNonLifetime(lastNonLifetimeStart,
                                 ICMP6_PREFIX_OPTION_VALID_LIFETIME_OFFSET,
                                 ICMP6_PREFIX_OPTION_VALID_LIFETIME_LEN);
+                        lifetime = getUint32(mPacket,
+                                position + ICMP6_PREFIX_OPTION_VALID_LIFETIME_OFFSET);
+                        builder.updatePrefixValidLifetime(lifetime);
                         // Parse preferred lifetime
                         lastNonLifetimeStart = addNonLifetime(lastNonLifetimeStart,
                                 ICMP6_PREFIX_OPTION_PREFERRED_LIFETIME_OFFSET,
                                 ICMP6_PREFIX_OPTION_PREFERRED_LIFETIME_LEN);
-                        mPrefixOptionOffsets.add(mPacket.position());
+                        lifetime = getUint32(mPacket,
+                                position + ICMP6_PREFIX_OPTION_PREFERRED_LIFETIME_OFFSET);
+                        builder.updatePrefixPreferredLifetime(lifetime);
+                        mPrefixOptionOffsets.add(position);
                         break;
-                    // These three options have the same lifetime offset and size, so process
-                    // together:
+                    // These three options have the same lifetime offset and size, and
+                    // are processed with the same specialized addNonLifetimeU32:
                     case ICMP6_RDNSS_OPTION_TYPE:
-                        mRdnssOptionOffsets.add(mPacket.position());
-                        // Fall through.
+                        mRdnssOptionOffsets.add(position);
+                        lastNonLifetimeStart = addNonLifetimeU32(lastNonLifetimeStart);
+                        lifetime = getUint32(mPacket, position + ICMP6_4_BYTE_LIFETIME_OFFSET);
+                        builder.updateRdnssLifetime(lifetime);
+                        break;
                     case ICMP6_ROUTE_INFO_OPTION_TYPE:
+                        lastNonLifetimeStart = addNonLifetimeU32(lastNonLifetimeStart);
+                        lifetime = getUint32(mPacket, position + ICMP6_4_BYTE_LIFETIME_OFFSET);
+                        builder.updateRouteInfoLifetime(lifetime);
+                        break;
                     case ICMP6_DNSSL_OPTION_TYPE:
-                        // Parse lifetime
-                        lastNonLifetimeStart = addNonLifetime(lastNonLifetimeStart,
-                                ICMP6_4_BYTE_LIFETIME_OFFSET,
-                                ICMP6_4_BYTE_LIFETIME_LEN);
+                        lastNonLifetimeStart = addNonLifetimeU32(lastNonLifetimeStart);
+                        lifetime = getUint32(mPacket, position + ICMP6_4_BYTE_LIFETIME_OFFSET);
+                        builder.updateDnsslLifetime(lifetime);
                         break;
                     default:
                         // RFC4861 section 4.2 dictates we ignore unknown options for fowards
@@ -437,11 +528,12 @@ public class ApfFilter {
                     throw new IllegalArgumentException(String.format(
                         "Invalid option length opt=%d len=%d", optionType, optionLength));
                 }
-                mPacket.position(mPacket.position() + optionLength);
+                mPacket.position(position + optionLength);
             }
             // Mark non-lifetime bytes since last lifetime.
             addNonLifetime(lastNonLifetimeStart, 0, 0);
             mMinLifetime = minLifetime(packet, length);
+            mMetricsLog.log(builder.build());
         }
 
         // Ignoring lifetimes (which may change) does {@code packet} match this RA?
@@ -470,16 +562,19 @@ public class ApfFilter {
                      continue;
                 }
 
-                int lifetimeLength = mNonLifetimes.get(i+1).first - offset;
-                long val;
+                final int lifetimeLength = mNonLifetimes.get(i+1).first - offset;
+                final long optionLifetime;
                 switch (lifetimeLength) {
-                    case 2: val = byteBuffer.getShort(offset); break;
-                    case 4: val = byteBuffer.getInt(offset); break;
-                    default: throw new IllegalStateException("bogus lifetime size " + length);
+                    case 2:
+                        optionLifetime = uint16(byteBuffer.getShort(offset));
+                        break;
+                    case 4:
+                        optionLifetime = uint32(byteBuffer.getInt(offset));
+                        break;
+                    default:
+                        throw new IllegalStateException("bogus lifetime size " + lifetimeLength);
                 }
-                // Mask to size, converting signed to unsigned
-                val &= (1L << (lifetimeLength * 8)) - 1;
-                minLifetime = Math.min(minLifetime, val);
+                minLifetime = Math.min(minLifetime, optionLifetime);
             }
             return minLifetime;
         }
@@ -586,23 +681,48 @@ public class ApfFilter {
     private void generateArpFilterLocked(ApfGenerator gen) throws IllegalInstructionException {
         // Here's a basic summary of what the ARP filter program does:
         //
-        // if interface has IPv4 address:
-        //   if it's not an ARP IPv4 request:
-        //     pass
-        //   if it's not a request for our IPv4 address:
-        //     drop
+        // if not ARP IPv4
+        //   pass
+        // if not ARP IPv4 reply or request
+        //   pass
+        // if unicast ARP reply
+        //   pass
+        // if interface has no IPv4 address
+        //   if target ip is 0.0.0.0
+        //      drop
+        // else
+        //   if target ip is not the interface ip
+        //      drop
         // pass
 
-        if (mIPv4Address != null) {
-            // if it's not an ARP IPv4 request, pass
-            gen.addLoadImmediate(Register.R0, ARP_HEADER_OFFSET);
-            gen.addJumpIfBytesNotEqual(Register.R0, ARP_IPV4_REQUEST_HEADER, gen.PASS_LABEL);
-            // if it's not a request for our IPv4 address, drop
+        final String checkTargetIPv4 = "checkTargetIPv4";
+
+        // Pass if not ARP IPv4.
+        gen.addLoadImmediate(Register.R0, ARP_HEADER_OFFSET);
+        gen.addJumpIfBytesNotEqual(Register.R0, ARP_IPV4_HEADER, gen.PASS_LABEL);
+
+        // Pass if unknown ARP opcode.
+        gen.addLoad16(Register.R0, ARP_OPCODE_OFFSET);
+        gen.addJumpIfR0Equals(ARP_OPCODE_REQUEST, checkTargetIPv4); // Skip to unicast check
+        gen.addJumpIfR0NotEquals(ARP_OPCODE_REPLY, gen.PASS_LABEL);
+
+        // Pass if unicast reply.
+        gen.addLoadImmediate(Register.R0, ETH_DEST_ADDR_OFFSET);
+        gen.addJumpIfBytesNotEqual(Register.R0, ETH_BROADCAST_MAC_ADDRESS, gen.PASS_LABEL);
+
+        // Either a unicast request, a unicast reply, or a broadcast reply.
+        gen.defineLabel(checkTargetIPv4);
+        if (mIPv4Address == null) {
+            // When there is no IPv4 address, drop GARP replies (b/29404209).
+            gen.addLoad32(Register.R0, ARP_TARGET_IP_ADDRESS_OFFSET);
+            gen.addJumpIfR0Equals(IPV4_ANY_HOST_ADDRESS, gen.DROP_LABEL);
+        } else {
+            // When there is an IPv4 address, drop unicast/broadcast requests
+            // and broadcast replies with a different target IPv4 address.
             gen.addLoadImmediate(Register.R0, ARP_TARGET_IP_ADDRESS_OFFSET);
             gen.addJumpIfBytesNotEqual(Register.R0, mIPv4Address, gen.DROP_LABEL);
         }
 
-        // Otherwise, pass
         gen.addJump(gen.PASS_LABEL);
     }
 
@@ -774,16 +894,19 @@ public class ApfFilter {
         return gen;
     }
 
+    /**
+     * Generate and install a new filter program.
+     */
     @GuardedBy("this")
     @VisibleForTesting
     void installNewProgramLocked() {
         purgeExpiredRasLocked();
+        ArrayList<Ra> rasToFilter = new ArrayList<>();
         final byte[] program;
         long programMinLifetime = Long.MAX_VALUE;
         try {
             // Step 1: Determine how many RA filters we can fit in the program.
             ApfGenerator gen = beginProgramLocked();
-            ArrayList<Ra> rasToFilter = new ArrayList<Ra>();
             for (Ra ra : mRas) {
                 ra.generateFilterLocked(gen);
                 // Stop if we get too big.
@@ -811,17 +934,17 @@ public class ApfFilter {
             hexDump("Installing filter: ", program, program.length);
         }
         mIpManagerCallback.installPacketFilter(program);
+        int flags = ApfProgramEvent.flagsFor(mIPv4Address != null, mMulticastFilter);
+        mMetricsLog.log(new ApfProgramEvent(
+                programMinLifetime, rasToFilter.size(), mRas.size(), program.length, flags));
     }
 
-    // Install a new filter program if the last installed one will die soon.
-    @GuardedBy("this")
-    private void maybeInstallNewProgramLocked() {
-        if (mRas.size() == 0) return;
-        // If the current program doesn't expire for a while, don't bother updating.
+    /**
+     * Returns {@code true} if a new program should be installed because the current one dies soon.
+     */
+    private boolean shouldInstallnewProgram() {
         long expiry = mLastTimeInstalledProgram + mLastInstalledProgramMinLifetime;
-        if (expiry < curTime() + MAX_PROGRAM_LIFETIME_WORTH_REFRESHING) {
-            installNewProgramLocked();
-        }
+        return expiry < curTime() + MAX_PROGRAM_LIFETIME_WORTH_REFRESHING;
     }
 
     private void hexDump(String msg, byte[] packet, int length) {
@@ -840,7 +963,12 @@ public class ApfFilter {
         }
     }
 
-    private synchronized void processRa(byte[] packet, int length) {
+    /**
+     * Process an RA packet, updating the list of known RAs and installing a new APF program
+     * if the current APF program should be updated.
+     * @return a ProcessRaResult enum describing what action was performed.
+     */
+    private synchronized ProcessRaResult processRa(byte[] packet, int length) {
         if (VDBG) hexDump("Read packet = ", packet, length);
 
         // Have we seen this RA before?
@@ -862,25 +990,34 @@ public class ApfFilter {
                 // Swap to front of array.
                 mRas.add(0, mRas.remove(i));
 
-                maybeInstallNewProgramLocked();
-                return;
+                // If the current program doesn't expire for a while, don't update.
+                if (shouldInstallnewProgram()) {
+                    installNewProgramLocked();
+                    return ProcessRaResult.UPDATE_EXPIRY;
+                }
+                return ProcessRaResult.MATCH;
             }
         }
         purgeExpiredRasLocked();
         // TODO: figure out how to proceed when we've received more then MAX_RAS RAs.
-        if (mRas.size() >= MAX_RAS) return;
+        if (mRas.size() >= MAX_RAS) {
+            return ProcessRaResult.DROPPED;
+        }
         final Ra ra;
         try {
             ra = new Ra(packet, length);
         } catch (Exception e) {
             Log.e(TAG, "Error parsing RA: " + e);
-            return;
+            return ProcessRaResult.PARSE_ERROR;
         }
         // Ignore 0 lifetime RAs.
-        if (ra.isExpired()) return;
+        if (ra.isExpired()) {
+            return ProcessRaResult.ZERO_LIFETIME;
+        }
         log("Adding " + ra);
         mRas.add(ra);
         installNewProgramLocked();
+        return ProcessRaResult.UPDATE_NEW_RA;
     }
 
     /**
@@ -905,7 +1042,8 @@ public class ApfFilter {
             Log.e(TAG, "Unsupported APF version: " + apfCapabilities.apfVersionSupported);
             return null;
         }
-        return new ApfFilter(apfCapabilities, networkInterface, ipManagerCallback, multicastFilter);
+        return new ApfFilter(apfCapabilities, networkInterface, ipManagerCallback,
+                multicastFilter, new IpConnectivityLog());
     }
 
     public synchronized void shutdown() {

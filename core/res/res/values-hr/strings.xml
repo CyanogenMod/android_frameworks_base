@@ -681,6 +681,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Ispravno!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Pokušajte ponovo"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Pokušajte ponovo"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Otključajte za sve značajke i podatke"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Premašen je maksimalni broj Otključavanja licem"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Nema SIM kartice"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"U tabletnom uređaju nema SIM kartice."</string>
@@ -1045,8 +1046,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"Android se nadograđuje…"</string>
     <string name="android_start_title" msgid="8418054686415318207">"Pokretanje Androida..."</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"Optimiziranje pohrane."</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android se nadograđuje"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Dovršavanje ažuriranja Androida…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"Neke aplikacije možda neće funkcionirati pravilno dok nadogradnja ne završi"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"Nadogradnja aplikacije <xliff:g id="APPLICATION">%1$s</xliff:g>…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"Optimiziranje aplikacije <xliff:g id="NUMBER_0">%1$d</xliff:g> od <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"Pripremanje aplikacije <xliff:g id="APPNAME">%1$s</xliff:g>."</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Pokretanje aplikacija."</string>
@@ -1687,7 +1689,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"Otkvači"</string>
     <string name="app_info" msgid="6856026610594615344">"Informacije o aplikaciji"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"Želite li vratiti uređaj na zadano?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"Dodirnite za vraćanje uređaja na zadano"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"Pokretanje demo-načina..."</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"Vraćanje uređaja na zadano…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"Želite li vratiti uređaj na zadano?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"Sve će se promjene izbrisati, a demonstracija će se ponovo pokrenuti za <xliff:g id="TIMEOUT">%1$s</xliff:g> s…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"Odustani"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"Vrati na zadano sada"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"Uređaj je vraćen na tvorničke postavke da biste ga mogli upotrebljavati bez ograničenja"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"Dodirnite da biste saznali više."</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"<xliff:g id="LABEL">%1$s</xliff:g> – onemogućeno"</string>
+    <string name="conference_call" msgid="3751093130790472426">"Konferencijski poziv"</string>
 </resources>

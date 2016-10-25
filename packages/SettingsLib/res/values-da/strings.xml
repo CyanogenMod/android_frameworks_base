@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Tillad/forbyd scanning i forbindelse med Wi-Fi-roaming afhængigt af mængden af datatrafik i grænsefladen"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Størrelser for Logger-buffer"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Vælg Logger-størrelser pr. logbuffer"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Vil du rydde det permanente lager for logger?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Når vi ikke længere overvåger via den permanente logger, er vi nødt til at slette de logdata, der er gemt på din enhed."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Gem logdata permanent på enheden"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Vælg logbuffere, der skal gemmes permanent på enheden"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Vælg USB-konfiguration"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Vælg USB-konfiguration"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Imiterede placeringer"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Tillad imiterede placeringer"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Aktivér visning af attributinspektion"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Brug DHCP-klienten fra Lollipop i stedet for den nye DHCP-klient i Android."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Hold altid mobildata aktiveret, selv når Wi-Fi er aktiveret (for at skifte hurtigt mellem netværk)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Vil du tillade USB-fejlretning?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB-fejlretning er kun beregnet til udvikling og kan bruges til at kopiere data mellem din computer og enheden, installere apps på enheden uden meddelelser og læse logdata."</string>

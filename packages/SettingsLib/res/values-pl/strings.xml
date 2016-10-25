@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Zezwalaj/nie zezwalaj na wyszukiwanie sieci Wi-Fi w roamingu w zależności od natężenia ruchu"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Rozmiary bufora Rejestratora"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Wybierz rozmiary Rejestratora/bufor dziennika"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Wyczyścić pamięć trwałych dzienników?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Po zakończeniu monitorowania przy użyciu trwale zapisywanych dzienników musimy usunąć ich dane zapisane na urządzeniu."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Zapisuj trwale dane dzienników"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Wybierz bufory dziennika, które mają być trwale przechowywane na urządzeniu"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Wybierz konfigurację USB"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Wybierz konfigurację USB"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Pozorowanie lokalizacji"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Zezwalaj na pozorowanie lokalizacji"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Inspekcja wyświetlania atrybutu"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Użyj klienta DHCP z Lollipop zamiast nowego klienta DHCP Androida"</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Nie wyłączaj transmisji danych przez sieć komórkową, nawet gdy aktywne jest połączenie Wi-Fi (aby szybko przełączać sieci)"</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Czy zezwalać na debugowanie USB?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"Debugowanie USB jest przeznaczone wyłącznie do celów programistycznych. Może służyć do kopiowania danych między komputerem a urządzeniem, instalowania aplikacji na urządzeniu bez powiadamiania, a także odczytu danych dziennika."</string>

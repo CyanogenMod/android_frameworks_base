@@ -81,9 +81,9 @@ public class KeyguardServiceWrapper implements IKeyguardService {
     }
 
     @Override // Binder interface
-    public void dismiss() {
+    public void dismiss(boolean allowWhileOccluded) {
         try {
-            mService.dismiss();
+            mService.dismiss(allowWhileOccluded);
         } catch (RemoteException e) {
             Slog.w(TAG , "Remote Exception", e);
         }
@@ -232,6 +232,14 @@ public class KeyguardServiceWrapper implements IKeyguardService {
 
     public boolean isShowing() {
         return mKeyguardStateMonitor.isShowing();
+    }
+
+    public boolean isTrusted() {
+        return mKeyguardStateMonitor.isTrusted();
+    }
+
+    public boolean hasLockscreenWallpaper() {
+        return mKeyguardStateMonitor.hasLockscreenWallpaper();
     }
 
     public boolean isSecure(int userId) {

@@ -44,6 +44,7 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Region;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.DisplayManager.DisplayListener;
@@ -822,6 +823,13 @@ public final class ViewRootImpl implements ViewParent,
         }
     }
 
+    public void registerVectorDrawableAnimator(
+            AnimatedVectorDrawable.VectorDrawableAnimatorRT animator) {
+        if (mAttachInfo.mHardwareRenderer != null) {
+            mAttachInfo.mHardwareRenderer.registerVectorDrawableAnimator(animator);
+        }
+    }
+
     private void enableHardwareAcceleration(WindowManager.LayoutParams attrs) {
         mAttachInfo.mHardwareAccelerated = false;
         mAttachInfo.mHardwareAccelerationRequested = false;
@@ -1459,6 +1467,8 @@ public final class ViewRootImpl implements ViewParent,
         final int viewVisibility = getHostVisibility();
         final boolean viewVisibilityChanged = !mFirst
                 && (mViewVisibility != viewVisibility || mNewSurfaceNeeded);
+        final boolean viewUserVisibilityChanged = !mFirst &&
+                ((mViewVisibility == View.VISIBLE) != (viewVisibility == View.VISIBLE));
 
         WindowManager.LayoutParams params = null;
         if (mWindowAttributesChanged) {
@@ -1532,7 +1542,9 @@ public final class ViewRootImpl implements ViewParent,
         if (viewVisibilityChanged) {
             mAttachInfo.mWindowVisibility = viewVisibility;
             host.dispatchWindowVisibilityChanged(viewVisibility);
-            host.dispatchVisibilityAggregated(viewVisibility == View.VISIBLE);
+            if (viewUserVisibilityChanged) {
+                host.dispatchVisibilityAggregated(viewVisibility == View.VISIBLE);
+            }
             if (viewVisibility != View.VISIBLE || mNewSurfaceNeeded) {
                 endDragResizing();
                 destroyHardwareResources();
@@ -1723,7 +1735,7 @@ public final class ViewRootImpl implements ViewParent,
             }
 
             boolean hwInitialized = false;
-            boolean framesChanged = false;
+            boolean contentInsetsChanged = false;
             boolean hadSurface = mSurface.isValid();
 
             try {
@@ -1763,7 +1775,7 @@ public final class ViewRootImpl implements ViewParent,
 
                 final boolean overscanInsetsChanged = !mPendingOverscanInsets.equals(
                         mAttachInfo.mOverscanInsets);
-                boolean contentInsetsChanged = !mPendingContentInsets.equals(
+                contentInsetsChanged = !mPendingContentInsets.equals(
                         mAttachInfo.mContentInsets);
                 final boolean visibleInsetsChanged = !mPendingVisibleInsets.equals(
                         mAttachInfo.mVisibleInsets);
@@ -1811,19 +1823,6 @@ public final class ViewRootImpl implements ViewParent,
                     mAttachInfo.mVisibleInsets.set(mPendingVisibleInsets);
                     if (DEBUG_LAYOUT) Log.v(mTag, "Visible insets changing to: "
                             + mAttachInfo.mVisibleInsets);
-                }
-
-                // If any of the insets changed, do a forceLayout on the view so that the
-                // measure cache is cleared. We might have a pending MSG_RESIZED_REPORT
-                // that is supposed to take care of it, but since pending insets are
-                // already modified here, it won't detect the frame change after this.
-                framesChanged = overscanInsetsChanged
-                        || contentInsetsChanged
-                        || stableInsetsChanged
-                        || visibleInsetsChanged
-                        || outsetsChanged;
-                if (mAdded && mView != null && framesChanged) {
-                    forceLayout(mView);
                 }
 
                 if (!hadSurface) {
@@ -2009,7 +2008,7 @@ public final class ViewRootImpl implements ViewParent,
                 boolean focusChangedDueToTouchMode = ensureTouchModeLocally(
                         (relayoutResult&WindowManagerGlobal.RELAYOUT_RES_IN_TOUCH_MODE) != 0);
                 if (focusChangedDueToTouchMode || mWidth != host.getMeasuredWidth()
-                        || mHeight != host.getMeasuredHeight() || framesChanged ||
+                        || mHeight != host.getMeasuredHeight() || contentInsetsChanged ||
                         updatedConfiguration) {
                     int childWidthMeasureSpec = getRootMeasureSpec(mWidth, lp.width);
                     int childHeightMeasureSpec = getRootMeasureSpec(mHeight, lp.height);
@@ -2018,7 +2017,7 @@ public final class ViewRootImpl implements ViewParent,
                             + mWidth + " measuredWidth=" + host.getMeasuredWidth()
                             + " mHeight=" + mHeight
                             + " measuredHeight=" + host.getMeasuredHeight()
-                            + " framesChanged=" + framesChanged);
+                            + " coveredInsetsChanged=" + contentInsetsChanged);
 
                      // Ask host how big it wants to be
                     performMeasure(childWidthMeasureSpec, childHeightMeasureSpec);
@@ -3178,7 +3177,7 @@ public final class ViewRootImpl implements ViewParent,
             }
             focusNode.recycle();
         }
-        if (mAccessibilityFocusedHost != null) {
+        if ((mAccessibilityFocusedHost != null) && (mAccessibilityFocusedHost != view))  {
             // Clear accessibility focus in the view.
             mAccessibilityFocusedHost.clearAccessibilityFocusNoCallbacks(
                     AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
@@ -5513,6 +5512,15 @@ public final class ViewRootImpl implements ViewParent,
         if (mView != null && mAdded) {
             final int what = event.mAction;
 
+            // Cache the drag description when the operation starts, then fill it in
+            // on subsequent calls as a convenience
+            if (what == DragEvent.ACTION_DRAG_STARTED) {
+                mCurrentDragView = null;    // Start the current-recipient tracking
+                mDragDescription = event.mClipDescription;
+            } else {
+                event.mClipDescription = mDragDescription;
+            }
+
             if (what == DragEvent.ACTION_DRAG_EXITED) {
                 // A direct EXITED event means that the window manager knows we've just crossed
                 // a window boundary, so the current drag target within this one must have
@@ -5520,15 +5528,6 @@ public final class ViewRootImpl implements ViewParent,
                 // for now.
                 mView.dispatchDragEvent(event);
             } else {
-                // Cache the drag description when the operation starts, then fill it in
-                // on subsequent calls as a convenience
-                if (what == DragEvent.ACTION_DRAG_STARTED) {
-                    mCurrentDragView = null;    // Start the current-recipient tracking
-                    mDragDescription = event.mClipDescription;
-                } else {
-                    event.mClipDescription = mDragDescription;
-                }
-
                 // For events with a [screen] location, translate into window coordinates
                 if ((what == DragEvent.ACTION_DRAG_LOCATION) || (what == DragEvent.ACTION_DROP)) {
                     mDragPoint.set(event.mX, event.mY);

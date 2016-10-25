@@ -219,6 +219,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
     private static final String ATTR_SETUP_COMPLETE = "setup-complete";
     private static final String ATTR_PROVISIONING_STATE = "provisioning-state";
     private static final String ATTR_PERMISSION_POLICY = "permission-policy";
+    private static final String ATTR_DEVICE_PROVISIONING_CONFIG_APPLIED =
+            "device-provisioning-config-applied";
 
     private static final String ATTR_DELEGATED_CERT_INSTALLER = "delegated-cert-installer";
     private static final String ATTR_APPLICATION_RESTRICTIONS_MANAGER
@@ -417,6 +419,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         boolean mUserSetupComplete = false;
         int mUserProvisioningState;
         int mPermissionPolicy;
+
+        boolean mDeviceProvisioningConfigApplied = false;
 
         final ArrayMap<ComponentName, ActiveAdmin> mAdminMap = new ArrayMap<>();
         final ArrayList<ActiveAdmin> mAdminList = new ArrayList<>();
@@ -2090,8 +2094,9 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
 
     void removeActiveAdminLocked(final ComponentName adminReceiver, final int userHandle) {
         final ActiveAdmin admin = getActiveAdminUncheckedLocked(adminReceiver, userHandle);
-        if (admin != null) {
-            getUserData(userHandle).mRemovingAdmins.add(adminReceiver);
+        DevicePolicyData policy = getUserData(userHandle);
+        if (admin != null && !policy.mRemovingAdmins.contains(adminReceiver)) {
+            policy.mRemovingAdmins.add(adminReceiver);
             sendAdminCommandLocked(admin,
                     DeviceAdminReceiver.ACTION_DEVICE_ADMIN_DISABLED,
                     new BroadcastReceiver() {
@@ -2172,6 +2177,10 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             }
             if (policy.mUserSetupComplete) {
                 out.attribute(null, ATTR_SETUP_COMPLETE,
+                        Boolean.toString(true));
+            }
+            if (policy.mDeviceProvisioningConfigApplied) {
+                out.attribute(null, ATTR_DEVICE_PROVISIONING_CONFIG_APPLIED,
                         Boolean.toString(true));
             }
             if (policy.mUserProvisioningState != DevicePolicyManager.STATE_USER_UNMANAGED) {
@@ -2333,6 +2342,12 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             String userSetupComplete = parser.getAttributeValue(null, ATTR_SETUP_COMPLETE);
             if (userSetupComplete != null && Boolean.toString(true).equals(userSetupComplete)) {
                 policy.mUserSetupComplete = true;
+            }
+            String deviceProvisioningConfigApplied = parser.getAttributeValue(null,
+                    ATTR_DEVICE_PROVISIONING_CONFIG_APPLIED);
+            if (deviceProvisioningConfigApplied != null
+                    && Boolean.toString(true).equals(deviceProvisioningConfigApplied)) {
+                policy.mDeviceProvisioningConfigApplied = true;
             }
             String provisioningState = parser.getAttributeValue(null, ATTR_PROVISIONING_STATE);
             if (!TextUtils.isEmpty(provisioningState)) {
@@ -4428,6 +4443,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         intent.putExtra(DeviceAdminReceiver.EXTRA_CHOOSE_PRIVATE_KEY_URI, uri);
         intent.putExtra(DeviceAdminReceiver.EXTRA_CHOOSE_PRIVATE_KEY_ALIAS, alias);
         intent.putExtra(DeviceAdminReceiver.EXTRA_CHOOSE_PRIVATE_KEY_RESPONSE, response);
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 
         final long id = mInjector.binderClearCallingIdentity();
         try {
@@ -5095,14 +5111,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
 
         boolean legacyApp = false;
-        if (ai != null) {
-            if (ai.targetSdkVersion <= Build.VERSION_CODES.M) {
-                legacyApp = true;
-            } else if ("com.google.android.apps.enterprise.dmagent".equals(ai.packageName)
-                    && ai.versionCode == 697) {
-                // TODO: STOPSHIP remove this (revert ag/895987) once a new prebuilt is dropped
-                legacyApp = true;
-            }
+        if (ai != null && ai.targetSdkVersion <= Build.VERSION_CODES.M) {
+            legacyApp = true;
         }
 
         final int rawStatus = getEncryptionStatus();
@@ -5723,7 +5733,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
         synchronized (this) {
             enforceCanSetDeviceOwnerLocked(userId);
-            if (getActiveAdminUncheckedLocked(admin, userId) == null) {
+            if (getActiveAdminUncheckedLocked(admin, userId) == null
+                    || getUserData(userId).mRemovingAdmins.contains(admin)) {
                 throw new IllegalArgumentException("Not active admin: " + admin);
             }
 
@@ -5911,7 +5922,8 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         synchronized (this) {
             enforceCanSetProfileOwnerLocked(userHandle);
 
-            if (getActiveAdminUncheckedLocked(who, userHandle) == null) {
+            if (getActiveAdminUncheckedLocked(who, userHandle) == null
+                    || getUserData(userHandle).mRemovingAdmins.contains(who)) {
                 throw new IllegalArgumentException("Not active admin: " + who);
             }
 
@@ -7947,17 +7959,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         Preconditions.checkNotNull(who, "ComponentName is null");
         synchronized (this) {
             getActiveAdminForCallerLocked(who, DeviceAdminInfo.USES_POLICY_PROFILE_OWNER);
-            int userId = UserHandle.getCallingUserId();
-            long identity = mInjector.binderClearCallingIdentity();
-            try {
-                IAudioService iAudioService = IAudioService.Stub.asInterface(
-                        ServiceManager.getService(Context.AUDIO_SERVICE));
-                iAudioService.setMasterMute(on, 0, mContext.getPackageName(), userId);
-            } catch (RemoteException re) {
-                Slog.e(LOG_TAG, "Failed to setMasterMute", re);
-            } finally {
-                mInjector.binderRestoreCallingIdentity(identity);
-            }
+            setUserRestriction(who, UserManager.DISALLLOW_UNMUTE_DEVICE, on);
         }
     }
 
@@ -8221,6 +8223,12 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
 
     @Override
     public SystemUpdatePolicy getSystemUpdatePolicy() {
+        if (UserManager.isDeviceInDemoMode(mContext)) {
+            // Pretending to have an automatic update policy when the device is in retail demo
+            // mode. This will allow the device to download and install an ota without
+            // any user interaction.
+            return SystemUpdatePolicy.createAutomaticInstallPolicy();
+        }
         synchronized (this) {
             SystemUpdatePolicy policy =  mOwners.getSystemUpdatePolicy();
             if (policy != null && !policy.isValid()) {
@@ -8996,6 +9004,11 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         }
     }
 
+    @Override
+    public boolean isDeviceProvisioned() {
+        return !TextUtils.isEmpty(mInjector.systemPropertiesGet(PROPERTY_DEVICE_OWNER_PRESENT));
+    }
+
     private void removePackageIfRequired(final String packageName, final int userId) {
         if (!packageHasActiveAdmins(packageName, userId)) {
             // Will not do anything if uninstall was not requested or was already started.
@@ -9061,5 +9074,24 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         // The removed admin might have disabled camera, so update user
         // restrictions.
         pushUserRestrictions(userHandle);
+    }
+
+    @Override
+    public void setDeviceProvisioningConfigApplied() {
+        enforceManageUsers();
+        synchronized (this) {
+            DevicePolicyData policy = getUserData(UserHandle.USER_SYSTEM);
+            policy.mDeviceProvisioningConfigApplied = true;
+            saveSettingsLocked(UserHandle.USER_SYSTEM);
+        }
+    }
+
+    @Override
+    public boolean isDeviceProvisioningConfigApplied() {
+        enforceManageUsers();
+        synchronized (this) {
+            final DevicePolicyData policy = getUserData(UserHandle.USER_SYSTEM);
+            return policy.mDeviceProvisioningConfigApplied;
+        }
     }
 }

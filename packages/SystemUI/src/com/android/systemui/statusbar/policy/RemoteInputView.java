@@ -16,11 +16,14 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ShortcutManager;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -32,6 +35,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.inputmethod.CompletionInfo;
@@ -46,11 +50,13 @@ import android.widget.TextView;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.MetricsProto;
+import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.ExpandableView;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.RemoteInputController;
 import com.android.systemui.statusbar.stack.ScrollContainer;
+import com.android.systemui.statusbar.stack.StackStateAnimator;
 
 /**
  * Host for the remote input.
@@ -75,6 +81,10 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
     private ScrollContainer mScrollContainer;
     private View mScrollContainerChild;
     private boolean mRemoved;
+
+    private int mRevealCx;
+    private int mRevealCy;
+    private int mRevealR;
 
     public RemoteInputView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -132,6 +142,15 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         mEditText.mShowImeOnInputConnection = false;
         mController.remoteInputSent(mEntry);
 
+        // Tell ShortcutManager that this package has been "activated".  ShortcutManager
+        // will reset the throttling for this package.
+        // Strictly speaking, the intent receiver may be different from the notification publisher,
+        // but that's an edge case, and also because we can't always know which package will receive
+        // an intent, so we just reset for the publisher.
+        getContext().getSystemService(ShortcutManager.class).onApplicationActive(
+                mEntry.notification.getPackageName(),
+                mEntry.notification.getUser().getIdentifier());
+
         MetricsLogger.action(mContext, MetricsProto.MetricsEvent.ACTION_REMOTE_INPUT_SEND,
                 mEntry.notification.getPackageName());
         try {
@@ -170,14 +189,28 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         return true;
     }
 
-    public void onDefocus() {
+    private void onDefocus(boolean animate) {
         mController.removeRemoteInput(mEntry);
         mEntry.remoteInputText = mEditText.getText();
 
         // During removal, we get reattached and lose focus. Not hiding in that
         // case to prevent flicker.
         if (!mRemoved) {
-            setVisibility(INVISIBLE);
+            if (animate && mRevealR > 0) {
+                Animator reveal = ViewAnimationUtils.createCircularReveal(
+                        this, mRevealCx, mRevealCy, mRevealR, 0);
+                reveal.setInterpolator(Interpolators.FAST_OUT_LINEAR_IN);
+                reveal.setDuration(StackStateAnimator.ANIMATION_DURATION_CLOSE_REMOTE_INPUT);
+                reveal.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        setVisibility(INVISIBLE);
+                    }
+                });
+                reveal.start();
+            } else {
+                setVisibility(INVISIBLE);
+            }
         }
         MetricsLogger.action(mContext, MetricsProto.MetricsEvent.ACTION_REMOTE_INPUT_CLOSE,
                 mEntry.notification.getPackageName());
@@ -213,6 +246,17 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         mEditText.setHint(mRemoteInput.getLabel());
     }
 
+    public void focusAnimated() {
+        if (getVisibility() != VISIBLE) {
+            Animator animator = ViewAnimationUtils.createCircularReveal(
+                    this, mRevealCx, mRevealCy, 0, mRevealR);
+            animator.setDuration(StackStateAnimator.ANIMATION_DURATION_STANDARD);
+            animator.setInterpolator(Interpolators.LINEAR_OUT_SLOW_IN);
+            animator.start();
+        }
+        focus();
+    }
+
     public void focus() {
         MetricsLogger.action(mContext, MetricsProto.MetricsEvent.ACTION_REMOTE_INPUT_OPEN,
                 mEntry.notification.getPackageName());
@@ -243,7 +287,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         mProgressBar.setVisibility(INVISIBLE);
         mController.removeSpinning(mEntry.key);
         updateSendButton();
-        onDefocus();
+        onDefocus(false /* animate */);
     }
 
     private void updateSendButton() {
@@ -262,7 +306,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
     }
 
     public void close() {
-        mEditText.defocusIfNeeded();
+        mEditText.defocusIfNeeded(false /* animated */);
     }
 
     @Override
@@ -304,13 +348,14 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
     }
 
     public boolean isActive() {
-        return mEditText.isFocused();
+        return mEditText.isFocused() && mEditText.isEnabled();
     }
 
     public void stealFocusFrom(RemoteInputView other) {
         other.close();
         setPendingIntent(other.mPendingIntent);
         setRemoteInput(other.mRemoteInputs, other.mRemoteInput);
+        setRevealParameters(other.mRevealCx, other.mRevealCy, other.mRevealR);
         focus();
     }
 
@@ -321,7 +366,6 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
      * @return true if a matching action was found, false otherwise
      */
     public boolean updatePendingIntentFromActions(Notification.Action[] actions) {
-        boolean found = false;
         if (mPendingIntent == null || actions == null) {
             return false;
         }
@@ -364,6 +408,12 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         mRemoved = true;
     }
 
+    public void setRevealParameters(int cx, int cy, int r) {
+        mRevealCx = cx;
+        mRevealCy = cy;
+        mRevealR = r;
+    }
+
     /**
      * An EditText that changes appearance based on whether it's focusable and becomes
      * un-focusable whenever the user navigates away from it or it becomes invisible.
@@ -379,14 +429,14 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
             mBackground = getBackground();
         }
 
-        private void defocusIfNeeded() {
+        private void defocusIfNeeded(boolean animate) {
             if (mRemoteInputView != null && mRemoteInputView.mEntry.row.isChangingPosition()) {
                 return;
             }
             if (isFocusable() && isEnabled()) {
                 setInnerFocusable(false);
                 if (mRemoteInputView != null) {
-                    mRemoteInputView.onDefocus();
+                    mRemoteInputView.onDefocus(animate);
                 }
                 mShowImeOnInputConnection = false;
             }
@@ -397,7 +447,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
             super.onVisibilityChanged(changedView, visibility);
 
             if (!isShown()) {
-                defocusIfNeeded();
+                defocusIfNeeded(false /* animate */);
             }
         }
 
@@ -405,7 +455,7 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
             super.onFocusChanged(focused, direction, previouslyFocusedRect);
             if (!focused) {
-                defocusIfNeeded();
+                defocusIfNeeded(true /* animate */);
             }
         }
 
@@ -422,14 +472,21 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         }
 
         @Override
-        public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                defocusIfNeeded();
-                final InputMethodManager imm = InputMethodManager.getInstance();
-                imm.hideSoftInputFromWindow(getWindowToken(), 0);
+        public boolean onKeyDown(int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                // Eat the DOWN event here to prevent any default behavior.
                 return true;
             }
-            return super.onKeyPreIme(keyCode, event);
+            return super.onKeyDown(keyCode, event);
+        }
+
+        @Override
+        public boolean onKeyUp(int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                defocusIfNeeded(true /* animate */);
+                return true;
+            }
+            return super.onKeyUp(keyCode, event);
         }
 
         @Override

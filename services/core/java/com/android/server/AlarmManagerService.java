@@ -2589,8 +2589,10 @@ class AlarmManagerService extends SystemService {
                             Slog.v(TAG, "Time changed notification from kernel; rebatching");
                         }
                         removeImpl(mTimeTickSender);
+                        removeImpl(mDateChangeSender);
                         rebatchAllAlarms();
                         mClockReceiver.scheduleTimeTickEvent();
+                        mClockReceiver.scheduleDateChangedEvent();
                         synchronized (mLock) {
                             mNumTimeChanged++;
                             mLastTimeChangeClockTime = nowRTC;
@@ -2667,9 +2669,9 @@ class AlarmManagerService extends SystemService {
                     }
 
                 } else {
+                    // Just in case -- even though no wakeup flag was set, make sure
+                    // we have updated the kernel to the next alarm time.
                     synchronized (mLock) {
-                        // Just in case -- even though no wakeup flag was set, make sure
-                        // we have updated the kernel to the next alarm time.
                         rescheduleKernelAlarmsLocked();
                     }
                 }
@@ -2813,7 +2815,7 @@ class AlarmManagerService extends SystemService {
         public void scheduleDateChangedEvent() {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR, 0);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);

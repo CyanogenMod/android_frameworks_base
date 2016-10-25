@@ -390,9 +390,9 @@
     <string name="permdesc_transmitIr" product="tv" msgid="3926790828514867101">"Dozvoljava aplikaciji korištenje infracrvenog predajnika na TV-u."</string>
     <string name="permdesc_transmitIr" product="default" msgid="7957763745020300725">"Omogućava aplikaciji korištenje infracrvenog odašiljača telefona."</string>
     <string name="permlab_setWallpaper" msgid="6627192333373465143">"postavljanje pozadinske slike"</string>
-    <string name="permdesc_setWallpaper" msgid="7373447920977624745">"Dozvoljava aplikaciji postavljanje sistemske pozadine ekrana."</string>
-    <string name="permlab_setWallpaperHints" msgid="3278608165977736538">"prilagođavanje veličine pozadine"</string>
-    <string name="permdesc_setWallpaperHints" msgid="8235784384223730091">"Dozvoljava aplikaciji određivanje veličine sistemske pozadine ekrana."</string>
+    <string name="permdesc_setWallpaper" msgid="7373447920977624745">"Dozvoljava aplikaciji postavljanje sistemske pozadinske slike."</string>
+    <string name="permlab_setWallpaperHints" msgid="3278608165977736538">"prilagođavanje veličine pozadinske slike"</string>
+    <string name="permdesc_setWallpaperHints" msgid="8235784384223730091">"Dozvoljava aplikaciji određivanje veličine sistemske pozadinske slike."</string>
     <string name="permlab_setTimeZone" msgid="2945079801013077340">"postavljanje vremenske zone"</string>
     <string name="permdesc_setTimeZone" product="tablet" msgid="1676983712315827645">"Dozvoljava aplikaciji promjenu vremenske zone tableta."</string>
     <string name="permdesc_setTimeZone" product="tv" msgid="888864653946175955">"Dozvoljava aplikaciji promjenu vremenske zone na TV-u."</string>
@@ -681,6 +681,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Ispravno!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Pokušajte ponovo"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Pokušajte ponovo"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Otključajte uređaj za sve funkcije i podatke"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Premašen maksimalni broj pokušaja otključavanja licem"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Nema SIM kartice"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Nema SIM kartice u tabletu."</string>
@@ -1047,8 +1048,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"Nadogradnja sistema Android u toku..."</string>
     <string name="android_start_title" msgid="8418054686415318207">"Android se pokreće..."</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"Optimiziranje pohrane."</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android se nadograđuje"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Dovršava se ažuriranje Androida…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"Neke aplikacije možda neće raditi ispravno dok traje nadogradnja"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"Aplikacija <xliff:g id="APPLICATION">%1$s</xliff:g> se nadograđuje…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"Optimiziranje aplikacije <xliff:g id="NUMBER_0">%1$d</xliff:g> od <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"Priprema se <xliff:g id="APPNAME">%1$s</xliff:g>."</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Pokretanje aplikacija."</string>
@@ -1163,8 +1165,8 @@
     <string name="usb_midi_notification_title" msgid="4850904915889144654">"USB za MIDI"</string>
     <string name="usb_accessory_notification_title" msgid="7848236974087653666">"Uspostavljena veza sa USB pohranom"</string>
     <string name="usb_notification_message" msgid="3370903770828407960">"Dodirnite za više opcija."</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"Uređaj za USB otklanjanje grešaka povezan"</string>
-    <string name="adb_active_notification_message" msgid="4948470599328424059">"Dodirnite da onemogućite otklanjanje grešaka preko USB veze."</string>
+    <string name="adb_active_notification_title" msgid="6729044778949189918">"Otklanjanje grešaka putem uređaja spojenog na USB je uspostavljeno"</string>
+    <string name="adb_active_notification_message" msgid="4948470599328424059">"Dodirnite da onemogućite otklanjanje grešaka putem uređaja spojenog na USB."</string>
     <string name="taking_remote_bugreport_notification_title" msgid="6742483073875060934">"Prijem izvještaja o grešci..."</string>
     <string name="share_remote_bugreport_notification_title" msgid="4987095013583691873">"Podijeliti izvještaj o grešci?"</string>
     <string name="sharing_remote_bugreport_notification_title" msgid="7572089031496651372">"Dijeljenje izvještaja o grešci..."</string>
@@ -1689,7 +1691,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"Otkači"</string>
     <string name="app_info" msgid="6856026610594615344">"Informacije o aplikaciji"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"Želite li vratiti na početne postavke?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"Dodirnite da vratite uređaj na početne postavke"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"Pokretanje demonstracije…"</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"Vraćanje uređaja na početne postavke…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"Želite li vratiti na početne postavke?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"Nestat će sve izmjene, a demonstracija će početi ponovo za <xliff:g id="TIMEOUT">%1$s</xliff:g> sek…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"Otkaži"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"Vrati sada na početne postavke"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"Vratite uređaj na fabričke postavke kako biste ga koristili bez ograničenja"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"Dodirnite da saznate više."</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"Onemogućen <xliff:g id="LABEL">%1$s</xliff:g>"</string>
+    <string name="conference_call" msgid="3751093130790472426">"Konferencijski poziv"</string>
 </resources>

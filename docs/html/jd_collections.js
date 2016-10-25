@@ -419,7 +419,8 @@ var RESOURCE_COLLECTIONS = {
       "distribute/engage/easy-signin.html",
       "distribute/analyze/build-better-apps.html",
       "distribute/engage/gcm.html",
-      "distribute/engage/beta.html"
+      "distribute/engage/beta.html",
+      "distribute/engage/nearby.html"
     ]
   },
   "distribute/monetize": {
@@ -430,6 +431,7 @@ var RESOURCE_COLLECTIONS = {
       "distribute/monetize/ads.html",
       "distribute/monetize/ecommerce.html",
       "distribute/monetize/payments.html",
+      "distribute/monetize/conversions.html",
       "distribute/analyze/understand-user-value.html",
     ]
   },
@@ -761,6 +763,14 @@ var RESOURCE_COLLECTIONS = {
       "https://support.google.com/adwords/answer/6167162"
     ]
   },
+  "distribute/users/nearby": {
+    "title": "",
+    "resources": [
+      "https://developers.google.com/nearby/",
+      "https://www.youtube.com/watch?v=hultDpBS22s",
+      "https://developers.google.com/beacons"
+    ]
+  },
   "distribute/users/buildbuzz": {
     "title": "",
     "resources": [
@@ -847,8 +857,7 @@ var RESOURCE_COLLECTIONS = {
       "design/index.html",
       "design/patterns/navigation.html",
       "design/patterns/actionbar.html",
-      "design/style/iconography.html",
-      "design/patterns/notifications.html"
+      "design/style/iconography.html"
     ]
   },
   "distribute/essentials/corequalityguidelines/functionality": {
@@ -1066,7 +1075,6 @@ var RESOURCE_COLLECTIONS = {
   "distribute/getusers/notifications": {
     "title": "",
     "resources": [
-      "design/patterns/notifications.html",
       "distribute/engage/gcm.html",
       "https://play.google.com/about/developer-content-policy.html"
     ]
@@ -1171,8 +1179,7 @@ var RESOURCE_COLLECTIONS = {
     "resources": [
       "distribute/essentials/optimizing-your-app.html",
       "distribute/tools/launch-checklist.html",
-      "distribute/googleplay/developer-console.html",
-      "design/patterns/notifications.html"
+      "distribute/googleplay/developer-console.html"
     ]
   },
   "distribute/engage/video/more": {
@@ -1554,6 +1561,15 @@ var RESOURCE_COLLECTIONS = {
     "resources": [
       "https://play.google.com/about/giftcards/",
       "https://support.google.com/googleplay/answer/2651410"
+    ]
+  },
+  "distribute/monetize/conversions": {
+    "title": "",
+    "resources": [
+      "https://support.google.com/adwords/answer/2471188",
+      "https://developers.google.com/app-conversion-tracking/",
+      "https://support.google.com/analytics/answer/2611404",
+      "https://support.google.com/adwords/answer/1704341"
     ]
   },
   "autolanding": {

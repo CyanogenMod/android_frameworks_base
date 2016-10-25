@@ -72,6 +72,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -90,10 +91,17 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
     private static final String ACTION_LOCKOUT_RESET =
             "com.android.server.fingerprint.ACTION_LOCKOUT_RESET";
 
+    private class PerformanceStats {
+        int accept; // number of accepted fingerprints
+        int reject; // number of rejected fingerprints
+        int acquire; // total number of acquisitions. Should be >= accept+reject due to poor image
+                     // acquisition in some cases (too fast, too slow, dirty sensor, etc.)
+        int lockout; // total number of lockouts
+    }
+
     private final ArrayList<FingerprintServiceLockoutResetMonitor> mLockoutMonitors =
             new ArrayList<>();
     private final AppOpsManager mAppOps;
-
     private static final long FAIL_LOCKOUT_TIMEOUT_MS = 30*1000;
     private static final int MAX_FAILED_ATTEMPTS = 5;
     private static final long CANCEL_TIMEOUT_LIMIT = 3000; // max wait for onCancel() from HAL,in ms
@@ -110,6 +118,15 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
     private ClientMonitor mCurrentClient;
     private ClientMonitor mPendingClient;
     private long mCurrentAuthenticatorId;
+    private PerformanceStats mPerformanceStats;
+
+    // Normal fingerprint authentications are tracked by mPerformanceMap.
+    private HashMap<Integer, PerformanceStats> mPerformanceMap
+            = new HashMap<Integer, PerformanceStats>();
+
+    // Transactions that make use of CryptoObjects are tracked by mCryptoPerformaceMap.
+    private HashMap<Integer, PerformanceStats> mCryptoPerformanceMap
+            = new HashMap<Integer, PerformanceStats>();
 
     private Handler mHandler = new Handler() {
         @Override
@@ -247,12 +264,22 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
         if (client != null && client.onAuthenticated(fingerId, groupId)) {
             removeClient(client);
         }
+        if (fingerId != 0) {
+            mPerformanceStats.accept++;
+        } else {
+            mPerformanceStats.reject++;
+        }
     }
 
     protected void handleAcquired(long deviceId, int acquiredInfo) {
         ClientMonitor client = mCurrentClient;
         if (client != null && client.onAcquired(acquiredInfo)) {
             removeClient(client);
+        }
+        if (mPerformanceStats != null && !inLockoutMode()
+                && client instanceof AuthenticationClient) {
+            // ignore enrollment acquisitions or acquisitions when we're locked out
+            mPerformanceStats.acquire++;
         }
     }
 
@@ -444,10 +471,10 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
 
     /**
      * @param opPackageName name of package for caller
-     * @param foregroundOnly only allow this call while app is in the foreground
+     * @param requireForeground only allow this call while app is in the foreground
      * @return true if caller can use fingerprint API
      */
-    private boolean canUseFingerprint(String opPackageName, boolean foregroundOnly, int uid,
+    private boolean canUseFingerprint(String opPackageName, boolean requireForeground, int uid,
             int pid) {
         checkPermission(USE_FINGERPRINT);
         if (isKeyguard(opPackageName)) {
@@ -462,11 +489,19 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
             Slog.w(TAG, "Rejecting " + opPackageName + " ; permission denied");
             return false;
         }
-        if (foregroundOnly && !isForegroundActivity(uid, pid)) {
+        if (requireForeground && !(isForegroundActivity(uid, pid) || currentClient(opPackageName))){
             Slog.w(TAG, "Rejecting " + opPackageName + " ; not in foreground");
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param opPackageName package of the caller
+     * @return true if this is the same client currently using fingerprint
+     */
+    private boolean currentClient(String opPackageName) {
+        return mCurrentClient != null && mCurrentClient.getOwnerString().equals(opPackageName);
     }
 
     /**
@@ -506,6 +541,9 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
             @Override
             public boolean handleFailedAttempt() {
                 mFailedAttempts++;
+                if (mFailedAttempts == MAX_FAILED_ATTEMPTS) {
+                    mPerformanceStats.lockout++;
+                }
                 if (inLockoutMode()) {
                     // Failing multiple times will continue to push out the lockout time.
                     scheduleLockoutReset();
@@ -743,12 +781,24 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    MetricsLogger.histogram(mContext, "fingerprint_token", opId != 0L ? 1 : 0);
                     if (!canUseFingerprint(opPackageName, true /* foregroundOnly */,
                             callingUid, pid)) {
                         if (DEBUG) Slog.v(TAG, "authenticate(): reject " + opPackageName);
                         return;
                     }
+
+                    MetricsLogger.histogram(mContext, "fingerprint_token", opId != 0L ? 1 : 0);
+
+                    // Get performance stats object for this user.
+                    HashMap<Integer, PerformanceStats> pmap
+                            = (opId == 0) ? mPerformanceMap : mCryptoPerformanceMap;
+                    PerformanceStats stats = pmap.get(mCurrentUserId);
+                    if (stats == null) {
+                        stats = new PerformanceStats();
+                        pmap.put(mCurrentUserId, stats);
+                    }
+                    mPerformanceStats = stats;
+
                     startAuthentication(token, opId, callingUserId, groupId, receiver,
                             flags, restricted, opPackageName);
                 }
@@ -925,9 +975,21 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
             for (UserInfo user : UserManager.get(getContext()).getUsers()) {
                 final int userId = user.getUserHandle().getIdentifier();
                 final int N = mFingerprintUtils.getFingerprintsForUser(mContext, userId).size();
+                PerformanceStats stats = mPerformanceMap.get(userId);
+                PerformanceStats cryptoStats = mCryptoPerformanceMap.get(userId);
                 JSONObject set = new JSONObject();
                 set.put("id", userId);
                 set.put("count", N);
+                set.put("accept", (stats != null) ? stats.accept : 0);
+                set.put("reject", (stats != null) ? stats.reject : 0);
+                set.put("acquire", (stats != null) ? stats.acquire : 0);
+                set.put("lockout", (stats != null) ? stats.lockout : 0);
+                // cryptoStats measures statistics about secure fingerprint transactions
+                // (e.g. to unlock password storage, make secure purchases, etc.)
+                set.put("acceptCrypto", (cryptoStats != null) ? cryptoStats.accept : 0);
+                set.put("rejectCrypto", (cryptoStats != null) ? cryptoStats.reject : 0);
+                set.put("acquireCrypto", (cryptoStats != null) ? cryptoStats.acquire : 0);
+                set.put("lockoutCrypto", (cryptoStats != null) ? cryptoStats.lockout : 0);
                 sets.put(set);
             }
 
@@ -948,6 +1010,7 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
 
     private void updateActiveGroup(int userId, String clientPackage) {
         IFingerprintDaemon daemon = getFingerprintDaemon();
+
         if (daemon != null) {
             try {
                 userId = getUserOrWorkProfileId(clientPackage, userId);
@@ -1014,7 +1077,7 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
                     public void onForegroundProfileSwitch(int newProfileId) {
                         // Ignore.
                     }
-                });
+                }, TAG);
         } catch (RemoteException e) {
             Slog.w(TAG, "Failed to listen for user switching event" ,e);
         }

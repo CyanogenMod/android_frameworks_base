@@ -31,7 +31,9 @@ import android.net.ProxyInfo;
 import android.net.RouteInfo;
 import android.net.StaticIpConfiguration;
 import android.net.dhcp.DhcpClient;
+import android.net.metrics.IpConnectivityLog;
 import android.net.metrics.IpManagerEvent;
+import android.net.util.AvoidBadWifiTracker;
 import android.os.INetworkManagementService;
 import android.os.Message;
 import android.os.RemoteException;
@@ -392,7 +394,9 @@ public class IpManager extends StateMachine {
     private final NetlinkTracker mNetlinkTracker;
     private final WakeupMessage mProvisioningTimeoutAlarm;
     private final WakeupMessage mDhcpActionTimeoutAlarm;
+    private final AvoidBadWifiTracker mAvoidBadWifiTracker;
     private final LocalLog mLocalLog;
+    private final IpConnectivityLog mMetricsLog = new IpConnectivityLog();
 
     private NetworkInterface mNetworkInterface;
 
@@ -463,6 +467,8 @@ public class IpManager extends StateMachine {
         } catch (RemoteException e) {
             Log.e(mTag, "Couldn't register NetlinkTracker: " + e.toString());
         }
+
+        mAvoidBadWifiTracker = new AvoidBadWifiTracker(mContext, getHandler());
 
         resetLinkProperties();
 
@@ -634,8 +640,8 @@ public class IpManager extends StateMachine {
 
     private void recordMetric(final int type) {
         if (mStartTimeMillis <= 0) { Log.wtf(mTag, "Start time undefined!"); }
-        IpManagerEvent.logEvent(type, mInterfaceName,
-                SystemClock.elapsedRealtime() - mStartTimeMillis);
+        final long duration = SystemClock.elapsedRealtime() - mStartTimeMillis;
+        mMetricsLog.log(new IpManagerEvent(mInterfaceName, type, duration));
     }
 
     // For now: use WifiStateMachine's historical notion of provisioned.
@@ -651,7 +657,7 @@ public class IpManager extends StateMachine {
     // object that is a correct and complete assessment of what changed, taking
     // account of the asymmetries described in the comments in this function.
     // Then switch to using it everywhere (IpReachabilityMonitor, etc.).
-    private static ProvisioningChange compareProvisioning(
+    private ProvisioningChange compareProvisioning(
             LinkProperties oldLp, LinkProperties newLp) {
         ProvisioningChange delta;
 
@@ -678,6 +684,25 @@ public class IpManager extends StateMachine {
             delta = ProvisioningChange.LOST_PROVISIONING;
         }
 
+        final boolean lostIPv6 = oldLp.isIPv6Provisioned() && !newLp.isIPv6Provisioned();
+        final boolean lostIPv4Address = oldLp.hasIPv4Address() && !newLp.hasIPv4Address();
+        final boolean lostIPv6Router = oldLp.hasIPv6DefaultRoute() && !newLp.hasIPv6DefaultRoute();
+
+        // If bad wifi avoidance is disabled, then ignore IPv6 loss of
+        // provisioning. Otherwise, when a hotspot that loses Internet
+        // access sends out a 0-lifetime RA to its clients, the clients
+        // will disconnect and then reconnect, avoiding the bad hotspot,
+        // instead of getting stuck on the bad hotspot. http://b/31827713 .
+        //
+        // This is incorrect because if the hotspot then regains Internet
+        // access with a different prefix, TCP connections on the
+        // deprecated addresses will remain stuck.
+        //
+        // Note that we can still be disconnected by IpReachabilityMonitor
+        // if the IPv6 default gateway (but not the IPv6 DNS servers; see
+        // accompanying code in IpReachabilityMonitor) is unreachable.
+        final boolean ignoreIPv6ProvisioningLoss = !mAvoidBadWifiTracker.currentValue();
+
         // Additionally:
         //
         // Partial configurations (e.g., only an IPv4 address with no DNS
@@ -690,8 +715,7 @@ public class IpManager extends StateMachine {
         // Because on such a network isProvisioned() will always return false,
         // delta will never be LOST_PROVISIONING. So check for loss of
         // provisioning here too.
-        if ((oldLp.hasIPv4Address() && !newLp.hasIPv4Address()) ||
-                (oldLp.isIPv6Provisioned() && !newLp.isIPv6Provisioned())) {
+        if (lostIPv4Address || (lostIPv6 && !ignoreIPv6ProvisioningLoss)) {
             delta = ProvisioningChange.LOST_PROVISIONING;
         }
 
@@ -700,8 +724,7 @@ public class IpManager extends StateMachine {
         // If the previous link properties had a global IPv6 address and an
         // IPv6 default route then also consider the loss of that default route
         // to be a loss of provisioning. See b/27962810.
-        if (oldLp.hasGlobalIPv6Address() && oldLp.hasIPv6DefaultRoute() &&
-                !newLp.hasIPv6DefaultRoute()) {
+        if (oldLp.hasGlobalIPv6Address() && (lostIPv6Router && !ignoreIPv6ProvisioningLoss)) {
             delta = ProvisioningChange.LOST_PROVISIONING;
         }
 
@@ -916,12 +939,6 @@ public class IpManager extends StateMachine {
             mDhcpClient = DhcpClient.makeDhcpClient(mContext, IpManager.this, mInterfaceName);
             mDhcpClient.registerForPreDhcpNotification();
             mDhcpClient.sendMessage(DhcpClient.CMD_START_DHCP);
-
-            if (mConfiguration.mProvisioningTimeoutMs > 0) {
-                final long alarmTime = SystemClock.elapsedRealtime() +
-                        mConfiguration.mProvisioningTimeoutMs;
-                mProvisioningTimeoutAlarm.schedule(alarmTime);
-            }
         }
 
         return true;
@@ -1041,9 +1058,22 @@ public class IpManager extends StateMachine {
                 mCallback.setFallbackMulticastFilter(mMulticastFiltering);
             }
 
+            if (mConfiguration.mProvisioningTimeoutMs > 0) {
+                final long alarmTime = SystemClock.elapsedRealtime() +
+                        mConfiguration.mProvisioningTimeoutMs;
+                mProvisioningTimeoutAlarm.schedule(alarmTime);
+            }
+
             if (mConfiguration.mEnableIPv6) {
                 // TODO: Consider transitionTo(mStoppingState) if this fails.
                 startIPv6();
+            }
+
+            if (mConfiguration.mEnableIPv4) {
+                if (!startIPv4()) {
+                    transitionTo(mStoppingState);
+                    return;
+                }
             }
 
             if (mConfiguration.mUsingIpReachabilityMonitor) {
@@ -1055,13 +1085,8 @@ public class IpManager extends StateMachine {
                             public void notifyLost(InetAddress ip, String logMsg) {
                                 mCallback.onReachabilityLost(logMsg);
                             }
-                        });
-            }
-
-            if (mConfiguration.mEnableIPv4) {
-                if (!startIPv4()) {
-                    transitionTo(mStoppingState);
-                }
+                        },
+                        mAvoidBadWifiTracker);
             }
         }
 

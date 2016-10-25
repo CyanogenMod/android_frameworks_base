@@ -31,10 +31,10 @@
         android:inputType="text"
         android:layout_weight="1"
         android:fontFamily="sans-serif-condensed-light"
-        android:textColor="@color/primary_text_default_material_dark"
+        android:textColor="@color/primary_text_material_dark"
+        android:textColorHint="@color/secondary_text_material_dark"
         android:textColorHighlight="@color/accent_material_dark"
         android:textSize="18dp"
-        android:cursorVisible="false"
         android:gravity="bottom|right"
         />
 

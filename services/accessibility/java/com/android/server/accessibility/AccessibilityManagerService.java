@@ -279,6 +279,31 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             }
 
             @Override
+            public void onPackageUpdateFinished(String packageName, int uid) {
+                // Unbind all services from this package, and then update the user state to
+                // re-bind new versions of them.
+                synchronized (mLock) {
+                    final int userId = getChangingUserId();
+                    if (userId != mCurrentUserId) {
+                        return;
+                    }
+                    UserState userState = getUserStateLocked(userId);
+                    boolean unboundAService = false;
+                    for (int i = userState.mBoundServices.size() - 1; i >= 0; i--) {
+                        Service boundService = userState.mBoundServices.get(i);
+                        String servicePkg = boundService.mComponentName.getPackageName();
+                        if (servicePkg.equals(packageName)) {
+                            boundService.unbindLocked();
+                            unboundAService = true;
+                        }
+                    }
+                    if (unboundAService) {
+                        onUserStateChangedLocked(userState);
+                    }
+                }
+            }
+
+            @Override
             public void onPackageRemoved(String packageName, int uid) {
                 synchronized (mLock) {
                     final int userId = getChangingUserId();
@@ -1112,9 +1137,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
     private void addServiceLocked(Service service, UserState userState) {
         try {
-            service.onAdded();
-            userState.mBoundServices.add(service);
-            userState.mComponentNameToServiceMap.put(service.mComponentName, service);
+            if (!userState.mBoundServices.contains(service)) {
+                service.onAdded();
+                userState.mBoundServices.add(service);
+                userState.mComponentNameToServiceMap.put(service.mComponentName, service);
+            }
         } catch (RemoteException re) {
             /* do nothing */
         }
@@ -1127,8 +1154,14 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
      */
     private void removeServiceLocked(Service service, UserState userState) {
         userState.mBoundServices.remove(service);
-        userState.mComponentNameToServiceMap.remove(service.mComponentName);
         service.onRemoved();
+        // It may be possible to bind a service twice, which confuses the map. Rebuild the map
+        // to make sure we can still reach a service
+        userState.mComponentNameToServiceMap.clear();
+        for (int i = 0; i < userState.mBoundServices.size(); i++) {
+            Service boundService = userState.mBoundServices.get(i);
+            userState.mComponentNameToServiceMap.put(boundService.mComponentName, boundService);
+        }
     }
 
     /**
@@ -1423,7 +1456,8 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         updateTouchExplorationLocked(userState);
         updatePerformGesturesLocked(userState);
         updateEnhancedWebAccessibilityLocked(userState);
-        updateDisplayColorAdjustmentSettingsLocked(userState);
+        updateDisplayDaltonizerLocked(userState);
+        updateDisplayInversionLocked(userState);
         updateMagnificationLocked(userState);
         updateSoftKeyboardShowModeLocked(userState);
         scheduleUpdateInputFilter(userState);
@@ -1540,7 +1574,6 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         somethingChanged |= readEnhancedWebAccessibilityEnabledChangedLocked(userState);
         somethingChanged |= readDisplayMagnificationEnabledSettingLocked(userState);
         somethingChanged |= readAutoclickEnabledSettingLocked(userState);
-        somethingChanged |= readDisplayColorAdjustmentSettingsLocked(userState);
 
         return somethingChanged;
     }
@@ -1601,18 +1634,6 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
              return true;
          }
          return false;
-    }
-
-    private boolean readDisplayColorAdjustmentSettingsLocked(UserState userState) {
-        final boolean displayAdjustmentsEnabled = DisplayAdjustmentUtils.hasAdjustments(mContext,
-                userState.mUserId);
-        if (displayAdjustmentsEnabled != userState.mHasDisplayColorAdjustment) {
-            userState.mHasDisplayColorAdjustment = displayAdjustmentsEnabled;
-            return true;
-        }
-        // If display adjustment is enabled, always assume there was a change in
-        // the adjustment settings.
-        return displayAdjustmentsEnabled;
     }
 
     private boolean readHighTextContrastEnabledSettingLocked(UserState userState) {
@@ -1731,8 +1752,12 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         return false;
     }
 
-    private void updateDisplayColorAdjustmentSettingsLocked(UserState userState) {
-        DisplayAdjustmentUtils.applyAdjustments(mContext, userState.mUserId);
+    private void updateDisplayDaltonizerLocked(UserState userState) {
+        DisplayAdjustmentUtils.applyDaltonizerSetting(mContext, userState.mUserId);
+    }
+
+    private void updateDisplayInversionLocked(UserState userState) {
+        DisplayAdjustmentUtils.applyInversionSetting(mContext, userState.mUserId);
     }
 
     private void updateMagnificationLocked(UserState userState) {
@@ -2333,15 +2358,12 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
 
         /**
-         * Unbinds form the accessibility service and removes it from the data
+         * Unbinds from the accessibility service and removes it from the data
          * structures for service management.
          *
          * @return True if unbinding is successful.
          */
         public boolean unbindLocked() {
-            if (mService == null) {
-                return false;
-            }
             UserState userState = getUserStateLocked(mUserId);
             getKeyEventDispatcher().flush(this);
             if (!mIsAutomation) {
@@ -3049,7 +3071,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            /* do nothing - #binderDied takes care */
+            binderDied();
         }
 
         public void onAdded() throws RemoteException {
@@ -3078,14 +3100,18 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         }
 
         public void unlinkToOwnDeathLocked() {
-            mService.unlinkToDeath(this, 0);
+            if (mService != null) {
+                mService.unlinkToDeath(this, 0);
+            }
         }
 
         public void resetLocked() {
             try {
                 // Clear the proxy in the other process so this
                 // IAccessibilityServiceConnection can be garbage collected.
-                mServiceInterface.init(null, mId, null);
+                if (mServiceInterface != null) {
+                    mServiceInterface.init(null, mId, null);
+                }
             } catch (RemoteException re) {
                 /* ignore */
             }
@@ -3109,10 +3135,10 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 mWasConnectedAndDied = true;
                 getKeyEventDispatcher().flush(this);
                 UserState userState = getUserStateLocked(mUserId);
-                // The death recipient is unregistered in removeServiceLocked
-                removeServiceLocked(this, userState);
                 resetLocked();
                 if (mIsAutomation) {
+                    // This is typically done when unbinding, but UiAutomation isn't bound.
+                    removeServiceLocked(this, userState);
                     // We no longer have an automation service, so restore
                     // the state based on values in the settings database.
                     userState.mInstalledServices.remove(mAccessibilityServiceInfo);
@@ -3567,6 +3593,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 case WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL:
                 case WindowManager.LayoutParams.TYPE_APPLICATION_ABOVE_SUB_PANEL:
                 case WindowManager.LayoutParams.TYPE_BASE_APPLICATION:
+                case WindowManager.LayoutParams.TYPE_DRAWN_APPLICATION:
                 case WindowManager.LayoutParams.TYPE_PHONE:
                 case WindowManager.LayoutParams.TYPE_PRIORITY_PHONE:
                 case WindowManager.LayoutParams.TYPE_TOAST:
@@ -4192,7 +4219,6 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         public boolean mIsAutoclickEnabled;
         public boolean mIsPerformGesturesEnabled;
         public boolean mIsFilterKeyEventsEnabled;
-        public boolean mHasDisplayColorAdjustment;
         public boolean mAccessibilityFocusOnlyInActiveWindow;
 
         private Service mUiAutomationService;
@@ -4308,9 +4334,6 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         private final Uri mDisplayDaltonizerUri = Settings.Secure.getUriFor(
                 Settings.Secure.ACCESSIBILITY_DISPLAY_DALTONIZER);
 
-        private final Uri mDisplayColorMatrixUri = Settings.Secure.getUriFor(
-                Settings.Secure.ACCESSIBILITY_DISPLAY_COLOR_MATRIX);
-
         private final Uri mHighTextContrastUri = Settings.Secure.getUriFor(
                 Settings.Secure.ACCESSIBILITY_HIGH_TEXT_CONTRAST_ENABLED);
 
@@ -4341,8 +4364,6 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     mDisplayDaltonizerEnabledUri, false, this, UserHandle.USER_ALL);
             contentResolver.registerContentObserver(
                     mDisplayDaltonizerUri, false, this, UserHandle.USER_ALL);
-            contentResolver.registerContentObserver(
-                    mDisplayColorMatrixUri, false, this, UserHandle.USER_ALL);
             contentResolver.registerContentObserver(
                     mHighTextContrastUri, false, this, UserHandle.USER_ALL);
             contentResolver.registerContentObserver(
@@ -4385,14 +4406,11 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     if (readEnhancedWebAccessibilityEnabledChangedLocked(userState)) {
                         onUserStateChangedLocked(userState);
                     }
-                } else if (mDisplayInversionEnabledUri.equals(uri)
-                        || mDisplayDaltonizerEnabledUri.equals(uri)
+                } else if (mDisplayDaltonizerEnabledUri.equals(uri)
                         || mDisplayDaltonizerUri.equals(uri)) {
-                    if (readDisplayColorAdjustmentSettingsLocked(userState)) {
-                        updateDisplayColorAdjustmentSettingsLocked(userState);
-                    }
-                } else if (mDisplayColorMatrixUri.equals(uri)) {
-                    updateDisplayColorAdjustmentSettingsLocked(userState);
+                    updateDisplayDaltonizerLocked(userState);
+                } else if (mDisplayInversionEnabledUri.equals(uri)) {
+                    updateDisplayInversionLocked(userState);
                 } else if (mHighTextContrastUri.equals(uri)) {
                     if (readHighTextContrastEnabledSettingLocked(userState)) {
                         onUserStateChangedLocked(userState);

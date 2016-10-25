@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Onartu edo debekatu ibiltaritzan Wi-Fi sareak bilatzea, interfazeko datu-trafikoaren arabera"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Erregistroen buffer-tamainak"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Hautatu erregistroen buffer-tamainak"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Erregistro iraunkorraren biltegia garbitu nahi duzu?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Erregistro iraunkor hau kontrolatzeari uzten diogunean gailuan dituzun erregistroko datuak ezabatu beharko ditugu."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Utzi datuak gailuan gordeta"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Hautatu gailuan gordeta utzi nahi dituzun erregistroen bufferrak"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Hautatu USB konfigurazioa"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Hautatu USB konfigurazioa"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Onartu kokapen faltsuak"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Onartu kokapen faltsuak"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Gaitu ikuspegiaren atributuak ikuskatzeko aukera"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Erabili Lollipop bertsioko DHCP bezeroa eta ez Android DHCP bezero berria."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Mantendu mugikorreko datuak beti aktibo, baita Wi-Fi konexioa aktibo dagoenean ere (sarez bizkor aldatu ahal izateko)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB arazketa onartu?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB arazketa garapen-xedeetarako soilik dago diseinatuta. Erabil ezazu ordenagailuaren eta gailuaren artean datuak kopiatzeko, aplikazioak gailuan jakinarazi gabe instalatzeko eta erregistro-datuak irakurtzeko."</string>

@@ -238,6 +238,11 @@ public class SystemGesturesPointerEventListener implements PointerEventListener 
                 && elapsed < SWIPE_TIMEOUT_MS) {
             return SWIPE_FROM_RIGHT;
         }
+        if (fromX <= mSwipeStartThreshold
+                && x > fromX + mSwipeDistanceThreshold
+                && elapsed < SWIPE_TIMEOUT_MS) {
+            return SWIPE_FROM_LEFT;
+        }
         return SWIPE_NONE;
     }
 
@@ -274,6 +279,7 @@ public class SystemGesturesPointerEventListener implements PointerEventListener 
         void onSwipeFromTop();
         void onSwipeFromBottom();
         void onSwipeFromRight();
+        void onSwipeFromLeft();
         void onFling(int durationMs);
         void onDown();
         void onUpOrCancel();

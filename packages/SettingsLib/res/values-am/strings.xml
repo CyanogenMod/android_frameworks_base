@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"በበይነገጹ ላይ ባለው የውሂብ ትራፊክ መጠን ላይ ተመስርተው የWi‑Fi ማንቀሳቀስ ቅኝቶችን ይፍቀዱ/ይከልክሉ"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"የምዝግብ ማስታወሻ ያዥ መጠኖች"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"በአንድ ምዝግብ ማስታወሻ ቋጥ የሚኖረው የምዝግብ ማስታወሻ ያዥ መጠኖች ይምረጡ"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"የምዝግብ ማስታወሻ ያዢ ቋሚ ማከማቻ ይጽዳ?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"ከእንግዲህ በቋሚ ምዝግብ ማስታወሻ ያዢው በማንከታተልበት ጊዜ በመሣሪያዎ ላይ የሚኖረው የምዝግብ ማስታወሻ ውሂብ መደምሰስ ይፈለግብናል።"</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"የምዝግብ ማስታወሻ ያዢ ውሂብ በመሣሪያ ላይ በቋሚነት ያከማቹ"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"በመሣሪያው ላይ በቋሚነት የሚከማች የምዝግብ ማስታወሻ ቋቶችን ይምረጡ"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"የዩኤስቢ መዋቅር ይምረጡ"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"የዩኤስቢ መዋቅር ይምረጡ"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"አስቂኝ ሥፍራዎችን ፍቀድ"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"አስቂኝ ሥፍራዎችን ፍቀድ"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"የእይታ አይነታ ምርመራን አንቃ"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"ከአዲሱ የAndroid DHCP ደንበኛ ይልቅ የLollipop DHCP ደንበኛውን ይጠቀሙ።"</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"ምንም እንኳን Wi‑Fi ንቁ ቢሆንም የሞባይል ውሂብን ንቁ እንደሆነ አቆይ (ለፈጣን የአውታረ መረብ ቅይይር)።"</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"የUSB ማረሚያ ይፈቀድ?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"የUSB አድስ ለግንባታ አላማ ብቻ የታሰበ ነው። ከኮምፒዩተርህ ወደ መሳሪያህ ውሂብ ለመገልበጥ፣ መሣሪያህ ላይ ያለ ማሳወቂያ መተግበሪያዎችን መጫን፣ እና ማስታወሻ ውሂብ ማንበብ ለመጠቀም ይቻላል።"</string>

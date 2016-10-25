@@ -245,7 +245,7 @@
     <string name="permgrouplab_contacts" msgid="3657758145679177612">"Kontaktet"</string>
     <string name="permgroupdesc_contacts" msgid="6951499528303668046">"qasu te kontaktet e tua"</string>
     <string name="permgrouplab_location" msgid="7275582855722310164">"Vendndodhja"</string>
-    <string name="permgroupdesc_location" msgid="1346617465127855033">"qasjen te vendndodhja e kësaj pajisjeje"</string>
+    <string name="permgroupdesc_location" msgid="1346617465127855033">"qaset te vendndodhja e kësaj pajisjeje"</string>
     <string name="permgrouplab_calendar" msgid="5863508437783683902">"Kalendari"</string>
     <string name="permgroupdesc_calendar" msgid="3889615280211184106">"qasje te kalendari yt"</string>
     <string name="permgrouplab_sms" msgid="228308803364967808">"SMS"</string>
@@ -678,6 +678,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Saktë!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Provo sërish"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Provo sërish"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Shkyçe për të gjitha funksionet dhe të dhënat"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Tentativat maksimale të \"Shkyçjes me fytyrë\" u tejkaluan"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"Nuk ka kartë SIM"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"Nuk ka kartë SIM në tablet."</string>
@@ -1022,8 +1023,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"\"Androidi\" po përditësohet…"</string>
     <string name="android_start_title" msgid="8418054686415318207">"\"Androidi\" po fillon…"</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"Po përshtat ruajtjen."</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android po përmirësohet"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Përditësimi i Android po përfundon…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"Disa aplikacione mund të mos funksionojnë si duhet deri sa të përfundojë përmirësimi"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"<xliff:g id="APPLICATION">%1$s</xliff:g> po përmirësohet…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"Po përshtat aplikacionin <xliff:g id="NUMBER_0">%1$d</xliff:g> nga gjithsej <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"Po përgatit <xliff:g id="APPNAME">%1$s</xliff:g>."</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"Aplikacionet e fillimit."</string>
@@ -1651,7 +1653,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"Zhgozhdo"</string>
     <string name="app_info" msgid="6856026610594615344">"Informacioni mbi aplikacionin"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"Do ta rivendosësh pajisjen?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"Trokit për ta rivendosur pajisjen"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"Po nis demonstrimin..."</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"Po rivendos pajisjen…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"Do ta rivendosësh pajisjen?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"Do të humbasësh çdo ndryshim dhe demonstrimi do të niset përsëri për <xliff:g id="TIMEOUT">%1$s</xliff:g> sekonda…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"Anulo"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"Rivendos tani"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"Rivendos cilësimet e fabrikës për ta përdorur këtë pajisje pa kufizime"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"Prek për të mësuar më shumë."</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"<xliff:g id="LABEL">%1$s</xliff:g> u çaktivizua"</string>
+    <string name="conference_call" msgid="3751093130790472426">"Telefonatë konferencë"</string>
 </resources>

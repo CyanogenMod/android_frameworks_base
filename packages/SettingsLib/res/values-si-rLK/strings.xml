@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"අතුරු මුහුණතෙහි ඇති දත්ත තදබදය අනුව Wi‑Fi රෝම් පරිලෝකන වෙත ඉඩ දෙන්න/නොදෙන්න"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"ලෝගයේ අන්තරාවක ප්‍රමාණය"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"ලොග අන්තරාවකට ලෝගයේ ප්‍රමාණය තෝරන්න"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"ලොගකරු නොනවතින ගබඩාව හිස් කරන්නද?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"අප තවදුරටත් නොනවතින ලොගකරුවකු සමගින් නිරීක්ෂණය නොකරන විට, අපට ඔබේ උපාංගය මත නේවාසික ලොගකරු දත්ත මැකීමට අවශ්‍ය වේ."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"උපාංගයේ දිගටම ලොග දත්ත ගබඩා කි."</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"උපාංගය මත නොනැවතී ගබඩා කිරීමට ලොග අන්තරාචය තෝරන්න"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB වින්‍යාස දත්ත තෝරන්න"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB වින්‍යාස දත්ත තෝරන්න"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"ව්‍යාජ ස්ථානයන්ට අවසර දෙන්න"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"ව්‍යාජ ස්ථාන අනුමත කරන්න"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"උපලක්ෂණ පරික්ෂාව බැලීම සබල කරන්න"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"නව Android DHCP සේවාලාභියා වෙනුවට Lollipop වෙතින් DHCP සේවාලාභියා භාවිත කරන්න."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Wi‑Fi අක්‍රිය විට පවා, සැම විටම ජංගම දත්ත ක්‍රියාකාරීව තබන්න (අවසන් ජාල මාරුව සඳහා)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB දෝශාවේක්ෂණයට ඉඩ දෙන්නද?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB දෝශාවේක්ෂණය සංවර්ධන කටයුතු සඳහා පමණක් යොදාගැනේ. එය ඔබගේ පරිගණකය සහ ඔබගේ උපාංගය අතර දත්ත පිටපත් කිරීමට පමණක් භාවිතා කරන්න, ඔබගේ උපාංගය මත දැනුම්දීම් රහිතව යෙදුම් ස්ථාපනය කරන්න, සහ ලොග් දත්ත කියවන්න."</string>

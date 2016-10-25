@@ -40,6 +40,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.Interpolator;
 import android.graphics.LinearGradient;
@@ -818,6 +819,16 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * without throwing
      */
     static boolean sTextureViewIgnoresDrawableSetters = false;
+
+    /**
+     * Prior to N, some ViewGroups would not convert LayoutParams properly even though both extend
+     * MarginLayoutParams. For instance, converting LinearLayout.LayoutParams to
+     * RelativeLayout.LayoutParams would lose margin information. This is fixed on N but target API
+     * check is implemented for backwards compatibility.
+     *
+     * {@hide}
+     */
+    protected static boolean sPreserveMarginParamsInLayoutParamConversion;
 
     /**
      * This view does not want keystrokes. Use with TAKES_FOCUS_MASK when
@@ -2435,6 +2446,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      *          1                        PFLAG3_OVERLAPPING_RENDERING_FORCED_VALUE
      *         1                         PFLAG3_HAS_OVERLAPPING_RENDERING_FORCED
      *        1                          PFLAG3_TEMPORARY_DETACH
+     *       1                           PFLAG3_NO_REVEAL_ON_FOCUS
      * |-------|-------|-------|-------|
      */
 
@@ -2675,6 +2687,16 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      * @see #onFinishTemporaryDetach()
      */
     static final int PFLAG3_TEMPORARY_DETACH = 0x2000000;
+
+    /**
+     * Flag indicating that the view does not wish to be revealed within its parent
+     * hierarchy when it gains focus. Expressed in the negative since the historical
+     * default behavior is to reveal on focus; this flag suppresses that behavior.
+     *
+     * @see #setRevealOnFocusHint(boolean)
+     * @see #getRevealOnFocusHint()
+     */
+    private static final int PFLAG3_NO_REVEAL_ON_FOCUS = 0x4000000;
 
     /* End of masks for mPrivateFlags3 */
 
@@ -3744,12 +3766,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     /**
      * Flag indicating that a drag can cross window boundaries.  When
      * {@link #startDragAndDrop(ClipData, DragShadowBuilder, Object, int)} is called
-     * with this flag set, all visible applications will be able to participate
+     * with this flag set, all visible applications with targetSdkVersion >=
+     * {@link android.os.Build.VERSION_CODES#N API 24} will be able to participate
      * in the drag operation and receive the dragged content.
      *
-     * If this is the only flag set, then the drag recipient will only have access to text data
+     * <p>If this is the only flag set, then the drag recipient will only have access to text data
      * and intents contained in the {@link ClipData} object. Access to URIs contained in the
-     * {@link ClipData} is determined by other DRAG_FLAG_GLOBAL_* flags.
+     * {@link ClipData} is determined by other DRAG_FLAG_GLOBAL_* flags</p>
      */
     public static final int DRAG_FLAG_GLOBAL = 1 << 8;  // 256
 
@@ -3979,6 +4002,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      */
     String mStartActivityRequestWho;
 
+    @Nullable
+    private RoundScrollbarRenderer mRoundScrollbarRenderer;
+
     /**
      * Simple constructor to use when creating a view from code.
      *
@@ -4035,6 +4061,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             // Prior to N, TextureView would silently ignore calls to setBackground/setForeground.
             // On N+, we throw, but that breaks compatibility with apps that use these methods.
             sTextureViewIgnoresDrawableSetters = targetSdkVersion <= M;
+
+            // Prior to N, we would drop margins in LayoutParam conversions. The fix triggers bugs
+            // in apps so we target check it to avoid breaking existing apps.
+            sPreserveMarginParamsInLayoutParamConversion = targetSdkVersion >= N;
 
             sCompatibilityDone = true;
         }
@@ -4214,25 +4244,25 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                     setAlpha(a.getFloat(attr, 1f));
                     break;
                 case com.android.internal.R.styleable.View_transformPivotX:
-                    setPivotX(a.getDimensionPixelOffset(attr, 0));
+                    setPivotX(a.getDimension(attr, 0));
                     break;
                 case com.android.internal.R.styleable.View_transformPivotY:
-                    setPivotY(a.getDimensionPixelOffset(attr, 0));
+                    setPivotY(a.getDimension(attr, 0));
                     break;
                 case com.android.internal.R.styleable.View_translationX:
-                    tx = a.getDimensionPixelOffset(attr, 0);
+                    tx = a.getDimension(attr, 0);
                     transformSet = true;
                     break;
                 case com.android.internal.R.styleable.View_translationY:
-                    ty = a.getDimensionPixelOffset(attr, 0);
+                    ty = a.getDimension(attr, 0);
                     transformSet = true;
                     break;
                 case com.android.internal.R.styleable.View_translationZ:
-                    tz = a.getDimensionPixelOffset(attr, 0);
+                    tz = a.getDimension(attr, 0);
                     transformSet = true;
                     break;
                 case com.android.internal.R.styleable.View_elevation:
-                    elevation = a.getDimensionPixelOffset(attr, 0);
+                    elevation = a.getDimension(attr, 0);
                     transformSet = true;
                     break;
                 case com.android.internal.R.styleable.View_rotation:
@@ -5937,6 +5967,47 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             onFocusChanged(true, direction, previouslyFocusedRect);
             refreshDrawableState();
         }
+    }
+
+    /**
+     * Sets this view's preference for reveal behavior when it gains focus.
+     *
+     * <p>When set to true, this is a signal to ancestor views in the hierarchy that
+     * this view would prefer to be brought fully into view when it gains focus.
+     * For example, a text field that a user is meant to type into. Other views such
+     * as scrolling containers may prefer to opt-out of this behavior.</p>
+     *
+     * <p>The default value for views is true, though subclasses may change this
+     * based on their preferred behavior.</p>
+     *
+     * @param revealOnFocus true to request reveal on focus in ancestors, false otherwise
+     *
+     * @see #getRevealOnFocusHint()
+     */
+    public final void setRevealOnFocusHint(boolean revealOnFocus) {
+        if (revealOnFocus) {
+            mPrivateFlags3 &= ~PFLAG3_NO_REVEAL_ON_FOCUS;
+        } else {
+            mPrivateFlags3 |= PFLAG3_NO_REVEAL_ON_FOCUS;
+        }
+    }
+
+    /**
+     * Returns this view's preference for reveal behavior when it gains focus.
+     *
+     * <p>When this method returns true for a child view requesting focus, ancestor
+     * views responding to a focus change in {@link ViewParent#requestChildFocus(View, View)}
+     * should make a best effort to make the newly focused child fully visible to the user.
+     * When it returns false, ancestor views should preferably not disrupt scroll positioning or
+     * other properties affecting visibility to the user as part of the focus change.</p>
+     *
+     * @return true if this view would prefer to become fully visible when it gains focus,
+     *         false if it would prefer not to disrupt scroll positioning
+     *
+     * @see #setRevealOnFocusHint(boolean)
+     */
+    public final boolean getRevealOnFocusHint() {
+        return (mPrivateFlags3 & PFLAG3_NO_REVEAL_ON_FOCUS) == 0;
     }
 
     /**
@@ -9780,6 +9851,18 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     /**
+     * Tells whether the {@link View} is in the state between {@link #onStartTemporaryDetach()}
+     * and {@link #onFinishTemporaryDetach()}.
+     *
+     * <p>This method always returns {@code true} when called directly or indirectly from
+     * {@link #onStartTemporaryDetach()}. The return value when called directly or indirectly from
+     * {@link #onFinishTemporaryDetach()}, however, depends on the OS version.
+     * <ul>
+     *     <li>{@code true} on {@link android.os.Build.VERSION_CODES#N API 24}</li>
+     *     <li>{@code false} on {@link android.os.Build.VERSION_CODES#N_MR1 API 25}} and later</li>
+     * </ul>
+     * </p>
+     *
      * @return {@code true} when the View is in the state between {@link #onStartTemporaryDetach()}
      * and {@link #onFinishTemporaryDetach()}.
      */
@@ -9814,8 +9897,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      */
     @CallSuper
     public void dispatchFinishTemporaryDetach() {
-        onFinishTemporaryDetach();
         mPrivateFlags3 &= ~PFLAG3_TEMPORARY_DETACH;
+        onFinishTemporaryDetach();
         if (hasWindowFocus() && hasFocus()) {
             InputMethodManager.getInstance().focusIn(this);
         }
@@ -10302,7 +10385,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      *                  ancestors or by window visibility
      * @return true if this view is visible to the user, not counting clipping or overlapping
      */
-    @Visibility boolean dispatchVisibilityAggregated(boolean isVisible) {
+    boolean dispatchVisibilityAggregated(boolean isVisible) {
         final boolean thisVisible = getVisibility() == VISIBLE;
         // If we're not visible but something is telling us we are, ignore it.
         if (thisVisible || !isVisible) {
@@ -12309,6 +12392,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     public void setAlpha(@FloatRange(from=0.0, to=1.0) float alpha) {
         ensureTransformationInfo();
         if (mTransformationInfo.mAlpha != alpha) {
+            // Report visibility changes, which can affect children, to accessibility
+            if ((alpha == 0) ^ (mTransformationInfo.mAlpha == 0)) {
+                notifySubtreeAccessibilityStateChangedIfNeeded();
+            }
             mTransformationInfo.mAlpha = alpha;
             if (onSetAlpha((int) (alpha * 255))) {
                 mPrivateFlags |= PFLAG_ALPHA_SET;
@@ -12319,8 +12406,6 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                 mPrivateFlags &= ~PFLAG_ALPHA_SET;
                 invalidateViewProperty(true, false);
                 mRenderNode.setAlpha(getFinalAlpha());
-                notifyViewAccessibilityStateChangedIfNeeded(
-                        AccessibilityEvent.CONTENT_CHANGE_TYPE_UNDEFINED);
             }
         }
     }
@@ -14720,6 +14805,25 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     private void getVerticalScrollBarBounds(Rect bounds) {
+        if (mRoundScrollbarRenderer == null) {
+            getStraightVerticalScrollBarBounds(bounds);
+        } else {
+            getRoundVerticalScrollBarBounds(bounds);
+        }
+    }
+
+    private void getRoundVerticalScrollBarBounds(Rect bounds) {
+        final int width = mRight - mLeft;
+        final int height = mBottom - mTop;
+        // Do not take padding into account as we always want the scrollbars
+        // to hug the screen for round wearable devices.
+        bounds.left = mScrollX;
+        bounds.top = mScrollY;
+        bounds.right = bounds.left + width;
+        bounds.bottom = mScrollY + height;
+    }
+
+    private void getStraightVerticalScrollBarBounds(Rect bounds) {
         final int inside = (mViewFlags & SCROLLBARS_OUTSIDE_MASK) == 0 ? ~0 : 0;
         final int size = getVerticalScrollbarWidth();
         int verticalScrollbarPosition = mVerticalScrollbarPosition;
@@ -14754,6 +14858,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     protected final void onDrawScrollBars(Canvas canvas) {
         // scrollbars are drawn only when the animation is running
         final ScrollabilityCache cache = mScrollCache;
+
         if (cache != null) {
 
             int state = cache.state;
@@ -14794,13 +14899,25 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
             final boolean drawVerticalScrollBar = isVerticalScrollBarEnabled()
                     && !isVerticalScrollBarHidden();
 
-            if (drawVerticalScrollBar || drawHorizontalScrollBar) {
+            // Fork out the scroll bar drawing for round wearable devices.
+            if (mRoundScrollbarRenderer != null) {
+                if (drawVerticalScrollBar) {
+                    final Rect bounds = cache.mScrollBarBounds;
+                    getVerticalScrollBarBounds(bounds);
+                    mRoundScrollbarRenderer.drawRoundScrollbars(
+                            canvas, (float) cache.scrollBar.getAlpha() / 255f, bounds);
+                    if (invalidate) {
+                        invalidate();
+                    }
+                }
+                // Do not draw horizontal scroll bars for round wearable devices.
+            } else if (drawVerticalScrollBar || drawHorizontalScrollBar) {
                 final ScrollBarDrawable scrollBar = cache.scrollBar;
 
                 if (drawHorizontalScrollBar) {
                     scrollBar.setParameters(computeHorizontalScrollRange(),
-                                            computeHorizontalScrollOffset(),
-                                            computeHorizontalScrollExtent(), false);
+                            computeHorizontalScrollOffset(),
+                            computeHorizontalScrollExtent(), false);
                     final Rect bounds = cache.mScrollBarBounds;
                     getHorizontalScrollBarBounds(bounds);
                     onDrawHorizontalScrollBar(canvas, scrollBar, bounds.left, bounds.top,
@@ -14812,8 +14929,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
                 if (drawVerticalScrollBar) {
                     scrollBar.setParameters(computeVerticalScrollRange(),
-                                            computeVerticalScrollOffset(),
-                                            computeVerticalScrollExtent(), true);
+                            computeVerticalScrollOffset(),
+                            computeVerticalScrollExtent(), true);
                     final Rect bounds = cache.mScrollBarBounds;
                     getVerticalScrollBarBounds(bounds);
                     onDrawVerticalScrollBar(canvas, scrollBar, bounds.left, bounds.top,
@@ -15414,7 +15531,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         if (vis != GONE) {
             onWindowVisibilityChanged(vis);
             if (isShown()) {
-                // Calling onVisibilityChanged directly here since the subtree will also
+                // Calling onVisibilityAggregated directly here since the subtree will also
                 // receive dispatchAttachedToWindow and this same call
                 onVisibilityAggregated(vis == VISIBLE);
             }
@@ -17524,6 +17641,15 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
 
         if (changed || (mPrivateFlags & PFLAG_LAYOUT_REQUIRED) == PFLAG_LAYOUT_REQUIRED) {
             onLayout(changed, l, t, r, b);
+
+            if (shouldDrawRoundScrollbar()) {
+                if(mRoundScrollbarRenderer == null) {
+                    mRoundScrollbarRenderer = new RoundScrollbarRenderer(this);
+                }
+            } else {
+                mRoundScrollbarRenderer = null;
+            }
+
             mPrivateFlags &= ~PFLAG_LAYOUT_REQUIRED;
 
             ListenerInfo li = mListenerInfo;
@@ -20540,7 +20666,6 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
      *         <li>{@link #DRAG_FLAG_GLOBAL}</li>
      *         <li>{@link #DRAG_FLAG_GLOBAL_PERSISTABLE_URI_PERMISSION}</li>
      *         <li>{@link #DRAG_FLAG_GLOBAL_PREFIX_URI_PERMISSION}</li>
-     *         <li>{@link #DRAG_FLAG_GLOBAL_PREFIX_URI_PERMISSION}</li>
      *         <li>{@link #DRAG_FLAG_GLOBAL_URI_READ}</li>
      *         <li>{@link #DRAG_FLAG_GLOBAL_URI_WRITE}</li>
      *         <li>{@link #DRAG_FLAG_OPAQUE}</li>
@@ -22857,7 +22982,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         /**
          * Last global system UI visibility reported by the window manager.
          */
-        int mGlobalSystemUiVisibility;
+        int mGlobalSystemUiVisibility = -1;
 
         /**
          * True if a view in this hierarchy has an OnSystemUiVisibilityChangeListener
@@ -22904,7 +23029,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
         final int[] mInvalidateChildLocation = new int[2];
 
         /**
-         * Global to the view hierarchy used as a temporary for dealng with
+         * Global to the view hierarchy used as a temporary for dealing with
          * computing absolute on-screen location.
          */
         final int[] mTmpLocation = new int[2];
@@ -23741,5 +23866,31 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
                 contentDescription == null ? "" : contentDescription.toString());
         stream.addProperty("accessibility:labelFor", getLabelFor());
         stream.addProperty("accessibility:importantForAccessibility", getImportantForAccessibility());
+    }
+
+    /**
+     * Determine if this view is rendered on a round wearable device and is the main view
+     * on the screen.
+     */
+    private boolean shouldDrawRoundScrollbar() {
+        if (!mResources.getConfiguration().isScreenRound()) {
+            return false;
+        }
+
+        final View rootView = getRootView();
+        final WindowInsets insets = getRootWindowInsets();
+
+        int height = getHeight();
+        int width = getWidth();
+        int displayHeight = rootView.getHeight();
+        int displayWidth = rootView.getWidth();
+
+        if (height != displayHeight || width != displayWidth) {
+            return false;
+        }
+
+        getLocationOnScreen(mAttachInfo.mTmpLocation);
+        return mAttachInfo.mTmpLocation[0] == insets.getStableInsetLeft()
+                && mAttachInfo.mTmpLocation[1] == insets.getStableInsetTop();
     }
 }

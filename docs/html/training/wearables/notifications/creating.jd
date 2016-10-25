@@ -28,7 +28,7 @@ notifications properly, whether they appear on a handheld or wearable.
 
 <p class="note"><strong>Note:</strong>
 Notifications using {@link android.widget.RemoteViews} are stripped of custom
-layouts and the wearable only displays the text and icons. However, you can create
+layouts and the wearable only displays the text and icons. However, you can 
 <a href="{@docRoot}training/wearables/apps/layouts.html#CustomNotifications">create custom notifications</a>
 that use custom card layouts by creating a wearable app that runs on the wearable device.</p>
 
@@ -58,7 +58,7 @@ such as action buttons and large icons, while remaining compatible with Android 
 
 <p>To create a notification with the support library, you create an instance of
 {@link android.support.v4.app.NotificationCompat.Builder} and issue the notification by
-passing it to {@link android.support.v4.app.NotificationManagerCompat#notify notify()}. For example:
+passing it to {@link android.support.v4.app.NotificationManagerCompat#notify(int, android.app.Notification) notify()}. For example:
 </p>
 
 <pre>

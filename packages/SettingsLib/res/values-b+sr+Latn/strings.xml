@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Dozvoli/zabrani skeniranje Wi-Fi-ja u romingu na osnovu prisutnog protoka podataka na interfejsu"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Veličine bafera podataka u programu za evidentiranje"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Izaberite veličine po baferu evidencije"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Želite li da obrišete stalni memorijski prostor programa za evidentiranje?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Kada ih više ne nadgledamo pomoću stalnog programa za evidentiranje, dužni smo da obrišemo podatke iz programa za evidentiranje koji su trajno smešteni na uređaju."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Čuvaj evidentirane podatke na uređaju"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Izaberite međumemorije evidencije koje ćete stalno čuvati na uređaju."</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Izaberite konfiguraciju USB-a"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Izaberite konfiguraciju USB-a"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Dozvoli lažne lokacije"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Dozvoli lažne lokacije"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Omogući proveru atributa za pregled"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Koristite DHCP klijent iz Lollipop-a umesto novog Android DHCP klijenta."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Neka podaci za mobilne uređaje uvek budu aktivni, čak i kada je Wi‑Fi aktivan (radi brze promene mreže)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Dozvoli otklanjanje USB grešaka?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"Otklanjanje USB grešaka namenjeno je samo za svrhe programiranja. Koristite ga za kopiranje podataka sa računara na uređaj i obrnuto, instaliranje aplikacija na uređaju bez obaveštenja i čitanje podataka iz evidencije."</string>

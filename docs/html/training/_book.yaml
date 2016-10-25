@@ -420,6 +420,8 @@ toc:
       path: /training/basics/network-ops/connecting.html
     - title: Managing Network Usage
       path: /training/basics/network-ops/managing.html
+    - title: Optimizing Network Data Usage
+      path: /training/basics/network-ops/data-saver.html
     - title: Parsing XML Data
       path: /training/basics/network-ops/xml.html
   - title: Transferring Data Without Draining the Battery
@@ -436,7 +438,7 @@ toc:
       path: /training/efficient-downloads/redundant_redundant.html
     - title: Modifying Patterns Based on the Connectivity Type
       path: /training/efficient-downloads/connectivity_patterns.html
-  - title: Syncing to the Cloud
+  - title: Backing up App Data to the Cloud
     path: /training/backup/index.html
     path_attributes:
     - name: description
@@ -695,6 +697,8 @@ toc:
       path: /training/tv/playback/guided-step.html
     - title: Enabling Background Playback
       path: /training/tv/playback/options.html
+    - title: Adding Picture-in-picture
+      path: /training/tv/playback/picture-in-picture.html
   - title: Helping Users Find Content on TV
     path: /training/tv/discovery/index.html
     path_attributes:
@@ -724,6 +728,8 @@ toc:
       path: /training/tv/tif/channel.html
     - title: Managing User Interaction
       path: /training/tv/tif/ui.html
+    - title: Supporting Content Recording
+      path: /training/tv/tif/content-recording.html
   - title: TV Apps Checklist
     path: /training/tv/publishing/checklist.html
     path_attributes:
@@ -1363,6 +1369,11 @@ toc:
     path_attributes:
     - name: description
       value: How to ensure that your app is secure when performing network transactions.
+  - title: Network Security Configuration
+    path: /training/articles/security-config.html
+    path_attributes:
+    - name: description
+      value: Customize the behavior of your app's secure network connections safely.
   - title: Updating Your Security Provider to Protect Against SSL Exploits
     path: /training/articles/security-gms-provider.html
     path_attributes:
@@ -1373,11 +1384,31 @@ toc:
     path_attributes:
     - name: description
       value: How to use the SafetyNet service to analyze a device where your app is running and get information about its compatibility with your app.
+  - title: Checking URLs with the Safe Browsing API
+    path: /training/safebrowsing/index.html
+    path_attributes:
+    - name: description
+      value: How to use the SafetyNet service to determine if a URL is designated as a known threat.
+  - title: Verifying Hardware-backed Key Pairs with Key Attestation
+    path: /training/articles/security-key-attestation.html
+    path_attributes:
+    - name: description
+      value: How to retrieve and verify the properties of a device's hardware-backed key pair.
   - title: Enhancing Security with Device Management Policies
     path: /work/device-management-policy.html
     path_attributes:
     - name: description
       value: How to create an application that enforces security policies on devices.
+  - title: Supporting Direct Boot
+    path: /training/articles/direct-boot.html
+    path_attributes:
+    - name: description
+      value: How use device encrypted storage during Direct Boot mode.
+  - title: Using Scoped Directory Access
+    path: /training/articles/scoped-directory-access.html
+    path_attributes:
+    - name: description
+      value: How to use scoped directory access to request access to external storage directories.
 
 - title: Best Practices for Permissions & Identifiers
   path: /training/best-permissions-ids.html

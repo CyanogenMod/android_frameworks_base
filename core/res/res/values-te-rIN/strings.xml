@@ -678,6 +678,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"సరైనది!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"మళ్లీ ప్రయత్నించండి"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"మళ్లీ ప్రయత్నించండి"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"అన్ని లక్షణాలు మరియు డేటా కోసం అన్‌లాక్ చేయండి"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"ముఖంతో అన్‌లాక్ ప్రయత్నాల గరిష్ట పరిమితి మించిపోయారు"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"సిమ్ కార్డు లేదు"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"టాబ్లెట్‌లో సిమ్ కార్డు లేదు."</string>
@@ -1022,8 +1023,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"Android అప్‌గ్రేడ్ అవుతోంది…"</string>
     <string name="android_start_title" msgid="8418054686415318207">"Android ప్రారంభమవుతోంది…"</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"నిల్వను అనుకూలపరుస్తోంది."</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android అప్‌గ్రేడ్ అవుతోంది"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Android నవీకరణను ముగిస్తోంది…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"అప్‌గ్రేడ్ పూర్తయ్యే వరకు కొన్ని అనువర్తనాలు సరిగ్గా పని చేయకపోవచ్చు"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"<xliff:g id="APPLICATION">%1$s</xliff:g>ని అప్‌గ్రేడ్ చేస్తోంది…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"<xliff:g id="NUMBER_1">%2$d</xliff:g>లో <xliff:g id="NUMBER_0">%1$d</xliff:g> అనువర్తనాన్ని అనుకూలీకరిస్తోంది."</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"<xliff:g id="APPNAME">%1$s</xliff:g>ని సిద్ధం చేస్తోంది."</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"అనువర్తనాలను ప్రారంభిస్తోంది."</string>
@@ -1651,7 +1653,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"అన్‌‌పిన్‌ ‌చేయి"</string>
     <string name="app_info" msgid="6856026610594615344">"అనువర్తన సమాచారం"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"పరికరాన్ని రీసెట్ చేయాలా?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"పరికరాన్ని రీసెట్ చేయడానికి నొక్కండి"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"డెమోను ప్రారంభిస్తోంది..."</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"పరికరాన్ని రీసెట్ చేస్తోంది..."</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"పరికరాన్ని రీసెట్ చేయాలా?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"మీరు చేసిన ఏవైనా మార్పులను కోల్పోతారు మరియు డెమో <xliff:g id="TIMEOUT">%1$s</xliff:g> సెకన్లలో మళ్లీ ప్రారంభమవుతుంది…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"రద్దు చేయి"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"ఇప్పుడే రీసెట్ చేయి"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"ఈ పరికరాన్ని ఎటువంటి పరిమితులు లేకుండా ఉపయోగించడానికి ఫ్యాక్టరీ రీసెట్ చేయండి"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"మరింత తెలుసుకోవడానికి తాకండి."</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"<xliff:g id="LABEL">%1$s</xliff:g> నిలిపివేయబడింది"</string>
+    <string name="conference_call" msgid="3751093130790472426">"కాన్ఫరెన్స్ కాల్"</string>
 </resources>

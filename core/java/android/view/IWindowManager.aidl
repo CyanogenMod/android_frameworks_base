@@ -112,7 +112,7 @@ interface IWindowManager
             int requestedOrientation, boolean fullscreen, boolean showWhenLocked, int userId,
             int configChanges, boolean voiceInteraction, boolean launchTaskBehind,
             in Rect taskBounds, in Configuration configuration, int taskResizeMode,
-            boolean alwaysFocusable, boolean homeTask, int targetSdkVersion);
+            boolean alwaysFocusable, boolean homeTask, int targetSdkVersion, int rotationAnimationHint);
     /**
      *
      * @param token The token we are adding to the input task Id.
@@ -173,7 +173,8 @@ interface IWindowManager
             in CompatibilityInfo compatInfo, CharSequence nonLocalizedLabel, int labelRes,
             int icon, int logo, int windowFlags, IBinder transferFrom, boolean createIfNeeded);
     void setAppVisibility(IBinder token, boolean visible);
-    void notifyAppStopped(IBinder token, boolean stopped);
+    void notifyAppResumed(IBinder token, boolean wasStopped, boolean allowSavedSurface);
+    void notifyAppStopped(IBinder token);
     void startAppFreezingScreen(IBinder token, int configChanges);
     void stopAppFreezingScreen(IBinder token, boolean force);
     void removeAppToken(IBinder token);
@@ -304,6 +305,11 @@ interface IWindowManager
      * @return Whether the rotation is frozen.
      */
     boolean isRotationFrozen();
+
+    /**
+     * Screenshot the current wallpaper layer, including the whole screen.
+     */
+    Bitmap screenshotWallpaper();
 
     /**
      * Used only for assist -- request a screenshot of the current application.

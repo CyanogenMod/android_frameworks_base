@@ -75,7 +75,7 @@
     <string name="bluetooth_pairing_will_share_phonebook" msgid="4982239145676394429">"Agar ulanishga ruxsat bersangiz, ulangan vaqtda kontakt va qo‘ng‘iroqlaringiz tarixiga kirishi mumkin."</string>
     <string name="bluetooth_pairing_error_message" msgid="3748157733635947087">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> bilan biriktirib bo‘lmadi."</string>
     <string name="bluetooth_pairing_pin_error_message" msgid="8337234855188925274">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> qurilmasiga ulanib bo‘lmadi, chunki PIN-kod yoki parol noto‘g‘ri kiritildi."</string>
-    <string name="bluetooth_pairing_device_down_error_message" msgid="7870998403045801381">"Quyidagi qurilma javob bermayapti: <xliff:g id="DEVICE_NAME">%1$s</xliff:g>."</string>
+    <string name="bluetooth_pairing_device_down_error_message" msgid="7870998403045801381">"“<xliff:g id="DEVICE_NAME">%1$s</xliff:g>” qurilmasi bilan aloqa o‘rnatib bo‘lmayapti."</string>
     <string name="bluetooth_pairing_rejected_error_message" msgid="1648157108520832454">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> biriktirish so‘rovini rad qildi."</string>
     <string name="accessibility_wifi_off" msgid="1166761729660614716">"Wi-Fi o‘chiq."</string>
     <string name="accessibility_no_wifi" msgid="8834610636137374508">"Wi-Fi o‘chiq."</string>
@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Ma’lumotlarni uzatish vaqtida  trafik hajmiga qarab Wi-Fi tarmoqlarni qidirish funksiyasini yoqish yoki o‘chirish"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Jurnal buferi hajmi"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Jurnal xotirasi hajmini tanlang"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Jurnalning doimiy xotirasi tozalansinmi?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Qachon doimiy jurnal nazorat qilinmasa, uning ma’lumotlarini qurilmadan o‘chirib tashlanadi."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Jurnal ma’lumotlari doim saqlansin"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Xotirada doimiy saqlanishi kerak bo‘lgan jurnal buferini tanlang"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB konfiguratsiyasini tanlang"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB konfiguratsiyasini tanlang"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Qo‘lbola joylashuvlarga ruxsat berish"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Joylashuv emulyatsiyasiga ruxsat berish"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Alomatlar tekshiruvini yoqish"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Yangi Android DHCP mijoz-dasturi o‘rniga Lollipop tizimi DHCP mijoz-dasturidan foydalanilsin."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Mobil internet har doim yoniq tursin, hatto Wi-Fi yoniq bo‘lsa ham (bir tarmoqdan ikkinchisiga tezroq o‘tish uchun)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB orqali nosozliklarni tuzatishga ruxsat berilsinmi?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB orqali nosozliklarni tuzatish faqat dasturlash maqsadlarida yoqiladi. Undan ma‘lumotlarni qurilmangiz va kompyuter o‘rtasida ko‘chirish, ilovalarni xabarnomasiz o‘rnatish va jurnal ma‘lumotlarini o‘qish uchun foydalaniladi."</string>

@@ -143,7 +143,9 @@
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
+    <string name="accessibility_data_connection_4g_plus" msgid="3032226872470658661">"4G+"</string>
     <string name="accessibility_data_connection_lte" msgid="5413468808637540658">"LTE"</string>
+    <string name="accessibility_data_connection_lte_plus" msgid="361876866906946007">"LTE+"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"રોમિંગ"</string>
     <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
@@ -317,6 +319,9 @@
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"<xliff:g id="DATA_LIMIT">%s</xliff:g> મર્યાદા"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> ચેતવણી"</string>
     <string name="quick_settings_work_mode_label" msgid="6244915274350490429">"કાર્ય મોડ"</string>
+    <string name="quick_settings_night_display_label" msgid="3577098011487644395">"રાત્રિ પ્રકાશ"</string>
+    <string name="quick_settings_night_display_summary_on" msgid="1814901757887526769">"રાત્રિ પ્રકાશ ચાલુ છે, બંધ કરવા માટે ટપ કરો"</string>
+    <string name="quick_settings_night_display_summary_off" msgid="7892102914128777905">"રાત્રિ પ્રકાશ બંધ છે, ચાલુ કરવા માટે ટૅપ કરો"</string>
     <string name="recents_empty_message" msgid="808480104164008572">"કોઇ તાજેતરની આઇટમ્સ નથી"</string>
     <string name="recents_empty_message_dismissed_all" msgid="2791312568666558651">"તમે બધું સાફ કર્યું"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"ઍપ્લિકેશન માહિતી"</string>
@@ -330,6 +335,8 @@
     <string name="recents_multistack_add_stack_dialog_split_horizontal" msgid="8848514474543427332">"આડું વિભક્ત કરો"</string>
     <string name="recents_multistack_add_stack_dialog_split_vertical" msgid="9075292233696180813">"ઊભું વિભક્ત કરો"</string>
     <string name="recents_multistack_add_stack_dialog_split_custom" msgid="4177837597513701943">"કસ્ટમ વિભક્ત કરો"</string>
+  <string-array name="recents_blacklist_array">
+  </string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"ચાર્જ થઈ ગયું"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"ચાર્જ થઈ રહ્યું છે"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"પૂર્ણ થવામાં <xliff:g id="CHARGING_TIME">%s</xliff:g> બાકી"</string>
@@ -344,8 +351,7 @@
     <string name="zen_silence_introduction" msgid="3137882381093271568">"એલાર્મ્સ, સંગીત, વિડિઓઝ અને રમતો સહિત તમામ ધ્વનિઓ અને વાઇબ્રેશન્સને આ અવરોધિત કરે છે."</string>
     <string name="keyguard_more_overflow_text" msgid="9195222469041601365">"+<xliff:g id="NUMBER_OF_NOTIFICATIONS">%d</xliff:g>"</string>
     <string name="speed_bump_explanation" msgid="1288875699658819755">"નીચે ઓછી તાકીદની સૂચનાઓ"</string>
-    <!-- no translation found for notification_tap_again (7590196980943943842) -->
-    <skip />
+    <string name="notification_tap_again" msgid="7590196980943943842">"ખોલવા માટે ફરીથી ટૅપ કરો"</string>
     <string name="keyguard_unlock" msgid="8043466894212841998">"અનલૉક કરવા માટે ઉપર સ્વાઇપ કરો"</string>
     <string name="phone_hint" msgid="4872890986869209950">"ફોન માટે આયકનમાંથી સ્વાઇપ કરો"</string>
     <string name="voice_hint" msgid="8939888732119726665">"વૉઇસ સહાય માટે આયકનમાંથી સ્વાઇપ કરો"</string>
@@ -435,6 +441,18 @@
     <string name="volumeui_notification_title" msgid="4906770126345910955">"<xliff:g id="APP_NAME">%1$s</xliff:g> એ વૉલ્યૂમ સંવાદ છે"</string>
     <string name="volumeui_notification_text" msgid="8819536904234337445">"મૂળને પુનઃસ્થાપિત કરવા માટે ટૅપ કરો."</string>
     <string name="managed_profile_foreground_toast" msgid="5421487114739245972">"તમે તમારી કાર્ય પ્રોફાઇલનો ઉપયોગ કરી રહ્યાં છો"</string>
+  <string-array name="volume_stream_titles">
+    <item msgid="5841843895402729630">"કૉલ કરો"</item>
+    <item msgid="5997713001067658559">"સિસ્ટમ"</item>
+    <item msgid="7858983209929864160">"રિંગ કરો"</item>
+    <item msgid="1850038478268896762">"મીડિયા"</item>
+    <item msgid="8265110906352372092">"એલાર્મ"</item>
+    <item msgid="5339394737636839168"></item>
+    <item msgid="2951313578278086204">"Bluetooth"</item>
+    <item msgid="2919807739709798970"></item>
+    <item msgid="150349973435223405"></item>
+    <item msgid="6761963760295549099"></item>
+  </string-array>
     <string name="volume_stream_content_description_unmute" msgid="4436631538779230857">"%1$s. અનમ્યૂટ કરવા માટે ટૅપ કરો."</string>
     <string name="volume_stream_content_description_vibrate" msgid="1187944970457807498">"%1$s. વાઇબ્રેટ પર સેટ કરવા માટે ટૅપ કરો. ઍક્સેસિબિલિટી સેવાઓ મ્યૂટ કરવામાં આવી શકે છે."</string>
     <string name="volume_stream_content_description_mute" msgid="3625049841390467354">"%1$s. મ્યૂટ કરવા માટે ટૅપ કરો. ઍક્સેસિબિલિટી સેવાઓ મ્યૂટ કરવામાં આવી શકે છે."</string>
@@ -505,21 +523,6 @@
     <string name="notification_more_settings" msgid="816306283396553571">"વધુ સેટિંગ્સ"</string>
     <string name="notification_done" msgid="5279426047273930175">"થઈ ગયું"</string>
     <string name="notification_gear_accessibility" msgid="94429150213089611">"<xliff:g id="APP_NAME">%1$s</xliff:g> સૂચના નિયંત્રણો"</string>
-    <string name="color_and_appearance" msgid="1254323855964993144">"રંગ અને દેખાવ"</string>
-    <string name="night_mode" msgid="3540405868248625488">"રાત્રિ મોડ"</string>
-    <string name="calibrate_display" msgid="5974642573432039217">"પ્રદર્શન કૅલિબ્રેટ કરો"</string>
-    <string name="night_mode_on" msgid="5597545513026541108">"ચાલુ"</string>
-    <string name="night_mode_off" msgid="8035605276956057508">"બંધ"</string>
-    <string name="turn_on_automatically" msgid="4167565356762016083">"આપમેળે ચાલુ કરો"</string>
-    <string name="turn_on_auto_summary" msgid="2190994512406701520">"સ્થાન અને દિવસના સમય માટે યોગ્ય હોય તે રાત્રિ મોડ પર સ્વિચ કરો"</string>
-    <string name="when_night_mode_on" msgid="2969436026899172821">"જ્યારે રાત્રિ મોડ ચાલુ હોય"</string>
-    <string name="use_dark_theme" msgid="2900938704964299312">"Android OS માટે ઘાટી થીમનો ઉપયોગ કરો"</string>
-    <string name="adjust_tint" msgid="3398569573231409878">"ટિંટ સમાયોજિત કરો"</string>
-    <string name="adjust_brightness" msgid="980039329808178246">"તેજ સમાયોજિત કરો"</string>
-    <string name="night_mode_disclaimer" msgid="598914896926759578">"ઘાટી થીમને Android OS ના મુખ્ય ક્ષેત્રો પર લાગુ કરે છે જે સામાન્ય રીતે સેટિંગ્સ જેવી લાઇટ થીમમાં પ્રદર્શિત કરવામાં આવે છે."</string>
-    <string name="color_apply" msgid="9212602012641034283">"લાગુ કરો"</string>
-    <string name="color_revert_title" msgid="4746666545480534663">"સેટિંગ્સની પુષ્ટિ કરો"</string>
-    <string name="color_revert_message" msgid="9116001069397996691">"કેટલીક રંગ સેટિંગ્સ આ ઉપકરણને બિનઉપયોગી બનાવી શકે છે. આ રંગ સેટિંગ્સની પુષ્ટિ કરવા માટે ઓકે ક્લિક કરો, અન્યથા 10 સેકંડ પછી આ સેટિંગ્સ ફરીથી સેટ થશે."</string>
     <string name="battery_panel_title" msgid="7944156115535366613">"બૅટરી વપરાશ"</string>
     <string name="battery_detail_charging_summary" msgid="1279095653533044008">"ચાર્જિંગ દરમિયાન બૅટરી બચતકર્તા ઉપલબ્ધ નથી"</string>
     <string name="battery_detail_switch_title" msgid="6285872470260795421">"બૅટરી બચતકર્તા"</string>

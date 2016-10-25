@@ -194,6 +194,38 @@ public class DisconnectCause {
      */
     public static final int VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED = 50;
 
+    /**
+     * The call was terminated because it was pulled to another device.
+     * {@hide}
+     */
+    public static final int CALL_PULLED = 51;
+
+    /**
+     * The call was terminated because it was answered on another device.
+     * {@hide}
+     */
+    public static final int ANSWERED_ELSEWHERE = 52;
+
+    /**
+     * The call was terminated because the maximum allowable number of calls has been reached.
+     * {@hide}
+     */
+    public static final int MAXIMUM_NUMBER_OF_CALLS_REACHED = 53;
+
+    /**
+     * The call was terminated because cellular data has been disabled.
+     * Used when in a video call and the user disables cellular data via the settings.
+     * {@hide}
+     */
+    public static final int DATA_DISABLED = 54;
+
+    /**
+     * The call was terminated because the data policy has disabled cellular data.
+     * Used when in a video call and the user has exceeded the device data limit.
+     * {@hide}
+     */
+    public static final int DATA_LIMIT_REACHED = 55;
+
     //*********************************************************************************************
     // When adding a disconnect type:
     // 1) Please assign the new type the next id value below.
@@ -202,14 +234,14 @@ public class DisconnectCause {
     // 4) Update toString() with the newly added disconnect type.
     // 5) Update android.telecom.DisconnectCauseUtil with any mappings to a telecom.DisconnectCause.
     //
-    // NextId: 50
+    // NextId: 56
     //*********************************************************************************************
 
     /** Smallest valid value for call disconnect codes. */
     public static final int MINIMUM_VALID_VALUE = NOT_DISCONNECTED;
 
     /** Largest valid value for call disconnect codes. */
-    public static final int MAXIMUM_VALID_VALUE = VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED;
+    public static final int MAXIMUM_VALID_VALUE = DATA_LIMIT_REACHED;
 
     /** Private constructor to avoid class instantiation. */
     private DisconnectCause() {
@@ -318,7 +350,17 @@ public class DisconnectCause {
         case CDMA_ALREADY_ACTIVATED:
             return "CDMA_ALREADY_ACTIVATED";
         case VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED:
-                return "VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED";
+            return "VIDEO_CALL_NOT_ALLOWED_WHILE_TTY_ENABLED";
+        case CALL_PULLED:
+            return "CALL_PULLED";
+        case ANSWERED_ELSEWHERE:
+            return "ANSWERED_ELSEWHERE";
+        case MAXIMUM_NUMBER_OF_CALLS_REACHED:
+            return "MAXIMUM_NUMER_OF_CALLS_REACHED";
+        case DATA_DISABLED:
+            return "DATA_DISABLED";
+        case DATA_LIMIT_REACHED:
+            return "DATA_LIMIT_REACHED";
         default:
             return "INVALID: " + cause;
         }

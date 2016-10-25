@@ -44,6 +44,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Loads global system configuration info.
@@ -127,6 +129,11 @@ public class SystemConfig {
 	final ArrayMap<Signature, ArraySet<String>> mSignatureAllowances
             = new ArrayMap<Signature, ArraySet<String>>();
 
+    // These are the packages of carrier-associated apps which should be disabled until used until
+    // a SIM is inserted which grants carrier privileges to that carrier app.
+    final ArrayMap<String, List<String>> mDisabledUntilUsedPreinstalledCarrierAssociatedApps =
+            new ArrayMap<>();
+
     public static SystemConfig getInstance() {
         synchronized (SystemConfig.class) {
             if (sInstance == null) {
@@ -190,6 +197,10 @@ public class SystemConfig {
 
     public ArrayMap<Signature, ArraySet<String>> getSignatureAllowances() {
         return mSignatureAllowances;
+    }
+
+    public ArrayMap<String, List<String>> getDisabledUntilUsedPreinstalledCarrierAssociatedApps() {
+        return mDisabledUntilUsedPreinstalledCarrierAssociatedApps;
     }
 
     SystemConfig() {
@@ -526,6 +537,26 @@ public class SystemConfig {
                         } else {
                             mBackupTransportWhitelist.add(cn);
                         }
+                    }
+                    XmlUtils.skipCurrentTag(parser);
+                } else if ("disabled-until-used-preinstalled-carrier-associated-app".equals(name)
+                        && allowAppConfigs) {
+                    String pkgname = parser.getAttributeValue(null, "package");
+                    String carrierPkgname = parser.getAttributeValue(null, "carrierAppPackage");
+                    if (pkgname == null || carrierPkgname == null) {
+                        Slog.w(TAG, "<disabled-until-used-preinstalled-carrier-associated-app"
+                                + " without package or carrierAppPackage in " + permFile + " at "
+                                + parser.getPositionDescription());
+                    } else {
+                        List<String> associatedPkgs =
+                                mDisabledUntilUsedPreinstalledCarrierAssociatedApps.get(
+                                        carrierPkgname);
+                        if (associatedPkgs == null) {
+                            associatedPkgs = new ArrayList<>();
+                            mDisabledUntilUsedPreinstalledCarrierAssociatedApps.put(
+                                    carrierPkgname, associatedPkgs);
+                        }
+                        associatedPkgs.add(pkgname);
                     }
                     XmlUtils.skipCurrentTag(parser);
                 } else {

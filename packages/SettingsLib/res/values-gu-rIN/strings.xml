@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"ઇન્ટરફેસ પર હાજર ડેટા ટ્રાફિકના પ્રમાણનાં આધારે Wi‑Fi રોમ સ્કૅન્સને મંજૂરી આપો/નામંજૂર કરો"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"લોગર બફર કદ"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"લૉગ દીઠ લૉગર કદ બફર પસંદ કરો"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"લૉગર નિરંતર સ્ટોરેજ સાફ કરીએ?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"જ્યારે અમે હવે નિરંતર લૉગર સાથે મોનીટર કરતાં નથી, તો તમારા ઉપકરણ પર રહેલો લૉગર ડેટા કાઢી નાખવાની જરૂર છે."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"તમારા ઉપકરણ પર લૉગર ડેટા નિરંતર સંગ્રહિત કરો"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"તમારા ઉપકરણ પર નિરંતર સંગ્રહવા માટે લૉગ બફર પસંદ કરો"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB ગોઠવણી પસંદ કરો"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB ગોઠવણી પસંદ કરો"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"મોક સ્થાનોની મંજૂરી આપો"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"મોક સ્થાનોની મંજૂરી આપો"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"લક્ષણ નિરીક્ષણ જોવાનું સક્ષમ કરો"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"નવા Android DHCP ક્લાઇન્ટને બદલે Lollipop પરના DHCP ક્લાઇન્ટનો ઉપયોગ કરો."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Wi‑Fi  સક્રિય હોય ત્યારે પણ, હંમેશા મોબાઇલ ડેટાને સક્રિય રાખો (ઝડપી નેટવર્ક સ્વિચિંગ માટે)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB ડિબગિંગને મંજૂરી આપીએ?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB ડિબગીંગ ફક્ત વિકાસ હેતુઓ માટે જ બનાવાયેલ છે. તેનો ઉપયોગ તમારા કમ્પ્યુટર અને તમારા ઉપકરણ વચ્ચે ડેટાને કૉપિ કરવા, સૂચના વગર તમારા ઉપકરણ પર ઍપ્લિકેશનો ઇન્સ્ટોલ કરવા અને લૉગ ડેટા વાંચવા માટે કરો."</string>

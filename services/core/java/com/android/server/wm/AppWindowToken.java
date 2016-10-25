@@ -17,7 +17,9 @@
 package com.android.server.wm;
 
 import static android.app.ActivityManager.StackId;
+import static android.view.WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
 import static android.view.WindowManager.LayoutParams.TYPE_APPLICATION_STARTING;
+import static android.view.WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER;
 import static com.android.server.wm.WindowManagerDebugConfig.DEBUG_ANIM;
 import static com.android.server.wm.WindowManagerDebugConfig.DEBUG_APP_TRANSITIONS;
 import static com.android.server.wm.WindowManagerDebugConfig.DEBUG_ADD_REMOVE;
@@ -132,6 +134,7 @@ class AppWindowToken extends WindowToken {
     boolean mAlwaysFocusable;
 
     boolean mAppStopped;
+    int mRotationAnimationHint;
     int mPendingRelaunchCount;
 
     private ArrayList<WindowSurfaceController.SurfaceControlWithBackground> mSurfaceViewBackgrounds =
@@ -336,16 +339,66 @@ class AppWindowToken extends WindowToken {
         }
     }
 
-    // Here we destroy surfaces which have been marked as eligible by the animator, taking care
-    // to ensure the client has finished with them. If the client could still be using them
-    // we will skip destruction and try again when the client has stopped.
+    void clearAnimatingFlags() {
+        boolean wallpaperMightChange = false;
+        for (int i = allAppWindows.size() - 1; i >= 0; i--) {
+            final WindowState win = allAppWindows.get(i);
+            // We don't want to clear it out for windows that get replaced, because the
+            // animation depends on the flag to remove the replaced window.
+            //
+            // We also don't clear the mAnimatingExit flag for windows which have the
+            // mRemoveOnExit flag. This indicates an explicit remove request has been issued
+            // by the client. We should let animation proceed and not clear this flag or
+            // they won't eventually be removed by WindowStateAnimator#finishExit.
+            if (!win.mWillReplaceWindow && !win.mRemoveOnExit) {
+                // Clear mAnimating flag together with mAnimatingExit. When animation
+                // changes from exiting to entering, we need to clear this flag until the
+                // new animation gets applied, so that isAnimationStarting() becomes true
+                // until then.
+                // Otherwise applySurfaceChangesTransaction will faill to skip surface
+                // placement for this window during this period, one or more frame will
+                // show up with wrong position or scale.
+                if (win.mAnimatingExit) {
+                    win.mAnimatingExit = false;
+                    wallpaperMightChange = true;
+                }
+                if (win.mWinAnimator.mAnimating) {
+                    win.mWinAnimator.mAnimating = false;
+                    wallpaperMightChange = true;
+                }
+                if (win.mDestroying) {
+                    win.mDestroying = false;
+                    service.mDestroySurface.remove(win);
+                    wallpaperMightChange = true;
+                }
+            }
+        }
+        if (wallpaperMightChange) {
+            requestUpdateWallpaperIfNeeded();
+        }
+    }
+
     void destroySurfaces() {
+        destroySurfaces(false /*cleanupOnResume*/);
+    }
+
+    /**
+     * Destroy surfaces which have been marked as eligible by the animator, taking care to ensure
+     * the client has finished with them.
+     *
+     * @param cleanupOnResume whether this is done when app is resumed without fully stopped. If
+     * set to true, destroy only surfaces of removed windows, and clear relevant flags of the
+     * others so that they are ready to be reused. If set to false (common case), destroy all
+     * surfaces that's eligible, if the app is already stopped.
+     */
+
+    private void destroySurfaces(boolean cleanupOnResume) {
         final ArrayList<WindowState> allWindows = (ArrayList<WindowState>) allAppWindows.clone();
         final DisplayContentList displayList = new DisplayContentList();
         for (int i = allWindows.size() - 1; i >= 0; i--) {
             final WindowState win = allWindows.get(i);
 
-            if (!(mAppStopped || win.mWindowRemovalAllowed)) {
+            if (!(mAppStopped || win.mWindowRemovalAllowed || cleanupOnResume)) {
                 continue;
             }
 
@@ -360,13 +413,18 @@ class AppWindowToken extends WindowToken {
                     + " win.mWindowRemovalAllowed=" + win.mWindowRemovalAllowed
                     + " win.mRemoveOnExit=" + win.mRemoveOnExit);
 
-            win.destroyOrSaveSurface();
+            if (!cleanupOnResume || win.mRemoveOnExit) {
+                win.destroyOrSaveSurface();
+            }
             if (win.mRemoveOnExit) {
                 service.removeWindowInnerLocked(win);
             }
             final DisplayContent displayContent = win.getDisplayContent();
             if (displayContent != null && !displayList.contains(displayContent)) {
                 displayList.add(displayContent);
+            }
+            if (cleanupOnResume) {
+                win.requestUpdateWallpaperIfNeeded();
             }
             win.mDestroying = false;
         }
@@ -378,18 +436,31 @@ class AppWindowToken extends WindowToken {
     }
 
     /**
-     * If the application has stopped it is okay to destroy any surfaces which were keeping alive
-     * in case they were still being used.
+     * Notify that the app is now resumed, and it was not stopped before, perform a clean
+     * up of the surfaces
      */
-    void notifyAppStopped(boolean stopped) {
-        if (DEBUG_ADD_REMOVE) Slog.v(TAG, "notifyAppStopped: stopped=" + stopped + " " + this);
-        mAppStopped = stopped;
-
-        if (stopped) {
-            destroySurfaces();
-            // Remove any starting window that was added for this app if they are still around.
-            mTask.mService.scheduleRemoveStartingWindowLocked(this);
+    void notifyAppResumed(boolean wasStopped, boolean allowSavedSurface) {
+        if (DEBUG_ADD_REMOVE) Slog.v(TAG, "notifyAppResumed: wasStopped=" + wasStopped
+                + " allowSavedSurface=" + allowSavedSurface + " " + this);
+        mAppStopped = false;
+        if (!wasStopped) {
+            destroySurfaces(true /*cleanupOnResume*/);
         }
+        if (!allowSavedSurface) {
+            destroySavedSurfaces();
+        }
+    }
+
+    /**
+     * Notify that the app has stopped, and it is okay to destroy any surfaces which were
+     * keeping alive in case they were still being used.
+     */
+    void notifyAppStopped() {
+        if (DEBUG_ADD_REMOVE) Slog.v(TAG, "notifyAppStopped: " + this);
+        mAppStopped = true;
+        destroySurfaces();
+        // Remove any starting window that was added for this app if they are still around.
+        mTask.mService.scheduleRemoveStartingWindowLocked(this);
     }
 
     /**
@@ -628,6 +699,16 @@ class AppWindowToken extends WindowToken {
         }
     }
 
+    void clearRelaunching() {
+        if (mPendingRelaunchCount == 0) {
+            return;
+        }
+        if (canFreezeBounds()) {
+            unfreezeBounds();
+        }
+        mPendingRelaunchCount = 0;
+    }
+
     void addWindow(WindowState w) {
         for (int i = allAppWindows.size() - 1; i >= 0; i--) {
             WindowState candidate = allAppWindows.get(i);
@@ -707,8 +788,12 @@ class AppWindowToken extends WindowToken {
      * Unfreezes the previously frozen bounds. See {@link #freezeBounds}.
      */
     private void unfreezeBounds() {
-        mFrozenBounds.remove();
-        mFrozenMergedConfig.remove();
+        if (!mFrozenBounds.isEmpty()) {
+            mFrozenBounds.remove();
+        }
+        if (!mFrozenMergedConfig.isEmpty()) {
+            mFrozenMergedConfig.remove();
+        }
         for (int i = windows.size() - 1; i >= 0; i--) {
             final WindowState win = windows.get(i);
             if (!win.mHasSurface) {

@@ -302,5 +302,9 @@ interface IDevicePolicyManager {
     boolean isUninstallInQueue(String packageName);
     void uninstallPackageWithActiveAdmins(String packageName);
 
+    boolean isDeviceProvisioned();
+    boolean isDeviceProvisioningConfigApplied();
+    void setDeviceProvisioningConfigApplied();
+
     boolean requireSecureKeyguard(int userHandle);
 }

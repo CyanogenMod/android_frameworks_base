@@ -236,6 +236,7 @@ public final class ActivityThread {
     boolean mSystemThread = false;
     boolean mJitEnabled = false;
     boolean mSomeActivitiesChanged = false;
+    boolean mUpdatingSystemConfig = false;
 
     // These can be accessed by multiple threads; mPackages is the lock.
     // XXX For now we keep around information about all packages we have
@@ -1574,7 +1575,9 @@ public final class ActivityThread {
                 case CONFIGURATION_CHANGED:
                     Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "configChanged");
                     mCurDefaultDisplayDpi = ((Configuration)msg.obj).densityDpi;
+                    mUpdatingSystemConfig = true;
                     handleConfigurationChanged((Configuration)msg.obj, null);
+                    mUpdatingSystemConfig = false;
                     Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
                     break;
                 case CLEAN_UP_CONTEXT:
@@ -4624,12 +4627,20 @@ public final class ActivityThread {
         if ((activity == null) || (activity.mCurrentConfig == null)) {
             shouldChangeConfig = true;
         } else {
-            // If the new config is the same as the config this Activity
-            // is already running with then don't bother calling
-            // onConfigurationChanged
+            // If the new config is the same as the config this Activity is already
+            // running with and the override config also didn't change, then don't
+            // bother calling onConfigurationChanged.
             int diff = activity.mCurrentConfig.diff(newConfig);
-            if (diff != 0) {
-                shouldChangeConfig = true;
+            if (diff != 0 || !mResourcesManager.isSameResourcesOverrideConfig(activityToken,
+                    amOverrideConfig)) {
+                // Always send the task-level config changes. For system-level configuration, if
+                // this activity doesn't handle any of the config changes, then don't bother
+                // calling onConfigurationChanged as we're going to destroy it.
+                if (!mUpdatingSystemConfig
+                        || (~activity.mActivityInfo.getRealConfigChanged() & diff) == 0
+                        || !reportToActivity) {
+                    shouldChangeConfig = true;
+                }
             }
         }
 

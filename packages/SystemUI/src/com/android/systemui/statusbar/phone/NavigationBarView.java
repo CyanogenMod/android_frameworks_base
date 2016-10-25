@@ -59,7 +59,7 @@ import cyanogenmod.providers.CMSettings;
 
 public class NavigationBarView extends LinearLayout implements TunerService.Tunable {
     final static boolean DEBUG = false;
-    final static String TAG = "PhoneStatusBar/NavigationBarView";
+    final static String TAG = "StatusBar/NavBarView";
 
     // slippery nav bar when everything is disabled, e.g. during setup
     final static boolean SLIPPERY_WHEN_DISABLED = true;
@@ -71,6 +71,8 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
     boolean mVertical;
     boolean mScreenOn;
     boolean mLeftInLandscape;
+
+    private int mCurrentRotation = -1;
 
     boolean mShowMenu;
     int mDisabledFlags = 0;
@@ -106,6 +108,8 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
 
     private final SparseArray<ButtonDispatcher> mButtonDisatchers = new SparseArray<>();
     private Configuration mConfiguration;
+
+    private NavigationBarInflaterView mNavigationInflaterView;
 
     private class NavTransitionListener implements TransitionListener {
         private boolean mBackTransitioning;
@@ -392,10 +396,6 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
                 && ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) == 0);
         final boolean disableSearch = ((disabledFlags & View.STATUS_BAR_DISABLE_SEARCH) != 0);
 
-        if (SLIPPERY_WHEN_DISABLED) {
-            setSlippery(disableHome && disableRecent && disableBack && disableSearch);
-        }
-
         ViewGroup navButtons = (ViewGroup) getCurrentView().findViewById(R.id.nav_buttons);
         if (navButtons != null) {
             LayoutTransition lt = navButtons.getLayoutTransition();
@@ -470,22 +470,6 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         }
     }
 
-    public void setSlippery(boolean newSlippery) {
-        WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
-        if (lp != null) {
-            boolean oldSlippery = (lp.flags & WindowManager.LayoutParams.FLAG_SLIPPERY) != 0;
-            if (!oldSlippery && newSlippery) {
-                lp.flags |= WindowManager.LayoutParams.FLAG_SLIPPERY;
-            } else if (oldSlippery && !newSlippery) {
-                lp.flags &= ~WindowManager.LayoutParams.FLAG_SLIPPERY;
-            } else {
-                return;
-            }
-            WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
-            wm.updateViewLayout(this, lp);
-        }
-    }
-
     public void setMenuVisibility(final boolean show) {
         setMenuVisibility(show, false);
     }
@@ -504,9 +488,10 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
 
     @Override
     public void onFinishInflate() {
+        mNavigationInflaterView = (NavigationBarInflaterView) findViewById(
+                R.id.navigation_inflater);
         updateRotatedViews();
-        ((NavigationBarInflaterView) findViewById(R.id.navigation_inflater)).setButtonDispatchers(
-                mButtonDisatchers);
+        mNavigationInflaterView.setButtonDispatchers(mButtonDisatchers);
 
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
 
@@ -560,6 +545,10 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         mDeadZone.setStartFromRight(leftInLandscape);
     }
 
+    public boolean needsReorient(int rotation) {
+        return mCurrentRotation != rotation;
+    }
+
     private void updateCurrentView() {
         final int rot = mDisplay.getRotation();
         for (int i=0; i<4; i++) {
@@ -567,10 +556,12 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         }
         mCurrentView = mRotatedViews[rot];
         mCurrentView.setVisibility(View.VISIBLE);
+        mNavigationInflaterView.setAlternativeOrder(rot == Surface.ROTATION_90);
         for (int i = 0; i < mButtonDisatchers.size(); i++) {
             mButtonDisatchers.valueAt(i).setCurrentView(mCurrentView);
         }
         updateLayoutTransitionsEnabled();
+        mCurrentRotation = rot;
     }
 
     private void updateRecentsIcon() {
@@ -595,7 +586,7 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
         setMenuVisibility(mShowMenu, true /* force */);
 
         if (DEBUG) {
-            Log.d(TAG, "reorient(): rot=" + mDisplay.getRotation());
+            Log.d(TAG, "reorient(): rot=" + mCurrentRotation);
         }
 
         updateTaskSwitchHelper();
@@ -654,9 +645,11 @@ public class NavigationBarView extends LinearLayout implements TunerService.Tuna
             if (mCarMode && uiMode != Configuration.UI_MODE_TYPE_CAR) {
                 mCarMode = false;
                 uiCarModeChanged = true;
+                getHomeButton().setCarMode(mCarMode);
             } else if (uiMode == Configuration.UI_MODE_TYPE_CAR) {
                 mCarMode = true;
                 uiCarModeChanged = true;
+                getHomeButton().setCarMode(mCarMode);
             }
         }
         return uiCarModeChanged;

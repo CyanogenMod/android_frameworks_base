@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"A Wi-Fi-roaming ellenőrzésének engedélyezése vagy letiltása az interfészen jelen lévő adatforgalom mennyiségétől függően"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Naplózási puffer mérete"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Naplózási pufferméret kiválasztása"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Törli a naplózó program állandó tárhelyét?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Ha az állandó naplózó programot már nem használjuk tovább, kötelesek vagyunk törölni a naplózott adatokat eszközéről."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Naplózott adatok állandó tárolása"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Válassza ki az állandó tárolásra szánt naplópuffereket"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB-beállítás kiválasztása"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB-beállítás kiválasztása"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Helyutánzatok engedélyezése"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Helyutánzatok engedélyezése"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Nézetattribútum vizsgálatának engedélyezése"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"A Lollipop DHCP-kliensének használata az új androidos DHCP-kliens helyett."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"A mobiladat-kapcsolat mindig maradjon aktív, még akkor is, ha a Wi‑Fi aktív (a gyors hálózatváltás érdekében)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Engedélyezi az USB hibakeresést?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"Az USB hibakeresés fejlesztési célokat szolgál. Használhatja adatok másolására a számítógép és a készülék között, alkalmazások a készülékre való értesítés nélküli telepítésére és naplózási adatok olvasására."</string>
@@ -323,7 +326,7 @@
     <string name="disabled_by_admin_summary_text" msgid="6750513964908334617">"Rendszergazda által irányítva"</string>
     <string name="enabled_by_admin" msgid="2386503803463071894">"Engedélyezve a rendszergazda által"</string>
     <string name="disabled_by_admin" msgid="3669999613095206948">"Letiltva a rendszergazda által"</string>
-    <string name="home" msgid="3256884684164448244">"Kezdőlap beállítása"</string>
+    <string name="home" msgid="3256884684164448244">"Beállítások kezdőlapja"</string>
   <string-array name="battery_labels">
     <item msgid="8494684293649631252">"0%"</item>
     <item msgid="8934126114226089439">"50%"</item>

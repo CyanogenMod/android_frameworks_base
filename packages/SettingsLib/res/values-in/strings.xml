@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Izinkan/Larang Pemindaian Roaming Wi-Fi berdasarkan jumlah lalu lintas data yang ada di antarmuka"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Ukuran penyangga pencatat log"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Ukuran Pencatat Log per penyangga log"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Hapus penyimpanan tetap pencatat log?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Jika kami tidak memantau lagi dengan pencatat log tetap, kami diwajibkan menghapus data pencatat log yang ada di perangkat Anda."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Terus simpan data pencatat log di perangkat"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Pilih penyangga log untuk terus menyimpan di perangkat"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"Pilih Konfigurasi USB"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"Pilih Konfigurasi USB"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Mengizinkan lokasi palsu"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Mengizinkan lokasi palsu"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Aktifkan inspeksi atribut tampilan"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Gunakan klien DHCP dari Lollipop alih-alih klien DHCP Android baru."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Selalu aktifkan data seluler, meski Wi-Fi aktif (agar jaringan beralih dengan cepat)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"Izinkan melakukan debug USB?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"Debugging USB dimaksudkan untuk tujuan pengembangan saja. Gunakan untuk menyalin data antara komputer dan perangkat Anda, memasang apl pada perangkat tanpa notifikasi, dan membaca data log."</string>

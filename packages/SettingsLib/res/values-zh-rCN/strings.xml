@@ -132,8 +132,8 @@
     <item msgid="164347302621392996">"快"</item>
     <item msgid="5794028588101562009">"较快"</item>
     <item msgid="7163942783888652942">"非常快"</item>
-    <item msgid="7831712693748700507">"迅速"</item>
-    <item msgid="5194774745031751806">"很迅速"</item>
+    <item msgid="7831712693748700507">"超快"</item>
+    <item msgid="5194774745031751806">"极快"</item>
     <item msgid="9085102246155045744">"最快"</item>
   </string-array>
     <string name="choose_profile" msgid="8229363046053568878">"选择个人资料"</string>
@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"根据接口中目前的数据流量允许/禁止WLAN漫游扫描"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"日志记录器缓冲区大小"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"选择每个日志缓冲区的日志记录器大小"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"要清除永久存储的日志记录器数据吗？"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"当我们不再使用永久日志记录器进行监控时，我们需要清除保存在您设备上的日志记录器数据。"</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"在设备上永久存储日志记录器数据"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"选择要在设备上永久存储的日志缓冲区"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"选择USB配置"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"选择USB配置"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"允许模拟位置"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"允许模拟位置"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"启用视图属性检查功能"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"使用 Lollipop 的 DHCP 客户端，而不是新的 Android DHCP 客户端。"</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"始终开启移动数据网络，即使 WLAN 网络已开启（便于快速切换网络）。"</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"是否允许USB调试？"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB调试仅适用于开发工作。该功能可用于在您的计算机和设备之间复制数据、在您的设备上安装应用而不发送通知以及读取日志数据。"</string>

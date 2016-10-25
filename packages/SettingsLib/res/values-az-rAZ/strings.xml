@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Wi‑Fi Axtarışlarına data trafikinə əsasən İcazə verin/Qadağan edin"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Logger bufer ölçüləri"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Hər jurnal buferinı Logger ölçüsü seçin"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Loqqerin davamlı yaddaşı silinsin?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Artıq davamlı loqqer ilə izləmədiyimiz zaman, cihazınızdakı loqqer data rezidentini silmək tələb olunur."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Loqqer datasını davamlı olaraq cihazda saxlayın"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Davamlı olaraq cihazda yadda saxlamaq üçün loq buferlərini seçin"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB Sazlaması seçin"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB Sazlaması seçin"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Sınaq yerləşmələrə icazə verin"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Sınaq yerləşmələrə icazə verin"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Atribut inspeksiyasına baxışa icazə verin"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Android DHCP klienti əvəzinə Lollipopdan DHCP klient istifadə edin."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Hətta Wi‑Fi aktiv olanda da mobil datanı həmişə aktiv saxlayın (sürətli şəbəkək keçidi üçün)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB debaq funksiyasına icazə verilsin?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB sazlanması yalnız inkişaf məqsədlidir. Kompüteriniz və cihazınız arasında datanı kopyalamaq üçün ondan istifadə edin, bildiriş olmadan tətbiqləri cihazınıza quraşdırın və qeydiyyat datasını oxuyun."</string>

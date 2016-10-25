@@ -678,6 +678,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"सही!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"फेरि प्रयास गर्नुहोस्"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"फेरि प्रयास गर्नुहोस्"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"सबै सुविधाहरू र डेटाका लागि अनलक गर्नुहोस्"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"अत्याधिक मोहडा खोल्ने प्रयासहरू बढी भए।"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"SIM कार्ड छैन"</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"ट्याब्लेटमा SIM कार्ड छैन।"</string>
@@ -1028,8 +1029,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"एन्ड्रोइड अपग्रेड हुँदैछ…"</string>
     <string name="android_start_title" msgid="8418054686415318207">"Android शुरू हुँदैछ..."</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"भण्डारण अनुकूलन गर्दै।"</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android को स्तरवृद्धि हुँदैछ"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"Android को अद्यावधिकलाई सम्पन्न गर्दै…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"स्तरवृद्धि सम्पन्न नभएसम्म केही अनुप्रयोगहरू राम्ररी काम नगर्न सक्छन्"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"<xliff:g id="APPLICATION">%1$s</xliff:g> को स्तरवृद्धि हुँदैछ…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"अनुप्रयोग अनुकुल हुँदै <xliff:g id="NUMBER_0">%1$d</xliff:g> को <xliff:g id="NUMBER_1">%2$d</xliff:g>।"</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"<xliff:g id="APPNAME">%1$s</xliff:g> तयारी गर्दै।"</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"सुरुवात अनुप्रयोगहरू।"</string>
@@ -1605,7 +1607,7 @@
     <string name="zen_mode_feature_name" msgid="5254089399895895004">"अवरोध नपुर्याउँनुहोस्"</string>
     <string name="zen_mode_downtime_feature_name" msgid="2626974636779860146">"डाउनटाइम"</string>
     <string name="zen_mode_default_weeknights_name" msgid="3081318299464998143">"हरेक हप्तादिनको राति"</string>
-    <string name="zen_mode_default_weekends_name" msgid="2786495801019345244">"शनिवार"</string>
+    <string name="zen_mode_default_weekends_name" msgid="2786495801019345244">"शनिबार"</string>
     <string name="zen_mode_default_events_name" msgid="8158334939013085363">"घटना"</string>
     <string name="muted_by" msgid="6147073845094180001">"<xliff:g id="THIRD_PARTY">%1$s</xliff:g> द्वारा मौन गरिएको"</string>
     <string name="system_error_wipe_data" msgid="6608165524785354962">"तपाईंको यन्त्रसँग आन्तरिक समस्या छ, र तपाईंले फ्याक्ट्री डाटा रिसेट नगर्दासम्म यो अस्थिर रहन्छ।"</string>
@@ -1657,7 +1659,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"अनपिन गर्नुहोस्"</string>
     <string name="app_info" msgid="6856026610594615344">"अनुप्रयोगका बारे जानकारी"</string>
     <string name="negative_duration" msgid="5688706061127375131">"−<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"यन्त्रलाई रिसेट गर्ने हो?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"यन्त्रलाई रिसेट गर्न ट्याप गर्नुहोस्"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"डेमो सुरु गर्दै…"</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"यन्त्रलाई रिसेट गर्दै…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"यन्त्रलाई रिसेट गर्ने हो?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"तपाईँ सबै परिवर्तनहरू गुमाउनु हुनेछ र <xliff:g id="TIMEOUT">%1$s</xliff:g> सेकेन्डमा डेमो फेरि सुरु हुनेछ…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"रद्द गर्नुहोस्"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"अहिले रिसेट गर्नुहोस्"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"यस यन्त्रलाई सीमितताहरू बिना प्रयोग गर्नका लागि फ्याक्ट्री रिसेट गर्नुहोस्"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"थप जान्नका लागि छुनुहोस्।"</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"<xliff:g id="LABEL">%1$s</xliff:g> लाई असक्षम गरियो"</string>
+    <string name="conference_call" msgid="3751093130790472426">"सम्मेलन कल"</string>
 </resources>

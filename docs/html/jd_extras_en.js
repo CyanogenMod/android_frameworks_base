@@ -1943,11 +1943,63 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "url": "https://support.google.com/googleplay/answer/2651410",
     "timestamp": null,
     "image": "images/cards/google-play_2x.png",
-    "title": "Google Play Accepted Payment Methods",
+    "title": "Google Play accepted payment methods",
     "summary": "Support details on the payment methods supported in Google Play.",
     "keywords": ["gift card"],
     "type": "distribute",
     "category": "google play"
+  },
+  {
+   "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://support.google.com/adwords/answer/2471188",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "AdWords Conversion Optimizer",
+    "summary": "Learn how Conversion Optimizer works to find the users who are most likely to convert and to serve them your conversion ads.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://developers.google.com/app-conversion-tracking/",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Track conversions with the AdWords SDK or server API",
+    "summary": "Use the lightweight AdWords app SDK or server-to-server API to track remarketing conversions.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://support.google.com/analytics/answer/2611404",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Create Remarketing Audiences in Google Analytics",
+    "summary": "Learn how to use preconfigured audiences created by the Analytics team or create your own to use in your conversion campaigns.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://support.google.com/adwords/answer/1704341",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Link your Google Analytics and AdWords accounts",
+    "summary": "Gain greater insight into how AdWords is driving app engagement and conversions, and use this insight to improve your ads and app.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
   },
   {
     "lang": "en",
@@ -2603,6 +2655,19 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "lang": "en",
     "group": "",
     "tags": [],
+    "url": "https://material.google.com/patterns/notifications.html",
+    "timestamp": "1469639720",
+    "image": "images/cards/card-notifications_2x.png",
+    "title": "Notifications",
+    "summary": "Notifications inform your app’s users about relevant and timely events in your app.",
+    "keywords": ["notifications", "design"],
+    "type": "design",
+    "category": "material design"
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
     "url": "https://www.google.com/design/spec/usability/",
     "timestamp": null,
     "image": "images/cards/material-usability_2x.png",
@@ -2681,7 +2746,6 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "type": "design",
     "category": "material design"
   },
-
   {
     "lang": "en",
     "group": "",
@@ -2694,6 +2758,45 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "keywords": ["marketing", "admob"],
     "type": "distribute",
     "category": "google"
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://developers.google.com/nearby/",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Create features based on proximity",
+    "summary": "Build simple interactions between nearby devices and people.",
+    "keywords": ["nearby", "engage"],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://www.youtube.com/watch?v=hultDpBS22s",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Use Nearby Messages to collaborate",
+    "summary": "Nearby Messages is perfect for setting up ad-hoc groups, collaborative sessions, or sharing resources with people in a co-located space.",
+    "keywords": ["nearby", "engage"],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://developers.google.com/beacons",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Mark up the world using beacons",
+    "summary": "Give your users better location and proximity experiences by providing a strong context signal for their devices in the form of Bluetooth low energy (BLE) beacons with Eddystone.",
+    "keywords": ["nearby", "engage"],
+    "type": "distribute",
+    "titleFriendly": ""
   },
   {
     "lang": "en",
@@ -2796,6 +2899,19 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "lang": "en",
     "group": "",
     "tags": [],
+    "url": "https://www.udacity.com/courses/ud876-3",
+    "timestamp": null,
+    "image": "distribute/images/advertising.jpg",
+    "title": "Learn how to show ads in your Android app",
+    "summary": "Take this online course to learn how to use AdMob to display ads in your Android app.",
+    "keywords": ["marketing", "analytics"],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
     "url": "https://developers.google.com/mobile-ads-sdk/download",
     "timestamp": null,
     "image": "distribute/images/advertising.jpg",
@@ -2878,7 +2994,7 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "url": "https://developers.google.com/identity/sign-in/android/people",
     "timestamp": 1383243492000,
     "image": "images/cards/google-sign-in_2x.png",
-    "title": "Get user profile details",
+    "title": "Get User Profile Details",
     "summary": "After users sign-in with Google, you can access their age range, language, and public profile information.",
     "keywords": ["signin", "identity", "google"],
     "type": "distribute",
@@ -3613,6 +3729,59 @@ METADATA['en'].extras = METADATA['en'].extras.concat([
     "lang":"en",
     "type":"Video"
   },
+
+  {
+    "title":"Android Performance Testing Codelab",
+    "titleFriendly":"",
+    "summary":"This codelab shows how to create a stable and reusable testing harness to run performance tests on a very simple existing app.",
+    "url":"https://codelabs.developers.google.com/codelabs/android-perf-testing/index.html",
+    "group":"",
+    "keywords": ["testing"],
+    "tags": [
+    ],
+    "image":"images/testing/testing-icon.png",
+    "type":"google"
+  },
+
+  {
+    "title":"Introduction to Doze",
+    "category":"android developers",
+    "summary":"A new way for the device to preserve battery by entering into an idle state.",
+    "url":"https://www.youtube.com/watch?v=N72ksDKrX6c",
+    "group":"",
+    "keywords": ["android, performance","battery"],
+    "tags": ["video, performance"],
+    "image":"https://i1.ytimg.com/vi/N72ksDKrX6c/maxresdefault.jpg",
+    "lang":"en",
+    "type":"develop"
+  },
+
+  {
+    "title":"Performance Profiling Tools",
+    "category":"training",
+    "summary":"Take a look under the hood to identify performance bottlenecks.",
+    "url":"https://developer.android.com/tools/performance/index.html",
+    "group":"",
+    "keywords": ["android, performance","profiling"],
+    "tags": ["android, performance"],
+    "image": null,
+    "lang":"en",
+    "type":"develop"
+  },
+
+  {
+    "title":"Managing Your App's Memory",
+    "category":"training",
+    "summary":"Learn how you can proactively reduce memory usage while developing for Android.",
+    "url":"https://developer.android.com/training/articles/memory.html",
+    "group":"",
+    "keywords": ["android, performance","profiling"],
+    "tags": ["android, performance"],
+    "image": null,
+    "lang":"en",
+    "type":"develop"
+  },
+
   {
     "url":"https://www.youtube.com/watch?v=QDM52bblwlg",
     "image": "images/distribute/hero-family-discovery.jpg",
@@ -4107,7 +4276,8 @@ METADATA['en'].collections = {
       "distribute/engage/easy-signin.html",
       "distribute/analyze/build-better-apps.html",
       "distribute/engage/gcm.html",
-      "distribute/engage/beta.html"
+      "distribute/engage/beta.html",
+      "distribute/engage/nearby.html"
     ]
   },
   "distribute/monetize": {
@@ -4118,6 +4288,7 @@ METADATA['en'].collections = {
       "distribute/monetize/ads.html",
       "distribute/monetize/ecommerce.html",
       "distribute/monetize/payments.html",
+      "distribute/monetize/conversions.html",
       "distribute/analyze/understand-user-value.html",
     ]
   },
@@ -4427,6 +4598,14 @@ METADATA['en'].collections = {
       "https://support.google.com/adwords/answer/6167162"
     ]
   },
+  "distribute/users/nearby": {
+    "title": "",
+    "resources": [
+      "https://developers.google.com/nearby/",
+      "https://www.youtube.com/watch?v=hultDpBS22s",
+      "https://developers.google.com/beacons"
+    ]
+  },
   "distribute/users/buildbuzz": {
     "title": "",
     "resources": [
@@ -4505,7 +4684,7 @@ METADATA['en'].collections = {
       "design/patterns/navigation.html",
       "design/patterns/actionbar.html",
       "design/style/iconography.html",
-      "design/patterns/notifications.html"
+      "https://material.google.com/patterns/notifications.html"
     ]
   },
   "distribute/essentials/corequalityguidelines/functionality": {
@@ -4702,7 +4881,7 @@ METADATA['en'].collections = {
   "distribute/getusers/notifications": {
     "title": "",
     "resources": [
-      "design/patterns/notifications.html",
+      "https://material.google.com/patterns/notifications.html",
       "distribute/engage/gcm.html",
       "https://play.google.com/about/developer-content-policy.html"
     ]
@@ -4818,7 +4997,7 @@ METADATA['en'].collections = {
       "distribute/essentials/optimizing-your-app.html",
       "distribute/tools/launch-checklist.html",
       "distribute/googleplay/developer-console.html",
-      "design/patterns/notifications.html"
+      "https://material.google.com/patterns/notifications.html"
     ]
   },
   "distribute/engage/video/more": {
@@ -5064,6 +5243,15 @@ METADATA['en'].collections = {
       "https://support.google.com/googleplay/answer/2651410"
     ]
   },
+  "distribute/monetize/conversions": {
+     "title": "",
+     "resources": [
+       "https://support.google.com/adwords/answer/2471188",
+       "https://developers.google.com/app-conversion-tracking/",
+       "https://support.google.com/analytics/answer/2611404",
+       "https://support.google.com/adwords/answer/1704341"
+     ]
+   },
   "topic/libraries": {
     "title": "",
     "resources": [
@@ -5368,32 +5556,47 @@ METADATA['en'].collections = {
     "https://medium.com/google-developers/writing-more-code-by-writing-less-code-with-android-studio-live-templates-244f648d17c7#.hczcm02du",
     ]
   },
-  "preview/landing/resources": {
+  "nougat/landing/resources": {
     "title": "",
     "resources": [
-      "preview/overview.html",
-      "preview/api-overview.html",
-      "preview/behavior-changes.html",
-      "preview/setup-sdk.html",
-      "preview/samples.html",
-      "preview/support.html"
+      "about/versions/nougat/android-7.0.html",
+      "about/versions/nougat/android-7.0-changes.html",
+      "about/versions/nougat/android-7.0-samples.html",
     ]
   },
-  "preview/landing/more": {
+
+  "nougat/landing/videos/first": {
     "title": "",
     "resources": [
-      "https://www.youtube.com/watch?v=CsulIu3UaUM",
-      "preview/features/multi-window.html",
-      "preview/features/notification-updates.html",
-      "preview/features/background-optimization.html",
-      "preview/features/data-saver.html",
-      "preview/features/direct-boot.html",
-      "preview/features/icu4j-framework.html",
-      "preview/features/multilingual-support.html",
-      "preview/features/scoped-folder-access.html",
-      "preview/features/security-config.html",
-      "preview/features/picture-in-picture.html",
-      "preview/features/tv-recording-api.html"
+    "https://www.youtube.com/watch?v=CsulIu3UaUM"
+    ]
+  },
+
+  "develop/performance/landing": {
+    "title": "",
+    "resources": [
+      "https://android-developers.blogspot.com/2010/07/multithreading-for-performance.html",
+      "https://www.udacity.com/course/ud825",
+      "https://www.youtube.com/watch?v=N72ksDKrX6c",
+      "tools/performance/index.html",
+      "https://codelabs.developers.google.com/codelabs/android-perf-testing/index.html",
+      "training/articles/memory.html",
+    ]
+  },
+  "nougat/landing/more": {
+    "title": "",
+    "resources": [
+      "guide/topics/ui/multi-window.html",
+      "guide/topics/ui/notifiers/notifications.html",
+      "topic/performance/background-optimization.html",
+      "training/basics/network-ops/data-saver.html",
+      "training/articles/direct-boot.html",
+      "guide/topics/resources/icu4j-framework.html",
+      "guide/topics/resources/multilingual-support.html",
+      "training/articles/scoped-directory-access.html",
+      "training/articles/security-config.html",
+      "training/tv/playback/picture-in-picture.html",
+      "training/tv/tif/content-recording.html"
     ]
   },
   "work/landing/primary": {

@@ -36,12 +36,17 @@ please see styles_device_defaults.xml.
         <item name="layout">@layout/preference_material</item>
     </style>
 
-    <style name="PreferenceFragment.Material">
+    <style name="BasePreferenceFragment">
         <item name="layout">@layout/preference_list_fragment_material</item>
         <item name="paddingStart">@dimen/preference_fragment_padding_side_material</item>
         <item name="paddingEnd">@dimen/preference_fragment_padding_side_material</item>
+        <item name="paddingTop">@dimen/preference_fragment_padding_vertical_material</item>
+        <item name="paddingBottom">@dimen/preference_fragment_padding_vertical_material</item>
         <item name="divider">?attr/listDivider</item>
+        <item name="clipToPadding">@bool/config_preferenceFragmentClipToPadding</item>
     </style>
+
+    <style name="PreferenceFragment.Material" parent="BasePreferenceFragment"/>
 
     <style name="PreferenceActivity.Material">
         <item name="layout">@layout/preference_list_content_material</item>
@@ -76,7 +81,12 @@ please see styles_device_defaults.xml.
         <item name="layout">@layout/preference_widget_seekbar_material</item>
     </style>
 
-    <style name="Preference.Material.PreferenceScreen"/>
+    <style name="Preference.Material.BasePreferenceScreen">
+        <item name="screenLayout">@layout/preference_list_fragment_material</item>
+        <item name="divider">?attr/listDivider</item>
+    </style>
+
+    <style name="Preference.Material.PreferenceScreen" parent="Preference.Material.BasePreferenceScreen"/>
 
     <style name="Preference.Material.DialogPreference">
         <item name="positiveButtonText">@string/ok</item>
@@ -134,6 +144,8 @@ please see styles_device_defaults.xml.
     <style name="PreferenceFragmentList.Material">
         <item name="paddingStart">@dimen/preference_fragment_padding_side_material</item>
         <item name="paddingEnd">@dimen/preference_fragment_padding_side_material</item>
+        <item name="paddingTop">@dimen/preference_fragment_padding_vertical_material</item>
+        <item name="paddingBottom">@dimen/preference_fragment_padding_vertical_material</item>
     </style>
 
     <!-- Begin Material theme styles -->
@@ -147,6 +159,7 @@ please see styles_device_defaults.xml.
         <item name="textColorLink">?attr/textColorLink</item>
         <item name="textSize">@dimen/text_size_body_1_material</item>
         <item name="fontFamily">@string/font_family_body_1_material</item>
+        <item name="lineSpacingMultiplier">@dimen/text_line_spacing_multiplier_material</item>
     </style>
 
     <style name="TextAppearance.Material.Display4">
@@ -535,7 +548,11 @@ please see styles_device_defaults.xml.
         <item name="textOff">@string/capital_off</item>
     </style>
 
-    <style name="Widget.Material.ButtonBar">
+    <style name="Widget.Material.BaseButtonBar">
+        <item name="background">?attr/colorBackgroundFloating</item>
+    </style>
+
+    <style name="Widget.Material.ButtonBar" parent="Widget.Material.BaseButtonBar">
         <item name="background">@null</item>
     </style>
 
@@ -1190,12 +1207,17 @@ please see styles_device_defaults.xml.
         <item name="listItemLayout">@layout/select_dialog_item_material</item>
         <item name="multiChoiceItemLayout">@layout/select_dialog_multichoice_material</item>
         <item name="singleChoiceItemLayout">@layout/select_dialog_singlechoice_material</item>
+        <item name="controllerType">@integer/config_alertDialogController</item>
     </style>
 
     <style name="AlertDialog.Material.Light" />
 
     <style name="DatePickerDialog.Material" parent="AlertDialog.Material">
-        <item name="showTitle">true</item>
+        <item name="showTitle">false</item>
+    </style>
+
+    <style name="TimePickerDialog.Material" parent="AlertDialog.Material">
+        <item name="showTitle">false</item>
     </style>
 
     <!-- Window title -->
@@ -1224,7 +1246,7 @@ please see styles_device_defaults.xml.
     <style name="DialogWindowTitleBackground.Material.Light" />
 
     <style name="DialogWindowTitle.Material">
-        <item name="maxLines">1</item>
+        <item name="maxLines">@integer/config_dialogWindowTitleMaxLines</item>
         <item name="scrollHorizontally">true</item>
         <item name="textAppearance">@style/TextAppearance.Material.DialogWindowTitle</item>
     </style>

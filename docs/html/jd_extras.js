@@ -1942,12 +1942,65 @@ DISTRIBUTE_RESOURCES = DISTRIBUTE_RESOURCES.concat([
     "url": "https://support.google.com/googleplay/answer/2651410",
     "timestamp": null,
     "image": "images/play_dev.jpg",
-    "title": "Google Play Accepted Payment Methods",
+    "title": "Google Play accepted payment methods",
     "summary": "Support details on the payment methods supported in Google Play.",
     "keywords": ["gift card"],
     "type": "distribute",
     "titleFriendly": ""
   },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://support.google.com/adwords/answer/2471188",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "AdWords Conversion Optimizer",
+    "summary": "Learn how Conversion Optimizer works to find the users who are most likely to convert and to serve them your conversion ads.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://developers.google.com/app-conversion-tracking/",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Track conversions with the AdWords SDK or server API",
+    "summary": "Use the lightweight AdWords app SDK or server-to-server API to track remarketing conversions.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://support.google.com/analytics/answer/2611404",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Create Remarketing Audiences in Google Analytics",
+    "summary": "Learn how to use preconfigured audiences created by the Analytics team or create your own to use in your conversion campaigns.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://support.google.com/adwords/answer/1704341",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Link your Google Analytics and AdWords accounts",
+    "summary": "Gain greater insight into how AdWords is driving app engagement and conversions, and use this insight to improve your ads and app.",
+    "keywords": [],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+
   {
     "lang": "en",
     "group": "",
@@ -2719,7 +2772,6 @@ DISTRIBUTE_RESOURCES = DISTRIBUTE_RESOURCES.concat([
     "type": "material design",
     "titleFriendly": ""
   },
-
   {
     "lang": "en",
     "group": "",
@@ -2730,6 +2782,45 @@ DISTRIBUTE_RESOURCES = DISTRIBUTE_RESOURCES.concat([
     "title": "Setting up Mobile App Install Ads",
     "summary": "With Mobile app installs campaigns on the Search and Display Networks, and TrueView for mobile app promotion on YouTube, you can create custom app install ads that run exclusively on phones and tablets.",
     "keywords": ["marketing", "admob"],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://developers.google.com/nearby/",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Create features based on proximity",
+    "summary": "Build simple interactions between nearby devices and people.",
+    "keywords": ["nearby", "engage"],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://www.youtube.com/watch?v=hultDpBS22s",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Use Nearby Messages to collaborate",
+    "summary": "Nearby Messages is perfect for setting up ad-hoc groups, collaborative sessions, or sharing resources with people in a co-located space.",
+    "keywords": ["nearby", "engage"],
+    "type": "distribute",
+    "titleFriendly": ""
+  },
+  {
+    "lang": "en",
+    "group": "",
+    "tags": [],
+    "url": "https://developers.google.com/beacons",
+    "timestamp": null,
+    "image": "images/play_dev.jpg",
+    "title": "Mark up the world using beacons",
+    "summary": "Give your users better location and proximity experiences by providing a strong context signal for their devices in the form of Bluetooth low energy (BLE) beacons with Eddystone.",
+    "keywords": ["nearby", "engage"],
     "type": "distribute",
     "titleFriendly": ""
   },

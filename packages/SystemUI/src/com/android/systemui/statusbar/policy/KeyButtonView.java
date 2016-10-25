@@ -16,6 +16,8 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.annotation.DrawableRes;
+import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -42,13 +44,14 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.ButtonDispatcher;
 
 import cyanogenmod.power.PerformanceManager;
 
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
 import static android.view.accessibility.AccessibilityNodeInfo.ACTION_LONG_CLICK;
 
-public class KeyButtonView extends ImageView {
+public class KeyButtonView extends ImageView implements ButtonDispatcher.ButtonInterface {
 
     private int mContentDescriptionRes;
 
@@ -275,9 +278,30 @@ public class KeyButtonView extends ImageView {
                 InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
 
+    @Override
     public void abortCurrentGesture() {
         setPressed(false);
         mGestureAborted = true;
+    }
+
+    @Override
+    public void setImageResource(@DrawableRes int resId) {
+        super.setImageResource(resId);
+    }
+
+    @Override
+    public void setImageDrawable(@Nullable Drawable drawable) {
+        super.setImageDrawable(drawable);
+    }
+
+    @Override
+    public void setLandscape(boolean landscape) {
+        //no op
+    }
+
+    @Override
+    public void setCarMode(boolean carMode) {
+        // no op
     }
 }
 

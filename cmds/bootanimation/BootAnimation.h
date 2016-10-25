@@ -32,7 +32,6 @@ class SkBitmap;
 
 namespace android {
 
-class AudioPlayer;
 class Surface;
 class SurfaceComposerClient;
 class SurfaceControl;
@@ -59,6 +58,24 @@ private:
     virtual void        onFirstRef();
     virtual void        binderDied(const wp<IBinder>& who);
 
+    bool                updateIsTimeAccurate();
+
+    class TimeCheckThread : public Thread {
+    public:
+        TimeCheckThread(BootAnimation* bootAnimation);
+        virtual ~TimeCheckThread();
+    private:
+        virtual status_t    readyToRun();
+        virtual bool        threadLoop();
+        bool                doThreadLoop();
+        void                addTimeDirWatch();
+
+        int mInotifyFd;
+        int mSystemWd;
+        int mTimeWd;
+        BootAnimation* mBootAnimation;
+    };
+
     struct Texture {
         GLint   w;
         GLint   h;
@@ -69,6 +86,10 @@ private:
         struct Frame {
             String8 name;
             FileMap* map;
+            int trimX;
+            int trimY;
+            int trimWidth;
+            int trimHeight;
             mutable GLuint tid;
             bool operator < (const Frame& rhs) const {
                 return name < rhs.name;
@@ -80,10 +101,12 @@ private:
             int clockPosY;  // The y position of the clock, in pixels, from the bottom of the
                             // display (the clock is centred horizontally). -1 to disable the clock
             String8 path;
+            String8 trimData;
             SortedVector<Frame> frames;
             bool playUntilComplete;
             float backgroundColor[3];
-            FileMap* audioFile;
+            uint8_t* audioData;
+            int audioLength;
             Animation* animation;
         };
         int fps;
@@ -113,26 +136,30 @@ private:
     void releaseAnimation(Animation*) const;
     bool parseAnimationDesc(Animation&);
     bool preloadZip(Animation &animation);
+    bool playSoundsAllowed() const;
 
     void checkExit();
 
     static SkBitmap *decode(const Animation::Frame& frame);
 
     sp<SurfaceComposerClient>       mSession;
-    sp<AudioPlayer>                 mAudioPlayer;
     AssetManager mAssets;
     Texture     mAndroid[2];
     Texture     mClock;
     int         mWidth;
     int         mHeight;
+    bool        mUseNpotTextures = false;
     EGLDisplay  mDisplay;
     EGLDisplay  mContext;
     EGLDisplay  mSurface;
     sp<SurfaceControl> mFlingerSurfaceControl;
     sp<Surface> mFlingerSurface;
     bool        mClockEnabled;
+    bool        mTimeIsAccurate;
+    bool        mSystemBoot;
     String8     mZipFileName;
     SortedVector<String8> mLoadedFiles;
+    sp<TimeCheckThread> mTimeCheckThread;
 };
 
 #ifdef MULTITHREAD_DECODE

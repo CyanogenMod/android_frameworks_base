@@ -443,6 +443,22 @@ public final class Settings {
             "android.settings.DISPLAY_SETTINGS";
 
     /**
+     * Activity Action: Show settings to allow configuration of Night display.
+     * <p>
+     * In some cases, a matching Activity may not exist, so ensure you
+     * safeguard against this.
+     * <p>
+     * Input: Nothing.
+     * <p>
+     * Output: Nothing.
+     *
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_NIGHT_DISPLAY_SETTINGS =
+            "android.settings.NIGHT_DISPLAY_SETTINGS";
+
+    /**
      * Activity Action: Show settings to allow configuration of locale.
      * <p>
      * In some cases, a matching Activity may not exist, so ensure you
@@ -5479,15 +5495,6 @@ public final class Settings {
                 "accessibility_display_daltonizer";
 
         /**
-         * Float list that specifies the color matrix to apply to
-         * the display. Valid values are defined in AccessibilityManager.
-         *
-         * @hide
-         */
-        public static final String ACCESSIBILITY_DISPLAY_COLOR_MATRIX =
-                "accessibility_display_color_matrix";
-
-        /**
          * Setting that specifies whether automatic click when the mouse pointer stops moving is
          * enabled.
          *
@@ -6196,6 +6203,17 @@ public final class Settings {
         public static final String ASSIST_SCREENSHOT_ENABLED = "assist_screenshot_enabled";
 
         /**
+         * Specifies whether the screen will show an animation if screen contents are sent to the
+         * assist application (active voice interaction service).
+         *
+         * Note that the disclosure will be forced for third-party assistants or if the device
+         * does not support disabling it.
+         *
+         * @hide
+         */
+        public static final String ASSIST_DISCLOSURE_ENABLED = "assist_disclosure_enabled";
+
+        /**
          * Names of the service components that the current user has explicitly allowed to
          * see all of the user's notifications, separated by ':'.
          *
@@ -6336,42 +6354,39 @@ public final class Settings {
                 "camera_double_tap_power_gesture_disabled";
 
         /**
-         * Behavior of twilight on the device.
-         * One of {@link #TWILIGHT_MODE_LOCKED_OFF}, {@link #TWILIGHT_MODE_LOCKED_ON}
-         * or {@link #TWILIGHT_MODE_AUTO}.
+         * Whether the camera double twist gesture to flip between front and back mode should be
+         * enabled.
+         *
          * @hide
          */
-        public static final String TWILIGHT_MODE = "twilight_mode";
+        public static final String CAMERA_DOUBLE_TWIST_TO_FLIP_ENABLED =
+                "camera_double_twist_to_flip_enabled";
 
         /**
-         * Twilight mode always off.
+         * Control whether Night display is currently activated.
          * @hide
          */
-        public static final int TWILIGHT_MODE_LOCKED_OFF = 0;
+        public static final String NIGHT_DISPLAY_ACTIVATED = "night_display_activated";
 
         /**
-         * Twilight mode always on.
+         * Control whether Night display will automatically activate/deactivate.
          * @hide
          */
-        public static final int TWILIGHT_MODE_LOCKED_ON = 1;
+        public static final String NIGHT_DISPLAY_AUTO_MODE = "night_display_auto_mode";
 
         /**
-         * Twilight mode auto.
+         * Custom time when Night display is scheduled to activate.
+         * Represented as milliseconds from midnight (e.g. 79200000 == 10pm).
          * @hide
          */
-        public static final int TWILIGHT_MODE_AUTO = 2;
+        public static final String NIGHT_DISPLAY_CUSTOM_START_TIME = "night_display_custom_start_time";
 
         /**
-         * Twilight mode auto, temporarily overriden to on.
+         * Custom time when Night display is scheduled to deactivate.
+         * Represented as milliseconds from midnight (e.g. 21600000 == 6am).
          * @hide
          */
-        public static final int TWILIGHT_MODE_AUTO_OVERRIDE_OFF = 3;
-
-        /**
-         * Twilight mode auto, temporarily overriden to off.
-         * @hide
-         */
-        public static final int TWILIGHT_MODE_AUTO_OVERRIDE_ON = 4;
+        public static final String NIGHT_DISPLAY_CUSTOM_END_TIME = "night_display_custom_end_time";
 
         /**
          * Whether brightness should automatically adjust based on twilight state.
@@ -6415,6 +6430,20 @@ public final class Settings {
         public static final int VR_DISPLAY_MODE_OFF = 1;
 
         /**
+         * Whether CarrierAppUtils#disableCarrierAppsUntilPrivileged has been executed at least
+         * once.
+         *
+         * <p>This is used to ensure that we only take one pass which will disable apps that are not
+         * privileged (if any). From then on, we only want to enable apps (when a matching SIM is
+         * inserted), to avoid disabling an app that the user might actively be using.
+         *
+         * <p>Will be set to 1 once executed.
+         *
+         * @hide
+         */
+        public static final String CARRIER_APPS_HANDLED = "carrier_apps_handled";
+
+        /**
          * Whether parent user can access remote contact in managed profile.
          *
          * @hide
@@ -6435,10 +6464,65 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
+         * Whether or not the automatic storage manager is enabled and should run on the device.
+         *
+         * @hide
+         */
+        public static final String AUTOMATIC_STORAGE_MANAGER_ENABLED =
+                "automatic_storage_manager_enabled";
+
+        /**
+         * How many days of information for the automatic storage manager to retain on the device.
+         *
+         * @hide
+         */
+        public static final String AUTOMATIC_STORAGE_MANAGER_DAYS_TO_RETAIN =
+                "automatic_storage_manager_days_to_retain";
+
+        /**
+         * Default number of days of information for the automatic storage manager to retain.
+         *
+         * @hide
+         */
+        public static final int AUTOMATIC_STORAGE_MANAGER_DAYS_TO_RETAIN_DEFAULT = 90;
+
+        /**
+         * How many bytes the automatic storage manager has cleared out.
+         *
+         * @hide
+         */
+        public static final String AUTOMATIC_STORAGE_MANAGER_BYTES_CLEARED =
+                "automatic_storage_manager_bytes_cleared";
+
+
+        /**
+         * Last run time for the automatic storage manager.
+         *
+         * @hide
+         */
+        public static final String AUTOMATIC_STORAGE_MANAGER_LAST_RUN =
+                "automatic_storage_manager_last_run";
+
+
+        /**
+         * Whether SystemUI navigation keys is enabled.
+         * @hide
+         */
+        public static final String SYSTEM_NAVIGATION_KEYS_ENABLED =
+                "system_navigation_keys_enabled";
+
+        /**
          * Holds comma separated list of ordering of QS tiles.
          * @hide
          */
         public static final String QS_TILES = "sysui_qs_tiles";
+
+        /**
+         * Whether preloaded APKs have been installed for the user.
+         * @hide
+         */
+        public static final String DEMO_USER_SETUP_COMPLETE
+                = "demo_user_setup_complete";
 
         /**
          * This are the settings to be backed up.
@@ -6457,7 +6541,6 @@ public final class Settings {
             USB_MASS_STORAGE_ENABLED,                           // moved to global
             ACCESSIBILITY_DISPLAY_INVERSION_ENABLED,
             ACCESSIBILITY_DISPLAY_DALTONIZER,
-            ACCESSIBILITY_DISPLAY_COLOR_MATRIX,
             ACCESSIBILITY_DISPLAY_DALTONIZER_ENABLED,
             ACCESSIBILITY_DISPLAY_MAGNIFICATION_ENABLED,
             ACCESSIBILITY_DISPLAY_MAGNIFICATION_SCALE,
@@ -6516,7 +6599,14 @@ public final class Settings {
             INCALL_POWER_BUTTON_BEHAVIOR,
             WIFI_DISCONNECT_DELAY_DURATION,
             ADVANCED_REBOOT,
-            QS_TILES
+            NIGHT_DISPLAY_CUSTOM_START_TIME,
+            NIGHT_DISPLAY_CUSTOM_END_TIME,
+            NIGHT_DISPLAY_AUTO_MODE,
+            NIGHT_DISPLAY_ACTIVATED,
+            CAMERA_DOUBLE_TWIST_TO_FLIP_ENABLED,
+            CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED,
+            SYSTEM_NAVIGATION_KEYS_ENABLED,
+            QS_TILES,
         };
 
         /**
@@ -7532,27 +7622,54 @@ public final class Settings {
         public static final String WEBVIEW_DATA_REDUCTION_PROXY_KEY =
                 "webview_data_reduction_proxy_key";
 
-        /**
-         * Whether or not the WebView fallback mechanism should be enabled.
-         * 0=disabled, 1=enabled.
-         * @hide
-         */
-        public static final String WEBVIEW_FALLBACK_LOGIC_ENABLED =
-                "webview_fallback_logic_enabled";
+       /**
+        * Whether or not the WebView fallback mechanism should be enabled.
+        * 0=disabled, 1=enabled.
+        * @hide
+        */
+       public static final String WEBVIEW_FALLBACK_LOGIC_ENABLED =
+               "webview_fallback_logic_enabled";
 
-        /**
-         * Name of the package used as WebView provider (if unset the provider is instead determined
-         * by the system).
-         * @hide
-         */
-        public static final String WEBVIEW_PROVIDER = "webview_provider";
+       /**
+        * Name of the package used as WebView provider (if unset the provider is instead determined
+        * by the system).
+        * @hide
+        */
+       public static final String WEBVIEW_PROVIDER = "webview_provider";
 
-        /**
-         * Developer setting to enable WebView multiprocess rendering.
-         * @hide
-         */
-        @SystemApi
-        public static final String WEBVIEW_MULTIPROCESS = "webview_multiprocess";
+       /**
+        * Developer setting to enable WebView multiprocess rendering.
+        * @hide
+        */
+       @SystemApi
+       public static final String WEBVIEW_MULTIPROCESS = "webview_multiprocess";
+
+       /**
+        * The maximum number of notifications shown in 24 hours when switching networks.
+        * @hide
+        */
+       public static final String NETWORK_SWITCH_NOTIFICATION_DAILY_LIMIT =
+              "network_switch_notification_daily_limit";
+
+       /**
+        * The minimum time in milliseconds between notifications when switching networks.
+        * @hide
+        */
+       public static final String NETWORK_SWITCH_NOTIFICATION_RATE_LIMIT_MILLIS =
+              "network_switch_notification_rate_limit_millis";
+
+       /**
+        * Whether to automatically switch away from wifi networks that lose Internet access.
+        * Only meaningful if config_networkAvoidBadWifi is set to 0, otherwise the system always
+        * avoids such networks. Valid values are:
+        *
+        * 0: Don't avoid bad wifi, don't prompt the user. Get stuck on bad wifi like it's 2013.
+        * null: Ask the user whether to switch away from bad wifi.
+        * 1: Avoid bad wifi.
+        *
+        * @hide
+        */
+       public static final String NETWORK_AVOID_BAD_WIFI = "network_avoid_bad_wifi";
 
        /**
         * Whether Wifi display is enabled/disabled
@@ -8721,8 +8838,6 @@ public final class Settings {
 
         /**
          * The name of the device
-         *
-         * @hide
          */
         public static final String DEVICE_NAME = "device_name";
 
@@ -8806,6 +8921,24 @@ public final class Settings {
                 "ephemeral_cookie_max_size_bytes";
 
         /**
+         * A mask applied to the ephemeral hash to generate the hash prefix.
+         * <p>
+         * Type: int
+         *
+         * @hide
+         */
+        public static final String EPHEMERAL_HASH_PREFIX_MASK = "ephemeral_hash_prefix_mask";
+
+        /**
+         * Number of hash prefixes to send during ephemeral resolution.
+         * <p>
+         * Type: int
+         *
+         * @hide
+         */
+        public static final String EPHEMERAL_HASH_PREFIX_COUNT = "ephemeral_hash_prefix_count";
+
+        /**
          * The duration for caching uninstalled ephemeral apps.
          * <p>
          * Type: long
@@ -8839,6 +8972,31 @@ public final class Settings {
          * @hide
          */
         public static final String SAFE_BOOT_DISALLOWED = "safe_boot_disallowed";
+
+        /**
+         * Whether this device is currently in retail demo mode. If true, device
+         * usage is severely limited.
+         * <p>
+         * Type: int (0 for false, 1 for true)
+         * @hide
+         */
+        public static final String DEVICE_DEMO_MODE = "device_demo_mode";
+
+        /**
+         * Retail mode specific settings. This is encoded as a key=value list, separated by commas.
+         * Ex: "user_inactivity_timeout_ms=30000,warning_dialog_timeout_ms=10000". The following
+         * keys are supported:
+         *
+         * <pre>
+         * user_inactivity_timeout_ms  (long)
+         * warning_dialog_timeout_ms   (long)
+         * </pre>
+         * <p>
+         * Type: string
+         *
+         * @hide
+         */
+        public static final String RETAIL_DEMO_MODE_CONSTANTS = "retail_demo_mode_constants";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -9290,6 +9448,12 @@ public final class Settings {
          * @hide
          */
         public static final String MAX_NOTIFICATION_ENQUEUE_RATE = "max_notification_enqueue_rate";
+
+        /**
+         * Whether cell is enabled/disabled
+         * @hide
+         */
+        public static final String CELL_ON = "cell_on";
     }
 
     /**

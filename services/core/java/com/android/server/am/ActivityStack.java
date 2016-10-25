@@ -995,7 +995,7 @@ final class ActivityStack {
             if (DEBUG_PAUSE) Slog.v(TAG_PAUSE, "Sleep needs to pause " + mResumedActivity);
             if (DEBUG_USER_LEAVING) Slog.v(TAG_USER_LEAVING,
                     "Sleep => pause with userLeaving=false");
-            startPausingLocked(false, true, false, false);
+            startPausingLocked(false, true, null, false);
             return true;
         }
         if (mPausingActivity != null) {
@@ -1073,15 +1073,16 @@ final class ActivityStack {
      * @param userLeaving True if this should result in an onUserLeaving to the current activity.
      * @param uiSleeping True if this is happening with the user interface going to sleep (the
      * screen turning off).
-     * @param resuming True if this is being called as part of resuming the top activity, so
-     * we shouldn't try to instigate a resume here.
+     * @param resuming The activity we are currently trying to resume or null if this is not being
+     *                 called as part of resuming the top activity, so we shouldn't try to instigate
+     *                 a resume here if not null.
      * @param dontWait True if the caller does not want to wait for the pause to complete.  If
      * set to true, we will immediately complete the pause here before returning.
      * @return Returns true if an activity now is in the PAUSING state, and we are waiting for
      * it to tell us when it is done.
      */
-    final boolean startPausingLocked(boolean userLeaving, boolean uiSleeping, boolean resuming,
-            boolean dontWait) {
+    final boolean startPausingLocked(boolean userLeaving, boolean uiSleeping,
+            ActivityRecord resuming, boolean dontWait) {
         if (mPausingActivity != null) {
             Slog.wtf(TAG, "Going to pause when pause is already pending for " + mPausingActivity
                     + " state=" + mPausingActivity.state);
@@ -1089,12 +1090,12 @@ final class ActivityStack {
                 // Avoid recursion among check for sleep and complete pause during sleeping.
                 // Because activity will be paused immediately after resume, just let pause
                 // be completed by the order of activity paused from clients.
-                completePauseLocked(false);
+                completePauseLocked(false, resuming);
             }
         }
         ActivityRecord prev = mResumedActivity;
         if (prev == null) {
-            if (!resuming) {
+            if (resuming == null) {
                 Slog.wtf(TAG, "Trying to pause when nothing is resumed");
                 mStackSupervisor.resumeFocusedStackTopActivityLocked();
             }
@@ -1167,7 +1168,7 @@ final class ActivityStack {
             if (dontWait) {
                 // If the caller said they don't want to wait for the pause, then complete
                 // the pause now.
-                completePauseLocked(false);
+                completePauseLocked(false, resuming);
                 return false;
 
             } else {
@@ -1186,7 +1187,7 @@ final class ActivityStack {
             // This activity failed to schedule the
             // pause, so just treat it as being paused now.
             if (DEBUG_PAUSE) Slog.v(TAG_PAUSE, "Activity not running, resuming next.");
-            if (!resuming) {
+            if (resuming == null) {
                 mStackSupervisor.resumeFocusedStackTopActivityLocked();
             }
             return false;
@@ -1203,7 +1204,7 @@ final class ActivityStack {
             if (mPausingActivity == r) {
                 if (DEBUG_STATES) Slog.v(TAG_STATES, "Moving to PAUSED: " + r
                         + (timeout ? " (due to timeout)" : " (pause complete)"));
-                completePauseLocked(true);
+                completePauseLocked(true, null);
                 return;
             } else {
                 EventLog.writeEvent(EventLogTags.AM_FAILED_TO_PAUSE,
@@ -1256,7 +1257,7 @@ final class ActivityStack {
             r.stopped = true;
             r.state = ActivityState.STOPPED;
 
-            mWindowManager.notifyAppStopped(r.appToken, true);
+            mWindowManager.notifyAppStopped(r.appToken);
 
             if (getVisibleBehindActivity() == r) {
                 mStackSupervisor.requestVisibleBehindLocked(r, false);
@@ -1274,7 +1275,7 @@ final class ActivityStack {
         }
     }
 
-    private void completePauseLocked(boolean resumeNext) {
+    private void completePauseLocked(boolean resumeNext, ActivityRecord resuming) {
         ActivityRecord prev = mPausingActivity;
         if (DEBUG_PAUSE) Slog.v(TAG_PAUSE, "Complete pause: " + prev);
 
@@ -1357,13 +1358,16 @@ final class ActivityStack {
             prev.cpuTimeAtResume = 0; // reset it
         }
 
-        // Notify when the task stack has changed, but only if visibilities changed (not just focus)
-        if (mStackSupervisor.mAppVisibilitiesChangedSinceLastPause) {
+        // Notify when the task stack has changed, but only if visibilities changed (not just
+        // focus). Also if there is an active pinned stack - we always want to notify it about
+        // task stack changes, because its positioning may depend on it.
+        if (mStackSupervisor.mAppVisibilitiesChangedSinceLastPause
+                || mService.mStackSupervisor.getStack(PINNED_STACK_ID) != null) {
             mService.notifyTaskStackChangedLocked();
             mStackSupervisor.mAppVisibilitiesChangedSinceLastPause = false;
         }
 
-        mStackSupervisor.ensureActivitiesVisibleLocked(null, 0, !PRESERVE_WINDOWS);
+        mStackSupervisor.ensureActivitiesVisibleLocked(resuming, 0, !PRESERVE_WINDOWS);
     }
 
     private void addToStopping(ActivityRecord r, boolean immediate) {
@@ -2058,6 +2062,14 @@ final class ActivityStack {
         // We don't want to clear starting window for activities that aren't behind fullscreen
         // activities as we need to display their starting window until they are done initializing.
         boolean behindFullscreenActivity = false;
+
+        if (getStackVisibilityLocked(null) == STACK_INVISIBLE) {
+            // The stack is not visible, so no activity in it should be displaying a starting
+            // window. Mark all activities below top and behind fullscreen.
+            aboveTop = false;
+            behindFullscreenActivity = true;
+        }
+
         for (int taskNdx = mTaskHistory.size() - 1; taskNdx >= 0; --taskNdx) {
             final ArrayList<ActivityRecord> activities = mTaskHistory.get(taskNdx).mActivities;
             for (int activityNdx = activities.size() - 1; activityNdx >= 0; --activityNdx) {
@@ -2260,11 +2272,11 @@ final class ActivityStack {
 
         // We need to start pausing the current activity so the top one can be resumed...
         final boolean dontWaitForPause = (next.info.flags & FLAG_RESUME_WHILE_PAUSING) != 0;
-        boolean pausing = mStackSupervisor.pauseBackStacks(userLeaving, true, dontWaitForPause);
+        boolean pausing = mStackSupervisor.pauseBackStacks(userLeaving, next, dontWaitForPause);
         if (mResumedActivity != null) {
             if (DEBUG_STATES) Slog.d(TAG_STATES,
                     "resumeTopActivityLocked: Pausing " + mResumedActivity);
-            pausing |= startPausingLocked(userLeaving, false, true, dontWaitForPause);
+            pausing |= startPausingLocked(userLeaving, false, next, dontWaitForPause);
         }
         if (pausing) {
             if (DEBUG_SWITCH || DEBUG_STATES) Slog.v(TAG_STATES,
@@ -2498,13 +2510,25 @@ final class ActivityStack {
                     }
                 }
 
+                boolean allowSavedSurface = true;
                 if (next.newIntents != null) {
+                    // Restrict saved surface to launcher start, or there is no intent at all
+                    // (eg. task being brought to front). If the intent is something else,
+                    // likely the app is going to show some specific page or view, instead of
+                    // what's left last time.
+                    for (int i = next.newIntents.size() - 1; i >= 0; i--) {
+                        final Intent intent = next.newIntents.get(i);
+                        if (intent != null && !ActivityRecord.isMainIntent(intent)) {
+                            allowSavedSurface = false;
+                            break;
+                        }
+                    }
                     next.app.thread.scheduleNewIntent(next.newIntents, next.appToken);
                 }
 
                 // Well the app will no longer be stopped.
                 // Clear app token stopped state in window manager if needed.
-                mWindowManager.notifyAppStopped(next.appToken, false);
+                mWindowManager.notifyAppResumed(next.appToken, next.stopped, allowSavedSurface);
 
                 EventLog.writeEvent(EventLogTags.AM_RESUME_ACTIVITY, next.userId,
                         System.identityHashCode(next), next.task.taskId, next.shortComponentName);
@@ -2612,11 +2636,14 @@ final class ActivityStack {
     }
 
     private void insertTaskAtTop(TaskRecord task, ActivityRecord newActivity) {
+        boolean isLastTaskOverHome = false;
         // If the moving task is over home stack, transfer its return type to next task
         if (task.isOverHomeStack()) {
             final TaskRecord nextTask = getNextTask(task);
             if (nextTask != null) {
                 nextTask.setTaskToReturnTo(task.getTaskToReturnTo());
+            } else {
+                isLastTaskOverHome = true;
             }
         }
 
@@ -2626,7 +2653,10 @@ final class ActivityStack {
             ActivityStack lastStack = mStackSupervisor.getLastStack();
             final boolean fromHome = lastStack.isHomeStack();
             if (!isHomeStack() && (fromHome || topTask() != task)) {
-                int returnToType = APPLICATION_ACTIVITY_TYPE;
+                // If it's a last task over home - we default to keep its return to type not to
+                // make underlying task focused when this one will be finished.
+                int returnToType = isLastTaskOverHome
+                        ? task.getTaskToReturnTo() : APPLICATION_ACTIVITY_TYPE;
                 if (fromHome && StackId.allowTopTaskToReturnHome(mStackId)) {
                     returnToType = lastStack.topTask() == null
                             ? HOME_ACTIVITY_TYPE : lastStack.topTask().taskType;
@@ -3541,7 +3571,7 @@ final class ActivityStack {
                 if (DEBUG_PAUSE) Slog.v(TAG_PAUSE, "Finish needs to pause: " + r);
                 if (DEBUG_USER_LEAVING) Slog.v(TAG_USER_LEAVING,
                         "finish() => pause with userLeaving=false");
-                startPausingLocked(false, false, false, false);
+                startPausingLocked(false, false, null, false);
             }
 
             if (endTask) {
@@ -3831,6 +3861,10 @@ final class ActivityStack {
         if (getVisibleBehindActivity() == r) {
             mStackSupervisor.requestVisibleBehindLocked(r, false);
         }
+
+        // Clean-up activities are no longer relaunching (e.g. app process died). Notify window
+        // manager so it can update its bookkeeping.
+        mWindowManager.notifyAppRelaunchesCleared(r.appToken);
     }
 
     private void removeTimeoutsForActivityLocked(ActivityRecord r) {
@@ -5266,7 +5300,7 @@ final class ActivityStack {
                 (r.info.flags & FLAG_SHOW_FOR_ALL_USERS) != 0, r.userId, r.info.configChanges,
                 task.voiceSession != null, r.mLaunchTaskBehind, bounds, task.mOverrideConfig,
                 task.mResizeMode, r.isAlwaysFocusable(), task.isHomeTask(),
-                r.appInfo.targetSdkVersion);
+                r.appInfo.targetSdkVersion, r.mRotationAnimationHint);
         r.taskConfigOverride = task.mOverrideConfig;
     }
 

@@ -304,9 +304,9 @@ public class UsageStatsService extends SystemService implements
 
         @Override public void onDisplayChanged(int displayId) {
             if (displayId == Display.DEFAULT_DISPLAY) {
+                final boolean displayOn = isDisplayOn();
                 synchronized (UsageStatsService.this.mLock) {
-                    mAppIdleHistory.updateDisplayLocked(isDisplayOn(),
-                            SystemClock.elapsedRealtime());
+                    mAppIdleHistory.updateDisplayLocked(displayOn, SystemClock.elapsedRealtime());
                 }
             }
         }
@@ -838,6 +838,10 @@ public class UsageStatsService extends SystemService implements
                     && mAppWidgetManager.isBoundWidgetPackage(packageName, userId)) {
                 return false;
             }
+
+            if (isDeviceProvisioningPackage(packageName)) {
+                return false;
+            }
         }
 
         if (!isAppIdleUnfiltered(packageName, userId, elapsedRealtime)) {
@@ -930,6 +934,16 @@ public class UsageStatsService extends SystemService implements
         return dpm.packageHasActiveAdmins(packageName, userId);
     }
 
+    /**
+     * Returns {@code true} if the supplied package is the device provisioning app. Otherwise,
+     * returns {@code false}.
+     */
+    private boolean isDeviceProvisioningPackage(String packageName) {
+        String deviceProvisioningPackage = getContext().getResources().getString(
+                com.android.internal.R.string.config_deviceProvisioningPackage);
+        return deviceProvisioningPackage != null && deviceProvisioningPackage.equals(packageName);
+    }
+
     private boolean isCarrierApp(String packageName) {
         synchronized (mLock) {
             if (!mHaveCarrierPrivilegedApps) {
@@ -991,9 +1005,9 @@ public class UsageStatsService extends SystemService implements
             service.persistActiveStats();
             mAppIdleHistory.writeAppIdleTimesLocked(mUserState.keyAt(i));
         }
-        // Persist elapsed time periodically, in case screen doesn't get toggled
-        // until the next boot
-        mAppIdleHistory.writeElapsedTimeLocked();
+        // Persist elapsed and screen on time. If this fails for whatever reason, the apps will be
+        // considered not-idle, which is the safest outcome in such an event.
+        mAppIdleHistory.writeAppIdleDurationsLocked();
         mHandler.removeMessages(MSG_FLUSH_TO_DISK);
     }
 
@@ -1408,6 +1422,24 @@ public class UsageStatsService extends SystemService implements
 
             event.mEventType = UsageEvents.Event.CONFIGURATION_CHANGE;
             event.mConfiguration = new Configuration(config);
+            mHandler.obtainMessage(MSG_REPORT_EVENT, userId, 0, event).sendToTarget();
+        }
+
+        @Override
+        public void reportShortcutUsage(String packageName, String shortcutId, int userId) {
+            if (packageName == null || shortcutId == null) {
+                Slog.w(TAG, "Event reported without a package name or a shortcut ID");
+                return;
+            }
+
+            UsageEvents.Event event = new UsageEvents.Event();
+            event.mPackage = packageName.intern();
+            event.mShortcutId = shortcutId.intern();
+
+            // This will later be converted to system time.
+            event.mTimeStamp = SystemClock.elapsedRealtime();
+
+            event.mEventType = Event.SHORTCUT_INVOCATION;
             mHandler.obtainMessage(MSG_REPORT_EVENT, userId, 0, event).sendToTarget();
         }
 

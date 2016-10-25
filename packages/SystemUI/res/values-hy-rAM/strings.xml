@@ -143,7 +143,9 @@
     <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
     <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
     <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
+    <string name="accessibility_data_connection_4g_plus" msgid="3032226872470658661">"4G+"</string>
     <string name="accessibility_data_connection_lte" msgid="5413468808637540658">"LTE"</string>
+    <string name="accessibility_data_connection_lte_plus" msgid="361876866906946007">"LTE+"</string>
     <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
     <string name="accessibility_data_connection_roaming" msgid="5977362333466556094">"Ռոումինգ"</string>
     <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
@@ -317,6 +319,9 @@
     <string name="quick_settings_cellular_detail_data_limit" msgid="56011158504994128">"Սահմանաչափ՝ <xliff:g id="DATA_LIMIT">%s</xliff:g>"</string>
     <string name="quick_settings_cellular_detail_data_warning" msgid="2440098045692399009">"<xliff:g id="DATA_LIMIT">%s</xliff:g> զգուշացում"</string>
     <string name="quick_settings_work_mode_label" msgid="6244915274350490429">"Աշխատանքային ռեժիմ"</string>
+    <string name="quick_settings_night_display_label" msgid="3577098011487644395">"Գիշերային լույս"</string>
+    <string name="quick_settings_night_display_summary_on" msgid="1814901757887526769">"Գիշերային լույսը միացված է, հպեք՝ անջատելու համար"</string>
+    <string name="quick_settings_night_display_summary_off" msgid="7892102914128777905">"Գիշերային լույսն անջատված է, հպեք՝ միացնելու համար"</string>
     <string name="recents_empty_message" msgid="808480104164008572">"Վերջին տարրեր չկան"</string>
     <string name="recents_empty_message_dismissed_all" msgid="2791312568666558651">"Դուք ջնջել եք ամենը"</string>
     <string name="recents_app_info_button_label" msgid="2890317189376000030">"Հավելվածի մասին"</string>
@@ -330,6 +335,8 @@
     <string name="recents_multistack_add_stack_dialog_split_horizontal" msgid="8848514474543427332">"Հորիզոնական տրոհում"</string>
     <string name="recents_multistack_add_stack_dialog_split_vertical" msgid="9075292233696180813">"Ուղղահայաց տրոհում"</string>
     <string name="recents_multistack_add_stack_dialog_split_custom" msgid="4177837597513701943">"Հատուկ տրոհում"</string>
+  <string-array name="recents_blacklist_array">
+  </string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Լիցքավորված է"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"Լիցքավորվում է"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"Լրիվ լիցքավորմանը մնաց <xliff:g id="CHARGING_TIME">%s</xliff:g>"</string>
@@ -423,7 +430,7 @@
     <string name="accessibility_volume_collapse" msgid="3609549593031810875">"Կոծկել"</string>
     <string name="screen_pinning_title" msgid="3273740381976175811">"Էկրանն ամրացված է"</string>
     <string name="screen_pinning_description" msgid="7238941806855968768">"Էկրանը կմնա տեսադաշտում, մինչև այն ապամրացնեք: Ապամրացնելու համար հպեք և պահեք Հետ կոճակը:"</string>
-    <string name="screen_pinning_positive" msgid="3783985798366751226">"Հասկանալի է"</string>
+    <string name="screen_pinning_positive" msgid="3783985798366751226">"Եղավ"</string>
     <string name="screen_pinning_negative" msgid="3741602308343880268">"Ոչ, շնորհակալություն"</string>
     <string name="quick_settings_reset_confirmation_title" msgid="748792586749897883">"Թաքցնե՞լ <xliff:g id="TILE_LABEL">%1$s</xliff:g>-ը:"</string>
     <string name="quick_settings_reset_confirmation_message" msgid="2235970126803317374">"Այն դարձյալ կհայտնվի, երբ նորից միացնեք կարգավորումներում:"</string>
@@ -434,6 +441,18 @@
     <string name="volumeui_notification_title" msgid="4906770126345910955">"<xliff:g id="APP_NAME">%1$s</xliff:g>-ը ձայնի ուժգնության երկխոսության հավելված է"</string>
     <string name="volumeui_notification_text" msgid="8819536904234337445">"Հպեք՝ բնօրինակը վերականգնելու համար:"</string>
     <string name="managed_profile_foreground_toast" msgid="5421487114739245972">"Դուք օգտագործում եք ձեր աշխատանքային պրոֆիլը"</string>
+  <string-array name="volume_stream_titles">
+    <item msgid="5841843895402729630">"Զանգել"</item>
+    <item msgid="5997713001067658559">"Համակարգ"</item>
+    <item msgid="7858983209929864160">"Զանգ"</item>
+    <item msgid="1850038478268896762">"Մեդիա"</item>
+    <item msgid="8265110906352372092">"Զարթուցիչ"</item>
+    <item msgid="5339394737636839168"></item>
+    <item msgid="2951313578278086204">"Bluetooth"</item>
+    <item msgid="2919807739709798970"></item>
+    <item msgid="150349973435223405"></item>
+    <item msgid="6761963760295549099"></item>
+  </string-array>
     <string name="volume_stream_content_description_unmute" msgid="4436631538779230857">"%1$s: Հպեք՝ ձայնը միացնելու համար:"</string>
     <string name="volume_stream_content_description_vibrate" msgid="1187944970457807498">"%1$s: Հպեք՝ թրթռումը միացնելու համար: Մատչելիության ծառայությունների ձայնը կարող է անջատվել:"</string>
     <string name="volume_stream_content_description_mute" msgid="3625049841390467354">"%1$s: Հպեք՝ ձայնն անջատելու համար: Մատչելիության ծառայությունների ձայնը կարող է անջատվել:"</string>
@@ -464,7 +483,7 @@
     <string name="tuner_warning_title" msgid="7094689930793031682">"Զվարճանք մեկ՝ որոշակի մարդու համար"</string>
     <string name="tuner_warning" msgid="8730648121973575701">"Համակարգի ՕՄ-ի ընդունիչը հնարավորություն է տալիս հարմարեցնել Android-ի օգտվողի միջերեսը: Այս փորձնական գործառույթները կարող են հետագա թողարկումների մեջ փոփոխվել, խափանվել կամ ընդհանրապես չհայտնվել: Եթե շարունակում եք, զգուշացեք:"</string>
     <string name="tuner_persistent_warning" msgid="8597333795565621795">"Այս փորձնական գործառույթները կարող են հետագա թողարկումների մեջ փոփոխվել, խափանվել կամ ընդհանրապես չհայտնվել: Եթե շարունակում եք, զգուշացեք:"</string>
-    <string name="got_it" msgid="2239653834387972602">"Հասկանալի է"</string>
+    <string name="got_it" msgid="2239653834387972602">"Եղավ"</string>
     <string name="tuner_toast" msgid="603429811084428439">"Համակարգի ՕՄ-ի ընդունիչը ավելացվել է կարգավորումներին"</string>
     <string name="remove_from_settings" msgid="8389591916603406378">"Հեռացնել կարգավորումներից"</string>
     <string name="remove_from_settings_prompt" msgid="6069085993355887748">"Հեռացնե՞լ Համակարգի ՕՄ-ի ընդունիչը կարգավորումներից և չօգտվել այլևս նրա գործառույթներից:"</string>
@@ -504,21 +523,6 @@
     <string name="notification_more_settings" msgid="816306283396553571">"Այլ կարգավորումներ"</string>
     <string name="notification_done" msgid="5279426047273930175">"Պատրաստ է"</string>
     <string name="notification_gear_accessibility" msgid="94429150213089611">"<xliff:g id="APP_NAME">%1$s</xliff:g> հավելվածի ծանուցումների կառավարներ"</string>
-    <string name="color_and_appearance" msgid="1254323855964993144">"Գույնը և արտաքին տեսքը"</string>
-    <string name="night_mode" msgid="3540405868248625488">"Գիշերային ռեժիմ"</string>
-    <string name="calibrate_display" msgid="5974642573432039217">"Չափաբերել էկրանը"</string>
-    <string name="night_mode_on" msgid="5597545513026541108">"Միացված է"</string>
-    <string name="night_mode_off" msgid="8035605276956057508">"Անջատված է"</string>
-    <string name="turn_on_automatically" msgid="4167565356762016083">"Միացնել ավտոմատ կերպով"</string>
-    <string name="turn_on_auto_summary" msgid="2190994512406701520">"Անցեք Գիշերային ռեժիմի, եթե դա պահանջում է տեղը և օրվա ժամանակը"</string>
-    <string name="when_night_mode_on" msgid="2969436026899172821">"Երբ Գիշերային ռեժիմը միացված է"</string>
-    <string name="use_dark_theme" msgid="2900938704964299312">"Օգտագործել մուգ թեման Android OS-ի համար"</string>
-    <string name="adjust_tint" msgid="3398569573231409878">"Կարգավորել երանգը"</string>
-    <string name="adjust_brightness" msgid="980039329808178246">"Կարգավորել պայծառությունը"</string>
-    <string name="night_mode_disclaimer" msgid="598914896926759578">"Մուգ թեման կիրառվում է Android OS-ի հիմնական հատվածների նկատմամբ, որոնք սովորաբար ցուցադրվում են բաց թեմայում (օրինակ՝ Կարգավորումներ):"</string>
-    <string name="color_apply" msgid="9212602012641034283">"Կիրառել"</string>
-    <string name="color_revert_title" msgid="4746666545480534663">"Հաստատել կարգավորումները"</string>
-    <string name="color_revert_message" msgid="9116001069397996691">"Գունային որոշ կարգավորումները կարող են այս սարքը օգտագործման համար ոչ պիտանի դարձնել: Սեղմեք Լավ կոճակը՝ գունային այս կարգավորումները հաստատելու համար: Հակառակ դեպքում այս կարգավորումները կվերակայվեն 10 վայրկյան հետո:"</string>
     <string name="battery_panel_title" msgid="7944156115535366613">"Մարտկոցի օգտագործում"</string>
     <string name="battery_detail_charging_summary" msgid="1279095653533044008">"Մարտկոցի տնտեսումը լիցքավորման ժամանակ հասանելի չէ"</string>
     <string name="battery_detail_switch_title" msgid="6285872470260795421">"Մարտկոցի տնտեսում"</string>

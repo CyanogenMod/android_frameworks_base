@@ -598,7 +598,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
     }
 
     private NotificationHeaderView getVisibleNotificationHeader() {
-        if (mIsSummaryWithChildren) {
+        if (mIsSummaryWithChildren && !mShowingPublic) {
             return mChildrenContainer.getHeaderView();
         }
         return getShowingLayout().getVisibleNotificationHeader();
@@ -1123,7 +1123,7 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
         mPrivateLayout.setUserExpanding(userLocked);
         if (mIsSummaryWithChildren) {
             mChildrenContainer.setUserLocked(userLocked);
-            if (userLocked || (!userLocked && !isGroupExpanded())) {
+            if (userLocked || !isGroupExpanded()) {
                 updateBackgroundForGroupState();
             }
         }
@@ -1176,7 +1176,20 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
      * @see #canViewBeDismissed()
      */
     public boolean isClearable() {
-        return mStatusBarNotification != null && mStatusBarNotification.isClearable();
+        if (mStatusBarNotification == null || !mStatusBarNotification.isClearable()) {
+            return false;
+        }
+        if (mIsSummaryWithChildren) {
+            List<ExpandableNotificationRow> notificationChildren =
+                    mChildrenContainer.getNotificationChildren();
+            for (int i = 0; i < notificationChildren.size(); i++) {
+                ExpandableNotificationRow child = notificationChildren.get(i);
+                if (!child.isClearable()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override
@@ -1430,10 +1443,27 @@ public class ExpandableNotificationRow extends ActivatableNotificationView {
 
     @Override
     protected View getContentView() {
-        if (mIsSummaryWithChildren) {
+        if (mIsSummaryWithChildren && !mShowingPublic) {
             return mChildrenContainer;
         }
         return getShowingLayout();
+    }
+
+    @Override
+    protected void onAppearAnimationFinished(boolean wasAppearing) {
+        super.onAppearAnimationFinished(wasAppearing);
+        if (wasAppearing) {
+            // During the animation the visible view might have changed, so let's make sure all
+            // alphas are reset
+            if (mChildrenContainer != null) {
+                mChildrenContainer.setAlpha(1.0f);
+                mChildrenContainer.setLayerType(LAYER_TYPE_NONE, null);
+            }
+            mPrivateLayout.setAlpha(1.0f);
+            mPrivateLayout.setLayerType(LAYER_TYPE_NONE, null);
+            mPublicLayout.setAlpha(1.0f);
+            mPublicLayout.setLayerType(LAYER_TYPE_NONE, null);
+        }
     }
 
     @Override

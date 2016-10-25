@@ -22,7 +22,6 @@ import android.annotation.Nullable;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -115,11 +114,17 @@ public class ImageView extends View {
     private int mBaseline = -1;
     private boolean mBaselineAlignBottom = false;
 
-    // AdjustViewBounds behavior will be in compatibility mode for older apps.
-    private boolean mAdjustViewBoundsCompat = false;
+    /** Compatibility modes dependent on targetSdkVersion of the app. */
+    private static boolean sCompatDone;
+
+    /** AdjustViewBounds behavior will be in compatibility mode for older apps. */
+    private static boolean sCompatAdjustViewBounds;
 
     /** Whether to pass Resources when creating the source from a stream. */
-    private boolean mUseCorrectStreamDensity;
+    private static boolean sCompatUseCorrectStreamDensity;
+
+    /** Whether to use pre-Nougat drawable visibility dispatching conditions. */
+    private static boolean sCompatDrawableVisibilityDispatch;
 
     private static final ScaleType[] sScaleTypeArray = {
         ScaleType.MATRIX,
@@ -206,9 +211,13 @@ public class ImageView extends View {
         mMatrix = new Matrix();
         mScaleType = ScaleType.FIT_CENTER;
 
-        final int targetSdkVersion = mContext.getApplicationInfo().targetSdkVersion;
-        mAdjustViewBoundsCompat = targetSdkVersion <= Build.VERSION_CODES.JELLY_BEAN_MR1;
-        mUseCorrectStreamDensity = targetSdkVersion > Build.VERSION_CODES.M;
+        if (!sCompatDone) {
+            final int targetSdkVersion = mContext.getApplicationInfo().targetSdkVersion;
+            sCompatAdjustViewBounds = targetSdkVersion <= Build.VERSION_CODES.JELLY_BEAN_MR1;
+            sCompatUseCorrectStreamDensity = targetSdkVersion > Build.VERSION_CODES.M;
+            sCompatDrawableVisibilityDispatch = targetSdkVersion < Build.VERSION_CODES.N;
+            sCompatDone = true;
+        }
     }
 
     @Override
@@ -545,6 +554,13 @@ public class ImageView extends View {
      * Subsequent calls to {@link #setImageDrawable(Drawable)} will automatically
      * mutate the drawable and apply the specified tint and tint mode using
      * {@link Drawable#setTintList(ColorStateList)}.
+     * <p>
+     * <em>Note:</em> The default tint mode used by this setter is NOT
+     * consistent with the default tint mode used by the
+     * {@link android.R.styleable#ImageView_tint android:tint}
+     * attribute. If the {@code android:tint} attribute is specified, the
+     * default tint mode will be set to {@link PorterDuff.Mode#SRC_ATOP} to
+     * ensure consistency with earlier versions of the platform.
      *
      * @param tint the tint to apply, may be {@code null} to clear tint
      *
@@ -874,8 +890,8 @@ public class ImageView extends View {
             InputStream stream = null;
             try {
                 stream = mContext.getContentResolver().openInputStream(uri);
-                return Drawable.createFromResourceStream(
-                        mUseCorrectStreamDensity ? getResources() : null, null, stream, null);
+                return Drawable.createFromResourceStream(sCompatUseCorrectStreamDensity
+                        ? getResources() : null, null, stream, null);
             } catch (Exception e) {
                 Log.w(LOG_TAG, "Unable to open content: " + uri, e);
             } finally {
@@ -910,10 +926,13 @@ public class ImageView extends View {
             mRecycleableBitmapDrawable.setBitmap(null);
         }
 
+        boolean sameDrawable = false;
+
         if (mDrawable != null) {
+            sameDrawable = mDrawable == d;
             mDrawable.setCallback(null);
             unscheduleDrawable(mDrawable);
-            if (isAttachedToWindow()) {
+            if (!sCompatDrawableVisibilityDispatch && !sameDrawable && isAttachedToWindow()) {
                 mDrawable.setVisible(false, false);
             }
         }
@@ -926,8 +945,11 @@ public class ImageView extends View {
             if (d.isStateful()) {
                 d.setState(getDrawableState());
             }
-            if (isAttachedToWindow()) {
-                d.setVisible(getWindowVisibility() == VISIBLE && isShown(), true);
+            if (!sameDrawable || sCompatDrawableVisibilityDispatch) {
+                final boolean visible = sCompatDrawableVisibilityDispatch
+                        ? getVisibility() == VISIBLE
+                        : isAttachedToWindow() && getWindowVisibility() == VISIBLE && isShown();
+                d.setVisible(visible, true);
             }
             d.setLevel(mLevel);
             mDrawableWidth = d.getIntrinsicWidth();
@@ -1051,7 +1073,7 @@ public class ImageView extends View {
                                 pleft + pright;
 
                         // Allow the width to outgrow its original estimate if height is fixed.
-                        if (!resizeHeight && !mAdjustViewBoundsCompat) {
+                        if (!resizeHeight && !sCompatAdjustViewBounds) {
                             widthSize = resolveAdjustedSize(newWidth, mMaxWidth, widthMeasureSpec);
                         }
 
@@ -1067,7 +1089,7 @@ public class ImageView extends View {
                                 ptop + pbottom;
 
                         // Allow the height to outgrow its original estimate if width is fixed.
-                        if (!resizeWidth && !mAdjustViewBoundsCompat) {
+                        if (!resizeWidth && !sCompatAdjustViewBounds) {
                             heightSize = resolveAdjustedSize(newHeight, mMaxHeight,
                                     heightMeasureSpec);
                         }
@@ -1506,8 +1528,37 @@ public class ImageView extends View {
     @Override
     public void onVisibilityAggregated(boolean isVisible) {
         super.onVisibilityAggregated(isVisible);
-        if (mDrawable != null) {
+        // Only do this for new apps post-Nougat
+        if (mDrawable != null && !sCompatDrawableVisibilityDispatch) {
             mDrawable.setVisible(isVisible, false);
+        }
+    }
+
+    @RemotableViewMethod
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        // Only do this for old apps pre-Nougat; new apps use onVisibilityAggregated
+        if (mDrawable != null && sCompatDrawableVisibilityDispatch) {
+            mDrawable.setVisible(visibility == VISIBLE, false);
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        // Only do this for old apps pre-Nougat; new apps use onVisibilityAggregated
+        if (mDrawable != null && sCompatDrawableVisibilityDispatch) {
+            mDrawable.setVisible(getVisibility() == VISIBLE, false);
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        // Only do this for old apps pre-Nougat; new apps use onVisibilityAggregated
+        if (mDrawable != null && sCompatDrawableVisibilityDispatch) {
+            mDrawable.setVisible(false, false);
         }
     }
 

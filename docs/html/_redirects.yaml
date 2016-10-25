@@ -23,6 +23,10 @@ redirects:
   to: /studio/debug/index.html
 - from: /sdk/compatibility-library.html
   to: /topic/libraries/support-library/index.html
+- from: /billions
+  to: /topic/billions/index.html
+- from: /performance
+  to: /topic/performance/index.html
 - from: /tools/extras/support-library.html
   to: /topic/libraries/support-library/index.html
 - from: /training/basics/fragments/support-lib.html
@@ -149,9 +153,13 @@ redirects:
   to: /google/play/licensing/index.html
 - from: /google/play/billing/billing_about.html
   to: /google/play/billing/index.html
-- from: /guide/developing/tools/
+- from: /guide/developing/tools/proguard.html
+  to: /studio/build/shrink-code.html
+- from: /guide/developing/tools/aidl.html
+  to: /guide/components/aidl.html
+- from: /guide/developing/tools/...
   to: /studio/command-line/
-- from: /guide/developing/
+- from: /guide/developing/...
   to: /studio/
 - from: /tools/aidl.html
   to: /guide/components/aidl.html
@@ -319,6 +327,8 @@ redirects:
   to: https://www.google.com/design/spec/layout/principles.html
 - from: /design/patterns/navigation-drawer.html
   to: https://www.google.com/design/spec/patterns/navigation-drawer.html
+- from: /design/patterns/notifications.html
+  to: https://material.google.com/patterns/notifications.html
 - from: /design/patterns/selection.html
   to: https://www.google.com/design/spec/patterns/selection.html
 - from: /design/patterns/settings.html
@@ -358,6 +368,8 @@ redirects:
 - from: /resources/dashboard/...
   to: /about/dashboards/index.html
 - from: /resources/community-groups.html
+  to: /support.html
+- from: /community/index.html
   to: /support.html
 - from: /guide/tutorials/
   to: /resources/tutorials/
@@ -417,6 +429,8 @@ redirects:
   to: /training/implementing-navigation/lateral.html
 - from: /training/cloudsync/aesync.html
   to: /google/gcm/index.html
+- from: /training/cloudsync/index.html
+  to: /training/backup/index.html
 - from: /training/basics/location/
   to: /training/location/
 - from: /training/monetization/index.html
@@ -469,6 +483,14 @@ redirects:
   to: /distribute/stories/index.html
 - from: /distribute/stories/tablets.html
   to: /distribute/stories/index.html
+- from: /distribute/stories/glu-dh.html
+  to: /distribute/stories/games/glu-dh.html
+- from: /distribute/stories/apps/tapps.html
+  to: /distribute/stories/games/tapps.html
+- from: /distribute/stories/apps/upbeat-games.html
+  to: /distribute/stories/games/upbeat-games.html
+- from: /distribute/stories/games/two-dots.html
+  to: /distribute/stories/games/dots.html
 - from: /distribute/googleplay/edu/index.html
   to: /distribute/googleplay/edu/about.html
 - from: /distribute/googleplay/edu/contact.html
@@ -780,13 +802,13 @@ redirects:
 - from: /preview/dev-community
   to: https://plus.google.com/communities/103655397235276743411
 - from: /preview/bug
-  to: https://code.google.com/p/android/issues/entry?template=Developer%20preview%20report
+  to: https://source.android.com/source/report-bugs.html
 - from: /preview/bug/
-  to: https://code.google.com/p/android/issues/entry?template=Developer%20preview%20report
+  to: https://source.android.com/source/report-bugs.html
 - from: /preview/bugreport
-  to: https://code.google.com/p/android/issues/entry?template=Developer%20preview%20report
+  to: https://source.android.com/source/report-bugs.html
 - from: /preview/bugreport/
-  to: https://code.google.com/p/android/issues/entry?template=Developer%20preview%20report
+  to: https://source.android.com/source/report-bugs.html
 - from: /preview/bugs
   to: https://code.google.com/p/android/issues/list?can=2&q=label%3ADevPreview-N
 - from: /preview/bugs/
@@ -803,6 +825,20 @@ redirects:
   to: https://commondatastorage.googleapis.com/androiddevelopers/shareables/...
 - from: /downloads/...
   to: https://commondatastorage.googleapis.com/androiddevelopers/...
+- from: /training/performance/battery/network/action-any-traffic.html
+  to: /topic/performance/power/network/action-any-traffic.html
+- from: /training/performance/battery/network/action-app-traffic.html
+  to: /topic/performance/power/network/action-app-traffic.html
+- from: /training/performance/battery/network/action-server-traffic.html
+  to: /topic/performance/power/network/action-server-traffic.html
+- from: /training/performance/battery/network/action-user-traffic.html
+  to: /topic/performance/power/network/action-user-traffic.html
+- from: /training/performance/battery/network/analyze-data.html
+  to: /topic/performance/power/network/analyze-data.html
+- from: /training/performance/battery/network/gather-data.html
+  to: /topic/performance/power/network/gather-data.html
+- from: /training/performance/battery/network/index.html
+  to: /topic/performance/power/network/index.html
 
 # Redirects for the new [dac]/topic/libraries/ area
 
@@ -1128,47 +1164,47 @@ redirects:
 
 # Android Studio help button redirects
 - from: /r/studio-ui/vector-asset-studio.html
-  to: /studio/write/vector-asset-studio.html
+  to: /studio/write/vector-asset-studio.html?utm_medium=android-studio
 - from: /r/studio-ui/image-asset-studio.html
-  to: /studio/write/image-asset-studio.html
+  to: /studio/write/image-asset-studio.html?utm_medium=android-studio
 - from: /r/studio-ui/project-structure.html
-  to: /studio/projects/index.html
+  to: /studio/projects/index.html?utm_medium=android-studio
 - from: /r/studio-ui/android-monitor.html
-  to: /studio/profile/android-monitor.html
+  to: /studio/profile/android-monitor.html?utm_medium=android-studio
 - from: /r/studio-ui/am-logcat.html
-  to: /studio/debug/am-logcat.html
+  to: /studio/debug/am-logcat.html?utm_medium=android-studio
 - from: /r/studio-ui/am-memory.html
-  to: /studio/profile/am-memory.html
+  to: /studio/profile/am-memory.html?utm_medium=android-studio
 - from: /r/studio-ui/am-cpu.html
-  to: /studio/profile/am-cpu.html
+  to: /studio/profile/am-cpu.html?utm_medium=android-studio
 - from: /r/studio-ui/am-gpu.html
-  to: /studio/profile/am-gpu.html
+  to: /studio/profile/am-gpu.html?utm_medium=android-studio
 - from: /r/studio-ui/am-network.html
-  to: /studio/profile/am-network.html
+  to: /studio/profile/am-network.html?utm_medium=android-studio
 - from: /r/studio-ui/am-hprof.html
-  to: /studio/profile/am-hprof.html
+  to: /studio/profile/am-hprof.html?utm_medium=android-studio
 - from: /r/studio-ui/am-allocation.html
-  to: /studio/profile/am-allocation.html
+  to: /studio/profile/am-allocation.html?utm_medium=android-studio
 - from: /r/studio-ui/am-methodtrace.html
-  to: /studio/profile/am-methodtrace.html
+  to: /studio/profile/am-methodtrace.html?utm_medium=android-studio
 - from: /r/studio-ui/am-sysinfo.html
-  to: /studio/profile/am-sysinfo.html
+  to: /studio/profile/am-sysinfo.html?utm_medium=android-studio
 - from: /r/studio-ui/am-screenshot.html
-  to: /studio/debug/am-screenshot.html
+  to: /studio/debug/am-screenshot.html?utm_medium=android-studio
 - from: /r/studio-ui/am-video.html
-  to: /studio/debug/am-video.html
+  to: /studio/debug/am-video.html?utm_medium=android-studio
 - from: /r/studio-ui/avd-manager.html
-  to: /studio/run/managing-avds.html
+  to: /studio/run/managing-avds.html?utm_medium=android-studio
 - from: /r/studio-ui/rundebugconfig.html
-  to: /studio/run/rundebugconfig.html
+  to: /studio/run/rundebugconfig.html?utm_medium=android-studio
 - from: /r/studio-ui/devicechooser.html
-  to: /studio/run/emulator.html
+  to: /studio/run/emulator.html?utm_medium=android-studio
 - from: /r/studio-ui/virtualdeviceconfig.html
-  to: /studio/run/managing-avds.html
+  to: /studio/run/managing-avds.html?utm_medium=android-studio
 - from: /r/studio-ui/emulator.html
-  to: /studio/run/emulator.html
+  to: /studio/run/emulator.html?utm_medium=android-studio
 - from: /r/studio-ui/instant-run.html
-  to: /studio/run/index.html#instant-run
+  to: /studio/run/index.html?utm_medium=android-studio#instant-run
 - from: /r/studio-ui/test-recorder.html
   to: http://tools.android.com/tech-docs/test-recorder
 - from: /r/studio-ui/export-licenses.html
@@ -1176,4 +1212,73 @@ redirects:
 - from: /r/studio-ui/experimental-to-stable-gradle.html
   to: http://tools.android.com/tech-docs/new-build-system/gradle-experimental/experimental-to-stable-gradle
 - from: /r/studio-ui/sdk-manager.html
-  to: https://developer.android.com/studio/intro/update.html#sdk-manager
+  to: /studio/intro/update.html?utm_medium=android-studio#sdk-manager
+- from: /r/studio-ui/newjclass.html
+  to: /studio/write/create-java-class.html?utm_medium=android-studio
+- from: /r/studio-ui/menu-help.html
+  to: /studio/intro/index.html?utm_medium=android-studio
+- from: /r/studio-ui/menu-start.html
+  to: /training/index.html?utm_medium=android-studio
+- from: /r/studio-ui/run-with-work-profile.html
+  to: /studio/run/index.html#ir-work-profile?utm_medium=android-studio
+- from: /r/studio-ui/am-gpu-debugger.html
+  to: /studio/profile/am-gpu.html?utm_medium=android-studio
+- from: /r/studio-ui/theme-editor.html
+  to: /studio/write/theme-editor.html?utm_medium=android-studio
+- from: /r/studio-ui/translations-editor.html
+  to: /studio/write/translations-editor.html?utm_medium=android-studio
+- from: /r/studio-ui/debug.html
+  to: /studio/debug/index.html?utm_medium=android-studio
+- from: /r/studio-ui/run.html
+  to: /studio/run/index.html?utm_medium=android-studio
+- from: /r/studio-ui/layout-editor.html
+  to: /studio/write/layout-editor.html?utm_medium=android-studio
+- from: /r/studio-ui/project-window.html
+  to: /studio/projects/index.html?utm_medium=android-studio
+- from: /r/studio-ui/lint-inspection-results.html
+  to: /studio/write/lint.html?utm_medium=android-studio
+- from: /r/studio-ui/gradle-console.html
+  to: /studio/run/index.html#gradle-console?utm_medium=android-studio
+
+# Redirects from (removed) N Preview documentation
+- from: /preview/features/afw.html
+  to: https://developers.google.com/android/work/overview
+- from: /preview/features/multi-window.html
+  to: /guide/topics/ui/multi-window.html
+- from: /preview/features/icu4j-framework.html
+  to: /guide/topics/resources/icu4j-framework.html
+- from: /preview/features/key-attestation.html
+  to: /training/articles/security-key-attestation.html
+- from: /preview/features/security-config.html
+  to: /training/articles/security-config.html
+- from: /preview/features/picture-in-picture.html
+  to: /training/tv/playback/picture-in-picture.html
+- from: /preview/features/tv-recording-api.html
+  to: /training/tv/tif/content-recording.html
+- from: /preview/features/direct-boot.html
+  to: /training/articles/direct-boot.html
+- from: /preview/features/scoped-folder-access.html
+  to: /training/articles/scoped-directory-access.html
+- from: /preview/features/notification-updates.html
+  to: /guide/topics/ui/notifiers/notifications.html
+- from: /preview/features/multilingual-support.html
+  to: /guide/topics/resources/multilingual-support.html
+- from: /preview/j8-jack.html
+  to: /guide/platform/j8-jack.html
+- from: /about/versions/marshmallow/samples.html
+  to: /about/versions/marshmallow/android-6.0-samples.html
+- from: /preview/behavior-changes.html
+  to: /about/versions/nougat/android-7.0-changes.html
+- from: /preview/samples.html
+  to: /about/versions/nougat/android-7.0-samples.html
+- from: /preview/guide.html
+  to: /about/versions/nougat/index.html
+- from: /preview/api-overview.html
+  to: /about/versions/nougat/android-7.0.html
+- from: /preview/index.html
+  to: /about/versions/nougat/index.html
+- from: /preview/features/background-optimization.html
+  to: /topic/performance/background-optimization.html
+- from: /preview/features/data-saver.html
+  to: /training/basics/network-ops/data-saver.html
+

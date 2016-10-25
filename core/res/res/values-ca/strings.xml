@@ -429,7 +429,7 @@
     <string name="permdesc_bluetooth" product="tv" msgid="3974124940101104206">"Permet que l\'aplicació consulti la configuració de Bluetooth del televisor i estableixi i accepti connexions amb dispositius vinculats ."</string>
     <string name="permdesc_bluetooth" product="default" msgid="3207106324452312739">"Permet que una aplicació visualitzi la configuració de Bluetooth del telèfon i que estableixi i accepti connexions amb els dispositius sincronitzats."</string>
     <string name="permlab_nfc" msgid="4423351274757876953">"controlar Comunicació de camp proper (NFC)"</string>
-    <string name="permdesc_nfc" msgid="7120611819401789907">"Permet que l\'aplicació es comuniqui amb les etiquetes, les targetes i els lectors de Near Field Communication (NFC)."</string>
+    <string name="permdesc_nfc" msgid="7120611819401789907">"Permet que l\'aplicació es comuniqui amb les etiquetes, les targetes i els lectors de Comunicació de camp proper (NFC)."</string>
     <string name="permlab_disableKeyguard" msgid="3598496301486439258">"desactivació del bloqueig de pantalla"</string>
     <string name="permdesc_disableKeyguard" msgid="6034203065077122992">"Permet que l\'aplicació desactivi el bloqueig del teclat i qualsevol element de seguretat de contrasenyes associat. Per exemple, el telèfon desactiva el bloqueig del teclat en rebre una trucada telefònica entrant i, a continuació, reactiva el bloqueig del teclat quan finalitza la trucada."</string>
     <string name="permlab_manageFingerprint" msgid="5640858826254575638">"Gestionar el maquinari d\'empremtes digitals"</string>
@@ -678,6 +678,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Correcte!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4317955014948108794">"Torna-ho a provar"</string>
     <string name="lockscreen_password_wrong" msgid="5737815393253165301">"Torna-ho a provar"</string>
+    <string name="lockscreen_storage_locked" msgid="9167551160010625200">"Desbl. per accedir a totes les funcions i dades"</string>
     <string name="faceunlock_multiple_failures" msgid="754137583022792429">"S\'ha superat el nombre màxim d\'intents de desbloqueig facial"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="5099439277819215399">"No hi ha cap targeta SIM."</string>
     <string name="lockscreen_missing_sim_message" product="tablet" msgid="151659196095791474">"No hi ha cap targeta SIM a la tauleta."</string>
@@ -1022,8 +1023,9 @@
     <string name="android_upgrading_title" msgid="1584192285441405746">"Android s\'està actualitzant..."</string>
     <string name="android_start_title" msgid="8418054686415318207">"S\'està iniciant Android…"</string>
     <string name="android_upgrading_fstrim" msgid="8036718871534640010">"S\'està optimitzant l\'emmagatzematge."</string>
-    <string name="android_upgrading_notification_title" msgid="1619393112444671028">"Android s\'està actualitzant"</string>
+    <string name="android_upgrading_notification_title" msgid="8428357096969413169">"S\'està acabant d\'actualitzar Android…"</string>
     <string name="android_upgrading_notification_body" msgid="5761201379457064286">"Pot ser que algunes aplicacions no funcionin correctament fins que no es completi l\'actualització"</string>
+    <string name="app_upgrading_toast" msgid="3008139776215597053">"S\'està actualitzant <xliff:g id="APPLICATION">%1$s</xliff:g>…"</string>
     <string name="android_upgrading_apk" msgid="7904042682111526169">"S\'està optimitzant l\'aplicació <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
     <string name="android_preparing_apk" msgid="8162599310274079154">"S\'està preparant <xliff:g id="APPNAME">%1$s</xliff:g>."</string>
     <string name="android_upgrading_starting_apps" msgid="451464516346926713">"S\'estan iniciant les aplicacions."</string>
@@ -1316,7 +1318,7 @@
     <string name="storage_usb" msgid="3017954059538517278">"Emmagatzematge USB"</string>
     <string name="extract_edit_menu_button" msgid="8940478730496610137">"Edita"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Advertiment d\'ús de dades"</string>
-    <string name="data_usage_warning_body" msgid="6660692274311972007">"Toca per veure ús i configuració."</string>
+    <string name="data_usage_warning_body" msgid="6660692274311972007">"Toca per veure l\'ús i la configuració."</string>
     <string name="data_usage_3g_limit_title" msgid="4361523876818447683">"Límit de dades 2G-3G assolit"</string>
     <string name="data_usage_4g_limit_title" msgid="4609566827219442376">"Límit de dades 4G assolit"</string>
     <string name="data_usage_mobile_limit_title" msgid="557158376602636112">"Límit de dades mòbils assolit"</string>
@@ -1651,7 +1653,16 @@
     <string name="unpin_target" msgid="3556545602439143442">"No fixis"</string>
     <string name="app_info" msgid="6856026610594615344">"Informació de l\'aplicació"</string>
     <string name="negative_duration" msgid="5688706061127375131">"-<xliff:g id="TIME">%1$s</xliff:g>"</string>
+    <string name="reset_retail_demo_mode_title" msgid="2370249087943803584">"Vols restablir el dispositiu?"</string>
+    <string name="reset_retail_demo_mode_text" msgid="5481925817590883246">"Toca per restablir el dispositiu"</string>
+    <string name="demo_starting_message" msgid="5268556852031489931">"S\'està iniciant la demostració…"</string>
+    <string name="demo_restarting_message" msgid="952118052531642451">"S\'està restablint el dispositiu…"</string>
+    <string name="demo_user_inactivity_timeout_title" msgid="6596109959002331334">"Vols restablir el dispositiu?"</string>
+    <string name="demo_user_inactivity_timeout_countdown" msgid="5675588824402569506">"Perdràs els canvis, i la demostració tornarà a començar d\'aquí a <xliff:g id="TIMEOUT">%1$s</xliff:g> segons…"</string>
+    <string name="demo_user_inactivity_timeout_left_button" msgid="5314271347014802475">"Cancel·la"</string>
+    <string name="demo_user_inactivity_timeout_right_button" msgid="5019306703066964808">"Restableix ara"</string>
     <string name="audit_safemode_notification" msgid="6416076898350685856">"Restableix les dades de fàbrica del dispositiu per utilitzar-lo sense restriccions"</string>
     <string name="audit_safemode_notification_details" msgid="1860601176690176413">"Toca per obtenir més informació."</string>
     <string name="suspended_widget_accessibility" msgid="6712143096475264190">"<xliff:g id="LABEL">%1$s</xliff:g> s\'ha desactivat"</string>
+    <string name="conference_call" msgid="3751093130790472426">"Conferència"</string>
 </resources>

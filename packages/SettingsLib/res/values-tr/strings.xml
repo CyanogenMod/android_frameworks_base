@@ -175,12 +175,15 @@
     <string name="wifi_allow_scan_with_traffic_summary" msgid="2575101424972686310">"Arayüzde mevcut veri trafiği miktarına bağlı olarak Kablosuz Dolaşım Taramalarına İzin Verin/Vermeyin"</string>
     <string name="select_logd_size_title" msgid="7433137108348553508">"Günlük Kaydedici arabellek boyutları"</string>
     <string name="select_logd_size_dialog_title" msgid="1206769310236476760">"Gün. arabel. başına Gün. Kayd. boyutunu seç"</string>
+    <string name="dev_logpersist_clear_warning_title" msgid="684806692440237967">"Günlük kaydedici kalıcı depolama alanı silinsin mi?"</string>
+    <string name="dev_logpersist_clear_warning_message" msgid="2256582531342994562">"Kalıcı günlük kaydediciyle artık izlemediğimizde, cihazınızda bulunan günlük kaydedici verilerini silmemiz gerekmektedir."</string>
+    <string name="select_logpersist_title" msgid="7530031344550073166">"Günlük kaydedici verilerini bu cihazda kalıcı olarak depola"</string>
+    <string name="select_logpersist_dialog_title" msgid="4003400579973269060">"Cihazda kalıcı olarak depolanacak günlük arabelleklerini seçin"</string>
     <string name="select_usb_configuration_title" msgid="2649938511506971843">"USB Yapılandırmasını seç"</string>
     <string name="select_usb_configuration_dialog_title" msgid="6385564442851599963">"USB Yapılandırmasını seç"</string>
     <string name="allow_mock_location" msgid="2787962564578664888">"Sahte konumlara izin ver"</string>
     <string name="allow_mock_location_summary" msgid="317615105156345626">"Sahte konumlara izin ver"</string>
     <string name="debug_view_attributes" msgid="6485448367803310384">"Görünüm özelliği incelemeyi etkinleştir"</string>
-    <string name="legacy_dhcp_client_summary" msgid="163383566317652040">"Yeni Android DHCP istemcisi yerine Lollipop DHCP istemcisini kullan."</string>
     <string name="mobile_data_always_on_summary" msgid="8149773901431697910">"Kablosuz bağlantı etkin bile olsa mobil veri kullanımını her zaman etkin tut (ağlar arasında hızlı geçiş yapmak için)."</string>
     <string name="adb_warning_title" msgid="6234463310896563253">"USB hata ayıklamasına izin verilsin mi?"</string>
     <string name="adb_warning_message" msgid="7316799925425402244">"USB hata ayıklaması yalnızca geliştirme amaçlıdır. Verileri bilgisayarınızla cihazınız arasında kopyalamak, bildirim göndermeksizin uygulamaları cihazınıza yüklemek ve günlük verilerini okumak için kullanın."</string>
