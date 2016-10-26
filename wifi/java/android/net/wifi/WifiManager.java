@@ -2690,21 +2690,6 @@ public class WifiManager {
     }
 
     /**
-     * get concurrency support
-     *
-     * @return true if concurrency is allowed.
-     *
-     * @hide no intent to publish
-     */
-    public boolean getWifiStaSapConcurrency() {
-        try {
-            return mService.getWifiStaSapConcurrency();
-        } catch (RemoteException e) {
-             throw e.rethrowFromSystemServer();
-        }
-    }
-
-    /**
      * Resets all wifi manager settings back to factory defaults.
      *
      * @hide
