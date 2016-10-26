@@ -46,7 +46,9 @@ public class RankingHelper implements RankingConfig {
 
     private static final int VERSION_INIT = 1;
     private static final int VERSION_ADDED_VERY_LOW_IMPORTANCE = 2;
-    private static final int VERSION_LATEST = VERSION_ADDED_VERY_LOW_IMPORTANCE;
+    private static final int VERSION_FIXED_VERY_LOW_IMPORTANCE = 3;
+    private static final int VERSION_LATEST = VERSION_FIXED_VERY_LOW_IMPORTANCE;
+    private static final int PREVIOUS_VERY_LOW_IMPORTANCE = 2;
 
     private static final String TAG_RANKING = "ranking";
     private static final String TAG_PACKAGE = "package";
@@ -63,7 +65,6 @@ public class RankingHelper implements RankingConfig {
     private static final int DEFAULT_PRIORITY = Notification.PRIORITY_DEFAULT;
     private static final int DEFAULT_VISIBILITY = Ranking.VISIBILITY_NO_OVERRIDE;
     private static final int DEFAULT_IMPORTANCE = Ranking.IMPORTANCE_UNSPECIFIED;
-    private static final int VERY_LOW_IMPORTANCE = Ranking.IMPORTANCE_VERY_LOW;
 
     private final NotificationSignalExtractor[] mSignalExtractors;
     private final NotificationComparator mPreliminaryComparator = new NotificationComparator();
@@ -168,9 +169,10 @@ public class RankingHelper implements RankingConfig {
                             r = getOrCreateRecord(name, uid);
                         }
                         r.importance = safeInt(parser, ATT_IMPORTANCE, DEFAULT_IMPORTANCE);
-                        if (version < VERSION_ADDED_VERY_LOW_IMPORTANCE
-                            && r.importance >= VERY_LOW_IMPORTANCE)
-                          r.importance++;
+                        if (version == VERSION_ADDED_VERY_LOW_IMPORTANCE
+                            && r.importance >= PREVIOUS_VERY_LOW_IMPORTANCE) {
+                          r.importance--;
+                        }
                         r.priority = safeInt(parser, ATT_PRIORITY, DEFAULT_PRIORITY);
                         r.visibility = safeInt(parser, ATT_VISIBILITY, DEFAULT_VISIBILITY);
                     }
