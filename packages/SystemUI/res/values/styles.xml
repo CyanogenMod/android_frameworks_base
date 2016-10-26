@@ -360,7 +360,7 @@
     </style>
 
     <style name="ThemeOverlay.SwitchBar.Secondary" parent="@android:style/ThemeOverlay">
-        <item name="android:colorAccent">@color/system_secondary_color</item>
+        <item name="android:colorAccent">?android:attr/colorSecondary</item>
     </style>
 
 </resources>
