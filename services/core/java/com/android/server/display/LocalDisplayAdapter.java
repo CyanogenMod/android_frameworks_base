@@ -284,6 +284,10 @@ final class LocalDisplayAdapter extends DisplayAdapter {
 
         private boolean updateColorModesLocked(int[] colorModes,
                 int activeColorMode) {
+            if (colorModes == null) {
+                return false;
+            }
+
             List<Integer> pendingColorModes = new ArrayList<>();
 
             // Build an updated list of all existing color modes.
