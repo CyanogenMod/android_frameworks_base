@@ -1176,7 +1176,7 @@ public abstract class NotificationListenerService extends Service {
                 CharSequence explanation, String overrideGroupKey) {
             mKey = key;
             mRank = rank;
-            mIsAmbient = importance < IMPORTANCE_VERY_LOW;
+            mIsAmbient = importance == IMPORTANCE_VERY_LOW || importance == IMPORTANCE_MIN;
             mMatchesInterruptionFilter = matchesInterruptionFilter;
             mVisibilityOverride = visibilityOverride;
             mSuppressedVisualEffects = suppressedVisualEffects;
