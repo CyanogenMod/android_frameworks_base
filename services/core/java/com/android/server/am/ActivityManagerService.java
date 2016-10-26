@@ -3685,17 +3685,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
-    void launchBoost(int pid, String packageName) {
-        if (mPerf == null) {
-            mPerf = LocalServices.getService(PerformanceManagerInternal.class);
-            if (mPerf == null) {
-                Slog.e(TAG, "PerformanceManager not ready!");
-                return;
-            }
-        }
-        mPerf.launchBoost(pid, packageName);
-    }
-
     final ProcessRecord startProcessLocked(String processName,
             ApplicationInfo info, boolean knownToBeDead, int intentFlags,
             String hostingType, ComponentName hostingName, boolean allowWhileBooting,
@@ -3991,9 +3980,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             checkTime(startTime, "startProcess: building log message");
             StringBuilder buf = mStringBuilder;
             buf.setLength(0);
-            if (hostingType.equals("activity")) {
-                launchBoost(startResult.pid, app.processName);
-            }
             buf.append("Start proc ");
             buf.append(startResult.pid);
             buf.append(':');
