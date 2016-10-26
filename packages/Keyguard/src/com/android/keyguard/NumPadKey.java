@@ -150,14 +150,6 @@ public class NumPadKey extends ViewGroup {
     }
 
     @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-
-        // Reset the "announced headset" flag when detached.
-        ObscureSpeechDelegate.sAnnouncedHeadset = false;
-    }
-
-    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         measureChildren(widthMeasureSpec, heightMeasureSpec);
