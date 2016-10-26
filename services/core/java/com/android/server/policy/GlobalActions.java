@@ -303,8 +303,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
             if (GLOBAL_ACTION_KEY_POWER.equals(actionKey)) {
                 continue;
-            } else if (GLOBAL_ACTION_KEY_REBOOT.equals(actionKey)) {
-                mItems.add(new RebootAction());
+            } else if (GLOBAL_ACTION_KEY_RESTART.equals(actionKey)) {
+                mItems.add(new RestartAction());
             } else if (GLOBAL_ACTION_KEY_SCREENSHOT.equals(actionKey)) {
                 mItems.add(getScreenshotAction());
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {

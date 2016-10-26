@@ -1936,7 +1936,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     @Override
                     public void onSwipeFromRight() {
                         if (mNavigationBar != null && mNavigationBarPosition == NAV_BAR_RIGHT) {
-                                !mNavigationBarLeftInLandscape) {
                             requestTransientBars(mNavigationBar);
                         }
                     }
@@ -4885,7 +4884,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             r.top = mForceImmersiveTop;
         }
         if ((pfl & PRIVATE_FLAG_NAV_HIDE_FORCED) != 0) {
-            if (mNavigationBarOnBottom) {
+            if (mNavigationBarPosition == NAV_BAR_BOTTOM) {
                 r.bottom = mForceImmersiveBottom;
             } else {
                 r.right = mForceImmersiveRight;

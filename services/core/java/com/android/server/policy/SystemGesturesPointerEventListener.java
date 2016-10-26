@@ -286,7 +286,6 @@ public class SystemGesturesPointerEventListener implements PointerEventListener 
         void onMouseHoverAtTop();
         void onMouseHoverAtBottom();
         void onMouseLeaveFromEdge();
-        void onSwipeFromLeft();
         void onDebug();
     }
 }

@@ -19,7 +19,6 @@ package com.android.internal.util.cm;
 /* Master list of all actions for the power menu */
 public class PowerMenuConstants {
     public static final String GLOBAL_ACTION_KEY_POWER = "power";
-    public static final String GLOBAL_ACTION_KEY_REBOOT = "reboot";
     public static final String GLOBAL_ACTION_KEY_SCREENSHOT = "screenshot";
     public static final String GLOBAL_ACTION_KEY_AIRPLANE = "airplane";
     public static final String GLOBAL_ACTION_KEY_USERS = "users";
@@ -29,10 +28,11 @@ public class PowerMenuConstants {
     public static final String GLOBAL_ACTION_KEY_SILENT = "silent";
     public static final String GLOBAL_ACTION_KEY_VOICEASSIST = "voiceassist";
     public static final String GLOBAL_ACTION_KEY_ASSIST = "assist";
+    public static final String GLOBAL_ACTION_KEY_RESTART = "restart";
 
     private static String[] ALL_ACTIONS = {
         GLOBAL_ACTION_KEY_POWER,
-        GLOBAL_ACTION_KEY_REBOOT,
+        GLOBAL_ACTION_KEY_RESTART,
         GLOBAL_ACTION_KEY_SCREENSHOT,
         GLOBAL_ACTION_KEY_AIRPLANE,
         GLOBAL_ACTION_KEY_USERS,

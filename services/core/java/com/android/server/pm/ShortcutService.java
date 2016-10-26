@@ -377,9 +377,9 @@ public class ShortcutService extends IShortcutService.Stub {
         mActivityManagerInternal = Preconditions.checkNotNull(
                 LocalServices.getService(ActivityManagerInternal.class));
 
-        if (onlyForPackageManagerApis) {
-            return; // Don't do anything further.  For unit tests only.
-        }
+        //if (onlyForPackageManagerApis) {
+        //    return; // Don't do anything further.  For unit tests only.
+        //}
 
         // Register receivers.
 

@@ -380,50 +380,51 @@ public abstract class Connection extends Conferenceable {
     public static final int PROPERTY_IS_EXTERNAL_CALL = 1<<4;
 
     /**
-     * Whether the call was forwarded from another party (GSM only)
-     * @hide
-     */
-    public static final int PROPERTY_WAS_FORWARDED = 1 << 5;
-
-    /**
-     * Whether the call is held remotely
-     * @hide
-     */
-    public static final int PROPERTY_HELD_REMOTELY = 1 << 6;
-
-    /**
-     * Whether the dialing state is waiting for the busy remote side
-     * @hide
-     */
-    public static final int PROPERTY_DIALING_IS_WAITING = 1 << 7;
-
-    /**
-     * Whether an additional call came in and was forwarded while the call was active
-     * @hide
-     */
-    public static final int PROPERTY_ADDITIONAL_CALL_FORWARDED = 1 << 8;
-
-    /**
-     * Whether incoming calls are barred at the remote side
-     * @hide
-     */
-    public static final int PROPERTY_REMOTE_INCOMING_CALLS_BARRED = 1 << 9;
-
-
-    // Next PROPERTY value: 1<<10
-
-    //**********************************************************************************************
-    /**
      * Indicates that the connection has CDMA Enhanced Voice Privacy enabled.
      */
-    public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 1<<10;
+    public static final int PROPERTY_HAS_CDMA_VOICE_PRIVACY = 1<<5;
 
     /**
      * Indicates that the connection represents a downgraded IMS conference.
      * @hide
      */
-    public static final int PROPERTY_IS_DOWNGRADED_CONFERENCE = 1<<11;
+    public static final int PROPERTY_IS_DOWNGRADED_CONFERENCE = 1<<6;
 
+
+    /**
+     * Whether the call was forwarded from another party (GSM only)
+     * @hide
+     */
+    public static final int PROPERTY_WAS_FORWARDED = 1 << 7;
+
+    /**
+     * Whether the call is held remotely
+     * @hide
+     */
+    public static final int PROPERTY_HELD_REMOTELY = 1 << 8;
+
+    /**
+     * Whether the dialing state is waiting for the busy remote side
+     * @hide
+     */
+    public static final int PROPERTY_DIALING_IS_WAITING = 1 << 9;
+
+    /**
+     * Whether an additional call came in and was forwarded while the call was active
+     * @hide
+     */
+    public static final int PROPERTY_ADDITIONAL_CALL_FORWARDED = 1 << 10;
+
+    /**
+     * Whether incoming calls are barred at the remote side
+     * @hide
+     */
+    public static final int PROPERTY_REMOTE_INCOMING_CALLS_BARRED = 1 << 11;
+
+
+    // Next PROPERTY value: 1<<12
+
+    //**********************************************************************************************
     //**********************************************************************************************
 
     /**

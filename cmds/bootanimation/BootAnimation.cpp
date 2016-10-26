@@ -63,12 +63,6 @@
 
 #include <private/regionalization/Environment.h>
 
-#define OEM_BOOTANIMATION_FILE "/oem/media/bootanimation.zip"
-#define SYSTEM_BOOTANIMATION_FILE "/system/media/bootanimation.zip"
-#define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE "/system/media/bootanimation-encrypted.zip"
-
-#define EXIT_PROP_NAME "service.bootanim.exit"
-
 namespace android {
 
 static const char OEM_BOOTANIMATION_FILE[] = "/oem/media/bootanimation.zip";
@@ -1042,6 +1036,9 @@ bool BootAnimation::playAnimation(const Animation& animation)
                 break;
         }
 
+        if (needSaveMem) {
+            glDeleteTextures(1, &mTextureid);
+        }
     }
 
     // Free textures created for looping parts now that the animation is done.
@@ -1052,10 +1049,6 @@ bool BootAnimation::playAnimation(const Animation& animation)
                 const Animation::Frame& frame(part.frames[j]);
                 glDeleteTextures(1, &frame.tid);
             }
-        }
-
-        if (needSaveMem) {
-            glDeleteTextures(1, &mTextureid);
         }
     }
 

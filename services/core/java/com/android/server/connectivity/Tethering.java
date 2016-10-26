@@ -1455,7 +1455,7 @@ public class Tethering extends BaseNetworkObserver implements IControlsTethering
 
                 Network network = null;
                 if (upType != ConnectivityManager.TYPE_NONE) {
-                    Network network = getConnectivityManager().getNetworkForType(upType);
+                    network = getConnectivityManager().getNetworkForType(upType);
                     NetPluginDelegate.setUpstream(network);
                     LinkProperties linkProperties = cm.getLinkProperties(upType);
                     if (linkProperties != null) {

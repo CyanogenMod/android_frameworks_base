@@ -364,7 +364,7 @@ public class LockPatternUtils {
         throwIfCalledOnMainThread();
         try {
             VerifyCredentialResponse response =
-                    getLockSettings().checkPattern(patternToString(pattern), userId,
+                    getLockSettings().checkPattern(patternToString(pattern, userId), userId,
                             wrapCallback(progressCallback));
 
             if (response.getResponseCode() == VerifyCredentialResponse.RESPONSE_OK) {
