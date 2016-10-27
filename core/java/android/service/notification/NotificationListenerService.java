@@ -1039,13 +1039,6 @@ public abstract class NotificationListenerService extends Service {
         public static final int IMPORTANCE_MIN = NotificationManager.IMPORTANCE_MIN;
 
         /**
-         * Very low notification importance: not on lock screen and not intrusive.
-         *
-         * @hide
-         */
-        public static final int IMPORTANCE_VERY_LOW = NotificationManager.IMPORTANCE_VERY_LOW;
-
-        /**
          * Low notification importance: shows everywhere, but is not intrusive.
          *
          * @hide
@@ -1176,7 +1169,7 @@ public abstract class NotificationListenerService extends Service {
                 CharSequence explanation, String overrideGroupKey) {
             mKey = key;
             mRank = rank;
-            mIsAmbient = importance < IMPORTANCE_VERY_LOW;
+            mIsAmbient = importance < IMPORTANCE_LOW;
             mMatchesInterruptionFilter = matchesInterruptionFilter;
             mVisibilityOverride = visibilityOverride;
             mSuppressedVisualEffects = suppressedVisualEffects;
@@ -1196,8 +1189,6 @@ public abstract class NotificationListenerService extends Service {
                     return "NONE";
                 case IMPORTANCE_MIN:
                     return "MIN";
-                case IMPORTANCE_VERY_LOW:
-                    return "VERY_LOW";
                 case IMPORTANCE_LOW:
                     return "LOW";
                 case IMPORTANCE_DEFAULT:
