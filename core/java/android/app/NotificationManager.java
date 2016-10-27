@@ -182,7 +182,7 @@ public class NotificationManager
 
     /** @hide */
     @IntDef({VISIBILITY_NO_OVERRIDE, IMPORTANCE_UNSPECIFIED, IMPORTANCE_NONE,
-            IMPORTANCE_MIN, IMPORTANCE_VERY_LOW, IMPORTANCE_LOW, IMPORTANCE_DEFAULT, IMPORTANCE_HIGH,
+            IMPORTANCE_MIN, IMPORTANCE_LOW, IMPORTANCE_DEFAULT, IMPORTANCE_HIGH,
             IMPORTANCE_MAX})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Importance {}
@@ -209,32 +209,26 @@ public class NotificationManager
     public static final int IMPORTANCE_MIN = 1;
 
     /**
-     * Very low notification importance: shows on the status bar, but never
-     * on the lock screen and is not intrusive.
-     */
-    public static final int IMPORTANCE_VERY_LOW = 2;
-
-    /**
      * Low notification importance: shows everywhere, but is not intrusive.
      */
-    public static final int IMPORTANCE_LOW = 3;
+    public static final int IMPORTANCE_LOW = 2;
 
     /**
      * Default notification importance: shows everywhere, allowed to makes noise,
      * but does not visually intrude.
      */
-    public static final int IMPORTANCE_DEFAULT = 4;
+    public static final int IMPORTANCE_DEFAULT = 3;
 
     /**
      * Higher notification importance: shows everywhere, allowed to makes noise and peek.
      */
-    public static final int IMPORTANCE_HIGH = 5;
+    public static final int IMPORTANCE_HIGH = 4;
 
     /**
      * Highest notification importance: shows everywhere, allowed to makes noise, peek, and
      * use full screen intents.
      */
-    public static final int IMPORTANCE_MAX = 6;
+    public static final int IMPORTANCE_MAX = 5;
 
     private static INotificationManager sService;
 
