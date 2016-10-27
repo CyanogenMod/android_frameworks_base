@@ -699,9 +699,9 @@ public class NotificationUsageStats {
 
     private static class ImportanceHistogram {
         // TODO define these somewhere else
-        private static final int NUM_IMPORTANCES = 6;
+        private static final int NUM_IMPORTANCES = 7;
         private static final String[] IMPORTANCE_NAMES =
-                {"none", "min", "low", "default", "high", "max"};
+                {"none", "min", "very-low", "low", "default", "high", "max"};
         private final Context mContext;
         private final String[] mCounterNames;
         private final String mPrefix;
