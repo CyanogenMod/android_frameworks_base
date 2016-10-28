@@ -184,7 +184,7 @@ public final class ShutdownThread extends Thread {
         }
 
         for (int i = 0; i < actionsArray.length; i++) {
-            if (actionsArray[i].equals("reboot")) {
+            if (actionsArray[i].equals("restart")) {
                 showRebootOption = true;
                 break;
             }
