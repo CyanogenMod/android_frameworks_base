@@ -18,7 +18,7 @@
      android:color="#ff9cdfd9">
      <item>
           <shape android:shape="oval">
-               <solid android:color="#9cc8c4" />
+               <solid android:color="@*android:color/material_pixel_blue_bright" />
                <size android:width="@dimen/recents_lock_to_app_size"
                      android:height="@dimen/recents_lock_to_app_size" />
           </shape>
