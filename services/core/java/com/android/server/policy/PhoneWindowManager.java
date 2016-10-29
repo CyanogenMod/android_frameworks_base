@@ -2056,7 +2056,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             activeHardwareKeys = 0;
         }
         final boolean hasMenu = (activeHardwareKeys & KEY_MASK_MENU) != 0;
-        final boolean hasHome = (activeHardwareKeys & KEY_MASK_HOME) != 0;
         final boolean hasAssist = (activeHardwareKeys & KEY_MASK_ASSIST) != 0;
         final boolean hasAppSwitch = (activeHardwareKeys & KEY_MASK_APP_SWITCH) != 0;
 
@@ -2093,15 +2092,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mDoubleTapOnHomeBehavior = KEY_ACTION_NOTHING;
         }
 
-        // Check for custom assignments and whether KEY_ACTION_MENU is assigned.
-        if (hasHome) {
-            mLongPressOnHomeBehavior = CMSettings.System.getIntForUser(resolver,
-                    CMSettings.System.KEY_HOME_LONG_PRESS_ACTION,
-                    mLongPressOnHomeBehavior, UserHandle.USER_CURRENT);
-            mDoubleTapOnHomeBehavior = CMSettings.System.getIntForUser(resolver,
-                    CMSettings.System.KEY_HOME_DOUBLE_TAP_ACTION,
-                    mDoubleTapOnHomeBehavior, UserHandle.USER_CURRENT);
-        }
+        mLongPressOnHomeBehavior = CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.KEY_HOME_LONG_PRESS_ACTION,
+                mLongPressOnHomeBehavior, UserHandle.USER_CURRENT);
+        mDoubleTapOnHomeBehavior = CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.KEY_HOME_DOUBLE_TAP_ACTION,
+                mDoubleTapOnHomeBehavior, UserHandle.USER_CURRENT);
+
         if (hasMenu) {
             mPressOnMenuBehavior = CMSettings.System.getIntForUser(resolver,
                     CMSettings.System.KEY_MENU_ACTION,
