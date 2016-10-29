@@ -42,6 +42,12 @@ LOCAL_C_INCLUDES += \
 
 LOCAL_MODULE := libandroid
 
+
+ifeq ($(USE_COMPAT_SENSORS_M),true)
+	LOCAL_CFLAGS += -DCOMPAT_SENSORS_M
+	LOCAL_CPPFLAGS += -DCOMPAT_SENSORS_M
+endif
+
 LOCAL_CFLAGS += -Wall -Werror -Wunused -Wunreachable-code
 
 # Required because of b/25642296
